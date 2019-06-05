@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -46,12 +46,12 @@ import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 /**
  * Represents a function declaration or definition.
- * 
+ *
  * <p>
  * Structure of children:<br>
  * - Parameters (ParmVarDecl)<br>
  * - Definition (Stmt)
- * 
+ *
  * @author JoaoBispo
  *
  */
@@ -160,14 +160,14 @@ public class FunctionDecl extends DeclaratorDecl {
     /*
     public FunctionDecl(String declName, List<ParmVarDecl> inputs, Type functionType, FunctionDeclData functionDeclData,
             DeclData declData, ClavaNodeInfo info, Stmt definition) {
-    
+
         this(declName, functionType, functionDeclData, declData, info, inputs, definition);
     }
     */
 
     /**
-     * 
-     * 
+     *
+     *
      * @param declName
      * @param inputs
      * @param returnType
@@ -242,7 +242,7 @@ public class FunctionDecl extends DeclaratorDecl {
 
     /**
      * Has definition if the last child is a Stmt.
-     * 
+     *
      * @return
      */
     public boolean hasBody() {
@@ -251,7 +251,7 @@ public class FunctionDecl extends DeclaratorDecl {
 
     // public Optional<Stmt> setBody(CompoundStmt body) {
     /**
-     * 
+     *
      * @param body
      * @return
      */
@@ -298,13 +298,13 @@ public class FunctionDecl extends DeclaratorDecl {
         if (getFunctionDeclData().isInline()) {
             code.append("inline ");
         }
-        
+
         if (getFunctionDeclData().getStorageClass() != StorageClass.NONE) {
             code.append(getFunctionDeclData().getStorageClass().getString()).append(" ");
         }
-        
+
         String returnType = getFunctionType().getReturnType().getCode();
-        
+
         code.append(returnType).append(" ").append(getTypelessCode()).append(getCodeBody());
         */
 
@@ -314,7 +314,7 @@ public class FunctionDecl extends DeclaratorDecl {
     }
 
     /**
-     * 
+     *
      * @return the node representing the declaration of this function, if it exists
      */
     public Optional<FunctionDecl> getDeclaration() {
@@ -338,7 +338,7 @@ public class FunctionDecl extends DeclaratorDecl {
 
     /**
      * The function declaration corresponding to the definition of the function represented by this node.
-     * 
+     *
      * @deprecated use .getDefinition() instead
      * @return
      */
@@ -473,7 +473,8 @@ public class FunctionDecl extends DeclaratorDecl {
     }
 
     public boolean isDefinition() {
-        return getDefinition().map(def -> def == this).orElse(false);
+        return hasBody();
+        // return getDefinition().map(def -> def == this).orElse(false);
     }
 
     // private boolean useQualifiedName() {
@@ -528,7 +529,7 @@ public class FunctionDecl extends DeclaratorDecl {
 
     /**
      * TODO: Make it protected
-     * 
+     *
      * @return
      */
     public Optional<Stmt> getFunctionDefinition() {
@@ -580,11 +581,11 @@ public class FunctionDecl extends DeclaratorDecl {
         String qualifiedName = get(QUALIFIED_NAME);
         SpecsCheck.checkArgument(qualifiedName.endsWith(previousName),
                 () -> "Expected qualified name to end with '" + previousName + "': " + qualifiedName);
-        
+
         boolean hasColons = qualifiedName.contains("::");
-        
+
         String qualifiedPrefix = hasColons ? qualifiedName.substring(0, qualifiedName.lastIndexOf("::")) + "::" : "";
-        
+
         String newQualifiedName = qualifiedPrefix + name;
         set(QUALIFIED_NAME, newQualifiedName);
         */
@@ -648,7 +649,7 @@ public class FunctionDecl extends DeclaratorDecl {
     /**
      * Sets the name of call if the corresponding definition, declaration or both refer to the function represented by
      * this node.
-     * 
+     *
      * @param name
      * @param original
      * @param tentative
@@ -691,34 +692,34 @@ public class FunctionDecl extends DeclaratorDecl {
         if (declMatch.isPresent()) {
             return declMatch.get();
         }
-        
+
         Optional<Boolean> defMatch = match(getFunctionDefinition(), call.getDefinition());
         if (defMatch.isPresent()) {
             return defMatch.get();
         }
-        
+
         throw new RuntimeException("Should not arrive here, either function declaration or definition must be defined");
         */
         /*
         if (functionDecl.isPresent()) {
             FunctionDecl decl = functionDecl.get();
-        
+
             if (!callDecl.isPresent()) {
                 return;
             }
-        
+
             boolean isFunction = decl == callDecl.get();
-        
+
             if (isFunction) {
                 call.setCallName(newName);
             }
-        
+
             return;
         }
         */
         /*
         boolean isDeclOfCall;
-        // If declaration exists, check if declaration of call is the 
+        // If declaration exists, check if declaration of call is the
         getDeclaration();
         call.getDeclaration()
         */
@@ -727,7 +728,7 @@ public class FunctionDecl extends DeclaratorDecl {
     /**
      * True if both objects match, false if they don't match, or empty if the first argument (functionDecl) is not
      * present.
-     * 
+     *
      * @param function
      * @param call
      * @return
@@ -737,13 +738,13 @@ public class FunctionDecl extends DeclaratorDecl {
         if (!functionDecl.isPresent()) {
             return Optional.empty();
         }
-    
+
         FunctionDecl decl = functionDecl.get();
-    
+
         if (!callDecl.isPresent()) {
             return Optional.of(false);
         }
-    
+
         return Optional.of(decl == callDecl.get());
     }
     */
@@ -755,13 +756,13 @@ public class FunctionDecl extends DeclaratorDecl {
         if (!callDecl.isPresent()) {
             return false;
         }
-        
+
         return decl == callDecl.get();
         */
     }
 
     /**
-     * 
+     *
      * @return all the calls to this function declaration.
      */
     public List<CallExpr> getCalls() {
@@ -811,9 +812,9 @@ public class FunctionDecl extends DeclaratorDecl {
     /**
      * Clones this function (both declaration and definition, if present), and inserts the cloned functions after the
      * corresponding original functions.
-     * 
+     *
      * @param newName
-     * 
+     *
      * @return the definition or the declaration of the cloned function, according to this node being a definition or a
      *         declaration.
      */
@@ -864,7 +865,7 @@ public class FunctionDecl extends DeclaratorDecl {
 
     /**
      * Makes sure the type changes in both the declaration and definition.
-     * 
+     *
      * @param type
      */
     public void setFunctionType(FunctionType type) {
