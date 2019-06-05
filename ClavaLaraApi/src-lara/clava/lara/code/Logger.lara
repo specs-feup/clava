@@ -341,7 +341,7 @@ Logger.prototype._insertCode = function($jp, insertBefore, code) {
 
 
 codedef _clava_logger_filename_declaration(varname, filename) %{
-FILE *[[varname]] = fopen("[[filename]]", "a+");
+FILE *[[varname]] = fopen("[[filename]]", "w+");
 if ([[varname]] == NULL)
 {
     printf("Error opening file [[filename]]\n");
