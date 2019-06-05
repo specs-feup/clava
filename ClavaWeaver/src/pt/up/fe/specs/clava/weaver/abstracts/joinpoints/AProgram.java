@@ -953,6 +953,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
         KEYS("keys"),
+        ISINSIDEHEADER("isInsideHeader"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),

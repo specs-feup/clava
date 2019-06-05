@@ -1216,6 +1216,7 @@ public abstract class AFunction extends ADeclarator {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
         KEYS("keys"),
+        ISINSIDEHEADER("isInsideHeader"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),

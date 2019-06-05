@@ -537,6 +537,7 @@ public abstract class ABinaryOp extends AOp {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
         KEYS("keys"),
+        ISINSIDEHEADER("isInsideHeader"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),

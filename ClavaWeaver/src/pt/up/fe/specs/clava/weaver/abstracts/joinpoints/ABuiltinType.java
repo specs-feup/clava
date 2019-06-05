@@ -648,6 +648,7 @@ public abstract class ABuiltinType extends AType {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
         KEYS("keys"),
+        ISINSIDEHEADER("isInsideHeader"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),

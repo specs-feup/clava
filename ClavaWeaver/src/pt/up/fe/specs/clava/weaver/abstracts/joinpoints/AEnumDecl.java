@@ -436,6 +436,7 @@ public abstract class AEnumDecl extends ANamedDecl {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
         KEYS("keys"),
+        ISINSIDEHEADER("isInsideHeader"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),

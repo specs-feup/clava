@@ -375,6 +375,9 @@
 		<parameter name="operator" type="String" />
 	</action>
 	
+	<action name="setBody" class="loop" tooltip="Sets the body of the loop">
+		<parameter name="body" type="scope" />
+	</action>	
 	
 	<!-- OMP -->
 	<action name="setKind" class="omp" tooltip="Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded">

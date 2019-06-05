@@ -32,6 +32,7 @@ import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DoStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
@@ -787,5 +788,20 @@ public class CxxLoop extends ALoop {
 
         return ((ForStmt) loop).getInit().map(init -> CxxJoinpoints.create(init, AStatement.class)).orElse(null);
 
+    }
+
+    @Override
+    public AScope getBodyImpl() {
+        return (AScope) CxxJoinpoints.create(loop.getBody());
+    }
+
+    @Override
+    public void defBodyImpl(AScope value) {
+        loop.setBody((CompoundStmt) value.getNode());
+    }
+
+    @Override
+    public void setBodyImpl(AScope body) {
+        defBodyImpl(body);
     }
 }

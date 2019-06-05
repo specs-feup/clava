@@ -34,6 +34,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AProgram;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -310,5 +311,15 @@ public class CxxProgram extends AProgram {
 
         // Insert call at the beginning of the main function
         mainFunction.getBodyImpl().insertBegin(CxxJoinpoints.create(atexitCall));
+
+        // Add include for atexit
+        AFile file = (AFile) mainFunction.ancestorImpl("file");
+        SpecsCheck.checkNotNull(file, () -> "Expected main function to be inside a file: " + mainFunction.getNode());
+        file.addInclude("stdlib.h", true);
+
+        // Add include for function
+        file.addIncludeJpImpl(function);
+        // Make it an action of $file? e.g., $file.addInclude($function);
+        // function.getDeclarationJp()
     }
 }

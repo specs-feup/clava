@@ -527,6 +527,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("javaValue(String fieldName)");
         attributes.add("javaFieldType(String fieldName)");
         attributes.add("isInsideLoopHeader");
+        attributes.add("isInsideHeader");
         attributes.add("getUserField(String fieldName)");
         attributes.add("userField(String fieldName)");
         attributes.add("parentRegion");
@@ -1546,14 +1547,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute isInsideLoopHeader
-     * @return the attribute's value
+     * true, if the join point is inside a loop header (e.g., for, while)
      */
     public abstract Boolean getIsInsideLoopHeaderImpl();
 
     /**
-     * Get value on attribute isInsideLoopHeader
-     * @return the attribute's value
+     * true, if the join point is inside a loop header (e.g., for, while)
      */
     public final Object getIsInsideLoopHeader() {
         try {
@@ -1567,6 +1566,29 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInsideLoopHeader", e);
+        }
+    }
+
+    /**
+     * true, if the join point is inside a header (e.g., if condition, for, while)
+     */
+    public abstract Boolean getIsInsideHeaderImpl();
+
+    /**
+     * true, if the join point is inside a header (e.g., if condition, for, while)
+     */
+    public final Object getIsInsideHeader() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInsideHeader", Optional.empty());
+        	}
+        	Boolean result = this.getIsInsideHeaderImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isInsideHeader", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isInsideHeader", e);
         }
     }
 

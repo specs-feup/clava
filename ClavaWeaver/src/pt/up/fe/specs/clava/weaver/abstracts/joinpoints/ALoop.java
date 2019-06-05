@@ -498,6 +498,38 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * Get value on attribute body
+     * @return the attribute's value
+     */
+    public abstract AScope getBodyImpl();
+
+    /**
+     * Get value on attribute body
+     * @return the attribute's value
+     */
+    public final Object getBody() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "body", Optional.empty());
+        	}
+        	AScope result = this.getBodyImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "body", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "body", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defBodyImpl(AScope value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def body with type AScope not implemented ");
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select inits
      * @return 
      */
@@ -872,6 +904,32 @@ public abstract class ALoop extends AStatement {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setCondRelation", e);
+        }
+    }
+
+    /**
+     * Sets the body of the loop
+     * @param body 
+     */
+    public void setBodyImpl(AScope body) {
+        throw new UnsupportedOperationException(get_class()+": Action setBody not implemented ");
+    }
+
+    /**
+     * Sets the body of the loop
+     * @param body 
+     */
+    public final void setBody(AScope body) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setBody", this, Optional.empty(), body);
+        	}
+        	this.setBodyImpl(body);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setBody", this, Optional.empty(), body);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setBody", e);
         }
     }
 
@@ -1295,6 +1353,13 @@ public abstract class ALoop extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "body": {
+        	if(value instanceof AScope){
+        		this.defBodyImpl((AScope)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -1322,6 +1387,7 @@ public abstract class ALoop extends AStatement {
         attributes.add("stepValue");
         attributes.add("hasCondRelation");
         attributes.add("condRelation");
+        attributes.add("body");
     }
 
     /**
@@ -1355,6 +1421,7 @@ public abstract class ALoop extends AStatement {
         actions.add("statement tile(String, statement, Boolean)");
         actions.add("void setCondRelation(Relation)");
         actions.add("void setCondRelation(String)");
+        actions.add("void setBody(scope)");
     }
 
     /**
@@ -1399,6 +1466,7 @@ public abstract class ALoop extends AStatement {
         STEPVALUE("stepValue"),
         HASCONDRELATION("hasCondRelation"),
         CONDRELATION("condRelation"),
+        BODY("body"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         ENDLINE("endLine"),
@@ -1411,6 +1479,7 @@ public abstract class ALoop extends AStatement {
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
         KEYS("keys"),
+        ISINSIDEHEADER("isInsideHeader"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
         TYPE("type"),

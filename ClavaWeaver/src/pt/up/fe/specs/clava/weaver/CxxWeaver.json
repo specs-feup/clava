@@ -353,6 +353,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -1249,6 +1259,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -2133,6 +2153,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -3045,6 +3075,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -3951,6 +3991,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -4923,6 +4973,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -5930,6 +5990,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -6832,6 +6902,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -7640,6 +7720,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -8447,6 +8537,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -9194,6 +9294,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -9973,6 +10083,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -10796,6 +10916,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -11548,6 +11678,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -12335,6 +12475,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -13277,6 +13427,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -14141,6 +14301,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -14964,6 +15134,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -15748,6 +15928,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -16649,6 +16839,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -17809,6 +18009,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -18914,6 +19124,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -19808,6 +20028,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -20686,6 +20916,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -21087,6 +21327,14 @@
          "name": "loop",
          "extends": "statement"      ,
          "children": [
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "scope",
+                              "name": "body"
+                           }]
+               },
                {
                   "type": "attribute",
                   "children": [
@@ -21596,6 +21844,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -21870,6 +22128,20 @@
                            {
                               "type": "loop",
                               "name": "otherLoop",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the body of the loop",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setBody"
+                           },
+                           {
+                              "type": "scope",
+                              "name": "body",
                               "defaultValue": ""
                            }]
                },
@@ -22671,6 +22943,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -23513,6 +23795,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -24456,6 +24748,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -25474,6 +25776,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -26455,6 +26767,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -27278,6 +27600,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -28237,6 +28569,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -29303,6 +29645,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -30140,6 +30492,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -31100,6 +31462,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -32089,6 +32461,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -32959,6 +33341,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -33857,6 +34249,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -34985,6 +35387,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -35865,6 +36277,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -36725,6 +37147,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -37726,6 +38158,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -38591,6 +39033,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -39419,6 +39871,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -40345,6 +40807,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -41349,6 +41821,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -42321,6 +42803,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -43185,6 +43677,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -44048,6 +44550,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -44879,6 +45391,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -45776,6 +46298,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -46693,6 +47225,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -47669,6 +48211,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -48592,6 +49144,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",
@@ -49389,6 +49951,16 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
                   "children": [
                            {
                               "type": "Boolean",

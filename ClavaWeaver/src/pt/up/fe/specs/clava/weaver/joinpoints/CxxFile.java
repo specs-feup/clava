@@ -231,8 +231,28 @@ public class CxxFile extends AFile {
 
     @Override
     public void addIncludeJpImpl(AJoinPoint jp) {
+        // If jp is a function, include declaration if available
+        if (jp.instanceOf("function")) {
+            AFunction functionJp = (AFunction) jp;
+            AJoinPoint decl = functionJp.getDeclarationJpImpl();
+            jp = decl != null ? decl : jp;
+        }
+
         // Get first joinpoint that is a CxxFile
         CxxFile includeFile = CxxJoinpoints.getAncestorandSelf(jp, CxxFile.class).get();
+
+        // If file is the same as the current file, ignore
+        if (includeFile.tunit.getLocation().equals(tunit.getLocation())) {
+            ClavaLog.debug("addIncludeJp: ignoring include '" + includeFile.getNode().getRelativeFilepath()
+                    + "', since it is in the same file");
+            return;
+        }
+
+        if (!includeFile.tunit.isHeaderFile()) {
+            ClavaLog.info("addIncludeJp: not adding file '" + includeFile.getNode().getRelativeFilepath()
+                    + "' as an include, since it is not a header file");
+            return;
+        }
 
         // String includePath = CxxWeaver.getRelativeFilepath(includeFile.getNode());
         String includePath = includeFile.getNode().getRelativeFilepath();
