@@ -40,6 +40,7 @@ import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
+import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -589,6 +590,25 @@ public class AstFactory {
         CompoundStmt emptyBody = CxxWeaver.getFactory().compoundStmt();
         IfStmt ifStmt = CxxWeaver.getFactory().ifStmt((Expr) condition.getNode(), emptyBody);
         return CxxJoinpoints.create(ifStmt, AIf.class);
+    }
+
+    public static ABinaryOp binaryOp(String op, AExpression left, AExpression right, AType type) {
+
+        BinaryOperatorKind opKind = BinaryOperator.getOpTry(op).orElse(null);
+        if (opKind == null) {
+            ClavaLog.info("binaryOp: operator '" + op + "' is not valid");
+            return null;
+        }
+
+        BinaryOperator opNode = CxxWeaver.getFactory().binaryOperator(opKind, (Type) type.getNode(),
+                (Expr) left.getNode(), (Expr) right.getNode());
+
+        return CxxJoinpoints.create(opNode, ABinaryOp.class);
+    }
+
+    public static AExpression parenthesis(AExpression expression) {
+        ParenExpr parenExpr = CxxWeaver.getFactory().parenExpr((Expr) expression.getNode());
+        return CxxJoinpoints.create(parenExpr, AExpression.class);
     }
 
 }
