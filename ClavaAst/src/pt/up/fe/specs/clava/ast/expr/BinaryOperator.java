@@ -1,11 +1,11 @@
 /**
  * Copyright 2016 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -23,11 +24,12 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
+import pt.up.fe.specs.util.lazy.Lazy;
 
 /**
  * Represents a builtin binary operation expression.
- * 
- * 
+ *
+ *
  * @author JoaoBispo
  *
  */
@@ -78,6 +80,21 @@ public class BinaryOperator extends Operator {
         KIND_NAMES.put(BinaryOperatorKind.OrAssign, "or_assign");
         KIND_NAMES.put(BinaryOperatorKind.Comma, "comma");
 
+    }
+
+    private static final Lazy<Map<String, BinaryOperatorKind>> OP_MAP = Lazy.newInstance(BinaryOperator::buildOpMap);
+
+    private static Map<String, BinaryOperatorKind> buildOpMap() {
+        Map<String, BinaryOperatorKind> opMap = new HashMap<>();
+        for (var entry : KIND_NAMES.entrySet()) {
+            opMap.put(entry.getValue(), entry.getKey());
+        }
+
+        return opMap;
+    }
+
+    public static Optional<BinaryOperatorKind> getOpTry(String opName) {
+        return Optional.ofNullable(OP_MAP.get().get(opName));
     }
 
     public BinaryOperator(DataStore data, Collection<? extends ClavaNode> children) {
