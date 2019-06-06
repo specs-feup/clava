@@ -153,9 +153,9 @@ public class CxxActions {
     //
     // }
 
-    public static void replace(ClavaNode target, ClavaNode newNode, CxxWeaver weaver) {
+    public static ClavaNode replace(ClavaNode target, ClavaNode newNode, CxxWeaver weaver) {
         weaver.clearUserField(target);
-        NodeInsertUtils.replace(target, newNode);
+        return NodeInsertUtils.replace(target, newNode);
     }
 
     public static AJoinPoint insertBefore(AJoinPoint baseJp, AJoinPoint newJp) {
