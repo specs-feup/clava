@@ -1,5 +1,7 @@
 import clava.Clava;
+import clava.ClavaType;
 import lara.Check;
+
 
 
 /**
@@ -251,12 +253,40 @@ ClavaJoinPoints.assign = function($leftHand, $rightHand) {
  * @param {String|$expr} $condition - The condition of the if statement. If a string, it is converted to a literal expression.
  */
 ClavaJoinPoints.ifStmt = function($condition) {
+	$condition = ClavaType.asExpression($condition);
+	/*
 	if(isString($condition)) {
 		$condition = ClavaJoinPoints.exprLiteral($condition);
 	}
 	else {
 		Check.isJoinPoint($condition, 'expression');		
 	}
-	
+	*/
 	return AstFactory.ifStmt($condition);
+}
+
+/**
+ * Creates a new join point 'binaryOp'. 
+ *
+ * @param {String} op - The binary operator kind.
+ * @param {String|$expr} $left - The left hand of the binary operator. If a string, it is converted to a literal expression.
+ * @param {String|$expr} $right - The right hand of the binary operator. If a string, it is converted to a literal expression.
+ * @param {String|$expr} $type - The return type of the operator. If a string, it is converted to a literal type. If undefined, uses int type.
+ */
+ClavaJoinPoints.binaryOp = function(op, $left, $right, $type) {
+	$left = ClavaType.asExpression($left);
+	$right = ClavaType.asExpression($right);
+	$type = ClavaType.asType($type);
+	
+	return AstFactory.binaryOp(op, $left, $right, $type);
+}
+
+/**
+ * Creates a new join point 'expr' representing a parenthesis expression. 
+ *
+ * @param {String|$expr} $expr - The expression inside the parenthesis. If a string, it is converted to a literal expression.
+ */
+ClavaJoinPoints.parenthesis = function($expr) {
+	$expr = ClavaType.asExpression($expr);
+	return AstFactory.parenthesis($expr);
 }
