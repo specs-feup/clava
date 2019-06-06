@@ -2,10 +2,20 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-int clava_dcg_global[ 1 ] = {0};
+int clava_dcg_global[ 3 ] = {0};
 int foo() {
    
    return 1;
+}
+
+int foo2() {
+   
+   return 1;
+}
+
+int foo3(int a) {
+   
+   return a;
 }
 
 void clava_call_graph() {
@@ -13,25 +23,28 @@ void clava_call_graph() {
    if(clava_dcg_global[0] != 0) {
       printf("	main -> foo [label=\"%d\"];\n", clava_dcg_global[0]);
    }
+   if(clava_dcg_global[1] != 0) {
+      printf("	main -> foo2 [label=\"%d\"];\n", clava_dcg_global[1]);
+   }
+   if(clava_dcg_global[2] != 0) {
+      printf("	main -> foo3 [label=\"%d\"];\n", clava_dcg_global[2]);
+   }
    printf("}\n");
 }
 
 int main() {
    atexit(clava_call_graph);
-   for(int i = 0; i < 10; i += foo()) {
-      clava_dcg_global[ 0 ]++;
+   for(int i = 0; i < 10; i += (clava_dcg_global[ 0 ]++ , foo())) {
    }
-   clava_dcg_global[ 0 ]++;
-   if(foo()) {
+   if((clava_dcg_global[ 0 ]++ , foo())) {
    }
-   else {
-      clava_dcg_global[ 0 ]++;
-      if(foo()) {
-      }
+   else if((clava_dcg_global[ 0 ]++ , foo())) {
    }
-   clava_dcg_global[ 0 ]++;
+   if((clava_dcg_global[ 0 ]++ , foo()) || (clava_dcg_global[ 1 ]++ , foo2())) {
+   }
+   (clava_dcg_global[ 2 ]++ , foo3((clava_dcg_global[ 0 ]++ , foo())));
    
-   return foo();
+   return (clava_dcg_global[ 0 ]++ , foo());
 }
 
 /**** End File ****/
