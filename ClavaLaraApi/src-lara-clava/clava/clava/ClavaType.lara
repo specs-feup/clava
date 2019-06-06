@@ -57,3 +57,33 @@ ClavaType.getVarrefsInTypeCopy = function($type, varrefs) {
 	
 	return ClavaType.visitExprInTypeCopy($type, exprFunction);
 }
+
+/**
+ *  Makes sure the given parameter is an expression join point.
+ *
+ * @param {String|$expr} $expression - If a string, returns a literal expression with the code of the string. Otherwise, returns $expression
+ */
+ClavaType.asExpression = function($expression) {
+
+	if(isString($expression)) {
+		return ClavaJoinPoints.exprLiteral($expression);
+	}
+
+	Check.isJoinPoint($expression, 'expression');
+	return $expression;
+}
+
+/**
+ *  Makes sure the given parameter is a type join point.
+ *
+ * @param {String|$type} $type - If a string, returns a literal type with the code of the string. Otherwise, returns $type
+ */
+ClavaType.asType = function($type) {
+
+	if(isString($type)) {
+		return ClavaJoinPoints.typeLiteral($type);
+	}
+
+	Check.isJoinPoint($type, 'type');
+	return $type;
+}
