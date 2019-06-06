@@ -1,6 +1,7 @@
 import clava.ClavaJoinPoints;
 import clava.Clava;
 import lara.code.Logger;
+import lara.util.TupleId;
 
 /**
  * Instruments code in order to build a runtime call graph.
@@ -12,21 +13,25 @@ import lara.code.Logger;
 aspectdef DynamicCallGraph
 	input graphFile end
 
-	
-    var obj = new LaraObject();
+	var tupleId = new TupleId();
 
 	var dcgName = "clava_dcg_global";
 
     /* Instrument function calls and increment the corresponding position */
     select function.call end
     apply
-        var id = obj.getId($function.name, $call.name);
+		var id = tupleId.getId($function.name, $call.name);
 		insertIncrement($call, dcgName + '[ '+id+' ]++;');
     end
 
-
+	// Get tuples and count them
+	var tuples = tupleId.getTuples();
+    var total = 0;
+	for(var key in tuples) {
+		total++;
+	}
+	
     /* Declare the array in each file */
-    var total = obj.getTotal();
     select file.function end
     apply
         if($file.hasMain) {
@@ -67,19 +72,19 @@ aspectdef DynamicCallGraph
 
 	var $lastStmt = graphLogger.getAfterJp();
 
+	for(var id in tuples) {
+		var tuple = tuples[id];
+		
+        var dcgCount = dcgName+"["+id+"]";
+        $lastStmt = $lastStmt.insertAfter(ClavaJoinPoints.ifStmt(dcgCount + " != 0"));
+        
+        graphLogger.append("\t"+tuple[0]+" -> "+tuple[1]+' [label=\\"')
+        	.int(dcgCount)
+        	.append('\\"];').ln()
+        	.logBefore($lastStmt.then);		
+		
+	}
 
-     for (f in obj) {
-         for (c in obj[f]) {
-             var id = obj[f][c];
-             var dcgCount = dcgName+"["+id+"]";
-             $lastStmt = $lastStmt.insertAfter(ClavaJoinPoints.ifStmt(dcgCount + " != 0"));
-             
-             graphLogger.append("\t"+f+" -> "+c+' [label=\\"')
-             		.int(dcgCount)
-             		.append('\\"];').ln()
-             		.logBefore($lastStmt.then);
-         }
-    }
 
 	graphLogger.append("}").ln().log($lastStmt);
 
