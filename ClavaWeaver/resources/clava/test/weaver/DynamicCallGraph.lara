@@ -120,7 +120,7 @@ function insertIncrement($call, code) {
 		var $commaOp = ClavaJoinPoints.binaryOp("comma", code, $call, $call.type);
 	
 		// Replace parenthesis child
-		$parenthesis.children[0].replaceWith($commaOp);
+		$parenthesis.firstChild = ($commaOp);
 		
 		return;
 	}
