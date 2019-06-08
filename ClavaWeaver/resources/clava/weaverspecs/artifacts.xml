@@ -110,6 +110,14 @@
 		<attribute name="isMacro" type="Boolean"
 			tooltip="true if any descendant or the node itself was defined as a macro">
 		</attribute>
+		<attribute name="firstChild" type="joinpoint" tooltip="Returns the first child of this node, or undefined if it has no child">
+			<def/>
+		</attribute>
+		<attribute name="lastChild" type="joinpoint" tooltip="Returns the last child of this node, or undefined if it has no child">
+			<def/>
+		</attribute>		
+		<attribute name="hasChildren" type="Boolean" 		tooltip="true if the node has children, false otherwise">
+		</attribute>
 		<!--
 		<attribute name="setValue" type="joinpoint" tooltip="Sets the value associated with the given property key">
 			<parameter name="key" type="String" />	

@@ -60,6 +60,20 @@ public abstract class AJoinPoint extends JoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "firstChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defFirstChildImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "lastChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defLastChildImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -84,6 +98,8 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("setValue(String key, Object value)");
         actions.add("messageToUser(String message)");
         actions.add("removeChildren()");
+        actions.add("setFirstChild(AJoinPoint node)");
+        actions.add("setLastChild(AJoinPoint node)");
     }
 
     /**
@@ -484,6 +500,58 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
+     * Replaces the first child, or inserts the join point if no child is present
+     * @param node 
+     */
+    public void setFirstChildImpl(AJoinPoint node) {
+        throw new UnsupportedOperationException(get_class()+": Action setFirstChild not implemented ");
+    }
+
+    /**
+     * Replaces the first child, or inserts the join point if no child is present
+     * @param node 
+     */
+    public final void setFirstChild(AJoinPoint node) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setFirstChild", this, Optional.empty(), node);
+        	}
+        	this.setFirstChildImpl(node);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setFirstChild", this, Optional.empty(), node);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setFirstChild", e);
+        }
+    }
+
+    /**
+     * Replaces the last child, or inserts the join point if no child is present
+     * @param node 
+     */
+    public void setLastChildImpl(AJoinPoint node) {
+        throw new UnsupportedOperationException(get_class()+": Action setLastChild not implemented ");
+    }
+
+    /**
+     * Replaces the last child, or inserts the join point if no child is present
+     * @param node 
+     */
+    public final void setLastChild(AJoinPoint node) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setLastChild", this, Optional.empty(), node);
+        	}
+        	this.setLastChildImpl(node);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setLastChild", this, Optional.empty(), node);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setLastChild", e);
+        }
+    }
+
+    /**
      * 
      */
     @Override
@@ -538,6 +606,9 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("getValue(String key)");
         attributes.add("keyType(String key)");
         attributes.add("isMacro");
+        attributes.add("firstChild");
+        attributes.add("lastChild");
+        attributes.add("hasChildren");
     }
 
     /**
@@ -1859,6 +1930,89 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isMacro", e);
+        }
+    }
+
+    /**
+     * Returns the first child of this node, or undefined if it has no child
+     */
+    public abstract AJoinPoint getFirstChildImpl();
+
+    /**
+     * 
+     */
+    public void defFirstChildImpl(AJoinPoint value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def firstChild with type AJoinPoint not implemented ");
+    }
+
+    /**
+     * Returns the first child of this node, or undefined if it has no child
+     */
+    public final Object getFirstChild() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "firstChild", Optional.empty());
+        	}
+        	AJoinPoint result = this.getFirstChildImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "firstChild", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "firstChild", e);
+        }
+    }
+
+    /**
+     * Returns the last child of this node, or undefined if it has no child
+     */
+    public abstract AJoinPoint getLastChildImpl();
+
+    /**
+     * 
+     */
+    public void defLastChildImpl(AJoinPoint value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def lastChild with type AJoinPoint not implemented ");
+    }
+
+    /**
+     * Returns the last child of this node, or undefined if it has no child
+     */
+    public final Object getLastChild() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "lastChild", Optional.empty());
+        	}
+        	AJoinPoint result = this.getLastChildImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "lastChild", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "lastChild", e);
+        }
+    }
+
+    /**
+     * true if the node has children, false otherwise
+     */
+    public abstract Boolean getHasChildrenImpl();
+
+    /**
+     * true if the node has children, false otherwise
+     */
+    public final Object getHasChildren() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasChildren", Optional.empty());
+        	}
+        	Boolean result = this.getHasChildrenImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasChildren", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasChildren", e);
         }
     }
 

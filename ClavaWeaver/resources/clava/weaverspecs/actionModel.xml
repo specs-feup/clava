@@ -70,8 +70,13 @@
 	
 
 	<action name="removeChildren" tooltip="Removes the children of this node"/>
-	
 
+	<action name="setFirstChild" tooltip="Replaces the first child, or inserts the join point if no child is present">
+		<parameter name="node" type="Joinpoint" />
+	</action>
+	<action name="setLastChild" tooltip="Replaces the last child, or inserts the join point if no child is present">	
+		<parameter name="node" type="Joinpoint" />
+	</action>
 	<!-- PROGRAM -->
 
 	<!-- Internally generates the code for the current program and rebuilds 

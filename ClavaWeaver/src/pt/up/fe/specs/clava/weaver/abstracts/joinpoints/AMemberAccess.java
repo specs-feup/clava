@@ -289,6 +289,24 @@ public abstract class AMemberAccess extends AExpression {
     }
 
     /**
+     * Replaces the first child, or inserts the join point if no child is present
+     * @param node 
+     */
+    @Override
+    public void setFirstChildImpl(AJoinPoint node) {
+        this.aExpression.setFirstChildImpl(node);
+    }
+
+    /**
+     * Replaces the last child, or inserts the join point if no child is present
+     * @param node 
+     */
+    @Override
+    public void setLastChildImpl(AJoinPoint node) {
+        this.aExpression.setLastChildImpl(node);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -340,6 +358,20 @@ public abstract class AMemberAccess extends AExpression {
         case "type": {
         	if(value instanceof AJoinPoint){
         		this.defTypeImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "firstChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defFirstChildImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "lastChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defLastChildImpl((AJoinPoint)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -407,54 +439,57 @@ public abstract class AMemberAccess extends AExpression {
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),
         IMPLICITCAST("implicitCast"),
-        ENDLINE("endLine"),
         PARENT("parent"),
-        ENDCOLUMN("endColumn"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
-        CODE("code"),
         DATA("data"),
+        HASCHILDREN("hasChildren"),
+        DESCENDANTSANDSELF("descendantsAndSelf"),
+        TYPE("type"),
+        CHILDREN("children"),
+        FIRSTCHILD("firstChild"),
+        NUMCHILDREN("numChildren"),
+        ANCESTOR("ancestor"),
+        ASTCHILD("astChild"),
+        ASTNAME("astName"),
+        ASTID("astId"),
+        CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
+        FILENAME("filename"),
+        JAVAFIELDS("javaFields"),
+        ASTPARENT("astParent"),
+        USERFIELD("userField"),
+        HASNODE("hasNode"),
+        CHILD("child"),
+        ENDLINE("endLine"),
+        ENDCOLUMN("endColumn"),
+        CODE("code"),
         ISINSIDELOOPHEADER("isInsideLoopHeader"),
         LINE("line"),
         KEYS("keys"),
         ISINSIDEHEADER("isInsideHeader"),
-        DESCENDANTSANDSELF("descendantsAndSelf"),
         ASTNUMCHILDREN("astNumChildren"),
-        TYPE("type"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
         ISMACRO("isMacro"),
-        CHILDREN("children"),
+        LASTCHILD("lastChild"),
         ROOT("root"),
-        NUMCHILDREN("numChildren"),
         JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        ANCESTOR("ancestor"),
         HASASTPARENT("hasAstParent"),
         COLUMN("column"),
-        ASTCHILD("astChild"),
         PARENTREGION("parentRegion"),
-        ASTNAME("astName"),
-        ASTID("astId"),
         GETVALUE("getValue"),
-        CONTAINS("contains"),
         FIRSTJP("firstJp"),
-        ASTISINSTANCE("astIsInstance"),
-        FILENAME("filename"),
-        JAVAFIELDS("javaFields"),
-        ASTPARENT("astParent"),
         JAVAFIELDTYPE("javaFieldType"),
-        USERFIELD("userField"),
         LOCATION("location"),
-        HASNODE("hasNode"),
         GETUSERFIELD("getUserField"),
         PRAGMAS("pragmas"),
-        HASPARENT("hasParent"),
-        CHILD("child");
+        HASPARENT("hasParent");
         private String name;
 
         /**
