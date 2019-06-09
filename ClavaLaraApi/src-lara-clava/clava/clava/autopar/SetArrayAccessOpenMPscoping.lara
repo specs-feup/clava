@@ -17,6 +17,9 @@ aspectdef SetArrayAccessOpenMPscoping
 		return;
 
 	
+	// TODO: This 'for' needs to be commented in order for array
+	// variables to appear as first private. However, commenting it
+	// triggers pragma generation bugs (e.g., ] in NAS CG and NAS UA)
 
 	// Ignore array uses in the loop whose pattern is 'R'
 	for(var arrayAccessObj of LoopOmpAttributes[loopindex].varAccess)
@@ -32,8 +35,7 @@ aspectdef SetArrayAccessOpenMPscoping
 			}
 			arrayAccessObj.usedInClause = true;
 		}
-
-
+	
 	
 
 	//var arrayAccesslist = SearchStruct(LoopOmpAttributes[loopindex].varAccess, {varTypeAccess : 'arrayAccess', usedInClause : false});
