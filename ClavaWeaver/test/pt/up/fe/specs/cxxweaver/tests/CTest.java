@@ -141,4 +141,9 @@ public class CTest {
     public void testDynamicCallGraph() {
         newTester().test("DynamicCallGraph.lara", "dynamic_call_graph.c");
     }
+
+    @Test
+    public void testSelects() {
+        newTester().test("Selects.lara", "selects.c");
+    }
 }

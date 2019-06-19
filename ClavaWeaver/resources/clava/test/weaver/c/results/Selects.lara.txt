@@ -1,0 +1,5 @@
+Select function foo
+Select function bar
+Select function foo
+Select function at line 1
+Select calls
