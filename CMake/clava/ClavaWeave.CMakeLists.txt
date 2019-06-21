@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.7)
 
 	#message(STATUS "Aspect: ${ASPECT}")
 	#message(STATUS "Aspect args flags: ${ASPECT_ARGS_FLAG}")
