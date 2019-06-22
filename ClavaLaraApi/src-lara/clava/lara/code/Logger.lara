@@ -16,10 +16,11 @@ Logger.prototype.printfFormat[Logger.prototype.Type.LONGLONG] = "%lld";
 //Logger.prototype.useSpecsLogger = true;
 
 Logger.prototype.ln = function(expr) {
+
     if(Clava.isCxx()) {
 		return this._append_private("std::endl", this.Type.LITERAL);
 	}
-	
+
 	return this._append_private("\\n", this.Type.NORMAL);
 } 
  

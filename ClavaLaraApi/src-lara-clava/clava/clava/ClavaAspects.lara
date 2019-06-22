@@ -20,12 +20,14 @@ end
 
 aspectdef ClavaIsCxx
 	output isCxx end
-	
+
 	select program end
 	apply
 		isCxx = $program.isCxx;
+
 		return;
 	end
+
 end
 
 aspectdef ClavaBaseFolder

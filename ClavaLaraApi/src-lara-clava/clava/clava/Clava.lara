@@ -20,13 +20,13 @@ Clava.useSpecsLogger = false;
  */
 Clava.getStandard = function() {
 	call standardResult:ClavaStandard();
-	
+
 	return standardResult.standard;
 }
 
 Clava.isCxx = function() {	
 	call standardResult:ClavaIsCxx();
-	
+
 	return standardResult.isCxx;
 }
 
