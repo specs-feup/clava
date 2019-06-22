@@ -200,17 +200,26 @@ aspectdef checkForOpenMPCanonicalForm
  	//------------------------------------------------------------
  	var stepmsgError = []; 	
  	var stepOp = null;
+	var $stepOpExpr = undefined;
  	select $ForStmt.step.expr end
  	apply
+ 		$stepOpExpr = $expr;
  		stepOp = $expr.kind;
  		break #$ForStmt;
  	end
  	condition $expr.joinpointType == 'binaryOp' || $expr.joinpointType == 'unaryOp' end
 
- 	if (stepOp == null || ['assign','post_inc','pre_inc','pre_dec','post_dec','add','sub'].indexOf(stepOp) == -1 || stepVars.length != 1)
-		stepmsgError.push('loop-step expression is not in canonical form' );
+// 	if (stepOp == null || ['assign','post_inc','pre_inc','pre_dec','post_dec','add','sub'].indexOf(stepOp) == -1 || stepVars.length != 1)
+//		stepmsgError.push('loop-step expression is not in canonical form' );
+		
+ 	if (stepOp == null)
+		stepmsgError.push('loop-step expression is not in canonical form: could not obtain step operation from expression "'+$stepOpExpr.code+'":' + $stepOpExpr.ast);		
 
-
+ 	if (['assign','post_inc','pre_inc','pre_dec','post_dec','add','sub'].indexOf(stepOp) == -1)
+		stepmsgError.push('loop-step expression is not in canonical form: detected step operation is "+stepOp+", expected one of assign, post_inc, pre_inc, pre_dec, post_dec, add, sub');
+ 	
+ 	if (stepVars.length != 1)
+		stepmsgError.push('loop-step expression is not in canonical form: step variables is not 1, it is ' + stepVars.length + ' (' + stepVars + ')');		
 
 	msgError = msgError.concat(initmsgError);
 	msgError = msgError.concat(condmsgError);
