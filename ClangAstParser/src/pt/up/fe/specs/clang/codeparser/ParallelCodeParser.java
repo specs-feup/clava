@@ -208,12 +208,12 @@ public class ParallelCodeParser extends CodeParser {
                 .isPresent();
 
         if (hasParsingErrors && !get(CONTINUE_ON_PARSING_ERRORS)) {
-            String errors = clangParserResults.stream()
+            List<String> errors = clangParserResults.stream()
                     .filter(data -> data.get(ClangParserData.HAS_ERRORS))
                     .map(data -> data.get(ClangParserData.LINES_NOT_PARSED))
-                    .collect(Collectors.joining("\n"));
+                    .collect(Collectors.toList());
 
-            throw new RuntimeException("There are errors in the source code:\n" + errors);
+            throw new ClavaParserException(errors);
         }
 
         tic = System.nanoTime();
