@@ -607,7 +607,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // List<String> implementationFilenames = processSources(sources);
 
-        // Convert to list, add header files in include folders
+        // Convert to list, add header files in include folders if enabled
         List<String> allFiles = processSources(allUserFilesMap, parserOptions);
         ClavaLog.debug(() -> "All sources: " + allFiles);
 
@@ -731,7 +731,7 @@ public class CxxWeaver extends ACxxWeaver {
     private List<File> adaptSources(List<File> sources, List<String> parserOptions) {
         List<File> adaptedSources = new ArrayList<>(sources);
         // if (args.get(CxxWeaverOption.GENERATE_CMAKE_HELPER_FILES)) {
-
+    
         // Add header files in normal include folders to the tree
         if (!args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
             // Use parser options instead of weaver options, it can be a rebuild with other folders
@@ -739,9 +739,9 @@ public class CxxWeaver extends ACxxWeaver {
                     .filter(option -> option.startsWith("-I"))
                     .map(option -> new File(option.substring("-I".length())))
                     .collect(Collectors.toList());
-
+    
             adaptedSources.addAll(headerIncludes);
-
+    
             ClavaLog.debug(() -> "Adding the following header includes from the options: " + headerIncludes);
             ClavaLog.debug(() -> "Original header includes: " + args.get(CxxWeaverOption.HEADER_INCLUDES));
             // for (File includeFolder : args.get(CxxWeaverOption.HEADER_INCLUDES)) {
@@ -749,13 +749,13 @@ public class CxxWeaver extends ACxxWeaver {
             // // parserOptions.add("-I" + parseIncludePath(includeFolder));
             // }
         }
-
+    
         // parserOptions.stream()
         // .filter(option -> option.startsWith("-I"))
         // .map(option -> option.substring("-I".length()))
         // .forEach(includeFolder -> adaptedSources.add(new File(includeFolder)));
         // }
-
+    
         return adaptedSources;
     }
     */
@@ -766,11 +766,23 @@ public class CxxWeaver extends ACxxWeaver {
 
         Set<String> adaptedSources = new HashSet<>();
 
-        sourceFiles.keySet().stream()
-                .forEach(adaptedSources::add);
+        boolean skipHeaderFiles = args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING);
+
+        if (skipHeaderFiles) {
+            // Add only implementation files if skipping header includes
+            for (String sourceFile : sourceFiles.keySet()) {
+                var currentSourceFiles = SpecsIo.getFilesRecursive(new File(sourceFile));
+                currentSourceFiles.stream()
+                        .filter(currentSource -> !SourceType.isHeader(currentSource))
+                        .map(File::getAbsolutePath)
+                        .forEach(adaptedSources::add);
+            }
+        } else {
+            sourceFiles.keySet().stream().forEach(adaptedSources::add);
+        }
 
         // Add header files in normal include folders to the tree
-        if (!args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
+        if (!skipHeaderFiles) {
             // Use parser options instead of weaver options, it can be a rebuild with other folders
             List<File> headerIncludes = parserOptions.stream()
                     .map(CxxWeaver::headerFlagToFile)
@@ -1136,6 +1148,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Write the other translation units and add folder as includes, in case they are needed
         String currentCodeFoldername = TEMP_WEAVING_FOLDER + "_for_file_rebuild";
         File currentCodeFolder = SpecsIo.mkdir(currentCodeFoldername).getAbsoluteFile();
+        SpecsIo.deleteFolderContents(currentCodeFolder, true);
 
         // Add include
         // rebuildOptions.add(0, "\"-I" + currentCodeFolder.getAbsolutePath() + "\"");

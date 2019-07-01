@@ -45,7 +45,7 @@ public interface CxxWeaverOption {
             .setDefault(() -> FileList.newInstance());
 
     DataKey<Boolean> SKIP_HEADER_INCLUDES_PARSING = KeyFactory.bool("skipHeaderIncludesParsing")
-            .setLabel("Skip parsing of header includes");
+            .setLabel("Skip parsing of header files");
     // .setDefault(() -> true);
 
     DataKey<FileList> SYSTEM_INCLUDES = LaraIKeyFactory.folderList("library includes")
