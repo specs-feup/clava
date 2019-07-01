@@ -44,6 +44,29 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * a Java file to the file that originated this translation unit
+     */
+    public abstract Object getFileImpl();
+
+    /**
+     * a Java file to the file that originated this translation unit
+     */
+    public final Object getFile() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "file", Optional.empty());
+        	}
+        	Object result = this.getFileImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "file", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "file", e);
+        }
+    }
+
+    /**
      * true if this file contains a 'main' method
      */
     public abstract Boolean getHasMainImpl();
@@ -559,14 +582,14 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Recompiles only this file, returns a join point to the new recompiled file
+     * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
      */
     public AFile rebuildImpl() {
         throw new UnsupportedOperationException(get_class()+": Action rebuild not implemented ");
     }
 
     /**
-     * Recompiles only this file, returns a join point to the new recompiled file
+     * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
      */
     public final AFile rebuild() {
         try {
@@ -580,6 +603,31 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "rebuild", e);
+        }
+    }
+
+    /**
+     * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
+     */
+    public AJoinPoint rebuildTryImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action rebuildTry not implemented ");
+    }
+
+    /**
+     * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
+     */
+    public final AJoinPoint rebuildTry() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "rebuildTry", this, Optional.empty());
+        	}
+        	AJoinPoint result = this.rebuildTryImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "rebuildTry", this, Optional.ofNullable(result));
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "rebuildTry", e);
         }
     }
 
@@ -811,6 +859,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     protected final void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
         attributes.add("name");
+        attributes.add("file");
         attributes.add("hasMain");
         attributes.add("path");
         attributes.add("filepath");
@@ -859,6 +908,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         actions.add("vardecl addGlobal(String, joinpoint, String)");
         actions.add("String write(String)");
         actions.add("file rebuild()");
+        actions.add("joinpoint rebuildTry()");
         actions.add("void insertBegin(joinpoint)");
         actions.add("void insertBegin(String)");
         actions.add("void insertEnd(joinpoint)");
@@ -879,6 +929,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
      */
     protected enum FileAttributes {
         NAME("name"),
+        FILE("file"),
         HASMAIN("hasMain"),
         PATH("path"),
         FILEPATH("filepath"),

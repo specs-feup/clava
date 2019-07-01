@@ -128,8 +128,12 @@
 
 
 
-
-
+	<!-- CLAVA EXCEPTION -->
+	<artifact class="clavaException">
+		<attribute name="message" type="String" />
+		<attribute name="exceptionType" type="String" />
+		<attribute name="exception" type="Object" />				
+	</artifact>
 
 	<!-- PROGRAM -->
 	<artifact class="program" default="name">
@@ -153,6 +157,7 @@
 	<!-- FILE -->
 	<artifact class="file" default="name">
 		<attribute name="name" type="String" tooltip="the name of the file"/>
+		<attribute name="file" type="Object" tooltip="a Java file to the file that originated this translation unit"/>
 		<attribute name="hasMain" type="Boolean" tooltip="true if this file contains a 'main' method"/>
 		<!-- <attribute name="filename" type="String"/> -->
 		<attribute name="path" type="String" tooltip="the folder of the source file"/>

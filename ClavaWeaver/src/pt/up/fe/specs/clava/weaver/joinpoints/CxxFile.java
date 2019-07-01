@@ -224,7 +224,7 @@ public class CxxFile extends AFile {
         if (path.endsWith(filename)) {
             return path.substring(0, path.length() - filename.length());
         }
-
+        
         return path;
         */
     }
@@ -444,5 +444,20 @@ public class CxxFile extends AFile {
         AFile rebuiltFile = CxxJoinpoints.create(rebuiltTunit, AFile.class);
         replaceWith(rebuiltFile);
         return rebuiltFile;
+    }
+
+    @Override
+    public AJoinPoint rebuildTryImpl() {
+        try {
+            return rebuildImpl();
+        } catch (Exception e) {
+            System.out.println("EXCEPTION: " + e);
+            return new CxxClavaException(e);
+        }
+    }
+
+    @Override
+    public Object getFileImpl() {
+        return tunit.getFile();
     }
 }

@@ -169,8 +169,9 @@
 	</action>
 
 
-	<action name="rebuild" class="file" return="file" tooltip="Recompiles only this file, returns a join point to the new recompiled file"/>
-
+	<action name="rebuild" class="file" return="file" tooltip="Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens"/>
+	
+	<action name="rebuildTry" class="file" return="joinpoint" tooltip="Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens"/>
 
 	<action name="insertBegin" class="file" tooltip="Adds the node in the join point to the start of the file">
 		<parameter name="node" type="joinpoint" />

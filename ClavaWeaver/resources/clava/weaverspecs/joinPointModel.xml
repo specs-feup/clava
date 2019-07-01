@@ -16,6 +16,10 @@
 	<!-- Utility joinpoint, to represent empty nodes when directly accessing the tree -->
 	<joinpoint class="empty"/>
 	
+	<!--  CLAVA EXCEPTION -->
+	<!-- Utility joinpoint, to represent certain problems when generating join points -->
+	<joinpoint class="clavaException"/>
+	
 	<!-- PROGRAM -->
 	<!-- Represents the complete program and is the topmost joinpoint in the hierarchy.  -->
 	<joinpoint class="program">
