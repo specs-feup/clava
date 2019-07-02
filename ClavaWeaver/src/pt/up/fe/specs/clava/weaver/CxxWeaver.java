@@ -999,6 +999,25 @@ public class CxxWeaver extends ACxxWeaver {
 
     @Override
     public void writeCode(File outputFolder) {
+        // If copy files is enabled, first copy source files to output folder
+        if (getConfig().get(CxxWeaverOption.COPY_FILES_IN_SOURCES)) {
+            for (File source : getSources()) {
+                // If file, just copy the file
+                if (source.isFile()) {
+                    SpecsIo.copy(source, new File(outputFolder, source.getName()));
+                    continue;
+                }
+
+                if (source.isDirectory()) {
+                    File destFolder = SpecsIo.mkdir(outputFolder, source.getName());
+                    SpecsIo.copyFolderContents(source, destFolder);
+                    continue;
+                }
+
+                SpecsLogs.warn("Case not defined for source '" + source + "', is neither a file or a folder");
+            }
+        }
+
         Set<String> modifiedFilenames = getModifiedFilenames();
 
         boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);

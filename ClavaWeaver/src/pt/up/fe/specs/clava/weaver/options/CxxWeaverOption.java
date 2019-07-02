@@ -73,6 +73,9 @@ public interface CxxWeaverOption {
     DataKey<Boolean> UNIT_TESTING_MODE = KeyFactory.bool("Unit Testing Mode")
             .setLabel("Runs the Clava Unit-Tester");
 
+    DataKey<Boolean> COPY_FILES_IN_SOURCES = KeyFactory.bool("Copy files in sources")
+            .setLabel("Copies to output folder all files defined in sources");
+
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("C/C++ Weaver")
             .addKeys(ClavaOptions.STORE_DEFINITION.getKeys())
             .addKeys(WOVEN_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX, CLEAN_INTERMEDIATE_FILES,
@@ -80,7 +83,8 @@ public interface CxxWeaverOption {
                     ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD,
                     DISABLE_WEAVING, DISABLE_CODE_GENERATION,
                     // GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES)
-                    GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE)
+                    GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE,
+                    COPY_FILES_IN_SOURCES)
             // GENERATE_MODIFIED_CODE_ONLY, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE, UNIT_TESTING_MODE)
             .addKey(ClangAstKeys.USE_PLATFORM_INCLUDES)
             .startSection("Parsing Options")

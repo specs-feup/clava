@@ -45,7 +45,6 @@ public class CxxWeaverOptions {
         addOneArgOption(ClavaOptions.FLAGS_LIST, "fsl", "flags-list", "flags string list",
                 "String list with C/C++ compiler flags");
 
-        
         addBooleanOption(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES, "drd", "disable-remote",
                 "Disables remote dependencies (e.g., git repos)");
 
@@ -113,6 +112,9 @@ public class CxxWeaverOptions {
 
         addBooleanOption(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS, "ipe", "ignore-parsing-errors",
                 "Ignores parsing errors in C/C++ source code");
+
+        addBooleanOption(CxxWeaverOption.COPY_FILES_IN_SOURCES, "cfs", "copy-files-in-sources",
+                "Copies all files found in sources");
     }
 
     private static final void addBooleanOption(DataKey<?> key, String shortOption, String longOption,
