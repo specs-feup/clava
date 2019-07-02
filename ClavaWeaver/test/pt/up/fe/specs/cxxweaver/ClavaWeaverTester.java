@@ -23,6 +23,7 @@ import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import org.lara.interpreter.joptions.config.interpreter.VerboseLevel;
 import org.lara.interpreter.joptions.keys.FileList;
 import org.lara.interpreter.joptions.keys.OptionalFile;
+import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import larai.LaraI;
@@ -52,6 +53,7 @@ public class ClavaWeaverTester {
     private String srcPackage;
     private String resultPackage;
     private String resultsFile;
+    private final DataStore additionalSettings;
     // private boolean debug;
 
     public ClavaWeaverTester(String basePackage, Standard standard, String compilerFlags) {
@@ -63,6 +65,7 @@ public class ClavaWeaverTester {
         srcPackage = null;
         resultPackage = null;
         resultsFile = null;
+        additionalSettings = DataStore.newInstance("Additional Settings");
         // debug = false;
     }
 
@@ -101,6 +104,12 @@ public class ClavaWeaverTester {
 
     public void setResultsFile(String resultsFile) {
         this.resultsFile = resultsFile;
+    }
+
+    public <T, ET extends T> ClavaWeaverTester set(DataKey<T> key, ET value) {
+        this.additionalSettings.set(key, value);
+
+        return this;
     }
 
     private String sanitizePackage(String packageName) {
@@ -211,6 +220,9 @@ public class ClavaWeaverTester {
         if (DEBUG) {
             data.set(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES, false);
         }
+
+        // Add additional settings
+        data.addAll(additionalSettings);
 
         CxxWeaver weaver = new CxxWeaver();
         try {
