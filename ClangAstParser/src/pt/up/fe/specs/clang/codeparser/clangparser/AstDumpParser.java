@@ -330,6 +330,10 @@ public class AstDumpParser implements ClangParser {
             if (!streamConsoleOutput) {
                 ClavaLog.info(output.getStdOut());
             }
+
+            if (lineStreamParser.hasExceptions()) {
+                SpecsLogs.warn("Exceptions happened while parsing the file '" + sourceFile.getAbsolutePath() + "'");
+            }
         } catch (Exception e) {
             throw new RuntimeException("Error while running Clang AST dumper", e);
         }
