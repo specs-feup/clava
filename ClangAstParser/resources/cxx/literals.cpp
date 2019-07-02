@@ -1,5 +1,4 @@
 #include <iostream>
-//#include <limits>
 
 long double operator""_E(long double);
 long double operator""_a(long double);
@@ -20,7 +19,6 @@ int main() {
 	double a4 = 0x1ffp10-0X0p-1;
 	double a5 = 0x1.p0-0xf.p-1;
 	double a6 = 0x0.123p-1-0xa.bp10l;
-	//double a7 = std::numeric_limits<double>::infinity();
 	// Since C++14, current parser does not correctly support single quote
 	double singleQuotes = 231.523'5;
 	double singleQuotes2 = 2'3'1.5;
