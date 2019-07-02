@@ -16,6 +16,7 @@ package pt.up.fe.specs.cxxweaver.tests;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
@@ -66,7 +67,10 @@ public class CApiTest {
     @Test
     public void testAutoPar() {
         if (SpecsPlatforms.isUnix()) {
-            newTester().test("AutoParTest.lara", "autopar_test.c");
+            // Enable restrict mode, to test if it works
+            // Using AutoPar example since it needs to call an external program
+            newTester().set(LaraiKeys.RESTRICT_MODE, Boolean.TRUE)
+                    .test("AutoParTest.lara", "autopar_test.c");
         }
 
     }
