@@ -1,0 +1,10 @@
+aspectdef Scope
+
+	// Count statements
+	select function{"numStatements"}.body end
+	apply
+		println("numStatements (depth): " + $body.numStatements);
+		println("numStatements (flat): " + $body.numStatements(true));
+	end
+
+end

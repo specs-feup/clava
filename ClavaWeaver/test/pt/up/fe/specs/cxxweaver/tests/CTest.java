@@ -146,4 +146,9 @@ public class CTest {
     public void testSelects() {
         newTester().test("Selects.lara", "selects.c");
     }
+
+    @Test
+    public void testScope() {
+        newTester().test("Scope.lara", "scope.c");
+    }
 }
