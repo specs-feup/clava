@@ -30,6 +30,7 @@ import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -175,8 +176,25 @@ public class CxxScope extends AScope {
     }
 
     @Override
-    public Integer getNumStatementsImpl() {
-        return getStatements().size();
+    public Long getNumStatementsImpl() {
+        // if (stmt instanceof WrapperStmt) {
+        // return false;
+        // }
+
+        // return getStatements().size();
+        return numStatementsImpl(false);
+    }
+
+    @Override
+    public Long numStatementsImpl(Boolean flat) {
+        var nodesStream = flat ? scope.getChildrenStream() : scope.getDescendantsStream();
+
+        return nodesStream.filter(Stmt.class::isInstance)
+                // Ignore CompoundStmt, etc
+                .filter(stmt -> !((Stmt) stmt).isAggregateStmt())
+                // Ignore comments, pragmas
+                .filter(stmt -> !(stmt instanceof WrapperStmt))
+                .count();
     }
 
     private List<Stmt> getStatements() {

@@ -39816,10 +39816,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The number of statements in the scope, including the statements inside structures such as ifs and loops, and not considering comments and pragmas",
                   "children": [
                            {
-                              "type": "Integer",
+                              "type": "Long",
                               "name": "numStatements"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The number of statements in the scope, not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)",
+                  "children": [
+                           {
+                              "type": "Long",
+                              "name": "numStatements"
+                           },
+                           {
+                              "type": "Boolean",
+                              "name": "flat"
                            }]
                },
                {

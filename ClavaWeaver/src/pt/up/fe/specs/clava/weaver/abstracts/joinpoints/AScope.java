@@ -30,23 +30,48 @@ public abstract class AScope extends AStatement {
         this.aStatement = aStatement;
     }
     /**
-     * Get value on attribute numStatements
-     * @return the attribute's value
+     * The number of statements in the scope, including the statements inside structures such as ifs and loops, and not considering comments and pragmas
      */
-    public abstract Integer getNumStatementsImpl();
+    public abstract Long getNumStatementsImpl();
 
     /**
-     * Get value on attribute numStatements
-     * @return the attribute's value
+     * The number of statements in the scope, including the statements inside structures such as ifs and loops, and not considering comments and pragmas
      */
     public final Object getNumStatements() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numStatements", Optional.empty());
         	}
-        	Integer result = this.getNumStatementsImpl();
+        	Long result = this.getNumStatementsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "numStatements", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "numStatements", e);
+        }
+    }
+
+    /**
+     * 
+     * @param flat
+     * @return 
+     */
+    public abstract Long numStatementsImpl(Boolean flat);
+
+    /**
+     * 
+     * @param flat
+     * @return 
+     */
+    public final Object numStatements(Boolean flat) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numStatements", Optional.empty(), flat);
+        	}
+        	Long result = this.numStatementsImpl(flat);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "numStatements", Optional.ofNullable(result), flat);
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
@@ -941,6 +966,7 @@ public abstract class AScope extends AStatement {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
+        attributes.add("numStatements");
         attributes.add("numStatements");
         attributes.add("naked");
         attributes.add("stmts");
