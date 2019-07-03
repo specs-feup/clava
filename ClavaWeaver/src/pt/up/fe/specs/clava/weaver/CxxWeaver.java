@@ -490,12 +490,12 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public Set<String> getIncludeFlags() {
-        if (currentSources == null) {
+        if (getSources() == null) {
             SpecsLogs.msgWarn("Source folders are not set");
             return Collections.emptySet();
         }
 
-        return getIncludeFlags(currentSources);
+        return getIncludeFlags(getSources());
     }
 
     private Set<String> getIncludeFlags(List<File> sources) {
@@ -507,12 +507,12 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public Set<String> getIncludeFolders() {
-        if (currentSources == null) {
+        if (getSources() == null) {
             SpecsLogs.msgWarn("Source folders are not set");
             return Collections.emptySet();
         }
 
-        return getIncludeFolders(currentSources);
+        return getIncludeFolders(getSources());
     }
 
     private Set<String> getIncludeFolders(List<File> sources) {
@@ -1409,7 +1409,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Search on sources and normal includes
 
         List<File> searchPaths = new ArrayList<>();
-        searchPaths.addAll(currentSources);
+        searchPaths.addAll(getSources());
         searchPaths.addAll(args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
         // System.out.println("SEARCH PATHS:" + searchPaths);
         Set<String> includeFolders = searchPaths.stream()
