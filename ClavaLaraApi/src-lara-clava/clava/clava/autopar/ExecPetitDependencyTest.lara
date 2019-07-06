@@ -143,6 +143,11 @@ aspectdef ExecPetitDependencyTest
 	}
 	else
 	{
+		// Check if console output has path to petit executable, cut it so that the message is platform independent
+		var petitIndex = consoleOutput.indexOf("petit:");
+		if(petitIndex !== -1) {
+			consoleOutput = consoleOutput.substring(petitIndex);
+		}
 		Add_msgError(LoopOmpAttributes, $ForStmt,'consoleOutput ' + consoleOutput);
 	}
 
