@@ -68,10 +68,19 @@ public class TranslationUnit extends ClavaNode {
      * Relative path refers to the last portion of the path of this file that should be considered as not part of the
      * original source folder.
      * <p>
-     * For instance, if the path of the file is /folder1/folder2/file.h, but the source folder should be considered to
+     * For instance, if the path of the file is /folder1/folder2/file.h, and the source folder should be considered to
      * be /folder1, this method returns folder2.
      */
     public static final DataKey<String> RELATIVE_PATH = KeyFactory.string("relativePath");
+
+    /**
+     * If this source file was specified as being part of a source folder, returns the name of that folder. Otherwise,
+     * returns empty.
+     * <p>
+     * For instance, if the path of the file is /folder1/folder2/file.h, and the source folder should be considered to
+     * be /folder1, this method returns folder1.
+     */
+    public static final DataKey<Optional<String>> SOURCE_FOLDERNAME = KeyFactory.optional("sourceFoldername");
 
     /// DATAKEYS END
 
@@ -429,6 +438,16 @@ public class TranslationUnit extends ClavaNode {
         // this.relativePath = relativePath.isEmpty() ? null : relativePath;
     }
 
+    // public void setSourceFoldername(String sourceFoldername) {
+    // if (sourceFoldername == null) {
+    // set(SOURCE_FOLDERNAME, Optional.empty());
+    // return;
+    // }
+    //
+    // set(SOURCE_FOLDERNAME, Optional.of(sourceFoldername));
+    // // this.relativePath = relativePath.isEmpty() ? null : relativePath;
+    // }
+
     public boolean isRelativePathValid(String relativePath) {
         File path = get(SOURCE_FILE).getParentFile();
         if (path != null) {
@@ -732,66 +751,65 @@ public class TranslationUnit extends ClavaNode {
         if (flattenFolder) {
             return baseFolder;
         }
-
-        // Check if there is a path defined
-        Optional<String> folderpathTry = getFolderpath();
-        // System.out.println("FOLDERPATH:" + folderpath);
-        if (!folderpathTry.isPresent()) {
+        // System.out.println("RELATIVE FOLDER PATH: " + getRelativeFolderpath());
+        // Check if there is a relative path defined
+        Optional<String> relativeFolderpathTry = getRelativeFolderpath();
+        if (!relativeFolderpathTry.isPresent()) {
             return baseFolder;
         }
 
-        String folderpath = folderpathTry.get();
-        File folder = new File(folderpath);
+        String relativeFolderpath = relativeFolderpathTry.get();
 
-        // System.out.println("BASE FOLDER: " + baseFolder);
-        // System.out.println("FOLDERPATH: " + folderpath);
-        // System.out.println("FOLDER: " + folder);
-        // System.out.println("CURRENT FOLDER: " + SpecsIo.getWorkingDir().getAbsolutePath());
+        return new File(baseFolder, relativeFolderpath);
 
-        // If folderpath is absolute, return only last name; otherwise, use it fully
-        String path = folder.isAbsolute() ? folder.getName() : folderpath;
-        return new File(baseFolder, path);
+        // // Check if there is a path defined
+        // Optional<String> folderpathTry = getFolderpath();
+        // // System.out.println("FOLDERPATH:" + folderpath);
+        // if (!folderpathTry.isPresent()) {
+        // return baseFolder;
+        // }
+        //
+        // String folderpath = folderpathTry.get();
+        // File folder = new File(folderpath);
+        //
+        // // If folderpath is absolute, return only last name; otherwise, use it fully
+        // String path = folder.isAbsolute() ? folder.getName() : folderpath;
+        // return new File(baseFolder, path);
 
-        /*
-        // If no source path present, use folder where file is located
-        if (!getSourcePath().isPresent()) {
-            // return baseFolder;
-            return new File(baseFolder, getFile().getParent());
-        }
-        
-        return baseFolder;
-        */
-        /*
-        File sourcePath = getSourcePath().get();
-        File sourceFolder = sourcePath.isDirectory() ? sourcePath : sourcePath.getParentFile();
-        
-        if (sourceFolder == null) {
-            return baseFolder;
-        }
-        
-        // If parent name is not null, create destination folder that mimics original input source
-        return SpecsIo.mkdir(new File(baseFolder, sourceFolder.getName()));
-        */
     }
 
     public File getDestinationFile(File destinationFolder, boolean flattenFolders) {
+        // System.out.println("FOLDER PATH: " + getFolderpath());
+
         // System.out.println("DESTINATION FOLDER:" + destinationFolder);
         // System.out.println("DESTINATION FOLDER:" + destinationFolder);
 
-        File actualDestinationFolder = getDestinationFolder(destinationFolder, flattenFolders);
+        // File actualDestinationFolder = getDestinationFolder(destinationFolder, flattenFolders);
         // System.out.println("ACTUAL DESTINATION FOLDER:" + actualDestinationFolder);
         // String relativePath = getRelativeFolderpath();
 
-        // Build destination path
-        File adjustedDestinationFolder = getRelativeFolderpath()
-                .map(relativePath -> SpecsIo.mkdir(new File(actualDestinationFolder, relativePath)))
-                .orElse(actualDestinationFolder);
-        // actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
+        // File destinationFolderWithSourceName = destinationFolder;
+        File destinationFolderWithSourceName = get(SOURCE_FOLDERNAME)
+                .map(sourceFoldername -> new File(destinationFolder, sourceFoldername)).orElse(destinationFolder);
 
+        // return actualDestinationFolder;
+        // System.out.println("RELATIVE FOLDERPATH: " + getRelativeFolderpath());
+        // Build destination path
+        File destinationFolderWithRelativePath = getRelativeFolderpath()
+                .map(relativePath -> SpecsIo.mkdir(new File(destinationFolderWithSourceName, relativePath)))
+                .orElse(destinationFolderWithSourceName);
+
+        // .map(relativePath -> SpecsIo.mkdir(new File(actualDestinationFolder, relativePath)))
+        // .orElse(actualDestinationFolder);
+
+        // actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
+        // System.out.println("ADJUST DESTINATION FOLDER: " + adjustedDestinationFolder);
         // System.out.println("ADJUSTED ACTUAL DESTI ATION:" + actualDestinationFolder);
         // System.out.println("FILE:" + new File(actualDestinationFolder, getFilename()));
 
-        return new File(adjustedDestinationFolder, getFilename());
+        // return new File(adjustedDestinationFolder, getFilename());
+        return new File(destinationFolderWithRelativePath, getFilename());
+
     }
 
     public void setLanguage(Language language) {
