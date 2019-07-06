@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -193,6 +194,10 @@ public class CxxWeaver extends ACxxWeaver {
     // private File outputDir = null;
     // private List<File> originalSources = null;
     private List<File> currentSources = null;
+    private Map<File, File> currentBases = null;
+    private Map<File, String> sourceFoldernames = null;
+    private List<File> currentSourceFolders = null;
+
     private List<String> userFlags = null;
     // private CxxJoinpoints jpFactory = null;
 
@@ -312,6 +317,9 @@ public class CxxWeaver extends ACxxWeaver {
     public boolean begin(List<File> sources, File outputDir, DataStore args) {
         reset();
 
+        // Set args
+        this.args = args;
+
         ClavaLog.debug(() -> "Clava Weaver arguments: " + args);
         // Add normal include folders to the sources
         // sources.addAll(args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
@@ -342,9 +350,29 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Weaver arguments
         // this.originalSources = sources;
-        this.currentSources = sources;
+        // this.currentSources = buildSources(sources, args.get(LaraiKeys.WORKSPACE_EXTRA));
+
+        // Create map with all sources, mapped to the corresponding base folder
+        Map<File, File> allSources = new HashMap<>();
+        for (var source : sources) {
+            if (source.isFile()) {
+                allSources.put(source, null);
+                continue;
+            }
+
+            if (source.isDirectory()) {
+                allSources.put(source, source);
+                continue;
+            }
+
+            throw new RuntimeException("Case not implemented: " + source);
+        }
+
+        allSources.putAll(args.get(LaraiKeys.WORKSPACE_EXTRA));
+        updateSources(allSources);
+        // updateSources(sources, args.get(LaraiKeys.WORKSPACE_EXTRA));
+
         // this.outputDir = outputDir;
-        this.args = args;
 
         // If args does not have a standard, add a standard one based on the input files
         if (!this.args.hasValue(ClavaOptions.STANDARD)) {
@@ -355,7 +383,8 @@ public class CxxWeaver extends ACxxWeaver {
         parserOptions = new ArrayList<>();
 
         // Add all source folders as include folders
-        Set<String> sourceIncludeFolders = getIncludeFlags(sources);
+        // Set<String> sourceIncludeFolders = getIncludeFlags(sources);
+        Set<String> sourceIncludeFolders = getIncludeFlags(getSources());
         parserOptions.addAll(sourceIncludeFolders);
 
         // Add normal include folders
@@ -405,12 +434,71 @@ public class CxxWeaver extends ACxxWeaver {
             return true;
         }
 
-        weaverData.pushAst(createApp(sources, parserOptions));
+        // weaverData.pushAst(createApp(sources, parserOptions));
+        weaverData.pushAst(createApp(getSources(), parserOptions));
 
         // TODO: Option to dump clang and clava
         SpecsIo.write(new File("clavaDump.txt"), getApp().toString());
 
         return true;
+    }
+
+    /**
+     * Updates the information relative to the current sources.
+     * 
+     * <p>
+     * Creation of sources follow this rules:<br>
+     * 1) Single files listed in 'sources' are considered to not have a base folder (relative path is null) <br>
+     * 2) Source folders listed in 'sources' will have the parent folder as its base folder <br>
+     * 3) Source files or folders listed in 'map' will have the base folder indicated in the map
+     * 
+     */
+    private void updateSources(Map<File, File> map) {
+        // TODO: Convert all folders to files, folders become bases when in sources
+        map = obtainFiles(map);
+
+        /// Sources
+        this.currentSources = new ArrayList<>();
+        // currentSources.addAll(sources);
+        currentSources.addAll(map.keySet());
+
+        // String datastoreFolderpath = args.get(JOptionKeys.CURRENT_FOLDER_PATH);
+        // File datastoreFolder = datastoreFolderpath == null ? null : new File(datastoreFolderpath);
+
+        /// Bases
+        currentBases = new HashMap<>();
+
+        for (var entry : map.entrySet()) {
+            if (entry.getKey().isDirectory()) {
+                continue;
+            }
+
+            // File base = entry.getValue().equals(datastoreFolder) ? null : entry.getValue();
+            // currentBases.put(entry.getKey(), base);
+            currentBases.put(entry.getKey(), entry.getValue());
+        }
+
+        /// Source folders
+        Set<File> sourceFoldersSet = new HashSet<>();
+        // sources.stream().filter(File::isDirectory).forEach(sourceFoldersSet::add);
+        // Base folders are considered the base source folders
+        map.values().stream()
+                .filter(file -> file != null)
+                .filter(File::isDirectory)
+                .forEach(sourceFoldersSet::add);
+
+        this.currentSourceFolders = new ArrayList<>(sourceFoldersSet);
+
+        /// Source foldernames
+        sourceFoldernames = new HashMap<>();
+
+        // If base folder defined, use foldername as source name
+        for (var entry : map.entrySet()) {
+            if (entry.getValue() != null) {
+                sourceFoldernames.put(entry.getKey(), entry.getValue().getName());
+            }
+        }
+
     }
 
     private void reset() {
@@ -583,41 +671,45 @@ public class CxxWeaver extends ACxxWeaver {
     public App createApp(List<File> sources, List<String> parserOptions, List<String> extraOptions) {
         ClavaLog.debug(() -> "Creating App from the following sources: " + sources);
         ClavaLog.debug(() -> "Creating App using the following options: " + parserOptions);
+
+        /*
         // List<File> adaptedSources = adaptSources(sources, parserOptions);
         // ClavaLog.debug(() -> "Adapted sources: " + adaptedSources);
-
+        
         // System.out.println("ADAPTED SOURCES:" + adaptedSources);
-
+        
         // App newApp = new CodeParser().parseParallel(sources, parserOptions);
         // System.out.println("APP SOURCE:" + newApp.getCode());
-
+        
         // List<File> allSourceFolders = getInputSourceFolders(sources, parserOptions);
         // Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
         // System.out.println("ALL SOURCE FOLDERS:" + allSourceFolders);
         // System.out.println("ALL SOURCES:" + allSources);
-
+        
         // All files specified by the user, header and implementation
         Set<String> extensions = SourceType.getPermittedExtensions();
         // Map<String, File> allFilesMap = SpecsIo.getFileMap(adaptedSources, true, extensions, this::isCutoffFolder);
         Map<String, File> allUserFilesMap = SpecsIo.getFileMap(sources, true, extensions, this::isCutoffFolder);
         ClavaLog.debug(() -> "All user sources: " + allUserFilesMap.values());
-
+        
         // Map<String, File> allFilesMap = SpecsIo.getFileMap(adaptedSources, SourceType.getPermittedExtensions());
         // System.out.println("ALL FILES MAP:" + allFilesMap);
-
+        
         // List<String> implementationFilenames = processSources(sources);
-
+        
         // Convert to list, add header files in include folders if enabled
         List<String> allFiles = processSources(allUserFilesMap, parserOptions);
         ClavaLog.debug(() -> "All sources: " + allFiles);
-
+        
         // System.out.println("ALL FILES:" + allFiles);
-
+        
         // TODO: If option to separe include folders in generation is on, it should return just that folder
         // List<File> includeFolders = sources;
-
+        
         // addFlagsFromFiles(includeFolders, filenames, parserOptions);
         // addFlagsFromFiles(allFiles, parserOptions);
+        */
+        List<String> allFiles = sources.stream().map(File::toString).collect(Collectors.toList());
 
         // Sort filenames so that select order of files is consistent between OSes
         Collections.sort(allFiles);
@@ -638,8 +730,11 @@ public class CxxWeaver extends ACxxWeaver {
         allParserOptions.addAll(parserOptions);
         allParserOptions.addAll(extraOptions);
         App app = codeParser.parse(SpecsCollections.map(allFiles, File::new), allParserOptions, context);
+
         // Set source paths of each TranslationUnit
         // app.setSourcesFromStrings(allFiles);
+        app.setSources(currentBases);
+        app.setSourceFoldernames(sourceFoldernames);
 
         // Set options
 
@@ -1001,12 +1096,28 @@ public class CxxWeaver extends ACxxWeaver {
     public void writeCode(File outputFolder) {
         // If copy files is enabled, first copy source files to output folder
         if (getConfig().get(CxxWeaverOption.COPY_FILES_IN_SOURCES)) {
-            for (File source : getSources()) {
+            // for (File source : getSources()) {
+            // // If file, just copy the file
+            // if (source.isFile()) {
+            // SpecsIo.copy(source, new File(outputFolder, source.getName()));
+            // continue;
+            // }
+            //
+            // if (source.isDirectory()) {
+            // File destFolder = SpecsIo.mkdir(outputFolder, source.getName());
+            // SpecsIo.copyFolderContents(source, destFolder);
+            // continue;
+            // }
+            //
+            // SpecsLogs.warn("Case not defined for source '" + source + "', is neither a file or a folder");
+            // }
+
+            for (File source : currentSourceFolders) {
                 // If file, just copy the file
-                if (source.isFile()) {
-                    SpecsIo.copy(source, new File(outputFolder, source.getName()));
-                    continue;
-                }
+                // if (source.isFile()) {
+                // SpecsIo.copy(source, new File(outputFolder, source.getName()));
+                // continue;
+                // }
 
                 if (source.isDirectory()) {
                     File destFolder = SpecsIo.mkdir(outputFolder, source.getName());
@@ -1143,7 +1254,7 @@ public class CxxWeaver extends ACxxWeaver {
         // List<File> writtenFiles = getApp().write(tempFolder, flattenFolders);
         ClavaLog.debug(() -> "Rebuilding file '" + destinationFile + "'");
 
-        Set<File> includeFolders = getSourceIncludeFolders(tempFolder);
+        Set<File> includeFolders = getSourceIncludeFoldersFromTempFolder(tempFolder);
 
         List<String> rebuildOptions = new ArrayList<>();
 
@@ -1223,7 +1334,8 @@ public class CxxWeaver extends ACxxWeaver {
         // Check if inside apply
 
         // Write current tree to a temporary folder
-        File tempFolder = SpecsIo.mkdir(TEMP_WEAVING_FOLDER).getAbsoluteFile();
+        // TODO: This can be problematic if several current instances of Clava are run
+        File tempFolder = SpecsIo.mkdir(TEMP_WEAVING_FOLDER + "_" + UUID.randomUUID().toString()).getAbsoluteFile();
         SpecsIo.deleteFolderContents(tempFolder, true);
 
         boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
@@ -1231,7 +1343,8 @@ public class CxxWeaver extends ACxxWeaver {
         List<File> writtenFiles = getApp().write(tempFolder, flattenFolders);
         ClavaLog.debug(() -> "Files written during rebuild: " + writtenFiles);
 
-        Set<File> includeFolders = getSourceIncludeFolders(tempFolder);
+        Set<File> includeFolders = getSourceIncludeFoldersFromTempFolder(tempFolder);
+
         /*
         // If we are skipping the parsing of include folders, we should include the original include folders as includes
         if (args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
@@ -1308,12 +1421,44 @@ public class CxxWeaver extends ACxxWeaver {
             // Add rebuilt app
             weaverData.pushAst(rebuiltApp);
 
-            // TODO: When separation of src/include is done, update accordingly
-            // currentSources = srcFolders;
-            currentSources = writtenFiles;
+            // Create file->base map
+            // Since files where all written to the same folder:
+            // 1) If the parent folder is the same as the temp folder, it has not base folder;
+            // 2) Otherwise, the temp folder is the base folder
+            Map<File, File> writtenFilesToBase = new HashMap<>();
+            System.out.println("TEMP FOLDER: " + tempFolder);
+            for (File writtenFile : writtenFiles) {
+                System.out.println("WRITTEN FILE: " + writtenFile);
+                // If the parent folder is the same as the temp folder, it has no base folder
+                if (writtenFile.getParentFile().equals(tempFolder)) {
+                    System.out.println("NULL!");
+                    writtenFilesToBase.put(writtenFile, null);
+                    continue;
+                }
+
+                // Calculate base folder as being the path next to temp folder
+                String relativePath = SpecsIo.getRelativePath(writtenFile, tempFolder);
+                System.out.println("RELATIVE PATH:" + relativePath);
+                int slashIndex = relativePath.indexOf('/');
+                SpecsCheck.checkArgument(slashIndex != -1,
+                        () -> "Expected to have at least one slash: " + relativePath);
+                String sourceFoldername = relativePath.substring(0, slashIndex);
+
+                System.out.println("SOURCE FOLDERNAME: " + sourceFoldername);
+                writtenFilesToBase.put(writtenFile, new File(tempFolder, sourceFoldername));
+                // File baseFolder = writtenFile.getParentFile().equals(tempFolder) ? null : tempFolder;
+                // writtenFilesToBase.put(writtenFile, baseFolder);
+            }
+            // writtenFiles.stream().forEach(
+            // file -> file.getParentFile().equals(tempFolder) ? null : writtenFilesToBase.put(file, tempFolder));
+
+            updateSources(writtenFilesToBase);
 
             // baseFolder = tempFolder;
         }
+
+        // Register temporary folder and its contents for deletion
+        SpecsIo.deleteOnExit(tempFolder);
 
         // Clear user values, all stored nodes are invalid now
         // userValues = new HashMap<>();
@@ -1471,17 +1616,30 @@ public class CxxWeaver extends ACxxWeaver {
 
     /**
      * Helper method which returns include folders of the source files.
-     *
+     * 
+     * <p>
+     * For the temporary folder, the source folders are the children folders of the temporary folder, and the temporary
+     * folder itself.
+     * 
      * @param weavingFolder
      * @return
      */
-    private Set<File> getSourceIncludeFolders(File weavingFolder) {
+    private Set<File> getSourceIncludeFoldersFromTempFolder(File weavingFolder) {
         return getSourceIncludeFolders(weavingFolder, false);
     }
 
+    /**
+     *
+    */
     private Set<File> getSourceIncludeFolders(File weavingFolder, boolean onlyHeaders) {
-        boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
+        Set<File> includeFolders = new LinkedHashSet<>();
+        includeFolders.addAll(SpecsIo.getFolders(weavingFolder));
+        includeFolders.add(weavingFolder);
 
+        return includeFolders;
+        /*
+        boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
+        
         // For all Translation Units, collect new destination folders
         return getApp().getTranslationUnits().stream()
                 // .map(tu -> new File(tu.getDestinationFolder(weavingFolder, flattenFolders),
@@ -1491,6 +1649,7 @@ public class CxxWeaver extends ACxxWeaver {
                 .map(tu -> tu.getDestinationFolder(weavingFolder, flattenFolders))
                 .map(file -> SpecsIo.getCanonicalFile(file))
                 .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
+        */
     }
 
     private Set<File> getExternalIncludeFolders() {
@@ -1569,4 +1728,40 @@ public class CxxWeaver extends ACxxWeaver {
     // private static App createEmptyApp(ClavaContext context) {
     // return context.get(ClavaContext.FACTORY).app(Collections.emptyList());
     // }
+
+    /**
+     * Normalizes key paths to be only files
+     */
+    private Map<File, File> obtainFiles(Map<File, File> filesToBases) {
+
+        Map<File, File> processedFiles = new HashMap<>();
+
+        for (var sourceAndBase : filesToBases.entrySet()) {
+            // If a file, just add it
+            if (sourceAndBase.getKey().isFile()) {
+                processedFiles.put(sourceAndBase.getKey(), sourceAndBase.getValue());
+            }
+
+            // Process folder
+            obtainFiles(sourceAndBase.getKey(), sourceAndBase.getValue(), processedFiles);
+        }
+
+        return processedFiles;
+
+    }
+
+    private void obtainFiles(File folder, File baseFolder, Map<File, File> processedFiles) {
+        // All files specified by the user, header and implementation
+        Set<String> extensions = SourceType.getPermittedExtensions();
+
+        Map<String, File> allUserFilesMap = SpecsIo.getFileMap(Arrays.asList(folder), true, extensions,
+                this::isCutoffFolder);
+        ClavaLog.debug(() -> "All user sources: " + allUserFilesMap.values());
+
+        // Convert to list, add header files in include folders if enabled
+        List<String> allFiles = processSources(allUserFilesMap, parserOptions);
+        ClavaLog.debug(() -> "All sources: " + allFiles);
+
+        allFiles.stream().forEach(filename -> processedFiles.put(new File(filename), baseFolder));
+    }
 }
