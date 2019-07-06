@@ -68,7 +68,7 @@ public interface CxxWeaverOption {
     DataKey<Boolean> GENERATE_CMAKE_HELPER_FILES = KeyFactory.bool("Generate CMake Integration Helper Files")
             .setLabel("Generate helper files to be used by Clava CMake integration modules");
 
-    DataKey<Boolean> FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE = KeyFactory.bool("Flatten woven code folder structure");
+    // DataKey<Boolean> FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE = KeyFactory.bool("Flatten woven code folder structure");
 
     DataKey<Boolean> UNIT_TESTING_MODE = KeyFactory.bool("Unit Testing Mode")
             .setLabel("Runs the Clava Unit-Tester");
@@ -83,7 +83,8 @@ public interface CxxWeaverOption {
                     ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD,
                     DISABLE_WEAVING, DISABLE_CODE_GENERATION,
                     // GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES)
-                    GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE,
+                    GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES,
+                    // FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE,
                     COPY_FILES_IN_SOURCES)
             // GENERATE_MODIFIED_CODE_ONLY, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE, UNIT_TESTING_MODE)
             .addKey(ClangAstKeys.USE_PLATFORM_INCLUDES)

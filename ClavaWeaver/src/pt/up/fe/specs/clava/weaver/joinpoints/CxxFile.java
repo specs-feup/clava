@@ -58,7 +58,6 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
-import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -433,8 +432,7 @@ public class CxxFile extends AFile {
 
     @Override
     public String destinationFilepathImpl(String destinationFolderpath) {
-        boolean flattenFolders = getWeaverEngine().getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
-        return tunit.getDestinationFile(new File(destinationFolderpath), flattenFolders).getAbsolutePath();
+        return tunit.getDestinationFile(new File(destinationFolderpath)).getAbsolutePath();
     }
 
     @Override

@@ -334,19 +334,17 @@ public class App extends ClavaNode {
      * @param baseInputFolder
      * @param destinationFolder
      */
-    public List<File> write(File destinationFolder) {
-        // Previous default behavior was to flatten the structure of the output folder
-        return write(destinationFolder, true);
-    }
+    // public List<File> write(File destinationFolder) {
+    // // Previous default behavior was to flatten the structure of the output folder
+    // return write(destinationFolder, true);
+    // }
 
-    public List<File> write(File destinationFolder, boolean flattenFolder) {
+    public List<File> write(File destinationFolder) {
         List<File> writtenFiles = new ArrayList<>();
-        // System.out.println("DESTINATION FOLDER:" + destinationFolder);
-        for (Entry<File, String> entry : getCode(destinationFolder, flattenFolder).entrySet()) {
+
+        for (Entry<File, String> entry : getCode(destinationFolder).entrySet()) {
             SpecsIo.write(entry.getKey(), entry.getValue());
             writtenFiles.add(entry.getKey());
-            // System.out.println("WRITING: " + entry.getKey());
-            // System.out.println("WRITTEN FILE: " + entry.getKey());
         }
 
         return writtenFiles;
@@ -431,8 +429,8 @@ public class App extends ClavaNode {
         return allFiles;
     }
     */
-    public Map<File, String> getCode(File destinationFolder, boolean flattenFolders) {
-        return getCode(destinationFolder, flattenFolders, null);
+    public Map<File, String> getCode(File destinationFolder) {
+        return getCode(destinationFolder, null);
     }
 
     /**
@@ -444,7 +442,7 @@ public class App extends ClavaNode {
      *            generates all files from the AST
      * @return
      */
-    public Map<File, String> getCode(File destinationFolder, boolean flattenFolders, Set<String> modifiedFiles) {
+    public Map<File, String> getCode(File destinationFolder, Set<String> modifiedFiles) {
         Map<File, String> files = new HashMap<>();
 
         boolean enableModifiedFilesFilter = enableModifiedFilesFilter(getFiles(), modifiedFiles);
@@ -454,7 +452,7 @@ public class App extends ClavaNode {
 
         for (TranslationUnit tUnit : getTranslationUnits()) {
             // File destinationFile = buildDestinationFile(tUnit, destinationFolder, flattenFolders);
-            File destinationFile = tUnit.getDestinationFile(destinationFolder, flattenFolders);
+            File destinationFile = tUnit.getDestinationFile(destinationFolder);
             String code = getTuCode(tUnit, enableModifiedFilesFilter, modifiedFiles);
 
             files.put(destinationFile, code);

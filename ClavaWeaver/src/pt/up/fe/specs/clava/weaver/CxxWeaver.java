@@ -1131,10 +1131,8 @@ public class CxxWeaver extends ACxxWeaver {
 
         Set<String> modifiedFilenames = getModifiedFilenames();
 
-        boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
-
         // Get files and contents to write
-        Map<File, String> files = getApp().getCode(outputFolder, flattenFolders, modifiedFilenames);
+        Map<File, String> files = getApp().getCode(outputFolder, modifiedFilenames);
 
         // Write files that have changed
         for (Entry<File, String> entry : files.entrySet()) {
@@ -1245,9 +1243,7 @@ public class CxxWeaver extends ACxxWeaver {
         File tempFolder = SpecsIo.mkdir(TEMP_WEAVING_FOLDER).getAbsoluteFile();
         SpecsIo.deleteFolderContents(tempFolder, true);
 
-        boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
-
-        File destinationFile = tUnit.getDestinationFile(tempFolder, flattenFolders);
+        File destinationFile = tUnit.getDestinationFile(tempFolder);
         String code = tUnit.getCode();
         SpecsIo.write(destinationFile, code);
 
@@ -1338,9 +1334,7 @@ public class CxxWeaver extends ACxxWeaver {
         File tempFolder = SpecsIo.mkdir(TEMP_WEAVING_FOLDER + "_" + UUID.randomUUID().toString()).getAbsoluteFile();
         SpecsIo.deleteFolderContents(tempFolder, true);
 
-        boolean flattenFolders = getConfig().get(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE);
-
-        List<File> writtenFiles = getApp().write(tempFolder, flattenFolders);
+        List<File> writtenFiles = getApp().write(tempFolder);
         ClavaLog.debug(() -> "Files written during rebuild: " + writtenFiles);
 
         Set<File> includeFolders = getSourceIncludeFoldersFromTempFolder(tempFolder);

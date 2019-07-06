@@ -778,36 +778,15 @@ public class TranslationUnit extends ClavaNode {
 
     }
 
-    public File getDestinationFile(File destinationFolder, boolean flattenFolders) {
-        // System.out.println("FOLDER PATH: " + getFolderpath());
-
-        // System.out.println("DESTINATION FOLDER:" + destinationFolder);
-        // System.out.println("DESTINATION FOLDER:" + destinationFolder);
-
-        // File actualDestinationFolder = getDestinationFolder(destinationFolder, flattenFolders);
-        // System.out.println("ACTUAL DESTINATION FOLDER:" + actualDestinationFolder);
-        // String relativePath = getRelativeFolderpath();
-
-        // File destinationFolderWithSourceName = destinationFolder;
+    public File getDestinationFile(File destinationFolder) {
         File destinationFolderWithSourceName = get(SOURCE_FOLDERNAME)
                 .map(sourceFoldername -> new File(destinationFolder, sourceFoldername)).orElse(destinationFolder);
 
-        // return actualDestinationFolder;
-        // System.out.println("RELATIVE FOLDERPATH: " + getRelativeFolderpath());
         // Build destination path
         File destinationFolderWithRelativePath = getRelativeFolderpath()
                 .map(relativePath -> SpecsIo.mkdir(new File(destinationFolderWithSourceName, relativePath)))
                 .orElse(destinationFolderWithSourceName);
 
-        // .map(relativePath -> SpecsIo.mkdir(new File(actualDestinationFolder, relativePath)))
-        // .orElse(actualDestinationFolder);
-
-        // actualDestinationFolder = SpecsIo.mkdir(new File(actualDestinationFolder, relativePath));
-        // System.out.println("ADJUST DESTINATION FOLDER: " + adjustedDestinationFolder);
-        // System.out.println("ADJUSTED ACTUAL DESTI ATION:" + actualDestinationFolder);
-        // System.out.println("FILE:" + new File(actualDestinationFolder, getFilename()));
-
-        // return new File(adjustedDestinationFolder, getFilename());
         return new File(destinationFolderWithRelativePath, getFilename());
 
     }

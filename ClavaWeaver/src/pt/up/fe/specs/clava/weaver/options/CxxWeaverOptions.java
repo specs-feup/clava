@@ -88,8 +88,9 @@ public class CxxWeaverOptions {
                 "Sets the name of the woven code folder (default value: '" + CxxWeaver.getWovenCodeFoldername()
                         + "')");
 
-        addBooleanOption(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE, "ff", "flatten-woven-folders",
-                "Flattens woven code folder structure. Otherwise, attempts to maintain original structure specified in input sources.");
+        // addBooleanOption(CxxWeaverOption.FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE, "ff", "flatten-woven-folders",
+        // "Flattens woven code folder structure. Otherwise, attempts to maintain original structure specified in input
+        // sources.");
 
         addBooleanOption(ClavaOptions.CUSTOM_RESOURCES, "cr", "custom-resources",
                 "Enables custom resource files (e.g., clang_ast.resources)");
