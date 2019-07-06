@@ -81,6 +81,7 @@ public class App extends ClavaNode {
     // private List<File> sources;
     // private Map<String, File> sourceFiles;
     private Map<File, File> sourceFiles;
+    private Map<File, String> sourceFoldernames;
 
     private GlobalManager globalManager;
     private final Map<String, ClavaNode> nodesCache;
@@ -735,7 +736,7 @@ public class App extends ClavaNode {
     }
 
     /**
-     * Sets the sources of each Translation Unit.
+     * Sets the sources of each Translation Unit that will be used to calculate the relative paths.
      * 
      * <p>
      * Receives a map of App files to the corresponding base source folder
@@ -753,6 +754,7 @@ public class App extends ClavaNode {
             File sourcePath = allFiles.get(tu.getFile());
 
             if (sourcePath == null) {
+                tu.setRelativePath(null);
                 continue;
             }
 
@@ -760,6 +762,29 @@ public class App extends ClavaNode {
             String relativePath = SpecsIo.getRelativePath(tu.getFile().getParentFile(), sourcePath);
 
             tu.setRelativePath(relativePath);
+        }
+    }
+
+    /**
+     * Sets the source folder names of each Translation Unit, which will be used to determine the folder to which the
+     * source will be written.
+     * 
+     * <p>
+     * Receives a map of App files to the corresponding source folder name, if any
+     *
+     * @param allFiles
+     */
+    public void setSourceFoldernames(Map<File, String> sourceFoldernames) {
+
+        // Set sourceFiles
+        this.sourceFoldernames = sourceFoldernames;
+
+        for (TranslationUnit tu : getTranslationUnits()) {
+            // Find the corresponding source
+            String sourceFoldername = sourceFoldernames.get(tu.getFile());
+
+            // No problem if sourceFoldername is null, will be converted to Optional.empty()
+            tu.setOptional(TranslationUnit.SOURCE_FOLDERNAME, sourceFoldername);
         }
     }
 
