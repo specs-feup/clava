@@ -1420,25 +1420,23 @@ public class CxxWeaver extends ACxxWeaver {
             // 1) If the parent folder is the same as the temp folder, it has not base folder;
             // 2) Otherwise, the temp folder is the base folder
             Map<File, File> writtenFilesToBase = new HashMap<>();
-            System.out.println("TEMP FOLDER: " + tempFolder);
+
             for (File writtenFile : writtenFiles) {
-                System.out.println("WRITTEN FILE: " + writtenFile);
+
                 // If the parent folder is the same as the temp folder, it has no base folder
                 if (writtenFile.getParentFile().equals(tempFolder)) {
-                    System.out.println("NULL!");
                     writtenFilesToBase.put(writtenFile, null);
                     continue;
                 }
 
                 // Calculate base folder as being the path next to temp folder
                 String relativePath = SpecsIo.getRelativePath(writtenFile, tempFolder);
-                System.out.println("RELATIVE PATH:" + relativePath);
+
                 int slashIndex = relativePath.indexOf('/');
                 SpecsCheck.checkArgument(slashIndex != -1,
                         () -> "Expected to have at least one slash: " + relativePath);
                 String sourceFoldername = relativePath.substring(0, slashIndex);
 
-                System.out.println("SOURCE FOLDERNAME: " + sourceFoldername);
                 writtenFilesToBase.put(writtenFile, new File(tempFolder, sourceFoldername));
                 // File baseFolder = writtenFile.getParentFile().equals(tempFolder) ? null : tempFolder;
                 // writtenFilesToBase.put(writtenFile, baseFolder);
