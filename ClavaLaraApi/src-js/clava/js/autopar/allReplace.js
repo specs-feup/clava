@@ -56,7 +56,8 @@ String.prototype.moveBracketsToEnd = function(arraylist)
 
 function normalizeVarName(Varname)
 {
-	return Varname.replace(/\[.*?\]/g, "");
+	//return Varname.replace(/\[.*?\]/g, "");
+	return Varname.replace(/\[.*\]/g, "");	
 }
 
 function normalizeVarName2(Varname)
