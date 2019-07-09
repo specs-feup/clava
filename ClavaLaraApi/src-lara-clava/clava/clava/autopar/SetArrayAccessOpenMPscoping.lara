@@ -31,7 +31,8 @@ aspectdef SetArrayAccessOpenMPscoping
 		{
 			if (LoopOmpAttributes[loopindex].firstprivateVars.indexOf(arrayAccessObj.name) === -1)
 			{
-				//LoopOmpAttributes[loopindex].firstprivateVars.push(arrayAccessObj.name);				
+				LoopOmpAttributes[loopindex].firstprivateVars.push(arrayAccessObj.name);				
+				//LoopOmpAttributes[loopindex].firstprivateVars.push(arrayAccessObj.name);								
 			}
 			arrayAccessObj.usedInClause = true;
 		}
