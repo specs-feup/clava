@@ -197,6 +197,7 @@ public class CxxWeaver extends ACxxWeaver {
     private Map<File, File> currentBases = null;
     private Map<File, String> sourceFoldernames = null;
     private List<File> currentSourceFolders = null;
+    private List<String> originalSourceFolders = null;
 
     private List<String> userFlags = null;
     // private CxxJoinpoints jpFactory = null;
@@ -370,6 +371,22 @@ public class CxxWeaver extends ACxxWeaver {
 
         allSources.putAll(args.get(LaraiKeys.WORKSPACE_EXTRA));
         updateSources(allSources);
+
+        // Store original source folders
+        // This means the current bases + folders of the sources
+        Set<String> originalSourceFoldersSet = new LinkedHashSet<>();
+
+        currentBases.values().stream()
+                .filter(base -> base != null)
+                .map(CxxWeaver::parseIncludePath)
+                .forEach(originalSourceFoldersSet::add);
+
+        getSources().stream()
+                .map(CxxWeaver::parseIncludePath)
+                .forEach(originalSourceFoldersSet::add);
+
+        originalSourceFolders = new ArrayList<>(originalSourceFoldersSet);
+        // System.out.println("ORIGINAL SOURCES: " + originalSourceFolders);
         // updateSources(sources, args.get(LaraiKeys.WORKSPACE_EXTRA));
 
         // this.outputDir = outputDir;
@@ -642,16 +659,20 @@ public class CxxWeaver extends ACxxWeaver {
 
         String folderAbsPath = folderPath.getAbsolutePath();
 
+        return folderAbsPath;
+        /*
         if (!folderAbsPath.contains(" ")) {
             return folderAbsPath;
         }
-
-        // If on Windows, do not escape
-        // if (Platforms.isWindows()) {
-        // return folderAbsPath;
-        // }
-
+        
+        // If on Windows, do not escape, or it will not work:
+        // https://coderanch.com/t/627514/java/ProcessBuilder-incorrectly-processes-embedded-spaces
+        if (SpecsPlatforms.isWindows()) {
+            return folderAbsPath;
+        }
+        
         return "\"" + folderAbsPath + "\"";
+        */
     }
 
     public App createApp(List<File> sources, List<String> parserOptions) {
@@ -671,6 +692,7 @@ public class CxxWeaver extends ACxxWeaver {
     public App createApp(List<File> sources, List<String> parserOptions, List<String> extraOptions) {
         ClavaLog.debug(() -> "Creating App from the following sources: " + sources);
         ClavaLog.debug(() -> "Creating App using the following options: " + parserOptions);
+        ClavaLog.debug(() -> "Creating App using the following extra options: " + extraOptions);
 
         /*
         // List<File> adaptedSources = adaptSources(sources, parserOptions);
@@ -709,6 +731,19 @@ public class CxxWeaver extends ACxxWeaver {
         // addFlagsFromFiles(includeFolders, filenames, parserOptions);
         // addFlagsFromFiles(allFiles, parserOptions);
         */
+
+        // Collect additional include folders
+        Set<String> sourceIncludeFolders = getSourceIncludes(sources);
+        ClavaLog.debug(() -> "Source include folders: " + sourceIncludeFolders);
+        // originalSourceFolders
+        // Set<String> sourceIncludeFolders =
+
+        // Add include folders to extra options
+        List<String> adaptedExtraOptions = new ArrayList<>(sourceIncludeFolders.size() + extraOptions.size());
+        adaptedExtraOptions.addAll(extraOptions);
+        sourceIncludeFolders.stream().map(includeFolder -> "-I" + includeFolder).forEach(adaptedExtraOptions::add);
+        // System.out.println("EXTRA OPTIONS: " + extraOptions);
+        // System.out.println("ADAPTED EXTRA OPTIONS: " + adaptedExtraOptions);
         List<String> allFiles = sources.stream().map(File::toString).collect(Collectors.toList());
 
         // Sort filenames so that select order of files is consistent between OSes
@@ -726,9 +761,9 @@ public class CxxWeaver extends ACxxWeaver {
                 getConfig().get(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS));
         codeParser.set(ClangAstKeys.USE_PLATFORM_INCLUDES, getConfig().get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
-        List<String> allParserOptions = new ArrayList<>(parserOptions.size() + extraOptions.size());
+        List<String> allParserOptions = new ArrayList<>(parserOptions.size() + adaptedExtraOptions.size());
         allParserOptions.addAll(parserOptions);
-        allParserOptions.addAll(extraOptions);
+        allParserOptions.addAll(adaptedExtraOptions);
         App app = codeParser.parse(SpecsCollections.map(allFiles, File::new), allParserOptions, context);
 
         // Set source paths of each TranslationUnit
@@ -794,6 +829,23 @@ public class CxxWeaver extends ACxxWeaver {
         }
         */
 
+    }
+
+    private Set<String> getSourceIncludes(List<File> sources) {
+        Set<String> sourceIncludeFolders = new LinkedHashSet<>();
+
+        // Add folders of source files as include folders
+        sources.stream()
+                .map(CxxWeaver::parseIncludePath)
+                .forEach(sourceIncludeFolders::add);
+
+        // Add original source folders as includes if skipping header parsing
+        // if (args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
+        sourceIncludeFolders.addAll(originalSourceFolders);
+        // System.out.println("ORIGINAL SOURCE FOLDERS: " + originalSourceFolders);
+        // originalSourceFolders.stream().forEach(sourceIncludeFolders::add);
+        // }
+        return sourceIncludeFolders;
     }
 
     private boolean isCutoffFolder(File path) {
@@ -1073,6 +1125,10 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Add original includes at the end, in case there are "out-of-source" files (e.g., .inc files) that are needed
         newIncludeDirs.addAll(args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
+
+        // Add includes from original sources
+        originalSourceFolders.stream().map(sourceFolder -> new File(sourceFolder))
+                .forEach(newIncludeDirs::add);
 
         // If we are skipping the parsing of include folders, we should include the original include folders as includes
         // if (args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING)) {
