@@ -6,7 +6,7 @@ import clava.autopar.AddPragmaLoopIndex;
 import clava.autopar.RunInlineFunctionCalls;
 import clava.autopar.LoopInductionVariables;
 import clava.autopar.CheckForSafeFunctionCall;
-
+import clava.autopar.AutoParStats;
 
 import clava.Clava;
 import lara.util.CodeInserter;    
@@ -104,6 +104,8 @@ Parallelize.forLoopsAsText = function($loops, outputFolder) {
 
 
 Parallelize.getForLoopsPragmas = function($loops) {
+	// Reset stats
+	//Parallelize.resetStats();
 	
 	// Initialize loops if undefined
 	if($loops === undefined) {
@@ -162,7 +164,10 @@ Parallelize.getForLoopsPragmas = function($loops) {
 		$program.rebuild();
 	end
 	*/
-
+	
+	// Write stats before attempting parallelization
+	AutoParStats.save();
+	
     println('Parallelizing ' + $forLoops.length + ' for loops...');
 
 	// Find all loops marked for parallelization
@@ -224,4 +229,25 @@ Parallelize.getForLoopsPragmas = function($loops) {
 	
 	//return parallelLoops;
 }	
+
+/*
+Parallelize.getStats = function($loops) {
+	if(Parallelize._stats === undefined) {
+		Parallelize._stats = new AutoParStats();
+	}
 	
+	return Parallelize._stats;
+}
+
+Parallelize.resetStats = function($loops) {
+	Parallelize._stats = undefined;
+}
+
+Parallelize.saveStats = function($loops) {
+	if(Parallelize._stats === undefined) {
+		return;
+	}
+	
+	Parallelize._stats.write();
+}
+*/

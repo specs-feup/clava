@@ -70,6 +70,7 @@ aspectdef LoopInductionVariables
 			{
 				strbefor = $arrayAccess.code;
 				$subscript.insert replace replaceCode;
+				AutoParStats.get().incIndunctionVariableReplacements();
 			}
 		}
 	end

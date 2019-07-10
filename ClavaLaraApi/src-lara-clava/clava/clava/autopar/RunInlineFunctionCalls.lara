@@ -6,11 +6,12 @@
 import clava.ClavaJoinPoints;
 import clava.ClavaType;
 
+import clava.autopar.AutoParStats;
+
 var countCallInlinedFunction;
 aspectdef RunInlineFunctionCalls
-
 	
-
+		
 	var func_name = {};
 	countCallInlinedFunction = 0;
 	select file.function end
@@ -70,6 +71,7 @@ aspectdef RunInlineFunctionCalls
 			{
 				debug("Excluding from inlining '" + caller_func + "', because it is recursive");
 				excluded_function_list.push(caller_func);
+				AutoParStats.get().incInlineAnalysis(AutoParStats.EXCLUDED_RECURSIVE, caller_func);
 			}
 
 	
@@ -85,6 +87,7 @@ aspectdef RunInlineFunctionCalls
 				if (excluded_function_list.indexOf($function.name) === -1) { // not exist
 					debug("Excluding from inlining '" + caller_func + "', because is not considered safe (func_name[obj.name]: " + func_name[obj.name] + ")");
 					excluded_function_list.push($function.name);
+					AutoParStats.get().incInlineAnalysis(AutoParStats.EXCLUDED_IS_UNSAFE, $function.name);
 				}
 	end
 
@@ -109,6 +112,7 @@ aspectdef RunInlineFunctionCalls
 		if (excluded_function_list.indexOf($function.name) === -1) {
 			debug("Excluding from inlining '" + $function.name + "', because it declares at least one global variable ("+$vardecl.name+"@"+$vardecl.location+")");
 			excluded_function_list.push($function.name);
+			AutoParStats.get().incInlineAnalysis(AutoParStats.EXCLUDED_GLOBAL_VAR, $function.name);
 		}
 	end
 	//condition $vardecl.storageClass === 'static' end
@@ -143,11 +147,13 @@ aspectdef RunInlineFunctionCalls
 				{
 					debug("Excluding from inlining '" +caller_func + "', because it calls excluded function '"+calling+"'");		
 					excluded_function_list.push(caller_func);
+					AutoParStats.get().incInlineAnalysis(AutoParStats.EXCLUDED_CALLS_UNSAFE, caller_func);
 				}
 				
 				
 				
 	debug("Functions excluded from inlining: " + excluded_function_list);
+	AutoParStats.get().setInlineExcludedFunctions(excluded_function_list);
 
 	var sorted = [];
 	for (var key in func_name)
@@ -176,7 +182,6 @@ aspectdef callInline
 	select file.function.call end
 	apply
 
-
 		var exprStmt = $call.astAncestor('ExprStmt');
 
 		if (exprStmt === undefined)
@@ -199,6 +204,8 @@ aspectdef callInline
 					)
 			)
 			{
+				// Count as an inlined call
+				AutoParStats.get().incInlineCalls();
 
 				var o = null;
 				call o : inlinePreparation(func_name, $call, exprStmt);
@@ -219,6 +226,7 @@ aspectdef callInline
 					//println("INSERTED CODE:\n" + insertedCode);
 
 					exprStmt.detach();
+					
 				}
 			}
 

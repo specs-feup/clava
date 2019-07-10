@@ -25,6 +25,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     ADDITIONAL_CONDITIONS_CHECK("autopar/additionalConditionsCheck.lara"),
     ADD_OPENMP_DIRECTIVES("autopar/AddOpenMPDirectivesForLoop.lara"),
     ADD_PRAGMA_LOOP_INDEX("autopar/AddPragmaLoopIndex.lara"),
+    AUTOPAR_STATS("autopar/AutoParStats.lara"),
     AUTOPAR_UTILS("autopar/AutoParUtils.lara"),
     AUTOPAR_1("autopar/BuildPetitFileInput.lara"),
     AUTOPAR_2("autopar/checkForFunctionCalls.lara"),
