@@ -1,2 +1,2 @@
-var safefunctionCallslist = ['sqrt', 'log', 'fabs', 'malloc', 'pow', 'cos', 'sin', 'exp'];
+var safefunctionCallslist = ['sqrt', 'log', 'fabs', 'malloc', 'pow', 'cos', 'sin', 'exp', 'floor', 'ceil'];
 

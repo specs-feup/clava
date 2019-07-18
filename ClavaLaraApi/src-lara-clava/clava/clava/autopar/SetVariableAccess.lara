@@ -111,7 +111,7 @@ aspectdef SetVariableAccess
 			var callJP = $varref.ancestor('call');
 			if (safefunctionCallslist.indexOf(callJP.name) === -1)
 			{
-				Add_msgError(LoopOmpAttributes, $ForStmt,'Variable Access for ' + $varref.name + ' Can not be traced inside of function ' + callJP.name + 'calling at line #' + callJP.line);
+				Add_msgError(LoopOmpAttributes, $ForStmt,'Variable Access for ' + $varref.name + ' Can not be traced inside of function ' + callJP.name + ' called at line #' + callJP.line);
 				return;
 			}
 		}
