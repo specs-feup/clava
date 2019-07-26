@@ -194,7 +194,11 @@ public class ClavaWeaverTester {
         // Set LaraI configurations
         data.add(LaraiKeys.LARA_FILE, laraFile);
         data.add(LaraiKeys.OUTPUT_FOLDER, workFolder);
-        data.add(LaraiKeys.WORKSPACE_FOLDER, FileList.newInstance(workFolder));
+        // Add workspace folder if code is not empty
+        if (!code.isEmpty()) {
+            data.add(LaraiKeys.WORKSPACE_FOLDER, FileList.newInstance(workFolder));
+        }
+
         // data.add(LaraiKeys.VERBOSE, VerboseLevel.all);
         data.add(LaraiKeys.VERBOSE, VerboseLevel.errors);
         // data.add(LaraiKeys.DEBUG_MODE, true);
