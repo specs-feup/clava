@@ -118,7 +118,7 @@ public class ClavaWeaverData {
         // factory...)
         long tic = System.nanoTime();
         ClavaPragmas.processClavaPragmas(app);
-        SpecsLogs.msgInfo(SpecsStrings.takeTime("Weaver AST processing", tic));
+        SpecsLogs.debug(() -> SpecsStrings.takeTime("Weaver AST processing after push", tic));
 
     }
 
