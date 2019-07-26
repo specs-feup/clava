@@ -1,0 +1,4 @@
+/**** File 'no_parsing.cpp' ****/
+
+int main() { return 0;}
+/**** End File ****/

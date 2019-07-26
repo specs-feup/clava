@@ -236,4 +236,9 @@ public class CxxTest {
                 .set(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING, true)
                 .test("SkipParsingHeaders.lara", "skip_parsing_headers.cpp", "skip_parsing_headers.h");
     }
+
+    @Test
+    public void testNoParsing() {
+        newTester().test("NoParsing.lara");
+    }
 }
