@@ -17,8 +17,13 @@ aspectdef RebuildTest
 	//println("Poping");
 	Clava.popAst();
 	//println("Rebuilding");
+	
+	// Rebuild two times, to stress test rebuild
 	Clava.rebuild();
+	Clava.rebuild();
+	
 	println("Original code:\n" + Clava.getProgram().code);
+
 	
 
 /*	
