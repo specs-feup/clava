@@ -67,6 +67,7 @@ import pt.up.fe.specs.util.csv.CsvWriter;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
 import pt.up.fe.specs.util.providers.ResourceProvider;
+import pt.up.fe.specs.util.utilities.Buffer;
 import pt.up.fe.specs.util.utilities.LineStream;
 import pt.up.fe.specs.util.utilities.ProgressCounter;
 import pt.up.fe.specs.util.utilities.StringLines;
@@ -99,6 +100,9 @@ public class CxxWeaver extends ACxxWeaver {
     private static final String TEMP_WEAVING_FOLDER = "__clava_woven";
     private static final String TEMP_SRC_FOLDER = "__clava_src";
     private static final String WOVEN_CODE_FOLDERNAME = "woven_code";
+
+    private static final ThreadLocal<Buffer<File>> REBUILD_WEAVING_FOLDERS = ThreadLocal
+            .withInitial(() -> new Buffer<>(2, CxxWeaver::newTemporaryWeavingFolder));
 
     private static final Set<String> LANGUAGES = Collections
             .unmodifiableSet(new HashSet<>(Arrays.asList("c", "cxx", "opencl")));
@@ -1296,7 +1300,7 @@ public class CxxWeaver extends ACxxWeaver {
     public TranslationUnit rebuildFile(TranslationUnit tUnit) {
 
         // Write current tree to a temporary folder
-        File tempFolder = newTemporaryWeavingFolder();
+        File tempFolder = REBUILD_WEAVING_FOLDERS.get().next();
 
         File destinationFile = tUnit.getDestinationFile(tempFolder);
         String code = tUnit.getCode();
@@ -1385,7 +1389,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Check if inside apply
 
         // Write current tree to a temporary folder
-        File tempFolder = newTemporaryWeavingFolder();
+        File tempFolder = REBUILD_WEAVING_FOLDERS.get().next();
 
         List<File> writtenFiles = getApp().write(tempFolder);
         ClavaLog.debug(() -> "Files written during rebuild: " + writtenFiles);
@@ -1517,7 +1521,7 @@ public class CxxWeaver extends ACxxWeaver {
      * 
      * @return
      */
-    private File newTemporaryWeavingFolder() {
+    private static File newTemporaryWeavingFolder() {
 
         File tempFolder = SpecsIo.getTempFolder(TEMP_WEAVING_FOLDER + "_" + UUID.randomUUID().toString());
 
