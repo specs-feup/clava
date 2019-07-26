@@ -57,7 +57,7 @@ public interface CxxWeaverOption {
     // .setDefault(() -> 1);
 
     DataKey<Boolean> DISABLE_WEAVING = KeyFactory.bool("Disable Weaving")
-            .setLabel("Disable weaving (only executes the LARA code, does not parse C/C++ code)");
+            .setLabel("Disable parsing (does not parse C/C++ code before executing the LARA code)");
 
     DataKey<Boolean> DISABLE_CODE_GENERATION = KeyFactory.bool("Disable Code Generation")
             .setLabel("Disable code generation (still possible to generate code explictly from LARA)");

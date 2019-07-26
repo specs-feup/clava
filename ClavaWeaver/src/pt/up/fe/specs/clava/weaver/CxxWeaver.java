@@ -446,7 +446,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // If weaving disabled, create empty App
         if (args.get(CxxWeaverOption.DISABLE_WEAVING)) {
-            SpecsLogs.msgInfo("Weaving disabled, creating empty 'program'");
+            SpecsLogs.msgInfo("Initial parsing disabled, creating empty 'program'");
 
             App emptyApp = context.get(ClavaContext.FACTORY).app(Collections.emptyList());
             // First app, add it to context
@@ -1026,7 +1026,9 @@ public class CxxWeaver extends ACxxWeaver {
     @Override
     public boolean close() {
 
-        if (!args.get(CxxWeaverOption.DISABLE_WEAVING)) {
+        // if (!args.get(CxxWeaverOption.DISABLE_WEAVING)) {
+        // Process App files
+        if (!getApp().getTranslationUnits().isEmpty()) {
             if (args.get(CxxWeaverOption.CHECK_SYNTAX)) {
                 SpecsLogs.msgInfo("Checking woven code syntax...");
                 rebuildAst(false);
@@ -1059,7 +1061,9 @@ public class CxxWeaver extends ACxxWeaver {
         // }
 
         // Delete intermediary files
-        if (args.get(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES)) {
+        if (args.get(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES))
+
+        {
             for (String tempFile : ClangAstParser.getTempFiles()) {
                 new File(tempFile).delete();
             }

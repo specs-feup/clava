@@ -49,7 +49,8 @@ public class CxxWeaverOptions {
                 "Disables remote dependencies (e.g., git repos)");
 
         WEAVER_OPTIONS.put(CxxWeaverOption.DISABLE_WEAVING.getName(), WeaverOptionBuilder.build("nw", "no-weaving",
-                "Disables weaving of source code, only runs the LARA aspect", CxxWeaverOption.DISABLE_WEAVING));
+                "Disables initial parsing of source code before running the LARA aspect",
+                CxxWeaverOption.DISABLE_WEAVING));
 
         addBooleanOption(CxxWeaverOption.CHECK_SYNTAX, "cs", "check-syntax", "Checks syntax of woven code");
 
