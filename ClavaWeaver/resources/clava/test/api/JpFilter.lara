@@ -13,10 +13,10 @@ aspectdef JpFilterTest
 	var filter1 = new JpFilter({name: 'A'});
 	println(convert(filter1.filter($records)));
 	
-	var filter2 = new JpFilter({rx_name: 'A'});
+	var filter2 = new JpFilter({name: /A/});
 	println(convert(filter2.filter($records)));
 	
-	var filter3 = new JpFilter({rx_name: 'A', kind: 'class'});
+	var filter3 = new JpFilter({name: /A/, kind: 'class'});
 	println(convert(filter3.filter($records)));
 
 	var filter4 = new JpFilter({name: /A/});
@@ -25,7 +25,7 @@ aspectdef JpFilterTest
 	var filter5 = new JpFilter({name: /A/, line: function(line){return line > 7;}});
 	println(convert(filter5.filter($records)));
 	
-	var $jps = WeaverJps.search("record", {rx_name: 'A'}).search("field", {name: 'x'}).get();
+	var $jps = WeaverJps.search("record", {name: /A/}).search("field", {name: 'x'}).get();
 	
 	for(var $selected of $jps) {
 		println("Select function: " + $selected.code);

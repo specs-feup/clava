@@ -18,6 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
 import pt.up.fe.specs.util.SpecsSystem;
 
@@ -83,7 +84,9 @@ public class CTest {
 
     @Test
     public void testWrap() {
-        newTester().test("Wrap.lara", "wrap.c", "wrap.h");
+        newTester()
+                .set(CxxWeaverOption.PARSE_INCLUDES)
+                .test("Wrap.lara", "wrap.c", "wrap.h");
     }
 
     @Test

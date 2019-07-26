@@ -106,7 +106,9 @@ public class CxxTest {
 
     @Test
     public void testClone() {
-        newTester().test("Clone.lara", "clone.cpp", "clone.h");
+        newTester()
+                .set(CxxWeaverOption.PARSE_INCLUDES)
+                .test("Clone.lara", "clone.cpp", "clone.h");
     }
 
     @Test
@@ -152,7 +154,9 @@ public class CxxTest {
     @Test
     public void testWrap() {
         // newTester().test("Wrap.lara", "wrap.cpp", "wrap.h", "lib/lib.h", "lib/lib.cpp");
-        newTester().test("Wrap.lara", "wrap.cpp", "wrap.h");
+        newTester()
+                .set(CxxWeaverOption.PARSE_INCLUDES)
+                .test("Wrap.lara", "wrap.cpp", "wrap.h");
     }
 
     @Test
@@ -212,7 +216,9 @@ public class CxxTest {
 
     @Test
     public void testMultiFile() {
-        newTester().test("MultiFile.lara", "multiFile.cpp", "multiFile.h");
+        newTester()
+                .set(CxxWeaverOption.PARSE_INCLUDES)
+                .test("MultiFile.lara", "multiFile.cpp", "multiFile.h");
     }
 
     @Test
@@ -222,7 +228,9 @@ public class CxxTest {
 
     @Test
     public void testFileRebuild() {
-        newTester().test("FileRebuild.lara", "file_rebuild.cpp", "file_rebuild.h", "file_rebuild_2.h");
+        newTester()
+                .set(CxxWeaverOption.PARSE_INCLUDES)
+                .test("FileRebuild.lara", "file_rebuild.cpp", "file_rebuild.h", "file_rebuild_2.h");
     }
 
     @Test
@@ -232,9 +240,7 @@ public class CxxTest {
 
     @Test
     public void testSkipParsingHeaders() {
-        newTester()
-                .set(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING, true)
-                .test("SkipParsingHeaders.lara", "skip_parsing_headers.cpp", "skip_parsing_headers.h");
+        newTester().test("SkipParsingHeaders.lara", "skip_parsing_headers.cpp", "skip_parsing_headers.h");
     }
 
     @Test

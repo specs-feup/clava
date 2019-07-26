@@ -18,6 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
 import pt.up.fe.specs.util.SpecsSystem;
 
@@ -42,7 +43,9 @@ public class CBenchTest {
 
     @Test
     public void testHamidRegion() {
-        newTester().test("HamidRegion.lara", "hamid_region.c", "hamid_region.h");
+        newTester()
+                .set(CxxWeaverOption.PARSE_INCLUDES)
+                .test("HamidRegion.lara", "hamid_region.c", "hamid_region.h");
     }
 
 }

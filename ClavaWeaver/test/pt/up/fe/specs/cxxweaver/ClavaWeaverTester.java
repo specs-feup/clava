@@ -112,6 +112,12 @@ public class ClavaWeaverTester {
         return this;
     }
 
+    public ClavaWeaverTester set(DataKey<Boolean> key) {
+        this.additionalSettings.set(key, true);
+
+        return this;
+    }
+
     private String sanitizePackage(String packageName) {
         String sanitizedPackage = packageName;
         if (!sanitizedPackage.endsWith("/")) {

@@ -18,6 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
 import pt.up.fe.specs.util.SpecsSystem;
 
@@ -106,7 +107,9 @@ public class CxxApiTest {
 
     @Test
     public void testJpFilter() {
-        newTester().test("JpFilter.lara", "jp_filter.hpp");
+        newTester()
+                .set(CxxWeaverOption.PARSE_INCLUDES)
+                .test("JpFilter.lara", "jp_filter.hpp");
     }
 
     @Test
