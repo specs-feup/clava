@@ -1296,8 +1296,7 @@ public class CxxWeaver extends ACxxWeaver {
     public TranslationUnit rebuildFile(TranslationUnit tUnit) {
 
         // Write current tree to a temporary folder
-        File tempFolder = SpecsIo.mkdir(TEMP_WEAVING_FOLDER).getAbsoluteFile();
-        SpecsIo.deleteFolderContents(tempFolder, true);
+        File tempFolder = newTemporaryWeavingFolder();
 
         File destinationFile = tUnit.getDestinationFile(tempFolder);
         String code = tUnit.getCode();
@@ -1386,9 +1385,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Check if inside apply
 
         // Write current tree to a temporary folder
-        // TODO: This can be problematic if several current instances of Clava are run
-        File tempFolder = SpecsIo.mkdir(TEMP_WEAVING_FOLDER + "_" + UUID.randomUUID().toString()).getAbsoluteFile();
-        SpecsIo.deleteFolderContents(tempFolder, true);
+        File tempFolder = newTemporaryWeavingFolder();
 
         List<File> writtenFiles = getApp().write(tempFolder);
         ClavaLog.debug(() -> "Files written during rebuild: " + writtenFiles);
@@ -1505,14 +1502,31 @@ public class CxxWeaver extends ACxxWeaver {
             // baseFolder = tempFolder;
         }
 
-        // Register temporary folder and its contents for deletion
-        SpecsIo.deleteOnExit(tempFolder);
-
         // Clear user values, all stored nodes are invalid now
         // userValues = new HashMap<>();
         // Discard user values
         // userValuesStack.pop();
         // userValuesStack.push(new HashMap<>());
+    }
+
+    /**
+     * Creates a new temporary folder for weaving.
+     * 
+     * <p>
+     * The folder will be deleted when the JVM exits.
+     * 
+     * @return
+     */
+    private File newTemporaryWeavingFolder() {
+
+        File tempFolder = SpecsIo.getTempFolder(TEMP_WEAVING_FOLDER + "_" + UUID.randomUUID().toString());
+
+        SpecsIo.deleteFolderContents(tempFolder, true);
+
+        // Register temporary folder and its contents for deletion
+        SpecsIo.deleteOnExit(tempFolder);
+
+        return tempFolder.getAbsoluteFile();
     }
 
     @Override
