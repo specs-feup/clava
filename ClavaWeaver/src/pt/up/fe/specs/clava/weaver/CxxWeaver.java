@@ -917,7 +917,8 @@ public class CxxWeaver extends ACxxWeaver {
 
         Set<String> adaptedSources = new HashSet<>();
 
-        boolean skipHeaderFiles = args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING);
+        // boolean skipHeaderFiles = args.get(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING);
+        boolean skipHeaderFiles = !args.get(CxxWeaverOption.PARSE_INCLUDES);
 
         if (skipHeaderFiles) {
             // Add only implementation files if skipping header includes
@@ -1372,7 +1373,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Return correct TranslationUnit
         for (TranslationUnit tu : rebuiltApp.getTranslationUnits()) {
-            if (destinationFile.equals(tu.getFile())) {
+            if (SpecsIo.getCanonicalFile(destinationFile).equals(SpecsIo.getCanonicalFile(tu.getFile()))) {
                 return tu;
             }
             // System.out.println("TU: " + tu.getFile());

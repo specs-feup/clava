@@ -44,8 +44,12 @@ public interface CxxWeaverOption {
             .setLabel("Normal Includes")
             .setDefault(() -> FileList.newInstance());
 
-    DataKey<Boolean> SKIP_HEADER_INCLUDES_PARSING = KeyFactory.bool("skipHeaderIncludesParsing")
-            .setLabel("Skip parsing of header files");
+    // DataKey<Boolean> SKIP_HEADER_INCLUDES_PARSING = KeyFactory.bool("skipHeaderIncludesParsing")
+    // .setLabel("Skip parsing of header files");
+    // .setDefault(() -> true);
+
+    DataKey<Boolean> PARSE_INCLUDES = KeyFactory.bool("parseIncludes")
+            .setLabel("Parses header files");
     // .setDefault(() -> true);
 
     DataKey<FileList> SYSTEM_INCLUDES = LaraIKeyFactory.folderList("library includes")
@@ -79,7 +83,10 @@ public interface CxxWeaverOption {
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("C/C++ Weaver")
             .addKeys(ClavaOptions.STORE_DEFINITION.getKeys())
             .addKeys(WOVEN_CODE_FOLDERNAME, DISABLE_CLAVA_INFO, CHECK_SYNTAX, CLEAN_INTERMEDIATE_FILES,
-                    HEADER_INCLUDES, SKIP_HEADER_INCLUDES_PARSING, SYSTEM_INCLUDES,
+                    HEADER_INCLUDES,
+                    // SKIP_HEADER_INCLUDES_PARSING,
+                    PARSE_INCLUDES,
+                    SYSTEM_INCLUDES,
                     ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD,
                     DISABLE_WEAVING, DISABLE_CODE_GENERATION,
                     // GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES)

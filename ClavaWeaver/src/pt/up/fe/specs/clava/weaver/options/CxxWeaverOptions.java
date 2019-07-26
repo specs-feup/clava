@@ -73,8 +73,11 @@ public class CxxWeaverOptions {
                 "dir1[,dir2]*",
                 "Include folders for C/C++ headers. Include files that are used in C/C++ files are processed by Clava and appear in the AST.");
 
-        addBooleanOption(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING, "sih", "skip-includes-headers-parsing",
-                "Skips parsing of the headers inside the specified include folders.");
+        // addBooleanOption(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING, "sih", "skip-includes-headers-parsing",
+        // "Skips parsing of the headers inside the specified include folders.");
+
+        addBooleanOption(CxxWeaverOption.PARSE_INCLUDES, "pi", "parse-includes",
+                "Parses headers inside the specified include folders.");
 
         addOneArgOption(CxxWeaverOption.SYSTEM_INCLUDES, "is", "includes-system",
                 "dir1[,dir2]*",
