@@ -18,6 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
 import pt.up.fe.specs.util.SpecsSystem;
 
@@ -227,5 +228,12 @@ public class CxxTest {
     @Test
     public void testSetters() {
         newTester().test("Setters.lara", "setters.cpp");
+    }
+
+    @Test
+    public void testSkipParsingHeaders() {
+        newTester()
+                .set(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING, true)
+                .test("SkipParsingHeaders.lara", "skip_parsing_headers.cpp", "skip_parsing_headers.h");
     }
 }

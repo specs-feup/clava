@@ -1,0 +1,8 @@
+/**** File 'skip_parsing_headers.cpp' ****/
+
+#include "skip_parsing_headers.h"
+int main() {
+   int a = 10;
+}
+
+/**** End File ****/
