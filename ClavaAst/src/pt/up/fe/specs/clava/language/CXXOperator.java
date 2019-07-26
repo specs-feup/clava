@@ -67,12 +67,13 @@ public enum CXXOperator implements StringProvider {
     FUNCTION_CALL("()", CXXOperator::getFunctionCallCode),
 
     SUBSCRIPT("[]", (op, args) -> args.get(0).getCode() + "[" + args.get(1).getCode() + "]");
-    // + - * / % � & | ~ ! = < > += -= *= /= %= �= &= |= << >> >>= <<= == != <= >= && || ++ -- , ->* -> ( ) [ ]
+    // + - * / % ^ & | ~ ! = < > += -= *= /= %= ^= &= |= << >> >>= <<= == != <= >= && || ++ -- , ->* -> ( ) [ ]
 
     private final String operatorCode;
     private final BiFunction<String, List<Expr>, String> toCode;
 
-    private static final Lazy<EnumHelperWithValue<CXXOperator>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(CXXOperator.class);
+    private static final Lazy<EnumHelperWithValue<CXXOperator>> HELPER = EnumHelperWithValue
+            .newLazyHelperWithValue(CXXOperator.class);
 
     public static EnumHelperWithValue<CXXOperator> getHelper() {
         return HELPER.get();

@@ -30,7 +30,7 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
 /**
  * Represents a new-expression e.g: "new Object(foo)".
  * 
- * @author Jo�o Bispo
+ * @author João Bispo
  *
  */
 public class CXXNewExpr extends Expr {

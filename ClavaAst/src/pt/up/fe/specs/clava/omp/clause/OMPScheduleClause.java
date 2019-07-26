@@ -26,7 +26,7 @@ import pt.up.fe.specs.util.providers.StringProvider;
  * Represents a 'schedule' clause, e.g.: #pragma omp for schedule(static, 3)
  *
  * @deprecated
- * @author Jo�o Bispo
+ * @author João Bispo
  *
  */
 @Deprecated
@@ -39,7 +39,8 @@ public class OMPScheduleClause implements OMPClause {
         AUTO,
         RUNTIME;
 
-        private static final Lazy<EnumHelperWithValue<ScheduleKind>> ENUM_HELPER = EnumHelperWithValue.newLazyHelperWithValue(ScheduleKind.class);
+        private static final Lazy<EnumHelperWithValue<ScheduleKind>> ENUM_HELPER = EnumHelperWithValue
+                .newLazyHelperWithValue(ScheduleKind.class);
 
         public static EnumHelperWithValue<ScheduleKind> getHelper() {
             return ENUM_HELPER.get();

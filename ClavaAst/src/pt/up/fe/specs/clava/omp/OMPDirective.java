@@ -21,7 +21,7 @@ import pt.up.fe.specs.clava.omp.clause.OMPClause;
 /**
  * Represents the information inside an OpenMP directive.
  * 
- * @author Jo�o Bispo
+ * @author João Bispo
  *
  */
 public class OMPDirective {

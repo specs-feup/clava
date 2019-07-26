@@ -36,7 +36,7 @@ import pt.up.fe.specs.util.treenode.transform.TransformQueue;
  * Clang AST puts global Decl nodes directly in the tree outside of functions, this transformation encapsulates such
  * Decls inside a DeclStmt.
  * 
- * @author Jo�o Bispo
+ * @author João Bispo
  *
  */
 public class CreateDeclStmts implements SimplePostClavaRule {
