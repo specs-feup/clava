@@ -91,6 +91,7 @@ public class CxxTest {
         newTester()
                 // Disable syntax checking, since test system may not have HDF5 includes automatically available
                 .setCheckWovenCodeSyntax(false)
+                .set(CxxWeaverOption.PARSE_INCLUDES)
                 .test("Hdf5Types.lara", "hdf5types.cpp");
     }
 
