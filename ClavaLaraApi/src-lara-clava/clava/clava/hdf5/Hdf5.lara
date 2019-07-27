@@ -42,7 +42,7 @@ Hdf5.convert = function($type) {
 		//println("ORIGINAL TYPE:"+$type.ast);
 
 		// Desugar type
-		$type = $type.desugar;
+		$type = $type.desugarAll;
 		
 		
 		// Special case: char[size]
