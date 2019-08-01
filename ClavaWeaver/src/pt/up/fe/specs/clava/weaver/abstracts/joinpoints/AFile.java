@@ -324,6 +324,29 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * the name of the source folder of this file, or undefined if it has none
+     */
+    public abstract String getSourceFoldernameImpl();
+
+    /**
+     * the name of the source folder of this file, or undefined if it has none
+     */
+    public final Object getSourceFoldername() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "sourceFoldername", Optional.empty());
+        	}
+        	String result = this.getSourceFoldernameImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "sourceFoldername", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "sourceFoldername", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select stmts
      * @return 
      */
@@ -871,6 +894,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         attributes.add("isOpenCL");
         attributes.add("destinationFilepath");
         attributes.add("destinationFilepath");
+        attributes.add("sourceFoldername");
     }
 
     /**
@@ -940,6 +964,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         ISHEADER("isHeader"),
         ISOPENCL("isOpenCL"),
         DESTINATIONFILEPATH("destinationFilepath"),
+        SOURCEFOLDERNAME("sourceFoldername"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

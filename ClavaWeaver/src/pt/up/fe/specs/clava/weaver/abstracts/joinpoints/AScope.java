@@ -30,12 +30,12 @@ public abstract class AScope extends AStatement {
         this.aStatement = aStatement;
     }
     /**
-     * The number of statements in the scope, including the statements inside structures such as ifs and loops, and not considering comments and pragmas
+     * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas
      */
     public abstract Long getNumStatementsImpl();
 
     /**
-     * The number of statements in the scope, including the statements inside structures such as ifs and loops, and not considering comments and pragmas
+     * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas
      */
     public final Object getNumStatements() {
         try {

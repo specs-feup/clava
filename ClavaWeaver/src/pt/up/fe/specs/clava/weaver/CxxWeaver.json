@@ -18385,6 +18385,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the name of the source folder of this file, or undefined if it has none",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "sourceFoldername"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -39816,7 +39825,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "The number of statements in the scope, including the statements inside structures such as ifs and loops, and not considering comments and pragmas",
+                  "tooltip": "The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas",
                   "children": [
                            {
                               "type": "Long",

@@ -172,7 +172,7 @@
 		<attribute name="destinationFilepath" type="String" tooltip="the complete path to the generated file, given a destination folder">
 			<parameter name="destinationFolderpath" type="String" />			
 		</attribute>		
-
+		<attribute name="sourceFoldername" type="String" tooltip="the name of the source folder of this file, or undefined if it has none"/>
 	</artifact>
 
 	<!-- INCLUDE -->

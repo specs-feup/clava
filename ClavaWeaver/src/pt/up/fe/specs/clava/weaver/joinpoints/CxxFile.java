@@ -458,4 +458,9 @@ public class CxxFile extends AFile {
     public Object getFileImpl() {
         return tunit.getFile();
     }
+
+    @Override
+    public String getSourceFoldernameImpl() {
+        return tunit.get(TranslationUnit.SOURCE_FOLDERNAME).orElse(null);
+    }
 }
