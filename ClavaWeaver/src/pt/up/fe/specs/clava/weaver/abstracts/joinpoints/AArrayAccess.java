@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
 import java.util.Map;
@@ -60,9 +59,9 @@ public abstract class AArrayAccess extends AExpression {
     /**
      * expression of the array access subscript
      */
-    public Bindings getSubscriptImpl() {
+    public Object getSubscriptImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getSubscriptArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
         return nativeArray0;
     }
 
@@ -74,7 +73,7 @@ public abstract class AArrayAccess extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "subscript", Optional.empty());
         	}
-        	Bindings result = this.getSubscriptImpl();
+        	Object result = this.getSubscriptImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "subscript", Optional.ofNullable(result));
         	}

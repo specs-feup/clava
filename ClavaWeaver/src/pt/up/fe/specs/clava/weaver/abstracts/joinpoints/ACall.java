@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
@@ -96,9 +95,9 @@ public abstract class ACall extends AExpression {
      * Get value on attribute memberNames
      * @return the attribute's value
      */
-    public Bindings getMemberNamesImpl() {
+    public Object getMemberNamesImpl() {
         String[] stringArrayImpl0 = getMemberNamesArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -111,7 +110,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "memberNames", Optional.empty());
         	}
-        	Bindings result = this.getMemberNamesImpl();
+        	Object result = this.getMemberNamesImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "memberNames", Optional.ofNullable(result));
         	}
@@ -199,9 +198,9 @@ public abstract class ACall extends AExpression {
     /**
      * an alias for 'args'
      */
-    public Bindings getArgListImpl() {
+    public Object getArgListImpl() {
         AExpression[] aExpressionArrayImpl0 = getArgListArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
         return nativeArray0;
     }
 
@@ -213,7 +212,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "argList", Optional.empty());
         	}
-        	Bindings result = this.getArgListImpl();
+        	Object result = this.getArgListImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "argList", Optional.ofNullable(result));
         	}
@@ -232,9 +231,9 @@ public abstract class ACall extends AExpression {
     /**
      * an array with the arguments of the call
      */
-    public Bindings getArgsImpl() {
+    public Object getArgsImpl() {
         AExpression[] aExpressionArrayImpl0 = getArgsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
         return nativeArray0;
     }
 
@@ -246,7 +245,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "args", Optional.empty());
         	}
-        	Bindings result = this.getArgsImpl();
+        	Object result = this.getArgsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "args", Optional.ofNullable(result));
         	}

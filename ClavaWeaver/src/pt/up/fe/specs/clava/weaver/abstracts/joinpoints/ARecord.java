@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
 import java.util.Map;
@@ -64,9 +63,9 @@ public abstract class ARecord extends ANamedDecl {
      * Get value on attribute fields
      * @return the attribute's value
      */
-    public Bindings getFieldsImpl() {
+    public Object getFieldsImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getFieldsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
         return nativeArray0;
     }
 
@@ -79,7 +78,7 @@ public abstract class ARecord extends ANamedDecl {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "fields", Optional.empty());
         	}
-        	Bindings result = this.getFieldsImpl();
+        	Object result = this.getFieldsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "fields", Optional.ofNullable(result));
         	}

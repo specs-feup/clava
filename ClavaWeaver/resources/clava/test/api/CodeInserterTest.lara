@@ -10,7 +10,7 @@ aspectdef CodeInserterTest
 
 	// Select the only file of the test
 	var $file = Clava.getProgram().descendants('file')[0];
-	
+
 	codeInserter.add($file, 11, "    #pragma omp parallel for default(shared) firstprivate(numIter) reduction(+ : a)");
 	codeInserter.add($file, 15, "    #pragma omp parallel for default(shared) reduction(+ : a)");
 	codeInserter.add($file, 24, "    #pragma omp parallel for default(shared)");

@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -62,9 +61,9 @@ public abstract class AMemberAccess extends AExpression {
      * Get value on attribute memberChain
      * @return the attribute's value
      */
-    public Bindings getMemberChainImpl() {
+    public Object getMemberChainImpl() {
         String[] stringArrayImpl0 = getMemberChainArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -77,7 +76,7 @@ public abstract class AMemberAccess extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "memberChain", Optional.empty());
         	}
-        	Bindings result = this.getMemberChainImpl();
+        	Object result = this.getMemberChainImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "memberChain", Optional.ofNullable(result));
         	}

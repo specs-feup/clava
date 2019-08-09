@@ -1,6 +1,5 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import javax.script.Bindings;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
@@ -37,9 +36,9 @@ public abstract class AQualType extends AType {
      * Get value on attribute qualifiers
      * @return the attribute's value
      */
-    public Bindings getQualifiersImpl() {
+    public Object getQualifiersImpl() {
         String[] stringArrayImpl0 = getQualifiersArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -52,7 +51,7 @@ public abstract class AQualType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "qualifiers", Optional.empty());
         	}
-        	Bindings result = this.getQualifiersImpl();
+        	Object result = this.getQualifiersImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "qualifiers", Optional.ofNullable(result));
         	}

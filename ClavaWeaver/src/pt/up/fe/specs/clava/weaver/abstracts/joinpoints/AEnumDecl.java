@@ -1,6 +1,5 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import javax.script.Bindings;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
@@ -39,9 +38,9 @@ public abstract class AEnumDecl extends ANamedDecl {
      * Get value on attribute enumerators
      * @return the attribute's value
      */
-    public Bindings getEnumeratorsImpl() {
+    public Object getEnumeratorsImpl() {
         AEnumeratorDecl[] aEnumeratorDeclArrayImpl0 = getEnumeratorsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aEnumeratorDeclArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aEnumeratorDeclArrayImpl0);
         return nativeArray0;
     }
 
@@ -54,7 +53,7 @@ public abstract class AEnumDecl extends ANamedDecl {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "enumerators", Optional.empty());
         	}
-        	Bindings result = this.getEnumeratorsImpl();
+        	Object result = this.getEnumeratorsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "enumerators", Optional.ofNullable(result));
         	}

@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
 import java.util.Map;
 import org.lara.interpreter.exception.ActionException;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
@@ -181,9 +180,9 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * Get value on attribute templateArgsStrings
      * @return the attribute's value
      */
-    public Bindings getTemplateArgsStringsImpl() {
+    public Object getTemplateArgsStringsImpl() {
         String[] stringArrayImpl0 = getTemplateArgsStringsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -196,7 +195,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "templateArgsStrings", Optional.empty());
         	}
-        	Bindings result = this.getTemplateArgsStringsImpl();
+        	Object result = this.getTemplateArgsStringsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "templateArgsStrings", Optional.ofNullable(result));
         	}
@@ -216,9 +215,9 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * Get value on attribute templateArgsTypes
      * @return the attribute's value
      */
-    public Bindings getTemplateArgsTypesImpl() {
+    public Object getTemplateArgsTypesImpl() {
         AType[] aTypeArrayImpl0 = getTemplateArgsTypesArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aTypeArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aTypeArrayImpl0);
         return nativeArray0;
     }
 
@@ -231,7 +230,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "templateArgsTypes", Optional.empty());
         	}
-        	Bindings result = this.getTemplateArgsTypesImpl();
+        	Object result = this.getTemplateArgsTypesImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "templateArgsTypes", Optional.ofNullable(result));
         	}

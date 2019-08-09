@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
 import java.util.Map;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -87,9 +86,9 @@ public abstract class ATemplateSpecializationType extends AType {
      * Get value on attribute args
      * @return the attribute's value
      */
-    public Bindings getArgsImpl() {
+    public Object getArgsImpl() {
         String[] stringArrayImpl0 = getArgsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -102,7 +101,7 @@ public abstract class ATemplateSpecializationType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "args", Optional.empty());
         	}
-        	Bindings result = this.getArgsImpl();
+        	Object result = this.getArgsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "args", Optional.ofNullable(result));
         	}

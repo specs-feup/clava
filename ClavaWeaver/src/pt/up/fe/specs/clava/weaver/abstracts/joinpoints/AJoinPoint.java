@@ -8,7 +8,6 @@ import java.util.Optional;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import org.lara.interpreter.weaver.interf.SelectOp;
 
@@ -693,9 +692,9 @@ public abstract class AJoinPoint extends JoinPoint {
     /**
      * Retrieves all descendants of the join point
      */
-    public Bindings getDescendantsImpl() {
+    public Object getDescendantsImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getDescendantsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
         return nativeArray0;
     }
 
@@ -707,7 +706,7 @@ public abstract class AJoinPoint extends JoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "descendants", Optional.empty());
         	}
-        	Bindings result = this.getDescendantsImpl();
+        	Object result = this.getDescendantsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "descendants", Optional.ofNullable(result));
         	}
@@ -729,9 +728,9 @@ public abstract class AJoinPoint extends JoinPoint {
      * @param type
      * @return 
      */
-    public Bindings descendantsImpl(String type) {
+    public Object descendantsImpl(String type) {
         AJoinPoint[] aJoinPointArrayImpl0 = descendantsArrayImpl(type);
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
         return nativeArray0;
     }
 
@@ -745,7 +744,7 @@ public abstract class AJoinPoint extends JoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "descendants", Optional.empty(), type);
         	}
-        	Bindings result = this.descendantsImpl(type);
+        	Object result = this.descendantsImpl(type);
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "descendants", Optional.ofNullable(result), type);
         	}
@@ -767,9 +766,9 @@ public abstract class AJoinPoint extends JoinPoint {
      * @param type
      * @return 
      */
-    public Bindings descendantsAndSelfImpl(String type) {
+    public Object descendantsAndSelfImpl(String type) {
         AJoinPoint[] aJoinPointArrayImpl0 = descendantsAndSelfArrayImpl(type);
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
         return nativeArray0;
     }
 
@@ -783,7 +782,7 @@ public abstract class AJoinPoint extends JoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "descendantsAndSelf", Optional.empty(), type);
         	}
-        	Bindings result = this.descendantsAndSelfImpl(type);
+        	Object result = this.descendantsAndSelfImpl(type);
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "descendantsAndSelf", Optional.ofNullable(result), type);
         	}
@@ -1305,9 +1304,9 @@ public abstract class AJoinPoint extends JoinPoint {
     /**
      * Returns an array with the children of the node, considering null nodes
      */
-    public Bindings getAstChildrenImpl() {
+    public Object getAstChildrenImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getAstChildrenArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
         return nativeArray0;
     }
 
@@ -1319,7 +1318,7 @@ public abstract class AJoinPoint extends JoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "astChildren", Optional.empty());
         	}
-        	Bindings result = this.getAstChildrenImpl();
+        	Object result = this.getAstChildrenImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "astChildren", Optional.ofNullable(result));
         	}
@@ -1388,9 +1387,9 @@ public abstract class AJoinPoint extends JoinPoint {
     /**
      * Returns an array with the children of the node, ignoring null nodes
      */
-    public Bindings getChildrenImpl() {
+    public Object getChildrenImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getChildrenArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
         return nativeArray0;
     }
 
@@ -1402,7 +1401,7 @@ public abstract class AJoinPoint extends JoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "children", Optional.empty());
         	}
-        	Bindings result = this.getChildrenImpl();
+        	Object result = this.getChildrenImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "children", Optional.ofNullable(result));
         	}
@@ -1503,9 +1502,9 @@ public abstract class AJoinPoint extends JoinPoint {
      * Get value on attribute chain
      * @return the attribute's value
      */
-    public Bindings getChainImpl() {
+    public Object getChainImpl() {
         String[] stringArrayImpl0 = getChainArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -1518,7 +1517,7 @@ public abstract class AJoinPoint extends JoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "chain", Optional.empty());
         	}
-        	Bindings result = this.getChainImpl();
+        	Object result = this.getChainImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "chain", Optional.ofNullable(result));
         	}
@@ -1538,9 +1537,9 @@ public abstract class AJoinPoint extends JoinPoint {
      * Get value on attribute javaFields
      * @return the attribute's value
      */
-    public Bindings getJavaFieldsImpl() {
+    public Object getJavaFieldsImpl() {
         String[] stringArrayImpl0 = getJavaFieldsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -1553,7 +1552,7 @@ public abstract class AJoinPoint extends JoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "javaFields", Optional.empty());
         	}
-        	Bindings result = this.getJavaFieldsImpl();
+        	Object result = this.getJavaFieldsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "javaFields", Optional.ofNullable(result));
         	}
@@ -1776,9 +1775,9 @@ public abstract class AJoinPoint extends JoinPoint {
     /**
      * The pragmas associated with this node
      */
-    public Bindings getPragmasImpl() {
+    public Object getPragmasImpl() {
         APragma[] aPragmaArrayImpl0 = getPragmasArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aPragmaArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aPragmaArrayImpl0);
         return nativeArray0;
     }
 
@@ -1790,7 +1789,7 @@ public abstract class AJoinPoint extends JoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "pragmas", Optional.empty());
         	}
-        	Bindings result = this.getPragmasImpl();
+        	Object result = this.getPragmasImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "pragmas", Optional.ofNullable(result));
         	}
@@ -1832,9 +1831,9 @@ public abstract class AJoinPoint extends JoinPoint {
     /**
      * A list of the properties currently supported by this node
      */
-    public Bindings getKeysImpl() {
+    public Object getKeysImpl() {
         String[] stringArrayImpl0 = getKeysArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -1846,7 +1845,7 @@ public abstract class AJoinPoint extends JoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "keys", Optional.empty());
         	}
-        	Bindings result = this.getKeysImpl();
+        	Object result = this.getKeysImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "keys", Optional.ofNullable(result));
         	}

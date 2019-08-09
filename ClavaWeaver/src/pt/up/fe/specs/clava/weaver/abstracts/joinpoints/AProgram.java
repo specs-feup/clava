@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
@@ -125,9 +124,9 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      * Get value on attribute defaultFlags
      * @return the attribute's value
      */
-    public Bindings getDefaultFlagsImpl() {
+    public Object getDefaultFlagsImpl() {
         String[] stringArrayImpl0 = getDefaultFlagsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -140,7 +139,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "defaultFlags", Optional.empty());
         	}
-        	Bindings result = this.getDefaultFlagsImpl();
+        	Object result = this.getDefaultFlagsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "defaultFlags", Optional.ofNullable(result));
         	}
@@ -160,9 +159,9 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      * Get value on attribute userFlags
      * @return the attribute's value
      */
-    public Bindings getUserFlagsImpl() {
+    public Object getUserFlagsImpl() {
         String[] stringArrayImpl0 = getUserFlagsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -175,7 +174,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "userFlags", Optional.empty());
         	}
-        	Bindings result = this.getUserFlagsImpl();
+        	Object result = this.getUserFlagsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "userFlags", Optional.ofNullable(result));
         	}
@@ -195,9 +194,9 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
      * Get value on attribute includeFolders
      * @return the attribute's value
      */
-    public Bindings getIncludeFoldersImpl() {
+    public Object getIncludeFoldersImpl() {
         String[] stringArrayImpl0 = getIncludeFoldersArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -210,7 +209,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "includeFolders", Optional.empty());
         	}
-        	Bindings result = this.getIncludeFoldersImpl();
+        	Object result = this.getIncludeFoldersImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "includeFolders", Optional.ofNullable(result));
         	}
@@ -279,9 +278,9 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     /**
      * paths to sources that the current program depends on
      */
-    public Bindings getExtraSourcesImpl() {
+    public Object getExtraSourcesImpl() {
         String[] stringArrayImpl0 = getExtraSourcesArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -293,7 +292,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraSources", Optional.empty());
         	}
-        	Bindings result = this.getExtraSourcesImpl();
+        	Object result = this.getExtraSourcesImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "extraSources", Optional.ofNullable(result));
         	}
@@ -312,9 +311,9 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     /**
      * paths to includes that the current program depends on
      */
-    public Bindings getExtraIncludesImpl() {
+    public Object getExtraIncludesImpl() {
         String[] stringArrayImpl0 = getExtraIncludesArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -326,7 +325,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraIncludes", Optional.empty());
         	}
-        	Bindings result = this.getExtraIncludesImpl();
+        	Object result = this.getExtraIncludesImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "extraIncludes", Optional.ofNullable(result));
         	}
@@ -345,9 +344,9 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     /**
      * paths to folders of projects that the current program depends on
      */
-    public Bindings getExtraProjectsImpl() {
+    public Object getExtraProjectsImpl() {
         String[] stringArrayImpl0 = getExtraProjectsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -359,7 +358,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraProjects", Optional.empty());
         	}
-        	Bindings result = this.getExtraProjectsImpl();
+        	Object result = this.getExtraProjectsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "extraProjects", Optional.ofNullable(result));
         	}
@@ -378,9 +377,9 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     /**
      * link libraries of external projects the current program depends on
      */
-    public Bindings getExtraLibsImpl() {
+    public Object getExtraLibsImpl() {
         String[] stringArrayImpl0 = getExtraLibsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -392,7 +391,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "extraLibs", Optional.empty());
         	}
-        	Bindings result = this.getExtraLibsImpl();
+        	Object result = this.getExtraLibsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "extraLibs", Optional.ofNullable(result));
         	}

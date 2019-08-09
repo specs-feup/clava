@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
 import org.lara.interpreter.exception.ActionException;
 import java.util.List;
 import java.util.Map;
@@ -120,9 +119,9 @@ public abstract class AOmp extends APragma {
     /**
      * The variable names of all private clauses, or empty array if no private clause is defined
      */
-    public Bindings getPrivateImpl() {
+    public Object getPrivateImpl() {
         String[] stringArrayImpl0 = getPrivateArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -134,7 +133,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "private", Optional.empty());
         	}
-        	Bindings result = this.getPrivateImpl();
+        	Object result = this.getPrivateImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "private", Optional.ofNullable(result));
         	}
@@ -207,9 +206,9 @@ public abstract class AOmp extends APragma {
     /**
      * The names of the kinds of all clauses in the pragma, or empty array if no clause is defined
      */
-    public Bindings getClauseKindsImpl() {
+    public Object getClauseKindsImpl() {
         String[] stringArrayImpl0 = getClauseKindsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -221,7 +220,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "clauseKinds", Optional.empty());
         	}
-        	Bindings result = this.getClauseKindsImpl();
+        	Object result = this.getClauseKindsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "clauseKinds", Optional.ofNullable(result));
         	}
@@ -243,9 +242,9 @@ public abstract class AOmp extends APragma {
      * @param kind
      * @return 
      */
-    public Bindings reductionImpl(String kind) {
+    public Object reductionImpl(String kind) {
         String[] stringArrayImpl0 = reductionArrayImpl(kind);
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -259,7 +258,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "reduction", Optional.empty(), kind);
         	}
-        	Bindings result = this.reductionImpl(kind);
+        	Object result = this.reductionImpl(kind);
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "reduction", Optional.ofNullable(result), kind);
         	}
@@ -278,9 +277,9 @@ public abstract class AOmp extends APragma {
     /**
      * The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined
      */
-    public Bindings getReductionKindsImpl() {
+    public Object getReductionKindsImpl() {
         String[] stringArrayImpl0 = getReductionKindsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -292,7 +291,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "reductionKinds", Optional.empty());
         	}
-        	Bindings result = this.getReductionKindsImpl();
+        	Object result = this.getReductionKindsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "reductionKinds", Optional.ofNullable(result));
         	}
@@ -334,9 +333,9 @@ public abstract class AOmp extends APragma {
     /**
      * The variable names of all firstprivate clauses, or empty array if no firstprivate clause is defined
      */
-    public Bindings getFirstprivateImpl() {
+    public Object getFirstprivateImpl() {
         String[] stringArrayImpl0 = getFirstprivateArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -348,7 +347,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "firstprivate", Optional.empty());
         	}
-        	Bindings result = this.getFirstprivateImpl();
+        	Object result = this.getFirstprivateImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "firstprivate", Optional.ofNullable(result));
         	}
@@ -367,9 +366,9 @@ public abstract class AOmp extends APragma {
     /**
      * The variable names of all lastprivate clauses, or empty array if no lastprivate clause is defined
      */
-    public Bindings getLastprivateImpl() {
+    public Object getLastprivateImpl() {
         String[] stringArrayImpl0 = getLastprivateArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -381,7 +380,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "lastprivate", Optional.empty());
         	}
-        	Bindings result = this.getLastprivateImpl();
+        	Object result = this.getLastprivateImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "lastprivate", Optional.ofNullable(result));
         	}
@@ -400,9 +399,9 @@ public abstract class AOmp extends APragma {
     /**
      * The variable names of all shared clauses, or empty array if no shared clause is defined
      */
-    public Bindings getSharedImpl() {
+    public Object getSharedImpl() {
         String[] stringArrayImpl0 = getSharedArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -414,7 +413,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "shared", Optional.empty());
         	}
-        	Bindings result = this.getSharedImpl();
+        	Object result = this.getSharedImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "shared", Optional.ofNullable(result));
         	}
@@ -433,9 +432,9 @@ public abstract class AOmp extends APragma {
     /**
      * The variable names of all copyin clauses, or empty array if no copyin clause is defined
      */
-    public Bindings getCopyinImpl() {
+    public Object getCopyinImpl() {
         String[] stringArrayImpl0 = getCopyinArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -447,7 +446,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "copyin", Optional.empty());
         	}
-        	Bindings result = this.getCopyinImpl();
+        	Object result = this.getCopyinImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "copyin", Optional.ofNullable(result));
         	}
@@ -512,9 +511,9 @@ public abstract class AOmp extends APragma {
     /**
      * A list with possible values of 'monotonic', 'nonmonotonic' or 'simd', or undefined if no 'schedule' clause with modifiers is defined
      */
-    public Bindings getScheduleModifiersImpl() {
+    public Object getScheduleModifiersImpl() {
         String[] stringArrayImpl0 = getScheduleModifiersArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -526,7 +525,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "scheduleModifiers", Optional.empty());
         	}
-        	Bindings result = this.getScheduleModifiersImpl();
+        	Object result = this.getScheduleModifiersImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "scheduleModifiers", Optional.ofNullable(result));
         	}

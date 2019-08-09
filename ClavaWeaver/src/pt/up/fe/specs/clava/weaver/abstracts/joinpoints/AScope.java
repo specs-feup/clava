@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
@@ -119,9 +118,9 @@ public abstract class AScope extends AStatement {
      * Get value on attribute stmts
      * @return the attribute's value
      */
-    public Bindings getStmtsImpl() {
+    public Object getStmtsImpl() {
         AStatement[] aStatementArrayImpl0 = getStmtsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
         return nativeArray0;
     }
 
@@ -134,7 +133,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "stmts", Optional.empty());
         	}
-        	Bindings result = this.getStmtsImpl();
+        	Object result = this.getStmtsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "stmts", Optional.ofNullable(result));
         	}

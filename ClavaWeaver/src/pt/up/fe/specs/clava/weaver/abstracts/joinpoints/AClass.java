@@ -1,6 +1,5 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import javax.script.Bindings;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
@@ -39,9 +38,9 @@ public abstract class AClass extends ARecord {
      * Get value on attribute methods
      * @return the attribute's value
      */
-    public Bindings getMethodsImpl() {
+    public Object getMethodsImpl() {
         AMethod[] aMethodArrayImpl0 = getMethodsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aMethodArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aMethodArrayImpl0);
         return nativeArray0;
     }
 
@@ -54,7 +53,7 @@ public abstract class AClass extends ARecord {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "methods", Optional.empty());
         	}
-        	Bindings result = this.getMethodsImpl();
+        	Object result = this.getMethodsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "methods", Optional.ofNullable(result));
         	}

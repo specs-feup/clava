@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
 import pt.up.fe.specs.clava.weaver.enums.Relation;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
@@ -188,9 +187,9 @@ public abstract class ALoop extends AStatement {
      * Get value on attribute rank
      * @return the attribute's value
      */
-    public Bindings getRankImpl() {
+    public Object getRankImpl() {
         Integer[] integerArrayImpl0 = getRankArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(integerArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(integerArrayImpl0);
         return nativeArray0;
     }
 
@@ -203,7 +202,7 @@ public abstract class ALoop extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "rank", Optional.empty());
         	}
-        	Bindings result = this.getRankImpl();
+        	Object result = this.getRankImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "rank", Optional.ofNullable(result));
         	}

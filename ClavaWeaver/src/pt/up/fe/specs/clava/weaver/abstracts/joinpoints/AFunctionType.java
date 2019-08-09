@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
 import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import java.util.List;
@@ -70,9 +69,9 @@ public abstract class AFunctionType extends AType {
      * Get value on attribute paramTypes
      * @return the attribute's value
      */
-    public Bindings getParamTypesImpl() {
+    public Object getParamTypesImpl() {
         AJoinPoint[] aJoinPointArrayImpl0 = getParamTypesArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
         return nativeArray0;
     }
 
@@ -85,7 +84,7 @@ public abstract class AFunctionType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "paramTypes", Optional.empty());
         	}
-        	Bindings result = this.getParamTypesImpl();
+        	Object result = this.getParamTypesImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "paramTypes", Optional.ofNullable(result));
         	}

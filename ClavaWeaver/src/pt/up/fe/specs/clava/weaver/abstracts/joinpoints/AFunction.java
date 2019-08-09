@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import javax.script.Bindings;
 import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
@@ -205,9 +204,9 @@ public abstract class AFunction extends ADeclarator {
      * Get value on attribute paramNames
      * @return the attribute's value
      */
-    public Bindings getParamNamesImpl() {
+    public Object getParamNamesImpl() {
         String[] stringArrayImpl0 = getParamNamesArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
         return nativeArray0;
     }
 
@@ -220,7 +219,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "paramNames", Optional.empty());
         	}
-        	Bindings result = this.getParamNamesImpl();
+        	Object result = this.getParamNamesImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "paramNames", Optional.ofNullable(result));
         	}
@@ -240,9 +239,9 @@ public abstract class AFunction extends ADeclarator {
      * Get value on attribute params
      * @return the attribute's value
      */
-    public Bindings getParamsImpl() {
+    public Object getParamsImpl() {
         AParam[] aParamArrayImpl0 = getParamsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aParamArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aParamArrayImpl0);
         return nativeArray0;
     }
 
@@ -255,7 +254,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "params", Optional.empty());
         	}
-        	Bindings result = this.getParamsImpl();
+        	Object result = this.getParamsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "params", Optional.ofNullable(result));
         	}
@@ -464,9 +463,9 @@ public abstract class AFunction extends ADeclarator {
      * Get value on attribute calls
      * @return the attribute's value
      */
-    public Bindings getCallsImpl() {
+    public Object getCallsImpl() {
         ACall[] aCallArrayImpl0 = getCallsArrayImpl();
-        Bindings nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aCallArrayImpl0);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aCallArrayImpl0);
         return nativeArray0;
     }
 
@@ -479,7 +478,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "calls", Optional.empty());
         	}
-        	Bindings result = this.getCallsImpl();
+        	Object result = this.getCallsImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "calls", Optional.ofNullable(result));
         	}
