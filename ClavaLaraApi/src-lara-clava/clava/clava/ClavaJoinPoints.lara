@@ -139,7 +139,7 @@ ClavaJoinPoints.stmtLiteral = function(stmtString) {
 /**
  * Creates a new join point 'call'. 
  *
- * @param {$function} $function - The literal code of the statement.
+ * @param {$function} $function - The function for which the call will refer to.
  * @param {...$expression} arguments - The arguments of the function.
  */
 ClavaJoinPoints.call = function($function) {
@@ -147,6 +147,19 @@ ClavaJoinPoints.call = function($function) {
 	return AstFactory.callFromFunction($function, callArgs);
 	//return AstFactory.stmtLiteral($function, callArgs);
 }
+
+/**
+ * Creates a new join point 'call'. 
+ *
+ * @param {string} functionName - The name of the function to call.
+ * @param {$type} $returnType - The return type of the function.
+ * @param {...$expression} arguments - The arguments of the function.
+ */
+ClavaJoinPoints.callFromName = function(functionName, $returnType) {
+	var callArgs = arrayFromArgs(arguments, 2);
+	return AstFactory.call(functionName, $returnType, callArgs);
+}
+
 
 /**
  * Creates a new join point 'switch'
@@ -289,4 +302,18 @@ ClavaJoinPoints.binaryOp = function(op, $left, $right, $type) {
 ClavaJoinPoints.parenthesis = function($expr) {
 	$expr = ClavaType.asExpression($expr);
 	return AstFactory.parenthesis($expr);
+}
+
+/**
+ * @param {String|number} doubleLiteral - The number that will be a double literal.
+ */
+ClavaJoinPoints.doubleLiteral = function(doubleLiteral) {
+	return AstFactory.doubleLiteral(doubleLiteral);
+}
+
+/**
+ * @param {String|number} integerLiteral - The number that will be a integer literal.
+ */
+ClavaJoinPoints.integerLiteral = function(integerLiteral) {
+	return AstFactory.integerLiteral(integerLiteral);
 }
