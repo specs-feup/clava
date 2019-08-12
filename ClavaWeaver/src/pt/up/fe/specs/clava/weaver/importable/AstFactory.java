@@ -441,7 +441,7 @@ public class AstFactory {
                 ClavaLog.info("Expected argument " + (i + 2) + " to be an expression join point");
                 return null;
             }
-
+            
             if (cases[i + 1] instanceof AStatement) {
                 ClavaLog.info("Expected argument " + (i + 3) + " to be a statement join point");
                 return null;
@@ -465,6 +465,10 @@ public class AstFactory {
         return CxxJoinpoints.create(type);
     }
 
+    public static AExpression doubleLiteral(String floating) {
+        return doubleLiteral(Double.parseDouble(floating));
+    }
+
     public static AExpression doubleLiteral(double floating) {
         FloatingLiteral floatingLiteral = CxxWeaver.getFactory()
                 .floatingLiteral(FloatKind.DOUBLE, floating);
@@ -478,6 +482,10 @@ public class AstFactory {
     public static ACxxWeaverJoinPoint longType() {
         BuiltinType type = CxxWeaver.getFactory().builtinType(BuiltinKind.Long);
         return CxxJoinpoints.create(type);
+    }
+
+    public static AExpression integerLiteral(String integer) {
+        return integerLiteral(Integer.parseInt(integer));
     }
 
     public static AExpression integerLiteral(int integer) {

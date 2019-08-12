@@ -1,8 +1,10 @@
+import clava.ClavaJoinPoints;
+
 aspectdef InsertsJp
 
 	
-	$bDecl = AstFactory.varDecl("b", AstFactory.integerLiteral(10));
-	$cDecl = AstFactory.varDecl("c", AstFactory.integerLiteral(20));
+	$bDecl = ClavaJoinPoints.varDecl("b", ClavaJoinPoints.integerLiteral(10));
+	$cDecl = ClavaJoinPoints.varDecl("c", ClavaJoinPoints.integerLiteral("20"));
 
 	select function{"fooStmtBeforeAfter"}.stmt end
 	apply
@@ -44,10 +46,10 @@ aspectdef InsertsJp
 	end
 	
 
-	$double2 = AstFactory.doubleLiteral("2.0");
-	$double3 = AstFactory.doubleLiteral("3.0");
-	$doubleType = AstFactory.builtinType("double");
-	$powCall = AstFactory.call("pow", $doubleType, $double2, $double3);
+	$double2 = ClavaJoinPoints.doubleLiteral(2.0);
+	$double3 = ClavaJoinPoints.doubleLiteral("3.0");
+	$doubleType = ClavaJoinPoints.builtinType("double");
+	$powCall = ClavaJoinPoints.callFromName("pow", $doubleType, $double2, $double3);
 	
 	select function{"fooCallReplace"}.stmt.call end
 	apply
@@ -60,7 +62,7 @@ aspectdef InsertsJp
 		$function.exec insertAfter($cDecl);
 	end
 	
-	$dDecl = AstFactory.varDecl("d", AstFactory.integerLiteral(30));
+	$dDecl = ClavaJoinPoints.varDecl("d", ClavaJoinPoints.integerLiteral(30));
 	select function{"fooReplace"} end
 	apply
 		$function.exec replaceWith($dDecl);
