@@ -31368,6 +31368,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the value of the collapse clause of an OpenMP pragma",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setCollapse"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "newExpr",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Sets the variables of a copyin clause of an OpenMP pragma",
                   "children": [
                            {
@@ -31530,6 +31544,20 @@
                            },
                            {
                               "type": "String",
+                              "name": "chunkSize",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setScheduleChunkSize"
+                           },
+                           {
+                              "type": "Integer",
                               "name": "chunkSize",
                               "defaultValue": ""
                            }]

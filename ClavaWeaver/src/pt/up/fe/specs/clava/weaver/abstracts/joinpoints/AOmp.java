@@ -922,6 +922,32 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+     * @param chunkSize 
+     */
+    public void setScheduleChunkSizeImpl(Integer chunkSize) {
+        throw new UnsupportedOperationException(get_class()+": Action setScheduleChunkSize not implemented ");
+    }
+
+    /**
+     * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
+     * @param chunkSize 
+     */
+    public final void setScheduleChunkSize(Integer chunkSize) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
+        	}
+        	this.setScheduleChunkSizeImpl(chunkSize);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setScheduleChunkSize", e);
+        }
+    }
+
+    /**
      * Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
      * @param modifiers 
      */
@@ -960,6 +986,32 @@ public abstract class AOmp extends APragma {
      * @param newExpr 
      */
     public final void setCollapse(String newExpr) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setCollapse", this, Optional.empty(), newExpr);
+        	}
+        	this.setCollapseImpl(newExpr);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setCollapse", this, Optional.empty(), newExpr);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setCollapse", e);
+        }
+    }
+
+    /**
+     * Sets the value of the collapse clause of an OpenMP pragma
+     * @param newExpr 
+     */
+    public void setCollapseImpl(Integer newExpr) {
+        throw new UnsupportedOperationException(get_class()+": Action setCollapse not implemented ");
+    }
+
+    /**
+     * Sets the value of the collapse clause of an OpenMP pragma
+     * @param newExpr 
+     */
+    public final void setCollapse(Integer newExpr) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setCollapse", this, Optional.empty(), newExpr);
@@ -1370,8 +1422,10 @@ public abstract class AOmp extends APragma {
         actions.add("void setCopyin(String[])");
         actions.add("void setScheduleKind(String)");
         actions.add("void setScheduleChunkSize(String)");
+        actions.add("void setScheduleChunkSize(Integer)");
         actions.add("void setScheduleModifiers(String[])");
         actions.add("void setCollapse(String)");
+        actions.add("void setCollapse(Integer)");
         actions.add("void setOrdered()");
         actions.add("void setOrdered(String)");
     }

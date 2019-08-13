@@ -239,6 +239,11 @@ public class CxxOmp extends AOmp {
     }
 
     @Override
+    public void setScheduleChunkSizeImpl(Integer chunkSize) {
+        setScheduleChunkSize(chunkSize.toString());
+    }
+
+    @Override
     public String[] getScheduleModifiersArrayImpl() {
         return SpecsCollections.toStringArray(ompPragma.clauses().getScheduleModifiers());
     }
@@ -257,6 +262,11 @@ public class CxxOmp extends AOmp {
     @Override
     public void setCollapseImpl(String newExpr) {
         ompPragma.clauses().setCollapse(newExpr);
+    }
+
+    @Override
+    public void setCollapseImpl(Integer newExpr) {
+        setCollapseImpl(newExpr.toString());
     }
 
     @Override
