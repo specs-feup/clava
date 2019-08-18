@@ -22,6 +22,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
@@ -34,6 +35,7 @@ import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
+import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.weaver.CxxActions;
@@ -142,8 +144,12 @@ public class CxxFile extends AFile {
 
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
-        Decl literalDecl = CxxWeaver.getFactory().literalDecl(code);
-        return CxxActions.insertAsChild(position, getNode(), literalDecl, getWeaverEngine());
+        var tentativeNode = CxxWeaver.getSnippetParser().parseStmt(code);
+        ClavaNode nodeToInsert = tentativeNode instanceof WrapperStmt ? tentativeNode.getChild(0)
+                : CxxWeaver.getFactory().literalDecl(code);
+        // Decl literalDecl = CxxWeaver.getFactory().literalDecl(code);
+        // return CxxActions.insertAsChild(position, getNode(), literalDecl, getWeaverEngine());
+        return CxxActions.insertAsChild(position, getNode(), nodeToInsert, getWeaverEngine());
     }
 
     @Override
@@ -274,6 +280,16 @@ public class CxxFile extends AFile {
     public String getRelativeFolderpathImpl() {
         return tunit.getRelativeFolderpath().orElse(null);
         // return CxxWeaver.getRelativeFolderpath(tunit);
+    }
+
+    @Override
+    public void defRelativeFolderpathImpl(String value) {
+        tunit.setRelativeFolderpath(value);
+    }
+
+    @Override
+    public void setRelativeFolderpathImpl(String path) {
+        defRelativeFolderpathImpl(path);
     }
 
     @Override

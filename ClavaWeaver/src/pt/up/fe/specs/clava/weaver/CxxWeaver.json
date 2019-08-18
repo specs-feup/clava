@@ -10069,6 +10069,19 @@
                   "children": [
                            {
                               "type": "void",
+                              "name": "setText"
+                           },
+                           {
+                              "type": "String",
+                              "name": "text",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
                               "name": "insert"
                            },
                            {
@@ -19166,6 +19179,20 @@
                            {
                               "type": "joinpoint",
                               "name": "rebuildTry"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the path to the folder of the source file relative to the base source path",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setRelativeFolderpath"
+                           },
+                           {
+                              "type": "String",
+                              "name": "path",
+                              "defaultValue": ""
                            }]
                },
                {

@@ -350,6 +350,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public String getJoinpointTypeImpl() {
+
         // return getNode().getClass().getSimpleName();
         return getJoinPointType();
         // String joinpointName = getClass().getSimpleName();

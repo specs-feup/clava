@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.exception.ActionException;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -40,6 +41,39 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "text", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defTextImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def text with type String not implemented ");
+    }
+
+    /**
+     * 
+     * @param text 
+     */
+    public void setTextImpl(String text) {
+        throw new UnsupportedOperationException(get_class()+": Action setText not implemented ");
+    }
+
+    /**
+     * 
+     * @param text 
+     */
+    public final void setText(String text) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setText", this, Optional.empty(), text);
+        	}
+        	this.setTextImpl(text);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setText", this, Optional.empty(), text);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setText", e);
         }
     }
 
@@ -84,6 +118,13 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "text": {
+        	if(value instanceof String){
+        		this.defTextImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -111,6 +152,7 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
     @Override
     protected final void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
+        actions.add("void setText(String)");
     }
 
     /**

@@ -182,6 +182,13 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * 
+     */
+    public void defRelativeFolderpathImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def relativeFolderpath with type String not implemented ");
+    }
+
+    /**
      * the path to the source folder that was given as the base folder of this file
      */
     public abstract String getBaseSourcePathImpl();
@@ -786,6 +793,32 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Sets the path to the folder of the source file relative to the base source path
+     * @param path 
+     */
+    public void setRelativeFolderpathImpl(String path) {
+        throw new UnsupportedOperationException(get_class()+": Action setRelativeFolderpath not implemented ");
+    }
+
+    /**
+     * Sets the path to the folder of the source file relative to the base source path
+     * @param path 
+     */
+    public final void setRelativeFolderpath(String path) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setRelativeFolderpath", this, Optional.empty(), path);
+        	}
+        	this.setRelativeFolderpathImpl(path);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setRelativeFolderpath", this, Optional.empty(), path);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setRelativeFolderpath", e);
+        }
+    }
+
+    /**
      * 
      */
     @Override
@@ -871,6 +904,13 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "relativeFolderpath": {
+        	if(value instanceof String){
+        		this.defRelativeFolderpathImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -938,6 +978,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         actions.add("void insertEnd(joinpoint)");
         actions.add("void insertEnd(String)");
         actions.add("joinpoint addFunction(String)");
+        actions.add("void setRelativeFolderpath(String)");
     }
 
     /**

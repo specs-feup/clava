@@ -64,8 +64,11 @@ public class CxxActions {
         ClavaNode realTarget = null;
         switch (insert) {
         case BEFORE:
+            // System.out.println("INSERT BEFORE");
             // NodeInsertUtils.insertBefore(getValidStatement(target), ClavaNodeFactory.literalStmt(code));
             Stmt beforeNode = snippetParser.parseStmt(code);
+            // System.out.println("CODE: " + code);
+            // System.out.println("INSERTING: " + beforeNode);
             realTarget = getValidStatement(target, insert);
             if (realTarget == null) {
                 return null;

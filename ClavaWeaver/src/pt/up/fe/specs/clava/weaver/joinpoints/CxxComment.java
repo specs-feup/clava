@@ -35,4 +35,14 @@ public class CxxComment extends AComment {
         return comment.getText();
     }
 
+    @Override
+    public void defTextImpl(String value) {
+        comment.setText(value);
+    }
+
+    @Override
+    public void setTextImpl(String text) {
+        defTextImpl(text);
+    }
+
 }

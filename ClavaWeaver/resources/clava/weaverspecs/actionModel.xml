@@ -192,6 +192,11 @@
 <!-- 		<parameter name="returnType" type="joinpoint" />
 		<parameter name="parameters" type="joinpoint[]" />  -->
 	</action>
+	
+	<action name="setRelativeFolderpath" class="file" tooltip="Sets the path to the folder of the source file relative to the base source path">
+		<parameter name="path" type="String" />
+	</action>
+	
 
 	<!-- RECORD -->
 
@@ -442,6 +447,12 @@
 	<action name="setOrdered" class="omp" tooltip="Sets the value of the ordered clause of an OpenMP pragma">
 		<parameter name="newExpr" type="String" />
 	</action>
+	
+	<!-- COMMENT -->
+	<action name="setText" class="comment">
+		<parameter name="text" type="String" />
+	</action>
+	
 	
 	<!-- PRAGMA -->
 	<action name="setName" class="pragma">
