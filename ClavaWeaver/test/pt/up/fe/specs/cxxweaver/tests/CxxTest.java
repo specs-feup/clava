@@ -248,4 +248,13 @@ public class CxxTest {
     public void testNoParsing() {
         newTester().test("NoParsing.lara");
     }
+
+    @Test
+    public void testLaraGetter() {
+        newTester()
+                // .set(LaraiKeys.DEBUG_MODE)
+                // .set(LaraiKeys.VERBOSE, VerboseLevel.all)
+                // .set(LaraiKeys.TRACE_MODE, false)
+                .test("LaraGetter.lara");
+    }
 }
