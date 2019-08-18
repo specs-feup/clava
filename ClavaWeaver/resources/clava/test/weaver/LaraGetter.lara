@@ -1,3 +1,4 @@
+import lara.Io;
 import weaver.Weaver;
 import clava.Clava;
 import clava.ClavaJoinPoints;
@@ -21,5 +22,5 @@ aspectdef LaraGetterTest
 	obj.i++;
 	obj.i--;
 	
-	println($app.code);
+	println(Io.removeExtension($app.code));
 end
