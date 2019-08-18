@@ -2,12 +2,6 @@ import weaver.JoinPointsBase;
 import lara.Check;
 import clava.Clava;
 
-/*
-JoinPoints.prototype.root = function() {
-	return Clava.getProgram();
-}
-*/
-
 JoinPoints.prototype.children = function($jp, jpType) {
 	if($jp === undefined) {
 		return [];
@@ -20,7 +14,6 @@ JoinPoints.prototype.children = function($jp, jpType) {
 		return children;
 	}
 	
-	//return $jp.astChildren;
 	return this._filterNodes(children, jpType);
 }
 
@@ -30,79 +23,15 @@ JoinPoints.prototype.descendants = function($jp, jpType) {
 		return [];
 	}
 	
-	//var hasParent = $jp.hasParent;
-	//println("Has parent: " + hasParent);
-	
-	//var jpType = $jp.joinPointType;
-	//println(jpType);
-	//println("jp name LARA: " + jpType);
-	
-	/*
-	var target = {
-		a: 1,
-		b: 2,
-		c: 3
-	};
 
-	var handler = {
-		get: function(target, name) {
-			return (name in target ? target[name] : 42);
-		}
-	};
-	
-	var target = new Proxy(target, handler);
-
-	println(target.a);  // 1
-	println(target.b);  // 2
-	println(target.c);  // 3
-	println(target.meaningOfLife);  // 42
-*/
-
-	/*
-	var jpHandle = {
-		get : function(obj, property) {
-			println("Proxy");
-
-			switch(property) {
-				case "descendants":
-					return obj.getDescendants();
-				default:
-					return obj[property];
-			}
-		}
-	};
-	$jp = new Proxy($jp, jpHandle);
-	*/
-
-/*
-	println("BEFORE TEST");
-	var test = {
-		a: function() {
-			return this;
-		}
-	};
-
-	test.a()['hello'] = 20;
-	println("TEST: " + test.hello);
-	*/
-	/*
-	var a = {};
-	println("a.laraSet: " + a.laraSet);
-	println("$jp.laraSet: " + $jp.laraSet);	
-	*/
-	
-	//println("HEY");
 	var descendants = $jp.descendants;
-	//println("Descendants LARA: " + descendants);
-	//var descendants2 = $jp.descendants("vardecl");
-	//println("Descendants2 LARA: " + descendants2);
 	
 	if(jpType === undefined) {
 		return descendants;
 	}	
 	
 	Check.isJoinPoint($jp);
-	//return $jp.descendants;
+
 	return this._filterNodes(descendants, jpType);
 }
 
