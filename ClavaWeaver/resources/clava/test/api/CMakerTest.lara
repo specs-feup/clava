@@ -37,7 +37,7 @@ aspectdef CMakerTest
 	var executable = cmaker.build(Clava.getWeavingFolder(), buildFolder);
 
 	if(executable !== undefined) {
-		println("Created executable: " + executable.getName());
+		println("Created executable: " + Io.removeExtension(executable.getName()));
 	} else {
 		println("Could not create executable");
 	}
