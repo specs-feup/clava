@@ -706,6 +706,12 @@ public class TranslationUnit extends ClavaNode {
         // return Optional.ofNullable(relativePath);
     }
 
+    public void setRelativeFolderpath(String path) {
+        set(RELATIVE_PATH, path);
+
+        // return Optional.ofNullable(relativePath);
+    }
+
     /**
      * @deprecated
      * @param baseSourceFolder
