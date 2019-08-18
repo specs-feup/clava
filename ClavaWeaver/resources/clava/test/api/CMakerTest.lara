@@ -1,4 +1,5 @@
 import lara.Io;
+import lara.Platforms;
 import lara.cmake.CMaker;
 import clava.Clava;
 
@@ -6,13 +7,21 @@ aspectdef CMakerTest
 
 	var cmaker = (new CMaker("testapp"))
 		.setMinimumVersion("3.0.2")
-		.setGenerator("MinGW Makefiles")
-		.setMakeCommand("mingw32-make")
 		.addCxxFlags("-O3", "-std=c++11")
-		.addLibs("stdc++");
+		.addLibs("stdc++")
+		.addCurrentAst();
+		
+	if(Platforms.isWindows()) {
+		cmaker.setGenerator("MinGW Makefiles")
+			.setMakeCommand("mingw32-make");
+	}
 
+/*
 	select file end
 	apply
+		//println("Relative filepath: " + $file.relativeFilepath);
+		//println("Basesourcepath: " + $file.baseSourcePath);
+		//println("Destination filepath: " + $file.destinationFilepath(Clava.getWeavingFolder()));
 		cmaker.sources.addSource($file.relativeFilepath);
 		
 		if($file.isHeader) {
@@ -22,12 +31,17 @@ aspectdef CMakerTest
 	
 	// Write AST code
 	Clava.writeCode(Clava.getWeavingFolder());
-	
+	*/
 	// Build
 	var buildFolder = Io.getPath(Clava.getWeavingFolder(), "build");
 	var executable = cmaker.build(Clava.getWeavingFolder(), buildFolder);
 
-	println("Created executable: " + executable);
+	if(executable !== undefined) {
+		println("Created executable: " + executable.getName());
+	} else {
+		println("Could not create executable");
+	}
+	
 end
 
 	// Writing the build file
