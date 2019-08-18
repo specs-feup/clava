@@ -63,6 +63,11 @@ public class DummyComment extends Comment {
     }
 
     @Override
+    public void setText(String text) {
+        set(CONTENT, text);
+    }
+
+    @Override
     public String getCode() {
         return ClavaNodes.toCode(getNodeCode(), this);
     }

@@ -55,6 +55,11 @@ public class MultiLineComment extends Comment {
     }
 
     @Override
+    public void setText(String text) {
+        set(LINES, text.lines().collect(Collectors.toList()));
+    }
+
+    @Override
     public String getCode() {
         // return lines.stream().collect(Collectors.joining("\n", "/*", "*/"));
         return "/*" + getText() + "*/";

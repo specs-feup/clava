@@ -47,4 +47,8 @@ public abstract class Comment extends ClavaNode {
     public String getText() {
         throw new NotImplementedException(getClass());
     }
+
+    public void setText(String text) {
+        throw new NotImplementedException(getClass());
+    }
 }

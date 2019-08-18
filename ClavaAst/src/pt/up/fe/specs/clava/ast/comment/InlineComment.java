@@ -60,6 +60,11 @@ public class InlineComment extends Comment {
         return get(TEXT);
     }
 
+    @Override
+    public void setText(String text) {
+        set(TEXT, text);
+    }
+
     /**
      * 
      * @return true, if the inline comment appears alone in the statement.
