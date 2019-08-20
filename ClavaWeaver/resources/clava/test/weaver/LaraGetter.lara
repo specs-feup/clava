@@ -14,7 +14,7 @@ aspectdef LaraGetterTest
 
 	$app.addFile($file);
 	
-	$app.firstChild.relativeFolderpath = $app.firstChild.relativeFolderpath;
+	$app.firstChild.relativeFolderpath = $app.firstChild.relativeFolderpath || '';
 	$app.firstChild.firstJp('comment').text = "hello 2";
 	
 	var obj = {i: 10};
