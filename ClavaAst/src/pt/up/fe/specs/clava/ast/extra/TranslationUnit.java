@@ -712,12 +712,12 @@ public class TranslationUnit extends ClavaNode {
         // return Optional.ofNullable(relativePath);
     }
 
-    public void setRelativeFolderpath(String path) {
-        // System.out.println("SET 1 BEFORE: " + get(RELATIVE_PATH));
-        set(RELATIVE_PATH, path);
-        // System.out.println("SET 1 AFTER: " + get(RELATIVE_PATH));
-        // return Optional.ofNullable(relativePath);
-    }
+    // public void setRelativeFolderpath(String path) {
+    // // System.out.println("SET 1 BEFORE: " + get(RELATIVE_PATH));
+    // set(RELATIVE_PATH, path);
+    // // System.out.println("SET 1 AFTER: " + get(RELATIVE_PATH));
+    // // return Optional.ofNullable(relativePath);
+    // }
 
     /**
      * @deprecated

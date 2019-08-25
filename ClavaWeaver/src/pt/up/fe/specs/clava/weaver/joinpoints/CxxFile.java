@@ -284,7 +284,8 @@ public class CxxFile extends AFile {
 
     @Override
     public void defRelativeFolderpathImpl(String value) {
-        tunit.setRelativeFolderpath(value);
+        // tunit.setRelativeFolderpath(value);
+        tunit.setRelativePath(value);
     }
 
     @Override
