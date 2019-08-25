@@ -77,9 +77,10 @@ function(clava_weave ORIG_TARGET ASPECT)
 	#message(STATUS "NEW PROC_ORIG_SOURCES: ${PROC_ORIG_SOURCES}")
 
 	# Process original source file list
-	if(NOT "${CMAKE_HOST_SYSTEM}" MATCHES ".*Windows.*")
-		string(REGEX REPLACE ";" ":" PROC_ORIG_SOURCES "${PROC_ORIG_SOURCES}")
-	endif()
+	# No longer needed, now Clava always uses ;
+	#if(NOT "${CMAKE_HOST_SYSTEM}" MATCHES ".*Windows.*")
+	#	string(REGEX REPLACE ";" ":" PROC_ORIG_SOURCES "${PROC_ORIG_SOURCES}")
+	#endif()
 	#message(STATUS "PROC_ORIG_SOURCES: ${PROC_ORIG_SOURCES}")
 
 	# Get all include folders
@@ -139,9 +140,9 @@ function(clava_weave ORIG_TARGET ASPECT)
 	string(REGEX REPLACE "([^;]+)" "\\1" PROC_ORIG_INCLUDES "${ORIG_INCLUDES}")
 	#message(STATUS "PROC_ORIG_INCLUDES: '${ORIG_INCLUDES}'")
 
-	if(NOT "${CMAKE_HOST_SYSTEM}" MATCHES ".*Windows.*")
-		string(REGEX REPLACE ";" ":" PROC_ORIG_INCLUDES "${PROC_ORIG_INCLUDES}")
-	endif()
+	#if(NOT "${CMAKE_HOST_SYSTEM}" MATCHES ".*Windows.*")
+	#	string(REGEX REPLACE ";" ":" PROC_ORIG_INCLUDES "${PROC_ORIG_INCLUDES}")
+	#endif()
 	#message(STATUS "INCLUDE HEADERS FLAG: ${INCLUDE_HEADERS_FLAG}")
 	#message(STATUS "PROC_ORIG_INCLUDES AFTER REPLACE: ${PROC_ORIG_INCLUDES}")
 	

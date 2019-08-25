@@ -90,9 +90,11 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	
 	# process original source file list
 	string(REGEX REPLACE "([^;]+)" "${ORIG_CMAKE_DIR}/\\1" PROC_ORIG_SOURCES "${ORIG_SOURCES}")
-	if(NOT "${CMAKE_HOST_SYSTEM}" MATCHES ".*Windows.*")
-		string(REGEX REPLACE ";" ":" PROC_ORIG_SOURCES "${PROC_ORIG_SOURCES}")
-	endif()
+	
+	# No longer needed, now Clava always uses ;
+	#if(NOT "${CMAKE_HOST_SYSTEM}" MATCHES ".*Windows.*")
+	#	string(REGEX REPLACE ";" ":" PROC_ORIG_SOURCES "${PROC_ORIG_SOURCES}")
+	#endif()
 	#message(STATUS "PROC_ORIG_SOURCES: ${PROC_ORIG_SOURCES}")
 	
 	
@@ -108,9 +110,9 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	
 	# process original includes list
 	string(REGEX REPLACE "([^;]+)" "\\1" PROC_ORIG_INCLUDES "${ORIG_INCLUDES}")
-	if(NOT "${CMAKE_HOST_SYSTEM}" MATCHES ".*Windows.*")
-		string(REGEX REPLACE ";" ":" PROC_ORIG_INCLUDES "${PROC_ORIG_INCLUDES}")
-	endif()
+	#if(NOT "${CMAKE_HOST_SYSTEM}" MATCHES ".*Windows.*")
+	#	string(REGEX REPLACE ";" ":" PROC_ORIG_INCLUDES "${PROC_ORIG_INCLUDES}")
+	#endif()
 	#message(STATUS "PROC_ORIG_INCLUDES: ${PROC_ORIG_INCLUDES}")
 	
 	
