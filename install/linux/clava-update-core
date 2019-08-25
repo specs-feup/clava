@@ -6,10 +6,20 @@ SCRIPT=$(readlink -f "$0")
 # Absolute path this script is in, thus /home/user/bin
 SCRIPTPATH=$(dirname "$SCRIPT")
 
+#Check if Java exists
+command -v java >/dev/null 2>&1 || { echo >&2 "I require 'java' but it's not installed.  Aborting."; exit 1; }
+
+#Check if wget exists
+command -v wget >/dev/null 2>&1 || { echo >&2 "I require 'wget' but it's not installed.  Aborting."; exit 1; }
 
 # Should be running on the folder where Clava.jar will by
-# get the jar and save it inside a Clava directory
-wget -N specs.fe.up.pt/tools/clava.jar
+# get the zip, unzip and save it inside a Clava directory
+wget -N specs.fe.up.pt/tools/clava.zip
+
+#Check if unzip exists
+command -v unzip >/dev/null 2>&1 || { echo >&2 "I require 'unzip' but it's not installed.  Aborting."; exit 1; }
+
+unzip -o clava.zip
 # get the clang_ast.resources file
 wget -N specs.fe.up.pt/tools/clang_ast.resources
 # icon
@@ -52,7 +62,7 @@ wget -N specs.fe.up.pt/tools/clava/ClavaConfig.cmake
 wget -N specs.fe.up.pt/tools/clava/ApplyLARA.cmake
 wget -N specs.fe.up.pt/tools/clava/ClavaUtils.cmake
 #wget -N specs.fe.up.pt/tools/clava/ClavaUtilConfig.cmake
-echo -n "$SCRIPTPATH/clava.jar" > clava-installation-jar.txt
+echo -n "$SCRIPTPATH/Clava.jar" > clava-installation-jar.txt
 
 mkdir clava
 cd clava

@@ -5,6 +5,6 @@
 SCRIPT=$(readlink -f "$0")
 # Absolute path this script is in, thus /home/user/bin
 SCRIPTPATH=$(dirname "$SCRIPT")
-java -jar $SCRIPTPATH/Clava/clava.jar -ut "$@"
+java -jar $SCRIPTPATH/Clava/Clava.jar -ut "$@"
 
 #java -cp SCRIPTPATH/Lara/lara-unit.jar:$SCRIPTPATH/Clava/clava.jar pt.up.fe.specs.lara.unit.LaraUnitLauncher lara-unit-weaver=pt.up.fe.specs.clava.weaver.CxxWeaver "$@"
