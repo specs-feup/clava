@@ -418,8 +418,12 @@ public class TranslationUnit extends ClavaNode {
      * @param relativePath
      */
     public void setRelativePath(String relativePath) {
+        // System.out.println("SET 2 BEFORE: " + get(RELATIVE_PATH));
+
         if (relativePath == null || relativePath.isEmpty()) {
             set(RELATIVE_PATH, null);
+            // System.out.println("SET 2 AFTER 1: " + get(RELATIVE_PATH));
+
             return;
         }
         // if (relativePath == null) {
@@ -435,6 +439,8 @@ public class TranslationUnit extends ClavaNode {
         }
 
         set(RELATIVE_PATH, relativePath);
+        // System.out.println("SET 2 AFTER 2: " + get(RELATIVE_PATH));
+
         // this.relativePath = relativePath.isEmpty() ? null : relativePath;
     }
 
@@ -707,8 +713,9 @@ public class TranslationUnit extends ClavaNode {
     }
 
     public void setRelativeFolderpath(String path) {
+        // System.out.println("SET 1 BEFORE: " + get(RELATIVE_PATH));
         set(RELATIVE_PATH, path);
-
+        // System.out.println("SET 1 AFTER: " + get(RELATIVE_PATH));
         // return Optional.ofNullable(relativePath);
     }
 

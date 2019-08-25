@@ -288,7 +288,6 @@ public class App extends ClavaNode {
             // : tu.getFolderpath();
             //
             // code.append("/**** File '" + basepath + tu.getFilename() + "' ****/" + ln() + ln());
-
             code.append("/**** File '" + SpecsIo.normalizePath(tu.getRelativeFilepath()) + "' ****/"
                     + ln() + ln());
             code.append(tu.getCode());
