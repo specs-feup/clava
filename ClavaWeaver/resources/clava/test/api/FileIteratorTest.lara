@@ -1,14 +1,39 @@
 import clava.util.FileIterator;
 import lara.Io;
+import clava.Clava;
 
 aspectdef FileIteratorTest
 
-	var fileIterator = new FileIterator(Clava.getBaseFolder());
+	// Write source files to a temporary folder
+	var tempFolder = Io.getTempFolder("ClavaFileIteratorTest");
+	Clava.writeCode(tempFolder);
+
+	// Iterate method 1
+	var fileIterator = new FileIterator(tempFolder);
 	
 	var $file = fileIterator.next();
 	while ($file !== undefined) {
 		println($file.code);
 		$file = fileIterator.next();
 	}
+	
+	// Iterate method 2
+	var fileIterator2 = new FileIterator(tempFolder);
+
+	while (fileIterator2.hasNext()) {
+		var $file = fileIterator2.next();
+		println($file.code);
+	}
+	
+	// Generic select after iterator
+	var fileIterator3 = new FileIterator(tempFolder);
+	fileIterator3.next();
+	
+	select file end
+	apply
+		println("Single file: " + $file.name);
+	end
+	
+	Io.deleteFolder(tempFolder);
 	
 end

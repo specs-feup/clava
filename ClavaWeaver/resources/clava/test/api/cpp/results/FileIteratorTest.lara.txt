@@ -1,0 +1,21 @@
+int main() {
+   
+   return 0;
+}
+
+int foo() {
+   
+   return 1;
+}
+
+int main() {
+   
+   return 0;
+}
+
+int foo() {
+   
+   return 1;
+}
+
+Single file: file_iterator_1.cpp

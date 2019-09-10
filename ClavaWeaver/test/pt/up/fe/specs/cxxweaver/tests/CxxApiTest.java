@@ -121,7 +121,6 @@ public class CxxApiTest {
 
     @Test
     public void testFileIterator() {
-        newTester().set(CxxWeaverOption.DISABLE_WEAVING)
-                .test("FileIteratorTest.lara", "file_iterator_1.cpp", "file_iterator_2.cpp");
+        newTester().test("FileIteratorTest.lara", "file_iterator_1.cpp", "file_iterator_2.cpp");
     }
 }
