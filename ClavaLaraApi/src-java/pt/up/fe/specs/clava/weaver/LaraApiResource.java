@@ -84,6 +84,7 @@ public enum LaraApiResource implements LaraResourceProvider {
 
     // Clava utils
     CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
+    FILE_ITERATOR("util/FileIterator.lara"),
     SINGLE_FILE("util/SingleFile.lara"),
 
     // Static objects
