@@ -81,3 +81,18 @@ ClavaDataStore.prototype.setSystemIncludes = function() {
 	var fileList = Java.type("org.lara.interpreter.joptions.keys.FileList").newInstance(files);	
 	this.put("library includes", fileList);	
 }
+
+/**
+ * @param {string...} arguments - A variable number of strings with the user includes.
+ * 
+ */
+ClavaDataStore.prototype.setUserIncludes = function() {
+	var filenames = arrayFromArgs(arguments);
+	var files = [];
+	for(filename of filenames) {
+		files.push(Io.getPath(filename));
+	}
+	
+	var fileList = Java.type("org.lara.interpreter.joptions.keys.FileList").newInstance(files);	
+	this.put("header includes", fileList);	
+}
