@@ -1,0 +1,14 @@
+import clava.util.FileIterator;
+import lara.Io;
+
+aspectdef FileIteratorTest
+
+	var fileIterator = new FileIterator(Clava.getBaseFolder());
+	
+	var $file = fileIterator.next();
+	while ($file !== undefined) {
+		println($file.code);
+		$file = fileIterator.next();
+	}
+	
+end
