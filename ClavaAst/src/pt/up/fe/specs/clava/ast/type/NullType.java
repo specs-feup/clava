@@ -31,23 +31,9 @@ import pt.up.fe.specs.clava.utils.NullNode;
  */
 public class NullType extends Type implements NullNode {
 
-    // public NullType(ClavaNodeInfo info) {
-    // this(new LegacyToDataStore()
-    // .setType(new TypeData("<null type>"))
-    // .setNodeInfo(info)
-    // .getData(),
-    // Collections.emptyList());
-    // // super(new TypeData("<null type>"), info, Collections.emptyList());
-    // }
-
     public NullType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new NullType(getInfo());
-    // }
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {

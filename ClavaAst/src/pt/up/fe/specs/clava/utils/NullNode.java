@@ -13,6 +13,9 @@
 
 package pt.up.fe.specs.clava.utils;
 
+import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
+
 /**
  * Marker interface.
  * 
@@ -21,4 +24,16 @@ package pt.up.fe.specs.clava.utils;
  */
 public interface NullNode {
 
+    // default String getCode() {
+    // return "/* NULL NODE */";
+    // }
+
+    default String getNullCode(boolean isIncompleteCode) {
+        if (isIncompleteCode) {
+            return "/* " + getClass().getName() + " */";
+        }
+
+        ClavaLog.info("getCode() not implemented for NullNode node: " + this);
+        throw new NotImplementedException(getClass());
+    }
 }

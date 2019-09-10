@@ -34,21 +34,9 @@ public class NullStmt extends Stmt implements NullNode {
         super(data, children);
     }
 
-    // public NullStmt(ClavaNodeInfo info) {
-    // this(info, Collections.emptyList());
-    // }
-    //
-    // private NullStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new NullStmt(getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public String getCode() {
         return ";";
     }
+
 }

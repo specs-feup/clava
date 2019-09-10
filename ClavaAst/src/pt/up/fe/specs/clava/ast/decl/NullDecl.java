@@ -18,6 +18,7 @@ import java.util.Collection;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.utils.NullNode;
 
 /**
@@ -34,20 +35,10 @@ public class NullDecl extends Decl implements NullNode {
 
     public static NullDecl create(ClavaNode node) {
         return node.getFactory().nullDecl();
-        // return create(node.getInfo());
     }
 
-    // public static NullDecl create(ClavaNodeInfo info) {
-    // return new NullDecl(info);
-    // }
-
-    // public NullDecl(ClavaNodeInfo info) {
-    // super(DeclData.empty(), info, Collections.emptyList());
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new NullDecl(getInfo());
-    // }
-
+    @Override
+    public String getCode() {
+        return getNullCode(getApp().get(App.HAS_PARSING_ERRORS));
+    }
 }
