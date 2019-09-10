@@ -79,29 +79,33 @@ public class SnippetParser {
         }
 
         // String pragmaPrefix = extractPragmaPrefix(currentCode);
-        if (lowerCurrentCode.startsWith("#pragma ")) {
-            String pragmaContent = currentCode.substring("#pragma ".length());
+        if (lowerCurrentCode.startsWith("#")) {
+            String pragmaContent = currentCode.substring("#".length());
+            pragmaContent = pragmaContent.stripLeading();
+            if (pragmaContent.startsWith("pragma ")) {
+                pragmaContent = pragmaContent.substring("pragma ".length());
 
-            // Split pragmaContent into lines, in case it is multiline
-            List<String> pragmaLines = pragmaContent.lines()
-                    .map(SnippetParser::removeTrailingBackslash)
-                    .collect(Collectors.toList());
-            Pragma parsedPragma = PragmaParsers.parse(pragmaLines, context)
-                    .orElse(context.getFactory().genericPragma(pragmaLines));
-            return ClavaNodes.toStmt(parsedPragma);
-            /*
-            // Get pragma kind
-            StringParser parser = new StringParser(pragmaContent);
-            String pragmaKind = parser.apply(StringParsers::parseWord);
-            
-            // Check if OpenMP pragma
-            if (pragmaKind.equals("omp")) {
+                // Split pragmaContent into lines, in case it is multiline
+                List<String> pragmaLines = pragmaContent.lines()
+                        .map(SnippetParser::removeTrailingBackslash)
+                        .collect(Collectors.toList());
+                Pragma parsedPragma = PragmaParsers.parse(pragmaLines, context)
+                        .orElse(context.getFactory().genericPragma(pragmaLines));
+                return ClavaNodes.toStmt(parsedPragma);
+                /*
+                // Get pragma kind
+                StringParser parser = new StringParser(pragmaContent);
+                String pragmaKind = parser.apply(StringParsers::parseWord);
+                
+                // Check if OpenMP pragma
+                if (pragmaKind.equals("omp")) {
                 return ClavaNodes.toStmt(new OmpParser().parse(parser, context));
+                }
+                
+                GenericPragma pragma = context.getFactory().genericPragma(Arrays.asList(pragmaContent));
+                return ClavaNodes.toStmt(pragma);
+                */
             }
-            
-            GenericPragma pragma = context.getFactory().genericPragma(Arrays.asList(pragmaContent));
-            return ClavaNodes.toStmt(pragma);
-            */
         }
 
         if (lowerCurrentCode.startsWith("_pragma")) {
