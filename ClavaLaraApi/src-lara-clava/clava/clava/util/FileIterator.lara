@@ -4,12 +4,14 @@ import lara.util.StringSet;
 
 import clava.Clava;
 
-//next() method which returns an object with two properties: value, the next value in the sequence; and done, which is true if the last value in the sequence has already been consumed. If value is present alongside done, it is the iterator's return value.
-
 /**
- * Given a folder, collects sources in that folder, and parses and returns one each time next() is called.
+ * Given a folder, collects sources in that folder, parses and returns one each time next() is called.
  *
- * Pushes an empty Clava AST, when parsed files are added, at maximum one at any given time.
+ * Pushes an empty Clava AST. Parsed files are added one at a time, and the AST contains at most one file at any given time.
+ *
+ * @param {string} srcFoldername name of the folder with the source files to iterate.
+ * @param {string[]} [sourceExt = ["c", "cpp"]] extensions of the source files.
+ * @param {string[]} [headerExt = ["h", "hpp"]] extensions of the header files.
  */
 var FileIterator = function(srcFoldername, sourceExt, headerExt) {
 	Check.isDefined(srcFoldername, "srcFoldername");
@@ -30,6 +32,7 @@ var FileIterator = function(srcFoldername, sourceExt, headerExt) {
 	this.currentFile = 0;
 	this.isInit = false;
 	this.isClosed = false;
+	this.pushedAst = false;
 	
 };
 
@@ -44,20 +47,16 @@ FileIterator.prototype.setHeaderExtensions = function() {
 }
 */
 
+/**
+ * @return $file join point, if there are still files to iterate over, or undefined otherwise
+ */
 FileIterator.prototype.next = function() {
 
-	if(this.isInit === false) {
-		this.isInit = true;
-		this._init();
-	}
+	// Initialized, in case it has not been initialized yet
+	this._init();
 
 	// Check if finished
-	if(this.currentFile >= this.files.length) {
-		if(!this.isClosed) {
-			this.isClosed = true;
-			this._close();
-		}
-		
+	if(!this.hasNext()) {
 		return undefined;
 	}
 
@@ -82,8 +81,36 @@ FileIterator.prototype.next = function() {
 	return $firstChild;
 }
 
+/**
+ * @return {boolean} true if there are still files to iterate over, false otherwise.
+ */
+FileIterator.prototype.hasNext = function() {
+	// Init, if not yet initalized
+	this._init();
+
+
+	if(this.currentFile < this.files.length) {
+		return true;
+	}
+	
+
+	// Close, if not yet closed
+	this._close();
+		
+	return false;
+}
+
+
+
 
 FileIterator.prototype._init = function() {
+
+	if(this.isInit) {
+		// Already initialized
+		return;
+	}
+
+	this.isInit = true;
 
 	var srcFolder = Io.getPath(Clava.getData().getContextFolder(), this.srcFoldername);
 
@@ -98,13 +125,23 @@ FileIterator.prototype._init = function() {
 	
 	// Work on new AST tree
 	Clava.pushAst();
+	this.pushedAst = true;
 
 }
 
 FileIterator.prototype._close = function() {
 	
+	if(this.isClosed) {
+		return;
+	}
+
+	this.isClosed = true;
+	
 	// Recover previous AST
-	Clava.popAst();
+	if(this.pushedAst) {
+		Clava.popAst();
+	}
+
 
 }
 
