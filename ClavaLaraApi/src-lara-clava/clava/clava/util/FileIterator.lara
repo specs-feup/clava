@@ -63,6 +63,9 @@ FileIterator.prototype.next = function() {
 	// Next file
 	var sourceFile = this.files[this.currentFile];
 
+	// Increment
+	this.currentFile++;
+
 	debug("FileIterator.next: Processing file " + sourceFile);
 	
 	// Ensure program tree is empty before adding file
@@ -75,8 +78,7 @@ FileIterator.prototype.next = function() {
 
 	var $firstChild = Clava.getProgram().firstChild;
 
-	// Increment
-	this.currentFile++;
+
 	
 	return $firstChild;
 }
