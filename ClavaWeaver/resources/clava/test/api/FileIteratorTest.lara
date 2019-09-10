@@ -13,7 +13,7 @@ aspectdef FileIteratorTest
 	
 	var $file = fileIterator.next();
 	while ($file !== undefined) {
-		println($file.code);
+		println("Iterator 1");
 		$file = fileIterator.next();
 	}
 	
@@ -22,7 +22,7 @@ aspectdef FileIteratorTest
 
 	while (fileIterator2.hasNext()) {
 		var $file = fileIterator2.next();
-		println($file.code);
+		println("Iterator 2");
 	}
 	
 	// Generic select after iterator
@@ -31,7 +31,7 @@ aspectdef FileIteratorTest
 	
 	select file end
 	apply
-		println("Single file: " + $file.name);
+		println("Single file");
 	end
 	
 	Io.deleteFolder(tempFolder);
