@@ -83,6 +83,11 @@ public class ClavaWeaverData {
             return Optional.empty();
         }
 
+        if (context.isStackEmpty()) {
+            SpecsLogs.msgWarn("Stack tree is empty");
+            return Optional.empty();
+        }
+
         return Optional.of(context.getApp());
 
         // return Optional.of(app);
