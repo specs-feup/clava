@@ -32,17 +32,23 @@ int main(int argc, const char *argv[])
     // Making it static/global because I do not know how to create actions with arbitrary arguments using newFrontendActionFactory
     DumpResources::init(UserIdOption.getValue(), UserSystemHeaderThresholdOption.getValue());
 
-    int returnCode = Tool.run(newFrontendActionFactory<DumpIncludesAction>().get());
+    int includesReturnCode = Tool.run(newFrontendActionFactory<DumpIncludesAction>().get());
 
-    if(returnCode != 0) {
-        std::cout << "Error while running IncludeFinderAction (return code "<< returnCode <<")";
-        DumpResources::finish();
-        return returnCode;
-    }
-
-    returnCode = Tool.run(newFrontendActionFactory<DumpAstAction>().get());
+    int dumpReturnCode = Tool.run(newFrontendActionFactory<DumpAstAction>().get());
 
     DumpResources::finish();
+
+    int returnCode = 0;
+
+    if(includesReturnCode != 0) {
+        std::cout << "Error while running IncludeFinderAction (return code "<< includesReturnCode <<")";
+        returnCode = 1;
+    }
+
+    if(dumpReturnCode != 0) {
+        std::cout << "Error while running DumpAstAction (return code "<< dumpReturnCode <<")";
+        returnCode = 1;
+    }
 
     return returnCode;
 }
