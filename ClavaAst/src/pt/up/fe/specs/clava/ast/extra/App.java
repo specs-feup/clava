@@ -74,6 +74,8 @@ public class App extends ClavaNode {
             .setDefault(() -> DataStore.newInstance("Clava App Arbitrary Data"))
             .setCopyFunction(dataStore -> DataStore.newInstance(dataStore.getName(), dataStore));
 
+    public final static DataKey<Boolean> HAS_PARSING_ERRORS = KeyFactory.bool("hasParsingErrors");
+
     /// DATAKEYS END
 
     // private static final FunctionDecl NO_FUNCTION_FOUND = ClavaNodeFactory.dummyFunctionDecl("No Function Found");
