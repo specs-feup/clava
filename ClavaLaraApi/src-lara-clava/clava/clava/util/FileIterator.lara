@@ -10,8 +10,8 @@ import clava.Clava;
  * Pushes an empty Clava AST. Parsed files are added one at a time, and the AST contains at most one file at any given time.
  *
  * @param {string} srcFoldername name of the folder with the source files to iterate.
- * @param {string[]} [sourceExt = ["c", "cpp"]] extensions of the source files.
- * @param {string[]} [headerExt = ["h", "hpp"]] extensions of the header files.
+ * @param {string[]} [sourceExt=["c", "cpp"]] extensions of the source files.
+ * @param {string[]} [headerExt=["h", "hpp"]] extensions of the header files.
  */
 var FileIterator = function(srcFoldername, sourceExt, headerExt) {
 	Check.isDefined(srcFoldername, "srcFoldername");
