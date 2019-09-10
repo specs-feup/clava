@@ -1,6 +1,7 @@
 
 int main() {
    #pragma p normal pragma
+   #pragma p with spaces
    #pragma Macro pragma
    #pragma Macro pragma with spaces
    #pragma Macro pragma with inline comment
