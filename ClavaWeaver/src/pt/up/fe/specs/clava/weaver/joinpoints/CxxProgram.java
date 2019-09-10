@@ -131,13 +131,9 @@ public class CxxProgram extends AProgram {
     // weaver.addMessageToUser(message);
     // }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
     @Override
     public String getBaseFolderImpl() {
-        ClavaLog.deprecated("attribute baseFolder should not be used, instead use file.sourcePath");
+        // ClavaLog.deprecated("attribute baseFolder should not be used, instead use file.sourcePath");
         List<File> sources = getWeaver().getSources();
         if (sources.isEmpty()) {
             SpecsLogs.msgWarn("Expected at least program to have one source folder, found none");
