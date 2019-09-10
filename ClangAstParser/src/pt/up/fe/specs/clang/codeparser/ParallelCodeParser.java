@@ -221,6 +221,7 @@ public class ParallelCodeParser extends CodeParser {
         List<TranslationUnit> tUnits = new TUnitProcessor(clangParserResults, normalizeNodes).getTranslationUnits();
 
         App app = context.get(ClavaContext.FACTORY).app(tUnits);
+        app.set(App.HAS_PARSING_ERRORS, hasParsingErrors);
 
         // Add App to context
         // app.getContext().set(ClavaContext.APP, app);
