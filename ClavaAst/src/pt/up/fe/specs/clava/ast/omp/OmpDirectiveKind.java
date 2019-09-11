@@ -13,7 +13,47 @@
 
 package pt.up.fe.specs.clava.ast.omp;
 
-import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.*;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.ALIGNED;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.COLLAPSE;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.COPYIN;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.COPYPRIVATE;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.DEFAULT;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.DEFAULTMAP;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.DEPEND;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.DEVICE;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.DIST_SCHEDULE;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.FINAL;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.FIRSTPRIVATE;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.FROM;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.GRAINSIZE;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.IF;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.INBRANCH;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.IS_DEVICE_PTR;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.LASTPRIVATE;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.LINEAR;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.LINK;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.MAP;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.MERGEABLE;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.NOGROUP;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.NOTINBRANCH;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.NOWAIT;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.NUM_TASKS;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.NUM_TEAMS;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.NUM_THREADS;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.PRIORITY;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.PRIVATE;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.PROC_BIND;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.REDUCTION;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.SAFELEN;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.SCHEDULE;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.SHARED;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.SIMDLEN;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.THREADS;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.THREAD_LIMIT;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.TO;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.UNIFORM;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.UNTIED;
+import static pt.up.fe.specs.clava.ast.omp.clauses.OmpClauseKind.USE_DEVICE_PTR;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,9 +75,9 @@ import pt.up.fe.specs.util.utilities.StringSlice;
 
 public enum OmpDirectiveKind implements StringProvider {
 
-    PARALLEL(IF, NUM_THREADS, DEFAULT, PRIVATE, FIRSTPRIVATE, SHARED, COPYIN, REDUCTION, PROC_BIND),
     FOR(PRIVATE, FIRSTPRIVATE, LASTPRIVATE, LINEAR, REDUCTION, SCHEDULE, COLLAPSE, OmpClauseKind.ORDERED, NOWAIT),
     SECTIONS(PRIVATE, FIRSTPRIVATE, LASTPRIVATE, REDUCTION, NOWAIT),
+    SECTION,
     SINGLE(PRIVATE, FIRSTPRIVATE, COPYPRIVATE, NOWAIT),
     SIMD(SAFELEN, SIMDLEN, LINEAR, ALIGNED, PRIVATE, LASTPRIVATE, REDUCTION, COLLAPSE),
     DECLARE_SIMD(SIMDLEN, LINEAR, ALIGNED, UNIFORM, INBRANCH, NOTINBRANCH),
@@ -60,6 +100,7 @@ public enum OmpDirectiveKind implements StringProvider {
             LASTPRIVATE, LINEAR, REDUCTION, SCHEDULE, COLLAPSE, OmpClauseKind.ORDERED),
     PARALLEL_SECTIONS(IF, NUM_THREADS, DEFAULT, PRIVATE, FIRSTPRIVATE, SHARED, COPYIN, REDUCTION, PROC_BIND,
             LASTPRIVATE),
+    PARALLEL(IF, NUM_THREADS, DEFAULT, PRIVATE, FIRSTPRIVATE, SHARED, COPYIN, REDUCTION, PROC_BIND),
     PARALLEL_FOR_SIMD(IF, NUM_THREADS, DEFAULT, PRIVATE, FIRSTPRIVATE, SHARED, COPYIN, REDUCTION, PROC_BIND,
             LASTPRIVATE, LINEAR, SCHEDULE, COLLAPSE, OmpClauseKind.ORDERED,
             SAFELEN, SIMDLEN, ALIGNED),
