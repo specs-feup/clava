@@ -24,6 +24,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
+import pt.up.fe.specs.clava.ast.omp.clang.GenericClangOMP;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class ClassesService {
@@ -111,6 +112,10 @@ public class ClassesService {
             // Before throwing exception, try some cases
             if (clangClassname.endsWith("Attr")) {
                 return Attribute.class;
+            }
+
+            if (clangClassname.startsWith("OMP")) {
+                return GenericClangOMP.class;
             }
 
             throw new RuntimeException("Could not map classname '" + clangClassname + "' to a ClavaNode class");
