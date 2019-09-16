@@ -523,10 +523,10 @@
 			<def type="type[]"/>
 		</attribute>		
 		<attribute name="hasSugar" type="Boolean" />
-		<attribute name="desugar" type="type">
+		<attribute name="desugar" type="type" tooltip="Single-step desugar. Returns the type itself if it does not have sugar" >
 			<def/>
 		</attribute>
-		<attribute name="desugarAll" type="type"/>
+		<attribute name="desugarAll" type="type" tooltip="Completely desugars the type"/>
 		<attribute name="isBuiltin" type="Boolean" />
 		<attribute name="constant" type="Boolean" />
 		<attribute name="unwrap" type="type" tooltip="If the type encapsulates another type, returns the encapsulated type" />

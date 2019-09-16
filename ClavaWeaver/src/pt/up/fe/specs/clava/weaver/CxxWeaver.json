@@ -846,6 +846,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Single-step desugar. Returns the type itself if it does not have sugar",
                   "children": [
                            {
                               "type": "type",
@@ -854,6 +855,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Completely desugars the type",
                   "children": [
                            {
                               "type": "type",
@@ -2772,6 +2774,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Single-step desugar. Returns the type itself if it does not have sugar",
                   "children": [
                            {
                               "type": "type",
@@ -2780,6 +2783,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Completely desugars the type",
                   "children": [
                            {
                               "type": "type",
@@ -4780,6 +4784,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Single-step desugar. Returns the type itself if it does not have sugar",
                   "children": [
                            {
                               "type": "type",
@@ -4788,6 +4793,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Completely desugars the type",
                   "children": [
                            {
                               "type": "type",
@@ -14633,6 +14639,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Single-step desugar. Returns the type itself if it does not have sugar",
                   "children": [
                            {
                               "type": "type",
@@ -14641,6 +14648,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Completely desugars the type",
                   "children": [
                            {
                               "type": "type",
@@ -20701,6 +20709,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Single-step desugar. Returns the type itself if it does not have sugar",
                   "children": [
                            {
                               "type": "type",
@@ -20709,6 +20718,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Completely desugars the type",
                   "children": [
                            {
                               "type": "type",
@@ -33782,6 +33792,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Single-step desugar. Returns the type itself if it does not have sugar",
                   "children": [
                            {
                               "type": "type",
@@ -33790,6 +33801,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Completely desugars the type",
                   "children": [
                            {
                               "type": "type",
@@ -34836,6 +34848,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Single-step desugar. Returns the type itself if it does not have sugar",
                   "children": [
                            {
                               "type": "type",
@@ -34844,6 +34857,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Completely desugars the type",
                   "children": [
                            {
                               "type": "type",
@@ -37927,6 +37941,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Single-step desugar. Returns the type itself if it does not have sugar",
                   "children": [
                            {
                               "type": "type",
@@ -37935,6 +37950,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Completely desugars the type",
                   "children": [
                            {
                               "type": "type",
@@ -43691,6 +43707,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Single-step desugar. Returns the type itself if it does not have sugar",
                   "children": [
                            {
                               "type": "type",
@@ -43699,6 +43716,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Completely desugars the type",
                   "children": [
                            {
                               "type": "type",
@@ -44760,6 +44778,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Single-step desugar. Returns the type itself if it does not have sugar",
                   "children": [
                            {
                               "type": "type",
@@ -44768,6 +44787,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Completely desugars the type",
                   "children": [
                            {
                               "type": "type",
@@ -45797,6 +45817,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Single-step desugar. Returns the type itself if it does not have sugar",
                   "children": [
                            {
                               "type": "type",
@@ -45805,6 +45826,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Completely desugars the type",
                   "children": [
                            {
                               "type": "type",
@@ -49512,6 +49534,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Single-step desugar. Returns the type itself if it does not have sugar",
                   "children": [
                            {
                               "type": "type",
@@ -49520,6 +49543,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Completely desugars the type",
                   "children": [
                            {
                               "type": "type",
@@ -51535,6 +51559,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Single-step desugar. Returns the type itself if it does not have sugar",
                   "children": [
                            {
                               "type": "type",
@@ -51543,6 +51568,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Completely desugars the type",
                   "children": [
                            {
                               "type": "type",

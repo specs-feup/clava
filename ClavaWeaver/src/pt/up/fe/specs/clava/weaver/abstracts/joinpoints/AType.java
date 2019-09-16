@@ -273,14 +273,12 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute desugar
-     * @return the attribute's value
+     * Single-step desugar. Returns the type itself if it does not have sugar
      */
     public abstract AType getDesugarImpl();
 
     /**
-     * Get value on attribute desugar
-     * @return the attribute's value
+     * Single-step desugar. Returns the type itself if it does not have sugar
      */
     public final Object getDesugar() {
         try {
@@ -305,14 +303,12 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute desugarAll
-     * @return the attribute's value
+     * Completely desugars the type
      */
     public abstract AType getDesugarAllImpl();
 
     /**
-     * Get value on attribute desugarAll
-     * @return the attribute's value
+     * Completely desugars the type
      */
     public final Object getDesugarAll() {
         try {
