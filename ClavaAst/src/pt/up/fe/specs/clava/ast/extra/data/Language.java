@@ -116,4 +116,48 @@ public class Language extends ADataClass<Language> {
      */
     public static final DataKey<Boolean> HAS_WCHAR = KeyFactory.bool("hasWchar");
 
+    /**
+     * Bitwidth of the char type of for the current target.
+     */
+    public static final DataKey<Integer> CHAR_WIDTH = KeyFactory.integer("charWidth");
+
+    /**
+     * Bitwidth of the float type of for the current target.
+     */
+    public static final DataKey<Integer> FLOAT_WIDTH = KeyFactory.integer("floatWidth");
+
+    /**
+     * Bitwidth of the double type of for the current target.
+     */
+    public static final DataKey<Integer> DOUBLE_WIDTH = KeyFactory.integer("doubleWidth");
+
+    /**
+     * Bitwidth of the long double type of for the current target.
+     */
+    public static final DataKey<Integer> LONG_DOUBLE_WIDTH = KeyFactory.integer("longDoubleWidth");
+
+    /**
+     * Bitwidth of the bool type of for the current target.
+     */
+    public static final DataKey<Integer> BOOL_WIDTH = KeyFactory.integer("boolWidth");
+
+    /**
+     * Bitwidth of the short type of for the current target.
+     */
+    public static final DataKey<Integer> SHORT_WIDTH = KeyFactory.integer("shortWidth");
+
+    /**
+     * Bitwidth of the int type of for the current target.
+     */
+    public static final DataKey<Integer> INT_WIDTH = KeyFactory.integer("intWidth");
+
+    /**
+     * Bitwidth of the long type of for the current target.
+     */
+    public static final DataKey<Integer> LONG_WIDTH = KeyFactory.integer("longWidth");
+
+    /**
+     * Bitwidth of the long long type of for the current target.
+     */
+    public static final DataKey<Integer> LONG_LONG_WIDTH = KeyFactory.integer("longLongWidth");
 }
