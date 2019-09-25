@@ -481,6 +481,16 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
         clava::dump(CI.getInvocation().getLangOpts()->Bool);
         clava::dump(CI.getInvocation().getLangOpts()->Half);
         clava::dump(CI.getInvocation().getLangOpts()->WChar);
+        
+        clava::dump(CI.getTarget().getCharWidth());
+        clava::dump(CI.getTarget().getFloatWidth());
+        clava::dump(CI.getTarget().getDoubleWidth());
+        clava::dump(CI.getTarget().getLongDoubleWidth());
+        clava::dump(CI.getTarget().getBoolWidth());
+        clava::dump(CI.getTarget().getShortWidth());
+        clava::dump(CI.getTarget().getIntWidth());
+        clava::dump(CI.getTarget().getLongWidth());
+        clava::dump(CI.getTarget().getLongLongWidth());
     }
 
 
