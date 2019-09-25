@@ -62,7 +62,16 @@ public class LanguageParser implements LineStreamWorker<ClangParserData> {
                 .set(Language.CUDA, LineStreamParsers.oneOrZero(lineStream))
                 .set(Language.HAS_BOOL, LineStreamParsers.oneOrZero(lineStream))
                 .set(Language.HAS_HALF, LineStreamParsers.oneOrZero(lineStream))
-                .set(Language.HAS_WCHAR, LineStreamParsers.oneOrZero(lineStream));
+                .set(Language.HAS_WCHAR, LineStreamParsers.oneOrZero(lineStream))
+                .set(Language.CHAR_WIDTH, LineStreamParsers.integer(lineStream))
+                .set(Language.FLOAT_WIDTH, LineStreamParsers.integer(lineStream))
+                .set(Language.DOUBLE_WIDTH, LineStreamParsers.integer(lineStream))
+                .set(Language.LONG_DOUBLE_WIDTH, LineStreamParsers.integer(lineStream))
+                .set(Language.BOOL_WIDTH, LineStreamParsers.integer(lineStream))
+                .set(Language.SHORT_WIDTH, LineStreamParsers.integer(lineStream))
+                .set(Language.INT_WIDTH, LineStreamParsers.integer(lineStream))
+                .set(Language.LONG_WIDTH, LineStreamParsers.integer(lineStream))
+                .set(Language.LONG_LONG_WIDTH, LineStreamParsers.integer(lineStream));
 
         map.put(file, language);
     }
