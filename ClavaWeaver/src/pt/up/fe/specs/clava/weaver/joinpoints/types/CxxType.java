@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -316,6 +317,13 @@ public class CxxType extends AType {
         CxxBuiltinType builtin = (CxxBuiltinType) raw;
 
         BuiltinKind builtinKind = ((BuiltinType) builtin.getNode()).get(BuiltinType.KIND);
+
+        // deal with special case of void
+        if (builtinKind == BuiltinKind.Void) {
+
+            ClavaLog.getLogger().info("This type is 'void'. Returning bit width 0.");
+            return 0;
+        }
 
         // get the language information
         Object referenceFile = reference.ancestor("file");
