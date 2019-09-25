@@ -178,6 +178,15 @@ public abstract class AParenType extends AType {
     }
 
     /**
+     * Get value on attribute bitWidth
+     * @return the attribute's value
+     */
+    @Override
+    public Integer bitWidthImpl(AJoinPoint reference) {
+        return this.aType.bitWidthImpl(reference);
+    }
+
+    /**
      * 
      */
     public void defTemplateArgsTypesImpl(AType[] value) {
@@ -541,6 +550,7 @@ public abstract class AParenType extends AType {
         NORMALIZE("normalize"),
         TYPEFIELDS("typeFields"),
         FIELDTREE("fieldTree"),
+        BITWIDTH("bitWidth"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

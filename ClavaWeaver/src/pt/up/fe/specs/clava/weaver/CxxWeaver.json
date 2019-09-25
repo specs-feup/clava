@@ -838,6 +838,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "reference"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -2762,6 +2775,19 @@
                            {
                               "type": "Integer",
                               "name": "arraySize"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "reference"
                            }]
                },
                {
@@ -4772,6 +4798,19 @@
                            {
                               "type": "Integer",
                               "name": "arraySize"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "reference"
                            }]
                },
                {
@@ -14631,6 +14670,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "reference"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -20697,6 +20749,19 @@
                            {
                               "type": "Integer",
                               "name": "arraySize"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "reference"
                            }]
                },
                {
@@ -33784,6 +33849,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "reference"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -34836,6 +34914,19 @@
                            {
                               "type": "Integer",
                               "name": "arraySize"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "reference"
                            }]
                },
                {
@@ -37929,6 +38020,19 @@
                            {
                               "type": "Integer",
                               "name": "arraySize"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "reference"
                            }]
                },
                {
@@ -43699,6 +43803,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "reference"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -44770,6 +44887,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "reference"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -45805,6 +45935,19 @@
                            {
                               "type": "Integer",
                               "name": "arraySize"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "reference"
                            }]
                },
                {
@@ -49526,6 +49669,19 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "reference"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -51547,6 +51703,19 @@
                            {
                               "type": "Integer",
                               "name": "arraySize"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "reference"
                            }]
                },
                {

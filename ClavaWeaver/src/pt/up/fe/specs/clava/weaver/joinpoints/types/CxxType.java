@@ -31,7 +31,9 @@ import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
+import pt.up.fe.specs.util.SpecsCheck;
 
 public class CxxType extends AType {
 
@@ -277,5 +279,16 @@ public class CxxType extends AType {
     public AType setUnderlyingTypeImpl(AType oldValue, AType newValue) {
         return CxxJoinpoints.create(type.setUnderlyingType((Type) oldValue.getNode(), (Type) newValue.getNode()),
                 AType.class);
+    }
+
+    @Override
+    public Integer bitWidthImpl(AJoinPoint reference) {
+
+        Object referenceFile = reference.ancestor("file");
+
+        SpecsCheck.checkNotNull(referenceFile,
+                () -> "Could not find the parent Translation Unit of the given join point.");
+
+        return null;
     }
 }

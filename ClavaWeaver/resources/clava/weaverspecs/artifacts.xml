@@ -533,6 +533,9 @@
 		<attribute name="normalize" type="type" tooltip="Ignores certain types (e.g., DecayedType)" />
 		<attribute name="typeFields" type="Map" tooltip="Maps names of join point fields that represent type join points, to their respective values"/>		
 		<attribute name="fieldTree" type="String" tooltip="A tree representation of the fields of this type"/>
+		<attribute name="bitWidth" type="Integer" tooltip="The bit width of this type in the Translation Unit of the given join point">
+			<parameter name="reference" type="Joinpoint" />
+		</attribute>
 	</artifact>
 
 

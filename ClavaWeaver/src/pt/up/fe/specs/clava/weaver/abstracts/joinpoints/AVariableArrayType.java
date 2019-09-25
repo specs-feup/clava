@@ -249,6 +249,15 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
+     * Get value on attribute bitWidth
+     * @return the attribute's value
+     */
+    @Override
+    public Integer bitWidthImpl(AJoinPoint reference) {
+        return this.aArrayType.bitWidthImpl(reference);
+    }
+
+    /**
      * 
      */
     public void defTemplateArgsTypesImpl(AType[] value) {
@@ -575,6 +584,7 @@ public abstract class AVariableArrayType extends AArrayType {
         NORMALIZE("normalize"),
         TYPEFIELDS("typeFields"),
         FIELDTREE("fieldTree"),
+        BITWIDTH("bitWidth"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

@@ -468,6 +468,33 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * 
+     * @param reference
+     * @return 
+     */
+    public abstract Integer bitWidthImpl(AJoinPoint reference);
+
+    /**
+     * 
+     * @param reference
+     * @return 
+     */
+    public final Object bitWidth(AJoinPoint reference) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "bitWidth", Optional.empty(), reference);
+        	}
+        	Integer result = this.bitWidthImpl(reference);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "bitWidth", Optional.ofNullable(result), reference);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "bitWidth", e);
+        }
+    }
+
+    /**
      * Sets the template argument types of a template type
      * @param templateArgTypes 
      */
@@ -687,6 +714,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         attributes.add("normalize");
         attributes.add("typeFields");
         attributes.add("fieldTree");
+        attributes.add("bitWidth");
     }
 
     /**
@@ -739,6 +767,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         NORMALIZE("normalize"),
         TYPEFIELDS("typeFields"),
         FIELDTREE("fieldTree"),
+        BITWIDTH("bitWidth"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
