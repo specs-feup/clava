@@ -25,20 +25,14 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 
-import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
-import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxFile;
-import pt.up.fe.specs.util.SpecsCheck;
 
 public class CxxType extends AType {
 
@@ -288,52 +282,8 @@ public class CxxType extends AType {
 
     @Override
     public Integer bitWidthImpl(AJoinPoint reference) {
+        var bitwidth = type.getBitwidth(reference.getNode());
 
-        // The mapping of builtin kind to the key that will have the bit width
-        Map<BuiltinKind, DataKey<Integer>> bitWidthMap = new HashMap<>();
-        bitWidthMap.put(BuiltinKind.Double, Language.DOUBLE_WIDTH);
-        bitWidthMap.put(BuiltinKind.LongDouble, Language.LONG_DOUBLE_WIDTH);
-        bitWidthMap.put(BuiltinKind.Float, Language.FLOAT_WIDTH);
-        bitWidthMap.put(BuiltinKind.Int, Language.INT_WIDTH);
-        bitWidthMap.put(BuiltinKind.UInt, Language.INT_WIDTH);
-        bitWidthMap.put(BuiltinKind.Long, Language.LONG_WIDTH);
-        bitWidthMap.put(BuiltinKind.ULong, Language.LONG_WIDTH);
-        bitWidthMap.put(BuiltinKind.LongLong, Language.LONG_LONG_WIDTH);
-        bitWidthMap.put(BuiltinKind.ULongLong, Language.LONG_LONG_WIDTH);
-        bitWidthMap.put(BuiltinKind.Short, Language.SHORT_WIDTH);
-        bitWidthMap.put(BuiltinKind.UShort, Language.SHORT_WIDTH);
-        bitWidthMap.put(BuiltinKind.Bool, Language.BOOL_WIDTH);
-        bitWidthMap.put(BuiltinKind.SChar, Language.CHAR_WIDTH);
-        bitWidthMap.put(BuiltinKind.UChar, Language.CHAR_WIDTH);
-        bitWidthMap.put(BuiltinKind.Char_S, Language.CHAR_WIDTH);
-        bitWidthMap.put(BuiltinKind.Char_U, Language.CHAR_WIDTH);
-
-        // get the builtin kind
-        AType raw = getDesugarAllImpl();
-
-        SpecsCheck.checkArgument(raw instanceof CxxBuiltinType,
-                () -> "This type is not a builtin type. Cannot provide bit width.");
-
-        CxxBuiltinType builtin = (CxxBuiltinType) raw;
-
-        BuiltinKind builtinKind = ((BuiltinType) builtin.getNode()).get(BuiltinType.KIND);
-
-        // deal with special case of void
-        if (builtinKind == BuiltinKind.Void) {
-
-            ClavaLog.getLogger().info("This type is 'void'. Returning bit width 0.");
-            return 0;
-        }
-
-        // get the language information
-        Object referenceFile = reference.ancestor("file");
-
-        SpecsCheck.checkNotNull(referenceFile,
-                () -> "Could not find the parent Translation Unit of the given join point.");
-
-        Language lang = ((CxxFile) referenceFile).getNode().get(TranslationUnit.LANGUAGE);
-
-        // get the bit width
-        return lang.get(bitWidthMap.get(builtinKind));
+        return bitwidth != -1 ? bitwidth : null;
     }
 }
