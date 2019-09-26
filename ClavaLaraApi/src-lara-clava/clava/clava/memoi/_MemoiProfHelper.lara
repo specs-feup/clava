@@ -24,6 +24,8 @@ function _isWaiting(sig, processed) {
 	return processed[sig] === _Res.WAITING;
 }
 
+var _Memoi_FindTargets_Report = {};
+
 /**
  * 		Finds possible targets for memoization. Filters results based
  * 	on the given predicate function (or uses default).
@@ -31,8 +33,17 @@ function _isWaiting(sig, processed) {
 aspectdef _Memoi_FindTargets
 
 	input filter end
-	output targets = [] end
+	output targets = [], report end
 	
+	// initialize report
+	_Memoi_FindTargets_Report.paramsNum = 0;
+	_Memoi_FindTargets_Report.unsupportedNums = {};
+	_Memoi_FindTargets_Report.paramsType = 0;
+	_Memoi_FindTargets_Report.returnType = 0;
+	_Memoi_FindTargets_Report.unsupportedTypes = {};
+	_Memoi_FindTargets_Report.global = 0;
+	_Memoi_FindTargets_Report.calls = 0;
+
 	// use default predicate if user doesn't provide one
 	if(filter === undefined) {
 		filter = _isValidMemoi;
@@ -42,7 +53,12 @@ aspectdef _Memoi_FindTargets
 	
 	select stmt.call end
 	apply
-		var sig = $call.function.signature;
+		var func = $call.function;
+		if(func === undefined) {
+			continue;
+		}
+		var sig = func.signature;
+		
 		sig = Strings.replacer(sig, ' ', '');
 
 		// if we've processed this one before (valid or not), skip
@@ -57,6 +73,8 @@ aspectdef _Memoi_FindTargets
 			targets.push(sig);
 		}
 	end
+	
+	report = _Memoi_FindTargets_Report;
 end
 
 /**
@@ -140,6 +158,10 @@ function _isValidMemoiRecursive($call, processed) {
 	if(paramTypes.length < 1 || paramTypes.length > 3) {
 		
 		debug(sig + ' - wrong number of parameters: ' + paramTypes.length);
+		_Memoi_FindTargets_Report.paramsNum++;
+		_Memoi_FindTargets_Report.unsupportedNums[paramTypes.length] ? 
+			_Memoi_FindTargets_Report.unsupportedNums[paramTypes.length]++ :
+			_Memoi_FindTargets_Report.unsupportedNums[paramTypes.length] = 1;
 		
 		processed[sig] = _Res.INVALID;
 		return _Res.INVALID;
@@ -150,6 +172,10 @@ function _isValidMemoiRecursive($call, processed) {
 	if(!_testType($returnType, ['int', 'float', 'double'])) {
 		
 		debug(sig + ' - return type is not supported: ' + $returnType.code);
+		_Memoi_FindTargets_Report.returnType++;
+		_Memoi_FindTargets_Report.unsupportedTypes[$returnType.code] ? 
+			_Memoi_FindTargets_Report.unsupportedTypes[$returnType.code]++ :
+			_Memoi_FindTargets_Report.unsupportedTypes[$returnType.code] = 1;
 		
 		processed[sig] = _Res.INVALID;
 		return _Res.INVALID;
@@ -159,6 +185,10 @@ function _isValidMemoiRecursive($call, processed) {
 		if(!_testType($type, ['int', 'float', 'double'])) {
 		
 		debug(sig + ' - param type is not supported: ' + $type.code);
+		_Memoi_FindTargets_Report.paramsType++;
+		_Memoi_FindTargets_Report.unsupportedTypes[$returnType.code] ? 
+			_Memoi_FindTargets_Report.unsupportedTypes[$returnType.code]++ :
+			_Memoi_FindTargets_Report.unsupportedTypes[$returnType.code] = 1;
 		
 		processed[sig] = _Res.INVALID;
 		return _Res.INVALID;
@@ -191,6 +221,7 @@ function _isValidMemoiRecursive($call, processed) {
 		if($varDecl.isGlobal && (!$ref.type.constant || $ref.type.isPointer)) {
 			
 			debug(sig + ' - accesses non-const global storage variable ' + $ref.code);
+			_Memoi_FindTargets_Report.global++;
 	
 			processed[sig] = _Res.INVALID;
 			return _Res.INVALID;
@@ -212,6 +243,7 @@ function _isValidMemoiRecursive($call, processed) {
 		var test = _isValidMemoiRecursive($childCall, processed);
 		if(test === _Res.INVALID) {
 			debug(sig + ' - calls invalid function ' + childSig);
+			_Memoi_FindTargets_Report.calls++;
 			
 			processed[sig] = _Res.INVALID;
 			return _Res.INVALID;

@@ -110,9 +110,56 @@ MemoiProf.prototype.profEach = function() {
  * */
 MemoiProf.findTargets = function(pred) {
 	
+	return MemoiProf.findTargetsReport(false, pred);
+}
+
+MemoiProf.findTargetsReport = function(isReport, pred) {
+	
+	checkDefined(isReport, "isReport (bool) of findTargetsReport needs to be defined");
+	
 	var ret = call _Memoi_FindTargets(pred);
-		
+	
+	if(isReport) {
+		MemoiProf._printFindReport(ret.report);
+	}
+	
 	return ret.targets;
 }
 
-
+MemoiProf._printFindReport = function(report) {
+	
+	println("Reasons to fail:");
+	
+	if(report.paramsNum > 0) {
+		println("\tWrong number of params: " + report.paramsNum);
+		print("\t\t{");
+		var arr = [];
+		for(var i in report.unsupportedNums) {
+			arr.push(i + ': ' + report.unsupportedNums[i]);
+		}
+		print(arr.join(', '));
+		println("}");
+	}
+	
+	if(report.paramsType > 0)
+		println("\tWrong type of params: " + report.paramsType);
+		
+	if(report.returnType > 0)
+		println("\tWrong type of return: " + report.returnType);
+		
+	if(report.paramsType > 0 || report.returnType > 0) {
+		print("\t\t{");
+		var arr = [];
+		for(var i in report.unsupportedTypes) {
+			arr.push(i + ': ' + report.unsupportedTypes[i]);
+		}
+		print(arr.join(', '));
+		println("}");
+	}
+	
+	if(report.global > 0)
+		println("\tGlobal accesses: " + report.global);
+		
+	if(report.calls > 0)
+		println("\tCalls to invalid functions: " + report.calls);
+}
