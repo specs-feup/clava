@@ -991,4 +991,43 @@ public abstract class Type extends ClavaNode {
         throw new RuntimeException("Not implemented for " + getClass());
     }
 
+    /**
+     * The bit width of this type.
+     * 
+     * @param node
+     * @return the bit width of this type according to the Translation Unit of the given node, or -1 if the bit width is
+     *         not defined
+     */
+    public int getBitwidth(ClavaNode node) {
+        // Desugar type, if it is the same as the current one, bitwidth is not defined
+        var desugaredType = desugarAll();
+        if (desugaredType == this) {
+            return -1;
+        }
+
+        // Get bitwidth of desugared type
+        return desugaredType.getBitwidth(node);
+    }
+
+    /*
+    private int getBitwidthPrivate(ClavaNode node, Set<Type> seenTypes) {
+    
+        // If current node has already been seen, bitwidth is not defined
+        if (seenTypes.contains(this)) {
+            return -1;
+        }
+    
+        // Desugar type, if it is the same as the current one, bitwidth is not defined
+        var desugaredType = desugarAll();
+        if (desugaredType == this) {
+            return -1;
+        }
+    
+        // Get bitwidth of desugared type, while trying to avoid circular dependencies
+        seenTypes.add(this);
+    
+        return getBitwidthPrivate(desugaredType, seenTypes);
+    }
+    */
+
 }

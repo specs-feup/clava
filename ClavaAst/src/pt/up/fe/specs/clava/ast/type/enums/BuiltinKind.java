@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -189,6 +190,39 @@ public enum BuiltinKind {
         BUILTIN_CODE.put(Double, "double");
     }
 
+    /**
+     * Calculates the bit width of built-in kinds.
+     */
+    private static final Map<BuiltinKind, Function<Language, Integer>> BIT_WIDTHS;
+    static {
+        BIT_WIDTHS = new HashMap<>();
+        BIT_WIDTHS.put(BuiltinKind.Double, lang -> lang.get(Language.DOUBLE_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.LongDouble, lang -> lang.get(Language.LONG_DOUBLE_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.Float, lang -> lang.get(Language.FLOAT_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.Int, lang -> lang.get(Language.INT_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.UInt, lang -> lang.get(Language.INT_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.Long, lang -> lang.get(Language.LONG_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.ULong, lang -> lang.get(Language.LONG_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.LongLong, lang -> lang.get(Language.LONG_LONG_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.ULongLong, lang -> lang.get(Language.LONG_LONG_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.Short, lang -> lang.get(Language.SHORT_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.UShort, lang -> lang.get(Language.SHORT_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.Bool, lang -> lang.get(Language.BOOL_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.SChar, lang -> lang.get(Language.CHAR_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.UChar, lang -> lang.get(Language.CHAR_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.Char_S, lang -> lang.get(Language.CHAR_WIDTH));
+        BIT_WIDTHS.put(BuiltinKind.Char_U, lang -> lang.get(Language.CHAR_WIDTH));
+
+        BIT_WIDTHS.put(BuiltinKind.Char8, lang -> 8);
+        BIT_WIDTHS.put(BuiltinKind.Char16, lang -> 16);
+        BIT_WIDTHS.put(BuiltinKind.Char32, lang -> 32);
+        BIT_WIDTHS.put(BuiltinKind.UInt128, lang -> 128);
+        BIT_WIDTHS.put(BuiltinKind.Int128, lang -> 128);
+        BIT_WIDTHS.put(BuiltinKind.Float16, lang -> 16);
+        BIT_WIDTHS.put(BuiltinKind.Float128, lang -> 128);
+
+    }
+
     // public String getCode(ClavaContext context) {
     // return getCodeTry(context)
     // .orElseThrow(() -> new RuntimeException("Not implemented yet for kind '" + this + "'"));
@@ -269,5 +303,9 @@ public enum BuiltinKind {
 
     public String getCode() {
         return getCodePrivate(null);
+    }
+
+    public int getBitwidth(Language lang) {
+        return BIT_WIDTHS.getOrDefault(this, languange -> -1).apply(lang);
     }
 }
