@@ -129,7 +129,7 @@ public class BuiltinType extends Type {
         BuiltinKind builtinKind = get(BuiltinType.KIND);
 
         // get the language information
-        var tUnit = getAncestorTry(TranslationUnit.class).orElse(null);
+        var tUnit = node.getAncestorTry(TranslationUnit.class).orElse(null);
         if (tUnit == null) {
             ClavaLog.info("BuiltinType.getBitwidth: Given node is not part of a TranslationUnit");
             return -1;
