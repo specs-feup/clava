@@ -1,11 +1,11 @@
 import lara.util.IdGenerator;
 
 function _normalizeSig(sig) {
-	var tmp = Strings.replacer(sig, '\\(', '_');
+	var tmp = Strings.replacer(sig, /\(/, '_');
 	tmp = Strings.replacer(tmp, ', ', '_');
 	tmp = Strings.replacer(tmp, ' ', '_');
 	tmp = Strings.replacer(tmp, ',', '_');
-	return Strings.replacer(tmp, '\\)', '_');
+	return Strings.replacer(tmp, /\)/, '_');
 }
 
 /**
@@ -186,9 +186,9 @@ function _isValidMemoiRecursive($call, processed) {
 		
 		debug(sig + ' - param type is not supported: ' + $type.code);
 		_Memoi_FindTargets_Report.paramsType++;
-		_Memoi_FindTargets_Report.unsupportedTypes[$returnType.code] ? 
-			_Memoi_FindTargets_Report.unsupportedTypes[$returnType.code]++ :
-			_Memoi_FindTargets_Report.unsupportedTypes[$returnType.code] = 1;
+		_Memoi_FindTargets_Report.unsupportedTypes[$type.code] ? 
+			_Memoi_FindTargets_Report.unsupportedTypes[$type.code]++ :
+			_Memoi_FindTargets_Report.unsupportedTypes[$type.code] = 1;
 		
 		processed[sig] = _Res.INVALID;
 		return _Res.INVALID;
@@ -363,7 +363,8 @@ aspectdef _Memoi_InstrumentWrapper
 		code += ');';
 		
 		insert after code;
-
+		insert after "#pragma omp critical"; // needed for correct semantics under OpenMP
+		
 		$file.exec addGlobal(monitorName, monitorType, 'NULL');
 		
 		$file.exec addInclude("MemoiProfiler.h", false);
@@ -394,8 +395,13 @@ aspectdef _Memoi_Setup
 
 	var inputsCode = inputTypes.join(',').toUpperCase();
 
+	var mainFound = false;
+
 	select file.function{'main'}.body end
 	apply
+	
+		mainFound = true;
+		
 		call _Memoi_AddCallSiteInfo($body, callSiteInfo, monitorName);
 		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[targetSig]]", "[[id]]", [[outputType.toUpperCase()]], [[inputTypes.length]], [[inputsCode]]);}%);
 
@@ -410,6 +416,8 @@ aspectdef _Memoi_Setup
 		$file.exec addInclude('MemoiProfiler.h', false);
 		$file.exec addInclude('stdlib.h', true);
 	end
+	
+	checkTrue(mainFound, 'Could not find main function needed for setup', 'MemoiProf');
 end
 
 aspectdef _Memoi_AddCallSiteInfo

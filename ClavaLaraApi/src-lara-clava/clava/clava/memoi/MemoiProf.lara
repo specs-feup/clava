@@ -28,7 +28,6 @@ function MemoiProf(targetSig, id, reportDir) {
 	this._inputTypes = [];
 	this._findDataTypes();
 	
-	
 	if(!MemoiProf._reportCodeDone) {
 		call _Memoi_AddReportCode();
 		MemoiProf._reportCodeDone = true;
