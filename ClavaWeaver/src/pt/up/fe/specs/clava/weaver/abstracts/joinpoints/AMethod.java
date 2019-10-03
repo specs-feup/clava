@@ -572,6 +572,16 @@ public abstract class AMethod extends AFunction {
 
     /**
      * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aFunction.insertImpl(position, code);
+    }
+
+    /**
+     * 
      */
     @Override
     public String toString() {

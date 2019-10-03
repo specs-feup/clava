@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import org.lara.interpreter.profile.ReportField;
 import org.lara.interpreter.utils.DefMap;
+import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.interf.SelectOp;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
@@ -42,6 +43,7 @@ import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.stringsplitter.StringSplitter;
 import pt.up.fe.specs.util.stringsplitter.StringSplitterRules;
 import pt.up.fe.specs.util.utilities.Incrementer;
@@ -377,6 +379,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         // return;
         // }
 
+    }
+
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint JoinPoint) {
+        throw new NotImplementedException(this);
     }
 
     @Override

@@ -500,6 +500,16 @@ public abstract class AMemberCall extends ACall {
 
     /**
      * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aCall.insertImpl(position, code);
+    }
+
+    /**
+     * 
      */
     @Override
     public String toString() {

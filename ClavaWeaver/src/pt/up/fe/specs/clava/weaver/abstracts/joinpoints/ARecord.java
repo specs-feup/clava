@@ -343,6 +343,16 @@ public abstract class ARecord extends ANamedDecl {
 
     /**
      * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aNamedDecl.insertImpl(position, code);
+    }
+
+    /**
+     * 
      */
     @Override
     public String toString() {

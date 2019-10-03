@@ -838,7 +838,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined",
                   "children": [
                            {
                               "type": "Integer",
@@ -2779,7 +2779,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined",
                   "children": [
                            {
                               "type": "Integer",
@@ -4802,7 +4802,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined",
                   "children": [
                            {
                               "type": "Integer",
@@ -14670,7 +14670,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined",
                   "children": [
                            {
                               "type": "Integer",
@@ -20753,7 +20753,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined",
                   "children": [
                            {
                               "type": "Integer",
@@ -33849,7 +33849,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined",
                   "children": [
                            {
                               "type": "Integer",
@@ -34918,7 +34918,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined",
                   "children": [
                            {
                               "type": "Integer",
@@ -38024,7 +38024,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined",
                   "children": [
                            {
                               "type": "Integer",
@@ -43803,7 +43803,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined",
                   "children": [
                            {
                               "type": "Integer",
@@ -44887,7 +44887,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined",
                   "children": [
                            {
                               "type": "Integer",
@@ -45939,7 +45939,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined",
                   "children": [
                            {
                               "type": "Integer",
@@ -49669,7 +49669,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined",
                   "children": [
                            {
                               "type": "Integer",
@@ -51707,7 +51707,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "The bit width of this type in the Translation Unit of the given join point",
+                  "tooltip": "The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined",
                   "children": [
                            {
                               "type": "Integer",

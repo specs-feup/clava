@@ -317,6 +317,16 @@ public abstract class AMemberAccess extends AExpression {
 
     /**
      * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aExpression.insertImpl(position, code);
+    }
+
+    /**
+     * 
      */
     @Override
     public String toString() {

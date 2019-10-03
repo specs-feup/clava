@@ -1239,6 +1239,16 @@ public abstract class ALoop extends AStatement {
 
     /**
      * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aStatement.insertImpl(position, code);
+    }
+
+    /**
+     * 
      */
     @Override
     public String toString() {

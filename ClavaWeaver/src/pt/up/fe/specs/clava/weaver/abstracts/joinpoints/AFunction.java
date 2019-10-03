@@ -1023,6 +1023,16 @@ public abstract class AFunction extends ADeclarator {
 
     /**
      * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aDeclarator.insertImpl(position, code);
+    }
+
+    /**
+     * 
      */
     @Override
     public String toString() {

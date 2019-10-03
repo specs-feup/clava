@@ -312,6 +312,16 @@ public abstract class AUnaryOp extends AOp {
 
     /**
      * 
+     * @param position 
+     * @param code 
+     */
+    @Override
+    public AJoinPoint[] insertImpl(String position, JoinPoint code) {
+        return this.aOp.insertImpl(position, code);
+    }
+
+    /**
+     * 
      */
     @Override
     public String toString() {
