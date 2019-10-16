@@ -28,7 +28,7 @@ var OmpPragmas = {};
 Parallelize.forLoops = function($loops) {
 
 	//var parallelLoops = Parallelize.getForLoopsPragmas($loops);
-	var autoparResult = Parallelize.getForLoopsPragmas($loops);
+	var autoparResult = Parallelize.getForLoopsPragmas($loops, true);
 	var parallelLoops = autoparResult["parallelLoops"];
 	var unparallelizableLoops = autoparResult["unparallelizableLoops"];
 	
@@ -61,7 +61,7 @@ Parallelize.forLoopsAsText = function($loops, outputFolder) {
 		outputFolder = Io.getPath("./");
 	}
 
-	var autoparResult = Parallelize.getForLoopsPragmas($loops);
+	var autoparResult = Parallelize.getForLoopsPragmas($loops, true);
 	var parallelLoops = autoparResult["parallelLoops"];
 	var unparallelizableLoops = autoparResult["unparallelizableLoops"];
 
@@ -103,7 +103,11 @@ Parallelize.forLoopsAsText = function($loops, outputFolder) {
 }
 
 
-Parallelize.getForLoopsPragmas = function($loops) {
+Parallelize.getForLoopsPragmas = function($loops, insertPragma) {
+	if(insertPragma === undefined) {
+		insertPragma = false;
+	}
+
 	// Reset stats
 	//Parallelize.resetStats();
 	
@@ -205,8 +209,18 @@ Parallelize.getForLoopsPragmas = function($loops) {
 		var loopindex = GetLoopIndex($loop);
 		if 	(OmpPragmas[loopindex] !== undefined)
 		{
-			$loop.insert before OmpPragmas[loopindex].pragmaCode;
-			parallelLoops[$pragma.content] = OmpPragmas[loopindex].pragmaCode;
+			if(insertPragma) {
+				$loop.insert before OmpPragmas[loopindex].pragmaCode;
+			}
+
+		//	parallelLoops[$pragma.content] = OmpPragmas[loopindex].pragmaCode;
+			var pragmaCode = OmpPragmas[loopindex].pragmaCode;
+			if(pragmaCode.startsWith("#pragma")) {
+				parallelLoops[$loop.astId] = pragmaCode;			
+			} else {
+				unparallelizableLoops[$loop.astId] = pragmaCode;
+			}
+
 		}
 
 	//end
