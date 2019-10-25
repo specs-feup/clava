@@ -1,3 +1,5 @@
+import lara.Io;
+
 function _isPowerOf2(num) {
 	
 	var log = _baseLog(num, 2);
@@ -15,7 +17,7 @@ function _readReports(reportsPaths) {
 	
 	for (var reportPath of reportsPaths) {
 		
-		var report = fileToJSON(reportPath);
+		var report = Io.readJson(reportPath);
 		
 		// add the path to uniquely identify this report
 		report.path = reportPath;
@@ -198,8 +200,8 @@ aspectdef _Memoi_InsertTableCode
 		if(isMemoiDebug) {
 			var totalName = wrapperName + '_total_calls';
 			var missesName = wrapperName + '_total_misses';
-			$file.exec addGlobal(totalName, ClavaJoinPoints.builtinType("int"), 0);
-			$file.exec addGlobal(missesName, ClavaJoinPoints.builtinType("int"), 0);
+			$file.exec addGlobal(totalName, ClavaJoinPoints.builtinType("int"), '0');
+			$file.exec addGlobal(missesName, ClavaJoinPoints.builtinType("int"), '0');
 			insert before '[[totalName]]++;';
 			insert after '[[missesName]]++;';
 			
@@ -217,8 +219,8 @@ aspectdef _Memoi_AddMainDebug
 	
 	select file.function{'main'} end
 	apply
-		$file.exec addGlobal(totalName, ClavaJoinPoints.builtinType("int"), 0);
-		$file.exec addGlobal(missesName, ClavaJoinPoints.builtinType("int"), 0);
+		$file.exec addGlobal(totalName, ClavaJoinPoints.builtinType("int"), '0');
+		$file.exec addGlobal(missesName, ClavaJoinPoints.builtinType("int"), '0');
 		$file.addInclude('stdio.h', true);
 		
 			$function.exec insertReturn(%{
@@ -522,10 +524,13 @@ function _hashFunction(bits64, indexBits) {
 function _convertCounts(newReport) {
 
 	var a = [];
-	
-	for(var count of newReport.counts) {
+
+	for(var countP in newReport.counts) {
+
+		var count = newReport.counts[countP];
 		a.push(count);
 	}
+	
 	
 	newReport.counts = a;
 }
