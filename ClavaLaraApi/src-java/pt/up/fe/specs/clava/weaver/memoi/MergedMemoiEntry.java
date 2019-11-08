@@ -1,4 +1,5 @@
 package pt.up.fe.specs.clava.weaver.memoi;
+
 import java.util.ArrayList;
 import java.util.List;
 

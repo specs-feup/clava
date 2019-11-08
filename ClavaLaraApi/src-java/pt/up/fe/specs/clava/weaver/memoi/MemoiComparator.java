@@ -1,4 +1,6 @@
 package pt.up.fe.specs.clava.weaver.memoi;
+
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -14,39 +16,27 @@ import java.util.List;
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-@FunctionalInterface
-public interface MemoiComparator {
+public class MemoiComparator {
 
-    final static MemoiComparator MEAN = (List<Integer> c1, List<Integer> c2, int t) -> {
+    public static Comparator<MergedMemoiEntry> getMeanComparator(int total) {
 
-        double mean1 = mean(c1, t);
-        double mean2 = mean(c2, t);
+        return (MergedMemoiEntry e1, MergedMemoiEntry e2) -> {
 
-        if (mean1 > mean2) {
-            return 1;
-        } else if (mean1 < mean2) {
-            return -1;
-        } else {
-            return 0;
-        }
-    };
+            double mean1 = mean(e1.getCounter(), total);
+            double mean2 = mean(e2.getCounter(), total);
+
+            if (mean1 > mean2) {
+                return 1;
+            } else if (mean1 < mean2) {
+                return -1;
+            } else {
+                return 0;
+            }
+        };
+    }
 
     private static double mean(List<Integer> c1, int t) {
 
         return c1.stream().reduce(0, Integer::sum) / t;
     }
-
-    /**
-     * Compares to counts merged lists.
-     * 
-     * @param c1
-     *            the first list
-     * @param c2
-     *            the second list
-     * @param total
-     *            the total number of elements
-     * 
-     * @return 1 if c1 > c2, -1 if c1 < c2, and 0 otherwise
-     */
-    int compare(List<Integer> c1, List<Integer> c2, int total);
 }

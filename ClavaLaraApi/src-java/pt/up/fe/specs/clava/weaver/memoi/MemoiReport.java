@@ -60,10 +60,12 @@ public class MemoiReport {
             MemoiReport tempReport = mergePartsFromName(fileName);
 
             if (report == null) {
-                report = new MergedMemoiReport(tempReport);
-            }
 
-            report.mergeReport(tempReport, check);
+                report = new MergedMemoiReport(tempReport);
+            } else {
+
+                report.mergeReport(tempReport, check);
+            }
 
             counter += 1;
         }
@@ -147,26 +149,6 @@ public class MemoiReport {
 
         String json = new Gson().toJson(this);
         SpecsIo.write(new File(fileName), json);
-    }
-
-    public static MemoiReportsMap buildReportsMap(String dirName) throws FileNotFoundException {
-
-        File dir = new File(dirName);
-
-        SpecsCheck.checkArgument(dir.exists(), () -> "the directory " + dirName + " doesn't exist");
-        SpecsCheck.checkArgument(dir.isDirectory(), () -> dirName + " is not a directory");
-
-        List<File> reportFiles = SpecsIo.getFiles(dir, "json");
-
-        MemoiReportsMap map = new MemoiReportsMap();
-
-        for (File reportFile : reportFiles) {
-
-            MemoiReport report = fromFile(reportFile);
-            map.put(report.funcSig, String.join("#", report.call_sites), reportFile.getAbsolutePath());
-        }
-
-        return map;
     }
 
     public String getId() {

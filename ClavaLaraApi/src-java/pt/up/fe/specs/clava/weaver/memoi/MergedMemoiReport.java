@@ -1,5 +1,7 @@
 package pt.up.fe.specs.clava.weaver.memoi;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +46,34 @@ public class MergedMemoiReport {
         this.inputCount = report.getInputCount();
         this.inputTypes = new ArrayList<>(report.getInputTypes());
         this.call_sites = new ArrayList<>(report.getCall_sites());
+
+        this.elements = new ArrayList<Integer>();
+        this.elements.add(report.getElements());
+
+        this.calls = new ArrayList<Integer>(report.getCalls());
+        this.calls.add(report.getCalls());
+
+        this.hits = new ArrayList<Integer>(report.getHits());
+        this.hits.add(report.getHits());
+
+        this.misses = new ArrayList<Integer>(report.getMisses());
+        this.misses.add(report.getMisses());
+
+        this.counts = new HashMap<String, MergedMemoiEntry>();
+        for (MemoiEntry oldEntry : report.getCounts()) {
+
+            String key = oldEntry.getKey();
+            MergedMemoiEntry newEntry = new MergedMemoiEntry(oldEntry);
+            counts.put(key, newEntry);
+        }
+    }
+
+    public List<MergedMemoiEntry> getMeanSorted() {
+
+        var list = new ArrayList<MergedMemoiEntry>(counts.values());
+        list.sort(MemoiComparator.getMeanComparator(reportCount));
+
+        return list;
     }
 
     void mergeReport(MemoiReport tempReport) {
@@ -77,9 +107,11 @@ public class MergedMemoiReport {
                 MergedMemoiEntry newEntry = new MergedMemoiEntry(oldEntry);
 
                 counts.put(key, newEntry);
+            } else {
+
+                counts.get(key).addCounter(oldEntry.getCounter());
             }
 
-            counts.get(key).addCounter(oldEntry.getCounter());
         }
     }
 

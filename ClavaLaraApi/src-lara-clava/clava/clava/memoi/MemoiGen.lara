@@ -2,6 +2,8 @@ import clava.memoi._MemoiGenHelper;
 
 import lara.util.IdGenerator;
 import lara.Io;
+import lara.Check;
+import lara.JavaInterop;
 
 /**
  * 		Library to generate memoization tables based on the results from
@@ -14,24 +16,52 @@ import lara.Io;
 function MemoiGen(reports) {
 	
 	this._reportsPaths = arrayFromArgs(arguments);
-	this._reports = _readReports(this._reportsPaths);
+
+	// generate the <target, site> map
+	var list = JavaInterop.arrayToList(reports);
+	this._reportsMap = MemoiReportsMap.fromFiles(list);
+	
 	this._isDebug = false;
 }
 
 /**
+ * 		Helper constructor that takes a dir name and looks for JSON
+ *  files there.
+ * 
  * @constructor
  * 
  * @param {string} dir - the path of the directory containing the report files
  * */
 MemoiGen.fromDir = function(dir) {
 
-	checkString(dir);
+	Check.isString(dir, "MemoiGen.fromDir");
 	
 	var files = Io.getFiles(dir, "*.json", false);
 
 	return new MemoiGen(files);
 };
 
+/**
+ * 		Helper constructor that takes file names.
+ * 
+ * @constructor
+ * 
+ * @param {string[]|...string} names - the paths of the report files
+ * */
+MemoiGen.fromFileNames = function(names) {
+	
+	var namesArray = arrayFromArgs(arguments);
+	var files = [];
+	
+	for(var name in namesArray) {
+		
+		var file = Io._newFile(name);
+		Check.isTrue(Io.isFile(file), name + " is not a file", "MemoiGen.fromFileNames");
+		files.push(file);
+	}
+
+	return new MemoiGen(files);	
+}
 
 /**
  * 		Prints detailed metrics for each <target function, call site>.
@@ -97,22 +127,23 @@ var MemoiInsert = {
 	}
 };
 
-var MemoiComparator = {
-	MEAN: function(count1, count2, total) {
+//~ var MemoiComparator = {
+	//~ MEAN: function(count1, count2, total) {
 			
-		var mean1 = mean(count1.counter, total);
-		var mean2 = mean(count2.counter, total);
+		//~ var mean1 = mean(count1.counter, total);
+		//~ var mean2 = mean(count2.counter, total);
 		
-		if(mean1 > mean2) {
-			return 1;
-		} else if (mean1 < mean2) {
-			return -1;
-		} else {
-			return 0;
-		}
-	}
-};
+		//~ if(mean1 > mean2) {
+			//~ return 1;
+		//~ } else if (mean1 < mean2) {
+			//~ return -1;
+		//~ } else {
+			//~ return 0;
+		//~ }
+	//~ }
+//~ };
 
+var MemoiComparator = new Enumeration('MEAN');
 
 /**
  * 		Sets whether to generate debug code in the final application.
@@ -147,27 +178,39 @@ MemoiGen.prototype.setDebug = function(isDebug) {
  * */
 MemoiGen.prototype.generate = function(applyPred, insertPred, countComparator, tableSize) {
 	
+	// test table size
 	var allowedSizes = [256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536];
 	if(allowedSizes.indexOf(tableSize) === -1) {
-		throw "The possible table sizes are 2^b, with b in [8, 16].";
+		throw 'The possible table sizes are 2^b, with b in [8, 16].';
 	}
 	
-	for(var report of this._reports) {
+	// test comparator
+	if(!MemoiComparator.isValidEnum(countComparator)) {
+		throw 'The possible comparators are {MemoiComparator.MEAN}.';
+	}
+	
+	for(var target in this._reportsMap) {
 		
-		debug('----------------------------------------------------------------------');
-		debug('analysing ' + report.funcSig + ' at ' + report.call_sites);
-		
-		if(!applyPred(report)) {
-			continue;
-		}
-		
-		// define the comparator based on this report
-		var comparatorToUse = function(count1, count2){
-			return countComparator(count1, count2, report.reportCounter);
-		};
+		var siteMap = this._reportsMap.get(target);
+		for(var site in siteMap) {
 
-		_generate(insertPred, comparatorToUse, report, this._isDebug, tableSize);
+			var reportPathList = siteMap.get(site);		
+			var report = MemoiReport.mergeReportsFromNames(reportPathList);
+			
+			debug('----------------------------------------------------------------------');
+			debug('analysing ' + target + ' at ' + site + ' (' + report.reportCount + ' reports)');
+			
+			if(!applyPred(report)) {
+				continue;
+			}
+			
+			//~ // define the comparator based on this report
+			//~ var comparatorToUse = function(count1, count2){
+				//~ return countComparator(count1, count2, report.reportCounter);
+			//~ };
+			
+			_generate(insertPred, countComparator, report, this._isDebug, tableSize, target, site);
+		}
 	}
 }
-
 

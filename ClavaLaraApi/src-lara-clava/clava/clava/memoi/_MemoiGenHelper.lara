@@ -127,10 +127,7 @@ function _combineReports(originalReports) {
  * 		
  * 		Inserts elements in the table based on the predicate insertPred.
  * */
-function _generate(insertPred, countComparator, report, isMemoiDebug, tableSize) {
-
-	var callSite = report.call_sites;
-	var signature = report.funcSig;
+function _generate(insertPred, countComparator, report, isMemoiDebug, tableSize, signature, callSite) {
 	
 	var wt;
 	
@@ -379,8 +376,17 @@ function _makeTable(insertPred, countComparator, report, $function, indexBits, t
 	var code = "";
 	var table = [];
 	
-	var counts = report.counts;
-	counts.sort(countComparator);
+	//~ var counts = report.counts.values();
+	//~ counts.sort(countComparator);
+	
+	switch(countComparator) {
+		case MemoiComparator.MEAN:
+			var counts = report.getMeanSorted();
+			break;
+		default:
+			throw 'The possible comparators are {MemoiComparator.MEAN}.';
+	}
+	
 	var totalElements = counts.length;
 	
 	for(var i = 0; i < totalElements; i++) {
@@ -426,9 +432,30 @@ function _makeTable(insertPred, countComparator, report, $function, indexBits, t
 	
 	if(isDebug()) {
 		_printTableReport(collisions, totalElements, maxCollision, report, tableSize, table);
+		_printTable(table, tableSize);
 	}
 	
 	return table;
+}
+
+function _printTable(table, tableSize) {
+	
+	for(var i = 0; i < tableSize; i++) {
+
+		if(table[i] !== undefined) {
+
+			var code = "";
+
+			var fullKey = table[i].fullKey;
+			var keys = fullKey.split('#');
+			for(var k = 0; k < keys.length; k++) {
+				code += '0x' + keys[k] + ', ';
+			}
+			code += '0x' + table[i].output;
+		
+			println(code);	
+		}
+	}
 }
 
 function _printTableReport(collisions, totalElements, maxCollision, report, tableSize, table) {
