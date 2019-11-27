@@ -79,4 +79,11 @@ public class CApiTest {
     public void testCodeInserter() {
         newTester().test("CodeInserterTest.lara", "code_inserter.c");
     }
+
+    @Test
+    public void testArrayLinearizer() {
+        // newTester().test("ArrayLinearizerTest.lara", "2d_array.c");
+        // newTester().test("ArrayLinearizerTest.lara", "3d_array.c");
+        newTester().test("ArrayLinearizerTest.lara", "qr.c");
+    }
 }

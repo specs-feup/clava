@@ -1,0 +1,29 @@
+aspectdef ArrayLinearizerTest
+
+	select param end
+	apply
+
+//		if(!$param.type.instanceOf('arrayType')) {
+//			continue;
+//		}
+		
+		println("Param Type: " + $param.name + " is a " + $param.type.joinPointType + "  -> " + $param.type.code);
+		println("Desugared param Type: " + $param.name + " is a " + $param.type.desugarAll.joinPointType + "  -> " + $param.type.desugarAll.code);
+	end
+
+
+/*
+	select vardecl end
+	apply
+		if(!$vardecl.type.desugarAll.instanceOf('arrayType')) {
+			continue;
+		}
+		
+		println("Array Type: " + $vardecl.name + " -> " + $vardecl.type.code);
+	end
+	println("Hello");
+*/
+end
+
+
+//function getStaticArrays
