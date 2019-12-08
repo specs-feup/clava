@@ -5,3 +5,6 @@ A, A2, A3
 A2, A3
 Select function: float x;
 Select function: float x;
+Search inclusive: foo2
+Default attribute of 'function': name
+Search with default: foo2

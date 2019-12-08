@@ -1,5 +1,6 @@
 import lara.util.JpFilter;
 import weaver.WeaverJps;
+import weaver.Weaver;
 
 aspectdef JpFilterTest
 
@@ -33,6 +34,16 @@ aspectdef JpFilterTest
 	
 	//println("FILTER:");
 	//printObject(filter2);
+
+
+	// Test search inclusive
+	var $foo2 = WeaverJps.search("function", {name: "foo2"}).first();
+	var $secondFoo2 = WeaverJps.searchFromInclusive($foo2, "function", {name: "foo2"}).first();
+	println("Search inclusive: " + $secondFoo2.name);
+
+	// Test retrieving default attribute of join point
+	println("Default attribute of 'function': " + Weaver.getDefaultAttribute("function"));
+	println("Search with default: " + WeaverJps.search("function", "foo2").first().name);
 
 end
 
