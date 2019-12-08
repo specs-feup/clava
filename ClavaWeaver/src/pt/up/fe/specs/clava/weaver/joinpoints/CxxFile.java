@@ -428,10 +428,7 @@ public class CxxFile extends AFile {
 
     @Override
     public List<? extends ADecl> selectDecl() {
-        return tunit.getDescendantsStream()
-                .filter(node -> node instanceof Decl)
-                .map(varDecl -> CxxJoinpoints.create((Decl) varDecl, ADecl.class))
-                .collect(Collectors.toList());
+        return CxxSelects.select(ADecl.class, tunit.getChildren(), true, Decl.class);
     }
 
     @Override
