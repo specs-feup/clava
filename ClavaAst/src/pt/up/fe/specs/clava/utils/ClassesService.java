@@ -18,10 +18,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.omp.clang.GenericClangOMP;
@@ -34,12 +37,17 @@ public class ClassesService {
 
     private static final ClassesService STATIC_INSTANCE = new ClassesService();
 
+    private static final Set<String> WARNED_CLASSES = ConcurrentHashMap.newKeySet();
+
     private final CustomClassnameMapper customClassMap;
     private final Map<String, Class<? extends ClavaNode>> autoClassMap;
+    // private final Map<String, String> warnedClassnames;
 
     public ClassesService(CustomClassnameMapper customClassMap) {
         this.customClassMap = customClassMap;
         this.autoClassMap = new HashMap<>();
+        // this.warnedClassnames = new HashSet<>();
+        // this.warnedClassnames = new ConcurrentHashMap<>();
     }
 
     public ClassesService() {
@@ -110,7 +118,12 @@ public class ClassesService {
 
         } catch (ClassNotFoundException e) {
             // Before throwing exception, try some cases
-            if (clangClassname.endsWith("Attr")) {
+            if (clangClassname.endsWith("Attr") && !WARNED_CLASSES.contains(clangClassname)) {
+                WARNED_CLASSES.add(clangClassname);
+
+                ClavaLog.info("No parser defined for attribute '" + clangClassname
+                        + "', using generic attribute parser with no arguments");
+
                 return Attribute.class;
             }
 
