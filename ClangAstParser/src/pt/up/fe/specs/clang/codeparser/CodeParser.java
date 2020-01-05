@@ -63,9 +63,9 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     }
 
     /**
-     * Currently returns a MonolithicCodeParser, which has higher compatibility than ParallelCodeParser.
+     * Creates a new CodeParser instance.
      * 
-     * @return
+     * @return currently returns an instance of ParallelCodeParser
      */
     public static CodeParser newInstance() {
         // return new MonolithicCodeParser();
