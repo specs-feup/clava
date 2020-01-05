@@ -340,6 +340,12 @@ public class App extends ClavaNode {
     // return write(destinationFolder, true);
     // }
 
+    /**
+     * Writes the source-code of the current application to the given destination folder.
+     * 
+     * @param destinationFolder
+     * @return
+     */
     public List<File> write(File destinationFolder) {
         List<File> writtenFiles = new ArrayList<>();
 
