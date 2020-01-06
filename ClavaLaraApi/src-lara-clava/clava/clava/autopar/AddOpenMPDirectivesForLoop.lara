@@ -92,7 +92,8 @@ aspectdef AddOpenMPDirectivesForLoop
 				}
 				else
 				{
-					exit();
+					//exit();
+					return;
 				}
 			}
 		}	
