@@ -201,8 +201,10 @@ aspectdef checkForOpenMPCanonicalForm
  	var stepmsgError = []; 	
  	var stepOp = null;
 	var $stepOpExpr = undefined;
+	var $stepExpr = undefined;
  	select $ForStmt.step.expr end
  	apply
+		$stepExpr = $step;
  		$stepOpExpr = $expr;
  		stepOp = $expr.kind;
  		break #$ForStmt;
@@ -211,6 +213,14 @@ aspectdef checkForOpenMPCanonicalForm
 
 // 	if (stepOp == null || ['assign','post_inc','pre_inc','pre_dec','post_dec','add','sub'].indexOf(stepOp) == -1 || stepVars.length != 1)
 //		stepmsgError.push('loop-step expression is not in canonical form' );
+ 	if ($stepExpr === undefined) {
+		stepmsgError.push('loop-step expression is not in canonical form: loop at "'+$ForStmt.location+'" does not have a step expression');		
+	}
+
+ 	if ($stepOpExpr === undefined) {
+		stepmsgError.push('loop-step expression is not in canonical form: could not obtain step operation expression from step "'+$step.code+'":' + $step.ast);		
+	}
+
 		
  	if (stepOp == null)
 		stepmsgError.push('loop-step expression is not in canonical form: could not obtain step operation from expression "'+$stepOpExpr.code+'":' + $stepOpExpr.ast);		
