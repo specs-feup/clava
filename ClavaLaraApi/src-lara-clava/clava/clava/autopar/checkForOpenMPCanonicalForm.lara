@@ -215,18 +215,13 @@ aspectdef checkForOpenMPCanonicalForm
 //		stepmsgError.push('loop-step expression is not in canonical form' );
  	if ($stepExpr === undefined) {
 		stepmsgError.push('loop-step expression is not in canonical form: loop at "'+$ForStmt.location+'" does not have a step expression');		
-	}
-
- 	if ($stepOpExpr === undefined) {
-		stepmsgError.push('loop-step expression is not in canonical form: could not obtain step operation expression from step "'+$step.code+'":' + $step.ast);		
-	}
-
-		
- 	if (stepOp == null)
+	} else if ($stepOpExpr === undefined) {
+		stepmsgError.push('loop-step expression is not in canonical form: could not obtain step operation expression from step "'+$stepExpr.code+'":' + $stepExpr.ast);		
+	}else if (stepOp == null) {
 		stepmsgError.push('loop-step expression is not in canonical form: could not obtain step operation from expression "'+$stepOpExpr.code+'":' + $stepOpExpr.ast);		
-
- 	if (['assign','post_inc','pre_inc','pre_dec','post_dec','add','sub'].indexOf(stepOp) == -1)
+	}else if (['assign','post_inc','pre_inc','pre_dec','post_dec','add','sub'].indexOf(stepOp) == -1) {
 		stepmsgError.push('loop-step expression is not in canonical form: detected step operation is '+stepOp+', expected one of assign, post_inc, pre_inc, pre_dec, post_dec, add, sub');
+	}
  	
  	if (stepVars.length != 1)
 		stepmsgError.push('loop-step expression is not in canonical form: step variables is not 1, it is ' + stepVars.length + ' (' + stepVars + ')');		
