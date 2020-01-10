@@ -14,14 +14,9 @@
 package pt.up.fe.specs.clava.weaver;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.IntStream;
 
 import org.junit.runner.Result;
-import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
-import org.lara.interpreter.joptions.gui.LaraLauncher;
 
 import eu.antarex.clang.parser.tests.CBenchTest;
 import eu.antarex.clang.parser.tests.CxxBenchTest;
@@ -31,9 +26,7 @@ import pt.up.fe.specs.cxxweaver.tests.CApiTest;
 import pt.up.fe.specs.cxxweaver.tests.CTest;
 import pt.up.fe.specs.cxxweaver.tests.CxxApiTest;
 import pt.up.fe.specs.cxxweaver.tests.CxxTest;
-import pt.up.fe.specs.lara.doc.LaraDocLauncher;
-import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
-import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.lara.WeaverLauncher;
 import pt.up.fe.specs.util.SpecsSystem;
 
 public class ClavaWeaverLauncher {
@@ -82,82 +75,84 @@ public class ClavaWeaverLauncher {
             return result.getFailures().isEmpty();
         }
 
-        // If unit testing flag is present, run unit tester
-        Optional<Boolean> unitTesterResult = runUnitTester(args);
-        if (unitTesterResult.isPresent()) {
-            return unitTesterResult.get();
-        }
+        return new WeaverLauncher(new CxxWeaver()).launch(args);
 
-        // If doc generator flag is present, run doc generator
-        Optional<Boolean> docGeneratorResult = runDocGenerator(args);
-        if (docGeneratorResult.isPresent()) {
-            return docGeneratorResult.get();
-        }
-
-        return LaraLauncher.launch(args, new CxxWeaver());
-        // return LaraI.exec(args, new CxxWeaver());
+        // // If unit testing flag is present, run unit tester
+        // Optional<Boolean> unitTesterResult = runUnitTester(args);
+        // if (unitTesterResult.isPresent()) {
+        // return unitTesterResult.get();
+        // }
+        //
+        // // If doc generator flag is present, run doc generator
+        // Optional<Boolean> docGeneratorResult = runDocGenerator(args);
+        // if (docGeneratorResult.isPresent()) {
+        // return docGeneratorResult.get();
+        // }
+        //
+        // return LaraLauncher.launch(args, new CxxWeaver());
+        // // return LaraI.exec(args, new CxxWeaver());
     }
 
     public static boolean execute(List<String> args) {
         return execute(args.toArray(new String[0]));
     }
 
-    private static Optional<Boolean> runUnitTester(String[] args) {
-        // Look for flag
-        String unitTestingFlag = "-" + LaraiKeys.getUnitTestFlag();
-
-        int flagIndex = IntStream.range(0, args.length)
-                .filter(index -> unitTestingFlag.equals(args[index]))
-                .findFirst()
-                .orElse(-1);
-
-        if (flagIndex == -1) {
-            return Optional.empty();
-        }
-
-        List<String> laraUnitArgs = new ArrayList<>();
-        // laraUnitArgs.add("lara-unit-weaver=" + CxxWeaver.class.getName());
-        laraUnitArgs.add("--weaver");
-        laraUnitArgs.add(CxxWeaver.class.getName());
-
-        // laraUnitArgs.add("lara-unit-weaver=" + CxxWeaver.class.getName());
-        for (int i = flagIndex + 1; i < args.length; i++) {
-            laraUnitArgs.add(args[i]);
-        }
-
-        SpecsLogs.debug("Launching lara-unit with flags '" + laraUnitArgs + "'");
-
-        int unitResults = LaraUnitLauncher.execute(laraUnitArgs.toArray(new String[0]));
-
-        return Optional.of(unitResults == 0);
-    }
-
-    private static Optional<Boolean> runDocGenerator(String[] args) {
-        // Look for flag
-        String docGeneratorFlag = "-" + LaraiKeys.getDocGeneratorFlag();
-
-        int flagIndex = IntStream.range(0, args.length)
-                .filter(index -> docGeneratorFlag.equals(args[index]))
-                .findFirst()
-                .orElse(-1);
-
-        if (flagIndex == -1) {
-            return Optional.empty();
-        }
-
-        List<String> laraDocArgs = new ArrayList<>();
-        laraDocArgs.add("--weaver");
-        laraDocArgs.add(CxxWeaver.class.getName());
-
-        for (int i = flagIndex + 1; i < args.length; i++) {
-            laraDocArgs.add(args[i]);
-        }
-
-        SpecsLogs.debug("Launching lara-doc with flags '" + laraDocArgs + "'");
-
-        int docResults = LaraDocLauncher.execute(laraDocArgs.toArray(new String[0]));
-
-        return Optional.of(docResults != -1);
-    }
+    // private static Optional<Boolean> runUnitTester(String[] args) {
+    // // Look for flag
+    // String unitTestingFlag = "-" + LaraiKeys.getUnitTestFlag();
+    //
+    // int flagIndex = IntStream.range(0, args.length)
+    // .filter(index -> unitTestingFlag.equals(args[index]))
+    // .findFirst()
+    // .orElse(-1);
+    //
+    // if (flagIndex == -1) {
+    // return Optional.empty();
+    // }
+    //
+    // List<String> laraUnitArgs = new ArrayList<>();
+    // // laraUnitArgs.add("lara-unit-weaver=" + CxxWeaver.class.getName());
+    // laraUnitArgs.add("--weaver");
+    // laraUnitArgs.add(CxxWeaver.class.getName());
+    //
+    // // laraUnitArgs.add("lara-unit-weaver=" + CxxWeaver.class.getName());
+    // for (int i = flagIndex + 1; i < args.length; i++) {
+    // laraUnitArgs.add(args[i]);
+    // }
+    //
+    // SpecsLogs.debug("Launching lara-unit with flags '" + laraUnitArgs + "'");
+    //
+    // int unitResults = LaraUnitLauncher.execute(laraUnitArgs.toArray(new String[0]));
+    //
+    // return Optional.of(unitResults == 0);
+    // }
+    //
+    // private static Optional<Boolean> runDocGenerator(String[] args) {
+    // // Look for flag
+    // String docGeneratorFlag = "-" + LaraiKeys.getDocGeneratorFlag();
+    //
+    // int flagIndex = IntStream.range(0, args.length)
+    // .filter(index -> docGeneratorFlag.equals(args[index]))
+    // .findFirst()
+    // .orElse(-1);
+    //
+    // if (flagIndex == -1) {
+    // return Optional.empty();
+    // }
+    //
+    // List<String> laraDocArgs = new ArrayList<>();
+    // laraDocArgs.add("--weaver");
+    // laraDocArgs.add(CxxWeaver.class.getName());
+    //
+    // for (int i = flagIndex + 1; i < args.length; i++) {
+    // laraDocArgs.add(args[i]);
+    // }
+    //
+    // SpecsLogs.debug("Launching lara-doc with flags '" + laraDocArgs + "'");
+    //
+    // int docResults = LaraDocLauncher.execute(laraDocArgs.toArray(new String[0]));
+    //
+    // return Optional.of(docResults != -1);
+    // }
 
 }
