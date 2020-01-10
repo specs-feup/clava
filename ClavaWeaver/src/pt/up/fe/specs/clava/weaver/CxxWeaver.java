@@ -1449,7 +1449,20 @@ public class CxxWeaver extends ACxxWeaver {
         // List<File> srcFolders = new ArrayList<>(includeFolders);
 
         // App rebuiltApp = createApp(srcFolders, rebuildOptions);
+
+        var previousBases = currentBases;
+        var rebuildBases = new HashMap<File, File>();
+        for (var writtenFile : writtenFiles) {
+            rebuildBases.put(SpecsIo.getCanonicalFile(writtenFile), tempFolder);
+        }
+
+        currentBases = rebuildBases;
         App rebuiltApp = createApp(writtenFiles, rebuildOptions, extraOptions);
+
+        // Restore current bases
+        currentBases = previousBases;
+
+        // rebuiltApp.getTranslationUnits().forEach(tu -> System.out.println("Relative: " + tu.getRelativeFilepath()));
 
         // Creating an app automatically pushes the App in the Context
         context.popApp();
@@ -1471,6 +1484,8 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Base folder is now the temporary folder
         if (update) {
+            currentBases = rebuildBases;
+
             // Discard current app
             weaverData.popAst();
 
