@@ -107,17 +107,17 @@ public class CxxLoop extends ALoop {
         if (!(loop instanceof ForStmt)) {
             return 0;
         }
-
+    
         ForStmt forLoop = (ForStmt) loop;
-
+    
         Stmt inc = forLoop.getInc().orElse(null);
         if (inc == null) {
             return 0;
         }
-
+    
         // TODO: Regular expression for <VAR_NAME>++; / <VAR_NAME>--;
         System.out.println("INC CODE:" + inc);
-
+    
         return 0;
     }
     */
@@ -282,16 +282,16 @@ public class CxxLoop extends ALoop {
         /*
         // Map<String, Consumer<? extends Object>> defMap = new HashMap<>();
         // defMap.put("qq", obj -> consumerString(obj));
-
+        
         // Check if loop is annotated with pragma "parallel"
         List<Pragma> pragmas = ClavaNodes.getPragmas(getNode());
-
+        
         boolean result = pragmas.stream()
                 .filter(pragma -> pragma.getName().equals("clava"))
                 .filter(clavaPragma -> clavaPragma.getContent().equals("parallel"))
                 .findFirst()
                 .isPresent();
-
+        
         return result;
         */
     }
@@ -370,13 +370,13 @@ public class CxxLoop extends ALoop {
         /*
         // ClavaLog.deprecated("action $loop.exec setInit is deprecated, please use setInitValue instead");
         // setInitValue(initCode);
-
+        
         if (!(loop instanceof ForStmt)) {
             return; // TODO: warn user?
         }
-
+        
         LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(initCode + ";");
-
+        
         ((ForStmt) loop).setInit(literalStmt);
         */
     }
@@ -393,15 +393,15 @@ public class CxxLoop extends ALoop {
         // ((ForStmt) loop).setInit(literalStmt);
         defInitValueImpl(initCode);
     }
-
+    
     @Override
     public void defInitValueImpl(String value) {
         if (!(loop instanceof ForStmt)) {
             return; // TODO: warn user?
         }
-
+    
         LiteralStmt literalStmt = ClavaNodeFactory.literalStmt(value + ";");
-
+    
         ((ForStmt) loop).setInit(literalStmt);
     }
     */
@@ -478,32 +478,32 @@ public class CxxLoop extends ALoop {
         return initValue;
         /*
         Optional<Stmt> initOpt = ((ForStmt) loop).getInit();
-
+        
         if (initOpt.isPresent()) {
-
+        
             Stmt init = initOpt.get();
-
+        
             ClavaNode child = init.getChild(0);
-
+        
             if (child instanceof VarDecl) {
-
+        
                 VarDecl decl = (VarDecl) child;
-
+        
                 Optional<Expr> declInitOpt = decl.getInit();
                 if (declInitOpt.isPresent()) {
-
+        
                     return declInitOpt.get().getCode();
                 }
             } else if (child instanceof BinaryOperator) {
-
+        
                 BinaryOperator binOp = (BinaryOperator) child;
                 if (binOp.getOp() == BinaryOperatorKind.ASSIGN) {
-
+        
                     return binOp.getRhs().getCode();
                 }
             }
         }
-
+        
         ClavaLog.warning(
                 "Could not determine the initial value of the loop. The init statement should be a variable declaration with initialization or assignment.");
         return null;
@@ -521,8 +521,8 @@ public class CxxLoop extends ALoop {
         // ops.add(BinaryOperatorKind.NE);
 
         if (!(loop instanceof ForStmt)) {
-            ClavaLog.warning(
-                    "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
+            ClavaLog.info("Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops ("
+                    + getLocationImpl() + ").");
             return null;
         }
 
@@ -536,30 +536,31 @@ public class CxxLoop extends ALoop {
         // .orElse(null);
 
         if (endValue == null) {
-            ClavaLog.warning(
-                    "Could not determine the end value of the loop. The condition statement should be a Canonical Loop Form test expression, as defined by the OpenMP standard.");
+            ClavaLog.info(
+                    "Could not determine the end value of the loop at '" + getLocationImpl()
+                            + "'. The condition statement should be a Canonical Loop Form test expression, as defined by the OpenMP standard.");
         }
 
         return endValue;
         /*
         Optional<Stmt> condOpt = forLoop.getCond();
-
+        
         if (condOpt.isPresent()) {
-
+        
             Stmt cond = condOpt.get();
-
+        
             ClavaNode child = cond.getChild(0);
-
+        
             if (child instanceof BinaryOperator) {
-
+        
                 BinaryOperator binOp = (BinaryOperator) child;
                 if (ops.contains(binOp.getOp())) {
-
+        
                     return binOp.getRhs().getCode();
                 }
             }
         }
-
+        
         ClavaLog.warning(
                 "Could not determine the initial value of the loop. The init statement should be a variable declaration with initialization or assignment.");
         return null;
