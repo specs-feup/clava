@@ -755,9 +755,10 @@ public class App extends ClavaNode {
 
         // System.out.println("ALL FILES:" + allFiles);
         for (TranslationUnit tu : getTranslationUnits()) {
+            // System.out.println("FINDING RELATIVE PATH FOR " + tu.getFile());
             // Find the corresponding source
-            File sourcePath = allFiles.get(tu.getFile());
-
+            File sourcePath = sourceFiles.get(tu.getFile());
+            // System.out.println("SOURCE PATH: " + sourcePath);
             if (sourcePath == null) {
                 tu.setRelativePath(null);
                 continue;
