@@ -81,6 +81,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
 import pt.up.fe.specs.util.Preconditions;
 import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class AstFactory {
@@ -270,7 +271,14 @@ public class AstFactory {
             tUnit.setRelativePath(relativePath);
         }
 
-        return CxxJoinpoints.create(tUnit, AFile.class);
+        var fileJp = CxxJoinpoints.create(tUnit, AFile.class);
+
+        // If file already exists, insert the code of the file literaly
+        if (file.isFile()) {
+            fileJp.insertBeginImpl(SpecsIo.read(file));
+        }
+
+        return fileJp;
     }
 
     /**
