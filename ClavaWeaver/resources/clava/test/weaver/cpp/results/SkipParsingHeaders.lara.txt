@@ -1,4 +1,4 @@
-/**** File 'skip_parsing_headers.cpp' ****/
+/**** File 'cxx_weaver_output/skip_parsing_headers.cpp' ****/
 
 #include "skip_parsing_headers.h"
 int main() {

@@ -1,5 +1,5 @@
 Temporary code:
-/**** File 'rebuild.cpp' ****/
+/**** File 'cxx_weaver_output/rebuild.cpp' ****/
 
 
 void b() {
@@ -25,7 +25,7 @@ int main() {
 
 
 Original code:
-/**** File 'rebuild.cpp' ****/
+/**** File 'cxx_weaver_output/rebuild.cpp' ****/
 
 
 void b() {
