@@ -275,7 +275,7 @@ public class AstFactory {
 
         // If file already exists, insert the code of the file literaly
         if (file.isFile()) {
-            fileJp.insertBeginImpl(SpecsIo.read(file));
+            fileJp.getNode().setOptional(TranslationUnit.LITERAL_SOURCE, SpecsIo.read(file));
         }
 
         return fileJp;
