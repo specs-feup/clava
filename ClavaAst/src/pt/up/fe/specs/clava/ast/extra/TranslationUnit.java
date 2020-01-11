@@ -82,6 +82,11 @@ public class TranslationUnit extends ClavaNode {
      */
     public static final DataKey<Optional<String>> SOURCE_FOLDERNAME = KeyFactory.optional("sourceFoldername");
 
+    /**
+     * If set, the source code of this file will be equivalent to the given string.
+     */
+    public static final DataKey<Optional<String>> LITERAL_SOURCE = KeyFactory.optional("literalSource");
+
     /// DATAKEYS END
 
     // private static final Set<String> HEADER_EXTENSIONS = new HashSet<>(Arrays.asList("h", "hpp"));
@@ -377,6 +382,11 @@ public class TranslationUnit extends ClavaNode {
 
     @Override
     public String getCode() {
+
+        var literalCode = get(LITERAL_SOURCE).orElse(null);
+        if (literalCode != null) {
+            return literalCode;
+        }
 
         String body = getChildrenStream()
                 // String body = getDecls().stream()
