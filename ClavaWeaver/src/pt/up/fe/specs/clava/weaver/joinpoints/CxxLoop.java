@@ -536,35 +536,13 @@ public class CxxLoop extends ALoop {
         // .orElse(null);
 
         if (endValue == null) {
-            ClavaLog.info(
+            ClavaLog.debug(
                     "Could not determine the end value of the loop at '" + getLocationImpl()
                             + "'. The condition statement should be a Canonical Loop Form test expression, as defined by the OpenMP standard.");
+            return null;
         }
 
         return endValue;
-        /*
-        Optional<Stmt> condOpt = forLoop.getCond();
-        
-        if (condOpt.isPresent()) {
-        
-            Stmt cond = condOpt.get();
-        
-            ClavaNode child = cond.getChild(0);
-        
-            if (child instanceof BinaryOperator) {
-        
-                BinaryOperator binOp = (BinaryOperator) child;
-                if (ops.contains(binOp.getOp())) {
-        
-                    return binOp.getRhs().getCode();
-                }
-            }
-        }
-        
-        ClavaLog.warning(
-                "Could not determine the initial value of the loop. The init statement should be a variable declaration with initialization or assignment.");
-        return null;
-        */
     }
 
     @Override
