@@ -123,4 +123,9 @@ public class CxxApiTest {
     public void testFileIterator() {
         newTester().test("FileIteratorTest.lara", "file_iterator_1.cpp", "file_iterator_2.cpp");
     }
+
+    @Test
+    public void testAddHeaderFile() {
+        newTester().test("AddHeaderFileTest.lara", "add_header_file.h");
+    }
 }
