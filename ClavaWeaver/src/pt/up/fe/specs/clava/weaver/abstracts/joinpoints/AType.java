@@ -146,6 +146,41 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Get value on attribute arrayDims
+     * @return the attribute's value
+     */
+    public abstract Integer[] getArrayDimsArrayImpl();
+
+    /**
+     * Get value on attribute arrayDims
+     * @return the attribute's value
+     */
+    public Object getArrayDimsImpl() {
+        Integer[] integerArrayImpl0 = getArrayDimsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(integerArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute arrayDims
+     * @return the attribute's value
+     */
+    public final Object getArrayDims() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "arrayDims", Optional.empty());
+        	}
+        	Object result = this.getArrayDimsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "arrayDims", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "arrayDims", e);
+        }
+    }
+
+    /**
      * Get value on attribute hasTemplateArgs
      * @return the attribute's value
      */
@@ -702,6 +737,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         attributes.add("isArray");
         attributes.add("isPointer");
         attributes.add("arraySize");
+        attributes.add("arrayDims");
         attributes.add("hasTemplateArgs");
         attributes.add("templateArgsStrings");
         attributes.add("templateArgsTypes");
@@ -755,6 +791,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         ISARRAY("isArray"),
         ISPOINTER("isPointer"),
         ARRAYSIZE("arraySize"),
+        ARRAYDIMS("arrayDims"),
         HASTEMPLATEARGS("hasTemplateArgs"),
         TEMPLATEARGSSTRINGS("templateArgsStrings"),
         TEMPLATEARGSTYPES("templateArgsTypes"),

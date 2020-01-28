@@ -832,6 +832,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "Integer[]",
+                              "name": "arrayDims"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Integer",
                               "name": "arraySize"
                            }]
@@ -2767,6 +2775,14 @@
                            {
                               "type": "type",
                               "name": "elementType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Integer[]",
+                              "name": "arrayDims"
                            }]
                },
                {
@@ -4790,6 +4806,14 @@
                            {
                               "type": "Boolean",
                               "name": "isUnsigned"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Integer[]",
+                              "name": "arrayDims"
                            }]
                },
                {
@@ -14664,6 +14688,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "Integer[]",
+                              "name": "arrayDims"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Integer",
                               "name": "arraySize"
                            }]
@@ -20741,6 +20773,14 @@
                            {
                               "type": "joinpoint",
                               "name": "returnType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Integer[]",
+                              "name": "arrayDims"
                            }]
                },
                {
@@ -33843,6 +33883,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "Integer[]",
+                              "name": "arrayDims"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Integer",
                               "name": "arraySize"
                            }]
@@ -34906,6 +34954,14 @@
                            {
                               "type": "Integer",
                               "name": "pointerLevels"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Integer[]",
+                              "name": "arrayDims"
                            }]
                },
                {
@@ -38012,6 +38068,14 @@
                            {
                               "type": "type",
                               "name": "unqualifiedType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Integer[]",
+                              "name": "arrayDims"
                            }]
                },
                {
@@ -43797,6 +43861,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "Integer[]",
+                              "name": "arrayDims"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Integer",
                               "name": "arraySize"
                            }]
@@ -44881,6 +44953,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "Integer[]",
+                              "name": "arrayDims"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Integer",
                               "name": "arraySize"
                            }]
@@ -45929,6 +46009,14 @@
          "name": "type",
          "extends": "joinpoint"      ,
          "children": [
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Integer[]",
+                              "name": "arrayDims"
+                           }]
+               },
                {
                   "type": "attribute",
                   "children": [
@@ -49663,6 +49751,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "Integer[]",
+                              "name": "arrayDims"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Integer",
                               "name": "arraySize"
                            }]
@@ -51695,6 +51791,14 @@
                            {
                               "type": "type",
                               "name": "elementType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Integer[]",
+                              "name": "arrayDims"
                            }]
                },
                {

@@ -70,6 +70,15 @@ public abstract class AUndefinedType extends AType {
     }
 
     /**
+     * Get value on attribute arrayDimsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public Integer[] getArrayDimsArrayImpl() {
+        return this.aType.getArrayDimsArrayImpl();
+    }
+
+    /**
      * Get value on attribute hasTemplateArgs
      * @return the attribute's value
      */
@@ -548,6 +557,7 @@ public abstract class AUndefinedType extends AType {
         ISARRAY("isArray"),
         ISPOINTER("isPointer"),
         ARRAYSIZE("arraySize"),
+        ARRAYDIMS("arrayDims"),
         HASTEMPLATEARGS("hasTemplateArgs"),
         TEMPLATEARGSSTRINGS("templateArgsStrings"),
         TEMPLATEARGSTYPES("templateArgsTypes"),

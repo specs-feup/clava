@@ -515,6 +515,7 @@
 		<attribute name="isArray" type="Boolean" />
 		<attribute name="isPointer" type="Boolean" />
 		<attribute name="arraySize" type="Integer" />
+		<attribute name="arrayDims" type="Integer[]" />		
 		<!-- <attribute name="elementType" type="joinpoint" />  -->
 		<attribute name="hasTemplateArgs" type="Boolean" />
 		<attribute name="templateArgsStrings" type="String[]" />

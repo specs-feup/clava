@@ -59,9 +59,17 @@ public class CxxType extends AType {
             return -1;
         }
 
-        return ((ConstantArrayType) type).getConstant();
+        return ((ConstantArrayType) type).getArraySize();
     }
 
+    @Override
+    public Integer[] getArrayDimsArrayImpl() {
+        if (!(type instanceof ConstantArrayType)) {
+            return new Integer[0];
+        }
+
+        return ((ConstantArrayType) type).getArrayDims().toArray(new Integer[0]);
+    }
     /*
     @Override
     public AJoinPoint getElementTypeImpl() {

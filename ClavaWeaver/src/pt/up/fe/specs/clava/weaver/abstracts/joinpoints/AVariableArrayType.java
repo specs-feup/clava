@@ -141,6 +141,15 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
+     * Get value on attribute arrayDimsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public Integer[] getArrayDimsArrayImpl() {
+        return this.aArrayType.getArrayDimsArrayImpl();
+    }
+
+    /**
      * Get value on attribute hasTemplateArgs
      * @return the attribute's value
      */
@@ -582,6 +591,7 @@ public abstract class AVariableArrayType extends AArrayType {
         ISARRAY("isArray"),
         ISPOINTER("isPointer"),
         ARRAYSIZE("arraySize"),
+        ARRAYDIMS("arrayDims"),
         HASTEMPLATEARGS("hasTemplateArgs"),
         TEMPLATEARGSSTRINGS("templateArgsStrings"),
         TEMPLATEARGSTYPES("templateArgsTypes"),
