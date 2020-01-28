@@ -156,6 +156,11 @@ public class CTest {
         newTester().test("Scope.lara", "scope.c");
     }
 
+    @Test
+    public void testArray() {
+        newTester().test("ArrayTest.lara", "array_test.c");
+    }
+
     // @Test
     public void testOpenCLType() {
         // TODO: Certain attributes are not supported yet (e.g., ReqdWorkGroupSizeAttr, WorkGroupSizeHintAttr,

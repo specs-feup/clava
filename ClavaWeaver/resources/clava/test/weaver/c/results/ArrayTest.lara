@@ -1,0 +1,6 @@
+oneDim dims: 10
+oneDimarray size: 10
+twoDims dims: 2,3
+twoDimsarray size: 6
+threeDims dims: 2,3,4
+threeDimsarray size: 24
