@@ -1396,6 +1396,9 @@ public class CxxWeaver extends ACxxWeaver {
         // Write current tree to a temporary folder
         File tempFolder = REBUILD_WEAVING_FOLDERS.get().next();
 
+        // Ensure folder is empty
+        SpecsIo.deleteFolderContents(tempFolder);
+
         List<File> writtenFiles = getApp().write(tempFolder);
         ClavaLog.debug(() -> "Files written during rebuild: " + writtenFiles);
 
