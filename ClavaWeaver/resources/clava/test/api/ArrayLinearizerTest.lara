@@ -1,5 +1,17 @@
+import weaver.Query;
+
 aspectdef ArrayLinearizerTest
 
+	var $arrayVardecls = getArrayVardecls(Query.root());
+	
+	for(var $arrayVardecl of $arrayVardecls) {
+		println("VARDECL: " + $arrayVardecl.code);	
+		println("TYPE: " + $arrayVardecl.type.joinPointType);		
+		println("Array size: " + $arrayVardecl.type.arraySize);
+	}
+
+
+/*
 	select param end
 	apply
 
@@ -10,7 +22,7 @@ aspectdef ArrayLinearizerTest
 		println("Param Type: " + $param.name + " is a " + $param.type.joinPointType + "  -> " + $param.type.code);
 		println("Desugared param Type: " + $param.name + " is a " + $param.type.desugarAll.joinPointType + "  -> " + $param.type.desugarAll.code);
 	end
-
+*/
 
 /*
 	select vardecl end
@@ -25,5 +37,26 @@ aspectdef ArrayLinearizerTest
 */
 end
 
+function getArrayVardecls($jp) {
+
+	var $arrayVardecls = [];
+
+	// Search for variable declarations
+	for(var $vardecl of Query.searchFrom($jp, 'vardecl')) {
+		
+		// Check array types
+		if(!$vardecl.type.isArray) {
+			continue;
+		}
+		
+		// Consider only constant array types for now
+	
+		$arrayVardecls.push($vardecl);
+		
+		
+	}
+
+	return $arrayVardecls;
+}
 
 //function getStaticArrays
