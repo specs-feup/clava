@@ -17,6 +17,7 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
@@ -153,5 +154,12 @@ public class CTest {
     @Test
     public void testScope() {
         newTester().test("Scope.lara", "scope.c");
+    }
+
+    // @Test
+    public void testOpenCLType() {
+        // TODO: Certain attributes are not supported yet (e.g., ReqdWorkGroupSizeAttr, WorkGroupSizeHintAttr,
+        // VecTypeHintAttr)
+        newTester().set(ClavaOptions.STANDARD, Standard.OPENCL20).test("OpenCLType.lara", "opencl_type.cl");
     }
 }
