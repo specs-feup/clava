@@ -461,8 +461,8 @@ public class CxxLoop extends ALoop {
     public String getInitValueImpl() {
 
         if (!(loop instanceof ForStmt)) {
-            ClavaLog.warning(
-                    "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
+            ClavaLog.info(
+                    "$loop.initValue: Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
             return null;
         }
 
@@ -471,8 +471,8 @@ public class CxxLoop extends ALoop {
                 .orElse(null);
 
         if (initValue == null) {
-            ClavaLog.warning(
-                    "Could not determine the initial value of the loop. The init statement should be a variable declaration with initialization or assignment.");
+            ClavaLog.info(
+                    "$loop.initValue: Could not determine the initial value of the loop. The init statement should be a variable declaration with initialization or assignment.");
         }
 
         return initValue;
