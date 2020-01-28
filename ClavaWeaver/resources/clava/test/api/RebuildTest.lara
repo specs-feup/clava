@@ -1,6 +1,16 @@
 import clava.Clava;
+import clava.ClavaJoinPoints;
+import lara.Io;
 
 aspectdef RebuildTest
+
+	// Manually add header file
+	var headerFile = Io.getPath("cxx_weaver_output/rebuild.h");
+	//println("header exists? " + Io.isFile(headerFile));
+	var $file = ClavaJoinPoints.file(headerFile);
+	Clava.addFile($file, "cxx_weaver_output");
+	
+	//println("Header code: " + $file.code);
 
 	//println("Pushing");
 	Clava.pushAst();
@@ -17,6 +27,7 @@ aspectdef RebuildTest
 	//println("Poping");
 	Clava.popAst();
 	//println("Rebuilding");
+	
 	
 	// Rebuild two times, to stress test rebuild
 	Clava.rebuild();
