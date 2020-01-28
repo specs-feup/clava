@@ -1,0 +1,10 @@
+import weaver.WeaverJps;
+
+aspectdef SelectorTest
+
+	for(var $chain of search("function", "loops").search("loop").children("scope").children("loop").chain()) {	
+		println("Loop:\n"+$chain["loop"].init.code);
+	}
+
+
+end

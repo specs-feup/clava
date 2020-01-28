@@ -86,4 +86,15 @@ public class CApiTest {
         // newTester().test("ArrayLinearizerTest.lara", "3d_array.c");
         newTester().test("ArrayLinearizerTest.lara", "qr.c");
     }
+
+    @Test
+    public void testSelector() {
+        newTester().test("SelectorTest.lara", "selector_test.c");
+    }
+
+    @Test
+    public void testAutoParInline() {
+        // TODO: No expected output, code has bugs to solve - does not take into account existing variable names
+        newTester().test("AutoParInlineTest.lara", "autopar_inline.c");
+    }
 }

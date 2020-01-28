@@ -1,0 +1,41 @@
+import clava.autopar.RunInlineFunctionCalls;
+import weaver.WeaverJps;
+import clava.Clava;
+
+aspectdef AutoParInlineTest
+
+	var $call = WeaverJps.search('call', {name: 'bar'}).first();
+	if($call === undefined) {
+		throw "Could not find call to 'bar'";
+	}
+	
+	var exprStmt = $call.astAncestor('ExprStmt');
+
+
+	var o = undefined;
+	call o : inlinePreparation("bar", $call, exprStmt);
+				
+
+	if(o.$newStmts.length > 0)
+	{
+		var replacedCallStr = '// ClavaInlineFunction : ' + exprStmt.code + '  countCallInlinedFunction : ' + countCallInlinedFunction;
+		//println("REPLACED CALL STR:\n" + replacedCallStr);
+		exprStmt.insert before replacedCallStr;
+
+		//var insertedCode = "";
+		for(var $newStmt of o.$newStmts)
+		{
+			//insertedCode += $newStmt.code + "\n";
+			exprStmt.insertBefore($newStmt);	
+		}
+		//println("INSERTED CODE:\n" + insertedCode);
+
+		exprStmt.detach();
+		
+	}
+	
+	println("Code:\n" + Clava.getProgram().code);
+	
+	Clava.rebuild();
+
+end
