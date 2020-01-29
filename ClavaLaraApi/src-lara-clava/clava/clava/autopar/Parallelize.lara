@@ -226,7 +226,7 @@ Parallelize.getForLoopsPragmas = function($loops, insertPragma) {
 	//end
 	}
 
-	Clava.rebuild();
+	//Clava.rebuild();
 	/*
 	select program end
 	apply
