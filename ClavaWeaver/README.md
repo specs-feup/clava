@@ -20,6 +20,10 @@ There is a demo online version of Clava available [here](http://specs.fe.up.pt/t
 
 ## Troubleshooting
 
+### Error 'Invalid or corrupt jarfile'
+
+Check if you have at least Java 11 installed, this is the minimum version.
+
 ### Error 'missing libtinfo.so.5'
 
 On Fedora >28 systems this can be solved by installing the package `ncurses-compat-libs`
