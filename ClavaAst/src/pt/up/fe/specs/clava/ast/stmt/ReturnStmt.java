@@ -20,6 +20,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 /**
  * Represents a return statement.
@@ -51,6 +52,21 @@ public class ReturnStmt extends Stmt {
         }
 
         return Optional.of(getChild(Expr.class, 0));
+    }
+
+    public void setRetValue(Expr expression) {
+        if (expression == null) {
+            if (hasChildren()) {
+                removeChild(0);
+            }
+
+            return;
+        }
+
+        // Replace return value if present, of add child if not
+        getRetValue().ifPresentOrElse(retValue -> NodeInsertUtils.replace(retValue, expression),
+                () -> addChild(expression));
+
     }
 
 }
