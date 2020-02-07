@@ -425,6 +425,12 @@
 		<attribute name="content" type="String"/>
 	</artifact>
 
+	<artifact class="returnStmt">
+		<attribute name="returnExpr" type="expression">
+<!-- 			<def/>  -->
+		</attribute>
+	</artifact>
+
 
 	<!-- MARKER -->
 	<artifact class="marker" default="id">

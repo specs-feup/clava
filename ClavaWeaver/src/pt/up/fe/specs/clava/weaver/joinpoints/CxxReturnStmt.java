@@ -15,6 +15,8 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
+import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AReturnStmt;
 
 public class CxxReturnStmt extends AReturnStmt {
@@ -31,4 +33,22 @@ public class CxxReturnStmt extends AReturnStmt {
         return returnStmt;
     }
 
+    @Override
+    public AExpression getReturnExprImpl() {
+        return returnStmt.getRetValue().map(retValue -> CxxJoinpoints.create(retValue, AExpression.class)).orElse(null);
+    }
+
+    /*
+    @Override
+    public void defReturnExprImpl(AExpression value) {
+    
+        // TODO Auto-generated method stub
+        super.defReturnExprImpl(value);
+    }
+    
+    @Override
+    public void setReturnExprImpl(AExpression returnExpr) {
+        defReturnExprImpl(returnExpr);
+    }
+    */
 }

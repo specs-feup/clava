@@ -40041,6 +40041,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "expression",
+                              "name": "returnExpr"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "Boolean",
                               "name": "isFirst"
                            }]
@@ -40594,6 +40602,11 @@
                               "type": "String",
                               "name": "fieldName"
                            }]
+               },
+               {
+                  "type": "select",
+                  "clazz": "expression",
+                  "alias": "returnExpr"
                },
                {
                   "type": "select",

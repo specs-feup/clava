@@ -329,6 +329,13 @@
 	</action>
 	
 
+	<!-- RETURN STMT -->
+	<!-- 
+	<action name="setReturnExpr" class="returnStmt" tooltip="Sets the expression of the return">
+		<parameter name="returnExpr" type="expression" />
+	</action>
+	 -->
+
 
 	<!-- LOOP -->
 	<action name="changeKind" class="loop" tooltip="DEPRECATED: use 'setKind' instead">

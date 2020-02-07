@@ -1,9 +1,12 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
+import org.lara.interpreter.weaver.interf.events.Stage;
+import java.util.Optional;
+import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
+import org.lara.interpreter.weaver.interf.SelectOp;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -24,6 +27,39 @@ public abstract class AReturnStmt extends AStatement {
     public AReturnStmt(AStatement aStatement){
         this.aStatement = aStatement;
     }
+    /**
+     * Get value on attribute returnExpr
+     * @return the attribute's value
+     */
+    public abstract AExpression getReturnExprImpl();
+
+    /**
+     * Get value on attribute returnExpr
+     * @return the attribute's value
+     */
+    public final Object getReturnExpr() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "returnExpr", Optional.empty());
+        	}
+        	AExpression result = this.getReturnExprImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "returnExpr", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "returnExpr", e);
+        }
+    }
+
+    /**
+     * Default implementation of the method used by the lara interpreter to select returnExprs
+     * @return 
+     */
+    public List<? extends AExpression> selectReturnExpr() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
+    }
+
     /**
      * Get value on attribute isFirst
      * @return the attribute's value
@@ -362,6 +398,9 @@ public abstract class AReturnStmt extends AStatement {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
+        	case "returnExpr": 
+        		joinPointList = selectReturnExpr();
+        		break;
         	case "expr": 
         		joinPointList = selectExpr();
         		break;
@@ -448,6 +487,7 @@ public abstract class AReturnStmt extends AStatement {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
+        attributes.add("returnExpr");
     }
 
     /**
@@ -456,6 +496,7 @@ public abstract class AReturnStmt extends AStatement {
     @Override
     protected final void fillWithSelects(List<String> selects) {
         this.aStatement.fillWithSelects(selects);
+        selects.add("returnExpr");
     }
 
     /**
@@ -491,6 +532,7 @@ public abstract class AReturnStmt extends AStatement {
      * 
      */
     protected enum ReturnStmtAttributes {
+        RETURNEXPR("returnExpr"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),
