@@ -297,6 +297,14 @@ public abstract class AScope extends AStatement {
     }
 
     /**
+     * Default implementation of the method used by the lara interpreter to select returnStmts
+     * @return 
+     */
+    public List<? extends AReturnStmt> selectReturnStmt() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AReturnStmt.class, SelectOp.DESCENDANTS);
+    }
+
+    /**
      * 
      * @param node 
      */
@@ -882,6 +890,9 @@ public abstract class AScope extends AStatement {
         	case "comment": 
         		joinPointList = selectComment();
         		break;
+        	case "returnStmt": 
+        		joinPointList = selectReturnStmt();
+        		break;
         	case "expr": 
         		joinPointList = selectExpr();
         		break;
@@ -1000,6 +1011,7 @@ public abstract class AScope extends AStatement {
         selects.add("tag");
         selects.add("omp");
         selects.add("comment");
+        selects.add("returnStmt");
     }
 
     /**

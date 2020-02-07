@@ -41589,6 +41589,11 @@
                },
                {
                   "type": "select",
+                  "clazz": "returnStmt",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
                   "clazz": "scope",
                   "alias": ""
                },

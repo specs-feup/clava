@@ -29,6 +29,7 @@ import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
+import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -44,6 +45,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMarker;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AOmp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AReturnStmt;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATag;
@@ -378,6 +380,11 @@ public class CxxScope extends AScope {
     public AJoinPoint getOwnerImpl() {
         // TODO: This should generically work, but corner cases have not been checked
         return getAstParentImpl();
+    }
+
+    @Override
+    public List<? extends AReturnStmt> selectReturnStmt() {
+        return CxxSelects.select(AReturnStmt.class, getStatements(), true, ReturnStmt.class);
     }
 
 }

@@ -149,6 +149,7 @@
 		<select							class="tag"/>	
 		<select							class="omp"/>	
 		<select 						class="comment"/>
+		<select 						class="returnStmt"/>		
 	</joinpoint>
 	
 	<!-- BODY -->
