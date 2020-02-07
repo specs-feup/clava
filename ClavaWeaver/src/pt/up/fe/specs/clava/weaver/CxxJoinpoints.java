@@ -54,6 +54,7 @@ import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
+import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
@@ -100,6 +101,7 @@ import pt.up.fe.specs.clava.weaver.joinpoints.CxxParam;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxPragma;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxRecord;
+import pt.up.fe.specs.clava.weaver.joinpoints.CxxReturnStmt;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxScope;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxStatement;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxStruct;
@@ -150,6 +152,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(IfStmt.class, CxxIf::new);
         JOINPOINT_FACTORY.put(LoopStmt.class, CxxLoop::new);
         JOINPOINT_FACTORY.put(CompoundStmt.class, CxxScope::new);
+        JOINPOINT_FACTORY.put(ReturnStmt.class, CxxReturnStmt::new);
         JOINPOINT_FACTORY.put(Stmt.class, CxxStatement::new);
         JOINPOINT_FACTORY.put(CXXMethodDecl.class, CxxMethod::new);
         JOINPOINT_FACTORY.put(FunctionDecl.class, CxxFunction::new);
@@ -207,22 +210,22 @@ public class CxxJoinpoints {
     private static void setWeaverEngine(ACxxWeaverJoinPoint newJoinPoint) {
         ACxxWeaverJoinPoint currentJoinpoint = newJoinPoint;
         CxxWeaver weaver = getWeaver();
-
+    
         while (currentJoinpoint != null) {
-
+    
             // Set engine
             currentJoinpoint.setWeaverEngine(weaver);
             currentJoinpoint = currentJoinpoint.getSuper()
                     .map(ACxxWeaverJoinPoint.class::cast)
                     .orElse(null);
-
+    
         }
     }
     */
 
     /*
     private final CxxWeaver weaverEngine;
-
+    
     public CxxJoinpoints(CxxWeaver weaverEngine) {
         this.weaverEngine = weaverEngine;
     }

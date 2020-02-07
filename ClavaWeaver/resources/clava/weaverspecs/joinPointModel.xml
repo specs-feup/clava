@@ -199,6 +199,9 @@
 	<joinpoint class="wrapperStmt" extends="statement">
 	</joinpoint>
 
+	<!-- RETURN STMT -->
+	<joinpoint class="returnStmt" extends="statement">
+	</joinpoint>
 
 
 	<!-- CALL -->	
