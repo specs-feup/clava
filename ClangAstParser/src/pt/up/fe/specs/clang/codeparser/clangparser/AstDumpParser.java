@@ -23,7 +23,9 @@ import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
+import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangAstParser;
+import pt.up.fe.specs.clang.cilk.CilkParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
@@ -150,6 +152,29 @@ public class AstDumpParser implements ClangParser {
 
     @Override
     public ClangParserData parse(File sourceFile, String id, Standard standard, DataStore config) {
+        // Pre-processing before the parsing
+        if (config.get(ClangAstKeys.USES_CILK)) {
+            // Prepare source file
+            sourceFile = new CilkParser().prepareCilkFile(sourceFile);
+        }
+
+        return parsePrivate(sourceFile, id, standard, config);
+
+        // try {
+        // return parsePrivate(sourceFile, id, standard, config);
+        // } catch (Exception e) {
+        // throw e;
+        // } finally {
+        // if (config.get(ClangAstKeys.USES_CILK)) {
+        // // Restore source file
+        // new CilkParser(sourceFile).restoreCilkFile();
+        // }
+        //
+        // }
+    }
+
+    private ClangParserData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
+
         // Create instance of ClangAstParser
         // ClangAstParser clangAstParser = new ClangAstParser(dumpStdOut, useCustomResources);
 

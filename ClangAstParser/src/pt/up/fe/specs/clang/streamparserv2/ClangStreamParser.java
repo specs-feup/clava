@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clang.cilk.CilkAstAdapter;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.textparser.SnippetParser;
@@ -81,6 +82,7 @@ public class ClangStreamParser {
             new MoveImplicitCasts(),
             // new RemovePoison(),
             new FlattenSubStmtNodes()
+    // new CilkAstAdapter()
 
     // new AdaptBoolTypes(),
     // new AdaptBoolCasts(),
@@ -92,7 +94,8 @@ public class ClangStreamParser {
     );
 
     private final static Collection<ClavaRule> TEXT_PARSING_RULES = Arrays.asList(
-            new RemovePoison());
+            new RemovePoison(),
+            new CilkAstAdapter());
 
     private final ClangParserData data;
 

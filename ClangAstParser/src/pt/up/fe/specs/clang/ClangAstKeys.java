@@ -35,6 +35,8 @@ public interface ClangAstKeys {
             // .setLabel("Uses the platform system includes headers (if available)");
             .setLabel("Disable built-in lib C/C++ includes");
 
+    DataKey<Boolean> USES_CILK = KeyFactory.bool("usesCilk");
+
     /**
      * Transform flags to the ClangAstDumper into a DataStore.
      * 
@@ -45,6 +47,7 @@ public interface ClangAstKeys {
         DataStore config = DataStore.newInstance(ClavaOptions.STORE_DEFINITION, false);
         final String stdPrefix = "-std=";
         final String clangAstDumperPrefix = "-clang-dumper=";
+        final String cilkFlag = "-fcilkplus";
 
         // Search options
         List<String> parsedFlags = new ArrayList<>();
@@ -70,6 +73,12 @@ public interface ClangAstKeys {
             if (flag.startsWith(clangAstDumperPrefix)) {
                 String version = flag.substring(clangAstDumperPrefix.length());
                 config.set(ClangAstKeys.CLANGAST_VERSION, version);
+                continue;
+            }
+
+            // If Cilk flag, add option
+            if (flag.equals(cilkFlag)) {
+                config.set(ClangAstKeys.USES_CILK);
                 continue;
             }
 
