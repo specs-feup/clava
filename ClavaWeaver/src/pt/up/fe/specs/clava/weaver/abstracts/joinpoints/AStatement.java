@@ -182,6 +182,14 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Default implementation of the method used by the lara interpreter to select cilkSpawns
+     * @return 
+     */
+    public List<? extends ACilkSpawn> selectCilkSpawn() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACilkSpawn.class, SelectOp.DESCENDANTS);
+    }
+
+    /**
      * 
      */
     @Override
@@ -229,6 +237,9 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
         		break;
         	case "deleteExpr": 
         		joinPointList = selectDeleteExpr();
+        		break;
+        	case "cilkSpawn": 
+        		joinPointList = selectCilkSpawn();
         		break;
         	default:
         		joinPointList = super.select(selectName);
@@ -298,6 +309,7 @@ public abstract class AStatement extends ACxxWeaverJoinPoint {
         selects.add("unaryOp");
         selects.add("newExpr");
         selects.add("deleteExpr");
+        selects.add("cilkSpawn");
     }
 
     /**

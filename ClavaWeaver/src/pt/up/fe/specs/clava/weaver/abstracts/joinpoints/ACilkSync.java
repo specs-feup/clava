@@ -1,172 +1,29 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
-import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point AIf
+ * Auto-Generated class for join point ACilkSync
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class AIf extends AStatement {
+public abstract class ACilkSync extends AStatement {
 
     protected AStatement aStatement;
 
     /**
      * 
      */
-    public AIf(AStatement aStatement){
+    public ACilkSync(AStatement aStatement){
         this.aStatement = aStatement;
     }
-    /**
-     * Get value on attribute cond
-     * @return the attribute's value
-     */
-    public abstract AJoinPoint getCondImpl();
-
-    /**
-     * Get value on attribute cond
-     * @return the attribute's value
-     */
-    public final Object getCond() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "cond", Optional.empty());
-        	}
-        	AJoinPoint result = this.getCondImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "cond", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "cond", e);
-        }
-    }
-
-    /**
-     * Get value on attribute condDecl
-     * @return the attribute's value
-     */
-    public abstract AJoinPoint getCondDeclImpl();
-
-    /**
-     * Get value on attribute condDecl
-     * @return the attribute's value
-     */
-    public final Object getCondDecl() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "condDecl", Optional.empty());
-        	}
-        	AJoinPoint result = this.getCondDeclImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "condDecl", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "condDecl", e);
-        }
-    }
-
-    /**
-     * Get value on attribute then
-     * @return the attribute's value
-     */
-    public abstract AJoinPoint getThenImpl();
-
-    /**
-     * Get value on attribute then
-     * @return the attribute's value
-     */
-    public final Object getThen() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "then", Optional.empty());
-        	}
-        	AJoinPoint result = this.getThenImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "then", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "then", e);
-        }
-    }
-
-    /**
-     * Get value on attribute _else
-     * @return the attribute's value
-     */
-    public abstract AJoinPoint getElseImpl();
-
-    /**
-     * Get value on attribute _else
-     * @return the attribute's value
-     */
-    public final Object getElse() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "else", Optional.empty());
-        	}
-        	AJoinPoint result = this.getElseImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "else", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "else", e);
-        }
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select conds
-     * @return 
-     */
-    public List<? extends AExpression> selectCond() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select condDecls
-     * @return 
-     */
-    public List<? extends AVardecl> selectCondDecl() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select thens
-     * @return 
-     */
-    public List<? extends AScope> selectThen() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select elses
-     * @return 
-     */
-    public List<? extends AScope> selectElse() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select bodys
-     * @return 
-     */
-    public List<? extends AScope> selectBody() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
-    }
-
     /**
      * Get value on attribute isFirst
      * @return the attribute's value
@@ -514,21 +371,6 @@ public abstract class AIf extends AStatement {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
-        	case "cond": 
-        		joinPointList = selectCond();
-        		break;
-        	case "condDecl": 
-        		joinPointList = selectCondDecl();
-        		break;
-        	case "then": 
-        		joinPointList = selectThen();
-        		break;
-        	case "else": 
-        		joinPointList = selectElse();
-        		break;
-        	case "body": 
-        		joinPointList = selectBody();
-        		break;
         	case "expr": 
         		joinPointList = selectExpr();
         		break;
@@ -618,10 +460,6 @@ public abstract class AIf extends AStatement {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
-        attributes.add("cond");
-        attributes.add("condDecl");
-        attributes.add("then");
-        attributes.add("else");
     }
 
     /**
@@ -630,11 +468,6 @@ public abstract class AIf extends AStatement {
     @Override
     protected final void fillWithSelects(List<String> selects) {
         this.aStatement.fillWithSelects(selects);
-        selects.add("cond");
-        selects.add("condDecl");
-        selects.add("then");
-        selects.add("else");
-        selects.add("body");
     }
 
     /**
@@ -651,7 +484,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public final String get_class() {
-        return "if";
+        return "cilkSync";
     }
 
     /**
@@ -669,11 +502,7 @@ public abstract class AIf extends AStatement {
     /**
      * 
      */
-    protected enum IfAttributes {
-        COND("cond"),
-        CONDDECL("condDecl"),
-        THEN("then"),
-        ELSE("else"),
+    protected enum CilkSyncAttributes {
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),
@@ -733,13 +562,13 @@ public abstract class AIf extends AStatement {
         /**
          * 
          */
-        private IfAttributes(String name){
+        private CilkSyncAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<IfAttributes> fromString(String name) {
+        public static Optional<CilkSyncAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -747,7 +576,7 @@ public abstract class AIf extends AStatement {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(IfAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(CilkSyncAttributes::name).collect(Collectors.toList());
         }
 
         /**

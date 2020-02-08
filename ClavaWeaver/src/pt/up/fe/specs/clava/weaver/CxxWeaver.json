@@ -7896,6 +7896,3300 @@
       },
       {
          "type": "joinpoint",
+         "name": "cilkFor",
+         "extends": "loop"      ,
+         "children": [
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "scope",
+                              "name": "body"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Relation",
+                              "name": "condRelation"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "controlVar"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The expression of the last value of the control variable (e.g. 'length' in 'i < length;')",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "endValue"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "True if the condition of the loop in the canonical format, and is one of: <, <=, >, >=",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "hasCondRelation"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Uniquely identifies the loop inside the program",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "id"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The statement of the loop initialization",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "init"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "initValue"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInnermost"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Tests whether the loops are interchangeable. This is a conservative test.",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInterchangeable"
+                           },
+                           {
+                              "type": "loop",
+                              "name": "otherLoop"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isOutermost"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isParallel"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "iterations"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "expression",
+                              "name": "iterationsExpr"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "[for| while| dowhile| foreach]",
+                              "name": "kind"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "nestedLevel"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Integer[]",
+                              "name": "rank"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The expression of the iteration step",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "stepValue"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isFirst"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isLast"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "attributes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "selects"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "actions"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "ancestor"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "ast"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks for an ancestor AST name, walking back on the AST",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "astAncestor"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "astChild"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "astName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "astNumChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "chain"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks for an ancestor joinpoint name, walking back on the joinpoint chain",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "chainAncestor"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "code"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "contains"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "jp"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the first child of this node, or undefined if it has no child",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstChild"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Deprecated version of 'userField'",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "getUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The value associated with the given property key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "getValue"
+                           },
+                           {
+                              "type": "String",
+                              "name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if the node has children, false otherwise",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "hasChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "hasNode"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "nodeOrJp"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "javaFieldType"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "javaFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "javaValue"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              "name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "A list of the properties currently supported by this node",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "keys"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the last child of this node, or undefined if it has no child",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "lastChild"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "line"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "parent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              "name": "pragmas"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the 'program' joinpoint",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "userField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "select",
+                  "clazz": "scope",
+                  "alias": "body"
+               },
+               {
+                  "type": "select",
+                  "clazz": "statement",
+                  "alias": "init"
+               },
+               {
+                  "type": "select",
+                  "clazz": "statement",
+                  "alias": "cond"
+               },
+               {
+                  "type": "select",
+                  "clazz": "statement",
+                  "alias": "step"
+               },
+               {
+                  "type": "select",
+                  "clazz": "arrayAccess",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "binaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "call",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "call",
+                  "alias": "stmtCall"
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSpawn",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "deleteExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "expression",
+                  "alias": "expr"
+               },
+               {
+                  "type": "select",
+                  "clazz": "expression",
+                  "alias": "childExpr"
+               },
+               {
+                  "type": "select",
+                  "clazz": "memberAccess",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "memberCall",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "newExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "op",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "unaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "vardecl",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "varref",
+                  "alias": ""
+               },
+               {
+                  "type": "action",
+                  "tooltip": "DEPRECATED: use 'setKind' instead",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "changeKind"
+                           },
+                           {
+                              "type": "String",
+                              "name": "kind",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Interchanges two for loops, if possible",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "interchange"
+                           },
+                           {
+                              "type": "loop",
+                              "name": "otherLoop",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the body of the loop",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setBody"
+                           },
+                           {
+                              "type": "scope",
+                              "name": "body",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the conditional statement of the loop. Works with loops of kind 'for'",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setCond"
+                           },
+                           {
+                              "type": "String",
+                              "name": "condCode",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setCondRelation"
+                           },
+                           {
+                              "type": "Relation",
+                              "name": "operator",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes the operator of a canonical condition, if possible. Supported operators: <, <=, >, >=",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setCondRelation"
+                           },
+                           {
+                              "type": "String",
+                              "name": "operator",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the end value of the loop. Works with loops of kind 'for'",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setEndValue"
+                           },
+                           {
+                              "type": "String",
+                              "name": "initCode",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the init statement of the loop",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInit"
+                           },
+                           {
+                              "type": "String",
+                              "name": "initCode",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the init value of the loop. Works with loops of kind 'for'",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInitValue"
+                           },
+                           {
+                              "type": "String",
+                              "name": "initCode",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the attribute 'isParallel' of the loop",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setIsParallel"
+                           },
+                           {
+                              "type": "Boolean",
+                              "name": "isParallel",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the kind of the loop",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setKind"
+                           },
+                           {
+                              "type": "String",
+                              "name": "kind",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the step statement of the loop. Works with loops of kind 'for'",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setStep"
+                           },
+                           {
+                              "type": "String",
+                              "name": "stepCode",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Applies loop tiling to this loop",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "tile"
+                           },
+                           {
+                              "type": "String",
+                              "name": "blockSize",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "statement",
+                              "name": "reference",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Applies loop tiling to this loop.",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "tile"
+                           },
+                           {
+                              "type": "String",
+                              "name": "blockSize",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "statement",
+                              "name": "reference",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Boolean",
+                              "name": "useTernary",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "insert"
+                           },
+                           {
+                              "type": "[before| after| replace]",
+                              "name": "position",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "code",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "def"
+                           },
+                           {
+                              "type": "String",
+                              "name": "attribute",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "deepCopy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the node associated to this joinpoint from the AST",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "detach"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Inserts the given join point after this join point",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertAfter"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which accepts a string",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertAfter"
+                           },
+                           {
+                              "type": "String",
+                              "name": "code",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Inserts the given join point before this join point",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertBefore"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which accepts a string",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertBefore"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds a message that will be printed to the user after weaving finishes. Identical messages are removed",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "messageToUser"
+                           },
+                           {
+                              "type": "String",
+                              "name": "message",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with the given join",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "replaceWith"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which accepts a string",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces the first child, or inserts the join point if no child is present",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setFirstChild"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces the last child, or inserts the join point if no child is present",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setLastChild"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the type of a node, if it has a type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setType"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Associates arbitrary values to nodes of the AST",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which accepts a map",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the value associated with the given property key",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "setValue"
+                           },
+                           {
+                              "type": "String",
+                              "name": "key",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               }]
+      },
+      {
+         "type": "joinpoint",
+         "name": "cilkSpawn",
+         "extends": "call"      ,
+         "children": [
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "expression",
+                              "name": "arg"
+                           },
+                           {
+                              "type": "int",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "an alias for 'args'",
+                  "children": [
+                           {
+                              "type": "expression[]",
+                              "name": "argList"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "an array with the arguments of the call",
+                  "children": [
+                           {
+                              "type": "expression[]",
+                              "name": "args"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "a 'function' join point that represents the function declaration or definition of the call, whatever appears first; 'undefined' if nothing was found",
+                  "children": [
+                           {
+                              "type": "function",
+                              "name": "decl"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "declaration"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "definition"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "a function join point associated with this call. No guarantees are made regarding if it is the declaration or definition of the function.",
+                  "children": [
+                           {
+                              "type": "function",
+                              "name": "function"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the function type of the call, which includes the return type and the types of the parameters",
+                  "children": [
+                           {
+                              "type": "functionType",
+                              "name": "functionType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "isMemberAccess"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "isStmtCall"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "memberAccess",
+                              "name": "memberAccess"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "memberNames"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "name"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numArgs"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the return type of the call",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "returnType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "similar to $function.signature, but if no function decl could be found (e.g., function from system include), returns a signature based on just the name of the function",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "signature"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise",
+                  "children": [
+                           {
+                              "type": "cast",
+                              "name": "implicitCast"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if the expression is part of an argument of a function call",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isFunctionArgument"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "[read| write| readwrite]",
+                              "name": "use"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "vardecl",
+                              "name": "vardecl"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "attributes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "selects"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "actions"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "ancestor"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "ast"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks for an ancestor AST name, walking back on the AST",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "astAncestor"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "astChild"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "astName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "astNumChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "chain"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks for an ancestor joinpoint name, walking back on the joinpoint chain",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "chainAncestor"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "code"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "contains"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "jp"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the first child of this node, or undefined if it has no child",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstChild"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Deprecated version of 'userField'",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "getUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The value associated with the given property key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "getValue"
+                           },
+                           {
+                              "type": "String",
+                              "name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if the node has children, false otherwise",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "hasChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "hasNode"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "nodeOrJp"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "javaFieldType"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "javaFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "javaValue"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              "name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "A list of the properties currently supported by this node",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "keys"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the last child of this node, or undefined if it has no child",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "lastChild"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "line"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "parent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              "name": "pragmas"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the 'program' joinpoint",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "userField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "select",
+                  "clazz": "expression",
+                  "alias": "callee"
+               },
+               {
+                  "type": "select",
+                  "clazz": "expression",
+                  "alias": "arg"
+               },
+               {
+                  "type": "select",
+                  "clazz": "vardecl",
+                  "alias": ""
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Tries to inline this call",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "inline"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setArg"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "expression",
+                              "name": "expr",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setArgFromString"
+                           },
+                           {
+                              "type": "int",
+                              "name": "index",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "expr",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Changes the name of the call",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setName"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Wraps this call with a possibly new wrapping function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "wrap"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "insert"
+                           },
+                           {
+                              "type": "[before| after| replace]",
+                              "name": "position",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "code",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "def"
+                           },
+                           {
+                              "type": "String",
+                              "name": "attribute",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "deepCopy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the node associated to this joinpoint from the AST",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "detach"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Inserts the given join point after this join point",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertAfter"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which accepts a string",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertAfter"
+                           },
+                           {
+                              "type": "String",
+                              "name": "code",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Inserts the given join point before this join point",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertBefore"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which accepts a string",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertBefore"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds a message that will be printed to the user after weaving finishes. Identical messages are removed",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "messageToUser"
+                           },
+                           {
+                              "type": "String",
+                              "name": "message",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with the given join",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "replaceWith"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which accepts a string",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces the first child, or inserts the join point if no child is present",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setFirstChild"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces the last child, or inserts the join point if no child is present",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setLastChild"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the type of a node, if it has a type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setType"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Associates arbitrary values to nodes of the AST",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which accepts a map",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the value associated with the given property key",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "setValue"
+                           },
+                           {
+                              "type": "String",
+                              "name": "key",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               }]
+      },
+      {
+         "type": "joinpoint",
+         "name": "cilkSync",
+         "extends": "statement"      ,
+         "children": [
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isFirst"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isLast"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "attributes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "selects"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "actions"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "ancestor"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "ast"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks for an ancestor AST name, walking back on the AST",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "astAncestor"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, considering null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "astChild"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, considering null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "astChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "astId"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "astIsInstance"
+                           },
+                           {
+                              "type": "String",
+                              "name": "className"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "astName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, considering null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "astNumChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "chain"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks for an ancestor joinpoint name, walking back on the joinpoint chain",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "chainAncestor"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the child of the node at the given index, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "child"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "children"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "code"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The starting column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "column"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "contains"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "jp"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "currentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "data"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves all descendants of the join point",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendants"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrieves the descendants of the given type, including the node itself",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "descendantsAndSelf"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending column of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endColumn"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The ending line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "endLine"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the first child of this node, or undefined if it has no child",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstChild"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Looks in the descendants for the first node of the given type",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "firstJp"
+                           },
+                           {
+                              "type": "String",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Deprecated version of 'userField'",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "getUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The value associated with the given property key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "getValue"
+                           },
+                           {
+                              "type": "String",
+                              "name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasAstParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if the node has children, false otherwise",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "hasChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "hasNode"
+                           },
+                           {
+                              "type": "Object",
+                              "name": "nodeOrJp"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "boolean",
+                              "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true, if the join point is inside a loop header (e.g., for, while)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isInsideLoopHeader"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if any descendant or the node itself was defined as a macro",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isMacro"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "javaFieldType"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "javaFields"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "javaValue"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "joinpointType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Java Class instance with the type of the given key",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "keyType"
+                           },
+                           {
+                              "type": "String",
+                              "name": "key"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "A list of the properties currently supported by this node",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "keys"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the last child of this node, or undefined if it has no child",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "lastChild"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The starting line of the current node in the original code",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "line"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "location"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the number of children of the node, ignoring null nodes",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "numChildren"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "parent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "parentRegion"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The pragmas associated with this node",
+                  "children": [
+                           {
+                              "type": "pragma[]",
+                              "name": "pragmas"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the 'program' joinpoint",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "type"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "userField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName"
+                           }]
+               },
+               {
+                  "type": "select",
+                  "clazz": "arrayAccess",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "binaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "call",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "call",
+                  "alias": "stmtCall"
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSpawn",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "deleteExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "expression",
+                  "alias": "expr"
+               },
+               {
+                  "type": "select",
+                  "clazz": "expression",
+                  "alias": "childExpr"
+               },
+               {
+                  "type": "select",
+                  "clazz": "memberAccess",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "memberCall",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "newExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "op",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "unaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "vardecl",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "varref",
+                  "alias": ""
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "insert"
+                           },
+                           {
+                              "type": "[before| after| replace]",
+                              "name": "position",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "code",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "def"
+                           },
+                           {
+                              "type": "String",
+                              "name": "attribute",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, but not of the nodes in its fields",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "copy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "deepCopy"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the node associated to this joinpoint from the AST",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "detach"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Inserts the given join point after this join point",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertAfter"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which accepts a string",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertAfter"
+                           },
+                           {
+                              "type": "String",
+                              "name": "code",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Inserts the given join point before this join point",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertBefore"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which accepts a string",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "insertBefore"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds a message that will be printed to the user after weaving finishes. Identical messages are removed",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "messageToUser"
+                           },
+                           {
+                              "type": "String",
+                              "name": "message",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Removes the children of this node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeChildren"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with the given join",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "replaceWith"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which accepts a string",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "replaceWith"
+                           },
+                           {
+                              "type": "String",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces the first child, or inserts the join point if no child is present",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setFirstChild"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces the last child, or inserts the join point if no child is present",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setLastChild"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the type of a node, if it has a type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setType"
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Associates arbitrary values to nodes of the AST",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "String",
+                              "name": "fieldName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which accepts a map",
+                  "children": [
+                           {
+                              "type": "Object",
+                              "name": "setUserField"
+                           },
+                           {
+                              "type": "Map",
+                              "name": "fieldNameAndValue",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the value associated with the given property key",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "setValue"
+                           },
+                           {
+                              "type": "String",
+                              "name": "key",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Object",
+                              "name": "value",
+                              "defaultValue": ""
+                           }]
+               }]
+      },
+      {
+         "type": "joinpoint",
          "name": "class",
          "extends": "record"      ,
          "children": [
@@ -22702,6 +25996,11 @@
                },
                {
                   "type": "select",
+                  "clazz": "cilkSpawn",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
                   "clazz": "deleteExpr",
                   "alias": ""
                },
@@ -24638,6 +27937,11 @@
                   "type": "select",
                   "clazz": "call",
                   "alias": "stmtCall"
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSpawn",
+                  "alias": ""
                },
                {
                   "type": "select",
@@ -41008,6 +44312,11 @@
                },
                {
                   "type": "select",
+                  "clazz": "cilkSpawn",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
                   "clazz": "deleteExpr",
                   "alias": ""
                },
@@ -41959,6 +45268,16 @@
                },
                {
                   "type": "select",
+                  "clazz": "cilkFor",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSync",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
                   "clazz": "comment",
                   "alias": ""
                },
@@ -42031,6 +45350,11 @@
                   "type": "select",
                   "clazz": "call",
                   "alias": "stmtCall"
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSpawn",
+                  "alias": ""
                },
                {
                   "type": "select",
@@ -43056,6 +46380,11 @@
                   "type": "select",
                   "clazz": "call",
                   "alias": "stmtCall"
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSpawn",
+                  "alias": ""
                },
                {
                   "type": "select",
@@ -55796,6 +59125,11 @@
                   "type": "select",
                   "clazz": "call",
                   "alias": "stmtCall"
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSpawn",
+                  "alias": ""
                },
                {
                   "type": "select",

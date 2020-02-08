@@ -1077,6 +1077,15 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * Method used by the lara interpreter to select cilkSpawns
+     * @return 
+     */
+    @Override
+    public List<? extends ACilkSpawn> selectCilkSpawn() {
+        return this.aStatement.selectCilkSpawn();
+    }
+
+    /**
      * Replaces this join point with the given join
      * @param node 
      */
@@ -1267,7 +1276,7 @@ public abstract class ALoop extends AStatement {
      * 
      */
     @Override
-    public final List<? extends JoinPoint> select(String selectName) {
+    public List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	case "init": 
@@ -1324,6 +1333,9 @@ public abstract class ALoop extends AStatement {
         	case "deleteExpr": 
         		joinPointList = selectDeleteExpr();
         		break;
+        	case "cilkSpawn": 
+        		joinPointList = selectCilkSpawn();
+        		break;
         	default:
         		joinPointList = this.aStatement.select(selectName);
         		break;
@@ -1335,7 +1347,7 @@ public abstract class ALoop extends AStatement {
      * 
      */
     @Override
-    public final void defImpl(String attribute, Object value) {
+    public void defImpl(String attribute, Object value) {
         switch(attribute){
         case "type": {
         	if(value instanceof AJoinPoint){
@@ -1409,7 +1421,7 @@ public abstract class ALoop extends AStatement {
      * 
      */
     @Override
-    protected final void fillWithAttributes(List<String> attributes) {
+    protected void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
         attributes.add("kind");
         attributes.add("id");
@@ -1435,7 +1447,7 @@ public abstract class ALoop extends AStatement {
      * 
      */
     @Override
-    protected final void fillWithSelects(List<String> selects) {
+    protected void fillWithSelects(List<String> selects) {
         this.aStatement.fillWithSelects(selects);
         selects.add("init");
         selects.add("cond");
@@ -1447,7 +1459,7 @@ public abstract class ALoop extends AStatement {
      * 
      */
     @Override
-    protected final void fillWithActions(List<String> actions) {
+    protected void fillWithActions(List<String> actions) {
         this.aStatement.fillWithActions(actions);
         actions.add("void changeKind(String)");
         actions.add("void setKind(String)");
@@ -1470,7 +1482,7 @@ public abstract class ALoop extends AStatement {
      * @return The join point type
      */
     @Override
-    public final String get_class() {
+    public String get_class() {
         return "loop";
     }
 
@@ -1479,7 +1491,7 @@ public abstract class ALoop extends AStatement {
      * @return True if this join point is an instanceof the given class
      */
     @Override
-    public final boolean instanceOf(String joinpointClass) {
+    public boolean instanceOf(String joinpointClass) {
         boolean isInstance = get_class().equals(joinpointClass);
         if(isInstance) {
         	return true;

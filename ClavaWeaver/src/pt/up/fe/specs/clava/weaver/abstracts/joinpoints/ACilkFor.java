@@ -1,170 +1,227 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
-import org.lara.interpreter.exception.AttributeException;
+import pt.up.fe.specs.clava.weaver.enums.Relation;
 import java.util.List;
-import org.lara.interpreter.weaver.interf.SelectOp;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point AIf
+ * Auto-Generated class for join point ACilkFor
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class AIf extends AStatement {
+public abstract class ACilkFor extends ALoop {
 
-    protected AStatement aStatement;
+    protected ALoop aLoop;
 
     /**
      * 
      */
-    public AIf(AStatement aStatement){
-        this.aStatement = aStatement;
+    public ACilkFor(ALoop aLoop){
+        super(aLoop);
+        this.aLoop = aLoop;
     }
     /**
-     * Get value on attribute cond
+     * Get value on attribute kind
      * @return the attribute's value
      */
-    public abstract AJoinPoint getCondImpl();
-
-    /**
-     * Get value on attribute cond
-     * @return the attribute's value
-     */
-    public final Object getCond() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "cond", Optional.empty());
-        	}
-        	AJoinPoint result = this.getCondImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "cond", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "cond", e);
-        }
+    @Override
+    public String getKindImpl() {
+        return this.aLoop.getKindImpl();
     }
 
     /**
-     * Get value on attribute condDecl
+     * Get value on attribute id
      * @return the attribute's value
      */
-    public abstract AJoinPoint getCondDeclImpl();
-
-    /**
-     * Get value on attribute condDecl
-     * @return the attribute's value
-     */
-    public final Object getCondDecl() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "condDecl", Optional.empty());
-        	}
-        	AJoinPoint result = this.getCondDeclImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "condDecl", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "condDecl", e);
-        }
+    @Override
+    public String getIdImpl() {
+        return this.aLoop.getIdImpl();
     }
 
     /**
-     * Get value on attribute then
+     * Get value on attribute isInnermost
      * @return the attribute's value
      */
-    public abstract AJoinPoint getThenImpl();
-
-    /**
-     * Get value on attribute then
-     * @return the attribute's value
-     */
-    public final Object getThen() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "then", Optional.empty());
-        	}
-        	AJoinPoint result = this.getThenImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "then", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "then", e);
-        }
+    @Override
+    public Boolean getIsInnermostImpl() {
+        return this.aLoop.getIsInnermostImpl();
     }
 
     /**
-     * Get value on attribute _else
+     * Get value on attribute isOutermost
      * @return the attribute's value
      */
-    public abstract AJoinPoint getElseImpl();
-
-    /**
-     * Get value on attribute _else
-     * @return the attribute's value
-     */
-    public final Object getElse() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "else", Optional.empty());
-        	}
-        	AJoinPoint result = this.getElseImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "else", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "else", e);
-        }
+    @Override
+    public Boolean getIsOutermostImpl() {
+        return this.aLoop.getIsOutermostImpl();
     }
 
     /**
-     * Default implementation of the method used by the lara interpreter to select conds
+     * Get value on attribute nestedLevel
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getNestedLevelImpl() {
+        return this.aLoop.getNestedLevelImpl();
+    }
+
+    /**
+     * Get value on attribute controlVar
+     * @return the attribute's value
+     */
+    @Override
+    public String getControlVarImpl() {
+        return this.aLoop.getControlVarImpl();
+    }
+
+    /**
+     * Get value on attribute rankArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public Integer[] getRankArrayImpl() {
+        return this.aLoop.getRankArrayImpl();
+    }
+
+    /**
+     * Get value on attribute isParallel
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsParallelImpl() {
+        return this.aLoop.getIsParallelImpl();
+    }
+
+    /**
+     * Get value on attribute iterations
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getIterationsImpl() {
+        return this.aLoop.getIterationsImpl();
+    }
+
+    /**
+     * Get value on attribute iterationsExpr
+     * @return the attribute's value
+     */
+    @Override
+    public AExpression getIterationsExprImpl() {
+        return this.aLoop.getIterationsExprImpl();
+    }
+
+    /**
+     * Get value on attribute isInterchangeable
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean isInterchangeableImpl(ALoop otherLoop) {
+        return this.aLoop.isInterchangeableImpl(otherLoop);
+    }
+
+    /**
+     * Get value on attribute init
+     * @return the attribute's value
+     */
+    @Override
+    public AStatement getInitImpl() {
+        return this.aLoop.getInitImpl();
+    }
+
+    /**
+     * Get value on attribute initValue
+     * @return the attribute's value
+     */
+    @Override
+    public String getInitValueImpl() {
+        return this.aLoop.getInitValueImpl();
+    }
+
+    /**
+     * Get value on attribute endValue
+     * @return the attribute's value
+     */
+    @Override
+    public String getEndValueImpl() {
+        return this.aLoop.getEndValueImpl();
+    }
+
+    /**
+     * Get value on attribute stepValue
+     * @return the attribute's value
+     */
+    @Override
+    public String getStepValueImpl() {
+        return this.aLoop.getStepValueImpl();
+    }
+
+    /**
+     * Get value on attribute hasCondRelation
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getHasCondRelationImpl() {
+        return this.aLoop.getHasCondRelationImpl();
+    }
+
+    /**
+     * Get value on attribute condRelation
+     * @return the attribute's value
+     */
+    @Override
+    public Relation getCondRelationImpl() {
+        return this.aLoop.getCondRelationImpl();
+    }
+
+    /**
+     * Get value on attribute body
+     * @return the attribute's value
+     */
+    @Override
+    public AScope getBodyImpl() {
+        return this.aLoop.getBodyImpl();
+    }
+
+    /**
+     * Method used by the lara interpreter to select inits
      * @return 
      */
-    public List<? extends AExpression> selectCond() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression.class, SelectOp.DESCENDANTS);
+    @Override
+    public List<? extends AStatement> selectInit() {
+        return this.aLoop.selectInit();
     }
 
     /**
-     * Default implementation of the method used by the lara interpreter to select condDecls
+     * Method used by the lara interpreter to select conds
      * @return 
      */
-    public List<? extends AVardecl> selectCondDecl() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl.class, SelectOp.DESCENDANTS);
+    @Override
+    public List<? extends AStatement> selectCond() {
+        return this.aLoop.selectCond();
     }
 
     /**
-     * Default implementation of the method used by the lara interpreter to select thens
+     * Method used by the lara interpreter to select steps
      * @return 
      */
-    public List<? extends AScope> selectThen() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
+    @Override
+    public List<? extends AStatement> selectStep() {
+        return this.aLoop.selectStep();
     }
 
     /**
-     * Default implementation of the method used by the lara interpreter to select elses
+     * Method used by the lara interpreter to select bodys
      * @return 
      */
-    public List<? extends AScope> selectElse() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
-    }
-
-    /**
-     * Default implementation of the method used by the lara interpreter to select bodys
-     * @return 
-     */
+    @Override
     public List<? extends AScope> selectBody() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
+        return this.aLoop.selectBody();
     }
 
     /**
@@ -173,7 +230,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public Boolean getIsFirstImpl() {
-        return this.aStatement.getIsFirstImpl();
+        return this.aLoop.getIsFirstImpl();
     }
 
     /**
@@ -182,7 +239,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public Boolean getIsLastImpl() {
-        return this.aStatement.getIsLastImpl();
+        return this.aLoop.getIsLastImpl();
     }
 
     /**
@@ -191,7 +248,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends AExpression> selectExpr() {
-        return this.aStatement.selectExpr();
+        return this.aLoop.selectExpr();
     }
 
     /**
@@ -200,7 +257,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends AExpression> selectChildExpr() {
-        return this.aStatement.selectChildExpr();
+        return this.aLoop.selectChildExpr();
     }
 
     /**
@@ -209,7 +266,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends ACall> selectCall() {
-        return this.aStatement.selectCall();
+        return this.aLoop.selectCall();
     }
 
     /**
@@ -218,7 +275,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends ACall> selectStmtCall() {
-        return this.aStatement.selectStmtCall();
+        return this.aLoop.selectStmtCall();
     }
 
     /**
@@ -227,7 +284,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends AMemberCall> selectMemberCall() {
-        return this.aStatement.selectMemberCall();
+        return this.aLoop.selectMemberCall();
     }
 
     /**
@@ -236,7 +293,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends AMemberAccess> selectMemberAccess() {
-        return this.aStatement.selectMemberAccess();
+        return this.aLoop.selectMemberAccess();
     }
 
     /**
@@ -245,7 +302,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends AArrayAccess> selectArrayAccess() {
-        return this.aStatement.selectArrayAccess();
+        return this.aLoop.selectArrayAccess();
     }
 
     /**
@@ -254,7 +311,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends AVardecl> selectVardecl() {
-        return this.aStatement.selectVardecl();
+        return this.aLoop.selectVardecl();
     }
 
     /**
@@ -263,7 +320,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends AVarref> selectVarref() {
-        return this.aStatement.selectVarref();
+        return this.aLoop.selectVarref();
     }
 
     /**
@@ -272,7 +329,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends AOp> selectOp() {
-        return this.aStatement.selectOp();
+        return this.aLoop.selectOp();
     }
 
     /**
@@ -281,7 +338,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends ABinaryOp> selectBinaryOp() {
-        return this.aStatement.selectBinaryOp();
+        return this.aLoop.selectBinaryOp();
     }
 
     /**
@@ -290,7 +347,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends AUnaryOp> selectUnaryOp() {
-        return this.aStatement.selectUnaryOp();
+        return this.aLoop.selectUnaryOp();
     }
 
     /**
@@ -299,7 +356,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends ANewExpr> selectNewExpr() {
-        return this.aStatement.selectNewExpr();
+        return this.aLoop.selectNewExpr();
     }
 
     /**
@@ -308,7 +365,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends ADeleteExpr> selectDeleteExpr() {
-        return this.aStatement.selectDeleteExpr();
+        return this.aLoop.selectDeleteExpr();
     }
 
     /**
@@ -317,7 +374,56 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public List<? extends ACilkSpawn> selectCilkSpawn() {
-        return this.aStatement.selectCilkSpawn();
+        return this.aLoop.selectCilkSpawn();
+    }
+
+    /**
+     * 
+     */
+    public void defIsParallelImpl(Boolean value) {
+        this.aLoop.defIsParallelImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defIsParallelImpl(String value) {
+        this.aLoop.defIsParallelImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defInitImpl(String value) {
+        this.aLoop.defInitImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defInitValueImpl(String value) {
+        this.aLoop.defInitValueImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defCondRelationImpl(Relation value) {
+        this.aLoop.defCondRelationImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defCondRelationImpl(String value) {
+        this.aLoop.defCondRelationImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defBodyImpl(AScope value) {
+        this.aLoop.defBodyImpl(value);
     }
 
     /**
@@ -326,7 +432,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aStatement.replaceWithImpl(node);
+        return this.aLoop.replaceWithImpl(node);
     }
 
     /**
@@ -335,7 +441,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public AJoinPoint replaceWithImpl(String node) {
-        return this.aStatement.replaceWithImpl(node);
+        return this.aLoop.replaceWithImpl(node);
     }
 
     /**
@@ -344,7 +450,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aStatement.insertBeforeImpl(node);
+        return this.aLoop.insertBeforeImpl(node);
     }
 
     /**
@@ -353,7 +459,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aStatement.insertBeforeImpl(node);
+        return this.aLoop.insertBeforeImpl(node);
     }
 
     /**
@@ -362,7 +468,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aStatement.insertAfterImpl(node);
+        return this.aLoop.insertAfterImpl(node);
     }
 
     /**
@@ -371,7 +477,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aStatement.insertAfterImpl(code);
+        return this.aLoop.insertAfterImpl(code);
     }
 
     /**
@@ -379,7 +485,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public void detachImpl() {
-        this.aStatement.detachImpl();
+        this.aLoop.detachImpl();
     }
 
     /**
@@ -388,7 +494,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public void setTypeImpl(AJoinPoint type) {
-        this.aStatement.setTypeImpl(type);
+        this.aLoop.setTypeImpl(type);
     }
 
     /**
@@ -396,7 +502,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aStatement.copyImpl();
+        return this.aLoop.copyImpl();
     }
 
     /**
@@ -404,7 +510,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public AJoinPoint deepCopyImpl() {
-        return this.aStatement.deepCopyImpl();
+        return this.aLoop.deepCopyImpl();
     }
 
     /**
@@ -414,7 +520,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aStatement.setUserFieldImpl(fieldName, value);
+        return this.aLoop.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -423,7 +529,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aStatement.setUserFieldImpl(fieldNameAndValue);
+        return this.aLoop.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -433,7 +539,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
-        return this.aStatement.setValueImpl(key, value);
+        return this.aLoop.setValueImpl(key, value);
     }
 
     /**
@@ -442,7 +548,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aStatement.messageToUserImpl(message);
+        this.aLoop.messageToUserImpl(message);
     }
 
     /**
@@ -450,7 +556,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public void removeChildrenImpl() {
-        this.aStatement.removeChildrenImpl();
+        this.aLoop.removeChildrenImpl();
     }
 
     /**
@@ -459,7 +565,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public void setFirstChildImpl(AJoinPoint node) {
-        this.aStatement.setFirstChildImpl(node);
+        this.aLoop.setFirstChildImpl(node);
     }
 
     /**
@@ -468,7 +574,136 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public void setLastChildImpl(AJoinPoint node) {
-        this.aStatement.setLastChildImpl(node);
+        this.aLoop.setLastChildImpl(node);
+    }
+
+    /**
+     * DEPRECATED: use 'setKind' instead
+     * @param kind 
+     */
+    @Override
+    public void changeKindImpl(String kind) {
+        this.aLoop.changeKindImpl(kind);
+    }
+
+    /**
+     * Sets the kind of the loop
+     * @param kind 
+     */
+    @Override
+    public void setKindImpl(String kind) {
+        this.aLoop.setKindImpl(kind);
+    }
+
+    /**
+     * Sets the init statement of the loop
+     * @param initCode 
+     */
+    @Override
+    public void setInitImpl(String initCode) {
+        this.aLoop.setInitImpl(initCode);
+    }
+
+    /**
+     * Sets the init value of the loop. Works with loops of kind 'for'
+     * @param initCode 
+     */
+    @Override
+    public void setInitValueImpl(String initCode) {
+        this.aLoop.setInitValueImpl(initCode);
+    }
+
+    /**
+     * Sets the end value of the loop. Works with loops of kind 'for'
+     * @param initCode 
+     */
+    @Override
+    public void setEndValueImpl(String initCode) {
+        this.aLoop.setEndValueImpl(initCode);
+    }
+
+    /**
+     * Sets the conditional statement of the loop. Works with loops of kind 'for'
+     * @param condCode 
+     */
+    @Override
+    public void setCondImpl(String condCode) {
+        this.aLoop.setCondImpl(condCode);
+    }
+
+    /**
+     * Sets the step statement of the loop. Works with loops of kind 'for'
+     * @param stepCode 
+     */
+    @Override
+    public void setStepImpl(String stepCode) {
+        this.aLoop.setStepImpl(stepCode);
+    }
+
+    /**
+     * Sets the attribute 'isParallel' of the loop
+     * @param isParallel 
+     */
+    @Override
+    public void setIsParallelImpl(Boolean isParallel) {
+        this.aLoop.setIsParallelImpl(isParallel);
+    }
+
+    /**
+     * Interchanges two for loops, if possible
+     * @param otherLoop 
+     */
+    @Override
+    public void interchangeImpl(ALoop otherLoop) {
+        this.aLoop.interchangeImpl(otherLoop);
+    }
+
+    /**
+     * Applies loop tiling to this loop
+     * @param blockSize 
+     * @param reference 
+     */
+    @Override
+    public AStatement tileImpl(String blockSize, AStatement reference) {
+        return this.aLoop.tileImpl(blockSize, reference);
+    }
+
+    /**
+     * Applies loop tiling to this loop.
+     * @param blockSize 
+     * @param reference 
+     * @param useTernary 
+     */
+    @Override
+    public AStatement tileImpl(String blockSize, AStatement reference, Boolean useTernary) {
+        return this.aLoop.tileImpl(blockSize, reference, useTernary);
+    }
+
+    /**
+     * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
+     * @param operator 
+     */
+    @Override
+    public void setCondRelationImpl(Relation operator) {
+        this.aLoop.setCondRelationImpl(operator);
+    }
+
+    /**
+     * Changes the operator of a canonical condition, if possible. Supported operators: <, <=, >, >=
+     * @param operator 
+     */
+    @Override
+    public void setCondRelationImpl(String operator) {
+        this.aLoop.setCondRelationImpl(operator);
+    }
+
+    /**
+     * Sets the body of the loop
+     * @param body 
+     */
+    @Override
+    public void setBodyImpl(AScope body) {
+        this.aLoop.setBodyImpl(body);
     }
 
     /**
@@ -478,7 +713,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aStatement.insertImpl(position, code);
+        return this.aLoop.insertImpl(position, code);
     }
 
     /**
@@ -488,7 +723,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aStatement.insertImpl(position, code);
+        return this.aLoop.insertImpl(position, code);
     }
 
     /**
@@ -496,15 +731,15 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public String toString() {
-        return this.aStatement.toString();
+        return this.aLoop.toString();
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends AStatement> getSuper() {
-        return Optional.of(this.aStatement);
+    public Optional<? extends ALoop> getSuper() {
+        return Optional.of(this.aLoop);
     }
 
     /**
@@ -514,17 +749,14 @@ public abstract class AIf extends AStatement {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
+        	case "init": 
+        		joinPointList = selectInit();
+        		break;
         	case "cond": 
         		joinPointList = selectCond();
         		break;
-        	case "condDecl": 
-        		joinPointList = selectCondDecl();
-        		break;
-        	case "then": 
-        		joinPointList = selectThen();
-        		break;
-        	case "else": 
-        		joinPointList = selectElse();
+        	case "step": 
+        		joinPointList = selectStep();
         		break;
         	case "body": 
         		joinPointList = selectBody();
@@ -575,7 +807,7 @@ public abstract class AIf extends AStatement {
         		joinPointList = selectCilkSpawn();
         		break;
         	default:
-        		joinPointList = this.aStatement.select(selectName);
+        		joinPointList = this.aLoop.select(selectName);
         		break;
         }
         return joinPointList;
@@ -608,6 +840,49 @@ public abstract class AIf extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "isParallel": {
+        	if(value instanceof Boolean){
+        		this.defIsParallelImpl((Boolean)value);
+        		return;
+        	}
+        	if(value instanceof String){
+        		this.defIsParallelImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "init": {
+        	if(value instanceof String){
+        		this.defInitImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "initValue": {
+        	if(value instanceof String){
+        		this.defInitValueImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "condRelation": {
+        	if(value instanceof Relation){
+        		this.defCondRelationImpl((Relation)value);
+        		return;
+        	}
+        	if(value instanceof String){
+        		this.defCondRelationImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "body": {
+        	if(value instanceof AScope){
+        		this.defBodyImpl((AScope)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -617,11 +892,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
-        this.aStatement.fillWithAttributes(attributes);
-        attributes.add("cond");
-        attributes.add("condDecl");
-        attributes.add("then");
-        attributes.add("else");
+        this.aLoop.fillWithAttributes(attributes);
     }
 
     /**
@@ -629,12 +900,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     protected final void fillWithSelects(List<String> selects) {
-        this.aStatement.fillWithSelects(selects);
-        selects.add("cond");
-        selects.add("condDecl");
-        selects.add("then");
-        selects.add("else");
-        selects.add("body");
+        this.aLoop.fillWithSelects(selects);
     }
 
     /**
@@ -642,7 +908,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     protected final void fillWithActions(List<String> actions) {
-        this.aStatement.fillWithActions(actions);
+        this.aLoop.fillWithActions(actions);
     }
 
     /**
@@ -651,7 +917,7 @@ public abstract class AIf extends AStatement {
      */
     @Override
     public final String get_class() {
-        return "if";
+        return "cilkFor";
     }
 
     /**
@@ -664,16 +930,30 @@ public abstract class AIf extends AStatement {
         if(isInstance) {
         	return true;
         }
-        return this.aStatement.instanceOf(joinpointClass);
+        return this.aLoop.instanceOf(joinpointClass);
     }
     /**
      * 
      */
-    protected enum IfAttributes {
-        COND("cond"),
-        CONDDECL("condDecl"),
-        THEN("then"),
-        ELSE("else"),
+    protected enum CilkForAttributes {
+        KIND("kind"),
+        ID("id"),
+        ISINNERMOST("isInnermost"),
+        ISOUTERMOST("isOutermost"),
+        NESTEDLEVEL("nestedLevel"),
+        CONTROLVAR("controlVar"),
+        RANK("rank"),
+        ISPARALLEL("isParallel"),
+        ITERATIONS("iterations"),
+        ITERATIONSEXPR("iterationsExpr"),
+        ISINTERCHANGEABLE("isInterchangeable"),
+        INIT("init"),
+        INITVALUE("initValue"),
+        ENDVALUE("endValue"),
+        STEPVALUE("stepValue"),
+        HASCONDRELATION("hasCondRelation"),
+        CONDRELATION("condRelation"),
+        BODY("body"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),
@@ -733,13 +1013,13 @@ public abstract class AIf extends AStatement {
         /**
          * 
          */
-        private IfAttributes(String name){
+        private CilkForAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<IfAttributes> fromString(String name) {
+        public static Optional<CilkForAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -747,7 +1027,7 @@ public abstract class AIf extends AStatement {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(IfAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(CilkForAttributes::name).collect(Collectors.toList());
         }
 
         /**

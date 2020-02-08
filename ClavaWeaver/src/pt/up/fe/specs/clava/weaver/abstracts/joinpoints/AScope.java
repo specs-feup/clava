@@ -305,6 +305,22 @@ public abstract class AScope extends AStatement {
     }
 
     /**
+     * Default implementation of the method used by the lara interpreter to select cilkFors
+     * @return 
+     */
+    public List<? extends ACilkFor> selectCilkFor() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACilkFor.class, SelectOp.DESCENDANTS);
+    }
+
+    /**
+     * Default implementation of the method used by the lara interpreter to select cilkSyncs
+     * @return 
+     */
+    public List<? extends ACilkSync> selectCilkSync() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACilkSync.class, SelectOp.DESCENDANTS);
+    }
+
+    /**
      * 
      * @param node 
      */
@@ -667,6 +683,15 @@ public abstract class AScope extends AStatement {
     }
 
     /**
+     * Method used by the lara interpreter to select cilkSpawns
+     * @return 
+     */
+    @Override
+    public List<? extends ACilkSpawn> selectCilkSpawn() {
+        return this.aStatement.selectCilkSpawn();
+    }
+
+    /**
      * Replaces this join point with the given join
      * @param node 
      */
@@ -893,6 +918,12 @@ public abstract class AScope extends AStatement {
         	case "returnStmt": 
         		joinPointList = selectReturnStmt();
         		break;
+        	case "cilkFor": 
+        		joinPointList = selectCilkFor();
+        		break;
+        	case "cilkSync": 
+        		joinPointList = selectCilkSync();
+        		break;
         	case "expr": 
         		joinPointList = selectExpr();
         		break;
@@ -934,6 +965,9 @@ public abstract class AScope extends AStatement {
         		break;
         	case "deleteExpr": 
         		joinPointList = selectDeleteExpr();
+        		break;
+        	case "cilkSpawn": 
+        		joinPointList = selectCilkSpawn();
         		break;
         	default:
         		joinPointList = this.aStatement.select(selectName);
@@ -1012,6 +1046,8 @@ public abstract class AScope extends AStatement {
         selects.add("omp");
         selects.add("comment");
         selects.add("returnStmt");
+        selects.add("cilkFor");
+        selects.add("cilkSync");
     }
 
     /**

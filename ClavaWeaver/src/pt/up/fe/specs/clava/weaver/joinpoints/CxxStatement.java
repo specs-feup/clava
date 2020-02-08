@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ast.cilk.CilkSpawn;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -41,6 +42,7 @@ import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AArrayAccess;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACilkSpawn;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeleteExpr;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
@@ -250,4 +252,8 @@ public class CxxStatement extends AStatement {
         return CxxSelects.select(AMemberAccess.class, stmt.getChildrenNormalized(), true, MemberExpr.class);
     }
 
+    @Override
+    public List<? extends ACilkSpawn> selectCilkSpawn() {
+        return CxxSelects.select(ACilkSpawn.class, stmt.getChildrenNormalized(), true, CilkSpawn.class);
+    }
 }

@@ -205,6 +205,15 @@ public abstract class AReturnStmt extends AStatement {
     }
 
     /**
+     * Method used by the lara interpreter to select cilkSpawns
+     * @return 
+     */
+    @Override
+    public List<? extends ACilkSpawn> selectCilkSpawn() {
+        return this.aStatement.selectCilkSpawn();
+    }
+
+    /**
      * Replaces this join point with the given join
      * @param node 
      */
@@ -442,6 +451,9 @@ public abstract class AReturnStmt extends AStatement {
         		break;
         	case "deleteExpr": 
         		joinPointList = selectDeleteExpr();
+        		break;
+        	case "cilkSpawn": 
+        		joinPointList = selectCilkSpawn();
         		break;
         	default:
         		joinPointList = this.aStatement.select(selectName);

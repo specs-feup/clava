@@ -150,6 +150,8 @@
 		<select							class="omp"/>	
 		<select 						class="comment"/>
 		<select 						class="returnStmt"/>		
+		<select 						class="cilkFor"/>
+		<select 						class="cilkSync"/>
 	</joinpoint>
 	
 	<!-- BODY -->
@@ -173,6 +175,7 @@
 		<select							class="unaryOp"/>
 		<select							class="newExpr"/>
 		<select							class="deleteExpr"/>		
+		<select							class="cilkSpawn"/>				
 	</joinpoint>
 	
 
@@ -268,6 +271,14 @@
 	<joinpoint class="comment"/>
 
 
+	<!-- CILK_FOR -->
+	<joinpoint class="cilkFor" extends="loop"/>	
+
+	<!-- CILK_SYNC -->
+	<joinpoint class="cilkSync" extends="statement"/>		
+
+	<!-- CILK_SPAWN -->
+	<joinpoint class="cilkSpawn" extends="call"/>		
 
 
 	<!-- TYPE -->

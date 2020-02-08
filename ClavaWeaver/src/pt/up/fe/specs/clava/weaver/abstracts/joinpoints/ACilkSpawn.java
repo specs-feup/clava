@@ -1,160 +1,226 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import org.lara.interpreter.weaver.interf.events.Stage;
-import java.util.Optional;
-import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point AWrapperStmt
+ * Auto-Generated class for join point ACilkSpawn
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class AWrapperStmt extends AStatement {
+public abstract class ACilkSpawn extends ACall {
 
-    protected AStatement aStatement;
+    protected ACall aCall;
 
     /**
      * 
      */
-    public AWrapperStmt(AStatement aStatement){
-        this.aStatement = aStatement;
+    public ACilkSpawn(ACall aCall){
+        super(aCall);
+        this.aCall = aCall;
     }
     /**
-     * Get value on attribute kind
-     * @return the attribute's value
-     */
-    public abstract String getKindImpl();
-
-    /**
-     * Get value on attribute kind
-     * @return the attribute's value
-     */
-    public final Object getKind() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
-        	}
-        	String result = this.getKindImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "kind", e);
-        }
-    }
-
-    /**
-     * Get value on attribute content
-     * @return the attribute's value
-     */
-    public abstract AJoinPoint getContentImpl();
-
-    /**
-     * Get value on attribute content
-     * @return the attribute's value
-     */
-    public final Object getContent() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "content", Optional.empty());
-        	}
-        	AJoinPoint result = this.getContentImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "content", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "content", e);
-        }
-    }
-
-    /**
-     * Get value on attribute isFirst
+     * Get value on attribute name
      * @return the attribute's value
      */
     @Override
-    public Boolean getIsFirstImpl() {
-        return this.aStatement.getIsFirstImpl();
+    public String getNameImpl() {
+        return this.aCall.getNameImpl();
     }
 
     /**
-     * Get value on attribute isLast
+     * Get value on attribute numArgs
      * @return the attribute's value
      */
     @Override
-    public Boolean getIsLastImpl() {
-        return this.aStatement.getIsLastImpl();
+    public Integer getNumArgsImpl() {
+        return this.aCall.getNumArgsImpl();
     }
 
     /**
-     * Method used by the lara interpreter to select exprs
-     * @return 
+     * Get value on attribute memberNamesArrayImpl
+     * @return the attribute's value
      */
     @Override
-    public List<? extends AExpression> selectExpr() {
-        return this.aStatement.selectExpr();
+    public String[] getMemberNamesArrayImpl() {
+        return this.aCall.getMemberNamesArrayImpl();
     }
 
     /**
-     * Method used by the lara interpreter to select childExprs
-     * @return 
+     * Get value on attribute decl
+     * @return the attribute's value
      */
     @Override
-    public List<? extends AExpression> selectChildExpr() {
-        return this.aStatement.selectChildExpr();
+    public AFunction getDeclImpl() {
+        return this.aCall.getDeclImpl();
     }
 
     /**
-     * Method used by the lara interpreter to select calls
-     * @return 
+     * Get value on attribute declaration
+     * @return the attribute's value
      */
     @Override
-    public List<? extends ACall> selectCall() {
-        return this.aStatement.selectCall();
+    public AJoinPoint getDeclarationImpl() {
+        return this.aCall.getDeclarationImpl();
     }
 
     /**
-     * Method used by the lara interpreter to select stmtCalls
-     * @return 
+     * Get value on attribute definition
+     * @return the attribute's value
      */
     @Override
-    public List<? extends ACall> selectStmtCall() {
-        return this.aStatement.selectStmtCall();
+    public AJoinPoint getDefinitionImpl() {
+        return this.aCall.getDefinitionImpl();
     }
 
     /**
-     * Method used by the lara interpreter to select memberCalls
-     * @return 
+     * Get value on attribute argListArrayImpl
+     * @return the attribute's value
      */
     @Override
-    public List<? extends AMemberCall> selectMemberCall() {
-        return this.aStatement.selectMemberCall();
+    public AExpression[] getArgListArrayImpl() {
+        return this.aCall.getArgListArrayImpl();
     }
 
     /**
-     * Method used by the lara interpreter to select memberAccesss
-     * @return 
+     * Get value on attribute argsArrayImpl
+     * @return the attribute's value
      */
     @Override
-    public List<? extends AMemberAccess> selectMemberAccess() {
-        return this.aStatement.selectMemberAccess();
+    public AExpression[] getArgsArrayImpl() {
+        return this.aCall.getArgsArrayImpl();
     }
 
     /**
-     * Method used by the lara interpreter to select arrayAccesss
+     * Get value on attribute arg
+     * @return the attribute's value
+     */
+    @Override
+    public AExpression argImpl(int index) {
+        return this.aCall.argImpl(index);
+    }
+
+    /**
+     * Get value on attribute returnType
+     * @return the attribute's value
+     */
+    @Override
+    public AType getReturnTypeImpl() {
+        return this.aCall.getReturnTypeImpl();
+    }
+
+    /**
+     * Get value on attribute functionType
+     * @return the attribute's value
+     */
+    @Override
+    public AFunctionType getFunctionTypeImpl() {
+        return this.aCall.getFunctionTypeImpl();
+    }
+
+    /**
+     * Get value on attribute isMemberAccess
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsMemberAccessImpl() {
+        return this.aCall.getIsMemberAccessImpl();
+    }
+
+    /**
+     * Get value on attribute memberAccess
+     * @return the attribute's value
+     */
+    @Override
+    public AMemberAccess getMemberAccessImpl() {
+        return this.aCall.getMemberAccessImpl();
+    }
+
+    /**
+     * Get value on attribute isStmtCall
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsStmtCallImpl() {
+        return this.aCall.getIsStmtCallImpl();
+    }
+
+    /**
+     * Get value on attribute function
+     * @return the attribute's value
+     */
+    @Override
+    public AFunction getFunctionImpl() {
+        return this.aCall.getFunctionImpl();
+    }
+
+    /**
+     * Get value on attribute signature
+     * @return the attribute's value
+     */
+    @Override
+    public String getSignatureImpl() {
+        return this.aCall.getSignatureImpl();
+    }
+
+    /**
+     * Method used by the lara interpreter to select callees
      * @return 
      */
     @Override
-    public List<? extends AArrayAccess> selectArrayAccess() {
-        return this.aStatement.selectArrayAccess();
+    public List<? extends AExpression> selectCallee() {
+        return this.aCall.selectCallee();
+    }
+
+    /**
+     * Method used by the lara interpreter to select args
+     * @return 
+     */
+    @Override
+    public List<? extends AExpression> selectArg() {
+        return this.aCall.selectArg();
+    }
+
+    /**
+     * Get value on attribute vardecl
+     * @return the attribute's value
+     */
+    @Override
+    public AVardecl getVardeclImpl() {
+        return this.aCall.getVardeclImpl();
+    }
+
+    /**
+     * Get value on attribute use
+     * @return the attribute's value
+     */
+    @Override
+    public String getUseImpl() {
+        return this.aCall.getUseImpl();
+    }
+
+    /**
+     * Get value on attribute isFunctionArgument
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsFunctionArgumentImpl() {
+        return this.aCall.getIsFunctionArgumentImpl();
+    }
+
+    /**
+     * Get value on attribute implicitCast
+     * @return the attribute's value
+     */
+    @Override
+    public ACast getImplicitCastImpl() {
+        return this.aCall.getImplicitCastImpl();
     }
 
     /**
@@ -163,70 +229,14 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public List<? extends AVardecl> selectVardecl() {
-        return this.aStatement.selectVardecl();
+        return this.aCall.selectVardecl();
     }
 
     /**
-     * Method used by the lara interpreter to select varrefs
-     * @return 
+     * 
      */
-    @Override
-    public List<? extends AVarref> selectVarref() {
-        return this.aStatement.selectVarref();
-    }
-
-    /**
-     * Method used by the lara interpreter to select ops
-     * @return 
-     */
-    @Override
-    public List<? extends AOp> selectOp() {
-        return this.aStatement.selectOp();
-    }
-
-    /**
-     * Method used by the lara interpreter to select binaryOps
-     * @return 
-     */
-    @Override
-    public List<? extends ABinaryOp> selectBinaryOp() {
-        return this.aStatement.selectBinaryOp();
-    }
-
-    /**
-     * Method used by the lara interpreter to select unaryOps
-     * @return 
-     */
-    @Override
-    public List<? extends AUnaryOp> selectUnaryOp() {
-        return this.aStatement.selectUnaryOp();
-    }
-
-    /**
-     * Method used by the lara interpreter to select newExprs
-     * @return 
-     */
-    @Override
-    public List<? extends ANewExpr> selectNewExpr() {
-        return this.aStatement.selectNewExpr();
-    }
-
-    /**
-     * Method used by the lara interpreter to select deleteExprs
-     * @return 
-     */
-    @Override
-    public List<? extends ADeleteExpr> selectDeleteExpr() {
-        return this.aStatement.selectDeleteExpr();
-    }
-
-    /**
-     * Method used by the lara interpreter to select cilkSpawns
-     * @return 
-     */
-    @Override
-    public List<? extends ACilkSpawn> selectCilkSpawn() {
-        return this.aStatement.selectCilkSpawn();
+    public void defNameImpl(String value) {
+        this.aCall.defNameImpl(value);
     }
 
     /**
@@ -235,7 +245,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aStatement.replaceWithImpl(node);
+        return this.aCall.replaceWithImpl(node);
     }
 
     /**
@@ -244,7 +254,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public AJoinPoint replaceWithImpl(String node) {
-        return this.aStatement.replaceWithImpl(node);
+        return this.aCall.replaceWithImpl(node);
     }
 
     /**
@@ -253,7 +263,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aStatement.insertBeforeImpl(node);
+        return this.aCall.insertBeforeImpl(node);
     }
 
     /**
@@ -262,7 +272,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aStatement.insertBeforeImpl(node);
+        return this.aCall.insertBeforeImpl(node);
     }
 
     /**
@@ -271,7 +281,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aStatement.insertAfterImpl(node);
+        return this.aCall.insertAfterImpl(node);
     }
 
     /**
@@ -280,7 +290,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aStatement.insertAfterImpl(code);
+        return this.aCall.insertAfterImpl(code);
     }
 
     /**
@@ -288,7 +298,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public void detachImpl() {
-        this.aStatement.detachImpl();
+        this.aCall.detachImpl();
     }
 
     /**
@@ -297,7 +307,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public void setTypeImpl(AJoinPoint type) {
-        this.aStatement.setTypeImpl(type);
+        this.aCall.setTypeImpl(type);
     }
 
     /**
@@ -305,7 +315,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aStatement.copyImpl();
+        return this.aCall.copyImpl();
     }
 
     /**
@@ -313,7 +323,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public AJoinPoint deepCopyImpl() {
-        return this.aStatement.deepCopyImpl();
+        return this.aCall.deepCopyImpl();
     }
 
     /**
@@ -323,7 +333,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aStatement.setUserFieldImpl(fieldName, value);
+        return this.aCall.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -332,7 +342,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aStatement.setUserFieldImpl(fieldNameAndValue);
+        return this.aCall.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -342,7 +352,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
-        return this.aStatement.setValueImpl(key, value);
+        return this.aCall.setValueImpl(key, value);
     }
 
     /**
@@ -351,7 +361,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aStatement.messageToUserImpl(message);
+        this.aCall.messageToUserImpl(message);
     }
 
     /**
@@ -359,7 +369,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public void removeChildrenImpl() {
-        this.aStatement.removeChildrenImpl();
+        this.aCall.removeChildrenImpl();
     }
 
     /**
@@ -368,7 +378,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public void setFirstChildImpl(AJoinPoint node) {
-        this.aStatement.setFirstChildImpl(node);
+        this.aCall.setFirstChildImpl(node);
     }
 
     /**
@@ -377,7 +387,53 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public void setLastChildImpl(AJoinPoint node) {
-        this.aStatement.setLastChildImpl(node);
+        this.aCall.setLastChildImpl(node);
+    }
+
+    /**
+     * Changes the name of the call
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aCall.setNameImpl(name);
+    }
+
+    /**
+     * Wraps this call with a possibly new wrapping function
+     * @param name 
+     */
+    @Override
+    public void wrapImpl(String name) {
+        this.aCall.wrapImpl(name);
+    }
+
+    /**
+     * Tries to inline this call
+     */
+    @Override
+    public void inlineImpl() {
+        this.aCall.inlineImpl();
+    }
+
+    /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    @Override
+    public void setArgFromStringImpl(int index, String expr) {
+        this.aCall.setArgFromStringImpl(index, expr);
+    }
+
+    /**
+     * 
+     * @param index 
+     * @param expr 
+     */
+    @Override
+    public void setArgImpl(Integer index, AExpression expr) {
+        this.aCall.setArgImpl(index, expr);
     }
 
     /**
@@ -387,7 +443,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aStatement.insertImpl(position, code);
+        return this.aCall.insertImpl(position, code);
     }
 
     /**
@@ -397,7 +453,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aStatement.insertImpl(position, code);
+        return this.aCall.insertImpl(position, code);
     }
 
     /**
@@ -405,15 +461,15 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public String toString() {
-        return this.aStatement.toString();
+        return this.aCall.toString();
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends AStatement> getSuper() {
-        return Optional.of(this.aStatement);
+    public Optional<? extends ACall> getSuper() {
+        return Optional.of(this.aCall);
     }
 
     /**
@@ -423,53 +479,17 @@ public abstract class AWrapperStmt extends AStatement {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
-        	case "expr": 
-        		joinPointList = selectExpr();
+        	case "callee": 
+        		joinPointList = selectCallee();
         		break;
-        	case "childExpr": 
-        		joinPointList = selectChildExpr();
-        		break;
-        	case "call": 
-        		joinPointList = selectCall();
-        		break;
-        	case "stmtCall": 
-        		joinPointList = selectStmtCall();
-        		break;
-        	case "memberCall": 
-        		joinPointList = selectMemberCall();
-        		break;
-        	case "memberAccess": 
-        		joinPointList = selectMemberAccess();
-        		break;
-        	case "arrayAccess": 
-        		joinPointList = selectArrayAccess();
+        	case "arg": 
+        		joinPointList = selectArg();
         		break;
         	case "vardecl": 
         		joinPointList = selectVardecl();
         		break;
-        	case "varref": 
-        		joinPointList = selectVarref();
-        		break;
-        	case "op": 
-        		joinPointList = selectOp();
-        		break;
-        	case "binaryOp": 
-        		joinPointList = selectBinaryOp();
-        		break;
-        	case "unaryOp": 
-        		joinPointList = selectUnaryOp();
-        		break;
-        	case "newExpr": 
-        		joinPointList = selectNewExpr();
-        		break;
-        	case "deleteExpr": 
-        		joinPointList = selectDeleteExpr();
-        		break;
-        	case "cilkSpawn": 
-        		joinPointList = selectCilkSpawn();
-        		break;
         	default:
-        		joinPointList = this.aStatement.select(selectName);
+        		joinPointList = this.aCall.select(selectName);
         		break;
         }
         return joinPointList;
@@ -502,6 +522,13 @@ public abstract class AWrapperStmt extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "name": {
+        	if(value instanceof String){
+        		this.defNameImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -511,9 +538,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
-        this.aStatement.fillWithAttributes(attributes);
-        attributes.add("kind");
-        attributes.add("content");
+        this.aCall.fillWithAttributes(attributes);
     }
 
     /**
@@ -521,7 +546,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     protected final void fillWithSelects(List<String> selects) {
-        this.aStatement.fillWithSelects(selects);
+        this.aCall.fillWithSelects(selects);
     }
 
     /**
@@ -529,7 +554,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     protected final void fillWithActions(List<String> actions) {
-        this.aStatement.fillWithActions(actions);
+        this.aCall.fillWithActions(actions);
     }
 
     /**
@@ -538,7 +563,7 @@ public abstract class AWrapperStmt extends AStatement {
      */
     @Override
     public final String get_class() {
-        return "wrapperStmt";
+        return "cilkSpawn";
     }
 
     /**
@@ -551,16 +576,32 @@ public abstract class AWrapperStmt extends AStatement {
         if(isInstance) {
         	return true;
         }
-        return this.aStatement.instanceOf(joinpointClass);
+        return this.aCall.instanceOf(joinpointClass);
     }
     /**
      * 
      */
-    protected enum WrapperStmtAttributes {
-        KIND("kind"),
-        CONTENT("content"),
-        ISFIRST("isFirst"),
-        ISLAST("isLast"),
+    protected enum CilkSpawnAttributes {
+        NAME("name"),
+        NUMARGS("numArgs"),
+        MEMBERNAMES("memberNames"),
+        DECL("decl"),
+        DECLARATION("declaration"),
+        DEFINITION("definition"),
+        ARGLIST("argList"),
+        ARGS("args"),
+        ARG("arg"),
+        RETURNTYPE("returnType"),
+        FUNCTIONTYPE("functionType"),
+        ISMEMBERACCESS("isMemberAccess"),
+        MEMBERACCESS("memberAccess"),
+        ISSTMTCALL("isStmtCall"),
+        FUNCTION("function"),
+        SIGNATURE("signature"),
+        VARDECL("vardecl"),
+        USE("use"),
+        ISFUNCTIONARGUMENT("isFunctionArgument"),
+        IMPLICITCAST("implicitCast"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
@@ -618,13 +659,13 @@ public abstract class AWrapperStmt extends AStatement {
         /**
          * 
          */
-        private WrapperStmtAttributes(String name){
+        private CilkSpawnAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<WrapperStmtAttributes> fromString(String name) {
+        public static Optional<CilkSpawnAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -632,7 +673,7 @@ public abstract class AWrapperStmt extends AStatement {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(WrapperStmtAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(CilkSpawnAttributes::name).collect(Collectors.toList());
         }
 
         /**

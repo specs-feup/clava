@@ -21,6 +21,8 @@ import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ast.cilk.CilkFor;
+import pt.up.fe.specs.clava.ast.cilk.CilkSync;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -38,6 +40,8 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.Insert;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACilkFor;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACilkSync;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
@@ -387,4 +391,15 @@ public class CxxScope extends AScope {
         return CxxSelects.select(AReturnStmt.class, getStatements(), true, ReturnStmt.class);
     }
 
+    @Override
+    public List<? extends ACilkFor> selectCilkFor() {
+        return CxxSelects.select(ACilkFor.class, getStatements(), true, CilkFor.class);
+
+    }
+
+    @Override
+    public List<? extends ACilkSync> selectCilkSync() {
+        return CxxSelects.select(ACilkSync.class, getStatements(), true, CilkSync.class);
+
+    }
 }

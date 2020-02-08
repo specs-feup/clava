@@ -18,6 +18,9 @@ import java.util.Optional;
 import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.cilk.CilkFor;
+import pt.up.fe.specs.clava.ast.cilk.CilkSpawn;
+import pt.up.fe.specs.clava.ast.cilk.CilkSync;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
@@ -112,6 +115,9 @@ import pt.up.fe.specs.clava.weaver.joinpoints.CxxUnaryOp;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxVardecl;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxVarref;
 import pt.up.fe.specs.clava.weaver.joinpoints.GenericJoinpoint;
+import pt.up.fe.specs.clava.weaver.joinpoints.cilk.CxxCilkFor;
+import pt.up.fe.specs.clava.weaver.joinpoints.cilk.CxxCilkSpawn;
+import pt.up.fe.specs.clava.weaver.joinpoints.cilk.CxxCilkSync;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxAdjustedType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxArrayType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxBuiltinType;
@@ -192,6 +198,9 @@ public class CxxJoinpoints {
         // JOINPOINT_FACTORY.put(NullNodeOld.class, CxxEmpty::new);
         JOINPOINT_FACTORY.put(Comment.class, CxxComment::new);
         // JOINPOINT_FACTORY.put(WrapperStmt.class, CxxJoinpoints::wrapperStmtFactory);
+        JOINPOINT_FACTORY.put(CilkFor.class, CxxCilkFor::new);
+        JOINPOINT_FACTORY.put(CilkSync.class, CxxCilkSync::new);
+        JOINPOINT_FACTORY.put(CilkSpawn.class, CxxCilkSpawn::new);
         JOINPOINT_FACTORY.put(ClavaNode.class, CxxJoinpoints::defaultFactory);
     }
 
