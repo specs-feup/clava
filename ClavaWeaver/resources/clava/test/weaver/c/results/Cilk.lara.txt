@@ -1,0 +1,5 @@
+CilkFor: cilk.c:21:1 -> 22:8
+CilkSpawn: cilk.c:9:2 -> 9:7
+CilkSpawn: cilk.c:12:2 -> 12:7
+CilkSpawn: cilk.c:15:2 -> 15:7
+CilkSync: cilk.c:18:1 -> 18:8

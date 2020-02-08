@@ -167,4 +167,10 @@ public class CTest {
         // VecTypeHintAttr)
         newTester().set(ClavaOptions.STANDARD, Standard.OPENCL20).test("OpenCLType.lara", "opencl_type.cl");
     }
+
+    @Test
+    public void testCilk() {
+        // Generated code has Cilk directives
+        newTester().set(ClavaOptions.FLAGS, "-fcilkplus").test("Cilk.lara", "cilk.c");
+    }
 }
