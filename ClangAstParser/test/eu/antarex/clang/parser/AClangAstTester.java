@@ -214,6 +214,7 @@ public abstract class AClangAstTester {
         // App testClavaAst = testCodeParser.parseParallel(Arrays.asList(firstOutputFolder), compilerOptions);
         testClavaAst.write(SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME + "/outputSecond"));
         // System.out.println("STOREDEF CACHE:\n" + StoreDefinitions.getStoreDefinitionsCache().getAnalytics());
+
         // Test if files from first and second are the same
 
         Map<String, File> outputFiles1 = SpecsIo.getFiles(new File(AClangAstTester.OUTPUT_FOLDERNAME + "/outputFirst"))
@@ -228,6 +229,9 @@ public abstract class AClangAstTester {
             // Get corresponding file in output 2
             File outputFile2 = outputFiles2.get(name);
 
+            // if (outputFile2 == null) {
+            // ClavaLog.info("Could not find second version of file '" + name + "', ignoring");
+            // }
             Assert.assertNotNull("Could not find second version of file '" + name + "'", outputFile2);
 
         }

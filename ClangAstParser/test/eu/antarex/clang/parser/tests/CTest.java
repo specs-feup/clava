@@ -131,4 +131,9 @@ public class CTest {
     public void testC89() {
         new CTester("c89.c").addFlags("-std=c89").test();
     }
+
+    @Test
+    public void testCilk() {
+        new CTester("cilk.c").addFlags("-fcilkplus").test();
+    }
 }
