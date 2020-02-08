@@ -35,7 +35,7 @@ public class SourceLocation {
         return INVALID_LOCATION;
     }
 
-    private final String filepath;
+    private String filepath;
     private final int line;
     private final int column;
     private final boolean isMacro;
@@ -47,7 +47,8 @@ public class SourceLocation {
     public SourceLocation(String filepath, int line, int col, boolean isMacro) {
         // Normalize filepath
         // this.filepath = filepath != null ? new File(filepath).getAbsolutePath() : null;
-        this.filepath = filepath != null ? SpecsIo.getCanonicalPath(new File(filepath)) : null;
+        // this.filepath = filepath != null ? SpecsIo.getCanonicalPath(new File(filepath)) : null;
+        setFilepath(filepath);
         this.line = line;
         this.column = col;
         this.isMacro = isMacro;
@@ -59,6 +60,10 @@ public class SourceLocation {
 
     public String getFilepath() {
         return filepath;
+    }
+
+    public void setFilepath(String filepath) {
+        this.filepath = filepath != null ? SpecsIo.getCanonicalPath(new File(filepath)) : null;
     }
 
     public int getLine() {
