@@ -20,7 +20,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 
-public class CilkSync extends Stmt {
+public class CilkSync extends Stmt implements CilkNode {
 
     public CilkSync(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

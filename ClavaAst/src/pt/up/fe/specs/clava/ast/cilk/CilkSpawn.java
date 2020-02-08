@@ -20,7 +20,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 
-public class CilkSpawn extends CallExpr {
+public class CilkSpawn extends CallExpr implements CilkNode {
 
     public CilkSpawn(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

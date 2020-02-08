@@ -20,7 +20,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 
-public class CilkFor extends ForStmt {
+public class CilkFor extends ForStmt implements CilkNode {
 
     public CilkFor(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
