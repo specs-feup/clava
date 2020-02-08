@@ -13,13 +13,25 @@
 
 package pt.up.fe.specs.clava;
 
+import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
+import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 import pt.up.fe.specs.util.treenode.transform.TransformResult;
 import pt.up.fe.specs.util.treenode.transform.TransformRule;
 
 public interface ClavaRule extends TransformRule<ClavaNode, TransformResult> {
 
     default TransformResult empty() {
-	return TransformResult.empty();
+        return TransformResult.empty();
+    }
+
+    default void delete(ClavaNode node, TransformQueue<ClavaNode> queue) {
+        if (!node.hasParent()) {
+            queue.delete(node);
+            return;
+        }
+
+        var nodeToDelete = node.getParent() instanceof WrapperStmt ? node.getParent() : node;
+        queue.delete(nodeToDelete);
     }
 
 }

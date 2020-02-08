@@ -479,4 +479,17 @@ public class SourceRange {
     public boolean isMacro() {
         return getStart().isMacro() || getEnd().isMacro();
     }
+
+    /**
+     * 
+     * @param line
+     * @return true if the given line is inside this range
+     */
+    public boolean isLineInside(int line) {
+        if (!isValid()) {
+            return false;
+        }
+
+        return line >= getStartLine() && line <= getEndLine();
+    }
 }

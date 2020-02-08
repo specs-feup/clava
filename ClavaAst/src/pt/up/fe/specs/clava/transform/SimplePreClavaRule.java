@@ -23,15 +23,16 @@ public interface SimplePreClavaRule extends ClavaRule {
 
     @Override
     default TransformResult apply(ClavaNode node, TransformQueue<ClavaNode> queue) {
-	applySimple(node, queue);
+        applySimple(node, queue);
 
-	return empty();
+        return empty();
     }
 
     @Override
     default TraversalStrategy getTraversalStrategy() {
-	return TraversalStrategy.PRE_ORDER;
+        return TraversalStrategy.PRE_ORDER;
     }
 
     void applySimple(ClavaNode node, TransformQueue<ClavaNode> queue);
+
 }

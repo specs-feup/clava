@@ -94,11 +94,15 @@ public class ForStmt extends LoopStmt {
 
     @Override
     public String getCode() {
+        return getCode("for");
+    }
+
+    protected String getCode(String forKeyword) {
         StringBuilder code = new StringBuilder();
 
         // If the first parent that is not a CompountStmt is not a ForStmt
 
-        code.append("for(");
+        code.append(forKeyword).append("(");
 
         // ifPresent(init -> code.append(init.getCode()));
         // code.append(getInit().orElse(ClavaNodeFactory.literalStmt(";", getInfo())).getCode());

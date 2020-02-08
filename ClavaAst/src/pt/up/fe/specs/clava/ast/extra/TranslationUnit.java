@@ -545,6 +545,10 @@ public class TranslationUnit extends ClavaNode {
     }
     */
 
+    public void setFile(File sourceFile) {
+        set(SOURCE_FILE, sourceFile);
+    }
+
     public File getFile() {
         return get(SOURCE_FILE);
         // if (path == null) {
