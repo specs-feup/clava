@@ -422,6 +422,7 @@ public abstract class ATypedefDecl extends ANamedDecl {
         HASCHILDREN("hasChildren"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         TYPE("type"),
+        ISCILK("isCilk"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

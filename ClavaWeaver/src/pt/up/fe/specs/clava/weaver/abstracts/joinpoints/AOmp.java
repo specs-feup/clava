@@ -1494,6 +1494,7 @@ public abstract class AOmp extends APragma {
         HASCHILDREN("hasChildren"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         TYPE("type"),
+        ISCILK("isCilk"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

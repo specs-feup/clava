@@ -371,6 +371,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -1355,6 +1364,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -2300,6 +2318,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -3304,6 +3331,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -4271,6 +4307,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -5331,6 +5376,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -6407,6 +6461,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -7374,6 +7437,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -8243,6 +8315,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -9135,6 +9216,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -9951,6 +10041,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -10776,6 +10875,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -11620,6 +11728,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -12512,6 +12629,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -13325,6 +13451,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -14177,6 +14312,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -15211,6 +15355,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -16140,6 +16293,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -17028,6 +17190,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -17873,6 +18044,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -18857,6 +19037,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -20109,6 +20298,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -21302,6 +21500,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -22261,6 +22468,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -23200,6 +23416,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -24183,6 +24408,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -25341,6 +25575,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -26244,6 +26487,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -27252,6 +27504,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -28339,6 +28600,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -29385,6 +29655,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -30269,6 +30548,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -31293,6 +31581,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -32456,6 +32753,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -33354,6 +33660,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -34402,6 +34717,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -35483,6 +35807,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -36414,6 +36747,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -37377,6 +37719,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -38597,6 +38948,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -39542,6 +39902,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -40421,6 +40790,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -41388,6 +41766,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -42463,6 +42850,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -43393,6 +43789,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -44282,6 +44687,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -45296,6 +45710,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -46392,6 +46815,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -47452,6 +47884,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -48377,6 +48818,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -49309,6 +49759,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -50201,6 +50660,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -51190,6 +51658,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -52168,6 +52645,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {
@@ -53236,6 +53722,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -54224,6 +54719,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
                   "children": [
                            {
@@ -55082,6 +55586,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCilk"
                            }]
                },
                {

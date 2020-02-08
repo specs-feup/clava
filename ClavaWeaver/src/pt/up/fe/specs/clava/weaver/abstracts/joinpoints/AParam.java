@@ -486,6 +486,7 @@ public abstract class AParam extends AVardecl {
         HASCHILDREN("hasChildren"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         TYPE("type"),
+        ISCILK("isCilk"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

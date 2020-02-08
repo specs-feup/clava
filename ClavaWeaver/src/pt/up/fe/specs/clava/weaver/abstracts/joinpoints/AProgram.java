@@ -963,6 +963,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         HASCHILDREN("hasChildren"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         TYPE("type"),
+        ISCILK("isCilk"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

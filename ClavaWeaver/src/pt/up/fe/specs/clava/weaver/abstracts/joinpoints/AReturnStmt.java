@@ -542,6 +542,7 @@ public abstract class AReturnStmt extends AStatement {
         HASCHILDREN("hasChildren"),
         DESCENDANTSANDSELF("descendantsAndSelf"),
         TYPE("type"),
+        ISCILK("isCilk"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

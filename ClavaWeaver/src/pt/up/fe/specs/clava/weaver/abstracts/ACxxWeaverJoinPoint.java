@@ -23,6 +23,7 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.SourceRange;
+import pt.up.fe.specs.clava.ast.cilk.CilkNode;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -1225,4 +1226,8 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         return getNode().hasChildren();
     }
 
+    @Override
+    public Boolean getIsCilkImpl() {
+        return getNode() instanceof CilkNode;
+    }
 }

@@ -119,6 +119,8 @@
 		</attribute>		
 		<attribute name="hasChildren" type="Boolean" 		tooltip="true if the node has children, false otherwise">
 		</attribute>
+		<attribute name="isCilk" type="Boolean" 		tooltip="true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)">
+		</attribute>
 		<!--
 		<attribute name="setValue" type="joinpoint" tooltip="Sets the value associated with the given property key">
 			<parameter name="key" type="String" />	

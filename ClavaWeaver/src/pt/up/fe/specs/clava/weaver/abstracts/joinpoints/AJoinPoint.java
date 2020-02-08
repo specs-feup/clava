@@ -608,6 +608,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("firstChild");
         attributes.add("lastChild");
         attributes.add("hasChildren");
+        attributes.add("isCilk");
     }
 
     /**
@@ -2012,6 +2013,29 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasChildren", e);
+        }
+    }
+
+    /**
+     * true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)
+     */
+    public abstract Boolean getIsCilkImpl();
+
+    /**
+     * true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)
+     */
+    public final Object getIsCilk() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCilk", Optional.empty());
+        	}
+        	Boolean result = this.getIsCilkImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isCilk", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isCilk", e);
         }
     }
 
