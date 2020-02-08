@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.cilk;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
@@ -59,10 +60,22 @@ public class CilkAstAdapter implements SimplePreClavaRule {
             // Build new filename
             var cilkTempFile = tunit.getFile();
             var newFilename = SpecsIo.removeExtension(withoutExtension) + "." + originalExtension;
-            tunit.setFile(new File(cilkTempFile.getParentFile(), newFilename));
+            var newFile = new File(cilkTempFile.getParentFile(), newFilename);
+            tunit.setFile(newFile);
 
             // If temporary Clava file exists, delete it
             SpecsIo.delete(cilkTempFile);
+
+            var oldFilepath = SpecsIo.getCanonicalPath(cilkTempFile);
+            var newFilepath = SpecsIo.getCanonicalPath(newFile);
+
+            // Change the file location of all nodes
+            tunit.getDescendantsAndSelfStream()
+                    .map(aNode -> aNode.getLocation())
+                    .flatMap(sourceRange -> Stream.of(sourceRange.getStart(), sourceRange.getEnd()))
+                    .filter(sourceLoc -> oldFilepath.equals(sourceLoc.getFilepath()))
+                    // .filter(sourceRange -> sourceRange.getFilenameTry().orElse("").equals(oldFilename))
+                    .forEach(sourceLoc -> sourceLoc.setFilepath(newFilepath));
 
             return;
         }
