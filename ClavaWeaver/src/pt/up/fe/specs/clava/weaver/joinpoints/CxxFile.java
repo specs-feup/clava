@@ -477,4 +477,14 @@ public class CxxFile extends AFile {
     public String getSourceFoldernameImpl() {
         return tunit.get(TranslationUnit.SOURCE_FOLDERNAME).orElse(null);
     }
+
+    @Override
+    public Boolean getHasParsingErrorsImpl() {
+        return tunit.get(TranslationUnit.HAS_PARSING_ERRORS);
+    }
+
+    @Override
+    public String getErrorOutputImpl() {
+        return tunit.get(TranslationUnit.ERROR_OUTPUT);
+    }
 }

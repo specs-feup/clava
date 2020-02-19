@@ -354,6 +354,52 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * true if there were errors during parsing
+     */
+    public abstract Boolean getHasParsingErrorsImpl();
+
+    /**
+     * true if there were errors during parsing
+     */
+    public final Object getHasParsingErrors() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasParsingErrors", Optional.empty());
+        	}
+        	Boolean result = this.getHasParsingErrorsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasParsingErrors", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasParsingErrors", e);
+        }
+    }
+
+    /**
+     * the output of the parser if there were errors during parsing
+     */
+    public abstract String getErrorOutputImpl();
+
+    /**
+     * the output of the parser if there were errors during parsing
+     */
+    public final Object getErrorOutput() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "errorOutput", Optional.empty());
+        	}
+        	String result = this.getErrorOutputImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "errorOutput", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "errorOutput", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select stmts
      * @return 
      */
@@ -935,6 +981,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         attributes.add("destinationFilepath");
         attributes.add("destinationFilepath");
         attributes.add("sourceFoldername");
+        attributes.add("hasParsingErrors");
+        attributes.add("errorOutput");
     }
 
     /**
@@ -1006,6 +1054,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         ISOPENCL("isOpenCL"),
         DESTINATIONFILEPATH("destinationFilepath"),
         SOURCEFOLDERNAME("sourceFoldername"),
+        HASPARSINGERRORS("hasParsingErrors"),
+        ERROROUTPUT("errorOutput"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

@@ -178,6 +178,8 @@
 			<parameter name="destinationFolderpath" type="String" />			
 		</attribute>		
 		<attribute name="sourceFoldername" type="String" tooltip="the name of the source folder of this file, or undefined if it has none"/>
+		<attribute name="hasParsingErrors" type="Boolean" tooltip="true if there were errors during parsing"/>
+		<attribute name="errorOutput" type="String" tooltip="the output of the parser if there were errors during parsing"/>
 	</artifact>
 
 	<!-- INCLUDE -->
