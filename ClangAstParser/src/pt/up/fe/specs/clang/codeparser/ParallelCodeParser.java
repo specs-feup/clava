@@ -220,6 +220,17 @@ public class ParallelCodeParser extends CodeParser {
         boolean normalizeNodes = true;
         List<TranslationUnit> tUnits = new TUnitProcessor(clangParserResults, normalizeNodes).getTranslationUnits();
 
+        // If errors, set error messages in corresponding TUnit
+        for (var parserData : clangParserResults) {
+            if (!parserData.get(ClangParserData.HAS_ERRORS)) {
+                continue;
+            }
+
+            var errorOutput = parserData.get(ClangParserData.LINES_NOT_PARSED);
+            parserData.get(ClangParserData.TRANSLATION_UNIT).set(TranslationUnit.HAS_PARSING_ERRORS);
+            parserData.get(ClangParserData.TRANSLATION_UNIT).set(TranslationUnit.ERROR_OUTPUT, errorOutput);
+        }
+
         App app = context.get(ClavaContext.FACTORY).app(tUnits);
         app.set(App.HAS_PARSING_ERRORS, hasParsingErrors);
 
