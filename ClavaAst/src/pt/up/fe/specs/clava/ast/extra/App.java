@@ -74,6 +74,9 @@ public class App extends ClavaNode {
             .setDefault(() -> DataStore.newInstance("Clava App Arbitrary Data"))
             .setCopyFunction(dataStore -> DataStore.newInstance(dataStore.getName(), dataStore));
 
+    /**
+     * TODO: Use instead HAS_PARSING_ERRORS of TranslationUnits?
+     */
     public final static DataKey<Boolean> HAS_PARSING_ERRORS = KeyFactory.bool("hasParsingErrors");
 
     /// DATAKEYS END
@@ -445,8 +448,8 @@ public class App extends ClavaNode {
      * @param baseInputFolder
      * @param destinationFolder
      * @param modifiedFiles
-     *            a set of filenames which is a white-list for files that should be generated from the AST. If null,
-     *            generates all files from the AST
+     *                              a set of filenames which is a white-list for files that should be generated from the
+     *                              AST. If null, generates all files from the AST
      * @return
      */
     public Map<File, String> getCode(File destinationFolder, Set<String> modifiedFiles) {

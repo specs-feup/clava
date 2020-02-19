@@ -87,6 +87,10 @@ public class TranslationUnit extends ClavaNode {
      */
     public static final DataKey<Optional<String>> LITERAL_SOURCE = KeyFactory.optional("literalSource");
 
+    public static final DataKey<Boolean> HAS_PARSING_ERRORS = KeyFactory.bool("hasParsingErrors");
+
+    public static final DataKey<String> ERROR_OUTPUT = KeyFactory.string("errorOutput");
+
     /// DATAKEYS END
 
     // private static final Set<String> HEADER_EXTENSIONS = new HashSet<>(Arrays.asList("h", "hpp"));
