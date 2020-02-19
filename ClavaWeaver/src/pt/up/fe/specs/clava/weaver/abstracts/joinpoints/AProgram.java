@@ -457,6 +457,30 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality
+     */
+    public void rebuildFuzzyImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action rebuildFuzzy not implemented ");
+    }
+
+    /**
+     * Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality
+     */
+    public final void rebuildFuzzy() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "rebuildFuzzy", this, Optional.empty());
+        	}
+        	this.rebuildFuzzyImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "rebuildFuzzy", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "rebuildFuzzy", e);
+        }
+    }
+
+    /**
      * Adds a file join point to the current program
      * @param file 
      */
@@ -914,6 +938,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     protected final void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
         actions.add("void rebuild()");
+        actions.add("void rebuildFuzzy()");
         actions.add("joinpoint addFile(file)");
         actions.add("joinpoint addFileFromPath(Object)");
         actions.add("void push()");

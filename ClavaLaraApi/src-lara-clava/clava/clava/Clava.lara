@@ -34,6 +34,10 @@ Clava.rebuild = function() {
 	call Rebuild();
 }; 
 
+Clava.rebuildFuzzy = function() {
+	call RebuildFuzzy();
+}; 
+
 /**
  * @return {J#java.io.File} The folder of the first input source element, either itself, if a folder, or the parent folder, if it is a file. 
  */

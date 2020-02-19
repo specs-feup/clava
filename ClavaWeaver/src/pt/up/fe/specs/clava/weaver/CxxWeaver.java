@@ -311,11 +311,11 @@ public class CxxWeaver extends ACxxWeaver {
      * Set a file/folder in the weaver if it is valid file/folder type for the weaver.
      *
      * @param source
-     *            the file with the source code
+     *                      the file with the source code
      * @param outputDir
-     *            output directory for the generated file(s)
+     *                      output directory for the generated file(s)
      * @param args
-     *            arguments to start the weaver
+     *                      arguments to start the weaver
      * @return true if the file type is valid
      */
     @Override
@@ -688,9 +688,9 @@ public class CxxWeaver extends ACxxWeaver {
      * @param sources
      * @param parserOptions
      * @param extraOptions
-     *            options that should not be processed (e.g., header files found in folders specified by -I flags are
-     *            automatically added to the compilation, if we want to add header folders whose header files should not
-     *            be parsed, they can be specified here)
+     *                          options that should not be processed (e.g., header files found in folders specified by
+     *                          -I flags are automatically added to the compilation, if we want to add header folders
+     *                          whose header files should not be parsed, they can be specified here)
      * @return
      */
     public App createApp(List<File> sources, List<String> parserOptions, List<String> extraOptions) {
@@ -1385,10 +1385,81 @@ public class CxxWeaver extends ACxxWeaver {
         // return rebuiltApp.getTranslationUnits().get(0);
     }
 
+    public void rebuildAstFuzzy() {
+        int maxIterations = 1;
+
+        ClavaLog.debug("Fuzzy parsing started");
+
+        int currentIteration = 0;
+        boolean hasParsingErrors = true;
+        while (hasParsingErrors && currentIteration < maxIterations) {
+            currentIteration++;
+
+            ClavaLog.debug("Fuzzy parsing iteration " + currentIteration);
+
+            // Save AST
+            pushAst();
+
+            // Rebuild
+            rebuildAst(true);
+
+            var fuzzyApp = getApp();
+            hasParsingErrors = fuzzyApp.get(App.HAS_PARSING_ERRORS);
+
+            // No parsing errors, job done
+            if (!hasParsingErrors) {
+                break;
+            }
+
+            // Collect error for each translation unit
+            Map<String, String> tunitsErrors = new HashMap<>();
+            for (var tunit : fuzzyApp.getTranslationUnits()) {
+                System.out.println("CHECKING " + tunit.getRelativeFilepath());
+                if (!tunit.get(TranslationUnit.HAS_PARSING_ERRORS)) {
+                    continue;
+                }
+                System.out.println("ADDED");
+                var errorOutput = tunit.get(TranslationUnit.ERROR_OUTPUT);
+
+                String tunitId = tunit.getRelativeFilepath();
+                tunitsErrors.put(tunitId, errorOutput);
+            }
+
+            // Restore app
+            popAst();
+
+            var originalApp = getApp();
+
+            for (var originalTunit : originalApp.getTranslationUnits()) {
+                var errorOutput = tunitsErrors.get(originalTunit.getRelativeFilepath());
+                System.out.println("HAS ERRORS? " + originalTunit.getRelativeFilepath());
+                if (errorOutput == null) {
+                    System.out.println("NO");
+                    continue;
+                }
+                System.out.println("YES");
+
+                ClavaLog.debug("Trying to fix file '" + originalTunit.getRelativeFilepath() + "'");
+                fuzzyFix(originalTunit, errorOutput);
+            }
+        }
+
+        if (hasParsingErrors && currentIteration == maxIterations) {
+            ClavaLog.debug("Stopping after achieving maximum number of iterations (" + maxIterations + ")");
+        }
+
+        ClavaLog.debug("Fuzzy parsing ended");
+    }
+
+    private void fuzzyFix(TranslationUnit tunit, String errorOutput) {
+        System.out.println("FIXING " + tunit.getRelativeFilepath());
+        System.out.println("ERROR:" + errorOutput);
+    }
+
     /**
      *
      * @param update
-     *            if true, the weaver will update its state to use the rebuilt tree instead of the original tree
+     *                   if true, the weaver will update its state to use the rebuilt tree instead of the original tree
      */
     public void rebuildAst(boolean update) {
         // Check if inside apply

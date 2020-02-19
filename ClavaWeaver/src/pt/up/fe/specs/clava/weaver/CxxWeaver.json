@@ -21874,6 +21874,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the output of the parser if there were errors during parsing",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "errorOutput"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "a Java file to the file that originated this translation unit",
                   "children": [
                            {
@@ -21897,6 +21906,15 @@
                            {
                               "type": "Boolean",
                               "name": "hasMain"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if there were errors during parsing",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "hasParsingErrors"
                            }]
                },
                {
@@ -41437,6 +41455,15 @@
                            {
                               "type": "void",
                               "name": "rebuild"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "rebuildFuzzy"
                            }]
                },
                {

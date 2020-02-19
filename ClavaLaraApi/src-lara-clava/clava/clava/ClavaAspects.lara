@@ -8,6 +8,15 @@ aspectdef Rebuild
 	end
 end
 
+
+aspectdef RebuildFuzzy
+	select program end
+	apply
+		$program.exec rebuildFuzzy();
+	end
+end
+
+
 aspectdef ClavaStandard
 	output standard end
 	

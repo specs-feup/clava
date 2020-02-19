@@ -83,6 +83,8 @@
 		the AST -->
 	<action name="rebuild" class="program" tooltip="Recompiles the program currently represented by the AST, transforming literal code into AST nodes"/>
 
+	<action name="rebuildFuzzy" class="program" tooltip="Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality"/>
+
 	<action name="addFile" class="program" return="joinpoint" tooltip="Adds a file join point to the current program">
 		<parameter name="file" type="file" />
 	</action>
