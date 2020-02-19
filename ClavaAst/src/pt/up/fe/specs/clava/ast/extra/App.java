@@ -74,11 +74,6 @@ public class App extends ClavaNode {
             .setDefault(() -> DataStore.newInstance("Clava App Arbitrary Data"))
             .setCopyFunction(dataStore -> DataStore.newInstance(dataStore.getName(), dataStore));
 
-    /**
-     * TODO: Use instead HAS_PARSING_ERRORS of TranslationUnits?
-     */
-    public final static DataKey<Boolean> HAS_PARSING_ERRORS = KeyFactory.bool("hasParsingErrors");
-
     /// DATAKEYS END
 
     // private static final FunctionDecl NO_FUNCTION_FOUND = ClavaNodeFactory.dummyFunctionDecl("No Function Found");
@@ -891,4 +886,15 @@ public class App extends ClavaNode {
         return newApp;
     }
     */
+
+    /**
+     * 
+     * @return true, if any of the TranslationUnits has parsing errors
+     */
+    public boolean hasParsingErrors() {
+        return getTranslationUnits().stream()
+                .filter(tu -> tu.get(TranslationUnit.HAS_PARSING_ERRORS))
+                .findFirst()
+                .isPresent();
+    }
 }

@@ -232,7 +232,6 @@ public class ParallelCodeParser extends CodeParser {
         }
 
         App app = context.get(ClavaContext.FACTORY).app(tUnits);
-        app.set(App.HAS_PARSING_ERRORS, hasParsingErrors);
 
         // Add App to context
         // app.getContext().set(ClavaContext.APP, app);

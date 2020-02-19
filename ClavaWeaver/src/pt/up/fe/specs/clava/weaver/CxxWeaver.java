@@ -1404,7 +1404,7 @@ public class CxxWeaver extends ACxxWeaver {
             rebuildAst(true);
 
             var fuzzyApp = getApp();
-            hasParsingErrors = fuzzyApp.get(App.HAS_PARSING_ERRORS);
+            hasParsingErrors = fuzzyApp.hasParsingErrors();
 
             // No parsing errors, job done
             if (!hasParsingErrors) {

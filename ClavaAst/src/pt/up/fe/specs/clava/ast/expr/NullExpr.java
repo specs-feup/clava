@@ -18,7 +18,6 @@ import java.util.Collection;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.utils.NullNode;
 
 public class NullExpr extends Expr implements NullNode {
@@ -29,7 +28,7 @@ public class NullExpr extends Expr implements NullNode {
 
     @Override
     public String getCode() {
-        return getNullCode(getApp().get(App.HAS_PARSING_ERRORS));
+        return getNullCode(getApp().hasParsingErrors());
     }
 
 }
