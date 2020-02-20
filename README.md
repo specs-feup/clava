@@ -3,7 +3,6 @@ Clava is a C/C++ source-to-source compiler. It applies analysis and transformati
 
 
 # resources
-To build Clava, please check the [ClavaWeaver](https://github.com/specs-feup/clava/tree/master/ClavaWeaver) project folder.
 
 A ZIP file with the compiled JAR for Clava can be downloaded from [here](http://specs.fe.up.pt/tools/clava.zip).
 
@@ -14,6 +13,9 @@ For an online demo version of Clava, please click [here](http://specs.fe.up.pt/t
 For a tutorial on how to use Clava, please click [here](https://github.com/specs-feup/specs-lara/tree/master/2018-PACT).
 
 For a sample of Clava examples, please click [here](https://github.com/specs-feup/clava-examples/).
+
+To build Clava, please check the [ClavaWeaver](https://github.com/specs-feup/clava/tree/master/ClavaWeaver) project folder.
+
 
 # configuring eclipse
 
