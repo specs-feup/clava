@@ -69,3 +69,10 @@ To pass a configuration file, use the flag -c:
 
 where <config.clava> is the configuration file created with the GUI.
 
+
+# configuring eclipse
+
+Please check the README file in repository [specs-java-libs](https://github.com/specs-feup/specs-java-libs).
+
+
+
