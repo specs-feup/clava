@@ -29,9 +29,7 @@ On Fedora >28 systems this can be solved by installing the package `ncurses-comp
 
 
 
-# configuring eclipse
 
-Please check the README file in repository [specs-java-libs](https://github.com/specs-feup/specs-java-libs).
 
 # acknowledgments
 
