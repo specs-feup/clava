@@ -203,7 +203,7 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition {
     public String getLoopId() {
         String fileId = "file$"
                 + getAncestorTry(TranslationUnit.class)
-                        .map(tunit -> tunit.getFile().getPath())
+                        .map(tunit -> tunit.getRelativeFilepath())
                         .orElse("<no_file>");
 
         String functionId = "function$" + getAncestorTry(FunctionDecl.class)
