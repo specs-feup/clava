@@ -1,7 +1,8 @@
-# clava
-C/C++ Source-to-Source Tool
+# Clava
+Clava is a C/C++ source-to-source compiler. It applies analysis and transformations written in Javascript-like scripts, and can be installed in under a minute.
 
-To build Clava, please check the [ClavaWeaver](https://github.com/specs-feup/clava/tree/master/ClavaWeaver) project folder.
+
+# Resources
 
 A ZIP file with the compiled JAR for Clava can be downloaded from [here](http://specs.fe.up.pt/tools/clava.zip).
 
@@ -13,9 +14,22 @@ For a tutorial on how to use Clava, please click [here](https://github.com/specs
 
 For a sample of Clava examples, please click [here](https://github.com/specs-feup/clava-examples/).
 
-# configuring eclipse
+To build Clava, please check the [ClavaWeaver](https://github.com/specs-feup/clava/tree/master/ClavaWeaver) project folder.
 
-Please check the README file in repository [specs-java-libs](https://github.com/specs-feup/specs-java-libs).
+
+# Troubleshooting
+
+## Error 'Invalid or corrupt jarfile'
+
+Check if you have at least Java 11 installed, this is the minimum version.
+
+## Error 'missing libtinfo.so.5'
+
+On Fedora >28 systems this can be solved by installing the package `ncurses-compat-libs`
+
+
+
+
 
 # acknowledgments
 
