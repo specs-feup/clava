@@ -1230,4 +1230,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public Boolean getIsCilkImpl() {
         return getNode() instanceof CilkNode;
     }
+
+    @Override
+    public Integer getDepthImpl() {
+        return getNode().getDepth();
+    }
 }

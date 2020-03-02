@@ -609,6 +609,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("lastChild");
         attributes.add("hasChildren");
         attributes.add("isCilk");
+        attributes.add("depth");
     }
 
     /**
@@ -2036,6 +2037,29 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isCilk", e);
+        }
+    }
+
+    /**
+     * the depth of this join point in the AST. If it is the root join point returns 0, if it is a child of the root node returns 1, etc.
+     */
+    public abstract Integer getDepthImpl();
+
+    /**
+     * the depth of this join point in the AST. If it is the root join point returns 0, if it is a child of the root node returns 1, etc.
+     */
+    public final Object getDepth() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "depth", Optional.empty());
+        	}
+        	Integer result = this.getDepthImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "depth", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "depth", e);
         }
     }
 

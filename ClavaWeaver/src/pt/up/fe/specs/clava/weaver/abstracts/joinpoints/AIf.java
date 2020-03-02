@@ -723,6 +723,7 @@ public abstract class AIf extends AStatement {
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
         FIRSTJP("firstJp"),
+        DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),

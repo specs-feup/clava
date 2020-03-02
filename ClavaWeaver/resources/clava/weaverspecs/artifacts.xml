@@ -127,6 +127,9 @@
 			<parameter name="value" type="Object" />				
 		</attribute>
 		-->		
+		<attribute name="depth" type="Integer" tooltip="the depth of this join point in the AST. If it is the root join point returns 0, if it is a child of the root node returns 1, etc.">
+		</attribute>
+		
 	</global>
 
 

@@ -454,6 +454,7 @@ public abstract class AInclude extends ADecl {
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
         FIRSTJP("firstJp"),
+        DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),

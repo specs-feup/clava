@@ -1569,6 +1569,7 @@ public abstract class ALoop extends AStatement {
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
         FIRSTJP("firstJp"),
+        DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),

@@ -705,6 +705,7 @@ public abstract class AMemberCall extends ACall {
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
         FIRSTJP("firstJp"),
+        DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),

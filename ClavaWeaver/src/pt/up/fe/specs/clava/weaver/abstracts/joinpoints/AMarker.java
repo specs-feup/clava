@@ -479,6 +479,7 @@ public abstract class AMarker extends APragma {
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
         FIRSTJP("firstJp"),
+        DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
