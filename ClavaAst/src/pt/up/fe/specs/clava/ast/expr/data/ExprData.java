@@ -13,16 +13,11 @@
 
 package pt.up.fe.specs.clava.ast.expr.data;
 
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.Type;
 
 public class ExprData {
-
-    private static final ExprData EMPTY = new ExprData(ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo()),
-            ValueKind.getDefault());
 
     private final Type type;
     private final ValueKind valueKind;
@@ -56,10 +51,6 @@ public class ExprData {
 
     public ObjectKind getObjectKind() {
         return objectKind;
-    }
-
-    public static ExprData empty() {
-        return EMPTY;
     }
 
     @Override
