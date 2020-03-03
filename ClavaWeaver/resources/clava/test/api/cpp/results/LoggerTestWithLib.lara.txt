@@ -12,11 +12,11 @@ double foo() {
    ConsoleLogger clava_logger_0;
    double a = 0;
    for(int i = 0; i < 1000; i++) {
-      clava_logger_0.msg("Print double ", 2.0, " after bar", std::endl);
-      clava_logger_1.msg("Logging to a file", std::endl);
+      clava_logger_0.msg("Print double ", 2.0, " after bar", "\n");
+      clava_logger_1.msg("Logging to a file", "\n");
       a += bar();
-      clava_logger_1.msg("Logging again to a file", std::endl);
-      clava_logger_0.msg("Printing again", std::endl);
+      clava_logger_1.msg("Logging again to a file", "\n");
+      clava_logger_0.msg("Printing again", "\n");
    }
    
    return a;
@@ -32,10 +32,10 @@ void testAppend() {
 int main() {
    FileLogger clava_logger_3("log.txt");
    ConsoleLogger clava_logger_2;
-   clava_logger_2.msg("Print double ", 2.0, " after foo", std::endl);
-   clava_logger_3.msg("Logging to a file", std::endl);
+   clava_logger_2.msg("Print double ", 2.0, " after foo", "\n");
+   clava_logger_3.msg("Logging to a file", "\n");
    foo();
-   clava_logger_3.msg("Logging again to a file", std::endl);
-   clava_logger_2.msg("Printing again", std::endl);
+   clava_logger_3.msg("Logging again to a file", "\n");
+   clava_logger_2.msg("Printing again", "\n");
 }
 

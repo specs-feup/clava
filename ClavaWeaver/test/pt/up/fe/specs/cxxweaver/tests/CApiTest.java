@@ -18,6 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 
+import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
 import pt.up.fe.specs.lang.SpecsPlatforms;
@@ -55,6 +56,19 @@ public class CApiTest {
         }
 
         tester.test("TimerTest.lara", "timer_test.c");
+    }
+
+    /**
+     * Compiles C code, but with C++ flag.
+     */
+    @Test
+    public void testTimerWithCxxFlag() {
+        ClavaWeaverTester tester = newTester();
+        if (SpecsPlatforms.isUnix()) {
+            tester.setResultsFile("TimerTest.lara.unix.txt");
+        }
+
+        tester.set(ClavaOptions.STANDARD, Standard.CXX11).test("TimerTest.lara", "timer_test.c");
     }
 
     @Test
