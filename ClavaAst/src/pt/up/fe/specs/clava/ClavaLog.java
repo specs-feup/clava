@@ -25,16 +25,16 @@ public interface ClavaLog extends TagLoggerUser<ClavaLoggerTag> {
     // private static final String CLAVA_WEAVER_TAG = buildLoggerName(ClavaLog.class);
     // private static final Lazy<ClavaLog> LOGGER = buildLazy(ClavaLog::new);
 
-    static final EnumLogger<ClavaLoggerTag> CLAVA_LOGGER = EnumLogger.newInstance(ClavaLoggerTag.class)
-            .addToIgnoreList(ClavaLog.class);
+    static final ThreadLocal<EnumLogger<ClavaLoggerTag>> CLAVA_LOGGER = ThreadLocal
+            .withInitial(() -> EnumLogger.newInstance(ClavaLoggerTag.class).addToIgnoreList(ClavaLog.class));
 
     public static EnumLogger<ClavaLoggerTag> getLogger() {
-        return CLAVA_LOGGER;
+        return CLAVA_LOGGER.get();
     }
 
     @Override
     default TagLogger<ClavaLoggerTag> logger() {
-        return CLAVA_LOGGER;
+        return CLAVA_LOGGER.get();
     }
 
     // private static ClavaLog logger() {
@@ -46,19 +46,19 @@ public interface ClavaLog extends TagLoggerUser<ClavaLoggerTag> {
     // }
 
     public static void deprecated(String message) {
-        CLAVA_LOGGER.deprecated(message);
+        CLAVA_LOGGER.get().deprecated(message);
     }
 
     public static void debug(String message) {
-        CLAVA_LOGGER.debug(message);
+        CLAVA_LOGGER.get().debug(message);
     }
 
     public static void debug(Supplier<String> message) {
-        CLAVA_LOGGER.debug(message);
+        CLAVA_LOGGER.get().debug(message);
     }
 
     public static void info(String message) {
-        CLAVA_LOGGER.info(message);
+        CLAVA_LOGGER.get().info(message);
     }
 
     public static void info(Supplier<String> message) {
@@ -72,7 +72,7 @@ public interface ClavaLog extends TagLoggerUser<ClavaLoggerTag> {
 
     public static void warning(String message) {
         // TODO: Implemented as info for now
-        CLAVA_LOGGER.warn(message);
+        CLAVA_LOGGER.get().warn(message);
         // throw new RuntimeException("Not implemented yet");
         // CLAVA_LOGGER.warn(message);
         // SpecsLogs.msgInfo("[Warning] " + message);
@@ -84,6 +84,6 @@ public interface ClavaLog extends TagLoggerUser<ClavaLoggerTag> {
      * @param takeTime
      */
     public static void metrics(String message) {
-        CLAVA_LOGGER.info(ClavaLoggerTag.METRICS, message);
+        CLAVA_LOGGER.get().info(ClavaLoggerTag.METRICS, message);
     }
 }
