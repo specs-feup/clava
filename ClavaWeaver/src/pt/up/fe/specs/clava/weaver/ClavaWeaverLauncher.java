@@ -16,6 +16,8 @@ package pt.up.fe.specs.clava.weaver;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 
 import org.junit.runner.Result;
@@ -157,20 +159,46 @@ public class ClavaWeaverLauncher {
     // return Optional.of(docResults != -1);
     // }
 
-    public static boolean executeParallel(String[][] args) {
+    public static boolean executeParallel(String[][] args, int threads) {
 
-        var results = Arrays.asList(args).parallelStream()
-                .map(arg -> execute(arg))
-                .collect(Collectors.toList());
+        var customThreadPool = threads > 0 ? new ForkJoinPool(threads) : new ForkJoinPool();
 
-        return results.parallelStream()
-                .filter(result -> result == false)
-                .findFirst()
-                .orElse(true);
+        ClavaLog.info(
+                () -> "Launching " + args.length + " instances of Clava in parallel, using " + threads + " threads");
+
+        try {
+            var results = customThreadPool.submit(() -> Arrays.asList(args).parallelStream()
+                    .map(ClavaWeaverLauncher::executeSafe)
+                    .collect(Collectors.toList())).get();
+
+            return results.parallelStream()
+                    .filter(result -> result == false)
+                    .findFirst()
+                    .orElse(true);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return false;
+        } catch (ExecutionException e) {
+            ClavaLog.info("Unrecoverable exception while executing parallel instances of Clava: " + e);
+            return false;
+        }
+
+        // var results = Arrays.asList(args).parallelStream()
+        // .map(ClavaWeaverLauncher::executeSafe)
+        // .collect(Collectors.toList());
 
         // Arrays.asList(args).parallelStream()
         // .forEach(arg -> System.out.println(Arrays.toString(arg)));
         //
         // return true;
+    }
+
+    private static boolean executeSafe(String[] args) {
+        try {
+            return execute(args);
+        } catch (Exception e) {
+            ClavaLog.info("Exception during Clava execution: " + e);
+            return false;
+        }
     }
 }
