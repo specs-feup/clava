@@ -14,7 +14,9 @@
 package pt.up.fe.specs.clava.weaver;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.runner.Result;
 
@@ -155,4 +157,20 @@ public class ClavaWeaverLauncher {
     // return Optional.of(docResults != -1);
     // }
 
+    public static boolean executeParallel(String[][] args) {
+
+        var results = Arrays.asList(args).parallelStream()
+                .map(arg -> execute(arg))
+                .collect(Collectors.toList());
+
+        return results.parallelStream()
+                .filter(result -> result == false)
+                .findFirst()
+                .orElse(true);
+
+        // Arrays.asList(args).parallelStream()
+        // .forEach(arg -> System.out.println(Arrays.toString(arg)));
+        //
+        // return true;
+    }
 }
