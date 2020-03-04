@@ -92,6 +92,28 @@ Clava.runClava = function(args) {
 }
 
 /**
+ * Launches several Clava weaving sessions in parallel.
+ *
+ * @param {string[][]} argsLists - An array where each element is an array with the arguments to pass to the weaver, as if it was launched from the command-line
+ *
+ * @return {Boolean} true if none of the weaver executions had problems, false otherwise
+ */
+Clava.runClavaParallel = function(argsLists) {
+//  * @param {int} threads -  Number of threads to use
+//	if(threads === undefined) {
+//		threads = -1;
+//	}
+
+/*
+	// If string, separate arguments
+	if(typeof args  === "string") {
+		args = ArgumentsParser.newCommandLine().parse(args);
+	}
+*/
+	return ClavaWeaverLauncher.executeParallel(argsLists);
+}
+
+/**
  * Creates a clone of the current AST and pushes the clone to the top of the current AST stack.
  */
 Clava.pushAst = function() {
