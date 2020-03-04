@@ -18,9 +18,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clang.textparser.TextParserRule;
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
@@ -70,8 +69,16 @@ public class MultiLineCommentRule implements TextParserRule {
 
             }
 
-            Preconditions.checkArgument(iterator.hasNext(),
-                    "Could not find end of multi-line comment start at '" + filepath + "':" + lineNumber);
+            // If no more line, multi-line comment does not end.
+            // Add line, warn user and return
+            if (!iterator.hasNext()) {
+                lines.add(currentLine.trim());
+                ClavaLog.info("Could not find end of multi-line comment start at '" + filepath + "':" + lineNumber);
+                break;
+            }
+
+            // Preconditions.checkArgument(iterator.hasNext(),
+            // "Could not find end of multi-line comment start at '" + filepath + "':" + lineNumber);
 
             // Did not find end of comment, add current string to list
             lines.add(currentLine.trim());
