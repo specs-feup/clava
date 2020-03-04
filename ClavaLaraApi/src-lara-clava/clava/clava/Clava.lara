@@ -95,14 +95,15 @@ Clava.runClava = function(args) {
  * Launches several Clava weaving sessions in parallel.
  *
  * @param {string[][]} argsLists - An array where each element is an array with the arguments to pass to the weaver, as if it was launched from the command-line
+ * @param {int} threads -  Number of threads to use
  *
  * @return {Boolean} true if none of the weaver executions had problems, false otherwise
  */
-Clava.runClavaParallel = function(argsLists) {
-//  * @param {int} threads -  Number of threads to use
-//	if(threads === undefined) {
-//		threads = -1;
-//	}
+Clava.runClavaParallel = function(argsLists, threads) {
+
+	if(threads === undefined) {
+		threads = -1;
+	}
 
 /*
 	// If string, separate arguments
@@ -110,7 +111,7 @@ Clava.runClavaParallel = function(argsLists) {
 		args = ArgumentsParser.newCommandLine().parse(args);
 	}
 */
-	return ClavaWeaverLauncher.executeParallel(argsLists);
+	return ClavaWeaverLauncher.executeParallel(argsLists, threads);
 }
 
 /**
