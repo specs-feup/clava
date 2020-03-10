@@ -21,9 +21,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.utils.StmtWithCondition;
-import pt.up.fe.specs.util.SpecsCheck;
 
 public class IfStmt extends Stmt implements StmtWithCondition {
 
@@ -71,28 +69,16 @@ public class IfStmt extends Stmt implements StmtWithCondition {
 
     }
 
-    // public Optional<CompoundStmt> getThen() {
-    public CompoundStmt getThen() {
-
-        var then = getChild(CompoundStmt.class, 2);
-
-        SpecsCheck.checkArgument(!(then instanceof NullNode),
-                () -> "So there is case where the Then of the If can be null, now is confirmed");
-
-        return then;
-
-        // return getOptionalChild(CompoundStmt.class, 2);
-
-        // Optional<Stmt> stmt = getOptionalChild(Stmt.class, 2);
-        // if (!stmt.isPresent()) {
-        // return Optional.empty();
-        // }
-        //
-        // if (stmt.get() instanceof CompoundStmt) {
-        // return Optional.of((CompoundStmt) stmt.get());
-        // }
-        // System.out.println("IfStmt: Then not being normalized as a CompoundStmt: " + stmt.get());
-        // return stmt.map(ClavaNodes::toCompoundStmt);
+    /**
+     * The 'then' block.
+     * 
+     * <p>
+     * In C++ the IfStmt can have no then (e.g., "if(true);").
+     * 
+     * @return
+     */
+    public Optional<CompoundStmt> getThen() {
+        return getOptionalChild(CompoundStmt.class, 2);
     }
 
     public Optional<CompoundStmt> getElse() {
@@ -116,9 +102,8 @@ public class IfStmt extends Stmt implements StmtWithCondition {
 
         String conditionCode = getDeclCondition().map(VarDecl::getCode).orElse(getCondition().getCode());
 
-        String thenCode = getThen().getCode();
+        String thenCode = getThen().map(CompoundStmt::getCode).orElse(";\n");
 
-        // String thenCode = getThen().map(CompoundStmt::getCode).orElse(";\n");
         // If then does not end with newline, add one
         thenCode = thenCode.endsWith(ln()) ? thenCode : thenCode + ln();
 
