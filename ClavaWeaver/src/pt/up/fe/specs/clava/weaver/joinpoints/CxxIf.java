@@ -54,8 +54,10 @@ public class CxxIf extends AIf {
 
     @Override
     public List<? extends AScope> selectThen() {
-        return ifStmt.getThen().map(then -> Arrays.asList(CxxJoinpoints.create(then, AScope.class)))
-                .orElse(Collections.emptyList());
+        return Arrays.asList(CxxJoinpoints.create(ifStmt.getThen(), AScope.class));
+
+        // return ifStmt.getThen().map(then -> Arrays.asList(CxxJoinpoints.create(then, AScope.class)))
+        // .orElse(Collections.emptyList());
         // return Arrays.asList(CxxJoinpoints.create(ifStmt.getThen(), this, AScope.class));
     }
 
