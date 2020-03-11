@@ -267,6 +267,8 @@
 
 	<action name="clear" class="scope"	tooltip="Clears the contents of this scope (untested)" />
 	
+	<action name="cfg" class="scope"	tooltip="CFG tester" />
+	
 
 	<!-- FUNCTION -->
 	<action name="clone" class="function" return="function" tooltip="Clones this function assigning it a new name, inserts the cloned function after the original function">
