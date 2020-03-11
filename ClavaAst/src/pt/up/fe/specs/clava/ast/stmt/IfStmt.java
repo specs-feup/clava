@@ -69,19 +69,16 @@ public class IfStmt extends Stmt implements StmtWithCondition {
 
     }
 
+    /**
+     * The 'then' block.
+     * 
+     * <p>
+     * In C++ the IfStmt can have no then (e.g., "if(true);").
+     * 
+     * @return
+     */
     public Optional<CompoundStmt> getThen() {
         return getOptionalChild(CompoundStmt.class, 2);
-
-        // Optional<Stmt> stmt = getOptionalChild(Stmt.class, 2);
-        // if (!stmt.isPresent()) {
-        // return Optional.empty();
-        // }
-        //
-        // if (stmt.get() instanceof CompoundStmt) {
-        // return Optional.of((CompoundStmt) stmt.get());
-        // }
-        // System.out.println("IfStmt: Then not being normalized as a CompoundStmt: " + stmt.get());
-        // return stmt.map(ClavaNodes::toCompoundStmt);
     }
 
     public Optional<CompoundStmt> getElse() {
@@ -106,6 +103,7 @@ public class IfStmt extends Stmt implements StmtWithCondition {
         String conditionCode = getDeclCondition().map(VarDecl::getCode).orElse(getCondition().getCode());
 
         String thenCode = getThen().map(CompoundStmt::getCode).orElse(";\n");
+
         // If then does not end with newline, add one
         thenCode = thenCode.endsWith(ln()) ? thenCode : thenCode + ln();
 

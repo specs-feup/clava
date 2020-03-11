@@ -338,6 +338,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Logger.getLogger(LoggingUtils.INFO_TAG).setUseParentHandlers(false);
 
         if (args.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
+            System.out.println("DISABLING CLAVA INFO FOR LOGGER " + SpecsLogs.getSpecsLogger());
             // Needs to keep a strong reference, or it can be garbage collected
             /*
             infoLogger = Logger.getLogger(SpecsLogs.INFO_TAG);
@@ -1072,6 +1073,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Re-enable output
         if (args.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
+            System.out.println("REENABLING CLAVA INFO FOR LOGGER " + SpecsLogs.getSpecsLogger());
             /*
             Preconditions.checkNotNull(infoLogger);
             infoLogger.setLevel(previousLevel);

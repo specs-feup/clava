@@ -168,6 +168,9 @@ public class ParallelCodeParser extends CodeParser {
         List<ClangParserData> clangParserResults = futureTUnits.stream()
                 .map(SpecsSystem::get)
                 .collect(Collectors.toList());
+        // for (var data : clangParserResults) {
+        // System.out.println("CLANG PARSER NODES:\n" + data.get(ClangParserData.CLAVA_NODES).getNodes());
+        // }
 
         // Delete temporary folder
         SpecsIo.deleteFolder(parsingFolder);
