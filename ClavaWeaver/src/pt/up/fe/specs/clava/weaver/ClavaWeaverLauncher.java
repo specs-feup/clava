@@ -171,7 +171,7 @@ public class ClavaWeaverLauncher {
                     .map(ClavaWeaverLauncher::executeSafe)
                     .collect(Collectors.toList())).get();
 
-            return results.parallelStream()
+            return results.stream()
                     .filter(result -> result == false)
                     .findFirst()
                     .orElse(true);
@@ -183,14 +183,6 @@ public class ClavaWeaverLauncher {
             return false;
         }
 
-        // var results = Arrays.asList(args).parallelStream()
-        // .map(ClavaWeaverLauncher::executeSafe)
-        // .collect(Collectors.toList());
-
-        // Arrays.asList(args).parallelStream()
-        // .forEach(arg -> System.out.println(Arrays.toString(arg)));
-        //
-        // return true;
     }
 
     private static boolean executeSafe(String[] args) {
