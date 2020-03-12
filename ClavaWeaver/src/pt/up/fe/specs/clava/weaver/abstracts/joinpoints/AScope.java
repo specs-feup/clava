@@ -539,6 +539,30 @@ public abstract class AScope extends AStatement {
     }
 
     /**
+     * CFG tester
+     */
+    public void cfgImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action cfg not implemented ");
+    }
+
+    /**
+     * CFG tester
+     */
+    public final void cfg() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "cfg", this, Optional.empty());
+        	}
+        	this.cfgImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "cfg", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "cfg", e);
+        }
+    }
+
+    /**
      * Get value on attribute isFirst
      * @return the attribute's value
      */
@@ -1064,6 +1088,7 @@ public abstract class AScope extends AStatement {
         actions.add("joinpoint addLocal(String, joinpoint)");
         actions.add("void setNaked(Boolean)");
         actions.add("void clear()");
+        actions.add("void cfg()");
     }
 
     /**

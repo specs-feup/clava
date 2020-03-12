@@ -45892,6 +45892,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "CFG tester",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "cfg"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Clears the contents of this scope (untested)",
                   "children": [
                            {

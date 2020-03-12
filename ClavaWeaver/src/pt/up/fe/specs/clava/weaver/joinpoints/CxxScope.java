@@ -21,6 +21,7 @@ import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.analysis.flow.ControlFlowGraph;
 import pt.up.fe.specs.clava.ast.cilk.CilkFor;
 import pt.up.fe.specs.clava.ast.cilk.CilkSync;
 import pt.up.fe.specs.clava.ast.comment.Comment;
@@ -401,5 +402,13 @@ public class CxxScope extends AScope {
     public List<? extends ACilkSync> selectCilkSync() {
         return CxxSelects.select(ACilkSync.class, getStatements(), true, CilkSync.class);
 
+    }
+
+    @Override
+    public void cfgImpl() {
+
+        ControlFlowGraph cfg = new ControlFlowGraph(scope);
+
+        System.out.println(cfg.toDot());
     }
 }
