@@ -425,6 +425,39 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Get value on attribute files
+     * @return the attribute's value
+     */
+    public abstract AFile[] getFilesArrayImpl();
+
+    /**
+     * the source files in this program
+     */
+    public Object getFilesImpl() {
+        AFile[] aFileArrayImpl0 = getFilesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aFileArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * the source files in this program
+     */
+    public final Object getFiles() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "files", Optional.empty());
+        	}
+        	Object result = this.getFilesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "files", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "files", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select files
      * @return 
      */
@@ -920,6 +953,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         attributes.add("extraProjects");
         attributes.add("extraLibs");
         attributes.add("main");
+        attributes.add("files");
     }
 
     /**
@@ -981,6 +1015,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         EXTRAPROJECTS("extraProjects"),
         EXTRALIBS("extraLibs"),
         MAIN("main"),
+        FILES("files"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

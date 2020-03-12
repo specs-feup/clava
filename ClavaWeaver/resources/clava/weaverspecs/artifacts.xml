@@ -157,6 +157,7 @@
 		<attribute name="extraProjects" type="String[]" tooltip="paths to folders of projects that the current program depends on"/>
 		<attribute name="extraLibs" type="String[]" tooltip="link libraries of external projects the current program depends on"/>		
 		<attribute name="main" type="joinpoint" tooltip="a function join point with the main function of the program, if one is available"/>		
+		<attribute name="files" type="file[]" tooltip="the source files in this program"/>		
 	</artifact>
 
 

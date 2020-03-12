@@ -358,4 +358,9 @@ public class CxxProgram extends AProgram {
 
         // ClavaLog.debug("Finsished");
     }
+
+    @Override
+    public AFile[] getFilesArrayImpl() {
+        return selectFile().toArray(size -> new AFile[size]);
+    }
 }

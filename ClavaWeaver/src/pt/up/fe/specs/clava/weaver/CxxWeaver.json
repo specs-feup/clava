@@ -40984,6 +40984,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the source files in this program",
+                  "children": [
+                           {
+                              "type": "file[]",
+                              "name": "files"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
