@@ -51,6 +51,7 @@ import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
+import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
@@ -110,6 +111,7 @@ import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.language.CastKind;
@@ -799,6 +801,21 @@ public class ClavaFactory {
                 .set(MultiLineComment.LINES, new ArrayList<>(lines));
 
         return new MultiLineComment(data, Collections.emptyList());
+    }
+
+    public TypedefType typedefType(TypedefDecl typedefDecl) {
+        DataStore data = newDataStore(TypedefType.class)
+                .set(TypedefType.DECL, typedefDecl);
+
+        return new TypedefType(data, Collections.emptyList());
+    }
+
+    public TypedefDecl typedefDecl(Type node, String identifier) {
+        DataStore data = newDataStore(TypedefDecl.class)
+                .put(NamedDecl.DECL_NAME, identifier)
+                .put(TypedefDecl.UNDERLYING_TYPE, node);
+
+        return new TypedefDecl(data, Collections.emptyList());
     }
 
 }
