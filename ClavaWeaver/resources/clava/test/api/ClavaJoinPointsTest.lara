@@ -8,5 +8,10 @@ aspectdef ClavaJoinPointsTest
 	// Stmt Literal
 	println("Literal statement: " + ClavaJoinPoints.stmtLiteral("int a = 0;").code);	
 	
-
+	// TypedefDecl
+	var typedefDecl = ClavaJoinPoints.typedefDecl(ClavaJoinPoints.builtinType("int"), "custom_int");
+	println("Typedef decl: " + typedefDecl.code);	
+	
+	// TypedefType
+	println("Typedef type: " + ClavaJoinPoints.typedefType(typedefDecl).code);	
 end
