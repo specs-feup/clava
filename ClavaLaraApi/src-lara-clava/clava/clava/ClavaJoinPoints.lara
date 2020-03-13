@@ -317,3 +317,25 @@ ClavaJoinPoints.doubleLiteral = function(doubleLiteral) {
 ClavaJoinPoints.integerLiteral = function(integerLiteral) {
 	return AstFactory.integerLiteral(integerLiteral);
 }
+
+/**
+ * @param {$typedefDecl} $typedefDecl - A typedef declaration.
+ */
+ClavaJoinPoints.typedefType = function($typedefDecl) {
+	Check.isJoinPoint($typedefDecl, 'typedefDecl');
+	
+	return AstFactory.typedefType($typedefDecl);
+}
+
+
+/**
+ * @param {$type} $underlyingType - The underlying type of the typedef.
+ * @param {String} identifier - The name of the typedef. 
+ */
+ClavaJoinPoints.typedefDecl = function($underlyingType, identifier) {
+	Check.isJoinPoint($underlyingType);
+	Check.isString(identifier);
+	
+	return AstFactory.typedefDecl($underlyingType, identifier);
+}
+

@@ -31,6 +31,7 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
+import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
@@ -76,6 +77,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANamedDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
@@ -625,6 +627,23 @@ public class AstFactory {
     public static AExpression parenthesis(AExpression expression) {
         ParenExpr parenExpr = CxxWeaver.getFactory().parenExpr((Expr) expression.getNode());
         return CxxJoinpoints.create(parenExpr, AExpression.class);
+    }
+
+    /**
+     * Creates a join point representing a type of a typedef.
+     *
+     * @param varName
+     * @param joinpoint
+     * @return
+     */
+    public static AType typedefType(ATypedefDecl typedefDecl) {
+        var typedefType = CxxWeaver.getFactory().typedefType((TypedefDecl) typedefDecl.getNode());
+        return CxxJoinpoints.create(typedefType, AType.class);
+    }
+
+    public static ATypedefDecl typedefDecl(AType underlyingType, String identifier) {
+        var typedefDecl = CxxWeaver.getFactory().typedefDecl((Type) underlyingType.getNode(), identifier);
+        return CxxJoinpoints.create(typedefDecl, ATypedefDecl.class);
     }
 
 }
