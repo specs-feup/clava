@@ -24,6 +24,7 @@ import pt.up.fe.specs.clava.ast.type.DecayedType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.NullType;
+import pt.up.fe.specs.clava.ast.type.ParenType;
 import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -41,6 +42,7 @@ public class Types {
         TO_FUNCTION_TYPE.put(FunctionProtoType.class, type -> type);
         TO_FUNCTION_TYPE.put(AttributedType.class, type -> TO_FUNCTION_TYPE.apply(type.getModifiedType()));
         TO_FUNCTION_TYPE.put(PointerType.class, type -> TO_FUNCTION_TYPE.apply(type.getPointeeType()));
+        TO_FUNCTION_TYPE.put(ParenType.class, type -> TO_FUNCTION_TYPE.apply(type.getInnerType()));
         // TO_FUNCTION_TYPE.put(QualType.class, type -> TO_FUNCTION_TYPE.apply(type.getQualifiedType()));
         TO_FUNCTION_TYPE.put(NullType.class, type -> null);
     }
