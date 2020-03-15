@@ -2,14 +2,36 @@ import weaver.Query;
 
 aspectdef ArrayLinearizerTest
 
-	var $arrayVardecls = getArrayVardecls(Query.root());
-	
+	// Get candidate vardecls
+	var $arrayVardecls = getArrayVardecls(Query.search('function', 'main').getFirst());
+
+
+
+	// Check vardecl use
+	// (not currently being done)
+	var vardeclsInfo = [];
 	for(var $arrayVardecl of $arrayVardecls) {
-		println("VARDECL: " + $arrayVardecl.code);	
-		println("TYPE: " + $arrayVardecl.type.joinPointType);		
-		println("Array size: " + $arrayVardecl.type.arraySize);
+		/*
+		println("VARDECL: " + $arrayVardecl.code + " (at " + $arrayVardecl.location +  ")");	
+		//println("TYPE: " + $arrayVardecl.type.joinPointType);		
+		//println("Array size: " + $arrayVardecl.type.arraySize);
+		
+		var $varrefs = getVardeclUses($arrayVardecl);
+		
+		for(var $varref of $varrefs) {
+			println("Use: " + $varref.location);
+		}
+		*/
+		
+		vardeclsInfo.push(getVardeclInfo($arrayVardecl));
 	}
 
+
+
+	// Transform each vardecl
+	for(var vardeclInfo of vardeclsInfo) {
+		linearizeArray(vardeclInfo);
+	}
 
 /*
 	select param end
@@ -37,6 +59,9 @@ aspectdef ArrayLinearizerTest
 */
 end
 
+/**
+ * @return static array declarations that have constant size
+ */
 function getArrayVardecls($jp) {
 
 	var $arrayVardecls = [];
@@ -49,14 +74,76 @@ function getArrayVardecls($jp) {
 			continue;
 		}
 		
-		// Consider only constant array types for now
+		// Consider only constant array types for now, that have more than two dimensions
+		if($vardecl.type.arraySize < 1) {
+			continue;
+		}	
+		
+		if($vardecl.type.arrayDims.length < 2) {
+			continue;
+		}
 	
-		$arrayVardecls.push($vardecl);
-		
-		
+		$arrayVardecls.push($vardecl);		
 	}
 
 	return $arrayVardecls;
 }
 
-//function getStaticArrays
+function getVardeclUses($vardecl, $vardeclScope) {
+	// Get all varrefs in the vardecl scope
+	if($vardeclScope === undefined) {
+		$vardeclScope = $vardecl.ancestor('scope');
+	
+		// If scope is still undefined, return
+		if($vardeclScope === undefined) {
+			println("Could not find a local scope for $vardecl at '"+$vardecl.location+"', global scope not supported");
+			return [];
+		}
+	}
+
+	
+	var $usedVarrefs = [];
+	
+	for(var $varref of Query.searchFrom($vardeclScope, 'varref')) {
+		// Check if the declaration is the same
+		if($vardecl.compareNodes($varref.declaration)) {
+			$usedVarrefs.push($varref);
+		}	
+	}
+	
+	return $usedVarrefs;
+}
+
+function getVardeclInfo($vardecl) {
+	var vardeclInfo = {};
+	
+	var $function = $vardecl.ancestor('function');
+	
+	if($function === undefined) {
+		println("Could not find function of $vardecl '"+$vardecl.location+"', global variables not supported");
+		return;
+	}
+	
+	vardeclInfo['functionName'] = $function.name;
+	vardeclInfo['vardeclName'] = $vardecl.name;
+	
+	return vardeclInfo;
+}
+
+function linearizeArray(vardeclInfo) {
+	// Go to the function where the variable declaration appears
+	var queryResult = Query.search('function', vardeclInfo['functionName']).search('vardecl', vardeclInfo['vardeclName']).chain();
+	
+	// Check number of results
+	if(queryResult.length > 1) {
+		println("Found more than one candidate for the function/vardecl pair '"+vardeclInfo['functionName']+"'/'"+vardeclInfo['vardeclName']+"'");
+		return;
+	}
+	
+	var $function = queryResult[0]['function'];
+	var $vardecl = queryResult[0]['vardecl'];
+	
+	
+	println("DECL: " + $vardecl.location);
+	
+}
