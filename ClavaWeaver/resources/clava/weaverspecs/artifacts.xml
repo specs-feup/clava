@@ -577,6 +577,12 @@
 		</attribute>
 	</artifact>
 
+	<!-- TAG TYPE -->
+	<artifact class="tagType">
+		<attribute name="name" type="String" />
+		<attribute name="decl" type="decl" tooltip="a 'decl' join point that represents the declaration of this tag type"/>		
+	</artifact>
+
 	<!-- ENUM TYPE -->
 	<artifact class="enumType">
 		<attribute name="integerType" type="joinpoint" />
@@ -600,10 +606,7 @@
 	</artifact>
 
 
-	<!-- TAGTYPE -->
-	<artifact class="tagType">
-		<attribute name="name" type="String" />
-	</artifact>
+
 
 	<!-- QUAL TYPE -->
 	<artifact class="qualType">

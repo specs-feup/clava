@@ -16,6 +16,8 @@ package pt.up.fe.specs.clava.weaver.joinpoints.types;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.ast.type.TagType;
+import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATagType;
 
 public class CxxTagType extends ATagType {
@@ -35,6 +37,11 @@ public class CxxTagType extends ATagType {
     @Override
     public String getNameImpl() {
         return tagType.get(TagType.DECL).get(TagDecl.DECL_NAME);
+    }
+
+    @Override
+    public ADecl getDeclImpl() {
+        return CxxJoinpoints.create(tagType.getDecl(), ADecl.class);
     }
 
 }

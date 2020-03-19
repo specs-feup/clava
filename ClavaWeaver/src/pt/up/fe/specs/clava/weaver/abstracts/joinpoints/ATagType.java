@@ -52,6 +52,29 @@ public abstract class ATagType extends AType {
     }
 
     /**
+     * a 'decl' join point that represents the declaration of this tag type
+     */
+    public abstract ADecl getDeclImpl();
+
+    /**
+     * a 'decl' join point that represents the declaration of this tag type
+     */
+    public final Object getDecl() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "decl", Optional.empty());
+        	}
+        	ADecl result = this.getDeclImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "decl", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "decl", e);
+        }
+    }
+
+    /**
      * Get value on attribute kind
      * @return the attribute's value
      */
@@ -537,6 +560,7 @@ public abstract class ATagType extends AType {
     protected final void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
         attributes.add("name");
+        attributes.add("decl");
     }
 
     /**
@@ -581,6 +605,7 @@ public abstract class ATagType extends AType {
      */
     protected enum TagTypeAttributes {
         NAME("name"),
+        DECL("decl"),
         KIND("kind"),
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),

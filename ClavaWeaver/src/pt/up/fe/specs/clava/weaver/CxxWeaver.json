@@ -49419,6 +49419,15 @@
          "children": [
                {
                   "type": "attribute",
+                  "tooltip": "a 'decl' join point that represents the declaration of this tag type",
+                  "children": [
+                           {
+                              "type": "decl",
+                              "name": "decl"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String",
