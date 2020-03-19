@@ -174,4 +174,9 @@ public class CTest {
         newTester().set(ClavaOptions.FLAGS, "-fcilkplus").test("Cilk.lara", "cilk.c");
     }
 
+    @Test
+    public void testTagDecl() {
+        newTester().test("TagDecl.lara", "tag_decl.c");
+    }
+
 }

@@ -1,0 +1,8 @@
+aspectdef TagDecl
+
+	select function{"structTest"}.vardecl end
+    apply
+        println($vardecl.type.desugar.decl.name);
+    end
+
+end
