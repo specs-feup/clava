@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -26,27 +27,29 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.utils.StmtWithCondition;
+import pt.up.fe.specs.util.SpecsStrings;
 
 public abstract class LoopStmt extends Stmt implements StmtWithCondition {
 
-    private static final int DEFAULT_ITERATIONS = -1;
+    // private static final Integer DEFAULT_ITERATIONS = null;
 
     public LoopStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
 
         isParallel = false;
-        iterations = DEFAULT_ITERATIONS;
+        iterations = null;
         rank = null;
     }
 
-    public static int getDefaultIterations() {
-        return DEFAULT_ITERATIONS;
-    }
+    // public static int getDefaultIterations() {
+    // return DEFAULT_ITERATIONS;
+    // }
 
     private boolean isParallel;
-    private int iterations;
+    private Integer iterations;
     private List<Integer> rank;
 
     // public LoopStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
@@ -78,8 +81,24 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition {
         this.isParallel = isParallel;
     }
 
-    public int getIterations() {
-        return iterations;
+    public Integer getIterations() {
+        // If a custom number of iterations was set, it has priority
+        if (iterations != null) {
+            return iterations;
+        }
+
+        // Try to parse the iterations expression
+        return getIterationsExpr().map(expr -> SpecsStrings.parseInteger(expr.getCode())).orElse(null);
+        // return iterations;
+    }
+
+    /**
+     * By default, returns empty.
+     * 
+     * @return
+     */
+    public Optional<Expr> getIterationsExpr() {
+        return Optional.empty();
     }
 
     public void setIterations(int iterations) {
