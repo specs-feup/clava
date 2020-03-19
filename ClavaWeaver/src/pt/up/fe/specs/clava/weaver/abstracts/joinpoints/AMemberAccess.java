@@ -456,6 +456,7 @@ public abstract class AMemberAccess extends AExpression {
         DESCENDANTSANDSELF("descendantsAndSelf"),
         TYPE("type"),
         ISCILK("isCilk"),
+        FILEPATH("filepath"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

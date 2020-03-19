@@ -352,6 +352,12 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
+    public String getFilepathImpl() {
+        SourceRange location = getNode().getLocation();
+        return location.isValid() ? location.getFilepath() : null;
+    }
+
+    @Override
     public String getJoinpointTypeImpl() {
 
         // return getNode().getClass().getSimpleName();

@@ -73,29 +73,6 @@ public abstract class AInclude extends ADecl {
     }
 
     /**
-     * the complete path to the file
-     */
-    public abstract String getFilepathImpl();
-
-    /**
-     * the complete path to the file
-     */
-    public final Object getFilepath() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "filepath", Optional.empty());
-        	}
-        	String result = this.getFilepathImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "filepath", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "filepath", e);
-        }
-    }
-
-    /**
      * the path to the folder of the source file of the include, relative to the name of the include
      */
     public abstract String getRelativeFolderpathImpl();
@@ -358,7 +335,6 @@ public abstract class AInclude extends ADecl {
         this.aDecl.fillWithAttributes(attributes);
         attributes.add("name");
         attributes.add("isAngled");
-        attributes.add("filepath");
         attributes.add("relativeFolderpath");
     }
 
@@ -405,7 +381,6 @@ public abstract class AInclude extends ADecl {
     protected enum IncludeAttributes {
         NAME("name"),
         ISANGLED("isAngled"),
-        FILEPATH("filepath"),
         RELATIVEFOLDERPATH("relativeFolderpath"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
@@ -415,6 +390,7 @@ public abstract class AInclude extends ADecl {
         DESCENDANTSANDSELF("descendantsAndSelf"),
         TYPE("type"),
         ISCILK("isCilk"),
+        FILEPATH("filepath"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

@@ -294,6 +294,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -1296,6 +1305,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -2259,6 +2277,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -3281,6 +3308,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -4266,6 +4302,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -5344,6 +5389,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -6438,6 +6492,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -7419,6 +7482,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -8425,6 +8497,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -9740,6 +9821,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -10670,6 +10760,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -11635,6 +11734,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -12541,6 +12649,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -13375,6 +13492,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -14218,6 +14344,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -15080,6 +15215,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -15990,6 +16134,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -16821,6 +16974,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -17691,6 +17853,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -18743,6 +18914,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -19690,6 +19870,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -20596,6 +20785,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -21463,6 +21661,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -22099,15 +22306,6 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "the complete path to the file",
-                  "children": [
-                           {
-                              "type": "String",
-                              "name": "filepath"
-                           }]
-               },
-               {
-                  "type": "attribute",
                   "tooltip": "true if this file contains a 'main' method",
                   "children": [
                            {
@@ -22479,6 +22677,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -23749,6 +23956,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -24960,6 +25176,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -25937,6 +26162,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -26582,15 +26816,6 @@
          "children": [
                {
                   "type": "attribute",
-                  "tooltip": "the complete path to the file",
-                  "children": [
-                           {
-                              "type": "String",
-                              "name": "filepath"
-                           }]
-               },
-               {
-                  "type": "attribute",
                   "tooltip": "true if this is an angled include (i.e., system include)",
                   "children": [
                            {
@@ -26899,6 +27124,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -27900,6 +28134,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -29081,6 +29324,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -30002,6 +30254,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -31028,6 +31289,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -32133,6 +32403,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -33197,6 +33476,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -34099,6 +34387,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -35141,6 +35438,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -36322,6 +36628,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -37238,6 +37553,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -38304,6 +38628,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -39403,6 +39736,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -40352,6 +40694,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -41342,6 +41693,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -42589,6 +42949,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -43552,6 +43921,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -44449,6 +44827,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -45439,6 +45826,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -46556,6 +46952,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -47509,6 +47914,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -48416,6 +48830,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -49448,6 +49871,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -50562,6 +50994,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -51640,6 +52081,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -52583,6 +53033,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -53533,6 +53992,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -54443,6 +54911,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -55450,6 +55927,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -56446,6 +56932,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {
@@ -57532,6 +58027,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -58538,6 +59042,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the first child of this node, or undefined if it has no child",
                   "children": [
                            {
@@ -59414,6 +59927,15 @@
                            {
                               "type": "String",
                               "name": "filename"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the complete path to the file where the code of this node comes from",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "filepath"
                            }]
                },
                {

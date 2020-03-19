@@ -88,7 +88,7 @@
 	<action name="addFile" class="program" return="joinpoint" tooltip="Adds a file join point to the current program">
 		<parameter name="file" type="file" />
 	</action>
-	
+		
 	<action name="addFileFromPath" class="program" return="joinpoint" tooltip="Adds a file join point to the current program, from the given path, which can be either a Java File or a String">
 		<parameter name="filepath" type="Object" />
 	</action>

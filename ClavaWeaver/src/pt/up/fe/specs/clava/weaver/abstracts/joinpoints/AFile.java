@@ -113,29 +113,6 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * the complete path to the file
-     */
-    public abstract String getFilepathImpl();
-
-    /**
-     * the complete path to the file
-     */
-    public final Object getFilepath() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "filepath", Optional.empty());
-        	}
-        	String result = this.getFilepathImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "filepath", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "filepath", e);
-        }
-    }
-
-    /**
      * the path to the file relative to the base source path
      */
     public abstract String getRelativeFilepathImpl();
@@ -971,7 +948,6 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         attributes.add("file");
         attributes.add("hasMain");
         attributes.add("path");
-        attributes.add("filepath");
         attributes.add("relativeFilepath");
         attributes.add("relativeFolderpath");
         attributes.add("baseSourcePath");
@@ -1045,7 +1021,6 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         FILE("file"),
         HASMAIN("hasMain"),
         PATH("path"),
-        FILEPATH("filepath"),
         RELATIVEFILEPATH("relativeFilepath"),
         RELATIVEFOLDERPATH("relativeFolderpath"),
         BASESOURCEPATH("baseSourcePath"),
@@ -1064,6 +1039,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         DESCENDANTSANDSELF("descendantsAndSelf"),
         TYPE("type"),
         ISCILK("isCilk"),
+        FILEPATH("filepath"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

@@ -613,6 +613,7 @@ public abstract class AVariableArrayType extends AArrayType {
         DESCENDANTSANDSELF("descendantsAndSelf"),
         TYPE("type"),
         ISCILK("isCilk"),
+        FILEPATH("filepath"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

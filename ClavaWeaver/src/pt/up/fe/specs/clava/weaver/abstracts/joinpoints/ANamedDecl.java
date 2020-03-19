@@ -547,6 +547,7 @@ public abstract class ANamedDecl extends ADecl {
         DESCENDANTSANDSELF("descendantsAndSelf"),
         TYPE("type"),
         ISCILK("isCilk"),
+        FILEPATH("filepath"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

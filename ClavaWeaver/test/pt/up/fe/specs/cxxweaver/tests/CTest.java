@@ -173,4 +173,5 @@ public class CTest {
         // Generated code has Cilk directives
         newTester().set(ClavaOptions.FLAGS, "-fcilkplus").test("Cilk.lara", "cilk.c");
     }
+
 }

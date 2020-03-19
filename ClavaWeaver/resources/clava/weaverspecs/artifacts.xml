@@ -51,6 +51,7 @@
 		<attribute name="endColumn" type="Integer" tooltip="The ending column of the current node in the original code"/>		
 		<attribute name="location" type="String" />
 		<attribute name="filename" type="String" />
+		<attribute name="filepath" type="String" tooltip="the complete path to the file where the code of this node comes from"/>
 		<attribute name="astId" type="String" />
 		<attribute name="ast" type="String" />
 		<attribute name="code" type="String" />
@@ -168,7 +169,7 @@
 		<attribute name="hasMain" type="Boolean" tooltip="true if this file contains a 'main' method"/>
 		<!-- <attribute name="filename" type="String"/> -->
 		<attribute name="path" type="String" tooltip="the folder of the source file"/>
-		<attribute name="filepath" type="String" tooltip="the complete path to the file"/>
+		<!--  <attribute name="filepath" type="String" tooltip="the complete path to the file"/> -->
 		<attribute name="relativeFilepath" type="String" tooltip="the path to the file relative to the base source path"/>
 		<attribute name="relativeFolderpath" type="String" tooltip="the path to the folder of the source file relative to the base source path">
 			<def/>
@@ -190,7 +191,7 @@
 	<artifact class="include" default="name">
 		<attribute name="name" type="String" tooltip="the name of the include"/>
 		<attribute name="isAngled" type="Boolean" tooltip="true if this is an angled include (i.e., system include)"/>
-		<attribute name="filepath" type="String" tooltip="the complete path to the file"/>
+		<!-- <attribute name="filepath" type="String" tooltip="the complete path to the file"/>  -->
 		<attribute name="relativeFolderpath" type="String" tooltip="the path to the folder of the source file of the include, relative to the name of the include"/>
 	</artifact>
 
