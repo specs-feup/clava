@@ -363,6 +363,7 @@ public class ParallelCodeParser extends CodeParser {
                 streamConsoleOutput, clangExecutable, builtinIncludes)
                         .setBaseFolder(parsingFolder)
                         .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
+
         // .setUsePlatformLibc(get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         counter.print(sourceFile);

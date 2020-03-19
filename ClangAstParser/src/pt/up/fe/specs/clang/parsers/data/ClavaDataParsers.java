@@ -86,6 +86,7 @@ public class ClavaDataParsers {
 
         // Filepaths will be shared between most nodes, cache them
         String startFilepath = dataStore.get(ClangParserData.CONTEXT).get(ClavaContext.CACHED_FILEPATHS).get(firstPart);
+
         // String startFilepath = firstPart.intern();
         // String startFilepath = firstPart;
         int startLine = Integer.parseInt(lines.nextLine());
