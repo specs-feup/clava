@@ -71,23 +71,30 @@ public class CxxAttributes {
      *         CompoundStmt
      */
     private static boolean isInsideHeader(ClavaNode node, Collection<Class<?>> headerClasses) {
-        ClavaNode currentNode = node;
-        while (currentNode != null) {
 
+
+        
+        // If node is a header or a CompoundStmt, return immediately
+        if(node instanceof CompoundStmt || isHeader(node, headerClasses)) {
+            return false;
+        }
+        
+        ClavaNode currentNode = node.getParent();
+
+        
+        while (currentNode != null) {
+            // If we find a CompoundStmt before the loop, is not in a loop header
+            if (currentNode instanceof CompoundStmt) {
+                return false;
+            }
+            
             ClavaNode nodeToTest = currentNode;
-            boolean isHeader = headerClasses.stream()
-                    .filter(aClass -> aClass.isInstance(nodeToTest))
-                    .findFirst()
-                    .isPresent();
+
+            boolean isHeader = isHeader(nodeToTest, headerClasses);
 
             // If we find an instance, is inside header
             if (isHeader) {
                 return true;
-            }
-
-            // If we find a CompoundStmt before the loop, is not in a loop header
-            if (currentNode instanceof CompoundStmt) {
-                return false;
             }
 
             currentNode = currentNode.getParent();
@@ -95,6 +102,14 @@ public class CxxAttributes {
 
         // Did not find a loop header
         return false;
+    }
+
+    private static boolean isHeader(ClavaNode nodeToTest, Collection<Class<?>> headerClasses) {
+        boolean isHeader = headerClasses.stream()
+                .filter(aClass -> aClass.isInstance(nodeToTest))
+                .findFirst()
+                .isPresent();
+        return isHeader;
     }
 
     public static Optional<? extends ClavaNode> getCurrentRegion(ClavaNode node) {
