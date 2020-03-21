@@ -1,3 +1,5 @@
+import weaver.WeaverJps;
+
 aspectdef GlobalAttributes
 
 	select function{"main"}.vardecl{"a"} end
@@ -9,5 +11,18 @@ aspectdef GlobalAttributes
 		$vardecl.type = $type.copy().setValue('builtinKind', 'float');
 		println("Changed vardecl: " + $vardecl.code);		
 	end
+
+
+	println("Inside header:");
+	for(var $function of WeaverJps.search('function', 'insideHeader')) {
+		for(var $jp of $function.descendants) {
+			if($jp.isInsideHeader) {
+				println($jp.joinPointType + " -> " + $jp.code);
+			}
+		}
+
+	}
+	
+	//println(WeaverJps.root().ast);
 
 end
