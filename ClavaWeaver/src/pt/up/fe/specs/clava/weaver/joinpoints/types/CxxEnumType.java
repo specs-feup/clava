@@ -24,7 +24,7 @@ public class CxxEnumType extends AEnumType {
     private final EnumType enumType;
 
     public CxxEnumType(EnumType enumType) {
-        super(new CxxType(enumType));
+        super(new CxxTagType(enumType));
 
         this.enumType = enumType;
     }

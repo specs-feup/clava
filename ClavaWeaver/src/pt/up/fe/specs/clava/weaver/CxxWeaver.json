@@ -18454,7 +18454,7 @@
       {
          "type": "joinpoint",
          "name": "enumType",
-         "extends": "type"      ,
+         "extends": "tagType"      ,
          "children": [
                {
                   "type": "attribute",
@@ -18462,6 +18462,23 @@
                            {
                               "type": "joinpoint",
                               "name": "integerType"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "a 'decl' join point that represents the declaration of this tag type",
+                  "children": [
+                           {
+                              "type": "decl",
+                              "name": "decl"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "name"
                            }]
                },
                {

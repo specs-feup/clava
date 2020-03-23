@@ -16,15 +16,16 @@ import java.util.Arrays;
  * 
  * @author Lara Weaver Generator
  */
-public abstract class AEnumType extends AType {
+public abstract class AEnumType extends ATagType {
 
-    protected AType aType;
+    protected ATagType aTagType;
 
     /**
      * 
      */
-    public AEnumType(AType aType){
-        this.aType = aType;
+    public AEnumType(ATagType aTagType){
+        super(aTagType);
+        this.aTagType = aTagType;
     }
     /**
      * Get value on attribute integerType
@@ -52,12 +53,30 @@ public abstract class AEnumType extends AType {
     }
 
     /**
+     * Get value on attribute name
+     * @return the attribute's value
+     */
+    @Override
+    public String getNameImpl() {
+        return this.aTagType.getNameImpl();
+    }
+
+    /**
+     * Get value on attribute decl
+     * @return the attribute's value
+     */
+    @Override
+    public ADecl getDeclImpl() {
+        return this.aTagType.getDeclImpl();
+    }
+
+    /**
      * Get value on attribute kind
      * @return the attribute's value
      */
     @Override
     public String getKindImpl() {
-        return this.aType.getKindImpl();
+        return this.aTagType.getKindImpl();
     }
 
     /**
@@ -66,7 +85,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public Boolean getIsTopLevelImpl() {
-        return this.aType.getIsTopLevelImpl();
+        return this.aTagType.getIsTopLevelImpl();
     }
 
     /**
@@ -75,7 +94,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public Boolean getIsArrayImpl() {
-        return this.aType.getIsArrayImpl();
+        return this.aTagType.getIsArrayImpl();
     }
 
     /**
@@ -84,7 +103,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public Boolean getIsPointerImpl() {
-        return this.aType.getIsPointerImpl();
+        return this.aTagType.getIsPointerImpl();
     }
 
     /**
@@ -93,7 +112,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public Integer getArraySizeImpl() {
-        return this.aType.getArraySizeImpl();
+        return this.aTagType.getArraySizeImpl();
     }
 
     /**
@@ -102,7 +121,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public Integer[] getArrayDimsArrayImpl() {
-        return this.aType.getArrayDimsArrayImpl();
+        return this.aTagType.getArrayDimsArrayImpl();
     }
 
     /**
@@ -111,7 +130,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public Boolean getHasTemplateArgsImpl() {
-        return this.aType.getHasTemplateArgsImpl();
+        return this.aTagType.getHasTemplateArgsImpl();
     }
 
     /**
@@ -120,7 +139,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public String[] getTemplateArgsStringsArrayImpl() {
-        return this.aType.getTemplateArgsStringsArrayImpl();
+        return this.aTagType.getTemplateArgsStringsArrayImpl();
     }
 
     /**
@@ -129,7 +148,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AType[] getTemplateArgsTypesArrayImpl() {
-        return this.aType.getTemplateArgsTypesArrayImpl();
+        return this.aTagType.getTemplateArgsTypesArrayImpl();
     }
 
     /**
@@ -138,7 +157,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public Boolean getHasSugarImpl() {
-        return this.aType.getHasSugarImpl();
+        return this.aTagType.getHasSugarImpl();
     }
 
     /**
@@ -147,7 +166,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AType getDesugarImpl() {
-        return this.aType.getDesugarImpl();
+        return this.aTagType.getDesugarImpl();
     }
 
     /**
@@ -156,7 +175,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AType getDesugarAllImpl() {
-        return this.aType.getDesugarAllImpl();
+        return this.aTagType.getDesugarAllImpl();
     }
 
     /**
@@ -165,7 +184,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public Boolean getIsBuiltinImpl() {
-        return this.aType.getIsBuiltinImpl();
+        return this.aTagType.getIsBuiltinImpl();
     }
 
     /**
@@ -174,7 +193,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public Boolean getConstantImpl() {
-        return this.aType.getConstantImpl();
+        return this.aTagType.getConstantImpl();
     }
 
     /**
@@ -183,7 +202,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AType getUnwrapImpl() {
-        return this.aType.getUnwrapImpl();
+        return this.aTagType.getUnwrapImpl();
     }
 
     /**
@@ -192,7 +211,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AType getNormalizeImpl() {
-        return this.aType.getNormalizeImpl();
+        return this.aTagType.getNormalizeImpl();
     }
 
     /**
@@ -201,7 +220,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public Map<?, ?> getTypeFieldsImpl() {
-        return this.aType.getTypeFieldsImpl();
+        return this.aTagType.getTypeFieldsImpl();
     }
 
     /**
@@ -210,7 +229,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public String getFieldTreeImpl() {
-        return this.aType.getFieldTreeImpl();
+        return this.aTagType.getFieldTreeImpl();
     }
 
     /**
@@ -219,21 +238,21 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public Integer bitWidthImpl(AJoinPoint reference) {
-        return this.aType.bitWidthImpl(reference);
+        return this.aTagType.bitWidthImpl(reference);
     }
 
     /**
      * 
      */
     public void defTemplateArgsTypesImpl(AType[] value) {
-        this.aType.defTemplateArgsTypesImpl(value);
+        this.aTagType.defTemplateArgsTypesImpl(value);
     }
 
     /**
      * 
      */
     public void defDesugarImpl(AType value) {
-        this.aType.defDesugarImpl(value);
+        this.aTagType.defDesugarImpl(value);
     }
 
     /**
@@ -242,7 +261,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aType.replaceWithImpl(node);
+        return this.aTagType.replaceWithImpl(node);
     }
 
     /**
@@ -251,7 +270,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AJoinPoint replaceWithImpl(String node) {
-        return this.aType.replaceWithImpl(node);
+        return this.aTagType.replaceWithImpl(node);
     }
 
     /**
@@ -260,7 +279,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aType.insertBeforeImpl(node);
+        return this.aTagType.insertBeforeImpl(node);
     }
 
     /**
@@ -269,7 +288,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aType.insertBeforeImpl(node);
+        return this.aTagType.insertBeforeImpl(node);
     }
 
     /**
@@ -278,7 +297,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aType.insertAfterImpl(node);
+        return this.aTagType.insertAfterImpl(node);
     }
 
     /**
@@ -287,7 +306,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aType.insertAfterImpl(code);
+        return this.aTagType.insertAfterImpl(code);
     }
 
     /**
@@ -295,7 +314,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public void detachImpl() {
-        this.aType.detachImpl();
+        this.aTagType.detachImpl();
     }
 
     /**
@@ -304,7 +323,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public void setTypeImpl(AJoinPoint type) {
-        this.aType.setTypeImpl(type);
+        this.aTagType.setTypeImpl(type);
     }
 
     /**
@@ -312,7 +331,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aType.copyImpl();
+        return this.aTagType.copyImpl();
     }
 
     /**
@@ -320,7 +339,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AJoinPoint deepCopyImpl() {
-        return this.aType.deepCopyImpl();
+        return this.aTagType.deepCopyImpl();
     }
 
     /**
@@ -330,7 +349,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aType.setUserFieldImpl(fieldName, value);
+        return this.aTagType.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -339,7 +358,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aType.setUserFieldImpl(fieldNameAndValue);
+        return this.aTagType.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -349,7 +368,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
-        return this.aType.setValueImpl(key, value);
+        return this.aTagType.setValueImpl(key, value);
     }
 
     /**
@@ -358,7 +377,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aType.messageToUserImpl(message);
+        this.aTagType.messageToUserImpl(message);
     }
 
     /**
@@ -366,7 +385,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public void removeChildrenImpl() {
-        this.aType.removeChildrenImpl();
+        this.aTagType.removeChildrenImpl();
     }
 
     /**
@@ -375,7 +394,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public void setFirstChildImpl(AJoinPoint node) {
-        this.aType.setFirstChildImpl(node);
+        this.aTagType.setFirstChildImpl(node);
     }
 
     /**
@@ -384,55 +403,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public void setLastChildImpl(AJoinPoint node) {
-        this.aType.setLastChildImpl(node);
-    }
-
-    /**
-     * Sets the template argument types of a template type
-     * @param templateArgTypes 
-     */
-    @Override
-    public void setTemplateArgsTypesImpl(AType[] templateArgTypes) {
-        this.aType.setTemplateArgsTypesImpl(templateArgTypes);
-    }
-
-    /**
-     * Sets a single template argument type of a template type
-     * @param index 
-     * @param templateArgType 
-     */
-    @Override
-    public void setTemplateArgsTypesImpl(Integer index, AType templateArgType) {
-        this.aType.setTemplateArgsTypesImpl(index, templateArgType);
-    }
-
-    /**
-     * Sets the desugared type of this type
-     * @param desugaredType 
-     */
-    @Override
-    public void setDesugarImpl(AType desugaredType) {
-        this.aType.setDesugarImpl(desugaredType);
-    }
-
-    /**
-     * Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change
-     * @param currentValue 
-     * @param newValue 
-     */
-    @Override
-    public boolean setTypeFieldByValueRecursiveImpl(Object currentValue, Object newValue) {
-        return this.aType.setTypeFieldByValueRecursiveImpl(currentValue, newValue);
-    }
-
-    /**
-     * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
-     * @param oldValue 
-     * @param newValue 
-     */
-    @Override
-    public AType setUnderlyingTypeImpl(AType oldValue, AType newValue) {
-        return this.aType.setUnderlyingTypeImpl(oldValue, newValue);
+        this.aTagType.setLastChildImpl(node);
     }
 
     /**
@@ -442,7 +413,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aType.insertImpl(position, code);
+        return this.aTagType.insertImpl(position, code);
     }
 
     /**
@@ -452,7 +423,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aType.insertImpl(position, code);
+        return this.aTagType.insertImpl(position, code);
     }
 
     /**
@@ -460,15 +431,15 @@ public abstract class AEnumType extends AType {
      */
     @Override
     public String toString() {
-        return this.aType.toString();
+        return this.aTagType.toString();
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends AType> getSuper() {
-        return Optional.of(this.aType);
+    public Optional<? extends ATagType> getSuper() {
+        return Optional.of(this.aTagType);
     }
 
     /**
@@ -479,7 +450,7 @@ public abstract class AEnumType extends AType {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	default:
-        		joinPointList = this.aType.select(selectName);
+        		joinPointList = this.aTagType.select(selectName);
         		break;
         }
         return joinPointList;
@@ -535,7 +506,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
-        this.aType.fillWithAttributes(attributes);
+        this.aTagType.fillWithAttributes(attributes);
         attributes.add("integerType");
     }
 
@@ -544,7 +515,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     protected final void fillWithSelects(List<String> selects) {
-        this.aType.fillWithSelects(selects);
+        this.aTagType.fillWithSelects(selects);
     }
 
     /**
@@ -552,7 +523,7 @@ public abstract class AEnumType extends AType {
      */
     @Override
     protected final void fillWithActions(List<String> actions) {
-        this.aType.fillWithActions(actions);
+        this.aTagType.fillWithActions(actions);
     }
 
     /**
@@ -574,13 +545,15 @@ public abstract class AEnumType extends AType {
         if(isInstance) {
         	return true;
         }
-        return this.aType.instanceOf(joinpointClass);
+        return this.aTagType.instanceOf(joinpointClass);
     }
     /**
      * 
      */
     protected enum EnumTypeAttributes {
         INTEGERTYPE("integerType"),
+        NAME("name"),
+        DECL("decl"),
         KIND("kind"),
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),

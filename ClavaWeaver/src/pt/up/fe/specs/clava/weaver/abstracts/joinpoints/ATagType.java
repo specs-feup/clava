@@ -498,7 +498,7 @@ public abstract class ATagType extends AType {
      * 
      */
     @Override
-    public final List<? extends JoinPoint> select(String selectName) {
+    public List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	default:
@@ -512,7 +512,7 @@ public abstract class ATagType extends AType {
      * 
      */
     @Override
-    public final void defImpl(String attribute, Object value) {
+    public void defImpl(String attribute, Object value) {
         switch(attribute){
         case "type": {
         	if(value instanceof AJoinPoint){
@@ -557,7 +557,7 @@ public abstract class ATagType extends AType {
      * 
      */
     @Override
-    protected final void fillWithAttributes(List<String> attributes) {
+    protected void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
         attributes.add("name");
         attributes.add("decl");
@@ -567,7 +567,7 @@ public abstract class ATagType extends AType {
      * 
      */
     @Override
-    protected final void fillWithSelects(List<String> selects) {
+    protected void fillWithSelects(List<String> selects) {
         this.aType.fillWithSelects(selects);
     }
 
@@ -575,7 +575,7 @@ public abstract class ATagType extends AType {
      * 
      */
     @Override
-    protected final void fillWithActions(List<String> actions) {
+    protected void fillWithActions(List<String> actions) {
         this.aType.fillWithActions(actions);
     }
 
@@ -584,7 +584,7 @@ public abstract class ATagType extends AType {
      * @return The join point type
      */
     @Override
-    public final String get_class() {
+    public String get_class() {
         return "tagType";
     }
 
@@ -593,7 +593,7 @@ public abstract class ATagType extends AType {
      * @return True if this join point is an instanceof the given class
      */
     @Override
-    public final boolean instanceOf(String joinpointClass) {
+    public boolean instanceOf(String joinpointClass) {
         boolean isInstance = get_class().equals(joinpointClass);
         if(isInstance) {
         	return true;

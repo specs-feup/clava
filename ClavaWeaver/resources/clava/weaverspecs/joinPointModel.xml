@@ -302,7 +302,7 @@
 	</joinpoint>		
 		
 	<!--  ENUM TYPE -->
-	<joinpoint class="enumType" extends="type">
+	<joinpoint class="enumType" extends="tagType">
 	</joinpoint>
 	
 	
