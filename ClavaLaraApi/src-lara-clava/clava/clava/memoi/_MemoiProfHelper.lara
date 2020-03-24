@@ -19,6 +19,18 @@ function MemoiCompleteReport(targets, report) {
 	};
 }
 
+MemoiCompleteReport.prototype.isTarget = function($func) {
+	
+	var sig = Strings.replacer($func.signature, ' ', '');
+	for(var i in this.targets) {
+		if(this.targets[i].sig == sig) {
+			return true;
+		}
+	}
+	
+	return false;
+}
+
 function _normalizeSig(sig) {
 	var tmp = Strings.replacer(sig, /\(/, '_');
 	tmp = Strings.replacer(tmp, ', ', '_');
