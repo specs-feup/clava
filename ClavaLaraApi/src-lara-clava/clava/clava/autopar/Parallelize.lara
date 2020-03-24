@@ -201,13 +201,17 @@ Parallelize.getForLoopsPragmas = function($loops, insertPragma) {
    
 	// Revert AST changes
 	Clava.popAst();
-
+	
+	var loopIds = [];
+	for (var $loop of $loops) {
+		loopIds.push($loop.id);
+	}
 	
 	for(var $loop of WeaverJps.search('loop').get()) {
 	//select file.function.loop end
 	//apply
 		var loopindex = GetLoopIndex($loop);
-		if 	(OmpPragmas[loopindex] !== undefined)
+		if 	(OmpPragmas[loopindex] !== undefined && loopIds.includes($loop.id))
 		{
 			if(insertPragma) {
 				$loop.insert before OmpPragmas[loopindex].pragmaCode;
