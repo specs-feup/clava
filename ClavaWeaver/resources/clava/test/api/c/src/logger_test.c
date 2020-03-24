@@ -10,6 +10,7 @@ double foo() {
     }
     
     return a;
+    // Comment after return
 }
 
 void testAppend() {

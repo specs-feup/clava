@@ -23,8 +23,9 @@ double foo() {
       printf("Printing again\n");
    }
    
-   return a;
    fclose(log_file_0);
+   return a;
+   // Comment after return
 }
 
 void testAppend() {

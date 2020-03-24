@@ -32,6 +32,7 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.weaver.CxxActions;
@@ -379,8 +380,12 @@ public class CxxFunction extends AFunction {
 
         List<Stmt> bodyStmts = function.getBody().get().toStatements();
 
-        // Check if it has return statement
-        Stmt lastStmt = SpecsCollections.lastTry(bodyStmts).orElse(null);
+        // Check if it has return statement, ignoring wrapper statements
+        Stmt lastStmt = SpecsCollections.reverseStream(bodyStmts)
+                .filter(stmt -> !(stmt instanceof WrapperStmt))
+                .findFirst().orElse(null);
+        // Stmt lastStmt = SpecsCollections.lastTry(bodyStmts).orElse(null);
+
         ReturnStmt lastReturnStmt = lastStmt instanceof ReturnStmt ? (ReturnStmt) lastStmt : null;
 
         // Get list of all return statements inside children
