@@ -317,8 +317,9 @@ Logger.prototype._log_c_file_setup = function($file, $function) {
     // Add code at beginning of the function
     $function.body.insertBegin(code);
 
-	// Close file at the end of the function
-	$function.body.insertEnd("fclose(" + varname + ");");
+	// Close file at the return points of the function
+	$function.insertReturn("fclose(" + varname + ");");
+
 	
 	return varname;
 }
