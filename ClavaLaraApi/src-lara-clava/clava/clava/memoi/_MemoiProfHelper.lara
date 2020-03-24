@@ -1,5 +1,24 @@
 import lara.util.IdGenerator;
 
+function MemoiTarget(sig, $func, isUser) {
+	
+	this.sig = sig;
+	this.$func = $func;
+	this.isUser = isUser;
+}
+
+function MemoiCompleteReport(targets, report) {
+	
+	this.targets = targets;
+	this.failSummary = {
+		numParams		: report.paramsNum,
+		typeParams		: report.paramsType,
+		typeReturn		: report.returnType,
+		globalAccess	: report.global,
+		invalidCalls	: report.calls
+	};
+}
+
 function _normalizeSig(sig) {
 	var tmp = Strings.replacer(sig, /\(/, '_');
 	tmp = Strings.replacer(tmp, ', ', '_');
@@ -53,11 +72,11 @@ aspectdef _Memoi_FindTargets
 	
 	select stmt.call end
 	apply
-		var func = $call.function;
-		if(func === undefined) {
+		var $func = $call.function;
+		if($func === undefined) {
 			continue;
 		}
-		var sig = func.signature;
+		var sig = $func.signature;
 		
 		sig = Strings.replacer(sig, ' ', '');
 
@@ -70,7 +89,9 @@ aspectdef _Memoi_FindTargets
 		// test if valid
 		var valid = filter($call, processed);
 		if(valid === _Res.VALID) {
-			targets.push(sig);
+			var isUser = !_isWhiteListed(sig); // it's a user function if it's not a whitelisted function
+			var target = new MemoiTarget(sig, $func, isUser);
+			targets.push(target);
 		}
 	end
 	
