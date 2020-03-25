@@ -62,3 +62,52 @@ function(target_include_directories_recursive CURRENT_TARGET INCLUDE_DIRECTORIES
 #	endif()
 
 endfunction(target_include_directories_recursive)
+
+
+# Gets the Clava standard flag automatically from the provided target
+#
+# Parameter 1: _target - The target that we will query
+# Parameter 2: _std - The variable that will hold the standard flag string (output parameter)
+function(clava_get_target_std _target _std)
+	get_property(_cxxs TARGET ${_target} PROPERTY CXX_STANDARD)
+	get_property(_cxxe TARGET ${_target} PROPERTY CXX_EXTENSIONS)
+	get_property(_cs TARGET ${_target} PROPERTY C_STANDARD)
+	get_property(_ce TARGET ${_target} PROPERTY C_EXTENSIONS)
+	
+	if(${_cxxs})
+		# C++ is on
+		if(("${_cxxe}" STREQUAL ON) OR ("${_cxxe}" STREQUAL ""))
+			# gnu is on
+			set(${_std} "-std gnu++${_cxxs}" PARENT_SCOPE)
+		else()
+			# gnu is off
+			set(${_std} "-std c++${_cxxs}" PARENT_SCOPE)
+		endif()
+	elseif(${_cs})
+		# C is on
+		if(("${_ce}" STREQUAL ON) OR ("${_ce}" STREQUAL ""))
+			# gnu is on
+			set(${_std} "-std gnu${_cs}" PARENT_SCOPE)
+		else()
+			# gnu is off
+			set(${_std} "-std c${_cs}" PARENT_SCOPE)
+		endif()
+	else()
+		# neither standard is explicitly defined, assume the user will provide one
+		set(${_std} "" PARENT_SCOPE)
+	endif()
+endfunction(clava_get_target_std)
+
+
+# Gets all the targets from the subdirectories of the provided targets
+# 
+# Parameter 1: _result - A list with all the targets found (output parameter)
+# Parameter 2: _dir - The directory where the subdirectory search will start
+function(clava_get_all_targets _result _dir)
+	get_property(_sub_dirs DIRECTORY "${_dir}" PROPERTY SUBDIRECTORIES)
+	foreach(_sub_dir IN LISTS _sub_dirs)
+		clava_get_all_targets(${_result} "${_sub_dir}")
+	endforeach()
+	get_property(_sub_targets DIRECTORY "${_dir}" PROPERTY BUILDSYSTEM_TARGETS)
+	set(${_result} ${${_result}} ${_sub_targets} PARENT_SCOPE)
+endfunction(clava_get_all_targets)
