@@ -339,3 +339,13 @@ ClavaJoinPoints.typedefDecl = function($underlyingType, identifier) {
 	return AstFactory.typedefDecl($underlyingType, identifier);
 }
 
+/**
+ * @param {struct} $struct - a struct for the type
+ * @return {elaboratedType} - an elaborated type for the given struct.
+ */
+ClavaJoinPoints.structType = function($struct) {
+	Check.isJoinPoint($struct, "struct");
+	
+	return AstFactory.structType($struct);
+}
+
