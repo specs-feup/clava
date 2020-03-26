@@ -619,7 +619,7 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function)
+     * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
      * @param code 
      */
     public AJoinPoint insertReturnImpl(AJoinPoint code) {
@@ -627,7 +627,7 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function)
+     * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
      * @param code 
      */
     public final AJoinPoint insertReturn(AJoinPoint code) {
@@ -646,7 +646,7 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function)
+     * Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
      * @param code 
      */
     public AJoinPoint insertReturnImpl(String code) {
@@ -654,7 +654,7 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function)
+     * Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
      * @param code 
      */
     public final AJoinPoint insertReturn(String code) {

@@ -249,7 +249,13 @@
 	<action name="insertEnd" class="scope" return="joinpoint">
 		<parameter name="code" type="string" />
 	</action>
-
+	
+	<!-- 
+	<action name="insertReturn" class="scope" return="joinpoint" tooltip="Inserts the joinpoint before the return points of the scope (i.e., return statements). Returns the last inserted node">
+		<parameter name="code" type="joinpoint" />
+	</action>
+ 	-->
+ 
 	<action name="addLocal" class="scope" return="joinpoint" tooltip="Adds a new local variable to this scope">
 		<parameter name="name" type="String" />
 		<parameter name="type" type="joinpoint" />
@@ -290,11 +296,11 @@
 	</action>
 	 -->
 	
-	<action name="insertReturn" class="function" return="joinpoint" tooltip="Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function)">
+	<action name="insertReturn" class="function" return="joinpoint" tooltip="Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node">
 		<parameter name="code" type="joinpoint" />
 	</action>
 
-	<action name="insertReturn" class="function" return="joinpoint" tooltip="Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function)">
+	<action name="insertReturn" class="function" return="joinpoint" tooltip="Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node">
 		<parameter name="code" type="String" />
 	</action>
 	

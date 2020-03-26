@@ -498,7 +498,7 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function)
+     * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
      * @param code 
      */
     @Override
@@ -507,7 +507,7 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function)
+     * Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
      * @param code 
      */
     @Override

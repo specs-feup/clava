@@ -359,7 +359,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public String getJoinpointTypeImpl() {
-
+        ClavaLog.deprecated("joinpointType is deprecated, please use joinPointType");
         // return getNode().getClass().getSimpleName();
         return getJoinPointType();
         // String joinpointName = getClass().getSimpleName();
