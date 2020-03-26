@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.weaver;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import com.google.common.base.Preconditions;
 
@@ -162,25 +163,51 @@ public class CxxActions {
     }
 
     public static AJoinPoint insertBefore(AJoinPoint baseJp, AJoinPoint newJp) {
-        Stmt newStmt = ClavaNodes.toStmt(newJp.getNode());
-        Stmt baseStmt = getValidStatement(baseJp.getNode(), Insert.BEFORE);
-        if (baseStmt == null) {
-            return null;
-        }
-        NodeInsertUtils.insertBefore(baseStmt, newStmt);
-
-        return CxxJoinpoints.create(newStmt);
+        return insert(baseJp, newJp, Insert.BEFORE, (base, node) -> NodeInsertUtils.insertBefore(base, node));
+        // Stmt newStmt = ClavaNodes.toStmt(newJp.getNode());
+        // Stmt baseStmt = getValidStatement(baseJp.getNode(), Insert.BEFORE);
+        // if (baseStmt == null) {
+        // return null;
+        // }
+        // NodeInsertUtils.insertBefore(baseStmt, newStmt);
+        //
+        // return CxxJoinpoints.create(newStmt);
     }
 
     public static AJoinPoint insertAfter(AJoinPoint baseJp, AJoinPoint newJp) {
-        Stmt newStmt = ClavaNodes.toStmt(newJp.getNode());
-        Stmt baseStmt = getValidStatement(baseJp.getNode(), Insert.AFTER);
-        if (baseStmt == null) {
+        return insert(baseJp, newJp, Insert.AFTER, (base, node) -> NodeInsertUtils.insertAfter(base, node));
+        // // If inside a scope, treat nodes at the statement level
+        // // if
+        // Stmt newStmt = ClavaNodes.toStmt(newJp.getNode());
+        // Stmt baseStmt = getValidStatement(baseJp.getNode(), Insert.AFTER);
+        // if (baseStmt == null) {
+        // return null;
+        // }
+        // NodeInsertUtils.insertAfter(baseStmt, newStmt);
+        //
+        // return CxxJoinpoints.create(newStmt);
+    }
+
+    public static AJoinPoint insert(AJoinPoint baseJp, AJoinPoint newJp, Insert position,
+            BiConsumer<ClavaNode, ClavaNode> insertFunction) {
+
+        // If baseJp will do a statement-base insertion, adapt nodes
+        // Check if base is inside a scope
+        boolean isInsideScope = baseJp.getNode().getAncestorTry(CompoundStmt.class).isPresent();
+
+        // Optional<Stmt> targetStmt = ClavaNodes.getStatement(baseJp.getNode());
+        ClavaNode adaptedBase = isInsideScope ? getValidStatement(baseJp.getNode(), position)
+                : baseJp.getNode();
+
+        if (adaptedBase == null) {
             return null;
         }
-        NodeInsertUtils.insertAfter(baseStmt, newStmt);
 
-        return CxxJoinpoints.create(newStmt);
+        ClavaNode adaptedNew = isInsideScope ? ClavaNodes.toStmt(newJp.getNode()) : newJp.getNode();
+
+        insertFunction.accept(adaptedBase, adaptedNew);
+
+        return CxxJoinpoints.create(adaptedNew);
     }
 
     /**
@@ -189,7 +216,6 @@ public class CxxActions {
      * @param node
      * @return
      */
-    // public static Optional<Stmt> getValidStatement(ClavaNode node, Insert position) {
     public static Stmt getValidStatement(ClavaNode node, Insert position) {
         Stmt target = getValidStatement(node);
 

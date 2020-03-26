@@ -64,10 +64,10 @@ aspectdef InsertsLiteral
 	end
 	
 	
-	
 	// Output code
 	select file end
 	apply
 		println($file.code);
 	end
+
 end
