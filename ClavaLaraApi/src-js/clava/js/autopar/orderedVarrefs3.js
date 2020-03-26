@@ -7,7 +7,7 @@ var orderedVarrefs3 = function($jp)
 {
 
     var varrefs = [];
-    if($jp.instanceOf("expression") || $jp.joinpointType === "statement")
+    if($jp.instanceOf("expression") || $jp.joinPointType === "statement")
     {
         return orderedVarrefsBase3($jp);
     }
@@ -40,7 +40,7 @@ var orderedVarrefsBase3 = function($stmt)
 };
 var varrefUsageOrder3 = function($jp, currentLevel, varrefTable)
 {   
-    if($jp.joinpointType === "binaryOp") 
+    if($jp.joinPointType === "binaryOp") 
     {
         if($jp.kind === "assign") 
         {
@@ -58,7 +58,7 @@ var varrefUsageOrder3 = function($jp, currentLevel, varrefTable)
 
     } 
     else if(
-            $jp.joinpointType === "varref" && $jp.isFunctionCall === false
+            $jp.joinPointType === "varref" && $jp.isFunctionCall === false
             )
     {        
         var currentVarrefs = varrefTable[currentLevel];
@@ -72,7 +72,7 @@ var varrefUsageOrder3 = function($jp, currentLevel, varrefTable)
     }
     else
     {
-        if (['arrayAccess','memberAccess'].indexOf($jp.joinpointType) !== -1)
+        if (['arrayAccess','memberAccess'].indexOf($jp.joinPointType) !== -1)
         {
             var maxLevel = currentLevel;
             for(var i=0; i<$jp.numChildren; i++)
