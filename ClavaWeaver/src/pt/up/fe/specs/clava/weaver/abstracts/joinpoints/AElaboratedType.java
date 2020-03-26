@@ -27,12 +27,35 @@ public abstract class AElaboratedType extends AType {
         this.aType = aType;
     }
     /**
-     * the qualifier of this elaborated type (e.g., struct)
+     * the keyword of this elaborated type, if present (e.g., struct)
+     */
+    public abstract String getKeywordImpl();
+
+    /**
+     * the keyword of this elaborated type, if present (e.g., struct)
+     */
+    public final Object getKeyword() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "keyword", Optional.empty());
+        	}
+        	String result = this.getKeywordImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "keyword", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "keyword", e);
+        }
+    }
+
+    /**
+     * the qualifier of this elaborated type, if present (e.g., A::)
      */
     public abstract String getQualifierImpl();
 
     /**
-     * the qualifier of this elaborated type (e.g., struct)
+     * the qualifier of this elaborated type, if present (e.g., A::)
      */
     public final Object getQualifier() {
         try {
@@ -557,6 +580,7 @@ public abstract class AElaboratedType extends AType {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
+        attributes.add("keyword");
         attributes.add("qualifier");
         attributes.add("namedType");
     }
@@ -602,6 +626,7 @@ public abstract class AElaboratedType extends AType {
      * 
      */
     protected enum ElaboratedTypeAttributes {
+        KEYWORD("keyword"),
         QUALIFIER("qualifier"),
         NAMEDTYPE("namedType"),
         KIND("kind"),

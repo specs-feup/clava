@@ -17085,6 +17085,15 @@
          "children": [
                {
                   "type": "attribute",
+                  "tooltip": "the keyword of this elaborated type, if present (e.g., struct)",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "keyword"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "the type that is being prefixed with the qualifier",
                   "children": [
                            {
@@ -17094,7 +17103,7 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "the qualifier of this elaborated type (e.g., struct)",
+                  "tooltip": "the qualifier of this elaborated type, if present (e.g., A::)",
                   "children": [
                            {
                               "type": "String",

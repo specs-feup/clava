@@ -18,6 +18,7 @@ import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AElaboratedType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
+import pt.up.fe.specs.util.SpecsStrings;
 
 public class CxxElaboratedType extends AElaboratedType {
 
@@ -36,7 +37,15 @@ public class CxxElaboratedType extends AElaboratedType {
 
     @Override
     public String getQualifierImpl() {
-        return elaboratedType.get(ElaboratedType.QUALIFIER);
+        return SpecsStrings.nullIfEmpty(elaboratedType.getQualifier());
+        // String qualifier = elaboratedType.get(ElaboratedType.QUALIFIER);
+        //
+        // return qualifier.isEmpty() ? null : qualifier;
+    }
+
+    @Override
+    public String getKeywordImpl() {
+        return SpecsStrings.nullIfEmpty(elaboratedType.getKeyword().getCode());
     }
 
     @Override

@@ -58,6 +58,7 @@ import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
+import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.parsing.omp.OmpParser;
 import pt.up.fe.specs.clava.utils.Typable;
@@ -67,6 +68,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AElaboratedType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
@@ -76,6 +78,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANamedDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStruct;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
@@ -644,6 +647,13 @@ public class AstFactory {
     public static ATypedefDecl typedefDecl(AType underlyingType, String identifier) {
         var typedefDecl = CxxWeaver.getFactory().typedefDecl((Type) underlyingType.getNode(), identifier);
         return CxxJoinpoints.create(typedefDecl, ATypedefDecl.class);
+    }
+
+    public static AElaboratedType structType(AStruct struct) {
+        var namedType = (Type) struct.getTypeImpl().getNode();
+        var elaboratedType = CxxWeaver.getFactory().elaboratedType(ElaboratedTypeKeyword.STRUCT, namedType);
+
+        return CxxJoinpoints.create(elaboratedType, AElaboratedType.class);
     }
 
 }

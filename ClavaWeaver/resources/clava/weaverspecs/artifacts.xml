@@ -630,7 +630,8 @@
 	
 	<!-- ELABORATED TYPE -->
 	<artifact class="elaboratedType">
-		<attribute name="qualifier" type="String" tooltip="the qualifier of this elaborated type (e.g., struct)"/>
+		<attribute name="keyword" type="String" tooltip="the keyword of this elaborated type, if present. Can be one of: struct, interface, union, class, enum, typename"/>
+		<attribute name="qualifier" type="String" tooltip="the qualifier of this elaborated type, if present (e.g., A::)"/>
 		<attribute name="namedType" type="type" tooltip="the type that is being prefixed with the qualifier"/>
 	</artifact>
 	
