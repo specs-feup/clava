@@ -28,7 +28,7 @@ aspectdef CheckForSafeFunctionCall
 		}
 		
 		var currentRegion = $arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.currentRegion;
-		if((currentRegion !== undefined && currentRegion.joinpointType === 'file')
+		if((currentRegion !== undefined && currentRegion.joinPointType === 'file')
 			|| $arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.isParam) {
 			
 			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);
@@ -38,7 +38,7 @@ aspectdef CheckForSafeFunctionCall
 		if (
 			$arrayAccess.use.indexOf('write') !== -1 && 
 				(
-					$arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.currentRegion.joinpointType === 'file'
+					$arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.currentRegion.joinPointType === 'file'
 					||
 					$arrayAccess.arrayVar.descendantsAndSelf('varref')[0].vardecl.isParam
 				)
@@ -55,14 +55,14 @@ aspectdef CheckForSafeFunctionCall
 		}
 		
 		var currentRegion = $memberAccess.descendantsAndSelf('varref')[0].vardecl.currentRegion;
-		if(currentRegion !== undefined && currentRegion.joinpointType === 'file') {
+		if(currentRegion !== undefined && currentRegion.joinPointType === 'file') {
 			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);
 		}
 		
 	/*
 		if (
 			$memberAccess.use.indexOf('write') !== -1 &&
-			$memberAccess.descendantsAndSelf('varref')[0].vardecl.currentRegion.joinpointType === 'file'
+			$memberAccess.descendantsAndSelf('varref')[0].vardecl.currentRegion.joinPointType === 'file'
 			)
 			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);		
 	*/
@@ -77,13 +77,13 @@ aspectdef CheckForSafeFunctionCall
 		}
 	
 		var currentRegion = $varref.vardecl.currentRegion;
-		if(currentRegion !== undefined && currentRegion.joinpointType === 'file') {
+		if(currentRegion !== undefined && currentRegion.joinPointType === 'file') {
 			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);
 		}
 		/*
 		if (
 			$varref.useExpr.use.indexOf('write') !== -1 &&
-			$varref.vardecl.currentRegion.joinpointType === 'file'
+			$varref.vardecl.currentRegion.joinPointType === 'file'
 			)
 			new_safefunctionCallslist.splice(new_safefunctionCallslist.indexOf($function.name),1);		
 		*/

@@ -13,7 +13,7 @@ end
 aspectdef exractExprVardecl
     input $expr end
     println('\tIn exractExprVardecl  expr : ' + $expr);
-    println('\tIn exractExprVardecl  expr.joinpointType : ' + $expr.joinpointType);
+    println('\tIn exractExprVardecl  expr.joinPointType : ' + $expr.joinPointType);
     println('\tIn exractExprVardecl  expr.selects : ' + $expr.selects);
     println('\tIn exractExprVardecl  expr.vardecl : ' + $expr.vardecl);
     

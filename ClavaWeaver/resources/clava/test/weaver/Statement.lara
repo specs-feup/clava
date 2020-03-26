@@ -3,7 +3,7 @@ aspectdef Statement
 	select loop.cond.childExpr end
 	apply
 	
-		if($childExpr.joinpointType !== "binaryOp") {
+		if($childExpr.joinPointType !== "binaryOp") {
 			continue;
 		}
 		

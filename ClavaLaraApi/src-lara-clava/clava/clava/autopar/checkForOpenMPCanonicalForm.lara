@@ -209,7 +209,7 @@ aspectdef checkForOpenMPCanonicalForm
  		stepOp = $expr.kind;
  		break #$ForStmt;
  	end
- 	condition $expr.joinpointType == 'binaryOp' || $expr.joinpointType == 'unaryOp' end
+ 	condition $expr.joinPointType == 'binaryOp' || $expr.joinPointType == 'unaryOp' end
 
 // 	if (stepOp == null || ['assign','post_inc','pre_inc','pre_dec','post_dec','add','sub'].indexOf(stepOp) == -1 || stepVars.length != 1)
 //		stepmsgError.push('loop-step expression is not in canonical form' );

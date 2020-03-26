@@ -12,7 +12,7 @@ aspectdef LoopInductionVariables
 	select file.function.loop.binaryOp end
 	apply
 		if (
-				$binaryOp.left.joinpointType === 'varref'
+				$binaryOp.left.joinPointType === 'varref'
 			)
 		{
 			$varref = $binaryOp.left;
@@ -74,6 +74,6 @@ aspectdef LoopInductionVariables
 			}
 		}
 	end
-	condition $loop.nestedLevel === 0 && $subscript.joinpointType === 'varref' end
+	condition $loop.nestedLevel === 0 && $subscript.joinPointType === 'varref' end
 
 end

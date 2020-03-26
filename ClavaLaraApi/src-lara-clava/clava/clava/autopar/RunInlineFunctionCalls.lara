@@ -192,14 +192,14 @@ aspectdef callInline
 
 		if (
 					(// funcCall(...)
-					exprStmt.children[0].joinpointType === 'call' && 
+					exprStmt.children[0].joinPointType === 'call' && 
 					exprStmt.descendantsAndSelf('call').length ===1 && 
 					exprStmt.children[0].name === func_name
 					) 
 			||
 					(// var op funcCall(...)
-					exprStmt.children[0].joinpointType === 'binaryOp' && 
-					exprStmt.children[0].right.joinpointType === 'call' && 
+					exprStmt.children[0].joinPointType === 'binaryOp' && 
+					exprStmt.children[0].right.joinPointType === 'call' && 
 					exprStmt.children[0].right.descendantsAndSelf('call').length === 1
 					)
 			)
@@ -372,7 +372,7 @@ aspectdef inlinePreparation
 		
 		else if ($param.type.isArray === true)
 		{
-			if (callStmt.argList[param_index].joinpointType === 'unaryOp')
+			if (callStmt.argList[param_index].joinPointType === 'unaryOp')
 			{
 				funcJP.detach();
 				return;
@@ -385,7 +385,7 @@ aspectdef inlinePreparation
 					param_table[$param.name] += '[' + arrayVarObj.subscript[index].code +']';
 				}				
 			}
-			else if (callStmt.argList[param_index].joinpointType === 'cast')
+			else if (callStmt.argList[param_index].joinPointType === 'cast')
 			{
 
 				if (callStmt.argList[param_index].vardecl.type.unwrap.code !== callStmt.argList[param_index].type.unwrap.code)
@@ -435,7 +435,7 @@ aspectdef inlinePreparation
     
 
 
-	if (exprStmt.children[0].joinpointType === 'binaryOp')
+	if (exprStmt.children[0].joinPointType === 'binaryOp')
 	{
 		var ret_str_replacement = exprStmt.children[0].children[0].code;
 

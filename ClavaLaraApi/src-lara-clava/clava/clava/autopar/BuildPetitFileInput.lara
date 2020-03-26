@@ -292,7 +292,7 @@ aspectdef CovertLoopToPetitForm
  		}
  		break #$ForStmt;
  	end
- 	condition $expr.joinpointType == 'binaryOp' || $expr.joinpointType == 'unaryOp' end
+ 	condition $expr.joinPointType == 'binaryOp' || $expr.joinPointType == 'unaryOp' end
  	
 
  	if (stepOp === 'post_inc' || stepOp === 'pre_inc')

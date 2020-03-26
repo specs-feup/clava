@@ -71,14 +71,14 @@ aspectdef SetVariableAccess
 		
 			var vardeclRegion = "";
 			if(vardecl.currentRegion !== undefined) {
-				vardeclRegion = vardecl.currentRegion.joinpointType;
+				vardeclRegion = vardecl.currentRegion.joinPointType;
 			}
-			//var vardeclRegion = vardecl.currentRegion.joinpointType;
+			//var vardeclRegion = vardecl.currentRegion.joinPointType;
 			
 
 			if ($ForStmt.contains(vardecl) === true)
 				declpos = 'inside';
-			else if (vardecl.joinpointType === 'param')
+			else if (vardecl.joinPointType === 'param')
 				declpos = 'param';
 			else if (vardeclRegion === 'file')
 				declpos = 'global';
