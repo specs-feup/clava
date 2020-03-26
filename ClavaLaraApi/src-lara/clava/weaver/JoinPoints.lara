@@ -2,6 +2,26 @@ import weaver.JoinPointsBase;
 import lara.Check;
 import clava.Clava;
 
+
+
+/**
+ * 
+ * @return {$jp[]} the children of the given node
+ */
+JoinPoints.prototype._all_children = function($jp) {
+	return $jp.children;
+}
+
+
+/**
+ * 
+ * @return {$jp[]} the descendants of the given node
+ */
+JoinPoints.prototype._all_descendants = function($jp) {
+	return $jp.descendants;
+}
+
+/*
 JoinPoints.prototype.children = function($jp, jpType) {
 	if($jp === undefined) {
 		return [];
@@ -45,10 +65,6 @@ JoinPoints.prototype._filterNodes = function($jps, jpType) {
 		if(!$jp.instanceOf(jpType)) {
 			continue;
 		}
-		// Skip null nodes
-		//if($jp === undefined) {
-		//	continue;
-		//}
 		
 		filteredJps.push($jp);
 	}
@@ -56,3 +72,4 @@ JoinPoints.prototype._filterNodes = function($jps, jpType) {
 	return filteredJps;
 
 }
+*/
