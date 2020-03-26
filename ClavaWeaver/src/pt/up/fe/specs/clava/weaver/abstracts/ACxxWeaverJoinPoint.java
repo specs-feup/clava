@@ -398,7 +398,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         // Check if joinpoint is a type
         if (!(type instanceof AType)) {
             SpecsLogs.msgInfo(
-                    "[setType] Passed a joinpoint that is not a Type ('" + type.getJoinpointType() + "'), ignoring");
+                    "[setType] Passed a joinpoint that is not a Type ('" + type.getJoinPointType() + "'), ignoring");
             return;
         }
 
@@ -529,7 +529,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         if (!node.hasParent()) {
             SpecsLogs.msgInfo(
-                    "action detach: could not find a parent in joinpoint of type '" + getJoinpointType() + "'");
+                    "action detach: could not find a parent in joinpoint of type '" + getJoinPointType() + "'");
             return;
         }
 
@@ -548,7 +548,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         ClavaNode node = getNode();
 
         if (!(node instanceof Typable)) {
-            SpecsLogs.msgInfo("Joinpoint of type '" + getJoinpointType() + "' with node '" + node.getNodeName()
+            SpecsLogs.msgInfo("Joinpoint of type '" + getJoinPointType() + "' with node '" + node.getNodeName()
                     + "' does not have a type");
             return null;
         }
@@ -557,10 +557,10 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         return CxxJoinpoints.create(((Typable) node).getType());
     }
 
-    @Override
-    public String toString() {
-        return "Joinpoint '" + getJoinpointType() + "'";
-    }
+    // @Override
+    // public String toString() {
+    // return "Joinpoint '" + getJoinpointType() + "'";
+    // }
 
     /**
      * In case a joinpoint child needs to access the list of the parent joinpoint statements.

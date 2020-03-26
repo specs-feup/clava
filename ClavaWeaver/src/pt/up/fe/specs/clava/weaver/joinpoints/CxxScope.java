@@ -312,7 +312,7 @@ public class CxxScope extends AScope {
 
         // Check if joinpoint is a CxxType
         if (!(type instanceof AType)) {
-            SpecsLogs.msgInfo("addLocal: the provided join point (" + type.getJoinpointType() + ") is not a type");
+            SpecsLogs.msgInfo("addLocal: the provided join point (" + type.getJoinPointType() + ") is not a type");
             return null;
         }
 

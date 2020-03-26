@@ -300,7 +300,7 @@ public class AstFactory {
         boolean isFunction = jpDecl instanceof CxxFunction;
         if (!isFunction) {
             ClavaLog.warning(
-                    "Constructor 'externC' does not support joinpoint of type '" + jpDecl.getJoinpointType() + "'");
+                    "Constructor 'externC' does not support joinpoint of type '" + jpDecl.getJoinPointType() + "'");
             return null;
         }
 

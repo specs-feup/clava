@@ -157,7 +157,7 @@ public class CxxFile extends AFile {
         // Check node is a decl
         if (!(node.getNode() instanceof Decl)) {
             SpecsLogs.msgInfo(
-                    "Can only insert Decl nodes in a file, tried to insert a '" + node.getJoinpointType() + "'");
+                    "Can only insert Decl nodes in a file, tried to insert a '" + node.getJoinPointType() + "'");
             return null;
         }
 
@@ -171,7 +171,7 @@ public class CxxFile extends AFile {
         // Check node is a decl
         if (node.getNode() instanceof Decl) {
             SpecsLogs.msgInfo(
-                    "Can only insert Decl nodes in a file, tried to insert a '" + node.getJoinpointType() + "'");
+                    "Can only insert Decl nodes in a file, tried to insert a '" + node.getJoinPointType() + "'");
             return null;
         }
 
@@ -317,7 +317,7 @@ public class CxxFile extends AFile {
 
         // Check if joinpoint is a CxxType
         if (!(type instanceof AType)) {
-            SpecsLogs.msgInfo("addGlobal: the provided join point (" + type.getJoinpointType() + ") is not a type");
+            SpecsLogs.msgInfo("addGlobal: the provided join point (" + type.getJoinPointType() + ") is not a type");
             return null;
         }
 

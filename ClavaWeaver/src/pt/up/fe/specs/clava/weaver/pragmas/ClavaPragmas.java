@@ -100,7 +100,7 @@ public class ClavaPragmas {
                 Class<?> joinpointTestClass = Class.forName(JOINPOINTS_PACKAGE_PREFIX + className);
                 if (!joinpointTestClass.isInstance(joinpoint)) {
                     ClavaLog.warning(clavaPragma,
-                            "Clava pragma associated to a joinpoint $" + joinpoint.getJoinpointType()
+                            "Clava pragma associated to a joinpoint $" + joinpoint.getJoinPointType()
                                     + ", which is not compatible with the joinpoint $" + joinpointName
                                     + " defined in the pragma");
                 }
