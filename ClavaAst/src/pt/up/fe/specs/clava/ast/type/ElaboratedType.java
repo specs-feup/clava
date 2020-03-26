@@ -148,7 +148,7 @@ public class ElaboratedType extends TypeWithKeyword {
      * 
      * @return
      */
-    private String getQualifier() {
+    public String getQualifier() {
         String qualifier = get(QUALIFIER);
         if (!hasUpdatedTemplateArgTypes()) {
             return qualifier;

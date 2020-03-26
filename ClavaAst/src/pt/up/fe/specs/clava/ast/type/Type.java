@@ -50,6 +50,9 @@ public abstract class Type extends ClavaNode {
     /// DATAKEYS BEGIN
 
     public final static DataKey<String> TYPE_AS_STRING = KeyFactory.string("typeAsString");
+    // This is a static value, extracted from the original code. If it gets stale, the current policy is to
+    // remove it.
+    // .setDefault(null);
 
     public final static DataKey<Boolean> HAS_SUGAR = KeyFactory.bool("hasSugar");
 

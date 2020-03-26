@@ -20,8 +20,10 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
+import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Typable;
 
@@ -81,4 +83,37 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
         set(TYPE_FOR_DECL, Optional.of(type));
     }
 
+    @Override
+    public ClavaNode copy(boolean keepId) {
+        var declCopy = (TypeDecl) super.copy(keepId);
+
+        // TypeForDecl type is linked to this Decl, also copy the type and replace the Decl
+        var type = get(TYPE_FOR_DECL);
+        if (type.isPresent()) {
+            // Copy the type
+            var typeCopy = type.get().copy(keepId);
+
+            // Set as the type of the decl copy
+            declCopy.setType(typeCopy);
+
+            // System.out.println("TYPE AS STRING: " + typeCopy.get(Type.TYPE_AS_STRING));
+            // Erase TypeAsString
+            typeCopy.set(Type.TYPE_AS_STRING, "<INVALID TYPE_AS_STRING>");
+
+            // Link new decl copy
+            if (typeCopy instanceof TagType) {
+                TagType tagType = (TagType) typeCopy;
+                tagType.set(TagType.DECL, declCopy);
+                // String newTypeAsString = tagType.getTagKind().getCode() + " " + tagType.getDecl().getDeclName();
+                // tagType.set(Type.TYPE_AS_STRING, newTypeAsString);
+
+                // System.out.println("TYPE COPY TYPE AS STRING: " + typeCopy.get(Type.TYPE_AS_STRING));
+            } else {
+                ClavaLog.warning("TypeDecl.copy: not defined when type is " + typeCopy.getClass());
+            }
+
+        }
+
+        return declCopy;
+    }
 }
