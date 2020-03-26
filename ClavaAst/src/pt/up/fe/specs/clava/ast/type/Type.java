@@ -829,7 +829,6 @@ public abstract class Type extends ClavaNode {
         return getTypeChildren().stream().flatMap(c -> c.getTypeDescendantsAndSelfStream());
     }
 
-    @SuppressWarnings("unchecked")
     public Stream<Type> getTypeDescendantsAndSelfStream() {
         return Stream.concat(Stream.of(this), getTypeDescendantsStream());
     }

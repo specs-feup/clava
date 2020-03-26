@@ -105,15 +105,18 @@ import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.DummyType;
+import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.TypeWithKeyword;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
+import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.utils.ClassesService;
@@ -816,6 +819,14 @@ public class ClavaFactory {
                 .put(TypedefDecl.UNDERLYING_TYPE, node);
 
         return new TypedefDecl(data, Collections.emptyList());
+    }
+
+    public ElaboratedType elaboratedType(ElaboratedTypeKeyword keyword, Type namedType) {
+        DataStore data = newDataStore(ElaboratedType.class)
+                .put(TypeWithKeyword.ELABORATED_TYPE_KEYWORD, keyword)
+                .put(ElaboratedType.NAMED_TYPE, namedType);
+
+        return new ElaboratedType(data, Collections.emptyList());
     }
 
 }
