@@ -628,7 +628,12 @@
 		<attribute name="originalType" type="type" tooltip="the type that is being adjusted"/>
 	</artifact>
 	
-
+	<!-- ELABORATED TYPE -->
+	<artifact class="elaboratedType">
+		<attribute name="qualifier" type="String" tooltip="the qualifier of this elaborated type (e.g., struct)"/>
+		<attribute name="namedType" type="type" tooltip="the type that is being prefixed with the qualifier"/>
+	</artifact>
+	
 
 	<!-- OPENMP -->
 

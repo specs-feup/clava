@@ -1217,14 +1217,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute joinpointType
-     * @return the attribute's value
+     * [DEPRECATED: please use joinPointType instead (uppercase P)]
      */
     public abstract String getJoinpointTypeImpl();
 
     /**
-     * Get value on attribute joinpointType
-     * @return the attribute's value
+     * [DEPRECATED: please use joinPointType instead (uppercase P)]
      */
     public final Object getJoinpointType() {
         try {

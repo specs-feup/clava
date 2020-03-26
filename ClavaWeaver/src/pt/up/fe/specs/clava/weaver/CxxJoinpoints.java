@@ -62,6 +62,7 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
+import pt.up.fe.specs.clava.ast.type.ElaboratedType;
 import pt.up.fe.specs.clava.ast.type.EnumType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.NullType;
@@ -121,6 +122,7 @@ import pt.up.fe.specs.clava.weaver.joinpoints.cilk.CxxCilkSync;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxAdjustedType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxArrayType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxBuiltinType;
+import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxElaboratedType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxEnumType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxFunctionType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxParenType;
@@ -140,6 +142,8 @@ public class CxxJoinpoints {
     private static final FunctionClassMap<ClavaNode, ACxxWeaverJoinPoint> JOINPOINT_FACTORY;
     static {
         JOINPOINT_FACTORY = new FunctionClassMap<>();
+        JOINPOINT_FACTORY.put(ElaboratedType.class, CxxElaboratedType::new);
+
         JOINPOINT_FACTORY.put(CastExpr.class, CxxCast::new);
         JOINPOINT_FACTORY.put(BinaryOperator.class, CxxBinaryOp::new);
         JOINPOINT_FACTORY.put(UnaryOperator.class, CxxUnaryOp::new);
@@ -184,6 +188,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(QualType.class, CxxQualType::new);
         JOINPOINT_FACTORY.put(ParenType.class, CxxParenType::new);
         JOINPOINT_FACTORY.put(AdjustedType.class, CxxAdjustedType::new);
+        // JOINPOINT_FACTORY.put(ElaboratedType.class, CxxElaboratedType::new);
         JOINPOINT_FACTORY.put(Type.class, CxxType::new);
         JOINPOINT_FACTORY.put(Pragma.class, CxxPragma::new);
         JOINPOINT_FACTORY.put(LaraMarkerPragma.class, CxxMarker::new);
