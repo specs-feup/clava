@@ -32,7 +32,8 @@ elseif(EXISTS "${CMAKE_CURRENT_LIST_DIR}/clava-installation-jar.txt")
 	message(STATUS "Found Clava: " ${CLAVA_JAR_PATH})
 else()
 	# Set default URL for clava.jar
-	set(CLAVA_JAR_URL "http://specs.fe.up.pt/tools/clava.jar")
+	set(CLAVA_ZIP_URL "http://specs.fe.up.pt/tools/clava.zip")
+	set(CLAVA_ZIP_PATH "${CMAKE_CURRENT_BINARY_DIR}/clava.zip")
 	set(CLAVA_JAR_PATH "${CMAKE_CURRENT_BINARY_DIR}/clava.jar")
 	set(DOWNLOADED_CLAVA true)
 endif()
@@ -46,8 +47,8 @@ if(DOWNLOADED_CLAVA)
     else()
         message(STATUS "Downloading Clava")
         file(DOWNLOAD
-                ${CLAVA_JAR_URL}
-                ${CLAVA_JAR_PATH}
+                ${CLAVA_ZIP_URL}
+                ${CLAVA_ZIP_PATH}
                 INACTIVITY_TIMEOUT 30
                 STATUS DOWN_STATUS)
         list(GET DOWN_STATUS 0 status_code)
@@ -56,8 +57,22 @@ if(DOWNLOADED_CLAVA)
         if(${status_code} OR 0)
             message(SEND_ERROR "Cannot download Clava: ${status_code} - ${status_string}")
         endif()
-        message(STATUS "Downloaded Clava to: ${CLAVA_JAR_PATH}")
-    endif()
+		
+		# Unzip Clava
+		message(STATUS "Unzipping Clava")
+		execute_process(COMMAND ${CMAKE_COMMAND} -E tar -xf ${CLAVA_ZIP_PATH}
+                  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+		
+		# Delete zip
+		file(REMOVE ${CLAVA_ZIP_PATH})
+		
+		if(EXISTS ${CLAVA_JAR_PATH})
+			message(STATUS "Downloaded Clava to: ${CLAVA_JAR_PATH}")
+		 else()
+			message(SEND_ERROR "Could not unzip Clava")
+		endif()	
+    
+	endif()
 
 elseif(LOCAL_CLAVA)
     message(STATUS "Using local Clava at: ${LOCAL_CLAVA}")
