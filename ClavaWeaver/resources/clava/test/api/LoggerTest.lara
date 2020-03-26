@@ -33,6 +33,14 @@ aspectdef LoggerTest
 		appendLogger.log($vardecl);
 	end	
 	
+	
+	select function{"testAppendJp"}.varref end
+	apply
+		var appendLoggerJp = (new Logger())
+		.int($varref)
+		.log($varref);
+	end
+	
 	select file end
 	apply
 		println($file.code);

@@ -35,6 +35,13 @@ void testAppend() {
 	printf("%ld%lld", aLong, aLongLong);
 }
 
+void testAppendJp() {
+	int a, b, c = 0;
+	c = a + b;
+	printf("%d", b);
+	printf("%d", a);
+	printf("%d", c);
+}
 
 int main() {
    FILE *log_file_1 = fopen("log.txt", "w+");

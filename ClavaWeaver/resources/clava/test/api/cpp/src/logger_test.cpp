@@ -19,7 +19,11 @@ void testAppend() {
 	int a;
 }
 
-
+void testAppendJp() {
+	int a, b, c = 0;
+	
+	c = a + b;
+}
 
 int main() {
     
