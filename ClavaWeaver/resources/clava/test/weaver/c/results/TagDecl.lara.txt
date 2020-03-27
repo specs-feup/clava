@@ -1,0 +1,23 @@
+Struct: param_t
+Code:
+/**** File 'tag_decl.c' ****/
+
+
+struct param_t {
+   float const *weights;
+   float const *biases;
+};
+
+
+struct new_struct {
+   float const *weights;
+   float const *biases;
+};
+
+void structTest() {
+   struct param_t a;
+}
+
+struct param_t struct_decl;
+typedef struct new_struct new_typedef;
+/**** End File ****/

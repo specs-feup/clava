@@ -6,3 +6,5 @@ struct param_t {
 void structTest() {
   struct param_t a;
 }	
+
+struct param_t struct_decl;
