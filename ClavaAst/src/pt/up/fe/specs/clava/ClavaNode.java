@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,7 @@ import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.utils.NullNode;
@@ -1033,20 +1035,33 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return deepCopy(false);
     }
 
-    @SuppressWarnings("unchecked")
     private ClavaNode deepCopy(boolean keepId) {
+        return deepCopy(keepId, new HashMap<>());
+    }
+
+    @SuppressWarnings("unchecked")
+    private ClavaNode deepCopy(boolean keepId, Map<String, ClavaNode> copiedNodes) {
+
+        // Check if node was already copied
+        ClavaNode copy = copiedNodes.get(getId());
+        if (copy != null) {
+            return copy;
+        }
 
         // Simple copy of the node, without children
-        ClavaNode copy = copyPrivate(keepId);
+        copy = copyPrivate(keepId);
+
+        // Add to replacement map
+        copiedNodes.put(getId(), copy);
 
         // Deep copy of the children
         for (ClavaNode child : getChildren()) {
             // Copy children of node
-            ClavaNode newChildToken = child.deepCopy(keepId);
+            ClavaNode newChildToken = child.deepCopy(keepId, copiedNodes);
             copy.addChild(newChildToken);
         }
 
-        // Simple copy of fields (1st level only)
+        // Simple copy of fields (1st level only), unless it is a type node, in which case performs a deep copy
         for (DataKey<?> keyWithNode : getAllKeysWithNodes()) {
             if (!hasValue(keyWithNode)) {
                 continue;
@@ -1056,7 +1071,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
             if (ClavaNode.class.isAssignableFrom(keyWithNode.getValueClass())) {
                 DataKey<ClavaNode> clavaNodeKey = (DataKey<ClavaNode>) keyWithNode;
                 ClavaNode value = get(clavaNodeKey);
-                copy.set(clavaNodeKey, value.copy(keepId));
+
+                copy.set(clavaNodeKey, copyNodeValue(value, keepId, copiedNodes));
+                // copy.set(clavaNodeKey, value.copy(keepId));
                 continue;
             }
 
@@ -1079,7 +1096,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
                 ClavaNode node = (ClavaNode) possibleNode;
 
-                copy.set(optionalKey, Optional.of(node.copy(keepId)));
+                // copy.set(optionalKey, Optional.of(node.copy(keepId)));
+                copy.set(optionalKey, Optional.of(copyNodeValue(node, keepId, copiedNodes)));
                 continue;
             }
 
@@ -1103,7 +1121,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
                 List<ClavaNode> newList = new ArrayList<>(list.size());
 
                 for (Object listValue : list) {
-                    newList.add(((ClavaNode) listValue).copy());
+                    // newList.add(((ClavaNode) listValue).copy());
+                    newList.add((copyNodeValue((ClavaNode) listValue, false, copiedNodes)));
                 }
 
                 copy.set(listKey, newList);
@@ -1235,6 +1254,18 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     // // ClavaLog.info("Case not supported yet:" + keyWithNode);
     //
     // }
+
+    /**
+     * Deep copy node if it is a Type node, simple copy otherwise.
+     * 
+     * @param value
+     * @param keepId
+     * @param copiedNodes
+     * @return
+     */
+    private ClavaNode copyNodeValue(ClavaNode value, boolean keepId, Map<String, ClavaNode> copiedNodes) {
+        return value instanceof Type ? value.deepCopy(keepId, copiedNodes) : value.copy(keepId);
+    }
 
     @SuppressWarnings("unchecked")
     public void replaceNodeField(DataKey<?> keyWithNode, List<ClavaNode> newValue) {
