@@ -2,6 +2,10 @@ import clava.ClavaJoinPoints;
 
 aspectdef ClavaJoinPointsTest
 
+	var intType = ClavaJoinPoints.builtinType("int");
+	var doubleType = ClavaJoinPoints.builtinType("double");
+	var intExpr = ClavaJoinPoints.exprLiteral("a", intType);
+
 	// Type Literal of user defined type
 	println("User literal type: " + ClavaJoinPoints.typeLiteral("xpto").code);
 	
@@ -14,4 +18,7 @@ aspectdef ClavaJoinPointsTest
 	
 	// TypedefType
 	println("Typedef type: " + ClavaJoinPoints.typedefType(typedefDecl).code);	
+	
+	// Cast
+	println("C-Style cast: " + ClavaJoinPoints.cStyleCast(doubleType, intExpr).code);
 end

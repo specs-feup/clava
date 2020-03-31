@@ -2,3 +2,4 @@ User literal type: xpto
 Literal statement: int a = 0;
 Typedef decl: typedef int custom_int
 Typedef type: custom_int
+C-Style cast: (double) a
