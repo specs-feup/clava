@@ -13,4 +13,9 @@ double fooType(int a, double b) {
    return a + (int) b;
 }
 
+void deepCopyTest() {
+   double a[10][20][30];
+   int b[10][20][30];
+}
+
 /**** End File ****/
