@@ -349,3 +349,17 @@ ClavaJoinPoints.structType = function($struct) {
 	return AstFactory.structType($struct);
 }
 
+/**
+ * Represents an explicit C-style cast (e.g., (double) a).
+ *
+ * @param {type} $type
+ * @param {expr} $expr 
+ *
+ * @return {cast}
+ */
+ClavaJoinPoints.cStyleCast = function($type, $expr) {
+	Check.isJoinPoint($type, "type");
+	Check.isJoinPoint($expr, "expression");	
+	
+	return AstFactory.cStyleCast($type, $expr);
+}
