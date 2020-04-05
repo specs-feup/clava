@@ -24,6 +24,12 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.TypedefNameDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 
+/**
+ * Represents the type of a typedef.
+ * 
+ * @author jbispo
+ *
+ */
 public class TypedefType extends Type {
 
     /// DATAKEYS BEGIN
