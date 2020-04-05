@@ -635,6 +635,10 @@
 		<attribute name="namedType" type="type" tooltip="the type that is being prefixed with the qualifier"/>
 	</artifact>
 	
+	<artifact class="typedefType">
+		<attribute name="decl" type="typedefNameDecl" tooltip="the keyword of this elaborated type, if present. Can be one of: struct, interface, union, class, enum, typename"/>
+	</artifact>
+
 
 	<!-- OPENMP -->
 

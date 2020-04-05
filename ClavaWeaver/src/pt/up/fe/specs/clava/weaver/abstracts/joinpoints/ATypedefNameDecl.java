@@ -8,22 +8,22 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point ATypedefDecl
+ * Auto-Generated class for join point ATypedefNameDecl
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class ATypedefDecl extends ATypedefNameDecl {
+public abstract class ATypedefNameDecl extends ANamedDecl {
 
-    protected ATypedefNameDecl aTypedefNameDecl;
+    protected ANamedDecl aNamedDecl;
 
     /**
      * 
      */
-    public ATypedefDecl(ATypedefNameDecl aTypedefNameDecl){
-        super(aTypedefNameDecl);
-        this.aTypedefNameDecl = aTypedefNameDecl;
+    public ATypedefNameDecl(ANamedDecl aNamedDecl){
+        super(aNamedDecl);
+        this.aNamedDecl = aNamedDecl;
     }
     /**
      * Get value on attribute name
@@ -31,7 +31,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public String getNameImpl() {
-        return this.aTypedefNameDecl.getNameImpl();
+        return this.aNamedDecl.getNameImpl();
     }
 
     /**
@@ -40,7 +40,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public Boolean getIsPublicImpl() {
-        return this.aTypedefNameDecl.getIsPublicImpl();
+        return this.aNamedDecl.getIsPublicImpl();
     }
 
     /**
@@ -49,7 +49,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public String getQualifiedPrefixImpl() {
-        return this.aTypedefNameDecl.getQualifiedPrefixImpl();
+        return this.aNamedDecl.getQualifiedPrefixImpl();
     }
 
     /**
@@ -58,28 +58,28 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public String getQualifiedNameImpl() {
-        return this.aTypedefNameDecl.getQualifiedNameImpl();
+        return this.aNamedDecl.getQualifiedNameImpl();
     }
 
     /**
      * 
      */
     public void defNameImpl(String value) {
-        this.aTypedefNameDecl.defNameImpl(value);
+        this.aNamedDecl.defNameImpl(value);
     }
 
     /**
      * 
      */
     public void defQualifiedPrefixImpl(String value) {
-        this.aTypedefNameDecl.defQualifiedPrefixImpl(value);
+        this.aNamedDecl.defQualifiedPrefixImpl(value);
     }
 
     /**
      * 
      */
     public void defQualifiedNameImpl(String value) {
-        this.aTypedefNameDecl.defQualifiedNameImpl(value);
+        this.aNamedDecl.defQualifiedNameImpl(value);
     }
 
     /**
@@ -88,7 +88,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aTypedefNameDecl.replaceWithImpl(node);
+        return this.aNamedDecl.replaceWithImpl(node);
     }
 
     /**
@@ -97,7 +97,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public AJoinPoint replaceWithImpl(String node) {
-        return this.aTypedefNameDecl.replaceWithImpl(node);
+        return this.aNamedDecl.replaceWithImpl(node);
     }
 
     /**
@@ -106,7 +106,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aTypedefNameDecl.insertBeforeImpl(node);
+        return this.aNamedDecl.insertBeforeImpl(node);
     }
 
     /**
@@ -115,7 +115,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aTypedefNameDecl.insertBeforeImpl(node);
+        return this.aNamedDecl.insertBeforeImpl(node);
     }
 
     /**
@@ -124,7 +124,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aTypedefNameDecl.insertAfterImpl(node);
+        return this.aNamedDecl.insertAfterImpl(node);
     }
 
     /**
@@ -133,7 +133,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aTypedefNameDecl.insertAfterImpl(code);
+        return this.aNamedDecl.insertAfterImpl(code);
     }
 
     /**
@@ -141,7 +141,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public void detachImpl() {
-        this.aTypedefNameDecl.detachImpl();
+        this.aNamedDecl.detachImpl();
     }
 
     /**
@@ -150,7 +150,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public void setTypeImpl(AJoinPoint type) {
-        this.aTypedefNameDecl.setTypeImpl(type);
+        this.aNamedDecl.setTypeImpl(type);
     }
 
     /**
@@ -158,7 +158,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aTypedefNameDecl.copyImpl();
+        return this.aNamedDecl.copyImpl();
     }
 
     /**
@@ -166,7 +166,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public AJoinPoint deepCopyImpl() {
-        return this.aTypedefNameDecl.deepCopyImpl();
+        return this.aNamedDecl.deepCopyImpl();
     }
 
     /**
@@ -176,7 +176,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aTypedefNameDecl.setUserFieldImpl(fieldName, value);
+        return this.aNamedDecl.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -185,7 +185,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aTypedefNameDecl.setUserFieldImpl(fieldNameAndValue);
+        return this.aNamedDecl.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -195,7 +195,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
-        return this.aTypedefNameDecl.setValueImpl(key, value);
+        return this.aNamedDecl.setValueImpl(key, value);
     }
 
     /**
@@ -204,7 +204,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aTypedefNameDecl.messageToUserImpl(message);
+        this.aNamedDecl.messageToUserImpl(message);
     }
 
     /**
@@ -212,7 +212,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public void removeChildrenImpl() {
-        this.aTypedefNameDecl.removeChildrenImpl();
+        this.aNamedDecl.removeChildrenImpl();
     }
 
     /**
@@ -221,7 +221,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public void setFirstChildImpl(AJoinPoint node) {
-        this.aTypedefNameDecl.setFirstChildImpl(node);
+        this.aNamedDecl.setFirstChildImpl(node);
     }
 
     /**
@@ -230,7 +230,34 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public void setLastChildImpl(AJoinPoint node) {
-        this.aTypedefNameDecl.setLastChildImpl(node);
+        this.aNamedDecl.setLastChildImpl(node);
+    }
+
+    /**
+     * Sets the name of this namedDecl
+     * @param name 
+     */
+    @Override
+    public void setNameImpl(String name) {
+        this.aNamedDecl.setNameImpl(name);
+    }
+
+    /**
+     * Sets the qualified prefix of this namedDecl
+     * @param qualifiedPrefix 
+     */
+    @Override
+    public void setQualifiedPrefixImpl(String qualifiedPrefix) {
+        this.aNamedDecl.setQualifiedPrefixImpl(qualifiedPrefix);
+    }
+
+    /**
+     * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
+     * @param name 
+     */
+    @Override
+    public void setQualifiedNameImpl(String name) {
+        this.aNamedDecl.setQualifiedNameImpl(name);
     }
 
     /**
@@ -240,7 +267,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aTypedefNameDecl.insertImpl(position, code);
+        return this.aNamedDecl.insertImpl(position, code);
     }
 
     /**
@@ -250,7 +277,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aTypedefNameDecl.insertImpl(position, code);
+        return this.aNamedDecl.insertImpl(position, code);
     }
 
     /**
@@ -258,26 +285,26 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      */
     @Override
     public String toString() {
-        return this.aTypedefNameDecl.toString();
+        return this.aNamedDecl.toString();
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends ATypedefNameDecl> getSuper() {
-        return Optional.of(this.aTypedefNameDecl);
+    public Optional<? extends ANamedDecl> getSuper() {
+        return Optional.of(this.aNamedDecl);
     }
 
     /**
      * 
      */
     @Override
-    public final List<? extends JoinPoint> select(String selectName) {
+    public List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	default:
-        		joinPointList = this.aTypedefNameDecl.select(selectName);
+        		joinPointList = this.aNamedDecl.select(selectName);
         		break;
         }
         return joinPointList;
@@ -287,7 +314,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      * 
      */
     @Override
-    public final void defImpl(String attribute, Object value) {
+    public void defImpl(String attribute, Object value) {
         switch(attribute){
         case "type": {
         	if(value instanceof AJoinPoint){
@@ -339,24 +366,24 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      * 
      */
     @Override
-    protected final void fillWithAttributes(List<String> attributes) {
-        this.aTypedefNameDecl.fillWithAttributes(attributes);
+    protected void fillWithAttributes(List<String> attributes) {
+        this.aNamedDecl.fillWithAttributes(attributes);
     }
 
     /**
      * 
      */
     @Override
-    protected final void fillWithSelects(List<String> selects) {
-        this.aTypedefNameDecl.fillWithSelects(selects);
+    protected void fillWithSelects(List<String> selects) {
+        this.aNamedDecl.fillWithSelects(selects);
     }
 
     /**
      * 
      */
     @Override
-    protected final void fillWithActions(List<String> actions) {
-        this.aTypedefNameDecl.fillWithActions(actions);
+    protected void fillWithActions(List<String> actions) {
+        this.aNamedDecl.fillWithActions(actions);
     }
 
     /**
@@ -364,8 +391,8 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      * @return The join point type
      */
     @Override
-    public final String get_class() {
-        return "typedefDecl";
+    public String get_class() {
+        return "typedefNameDecl";
     }
 
     /**
@@ -373,17 +400,17 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      * @return True if this join point is an instanceof the given class
      */
     @Override
-    public final boolean instanceOf(String joinpointClass) {
+    public boolean instanceOf(String joinpointClass) {
         boolean isInstance = get_class().equals(joinpointClass);
         if(isInstance) {
         	return true;
         }
-        return this.aTypedefNameDecl.instanceOf(joinpointClass);
+        return this.aNamedDecl.instanceOf(joinpointClass);
     }
     /**
      * 
      */
-    protected enum TypedefDeclAttributes {
+    protected enum TypedefNameDeclAttributes {
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),
@@ -447,13 +474,13 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
         /**
          * 
          */
-        private TypedefDeclAttributes(String name){
+        private TypedefNameDeclAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<TypedefDeclAttributes> fromString(String name) {
+        public static Optional<TypedefNameDeclAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -461,7 +488,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(TypedefDeclAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(TypedefNameDeclAttributes::name).collect(Collectors.toList());
         }
 
         /**

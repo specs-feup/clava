@@ -10,88 +10,42 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point AElaboratedType
+ * Auto-Generated class for join point ATypedefType
  * This class is overwritten by the Weaver Generator.
  * 
- * Represents a type that was referred to using an elaborated type keyword, e.g., struct S, or via a qualified name, e.g., N::M::type, or both. This type is used to keep track of a type name as written in the source code, including tag keywords and any nested-name-specifiers. The type itself is always 'sugar', used to express what was written in the source code but containing no additional semantic information.
+ * Represents the type of a typedef.
  * @author Lara Weaver Generator
  */
-public abstract class AElaboratedType extends AType {
+public abstract class ATypedefType extends AType {
 
     protected AType aType;
 
     /**
      * 
      */
-    public AElaboratedType(AType aType){
+    public ATypedefType(AType aType){
         this.aType = aType;
     }
     /**
      * the keyword of this elaborated type, if present. Can be one of: struct, interface, union, class, enum, typename
      */
-    public abstract String getKeywordImpl();
+    public abstract ATypedefNameDecl getDeclImpl();
 
     /**
      * the keyword of this elaborated type, if present. Can be one of: struct, interface, union, class, enum, typename
      */
-    public final Object getKeyword() {
+    public final Object getDecl() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "keyword", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "decl", Optional.empty());
         	}
-        	String result = this.getKeywordImpl();
+        	ATypedefNameDecl result = this.getDeclImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "keyword", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "decl", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "keyword", e);
-        }
-    }
-
-    /**
-     * the qualifier of this elaborated type, if present (e.g., A::)
-     */
-    public abstract String getQualifierImpl();
-
-    /**
-     * the qualifier of this elaborated type, if present (e.g., A::)
-     */
-    public final Object getQualifier() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "qualifier", Optional.empty());
-        	}
-        	String result = this.getQualifierImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "qualifier", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "qualifier", e);
-        }
-    }
-
-    /**
-     * the type that is being prefixed with the qualifier
-     */
-    public abstract AType getNamedTypeImpl();
-
-    /**
-     * the type that is being prefixed with the qualifier
-     */
-    public final Object getNamedType() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "namedType", Optional.empty());
-        	}
-        	AType result = this.getNamedTypeImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "namedType", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "namedType", e);
+        	throw new AttributeException(get_class(), "decl", e);
         }
     }
 
@@ -580,9 +534,7 @@ public abstract class AElaboratedType extends AType {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
-        attributes.add("keyword");
-        attributes.add("qualifier");
-        attributes.add("namedType");
+        attributes.add("decl");
     }
 
     /**
@@ -607,7 +559,7 @@ public abstract class AElaboratedType extends AType {
      */
     @Override
     public final String get_class() {
-        return "elaboratedType";
+        return "typedefType";
     }
 
     /**
@@ -625,10 +577,8 @@ public abstract class AElaboratedType extends AType {
     /**
      * 
      */
-    protected enum ElaboratedTypeAttributes {
-        KEYWORD("keyword"),
-        QUALIFIER("qualifier"),
-        NAMEDTYPE("namedType"),
+    protected enum TypedefTypeAttributes {
+        DECL("decl"),
         KIND("kind"),
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),
@@ -707,13 +657,13 @@ public abstract class AElaboratedType extends AType {
         /**
          * 
          */
-        private ElaboratedTypeAttributes(String name){
+        private TypedefTypeAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<ElaboratedTypeAttributes> fromString(String name) {
+        public static Optional<TypedefTypeAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -721,7 +671,7 @@ public abstract class AElaboratedType extends AType {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(ElaboratedTypeAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(TypedefTypeAttributes::name).collect(Collectors.toList());
         }
 
         /**

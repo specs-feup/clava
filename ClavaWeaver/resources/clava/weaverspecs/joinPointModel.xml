@@ -104,8 +104,12 @@
  	</joinpoint>  		
 	
 	
+	<!-- TYPEDEF NAME DECL -->
+	<joinpoint class="typedefNameDecl" extends="namedDecl">
+ 	</joinpoint>  		
+	
 	<!-- TYPEDEF DECL -->
-	<joinpoint class="typedefDecl" extends="namedDecl">
+	<joinpoint class="typedefDecl" extends="typedefNameDecl">
  	</joinpoint>  		
 	
 	<!-- ENUM DECL -->
@@ -338,5 +342,9 @@
 	<!-- ELABORATED TYPE -->
 	<joinpoint class="elaboratedType" extends="type" tooltip="Represents a type that was referred to using an elaborated type keyword, e.g., struct S, or via a qualified name, e.g., N::M::type, or both. This type is used to keep track of a type name as written in the source code, including tag keywords and any nested-name-specifiers. The type itself is always 'sugar', used to express what was written in the source code but containing no additional semantic information.">
 	</joinpoint>
+
+	<!-- TYPEDEF TYPE -->
+	<joinpoint class="typedefType" extends="type" tooltip="Represents the type of a typedef.">
+	</joinpoint>	
 		 	
 </joinpoints>
