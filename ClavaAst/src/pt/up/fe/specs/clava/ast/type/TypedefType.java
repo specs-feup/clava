@@ -42,6 +42,11 @@ public class TypedefType extends Type {
         super(data, children);
     }
 
+    @Override
+    public Type desugar() {
+        return get(DECL).getUnderlyingType();
+    }
+
     /*
     private final DeclRef declInfo;
     

@@ -38,6 +38,15 @@ public class TypeOfExprType extends Type {
         super(data, children);
     }
 
+    @Override
+    public Type desugar() {
+        if (hasSugar()) {
+            return get(UNDERLYING_EXPR).getType();
+        }
+
+        return this;
+    }
+
     // private final Standard standard;
     //
     // public TypeOfExprType(Standard standard, TypeData data, ClavaNodeInfo info, Expr underlyingExpr,

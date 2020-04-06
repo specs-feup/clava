@@ -67,6 +67,11 @@ public class ElaboratedType extends TypeWithKeyword {
     }
     */
 
+    @Override
+    public Type desugar() {
+        return getNamedType();
+    }
+
     public Type getNamedType() {
         return get(NAMED_TYPE);
         // return getChild(Type.class, 0);

@@ -51,6 +51,15 @@ public class DecltypeType extends Type {
         return getChild(Expr.class, 0);
     }
 
+    @Override
+    public Type desugar() {
+        if (hasSugar()) {
+            return get(UNDERLYING_EXPR).getType();
+        }
+
+        return this;
+    }
+
     // @Override
     // public String getCode() {
     // System.out.println("DECLTYPE CODE:" + super.getCode());
