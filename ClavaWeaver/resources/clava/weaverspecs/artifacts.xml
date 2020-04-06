@@ -636,7 +636,8 @@
 	</artifact>
 	
 	<artifact class="typedefType">
-		<attribute name="decl" type="typedefNameDecl" tooltip="the keyword of this elaborated type, if present. Can be one of: struct, interface, union, class, enum, typename"/>
+		<attribute name="decl" type="typedefNameDecl" tooltip="the typedef declaration associated with this typedef type"/>
+		<attribute name="underlyingType" type="type" tooltip="the type that is being typedef'd"/>
 	</artifact>
 
 

@@ -27,12 +27,12 @@ public abstract class ATypedefType extends AType {
         this.aType = aType;
     }
     /**
-     * the keyword of this elaborated type, if present. Can be one of: struct, interface, union, class, enum, typename
+     * the typedef declaration associated with this typedef type
      */
     public abstract ATypedefNameDecl getDeclImpl();
 
     /**
-     * the keyword of this elaborated type, if present. Can be one of: struct, interface, union, class, enum, typename
+     * the typedef declaration associated with this typedef type
      */
     public final Object getDecl() {
         try {
@@ -46,6 +46,29 @@ public abstract class ATypedefType extends AType {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "decl", e);
+        }
+    }
+
+    /**
+     * the type that is being typedef'd
+     */
+    public abstract AType getUnderlyingTypeImpl();
+
+    /**
+     * the type that is being typedef'd
+     */
+    public final Object getUnderlyingType() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "underlyingType", Optional.empty());
+        	}
+        	AType result = this.getUnderlyingTypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "underlyingType", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "underlyingType", e);
         }
     }
 
@@ -535,6 +558,7 @@ public abstract class ATypedefType extends AType {
     protected final void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
         attributes.add("decl");
+        attributes.add("underlyingType");
     }
 
     /**
@@ -579,6 +603,7 @@ public abstract class ATypedefType extends AType {
      */
     protected enum TypedefTypeAttributes {
         DECL("decl"),
+        UNDERLYINGTYPE("underlyingType"),
         KIND("kind"),
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),

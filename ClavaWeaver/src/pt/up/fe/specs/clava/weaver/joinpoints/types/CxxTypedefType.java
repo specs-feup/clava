@@ -14,8 +14,10 @@
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.TypedefNameDecl;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefNameDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefType;
 
@@ -36,6 +38,12 @@ public class CxxTypedefType extends ATypedefType {
     @Override
     public ClavaNode getNode() {
         return typedefType;
+    }
+
+    @Override
+    public AType getUnderlyingTypeImpl() {
+        return CxxJoinpoints.create(typedefType.get(TypedefType.DECL).get(TypedefNameDecl.UNDERLYING_TYPE),
+                AType.class);
     }
 
 }

@@ -56953,11 +56953,20 @@
          "children": [
                {
                   "type": "attribute",
-                  "tooltip": "the keyword of this elaborated type, if present. Can be one of: struct, interface, union, class, enum, typename",
+                  "tooltip": "the typedef declaration associated with this typedef type",
                   "children": [
                            {
                               "type": "typedefNameDecl",
                               "name": "decl"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the type that is being typedef'd",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "underlyingType"
                            }]
                },
                {
