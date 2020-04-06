@@ -463,7 +463,9 @@ public abstract class Type extends ClavaNode {
      *         sugar.
      */
     public boolean hasSugar() {
-        return get(HAS_SUGAR);
+        // Has desugar if calling desugar returns an node different than the current one
+        return desugar() != this;
+        // return get(HAS_SUGAR);
         /*
         if (hasDataI()) {
             return getDataI().get(HAS_SUGAR);
@@ -522,7 +524,7 @@ public abstract class Type extends ClavaNode {
      * 
      * @return
      */
-    public final Type desugar() {
+    public Type desugar() {
         return get(UNQUALIFIED_DESUGARED_TYPE).orElse(this);
         // if (!hasSugar()) {
         // return this;
@@ -562,11 +564,18 @@ public abstract class Type extends ClavaNode {
      * @return
      */
     public final Type desugarAll() {
-        if (!hasSugar()) {
+        var desugar = desugar();
+
+        if (desugar == this) {
             return this;
         }
 
-        return desugar().desugarAll();
+        return desugar.desugarAll();
+        // if (!hasSugar()) {
+        // return this;
+        // }
+        //
+        // return desugar().desugarAll();
         // return get(UNQUALIFIED_DESUGARED_TYPE).flatMap(Type::desugarTry).orElse(this);
         // if (!hasSugar()) {
         // return this;
