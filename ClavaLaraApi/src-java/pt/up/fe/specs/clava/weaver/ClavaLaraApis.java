@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.clava.weaver.memoi.MemoiCodeGen;
 import pt.up.fe.specs.clava.weaver.memoi.MemoiReport;
 import pt.up.fe.specs.clava.weaver.memoi.MemoiReportsMap;
 import pt.up.fe.specs.clava.weaver.memoi.MergedMemoiReport;
@@ -29,7 +30,8 @@ public class ClavaLaraApis {
             .getResourcesFromEnum(LaraCoreApiResource.class, LaraWeaverApiResource.class, LaraApiResource.class);
 
     private static final List<Class<?>> CLAVA_IMPORTABLE_CLASSES = Arrays.asList(Standard.class, OpenCLTemplates.class,
-            ClavaPetit.class, MemoiReport.class, MemoiReportsMap.class, MergedMemoiReport.class);
+            ClavaPetit.class, MemoiReport.class, MemoiReportsMap.class, MergedMemoiReport.class,
+            MemoiCodeGen.class);
 
     public static List<ResourceProvider> getApis() {
         return CLAVA_LARA_API;

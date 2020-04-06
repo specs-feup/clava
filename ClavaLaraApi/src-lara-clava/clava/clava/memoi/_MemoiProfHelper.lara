@@ -1,4 +1,5 @@
 import lara.util.IdGenerator;
+import lara.Strings;
 
 function MemoiTarget(sig, $func, isUser) {
 	
@@ -435,14 +436,16 @@ aspectdef _Memoi_Setup
 	
 		mainFound = true;
 		
+		var memoiReportPath = "path_" + monitorName;
+		
 		call _Memoi_AddCallSiteInfo($body, callSiteInfo, monitorName);
 		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[targetSig]]", "[[id]]", [[outputType.toUpperCase()]], [[inputTypes.length]], [[inputsCode]]);}%);
+		$body.exec insertBegin(%{char* [[memoiReportPath]] = make_report_path("[[dir]]", "[[monitorName]]");}%);
 
 		/* add functions to print and clean up at every return on main */
-		$function.exec insertReturn(%{char* path_[[monitorName]] = make_report_path("[[dir]]", "[[monitorName]]");}%);
-		$function.exec insertReturn(%{mp_to_json([[monitorName]], path_[[monitorName]]);}%);
+		$function.exec insertReturn(%{mp_to_json([[monitorName]], [[memoiReportPath]]);}%);
 		$function.exec insertReturn(%{[[monitorName]] = mp_destroy([[monitorName]]);}%);
-		$function.exec insertReturn(%{free(path_[[monitorName]]);}%);
+		$function.exec insertReturn(%{free([[memoiReportPath]]);}%);
 
 		$file.exec addGlobal(monitorName, monitorType, 'NULL');
 

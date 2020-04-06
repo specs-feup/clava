@@ -94,9 +94,9 @@ public class MemoiReport {
             finalReport.mergePart(partReport);
         }
 
-        finalReport.setElements(finalReport.getCounts().size());
-        finalReport.setMisses(finalReport.getElements());
-        finalReport.setHits(finalReport.getCalls() - finalReport.getMisses());
+        // finalReport.setElements(finalReport.getCounts().size());
+        // finalReport.setMisses(finalReport.getElements());
+        // finalReport.setHits(finalReport.getCalls() - finalReport.getMisses());
 
         return finalReport;
     }
@@ -132,7 +132,10 @@ public class MemoiReport {
             }
         }
 
-        this.calls = this.calls + otherReport.calls;
+        this.calls += otherReport.calls;
+        this.elements += otherReport.elements;
+        this.misses += otherReport.misses;
+        this.hits += otherReport.hits;
         counts = new ArrayList<MemoiEntry>(tempMap.values());
     }
 

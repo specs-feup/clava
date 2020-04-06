@@ -1,6 +1,7 @@
 package pt.up.fe.specs.clava.weaver.memoi;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +72,16 @@ public class MergedMemoiReport {
     public List<MergedMemoiEntry> getMeanSorted() {
 
         var list = new ArrayList<MergedMemoiEntry>(counts.values());
-        list.sort(MemoiComparator.getMeanComparator(reportCount));
+        list.sort(MemoiComparator.mean(this));
+
+        return list;
+    }
+
+    public List<MergedMemoiEntry> getSortedCounts(Comparator<MergedMemoiEntry> countComparator) {
+
+        var list = new ArrayList<MergedMemoiEntry>(counts.values());
+
+        list.sort(countComparator);
 
         return list;
     }
