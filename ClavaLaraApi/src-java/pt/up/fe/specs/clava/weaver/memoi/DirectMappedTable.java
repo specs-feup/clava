@@ -31,6 +31,7 @@ public class DirectMappedTable {
     private static final int KEY_STRING_LENGTH = 16;
     private final MergedMemoiReport report;
     private final int indexBits;
+    private final int numSets;
     private final Predicate<MergedMemoiEntry> insertPred;
     private final Comparator<MergedMemoiEntry> countComparator;
 
@@ -90,6 +91,7 @@ public class DirectMappedTable {
         this.indexBits = (int) log2(numSets);
         this.insertPred = insertPred;
         this.countComparator = countComparator;
+        this.numSets = numSets;
 
         this.debug = false;
     }
@@ -106,7 +108,7 @@ public class DirectMappedTable {
         return debug;
     }
 
-    Map<String, MergedMemoiEntry> generate() {
+    public Map<String, MergedMemoiEntry> generate() {
 
         var table = new HashMap<String, MergedMemoiEntry>();
 
@@ -172,13 +174,14 @@ public class DirectMappedTable {
         double callCoverage = 100.0 * tableCalls / totalCalls;
 
         Locale l = null;
-        System.out.println("collisions: " + totalCollisions + "/" + totalElements + " ("
+        System.out.println("\n\n=== table metrics ===");
+        System.out.println("\tcollisions: " + totalCollisions + "/" + totalElements + " ("
                 + String.format(l, "%.2f", collisionPercentage) + "%)");
-        System.out.println("largest collision: " + maxCollision);
-        System.out.println("element coverage: " + tableElements + "/" + totalElements + " ("
+        System.out.println("\tlargest collision: " + maxCollision);
+        System.out.println("\telement coverage: " + tableElements + "/" + totalElements + " ("
                 + String.format(l, "%.2f", elementCoverage) + "%)");
         System.out.println(
-                "call coverage: " + tableCalls + "/" + totalCalls + " (" + String.format(l, "%.2f", callCoverage)
+                "\tcall coverage: " + tableCalls + "/" + totalCalls + " (" + String.format(l, "%.2f", callCoverage)
                         + "%)");
     }
 

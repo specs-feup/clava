@@ -71,6 +71,9 @@ public class MemoiReport {
         }
 
         report.setReportCount(counter);
+
+        report.makeStats();
+        report.printStats();
         return report;
     }
 
