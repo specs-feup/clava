@@ -25329,6 +25329,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "returnType"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "a string with the signature of this function (e.g., name of the function, plus the parameters types)",
                   "children": [
                            {
@@ -26102,6 +26110,25 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the type of a parameter of the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setParamType"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "type",
+                              "name": "newType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Sets the parameters of the function",
                   "children": [
                            {
@@ -26125,6 +26152,20 @@
                            {
                               "type": "String[]",
                               "name": "params",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the return type of the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setReturnType"
+                           },
+                           {
+                              "type": "type",
+                              "name": "returnType",
                               "defaultValue": ""
                            }]
                },
@@ -34002,6 +34043,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "type",
+                              "name": "returnType"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "a string with the signature of this function (e.g., name of the function, plus the parameters types)",
                   "children": [
                            {
@@ -34775,6 +34824,25 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the type of a parameter of the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setParamType"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "type",
+                              "name": "newType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Sets the parameters of the function",
                   "children": [
                            {
@@ -34798,6 +34866,20 @@
                            {
                               "type": "String[]",
                               "name": "params",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the return type of the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setReturnType"
+                           },
+                           {
+                              "type": "type",
+                              "name": "returnType",
                               "defaultValue": ""
                            }]
                },

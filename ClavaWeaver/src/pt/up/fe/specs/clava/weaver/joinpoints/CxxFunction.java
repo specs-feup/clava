@@ -47,6 +47,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxFunctionType;
@@ -593,5 +594,25 @@ public class CxxFunction extends AFunction {
     @Override
     public void setFunctionTypeImpl(AFunctionType functionType) {
         defFunctionTypeImpl(functionType);
+    }
+
+    @Override
+    public AType getReturnTypeImpl() {
+        return CxxJoinpoints.create(function.getReturnType(), AType.class);
+    }
+
+    @Override
+    public void defReturnTypeImpl(AType value) {
+        function.setReturnType((Type) value.getNode());
+    };
+
+    @Override
+    public void setReturnTypeImpl(AType returnType) {
+        defReturnTypeImpl(returnType);
+    }
+
+    @Override
+    public void setParamTypeImpl(Integer index, AType newType) {
+        function.setParamType(index, (Type) newType.getNode());
     }
 }

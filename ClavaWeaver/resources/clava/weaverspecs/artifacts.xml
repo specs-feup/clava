@@ -400,6 +400,9 @@
 		<attribute name="storageClass" type="StorageClass"/>
 		<attribute name="calls" type="call[]"/>		
 		<attribute name="signature" type="String" tooltip="a string with the signature of this function (e.g., name of the function, plus the parameters types)"/>
+		<attribute name="returnType" type="type">
+			<def/>
+		</attribute>
 	</artifact>
 
 

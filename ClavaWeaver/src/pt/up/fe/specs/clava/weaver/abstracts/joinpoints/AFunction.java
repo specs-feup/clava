@@ -512,6 +512,38 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Get value on attribute returnType
+     * @return the attribute's value
+     */
+    public abstract AType getReturnTypeImpl();
+
+    /**
+     * Get value on attribute returnType
+     * @return the attribute's value
+     */
+    public final Object getReturnType() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "returnType", Optional.empty());
+        	}
+        	AType result = this.getReturnTypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "returnType", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "returnType", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defReturnTypeImpl(AType value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def returnType with type AType not implemented ");
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select bodys
      * @return 
      */
@@ -800,6 +832,60 @@ public abstract class AFunction extends ADeclarator {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setFunctionType", e);
+        }
+    }
+
+    /**
+     * Sets the return type of the function
+     * @param returnType 
+     */
+    public void setReturnTypeImpl(AType returnType) {
+        throw new UnsupportedOperationException(get_class()+": Action setReturnType not implemented ");
+    }
+
+    /**
+     * Sets the return type of the function
+     * @param returnType 
+     */
+    public final void setReturnType(AType returnType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setReturnType", this, Optional.empty(), returnType);
+        	}
+        	this.setReturnTypeImpl(returnType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setReturnType", this, Optional.empty(), returnType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setReturnType", e);
+        }
+    }
+
+    /**
+     * Sets the type of a parameter of the function
+     * @param index 
+     * @param newType 
+     */
+    public void setParamTypeImpl(Integer index, AType newType) {
+        throw new UnsupportedOperationException(get_class()+": Action setParamType not implemented ");
+    }
+
+    /**
+     * Sets the type of a parameter of the function
+     * @param index 
+     * @param newType 
+     */
+    public final void setParamType(Integer index, AType newType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParamType", this, Optional.empty(), index, newType);
+        	}
+        	this.setParamTypeImpl(index, newType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setParamType", this, Optional.empty(), index, newType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setParamType", e);
         }
     }
 
@@ -1122,6 +1208,13 @@ public abstract class AFunction extends ADeclarator {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "returnType": {
+        	if(value instanceof AType){
+        		this.defReturnTypeImpl((AType)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "name": {
         	if(value instanceof String){
         		this.defNameImpl((String)value);
@@ -1170,6 +1263,7 @@ public abstract class AFunction extends ADeclarator {
         attributes.add("storageClass");
         attributes.add("calls");
         attributes.add("signature");
+        attributes.add("returnType");
     }
 
     /**
@@ -1199,6 +1293,8 @@ public abstract class AFunction extends ADeclarator {
         actions.add("void setBody(scope)");
         actions.add("call newCall(joinpoint[])");
         actions.add("void setFunctionType(functionType)");
+        actions.add("void setReturnType(type)");
+        actions.add("void setParamType(Integer, type)");
     }
 
     /**
@@ -1243,6 +1339,7 @@ public abstract class AFunction extends ADeclarator {
         STORAGECLASS("storageClass"),
         CALLS("calls"),
         SIGNATURE("signature"),
+        RETURNTYPE("returnType"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),
