@@ -24,6 +24,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
@@ -160,7 +161,7 @@ public class FunctionDecl extends DeclaratorDecl {
     /*
     public FunctionDecl(String declName, List<ParmVarDecl> inputs, Type functionType, FunctionDeclData functionDeclData,
             DeclData declData, ClavaNodeInfo info, Stmt definition) {
-
+    
         this(declName, functionType, functionDeclData, declData, info, inputs, definition);
     }
     */
@@ -226,6 +227,10 @@ public class FunctionDecl extends DeclaratorDecl {
 
     public Type getReturnType() {
         return getFunctionType().getReturnType();
+    }
+
+    public void setReturnType(Type returnType) {
+        getFunctionType().setReturnType(returnType);
     }
 
     // @Deprecated
@@ -298,13 +303,13 @@ public class FunctionDecl extends DeclaratorDecl {
         if (getFunctionDeclData().isInline()) {
             code.append("inline ");
         }
-
+        
         if (getFunctionDeclData().getStorageClass() != StorageClass.NONE) {
             code.append(getFunctionDeclData().getStorageClass().getString()).append(" ");
         }
-
+        
         String returnType = getFunctionType().getReturnType().getCode();
-
+        
         code.append(returnType).append(" ").append(getTypelessCode()).append(getCodeBody());
         */
 
@@ -581,11 +586,11 @@ public class FunctionDecl extends DeclaratorDecl {
         String qualifiedName = get(QUALIFIED_NAME);
         SpecsCheck.checkArgument(qualifiedName.endsWith(previousName),
                 () -> "Expected qualified name to end with '" + previousName + "': " + qualifiedName);
-
+        
         boolean hasColons = qualifiedName.contains("::");
-
+        
         String qualifiedPrefix = hasColons ? qualifiedName.substring(0, qualifiedName.lastIndexOf("::")) + "::" : "";
-
+        
         String newQualifiedName = qualifiedPrefix + name;
         set(QUALIFIED_NAME, newQualifiedName);
         */
@@ -692,28 +697,28 @@ public class FunctionDecl extends DeclaratorDecl {
         if (declMatch.isPresent()) {
             return declMatch.get();
         }
-
+        
         Optional<Boolean> defMatch = match(getFunctionDefinition(), call.getDefinition());
         if (defMatch.isPresent()) {
             return defMatch.get();
         }
-
+        
         throw new RuntimeException("Should not arrive here, either function declaration or definition must be defined");
         */
         /*
         if (functionDecl.isPresent()) {
             FunctionDecl decl = functionDecl.get();
-
+        
             if (!callDecl.isPresent()) {
                 return;
             }
-
+        
             boolean isFunction = decl == callDecl.get();
-
+        
             if (isFunction) {
                 call.setCallName(newName);
             }
-
+        
             return;
         }
         */
@@ -738,13 +743,13 @@ public class FunctionDecl extends DeclaratorDecl {
         if (!functionDecl.isPresent()) {
             return Optional.empty();
         }
-
+    
         FunctionDecl decl = functionDecl.get();
-
+    
         if (!callDecl.isPresent()) {
             return Optional.of(false);
         }
-
+    
         return Optional.of(decl == callDecl.get());
     }
     */
@@ -756,7 +761,7 @@ public class FunctionDecl extends DeclaratorDecl {
         if (!callDecl.isPresent()) {
             return false;
         }
-
+        
         return decl == callDecl.get();
         */
     }
@@ -787,6 +792,31 @@ public class FunctionDecl extends DeclaratorDecl {
         for (int i = 0; i < params.size(); i++) {
             addChild(i, params.get(i));
         }
+
+        // Update FunctionType
+        var newFunctionType = (FunctionType) getFunctionType().copy();
+        for (int i = 0; i < params.size(); i++) {
+            newFunctionType.setParamType(i, params.get(i).getType());
+        }
+        set(TYPE, newFunctionType);
+    }
+
+    public void setParamType(Integer index, Type type) {
+        int numParams = getNumParameters();
+        if (index >= numParams) {
+            ClavaLog.info(
+                    "Cannot set type for param at index '" + index + "', function has only '" + numParams + "' params");
+            return;
+        }
+
+        // Set type of parameter
+        var param = getChild(ParmVarDecl.class, index);
+        param.setType(type);
+
+        // Set type of the function type
+        var newFunctionType = ((FunctionType) getFunctionType().copy());
+        newFunctionType.setParamType(index, type);
+        setFunctionType(newFunctionType);
     }
 
     public String getSignature() {
@@ -872,4 +902,5 @@ public class FunctionDecl extends DeclaratorDecl {
         getDeclaration().ifPresent(decl -> decl.setType(type));
         getDefinition().ifPresent(decl -> decl.setType(type));
     }
+
 }
