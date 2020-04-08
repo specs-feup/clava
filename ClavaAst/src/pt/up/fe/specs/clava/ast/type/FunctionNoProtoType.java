@@ -19,6 +19,7 @@ import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 
 /**
@@ -46,6 +47,11 @@ public class FunctionNoProtoType extends FunctionType {
     @Override
     public boolean isVariadic() {
         return false;
+    }
+
+    @Override
+    public void setParamType(int paramIndex, Type paramType) {
+        ClavaLog.debug("FunctionNoProtoType.setParamType(): ignoring, no parameters to set");
     }
 
 }

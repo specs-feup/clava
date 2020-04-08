@@ -207,6 +207,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute returnType
+     * @return the attribute's value
+     */
+    @Override
+    public AType getReturnTypeImpl() {
+        return this.aFunction.getReturnTypeImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select bodys
      * @return 
      */
@@ -316,6 +325,13 @@ public abstract class AMethod extends AFunction {
      */
     public void defParamsImpl(String[] value) {
         this.aFunction.defParamsImpl(value);
+    }
+
+    /**
+     * 
+     */
+    public void defReturnTypeImpl(AType value) {
+        this.aFunction.defReturnTypeImpl(value);
     }
 
     /**
@@ -561,6 +577,25 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Sets the return type of the function
+     * @param returnType 
+     */
+    @Override
+    public void setReturnTypeImpl(AType returnType) {
+        this.aFunction.setReturnTypeImpl(returnType);
+    }
+
+    /**
+     * Sets the type of a parameter of the function
+     * @param index 
+     * @param newType 
+     */
+    @Override
+    public void setParamTypeImpl(Integer index, AType newType) {
+        this.aFunction.setParamTypeImpl(index, newType);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -671,6 +706,13 @@ public abstract class AMethod extends AFunction {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "returnType": {
+        	if(value instanceof AType){
+        		this.defReturnTypeImpl((AType)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "name": {
         	if(value instanceof String){
         		this.defNameImpl((String)value);
@@ -764,6 +806,7 @@ public abstract class AMethod extends AFunction {
         STORAGECLASS("storageClass"),
         CALLS("calls"),
         SIGNATURE("signature"),
+        RETURNTYPE("returnType"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),

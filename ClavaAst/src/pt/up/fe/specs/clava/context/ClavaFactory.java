@@ -120,6 +120,7 @@ import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.utils.ClassesService;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.classmap.ClassMap;
 
@@ -684,19 +685,41 @@ public class ClavaFactory {
         return exprStmt(assign);
     }
 
-    public IfStmt ifStmt(Expr condition, CompoundStmt thenBody) {
-        return ifStmt(condition, thenBody, nullStmt());
-    }
+    // public IfStmt ifStmt(Expr condition, CompoundStmt thenBody) {
+    // return ifStmt(condition, thenBody, null);
+    // }
 
+    /**
+     * 
+     * @param condition
+     * @param thenBody
+     *            can be null (i.e., empty body)
+     * @param elseBody
+     *            can be null (i.e., no else)
+     * @return
+     */
     public IfStmt ifStmt(Expr condition, CompoundStmt thenBody, CompoundStmt elseBody) {
-        return ifStmt(condition, thenBody, (ClavaNode) elseBody);
-    }
+        // return ifStmt(condition, thenBody, (ClavaNode) elseBody);
+        //
 
-    private IfStmt ifStmt(Expr condition, CompoundStmt thenBody, ClavaNode elseBody) {
+        SpecsCheck.checkNotNull(condition, () -> "Condition of IfStmt must exist");
+
+        // If null, create empty CompoundStmt
+        ClavaNode thenStmt = thenBody != null ? thenBody : compoundStmt();
+        // If null, create NullStmt
+        ClavaNode elseStmt = elseBody != null ? elseBody : nullStmt();
+
         DataStore ifStmtData = newDataStore(IfStmt.class);
 
-        return new IfStmt(ifStmtData, Arrays.asList(nullDecl(), condition, thenBody, elseBody));
+        return new IfStmt(ifStmtData, Arrays.asList(nullDecl(), condition, thenStmt, elseStmt));
+
     }
+
+    // private IfStmt ifStmt(Expr condition, CompoundStmt thenBody, ClavaNode elseBody) {
+    // DataStore ifStmtData = newDataStore(IfStmt.class);
+    //
+    // return new IfStmt(ifStmtData, Arrays.asList(nullDecl(), condition, thenBody, elseBody));
+    // }
 
     public ForStmt forStmt(Stmt init, Stmt cond, Stmt inc, CompoundStmt body) {
         DataStore forStmtData = newDataStore(ForStmt.class);

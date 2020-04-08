@@ -21,4 +21,9 @@ aspectdef ClavaJoinPointsTest
 	
 	// Cast
 	println("C-Style cast: " + ClavaJoinPoints.cStyleCast(doubleType, intExpr).code);
+	
+	// If Stmt
+	println("Empty if:\n" + ClavaJoinPoints.ifStmt("a == 0").code);
+	println("If with then:\n" + ClavaJoinPoints.ifStmt("a == 0", ClavaJoinPoints.stmtLiteral("a = 1;")).code);
+	println("If with else:\n" + ClavaJoinPoints.ifStmt("a == 0", undefined, ClavaJoinPoints.stmtLiteral("a = 2;")).code);
 end

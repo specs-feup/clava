@@ -26,7 +26,6 @@ import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.CallingConvention;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.util.SpecsCheck;
-import pt.up.fe.specs.util.SpecsLogs;
 
 /**
  * Represents the type of a Function.
@@ -97,29 +96,29 @@ public abstract class FunctionType extends Type {
      * 
      * @return
      */
-    public int getIndexReturnType() {
-        // return 0;
-        return getIndexDesugar() + 1;
-    }
+    // public int getIndexReturnType() {
+    // // return 0;
+    // return getIndexDesugar() + 1;
+    // }
 
     /**
      * Inclusive index.
      * 
      * @return
      */
-    public int getIndexParamStart() {
-
-        return getIndexReturnType() + 1;
-    }
+    // public int getIndexParamStart() {
+    //
+    // return getIndexReturnType() + 1;
+    // }
 
     /**
      * Exclusive index.
      * 
      * @return
      */
-    public int getIndexParamEnd() {
-        return getIndexParamStart() + getNumParams();
-    }
+    // public int getIndexParamEnd() {
+    // return getIndexParamStart() + getNumParams();
+    // }
 
     public abstract List<Type> getParamTypes();
     // public List<Type> getParamTypes() {
@@ -150,18 +149,11 @@ public abstract class FunctionType extends Type {
     abstract public boolean isVariadic();
 
     public void setReturnType(Type returnType) {
-        setChild(getIndexReturnType(), returnType);
+        set(RETURN_TYPE, returnType);
+        // setChild(getIndexReturnType(), returnType);
     }
 
-    public void setParamType(int paramIndex, Type paramType) {
-        if (paramIndex >= getNumParams()) {
-            SpecsLogs.msgInfo("Cannot set param '', function has only '" + getNumParams() + "' params");
-            return;
-        }
-
-        // setChild(paramIndex + 1, paramType);
-        setChild(getIndexParamStart() + paramIndex, paramType);
-    }
+    public abstract void setParamType(int paramIndex, Type paramType);
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {

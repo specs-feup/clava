@@ -264,18 +264,18 @@ ClavaJoinPoints.assign = function($leftHand, $rightHand) {
  * Creates a new join point 'if'. 
  *
  * @param {String|$expr} $condition - The condition of the if statement. If a string, it is converted to a literal expression.
+ * @param {$statement} [$then=undefined] - The body of the if
+ * @param {$statement} [$else=undefined] - The body of the else
+ * 
  */
-ClavaJoinPoints.ifStmt = function($condition) {
+ClavaJoinPoints.ifStmt = function($condition, $then, $else) {
 	$condition = ClavaType.asExpression($condition);
-	/*
-	if(isString($condition)) {
-		$condition = ClavaJoinPoints.exprLiteral($condition);
-	}
-	else {
-		Check.isJoinPoint($condition, 'expression');		
-	}
-	*/
-	return AstFactory.ifStmt($condition);
+
+	Check.isJoinPoint($then, 'statement', true);
+	Check.isJoinPoint($else, 'statement', true);
+	
+	
+	return AstFactory.ifStmt($condition, $then, $else);
 }
 
 /**

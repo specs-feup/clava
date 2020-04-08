@@ -322,8 +322,16 @@
 
 	<action name="setFunctionType" class="function" tooltip="Sets the type of the function">
 		<parameter name="functionType" type="functionType" />
-	</action>	
+	</action>	 
 
+	<action name="setReturnType" class="function" tooltip="Sets the return type of the function">
+		<parameter name="returnType" type="type" />
+	</action>	
+	
+	<action name="setParamType" class="function" tooltip="Sets the type of a parameter of the function">
+		<parameter name="index" type="Integer" />
+		<parameter name="newType" type="type" />
+	</action>	
 
 	<!-- NAMED DECL -->
 	<action name="setName" class="namedDecl" tooltip="Sets the name of this namedDecl">
@@ -405,6 +413,20 @@
 	
 	<action name="setBody" class="loop" tooltip="Sets the body of the loop">
 		<parameter name="body" type="scope" />
+	</action>	
+
+
+	<!-- IF -->
+	<action name="setCond" class="if" tooltip="sets the condition of the if">
+		<parameter name="cond" type="expression" />
+	</action>
+
+	<action name="setThen" class="if" tooltip="sets the body of the if">
+		<parameter name="then" type="statement" />
+	</action>
+
+	<action name="setElse" class="if" tooltip="sets the body of the else">
+		<parameter name="else" type="statement" />
 	</action>	
 	
 	<!-- OMP -->
@@ -538,13 +560,11 @@
 		<parameter name="newType" type="type" />
 	</action>
 
-		
-	<!-- 
-	<action name="setParamType" class="functionType" tooltip="Sets the type of a parameter of the FunctionType">
+	<!-- Functions derive signature from params, not from functionType. Also, there is not a 1-to-1 correspondence between FunctionType and Function (several functions can share the same FunctionType  -->		
+	<!-- <action name="setParamType" class="functionType" tooltip="Sets the type of a parameter of the FunctionType">
 		<parameter name="index" type="Integer" />
 		<parameter name="newType" type="type" />
-	</action>	
-	 -->
+	</action>	 -->
 
 	
 	<!-- UnaryExprOrType -->

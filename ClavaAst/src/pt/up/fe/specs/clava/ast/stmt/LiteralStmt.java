@@ -35,6 +35,15 @@ public class LiteralStmt extends Stmt implements LiteralNode {
     @Override
     public String getCode() {
         return get(LITERAL_CODE);
+        // Better to stick with what the user gives you. Statement could be a CompoudStmt (e.g., {})
+        // String code = get(LITERAL_CODE);
+        //
+        // // Should automatically add ; to the end?
+        // if (!code.strip().endsWith(";")) {
+        // code = code + ";";
+        // }
+        //
+        // return code;
     }
 
 }

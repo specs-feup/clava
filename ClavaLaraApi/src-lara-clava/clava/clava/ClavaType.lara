@@ -87,3 +87,4 @@ ClavaType.asType = function($type) {
 	Check.isJoinPoint($type, 'type');
 	return $type;
 }
+

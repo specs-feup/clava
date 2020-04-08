@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
+import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -31,7 +32,7 @@ public abstract class AIf extends AStatement {
      * Get value on attribute cond
      * @return the attribute's value
      */
-    public abstract AJoinPoint getCondImpl();
+    public abstract AExpression getCondImpl();
 
     /**
      * Get value on attribute cond
@@ -42,7 +43,7 @@ public abstract class AIf extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "cond", Optional.empty());
         	}
-        	AJoinPoint result = this.getCondImpl();
+        	AExpression result = this.getCondImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "cond", Optional.ofNullable(result));
         	}
@@ -50,6 +51,13 @@ public abstract class AIf extends AStatement {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "cond", e);
         }
+    }
+
+    /**
+     * 
+     */
+    public void defCondImpl(AExpression value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def cond with type AExpression not implemented ");
     }
 
     /**
@@ -81,7 +89,7 @@ public abstract class AIf extends AStatement {
      * Get value on attribute then
      * @return the attribute's value
      */
-    public abstract AJoinPoint getThenImpl();
+    public abstract AScope getThenImpl();
 
     /**
      * Get value on attribute then
@@ -92,7 +100,7 @@ public abstract class AIf extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "then", Optional.empty());
         	}
-        	AJoinPoint result = this.getThenImpl();
+        	AScope result = this.getThenImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "then", Optional.ofNullable(result));
         	}
@@ -103,10 +111,17 @@ public abstract class AIf extends AStatement {
     }
 
     /**
+     * 
+     */
+    public void defThenImpl(AStatement value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def then with type AStatement not implemented ");
+    }
+
+    /**
      * Get value on attribute _else
      * @return the attribute's value
      */
-    public abstract AJoinPoint getElseImpl();
+    public abstract AScope getElseImpl();
 
     /**
      * Get value on attribute _else
@@ -117,7 +132,7 @@ public abstract class AIf extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "else", Optional.empty());
         	}
-        	AJoinPoint result = this.getElseImpl();
+        	AScope result = this.getElseImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "else", Optional.ofNullable(result));
         	}
@@ -125,6 +140,13 @@ public abstract class AIf extends AStatement {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "else", e);
         }
+    }
+
+    /**
+     * 
+     */
+    public void defElseImpl(AStatement value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def else with type AStatement not implemented ");
     }
 
     /**
@@ -165,6 +187,84 @@ public abstract class AIf extends AStatement {
      */
     public List<? extends AScope> selectBody() {
         return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
+    }
+
+    /**
+     * sets the condition of the if
+     * @param cond 
+     */
+    public void setCondImpl(AExpression cond) {
+        throw new UnsupportedOperationException(get_class()+": Action setCond not implemented ");
+    }
+
+    /**
+     * sets the condition of the if
+     * @param cond 
+     */
+    public final void setCond(AExpression cond) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setCond", this, Optional.empty(), cond);
+        	}
+        	this.setCondImpl(cond);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setCond", this, Optional.empty(), cond);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setCond", e);
+        }
+    }
+
+    /**
+     * sets the body of the if
+     * @param then 
+     */
+    public void setThenImpl(AStatement then) {
+        throw new UnsupportedOperationException(get_class()+": Action setThen not implemented ");
+    }
+
+    /**
+     * sets the body of the if
+     * @param then 
+     */
+    public final void setThen(AStatement then) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setThen", this, Optional.empty(), then);
+        	}
+        	this.setThenImpl(then);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setThen", this, Optional.empty(), then);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setThen", e);
+        }
+    }
+
+    /**
+     * sets the body of the else
+     * @param _else 
+     */
+    public void setElseImpl(AStatement _else) {
+        throw new UnsupportedOperationException(get_class()+": Action setElse not implemented ");
+    }
+
+    /**
+     * sets the body of the else
+     * @param _else 
+     */
+    public final void setElse(AStatement _else) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setElse", this, Optional.empty(), _else);
+        	}
+        	this.setElseImpl(_else);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setElse", this, Optional.empty(), _else);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setElse", e);
+        }
     }
 
     /**
@@ -608,6 +708,27 @@ public abstract class AIf extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "cond": {
+        	if(value instanceof AExpression){
+        		this.defCondImpl((AExpression)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "then": {
+        	if(value instanceof AStatement){
+        		this.defThenImpl((AStatement)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "else": {
+        	if(value instanceof AStatement){
+        		this.defElseImpl((AStatement)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -643,6 +764,9 @@ public abstract class AIf extends AStatement {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aStatement.fillWithActions(actions);
+        actions.add("void setCond(expression)");
+        actions.add("void setThen(statement)");
+        actions.add("void setElse(statement)");
     }
 
     /**

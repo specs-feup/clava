@@ -19,6 +19,7 @@ import java.util.Optional;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.utils.StmtWithCondition;
@@ -69,6 +70,10 @@ public class IfStmt extends Stmt implements StmtWithCondition {
 
     }
 
+    public void setCondition(Expr condition) {
+        setChild(1, condition);
+    }
+
     /**
      * The 'then' block.
      * 
@@ -79,6 +84,11 @@ public class IfStmt extends Stmt implements StmtWithCondition {
      */
     public Optional<CompoundStmt> getThen() {
         return getOptionalChild(CompoundStmt.class, 2);
+    }
+
+    public void setThen(Stmt thenBody) {
+        var thenNode = thenBody != null ? ClavaNodes.toCompoundStmt(thenBody) : getFactory().nullStmt();
+        setChild(2, thenNode);
     }
 
     public Optional<CompoundStmt> getElse() {
@@ -93,6 +103,11 @@ public class IfStmt extends Stmt implements StmtWithCondition {
         // }
         // System.out.println("IfStmt: Else not being normalized as a CompoundStmt: " + stmt.get());
         // return stmt.map(ClavaNodes::toCompoundStmt);
+    }
+
+    public void setElse(Stmt elseBody) {
+        var elseNode = elseBody != null ? ClavaNodes.toCompoundStmt(elseBody) : getFactory().nullStmt();
+        setChild(3, elseNode);
     }
 
     @Override

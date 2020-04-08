@@ -21,11 +21,13 @@ import java.util.stream.Collectors;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.util.SpecsCollections;
 
@@ -49,7 +51,7 @@ public class CxxIf extends AIf {
             return Collections.emptyList();
         }
 
-        return Arrays.asList(CxxJoinpoints.create((Expr) ifStmt.getCondition(), AExpression.class));
+        return Arrays.asList(CxxJoinpoints.create(ifStmt.getCondition(), AExpression.class));
     }
 
     @Override
@@ -82,7 +84,7 @@ public class CxxIf extends AIf {
     }
 
     @Override
-    public AJoinPoint getCondImpl() {
+    public AExpression getCondImpl() {
         return SpecsCollections.orElseNull(selectCond());
     }
 
@@ -92,13 +94,43 @@ public class CxxIf extends AIf {
     }
 
     @Override
-    public AJoinPoint getThenImpl() {
+    public AScope getThenImpl() {
         return SpecsCollections.orElseNull(selectThen());
     }
 
     @Override
-    public AJoinPoint getElseImpl() {
+    public AScope getElseImpl() {
         return SpecsCollections.orElseNull(selectElse());
+    }
+
+    @Override
+    public void defCondImpl(AExpression value) {
+        ifStmt.setCondition((Expr) value.getNode());
+    }
+
+    @Override
+    public void setCondImpl(AExpression cond) {
+        defCondImpl(cond);
+    }
+
+    @Override
+    public void defThenImpl(AStatement value) {
+        ifStmt.setThen((Stmt) value.getNode());
+    }
+
+    @Override
+    public void setThenImpl(AStatement then) {
+        defThenImpl(then);
+    }
+
+    @Override
+    public void defElseImpl(AStatement value) {
+        ifStmt.setElse((Stmt) value.getNode());
+    }
+
+    @Override
+    public void setElseImpl(AStatement _else) {
+        defElseImpl(_else);
     }
 
 }

@@ -400,15 +400,24 @@
 		<attribute name="storageClass" type="StorageClass"/>
 		<attribute name="calls" type="call[]"/>		
 		<attribute name="signature" type="String" tooltip="a string with the signature of this function (e.g., name of the function, plus the parameters types)"/>
+		<attribute name="returnType" type="type">
+			<def/>
+		</attribute>
 	</artifact>
 
 
 	<!-- IF -->
 	<artifact class="if">
-		<attribute name="cond" type="joinpoint" />
+		<attribute name="cond" type="expression">
+			<def/>
+		</attribute>
 		<attribute name="condDecl" type="joinpoint" />
-		<attribute name="then" type="joinpoint" />
-		<attribute name="else" type="joinpoint" />
+		<attribute name="then" type="scope">
+			<def type="statement"/>
+		</attribute>		
+		<attribute name="else" type="scope">
+			<def type="statement"/>
+		</attribute>		
 	</artifact>
 
 
