@@ -14,6 +14,10 @@ void testIf() {
 
 }
 
+int testFunctionType(double a) {
+	return 0;
+}
+
 int main() {
 	return 0;
 }

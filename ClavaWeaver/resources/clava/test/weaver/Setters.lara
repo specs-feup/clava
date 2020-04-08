@@ -24,4 +24,12 @@ aspectdef Setters
 		println("Changed condition:\n" + $if.code);				
 	end
 	
+	
+	select function{"testFunctionType"} end
+	apply
+		$function.returnType = ClavaJoinPoints.builtinType("double");
+		$function.setParamType(0, ClavaJoinPoints.builtinType("int"));		
+		println("Changed Function:\n"+$function.code);
+		println("Changed FunctionType:\n"+$function.functionType.code);
+	end
 end

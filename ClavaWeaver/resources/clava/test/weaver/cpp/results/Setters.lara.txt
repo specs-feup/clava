@@ -13,3 +13,10 @@ else a = 4;
 Changed condition:
 if(a == 3) a = 3;
 else a = 4;
+Changed Function:
+double testFunctionType(int a) {
+   
+   return 0;
+}
+Changed FunctionType:
+double (int)
