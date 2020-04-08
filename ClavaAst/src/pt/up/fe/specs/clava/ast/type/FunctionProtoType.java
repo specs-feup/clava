@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
+import pt.up.fe.specs.util.SpecsLogs;
 
 public class FunctionProtoType extends FunctionType {
 
@@ -65,15 +66,15 @@ public class FunctionProtoType extends FunctionType {
         super(data, children);
     }
 
-    @Override
-    public int getIndexParamStart() {
-        return getIndexReturnType() + 1;
-    }
+    // @Override
+    // public int getIndexParamStart() {
+    // return getIndexReturnType() + 1;
+    // }
 
-    @Override
-    public int getIndexParamEnd() {
-        return getIndexParamStart() + get(NUM_PARAMETERS);
-    }
+    // @Override
+    // public int getIndexParamEnd() {
+    // return getIndexParamStart() + get(NUM_PARAMETERS);
+    // }
 
     public String getCodeAfterParams() {
         StringBuilder code = new StringBuilder();
@@ -112,5 +113,16 @@ public class FunctionProtoType extends FunctionType {
     @Override
     protected List<DataKey<Type>> getUnderlyingTypeKeys() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public void setParamType(int paramIndex, Type paramType) {
+        if (paramIndex >= getNumParams()) {
+            SpecsLogs.msgInfo("Cannot set param '', function has only '" + getNumParams() + "' params");
+            return;
+        }
+
+        get(PARAMETERS_TYPES).set(paramIndex, paramType);
+        // setChild(getIndexParamStart() + paramIndex, paramType);
     }
 }
