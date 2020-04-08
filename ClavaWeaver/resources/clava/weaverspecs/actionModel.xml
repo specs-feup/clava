@@ -406,6 +406,20 @@
 	<action name="setBody" class="loop" tooltip="Sets the body of the loop">
 		<parameter name="body" type="scope" />
 	</action>	
+
+
+	<!-- IF -->
+	<action name="setCond" class="if" tooltip="sets the condition of the if">
+		<parameter name="cond" type="expression" />
+	</action>
+
+	<action name="setThen" class="if" tooltip="sets the body of the if">
+		<parameter name="then" type="statement" />
+	</action>
+
+	<action name="setElse" class="if" tooltip="sets the body of the else">
+		<parameter name="else" type="statement" />
+	</action>	
 	
 	<!-- OMP -->
 	<action name="setKind" class="omp" tooltip="Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded">

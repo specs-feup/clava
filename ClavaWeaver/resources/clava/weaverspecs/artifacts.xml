@@ -405,10 +405,16 @@
 
 	<!-- IF -->
 	<artifact class="if">
-		<attribute name="cond" type="joinpoint" />
+		<attribute name="cond" type="expression">
+			<def/>
+		</attribute>
 		<attribute name="condDecl" type="joinpoint" />
-		<attribute name="then" type="joinpoint" />
-		<attribute name="else" type="joinpoint" />
+		<attribute name="then" type="scope">
+			<def type="statement"/>
+		</attribute>		
+		<attribute name="else" type="scope">
+			<def type="statement"/>
+		</attribute>		
 	</artifact>
 
 

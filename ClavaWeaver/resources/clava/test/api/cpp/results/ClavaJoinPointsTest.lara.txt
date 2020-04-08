@@ -3,3 +3,12 @@ Literal statement: int a = 0;
 Typedef decl: typedef int custom_int
 Typedef type: custom_int
 C-Style cast: (double) a
+Empty if:
+if(a == 0) {
+}
+If with then:
+if(a == 0) a = 1;
+If with else:
+if(a == 0) {
+}
+else a = 2;

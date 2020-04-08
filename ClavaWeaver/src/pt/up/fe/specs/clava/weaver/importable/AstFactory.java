@@ -25,6 +25,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -608,9 +609,13 @@ public class AstFactory {
         return CxxJoinpoints.create(assign, ABinaryOp.class);
     }
 
-    public static AIf ifStmt(AExpression condition) {
-        CompoundStmt emptyBody = CxxWeaver.getFactory().compoundStmt();
-        IfStmt ifStmt = CxxWeaver.getFactory().ifStmt((Expr) condition.getNode(), emptyBody);
+    public static AIf ifStmt(AExpression condition, AStatement thenBody, AStatement elseBody) {
+
+        var thenNode = thenBody != null ? ClavaNodes.toCompoundStmt((Stmt) thenBody.getNode()) : null;
+        var elseNode = elseBody != null ? ClavaNodes.toCompoundStmt((Stmt) elseBody.getNode()) : null;
+        // CompoundStmt emptyBody = CxxWeaver.getFactory().compoundStmt();
+        // IfStmt ifStmt = CxxWeaver.getFactory().ifStmt((Expr) condition.getNode(), emptyBody);
+        IfStmt ifStmt = CxxWeaver.getFactory().ifStmt((Expr) condition.getNode(), thenNode, elseNode);
         return CxxJoinpoints.create(ifStmt, AIf.class);
     }
 

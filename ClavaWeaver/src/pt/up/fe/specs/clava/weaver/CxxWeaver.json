@@ -27584,7 +27584,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "expression",
                               "name": "cond"
                            }]
                },
@@ -27600,7 +27600,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "scope",
                               "name": "else"
                            }]
                },
@@ -27608,7 +27608,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "scope",
                               "name": "then"
                            }]
                },
@@ -28319,6 +28319,48 @@
                   "type": "select",
                   "clazz": "varref",
                   "alias": ""
+               },
+               {
+                  "type": "action",
+                  "tooltip": "sets the condition of the if",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setCond"
+                           },
+                           {
+                              "type": "expression",
+                              "name": "cond",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "sets the body of the else",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setElse"
+                           },
+                           {
+                              "type": "statement",
+                              "name": "else",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "sets the body of the if",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setThen"
+                           },
+                           {
+                              "type": "statement",
+                              "name": "then",
+                              "defaultValue": ""
+                           }]
                },
                {
                   "type": "action",
