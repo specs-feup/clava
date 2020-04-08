@@ -1,10 +1,12 @@
 package pt.up.fe.specs.clava.weaver.memoi;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import pt.up.fe.specs.clava.weaver.memoi.stats.Stats;
 import pt.up.fe.specs.util.SpecsCheck;
 
 /**
@@ -27,7 +29,7 @@ public class MergedMemoiReport {
     private String outputType;
     private int inputCount;
     private List<String> inputTypes;
-    private List<String> call_sites;
+    private List<String> callSites;
 
     private List<Integer> elements;
     private List<Integer> calls;
@@ -38,6 +40,8 @@ public class MergedMemoiReport {
 
     private int reportCount = 1;
 
+    private Stats stats;
+
     public MergedMemoiReport(MemoiReport report) {
 
         this.id = report.getId();
@@ -45,7 +49,7 @@ public class MergedMemoiReport {
         this.outputType = report.getOutputType();
         this.inputCount = report.getInputCount();
         this.inputTypes = new ArrayList<>(report.getInputTypes());
-        this.call_sites = new ArrayList<>(report.getCall_sites());
+        this.callSites = new ArrayList<>(report.getCall_sites());
 
         this.elements = new ArrayList<Integer>();
         this.elements.add(report.getElements());
@@ -71,7 +75,16 @@ public class MergedMemoiReport {
     public List<MergedMemoiEntry> getMeanSorted() {
 
         var list = new ArrayList<MergedMemoiEntry>(counts.values());
-        list.sort(MemoiComparator.getMeanComparator(reportCount));
+        list.sort(MemoiComparator.mean(this));
+
+        return list;
+    }
+
+    public List<MergedMemoiEntry> getSortedCounts(Comparator<MergedMemoiEntry> countComparator) {
+
+        var list = new ArrayList<MergedMemoiEntry>(counts.values());
+
+        list.sort(countComparator);
 
         return list;
     }
@@ -119,7 +132,7 @@ public class MergedMemoiReport {
 
         SpecsCheck.checkArgument(this.funcSig.equals(tempReport.getFuncSig()),
                 () -> "The function signatures of the reports are not equal");
-        SpecsCheck.checkArgument(this.call_sites.equals(tempReport.getCall_sites()),
+        SpecsCheck.checkArgument(this.callSites.equals(tempReport.getCall_sites()),
                 () -> "The call sites of the reports are not equal");
     }
 
@@ -163,12 +176,12 @@ public class MergedMemoiReport {
         this.inputTypes = inputTypes;
     }
 
-    public List<String> getCall_sites() {
-        return call_sites;
+    public List<String> getCallSites() {
+        return callSites;
     }
 
-    public void setCall_sites(List<String> call_sites) {
-        this.call_sites = call_sites;
+    public void setCallSites(List<String> call_sites) {
+        this.callSites = call_sites;
     }
 
     public List<Integer> getElements() {
@@ -219,4 +232,17 @@ public class MergedMemoiReport {
         this.reportCount = reportCount;
     }
 
+    public void printStats() {
+
+        System.out.println("\n\n=== profile stats ===");
+        System.out.println("target function: " + funcSig);
+        System.out.println("call sites: " + callSites);
+        System.out.println("report count: " + reportCount);
+
+        stats.print();
+    }
+
+    public void makeStats() {
+        this.stats = new Stats(this);
+    }
 }

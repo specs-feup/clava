@@ -1,4 +1,14 @@
 import lara.Io;
+import lara.Strings;
+import clava.ClavaJoinPoints;
+
+function _normalizeSig(sig) {
+	var tmp = Strings.replacer(sig, /\(/, '_');
+	tmp = Strings.replacer(tmp, ', ', '_');
+	tmp = Strings.replacer(tmp, ' ', '_');
+	tmp = Strings.replacer(tmp, ',', '_');
+	return Strings.replacer(tmp, /\)/, '_');
+}
 
 function _isPowerOf2(num) {
 	
@@ -241,8 +251,9 @@ function _makeTableCode(insertPred, countComparator, report, $function, tableSiz
 	debug('table size: ' + tableSize);
 	debug('index bits: ' + indexBits);
 
-	var table = _makeTable(insertPred, countComparator, report, $function, indexBits, tableSize);
-	var code = _makeCode(table, indexBits, tableSize, $function, report);
+	//~ var table = _makeTable(insertPred, countComparator, report, $function, indexBits, tableSize);
+	//~ var code = _makeCode(table, indexBits, tableSize, $function, report);
+	var code = _makeCode2(indexBits, report, tableSize, $function);
 
 	return code;
 }
@@ -251,7 +262,73 @@ var sizeMap = {
 	'float': 32,
 	'int': 32,
 	'double': 64
-	};
+};
+function _makeCode2(indexBits, report, tableSize, $function) {
+	
+	var tableCode = MemoiCodeGen.generateDirectMappedTableCode(report, tableSize);
+	
+	var inputCount = report.inputCount;
+	
+	// logic code
+	var logicCode = '';
+	var maxVarBits = 0;
+	var varNames = [];
+	
+	// get the bits of all parameters
+	for(var $param of $function.params) {
+	
+		var name = $param.name;
+		var varBits = sizeMap[$param.type.code];
+		
+		if(varBits > maxVarBits) {maxVarBits = varBits;}
+		
+		var varName = name +'_bits';
+		varNames.push(varName);
+		logicCode += 'uint' + varBits + '_t ' + varName + ' = *(uint' + varBits + '_t*)&' + name + ';\n';
+	}
+	debug('max var bits: ' + maxVarBits);
+	
+	// merge all bits
+	logicCode += '\nuint' + maxVarBits + '_t hash_' + maxVarBits +'_bits = ';
+	logicCode += varNames.join(' ^ ');
+	logicCode += ';\n';
+	
+	var iters = _baseLog(maxVarBits / indexBits, 2);
+	var intIters = parseInt(iters, 10);
+
+	var large = maxVarBits;
+	for(var i = 0; i < intIters; i++) {
+
+		var small = large / 2;
+		logicCode += 'uint' + small + '_t hash_' + small + '_bits = (hash_' + large +'_bits ^ (hash_' + large +'_bits >> ' + small + '));\n';
+		large = large / 2;
+	}
+	
+	// if not integer, we need to mask bits at the end
+	if(iters !== intIters) {
+		var numMaskBits = small - indexBits;
+		logicCode += 'uint' + small + '_t mask = 0xffff >> (16 - ' + indexBits + ');\n';
+		logicCode += 'uint' + small + '_t hash_' + indexBits + '_bits = hash_' + small +'_bits & mask;\n';			
+	}
+	
+	// lookup code
+	logicCode += '\nif(';
+	
+	var access = 'table[hash_' + indexBits + '_bits]';
+	var testClauses = [];
+	for(var v = 0; v < varNames.length; v++) {
+		
+		testClauses.push(access + '[' + v + '] == ' + varNames[v]);
+	}
+	logicCode += testClauses.join(' && ');
+	
+	logicCode += ') {';
+	logicCode += '\n\treturn *(' + $function.functionType.returnType.code + ' *) &table[hash_' + indexBits + '_bits][' + inputCount + '];\n}\n';	
+	
+
+	// concat
+	return tableCode + '\n\n' + logicCode;
+}
 
 function _makeCode(table, indexBits, tableSize, $function, report) {
 	
@@ -281,6 +358,8 @@ function _makeCode(table, indexBits, tableSize, $function, report) {
 		tableCode += '},\n';
 	}
 	tableCode += '};';
+
+
 
 	// logic code
 	var logicCode = '';
@@ -430,8 +509,9 @@ function _makeTable(insertPred, countComparator, report, $function, indexBits, t
 		}
 	}
 	
+	_printTableReport(collisions, totalElements, maxCollision, report, tableSize, table);
 	if(isDebug()) {
-		_printTableReport(collisions, totalElements, maxCollision, report, tableSize, table);
+		
 		_printTable(table, tableSize);
 	}
 	
@@ -475,10 +555,10 @@ function _printTableReport(collisions, totalElements, maxCollision, report, tabl
 	var elementsCoverage = tableElements / totalElements * 100;
 	var callCoverage = tableCalls / totalCalls * 100;
 	
-	debug('collisions: ' + collisions + ' (' + (collisionPercentage.toFixed(2)) + '%)');
-	debug('largest collision: ' + maxCollision);
-	debug('element coverage: ' + tableElements + '/' + totalElements + ' (' + (elementsCoverage.toFixed(2)) + ')%');
-	debug('call coverage: ' + tableCalls + '/' + totalCalls + ' (' + (callCoverage.toFixed(2)) + ')%');
+	println('collisions: ' + collisions + ' (' + (collisionPercentage.toFixed(2)) + '%)');
+	println('largest collision: ' + maxCollision);
+	println('element coverage: ' + tableElements + '/' + totalElements + ' (' + (elementsCoverage.toFixed(2)) + ')%');
+	println('call coverage: ' + tableCalls + '/' + totalCalls + ' (' + (callCoverage.toFixed(2)) + ')%');
 }
 
 function _hashFunctionHalf(bits64){

@@ -1,7 +1,6 @@
 package pt.up.fe.specs.clava.weaver.memoi;
 
 import java.util.Comparator;
-import java.util.List;
 
 /**
  * Copyright 2019 SPeCS.
@@ -18,12 +17,14 @@ import java.util.List;
 
 public class MemoiComparator {
 
-    public static Comparator<MergedMemoiEntry> getMeanComparator(int total) {
+    public final static Comparator<MergedMemoiEntry> mean(MergedMemoiReport report) {
+
+        int total = report.getInputCount();
 
         return (MergedMemoiEntry e1, MergedMemoiEntry e2) -> {
 
-            double mean1 = mean(e1.getCounter(), total);
-            double mean2 = mean(e2.getCounter(), total);
+            double mean1 = MemoiUtils.mean(e1.getCounter(), total);
+            double mean2 = MemoiUtils.mean(e2.getCounter(), total);
 
             if (mean1 > mean2) {
                 return 1;
@@ -33,10 +34,5 @@ public class MemoiComparator {
                 return 0;
             }
         };
-    }
-
-    private static double mean(List<Integer> c1, int t) {
-
-        return c1.stream().reduce(0, Integer::sum) / t;
     }
 }

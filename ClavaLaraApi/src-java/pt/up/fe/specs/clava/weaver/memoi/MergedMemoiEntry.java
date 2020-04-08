@@ -18,9 +18,10 @@ import java.util.List;
 
 public class MergedMemoiEntry {
 
-    private String key;
-    private String output;
-    private List<Integer> counter;
+    private final String key;
+    private final String output;
+    private final List<Integer> counter;
+    private int collisions;
 
     public MergedMemoiEntry(MemoiEntry previousEntry) {
 
@@ -28,35 +29,32 @@ public class MergedMemoiEntry {
         this.output = previousEntry.getOutput();
         this.counter = new ArrayList<>();
         this.counter.add(previousEntry.getCounter());
+        this.collisions = 0;
     }
 
     public String getKey() {
         return key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     public String getOutput() {
         return output;
-    }
-
-    public void setOutput(String output) {
-        this.output = output;
     }
 
     public List<Integer> getCounter() {
         return counter;
     }
 
-    public void setCounter(List<Integer> counter) {
-        this.counter = counter;
-    }
-
     public void addCounter(int newValue) {
 
         this.counter.add(newValue);
+    }
+
+    public void incCollisions() {
+        this.collisions++;
+    }
+
+    public int getCollisions() {
+        return this.collisions;
     }
 
     @Override
