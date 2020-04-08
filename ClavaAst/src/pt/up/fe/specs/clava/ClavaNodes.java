@@ -316,7 +316,7 @@ public class ClavaNodes {
      * case, returns the statement itself.
      * 
      * <p>
-     * Marks in the CompoundStmt as 'naked' if it was created from a list of Stmt instances.
+     * Marks in the CompoundStmt as 'naked' if it was created from a single Stmt instance.
      * <p>
      * If given Stmt is null, returns null.
      * 
