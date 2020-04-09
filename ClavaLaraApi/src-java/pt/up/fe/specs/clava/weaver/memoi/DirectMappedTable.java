@@ -88,7 +88,7 @@ public class DirectMappedTable {
                 () -> "TableGenerator: tableSize not allowed, choose one of " + ALLOWED_SIZES);
 
         this.report = report;
-        this.indexBits = (int) log2(numSets);
+        this.indexBits = (int) MemoiUtils.log2(numSets);
         this.insertPred = insertPred;
         this.countComparator = countComparator;
         this.numSets = numSets;
@@ -212,7 +212,7 @@ public class DirectMappedTable {
 
         int varBits = 64;
 
-        double iters = log2(varBits / indexBits);
+        double iters = MemoiUtils.log2(varBits / indexBits);
         int intIters = (int) iters;
 
         String hash = key64bits;
@@ -255,10 +255,6 @@ public class DirectMappedTable {
         }
 
         return newHash.toString();
-    }
-
-    private double log2(int i) {
-        return (Math.log(i) / Math.log(2));
     }
 
     private String makeHashKey(MergedMemoiEntry count) {

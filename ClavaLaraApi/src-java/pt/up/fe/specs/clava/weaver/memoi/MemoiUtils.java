@@ -21,4 +21,8 @@ public class MemoiUtils {
 
         return c1.stream().reduce(0, Integer::sum) / t;
     }
+
+    public static double log2(int i) {
+        return (Math.log(i) / Math.log(2));
+    }
 }
