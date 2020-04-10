@@ -121,6 +121,34 @@ public abstract class AFunctionType extends AType {
     }
 
     /**
+     * Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType
+     * @param index 
+     * @param newType 
+     */
+    public void setParamTypeImpl(Integer index, AType newType) {
+        throw new UnsupportedOperationException(get_class()+": Action setParamType not implemented ");
+    }
+
+    /**
+     * Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType
+     * @param index 
+     * @param newType 
+     */
+    public final void setParamType(Integer index, AType newType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParamType", this, Optional.empty(), index, newType);
+        	}
+        	this.setParamTypeImpl(index, newType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setParamType", this, Optional.empty(), index, newType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setParamType", e);
+        }
+    }
+
+    /**
      * Get value on attribute kind
      * @return the attribute's value
      */
@@ -631,6 +659,7 @@ public abstract class AFunctionType extends AType {
     protected final void fillWithActions(List<String> actions) {
         this.aType.fillWithActions(actions);
         actions.add("void setReturnType(type)");
+        actions.add("void setParamType(Integer, type)");
     }
 
     /**

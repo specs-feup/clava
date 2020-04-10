@@ -59,9 +59,9 @@ public class CxxFunctionType extends AFunctionType {
         defReturnTypeImpl(newType);
     }
 
-    // @Override
-    // public void setParamTypeImpl(Integer index, AType newType) {
-    // type.setParamType(index, (Type) newType.getNode());
-    // }
+    @Override
+    public void setParamTypeImpl(Integer index, AType newType) {
+        type.setParamType(index, (Type) newType.getNode());
+    }
 
 }

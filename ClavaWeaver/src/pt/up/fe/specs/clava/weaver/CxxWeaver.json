@@ -27254,6 +27254,25 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setParamType"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "type",
+                              "name": "newType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Sets the return type of the FunctionType",
                   "children": [
                            {
