@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.weaver.memoi;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,32 +22,165 @@ public class MemoiCodeGen {
 
     private static final int BASE = 16;
 
-    public static String generateDirectMappedTableCode(MergedMemoiReport report, int numSets) {
+    /**
+     * 
+     * list of param names
+     * 
+     * 
+     * @param report
+     * @param numSets
+     * @param func
+     * @return
+     */
+    public static String generateDirectMappedTableCode(MergedMemoiReport report, int numSets, List<String> paramNames) {
 
-        DirectMappedTable dmt = new DirectMappedTable(report, numSets);
-        var table = dmt.generate();
+        var table = new DirectMappedTable(report, numSets).generate();
 
-        return generateDirectMappedTableCode(table, report, numSets);
+        return generateDirectMappedTableCode(table, report, numSets, paramNames);
     }
 
     private static String generateDirectMappedTableCode(Map<String, MergedMemoiEntry> table, MergedMemoiReport report,
-            int numSets) {
+            int numSets, List<String> paramNames) {
 
         String tableCode = dmtCode(table, report, numSets);
 
-        // String logicCode = dmtLogicCode();
+        String logicCode = dmtLogicCode(report, paramNames, numSets);
 
-        return tableCode;
+        return tableCode + "\n\n" + logicCode;
     }
 
-    private static String dmtLogicCode() {
+    private static String dmtLogicCode(MergedMemoiReport report, List<String> paramNames, int numSets) {
 
         StringBuilder code = new StringBuilder();
-
-        int maxVarBits = 0;
         List<String> varNames = new ArrayList<>();
+        int indexBits = (int) MemoiUtils.log2(numSets);
+
+        int maxVarBits = varBitsCode(report, paramNames, code, varNames);
+
+        mergeBitsCode(code, varNames, maxVarBits, indexBits);
+
+        lookupCode(report, code, varNames, indexBits);
 
         return code.toString();
+    }
+
+    private static void lookupCode(MergedMemoiReport report, StringBuilder code, List<String> varNames, int indexBits) {
+        code.append("\nif(");
+
+        List<String> testClauses = new ArrayList<>();
+        StringBuilder access = new StringBuilder("table[hash_").append(indexBits).append("_bits]");
+
+        for (int v = 0; v < varNames.size(); v++) {
+
+            StringBuilder testClause = new StringBuilder(access);
+            testClause.append("[");
+            testClause.append(v);
+            testClause.append("] == ");
+            testClause.append(varNames.get(v));
+
+            testClauses.add(testClause.toString());
+        }
+        code.append(String.join(" && ", testClauses));
+
+        code.append(") {\n\treturn *(");
+        code.append(report.getOutputType());
+        code.append(" *) &table[hash_");
+        code.append(indexBits);
+        code.append("_bits][");
+        code.append(varNames.size());
+        code.append("];\n}\n");
+    }
+
+    private static void mergeBitsCode(StringBuilder code, List<String> varNames, int maxVarBits, int indexBits) {
+
+        code.append("\n");
+        code.append("uint");
+        code.append(maxVarBits);
+        code.append("_t hash_");
+        code.append(maxVarBits);
+        code.append("_bits = ");
+        code.append(String.join(" ^ ", varNames));
+        code.append(";\n");
+
+        double iters = (int) MemoiUtils.log2(maxVarBits / indexBits);
+        int intIters = (int) Math.floor(iters);
+
+        int large = maxVarBits;
+        int small = 0;
+        for (int i = 0; i < intIters; i++) {
+
+            small = large / 2;
+
+            code.append("uint");
+            code.append(small);
+            code.append("_t hash_");
+            code.append(small);
+            code.append("_bits = (hash_");
+            code.append(large);
+            code.append("_bits ^ (hash_");
+            code.append(large);
+            code.append("_bits >> ");
+            code.append(small);
+            code.append("));\n");
+
+            large /= 2;
+        }
+
+        // if not integer, we need to mask bits at the end
+        if (iters != intIters) {
+
+            code.append("uint");
+            code.append(small);
+            code.append("_t mask = 0xffff >> (16 - ");
+            code.append(indexBits);
+            code.append(");\n");
+
+            code.append("uint");
+            code.append(small);
+            code.append("_t hash_");
+            code.append(indexBits);
+            code.append("_bits = hash_");
+            code.append(small);
+            code.append("bits & mask;\n");
+        }
+    }
+
+    private static int varBitsCode(MergedMemoiReport report, List<String> paramNames, StringBuilder code,
+            List<String> varNames) {
+
+        Map<String, Integer> sizeMap = new HashMap<>();
+        sizeMap.put("float", 32);
+        sizeMap.put("int", 32);
+        sizeMap.put("double", 64);
+
+        int maxVarBits = 0;
+
+        for (int p = 0; p < paramNames.size(); p++) {
+
+            String paramName = paramNames.get(p);
+
+            String paramType = report.getInputTypes().get(p);
+            int varBits = sizeMap.get(paramType);
+
+            if (varBits > maxVarBits) {
+                maxVarBits = varBits;
+            }
+
+            String varName = paramName + "_bits";
+            varNames.add(varName);
+
+            code.append("uint");
+            code.append(varBits);
+            code.append("_t ");
+            code.append(varName);
+            code.append(" = *(uint");
+            code.append(varBits);
+            code.append("_t*)&");
+            code.append(paramName);
+            code.append(";\n");
+        }
+
+        return maxVarBits;
     }
 
     private static String dmtCode(Map<String, MergedMemoiEntry> table, MergedMemoiReport report, int numSets) {

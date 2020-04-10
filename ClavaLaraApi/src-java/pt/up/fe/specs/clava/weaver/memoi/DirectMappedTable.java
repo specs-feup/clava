@@ -88,7 +88,7 @@ public class DirectMappedTable {
                 () -> "TableGenerator: tableSize not allowed, choose one of " + ALLOWED_SIZES);
 
         this.report = report;
-        this.indexBits = (int) log2(numSets);
+        this.indexBits = (int) MemoiUtils.log2(numSets);
         this.insertPred = insertPred;
         this.countComparator = countComparator;
         this.numSets = numSets;
@@ -168,20 +168,23 @@ public class DirectMappedTable {
                 .map(l -> MemoiUtils.mean(l, reportCount))
                 .reduce(0.0, Double::sum);
 
+        double capacity = 100.0 * table.size() / numSets;
         double totalCalls = MemoiUtils.mean(report.getCalls(), reportCount);
         double collisionPercentage = 100.0 * totalCollisions / totalElements;
         double elementCoverage = 100.0 * tableElements / totalElements;
         double callCoverage = 100.0 * tableCalls / totalCalls;
 
         Locale l = null;
-        System.out.println("\n\n=== table metrics ===");
-        System.out.println("\tcollisions: " + totalCollisions + "/" + totalElements + " ("
+        System.out.println("\n\n=== table stats ===");
+        System.out.println("table capacity: " + table.size() + "/" + numSets + " ("
+                + String.format(l, "%.2f", capacity) + "%)");
+        System.out.println("collisions: " + totalCollisions + "/" + totalElements + " ("
                 + String.format(l, "%.2f", collisionPercentage) + "%)");
-        System.out.println("\tlargest collision: " + maxCollision);
-        System.out.println("\telement coverage: " + tableElements + "/" + totalElements + " ("
+        System.out.println("largest collision: " + maxCollision);
+        System.out.println("element coverage: " + tableElements + "/" + totalElements + " ("
                 + String.format(l, "%.2f", elementCoverage) + "%)");
         System.out.println(
-                "\tcall coverage: " + tableCalls + "/" + totalCalls + " (" + String.format(l, "%.2f", callCoverage)
+                "call coverage: " + tableCalls + "/" + totalCalls + " (" + String.format(l, "%.2f", callCoverage)
                         + "%)");
     }
 
@@ -209,7 +212,7 @@ public class DirectMappedTable {
 
         int varBits = 64;
 
-        double iters = log2(varBits / indexBits);
+        double iters = MemoiUtils.log2(varBits / indexBits);
         int intIters = (int) iters;
 
         String hash = key64bits;
@@ -252,10 +255,6 @@ public class DirectMappedTable {
         }
 
         return newHash.toString();
-    }
-
-    private double log2(int i) {
-        return (Math.log(i) / Math.log(2));
     }
 
     private String makeHashKey(MergedMemoiEntry count) {

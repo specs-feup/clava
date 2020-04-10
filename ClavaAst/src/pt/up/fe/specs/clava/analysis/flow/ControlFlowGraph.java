@@ -384,12 +384,25 @@ public class ControlFlowGraph {
 
     private BasicBlock findSource() {
 
-        for (BasicBlock bb : bbs.values()) {
+        // for (BasicBlock bb : bbs.values()) {
+        //
+        // if (!bb.hasInEdges()) {
+        //
+        // return bb;
+        // }
+        // }
+        //
+        // throw new RuntimeException("Didn't find a source node for the CFG");
 
-            if (!bb.hasInEdges()) {
+        var first = body.getChild(0);
 
-                return bb;
-            }
+        var source = bbs.values()
+                .stream()
+                .filter(bb -> bb.first().equals(first))
+                .findFirst();
+
+        if (source.isPresent()) {
+            return source.get();
         }
 
         throw new RuntimeException("Didn't find a source node for the CFG");

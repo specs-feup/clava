@@ -251,9 +251,20 @@ function _makeTableCode(insertPred, countComparator, report, $function, tableSiz
 	debug('table size: ' + tableSize);
 	debug('index bits: ' + indexBits);
 
+	/** VERSION 1 */
 	//~ var table = _makeTable(insertPred, countComparator, report, $function, indexBits, tableSize);
 	//~ var code = _makeCode(table, indexBits, tableSize, $function, report);
-	var code = _makeCode2(indexBits, report, tableSize, $function);
+	
+	/** VERSION 2 */
+	//~ var code = _makeCode2(indexBits, report, tableSize, $function);
+
+	/** VERSION 3 */
+	var paramNames = [];
+	for(var $param of $function.params) {
+		paramNames.push($param.name);
+	}
+	
+	var code = MemoiCodeGen.generateDirectMappedTableCode(report, tableSize, paramNames);
 
 	return code;
 }
@@ -263,9 +274,14 @@ var sizeMap = {
 	'int': 32,
 	'double': 64
 };
+
 function _makeCode2(indexBits, report, tableSize, $function) {
 	
-	var tableCode = MemoiCodeGen.generateDirectMappedTableCode(report, tableSize);
+	var paramNames = [];
+	for(var $param of $function.params) {
+		paramNames.push($param.name);
+	}
+	var tableCode = MemoiCodeGen.generateDirectMappedTableCode(report, tableSize, paramNames);
 	
 	var inputCount = report.inputCount;
 	
