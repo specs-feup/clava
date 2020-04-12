@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.analysis.flow;
+package pt.up.fe.specs.clava.analysis.flow.control;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -326,8 +326,12 @@ public class ControlFlowGraph {
         }
     }
 
-    public List<BasicBlock> getBasicBlocks() {
+    public ArrayList<BasicBlock> getBasicBlocks() {
         return new ArrayList<BasicBlock>(bbs.values());
+    }
+    
+    public ArrayList<BasicBlockEdge> getBasicBlockEdges() {
+        return new ArrayList<BasicBlockEdge>(edges);
     }
 
     public String toDot() {

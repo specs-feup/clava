@@ -561,6 +561,30 @@ public abstract class AScope extends AStatement {
         	throw new ActionException(get_class(), "cfg", e);
         }
     }
+    
+    /**
+     * DFG tester
+     */
+    public void dfgImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action dfg not implemented ");
+    }
+
+    /**
+     * DFG tester
+     */
+    public final void dfg() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "dfg", this, Optional.empty());
+        	}
+        	this.dfgImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "dfg", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "dfg", e);
+        }
+    }
 
     /**
      * Get value on attribute isFirst
@@ -1089,6 +1113,7 @@ public abstract class AScope extends AStatement {
         actions.add("void setNaked(Boolean)");
         actions.add("void clear()");
         actions.add("void cfg()");
+        actions.add("void dfg()");
     }
 
     /**

@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.analysis.flow;
+package pt.up.fe.specs.clava.analysis.flow.control;
 
 public class BasicBlockEdge {
 
@@ -72,5 +72,13 @@ public class BasicBlockEdge {
 
     public BasicBlock getDest() {
         return dest;
+    }
+
+    public BasicBlockEdgeType getType() {
+	return type;
+    }
+
+    public BasicBlock getSource() {
+	return source;
     }
 }

@@ -21,7 +21,8 @@ import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.analysis.flow.ControlFlowGraph;
+import pt.up.fe.specs.clava.analysis.flow.control.ControlFlowGraph;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.ast.cilk.CilkFor;
 import pt.up.fe.specs.clava.ast.cilk.CilkSync;
 import pt.up.fe.specs.clava.ast.comment.Comment;
@@ -410,5 +411,11 @@ public class CxxScope extends AScope {
         ControlFlowGraph cfg = new ControlFlowGraph(scope);
 
         System.out.println(cfg.toDot());
+    }
+    
+    @Override
+    public void dfgImpl() {
+        DataFlowGraph dfg = new DataFlowGraph(scope, 1);
+        dfg.generateDot(false);
     }
 }
