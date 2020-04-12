@@ -611,6 +611,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("hasChildren");
         attributes.add("isCilk");
         attributes.add("depth");
+        attributes.add("jpId");
     }
 
     /**
@@ -2082,6 +2083,29 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "depth", e);
+        }
+    }
+
+    /**
+     * Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)
+     */
+    public abstract String getJpIdImpl();
+
+    /**
+     * Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)
+     */
+    public final Object getJpId() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "jpId", Optional.empty());
+        	}
+        	String result = this.getJpIdImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "jpId", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "jpId", e);
         }
     }
 

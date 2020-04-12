@@ -218,6 +218,19 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
+     * An id that is stable across compilations and is based on the position of the node in the code.
+     * 
+     * @return
+     */
+    public String getNodeId() {
+        throw new NotImplementedException(this);
+    }
+
+    public String getNodeIdSeparator() {
+        return "->";
+    }
+
+    /**
      * TODO: Make method protected when all accesses are "fixed"
      * 
      * @deprecated

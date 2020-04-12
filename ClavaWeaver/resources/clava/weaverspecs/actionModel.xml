@@ -561,10 +561,10 @@
 	</action>
 
 	<!-- Functions derive signature from params, not from functionType. Also, there is not a 1-to-1 correspondence between FunctionType and Function (several functions can share the same FunctionType  -->		
-	<!-- <action name="setParamType" class="functionType" tooltip="Sets the type of a parameter of the FunctionType">
+	<action name="setParamType" class="functionType" tooltip="Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType">
 		<parameter name="index" type="Integer" />
 		<parameter name="newType" type="type" />
-	</action>	 -->
+	</action>	 
 
 	
 	<!-- UnaryExprOrType -->

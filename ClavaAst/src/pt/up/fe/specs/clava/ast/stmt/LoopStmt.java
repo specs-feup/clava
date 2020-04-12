@@ -28,7 +28,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.utils.StmtWithCondition;
 import pt.up.fe.specs.util.SpecsStrings;
 
@@ -220,20 +219,31 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition {
      * Currently uses the loop file, function and rank to identify the loop
      */
     public String getLoopId() {
-        String fileId = "file$"
-                + getAncestorTry(TranslationUnit.class)
-                        .map(tunit -> tunit.getRelativeFilepath())
-                        .orElse("<no_file>");
+        // String fileId = "file$"
+        // + getAncestorTry(TranslationUnit.class)
+        // .map(tunit -> tunit.getRelativeFilepath())
+        // .orElse("<no_file>");
+        //
+        // String functionId = "function$" + getAncestorTry(FunctionDecl.class)
+        // .map(functionDecl -> functionDecl.getDeclarationId(false))
+        // .orElse("<no_function>");
 
-        String functionId = "function$" + getAncestorTry(FunctionDecl.class)
-                .map(functionDecl -> functionDecl.getDeclarationId(false))
+        // Get function id
+        String functionId = getAncestorTry(FunctionDecl.class)
+                .map(functionDecl -> functionDecl.getNodeId())
                 .orElse("<no_function>");
 
         String rankId = "rank$" + getRank().stream()
                 .map(rankValue -> rankValue.toString())
                 .collect(Collectors.joining("."));
 
-        return fileId + "->" + functionId + "->" + rankId;
+        return functionId + getNodeIdSeparator() + rankId;
+        // return fileId + "->" + functionId + "->" + rankId;
+    }
+
+    @Override
+    public String getNodeId() {
+        return getLoopId();
     }
 
     /*

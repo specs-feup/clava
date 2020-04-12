@@ -1241,4 +1241,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public Integer getDepthImpl() {
         return getNode().getDepth();
     }
+
+    @Override
+    public String getJpIdImpl() {
+        return getNode().getNodeId();
+    }
 }

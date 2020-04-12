@@ -830,4 +830,9 @@ public class TranslationUnit extends ClavaNode {
         return getIncludes().hasInclude(includeName, isAngled, getFactory());
     }
 
+    @Override
+    public String getNodeId() {
+        return "file$" + getRelativeFilepath();
+    }
+
 }
