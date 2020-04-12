@@ -50,6 +50,9 @@ public enum LaraApiResource implements LaraResourceProvider {
     AUTOPAR_15("autopar/SetVariableAccess.lara"),
     AUTOPAR_16("autopar/SetVarrefOpenMPscoping.lara"),
 
+    // Code
+    GLOBAL_VARIABLE("code/GlobalVariable.lara"),
+
     // Gprofer
     GPROFER("gprofer/Gprofer.lara"),
     GPROFER_ASPECTS("gprofer/_GproferAspects.lara"),
