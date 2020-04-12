@@ -1,10 +1,29 @@
+import clava.ClavaJoinPoints;
+import clava.code.GlobalVariable;
+
+import weaver.Query;
+
+import lara.util.StringSet;
+import lara.util.PrintOnce;
+import lara.code.Logger;
+
+import lara.Strings;
+
+
 /**
  * Instruments an application so that it counts total operations in a region of code.
  *
+ * @param {function} [filterFunction=undefined] - Function that receives an $op. If returns false, $op will not be counted.
  */
-var OpsCounter = function() {
+var OpsCounter = function(filterFunction) {
 	this._counters = {};
-	this._$counterType = ClavaJoinPoints.builtinType("long");
+	this._$counterType = ClavaJoinPoints.builtinType("long long");
+	//this._$counterType = ClavaJoinPoints.builtinType("unsigned long long");
+	this._instrumentedFunctions = new StringSet();
+	this._filterFunction = filterFunction;
+	if(filterFunction !== undefined) {
+		println("OpsCounter: filter function set");
+	}
 };
 
 // Whitelist of ops
@@ -12,19 +31,46 @@ OpsCounter._validOps = new StringSet("mul", "div", "rem", "add", "sub", "shl", "
 
 
 OpsCounter.prototype.instrument = function($region) {
+	var $function = $region.instanceOf('function') ?  $region : $region.ancestor('function');
+	
+	if($function === undefined) {
+		PrintOnce.message("OpsCounter.instrument: Could not find function corresponding to the region " + $region.location);
+		return;
+	}
+	
+	// Check if it is already instrumented
+	if(this._instrumentedFunctions.has($function.jpId)) {
+		return;
+	}
+
+	this._instrumentedFunctions.add($function.jpId);
+	
+	println("OpsCounter.instrument: Instrumenting  function "+$function.jpId);
+
+	
 	// Apply to all ops found in the region
 	for(var $op of Query.searchFrom($region, 'op')) {
 		this._countOp($op);
 	}
-	
-	// TODO: Call function recursively when function calls are found
+
+	// Call function recursively when function calls are found
+	for(var $call of Query.searchFrom($region, 'call')) {			
+		var $funcDef = $call.definition;
+		
+		if($funcDef === undefined) {
+			continue;
+		}
+		
+		this.instrument($funcDef);
+	}
+
 };
 
 
 OpsCounter.prototype._countOp = function($op) {
 
 	// If not a valid op, return
-	if(!OpsCounter._isValidOp($op)) {
+	if(!this._isValidOp($op)) {
 		return;
 	}
 	
@@ -124,7 +170,7 @@ OpsCounter.prototype.log = function($insertionPoint) {
 
 
 
-OpsCounter._isValidOp = function($op) {
+OpsCounter.prototype._isValidOp = function($op) {
 	var isValid = OpsCounter._validOps.has($op.kind);
 	
 	if(!isValid) {
@@ -135,6 +181,14 @@ OpsCounter._isValidOp = function($op) {
 	if($op.isInsideLoopHeader) {
 		return false;
 	}
-	
+
+	//println("FILTER FUNCTION DEFINED? " + (this._filterFunction !== undefined));
+	if(this._filterFunction !== undefined) {
+		//println("Calling filter function");
+		if(!this._filterFunction($op)) {
+			return false;
+		}
+	}
+		
 	return true;
 }
