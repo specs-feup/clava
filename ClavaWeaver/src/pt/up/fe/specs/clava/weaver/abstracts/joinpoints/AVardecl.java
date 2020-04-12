@@ -626,6 +626,7 @@ public abstract class AVardecl extends ADeclarator {
         ANCESTOR("ancestor"),
         ASTCHILD("astChild"),
         ASTNAME("astName"),
+        JPID("jpId"),
         ASTID("astId"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),

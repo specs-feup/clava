@@ -588,6 +588,7 @@ public abstract class AEnumType extends ATagType {
         ANCESTOR("ancestor"),
         ASTCHILD("astChild"),
         ASTNAME("astName"),
+        JPID("jpId"),
         ASTID("astId"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),

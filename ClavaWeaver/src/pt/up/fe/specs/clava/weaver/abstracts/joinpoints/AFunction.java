@@ -1359,6 +1359,7 @@ public abstract class AFunction extends ADeclarator {
         ANCESTOR("ancestor"),
         ASTCHILD("astChild"),
         ASTNAME("astName"),
+        JPID("jpId"),
         ASTID("astId"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),

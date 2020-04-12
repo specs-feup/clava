@@ -1031,6 +1031,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         ANCESTOR("ancestor"),
         ASTCHILD("astChild"),
         ASTNAME("astName"),
+        JPID("jpId"),
         ASTID("astId"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),

@@ -826,6 +826,7 @@ public abstract class AMethod extends AFunction {
         ANCESTOR("ancestor"),
         ASTCHILD("astChild"),
         ASTNAME("astName"),
+        JPID("jpId"),
         ASTID("astId"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
