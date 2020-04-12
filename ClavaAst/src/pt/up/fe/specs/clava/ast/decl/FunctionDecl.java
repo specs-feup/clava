@@ -903,4 +903,16 @@ public class FunctionDecl extends DeclaratorDecl {
         getDefinition().ifPresent(decl -> decl.setType(type));
     }
 
+    @Override
+    public String getNodeId() {
+        // Get id of file
+        String fileId = getAncestorTry(TranslationUnit.class)
+                .map(tunit -> tunit.getNodeId())
+                .orElse("<no_file>");
+
+        String functionId = "function$" + getDeclarationId(false);
+
+        return fileId + getNodeIdSeparator() + functionId;
+    }
+
 }
