@@ -1,0 +1,153 @@
+var OpsCounter = function() {
+	// Initialize counters
+	this._counters = {};
+	this._$counterType = ClavaJoinPoints.builtinType("long");
+
+/*
+	for(var counterName of OpsCounter._countersNames) {
+		var newCounter = new GlobalVariable(counterName, $counterType, "0");
+		this._counters[counterName] = newCounter;
+	}
+*/	
+};
+
+//OpsCounter._countersNames = ["flops_counter", "iops_counter", "unknown_counter", "ops_counter", "flops_bits_counter", "iops_bits_counter"];
+
+// Whitelist of ops
+OpsCounter._validOps = new StringSet("mul", "div", "rem", "add", "sub", "shl", "shr", "cmp", "and", "xor", "or", "l_and", "l_or", "mul_assign", "div_assign", "rem_assign", "add_assign", "sub_assign", "shl_assign", "shr_assign", "and_assign", "xor_assign", "or_assign", "post_inc", "post_dec", "pre_inc", "pre_dec");
+
+
+OpsCounter.prototype.instrument = function($region) {
+	// Apply to all ops found in the region
+	for(var $op of Query.searchFrom($region, 'op')) {
+		this._countOp($op);
+	}
+};
+
+
+OpsCounter.prototype._countOp = function($op) {
+
+	// If not a valid op, return
+	if(!OpsCounter._isValidOp($op)) {
+		return;
+	}
+	
+	println("Op ("+$op.kind+"): " + $op.code);
+
+	// Always add to ops counter
+	var opsCounter = this._getCounter("ops", "");
+	var opsCounterStmt = ClavaJoinPoints.stmtLiteral(opsCounter.getRef($op).code + "++;");
+	$op.insertBefore(opsCounterStmt);			
+		
+	// Calculate type and bitwidth
+	var $builtinType = this._toBuiltinType($op.type);
+	var counterType = this._getCounterType($builtinType);
+	var bitwidth = $builtinType !== undefined ? $builtinType.bitWidth($op) : undefined;
+
+	// Get counter
+	var counter = this._getCounter(counterType, bitwidth);		
+		
+	// Add to corresponding counter type	
+	//var counterName = counterType + "_counter";
+	//var counter = this._counters[counterName];
+	var counterStmt = ClavaJoinPoints.stmtLiteral(counter.getRef($op).code + "++;");
+	$op.insertBefore(counterStmt);
+
+
+	
+
+
+	//var bitsCounterName = counterType + "_bits_counter";
+	
+	
+}
+
+
+OpsCounter.prototype._getCounter = function(counterType, bitwidth) {
+	var counterName = this._getCounterPrefix(counterType, bitwidth) + "_counter";
+	
+	// Check if counter exists 
+	var counter = this._counters[counterName];
+	
+	if(counter === undefined) {
+		counter = new GlobalVariable(counterName, this._$counterType, "0");
+		this._counters[counterName] = counter;
+	}
+	
+	return counter;
+}
+
+OpsCounter.prototype._getCounterPrefix = function(counterType, bitwidth) {
+	// If counterType is undefined, return unknown, without looking at the bitwidth
+	if(counterType === undefined) {
+		return "unknown";
+	}
+	
+	var counterPrefix = counterType;
+
+	var bitwidthString = bitwidth !== undefined ? bitwidth.toString() : "unknown";
+	
+	if(!Strings.isEmpty(bitwidthString)) {
+	counterPrefix += "_";
+	}
+	
+	counterPrefix += bitwidthString;
+
+	return counterPrefix;
+}
+
+OpsCounter.prototype._getCounterType = function($builtinType) {
+	
+	if($builtinType === undefined) {
+		return undefined;
+	}
+	
+	if($builtinType.isFloat) {
+		return "flops";
+	} else if($builtinType.isInteger) {
+		return "iops";
+	} else {
+		PrintOnce.message("OpsCounter: could not determine if builtinType " + $type.kind + " is integer or float");
+		return undefined;	
+	}
+}
+
+OpsCounter.prototype._toBuiltinType = function($type) {
+	if($type.instanceOf("builtinType")) {
+		return $type;
+	}
+	
+	PrintOnce.message("OpsCounter: could not determine builtinType of " + $type.joinPointType);
+	return undefined;
+}
+
+/**
+ * Adds code that prints the operation counting report.
+ */
+OpsCounter.prototype.log = function($insertionPoint) {
+
+		var logger = new Logger();		
+		for(counterName in this._counters) {	
+			var counter = this._counters[counterName];
+			logger.text(counterName + ": ").long(counter.getRef($insertionPoint).code).ln();
+		}
+
+		logger.log($insertionPoint);
+};
+
+
+
+OpsCounter._isValidOp = function($op) {
+	var isValid = OpsCounter._validOps.has($op.kind);
+	
+	if(!isValid) {
+		return false;
+	}
+	
+	// Ignore operations inside loop headers
+	if($op.isInsideLoopHeader) {
+		return false;
+	}
+	
+	return true;
+}
