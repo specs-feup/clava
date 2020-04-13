@@ -6,6 +6,8 @@ function MemoiTarget(sig, $func, isUser) {
 	this.sig = sig;
 	this.$func = $func;
 	this.isUser = isUser;
+	this.numInputs = $func.params.length;
+	this.numOutputs = 1;
 }
 
 function MemoiCompleteReport(targets, report) {
@@ -22,7 +24,7 @@ function MemoiCompleteReport(targets, report) {
 
 MemoiCompleteReport.prototype.isTarget = function($func) {
 	
-	var sig = Strings.replacer($func.signature, ' ', '');
+	var sig = Strings.replacer($func.signature, / /g, '');
 	for(var i in this.targets) {
 		if(this.targets[i].sig == sig) {
 			return true;
@@ -33,11 +35,11 @@ MemoiCompleteReport.prototype.isTarget = function($func) {
 }
 
 function _normalizeSig(sig) {
-	var tmp = Strings.replacer(sig, /\(/, '_');
-	tmp = Strings.replacer(tmp, ', ', '_');
-	tmp = Strings.replacer(tmp, ' ', '_');
-	tmp = Strings.replacer(tmp, ',', '_');
-	return Strings.replacer(tmp, /\)/, '_');
+	var tmp = Strings.replacer(sig, /\(/g, '_');
+	tmp = Strings.replacer(tmp, /\*/g, '_p');
+	tmp = Strings.replacer(tmp, / /g, '_');
+	tmp = Strings.replacer(tmp, /,/g, '_');
+	return Strings.replacer(tmp, /\)/g, '_');
 }
 
 /**
@@ -91,7 +93,7 @@ aspectdef _Memoi_FindTargets
 		}
 		var sig = $func.signature;
 		
-		sig = Strings.replacer(sig, ' ', '');
+		sig = Strings.replacer(sig, / /g, '');
 
 		// if we've processed this one before (valid or not), skip
 		if(_isProcessed(sig, processed)) {
@@ -112,38 +114,56 @@ aspectdef _Memoi_FindTargets
 end
 
 /**
- * 		Finds the target function and gets its return type.
+ * 		Finds the target function and gets its types.
  * 
  * @aspect
  * @private
  * */
 aspectdef _Memoi_FindTypes
 	input
-		targetSig
+		targetSig,
+		numInputs,
+		numOutputs
 	end
 	output
-		outputType = '',
-		inputTypes = []
+		inputTypes = [],
+		outputTypes = []
 	end
 
 	select stmt.call end
 	apply
 		var sig = $call.signature;
-		sig = Strings.replacer(sig, ' ', '');
+		sig = Strings.replacer(sig, / /g, '');
+		
 		if(sig != targetSig) {
 			continue;
 		}
 		
-		var valid = _isValidMemoi($call, {});
-		if(valid === _Res.VALID) {
-			var $functionType = $call.function.functionType;
-			outputType = $functionType.returnType.code;
-			inputTypes = $functionType.paramTypes.map(function(e){return e.code;});
-			return;
-		}
+		//~ var valid = _isValidMemoi($call, {});
+		//~ if(valid === _Res.VALID) {
+		var $functionType = $call.function.functionType;
+		
+		_getTypes($functionType, numInputs, numOutputs, inputTypes, outputTypes);
+		return;
+		//~ }
 	end
 	throw 'Target function "' + targetSig + '" not found.';
 end
+
+function _getTypes($functionType, numInputs, numOutputs, inputTypes, outputTypes) {
+	
+	if(numOutputs == 1) {
+		outputTypes.push($functionType.returnType.code);
+		$functionType.paramTypes.forEach(function(e){inputTypes.push(e.code);});
+
+	} else {
+
+		var typeCodes = $functionType.paramTypes.map(function(e){return e.code;});
+		
+		typeCodes.filter(function(e,i){return i < numInputs;}).forEach(function(e){inputTypes.push(e);});
+		typeCodes.filter(function(e,i){return i >= numInputs;}).forEach(function(e){outputTypes.push(e);});
+	}
+}
 
 function _isValidMemoi($call, processed) {
 	
@@ -165,7 +185,7 @@ function _isValidMemoi($call, processed) {
  *
  *	The constraints are:
  *	1) has between 1 and 3 parameters
- *	2) type of return and params is one of {int, float, double}
+ *	2) type of inputs and outputs is one of {int, float, double}
  * 	3) It doesn't access global state;
  *	4) It doesn't call non-valid functions.
  **/
@@ -308,7 +328,7 @@ function _isValidMemoiRecursive($call, processed) {
 aspectdef _Memoi_GlobalWrapper
 	input
 		targetSig, normalizedSig, wrapperName, monitorType, monitorName,
-		id, reportDir, outputType, inputTypes
+		id, reportDir, outputTypes, inputTypes
 	end
 	
 	// make the wrapper
@@ -324,10 +344,10 @@ aspectdef _Memoi_GlobalWrapper
 	end
 	
 	// instrument the wrapper
-	call _Memoi_InstrumentWrapper(wrapperName, monitorName, monitorType);
+	call _Memoi_InstrumentWrapper(wrapperName, monitorName, monitorType, inputTypes.length, outputTypes.length);
 	
 	// setup
-	call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir,  outputType, inputTypes, ['global']);
+	call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir,  outputTypes, inputTypes, ['global']);
 end
 
 /**
@@ -340,14 +360,14 @@ end
 aspectdef _Memoi_IndividualWrapper
 	input
 		targetSig, normalizedSig, wrapperNameBase, monitorType,
-		monitorNameBase, idBase, reportDir, outputType, inputTypes
+		monitorNameBase, idBase, reportDir, outputTypes, inputTypes
 	end
 	
 	select file.stmt.call end
 	apply
 		
 		var sig = $call.signature;
-		sig = Strings.replacer(sig, ' ', '');
+		sig = Strings.replacer(sig, / /g, '');
 		if(sig != targetSig) {
 			continue;
 		}
@@ -358,7 +378,7 @@ aspectdef _Memoi_IndividualWrapper
 					
 		// instrument the wrapper
 		var monitorName = IdGenerator.next(monitorNameBase);
-		call _Memoi_InstrumentWrapper(wrapperName, monitorName, monitorType);
+		call _Memoi_InstrumentWrapper(wrapperName, monitorName, monitorType, inputTypes.length, outputTypes.length);
 		
 		// make call site info
 		//~ var callSiteInfo = $file.name + ':' + $call.line + ':' + $call.column;
@@ -366,7 +386,7 @@ aspectdef _Memoi_IndividualWrapper
 		
 		// setup
 		var id = IdGenerator.next(idBase + '_');
-		call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir,  outputType, inputTypes, [callSiteInfo]);
+		call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir,  outputTypes, inputTypes, [callSiteInfo]);
 	end
 end
 
@@ -382,18 +402,31 @@ aspectdef _Memoi_InstrumentWrapper
 	input
 		wrapperName,
 		monitorName,
-		monitorType
+		monitorType,
+		numInputs,
+		numOutputs
 	end
 	
 	select file.function{wrapperName}.stmt.call end
 	apply
 		var code = 'mp_inc(' + monitorName;
-		code += ', &result';
 		
-		for (var $param of $function.params) {
-			code += ', &' + $param.name;
+		var $params = $function.params;
+		
+		for(var i = 0; i < numInputs; i++) {
+			code += ", &" + $params[i].name;
 		}
 		
+		if(numOutputs == 1) {
+		
+			code += ', &result';
+		} else {
+		
+			for(var o = numInputs; o < $params.length; o++) {
+				code += ", " + $params[i].name;
+			}
+		}
+				
 		code += ');';
 		
 		insert after code;
@@ -423,11 +456,12 @@ aspectdef _Memoi_Setup
 		targetSig,
 		id,
 		dir,
-		outputType, inputTypes,
+		outputTypes, inputTypes,
 		callSiteInfo
 	end
 
-	var inputsCode = inputTypes.join(',').toUpperCase();
+	var inputsCode = inputTypes.map(function(e){return "mp_" + e;}).join(',').toUpperCase();
+	var outputsCode = outputTypes.map(function(e){return "mp_" + e;}).join(',').toUpperCase();
 
 	var mainFound = false;
 
@@ -439,11 +473,11 @@ aspectdef _Memoi_Setup
 		var memoiReportPath = "path_" + monitorName;
 		
 		call _Memoi_AddCallSiteInfo($body, callSiteInfo, monitorName);
-		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[targetSig]]", "[[id]]", [[outputType.toUpperCase()]], [[inputTypes.length]], [[inputsCode]]);}%);
+		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[targetSig]]", "[[id]]", [[memoiReportPath]], [[inputTypes.length]], [[outputTypes.length]], [[inputsCode]], [[outputsCode]]);}%);
 		$body.exec insertBegin(%{char* [[memoiReportPath]] = make_report_path("[[dir]]", "[[monitorName]]");}%);
-
+		
 		/* add functions to print and clean up at every return on main */
-		$function.exec insertReturn(%{mp_to_json([[monitorName]], [[memoiReportPath]]);}%);
+		$function.exec insertReturn(%{mp_to_json([[monitorName]]);}%);
 		$function.exec insertReturn(%{[[monitorName]] = mp_destroy([[monitorName]]);}%);
 		$function.exec insertReturn(%{free([[memoiReportPath]]);}%);
 

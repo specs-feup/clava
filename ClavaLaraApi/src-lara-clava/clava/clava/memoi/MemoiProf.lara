@@ -15,7 +15,7 @@ import lara.Compilation;
  * @param {string} id - unique ID representing this function
  * @param {string} reportDir - path to the directory where the report will be saved (does not need trailing /)
  * */
-function MemoiProf(targetSig, id, reportDir) {
+function MemoiProf(targetSig, id, reportDir, numInputs, numOutputs) {
 
 	this._targetSig = Strings.replacer(targetSig, ' ', '');
 	this._normalizedSig = _normalizeSig(targetSig);
@@ -24,8 +24,10 @@ function MemoiProf(targetSig, id, reportDir) {
 	this._wrapperName =  'mw_' + this._normalizedSig;
 	this._monitorName = 'mp_' + this._normalizedSig;
 	this._monitorType = ClavaJoinPoints.typeLiteral('MemoiProf*');
-	this._outputType = undefined;
+	this._numInputs = numInputs;
 	this._inputTypes = [];
+	this._numOutputs = numOutputs;
+	this._outputTypes = [];
 	this._findDataTypes();
 	
 	if(!MemoiProf._reportCodeDone) {
@@ -52,24 +54,47 @@ MemoiProf.resetReportCode = function() {
 var MemoiDataType = new Enumeration({INT: 'INT', DOUBLE: 'DOUBLE', FLOAT: 'FLOAT'});
 
 /**
- * 		Finds the return data type of the target function. If the type is not
- * one of the supported types of the profiling library, this function will throw
- *  an exception.
+ * 		Finds the data types of the target function. If any of the types is not
+ * supported, this function will throw an exception.
  * 
  * @private
  * */
 MemoiProf.prototype._findDataTypes = function() {
 
-	var ret = call _Memoi_FindTypes(this._targetSig);
-
-	if(ret.outputType != 'double' &&
-		ret.outputType != 'float' &&
-		ret.outputType != 'int') {
-			throw 'Target function "' + this._targetSig + '" is not supported yet.';
-	}
+	var ret = call _Memoi_FindTypes(this._targetSig, this._numInputs, this._numOutputs);
 	
-	this._outputType = ret.outputType;
 	this._inputTypes = ret.inputTypes;
+	this._outputTypes = ret.outputTypes;
+	
+	this._checkDataTypes();
+}
+
+MemoiProf.prototype._checkDataTypes = function() {
+	
+	var normalTypes = ["double", "float", "int"];
+	var pointerTypes = ["double *", "float *", "int *"];
+	var outputTestArray;
+	
+	var inputsInvalid = this._inputTypes.some(function(e){return !_arrayContains(normalTypes, e);});
+
+	if(inputsInvalid) {
+		throw "The inputs of the target function '" + this._targetSig + "' are not supported.";
+	}
+
+	outputTestArray = this._numOutputs == 1 ? normalTypes : pointerTypes;
+	var outputsInvalid = this._outputTypes.some(function(e){return !_arrayContains(outputTestArray, e);});
+	
+	if(outputsInvalid) {
+		throw "The outputs of the target function '" + this._targetSig + "' are not supported.";
+	}	
+
+	// if the output are valid, drop the pointer from the type
+	this._outputTypes = this._outputTypes.map(function(e){return Strings.replacer(e, /\*/, '').trim();});
+}
+
+function _arrayContains(array, element) {
+	
+	return array.indexOf(element) != -1;
 }
 
 /**
@@ -83,7 +108,7 @@ MemoiProf.prototype.profAll = function() {
 			this._targetSig, this._normalizedSig, this._wrapperName,
 			this._monitorType, this._monitorName,
 			this._id, this._reportDir,
-			this._outputType, this._inputTypes);
+			this._outputTypes, this._inputTypes);
 }
 
 
@@ -98,7 +123,7 @@ MemoiProf.prototype.profEach = function() {
 			this._targetSig, this._normalizedSig, this._wrapperName,
 			this._monitorType, this._monitorName,
 			this._id, this._reportDir,
-			this._outputType, this._inputTypes);
+			this._outputTypes, this._inputTypes);
 }
 
 /**
