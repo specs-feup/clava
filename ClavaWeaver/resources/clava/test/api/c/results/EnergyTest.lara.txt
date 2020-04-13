@@ -14,7 +14,7 @@ double foo() {
       long long clava_energy_output_0_start = rapl_energy();
       a += bar();
       long long clava_energy_output_0_end = rapl_energy();
-      printf("Energy:%llduJ\n", clava_energy_output_0_end - clava_energy_output_0_start);
+      printf("Energy:%I64duJ\n", clava_energy_output_0_end - clava_energy_output_0_start);
    }
    
    return a;
@@ -25,5 +25,5 @@ int main() {
    long long clava_energy_output_1_start = rapl_energy();
    foo();
    long long clava_energy_output_1_end = rapl_energy();
-   printf("Energy:%llduJ\n", clava_energy_output_1_end - clava_energy_output_1_start);
+   printf("Energy:%I64duJ\n", clava_energy_output_1_end - clava_energy_output_1_start);
 }
