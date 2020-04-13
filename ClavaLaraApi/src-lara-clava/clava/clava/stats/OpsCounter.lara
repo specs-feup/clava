@@ -162,7 +162,7 @@ OpsCounter.prototype.log = function($insertionPoint) {
 		var logger = new Logger();		
 		for(counterName in this._counters) {	
 			var counter = this._counters[counterName];
-			logger.text(counterName + ": ").long(counter.getRef($insertionPoint).code).ln();
+			logger.text(counterName + ": ").longLong(counter.getRef($insertionPoint).code).ln();
 		}
 
 		logger.log($insertionPoint);
