@@ -7,9 +7,12 @@ import clava.Clava;
 // Adds C/C++ specific types
 Logger.prototype.Type.LONGLONG = 100;
 
-Logger.prototype.printfFormat[Logger.prototype.Type.LONGLONG] = "%lld";
+// 64-bit int
+Logger.prototype.printfFormat[Logger.prototype.Type.LONGLONG] = "%I64d";
+//Logger.prototype.printfFormat[Logger.prototype.Type.LONGLONG] = "%lld";
+
 // Replace 64-bit int
-Logger.prototype.printfFormat[Logger.prototype.Type.LONG] = "%I64d";
+//Logger.prototype.printfFormat[Logger.prototype.Type.LONG] = "%I64d";
 
 
 /**
@@ -79,6 +82,13 @@ Logger.prototype.log = function($jp, insertBefore) {
  */
 Logger.prototype.appendLongLong = function(expr) {
     return this._append_private(expr, this.Type.LONGLONG);
+}
+
+/**
+ * Appends an expression that represents a long long.
+ */
+Logger.prototype.longLong = function(expr) {
+    return this.appendLongLong(expr);
 }
 
 
