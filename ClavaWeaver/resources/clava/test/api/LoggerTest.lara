@@ -25,8 +25,8 @@ aspectdef LoggerTest
 
 	
 	var appendLogger = (new Logger())
-		.appendLong("aLong")
-		.appendLongLong("aLongLong");
+		.long("aLong")
+		.longLong("aLongLong");
 	
 	select function{"testAppend"}.vardecl{"a"} end
 	apply
