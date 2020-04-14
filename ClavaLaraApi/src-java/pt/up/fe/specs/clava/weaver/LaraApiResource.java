@@ -79,6 +79,9 @@ public enum LaraApiResource implements LaraResourceProvider {
     // Parser
     BATCH_PARSER("parser/BatchParser.lara"),
 
+    // Stats
+    OPS_COUNTER("stats/OpsCounter.lara"),
+
     // Memoization
     MEMOI_PROF("memoi/MemoiProf.lara"),
     MEMOI_PROF_HELPER("memoi/_MemoiProfHelper.lara"),
