@@ -40369,19 +40369,30 @@
                },
                {
                   "type": "action",
+                  "tooltip": "If vardecl already has an initialization, removes it. Otherwise does nothing",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeInit"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization",
                   "children": [
                            {
                               "type": "void",
                               "name": "setInit"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "expression",
                               "name": "init",
                               "defaultValue": ""
                            }]
                },
                {
                   "type": "action",
+                  "tooltip": "Converts the given string to a literal expression and sets it as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization",
                   "children": [
                            {
                               "type": "void",
@@ -62448,19 +62459,30 @@
                },
                {
                   "type": "action",
+                  "tooltip": "If vardecl already has an initialization, removes it. Otherwise does nothing",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeInit"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization",
                   "children": [
                            {
                               "type": "void",
                               "name": "setInit"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "expression",
                               "name": "init",
                               "defaultValue": ""
                            }]
                },
                {
                   "type": "action",
+                  "tooltip": "Converts the given string to a literal expression and sets it as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization",
                   "children": [
                            {
                               "type": "void",

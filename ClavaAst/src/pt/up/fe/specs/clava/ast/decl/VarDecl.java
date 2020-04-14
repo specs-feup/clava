@@ -26,6 +26,7 @@ import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TLSKind;
 
 /**
@@ -357,6 +358,26 @@ public class VarDecl extends DeclaratorDecl {
         // }
         // set(INIT_STYLE, InitializationStyle.CINIT);
         // data.setInitKind(InitializationStyle.CINIT);
+    }
+
+    public void removeInit() {
+        // If no init, do nothing
+        if (!hasInit()) {
+            return;
+        }
+
+        // Remove child
+        removeChild(0);
+
+        // If element type is const, remove const
+        var declType = getType();
+        if (declType.isConst()) {
+            // Copy
+            var copy = (Type) declType.deepCopy();
+            setType(copy);
+            copy.removeConst();
+        }
+
     }
 
 }

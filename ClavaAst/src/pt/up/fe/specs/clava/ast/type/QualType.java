@@ -268,6 +268,19 @@ public class QualType extends Type {
         return getUnqualifiedType().isConst();
     }
 
+    @Override
+    public void removeConst() {
+        var qualifiers = get(QualType.C99_QUALIFIERS);
+
+        if (qualifiers.contains(C99Qualifier.CONST)) {
+            // Make copy of qualifiers
+            var qualCopy = new ArrayList<>(qualifiers);
+            set(QualType.C99_QUALIFIERS, qualCopy);
+            qualCopy.remove(C99Qualifier.CONST);
+            return;
+        }
+    }
+
     public List<String> getQualifierStrings() {
         return getQualifiersPrivate();
 

@@ -91,6 +91,11 @@ public abstract class FunctionType extends Type {
         return get(IS_CONST);
     }
 
+    @Override
+    public void removeConst() {
+        set(IS_CONST, false);
+    }
+
     /**
      * Return type comes after desugared type, if present.
      * 

@@ -143,7 +143,11 @@ public abstract class ArrayType extends Type {
 
     @Override
     public boolean isConst() {
-
         return get(ELEMENT_TYPE).isConst();
+    }
+
+    @Override
+    public void removeConst() {
+        get(ELEMENT_TYPE).removeConst();
     }
 }
