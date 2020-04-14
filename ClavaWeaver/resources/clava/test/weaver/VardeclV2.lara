@@ -1,0 +1,11 @@
+aspectdef VardeclV2Test
+
+	select function{"removeInit"}.vardecl{"array1"} end
+	apply
+		$vardecl.removeInit();
+		println("After removing init:\n" + $function.code);
+	end
+	
+	
+
+end
