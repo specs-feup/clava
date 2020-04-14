@@ -503,14 +503,16 @@
 	</action>
 	
 	<!-- VARDECL -->
-	<action name="setInit" class="vardecl">
-		<parameter name="init" type="joinpoint" />
+	<action name="setInit" class="vardecl" tooltip="Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization">
+		<parameter name="init" type="expression" />
 	</action>
 	
-	<action name="setInit" class="vardecl">
+	<action name="setInit" class="vardecl" tooltip="Converts the given string to a literal expression and sets it as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization">
 		<parameter name="init" type="String" />
 	</action>
-	
+
+	<action name="removeInit" class="vardecl" tooltip="If vardecl already has an initialization, removes it. Otherwise does nothing">
+	</action>	
 	
 	<!-- VARREF -->
 	<action name="setName" class="varref">

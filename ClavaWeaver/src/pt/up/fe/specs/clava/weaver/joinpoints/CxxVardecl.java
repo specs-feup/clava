@@ -21,11 +21,9 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.enums.InitializationStyle;
 import pt.up.fe.specs.util.SpecsCollections;
-import pt.up.fe.specs.util.SpecsLogs;
 
 public class CxxVardecl extends AVardecl {
 
@@ -61,18 +59,31 @@ public class CxxVardecl extends AVardecl {
     }
 
     @Override
-    public void setInitImpl(AJoinPoint init) {
-        if (init instanceof AExpression) {
-            SpecsLogs.msgInfo("vardecl.setInit: join point must an instance of 'expression'");
-            return;
+    public void setInitImpl(AExpression init) {
+        if (init == null) {
+            removeInitImpl();
         }
+
+        // if (init instanceof AExpression) {
+        // SpecsLogs.msgInfo("vardecl.setInit: join point must an instance of 'expression'");
+        // return;
+        // }
 
         varDecl.setInit((Expr) init.getNode());
     }
 
     @Override
     public void setInitImpl(String init) {
+        if (init == null) {
+            removeInitImpl();
+        }
+
         varDecl.setInit(CxxWeaver.getFactory().literalExpr(init, varDecl.getType()));
+    }
+
+    @Override
+    public void removeInitImpl() {
+        varDecl.removeInit();
     }
 
     @Override
