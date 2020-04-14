@@ -13,12 +13,14 @@
 
 package pt.up.fe.specs.clava.weaver.memoi.stats;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.weaver.memoi.MemoiComparator;
 import pt.up.fe.specs.clava.weaver.memoi.MemoiUtils;
 import pt.up.fe.specs.clava.weaver.memoi.MergedMemoiReport;
+import pt.up.fe.specs.util.SpecsIo;
 
 public class Stats {
 
@@ -36,15 +38,33 @@ public class Stats {
     final private BoxWhisker bw;
     final private Histogram hist;
 
+    public static boolean isSorted(List<Integer> listOfT) {
+        Integer previous = null;
+        for (Integer current : listOfT) {
+            if (previous != null && current < previous)
+                return false;
+            previous = current;
+        }
+        return true;
+    }
+
     public Stats(MergedMemoiReport report) {
 
         var elements = report.getElements();
         var reportCount = report.getReportCount();
         var calls = report.getCalls();
-        var counts = report.getSortedCounts(MemoiComparator.mean(report).reversed());
-        var meanCounts = counts.parallelStream()
+        var entries = report.getSortedCounts(MemoiComparator.mean(report).reversed());
+
+        File file = new File("/home/pedro/Desktop/parboil_sunday_experiment/entries.txt");
+
+        var meanCounts = entries.stream()
                 .map(c -> (int) MemoiUtils.mean(c.getCounter(), reportCount))
                 .collect(Collectors.toList());
+
+        SpecsIo.delete(file);
+        entries.forEach(e -> {
+            SpecsIo.append(file, e.toString() + "\n");
+        });
 
         this.unique = MemoiUtils.mean(elements, reportCount);
         this.totalCalls = MemoiUtils.mean(calls, reportCount);

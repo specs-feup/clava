@@ -17,6 +17,9 @@ import java.util.List;
 
 public class BoxWhisker {
 
+    private static final double ONE_QUARTER = 0.25;
+    private static final double HALF = 0.5;
+    private static final double THREE_QUARTERS = 0.75;
     private final int min;
     private final int max;
     private final int q1;
@@ -29,9 +32,10 @@ public class BoxWhisker {
         int size = meanCounts.size();
 
         this.min = meanCounts.get(size - 1);
-        this.q1 = getQuartVal(meanCounts, 1 / 4.0 * size);
-        this.q2 = getQuartVal(meanCounts, 2 / 4.0 * size);
-        this.q3 = getQuartVal(meanCounts, 3 / 4.0 * size);
+        this.q3 = getQuartVal(meanCounts, ONE_QUARTER * size); // q1 and q3 are inverted since this list is order from
+                                                               // highest to lowest
+        this.q2 = getQuartVal(meanCounts, HALF * size);
+        this.q1 = getQuartVal(meanCounts, THREE_QUARTERS * size);
         this.max = meanCounts.get(0);
         this.iqr = q3 - q1;
     }
@@ -40,12 +44,14 @@ public class BoxWhisker {
 
         int floor = (int) Math.floor(i);
 
+        Integer first = meanCounts.get(floor);
         if (i == floor) {
 
-            return (meanCounts.get(floor) + meanCounts.get(floor + 1)) / 2;
+            Integer second = meanCounts.get(floor + 1);
+            return (first + second) / 2;
         } else {
 
-            return meanCounts.get(floor);
+            return first;
         }
     }
 

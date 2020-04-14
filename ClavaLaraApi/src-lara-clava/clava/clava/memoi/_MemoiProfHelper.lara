@@ -423,7 +423,7 @@ aspectdef _Memoi_InstrumentWrapper
 		} else {
 		
 			for(var o = numInputs; o < $params.length; o++) {
-				code += ", " + $params[i].name;
+				code += ", " + $params[o].name;
 			}
 		}
 				
