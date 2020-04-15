@@ -17,33 +17,33 @@
 
 package pt.up.fe.specs.clava.analysis.flow.data;
 
-import pt.up.fe.specs.clava.analysis.flow.Edge;
-import pt.up.fe.specs.clava.analysis.flow.Node;
+import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
+import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 
-public class DataFlowEdge extends Edge {
+public class DataFlowEdge extends FlowEdge {
     public int repeating = 0;
     public boolean directed = true;
     public DataFlowEdgeType type = DataFlowEdgeType.DATA;
 
-    public DataFlowEdge(Node source, Node dest) {
+    public DataFlowEdge(FlowNode source, FlowNode dest) {
 	super(source, dest);
     }
 
-    public DataFlowEdge(Node source, Node dest, DataFlowEdgeType type) {
+    public DataFlowEdge(FlowNode source, FlowNode dest, DataFlowEdgeType type) {
 	super(source, dest);
 	this.type = type;
 	if (type == DataFlowEdgeType.REPEATING)
 	    this.directed = false;
     }
 
-    public DataFlowEdge(Node source, Node dest, int repeating) {
+    public DataFlowEdge(FlowNode source, FlowNode dest, int repeating) {
 	super(source, dest);
 	this.repeating = repeating;
 	this.directed = false;
 	this.type = DataFlowEdgeType.REPEATING;
     }
 
-    public DataFlowEdge(Node source, Node dest, boolean directed) {
+    public DataFlowEdge(FlowNode source, FlowNode dest, boolean directed) {
 	super(source, dest);
 	this.directed = directed;
     }

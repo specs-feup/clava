@@ -14,50 +14,28 @@
 package pt.up.fe.specs.clava.analysis.flow.control;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
+import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 import pt.up.fe.specs.clava.ast.stmt.DoStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 
-public class BasicBlock {
+public class BasicBlockNode extends FlowNode {
 
-    private final String id;
     private Stmt leader;
     private List<Stmt> stmts;
-    private Set<BasicBlock> outEdges;
-    private Set<BasicBlock> inEdges;
-    private BasicBlockType type;
+    private BasicBlockNodeType type;
 
-    public BasicBlock(String id) {
-	this.id = id;
-	stmts = new ArrayList<Stmt>();
-	outEdges = new HashSet<BasicBlock>();
-	inEdges = new HashSet<BasicBlock>();
-	type = BasicBlockType.UNDEFINED;
-    }
-
-    public BasicBlock(String id, Stmt leader) {
-	this.id = id;
+    public BasicBlockNode(Stmt leader) {
+	super("BB");
+	label += id;
 	this.leader = leader;
 	stmts = new ArrayList<Stmt>();
 	stmts.add(leader);
-	outEdges = new HashSet<BasicBlock>();
-	inEdges = new HashSet<BasicBlock>();
-	type = BasicBlockType.UNDEFINED;
-    }
-
-    public String getId() {
-	return id;
-    }
-
-    public int getOrder() {
-	return Integer.parseInt(id.substring(2));
+	type = BasicBlockNodeType.UNDEFINED;
     }
 
     public Stmt first() {
@@ -72,17 +50,7 @@ public class BasicBlock {
 	stmts.add(stmt);
     }
 
-    public void addOutEdge(BasicBlock bb) {
-	outEdges.add(bb);
-	bb.addInEdge(this);
-    }
-
-    public void addInEdge(BasicBlock bb) {
-	inEdges.add(bb);
-    }
-
-    public void setType(BasicBlockType type) {
-
+    public void setType(BasicBlockNodeType type) {
 	this.type = type;
     }
 
@@ -95,7 +63,7 @@ public class BasicBlock {
 	builder.append(" (");
 	builder.append(type);
 	builder.append(") ");
-	builder.append(outEdges.stream().map(BasicBlock::getId).collect(Collectors.toList()));
+	// builder.append(outEdges.stream().map(BasicBlockNode::getId).collect(Collectors.toList()));
 	builder.append("\n");
 
 	for (Stmt stmt : stmts) {
@@ -110,6 +78,7 @@ public class BasicBlock {
 	return builder.toString();
     }
 
+    @Override
     public String toDot() {
 
 	String NL = "\n";
@@ -123,7 +92,7 @@ public class BasicBlock {
 	 * for (BasicBlock bb : outEdges) { builder.append(id); builder.append(ARROW);
 	 * builder.append(bb.id); builder.append(NL); }
 	 */
-	builder.append(id).append(" ");
+	builder.append(label).append(" ");
 	builder.append("[label=");
 	builder.append(QUOTE);
 	builder.append(SELF);
@@ -190,7 +159,7 @@ public class BasicBlock {
 	return stmt.getCode().trim();
     }
 
-    public BasicBlockType getType() {
+    public BasicBlockNodeType getType() {
 	return type;
     }
 
@@ -208,13 +177,5 @@ public class BasicBlock {
 
     public List<Stmt> getStmts() {
 	return stmts;
-    }
-
-    public Set<BasicBlock> getOutEdges() {
-	return outEdges;
-    }
-
-    public Set<BasicBlock> getInEdges() {
-	return inEdges;
     }
 }

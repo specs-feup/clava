@@ -17,9 +17,9 @@
 
 package pt.up.fe.specs.clava.analysis.flow.data;
 
-import pt.up.fe.specs.clava.analysis.flow.Node;
+import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 
-public class DataFlowNode extends Node implements Cloneable {
+public class DataFlowNode extends FlowNode implements Cloneable {
 
     private DataFlowNodeType type;
     public static final DataFlowNode nullNode = new DataFlowNode(DataFlowNodeType.NULL, "");

@@ -24,27 +24,27 @@ import java.util.ArrayList;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public abstract class FlowGraph {
-    protected ArrayList<Node> nodes = new ArrayList<>();
-    protected ArrayList<Edge> edges = new ArrayList<>();
+    protected ArrayList<FlowNode> nodes = new ArrayList<>();
+    protected ArrayList<FlowEdge> edges = new ArrayList<>();
     protected String name;
 
     public FlowGraph(String name) {
 	this.name = name;
     }
 
-    public void addNode(Node node) {
+    public void addNode(FlowNode node) {
 	nodes.add(node);
     }
 
-    public void addEdge(Edge edge) {
+    public void addEdge(FlowEdge edge) {
 	edges.add(edge);
-	Node source = edge.source;
-	Node dest = edge.dest;
-	for (Node node : nodes) {
+	FlowNode source = edge.source;
+	FlowNode dest = edge.dest;
+	for (FlowNode node : nodes) {
 	    if (node.getId() == source.getId())
-		node.addInEdge(edge);
-	    if (node.getId() == dest.getId())
 		node.addOutEdge(edge);
+	    if (node.getId() == dest.getId())
+		node.addInEdge(edge);
 	}
     }
 
@@ -62,5 +62,13 @@ public abstract class FlowGraph {
 	    }
 	} else
 	    System.out.println(dot);
+    }
+
+    public ArrayList<FlowNode> getNodes() {
+	return nodes;
+    }
+
+    public ArrayList<FlowEdge> getEdges() {
+	return edges;
     }
 }

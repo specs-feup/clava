@@ -19,40 +19,40 @@ package pt.up.fe.specs.clava.analysis.flow;
 
 import java.util.ArrayList;
 
-public abstract class Node implements ToDot {
-    protected ArrayList<Edge> inEdges = new ArrayList<>();
-    protected ArrayList<Edge> outEdges = new ArrayList<>();
+public abstract class FlowNode implements ToDot {
+    protected ArrayList<FlowEdge> inEdges = new ArrayList<>();
+    protected ArrayList<FlowEdge> outEdges = new ArrayList<>();
     protected static int globalID = 0;
     protected final int id;
-    protected final String label;
+    protected String label;
     public boolean disabled = false;
 
-    public Node(String label) {
+    public FlowNode(String label) {
 	this.id = globalID;
 	globalID++;
 	this.label = label;
     }
 
-    public void addInEdge(Edge e) {
+    public void addInEdge(FlowEdge e) {
 	inEdges.add(e);
     }
 
-    public void addOutEdge(Edge e) {
+    public void addOutEdge(FlowEdge e) {
 	outEdges.add(e);
     }
 
-    public ArrayList<Node> getInNodes() {
-	ArrayList<Node> nodes = new ArrayList<>();
+    public ArrayList<FlowNode> getInNodes() {
+	ArrayList<FlowNode> nodes = new ArrayList<>();
 
-	for (Edge e : this.inEdges)
+	for (FlowEdge e : this.inEdges)
 	    nodes.add(e.source);
 	return nodes;
     }
 
-    public ArrayList<Node> getOutNodes() {
-	ArrayList<Node> nodes = new ArrayList<>();
+    public ArrayList<FlowNode> getOutNodes() {
+	ArrayList<FlowNode> nodes = new ArrayList<>();
 
-	for (Edge e : this.outEdges)
+	for (FlowEdge e : this.outEdges)
 	    nodes.add(e.dest);
 	return nodes;
     }

@@ -13,7 +13,7 @@
 
 package pt.up.fe.specs.clava.analysis.flow.control;
 
-public enum BasicBlockType {
+public enum BasicBlockNodeType {
 
     UNDEFINED,
     EXIT,

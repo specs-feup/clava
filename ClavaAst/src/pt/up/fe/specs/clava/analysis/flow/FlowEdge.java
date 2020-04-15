@@ -17,12 +17,12 @@
 
 package pt.up.fe.specs.clava.analysis.flow;
 
-public abstract class Edge implements ToDot {
-    protected Node source;
-    protected Node dest;
+public abstract class FlowEdge implements ToDot {
+    protected FlowNode source;
+    protected FlowNode dest;
     private String label;
 
-    public Edge(Node source, Node dest) {
+    public FlowEdge(FlowNode source, FlowNode dest) {
 	this.source = source;
 	this.dest = dest;
     }

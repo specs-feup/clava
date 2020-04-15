@@ -13,72 +13,63 @@
 
 package pt.up.fe.specs.clava.analysis.flow.control;
 
-public class BasicBlockEdge {
+import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
 
+public class BasicBlockEdge extends FlowEdge {
     private BasicBlockEdgeType type;
-    private BasicBlock source;
-    private BasicBlock dest;
 
-    public BasicBlockEdge(BasicBlock source, BasicBlock dest, BasicBlockEdgeType type) {
-        this.type = type;
-        this.source = source;
-        this.dest = dest;
+    public BasicBlockEdge(BasicBlockNode source, BasicBlockNode dest, BasicBlockEdgeType type) {
+	super(source, dest);
+	this.type = type;
     }
 
-    public static BasicBlockEdge newTrueEdge(BasicBlock source, BasicBlock dest) {
-        return new BasicBlockEdge(source, dest, BasicBlockEdgeType.TRUE);
+    public static BasicBlockEdge newTrueEdge(BasicBlockNode source, BasicBlockNode dest) {
+	return new BasicBlockEdge(source, dest, BasicBlockEdgeType.TRUE);
     }
 
-    public static BasicBlockEdge newFalseEdge(BasicBlock source, BasicBlock dest) {
-        return new BasicBlockEdge(source, dest, BasicBlockEdgeType.FALSE);
+    public static BasicBlockEdge newFalseEdge(BasicBlockNode source, BasicBlockNode dest) {
+	return new BasicBlockEdge(source, dest, BasicBlockEdgeType.FALSE);
     }
 
-    public static BasicBlockEdge newLoopEdge(BasicBlock source, BasicBlock dest) {
-        return new BasicBlockEdge(source, dest, BasicBlockEdgeType.LOOP);
+    public static BasicBlockEdge newLoopEdge(BasicBlockNode source, BasicBlockNode dest) {
+	return new BasicBlockEdge(source, dest, BasicBlockEdgeType.LOOP);
     }
 
-    public static BasicBlockEdge newNoLoopEdge(BasicBlock source, BasicBlock dest) {
-        return new BasicBlockEdge(source, dest, BasicBlockEdgeType.NOLOOP);
+    public static BasicBlockEdge newNoLoopEdge(BasicBlockNode source, BasicBlockNode dest) {
+	return new BasicBlockEdge(source, dest, BasicBlockEdgeType.NOLOOP);
     }
 
-    public static BasicBlockEdge newEdge(BasicBlock source, BasicBlock dest) {
-        return new BasicBlockEdge(source, dest, BasicBlockEdgeType.UNCONDITIONAL);
+    public static BasicBlockEdge newEdge(BasicBlockNode source, BasicBlockNode dest) {
+	return new BasicBlockEdge(source, dest, BasicBlockEdgeType.UNCONDITIONAL);
     }
 
+    @Override
     public String toDot() {
 
-        String ARROW = "->";
-        String SPACE = " ";
-        String NL = "\n";
-        String QUOTE = "\"";
+	String ARROW = "->";
+	String SPACE = " ";
+	String NL = "\n";
+	String QUOTE = "\"";
 
-        StringBuilder b = new StringBuilder();
+	StringBuilder b = new StringBuilder();
 
-        b.append(source.getId());
-        b.append(SPACE);
-        b.append(ARROW);
-        b.append(SPACE);
-        b.append(dest.getId());
-        b.append(SPACE);
-        b.append("[label=");
-        b.append(QUOTE);
-        b.append(type.getLabel());
-        b.append(QUOTE);
-        b.append("]");
-        b.append(NL);
+	b.append(source.getLabel());
+	b.append(SPACE);
+	b.append(ARROW);
+	b.append(SPACE);
+	b.append(dest.getLabel());
+	b.append(SPACE);
+	b.append("[label=");
+	b.append(QUOTE);
+	b.append(type.getLabel());
+	b.append(QUOTE);
+	b.append("]");
+	b.append(NL);
 
-        return b.toString();
-    }
-
-    public BasicBlock getDest() {
-        return dest;
+	return b.toString();
     }
 
     public BasicBlockEdgeType getType() {
 	return type;
-    }
-
-    public BasicBlock getSource() {
-	return source;
     }
 }
