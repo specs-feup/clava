@@ -298,21 +298,29 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
-     * 
+     * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
      * @param init 
      */
     @Override
-    public void setInitImpl(AJoinPoint init) {
+    public void setInitImpl(AExpression init) {
         this.aVardecl.setInitImpl(init);
     }
 
     /**
-     * 
+     * Converts the given string to a literal expression and sets it as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
      * @param init 
      */
     @Override
     public void setInitImpl(String init) {
         this.aVardecl.setInitImpl(init);
+    }
+
+    /**
+     * If vardecl already has an initialization, removes it. Otherwise does nothing
+     */
+    @Override
+    public void removeInitImpl() {
+        this.aVardecl.removeInitImpl();
     }
 
     /**

@@ -257,4 +257,9 @@ public class CxxTest {
                 // .set(LaraiKeys.TRACE_MODE, false)
                 .test("LaraGetter.lara");
     }
+
+    @Test
+    public void testVarDeclV2() {
+        newTester().test("VardeclV2.lara", "vardeclv2.cpp");
+    }
 }

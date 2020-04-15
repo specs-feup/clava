@@ -179,18 +179,18 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
-     * 
+     * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
      * @param init 
      */
-    public void setInitImpl(AJoinPoint init) {
+    public void setInitImpl(AExpression init) {
         throw new UnsupportedOperationException(get_class()+": Action setInit not implemented ");
     }
 
     /**
-     * 
+     * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
      * @param init 
      */
-    public final void setInit(AJoinPoint init) {
+    public final void setInit(AExpression init) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setInit", this, Optional.empty(), init);
@@ -205,7 +205,7 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
-     * 
+     * Converts the given string to a literal expression and sets it as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
      * @param init 
      */
     public void setInitImpl(String init) {
@@ -213,7 +213,7 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
-     * 
+     * Converts the given string to a literal expression and sets it as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
      * @param init 
      */
     public final void setInit(String init) {
@@ -227,6 +227,30 @@ public abstract class AVardecl extends ADeclarator {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setInit", e);
+        }
+    }
+
+    /**
+     * If vardecl already has an initialization, removes it. Otherwise does nothing
+     */
+    public void removeInitImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action removeInit not implemented ");
+    }
+
+    /**
+     * If vardecl already has an initialization, removes it. Otherwise does nothing
+     */
+    public final void removeInit() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "removeInit", this, Optional.empty());
+        	}
+        	this.removeInitImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "removeInit", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "removeInit", e);
         }
     }
 
@@ -572,8 +596,9 @@ public abstract class AVardecl extends ADeclarator {
     @Override
     protected void fillWithActions(List<String> actions) {
         this.aDeclarator.fillWithActions(actions);
-        actions.add("void setInit(joinpoint)");
+        actions.add("void setInit(expression)");
         actions.add("void setInit(String)");
+        actions.add("void removeInit()");
     }
 
     /**

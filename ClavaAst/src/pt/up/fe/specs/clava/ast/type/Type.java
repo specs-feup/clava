@@ -659,6 +659,13 @@ public abstract class Type extends ClavaNode {
         return false;
     }
 
+    /**
+     * If this type is qualified as const, removes the constness.
+     */
+    public void removeConst() {
+        // Do nothing
+    }
+
     public boolean isArray() {
         return false;
     }

@@ -33,9 +33,10 @@ public class MemoiReport {
 
     private String id;
     private String funcSig;
-    private String outputType;
     private int inputCount;
+    private int outputCount;
     private List<String> inputTypes;
+    private List<String> outputTypes;
     private List<String> call_sites;
 
     private int elements;
@@ -116,7 +117,8 @@ public class MemoiReport {
         }
 
         BufferedReader br = new BufferedReader(fr);
-        return new Gson().fromJson(br, MemoiReport.class);
+        MemoiReport fromJson = new Gson().fromJson(br, MemoiReport.class);
+        return fromJson;
     }
 
     private void mergePart(MemoiReport otherReport) {
@@ -173,12 +175,12 @@ public class MemoiReport {
         this.funcSig = funcSig;
     }
 
-    public String getOutputType() {
-        return outputType;
+    public List<String> getOutputTypes() {
+        return outputTypes;
     }
 
-    public void setOutputType(String outputType) {
-        this.outputType = outputType;
+    public void setOutputTypes(List<String> outputTypes) {
+        this.outputTypes = outputTypes;
     }
 
     public int getInputCount() {
@@ -187,6 +189,14 @@ public class MemoiReport {
 
     public void setInputCount(int inputCount) {
         this.inputCount = inputCount;
+    }
+
+    public int getOutputCount() {
+        return outputCount;
+    }
+
+    public void setOutputCount(int outputCount) {
+        this.outputCount = outputCount;
     }
 
     public List<String> getInputTypes() {
