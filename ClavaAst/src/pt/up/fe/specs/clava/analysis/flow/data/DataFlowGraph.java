@@ -26,6 +26,7 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
+import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
@@ -126,7 +127,7 @@ public class DataFlowGraph extends FlowGraph {
 	if (n instanceof CompoundAssignOperator) { // x += y
 	    CompoundAssignOperator assign = (CompoundAssignOperator) n;
 	    String op = assign.getOp().getOpString().replace("=", "");
-	    assignNode = new DataFlowNode(DataFlowNodeType.OP, op);
+	    assignNode = new DataFlowNode(DataFlowNodeType.OP_ARITH, op);
 	    this.addNode(assignNode);
 	}
 
@@ -186,7 +187,7 @@ public class DataFlowGraph extends FlowGraph {
 	if (n instanceof BinaryOperator) {
 	    BinaryOperator op = (BinaryOperator) n;
 	    String label = op.getOp().getOpString();
-	    DataFlowNode opNode = new DataFlowNode(DataFlowNodeType.OP, label);
+	    DataFlowNode opNode = new DataFlowNode(DataFlowNodeType.OP_ARITH, label);
 	    this.addNode(opNode);
 	    DataFlowNode lhsNode = buildExpression(op.getChild(0));
 	    DataFlowNode rhsNode = buildExpression(op.getChild(1));
@@ -199,7 +200,19 @@ public class DataFlowGraph extends FlowGraph {
 	    this.addEdge(new DataFlowEdge(opNode, tempNode));
 	    return tempNode;
 	}
-	System.out.println(n.toString());
+	if (n instanceof CallExpr) {
+	    CallExpr call = (CallExpr) n;
+	    DeclRefExpr fun = (DeclRefExpr) call.getChild(0);
+	    String funName = fun.getName();
+	    DataFlowNode callNode = new DataFlowNode(DataFlowNodeType.OP_CALL, funName);
+	    this.addNode(callNode);
+	    for (int i = 1; i < call.getNumChildren(); i++) {
+		DataFlowNode argNode = buildExpression(call.getChild(i));
+		this.addEdge(new DataFlowEdge(argNode, callNode));
+	    }
+	    return callNode;
+	}
+	System.out.println("Unsupported dataflow node " + n.toString());
 	return DataFlowNode.nullNode;
     }
 
