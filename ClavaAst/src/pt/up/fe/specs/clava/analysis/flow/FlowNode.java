@@ -22,15 +22,18 @@ import java.util.ArrayList;
 public abstract class FlowNode implements ToDot {
     protected ArrayList<FlowEdge> inEdges = new ArrayList<>();
     protected ArrayList<FlowEdge> outEdges = new ArrayList<>();
-    protected static int globalID = 0;
-    protected final int id;
+    protected int id;
+    protected String name;
     protected String label;
     public boolean disabled = false;
 
     public FlowNode(String label) {
-	this.id = globalID;
-	globalID++;
 	this.label = label;
+    }
+
+    public void initNode(String prefix, int id) {
+	this.id = id;
+	this.name = prefix + id;
     }
 
     public void addInEdge(FlowEdge e) {
@@ -63,5 +66,9 @@ public abstract class FlowNode implements ToDot {
 
     public int getId() {
 	return id;
+    }
+
+    public String getName() {
+	return name;
     }
 }

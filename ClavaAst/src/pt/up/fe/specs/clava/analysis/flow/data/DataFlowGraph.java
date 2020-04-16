@@ -14,6 +14,8 @@
 package pt.up.fe.specs.clava.analysis.flow.data;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
@@ -39,19 +41,21 @@ public class DataFlowGraph extends FlowGraph {
     private ControlFlowGraph cfg;
     private ArrayList<Integer> processed = new ArrayList<>();
     private int tempCounter = 0;
+    public static final DataFlowNode nullNode = new DataFlowNode(DataFlowNodeType.NULL, "");
 
     public DataFlowGraph(FunctionDecl func, Stmt beginning, Stmt end) {
 	this(func.getBody().get(), beginning, end);
     }
 
     public DataFlowGraph(CompoundStmt body, Stmt beginning, Stmt end) {
-	super("Data-flow Graph - " + ((FunctionDecl) body.getParent()).getDeclName());
+	super("Data-flow Graph - " + ((FunctionDecl) body.getParent()).getDeclName(), "n");
 	this.cfg = new ControlFlowGraph(body);
 	// this.beginning = beginning;
 	// this.end = end;
 
 	BasicBlockNode start = findStartingRegion();
 
+	this.addNode(nullNode);
 	buildGraph(start);
     }
 
@@ -60,13 +64,25 @@ public class DataFlowGraph extends FlowGraph {
 	StringBuilder sb = new StringBuilder();
 	String NL = "\n";
 	sb.append("Digraph G {").append(NL);
+
 	for (FlowNode node : getNodes()) {
 	    sb.append(node.toDot()).append(NL);
 	}
+
 	for (FlowEdge edge : edges) {
 	    sb.append(edge.toDot()).append(NL);
 	}
-	sb.append("}").append(NL);
+
+	sb.append(NL).append("{rank=source; ");
+	List<String> sources = getSources().stream().map(object -> object.getName()).collect(Collectors.toList());
+	sb.append(String.join(",", sources)).append("}").append(NL);
+
+	sb.append("{rank=sink; ");
+	List<String> sinks = getSinks().stream().map(object -> object.getName()).collect(Collectors.toList());
+	sb.append(String.join(",", sinks)).append("}").append(NL);
+
+	sb.append("labelloc=\"t\"").append(NL).append("label=\"").append(name).append("\"").append(NL).append("}");
+	;
 	return sb.toString();
     }
 
@@ -119,12 +135,12 @@ public class DataFlowGraph extends FlowGraph {
     private DataFlowNode buildStatement(Stmt statement) {
 	ClavaNode n = statement.getChild(0);
 	if (n.getNumChildren() < 2)
-	    return DataFlowNode.nullNode;
+	    return nullNode;
 	ClavaNode rhs = n.getChild(1);
 	ClavaNode lhs = n.getChild(0);
 
 	// Build node of assignment operation
-	DataFlowNode assignNode = DataFlowNode.nullNode;
+	DataFlowNode assignNode = nullNode;
 	if (n instanceof CompoundAssignOperator) { // x += y
 	    CompoundAssignOperator assign = (CompoundAssignOperator) n;
 	    String op = assign.getOp().getOpString().replace("=", "");
@@ -162,7 +178,7 @@ public class DataFlowGraph extends FlowGraph {
     }
 
     private DataFlowNode buildExpression(ClavaNode n) {
-	DataFlowNode node = DataFlowNode.nullNode;
+	DataFlowNode node = nullNode;
 
 	if (n instanceof IntegerLiteral) {
 	    node = buildIntegerLitNode((IntegerLiteral) n);

@@ -27,13 +27,18 @@ public abstract class FlowGraph {
     protected ArrayList<FlowNode> nodes = new ArrayList<>();
     protected ArrayList<FlowEdge> edges = new ArrayList<>();
     protected String name;
+    protected final String nodePrefix;
+    protected int nodeID = 0;
 
-    public FlowGraph(String name) {
+    public FlowGraph(String name, String nodePrefix) {
 	this.name = name;
+	this.nodePrefix = nodePrefix;
     }
 
     public void addNode(FlowNode node) {
 	nodes.add(node);
+	node.initNode(nodePrefix, nodeID);
+	nodeID++;
     }
 
     public void addEdge(FlowEdge edge) {
@@ -70,5 +75,21 @@ public abstract class FlowGraph {
 
     public ArrayList<FlowEdge> getEdges() {
 	return edges;
+    }
+
+    public ArrayList<FlowNode> getSources() {
+	ArrayList<FlowNode> sources = new ArrayList<>();
+	for (FlowNode node : nodes)
+	    if (node.getInNodes().size() == 0)
+		sources.add(node);
+	return sources;
+    }
+
+    public ArrayList<FlowNode> getSinks() {
+	ArrayList<FlowNode> sinks = new ArrayList<>();
+	for (FlowNode node : nodes)
+	    if (node.getOutNodes().size() == 0)
+		sinks.add(node);
+	return sinks;
     }
 }

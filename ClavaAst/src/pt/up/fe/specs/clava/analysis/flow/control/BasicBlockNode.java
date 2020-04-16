@@ -30,8 +30,7 @@ public class BasicBlockNode extends FlowNode {
     private BasicBlockNodeType type;
 
     public BasicBlockNode(Stmt leader) {
-	super("BB");
-	label += id;
+	super("");
 	this.leader = leader;
 	stmts = new ArrayList<Stmt>();
 	stmts.add(leader);
@@ -59,7 +58,7 @@ public class BasicBlockNode extends FlowNode {
 
 	StringBuilder builder = new StringBuilder();
 
-	builder.append(id);
+	builder.append(name);
 	builder.append(" (");
 	builder.append(type);
 	builder.append(") ");
@@ -92,7 +91,7 @@ public class BasicBlockNode extends FlowNode {
 	 * for (BasicBlock bb : outEdges) { builder.append(id); builder.append(ARROW);
 	 * builder.append(bb.id); builder.append(NL); }
 	 */
-	builder.append(label).append(" ");
+	builder.append(name).append(" ");
 	builder.append("[label=");
 	builder.append(QUOTE);
 	builder.append(SELF);

@@ -45,7 +45,7 @@ public class ControlFlowGraph extends FlowGraph {
     }
 
     public ControlFlowGraph(CompoundStmt body) {
-	super("Control-flow Graph - " + ((FunctionDecl) body.getParent()).getDeclName());
+	super("Control-flow Graph - " + ((FunctionDecl) body.getParent()).getDeclName(), "BB");
 	this.body = body;
 	this.bbs = new HashMap<>();
 

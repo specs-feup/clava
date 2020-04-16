@@ -22,7 +22,6 @@ import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 public class DataFlowNode extends FlowNode implements Cloneable {
 
     private DataFlowNodeType type;
-    public static final DataFlowNode nullNode = new DataFlowNode(DataFlowNodeType.NULL, "");
     private int nIterations = 0;
 
     public DataFlowNode(DataFlowNodeType type, String label) {
@@ -33,14 +32,13 @@ public class DataFlowNode extends FlowNode implements Cloneable {
     @Override
     public String toDot() {
 	StringBuilder sb = new StringBuilder();
-	sb.append("n").append(id).append(" [label=\"").append(label).append("\" color=\"").append(type.getColor())
-		.append("\"]");
+	sb.append(name).append(" [label=\"").append(label).append("\" color=\"").append(type.getColor()).append("\"]");
 	return sb.toString();
     }
 
     @Override
     public String toString() {
-	return id + "  [" + label + "]";
+	return name + "  [" + label + "]";
     }
 
     public void setIterations(int numIter) {
