@@ -77,7 +77,7 @@ public abstract class FlowGraph {
 	return edges;
     }
 
-    public ArrayList<FlowNode> getSources() {
+    protected ArrayList<FlowNode> getSources() {
 	ArrayList<FlowNode> sources = new ArrayList<>();
 	for (FlowNode node : nodes)
 	    if (node.getInNodes().size() == 0)
@@ -85,11 +85,18 @@ public abstract class FlowGraph {
 	return sources;
     }
 
-    public ArrayList<FlowNode> getSinks() {
+    protected ArrayList<FlowNode> getSinks() {
 	ArrayList<FlowNode> sinks = new ArrayList<>();
 	for (FlowNode node : nodes)
 	    if (node.getOutNodes().size() == 0)
 		sinks.add(node);
 	return sinks;
+    }
+
+    public FlowNode findNode(int id) {
+	for (FlowNode node : nodes)
+	    if (node.getId() == id)
+		return node;
+	return null;
     }
 }

@@ -25,7 +25,7 @@ public abstract class FlowNode implements ToDot {
     protected int id;
     protected String name;
     protected String label;
-    public boolean disabled = false;
+    private boolean disabled = false;
 
     public FlowNode(String label) {
 	this.label = label;
@@ -70,5 +70,21 @@ public abstract class FlowNode implements ToDot {
 
     public String getName() {
 	return name;
+    }
+
+    public boolean isDisabled() {
+	return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+	this.disabled = disabled;
+    }
+
+    public ArrayList<FlowEdge> getOutEdges() {
+	return outEdges;
+    }
+
+    public ArrayList<FlowEdge> getInEdges() {
+	return inEdges;
     }
 }

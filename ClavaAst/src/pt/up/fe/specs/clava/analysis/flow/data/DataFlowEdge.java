@@ -23,12 +23,25 @@ import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 public class DataFlowEdge extends FlowEdge {
     public int repeating = 0;
     public boolean directed = true;
-    public DataFlowEdgeType type = DataFlowEdgeType.DATA;
+    private DataFlowEdgeType type = DataFlowEdgeType.DATA;
 
+    /**
+     * Constructor for directed edge of default type "data"
+     * 
+     * @param source
+     * @param dest
+     */
     public DataFlowEdge(FlowNode source, FlowNode dest) {
 	super(source, dest);
     }
 
+    /**
+     * Constructor for directed edge of provided type
+     * 
+     * @param source
+     * @param dest
+     * @param type
+     */
     public DataFlowEdge(FlowNode source, FlowNode dest, DataFlowEdgeType type) {
 	super(source, dest);
 	this.type = type;
@@ -36,14 +49,30 @@ public class DataFlowEdge extends FlowEdge {
 	    this.directed = false;
     }
 
+    /**
+     * Constructor for directed edge of type "repeating", with provided number of
+     * repetitions
+     * 
+     * @param source
+     * @param dest
+     * @param repeating
+     */
     public DataFlowEdge(FlowNode source, FlowNode dest, int repeating) {
 	super(source, dest);
 	this.repeating = repeating;
-	this.directed = false;
+	// this.directed = false;
 	this.type = DataFlowEdgeType.REPEATING;
     }
 
-    public DataFlowEdge(FlowNode source, FlowNode dest, boolean directed) {
+    /**
+     * Constructor for edge with provided type and direction
+     * 
+     * @param source
+     * @param dest
+     * @param type
+     * @param directed
+     */
+    public DataFlowEdge(FlowNode source, FlowNode dest, DataFlowEdgeType type, boolean directed) {
 	super(source, dest);
 	this.directed = directed;
     }
@@ -62,5 +91,13 @@ public class DataFlowEdge extends FlowEdge {
 	}
 	sb.append("]");
 	return sb.toString();
+    }
+
+    public DataFlowEdgeType getType() {
+	return type;
+    }
+
+    public void setType(DataFlowEdgeType type) {
+	this.type = type;
     }
 }

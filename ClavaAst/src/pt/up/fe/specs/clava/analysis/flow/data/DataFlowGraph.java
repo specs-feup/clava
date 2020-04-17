@@ -28,10 +28,13 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
+import pt.up.fe.specs.clava.ast.expr.CStyleCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
+import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
+import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
@@ -41,6 +44,7 @@ public class DataFlowGraph extends FlowGraph {
     private ControlFlowGraph cfg;
     private ArrayList<Integer> processed = new ArrayList<>();
     private int tempCounter = 0;
+    private boolean tempEnabled = false;
     public static final DataFlowNode nullNode = new DataFlowNode(DataFlowNodeType.NULL, "");
 
     public DataFlowGraph(FunctionDecl func, Stmt beginning, Stmt end) {
@@ -53,10 +57,10 @@ public class DataFlowGraph extends FlowGraph {
 	// this.beginning = beginning;
 	// this.end = end;
 
-	BasicBlockNode start = findStartingRegion();
+	BasicBlockNode start = findRegion();
 
 	this.addNode(nullNode);
-	buildGraph(start);
+	buildGraph(start, -1);
     }
 
     @Override
@@ -82,50 +86,46 @@ public class DataFlowGraph extends FlowGraph {
 	sb.append(String.join(",", sinks)).append("}").append(NL);
 
 	sb.append("labelloc=\"t\"").append(NL).append("label=\"").append(name).append("\"").append(NL).append("}");
-	;
 	return sb.toString();
     }
 
-    private BasicBlockNode findStartingRegion() {
-	ArrayList<FlowNode> blocks = cfg.getNodes();
-
-	int min = Integer.MAX_VALUE;
-	BasicBlockNode start = null;
-	for (FlowNode block : blocks) {
-	    BasicBlockNode b = (BasicBlockNode) block;
-	    if (b.getType() == BasicBlockNodeType.LOOP) {
-		if (b.getId() < min) {
-		    min = b.getId();
-		    start = b;
-		}
-	    }
-	}
+    private BasicBlockNode findRegion() {
+	BasicBlockNode start = (BasicBlockNode) cfg.findNode(0);
 	return start;
     }
 
-    private ArrayList<DataFlowNode> buildGraph(BasicBlockNode currBlock) {
+    private ArrayList<DataFlowNode> buildGraph(BasicBlockNode currBlock, int loopAncestorID) {
 	processed.add(currBlock.getId());
 
-	// Build graph for each statement of basic block
+	// Build sub-graph for each statement of basic block
 	ArrayList<DataFlowNode> nodes = new ArrayList<>();
 	if (currBlock.getType() == BasicBlockNodeType.LOOP) {
-	    nodes.add(buildLoopNode(currBlock));
-	} else {
+	    DataFlowNode loopNode = buildLoopNode(currBlock);
+	    nodes.add(loopNode);
+	    loopAncestorID = loopNode.getId();
+	}
+	if (currBlock.getType() == BasicBlockNodeType.NORMAL) {
 	    for (Stmt statement : currBlock.getStmts()) {
 		DataFlowNode node = buildStatement(statement);
 		nodes.add(node);
 	    }
+	    if (loopAncestorID == -1) {
+		for (int i = 1; i < nodes.size(); i++)
+		    this.addEdge(new DataFlowEdge(nodes.get(i - 1), nodes.get(i), 0));
+	    }
 	}
-	DataFlowNode lastNode = nodes.get(nodes.size() - 1);
+	DataFlowNode lastNode = (loopAncestorID != -1) ? (DataFlowNode) this.findNode(loopAncestorID)
+		: nodes.get(nodes.size() - 1);
+	loopAncestorID = lastNode.getId();
 
 	// Get subgraphs of children basic blocks and connect them
 	for (FlowNode nextBlock : currBlock.getOutNodes()) {
 	    ArrayList<DataFlowNode> children = new ArrayList<>();
 	    if (!processed.contains(nextBlock.getId())) {
-		children = buildGraph((BasicBlockNode) nextBlock);
+		children = buildGraph((BasicBlockNode) nextBlock, loopAncestorID);
 		for (DataFlowNode child : children) {
-		    if (!child.disabled)
-			this.addEdge(new DataFlowEdge(child, lastNode, lastNode.getIterations()));
+		    if (!child.isDisabled())
+			this.addEdge(new DataFlowEdge(lastNode, child, lastNode.getIterations()));
 		}
 	    }
 	}
@@ -134,8 +134,19 @@ public class DataFlowGraph extends FlowGraph {
 
     private DataFlowNode buildStatement(Stmt statement) {
 	ClavaNode n = statement.getChild(0);
-	if (n.getNumChildren() < 2)
-	    return nullNode;
+	DataFlowNode node = nullNode;
+
+	if (n instanceof VarDecl) {
+	    VarDecl decl = (VarDecl) n;
+	    node = buildVarDecl(decl);
+	}
+	if ((n instanceof BinaryOperator) || (n instanceof CompoundAssignOperator)) {
+	    node = buildBinaryOp(n);
+	}
+	return node;
+    }
+
+    private DataFlowNode buildBinaryOp(ClavaNode n) {
 	ClavaNode rhs = n.getChild(1);
 	ClavaNode lhs = n.getChild(0);
 
@@ -177,11 +188,26 @@ public class DataFlowGraph extends FlowGraph {
 	return lhsNode;
     }
 
+    private DataFlowNode buildVarDecl(VarDecl decl) {
+	DataFlowNode lhsNode = new DataFlowNode(DataFlowNodeType.STORE_VAR, decl.getDeclName());
+	this.addNode(lhsNode);
+	if (decl.getNumChildren() > 0) {
+	    ClavaNode rhs = decl.getChild(0);
+	    DataFlowNode rhsNode = buildExpression(rhs);
+	    this.addNode(rhsNode);
+	    this.addEdge(new DataFlowEdge(rhsNode, lhsNode));
+	}
+	return lhsNode;
+    }
+
     private DataFlowNode buildExpression(ClavaNode n) {
 	DataFlowNode node = nullNode;
 
 	if (n instanceof IntegerLiteral) {
 	    node = buildIntegerLitNode((IntegerLiteral) n);
+	}
+	if (n instanceof FloatingLiteral) {
+	    node = buildFloatingLitNode((FloatingLiteral) n);
 	}
 	if (n instanceof DeclRefExpr) {
 	    node = buildDeclRefNode((DeclRefExpr) n);
@@ -195,11 +221,26 @@ public class DataFlowGraph extends FlowGraph {
 	if (n instanceof CallExpr) {
 	    node = buildCallNode((CallExpr) n);
 	}
+	if (n instanceof CStyleCastExpr) {
+	    node = buildExpression(n.getChild(0));
+	}
+	if (n instanceof ParenExpr) {
+	    node = buildExpression(n.getChild(0));
+	}
+	if (node == nullNode)
+	    System.out.println(n.toString());
 	return node;
     }
 
-    private DataFlowNode buildIntegerLitNode(IntegerLiteral intN) {
-	String label = intN.getLiteral();
+    private DataFlowNode buildIntegerLitNode(IntegerLiteral intL) {
+	String label = intL.getLiteral();
+	DataFlowNode constNode = new DataFlowNode(DataFlowNodeType.CONSTANT, label);
+	this.addNode(constNode);
+	return constNode;
+    }
+
+    private DataFlowNode buildFloatingLitNode(FloatingLiteral floatL) {
+	String label = floatL.getLiteral();
 	DataFlowNode constNode = new DataFlowNode(DataFlowNodeType.CONSTANT, label);
 	this.addNode(constNode);
 	return constNode;
@@ -227,14 +268,17 @@ public class DataFlowGraph extends FlowGraph {
 	this.addNode(opNode);
 	DataFlowNode lhsNode = buildExpression(op.getChild(0));
 	DataFlowNode rhsNode = buildExpression(op.getChild(1));
-	String tempLabel = "temp_" + this.tempCounter;
-	this.tempCounter += 1;
-	DataFlowNode tempNode = new DataFlowNode(DataFlowNodeType.TEMP, tempLabel);
-	this.addNode(tempNode);
 	this.addEdge(new DataFlowEdge(lhsNode, opNode));
 	this.addEdge(new DataFlowEdge(rhsNode, opNode));
-	this.addEdge(new DataFlowEdge(opNode, tempNode));
-	return tempNode;
+	if (tempEnabled) {
+	    String tempLabel = "temp_" + this.tempCounter;
+	    this.tempCounter += 1;
+	    DataFlowNode tempNode = new DataFlowNode(DataFlowNodeType.TEMP, tempLabel);
+	    this.addNode(tempNode);
+	    this.addEdge(new DataFlowEdge(opNode, tempNode));
+	    return tempNode;
+	} else
+	    return opNode;
     }
 
     private DataFlowNode buildCallNode(CallExpr call) {
@@ -254,15 +298,17 @@ public class DataFlowGraph extends FlowGraph {
 	int initVal = -1;
 	int limitVal = -1;
 	int increment = 1;
-	int numIter = 0;
+	int numIter = -1;
 	String counterName = "";
 
 	// Loop counter
 	if (root.getChild(0).getChild(0) instanceof VarDecl) {
 	    VarDecl counter = (VarDecl) root.getChild(0).getChild(0);
 	    counterName = counter.getDeclName();
-	    IntegerLiteral init = (IntegerLiteral) root.getChild(0).getChild(0).getChild(0);
-	    initVal = init.getValue().intValue();
+	    if (root.getChild(0).getChild(0).getChild(0) instanceof IntegerLiteral) {
+		IntegerLiteral init = (IntegerLiteral) root.getChild(0).getChild(0).getChild(0);
+		initVal = init.getValue().intValue();
+	    }
 	}
 
 	// Loop condition
@@ -282,5 +328,25 @@ public class DataFlowGraph extends FlowGraph {
 	node.setIterations(numIter);
 	this.addNode(node);
 	return node;
+    }
+
+    @Override
+    protected ArrayList<FlowNode> getSources() {
+	return new ArrayList<FlowNode>();
+    }
+
+    @Override
+    protected ArrayList<FlowNode> getSinks() {
+	ArrayList<FlowNode> sinks = new ArrayList<>();
+	for (FlowNode node : nodes) {
+	    for (int i = 0; i < node.getOutEdges().size(); i++) {
+		DataFlowEdge edge = (DataFlowEdge) node.getOutEdges().get(i);
+		if (edge.getType() == DataFlowEdgeType.REPEATING) {
+		    sinks.add(node);
+		    break;
+		}
+	    }
+	}
+	return sinks;
     }
 }

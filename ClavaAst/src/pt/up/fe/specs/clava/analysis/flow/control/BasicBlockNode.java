@@ -163,11 +163,11 @@ public class BasicBlockNode extends FlowNode {
     }
 
     public boolean hasOutEdges() {
-	return !outEdges.isEmpty();
+	return !getOutEdges().isEmpty();
     }
 
     public boolean hasInEdges() {
-	return !inEdges.isEmpty();
+	return !getInEdges().isEmpty();
     }
 
     public Stmt getLeader() {
