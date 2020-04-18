@@ -53,11 +53,11 @@ public class BasicBlockEdge extends FlowEdge {
 
 	StringBuilder b = new StringBuilder();
 
-	b.append(source.getName());
+	b.append(getSource().getName());
 	b.append(SPACE);
 	b.append(ARROW);
 	b.append(SPACE);
-	b.append(dest.getName());
+	b.append(getDest().getName());
 	b.append(SPACE);
 	b.append("[label=");
 	b.append(QUOTE);

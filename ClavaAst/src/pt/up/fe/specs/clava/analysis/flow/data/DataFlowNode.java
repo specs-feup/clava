@@ -23,6 +23,7 @@ public class DataFlowNode extends FlowNode implements Cloneable {
 
     private DataFlowNodeType type;
     private int nIterations = 0;
+    private int subgraphID = -1;
 
     public DataFlowNode(DataFlowNodeType type, String label) {
 	super(label);
@@ -32,7 +33,8 @@ public class DataFlowNode extends FlowNode implements Cloneable {
     @Override
     public String toDot() {
 	StringBuilder sb = new StringBuilder();
-	sb.append(name).append(" [label=\"").append(label).append("\" color=\"").append(type.getColor()).append("\"]");
+	sb.append(name).append(" [label=\"").append(label).append("\" color=\"").append(type.getColor()).append("\"")
+		.append("]");
 	return sb.toString();
     }
 
@@ -61,5 +63,13 @@ public class DataFlowNode extends FlowNode implements Cloneable {
     public Object clone() throws CloneNotSupportedException {
 	DataFlowNode node = new DataFlowNode(this.type, this.label);
 	return node;
+    }
+
+    public int getSubgraphID() {
+	return subgraphID;
+    }
+
+    public void setSubgraphID(int subgraphID) {
+	this.subgraphID = subgraphID;
     }
 }

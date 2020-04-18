@@ -18,8 +18,8 @@
 package pt.up.fe.specs.clava.analysis.flow;
 
 public abstract class FlowEdge implements ToDot {
-    protected FlowNode source;
-    protected FlowNode dest;
+    private FlowNode source;
+    private FlowNode dest;
     private String label;
 
     public FlowEdge(FlowNode source, FlowNode dest) {
@@ -27,12 +27,28 @@ public abstract class FlowEdge implements ToDot {
 	this.dest = dest;
     }
 
-    protected String getLabel() {
+    public String getLabel() {
 	return label;
     }
 
-    protected void setLabel(String label) {
+    public void setLabel(String label) {
 	this.label = label;
+    }
+
+    public FlowNode getSource() {
+	return source;
+    }
+
+    public void setSource(FlowNode source) {
+	this.source = source;
+    }
+
+    public FlowNode getDest() {
+	return dest;
+    }
+
+    public void setDest(FlowNode dest) {
+	this.dest = dest;
     }
 
 }

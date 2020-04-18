@@ -14,8 +14,6 @@
 package pt.up.fe.specs.clava.analysis.flow.data;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
@@ -45,6 +43,7 @@ public class DataFlowGraph extends FlowGraph {
     private ArrayList<Integer> processed = new ArrayList<>();
     private int tempCounter = 0;
     private boolean tempEnabled = false;
+    private int subgraphCounter = 1;
     public static final DataFlowNode nullNode = new DataFlowNode(DataFlowNodeType.NULL, "");
 
     public DataFlowGraph(FunctionDecl func, Stmt beginning, Stmt end) {
@@ -54,44 +53,77 @@ public class DataFlowGraph extends FlowGraph {
     public DataFlowGraph(CompoundStmt body, Stmt beginning, Stmt end) {
 	super("Data-flow Graph - " + ((FunctionDecl) body.getParent()).getDeclName(), "n");
 	this.cfg = new ControlFlowGraph(body);
+	this.cfg = CFGConverter.convert(this.cfg);
 	// this.beginning = beginning;
 	// this.end = end;
 
-	BasicBlockNode start = findRegion();
+	BasicBlockNode start = (BasicBlockNode) cfg.findNode(0);
 
 	this.addNode(nullNode);
 	buildGraph(start, -1);
+
+	findSubgraphs();
+    }
+
+    private void findSubgraphs() {
+	for (FlowNode n : this.nodes) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getSubgraphID() == -1) {
+		boolean inEdge = false;
+		for (FlowEdge e : node.getInEdges()) {
+		    DataFlowEdge edge = (DataFlowEdge) e;
+		    if (edge.getType() == DataFlowEdgeType.REPEATING)
+			inEdge = true;
+		}
+		boolean outEdge = true;
+		for (FlowEdge e : node.getOutEdges()) {
+		    DataFlowEdge edge = (DataFlowEdge) e;
+		    if (edge.getType() == DataFlowEdgeType.REPEATING)
+			inEdge = false;
+		}
+		if (inEdge && outEdge) {
+		    buildSubgraph(node, subgraphCounter);
+		    subgraphCounter++;
+		} else {
+		    node.setSubgraphID(0);
+		}
+	    }
+	}
+    }
+
+    private void buildSubgraph(DataFlowNode node, int id) {
+	if (node.getSubgraphID() == id)
+	    return;
+	node.setSubgraphID(id);
+	ArrayList<FlowEdge> edges = node.getInEdges();
+	for (FlowEdge e : edges) {
+	    DataFlowEdge edge = (DataFlowEdge) e;
+	    if (edge.getType() != DataFlowEdgeType.REPEATING) {
+		buildSubgraph((DataFlowNode) edge.getSource(), id);
+	    }
+	}
     }
 
     @Override
     protected String buildDot() {
 	StringBuilder sb = new StringBuilder();
 	String NL = "\n";
-	sb.append("Digraph G {").append(NL);
+	sb.append("Digraph G {").append(NL).append("node [penwidth=2.5]").append(NL);
 
-	for (FlowNode node : getNodes()) {
-	    sb.append(node.toDot()).append(NL);
+	for (int i = subgraphCounter - 1; i >= 0; i--) {
+	    ArrayList<DataFlowNode> sub = getSubgraphNodes(i);
+	    sb.append("subgraph cluster").append(i).append("{").append(NL);
+	    for (DataFlowNode node : sub)
+		sb.append(node.toDot()).append(NL);
+	    sb.append("}").append(NL);
 	}
 
 	for (FlowEdge edge : edges) {
 	    sb.append(edge.toDot()).append(NL);
 	}
 
-	sb.append(NL).append("{rank=source; ");
-	List<String> sources = getSources().stream().map(object -> object.getName()).collect(Collectors.toList());
-	sb.append(String.join(",", sources)).append("}").append(NL);
-
-	sb.append("{rank=sink; ");
-	List<String> sinks = getSinks().stream().map(object -> object.getName()).collect(Collectors.toList());
-	sb.append(String.join(",", sinks)).append("}").append(NL);
-
 	sb.append("labelloc=\"t\"").append(NL).append("label=\"").append(name).append("\"").append(NL).append("}");
 	return sb.toString();
-    }
-
-    private BasicBlockNode findRegion() {
-	BasicBlockNode start = (BasicBlockNode) cfg.findNode(0);
-	return start;
     }
 
     private ArrayList<DataFlowNode> buildGraph(BasicBlockNode currBlock, int loopAncestorID) {
@@ -137,11 +169,13 @@ public class DataFlowGraph extends FlowGraph {
 	DataFlowNode node = nullNode;
 
 	if (n instanceof VarDecl) {
-	    VarDecl decl = (VarDecl) n;
-	    node = buildVarDecl(decl);
+	    node = buildVarDecl((VarDecl) n);
 	}
 	if ((n instanceof BinaryOperator) || (n instanceof CompoundAssignOperator)) {
 	    node = buildBinaryOp(n);
+	}
+	if (n instanceof CallExpr) {
+	    node = buildCallNode((CallExpr) n);
 	}
 	return node;
     }
@@ -348,5 +382,15 @@ public class DataFlowGraph extends FlowGraph {
 	    }
 	}
 	return sinks;
+    }
+
+    public ArrayList<DataFlowNode> getSubgraphNodes(int id) {
+	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	for (FlowNode n : this.nodes) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getSubgraphID() == id)
+		nodes.add(node);
+	}
+	return nodes;
     }
 }

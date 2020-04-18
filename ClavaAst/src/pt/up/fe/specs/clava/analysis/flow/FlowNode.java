@@ -48,7 +48,7 @@ public abstract class FlowNode implements ToDot {
 	ArrayList<FlowNode> nodes = new ArrayList<>();
 
 	for (FlowEdge e : this.inEdges)
-	    nodes.add(e.source);
+	    nodes.add(e.getSource());
 	return nodes;
     }
 
@@ -56,7 +56,7 @@ public abstract class FlowNode implements ToDot {
 	ArrayList<FlowNode> nodes = new ArrayList<>();
 
 	for (FlowEdge e : this.outEdges)
-	    nodes.add(e.dest);
+	    nodes.add(e.getDest());
 	return nodes;
     }
 

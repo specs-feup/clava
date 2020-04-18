@@ -79,8 +79,8 @@ public class DataFlowEdge extends FlowEdge {
 
     @Override
     public String toDot() {
-	String sourceLabel = "n" + source.getId();
-	String destLabel = "n" + dest.getId();
+	String sourceLabel = "n" + getSource().getId();
+	String destLabel = "n" + getDest().getId();
 	StringBuilder sb = new StringBuilder();
 	sb.append(sourceLabel).append(" -> ").append(destLabel).append(" [label=\"");
 	if (repeating > 0)

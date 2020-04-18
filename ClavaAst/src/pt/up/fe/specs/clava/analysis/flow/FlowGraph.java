@@ -43,8 +43,8 @@ public abstract class FlowGraph {
 
     public void addEdge(FlowEdge edge) {
 	edges.add(edge);
-	FlowNode source = edge.source;
-	FlowNode dest = edge.dest;
+	FlowNode source = edge.getSource();
+	FlowNode dest = edge.getDest();
 	for (FlowNode node : nodes) {
 	    if (node.getId() == source.getId())
 		node.addOutEdge(edge);

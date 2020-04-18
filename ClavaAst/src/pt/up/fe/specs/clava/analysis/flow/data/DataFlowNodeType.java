@@ -18,9 +18,9 @@
 package pt.up.fe.specs.clava.analysis.flow.data;
 
 public enum DataFlowNodeType {
-    LOOP("#d11515"), OP_ARITH("#5c420a"), OP_CALL("#5c420a"), LOAD_VAR("#10611c"), LOAD_ARRAY("#10611c"),
-    LOAD_INDEX("#197dcf"), STORE_VAR("#e37419"), STORE_ARRAY("#e37419"), CONSTANT("#555555"), TEMP("#000000"),
-    NULL("#ffffff");
+    LOOP("blue1"), OP_ARITH("darkorchid2"), OP_CALL("darkorchid2"), LOAD_VAR("darkgreen"), LOAD_ARRAY("darkgreen"),
+    LOAD_INDEX("red"), STORE_VAR("goldenrod2"), STORE_ARRAY("goldenrod2"), CONSTANT("gray36"), TEMP("gray36"),
+    NULL("white");
 
     private String color;
 
