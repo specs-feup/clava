@@ -3,11 +3,11 @@ import lara.Strings;
 import clava.ClavaJoinPoints;
 
 function _normalizeSig(sig) {
-	var tmp = Strings.replacer(sig, /\(/, '_');
-	tmp = Strings.replacer(tmp, ', ', '_');
-	tmp = Strings.replacer(tmp, ' ', '_');
-	tmp = Strings.replacer(tmp, ',', '_');
-	return Strings.replacer(tmp, /\)/, '_');
+	var tmp = Strings.replacer(sig, /\(/g, '_');
+	tmp = Strings.replacer(tmp, /\*/g, '_p');
+	tmp = Strings.replacer(tmp, / /g, '_');
+	tmp = Strings.replacer(tmp, /,/g, '_');
+	return Strings.replacer(tmp, /\)/g, '_');
 }
 
 function _isPowerOf2(num) {
@@ -157,7 +157,7 @@ aspectdef _Memoi_WrapGlobalTarget
 	apply
 
 		var sig = $call.signature;
-		sig = Strings.replacer(sig, ' ', '');
+		sig = Strings.replacer(sig, / /g, '');
 		if(sig != signature) {
 			continue;
 		}
@@ -179,7 +179,7 @@ aspectdef _Memoi_WrapSingleTarget
 	apply
 
 		var sig = $call.signature;
-		sig = Strings.replacer(sig, ' ', '');
+		sig = Strings.replacer(sig, / /g, '');
 		if(sig != signature) {
 			continue;
 		}

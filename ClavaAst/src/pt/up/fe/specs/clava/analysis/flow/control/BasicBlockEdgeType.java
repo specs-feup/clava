@@ -11,13 +11,24 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.analysis.flow;
+package pt.up.fe.specs.clava.analysis.flow.control;
 
-public enum BasicBlockType {
+public enum BasicBlockEdgeType {
 
-    UNDEFINED,
-    EXIT,
-    NORMAL,
-    IF,
-    LOOP
+    UNCONDITIONAL(""),
+    TRUE("[true]"),
+    FALSE("[false]"),
+    LOOP("[loop]"),
+    NOLOOP("[noloop]");
+
+    private String label;
+
+    private BasicBlockEdgeType(String label) {
+
+        this.label = label;
+    }
+
+    public String getLabel() {
+        return label;
+    }
 }

@@ -19,7 +19,7 @@ public class MemoiComparator {
 
     public final static Comparator<MergedMemoiEntry> mean(MergedMemoiReport report) {
 
-        int total = report.getInputCount();
+        int total = report.getReportCount();
 
         return (MergedMemoiEntry e1, MergedMemoiEntry e2) -> {
 

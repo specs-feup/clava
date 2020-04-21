@@ -59,12 +59,13 @@ public class MemoiCodeGen {
 
         mergeBitsCode(code, varNames, maxVarBits, indexBits);
 
-        lookupCode(report, code, varNames, indexBits);
+        lookupCode(report, code, varNames, indexBits, paramNames);
 
         return code.toString();
     }
 
-    private static void lookupCode(MergedMemoiReport report, StringBuilder code, List<String> varNames, int indexBits) {
+    private static void lookupCode(MergedMemoiReport report, StringBuilder code, List<String> varNames, int indexBits,
+            List<String> paramNames) {
         code.append("\nif(");
 
         List<String> testClauses = new ArrayList<>();
@@ -82,13 +83,36 @@ public class MemoiCodeGen {
         }
         code.append(String.join(" && ", testClauses));
 
-        code.append(") {\n\treturn *(");
-        code.append(report.getOutputType());
-        code.append(" *) &table[hash_");
-        code.append(indexBits);
-        code.append("_bits][");
-        code.append(varNames.size());
-        code.append("];\n}\n");
+        final int outputCount = report.getOutputCount();
+        final int inputCount = report.getInputCount();
+
+        code.append(") {\n");
+
+        if (outputCount == 1) {
+
+            code.append("\treturn *(");
+            code.append(report.getOutputTypes().get(0));
+            code.append(" *) &table[hash_");
+            code.append(indexBits);
+            code.append("_bits][");
+            code.append(varNames.size());
+            code.append("];\n}\n");
+        } else {
+
+            for (int o = 0; o < outputCount; o++) {
+
+                code.append("\t*");
+                code.append(paramNames.get(o + inputCount));
+                code.append(" = *(");
+                code.append(report.getOutputTypes().get(o));
+                code.append(" *) &table[hash_");
+                code.append(indexBits);
+                code.append("_bits][");
+                code.append(o + inputCount);
+                code.append("];\n");
+            }
+            code.append("\treturn;\n}\n");
+        }
     }
 
     private static void mergeBitsCode(StringBuilder code, List<String> varNames, int maxVarBits, int indexBits) {
@@ -155,7 +179,7 @@ public class MemoiCodeGen {
 
         int maxVarBits = 0;
 
-        for (int p = 0; p < paramNames.size(); p++) {
+        for (int p = 0; p < report.getInputCount(); p++) {
 
             String paramName = paramNames.get(p);
 
@@ -187,11 +211,12 @@ public class MemoiCodeGen {
 
         String nanBits = "fff8000000000000";
         int inputCount = report.getInputCount();
+        int outputCount = report.getOutputCount();
 
         StringBuilder code = new StringBuilder("static const uint64_t table[");
         code.append(numSets);
         code.append("][");
-        code.append(inputCount + 1);
+        code.append(inputCount + outputCount);
         code.append("] = {\n");
 
         for (int i = 0; i < numSets; i++) {
@@ -211,7 +236,12 @@ public class MemoiCodeGen {
                     code.append(nanBits);
                     code.append(", ");
                 }
+
                 code.append(0);
+                for (int oc = 1; oc < outputCount; oc++) {
+                    code.append(", ");
+                    code.append(0);
+                }
             } else {
 
                 String fullKey = entry.getKey();
@@ -221,8 +251,17 @@ public class MemoiCodeGen {
                     code.append(keys[k]);
                     code.append(", ");
                 }
+
+                String fullOutputString = entry.getOutput();
+                String[] outputStrings = fullOutputString.split("#");
+
                 code.append(H);
-                code.append(entry.getOutput());
+                code.append(outputStrings[0]);
+                for (int o = 1; o < outputCount; o++) {
+                    code.append(", ");
+                    code.append(H);
+                    code.append(outputStrings[o]);
+                }
             }
             code.append("},\n");
         }

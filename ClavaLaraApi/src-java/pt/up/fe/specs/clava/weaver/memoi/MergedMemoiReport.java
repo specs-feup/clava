@@ -26,9 +26,10 @@ public class MergedMemoiReport {
 
     private String id;
     private String funcSig;
-    private String outputType;
     private int inputCount;
+    private int outputCount;
     private List<String> inputTypes;
+    private List<String> outputTypes;
     private List<String> callSites;
 
     private List<Integer> elements;
@@ -46,8 +47,9 @@ public class MergedMemoiReport {
 
         this.id = report.getId();
         this.funcSig = report.getFuncSig();
-        this.outputType = report.getOutputType();
+        this.outputTypes = report.getOutputTypes();
         this.inputCount = report.getInputCount();
+        this.outputCount = report.getOutputCount();
         this.inputTypes = new ArrayList<>(report.getInputTypes());
         this.callSites = new ArrayList<>(report.getCall_sites());
 
@@ -152,12 +154,12 @@ public class MergedMemoiReport {
         this.funcSig = funcSig;
     }
 
-    public String getOutputType() {
-        return outputType;
+    public List<String> getOutputTypes() {
+        return outputTypes;
     }
 
-    public void setOutputType(String outputType) {
-        this.outputType = outputType;
+    public void setOutputType(List<String> outputTypes) {
+        this.outputTypes = outputTypes;
     }
 
     public int getInputCount() {
@@ -166,6 +168,14 @@ public class MergedMemoiReport {
 
     public void setInputCount(int inputCount) {
         this.inputCount = inputCount;
+    }
+
+    public int getOutputCount() {
+        return outputCount;
+    }
+
+    public void setOutputCount(int outputCount) {
+        this.outputCount = outputCount;
     }
 
     public List<String> getInputTypes() {
