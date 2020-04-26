@@ -311,11 +311,11 @@ public class CxxWeaver extends ACxxWeaver {
      * Set a file/folder in the weaver if it is valid file/folder type for the weaver.
      *
      * @param source
-     *                      the file with the source code
+     *            the file with the source code
      * @param outputDir
-     *                      output directory for the generated file(s)
+     *            output directory for the generated file(s)
      * @param args
-     *                      arguments to start the weaver
+     *            arguments to start the weaver
      * @return true if the file type is valid
      */
     @Override
@@ -325,7 +325,9 @@ public class CxxWeaver extends ACxxWeaver {
         // Set args
         this.args = args;
 
-        ClavaLog.debug(() -> "Clava Weaver arguments: " + args);
+        // TODO: Temporarily disabled
+        // ClavaLog.debug(() -> "Clava Weaver arguments: " + args);
+
         // Add normal include folders to the sources
         // sources.addAll(args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles());
 
@@ -338,7 +340,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Logger.getLogger(LoggingUtils.INFO_TAG).setUseParentHandlers(false);
 
         if (args.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
-            System.out.println("DISABLING CLAVA INFO FOR LOGGER " + SpecsLogs.getSpecsLogger());
+            // System.out.println("DISABLING CLAVA INFO FOR LOGGER " + SpecsLogs.getSpecsLogger());
             // Needs to keep a strong reference, or it can be garbage collected
             /*
             infoLogger = Logger.getLogger(SpecsLogs.INFO_TAG);
@@ -689,9 +691,9 @@ public class CxxWeaver extends ACxxWeaver {
      * @param sources
      * @param parserOptions
      * @param extraOptions
-     *                          options that should not be processed (e.g., header files found in folders specified by
-     *                          -I flags are automatically added to the compilation, if we want to add header folders
-     *                          whose header files should not be parsed, they can be specified here)
+     *            options that should not be processed (e.g., header files found in folders specified by -I flags are
+     *            automatically added to the compilation, if we want to add header folders whose header files should not
+     *            be parsed, they can be specified here)
      * @return
      */
     public App createApp(List<File> sources, List<String> parserOptions, List<String> extraOptions) {
@@ -1073,7 +1075,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Re-enable output
         if (args.get(CxxWeaverOption.DISABLE_CLAVA_INFO)) {
-            System.out.println("REENABLING CLAVA INFO FOR LOGGER " + SpecsLogs.getSpecsLogger());
+            // System.out.println("REENABLING CLAVA INFO FOR LOGGER " + SpecsLogs.getSpecsLogger());
             /*
             Preconditions.checkNotNull(infoLogger);
             infoLogger.setLevel(previousLevel);
@@ -1461,7 +1463,7 @@ public class CxxWeaver extends ACxxWeaver {
     /**
      *
      * @param update
-     *                   if true, the weaver will update its state to use the rebuilt tree instead of the original tree
+     *            if true, the weaver will update its state to use the rebuilt tree instead of the original tree
      */
     public void rebuildAst(boolean update) {
         // Check if inside apply
