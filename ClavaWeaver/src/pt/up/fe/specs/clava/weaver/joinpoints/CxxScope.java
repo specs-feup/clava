@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,9 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.analysis.flow.control.ControlFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraph;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraphMetrics;
 import pt.up.fe.specs.clava.ast.cilk.CilkFor;
 import pt.up.fe.specs.clava.ast.cilk.CilkSync;
 import pt.up.fe.specs.clava.ast.comment.Comment;
@@ -416,5 +420,11 @@ public class CxxScope extends AScope {
     public void dfgImpl() {
 	DataFlowGraph dfg = new DataFlowGraph(scope, null, null);
 	dfg.generateDot(false);
+	ArrayList<DataFlowNode> subgraphs = dfg.getSubgraphRoots();
+	for (DataFlowNode node : subgraphs) {
+	    DataFlowSubgraph sub = dfg.getSubgraph(node);
+	    DataFlowSubgraphMetrics metrics = sub.getMetrics();
+	    System.out.println(metrics.toString());
+	}
     }
 }

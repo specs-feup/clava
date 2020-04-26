@@ -24,6 +24,7 @@ public class DataFlowNode extends FlowNode implements Cloneable {
     private DataFlowNodeType type;
     private int nIterations = 0;
     private int subgraphID = -1;
+    private boolean isSubgraphRoot = false;
 
     public DataFlowNode(DataFlowNodeType type, String label) {
 	super(label);
@@ -71,5 +72,13 @@ public class DataFlowNode extends FlowNode implements Cloneable {
 
     public void setSubgraphID(int subgraphID) {
 	this.subgraphID = subgraphID;
+    }
+
+    public boolean isSubgraphRoot() {
+	return isSubgraphRoot;
+    }
+
+    public void setSubgraphRoot(boolean isSubgraphRoot) {
+	this.isSubgraphRoot = isSubgraphRoot;
     }
 }

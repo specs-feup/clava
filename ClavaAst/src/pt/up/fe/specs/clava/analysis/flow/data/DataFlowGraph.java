@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.analysis.flow.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
@@ -44,6 +45,8 @@ public class DataFlowGraph extends FlowGraph {
     private int tempCounter = 0;
     private boolean tempEnabled = false;
     private int subgraphCounter = 1;
+    private ArrayList<DataFlowNode> subgraphRoots = new ArrayList<>();
+    private HashMap<DataFlowNode, DataFlowSubgraph> subgraphs = new HashMap<>();
     public static final DataFlowNode nullNode = new DataFlowNode(DataFlowNodeType.NULL, "");
 
     public DataFlowGraph(FunctionDecl func, Stmt beginning, Stmt end) {
@@ -54,13 +57,13 @@ public class DataFlowGraph extends FlowGraph {
 	super("Data-flow Graph - " + ((FunctionDecl) body.getParent()).getDeclName(), "n");
 	this.cfg = new ControlFlowGraph(body);
 	this.cfg = CFGConverter.convert(this.cfg);
-	// this.beginning = beginning;
-	// this.end = end;
 
 	BasicBlockNode start = (BasicBlockNode) cfg.findNode(0);
 
 	this.addNode(nullNode);
 	buildGraph(start, -1);
+
+	// mergeNodes();
 
 	findSubgraphs();
     }
@@ -83,6 +86,9 @@ public class DataFlowGraph extends FlowGraph {
 		}
 		if (inEdge && outEdge) {
 		    buildSubgraph(node, subgraphCounter);
+		    node.setSubgraphRoot(true);
+		    this.subgraphRoots.add(node);
+		    this.subgraphs.put(node, new DataFlowSubgraph(node));
 		    subgraphCounter++;
 		} else {
 		    node.setSubgraphID(0);
@@ -102,6 +108,29 @@ public class DataFlowGraph extends FlowGraph {
 		buildSubgraph((DataFlowNode) edge.getSource(), id);
 	    }
 	}
+    }
+
+    private ArrayList<DataFlowNode> getSubgraphNodes(int id) {
+	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	for (FlowNode n : this.nodes) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getSubgraphID() == id)
+		nodes.add(node);
+	}
+	return nodes;
+    }
+
+    public int getSubgraphCounter() {
+	return subgraphCounter;
+    }
+
+    public DataFlowSubgraph getSubgraph(DataFlowNode root) {
+	return this.subgraphs.get(root);
+    }
+
+    public DataFlowSubgraph getSubgraph(int id) {
+	DataFlowNode node = this.subgraphRoots.get(id);
+	return this.subgraphs.get(node);
     }
 
     @Override
@@ -384,13 +413,7 @@ public class DataFlowGraph extends FlowGraph {
 	return sinks;
     }
 
-    public ArrayList<DataFlowNode> getSubgraphNodes(int id) {
-	ArrayList<DataFlowNode> nodes = new ArrayList<>();
-	for (FlowNode n : this.nodes) {
-	    DataFlowNode node = (DataFlowNode) n;
-	    if (node.getSubgraphID() == id)
-		nodes.add(node);
-	}
-	return nodes;
+    public ArrayList<DataFlowNode> getSubgraphRoots() {
+	return subgraphRoots;
     }
 }
