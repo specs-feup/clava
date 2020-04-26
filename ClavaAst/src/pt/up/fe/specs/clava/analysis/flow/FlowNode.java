@@ -26,6 +26,7 @@ public abstract class FlowNode implements ToDot {
     protected String name;
     protected String label;
     private boolean disabled = false;
+    private boolean explored = false;
 
     public FlowNode(String label) {
 	this.label = label;
@@ -42,6 +43,14 @@ public abstract class FlowNode implements ToDot {
 
     public void addOutEdge(FlowEdge e) {
 	outEdges.add(e);
+    }
+
+    public void removeInEdge(FlowEdge e) {
+	inEdges.remove(e);
+    }
+
+    public void removeOutEdge(FlowEdge e) {
+	outEdges.remove(e);
     }
 
     public ArrayList<FlowNode> getInNodes() {
@@ -86,5 +95,18 @@ public abstract class FlowNode implements ToDot {
 
     public ArrayList<FlowEdge> getInEdges() {
 	return inEdges;
+    }
+
+    public void clear() {
+	this.inEdges.clear();
+	this.outEdges.clear();
+    }
+
+    public boolean isExplored() {
+	return explored;
+    }
+
+    public void setExplored(boolean explored) {
+	this.explored = explored;
     }
 }

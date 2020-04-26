@@ -24,68 +24,128 @@ import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 
 public class DataFlowSubgraph {
     private DataFlowNode root;
-    private int id = -1;
+    private int id;
 
     public DataFlowSubgraph(DataFlowNode root) {
 	this.root = root;
-	this.id = root.getSubgraphID();
     }
 
     public ArrayList<DataFlowNode> getNodes() {
-	return findNodes(root);
+	ArrayList<DataFlowNode> nodes = findNodes(root);
+	nodes.forEach(node -> {
+	    node.setExplored(false);
+	});
+	return nodes;
     }
 
     private ArrayList<DataFlowNode> findNodes(DataFlowNode node) {
 	ArrayList<DataFlowNode> nodes = new ArrayList<>();
-	for (FlowNode n : node.getInNodes()) {
-	    DataFlowNode ascendant = (DataFlowNode) n;
-	    nodes.addAll(findNodes(ascendant));
+	if (!node.isExplored()) {
+	    nodes.add(node);
+	    node.setExplored(true);
+	    for (FlowNode n : node.getInNodes()) {
+		DataFlowNode ascendant = (DataFlowNode) n;
+		nodes.addAll(findNodes(ascendant));
+	    }
 	}
 	return nodes;
     }
 
-    public void mergeNodes() {
-
+    public HashMap<String, ArrayList<DataFlowNode>> getMultipleVarLoads() {
+	HashMap<String, ArrayList<DataFlowNode>> map = new HashMap<>();
+	ArrayList<DataFlowNode> nodes = getNodes();
+	for (DataFlowNode node : nodes) {
+	    if (node.getType() == DataFlowNodeType.LOAD_ARRAY || node.getType() == DataFlowNodeType.LOAD_VAR
+		    || node.getType() == DataFlowNodeType.LOAD_INDEX) {
+		if (map.containsKey(node.getLabel())) {
+		    map.get(node.getLabel()).add(node);
+		} else {
+		    ArrayList<DataFlowNode> labelNodes = new ArrayList<>();
+		    labelNodes.add(node);
+		    map.put(node.getLabel(), labelNodes);
+		}
+	    }
+	}
+	map.entrySet().removeIf(e -> e.getValue().size() == 1);
+	return map;
     }
 
     public DataFlowSubgraphMetrics getMetrics() {
 	DataFlowSubgraphMetrics metrics = new DataFlowSubgraphMetrics(root);
-	// metrics.setCriticalPath(calculateCriticalPath());
-	metrics.setDepth(calculateDepth(root, 0));
-	// metrics.setLoads(findLoads());
-	// metrics.setStores(findStores());
+	int depth = calculateCriticalPath(root);
+	ArrayList<DataFlowNode> path = root.getCurrPath();
+	metrics.setCriticalPath(path);
+	metrics.setDepth(path.size());
+	metrics.setNumLoads(findLoads());
+	metrics.setNumStores(findStores());
+	metrics.setNumOp(findOps());
 	return metrics;
     }
 
-    private HashMap<String, Integer> findStores() {
-	// TODO Auto-generated method stub
-	return null;
+    private int findOps() {
+	ArrayList<DataFlowNode> nodes = this.getNodes();
+	int counter = 0;
+	for (DataFlowNode node : nodes) {
+	    if (node.getType() == DataFlowNodeType.OP_ARITH || node.getType() == DataFlowNodeType.OP_CALL) {
+		counter++;
+	    }
+	}
+	return counter;
     }
 
-    private HashMap<String, Integer> findLoads() {
-	// TODO Auto-generated method stub
-	return null;
+    private int findStores() {
+	ArrayList<DataFlowNode> nodes = this.getNodes();
+	int counter = 0;
+	for (DataFlowNode node : nodes) {
+	    if (node.getType() == DataFlowNodeType.STORE_ARRAY || node.getType() == DataFlowNodeType.STORE_VAR) {
+		counter++;
+	    }
+	}
+	return counter;
     }
 
-    private int calculateDepth(DataFlowNode node, int depth) {
-//	if (node.getInNodes().size() == 0)
-//	    return depth;
-//	else {
-//	    ArrayList<FlowNode> children = node.getInNodes();
-//	    int max = 0;
-//	    for (FlowNode child : children) {
-//		DataFlowNode childNode = (DataFlowNode) child;
-//		int d = calculateDepth(childNode, depth + 1);
-//		if (d > max)
-//		    max = d;
-//	    }
-//	    return max;
-//	}
-	return 0;
+    private int findLoads() {
+	ArrayList<DataFlowNode> nodes = this.getNodes();
+	int counter = 0;
+	for (DataFlowNode node : nodes) {
+	    if (node.getType() == DataFlowNodeType.LOAD_ARRAY || node.getType() == DataFlowNodeType.LOAD_VAR
+		    || node.getType() == DataFlowNodeType.LOAD_INDEX) {
+		counter++;
+	    }
+	}
+	return counter;
     }
 
-    private ArrayList<DataFlowNode> calculateCriticalPath() {
-	// TODO Auto-generated method stub
-	return this.getNodes();
+    private int calculateCriticalPath(DataFlowNode node) {
+	int count = 0;
+	if (node.getType() == DataFlowNodeType.OP_ARITH || node.getType() == DataFlowNodeType.OP_CALL)
+	    count++;
+	node.getCurrPath().add(node);
+
+	int max = -1;
+	ArrayList<DataFlowNode> ascendantPath = new ArrayList<>();
+	for (FlowNode n : node.getInNodes()) {
+	    DataFlowNode ascendant = (DataFlowNode) n;
+	    if (ascendant != root) {
+		int ascendantCount = calculateCriticalPath(ascendant);
+		if (ascendantCount > max) {
+		    max = ascendantCount;
+		    ascendantPath = ascendant.getCurrPath();
+		}
+	    }
+	}
+	max = (max == -1) ? 0 : max;
+	node.getCurrPath().addAll(ascendantPath);
+	return count + max;
+    }
+
+    private ArrayList<DataFlowNode> getSources() {
+	ArrayList<DataFlowNode> sources = new ArrayList<>();
+	ArrayList<DataFlowNode> nodes = getNodes();
+	nodes.forEach(node -> {
+	    if (node.getInEdges().size() == 0 && node.getOutEdges().size() != 0)
+		sources.add(node);
+	});
+	return sources;
     }
 }

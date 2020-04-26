@@ -18,10 +18,7 @@
 package pt.up.fe.specs.clava.analysis.flow.data;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Collections;
 
 public class DataFlowSubgraphMetrics {
     private DataFlowNode root;
@@ -30,8 +27,6 @@ public class DataFlowSubgraphMetrics {
     private int numStores = -1;
     private int depth = -1;
     private ArrayList<DataFlowNode> criticalPath = new ArrayList<>();
-    private HashMap<String, Integer> stores = new HashMap<>();
-    private HashMap<String, Integer> loads = new HashMap<>();
 
     public DataFlowSubgraphMetrics(DataFlowNode root) {
 	this.root = root;
@@ -62,45 +57,24 @@ public class DataFlowSubgraphMetrics {
     }
 
     public void setCriticalPath(ArrayList<DataFlowNode> criticalPath) {
+	Collections.reverse(criticalPath);
 	this.criticalPath = criticalPath;
-    }
-
-    public HashMap<String, Integer> getStores() {
-	return stores;
-    }
-
-    public void setStores(HashMap<String, Integer> stores) {
-	this.stores = stores;
-	int n = 0;
-	Iterator<Entry<String, Integer>> it = stores.entrySet().iterator();
-	while (it.hasNext()) {
-	    Map.Entry<String, Integer> pair = it.next();
-	    n += pair.getValue();
-	}
-	this.numStores = n;
-    }
-
-    public HashMap<String, Integer> getLoads() {
-	return loads;
-    }
-
-    public void setLoads(HashMap<String, Integer> loads) {
-	this.loads = loads;
-	int n = 0;
-	Iterator<Entry<String, Integer>> it = loads.entrySet().iterator();
-	while (it.hasNext()) {
-	    Map.Entry<String, Integer> pair = it.next();
-	    n += pair.getValue();
-	}
-	this.numLoads = n;
     }
 
     public int getNumLoads() {
 	return numLoads;
     }
 
+    public void setNumLoads(int n) {
+	this.numLoads = n;
+    }
+
     public int getNumStores() {
 	return numStores;
+    }
+
+    public void setNumStores(int n) {
+	this.numStores = n;
     }
 
     @Override
@@ -114,9 +88,9 @@ public class DataFlowSubgraphMetrics {
 	sb.append("Num. stores: ").append(numStores).append(NL);
 	sb.append("Num. operations: ").append(numOp).append(NL);
 	sb.append("Critical Path:").append(NL);
-//	for (int i = 0; i < criticalPath.size() - 1; i++)
-//	    sb.append(criticalPath.get(i).getLabel()).append(" -> ");
-//	sb.append(criticalPath.get(criticalPath.size() - 1)).append(NL);
+	for (int i = 0; i < criticalPath.size() - 1; i++)
+	    sb.append(criticalPath.get(i).getLabel()).append(" -> ");
+	sb.append(criticalPath.get(criticalPath.size() - 1).getLabel()).append(NL);
 	sb.append("------------------------------").append(NL);
 	return sb.toString();
     }

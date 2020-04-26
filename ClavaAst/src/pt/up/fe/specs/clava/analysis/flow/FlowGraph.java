@@ -99,4 +99,8 @@ public abstract class FlowGraph {
 		return node;
 	return null;
     }
+
+    protected void removeNode(FlowNode node) {
+	this.nodes.remove(node);
+    }
 }

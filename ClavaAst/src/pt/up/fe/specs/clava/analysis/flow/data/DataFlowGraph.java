@@ -57,15 +57,22 @@ public class DataFlowGraph extends FlowGraph {
 	super("Data-flow Graph - " + ((FunctionDecl) body.getParent()).getDeclName(), "n");
 	this.cfg = new ControlFlowGraph(body);
 	this.cfg = CFGConverter.convert(this.cfg);
+	this.addNode(nullNode);
 
 	BasicBlockNode start = (BasicBlockNode) cfg.findNode(0);
-
-	this.addNode(nullNode);
 	buildGraph(start, -1);
-
-	// mergeNodes();
-
 	findSubgraphs();
+	findDuplicatedNodes();
+    }
+
+    private void findDuplicatedNodes() {
+	for (DataFlowNode root : subgraphRoots) {
+	    HashMap<String, ArrayList<DataFlowNode>> map = subgraphs.get(root).getMultipleVarLoads();
+	    map.forEach((key, value) -> {
+		mergeNodes(value);
+		System.out.println("Merged accesses to variable " + key);
+	    });
+	}
     }
 
     private void findSubgraphs() {
@@ -415,5 +422,30 @@ public class DataFlowGraph extends FlowGraph {
 
     public ArrayList<DataFlowNode> getSubgraphRoots() {
 	return subgraphRoots;
+    }
+
+    public void mergeNodes(ArrayList<DataFlowNode> nodes) {
+	DataFlowNode master = nodes.get(0);
+	for (int i = 1; i < nodes.size(); i++) {
+	    FlowNode node = nodes.get(i);
+	    for (FlowEdge inEdge : node.getInEdges()) {
+		FlowNode inNode = inEdge.getSource();
+		inNode.removeOutEdge(inEdge);
+		// node.removeInEdge(inEdge);
+		inEdge.setDest(master);
+		inNode.addOutEdge(inEdge);
+		master.addInEdge(inEdge);
+	    }
+	    for (FlowEdge outEdge : node.getOutEdges()) {
+		FlowNode outNode = outEdge.getDest();
+		outNode.removeInEdge(outEdge);
+		// node.removeOutEdge(outEdge);
+		outEdge.setSource(master);
+		outNode.addInEdge(outEdge);
+		master.addOutEdge(outEdge);
+	    }
+	    node.clear();
+	    removeNode(node);
+	}
     }
 }

@@ -17,6 +17,8 @@
 
 package pt.up.fe.specs.clava.analysis.flow.data;
 
+import java.util.ArrayList;
+
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 
 public class DataFlowNode extends FlowNode implements Cloneable {
@@ -25,6 +27,7 @@ public class DataFlowNode extends FlowNode implements Cloneable {
     private int nIterations = 0;
     private int subgraphID = -1;
     private boolean isSubgraphRoot = false;
+    private ArrayList<DataFlowNode> currPath = new ArrayList<>();
 
     public DataFlowNode(DataFlowNodeType type, String label) {
 	super(label);
@@ -80,5 +83,9 @@ public class DataFlowNode extends FlowNode implements Cloneable {
 
     public void setSubgraphRoot(boolean isSubgraphRoot) {
 	this.isSubgraphRoot = isSubgraphRoot;
+    }
+
+    public ArrayList<DataFlowNode> getCurrPath() {
+	return currPath;
     }
 }
