@@ -41,6 +41,7 @@ import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.hls.ClavaHLS;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
@@ -418,13 +419,15 @@ public class CxxScope extends AScope {
 
     @Override
     public void dfgImpl() {
-	DataFlowGraph dfg = new DataFlowGraph(scope, null, null);
-	dfg.generateDot(false);
+	DataFlowGraph dfg = new DataFlowGraph(scope);
+	// dfg.generateDot(false);
 	ArrayList<DataFlowNode> subgraphs = dfg.getSubgraphRoots();
 	for (DataFlowNode node : subgraphs) {
 	    DataFlowSubgraph sub = dfg.getSubgraph(node);
 	    DataFlowSubgraphMetrics metrics = sub.getMetrics();
-	    System.out.println(metrics.toString());
+	    // System.out.println(metrics.toString());
 	}
+	ClavaHLS hls = new ClavaHLS(dfg);
+	hls.run();
     }
 }

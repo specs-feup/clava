@@ -24,6 +24,7 @@ import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNode;
 import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNodeType;
 import pt.up.fe.specs.clava.analysis.flow.control.ControlFlowGraph;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
@@ -45,16 +46,19 @@ public class DataFlowGraph extends FlowGraph {
     private int tempCounter = 0;
     private boolean tempEnabled = false;
     private int subgraphCounter = 1;
+    private ArrayList<DataFlowParam> params = new ArrayList<>();
     private ArrayList<DataFlowNode> subgraphRoots = new ArrayList<>();
     private HashMap<DataFlowNode, DataFlowSubgraph> subgraphs = new HashMap<>();
+    private CompoundStmt body;
     public static final DataFlowNode nullNode = new DataFlowNode(DataFlowNodeType.NULL, "");
 
-    public DataFlowGraph(FunctionDecl func, Stmt beginning, Stmt end) {
-	this(func.getBody().get(), beginning, end);
+    public DataFlowGraph(FunctionDecl func) {
+	this(func.getBody().get());
     }
 
-    public DataFlowGraph(CompoundStmt body, Stmt beginning, Stmt end) {
+    public DataFlowGraph(CompoundStmt body) {
 	super("Data-flow Graph - " + ((FunctionDecl) body.getParent()).getDeclName(), "n");
+	this.body = body;
 	this.cfg = new ControlFlowGraph(body);
 	this.cfg = CFGConverter.convert(this.cfg);
 	this.addNode(nullNode);
@@ -63,6 +67,20 @@ public class DataFlowGraph extends FlowGraph {
 	buildGraph(start, -1);
 	findSubgraphs();
 	findDuplicatedNodes();
+	findFunctionParams();
+	for (DataFlowParam param : params)
+	    System.out.println(param.toString());
+    }
+
+    private void findFunctionParams() {
+	for (int i = 0; i < body.getParent().getChildren().size(); i++) {
+	    if (body.getParent().getChild(i) instanceof ParmVarDecl) {
+		ParmVarDecl paramNode = (ParmVarDecl) body.getParent().getChild(i);
+		DataFlowParam param = new DataFlowParam(paramNode);
+		params.add(param);
+	    }
+	}
+
     }
 
     private void findDuplicatedNodes() {

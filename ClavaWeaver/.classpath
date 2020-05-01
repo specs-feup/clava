@@ -13,6 +13,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/LanguageSpecification"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ClangAstParser"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ClavaAst"/>
+	<classpathentry kind="src" path="/ClavaHls"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SpecsUtils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/WeaverInterface"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/LARAI"/>
