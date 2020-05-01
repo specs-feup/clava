@@ -17,20 +17,41 @@
 
 package pt.up.fe.specs.clava.hls.strategies;
 
-import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
+import java.util.HashMap;
 
-public class ArrayStreamDetector {
-    private DataFlowGraph dfg;
+import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowParam;
+import pt.up.fe.specs.clava.hls.ClavaHLS;
+import pt.up.fe.specs.clava.hls.directives.HLSStream;
+
+public class ArrayStreamDetector extends HLSStrategy {
+    private HashMap<String, Boolean> isStream = new HashMap<>();
 
     public ArrayStreamDetector(DataFlowGraph dfg) {
-	this.dfg = dfg;
+	super(dfg);
+	for (DataFlowParam param : dfg.getParams()) {
+	    if (param.isArray())
+		isStream.put(param.getName(), false);
+	}
+
     }
 
     public void detect() {
-
+	for (String variable : isStream.keySet()) {
+	    isStream.put(variable, true);
+	}
     }
 
     public void apply() {
+	ClavaNode node = dfg.getFirstStmt();
 
+	for (String variable : isStream.keySet()) {
+	    if (isStream.get(variable)) {
+		HLSStream directive = new HLSStream(variable);
+		insertDirective(node, directive);
+		ClavaHLS.log("declaring parameter array " + variable + " as stream");
+	    }
+	}
     }
 }

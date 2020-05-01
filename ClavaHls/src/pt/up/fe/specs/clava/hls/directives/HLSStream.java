@@ -17,23 +17,38 @@
 
 package pt.up.fe.specs.clava.hls.directives;
 
-public class HLSInline extends HLSDirective {
-    private InlineType type = InlineType.NONE;
+public class HLSStream extends HLSDirective {
+    private String variable;
+    private int depth = -1;
+    private int dim = -1;
+    private boolean isOff = false;
 
-    public enum InlineType {
-	REGION, RECURSIVE, OFF, NONE
-    };
-
-    public HLSInline(InlineType type) {
-	this.type = type;
+    public HLSStream(String variable) {
+	this.variable = variable;
     }
 
     @Override
     public String toString() {
-	String s = super.toString();
-	s += "inline ";
-	if (type != InlineType.NONE)
-	    s += type.toString().toLowerCase();
-	return s;
+	StringBuilder sb = new StringBuilder();
+	sb.append(super.toString()).append("stream variable=").append(variable);
+	if (depth != -1)
+	    sb.append(" depth=").append(depth);
+	if (dim != -1)
+	    sb.append(" dim=").append(dim);
+	if (isOff)
+	    sb.append(" off");
+	return sb.toString();
+    }
+
+    public void setDepth(int depth) {
+	this.depth = depth;
+    }
+
+    public void setDim(int dim) {
+	this.dim = dim;
+    }
+
+    public void setOff(boolean isOff) {
+	this.isOff = isOff;
     }
 }

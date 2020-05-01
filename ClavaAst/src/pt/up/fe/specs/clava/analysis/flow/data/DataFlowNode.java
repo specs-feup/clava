@@ -19,7 +19,9 @@ package pt.up.fe.specs.clava.analysis.flow.data;
 
 import java.util.ArrayList;
 
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
 
 public class DataFlowNode extends FlowNode implements Cloneable {
 
@@ -27,11 +29,15 @@ public class DataFlowNode extends FlowNode implements Cloneable {
     private int nIterations = 0;
     private int subgraphID = -1;
     private boolean isSubgraphRoot = false;
+    private Stmt stmt;
     private ArrayList<DataFlowNode> currPath = new ArrayList<>();
+    private ClavaNode clavaNode;
 
-    public DataFlowNode(DataFlowNodeType type, String label) {
+    public DataFlowNode(DataFlowNodeType type, String label, ClavaNode node) {
 	super(label);
 	this.type = type;
+	this.clavaNode = node;
+	this.stmt = findStmt(node);
     }
 
     @Override
@@ -65,7 +71,7 @@ public class DataFlowNode extends FlowNode implements Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-	DataFlowNode node = new DataFlowNode(this.type, this.label);
+	DataFlowNode node = new DataFlowNode(this.type, this.label, null);
 	return node;
     }
 
@@ -87,5 +93,25 @@ public class DataFlowNode extends FlowNode implements Cloneable {
 
     public ArrayList<DataFlowNode> getCurrPath() {
 	return currPath;
+    }
+
+    public Stmt getStmt() {
+	return stmt;
+    }
+
+    public void setStmt(Stmt stmt) {
+	this.stmt = stmt;
+    }
+
+    private Stmt findStmt(ClavaNode node) {
+	return (node != null) ? node.getAncestor(Stmt.class) : null;
+    }
+
+    public ClavaNode getClavaNode() {
+	return clavaNode;
+    }
+
+    public void setClavaNode(ClavaNode clavaNode) {
+	this.clavaNode = clavaNode;
     }
 }

@@ -17,16 +17,9 @@
 
 package pt.up.fe.specs.clava.hls.directives;
 
-import pt.up.fe.specs.util.parsing.comments.PragmaRule;
-
 public abstract class HLSDirective {
-    protected String getPragmaString() {
+    @Override
+    public String toString() {
 	return "#pragma HLS ";
-    }
-
-    public PragmaRule getPragma() {
-	PragmaRule pragma = new PragmaRule();
-	pragma.apply(getPragmaString(), null);
-	return pragma;
     }
 }

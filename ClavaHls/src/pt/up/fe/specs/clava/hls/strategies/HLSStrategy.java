@@ -15,27 +15,23 @@
  *  under the License.
  */
 
-package pt.up.fe.specs.clava.hls;
+package pt.up.fe.specs.clava.hls.strategies;
 
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
-import pt.up.fe.specs.clava.hls.strategies.ArrayStreamDetector;
+import pt.up.fe.specs.clava.hls.directives.HLSDirective;
+import pt.up.fe.specs.clava.weaver.CxxActions;
+import pt.up.fe.specs.clava.weaver.CxxWeaver;
+import pt.up.fe.specs.clava.weaver.Insert;
 
-public class ClavaHLS {
-    private DataFlowGraph dfg;
+public abstract class HLSStrategy {
+    protected DataFlowGraph dfg;
 
-    public ClavaHLS(DataFlowGraph dfg) {
+    protected HLSStrategy(DataFlowGraph dfg) {
 	this.dfg = dfg;
     }
 
-    public void run() {
-	log("starting HLS restructuring");
-	log("detecting if arrays can be turned into streams");
-	ArrayStreamDetector arrayStream = new ArrayStreamDetector(dfg);
-	arrayStream.detect();
-	arrayStream.apply();
-    }
-
-    public static void log(String msg) {
-	System.out.println("HLS: " + msg);
+    public void insertDirective(ClavaNode node, HLSDirective directive) {
+	CxxActions.insertAsStmt(node, directive.toString(), Insert.BEFORE, CxxWeaver.getCxxWeaver());
     }
 }

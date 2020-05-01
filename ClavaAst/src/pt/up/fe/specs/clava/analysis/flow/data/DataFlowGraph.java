@@ -50,7 +50,8 @@ public class DataFlowGraph extends FlowGraph {
     private ArrayList<DataFlowNode> subgraphRoots = new ArrayList<>();
     private HashMap<DataFlowNode, DataFlowSubgraph> subgraphs = new HashMap<>();
     private CompoundStmt body;
-    public static final DataFlowNode nullNode = new DataFlowNode(DataFlowNodeType.NULL, "");
+    private ClavaNode firstStmt;
+    public static final DataFlowNode nullNode = new DataFlowNode(DataFlowNodeType.NULL, "", null);
 
     public DataFlowGraph(FunctionDecl func) {
 	this(func.getBody().get());
@@ -59,6 +60,7 @@ public class DataFlowGraph extends FlowGraph {
     public DataFlowGraph(CompoundStmt body) {
 	super("Data-flow Graph - " + ((FunctionDecl) body.getParent()).getDeclName(), "n");
 	this.body = body;
+	this.firstStmt = body.getChild(0);
 	this.cfg = new ControlFlowGraph(body);
 	this.cfg = CFGConverter.convert(this.cfg);
 	this.addNode(nullNode);
@@ -68,8 +70,6 @@ public class DataFlowGraph extends FlowGraph {
 	findSubgraphs();
 	findDuplicatedNodes();
 	findFunctionParams();
-	for (DataFlowParam param : params)
-	    System.out.println(param.toString());
     }
 
     private void findFunctionParams() {
@@ -243,7 +243,7 @@ public class DataFlowGraph extends FlowGraph {
 	if (n instanceof CompoundAssignOperator) { // x += y
 	    CompoundAssignOperator assign = (CompoundAssignOperator) n;
 	    String op = assign.getOp().getOpString().replace("=", "");
-	    assignNode = new DataFlowNode(DataFlowNodeType.OP_ARITH, op);
+	    assignNode = new DataFlowNode(DataFlowNodeType.OP_ARITH, op, n);
 	    this.addNode(assignNode);
 	}
 
@@ -277,7 +277,7 @@ public class DataFlowGraph extends FlowGraph {
     }
 
     private DataFlowNode buildVarDecl(VarDecl decl) {
-	DataFlowNode lhsNode = new DataFlowNode(DataFlowNodeType.STORE_VAR, decl.getDeclName());
+	DataFlowNode lhsNode = new DataFlowNode(DataFlowNodeType.STORE_VAR, decl.getDeclName(), decl);
 	this.addNode(lhsNode);
 	if (decl.getNumChildren() > 0) {
 	    ClavaNode rhs = decl.getChild(0);
@@ -322,28 +322,28 @@ public class DataFlowGraph extends FlowGraph {
 
     private DataFlowNode buildIntegerLitNode(IntegerLiteral intL) {
 	String label = intL.getLiteral();
-	DataFlowNode constNode = new DataFlowNode(DataFlowNodeType.CONSTANT, label);
+	DataFlowNode constNode = new DataFlowNode(DataFlowNodeType.CONSTANT, label, intL);
 	this.addNode(constNode);
 	return constNode;
     }
 
     private DataFlowNode buildFloatingLitNode(FloatingLiteral floatL) {
 	String label = floatL.getLiteral();
-	DataFlowNode constNode = new DataFlowNode(DataFlowNodeType.CONSTANT, label);
+	DataFlowNode constNode = new DataFlowNode(DataFlowNodeType.CONSTANT, label, floatL);
 	this.addNode(constNode);
 	return constNode;
     }
 
     private DataFlowNode buildDeclRefNode(DeclRefExpr var) {
 	String label = var.getName();
-	DataFlowNode varNode = new DataFlowNode(DataFlowNodeType.LOAD_VAR, label);
+	DataFlowNode varNode = new DataFlowNode(DataFlowNodeType.LOAD_VAR, label, var);
 	this.addNode(varNode);
 	return varNode;
     }
 
     private DataFlowNode buildArraySubExprNode(ArraySubscriptExpr arr) {
 	String label = ((DeclRefExpr) arr.getChild(0)).getName();
-	DataFlowNode arrNode = new DataFlowNode(DataFlowNodeType.LOAD_ARRAY, label);
+	DataFlowNode arrNode = new DataFlowNode(DataFlowNodeType.LOAD_ARRAY, label, arr);
 	this.addNode(arrNode);
 	DataFlowNode indexNode = buildExpression(arr.getChild(1));
 	this.addEdge(new DataFlowEdge(indexNode, arrNode, DataFlowEdgeType.INDEX));
@@ -352,7 +352,7 @@ public class DataFlowGraph extends FlowGraph {
 
     private DataFlowNode buildBinaryOperationNode(BinaryOperator op) {
 	String label = op.getOp().getOpString();
-	DataFlowNode opNode = new DataFlowNode(DataFlowNodeType.OP_ARITH, label);
+	DataFlowNode opNode = new DataFlowNode(DataFlowNodeType.OP_ARITH, label, op);
 	this.addNode(opNode);
 	DataFlowNode lhsNode = buildExpression(op.getChild(0));
 	DataFlowNode rhsNode = buildExpression(op.getChild(1));
@@ -361,7 +361,7 @@ public class DataFlowGraph extends FlowGraph {
 	if (tempEnabled) {
 	    String tempLabel = "temp_" + this.tempCounter;
 	    this.tempCounter += 1;
-	    DataFlowNode tempNode = new DataFlowNode(DataFlowNodeType.TEMP, tempLabel);
+	    DataFlowNode tempNode = new DataFlowNode(DataFlowNodeType.TEMP, tempLabel, op);
 	    this.addNode(tempNode);
 	    this.addEdge(new DataFlowEdge(opNode, tempNode));
 	    return tempNode;
@@ -372,7 +372,7 @@ public class DataFlowGraph extends FlowGraph {
     private DataFlowNode buildCallNode(CallExpr call) {
 	DeclRefExpr fun = (DeclRefExpr) call.getChild(0);
 	String funName = fun.getName();
-	DataFlowNode callNode = new DataFlowNode(DataFlowNodeType.OP_CALL, funName);
+	DataFlowNode callNode = new DataFlowNode(DataFlowNodeType.OP_CALL, funName, call);
 	this.addNode(callNode);
 	for (int i = 1; i < call.getNumChildren(); i++) {
 	    DataFlowNode argNode = buildExpression(call.getChild(i));
@@ -412,7 +412,7 @@ public class DataFlowGraph extends FlowGraph {
 
 	if (limitVal != -1 && initVal != -1)
 	    numIter = (limitVal - initVal) / increment;
-	DataFlowNode node = new DataFlowNode(DataFlowNodeType.LOOP, "loop " + counterName);
+	DataFlowNode node = new DataFlowNode(DataFlowNodeType.LOOP, "loop " + counterName, null);
 	node.setIterations(numIter);
 	this.addNode(node);
 	return node;
@@ -465,5 +465,17 @@ public class DataFlowGraph extends FlowGraph {
 	    node.clear();
 	    removeNode(node);
 	}
+    }
+
+    public CompoundStmt getBody() {
+	return body;
+    }
+
+    public ArrayList<DataFlowParam> getParams() {
+	return params;
+    }
+
+    public ClavaNode getFirstStmt() {
+	return firstStmt;
     }
 }
