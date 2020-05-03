@@ -13,7 +13,9 @@
 
 package pt.up.fe.specs.clava.weaver;
 
+import pt.up.fe.specs.clava.utils.NodePosition;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -23,14 +25,29 @@ public enum Insert implements StringProvider {
     REPLACE,
     AROUND;
 
-    private static final Lazy<EnumHelperWithValue<Insert>> HELPER = EnumHelperWithValue.newLazyHelperWithValue(Insert.class);
+    private static final Lazy<EnumHelperWithValue<Insert>> HELPER = EnumHelperWithValue
+            .newLazyHelperWithValue(Insert.class);
 
     public static EnumHelperWithValue<Insert> getHelper() {
-	return HELPER.get();
+        return HELPER.get();
     }
 
     @Override
     public String getString() {
-	return name().toLowerCase();
+        return name().toLowerCase();
+    }
+
+    public NodePosition toPosition() {
+        switch (this) {
+        case AFTER:
+            return NodePosition.AFTER;
+        case BEFORE:
+            return NodePosition.BEFORE;
+        case AROUND:
+        case REPLACE:
+            return NodePosition.REPLACE;
+        default:
+            throw new NotImplementedException(this);
+        }
     }
 }

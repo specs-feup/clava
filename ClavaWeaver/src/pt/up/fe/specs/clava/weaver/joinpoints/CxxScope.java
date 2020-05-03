@@ -69,365 +69,366 @@ public class CxxScope extends AScope {
     private final CompoundStmt scope;
 
     public CxxScope(CompoundStmt scope) {
-	super(new CxxStatement(scope));
-	this.scope = scope;
+        super(new CxxStatement(scope));
+        this.scope = scope;
     }
 
     @Override
     public ClavaNode getNode() {
-	return scope;
+        return scope;
     }
 
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
-	// 'body' behaviour
-	if (!scope.isNestedScope()) {
-	    // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
-	    Stmt literalStmt = CxxWeaver.getSnippetParser().parseStmt(code);
-	    CxxActions.insertStmt(position, scope, literalStmt, getWeaverEngine());
-	    return new AJoinPoint[] { CxxJoinpoints.create(literalStmt) };
-	}
+        // 'body' behaviour
+        if (!scope.isNestedScope()) {
+            // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
+            Stmt literalStmt = CxxWeaver.getSnippetParser().parseStmt(code);
+            CxxActions.insertStmt(position, scope, literalStmt, getWeaverEngine());
+            return new AJoinPoint[] { CxxJoinpoints.create(literalStmt) };
+        }
 
-	// Default behaviour
-	return super.insertImpl(position, code);
+        // Default behaviour
+        return super.insertImpl(position, code);
     }
 
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-	// 'body' behaviour
-	if (!scope.isNestedScope()) {
-	    ClavaLog.warning("Avoid using action 'insert before' over 'body' joinpoint, use 'insertBegin' instead.");
-	    return insertBodyImplJp("before", node.getNode());
-	}
+        // 'body' behaviour
+        if (!scope.isNestedScope()) {
+            ClavaLog.warning("Avoid using action 'insert before' over 'body' joinpoint, use 'insertBegin' instead.");
+            return insertBodyImplJp("before", node.getNode());
+        }
 
-	return super.insertBeforeImpl(node);
+        return super.insertBeforeImpl(node);
     }
 
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-	// 'body' behaviour
-	if (!scope.isNestedScope()) {
-	    ClavaLog.warning("Avoid using action 'insert after' over 'body' joinpoint, use 'insertEnd' instead.");
-	    return insertBodyImplJp("after", node.getNode());
-	}
+        // 'body' behaviour
+        if (!scope.isNestedScope()) {
+            ClavaLog.warning("Avoid using action 'insert after' over 'body' joinpoint, use 'insertEnd' instead.");
+            return insertBodyImplJp("after", node.getNode());
+        }
 
-	return super.insertAfterImpl(node);
+        return super.insertAfterImpl(node);
     }
 
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-	// 'body' behaviour
-	if (!scope.isNestedScope() && !(node instanceof AScope)) {
-	    // Transform, if needed, the given node into a stmt
-	    Stmt stmt = ClavaNodes.toStmt(node.getNode());
-	    return insertBodyImplJp("replace", stmt);
-	}
+        // 'body' behaviour
+        if (!scope.isNestedScope() && !(node instanceof AScope)) {
+            // Transform, if needed, the given node into a stmt
+            Stmt stmt = ClavaNodes.toStmt(node.getNode());
+            return insertBodyImplJp("replace", stmt);
+        }
 
-	// Default behaviour
-	return super.replaceWithImpl(node);
+        // Default behaviour
+        return super.replaceWithImpl(node);
     }
 
     private AJoinPoint insertBodyImplJp(String position, ClavaNode newNode) {
-	Stmt newStmt = CxxActions.getValidStatement(newNode, Insert.valueOf(position.toUpperCase()));
-	if (newStmt == null) {
-	    return null;
-	}
+        // Stmt newStmt = CxxActions.getValidStatement(newNode, Insert.valueOf(position.toUpperCase()));
+        Stmt newStmt = ClavaNodes.getValidStatement(newNode, Insert.valueOf(position.toUpperCase()).toPosition());
+        if (newStmt == null) {
+            return null;
+        }
 
-	CxxActions.insertStmt(position, scope, newStmt, getWeaverEngine());
+        CxxActions.insertStmt(position, scope, newStmt, getWeaverEngine());
 
-	// Body becomes the parent of this statement
-	return CxxJoinpoints.create(newStmt);
+        // Body becomes the parent of this statement
+        return CxxJoinpoints.create(newStmt);
     }
 
     @Override
     public AJoinPoint insertBeginImpl(String code) {
-	return insertBeginImpl(AstFactory.stmtLiteral(code));
+        return insertBeginImpl(AstFactory.stmtLiteral(code));
     }
 
     @Override
     public AJoinPoint insertBeginImpl(AJoinPoint node) {
-	Stmt newStmt = ClavaNodes.toStmt(node.getNode());
+        Stmt newStmt = ClavaNodes.toStmt(node.getNode());
 
-	// Preconditions.checkArgument(node.getNode() instanceof Stmt,
-	// "Expected input of action scope.insertEntry to be a Stmt joinpoint");
+        // Preconditions.checkArgument(node.getNode() instanceof Stmt,
+        // "Expected input of action scope.insertEntry to be a Stmt joinpoint");
 
-	CxxActions.insertStmt("before", scope, newStmt, getWeaverEngine());
+        CxxActions.insertStmt("before", scope, newStmt, getWeaverEngine());
 
-	// return node;
-	// TODO: Consider returning newStmt instead
-	return CxxJoinpoints.create(newStmt);
+        // return node;
+        // TODO: Consider returning newStmt instead
+        return CxxJoinpoints.create(newStmt);
     }
 
     @Override
     public AJoinPoint insertEndImpl(String code) {
-	return insertEndImpl(AstFactory.stmtLiteral(code));
+        return insertEndImpl(AstFactory.stmtLiteral(code));
     }
 
     @Override
     public AJoinPoint insertEndImpl(AJoinPoint node) {
-	Stmt newStmt = ClavaNodes.toStmt(node.getNode());
+        Stmt newStmt = ClavaNodes.toStmt(node.getNode());
 
-	// Preconditions.checkArgument(newStmt instanceof Stmt,
-	// "Expected input of action scope.insertEnd to be a Stmt joinpoint, is a " +
-	// node.getJoinPointType());
-	CxxActions.insertStmt("after", scope, newStmt, getWeaverEngine());
-	// return node;
-	// TODO: Consider returning newStmt instead
-	return CxxJoinpoints.create(newStmt);
-	/*
-	 * List<? extends AStatement> statements = selectStatements(); if
-	 * (statements.isEmpty()) { throw new
-	 * RuntimeException("Not yet implemented when scope is empty"); }
-	 * 
-	 * Stmt newStmt =
-	 * CxxActions.getValidStatement(CollectionUtils.last(statements).getNode());
-	 * 
-	 * insertImpl(position, newStmt);
-	 * 
-	 * // Body becomes the parent of this statement return new CxxStatement(newStmt,
-	 * this);
-	 */
+        // Preconditions.checkArgument(newStmt instanceof Stmt,
+        // "Expected input of action scope.insertEnd to be a Stmt joinpoint, is a " +
+        // node.getJoinPointType());
+        CxxActions.insertStmt("after", scope, newStmt, getWeaverEngine());
+        // return node;
+        // TODO: Consider returning newStmt instead
+        return CxxJoinpoints.create(newStmt);
+        /*
+         * List<? extends AStatement> statements = selectStatements(); if
+         * (statements.isEmpty()) { throw new
+         * RuntimeException("Not yet implemented when scope is empty"); }
+         * 
+         * Stmt newStmt =
+         * CxxActions.getValidStatement(CollectionUtils.last(statements).getNode());
+         * 
+         * insertImpl(position, newStmt);
+         * 
+         * // Body becomes the parent of this statement return new CxxStatement(newStmt,
+         * this);
+         */
     }
 
     @Override
     public Long getNumStatementsImpl() {
-	// if (stmt instanceof WrapperStmt) {
-	// return false;
-	// }
+        // if (stmt instanceof WrapperStmt) {
+        // return false;
+        // }
 
-	// return getStatements().size();
-	return numStatementsImpl(false);
+        // return getStatements().size();
+        return numStatementsImpl(false);
     }
 
     @Override
     public Long numStatementsImpl(Boolean flat) {
-	var nodesStream = flat ? scope.getChildrenStream() : scope.getDescendantsStream();
+        var nodesStream = flat ? scope.getChildrenStream() : scope.getDescendantsStream();
 
-	return nodesStream.filter(Stmt.class::isInstance)
-		// Ignore CompoundStmt, etc
-		.filter(stmt -> !((Stmt) stmt).isAggregateStmt())
-		// Ignore comments, pragmas
-		.filter(stmt -> !(stmt instanceof WrapperStmt)).count();
+        return nodesStream.filter(Stmt.class::isInstance)
+                // Ignore CompoundStmt, etc
+                .filter(stmt -> !((Stmt) stmt).isAggregateStmt())
+                // Ignore comments, pragmas
+                .filter(stmt -> !(stmt instanceof WrapperStmt)).count();
     }
 
     private List<Stmt> getStatements() {
-	return scope.toStatements();
+        return scope.toStatements();
     }
 
     @Override
     public List<? extends AStatement> selectStmt() {
-	return CxxSelects.select(AStatement.class, getStatements(), true, CxxSelects::stmtFilter);
+        return CxxSelects.select(AStatement.class, getStatements(), true, CxxSelects::stmtFilter);
 
     }
 
     @Override
     public List<? extends AStatement> selectChildStmt() {
-	return getStatements().stream().map(stmt -> (AStatement) CxxJoinpoints.create(stmt))
-		.collect(Collectors.toList());
+        return getStatements().stream().map(stmt -> (AStatement) CxxJoinpoints.create(stmt))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<? extends AScope> selectScope() {
-	// It is a scope if the parent is a compound statement
-	return CxxSelects.select(AScope.class, getStatements(), true,
-		node -> node instanceof CompoundStmt && ((CompoundStmt) node).isNestedScope());
+        // It is a scope if the parent is a compound statement
+        return CxxSelects.select(AScope.class, getStatements(), true,
+                node -> node instanceof CompoundStmt && ((CompoundStmt) node).isNestedScope());
 
     }
 
     @Override
     public List<? extends AIf> selectIf() {
-	return CxxSelects.select(AIf.class, getStatements(), true, IfStmt.class);
-	// return getStatements().stream()
-	// .filter(stmt -> stmt instanceof IfStmt)
-	// .map(stmt -> CxxJoinpoints.create((IfStmt) stmt, this, AIf.class))
-	// .collect(Collectors.toList());
+        return CxxSelects.select(AIf.class, getStatements(), true, IfStmt.class);
+        // return getStatements().stream()
+        // .filter(stmt -> stmt instanceof IfStmt)
+        // .map(stmt -> CxxJoinpoints.create((IfStmt) stmt, this, AIf.class))
+        // .collect(Collectors.toList());
 
     }
 
     @Override
     public List<? extends ALoop> selectLoop() {
-	return CxxSelects.select(ALoop.class, getStatements(), true, LoopStmt.class);
-	// return getStatements().stream()
-	// .flatMap(stmt -> stmt.getDescendantsAndSelfStream())
-	// .filter(node -> node instanceof LoopStmt)
-	// .map(loop -> CxxJoinpoints.create((LoopStmt) loop, this, ALoop.class))
-	// .collect(Collectors.toList());
+        return CxxSelects.select(ALoop.class, getStatements(), true, LoopStmt.class);
+        // return getStatements().stream()
+        // .flatMap(stmt -> stmt.getDescendantsAndSelfStream())
+        // .filter(node -> node instanceof LoopStmt)
+        // .map(loop -> CxxJoinpoints.create((LoopStmt) loop, this, ALoop.class))
+        // .collect(Collectors.toList());
     }
 
     @Override
     public List<? extends APragma> selectPragma() {
-	return CxxSelects.select(APragma.class, getStatements(), true, Pragma.class);
-	/*
-	 * return getStatements().stream() .flatMap(stmt ->
-	 * stmt.getDescendantsAndSelfStream()) .filter(node -> node instanceof Pragma)
-	 * .map(pragma -> new CxxPragma((Pragma) pragma, this))
-	 * .collect(Collectors.toList());
-	 */
+        return CxxSelects.select(APragma.class, getStatements(), true, Pragma.class);
+        /*
+         * return getStatements().stream() .flatMap(stmt ->
+         * stmt.getDescendantsAndSelfStream()) .filter(node -> node instanceof Pragma)
+         * .map(pragma -> new CxxPragma((Pragma) pragma, this))
+         * .collect(Collectors.toList());
+         */
     }
 
     @Override
     public List<? extends AMarker> selectMarker() {
-	return CxxSelects.select(AMarker.class, getStatements(), true, LaraMarkerPragma.class);
+        return CxxSelects.select(AMarker.class, getStatements(), true, LaraMarkerPragma.class);
     }
 
     @Override
     public List<? extends ATag> selectTag() {
-	return CxxSelects.select(ATag.class, getStatements(), true, LaraTagPragma.class);
+        return CxxSelects.select(ATag.class, getStatements(), true, LaraTagPragma.class);
     }
 
     @Override
     public void clearImpl() {
-	CxxActions.removeChildren(scope, getWeaverEngine());
+        CxxActions.removeChildren(scope, getWeaverEngine());
     }
 
     @Override
     public List<? extends AOmp> selectOmp() {
-	return CxxSelects.select(AOmp.class, getStatements(), true, OmpPragma.class);
+        return CxxSelects.select(AOmp.class, getStatements(), true, OmpPragma.class);
     }
 
     @Override
     public List<? extends AComment> selectComment() {
-	return CxxSelects.select(AComment.class, getStatements(), true, Comment.class::isInstance);
+        return CxxSelects.select(AComment.class, getStatements(), true, Comment.class::isInstance);
     }
 
     @Override
     public Boolean getNakedImpl() {
-	return scope.isNaked();
+        return scope.isNaked();
     }
 
     @Override
     public void defNakedImpl(Boolean value) {
-	scope.setNaked(value);
+        scope.setNaked(value);
     }
 
     @Override
     public void setNakedImpl(Boolean isNaked) {
-	defNakedImpl(isNaked);
+        defNakedImpl(isNaked);
     }
 
     @Override
     public AJoinPoint addLocalImpl(String name, AJoinPoint type) {
 
-	return addLocalImpl(name, type, null);
+        return addLocalImpl(name, type, null);
     }
 
     @Override
     public AJoinPoint addLocalImpl(String name, AJoinPoint type, String initValue) {
 
-	// Check if joinpoint is a CxxType
-	if (!(type instanceof AType)) {
-	    SpecsLogs.msgInfo("addLocal: the provided join point (" + type.getJoinPointType() + ") is not a type");
-	    return null;
-	}
+        // Check if joinpoint is a CxxType
+        if (!(type instanceof AType)) {
+            SpecsLogs.msgInfo("addLocal: the provided join point (" + type.getJoinPointType() + ") is not a type");
+            return null;
+        }
 
-	Type typeNode = (Type) type.getNode();
+        Type typeNode = (Type) type.getNode();
 
-	// defaults as no init
-	Expr initExpr = null;
-	// InitializationStyle initStyle = InitializationStyle.NO_INIT;
+        // defaults as no init
+        Expr initExpr = null;
+        // InitializationStyle initStyle = InitializationStyle.NO_INIT;
 
-	if (initValue != null) {
+        if (initValue != null) {
 
-	    initExpr = getFactory().literalExpr(initValue, getFactory().nullType());
+            initExpr = getFactory().literalExpr(initValue, getFactory().nullType());
 
-	    // initStyle = InitializationStyle.CINIT;
-	}
+            // initStyle = InitializationStyle.CINIT;
+        }
 
-	// boolean isUsed = true;
-	// boolean isImplicit = false;
-	// boolean isNrvo = false;
+        // boolean isUsed = true;
+        // boolean isImplicit = false;
+        // boolean isNrvo = false;
 
-	// VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE,
-	// false, isNrvo, initStyle, false);
-	// DeclData declData = new DeclData(false, isImplicit, isUsed, false, false,
-	// false);
+        // VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE,
+        // false, isNrvo, initStyle, false);
+        // DeclData declData = new DeclData(false, isImplicit, isUsed, false, false,
+        // false);
 
-	// VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, name, typeNode,
-	// declData,
-	// ClavaNodeInfo.undefinedInfo(),
-	// initExpr);
+        // VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, name, typeNode,
+        // declData,
+        // ClavaNodeInfo.undefinedInfo(),
+        // initExpr);
 
-	VarDecl varDecl = getFactory().varDecl(name, typeNode);
-	if (initExpr != null) {
-	    varDecl.setInit(initExpr);
-	}
-	varDecl.set(VarDecl.IS_USED);
+        VarDecl varDecl = getFactory().varDecl(name, typeNode);
+        if (initExpr != null) {
+            varDecl.setInit(initExpr);
+        }
+        varDecl.set(VarDecl.IS_USED);
 
-	AJoinPoint varDeclJp = CxxJoinpoints.create(varDecl);
+        AJoinPoint varDeclJp = CxxJoinpoints.create(varDecl);
 
-	insertBegin(varDeclJp);
+        insertBegin(varDeclJp);
 
-	return varDeclJp;
+        return varDeclJp;
     }
 
     @Override
     public AStatement[] getStmtsArrayImpl() {
-	return selectStmt().toArray(new AStatement[0]);
+        return selectStmt().toArray(new AStatement[0]);
     }
 
     @Override
     public AStatement getFirstStmtImpl() {
-	AStatement[] stmts = getStmtsArrayImpl();
+        AStatement[] stmts = getStmtsArrayImpl();
 
-	if (stmts.length == 0) {
-	    return null;
-	}
+        if (stmts.length == 0) {
+            return null;
+        }
 
-	return stmts[0];
+        return stmts[0];
 
     }
 
     @Override
     public AStatement getLastStmtImpl() {
-	AStatement[] stmts = getStmtsArrayImpl();
+        AStatement[] stmts = getStmtsArrayImpl();
 
-	if (stmts.length == 0) {
-	    return null;
-	}
+        if (stmts.length == 0) {
+            return null;
+        }
 
-	return stmts[stmts.length - 1];
+        return stmts[stmts.length - 1];
     }
 
     @Override
     public AJoinPoint getOwnerImpl() {
-	// TODO: This should generically work, but corner cases have not been checked
-	return getAstParentImpl();
+        // TODO: This should generically work, but corner cases have not been checked
+        return getAstParentImpl();
     }
 
     @Override
     public List<? extends AReturnStmt> selectReturnStmt() {
-	return CxxSelects.select(AReturnStmt.class, getStatements(), true, ReturnStmt.class);
+        return CxxSelects.select(AReturnStmt.class, getStatements(), true, ReturnStmt.class);
     }
 
     @Override
     public List<? extends ACilkFor> selectCilkFor() {
-	return CxxSelects.select(ACilkFor.class, getStatements(), true, CilkFor.class);
+        return CxxSelects.select(ACilkFor.class, getStatements(), true, CilkFor.class);
 
     }
 
     @Override
     public List<? extends ACilkSync> selectCilkSync() {
-	return CxxSelects.select(ACilkSync.class, getStatements(), true, CilkSync.class);
+        return CxxSelects.select(ACilkSync.class, getStatements(), true, CilkSync.class);
 
     }
 
     @Override
     public void cfgImpl() {
-	ControlFlowGraph cfg = new ControlFlowGraph(scope);
-	cfg.generateDot(false);
+        ControlFlowGraph cfg = new ControlFlowGraph(scope);
+        cfg.generateDot(false);
     }
 
     @Override
     public void dfgImpl() {
-	DataFlowGraph dfg = new DataFlowGraph(scope);
-	// dfg.generateDot(false);
-	ArrayList<DataFlowNode> subgraphs = dfg.getSubgraphRoots();
-	for (DataFlowNode node : subgraphs) {
-	    DataFlowSubgraph sub = dfg.getSubgraph(node);
-	    DataFlowSubgraphMetrics metrics = sub.getMetrics();
-	    // System.out.println(metrics.toString());
-	}
-	ClavaHLS hls = new ClavaHLS(dfg);
-	hls.run();
+        DataFlowGraph dfg = new DataFlowGraph(scope);
+        // dfg.generateDot(false);
+        ArrayList<DataFlowNode> subgraphs = dfg.getSubgraphRoots();
+        for (DataFlowNode node : subgraphs) {
+            DataFlowSubgraph sub = dfg.getSubgraph(node);
+            DataFlowSubgraphMetrics metrics = sub.getMetrics();
+            // System.out.println(metrics.toString());
+        }
+        ClavaHLS hls = new ClavaHLS(dfg);
+        hls.run();
     }
 }
