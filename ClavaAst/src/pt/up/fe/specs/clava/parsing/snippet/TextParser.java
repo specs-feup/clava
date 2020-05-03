@@ -11,9 +11,9 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.textparser;
+package pt.up.fe.specs.clava.parsing.snippet;
 
-import static pt.up.fe.specs.clava.context.ClavaContext.*;
+import static pt.up.fe.specs.clava.context.ClavaContext.FACTORY;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,8 +32,6 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clang.textparser.rules.InlineCommentRule;
-import pt.up.fe.specs.clang.textparser.rules.MultiLineCommentRule;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.SourceRange;
@@ -48,6 +46,8 @@ import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
+import pt.up.fe.specs.clava.parsing.snippet.rules.InlineCommentRule;
+import pt.up.fe.specs.clava.parsing.snippet.rules.MultiLineCommentRule;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;

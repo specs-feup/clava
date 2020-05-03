@@ -18,7 +18,6 @@ import java.util.function.BiConsumer;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clang.textparser.SnippetParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -27,6 +26,7 @@ import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DoStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.parsing.snippet.SnippetParser;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
@@ -49,6 +49,9 @@ public class CxxActions {
      * <p>
      * Minimum granularity level of insert before/after is at the statement level.
      *
+     *
+     * TODO: Refactor class in order to use ClavaNodes.insertAsStmt
+     * 
      * @param target
      * @param position
      * @param from

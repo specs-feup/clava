@@ -11,23 +11,27 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.textparser.rules;
+package pt.up.fe.specs.clava.parsing.snippet.rules;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import pt.up.fe.specs.clang.textparser.TextParserRule;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.parsing.pragma.PragmaParsers;
+import pt.up.fe.specs.clava.parsing.snippet.TextParserRule;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.stringparser.StringParser;
+import pt.up.fe.specs.util.stringparser.StringParsers;
 
-public class PragmaRule implements TextParserRule {
+public class PragmaMacroRule implements TextParserRule {
 
-    private static final String PRAGMA = "#pragma";
+    private static final String PRAGMA = "_Pragma";
 
     @Override
     public Optional<ClavaNode> apply(String filepath, String line, int lineNumber, Iterator<String> iterator,
@@ -36,7 +40,7 @@ public class PragmaRule implements TextParserRule {
         // To calculate position of pragma
         String lastLine = line;
 
-        // Check if line starts with '#pragma'
+        // Check if line starts with '_Pragma'
         String trimmedLine = line.trim();
 
         // First characters that can contain #pragma
@@ -45,7 +49,7 @@ public class PragmaRule implements TextParserRule {
         }
 
         String probe = trimmedLine.substring(0, PRAGMA.length());
-        if (!probe.toLowerCase().equals("#pragma")) {
+        if (!probe.startsWith(PRAGMA)) {
             return Optional.empty();
         }
 
@@ -59,7 +63,8 @@ public class PragmaRule implements TextParserRule {
             pragmaContents.add(trimmedLine.substring(0, trimmedLine.length() - 1));
 
             if (!iterator.hasNext()) {
-                SpecsLogs.msgInfo("Could not parse #pragma, there is no more lines after '" + trimmedLine + "'");
+                SpecsLogs
+                        .msgInfo("Could not parse " + PRAGMA + ", there is no more lines after '" + trimmedLine + "'");
                 return Optional.empty();
             }
 
@@ -71,20 +76,30 @@ public class PragmaRule implements TextParserRule {
         // Add last non-broken line
         pragmaContents.add(trimmedLine);
 
+        // Get a single string
+        String pragmaContentsSingleLine = pragmaContents.stream()
+                .collect(Collectors.joining());
+
+        StringParser parser = new StringParser(pragmaContentsSingleLine);
+
+        parser.apply(StringParsers::parseString, "(");
+        String pragmaFullContent = parser.apply(StringParsers::parseDoubleQuotedString);
+        parser.apply(StringParsers::parseString, ")");
+
         // If no endIndex found, comment is malformed
         // Preconditions.checkArgument(endIndex != -1,
         // "Could not find end of multi-line comment start at '" + filepath + "':" + lineNumber);
 
-        int startCol = line.indexOf('#') + 1;
-        int endCol = lastLine.length();
+        int startCol = line.indexOf(PRAGMA) + 1;
+        int endCol = -1;
         int endLine = lineNumber + pragmaContents.size() - 1;
 
         SourceRange loc = new SourceRange(filepath, lineNumber, startCol, endLine, endCol);
         // ClavaNodeInfo info = new ClavaNodeInfo(null, loc);
 
         // Try to parse pragma. If pragma not parsable, create generic pragma
-        ClavaNode pragmaNode = PragmaParsers.parse(pragmaContents, context)
-                .orElse(context.getFactory().genericPragma(pragmaContents));
+        ClavaNode pragmaNode = PragmaParsers.parse(pragmaFullContent, context)
+                .orElse(context.getFactory().genericPragma(Arrays.asList(pragmaFullContent)));
         pragmaNode.set(ClavaNode.LOCATION, loc);
 
         return Optional.of(pragmaNode);
