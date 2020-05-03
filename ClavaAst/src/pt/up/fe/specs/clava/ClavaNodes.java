@@ -40,14 +40,20 @@ import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
+import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.DoStmt;
+import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.parsing.snippet.SnippetParser;
+import pt.up.fe.specs.clava.utils.NodePosition;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 import pt.up.fe.specs.util.utilities.StringLines;
 
 /**
@@ -525,5 +531,110 @@ public class ClavaNodes {
         }
 
         return false;
+    }
+
+    /**
+     * Insert children from a C/C++ token before/after the reference token, when the token is a statement of is further
+     * below in the AST.
+     *
+     * <p>
+     * Minimum granularity level of insert before/after is at the statement level.
+     *
+     * @param target
+     * @param position
+     * @param from
+     */
+    public static ClavaNode insertAsStmt(ClavaNode target, String code, NodePosition position) {
+
+        // Check: if inserting before or after, check if target is valid
+        if (!isTargetValid(target, position)) {
+            ClavaLog.info("Could not insert code " + position.getString() + " location " + target.getLocation());
+            return null;
+        }
+
+        SnippetParser snippetParser = new SnippetParser(target.getContext());
+        ClavaNode realTarget = null;
+        switch (position) {
+        case BEFORE:
+            Stmt beforeNode = snippetParser.parseStmt(code);
+
+            realTarget = getValidStatement(target, position);
+            if (realTarget == null) {
+                return null;
+            }
+            NodeInsertUtils.insertBefore(realTarget, beforeNode);
+            return beforeNode;
+
+        case AFTER:
+
+            Stmt afterNode = snippetParser.parseStmt(code);
+            realTarget = getValidStatement(target, position);
+            if (realTarget == null) {
+                return null;
+            }
+            NodeInsertUtils.insertAfter(realTarget, afterNode);
+            return afterNode;
+
+        case REPLACE:
+            // Has to replace with a node of the same "kind" (e.g., Expr, Stmt...)
+            ClavaNode replaceNode = ClavaNodes.toLiteral(code, target.getFactory().nullType(), target);
+            NodeInsertUtils.replace(target, replaceNode);
+            return replaceNode;
+        default:
+            throw new RuntimeException("Case not defined:" + position);
+        }
+    }
+
+    private static boolean isTargetValid(ClavaNode target, NodePosition position) {
+        // If before or after, check if invalid child of a For/ForRange/Do
+        if (position == NodePosition.AFTER || position == NodePosition.BEFORE) {
+            int indexOfTarget = target.indexOfSelf();
+            ClavaNode targetParent = target.getParent();
+
+            // For
+            if (targetParent instanceof ForStmt) {
+                return indexOfTarget > 2 ? true : false;
+            }
+
+            // ForRange
+            if (targetParent instanceof CXXForRangeStmt) {
+                return indexOfTarget > 4 ? true : false;
+            }
+
+            // ForRange
+            if (targetParent instanceof DoStmt) {
+                return indexOfTarget == 0 ? true : false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns the first valid statement where we can insert another node in the after/before inserts
+     *
+     * @param node
+     * @return
+     */
+    public static Stmt getValidStatement(ClavaNode node, NodePosition position) {
+        Stmt target = getValidStatement(node);
+
+        // Check: if inserting before or after, check if target is valid
+        if (!isTargetValid(target, position)) {
+            ClavaLog.info("Could not insert code " + position.getString() + " location " + target.getLocation());
+            return null;
+        }
+
+        return target;
+    }
+
+    public static Stmt getValidStatement(ClavaNode node) {
+        Optional<Stmt> stmt = ClavaNodes.getStatement(node);
+
+        if (!stmt.isPresent()) {
+            throw new RuntimeException("Node does not have a statement ancestor:\n" + node);
+        }
+
+        return stmt.get();
     }
 }
