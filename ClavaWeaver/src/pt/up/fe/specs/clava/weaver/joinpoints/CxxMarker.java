@@ -18,8 +18,8 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMarker;
