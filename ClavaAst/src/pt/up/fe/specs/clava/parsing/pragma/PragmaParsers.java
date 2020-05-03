@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.pragma;
+package pt.up.fe.specs.clava.parsing.pragma;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.parsing.omp.OmpParser;
-import pt.up.fe.specs.clava.parsing.pragma.PragmaParser;
 import pt.up.fe.specs.util.stringparser.StringParser;
 
 public class PragmaParsers {

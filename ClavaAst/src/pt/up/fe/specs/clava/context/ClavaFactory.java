@@ -77,6 +77,8 @@ import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.lara.LaraMarkerPragma;
+import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ast.omp.OmpClausePragma;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
 import pt.up.fe.specs.clava.ast.omp.OmpLiteralPragma;
@@ -810,6 +812,20 @@ public class ClavaFactory {
                 .set(OmpLiteralPragma.CUSTOM_CONTENT, customContent);
 
         return new OmpLiteralPragma(data, Collections.emptyList());
+    }
+
+    public LaraMarkerPragma laraMarkerPragma(String markedId) {
+        DataStore data = newDataStore(LaraMarkerPragma.class)
+                .set(LaraMarkerPragma.MARKER_ID, markedId);
+
+        return new LaraMarkerPragma(data, Collections.emptyList());
+    }
+
+    public LaraTagPragma laraTagPragma(String tagId) {
+        DataStore data = newDataStore(LaraTagPragma.class)
+                .set(LaraTagPragma.TAG_ID, tagId);
+
+        return new LaraTagPragma(data, Collections.emptyList());
     }
 
     /// COMMENTS

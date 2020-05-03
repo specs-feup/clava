@@ -18,11 +18,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import pt.up.fe.specs.clang.pragma.PragmaParsers;
 import pt.up.fe.specs.clang.textparser.TextParserRule;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.parsing.pragma.PragmaParsers;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class PragmaRule implements TextParserRule {

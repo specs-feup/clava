@@ -17,8 +17,8 @@ import java.util.Collections;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
-import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
+import pt.up.fe.specs.clava.ast.lara.LaraMarkerPragma;
+import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 
