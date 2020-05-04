@@ -55,8 +55,13 @@ public class CxxActions {
         var position = insert.toPosition();
         ClavaNode node = ClavaNodes.insertAsStmt(target, code, position);
 
+        // If null, return
+        if (node == null) {
+            return null;
+        }
+
         // If replace and could insert a node, clear information of target node
-        if (position == NodePosition.REPLACE && node != null) {
+        if (position == NodePosition.REPLACE) {
             weaver.clearUserField(target);
         }
 
