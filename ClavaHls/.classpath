@@ -13,6 +13,5 @@
 	<classpathentry kind="src" path="/tdrcLibrary"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/GitPlus"/>
 	<classpathentry kind="src" path="/ClavaAst"/>
-	<classpathentry kind="src" path="/ClavaWeaver"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

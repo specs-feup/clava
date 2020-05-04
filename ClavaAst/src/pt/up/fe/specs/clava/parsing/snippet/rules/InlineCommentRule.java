@@ -11,16 +11,16 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.textparser.rules;
+package pt.up.fe.specs.clava.parsing.snippet.rules;
 
 import java.util.Iterator;
 import java.util.Optional;
 
-import pt.up.fe.specs.clang.textparser.TextParserRule;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.parsing.snippet.TextParserRule;
 
 public class InlineCommentRule implements TextParserRule {
 

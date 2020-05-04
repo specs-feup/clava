@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.textparser;
+package pt.up.fe.specs.clava.parsing.snippet;
 
 import java.util.Iterator;
 import java.util.Optional;

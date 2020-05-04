@@ -1,17 +1,17 @@
 /**
  * Copyright 2017 SPeCS.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.clava.lara;
+package pt.up.fe.specs.clava.ast.lara;
 
 import java.util.Collection;
 
@@ -22,73 +22,74 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 
-public class LaraMarkerPragma extends Pragma {
+public class LaraTagPragma extends Pragma {
 
-    private static final String LARA_MARKER_PREFIX = "lara marker ";
+    private static final String LARA_TAG_PREFIX = "lara tag ";
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<String> MARKER_ID = KeyFactory.string("markerId");
+    public final static DataKey<String> TAG_ID = KeyFactory.string("tagId");
 
     /// DATAKEYS END
 
-    public LaraMarkerPragma(DataStore data, Collection<? extends ClavaNode> children) {
+    public LaraTagPragma(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
-    // private String markerId;
+    // private String tagId;
 
     /**
-     * @param markerId
+     * @param tagId
      * @param info
      */
     // @Deprecated
-    // public LaraMarkerPragma(String markerId, ClavaNodeInfo info) {
-    // this(markerId, info, Collections.emptyList());
+    // public LaraTagPragma(String tagId, ClavaNodeInfo info) {
+    // this(tagId, info, Collections.emptyList());
     // }
 
     /**
      * 
-     * @param markerId
+     * @param tagId
      * @param info
      * @param children
      */
     // @Deprecated
-    // private LaraMarkerPragma(String markerId, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
+    // private LaraTagPragma(String tagId, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
     // super(info, children);
     //
-    // this.markerId = markerId;
+    // this.tagId = tagId;
     // }
-
+    //
     // @Override
     // protected ClavaNode copyPrivate() {
-    // return new LaraMarkerPragma(markerId, getInfo(), Collections.emptyList());
+    // return new LaraTagPragma(tagId, getInfo(), Collections.emptyList());
     // }
 
     @Override
     public String getFullContent() {
-        return LARA_MARKER_PREFIX + get(MARKER_ID);
+        // return LARA_TAG_PREFIX + tagId;
+        return LARA_TAG_PREFIX + get(TAG_ID);
     }
 
     @Override
     public void setFullContent(String fullContent) {
         String newContent = fullContent;
 
-        if (newContent.startsWith(LARA_MARKER_PREFIX)) {
-            newContent = newContent.substring(LARA_MARKER_PREFIX.length());
+        if (newContent.startsWith(LARA_TAG_PREFIX)) {
+            newContent = newContent.substring(LARA_TAG_PREFIX.length());
         }
 
-        set(MARKER_ID, newContent);
-        // this.markerId = newContent;
+        set(TAG_ID, newContent);
+        // tagId = newContent;
     }
 
-    public String getMarkerId() {
-        return get(MARKER_ID);
-        // return markerId;
+    public String getTagId() {
+        return get(TAG_ID);
+        // return tagId;
     }
 
     @Override
     public String getCode() {
-        return "#pragma lara marker " + getMarkerId();
+        return "#pragma " + getFullContent();
     }
 }

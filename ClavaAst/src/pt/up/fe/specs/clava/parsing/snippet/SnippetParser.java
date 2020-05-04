@@ -11,17 +11,17 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.textparser;
+package pt.up.fe.specs.clava.parsing.snippet;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import pt.up.fe.specs.clang.pragma.PragmaParsers;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.clava.parsing.pragma.PragmaParsers;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 import pt.up.fe.specs.util.utilities.StringLines;

@@ -11,15 +11,13 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.pragma;
+package pt.up.fe.specs.clava.parsing.pragma;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import pt.up.fe.specs.clang.utils.ClavaParserFactory;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.context.ClavaContext;
-import pt.up.fe.specs.clava.parsing.pragma.PragmaParser;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 
@@ -53,14 +51,14 @@ public class LaraPragmaParser implements PragmaParser {
     private static Pragma marker(StringParser contents, ClavaContext context) {
         // Get marker id
         String markerId = contents.apply(StringParsers::parseWord);
-        return new ClavaParserFactory(context).laraMarkerPragma(markerId);
+        return context.getFactory().laraMarkerPragma(markerId);
         // return new LaraMarkerPragma(markerId, context);
     }
 
     private static Pragma tag(StringParser contents, ClavaContext context) {
 
         String refId = contents.apply(StringParsers::parseWord);
-        return new ClavaParserFactory(context).laraTagPragma(refId);
+        return context.getFactory().laraTagPragma(refId);
         // return new LaraTagPragma(refId, context);
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 SPeCS.
+ * Copyright 2020 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,24 +11,22 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.weaver;
+package pt.up.fe.specs.clava.utils;
 
-import pt.up.fe.specs.clava.utils.NodePosition;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
-import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
-public enum Insert implements StringProvider {
+public enum NodePosition implements StringProvider {
+
     AFTER,
     BEFORE,
-    REPLACE,
-    AROUND;
+    REPLACE;
 
-    private static final Lazy<EnumHelperWithValue<Insert>> HELPER = EnumHelperWithValue
-            .newLazyHelperWithValue(Insert.class);
+    private static final Lazy<EnumHelperWithValue<NodePosition>> HELPER = EnumHelperWithValue
+            .newLazyHelperWithValue(NodePosition.class);
 
-    public static EnumHelperWithValue<Insert> getHelper() {
+    public static EnumHelperWithValue<NodePosition> getHelper() {
         return HELPER.get();
     }
 
@@ -37,17 +35,4 @@ public enum Insert implements StringProvider {
         return name().toLowerCase();
     }
 
-    public NodePosition toPosition() {
-        switch (this) {
-        case AFTER:
-            return NodePosition.AFTER;
-        case BEFORE:
-            return NodePosition.BEFORE;
-        case AROUND:
-        case REPLACE:
-            return NodePosition.REPLACE;
-        default:
-            throw new NotImplementedException(this);
-        }
-    }
 }
