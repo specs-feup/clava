@@ -42,4 +42,9 @@ public class CxxOp extends AOp {
         return op;
     }
 
+    @Override
+    public String getOperatorImpl() {
+        return op.getOperatorCode();
+    }
+
 }

@@ -465,6 +465,7 @@
 	</artifact>
 
 	<artifact class="op">
+		<attribute name="operator" type="String" />	
 		<attribute name="kind" type="String" />
 		<attribute name="isBitwise" type="Boolean" />
 	</artifact>

@@ -87,6 +87,15 @@ public abstract class AUnaryOp extends AOp {
     }
 
     /**
+     * Get value on attribute operator
+     * @return the attribute's value
+     */
+    @Override
+    public String getOperatorImpl() {
+        return this.aOp.getOperatorImpl();
+    }
+
+    /**
      * Get value on attribute kind
      * @return the attribute's value
      */
@@ -441,6 +450,7 @@ public abstract class AUnaryOp extends AOp {
     protected enum UnaryOpAttributes {
         OPERAND("operand"),
         ISPOINTERDEREF("isPointerDeref"),
+        OPERATOR("operator"),
         KIND("kind"),
         ISBITWISE("isBitwise"),
         VARDECL("vardecl"),

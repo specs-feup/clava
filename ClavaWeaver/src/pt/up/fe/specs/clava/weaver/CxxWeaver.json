@@ -4115,6 +4115,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "operator"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise",
                   "children": [
                            {
@@ -38768,6 +38776,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "operator"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise",
                   "children": [
                            {
@@ -59730,6 +59746,14 @@
                            {
                               "type": "String",
                               "name": "kind"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "operator"
                            }]
                },
                {
