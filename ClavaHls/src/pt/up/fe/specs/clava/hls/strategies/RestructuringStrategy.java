@@ -24,14 +24,18 @@ import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.Insert;
 
-public abstract class HLSStrategy {
+public abstract class RestructuringStrategy {
     protected DataFlowGraph dfg;
 
-    protected HLSStrategy(DataFlowGraph dfg) {
+    protected RestructuringStrategy(DataFlowGraph dfg) {
 	this.dfg = dfg;
     }
 
     public void insertDirective(ClavaNode node, HLSDirective directive) {
 	CxxActions.insertAsStmt(node, directive.toString(), Insert.BEFORE, CxxWeaver.getCxxWeaver());
     }
+
+    public abstract void analyze();
+
+    public abstract void apply();
 }

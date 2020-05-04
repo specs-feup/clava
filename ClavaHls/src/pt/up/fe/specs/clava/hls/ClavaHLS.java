@@ -19,6 +19,7 @@ package pt.up.fe.specs.clava.hls;
 
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.hls.strategies.ArrayStreamDetector;
+import pt.up.fe.specs.clava.hls.strategies.NestedLoopUnrolling;
 
 public class ClavaHLS {
     private DataFlowGraph dfg;
@@ -31,8 +32,13 @@ public class ClavaHLS {
 	log("starting HLS restructuring");
 	log("detecting if arrays can be turned into streams");
 	ArrayStreamDetector arrayStream = new ArrayStreamDetector(dfg);
-	arrayStream.detect();
+	arrayStream.analyze();
 	arrayStream.apply();
+	log("defining unrolling factor for nested loops");
+	NestedLoopUnrolling loopUnfolding = new NestedLoopUnrolling(dfg);
+	loopUnfolding.analyze();
+	loopUnfolding.apply();
+	log("finished HLS restructuring");
     }
 
     public static void log(String msg) {

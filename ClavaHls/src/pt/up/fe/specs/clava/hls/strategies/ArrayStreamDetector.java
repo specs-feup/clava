@@ -25,7 +25,7 @@ import pt.up.fe.specs.clava.analysis.flow.data.DataFlowParam;
 import pt.up.fe.specs.clava.hls.ClavaHLS;
 import pt.up.fe.specs.clava.hls.directives.HLSStream;
 
-public class ArrayStreamDetector extends HLSStrategy {
+public class ArrayStreamDetector extends RestructuringStrategy {
     private HashMap<String, Boolean> isStream = new HashMap<>();
 
     public ArrayStreamDetector(DataFlowGraph dfg) {
@@ -37,12 +37,14 @@ public class ArrayStreamDetector extends HLSStrategy {
 
     }
 
-    public void detect() {
+    @Override
+    public void analyze() {
 	for (String variable : isStream.keySet()) {
 	    isStream.put(variable, true);
 	}
     }
 
+    @Override
     public void apply() {
 	ClavaNode node = dfg.getFirstStmt();
 

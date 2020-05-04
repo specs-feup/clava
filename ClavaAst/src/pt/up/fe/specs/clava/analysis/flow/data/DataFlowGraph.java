@@ -62,7 +62,7 @@ public class DataFlowGraph extends FlowGraph {
 	this.body = body;
 	this.firstStmt = body.getChild(0);
 	this.cfg = new ControlFlowGraph(body);
-	this.cfg = CFGConverter.convert(this.cfg);
+	CFGConverter.convert(this.cfg);
 	this.addNode(nullNode);
 
 	BasicBlockNode start = (BasicBlockNode) cfg.findNode(0);

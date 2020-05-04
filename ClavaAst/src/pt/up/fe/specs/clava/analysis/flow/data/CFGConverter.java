@@ -25,12 +25,13 @@ import pt.up.fe.specs.clava.analysis.flow.control.ControlFlowGraph;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 
 public class CFGConverter {
-    public static ControlFlowGraph convert(ControlFlowGraph cfg) {
-	cfg = removeComments(cfg);
-	return cfg;
+    public static void convert(ControlFlowGraph cfg) {
+	removeComments(cfg);
+	normalizeEdges(cfg);
+	cfg.generateDot(false);
     }
 
-    private static ControlFlowGraph removeComments(ControlFlowGraph cfg) {
+    private static void removeComments(ControlFlowGraph cfg) {
 	for (FlowNode n : cfg.getNodes()) {
 	    BasicBlockNode node = (BasicBlockNode) n;
 	    Iterator<Stmt> itr = node.getStmts().iterator();
@@ -41,6 +42,9 @@ public class CFGConverter {
 		}
 	    }
 	}
-	return cfg;
+    }
+
+    private static void normalizeEdges(ControlFlowGraph cfg) {
+
     }
 }
