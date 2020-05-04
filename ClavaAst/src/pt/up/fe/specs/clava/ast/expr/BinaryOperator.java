@@ -170,4 +170,9 @@ public class BinaryOperator extends Operator {
         return kindName;
     }
 
+    @Override
+    public String getOperatorCode() {
+        return getOp().getOpString();
+    }
+
 }
