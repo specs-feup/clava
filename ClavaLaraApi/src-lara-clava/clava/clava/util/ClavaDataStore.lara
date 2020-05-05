@@ -96,3 +96,22 @@ ClavaDataStore.prototype.setUserIncludes = function() {
 	var fileList = Java.type("org.lara.interpreter.joptions.keys.FileList").newInstance(files);	
 	this.put("header includes", fileList);	
 }
+
+
+/**
+ * @return {string} a string with the current compilation standard.
+ */
+ClavaDataStore.prototype.getStandard = function() {
+	return this.get("C/C++ Standard").toString();
+}
+
+/**
+ * @param {string} flags - A string with a C/C++/OpenCL compilation standard.
+ * 
+ */
+ClavaDataStore.prototype.setStandard = function(standard) {
+	checkString(standard);
+
+	var stdObject = Java.type("pt.up.fe.specs.clava.language.Standard").getEnumHelper().fromValue(standard);
+	this.put("C/C++ Standard", stdObject);	
+}
