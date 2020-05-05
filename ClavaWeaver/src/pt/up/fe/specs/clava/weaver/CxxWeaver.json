@@ -49121,6 +49121,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "DFG tester",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "dfg"
+                           }]
+               },
+               {
+                  "type": "action",
                   "children": [
                            {
                               "type": "joinpoint",
