@@ -207,7 +207,7 @@ public class CxxWeaver extends ACxxWeaver {
     // private CxxJoinpoints jpFactory = null;
 
     // private File baseFolder = null;
-    private List<String> parserOptions = new ArrayList<>();
+    // private List<String> parserOptions = new ArrayList<>();
 
     // private Logger infoLogger = null;
     // private Level previousLevel = null;
@@ -231,11 +231,11 @@ public class CxxWeaver extends ACxxWeaver {
         args = null;
 
         // outputDir = null;
-        currentSources = null;
+        currentSources = new ArrayList<>();
         userFlags = null;
 
         // baseFolder = null;
-        parserOptions = new ArrayList<>();
+        // parserOptions = new ArrayList<>();
 
         // infoLogger = null;
         // previousLevel = null;
@@ -403,6 +403,42 @@ public class CxxWeaver extends ACxxWeaver {
             this.args.add(ClavaOptions.STANDARD, getStandard());
         }
 
+        var parserOptions = buildParserOptions(args);
+
+        // Initialize weaver with the input file/folder
+
+        // First folder is considered the base folder
+        // Only needs folder if we are doing weaving
+        // if (!disableWeaving) {
+        // baseFolder = getFirstSourceFolder(sources);
+        // }
+
+        // Init messages to user
+        messagesToUser = new LinkedHashSet<>();
+
+        // If weaving disabled, create empty App
+        if (args.get(CxxWeaverOption.DISABLE_WEAVING)) {
+            SpecsLogs.msgInfo("Initial parsing disabled, creating empty 'program'");
+
+            App emptyApp = context.get(ClavaContext.FACTORY).app(Collections.emptyList());
+            // First app, add it to context
+            context.pushApp(emptyApp);
+            weaverData.pushAst(emptyApp);
+            return true;
+        }
+
+        // weaverData.pushAst(createApp(sources, parserOptions));
+        weaverData.pushAst(createApp(getSources(), parserOptions));
+
+        // TODO: Option to dump clang and clava
+        SpecsIo.write(new File("clavaDump.txt"), getApp().toString());
+
+        return true;
+    }
+
+    private List<String> buildParserOptions(DataStore args) {
+        List<String> parserOptions = new ArrayList<>();
+
         // Initialize list of options for parser
         parserOptions = new ArrayList<>();
 
@@ -436,35 +472,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         parserOptions.addAll(userFlags);
 
-        // Initialize weaver with the input file/folder
-
-        // First folder is considered the base folder
-        // Only needs folder if we are doing weaving
-        // if (!disableWeaving) {
-        // baseFolder = getFirstSourceFolder(sources);
-        // }
-
-        // Init messages to user
-        messagesToUser = new LinkedHashSet<>();
-
-        // If weaving disabled, create empty App
-        if (args.get(CxxWeaverOption.DISABLE_WEAVING)) {
-            SpecsLogs.msgInfo("Initial parsing disabled, creating empty 'program'");
-
-            App emptyApp = context.get(ClavaContext.FACTORY).app(Collections.emptyList());
-            // First app, add it to context
-            context.pushApp(emptyApp);
-            weaverData.pushAst(emptyApp);
-            return true;
-        }
-
-        // weaverData.pushAst(createApp(sources, parserOptions));
-        weaverData.pushAst(createApp(getSources(), parserOptions));
-
-        // TODO: Option to dump clang and clava
-        SpecsIo.write(new File("clavaDump.txt"), getApp().toString());
-
-        return true;
+        return parserOptions;
     }
 
     /**
@@ -939,6 +947,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Add header files in normal include folders to the tree
         if (!skipHeaderFiles) {
             // Use parser options instead of weaver options, it can be a rebuild with other folders
+            // TODO: Remove dependency to parserOptions, instead ask for list of includes?
             List<File> headerIncludes = parserOptions.stream()
                     .map(CxxWeaver::headerFlagToFile)
                     .filter(Optional::isPresent)
@@ -1323,6 +1332,7 @@ public class CxxWeaver extends ACxxWeaver {
         List<String> rebuildOptions = new ArrayList<>();
 
         // Copy current options, removing previous normal includes
+        var parserOptions = buildParserOptions(args);
         parserOptions.stream()
                 .filter(option -> !option.startsWith("-I"))
                 .forEach(rebuildOptions::add);
@@ -1505,6 +1515,7 @@ public class CxxWeaver extends ACxxWeaver {
         List<String> rebuildOptions = new ArrayList<>();
 
         // Copy current options, removing previous normal includes
+        var parserOptions = buildParserOptions(args);
         parserOptions.stream()
                 .filter(option -> !option.startsWith("-I"))
                 .forEach(rebuildOptions::add);
@@ -1897,6 +1908,7 @@ public class CxxWeaver extends ACxxWeaver {
      * Normalizes key paths to be only files
      */
     private Map<File, File> obtainFiles(Map<File, File> filesToBases) {
+        var parserOptions = buildParserOptions(args);
 
         Map<File, File> processedFiles = new HashMap<>();
 
@@ -1907,14 +1919,14 @@ public class CxxWeaver extends ACxxWeaver {
             }
 
             // Process folder
-            obtainFiles(sourceAndBase.getKey(), sourceAndBase.getValue(), processedFiles);
+            obtainFiles(sourceAndBase.getKey(), sourceAndBase.getValue(), processedFiles, parserOptions);
         }
 
         return processedFiles;
 
     }
 
-    private void obtainFiles(File folder, File baseFolder, Map<File, File> processedFiles) {
+    private void obtainFiles(File folder, File baseFolder, Map<File, File> processedFiles, List<String> parserOptions) {
         // All files specified by the user, header and implementation
         Set<String> extensions = SourceType.getPermittedExtensions();
 
