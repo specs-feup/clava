@@ -3,7 +3,7 @@ import lara.benchmark.BenchmarkInstance;
 import clava.Clava;
 import clava.ClavaJoinPoints;
 
-import weaver.WeaverJps;
+import weaver.Query;
 
 /**
  * Instance of a Clava benchmark.
@@ -66,6 +66,19 @@ ClavaBenchmarkInstance.prototype._compilePrivate = function() {
 	this._setExecutable(exe);
 	
 	return exe;
+}
+
+/**
+ * Looks for #pragma kernel, returns target of that pragma
+ */
+ClavaBenchmarkInstance.prototype.getKernel = function() {
+	var $pragma = Query.search("pragma", "kernel").first();
+	
+	if($pragma === undefined) {  
+		throw "ClavaBenchmarkInstance.getKernel: Could not find '#pragma kernel' in benchmark " + this.getName();
+	}
+	
+	return $pragma.target;
 }
 
 
