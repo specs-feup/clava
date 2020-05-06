@@ -322,7 +322,9 @@ void appft(int niter, double *total_time, int *verified)
     timer_stop(2);
 
     timer_start(1);
-
+	
+	#pragma kernel
+	{
     n12 = NX / 2;
     n22 = NY / 2;
     n32 = NZ / 2;
@@ -356,6 +358,7 @@ void appft(int niter, double *total_time, int *verified)
 
     // Verification test.
     verify(NX, NY, NZ, niter, sums, verified);
+	}
     timer_stop(1);
 
     *total_time = timer_read(1);

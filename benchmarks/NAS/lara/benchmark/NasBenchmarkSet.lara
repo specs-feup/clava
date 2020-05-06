@@ -11,7 +11,8 @@ function NasBenchmarkSet() {
     // Parent constructor
     BenchmarkSet.call(this, "NasBenchmarkSet");
 	
-	this._testBenchmarks = ["BT", "CG", "EP", "FT", "IS", "LU", "MG", "SP", "UA"];
+	//this._testBenchmarks = ["BT", "CG", "EP", "FT", "IS", "LU", "MG", "SP", "UA"];
+	this._testBenchmarks = ["BT", "CG", "EP", "FT", "IS", "LU", "MG", "SP"];	
 	this._testInputSizes = ["W"];
 }
 // Inheritance
@@ -20,7 +21,8 @@ NasBenchmarkSet.prototype = Object.create(BenchmarkSet.prototype);
 /*
  * Available benchmarks
  */
-NasBenchmarkSet._benchmarkNames = new StringSet("BT", "CG", "EP", "FT", "IS", "LU", "MG", "SP", "UA");
+//NasBenchmarkSet._benchmarkNames = new StringSet("BT", "CG", "EP", "FT", "IS", "LU", "MG", "SP", "UA"); // UA is currently having compilation problems, disabled
+NasBenchmarkSet._benchmarkNames = new StringSet("BT", "CG", "EP", "FT", "IS", "LU", "MG", "SP");
 
 /*
  * Available sizes
@@ -144,6 +146,29 @@ NasBenchmarkSet.prototype.setInputSizes = function() {
 	}
 }
 
+
+/**
+ * Prints the current NAS benchmark set.
+ */
+NasBenchmarkSet.prototype.print = function() {
+	println("BenchmarkSet: " + this.getName());
+	println("Benchmark names: " + this._testBenchmarks);
+	println("Benchmark sizes: " + this._testInputSizes);	
+
+	for(var benchName of this._testBenchmarks) {
+
+		print(benchName+":");
+
+		for(var inputSize of this._testInputSizes) {
+
+			if(NasBenchmarkSet.isSizeSupported(benchName, inputSize)) {
+				print(" " + inputSize);
+			}
+		}
+		
+		println();
+	}
+}
 
 /*** IMPLEMENTATIONS ***/
 

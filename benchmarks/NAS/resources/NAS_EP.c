@@ -171,6 +171,8 @@ int main()
     timer_clear(2);
     timer_start(0);
 
+	#pragma kernel
+	{
     t1 = A;
     vranlc(0, &t1, A, x);
 
@@ -255,7 +257,7 @@ int main()
     {
         gc = gc + q[i];
     }
-
+	}
     timer_stop(0);
     tm = timer_read(0);
 

@@ -631,6 +631,7 @@ int main( int argc, char **argv )
 
 
     /*  This is the main iteration */
+	#pragma kernel
     for ( iteration = 1; iteration <= MAX_ITERATIONS; iteration++ )
     {
         if ( CLASS != 'S' ) printf( "        %d\n", iteration );

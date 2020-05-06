@@ -240,6 +240,7 @@ int main(int argc, char *argv[])
     }
     timer_start(1);
 
+	#pragma kernel
     for (step = 1; step <= niter; step++)
     {
         if ((step % 20) == 0 || step == 1)

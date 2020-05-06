@@ -2941,6 +2941,8 @@ void ssor(int niter)
   }
   timer_start(1);
 
+  #pragma kernel
+  {
   //---------------------------------------------------------------------
   // the timestep loop
   //---------------------------------------------------------------------
@@ -3099,6 +3101,7 @@ void ssor(int niter)
     }
   }
 
+  }
   timer_stop(1);
   maxtime = timer_read(1);
 }
