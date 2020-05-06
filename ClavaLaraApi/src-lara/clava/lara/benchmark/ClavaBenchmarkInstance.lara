@@ -1,0 +1,71 @@
+import lara.benchmark.BenchmarkInstance;
+
+import clava.Clava;
+import clava.ClavaJoinPoints;
+
+import weaver.WeaverJps;
+
+/**
+ * Instance of a Clava benchmark.
+ *
+ * Implements _compilePrivate and _executePrivate.
+ */
+function ClavaBenchmarkInstance(name) {
+    // Parent constructor
+    BenchmarkInstance.call(this, name);
+	
+//	this._cmaker =  new CMaker(this.getName());
+}
+// Inheritance
+ClavaBenchmarkInstance.prototype = Object.create(BenchmarkInstance.prototype);
+
+
+/**
+ * The output folder for this BenchmarkInstance.
+ */ 
+ClavaBenchmarkInstance.prototype._getOutputFolder = function() {
+	return Io.mkdir(this.getBaseFolder(), this.getName());
+}
+
+/*
+ClavaBenchmarkInstance.prototype.getCMaker = function() {
+	return this._cmaker;
+}
+*/
+
+
+/*** IMPLEMENTATIONS ***/
+
+
+/*
+ClavaBenchmarkInstance.prototype.close = function() {
+	//var result = super.close();
+	
+	// Clean CMaker
+	this._cmaker =  new CMaker(this.getName());
+	
+	return result;
+}
+*/
+
+/**
+ * 
+ */
+ClavaBenchmarkInstance.prototype._compilePrivate = function() {
+
+	
+	var folder = this._getOutputFolder();
+	Clava.writeCode(folder);
+	
+	var cmaker = this.getCMaker();
+
+	cmaker.addCurrentAst();
+
+	var exe = cmaker.build(folder);
+
+	this._setExecutable(exe);
+	
+	return exe;
+}
+
+
