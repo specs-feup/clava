@@ -147,7 +147,7 @@ NasBenchmarkSet.prototype.setInputSizes = function() {
 
 /*** IMPLEMENTATIONS ***/
 
-NasBenchmarkSet.prototype.getInstances = function() {
+NasBenchmarkSet.prototype._getInstancesPrivate = function() {
 
 	var instances = [];
 

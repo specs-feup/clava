@@ -1,4 +1,4 @@
-import lara.benchmark.BenchmarkInstance;
+import lara.benchmark.ClavaBenchmarkInstance;
 import lara.benchmark.NasBenchmarkResources;
 
 import clava.Clava;
@@ -11,7 +11,7 @@ import weaver.WeaverJps;
  */
 function NasBenchmarkInstance(benchmarkName, inputSize) {
     // Parent constructor
-    BenchmarkInstance.call(this, "NAS-" + benchmarkName + "-" + inputSize);
+    ClavaBenchmarkInstance.call(this, "NAS-" + benchmarkName + "-" + inputSize);
 	
 	this._benchmarkName = benchmarkName;
 	this._inputSize = inputSize;
@@ -23,12 +23,12 @@ function NasBenchmarkInstance(benchmarkName, inputSize) {
 	this._file = NasBenchmarkResources.getFile(filename);
 }
 // Inheritance
-NasBenchmarkInstance.prototype = Object.create(BenchmarkInstance.prototype);
+NasBenchmarkInstance.prototype = Object.create(ClavaBenchmarkInstance.prototype);
 
 
 /*** IMPLEMENTATIONS ***/
 
-BenchmarkInstance.prototype._loadPrivate = function() {
+NasBenchmarkInstance.prototype._loadPrivate = function() {
 
 
 	// Save current AST
@@ -57,7 +57,7 @@ BenchmarkInstance.prototype._loadPrivate = function() {
 
 
 
-BenchmarkInstance.prototype._closePrivate = function() {
+NasBenchmarkInstance.prototype._closePrivate = function() {
 	// Restore standard
 	Clava.getData().setStandard(this._previousStandard);	
 	this._previousStandard = undefined;
@@ -70,3 +70,4 @@ BenchmarkInstance.prototype._closePrivate = function() {
 	Clava.popAst();
 		
 }
+
