@@ -72,7 +72,6 @@ public class DataFlowSubgraph {
 
     public DataFlowSubgraphMetrics getMetrics() {
 	DataFlowSubgraphMetrics metrics = new DataFlowSubgraphMetrics(root);
-	int depth = calculateCriticalPath(root);
 	ArrayList<DataFlowNode> path = root.getCurrPath();
 	metrics.setCriticalPath(path);
 	metrics.setDepth(path.size());
@@ -139,7 +138,7 @@ public class DataFlowSubgraph {
 	return count + max;
     }
 
-    private ArrayList<DataFlowNode> getSources() {
+    public ArrayList<DataFlowNode> getSources() {
 	ArrayList<DataFlowNode> sources = new ArrayList<>();
 	ArrayList<DataFlowNode> nodes = getNodes();
 	nodes.forEach(node -> {
@@ -147,5 +146,13 @@ public class DataFlowSubgraph {
 		sources.add(node);
 	});
 	return sources;
+    }
+
+    public int getId() {
+	return id;
+    }
+
+    public void setId(int id) {
+	this.id = id;
     }
 }

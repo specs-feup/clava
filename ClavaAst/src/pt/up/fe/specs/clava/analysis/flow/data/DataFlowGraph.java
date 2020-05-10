@@ -68,7 +68,6 @@ public class DataFlowGraph extends FlowGraph {
 	this.addNode(nullNode);
 
 	BasicBlockNode start = (BasicBlockNode) cfg.findNode(0);
-	// buildGraph(start, -1);
 	buildGraphTopLevel(start);
 	findSubgraphs();
 	findDuplicatedNodes();
@@ -180,45 +179,6 @@ public class DataFlowGraph extends FlowGraph {
 
 	sb.append("labelloc=\"t\"").append(NL).append("label=\"").append(name).append("\"").append(NL).append("}");
 	return sb.toString();
-    }
-
-    @Deprecated
-    private ArrayList<DataFlowNode> buildGraph(BasicBlockNode currBlock, int loopAncestorID) {
-	processed.add(currBlock.getId());
-
-	// Build sub-graph for each statement of basic block
-	ArrayList<DataFlowNode> nodes = new ArrayList<>();
-	if (currBlock.getType() == BasicBlockNodeType.LOOP) {
-	    DataFlowNode loopNode = buildLoopNode(currBlock);
-	    nodes.add(loopNode);
-	    loopAncestorID = loopNode.getId();
-	}
-	if (currBlock.getType() == BasicBlockNodeType.NORMAL) {
-	    for (Stmt statement : currBlock.getStmts()) {
-		DataFlowNode node = buildStatement(statement);
-		nodes.add(node);
-	    }
-	    if (loopAncestorID == -1) {
-		for (int i = 1; i < nodes.size(); i++)
-		    this.addEdge(new DataFlowEdge(nodes.get(i - 1), nodes.get(i), 0));
-	    }
-	}
-	DataFlowNode lastNode = (loopAncestorID != -1) ? (DataFlowNode) this.findNode(loopAncestorID)
-		: nodes.get(nodes.size() - 1);
-	loopAncestorID = lastNode.getId();
-
-	// Get subgraphs of children basic blocks and connect them
-	for (FlowNode nextBlock : currBlock.getOutNodes()) {
-	    ArrayList<DataFlowNode> children = new ArrayList<>();
-	    if (!processed.contains(nextBlock.getId())) {
-		children = buildGraph((BasicBlockNode) nextBlock, loopAncestorID);
-		for (DataFlowNode child : children) {
-		    if (!child.isDisabled())
-			this.addEdge(new DataFlowEdge(lastNode, child, lastNode.getIterations()));
-		}
-	    }
-	}
-	return nodes;
     }
 
     private void buildGraphTopLevel(BasicBlockNode topBlock) {
