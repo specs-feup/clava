@@ -20,6 +20,8 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
 import pt.up.fe.specs.clava.analysis.flow.FlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
+import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockEdge;
+import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockEdgeType;
 import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNode;
 import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNodeType;
 import pt.up.fe.specs.clava.analysis.flow.control.ControlFlowGraph;
@@ -66,7 +68,8 @@ public class DataFlowGraph extends FlowGraph {
 	this.addNode(nullNode);
 
 	BasicBlockNode start = (BasicBlockNode) cfg.findNode(0);
-	buildGraph(start, -1);
+	// buildGraph(start, -1);
+	buildGraphTopLevel(start);
 	findSubgraphs();
 	findDuplicatedNodes();
 	findFunctionParams();
@@ -179,6 +182,7 @@ public class DataFlowGraph extends FlowGraph {
 	return sb.toString();
     }
 
+    @Deprecated
     private ArrayList<DataFlowNode> buildGraph(BasicBlockNode currBlock, int loopAncestorID) {
 	processed.add(currBlock.getId());
 
@@ -213,6 +217,99 @@ public class DataFlowGraph extends FlowGraph {
 			this.addEdge(new DataFlowEdge(lastNode, child, lastNode.getIterations()));
 		}
 	    }
+	}
+	return nodes;
+    }
+
+    private void buildGraphTopLevel(BasicBlockNode topBlock) {
+	// Get top basic blocks
+	ArrayList<BasicBlockNode> blocks = new ArrayList<>();
+	while (topBlock.hasOutEdges()) {
+	    if (blocks.contains(topBlock))
+		break;
+	    blocks.add(topBlock);
+	    for (FlowEdge e : topBlock.getOutEdges()) {
+		BasicBlockEdge edge = (BasicBlockEdge) e;
+		if (edge.getType() == BasicBlockEdgeType.UNCONDITIONAL || edge.getType() == BasicBlockEdgeType.NOLOOP)
+		    topBlock = (BasicBlockNode) edge.getDest();
+	    }
+	}
+
+	// Build and connect the dataflows of each block
+	DataFlowNode previous = DataFlowGraph.nullNode;
+	for (BasicBlockNode block : blocks) {
+	    processed.add(block.getId());
+	    if (block.getType() == BasicBlockNodeType.NORMAL) {
+		for (Stmt statement : block.getStmts()) {
+		    DataFlowNode node = buildStatement(statement);
+		    if (previous == DataFlowGraph.nullNode) {
+			previous = node;
+		    } else {
+			this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.REPEATING));
+			previous = node;
+		    }
+		}
+	    }
+	    if (block.getType() == BasicBlockNodeType.LOOP) {
+		DataFlowNode node = buildLoopNode(block);
+
+		// Build and attach loop children to loop node
+		ArrayList<DataFlowNode> descendants = buildGraphLoop(block);
+		for (DataFlowNode child : descendants)
+		    this.addEdge(new DataFlowEdge(node, child, node.getIterations()));
+
+		// Connect loop to other control nodes
+		if (previous == DataFlowGraph.nullNode) {
+		    previous = node;
+		} else {
+		    this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.REPEATING));
+		    previous = node;
+		}
+	    }
+	}
+    }
+
+    private ArrayList<DataFlowNode> buildGraphLoop(BasicBlockNode loopBlock) {
+	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+
+	BasicBlockNode topBlock = null;
+	for (FlowEdge e : loopBlock.getOutEdges()) {
+	    BasicBlockEdge edge = (BasicBlockEdge) e;
+	    if (edge.getType() == BasicBlockEdgeType.LOOP)
+		topBlock = (BasicBlockNode) edge.getDest();
+	}
+
+	// Get top basic blocks
+	ArrayList<BasicBlockNode> blocks = new ArrayList<>();
+	while (topBlock != loopBlock) {
+	    blocks.add(topBlock);
+	    for (FlowEdge e : topBlock.getOutEdges()) {
+		BasicBlockEdge edge = (BasicBlockEdge) e;
+		if (edge.getType() == BasicBlockEdgeType.UNCONDITIONAL || edge.getType() == BasicBlockEdgeType.NOLOOP) {
+		    topBlock = (BasicBlockNode) edge.getDest();
+		}
+	    }
+	}
+	System.out.println("LOOP LEVEL BBs: " + blocks.size());
+
+	// Build the dataflow of each block
+	for (BasicBlockNode block : blocks) {
+	    if (block.getType() == BasicBlockNodeType.NORMAL) {
+		for (Stmt statement : block.getStmts()) {
+		    DataFlowNode node = buildStatement(statement);
+		    nodes.add(node);
+		}
+	    }
+	    if (block.getType() == BasicBlockNodeType.LOOP) {
+		DataFlowNode node = buildLoopNode(block);
+
+		// Build and attach loop children to loop node
+		ArrayList<DataFlowNode> descendants = buildGraphLoop(block);
+		for (DataFlowNode child : descendants)
+		    this.addEdge(new DataFlowEdge(node, child, node.getIterations()));
+		nodes.add(node);
+	    }
+	    processed.add(block.getId());
 	}
 	return nodes;
     }
@@ -385,7 +482,7 @@ public class DataFlowGraph extends FlowGraph {
 	int initVal = -1;
 	int limitVal = -1;
 	int increment = 1;
-	int numIter = -1;
+	int numIter = Integer.MAX_VALUE;
 	String counterName = "";
 
 	// Loop counter
