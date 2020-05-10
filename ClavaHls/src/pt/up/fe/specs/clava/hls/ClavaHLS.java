@@ -29,6 +29,10 @@ public class ClavaHLS {
     }
 
     public void run() {
+	log("using the following CDFG as input:");
+	log("----------------------------------");
+	dfg.generateDot(false);
+	log("----------------------------------");
 	log("starting HLS restructuring");
 	log("detecting if arrays can be turned into streams");
 	ArrayStreamDetector arrayStream = new ArrayStreamDetector(dfg);
