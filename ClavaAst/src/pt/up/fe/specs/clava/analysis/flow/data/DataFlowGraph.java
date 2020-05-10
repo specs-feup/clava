@@ -80,7 +80,6 @@ public class DataFlowGraph extends FlowGraph {
 		params.add(param);
 	    }
 	}
-
     }
 
     private void findDuplicatedNodes() {
@@ -390,11 +389,22 @@ public class DataFlowGraph extends FlowGraph {
 	String counterName = "";
 
 	// Loop counter
+	// Case "int i = 0"
 	if (root.getChild(0).getChild(0) instanceof VarDecl) {
 	    VarDecl counter = (VarDecl) root.getChild(0).getChild(0);
 	    counterName = counter.getDeclName();
 	    if (root.getChild(0).getChild(0).getChild(0) instanceof IntegerLiteral) {
 		IntegerLiteral init = (IntegerLiteral) root.getChild(0).getChild(0).getChild(0);
+		initVal = init.getValue().intValue();
+	    }
+	}
+	// Case "i = 0"
+	if (root.getChild(0).getChild(0) instanceof BinaryOperator) {
+	    BinaryOperator op = (BinaryOperator) root.getChild(0).getChild(0);
+	    DeclRefExpr ref = (DeclRefExpr) op.getLhs();
+	    counterName = ref.getName();
+	    if (op.getRhs() instanceof IntegerLiteral) {
+		IntegerLiteral init = (IntegerLiteral) op.getRhs();
 		initVal = init.getValue().intValue();
 	    }
 	}
@@ -449,7 +459,6 @@ public class DataFlowGraph extends FlowGraph {
 	    for (FlowEdge inEdge : node.getInEdges()) {
 		FlowNode inNode = inEdge.getSource();
 		inNode.removeOutEdge(inEdge);
-		// node.removeInEdge(inEdge);
 		inEdge.setDest(master);
 		inNode.addOutEdge(inEdge);
 		master.addInEdge(inEdge);
@@ -457,7 +466,6 @@ public class DataFlowGraph extends FlowGraph {
 	    for (FlowEdge outEdge : node.getOutEdges()) {
 		FlowNode outNode = outEdge.getDest();
 		outNode.removeInEdge(outEdge);
-		// node.removeOutEdge(outEdge);
 		outEdge.setSource(master);
 		outNode.addInEdge(outEdge);
 		master.addOutEdge(outEdge);

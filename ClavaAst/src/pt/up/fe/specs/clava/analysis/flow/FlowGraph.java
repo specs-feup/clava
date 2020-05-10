@@ -100,7 +100,13 @@ public abstract class FlowGraph {
 	return null;
     }
 
-    protected void removeNode(FlowNode node) {
+    public void removeNode(FlowNode node) {
 	this.nodes.remove(node);
+    }
+
+    public void removeEdge(FlowEdge edge) {
+	System.out.println(this.edges.contains(edge));
+	if (this.edges.contains(edge))
+	    this.edges.remove(edge);
     }
 }
