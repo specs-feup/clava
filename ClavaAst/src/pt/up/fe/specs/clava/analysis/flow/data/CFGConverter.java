@@ -17,17 +17,21 @@
 
 package pt.up.fe.specs.clava.analysis.flow.data;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
+import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
+import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockEdge;
 import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNode;
+import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNodeType;
 import pt.up.fe.specs.clava.analysis.flow.control.ControlFlowGraph;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 
 public class CFGConverter {
     public static void convert(ControlFlowGraph cfg) {
 	removeComments(cfg);
-	normalizeEdges(cfg);
+	// normalizeEdges(cfg);
 	cfg.generateDot(false);
     }
 
@@ -45,6 +49,18 @@ public class CFGConverter {
     }
 
     private static void normalizeEdges(ControlFlowGraph cfg) {
-
+	ArrayList<FlowEdge> toRemove = new ArrayList<>();
+	for (FlowEdge e : cfg.getEdges()) {
+	    BasicBlockEdge edge = (BasicBlockEdge) e;
+	    BasicBlockNode source = (BasicBlockNode) edge.getSource();
+	    BasicBlockNode dest = (BasicBlockNode) edge.getDest();
+	    if (source.getType() == BasicBlockNodeType.NORMAL && dest.getType() == BasicBlockNodeType.LOOP) {
+		source.removeOutEdge(e);
+		dest.removeInEdge(e);
+		toRemove.add(e);
+	    }
+	}
+	for (FlowEdge e : toRemove)
+	    cfg.removeEdge(e);
     }
 }
