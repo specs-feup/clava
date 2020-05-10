@@ -27,6 +27,7 @@ public class DataFlowSubgraphMetrics {
     private int numStores = -1;
     private int depth = -1;
     private ArrayList<DataFlowNode> criticalPath = new ArrayList<>();
+    private String code;
 
     public DataFlowSubgraphMetrics(DataFlowNode root) {
 	this.root = root;
@@ -77,20 +78,29 @@ public class DataFlowSubgraphMetrics {
 	this.numStores = n;
     }
 
+    public String getCode() {
+	return code;
+    }
+
+    public void setCode(String code) {
+	this.code = code;
+    }
+
     @Override
     public String toString() {
 	String NL = "\n";
 	StringBuilder sb = new StringBuilder();
 	sb.append("Subgraph ").append(root.getId()).append(NL);
 	sb.append("------------------------------").append(NL);
+	sb.append("Code: ").append(code).append(NL);
 	sb.append("Depth: ").append(depth).append(NL);
 	sb.append("Num. loads: ").append(numLoads).append(NL);
 	sb.append("Num. stores: ").append(numStores).append(NL);
 	sb.append("Num. operations: ").append(numOp).append(NL);
 	sb.append("Critical Path:").append(NL);
-	for (int i = 0; i < criticalPath.size() - 1; i++)
-	    sb.append(criticalPath.get(i).getLabel()).append(" -> ");
-	sb.append(criticalPath.get(criticalPath.size() - 1).getLabel()).append(NL);
+//	for (int i = 0; i < criticalPath.size() - 1; i++)
+//	    sb.append(criticalPath.get(i).getLabel()).append(" -> ");
+//	sb.append(criticalPath.get(criticalPath.size() - 1).getLabel()).append(NL);
 	sb.append("------------------------------").append(NL);
 	return sb.toString();
     }

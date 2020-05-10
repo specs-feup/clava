@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public abstract class FlowGraph {
@@ -66,7 +67,7 @@ public abstract class FlowGraph {
 		SpecsLogs.msgWarn("Error message:\n", e);
 	    }
 	} else
-	    System.out.println(dot);
+	    ClavaLog.info(dot);
     }
 
     public ArrayList<FlowNode> getNodes() {

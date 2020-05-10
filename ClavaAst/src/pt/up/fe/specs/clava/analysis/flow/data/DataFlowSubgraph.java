@@ -78,6 +78,7 @@ public class DataFlowSubgraph {
 	metrics.setNumLoads(findLoads());
 	metrics.setNumStores(findStores());
 	metrics.setNumOp(findOps());
+	metrics.setCode(root.getStmt().getCode());
 	return metrics;
     }
 
@@ -93,14 +94,15 @@ public class DataFlowSubgraph {
     }
 
     private int findStores() {
-	ArrayList<DataFlowNode> nodes = this.getNodes();
-	int counter = 0;
-	for (DataFlowNode node : nodes) {
-	    if (node.getType() == DataFlowNodeType.STORE_ARRAY || node.getType() == DataFlowNodeType.STORE_VAR) {
-		counter++;
-	    }
-	}
-	return counter;
+//	ArrayList<DataFlowNode> nodes = this.getNodes();
+//	int counter = 0;
+//	for (DataFlowNode node : nodes) {
+//	    if (node.getType() == DataFlowNodeType.STORE_ARRAY || node.getType() == DataFlowNodeType.STORE_VAR) {
+//		counter++;
+//	    }
+//	}
+//	return counter;
+	return 1;
     }
 
     private int findLoads() {
@@ -138,7 +140,7 @@ public class DataFlowSubgraph {
 	return count + max;
     }
 
-    public ArrayList<DataFlowNode> getSources() {
+    private ArrayList<DataFlowNode> getSources() {
 	ArrayList<DataFlowNode> sources = new ArrayList<>();
 	ArrayList<DataFlowNode> nodes = getNodes();
 	nodes.forEach(node -> {

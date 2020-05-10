@@ -31,4 +31,16 @@ public enum DataFlowNodeType {
     public String getColor() {
 	return color;
     }
+
+    public static boolean isLoad(DataFlowNodeType type) {
+	return type == LOAD_VAR || type == LOAD_ARRAY || type == LOAD_INDEX;
+    }
+
+    public static boolean isStore(DataFlowNodeType type) {
+	return type == STORE_VAR || type == STORE_ARRAY;
+    }
+
+    public static boolean isOp(DataFlowNodeType type) {
+	return type == OP_ARITH || type == OP_CALL;
+    }
 }

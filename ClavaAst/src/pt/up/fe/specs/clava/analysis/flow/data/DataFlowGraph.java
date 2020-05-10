@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.analysis.flow.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
 import pt.up.fe.specs.clava.analysis.flow.FlowGraph;
@@ -89,7 +90,7 @@ public class DataFlowGraph extends FlowGraph {
 	    HashMap<String, ArrayList<DataFlowNode>> map = subgraphs.get(root).getMultipleVarLoads();
 	    map.forEach((key, value) -> {
 		mergeNodes(value);
-		System.out.println("Merged accesses to variable " + key);
+		ClavaLog.info("Merged accesses to variable " + key);
 	    });
 	}
     }
@@ -250,7 +251,6 @@ public class DataFlowGraph extends FlowGraph {
 		}
 	    }
 	}
-	System.out.println("LOOP LEVEL BBs: " + blocks.size());
 
 	// Build the dataflow of each block
 	for (BasicBlockNode block : blocks) {
@@ -372,7 +372,7 @@ public class DataFlowGraph extends FlowGraph {
 	    node = buildExpression(n.getChild(0));
 	}
 	if (node == nullNode)
-	    System.out.println(n.toString());
+	    ClavaLog.warning("Unsupported note type for dfg: " + n.toString());
 	return node;
     }
 
@@ -398,6 +398,9 @@ public class DataFlowGraph extends FlowGraph {
     }
 
     private DataFlowNode buildArraySubExprNode(ArraySubscriptExpr arr) {
+	if (arr.getChild(0) instanceof ArraySubscriptExpr)
+	    return buildArraySubExprNode((ArraySubscriptExpr) arr.getChild(0));
+
 	String label = ((DeclRefExpr) arr.getChild(0)).getName();
 	DataFlowNode arrNode = new DataFlowNode(DataFlowNodeType.LOAD_ARRAY, label, arr);
 	this.addNode(arrNode);
