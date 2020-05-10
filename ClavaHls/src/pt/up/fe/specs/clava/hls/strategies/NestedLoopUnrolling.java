@@ -18,6 +18,7 @@
 package pt.up.fe.specs.clava.hls.strategies;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
@@ -25,24 +26,56 @@ import pt.up.fe.specs.clava.analysis.flow.data.DataFlowEdge;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.hls.ClavaHLS;
+import pt.up.fe.specs.clava.hls.directives.HLSUnroll;
 
 public class NestedLoopUnrolling extends RestructuringStrategy {
+    private HashMap<DataFlowNode, Integer> loopsToUnroll = new HashMap<>();
 
     public NestedLoopUnrolling(DataFlowGraph dfg) {
 	super(dfg);
-	// TODO Auto-generated constructor stub
+
     }
 
     @Override
     public void analyze() {
 	ArrayList<DataFlowNode> loops = findMasterLoops();
+	for (DataFlowNode loop : loops)
+	    evaluateLoopNest(loop);
 
+    }
+
+    private int evaluateLoopNest(DataFlowNode loop) {
+	boolean hasNested = false;
+	int currFactor = 0;
+	for (FlowNode n : loop.getOutNodes()) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getType() == DataFlowNodeType.LOOP) {
+		hasNested = true;
+		int prevFactor = evaluateLoopNest(node);
+		if (prevFactor == Integer.MAX_VALUE)
+		    return Integer.MAX_VALUE;
+	    }
+	}
+	if (!hasNested) {
+	    int iter = loop.getIterations();
+	    if (iter != Integer.MAX_VALUE)
+		currFactor = iter;
+	}
+	return currFactor;
     }
 
     @Override
     public void apply() {
-	// TODO Auto-generated method stub
+	for (DataFlowNode node : loopsToUnroll.keySet()) {
+	    int factor = loopsToUnroll.get(node);
+	    Stmt stmt = node.getStmt();
+	    HLSUnroll directive = new HLSUnroll();
+	    if (factor != Integer.MAX_VALUE)
+		directive.setFactor(factor);
+	    insertDirective(stmt, directive);
+	}
 
     }
 
@@ -59,7 +92,13 @@ public class NestedLoopUnrolling extends RestructuringStrategy {
 		}
 		if (!isNested) {
 		    loops.add(node);
-		    ClavaHLS.log("found master loop \"" + node.getLabel() + "\"");
+		    StringBuilder sb = new StringBuilder();
+		    sb.append("found master loop \"").append(node.getLabel()).append("\"");
+		    if (node.getIterations() != Integer.MAX_VALUE) {
+			sb.append(" (trip count = ").append(node.getIterations()).append(")");
+		    } else
+			sb.append(" (undetermined trip count)");
+		    ClavaHLS.log(sb.toString());
 		}
 	    }
 	}

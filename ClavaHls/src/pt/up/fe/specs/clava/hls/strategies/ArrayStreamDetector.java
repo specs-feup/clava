@@ -17,12 +17,17 @@
 
 package pt.up.fe.specs.clava.hls.strategies;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowParam;
 import pt.up.fe.specs.clava.hls.ClavaHLS;
+import pt.up.fe.specs.clava.hls.DFGUtils;
 import pt.up.fe.specs.clava.hls.directives.HLSStream;
 
 public class ArrayStreamDetector extends RestructuringStrategy {
@@ -40,8 +45,52 @@ public class ArrayStreamDetector extends RestructuringStrategy {
     @Override
     public void analyze() {
 	for (String variable : isStream.keySet()) {
-	    isStream.put(variable, true);
+	    ArrayList<DataFlowNode> loads = findLoads(variable);
+	    if (loads.size() > 0) {
+		boolean detected = analyzeLoads(loads);
+		if (detected)
+		    isStream.put(variable, true);
+	    }
 	}
+    }
+
+    private ArrayList<DataFlowNode> findLoads(String variable) {
+	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	boolean invalid = false;
+	for (FlowNode n : dfg.getNodes()) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getLabel() == variable) {
+		if (DataFlowNodeType.isStore(node.getType())) {
+		    invalid = true;
+		}
+		if (DataFlowNodeType.isLoad(node.getType())) {
+		    nodes.add(node);
+		}
+	    }
+	}
+	if (invalid)
+	    nodes.clear();
+	return nodes;
+    }
+
+    private boolean analyzeLoads(ArrayList<DataFlowNode> nodes) {
+	if (nodes.size() != 1)
+	    return false; // TODO: support more than one load
+	DataFlowNode node = nodes.get(0);
+	if (node.getIterations() == Integer.MAX_VALUE)
+	    return false; // TODO: not sure if necessary
+	DataFlowNode loopNode = DFGUtils.getLoopOfNode(node);
+	String loopIterator = loopNode.getLabel().split(" ")[1];
+	String iterator = DFGUtils.getIndexesOfArray(node).get(0).getLabel();
+	return loopIterator.compareTo(iterator) == 0;
+    }
+
+    public int detectedCases() {
+	int count = 0;
+	for (boolean b : isStream.values()) {
+	    count += b ? 1 : 0;
+	}
+	return count;
     }
 
     @Override
@@ -52,7 +101,7 @@ public class ArrayStreamDetector extends RestructuringStrategy {
 	    if (isStream.get(variable)) {
 		HLSStream directive = new HLSStream(variable);
 		insertDirective(node, directive);
-		ClavaHLS.log("declaring parameter array " + variable + " as stream");
+		ClavaHLS.log("declaring parameter array \"" + variable + "\" as stream");
 	    }
 	}
     }

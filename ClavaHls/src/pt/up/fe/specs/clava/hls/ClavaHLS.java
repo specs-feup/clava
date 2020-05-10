@@ -17,7 +17,10 @@
 
 package pt.up.fe.specs.clava.hls;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraph;
 import pt.up.fe.specs.clava.hls.strategies.ArrayStreamDetector;
 import pt.up.fe.specs.clava.hls.strategies.NestedLoopUnrolling;
 
@@ -29,23 +32,42 @@ public class ClavaHLS {
     }
 
     public void run() {
-	log("using the following CDFG as input:");
-	log("----------------------------------");
-	dfg.generateDot(false);
-	log("----------------------------------");
 	log("starting HLS restructuring");
+	printDfg();
+	// printSubgraphCosts();
+
 	log("detecting if arrays can be turned into streams");
 	ArrayStreamDetector arrayStream = new ArrayStreamDetector(dfg);
 	arrayStream.analyze();
-	arrayStream.apply();
+	if (arrayStream.detectedCases() > 0) {
+	    log("found " + arrayStream.detectedCases() + " parameter(s) that can be declared as stream");
+	    arrayStream.apply();
+	}
+
 	log("defining unrolling factor for nested loops");
 	NestedLoopUnrolling loopUnfolding = new NestedLoopUnrolling(dfg);
 	loopUnfolding.analyze();
 	loopUnfolding.apply();
+
 	log("finished HLS restructuring");
     }
 
     public static void log(String msg) {
-	System.out.println("HLS: " + msg);
+	ClavaLog.info("HLS: " + msg);
+    }
+
+    private void printDfg() {
+	log("using the following CDFG as input:");
+	log("----------------------------------");
+	dfg.generateDot(false);
+	log("----------------------------------");
+    }
+
+    private void printSubgraphCosts() {
+	log("reporting the cost of each subgraph");
+	for (DataFlowNode node : dfg.getSubgraphRoots()) {
+	    DataFlowSubgraph sub = dfg.getSubgraph(node);
+	    log(sub.getMetrics().toString());
+	}
     }
 }
