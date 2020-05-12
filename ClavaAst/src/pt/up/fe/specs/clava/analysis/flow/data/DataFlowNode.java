@@ -29,6 +29,7 @@ public class DataFlowNode extends FlowNode implements Cloneable {
     private int nIterations = 0;
     private int subgraphID = -1;
     private boolean isSubgraphRoot = false;
+    private boolean isTopLevel = false;
     private Stmt stmt;
     private ArrayList<DataFlowNode> currPath = new ArrayList<>();
     private ClavaNode clavaNode;
@@ -113,5 +114,13 @@ public class DataFlowNode extends FlowNode implements Cloneable {
 
     public void setClavaNode(ClavaNode clavaNode) {
 	this.clavaNode = clavaNode;
+    }
+
+    public boolean isTopLevel() {
+	return isTopLevel;
+    }
+
+    public void setTopLevel(boolean isTopLevel) {
+	this.isTopLevel = isTopLevel;
     }
 }
