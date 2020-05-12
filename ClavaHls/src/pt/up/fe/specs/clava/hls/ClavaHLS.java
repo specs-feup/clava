@@ -22,6 +22,7 @@ import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraph;
 import pt.up.fe.specs.clava.hls.strategies.ArrayStreamDetector;
+import pt.up.fe.specs.clava.hls.strategies.FunctionInlining;
 import pt.up.fe.specs.clava.hls.strategies.NestedLoopUnrolling;
 
 public class ClavaHLS {
@@ -43,6 +44,11 @@ public class ClavaHLS {
 	    log("found " + arrayStream.detectedCases() + " parameter(s) that can be declared as stream");
 	    arrayStream.apply();
 	}
+
+	log("detecting if function calls can be inlined");
+	FunctionInlining inliner = new FunctionInlining(dfg);
+	inliner.analyze();
+	inliner.printFrequencies();
 
 	log("defining unrolling factor for nested loops");
 	NestedLoopUnrolling loopUnfolding = new NestedLoopUnrolling(dfg);
