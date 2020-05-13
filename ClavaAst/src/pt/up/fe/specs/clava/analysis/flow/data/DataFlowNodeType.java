@@ -43,4 +43,8 @@ public enum DataFlowNodeType {
     public static boolean isOp(DataFlowNodeType type) {
 	return type == OP_ARITH || type == OP_CALL;
     }
+
+    public static boolean isLoop(DataFlowNodeType type) {
+	return type == LOOP;
+    }
 }

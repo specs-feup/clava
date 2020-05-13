@@ -18,26 +18,52 @@
 package pt.up.fe.specs.clava.hls;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowEdge;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowEdgeType;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
 
 public class DFGUtils {
     public static DataFlowNode getLoopOfNode(DataFlowNode node) {
-	while (node.getType() != DataFlowNodeType.LOOP) {
-	    if (DataFlowNodeType.isStore(node.getType())) {
-		for (FlowNode n : node.getInNodes()) {
-		    DataFlowNode curr = (DataFlowNode) n;
-		    if (curr.getType() == DataFlowNodeType.LOOP)
-			node = curr;
-		}
-	    } else {
-		node = (DataFlowNode) node.getOutNodes().get(0);
-	    }
+	if (DataFlowNodeType.isStore(node.getType())) {
+	    return getLoopOfLoop(node);
+	}
+	if (DataFlowNodeType.isLoop(node.getType())) {
+	    return getLoopOfStore(node);
+	}
+	if (DataFlowNodeType.isLoad(node.getType()) || DataFlowNodeType.isOp(node.getType())) {
+	    // TODO: Case for flows with no stores (e.g. calls)
+	    return getLoopOfStore(getStoreOfNode(node));
+	}
+	return node;
+    }
+
+    public static DataFlowNode getLoopOfLoop(DataFlowNode node) {
+	for (FlowNode n : node.getInNodes()) {
+	    DataFlowNode curr = (DataFlowNode) n;
+	    if (curr.getType() == DataFlowNodeType.LOOP)
+		return curr;
+	}
+	return node;
+    }
+
+    public static DataFlowNode getLoopOfStore(DataFlowNode node) {
+	for (FlowNode n : node.getInNodes()) {
+	    DataFlowNode curr = (DataFlowNode) n;
+	    if (curr.getType() == DataFlowNodeType.LOOP)
+		return curr;
+	}
+	return node;
+    }
+
+    public static DataFlowNode getStoreOfNode(DataFlowNode node) {
+	while (!DataFlowNodeType.isStore(node.getType())) {
+	    node = (DataFlowNode) node.getOutNodes().get(0);
 	}
 	return node;
     }
@@ -50,5 +76,29 @@ public class DFGUtils {
 		nodes.add((DataFlowNode) edge.getSource());
 	}
 	return nodes;
+    }
+
+    public static ArrayList<DataFlowNode> getAllNodesOfType(DataFlowGraph dfg, DataFlowNodeType type) {
+	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	for (FlowNode n : dfg.getNodes()) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getType() == type)
+		nodes.add(node);
+	}
+	nodes = (ArrayList<DataFlowNode>) nodes.stream().distinct().collect(Collectors.toList());
+	return nodes;
+    }
+
+    public static int estimateNodeFrequency(DataFlowNode node) {
+	int count = node.getIterations() == 0 ? 1 : node.getIterations();
+	if (node.isTopLevel())
+	    return count;
+	DataFlowNode loop = getLoopOfNode(node);
+	count *= loop.getIterations();
+	while (!loop.isTopLevel()) {
+	    loop = getLoopOfLoop(loop);
+	    count *= loop.getIterations();
+	}
+	return count == 0 ? 1 : count;
     }
 }

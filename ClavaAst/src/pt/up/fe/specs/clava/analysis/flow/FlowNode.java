@@ -109,4 +109,9 @@ public abstract class FlowNode implements ToDot {
     public void setExplored(boolean explored) {
 	this.explored = explored;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+	return id == ((FlowNode) obj).getId();
+    }
 }

@@ -203,6 +203,7 @@ public class DataFlowGraph extends FlowGraph {
 	    if (block.getType() == BasicBlockNodeType.NORMAL) {
 		for (Stmt statement : block.getStmts()) {
 		    DataFlowNode node = buildStatement(statement);
+		    node.setTopLevel(true);
 		    if (previous == DataFlowGraph.nullNode) {
 			previous = node;
 		    } else {
@@ -213,6 +214,7 @@ public class DataFlowGraph extends FlowGraph {
 	    }
 	    if (block.getType() == BasicBlockNodeType.LOOP) {
 		DataFlowNode node = buildLoopNode(block);
+		node.setTopLevel(true);
 
 		// Build and attach loop children to loop node
 		ArrayList<DataFlowNode> descendants = buildGraphLoop(block);
@@ -515,7 +517,9 @@ public class DataFlowGraph extends FlowGraph {
     public void mergeNodes(ArrayList<DataFlowNode> nodes) {
 	DataFlowNode master = nodes.get(0);
 	for (int i = 1; i < nodes.size(); i++) {
-	    FlowNode node = nodes.get(i);
+	    DataFlowNode node = nodes.get(i);
+	    if (node.getSubgraphID() != master.getSubgraphID())
+		continue;
 	    for (FlowEdge inEdge : node.getInEdges()) {
 		FlowNode inNode = inEdge.getSource();
 		inNode.removeOutEdge(inEdge);
