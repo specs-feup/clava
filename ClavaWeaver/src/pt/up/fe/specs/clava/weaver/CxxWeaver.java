@@ -22,6 +22,8 @@ import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.language.specification.LanguageSpecification;
+import org.lara.language.specification.dsl.JoinPointFactory;
+import org.lara.language.specification.dsl.LanguageSpecificationV2;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
@@ -90,7 +92,23 @@ public class CxxWeaver extends ACxxWeaver {
         // true, true);
     }
 
-    public static LanguageSpecification buildLanguageSpecification() {
+    public static LanguageSpecificationV2 buildLanguageSpecification() {
+        var langSpecV1 = LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS,
+                ClavaWeaverResource.ARTIFACTS,
+                ClavaWeaverResource.ACTIONS, true);
+
+        return JoinPointFactory.fromOld(langSpecV1);
+
+        // return LangSpecsXmlParser.parse(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
+        // ClavaWeaverResource.ACTIONS, true);
+    }
+
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated
+    public static LanguageSpecification buildLanguageSpecificationOld() {
         return LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
                 ClavaWeaverResource.ACTIONS, true);
     }
@@ -1302,7 +1320,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     @Override
     public LanguageSpecification getLanguageSpecification() {
-        return buildLanguageSpecification();
+        return buildLanguageSpecificationOld();
     }
 
     @Override
