@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.analysis.flow.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
@@ -71,8 +72,13 @@ public class DataFlowGraph extends FlowGraph {
 	BasicBlockNode start = (BasicBlockNode) cfg.findNode(0);
 	buildGraphTopLevel(start);
 	findSubgraphs();
+	pruneDuplicatedNodes();
 	findDuplicatedNodes();
 	findFunctionParams();
+    }
+
+    private void pruneDuplicatedNodes() {
+	this.nodes = (ArrayList<FlowNode>) nodes.stream().distinct().collect(Collectors.toList());
     }
 
     private void findFunctionParams() {

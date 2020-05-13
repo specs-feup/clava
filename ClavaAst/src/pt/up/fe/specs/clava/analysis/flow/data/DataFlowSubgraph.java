@@ -94,15 +94,14 @@ public class DataFlowSubgraph {
     }
 
     private int findStores() {
-//	ArrayList<DataFlowNode> nodes = this.getNodes();
-//	int counter = 0;
-//	for (DataFlowNode node : nodes) {
-//	    if (node.getType() == DataFlowNodeType.STORE_ARRAY || node.getType() == DataFlowNodeType.STORE_VAR) {
-//		counter++;
-//	    }
-//	}
-//	return counter;
-	return 1;
+	ArrayList<DataFlowNode> nodes = this.getNodes();
+	int counter = 0;
+	for (DataFlowNode node : nodes) {
+	    if (node.getType() == DataFlowNodeType.STORE_ARRAY || node.getType() == DataFlowNodeType.STORE_VAR) {
+		counter++;
+	    }
+	}
+	return counter;
     }
 
     private int findLoads() {
