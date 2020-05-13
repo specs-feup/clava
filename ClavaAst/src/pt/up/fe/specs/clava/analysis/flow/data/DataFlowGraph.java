@@ -201,12 +201,14 @@ public class DataFlowGraph extends FlowGraph {
 		    topBlock = (BasicBlockNode) edge.getDest();
 	    }
 	}
+	if (blocks.size() == 0)
+	    blocks.add(topBlock);
 
 	// Build and connect the dataflows of each block
 	DataFlowNode previous = DataFlowGraph.nullNode;
 	for (BasicBlockNode block : blocks) {
 	    processed.add(block.getId());
-	    if (block.getType() == BasicBlockNodeType.NORMAL) {
+	    if (block.getType() == BasicBlockNodeType.NORMAL || block.getType() == BasicBlockNodeType.EXIT) {
 		for (Stmt statement : block.getStmts()) {
 		    DataFlowNode node = buildStatement(statement);
 		    node.setTopLevel(true);
