@@ -101,7 +101,8 @@ public class DataFlowGraph extends FlowGraph {
 	}
     }
 
-    private void findSubgraphs() {
+    @Deprecated
+    private void findSubgraphsByEdge() {
 	for (FlowNode n : this.nodes) {
 	    DataFlowNode node = (DataFlowNode) n;
 	    if (node.getSubgraphID() == -1) {
@@ -125,6 +126,20 @@ public class DataFlowGraph extends FlowGraph {
 		    subgraphCounter++;
 		} else {
 		    node.setSubgraphID(0);
+		}
+	    }
+	}
+    }
+
+    private void findSubgraphs() {
+	for (FlowNode n : this.nodes) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getSubgraphID() == -1) {
+		if (DataFlowNodeType.isStore(node.getType())) {
+		    buildSubgraph(node, subgraphCounter);
+		    this.subgraphRoots.add(node);
+		    this.subgraphs.put(node, new DataFlowSubgraph(node));
+		    subgraphCounter++;
 		}
 	    }
 	}
@@ -172,12 +187,20 @@ public class DataFlowGraph extends FlowGraph {
 	String NL = "\n";
 	sb.append("Digraph G {").append(NL).append("node [penwidth=2.5]").append(NL);
 
+	// Data flow nodes
 	for (int i = subgraphCounter - 1; i >= 0; i--) {
 	    ArrayList<DataFlowNode> sub = getSubgraphNodes(i);
 	    sb.append("subgraph cluster").append(i).append("{").append(NL);
 	    for (DataFlowNode node : sub)
 		sb.append(node.toDot()).append(NL);
 	    sb.append("}").append(NL);
+	}
+
+	// Control flow nodes (e.g. loops, isolated function calls)
+	for (FlowNode n : nodes) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getSubgraphID() == -1)
+		sb.append(node.toDot()).append(NL);
 	}
 
 	for (FlowEdge edge : edges) {
@@ -211,6 +234,8 @@ public class DataFlowGraph extends FlowGraph {
 	    if (block.getType() == BasicBlockNodeType.NORMAL || block.getType() == BasicBlockNodeType.EXIT) {
 		for (Stmt statement : block.getStmts()) {
 		    DataFlowNode node = buildStatement(statement);
+		    if (node == nullNode)
+			continue;
 		    node.setTopLevel(true);
 		    if (previous == DataFlowGraph.nullNode) {
 			previous = node;
@@ -289,7 +314,8 @@ public class DataFlowGraph extends FlowGraph {
 	DataFlowNode node = nullNode;
 
 	if (n instanceof VarDecl) {
-	    node = buildVarDecl((VarDecl) n);
+	    if (n.getNumChildren() > 0)
+		node = buildVarDecl((VarDecl) n);
 	}
 	if ((n instanceof BinaryOperator) || (n instanceof CompoundAssignOperator)) {
 	    node = buildBinaryOp(n);
