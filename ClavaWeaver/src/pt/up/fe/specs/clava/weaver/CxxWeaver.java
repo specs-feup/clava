@@ -22,7 +22,6 @@ import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.language.specification.LanguageSpecification;
-import org.lara.language.specification.dsl.JoinPointFactory;
 import org.lara.language.specification.dsl.LanguageSpecificationV2;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
@@ -58,6 +57,7 @@ import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
 import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.lara.LaraExtraApis;
+import pt.up.fe.specs.lara.langspec.LangSpecsXmlParser;
 import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -93,14 +93,14 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     public static LanguageSpecificationV2 buildLanguageSpecification() {
-        var langSpecV1 = LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS,
-                ClavaWeaverResource.ARTIFACTS,
-                ClavaWeaverResource.ACTIONS, true);
-
-        return JoinPointFactory.fromOld(langSpecV1);
-
-        // return LangSpecsXmlParser.parse(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
+        // var langSpecV1 = LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS,
+        // ClavaWeaverResource.ARTIFACTS,
         // ClavaWeaverResource.ACTIONS, true);
+        //
+        // return JoinPointFactory.fromOld(langSpecV1);
+        // System.out.println("JPS: " + ClavaWeaverResource.JOINPOINTS.read());
+        return LangSpecsXmlParser.parse(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
+                ClavaWeaverResource.ACTIONS, true);
     }
 
     /**
