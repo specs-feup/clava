@@ -60,12 +60,17 @@ public class FunctionInlining extends RestructuringStrategy {
     private DataFlowGraph getCallDfg(DataFlowNode call) {
 	CallExpr callNode = (CallExpr) call.getClavaNode();
 	if (!callNode.getDefinition().isPresent()) {
-	    ClavaHLS.log("function defininion of " + call.getLabel() + "not found");
+	    ClavaHLS.log("function defininion of \"" + call.getLabel() + "\" not found");
 	    return null;
 	}
 	FunctionDecl fun = callNode.getDefinition().get();
+
+	if (!fun.getBody().isPresent()) {
+	    ClavaHLS.log("function body of \"" + call.getLabel() + "\" not found");
+	    return null;
+	}
 	CompoundStmt scope = fun.getBody().get();
-	System.out.println(scope.toString());
+
 	DataFlowGraph funDFG = new DataFlowGraph(scope);
 	funDFG.generateDot(false);
 	return funDFG;
