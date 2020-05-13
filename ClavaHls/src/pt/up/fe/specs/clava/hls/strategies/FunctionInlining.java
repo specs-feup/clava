@@ -23,15 +23,22 @@ import java.util.HashMap;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.expr.CallExpr;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.hls.ClavaHLS;
 import pt.up.fe.specs.clava.hls.DFGUtils;
 
 public class FunctionInlining extends RestructuringStrategy {
     private HashMap<DataFlowNode, Integer> callFreq;
+    private HashMap<String, DataFlowGraph> functions;
+    private HashMap<DataFlowNode, Boolean> inline;
 
     public FunctionInlining(DataFlowGraph dfg) {
 	super(dfg);
 	callFreq = new HashMap<>();
+	functions = new HashMap<>();
+	inline = new HashMap<>();
     }
 
     @Override
@@ -42,7 +49,26 @@ public class FunctionInlining extends RestructuringStrategy {
     }
 
     private void findDistinctFunctions(ArrayList<DataFlowNode> calls) {
+	for (DataFlowNode call : calls) {
+	    String funName = call.getLabel();
+	    if (!functions.containsKey(funName)) {
+		functions.put(funName, getCallDfg(call));
+	    }
+	}
+    }
 
+    private DataFlowGraph getCallDfg(DataFlowNode call) {
+	CallExpr callNode = (CallExpr) call.getClavaNode();
+	if (!callNode.getDefinition().isPresent()) {
+	    ClavaHLS.log("function defininion of " + call.getLabel() + "not found");
+	    return null;
+	}
+	FunctionDecl fun = callNode.getDefinition().get();
+	CompoundStmt scope = fun.getBody().get();
+	System.out.println(scope.toString());
+	DataFlowGraph funDFG = new DataFlowGraph(scope);
+	funDFG.generateDot(false);
+	return funDFG;
     }
 
     private void estimateCallFrequencies(ArrayList<DataFlowNode> calls) {
