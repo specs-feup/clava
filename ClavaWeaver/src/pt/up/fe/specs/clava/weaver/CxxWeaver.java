@@ -1958,4 +1958,9 @@ public class CxxWeaver extends ACxxWeaver {
 
         allFiles.stream().forEach(filename -> processedFiles.put(new File(filename), baseFolder));
     }
+
+    @Override
+    protected LanguageSpecificationV2 buildLangSpecsV2() {
+        return buildLanguageSpecification();
+    }
 }
