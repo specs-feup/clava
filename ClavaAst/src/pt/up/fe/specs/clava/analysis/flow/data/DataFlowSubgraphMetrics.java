@@ -28,6 +28,7 @@ public class DataFlowSubgraphMetrics {
     private int depth = -1;
     private ArrayList<DataFlowNode> criticalPath = new ArrayList<>();
     private String code;
+    private int iterations = 1;
 
     public DataFlowSubgraphMetrics(DataFlowNode root) {
 	this.root = root;
@@ -86,22 +87,36 @@ public class DataFlowSubgraphMetrics {
 	this.code = code;
     }
 
+//    @Override
+//    public String toString() {
+//	String NL = "\n";
+//	StringBuilder sb = new StringBuilder();
+//	sb.append("Subgraph ").append(root.getId()).append(NL);
+//	sb.append("------------------------------").append(NL);
+//	sb.append("Code: ").append(code).append(NL);
+//	sb.append("Depth: ").append(depth).append(NL);
+//	sb.append("Num. loads: ").append(numLoads).append(NL);
+//	sb.append("Num. stores: ").append(numStores).append(NL);
+//	sb.append("Num. operations: ").append(numOp).append(NL);
+//	sb.append("Critical Path:").append(NL);
+////	for (int i = 0; i < criticalPath.size() - 1; i++)
+////	    sb.append(criticalPath.get(i).getLabel()).append(" -> ");
+////	sb.append(criticalPath.get(criticalPath.size() - 1).getLabel()).append(NL);
+//	sb.append("------------------------------").append(NL);
+//	return sb.toString();
+//    }
+
+    public void setIterations(int freq) {
+	this.iterations = freq;
+    }
+
     @Override
     public String toString() {
-	String NL = "\n";
-	StringBuilder sb = new StringBuilder();
-	sb.append("Subgraph ").append(root.getId()).append(NL);
-	sb.append("------------------------------").append(NL);
-	sb.append("Code: ").append(code).append(NL);
-	sb.append("Depth: ").append(depth).append(NL);
-	sb.append("Num. loads: ").append(numLoads).append(NL);
-	sb.append("Num. stores: ").append(numStores).append(NL);
-	sb.append("Num. operations: ").append(numOp).append(NL);
-	sb.append("Critical Path:").append(NL);
-//	for (int i = 0; i < criticalPath.size() - 1; i++)
-//	    sb.append(criticalPath.get(i).getLabel()).append(" -> ");
-//	sb.append(criticalPath.get(criticalPath.size() - 1).getLabel()).append(NL);
-	sb.append("------------------------------").append(NL);
-	return sb.toString();
+	return "DataFlowSubgraphMetrics [root=" + root + ", numOp=" + numOp + ", numLoads=" + numLoads + ", numStores="
+		+ numStores + ", code=" + code + ", iterations=" + iterations + "]";
+    }
+
+    public int getIterations() {
+	return iterations;
     }
 }
