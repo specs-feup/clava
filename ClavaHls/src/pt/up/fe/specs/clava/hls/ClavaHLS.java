@@ -48,7 +48,7 @@ public class ClavaHLS {
 	log("detecting if function calls can be inlined");
 	FunctionInlining inliner = new FunctionInlining(dfg);
 	inliner.analyze();
-	inliner.printFrequencies();
+	inliner.apply();
 
 	log("defining unrolling factor for nested loops");
 	NestedLoopUnrolling loopUnfolding = new NestedLoopUnrolling(dfg);

@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.analysis.flow.data.DataFlowEdgeType;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraphMetrics;
 
 public class DFGUtils {
     public static DataFlowNode getLoopOfNode(DataFlowNode node) {
@@ -100,5 +101,12 @@ public class DFGUtils {
 	    count *= loop.getIterations();
 	}
 	return count == 0 ? 1 : count;
+    }
+
+    public static int sumLoads(ArrayList<DataFlowSubgraphMetrics> metrics) {
+	int sum = 0;
+	for (DataFlowSubgraphMetrics m : metrics)
+	    sum += m.getNumLoads() * m.getIterations();
+	return sum;
     }
 }
