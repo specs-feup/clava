@@ -106,9 +106,9 @@ public class DataFlowSubgraphMetrics {
     public String toString() {
 	String CM = ",";
 	StringBuilder sb = new StringBuilder();
-	sb.append(id).append(CM).append(root.getStmt().getCode()).append(CM).append(iterations).append(CM)
-		.append(numLoads).append(CM).append(numStores).append(CM).append(numOp).append(CM).append(numCalls)
-		.append(CM).append(depth).append(CM).append(getCriticalPathString());
+	sb.append(id).append(CM).append(root.getStmt().getCode().replace(";", "")).append(CM).append(iterations)
+		.append(CM).append(numLoads).append(CM).append(numStores).append(CM).append(numOp).append(CM)
+		.append(numCalls).append(CM).append(depth).append(CM).append(getCriticalPathString());
 	return sb.toString();
     }
 

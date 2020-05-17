@@ -75,7 +75,7 @@ public class DataFlowSubgraph {
 	calculateCriticalPath(root);
 	ArrayList<DataFlowNode> path = root.getCurrPath();
 	metrics.setCriticalPath(path);
-	metrics.setDepth(path.size());
+	metrics.setDepth(calculateDepth(path));
 	metrics.setNumLoads(findLoads());
 	metrics.setNumStores(findStores());
 	metrics.setNumOp(findOps());
@@ -110,7 +110,7 @@ public class DataFlowSubgraph {
 	ArrayList<DataFlowNode> nodes = this.getNodes();
 	int counter = 0;
 	for (DataFlowNode node : nodes) {
-	    if (node.getType() == DataFlowNodeType.STORE_ARRAY || node.getType() == DataFlowNodeType.STORE_VAR) {
+	    if (DataFlowNodeType.isStore(node.getType())) {
 		counter++;
 	    }
 	}
@@ -121,8 +121,7 @@ public class DataFlowSubgraph {
 	ArrayList<DataFlowNode> nodes = this.getNodes();
 	int counter = 0;
 	for (DataFlowNode node : nodes) {
-	    if (node.getType() == DataFlowNodeType.LOAD_ARRAY || node.getType() == DataFlowNodeType.LOAD_VAR
-		    || node.getType() == DataFlowNodeType.LOAD_INDEX) {
+	    if (DataFlowNodeType.isLoad(node.getType())) {
 		counter++;
 	    }
 	}
@@ -159,14 +158,13 @@ public class DataFlowSubgraph {
 	return count + max;
     }
 
-    private ArrayList<DataFlowNode> getSources() {
-	ArrayList<DataFlowNode> sources = new ArrayList<>();
-	ArrayList<DataFlowNode> nodes = getNodes();
-	nodes.forEach(node -> {
-	    if (node.getInEdges().size() == 0 && node.getOutEdges().size() != 0)
-		sources.add(node);
-	});
-	return sources;
+    private int calculateDepth(ArrayList<DataFlowNode> path) {
+	int count = 0;
+	for (DataFlowNode node : path) {
+	    if (DataFlowNodeType.isOp(node.getType()))
+		count++;
+	}
+	return count;
     }
 
     public int getId() {

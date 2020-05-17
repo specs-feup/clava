@@ -97,7 +97,7 @@ public class DataFlowGraph extends FlowGraph {
 	    HashMap<String, ArrayList<DataFlowNode>> map = subgraphs.get(root).getMultipleVarLoads();
 	    map.forEach((key, value) -> {
 		mergeNodes(value);
-		ClavaLog.info("Merged accesses to variable " + key);
+		// ClavaLog.info("Merged accesses to variable " + key);
 	    });
 	}
     }
