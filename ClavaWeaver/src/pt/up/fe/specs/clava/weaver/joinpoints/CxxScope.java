@@ -412,7 +412,7 @@ public class CxxScope extends AScope {
     @Override
     public void cfgImpl() {
 	ControlFlowGraph cfg = new ControlFlowGraph(scope);
-	ClavaLog.info(cfg.buildDot());
+	ClavaLog.info(cfg.toDot());
     }
 
     @Override
