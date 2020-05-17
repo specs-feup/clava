@@ -18,10 +18,13 @@
 package pt.up.fe.specs.clava.hls;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraphMetrics;
 import pt.up.fe.specs.clava.hls.strategies.ArrayStreamDetector;
@@ -39,6 +42,7 @@ public class ClavaHLS {
 
     public void run() {
 	log("starting HLS restructuring");
+	preprocessDfg();
 	printDfg();
 	printSubgraphCosts();
 
@@ -70,9 +74,10 @@ public class ClavaHLS {
     private void printDfg() {
 	log("using the following CDFG as input:");
 	log("----------------------------------");
+	ClavaHLS.log("\n" + dfg.toDot());
 	StringBuilder sb = new StringBuilder();
 	sb.append(dfg.getFunctionName()).append(".dot");
-	DFGUtils.saveFile(weavingFolder, sb.toString(), dfg.buildDot());
+	DFGUtils.saveFile(weavingFolder, sb.toString(), dfg.toDot());
 	log("----------------------------------");
     }
 
@@ -90,5 +95,21 @@ public class ClavaHLS {
 	StringBuilder fileName = new StringBuilder();
 	fileName.append("features_").append(dfg.getFunctionName()).append(".csv");
 	DFGUtils.saveFile(weavingFolder, fileName.toString(), sb.toString());
+    }
+
+    private void preprocessDfg() {
+	for (DataFlowNode node : dfg.getSubgraphRoots()) {
+	    DataFlowSubgraph sub = dfg.getSubgraph(node);
+	    ArrayList<DataFlowNode> loads = DFGUtils.getVarLoadsOfSubgraph(sub);
+	    for (DataFlowNode load : loads) {
+		if (DFGUtils.isIndex(load))
+		    load.setType(DataFlowNodeType.LOAD_INDEX);
+	    }
+	}
+	for (FlowNode n : dfg.getNodes()) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getType() == DataFlowNodeType.LOAD_INDEX)
+		System.out.println("FOUND INDEX");
+	}
     }
 }

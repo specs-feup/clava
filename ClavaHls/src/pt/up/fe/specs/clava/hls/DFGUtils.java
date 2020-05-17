@@ -76,7 +76,7 @@ public class DFGUtils {
 	ArrayList<DataFlowNode> nodes = new ArrayList<>();
 	for (FlowEdge e : node.getInEdges()) {
 	    DataFlowEdge edge = (DataFlowEdge) e;
-	    if (edge.getType() == DataFlowEdgeType.INDEX)
+	    if (edge.getType() == DataFlowEdgeType.DATAFLOW_INDEX)
 		nodes.add((DataFlowNode) edge.getSource());
 	}
 	return nodes;
@@ -113,10 +113,10 @@ public class DFGUtils {
 	return sum;
     }
 
-    public static ArrayList<DataFlowNode> getLoadsOfSubgraph(DataFlowSubgraph sub) {
+    public static ArrayList<DataFlowNode> getVarLoadsOfSubgraph(DataFlowSubgraph sub) {
 	ArrayList<DataFlowNode> nodes = new ArrayList<>();
 	for (DataFlowNode node : sub.getNodes()) {
-	    if (DataFlowNodeType.isLoad(node.getType()))
+	    if (node.getType() == DataFlowNodeType.LOAD_VAR)
 		nodes.add(node);
 	}
 	return nodes;
@@ -130,5 +130,26 @@ public class DFGUtils {
 	    ClavaHLS.log("saved HLS metrics report as \"" + fileName + "\"");
 	else
 	    ClavaHLS.log("failed to save HLS metrics report \"" + fileName + "\"");
+    }
+
+    public static boolean isIndex(DataFlowNode node) {
+	String name = node.getLabel();
+	DataFlowNode loop = getLoopOfNode(node);
+	if (loop == node)
+	    return false;
+	while (loop != node) {
+	    if (getIteratorOfLoop(loop).equals(name))
+		return true;
+	    else {
+		node = loop;
+		loop = getLoopOfLoop(node);
+	    }
+	}
+	return false;
+    }
+
+    public static String getIteratorOfLoop(DataFlowNode loop) {
+	String tokens[] = loop.getLabel().split(" ");
+	return tokens.length == 2 ? tokens[1] : "__undefined";
     }
 }
