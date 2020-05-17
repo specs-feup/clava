@@ -25,9 +25,12 @@ import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 public class DataFlowSubgraph {
     private DataFlowNode root;
     private int id;
+    private DataFlowGraph dfg;
 
-    public DataFlowSubgraph(DataFlowNode root) {
+    public DataFlowSubgraph(DataFlowNode root, DataFlowGraph dfg) {
 	this.root = root;
+	this.dfg = dfg;
+	this.id = root.getSubgraphID();
     }
 
     public ArrayList<DataFlowNode> getNodes() {
@@ -38,7 +41,8 @@ public class DataFlowSubgraph {
 	return nodes;
     }
 
-    private ArrayList<DataFlowNode> findNodes(DataFlowNode node) {
+    @Deprecated
+    private ArrayList<DataFlowNode> findNodesRecursively(DataFlowNode node) {
 	ArrayList<DataFlowNode> nodes = new ArrayList<>();
 	if (!node.isExplored()) {
 	    nodes.add(node);
@@ -47,6 +51,16 @@ public class DataFlowSubgraph {
 		DataFlowNode ascendant = (DataFlowNode) n;
 		nodes.addAll(findNodes(ascendant));
 	    }
+	}
+	return nodes;
+    }
+
+    private ArrayList<DataFlowNode> findNodes(DataFlowNode root) {
+	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	for (FlowNode n : dfg.getNodes()) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getSubgraphID() == this.id)
+		nodes.add(node);
 	}
 	return nodes;
     }
@@ -109,9 +123,12 @@ public class DataFlowSubgraph {
     private int findStores() {
 	ArrayList<DataFlowNode> nodes = this.getNodes();
 	int counter = 0;
+	System.out.println("-----------------");
+	System.out.println("Finding nodes of " + nodes.get(0).getStmt());
 	for (DataFlowNode node : nodes) {
 	    if (DataFlowNodeType.isStore(node.getType())) {
 		counter++;
+		System.out.println("FOUND STORE: " + node.toDot());
 	    }
 	}
 	return counter;

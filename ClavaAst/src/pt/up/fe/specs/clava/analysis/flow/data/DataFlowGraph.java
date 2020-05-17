@@ -123,7 +123,7 @@ public class DataFlowGraph extends FlowGraph {
 		    buildSubgraph(node, subgraphCounter);
 		    node.setSubgraphRoot(true);
 		    this.subgraphRoots.add(node);
-		    this.subgraphs.put(node, new DataFlowSubgraph(node));
+		    this.subgraphs.put(node, new DataFlowSubgraph(node, this));
 		    subgraphCounter++;
 		} else {
 		    node.setSubgraphID(0);
@@ -139,7 +139,7 @@ public class DataFlowGraph extends FlowGraph {
 		if (DataFlowNodeType.isStore(node.getType())) {
 		    buildSubgraph(node, subgraphCounter);
 		    this.subgraphRoots.add(node);
-		    this.subgraphs.put(node, new DataFlowSubgraph(node));
+		    this.subgraphs.put(node, new DataFlowSubgraph(node, this));
 		    subgraphCounter++;
 		}
 	    }
