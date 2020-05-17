@@ -418,7 +418,7 @@ public class CxxScope extends AScope {
     @Override
     public void dfgImpl() {
 	DataFlowGraph dfg = new DataFlowGraph(scope);
-	ClavaHLS hls = new ClavaHLS(dfg);
+	ClavaHLS hls = new ClavaHLS(dfg, CxxWeaver.getCxxWeaver().getWeavingFolder());
 	hls.run();
     }
 }
