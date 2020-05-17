@@ -34,6 +34,7 @@ public class ClavaHLS {
     private DataFlowGraph dfg;
     private File weavingFolder;
     private boolean verbose = false;
+    private final String separator = new String(new char[75]).replace('\0', '-');
 
     public ClavaHLS(DataFlowGraph dfg, File weavingFolder) {
 	this.dfg = dfg;
@@ -41,6 +42,7 @@ public class ClavaHLS {
     }
 
     public void run() {
+	log(separator);
 	log("starting HLS restructuring");
 	preprocessDfg();
 	printDfg();
@@ -65,6 +67,7 @@ public class ClavaHLS {
 	loopUnfolding.apply();
 
 	log("finished HLS restructuring");
+	log(separator);
     }
 
     public static void log(String msg) {
