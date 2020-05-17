@@ -40,6 +40,7 @@ import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
+import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -407,9 +408,47 @@ public class DataFlowGraph extends FlowGraph {
 	if (n instanceof ParenExpr) {
 	    node = buildExpression(n.getChild(0));
 	}
+	if (n instanceof UnaryOperator) {
+	    node = buildUnaryOperationNode((UnaryOperator) n);
+	}
 	if (node == nullNode)
 	    ClavaLog.warning("Unsupported note type for dfg: " + n.toString());
 	return node;
+    }
+
+    private DataFlowNode buildUnaryOperationNode(UnaryOperator n) {
+	UnaryOperatorKind kind = n.getOp();
+	switch (kind) {
+	case Minus:
+	case Plus: {
+	    DataFlowNode child = buildExpression(n.getChild(0));
+	    String literal = kind == UnaryOperatorKind.Minus ? "-1" : "1";
+	    DataFlowNode constant = new DataFlowNode(DataFlowNodeType.CONSTANT, literal, n);
+	    this.addNode(constant);
+	    DataFlowNode op = new DataFlowNode(DataFlowNodeType.OP_ARITH, "*", n);
+	    this.addNode(op);
+	    this.addEdge(new DataFlowEdge(constant, op));
+	    this.addEdge(new DataFlowEdge(child, op));
+	    return op;
+	}
+	case PreInc:
+	case PostInc:
+	case PreDec:
+	case PostDec: {
+	    // TODO: store is also load
+	    DataFlowNode child = buildExpression(n.getChild(0));
+	    String opSymbol = (kind == UnaryOperatorKind.PostDec || kind == UnaryOperatorKind.PreDec) ? "-" : "+";
+	    DataFlowNode constant = new DataFlowNode(DataFlowNodeType.CONSTANT, "1", n);
+	    this.addNode(constant);
+	    DataFlowNode op = new DataFlowNode(DataFlowNodeType.OP_ARITH, opSymbol, n);
+	    this.addNode(op);
+	    this.addEdge(new DataFlowEdge(constant, op));
+	    this.addEdge(new DataFlowEdge(child, op));
+	    return op;
+	}
+	default:
+	    return nullNode;
+	}
     }
 
     private DataFlowNode buildIntegerLitNode(IntegerLiteral intL) {
