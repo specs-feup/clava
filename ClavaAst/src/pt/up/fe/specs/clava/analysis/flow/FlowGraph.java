@@ -19,7 +19,7 @@ package pt.up.fe.specs.clava.analysis.flow;
 
 import java.util.ArrayList;
 
-public abstract class FlowGraph {
+public abstract class FlowGraph implements ToDot {
     protected ArrayList<FlowNode> nodes = new ArrayList<>();
     protected ArrayList<FlowEdge> edges = new ArrayList<>();
     protected String name;
@@ -49,7 +49,8 @@ public abstract class FlowGraph {
 	}
     }
 
-    public abstract String buildDot();
+    @Override
+    public abstract String toDot();
 
     public ArrayList<FlowNode> getNodes() {
 	return nodes;

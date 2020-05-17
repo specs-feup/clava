@@ -346,7 +346,7 @@ public class ControlFlowGraph extends FlowGraph {
     }
 
     @Override
-    public String buildDot() {
+    public String toDot() {
 	String SPACE = " ";
 	String NL = "\n";
 
