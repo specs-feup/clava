@@ -182,7 +182,7 @@ public class DataFlowGraph extends FlowGraph {
     }
 
     @Override
-    protected String buildDot() {
+    public String buildDot() {
 	StringBuilder sb = new StringBuilder();
 	String NL = "\n";
 	sb.append("Digraph G {").append(NL).append("node [penwidth=2.5]").append(NL);

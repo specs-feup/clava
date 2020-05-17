@@ -17,12 +17,7 @@
 
 package pt.up.fe.specs.clava.analysis.flow;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-
-import pt.up.fe.specs.clava.ClavaLog;
-import pt.up.fe.specs.util.SpecsLogs;
 
 public abstract class FlowGraph {
     protected ArrayList<FlowNode> nodes = new ArrayList<>();
@@ -54,21 +49,7 @@ public abstract class FlowGraph {
 	}
     }
 
-    protected abstract String buildDot();
-
-    public void generateDot(boolean saveToFile) {
-	String dot = buildDot();
-	if (saveToFile) {
-	    try {
-		PrintWriter file = new PrintWriter(name + ".dot");
-		file.println(dot);
-		file.close();
-	    } catch (FileNotFoundException e) {
-		SpecsLogs.msgWarn("Error message:\n", e);
-	    }
-	} else
-	    ClavaLog.info(dot);
-    }
+    public abstract String buildDot();
 
     public ArrayList<FlowNode> getNodes() {
 	return nodes;
