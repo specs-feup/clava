@@ -70,7 +70,9 @@ public class ClavaHLS {
     private void printDfg() {
 	log("using the following CDFG as input:");
 	log("----------------------------------");
-	dfg.generateDot(false);
+	StringBuilder sb = new StringBuilder();
+	sb.append(dfg.getFunctionName()).append(".dot");
+	DFGUtils.saveFile(weavingFolder, sb.toString(), dfg.buildDot());
 	log("----------------------------------");
     }
 

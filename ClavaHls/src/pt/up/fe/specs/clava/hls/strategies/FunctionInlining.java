@@ -106,7 +106,6 @@ public class FunctionInlining extends RestructuringStrategy {
 	CompoundStmt scope = fun.getBody().get();
 
 	DataFlowGraph funDFG = new DataFlowGraph(scope);
-	funDFG.generateDot(false);
 	return funDFG;
     }
 
