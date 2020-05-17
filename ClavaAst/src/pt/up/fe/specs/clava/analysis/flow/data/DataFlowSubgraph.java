@@ -72,12 +72,14 @@ public class DataFlowSubgraph {
 
     public DataFlowSubgraphMetrics getMetrics() {
 	DataFlowSubgraphMetrics metrics = new DataFlowSubgraphMetrics(root);
+	calculateCriticalPath(root);
 	ArrayList<DataFlowNode> path = root.getCurrPath();
 	metrics.setCriticalPath(path);
 	metrics.setDepth(path.size());
 	metrics.setNumLoads(findLoads());
 	metrics.setNumStores(findStores());
 	metrics.setNumOp(findOps());
+	metrics.setNumCalls(findCalls());
 	metrics.setCode(root.getStmt().getCode());
 	return metrics;
     }
@@ -86,7 +88,18 @@ public class DataFlowSubgraph {
 	ArrayList<DataFlowNode> nodes = this.getNodes();
 	int counter = 0;
 	for (DataFlowNode node : nodes) {
-	    if (node.getType() == DataFlowNodeType.OP_ARITH || node.getType() == DataFlowNodeType.OP_CALL) {
+	    if (node.getType() == DataFlowNodeType.OP_ARITH) {
+		counter++;
+	    }
+	}
+	return counter;
+    }
+
+    private int findCalls() {
+	ArrayList<DataFlowNode> nodes = this.getNodes();
+	int counter = 0;
+	for (DataFlowNode node : nodes) {
+	    if (node.getType() == DataFlowNodeType.OP_CALL) {
 		counter++;
 	    }
 	}
@@ -113,7 +126,14 @@ public class DataFlowSubgraph {
 		counter++;
 	    }
 	}
+
+	if (isRootAlsoALoad())
+	    counter++;
 	return counter;
+    }
+
+    private boolean isRootAlsoALoad() {
+	return root.getOutEdges().size() == 1;
     }
 
     private int calculateCriticalPath(DataFlowNode node) {
@@ -155,5 +175,9 @@ public class DataFlowSubgraph {
 
     public void setId(int id) {
 	this.id = id;
+    }
+
+    public DataFlowNode getRoot() {
+	return root;
     }
 }

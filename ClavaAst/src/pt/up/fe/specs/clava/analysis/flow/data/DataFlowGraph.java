@@ -584,4 +584,8 @@ public class DataFlowGraph extends FlowGraph {
     public ClavaNode getFirstStmt() {
 	return firstStmt;
     }
+
+    public String getFunctionName() {
+	return ((FunctionDecl) body.getParent()).getDeclName();
+    }
 }
