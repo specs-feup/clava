@@ -21,7 +21,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import pt.up.fe.specs.clava.ClavaLog;
-import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
@@ -34,6 +33,7 @@ import pt.up.fe.specs.clava.hls.strategies.NestedLoopUnrolling;
 public class ClavaHLS {
     private DataFlowGraph dfg;
     private File weavingFolder;
+    private boolean verbose = false;
 
     public ClavaHLS(DataFlowGraph dfg, File weavingFolder) {
 	this.dfg = dfg;
@@ -72,13 +72,17 @@ public class ClavaHLS {
     }
 
     private void printDfg() {
-	log("using the following CDFG as input:");
-	log("----------------------------------");
-	ClavaHLS.log("\n" + dfg.toDot());
 	StringBuilder sb = new StringBuilder();
 	sb.append(dfg.getFunctionName()).append(".dot");
-	DFGUtils.saveFile(weavingFolder, sb.toString(), dfg.toDot());
-	log("----------------------------------");
+	String dot = dfg.toDot();
+	DFGUtils.saveFile(weavingFolder, "graphs", sb.toString(), dfg.toDot());
+
+	if (verbose) {
+	    log("using the following CDFG as input:");
+	    log("----------------------------------");
+	    ClavaHLS.log("\n" + dot);
+	    log("----------------------------------");
+	}
     }
 
     private void printSubgraphCosts() {
@@ -94,7 +98,7 @@ public class ClavaHLS {
 	}
 	StringBuilder fileName = new StringBuilder();
 	fileName.append("features_").append(dfg.getFunctionName()).append(".csv");
-	DFGUtils.saveFile(weavingFolder, fileName.toString(), sb.toString());
+	DFGUtils.saveFile(weavingFolder, "reports", fileName.toString(), sb.toString());
     }
 
     private void preprocessDfg() {
@@ -105,11 +109,6 @@ public class ClavaHLS {
 		if (DFGUtils.isIndex(load))
 		    load.setType(DataFlowNodeType.LOAD_INDEX);
 	    }
-	}
-	for (FlowNode n : dfg.getNodes()) {
-	    DataFlowNode node = (DataFlowNode) n;
-	    if (node.getType() == DataFlowNodeType.LOAD_INDEX)
-		System.out.println("FOUND INDEX");
 	}
     }
 }

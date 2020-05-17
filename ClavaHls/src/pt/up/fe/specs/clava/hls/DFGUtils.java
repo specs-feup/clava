@@ -122,14 +122,15 @@ public class DFGUtils {
 	return nodes;
     }
 
-    public static void saveFile(File weavingFolder, String fileName, String fileContents) {
+    public static void saveFile(File weavingFolder, String reportType, String fileName, String fileContents) {
 	SpecsIo.mkdir(weavingFolder);
 	StringBuilder path = new StringBuilder();
-	path.append(weavingFolder.getPath().toString()).append(File.separator).append(fileName);
+	path.append(weavingFolder.getPath().toString()).append(File.separator).append(reportType).append(File.separator)
+		.append(fileName);
 	if (SpecsIo.write(new File(path.toString()), fileContents))
-	    ClavaHLS.log("saved HLS metrics report as \"" + fileName + "\"");
+	    ClavaHLS.log("file \"" + fileName + "\" saved to \"" + path.toString() + "\"");
 	else
-	    ClavaHLS.log("failed to save HLS metrics report \"" + fileName + "\"");
+	    ClavaHLS.log("failed to save file \"" + fileName + "\"");
     }
 
     public static boolean isIndex(DataFlowNode node) {
