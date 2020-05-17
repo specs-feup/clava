@@ -109,13 +109,13 @@ public class DataFlowGraph extends FlowGraph {
 		boolean inEdge = false;
 		for (FlowEdge e : node.getInEdges()) {
 		    DataFlowEdge edge = (DataFlowEdge) e;
-		    if (edge.getType() == DataFlowEdgeType.REPEATING)
+		    if (edge.getType() == DataFlowEdgeType.CONTROL_REPEATING)
 			inEdge = true;
 		}
 		boolean outEdge = true;
 		for (FlowEdge e : node.getOutEdges()) {
 		    DataFlowEdge edge = (DataFlowEdge) e;
-		    if (edge.getType() == DataFlowEdgeType.REPEATING)
+		    if (edge.getType() == DataFlowEdgeType.CONTROL_REPEATING)
 			inEdge = false;
 		}
 		if (inEdge && outEdge) {
@@ -152,7 +152,7 @@ public class DataFlowGraph extends FlowGraph {
 	ArrayList<FlowEdge> edges = node.getInEdges();
 	for (FlowEdge e : edges) {
 	    DataFlowEdge edge = (DataFlowEdge) e;
-	    if (edge.getType() != DataFlowEdgeType.REPEATING) {
+	    if (!DataFlowEdgeType.isControl(edge.getType())) {
 		buildSubgraph((DataFlowNode) edge.getSource(), id);
 	    }
 	}
@@ -240,7 +240,7 @@ public class DataFlowGraph extends FlowGraph {
 		    if (previous == DataFlowGraph.nullNode) {
 			previous = node;
 		    } else {
-			this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.REPEATING));
+			this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.CONTROL));
 			previous = node;
 		    }
 		}
@@ -258,7 +258,7 @@ public class DataFlowGraph extends FlowGraph {
 		if (previous == DataFlowGraph.nullNode) {
 		    previous = node;
 		} else {
-		    this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.REPEATING));
+		    this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.CONTROL));
 		    previous = node;
 		}
 	    }
@@ -441,7 +441,7 @@ public class DataFlowGraph extends FlowGraph {
 	DataFlowNode arrNode = new DataFlowNode(DataFlowNodeType.LOAD_ARRAY, label, arr);
 	this.addNode(arrNode);
 	DataFlowNode indexNode = buildExpression(arr.getChild(1));
-	this.addEdge(new DataFlowEdge(indexNode, arrNode, DataFlowEdgeType.INDEX));
+	this.addEdge(new DataFlowEdge(indexNode, arrNode, DataFlowEdgeType.DATAFLOW_INDEX));
 	return arrNode;
     }
 
@@ -535,7 +535,7 @@ public class DataFlowGraph extends FlowGraph {
 	for (FlowNode node : nodes) {
 	    for (int i = 0; i < node.getOutEdges().size(); i++) {
 		DataFlowEdge edge = (DataFlowEdge) node.getOutEdges().get(i);
-		if (edge.getType() == DataFlowEdgeType.REPEATING) {
+		if (edge.getType() == DataFlowEdgeType.CONTROL_REPEATING) {
 		    sinks.add(node);
 		    break;
 		}

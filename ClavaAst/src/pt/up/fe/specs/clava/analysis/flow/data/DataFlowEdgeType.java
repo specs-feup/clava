@@ -18,7 +18,7 @@
 package pt.up.fe.specs.clava.analysis.flow.data;
 
 public enum DataFlowEdgeType {
-    DATA("black"), REPEATING("blue"), INDEX("red");
+    DATAFLOW("black"), DATAFLOW_INDEX("red"), CONTROL_REPEATING("blue"), CONTROL("\"#b54707\"");
 
     private String color;
 
@@ -28,5 +28,13 @@ public enum DataFlowEdgeType {
 
     public String getColor() {
 	return color;
+    }
+
+    public static boolean isControl(DataFlowEdgeType type) {
+	return type == CONTROL || type == CONTROL_REPEATING;
+    }
+
+    public static boolean isDirected(DataFlowEdgeType type) {
+	return type == DATAFLOW || type == DATAFLOW_INDEX || type == CONTROL_REPEATING;
     }
 }

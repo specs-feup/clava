@@ -23,7 +23,7 @@ import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 public class DataFlowEdge extends FlowEdge {
     public int repeating = 0;
     public boolean directed = true;
-    private DataFlowEdgeType type = DataFlowEdgeType.DATA;
+    private DataFlowEdgeType type = DataFlowEdgeType.DATAFLOW;
 
     /**
      * Constructor for directed edge of default type "data"
@@ -45,7 +45,7 @@ public class DataFlowEdge extends FlowEdge {
     public DataFlowEdge(FlowNode source, FlowNode dest, DataFlowEdgeType type) {
 	super(source, dest);
 	this.type = type;
-	if (type == DataFlowEdgeType.REPEATING)
+	if (type == DataFlowEdgeType.CONTROL_REPEATING)
 	    this.directed = false;
     }
 
@@ -61,7 +61,7 @@ public class DataFlowEdge extends FlowEdge {
 	super(source, dest);
 	this.repeating = repeating;
 	// this.directed = false;
-	this.type = DataFlowEdgeType.REPEATING;
+	this.type = DataFlowEdgeType.CONTROL_REPEATING;
     }
 
     /**
@@ -86,9 +86,9 @@ public class DataFlowEdge extends FlowEdge {
 	if (repeating > 0)
 	    sb.append("x" + repeating);
 	sb.append("\", color=").append(type.getColor());
-	if (!directed) {
-	    sb.append(", dir=none");
-	}
+//	if (!directed) {
+//	    sb.append(", dir=none");
+//	}
 	sb.append("]");
 	return sb.toString();
     }
