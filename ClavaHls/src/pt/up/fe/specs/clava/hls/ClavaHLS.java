@@ -17,6 +17,8 @@
 
 package pt.up.fe.specs.clava.hls;
 
+import java.io.File;
+
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
@@ -28,9 +30,11 @@ import pt.up.fe.specs.clava.hls.strategies.NestedLoopUnrolling;
 
 public class ClavaHLS {
     private DataFlowGraph dfg;
+    private File weavingFolder;
 
-    public ClavaHLS(DataFlowGraph dfg) {
+    public ClavaHLS(DataFlowGraph dfg, File weavingFolder) {
 	this.dfg = dfg;
+	this.weavingFolder = weavingFolder;
     }
 
     public void run() {
@@ -81,8 +85,8 @@ public class ClavaHLS {
 	    m.setIterations(DFGUtils.estimateNodeFrequency(sub.getRoot()));
 	    sb.append(m.toString()).append(NL);
 	}
-	log("----------------------------------");
-	log(sb.toString());
-	log("----------------------------------");
+	StringBuilder fileName = new StringBuilder();
+	fileName.append("features_").append(dfg.getFunctionName()).append(".csv");
+	DFGUtils.saveFile(weavingFolder, fileName.toString(), sb.toString());
     }
 }

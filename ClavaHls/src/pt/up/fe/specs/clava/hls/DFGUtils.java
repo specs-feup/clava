@@ -17,6 +17,7 @@
 
 package pt.up.fe.specs.clava.hls;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,9 @@ import pt.up.fe.specs.clava.analysis.flow.data.DataFlowEdgeType;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraphMetrics;
+import pt.up.fe.specs.util.SpecsIo;
 
 public class DFGUtils {
     public static DataFlowNode getLoopOfNode(DataFlowNode node) {
@@ -108,5 +111,24 @@ public class DFGUtils {
 	for (DataFlowSubgraphMetrics m : metrics)
 	    sum += m.getNumLoads() * m.getIterations();
 	return sum;
+    }
+
+    public static ArrayList<DataFlowNode> getLoadsOfSubgraph(DataFlowSubgraph sub) {
+	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	for (DataFlowNode node : sub.getNodes()) {
+	    if (DataFlowNodeType.isLoad(node.getType()))
+		nodes.add(node);
+	}
+	return nodes;
+    }
+
+    public static void saveFile(File weavingFolder, String fileName, String fileContents) {
+	SpecsIo.mkdir(weavingFolder);
+	StringBuilder path = new StringBuilder();
+	path.append(weavingFolder.getPath().toString()).append(File.separator).append(fileName);
+	if (SpecsIo.write(new File(path.toString()), fileContents))
+	    ClavaHLS.log("saved HLS metrics report as \"" + fileName + "\"");
+	else
+	    ClavaHLS.log("failed to save HLS metrics report \"" + fileName + "\"");
     }
 }
