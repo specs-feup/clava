@@ -21,6 +21,7 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraph;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraphMetrics;
 import pt.up.fe.specs.clava.hls.strategies.ArrayStreamDetector;
 import pt.up.fe.specs.clava.hls.strategies.FunctionInlining;
 import pt.up.fe.specs.clava.hls.strategies.NestedLoopUnrolling;
@@ -35,7 +36,7 @@ public class ClavaHLS {
     public void run() {
 	log("starting HLS restructuring");
 	printDfg();
-	// printSubgraphCosts();
+	printSubgraphCosts();
 
 	log("detecting if arrays can be turned into streams");
 	ArrayStreamDetector arrayStream = new ArrayStreamDetector(dfg);
@@ -71,9 +72,17 @@ public class ClavaHLS {
 
     private void printSubgraphCosts() {
 	log("reporting the cost of each subgraph");
+	StringBuilder sb = new StringBuilder();
+	String NL = "\n";
+	sb.append(DataFlowSubgraphMetrics.HEADER).append(NL);
 	for (DataFlowNode node : dfg.getSubgraphRoots()) {
 	    DataFlowSubgraph sub = dfg.getSubgraph(node);
-	    log(sub.getMetrics().toString());
+	    DataFlowSubgraphMetrics m = sub.getMetrics();
+	    m.setIterations(DFGUtils.estimateNodeFrequency(sub.getRoot()));
+	    sb.append(m.toString()).append(NL);
 	}
+	log("----------------------------------");
+	log(sb.toString());
+	log("----------------------------------");
     }
 }
