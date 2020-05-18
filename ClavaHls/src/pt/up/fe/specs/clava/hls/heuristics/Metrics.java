@@ -15,26 +15,24 @@
  *  under the License.
  */
 
-package pt.up.fe.specs.clava.analysis.flow.data;
+package pt.up.fe.specs.clava.hls.heuristics;
 
-public enum DataFlowEdgeType {
-    DATAFLOW("black"), DATAFLOW_INDEX("red"), CONTROL_REPEATING("blue"), CONTROL("\"#b54707\"");
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraphMetrics;
 
-    private String color;
-
-    private DataFlowEdgeType(String color) {
-	this.color = color;
-    }
-
-    public String getColor() {
-	return color;
-    }
-
-    public static boolean isControl(DataFlowEdgeType type) {
-	return type == CONTROL || type == CONTROL_REPEATING;
-    }
-
-    public static boolean isDirected(DataFlowEdgeType type) {
-	return type == DATAFLOW || type == DATAFLOW_INDEX || type == CONTROL_REPEATING;
+public class Metrics {
+    public static DataFlowSubgraphMetrics merge(DataFlowSubgraphMetrics... metrics) {
+	DataFlowSubgraphMetrics merged = new DataFlowSubgraphMetrics(null);
+	int nStores = 0;
+	int nLoads = 0;
+	int nOps = 0;
+	for (DataFlowSubgraphMetrics metricsObj : metrics) {
+	    nStores += metricsObj.getNumStores();
+	    nLoads += metricsObj.getNumStores();
+	    nOps += metricsObj.getNumOp();
+	}
+	merged.setNumLoads(nLoads);
+	merged.setNumStores(nStores);
+	merged.setNumOp(nOps);
+	return merged;
     }
 }

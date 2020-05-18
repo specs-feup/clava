@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.analysis.flow.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
@@ -39,6 +40,7 @@ import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
+import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -71,8 +73,13 @@ public class DataFlowGraph extends FlowGraph {
 	BasicBlockNode start = (BasicBlockNode) cfg.findNode(0);
 	buildGraphTopLevel(start);
 	findSubgraphs();
+	pruneDuplicatedNodes();
 	findDuplicatedNodes();
 	findFunctionParams();
+    }
+
+    private void pruneDuplicatedNodes() {
+	this.nodes = (ArrayList<FlowNode>) nodes.stream().distinct().collect(Collectors.toList());
     }
 
     private void findFunctionParams() {
@@ -90,8 +97,38 @@ public class DataFlowGraph extends FlowGraph {
 	    HashMap<String, ArrayList<DataFlowNode>> map = subgraphs.get(root).getMultipleVarLoads();
 	    map.forEach((key, value) -> {
 		mergeNodes(value);
-		ClavaLog.info("Merged accesses to variable " + key);
+		// ClavaLog.info("Merged accesses to variable " + key);
 	    });
+	}
+    }
+
+    @Deprecated
+    private void findSubgraphsByEdge() {
+	for (FlowNode n : this.nodes) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getSubgraphID() == -1) {
+		boolean inEdge = false;
+		for (FlowEdge e : node.getInEdges()) {
+		    DataFlowEdge edge = (DataFlowEdge) e;
+		    if (edge.getType() == DataFlowEdgeType.CONTROL_REPEATING)
+			inEdge = true;
+		}
+		boolean outEdge = true;
+		for (FlowEdge e : node.getOutEdges()) {
+		    DataFlowEdge edge = (DataFlowEdge) e;
+		    if (edge.getType() == DataFlowEdgeType.CONTROL_REPEATING)
+			inEdge = false;
+		}
+		if (inEdge && outEdge) {
+		    buildSubgraph(node, subgraphCounter);
+		    node.setSubgraphRoot(true);
+		    this.subgraphRoots.add(node);
+		    this.subgraphs.put(node, new DataFlowSubgraph(node, this));
+		    subgraphCounter++;
+		} else {
+		    node.setSubgraphID(0);
+		}
+	    }
 	}
     }
 
@@ -99,26 +136,11 @@ public class DataFlowGraph extends FlowGraph {
 	for (FlowNode n : this.nodes) {
 	    DataFlowNode node = (DataFlowNode) n;
 	    if (node.getSubgraphID() == -1) {
-		boolean inEdge = false;
-		for (FlowEdge e : node.getInEdges()) {
-		    DataFlowEdge edge = (DataFlowEdge) e;
-		    if (edge.getType() == DataFlowEdgeType.REPEATING)
-			inEdge = true;
-		}
-		boolean outEdge = true;
-		for (FlowEdge e : node.getOutEdges()) {
-		    DataFlowEdge edge = (DataFlowEdge) e;
-		    if (edge.getType() == DataFlowEdgeType.REPEATING)
-			inEdge = false;
-		}
-		if (inEdge && outEdge) {
+		if (DataFlowNodeType.isStore(node.getType())) {
 		    buildSubgraph(node, subgraphCounter);
-		    node.setSubgraphRoot(true);
 		    this.subgraphRoots.add(node);
-		    this.subgraphs.put(node, new DataFlowSubgraph(node));
+		    this.subgraphs.put(node, new DataFlowSubgraph(node, this));
 		    subgraphCounter++;
-		} else {
-		    node.setSubgraphID(0);
 		}
 	    }
 	}
@@ -131,7 +153,7 @@ public class DataFlowGraph extends FlowGraph {
 	ArrayList<FlowEdge> edges = node.getInEdges();
 	for (FlowEdge e : edges) {
 	    DataFlowEdge edge = (DataFlowEdge) e;
-	    if (edge.getType() != DataFlowEdgeType.REPEATING) {
+	    if (!DataFlowEdgeType.isControl(edge.getType())) {
 		buildSubgraph((DataFlowNode) edge.getSource(), id);
 	    }
 	}
@@ -161,17 +183,25 @@ public class DataFlowGraph extends FlowGraph {
     }
 
     @Override
-    protected String buildDot() {
+    public String toDot() {
 	StringBuilder sb = new StringBuilder();
 	String NL = "\n";
 	sb.append("Digraph G {").append(NL).append("node [penwidth=2.5]").append(NL);
 
+	// Data flow nodes
 	for (int i = subgraphCounter - 1; i >= 0; i--) {
 	    ArrayList<DataFlowNode> sub = getSubgraphNodes(i);
 	    sb.append("subgraph cluster").append(i).append("{").append(NL);
 	    for (DataFlowNode node : sub)
 		sb.append(node.toDot()).append(NL);
 	    sb.append("}").append(NL);
+	}
+
+	// Control flow nodes (e.g. loops, isolated function calls)
+	for (FlowNode n : nodes) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getSubgraphID() == -1)
+		sb.append(node.toDot()).append(NL);
 	}
 
 	for (FlowEdge edge : edges) {
@@ -195,19 +225,23 @@ public class DataFlowGraph extends FlowGraph {
 		    topBlock = (BasicBlockNode) edge.getDest();
 	    }
 	}
+	if (blocks.size() == 0)
+	    blocks.add(topBlock);
 
 	// Build and connect the dataflows of each block
 	DataFlowNode previous = DataFlowGraph.nullNode;
 	for (BasicBlockNode block : blocks) {
 	    processed.add(block.getId());
-	    if (block.getType() == BasicBlockNodeType.NORMAL) {
+	    if (block.getType() == BasicBlockNodeType.NORMAL || block.getType() == BasicBlockNodeType.EXIT) {
 		for (Stmt statement : block.getStmts()) {
 		    DataFlowNode node = buildStatement(statement);
+		    if (node == nullNode)
+			continue;
 		    node.setTopLevel(true);
 		    if (previous == DataFlowGraph.nullNode) {
 			previous = node;
 		    } else {
-			this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.REPEATING));
+			this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.CONTROL));
 			previous = node;
 		    }
 		}
@@ -225,7 +259,7 @@ public class DataFlowGraph extends FlowGraph {
 		if (previous == DataFlowGraph.nullNode) {
 		    previous = node;
 		} else {
-		    this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.REPEATING));
+		    this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.CONTROL));
 		    previous = node;
 		}
 	    }
@@ -281,7 +315,8 @@ public class DataFlowGraph extends FlowGraph {
 	DataFlowNode node = nullNode;
 
 	if (n instanceof VarDecl) {
-	    node = buildVarDecl((VarDecl) n);
+	    if (n.getNumChildren() > 0)
+		node = buildVarDecl((VarDecl) n);
 	}
 	if ((n instanceof BinaryOperator) || (n instanceof CompoundAssignOperator)) {
 	    node = buildBinaryOp(n);
@@ -373,9 +408,47 @@ public class DataFlowGraph extends FlowGraph {
 	if (n instanceof ParenExpr) {
 	    node = buildExpression(n.getChild(0));
 	}
+	if (n instanceof UnaryOperator) {
+	    node = buildUnaryOperationNode((UnaryOperator) n);
+	}
 	if (node == nullNode)
 	    ClavaLog.warning("Unsupported note type for dfg: " + n.toString());
 	return node;
+    }
+
+    private DataFlowNode buildUnaryOperationNode(UnaryOperator n) {
+	UnaryOperatorKind kind = n.getOp();
+	switch (kind) {
+	case Minus:
+	case Plus: {
+	    DataFlowNode child = buildExpression(n.getChild(0));
+	    String literal = kind == UnaryOperatorKind.Minus ? "-1" : "1";
+	    DataFlowNode constant = new DataFlowNode(DataFlowNodeType.CONSTANT, literal, n);
+	    this.addNode(constant);
+	    DataFlowNode op = new DataFlowNode(DataFlowNodeType.OP_ARITH, "*", n);
+	    this.addNode(op);
+	    this.addEdge(new DataFlowEdge(constant, op));
+	    this.addEdge(new DataFlowEdge(child, op));
+	    return op;
+	}
+	case PreInc:
+	case PostInc:
+	case PreDec:
+	case PostDec: {
+	    // TODO: store is also load
+	    DataFlowNode child = buildExpression(n.getChild(0));
+	    String opSymbol = (kind == UnaryOperatorKind.PostDec || kind == UnaryOperatorKind.PreDec) ? "-" : "+";
+	    DataFlowNode constant = new DataFlowNode(DataFlowNodeType.CONSTANT, "1", n);
+	    this.addNode(constant);
+	    DataFlowNode op = new DataFlowNode(DataFlowNodeType.OP_ARITH, opSymbol, n);
+	    this.addNode(op);
+	    this.addEdge(new DataFlowEdge(constant, op));
+	    this.addEdge(new DataFlowEdge(child, op));
+	    return op;
+	}
+	default:
+	    return nullNode;
+	}
     }
 
     private DataFlowNode buildIntegerLitNode(IntegerLiteral intL) {
@@ -407,7 +480,7 @@ public class DataFlowGraph extends FlowGraph {
 	DataFlowNode arrNode = new DataFlowNode(DataFlowNodeType.LOAD_ARRAY, label, arr);
 	this.addNode(arrNode);
 	DataFlowNode indexNode = buildExpression(arr.getChild(1));
-	this.addEdge(new DataFlowEdge(indexNode, arrNode, DataFlowEdgeType.INDEX));
+	this.addEdge(new DataFlowEdge(indexNode, arrNode, DataFlowEdgeType.DATAFLOW_INDEX));
 	return arrNode;
     }
 
@@ -501,7 +574,7 @@ public class DataFlowGraph extends FlowGraph {
 	for (FlowNode node : nodes) {
 	    for (int i = 0; i < node.getOutEdges().size(); i++) {
 		DataFlowEdge edge = (DataFlowEdge) node.getOutEdges().get(i);
-		if (edge.getType() == DataFlowEdgeType.REPEATING) {
+		if (edge.getType() == DataFlowEdgeType.CONTROL_REPEATING) {
 		    sinks.add(node);
 		    break;
 		}
@@ -549,5 +622,9 @@ public class DataFlowGraph extends FlowGraph {
 
     public ClavaNode getFirstStmt() {
 	return firstStmt;
+    }
+
+    public String getFunctionName() {
+	return ((FunctionDecl) body.getParent()).getDeclName();
     }
 }

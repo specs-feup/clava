@@ -22,15 +22,20 @@ import java.util.Collections;
 
 public class DataFlowSubgraphMetrics {
     private DataFlowNode root;
+    private int id = -1;
     private int numOp = -1;
+    private int numCalls = -1;
     private int numLoads = -1;
     private int numStores = -1;
     private int depth = -1;
     private ArrayList<DataFlowNode> criticalPath = new ArrayList<>();
     private String code;
+    private int iterations = 1;
+    public static String HEADER = "ID,Statement,Iterations,Loads,Stores,Ops,Calls,Depth,Critical Path";
 
     public DataFlowSubgraphMetrics(DataFlowNode root) {
 	this.root = root;
+	this.id = root.getSubgraphID();
     }
 
     public DataFlowNode getRoot() {
@@ -55,6 +60,13 @@ public class DataFlowSubgraphMetrics {
 
     public ArrayList<DataFlowNode> getCriticalPath() {
 	return criticalPath;
+    }
+
+    public String getCriticalPathString() {
+	ArrayList<String> labels = new ArrayList<>();
+	for (DataFlowNode node : criticalPath)
+	    labels.add(node.getLabel());
+	return String.join("->", labels);
     }
 
     public void setCriticalPath(ArrayList<DataFlowNode> criticalPath) {
@@ -86,22 +98,37 @@ public class DataFlowSubgraphMetrics {
 	this.code = code;
     }
 
+    public void setIterations(int freq) {
+	this.iterations = freq;
+    }
+
     @Override
     public String toString() {
-	String NL = "\n";
+	String CM = ",";
 	StringBuilder sb = new StringBuilder();
-	sb.append("Subgraph ").append(root.getId()).append(NL);
-	sb.append("------------------------------").append(NL);
-	sb.append("Code: ").append(code).append(NL);
-	sb.append("Depth: ").append(depth).append(NL);
-	sb.append("Num. loads: ").append(numLoads).append(NL);
-	sb.append("Num. stores: ").append(numStores).append(NL);
-	sb.append("Num. operations: ").append(numOp).append(NL);
-	sb.append("Critical Path:").append(NL);
-//	for (int i = 0; i < criticalPath.size() - 1; i++)
-//	    sb.append(criticalPath.get(i).getLabel()).append(" -> ");
-//	sb.append(criticalPath.get(criticalPath.size() - 1).getLabel()).append(NL);
-	sb.append("------------------------------").append(NL);
+	sb.append(id).append(CM).append(root.getStmt().getCode().replace(";", "")).append(CM).append(iterations)
+		.append(CM).append(numLoads).append(CM).append(numStores).append(CM).append(numOp).append(CM)
+		.append(numCalls).append(CM).append(depth).append(CM).append(getCriticalPathString());
 	return sb.toString();
+    }
+
+    public int getIterations() {
+	return iterations;
+    }
+
+    public int getNumCalls() {
+	return numCalls;
+    }
+
+    public void setNumCalls(int numCalls) {
+	this.numCalls = numCalls;
+    }
+
+    public int getId() {
+	return id;
+    }
+
+    public void setId(int id) {
+	this.id = id;
     }
 }

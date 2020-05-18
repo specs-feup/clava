@@ -17,25 +17,36 @@
 
 package pt.up.fe.specs.clava.hls;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraph;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraphMetrics;
 import pt.up.fe.specs.clava.hls.strategies.ArrayStreamDetector;
 import pt.up.fe.specs.clava.hls.strategies.FunctionInlining;
 import pt.up.fe.specs.clava.hls.strategies.NestedLoopUnrolling;
 
 public class ClavaHLS {
     private DataFlowGraph dfg;
+    private File weavingFolder;
+    private boolean verbose = false;
+    private final String separator = new String(new char[75]).replace('\0', '-');
 
-    public ClavaHLS(DataFlowGraph dfg) {
+    public ClavaHLS(DataFlowGraph dfg, File weavingFolder) {
 	this.dfg = dfg;
+	this.weavingFolder = weavingFolder;
     }
 
     public void run() {
+	log(separator);
 	log("starting HLS restructuring");
+	preprocessDfg();
 	printDfg();
-	// printSubgraphCosts();
+	printSubgraphCosts();
 
 	log("detecting if arrays can be turned into streams");
 	ArrayStreamDetector arrayStream = new ArrayStreamDetector(dfg);
@@ -48,7 +59,7 @@ public class ClavaHLS {
 	log("detecting if function calls can be inlined");
 	FunctionInlining inliner = new FunctionInlining(dfg);
 	inliner.analyze();
-	inliner.printFrequencies();
+	inliner.apply();
 
 	log("defining unrolling factor for nested loops");
 	NestedLoopUnrolling loopUnfolding = new NestedLoopUnrolling(dfg);
@@ -56,6 +67,7 @@ public class ClavaHLS {
 	loopUnfolding.apply();
 
 	log("finished HLS restructuring");
+	log(separator);
     }
 
     public static void log(String msg) {
@@ -63,17 +75,43 @@ public class ClavaHLS {
     }
 
     private void printDfg() {
-	log("using the following CDFG as input:");
-	log("----------------------------------");
-	dfg.generateDot(false);
-	log("----------------------------------");
+	StringBuilder sb = new StringBuilder();
+	sb.append(dfg.getFunctionName()).append(".dot");
+	String dot = dfg.toDot();
+	DFGUtils.saveFile(weavingFolder, "graphs", sb.toString(), dfg.toDot());
+
+	if (verbose) {
+	    log("using the following CDFG as input:");
+	    log("----------------------------------");
+	    ClavaHLS.log("\n" + dot);
+	    log("----------------------------------");
+	}
     }
 
     private void printSubgraphCosts() {
 	log("reporting the cost of each subgraph");
+	StringBuilder sb = new StringBuilder();
+	String NL = "\n";
+	sb.append(DataFlowSubgraphMetrics.HEADER).append(NL);
 	for (DataFlowNode node : dfg.getSubgraphRoots()) {
 	    DataFlowSubgraph sub = dfg.getSubgraph(node);
-	    log(sub.getMetrics().toString());
+	    DataFlowSubgraphMetrics m = sub.getMetrics();
+	    m.setIterations(DFGUtils.estimateNodeFrequency(sub.getRoot()));
+	    sb.append(m.toString()).append(NL);
+	}
+	StringBuilder fileName = new StringBuilder();
+	fileName.append("features_").append(dfg.getFunctionName()).append(".csv");
+	DFGUtils.saveFile(weavingFolder, "reports", fileName.toString(), sb.toString());
+    }
+
+    private void preprocessDfg() {
+	for (DataFlowNode node : dfg.getSubgraphRoots()) {
+	    DataFlowSubgraph sub = dfg.getSubgraph(node);
+	    ArrayList<DataFlowNode> loads = DFGUtils.getVarLoadsOfSubgraph(sub);
+	    for (DataFlowNode load : loads) {
+		if (DFGUtils.isIndex(load))
+		    load.setType(DataFlowNodeType.LOAD_INDEX);
+	    }
 	}
     }
 }

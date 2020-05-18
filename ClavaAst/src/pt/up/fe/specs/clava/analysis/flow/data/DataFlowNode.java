@@ -49,11 +49,6 @@ public class DataFlowNode extends FlowNode implements Cloneable {
 	return sb.toString();
     }
 
-    @Override
-    public String toString() {
-	return name + "  [" + label + "]";
-    }
-
     public void setIterations(int numIter) {
 	nIterations = numIter;
     }
@@ -122,5 +117,12 @@ public class DataFlowNode extends FlowNode implements Cloneable {
 
     public void setTopLevel(boolean isTopLevel) {
 	this.isTopLevel = isTopLevel;
+    }
+
+    @Override
+    public String toString() {
+	return "DataFlowNode [type=" + type + ", nIterations=" + nIterations + ", subgraphID=" + subgraphID
+		+ ", isSubgraphRoot=" + isSubgraphRoot + ", isTopLevel=" + isTopLevel + ", id=" + id + ", name=" + name
+		+ ", label=" + label + "]";
     }
 }

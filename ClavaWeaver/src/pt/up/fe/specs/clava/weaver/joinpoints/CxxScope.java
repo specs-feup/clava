@@ -412,13 +412,13 @@ public class CxxScope extends AScope {
     @Override
     public void cfgImpl() {
 	ControlFlowGraph cfg = new ControlFlowGraph(scope);
-	cfg.generateDot(false);
+	ClavaLog.info(cfg.toDot());
     }
 
     @Override
     public void dfgImpl() {
 	DataFlowGraph dfg = new DataFlowGraph(scope);
-	ClavaHLS hls = new ClavaHLS(dfg);
+	ClavaHLS hls = new ClavaHLS(dfg, CxxWeaver.getCxxWeaver().getWeavingFolder());
 	hls.run();
     }
 }

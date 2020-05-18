@@ -15,26 +15,8 @@
  *  under the License.
  */
 
-package pt.up.fe.specs.clava.analysis.flow.data;
+package pt.up.fe.specs.clava.analysis.flow;
 
-public enum DataFlowEdgeType {
-    DATAFLOW("black"), DATAFLOW_INDEX("red"), CONTROL_REPEATING("blue"), CONTROL("\"#b54707\"");
+public class FlowAnalysisPreprocessing {
 
-    private String color;
-
-    private DataFlowEdgeType(String color) {
-	this.color = color;
-    }
-
-    public String getColor() {
-	return color;
-    }
-
-    public static boolean isControl(DataFlowEdgeType type) {
-	return type == CONTROL || type == CONTROL_REPEATING;
-    }
-
-    public static boolean isDirected(DataFlowEdgeType type) {
-	return type == DATAFLOW || type == DATAFLOW_INDEX || type == CONTROL_REPEATING;
-    }
 }

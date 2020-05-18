@@ -25,9 +25,12 @@ import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 public class DataFlowSubgraph {
     private DataFlowNode root;
     private int id;
+    private DataFlowGraph dfg;
 
-    public DataFlowSubgraph(DataFlowNode root) {
+    public DataFlowSubgraph(DataFlowNode root, DataFlowGraph dfg) {
 	this.root = root;
+	this.dfg = dfg;
+	this.id = root.getSubgraphID();
     }
 
     public ArrayList<DataFlowNode> getNodes() {
@@ -38,7 +41,8 @@ public class DataFlowSubgraph {
 	return nodes;
     }
 
-    private ArrayList<DataFlowNode> findNodes(DataFlowNode node) {
+    @Deprecated
+    private ArrayList<DataFlowNode> findNodesRecursively(DataFlowNode node) {
 	ArrayList<DataFlowNode> nodes = new ArrayList<>();
 	if (!node.isExplored()) {
 	    nodes.add(node);
@@ -47,6 +51,16 @@ public class DataFlowSubgraph {
 		DataFlowNode ascendant = (DataFlowNode) n;
 		nodes.addAll(findNodes(ascendant));
 	    }
+	}
+	return nodes;
+    }
+
+    private ArrayList<DataFlowNode> findNodes(DataFlowNode root) {
+	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	for (FlowNode n : dfg.getNodes()) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getSubgraphID() == this.id)
+		nodes.add(node);
 	}
 	return nodes;
     }
@@ -72,12 +86,14 @@ public class DataFlowSubgraph {
 
     public DataFlowSubgraphMetrics getMetrics() {
 	DataFlowSubgraphMetrics metrics = new DataFlowSubgraphMetrics(root);
+	calculateCriticalPath(root);
 	ArrayList<DataFlowNode> path = root.getCurrPath();
 	metrics.setCriticalPath(path);
-	metrics.setDepth(path.size());
+	metrics.setDepth(calculateDepth(path));
 	metrics.setNumLoads(findLoads());
 	metrics.setNumStores(findStores());
 	metrics.setNumOp(findOps());
+	metrics.setNumCalls(findCalls());
 	metrics.setCode(root.getStmt().getCode());
 	return metrics;
     }
@@ -86,7 +102,18 @@ public class DataFlowSubgraph {
 	ArrayList<DataFlowNode> nodes = this.getNodes();
 	int counter = 0;
 	for (DataFlowNode node : nodes) {
-	    if (node.getType() == DataFlowNodeType.OP_ARITH || node.getType() == DataFlowNodeType.OP_CALL) {
+	    if (node.getType() == DataFlowNodeType.OP_ARITH) {
+		counter++;
+	    }
+	}
+	return counter;
+    }
+
+    private int findCalls() {
+	ArrayList<DataFlowNode> nodes = this.getNodes();
+	int counter = 0;
+	for (DataFlowNode node : nodes) {
+	    if (node.getType() == DataFlowNodeType.OP_CALL) {
 		counter++;
 	    }
 	}
@@ -94,27 +121,35 @@ public class DataFlowSubgraph {
     }
 
     private int findStores() {
-//	ArrayList<DataFlowNode> nodes = this.getNodes();
-//	int counter = 0;
-//	for (DataFlowNode node : nodes) {
-//	    if (node.getType() == DataFlowNodeType.STORE_ARRAY || node.getType() == DataFlowNodeType.STORE_VAR) {
-//		counter++;
-//	    }
-//	}
-//	return counter;
-	return 1;
+	ArrayList<DataFlowNode> nodes = this.getNodes();
+	int counter = 0;
+	System.out.println("-----------------");
+	System.out.println("Finding nodes of " + nodes.get(0).getStmt());
+	for (DataFlowNode node : nodes) {
+	    if (DataFlowNodeType.isStore(node.getType())) {
+		counter++;
+		System.out.println("FOUND STORE: " + node.toDot());
+	    }
+	}
+	return counter;
     }
 
     private int findLoads() {
 	ArrayList<DataFlowNode> nodes = this.getNodes();
 	int counter = 0;
 	for (DataFlowNode node : nodes) {
-	    if (node.getType() == DataFlowNodeType.LOAD_ARRAY || node.getType() == DataFlowNodeType.LOAD_VAR
-		    || node.getType() == DataFlowNodeType.LOAD_INDEX) {
+	    if (DataFlowNodeType.isLoad(node.getType())) {
 		counter++;
 	    }
 	}
+
+	if (isRootAlsoALoad())
+	    counter++;
 	return counter;
+    }
+
+    private boolean isRootAlsoALoad() {
+	return root.getOutEdges().size() == 1;
     }
 
     private int calculateCriticalPath(DataFlowNode node) {
@@ -140,14 +175,13 @@ public class DataFlowSubgraph {
 	return count + max;
     }
 
-    private ArrayList<DataFlowNode> getSources() {
-	ArrayList<DataFlowNode> sources = new ArrayList<>();
-	ArrayList<DataFlowNode> nodes = getNodes();
-	nodes.forEach(node -> {
-	    if (node.getInEdges().size() == 0 && node.getOutEdges().size() != 0)
-		sources.add(node);
-	});
-	return sources;
+    private int calculateDepth(ArrayList<DataFlowNode> path) {
+	int count = 0;
+	for (DataFlowNode node : path) {
+	    if (DataFlowNodeType.isOp(node.getType()))
+		count++;
+	}
+	return count;
     }
 
     public int getId() {
@@ -156,5 +190,9 @@ public class DataFlowSubgraph {
 
     public void setId(int id) {
 	this.id = id;
+    }
+
+    public DataFlowNode getRoot() {
+	return root;
     }
 }
