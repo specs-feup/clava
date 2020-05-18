@@ -144,7 +144,7 @@ public class FunctionInlining extends RestructuringStrategy {
 	}
 //	for (DataFlowSubgraphMetrics m : metrics)
 //	    System.out.println(m.toString());
-	return DFGUtils.sumLoads(metrics);
+	return DFGUtils.sumArrayLoads(metrics);
     }
 
     @Override

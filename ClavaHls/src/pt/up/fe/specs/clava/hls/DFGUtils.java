@@ -106,10 +106,10 @@ public class DFGUtils {
 	return count == 0 ? 1 : count;
     }
 
-    public static int sumLoads(ArrayList<DataFlowSubgraphMetrics> metrics) {
+    public static int sumArrayLoads(ArrayList<DataFlowSubgraphMetrics> metrics) {
 	int sum = 0;
 	for (DataFlowSubgraphMetrics m : metrics)
-	    sum += m.getNumLoads() * m.getIterations();
+	    sum += m.getNumArrayLoads() * m.getIterations();
 	return sum;
     }
 
