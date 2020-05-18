@@ -90,8 +90,13 @@ public class DataFlowSubgraph {
 	ArrayList<DataFlowNode> path = root.getCurrPath();
 	metrics.setCriticalPath(path);
 	metrics.setDepth(calculateDepth(path));
-	metrics.setNumLoads(findLoads());
-	metrics.setNumStores(findStores());
+
+	metrics.setNumVarLoads(findLoads(false));
+	metrics.setNumArrayLoads(findLoads(true));
+
+	metrics.setNumVarStores(findStores(false));
+	metrics.setNumArrayStores(findStores(true));
+
 	metrics.setNumOp(findOps());
 	metrics.setNumCalls(findCalls());
 	metrics.setCode(root.getStmt().getCode());
@@ -120,26 +125,33 @@ public class DataFlowSubgraph {
 	return counter;
     }
 
-    private int findStores() {
+    private int findStores(boolean array) {
 	ArrayList<DataFlowNode> nodes = this.getNodes();
 	int counter = 0;
-	System.out.println("-----------------");
-	System.out.println("Finding nodes of " + nodes.get(0).getStmt());
 	for (DataFlowNode node : nodes) {
-	    if (DataFlowNodeType.isStore(node.getType())) {
-		counter++;
-		System.out.println("FOUND STORE: " + node.toDot());
+	    if (array) {
+		if (node.getType() == DataFlowNodeType.STORE_ARRAY)
+		    counter++;
+	    } else {
+		if (node.getType() == DataFlowNodeType.STORE_VAR)
+		    counter++;
 	    }
 	}
 	return counter;
     }
 
-    private int findLoads() {
+    private int findLoads(boolean array) {
 	ArrayList<DataFlowNode> nodes = this.getNodes();
 	int counter = 0;
 	for (DataFlowNode node : nodes) {
 	    if (DataFlowNodeType.isLoad(node.getType())) {
-		counter++;
+		if (array) {
+		    if (node.getType() == DataFlowNodeType.LOAD_ARRAY)
+			counter++;
+		} else {
+		    if (node.getType() == DataFlowNodeType.LOAD_VAR || node.getType() == DataFlowNodeType.LOAD_INDEX)
+			counter++;
+		}
 	    }
 	}
 

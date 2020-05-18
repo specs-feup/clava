@@ -25,13 +25,15 @@ public class DataFlowSubgraphMetrics {
     private int id = -1;
     private int numOp = -1;
     private int numCalls = -1;
-    private int numLoads = -1;
-    private int numStores = -1;
+    private int numVarLoads = -1;
+    private int numVarStores = -1;
+    private int numArrayLoads = -1;
+    private int numArrayStores = -1;
     private int depth = -1;
     private ArrayList<DataFlowNode> criticalPath = new ArrayList<>();
     private String code;
     private int iterations = 1;
-    public static String HEADER = "ID,Statement,Iterations,Loads,Stores,Ops,Calls,Depth,Critical Path";
+    public static String HEADER = "ID,Statement,Iterations,LoadsVar,LoadsArr,StoresVar,StoresArr,Ops,Calls,Depth,Critical Path";
 
     public DataFlowSubgraphMetrics(DataFlowNode root) {
 	this.root = root;
@@ -74,20 +76,20 @@ public class DataFlowSubgraphMetrics {
 	this.criticalPath = criticalPath;
     }
 
-    public int getNumLoads() {
-	return numLoads;
+    public int getNumVarLoads() {
+	return numVarLoads;
     }
 
-    public void setNumLoads(int n) {
-	this.numLoads = n;
+    public void setNumVarLoads(int n) {
+	this.numVarLoads = n;
     }
 
-    public int getNumStores() {
-	return numStores;
+    public int getNumVarStores() {
+	return numVarStores;
     }
 
-    public void setNumStores(int n) {
-	this.numStores = n;
+    public void setNumVarStores(int n) {
+	this.numVarStores = n;
     }
 
     public String getCode() {
@@ -107,8 +109,9 @@ public class DataFlowSubgraphMetrics {
 	String CM = ",";
 	StringBuilder sb = new StringBuilder();
 	sb.append(id).append(CM).append(root.getStmt().getCode().replace(";", "")).append(CM).append(iterations)
-		.append(CM).append(numLoads).append(CM).append(numStores).append(CM).append(numOp).append(CM)
-		.append(numCalls).append(CM).append(depth).append(CM).append(getCriticalPathString());
+		.append(CM).append(numVarLoads).append(CM).append(numArrayLoads).append(CM).append(numVarStores)
+		.append(CM).append(numArrayStores).append(CM).append(numOp).append(CM).append(numCalls).append(CM)
+		.append(depth).append(CM).append(getCriticalPathString());
 	return sb.toString();
     }
 
@@ -130,5 +133,21 @@ public class DataFlowSubgraphMetrics {
 
     public void setId(int id) {
 	this.id = id;
+    }
+
+    public int getNumArrayLoads() {
+	return numArrayLoads;
+    }
+
+    public void setNumArrayLoads(int numArrayLoads) {
+	this.numArrayLoads = numArrayLoads;
+    }
+
+    public int getNumArrayStores() {
+	return numArrayStores;
+    }
+
+    public void setNumArrayStores(int numArrayStores) {
+	this.numArrayStores = numArrayStores;
     }
 }
