@@ -99,7 +99,6 @@ public class DataFlowGraph extends FlowGraph {
 	    HashMap<String, ArrayList<DataFlowNode>> map = subgraphs.get(root).getMultipleVarLoads();
 	    map.forEach((key, value) -> {
 		mergeNodes(value);
-		// ClavaLog.info("Merged accesses to variable " + key);
 	    });
 	}
     }
@@ -231,26 +230,32 @@ public class DataFlowGraph extends FlowGraph {
 	    blocks.add(topBlock);
 
 	// Build and connect the dataflows of each block
+	int pragmaIter = -1;
 	DataFlowNode previous = DataFlowGraph.nullNode;
 	for (BasicBlockNode block : blocks) {
 	    processed.add(block.getId());
 	    if (block.getType() == BasicBlockNodeType.NORMAL || block.getType() == BasicBlockNodeType.EXIT) {
 		for (Stmt statement : block.getStmts()) {
-		    DataFlowNode node = buildStatement(statement);
-		    if (node == nullNode)
-			continue;
-		    node.setTopLevel(true);
-		    if (previous == DataFlowGraph.nullNode) {
-			previous = node;
+		    if (statement.isWrapper()) {
+			pragmaIter = CFGConverter.parsePragma(statement.getCode());
 		    } else {
-			this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.CONTROL));
-			previous = node;
+			DataFlowNode node = buildStatement(statement);
+			if (node == nullNode)
+			    continue;
+			node.setTopLevel(true);
+			if (previous == DataFlowGraph.nullNode) {
+			    previous = node;
+			} else {
+			    this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.CONTROL));
+			    previous = node;
+			}
 		    }
 		}
 	    }
 	    if (block.getType() == BasicBlockNodeType.LOOP) {
-		DataFlowNode node = buildLoopNode(block);
+		DataFlowNode node = buildLoopNode(block, pragmaIter);
 		node.setTopLevel(true);
+		pragmaIter = -1;
 
 		// Build and attach loop children to loop node
 		ArrayList<DataFlowNode> descendants = buildGraphLoop(block);
@@ -270,6 +275,7 @@ public class DataFlowGraph extends FlowGraph {
 
     private ArrayList<DataFlowNode> buildGraphLoop(BasicBlockNode loopBlock) {
 	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	int pragmaIter = -1;
 
 	BasicBlockNode topBlock = null;
 	for (FlowEdge e : loopBlock.getOutEdges()) {
@@ -294,12 +300,17 @@ public class DataFlowGraph extends FlowGraph {
 	for (BasicBlockNode block : blocks) {
 	    if (block.getType() == BasicBlockNodeType.NORMAL) {
 		for (Stmt statement : block.getStmts()) {
-		    DataFlowNode node = buildStatement(statement);
-		    nodes.add(node);
+		    if (statement.isWrapper()) {
+			pragmaIter = CFGConverter.parsePragma(statement.getCode());
+		    } else {
+			DataFlowNode node = buildStatement(statement);
+			nodes.add(node);
+		    }
 		}
 	    }
 	    if (block.getType() == BasicBlockNodeType.LOOP) {
-		DataFlowNode node = buildLoopNode(block);
+		DataFlowNode node = buildLoopNode(block, pragmaIter);
+		pragmaIter = -1;
 
 		// Build and attach loop children to loop node
 		ArrayList<DataFlowNode> descendants = buildGraphLoop(block);
@@ -519,7 +530,7 @@ public class DataFlowGraph extends FlowGraph {
 	return callNode;
     }
 
-    private DataFlowNode buildLoopNode(BasicBlockNode block) {
+    private DataFlowNode buildLoopNode(BasicBlockNode block, int pragmaIter) {
 	ForStmt root = (ForStmt) block.getLeader();
 	int initVal = -1;
 	int limitVal = -1;
@@ -553,6 +564,8 @@ public class DataFlowGraph extends FlowGraph {
 	    IntegerLiteral limit = (IntegerLiteral) root.getChild(1).getChild(0).getChild(1);
 	    limitVal = limit.getValue().intValue();
 	}
+	if (limitVal == -1 && pragmaIter != -1)
+	    limitVal = pragmaIter;
 
 	// Loop increment (if different than i++)
 	if (!(root.getChild(2) instanceof UnaryOperator)) {

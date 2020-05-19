@@ -94,6 +94,7 @@ public class DFGUtils {
 	while (!loop.isTopLevel()) {
 	    loop = getLoopOfLoop(loop);
 	    count *= loop.getIterations();
+	    count = count > Integer.MAX_VALUE ? Integer.MAX_VALUE : count;
 	}
 	return count == 0 ? 1 : count;
     }
