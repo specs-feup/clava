@@ -106,12 +106,23 @@ public class ClavaHLS {
 
     private void preprocessDfg() {
 	for (DataFlowNode node : dfg.getSubgraphRoots()) {
+	    // Identify indexes
 	    DataFlowSubgraph sub = dfg.getSubgraph(node);
 	    ArrayList<DataFlowNode> loads = DFGUtils.getVarLoadsOfSubgraph(sub);
 	    for (DataFlowNode load : loads) {
 		if (DFGUtils.isIndex(load))
 		    load.setType(DataFlowNodeType.LOAD_INDEX);
 	    }
+	    // Merge loads and stores of the same var
+	    String storeLabel = sub.getRoot().getLabel();
+	    ArrayList<DataFlowNode> nodesToMerge = new ArrayList<>();
+	    nodesToMerge.add(sub.getRoot());
+	    for (DataFlowNode n : sub.getNodes()) {
+		if (n.getLabel().contentEquals(storeLabel)) {
+		    nodesToMerge.add(n);
+		}
+	    }
+	    dfg.mergeNodes(nodesToMerge);
 	}
     }
 }

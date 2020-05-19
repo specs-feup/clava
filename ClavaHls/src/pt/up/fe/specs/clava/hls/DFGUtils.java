@@ -125,8 +125,8 @@ public class DFGUtils {
     public static void saveFile(File weavingFolder, String reportType, String fileName, String fileContents) {
 	SpecsIo.mkdir(weavingFolder);
 	StringBuilder path = new StringBuilder();
-	path.append(weavingFolder.getPath().toString()).append(File.separator).append(reportType).append(File.separator)
-		.append(fileName);
+	path.append(weavingFolder.getPath().toString()).append(File.separator).append("_HLS_").append(reportType)
+		.append(File.separator).append(fileName);
 	if (SpecsIo.write(new File(path.toString()), fileContents))
 	    ClavaHLS.log("file \"" + fileName + "\" saved to \"" + path.toString() + "\"");
 	else
