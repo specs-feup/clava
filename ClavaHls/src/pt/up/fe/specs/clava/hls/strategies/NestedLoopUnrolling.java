@@ -46,20 +46,20 @@ public class NestedLoopUnrolling extends RestructuringStrategy {
 
     }
 
-    private int evaluateLoopNest(DataFlowNode loop) {
+    private long evaluateLoopNest(DataFlowNode loop) {
 	boolean hasNested = false;
-	int currFactor = 0;
+	long currFactor = 0;
 	for (FlowNode n : loop.getOutNodes()) {
 	    DataFlowNode node = (DataFlowNode) n;
 	    if (node.getType() == DataFlowNodeType.LOOP) {
 		hasNested = true;
-		int prevFactor = evaluateLoopNest(node);
+		long prevFactor = evaluateLoopNest(node);
 		if (prevFactor == Integer.MAX_VALUE)
 		    return Integer.MAX_VALUE;
 	    }
 	}
 	if (!hasNested) {
-	    int iter = loop.getIterations();
+	    long iter = loop.getIterations();
 	    if (iter != Integer.MAX_VALUE)
 		currFactor = iter;
 	}
