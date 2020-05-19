@@ -576,6 +576,8 @@ public class DataFlowGraph extends FlowGraph {
 	    numIter = (limitVal - initVal) / increment;
 	DataFlowNode node = new DataFlowNode(DataFlowNodeType.LOOP, "loop " + counterName, null);
 	node.setIterations(numIter);
+	node.setClavaNode(root);
+	node.setStmt(root);
 	this.addNode(node);
 	return node;
     }
