@@ -43,7 +43,6 @@ public class NestedLoopUnrolling extends RestructuringStrategy {
 	ArrayList<DataFlowNode> loops = findMasterLoops();
 	for (DataFlowNode loop : loops)
 	    evaluateLoopNest(loop);
-
     }
 
     private long evaluateLoopNest(DataFlowNode loop) {
@@ -62,6 +61,7 @@ public class NestedLoopUnrolling extends RestructuringStrategy {
 	    long iter = loop.getIterations();
 	    if (iter != Integer.MAX_VALUE)
 		currFactor = iter;
+	    this.loopsToUnroll.put(loop, (int) currFactor);
 	}
 	return currFactor;
     }
@@ -76,7 +76,6 @@ public class NestedLoopUnrolling extends RestructuringStrategy {
 		directive.setFactor(factor);
 	    insertDirective(stmt, directive);
 	}
-
     }
 
     private ArrayList<DataFlowNode> findMasterLoops() {

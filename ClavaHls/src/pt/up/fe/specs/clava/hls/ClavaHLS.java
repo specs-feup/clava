@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraphMetrics;
 import pt.up.fe.specs.clava.hls.strategies.ArrayStreamDetector;
+import pt.up.fe.specs.clava.hls.strategies.CodeRegionPipelining;
 import pt.up.fe.specs.clava.hls.strategies.FunctionInlining;
 import pt.up.fe.specs.clava.hls.strategies.NestedLoopUnrolling;
 import pt.up.fe.specs.util.SpecsIo;
@@ -67,6 +68,11 @@ public class ClavaHLS {
 	NestedLoopUnrolling loopUnfolding = new NestedLoopUnrolling(dfg);
 	loopUnfolding.analyze();
 	loopUnfolding.apply();
+
+	log("defining if code regions can be pipelined");
+	CodeRegionPipelining pipelining = new CodeRegionPipelining(dfg);
+	pipelining.analyze();
+	pipelining.apply();
 
 	log("finished HLS restructuring");
 	log(separator);
