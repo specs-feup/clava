@@ -21,6 +21,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import pt.up.fe.specs.clava.ClavaLog;
+import pt.up.fe.specs.clava.analysis.flow.data.DFGUtils;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
@@ -29,6 +30,7 @@ import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraphMetrics;
 import pt.up.fe.specs.clava.hls.strategies.ArrayStreamDetector;
 import pt.up.fe.specs.clava.hls.strategies.FunctionInlining;
 import pt.up.fe.specs.clava.hls.strategies.NestedLoopUnrolling;
+import pt.up.fe.specs.util.SpecsIo;
 
 public class ClavaHLS {
     private DataFlowGraph dfg;
@@ -78,7 +80,7 @@ public class ClavaHLS {
 	StringBuilder sb = new StringBuilder();
 	sb.append(dfg.getFunctionName()).append(".dot");
 	String dot = dfg.toDot();
-	DFGUtils.saveFile(weavingFolder, "graphs", sb.toString(), dfg.toDot());
+	saveFile(weavingFolder, "graphs", sb.toString(), dfg.toDot());
 
 	if (verbose) {
 	    log("using the following CDFG as input:");
@@ -101,7 +103,7 @@ public class ClavaHLS {
 	}
 	StringBuilder fileName = new StringBuilder();
 	fileName.append("features_").append(dfg.getFunctionName()).append(".csv");
-	DFGUtils.saveFile(weavingFolder, "reports", fileName.toString(), sb.toString());
+	saveFile(weavingFolder, "reports", fileName.toString(), sb.toString());
     }
 
     private void preprocessDfg() {
@@ -124,5 +126,16 @@ public class ClavaHLS {
 	    }
 	    dfg.mergeNodes(nodesToMerge);
 	}
+    }
+
+    public void saveFile(File weavingFolder, String reportType, String fileName, String fileContents) {
+	SpecsIo.mkdir(weavingFolder);
+	StringBuilder path = new StringBuilder();
+	path.append(weavingFolder.getPath().toString()).append(File.separator).append("_HLS_").append(reportType)
+		.append(File.separator).append(fileName);
+	if (SpecsIo.write(new File(path.toString()), fileContents))
+	    ClavaHLS.log("file \"" + fileName + "\" saved to \"" + path.toString() + "\"");
+	else
+	    ClavaHLS.log("failed to save file \"" + fileName + "\"");
     }
 }

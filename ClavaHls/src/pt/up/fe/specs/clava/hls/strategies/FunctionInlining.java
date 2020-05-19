@@ -20,6 +20,7 @@ package pt.up.fe.specs.clava.hls.strategies;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import pt.up.fe.specs.clava.analysis.flow.data.DFGUtils;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
@@ -29,7 +30,6 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.hls.ClavaHLS;
-import pt.up.fe.specs.clava.hls.DFGUtils;
 import pt.up.fe.specs.clava.hls.directives.HLSInline;
 import pt.up.fe.specs.clava.hls.directives.HLSInline.InlineType;
 import pt.up.fe.specs.clava.hls.heuristics.InlineHeuristic;
