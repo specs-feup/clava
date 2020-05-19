@@ -47,4 +47,12 @@ public enum DataFlowNodeType {
     public static boolean isLoop(DataFlowNodeType type) {
 	return type == LOOP || type == MASTER_LOOP;
     }
+
+    public static boolean isArray(DataFlowNodeType type) {
+	return type == LOAD_ARRAY || type == STORE_ARRAY;
+    }
+
+    public static boolean isVar(DataFlowNodeType type) {
+	return type == LOAD_VAR || type == LOAD_INDEX || type == STORE_VAR;
+    }
 }

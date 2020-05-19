@@ -18,6 +18,7 @@
 package pt.up.fe.specs.clava.analysis.flow.data;
 
 import java.util.ArrayList;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
@@ -132,5 +133,37 @@ public class DFGUtils {
     public static String getIteratorOfLoop(DataFlowNode loop) {
 	String tokens[] = loop.getLabel().split(" ");
 	return tokens.length == 2 ? tokens[1] : "__undefined";
+    }
+
+    public static boolean isSameArrayAccess(DataFlowNode n1, DataFlowNode n2) {
+	ArrayList<DataFlowNode> f1 = getIndexExpr(n1);
+	ArrayList<DataFlowNode> f2 = getIndexExpr(n2);
+	return compareFlows(f1, f2);
+    }
+
+    public static ArrayList<DataFlowNode> getIndexExpr(DataFlowNode n) {
+	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	Stack<DataFlowNode> s = new Stack<>();
+	s.add(n);
+	while (!s.isEmpty()) {
+	    DataFlowNode node = s.pop();
+	    if (!nodes.contains(node)) {
+		nodes.add(node);
+		for (FlowNode child : node.getInNodes()) {
+		    s.add((DataFlowNode) child);
+		}
+	    }
+	}
+	return nodes;
+    }
+
+    public static boolean compareFlows(ArrayList<DataFlowNode> f1, ArrayList<DataFlowNode> f2) {
+	if (f1.size() != f2.size())
+	    return false;
+	for (int i = 0; i < f1.size(); i++) {
+	    if (f1.get(i).getLabel() != f2.get(i).getLabel())
+		return false;
+	}
+	return true;
     }
 }

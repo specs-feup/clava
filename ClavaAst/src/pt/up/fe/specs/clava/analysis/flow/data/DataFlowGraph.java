@@ -600,6 +600,14 @@ public class DataFlowGraph extends FlowGraph {
 	    DataFlowNode node = nodeIter.next();
 	    if (node.getSubgraphID() != master.getSubgraphID())
 		continue;
+
+	    if (DataFlowNodeType.isArray(master.getType()) && DataFlowNodeType.isArray(node.getType())) {
+		System.out.println("COMPARING");
+		boolean isSame = DFGUtils.isSameArrayAccess(master, node);
+		if (!isSame)
+		    continue;
+	    }
+
 	    Iterator<FlowEdge> iter = node.getInEdges().iterator();
 	    while (iter.hasNext()) {
 		FlowEdge inEdge = iter.next();
@@ -621,10 +629,6 @@ public class DataFlowGraph extends FlowGraph {
 	    node.clear();
 	    this.nodes.remove(node);
 	}
-    }
-
-    private boolean isSameArrayAccess(DataFlowNode n1, DataFlowNode n2) {
-	return false;
     }
 
     public CompoundStmt getBody() {

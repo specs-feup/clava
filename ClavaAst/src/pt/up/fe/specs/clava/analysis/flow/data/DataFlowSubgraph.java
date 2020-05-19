@@ -100,7 +100,7 @@ public class DataFlowSubgraph {
 	metrics.setNumOp(findOps());
 	metrics.setNumCalls(findCalls());
 	metrics.setCode(root.getStmt().getCode());
-	System.out.println(this.toString());
+//	System.out.println(this.toString());
 	return metrics;
     }
 
