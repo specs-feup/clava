@@ -15,8 +15,18 @@
  *  under the License.
  */
 
-package pt.up.fe.specs.clava.analysis.flow;
+package pt.up.fe.specs.clava.analysis.flow.preprocessing;
 
-public class FlowAnalysisPreprocessing {
+import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.transform.SimplePreClavaRule;
+import pt.up.fe.specs.util.treenode.transform.TransformQueue;
+
+public class UnwrapSingleLineMultipleDecls implements SimplePreClavaRule {
+
+    @Override
+    public void applySimple(ClavaNode node, TransformQueue<ClavaNode> queue) {
+	// TODO Auto-generated method stub
+
+    }
 
 }

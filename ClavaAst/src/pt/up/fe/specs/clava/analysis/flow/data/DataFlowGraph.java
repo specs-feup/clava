@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockEdgeType;
 import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNode;
 import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNodeType;
 import pt.up.fe.specs.clava.analysis.flow.control.ControlFlowGraph;
+import pt.up.fe.specs.clava.analysis.flow.preprocessing.FlowAnalysisPreprocessing;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -66,6 +67,9 @@ public class DataFlowGraph extends FlowGraph {
 
     public DataFlowGraph(CompoundStmt body) {
 	super("Data-flow Graph - " + ((FunctionDecl) body.getParent()).getDeclName(), "n");
+	FlowAnalysisPreprocessing pre = new FlowAnalysisPreprocessing(body);
+	pre.applyConstantFolding();
+	pre.applyUnwrapSingleLineMultipleDecls();
 	this.body = body;
 	this.firstStmt = body.getChild(0);
 	this.cfg = new ControlFlowGraph(body);
