@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.analysis.flow.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaLog;
@@ -36,6 +37,7 @@ import pt.up.fe.specs.clava.ast.expr.CStyleCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
@@ -473,14 +475,16 @@ public class DataFlowGraph extends FlowGraph {
     }
 
     private DataFlowNode buildArraySubExprNode(ArraySubscriptExpr arr) {
-	if (arr.getChild(0) instanceof ArraySubscriptExpr)
-	    return buildArraySubExprNode((ArraySubscriptExpr) arr.getChild(0));
-
-	String label = ((DeclRefExpr) arr.getChild(0)).getName();
+	// array variable
+	String label = ((DeclRefExpr) arr.getArrayExpr()).getName();
 	DataFlowNode arrNode = new DataFlowNode(DataFlowNodeType.LOAD_ARRAY, label, arr);
 	this.addNode(arrNode);
-	DataFlowNode indexNode = buildExpression(arr.getChild(1));
-	this.addEdge(new DataFlowEdge(indexNode, arrNode, DataFlowEdgeType.DATAFLOW_INDEX));
+
+	// subscripts
+	for (Expr subscript : arr.getSubscripts()) {
+	    DataFlowNode indexNode = buildExpression(subscript);
+	    this.addEdge(new DataFlowEdge(indexNode, arrNode, DataFlowEdgeType.DATAFLOW_INDEX));
+	}
 	return arrNode;
     }
 
@@ -588,19 +592,26 @@ public class DataFlowGraph extends FlowGraph {
     }
 
     public void mergeNodes(ArrayList<DataFlowNode> nodes) {
+	nodes = (ArrayList<DataFlowNode>) nodes.stream().distinct().collect(Collectors.toList());
 	DataFlowNode master = nodes.get(0);
-	for (int i = 1; i < nodes.size(); i++) {
-	    DataFlowNode node = nodes.get(i);
+	Iterator<DataFlowNode> nodeIter = nodes.iterator();
+	nodeIter.next();
+	while (nodeIter.hasNext()) {
+	    DataFlowNode node = nodeIter.next();
 	    if (node.getSubgraphID() != master.getSubgraphID())
 		continue;
-	    for (FlowEdge inEdge : node.getInEdges()) {
+	    Iterator<FlowEdge> iter = node.getInEdges().iterator();
+	    while (iter.hasNext()) {
+		FlowEdge inEdge = iter.next();
 		FlowNode inNode = inEdge.getSource();
 		inNode.removeOutEdge(inEdge);
 		inEdge.setDest(master);
 		inNode.addOutEdge(inEdge);
 		master.addInEdge(inEdge);
 	    }
-	    for (FlowEdge outEdge : node.getOutEdges()) {
+	    iter = node.getOutEdges().iterator();
+	    while (iter.hasNext()) {
+		FlowEdge outEdge = iter.next();
 		FlowNode outNode = outEdge.getDest();
 		outNode.removeInEdge(outEdge);
 		outEdge.setSource(master);
@@ -608,7 +619,7 @@ public class DataFlowGraph extends FlowGraph {
 		master.addOutEdge(outEdge);
 	    }
 	    node.clear();
-	    removeNode(node);
+	    this.nodes.remove(node);
 	}
     }
 

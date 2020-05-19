@@ -100,6 +100,7 @@ public class DataFlowSubgraph {
 	metrics.setNumOp(findOps());
 	metrics.setNumCalls(findCalls());
 	metrics.setCode(root.getStmt().getCode());
+	System.out.println(this.toString());
 	return metrics;
     }
 
@@ -155,13 +156,13 @@ public class DataFlowSubgraph {
 	    }
 	}
 
-	if (isRootAlsoALoad())
-	    counter++;
+	if (root.getOutNodes().size() >= 1) {
+	    if (root.getType() == DataFlowNodeType.STORE_ARRAY && array)
+		counter++;
+	    if (root.getType() == DataFlowNodeType.STORE_VAR && !array)
+		counter++;
+	}
 	return counter;
-    }
-
-    private boolean isRootAlsoALoad() {
-	return root.getOutEdges().size() == 1;
     }
 
     private int calculateCriticalPath(DataFlowNode node) {
@@ -206,5 +207,15 @@ public class DataFlowSubgraph {
 
     public DataFlowNode getRoot() {
 	return root;
+    }
+
+    @Override
+    public String toString() {
+	StringBuilder sb = new StringBuilder("Subgraph of ");
+	sb.append(this.root.getStmt().getCode()).append("\n");
+	for (DataFlowNode n : this.getNodes()) {
+	    sb.append(n.getLabel()).append(", type = ").append(n.getType()).append("\n");
+	}
+	return sb.toString();
     }
 }
