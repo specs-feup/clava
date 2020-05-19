@@ -623,6 +623,10 @@ public class DataFlowGraph extends FlowGraph {
 	}
     }
 
+    private boolean isSameArrayAccess(DataFlowNode n1, DataFlowNode n2) {
+	return false;
+    }
+
     public CompoundStmt getBody() {
 	return body;
     }

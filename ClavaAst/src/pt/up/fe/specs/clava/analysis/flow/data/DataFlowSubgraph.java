@@ -156,11 +156,14 @@ public class DataFlowSubgraph {
 	    }
 	}
 
-	if (root.getOutNodes().size() >= 1) {
-	    if (root.getType() == DataFlowNodeType.STORE_ARRAY && array)
-		counter++;
-	    if (root.getType() == DataFlowNodeType.STORE_VAR && !array)
-		counter++;
+	if (root.getOutEdges().size() >= 1) {
+	    DataFlowEdge edge = (DataFlowEdge) root.getOutEdges().get(0);
+	    if (edge.getType() == DataFlowEdgeType.DATAFLOW) {
+		if (root.getType() == DataFlowNodeType.STORE_ARRAY && array)
+		    counter++;
+		if (root.getType() == DataFlowNodeType.STORE_VAR && !array)
+		    counter++;
+	    }
 	}
 	return counter;
     }
