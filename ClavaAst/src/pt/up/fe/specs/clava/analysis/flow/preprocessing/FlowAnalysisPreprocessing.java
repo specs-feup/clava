@@ -25,6 +25,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
 public class FlowAnalysisPreprocessing {
@@ -58,6 +59,14 @@ public class FlowAnalysisPreprocessing {
     }
 
     public void applyUnwrapSingleLineMultipleDecls() {
-
+	UnwrapSingleLineMultipleDecls unwrap = new UnwrapSingleLineMultipleDecls();
+	TransformQueue<ClavaNode> queue = new TransformQueue<>("Unwrapping Decls Queue");
+	List<DeclStmt> decls = body.getDescendants(DeclStmt.class);
+	for (DeclStmt decl : decls) {
+	    if (decl.getNumChildren() > 1) {
+		unwrap.apply(decl, queue);
+	    }
+	}
+	queue.apply();
     }
 }
