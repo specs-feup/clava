@@ -32,7 +32,7 @@ public class DataFlowSubgraphMetrics {
     private int depth = -1;
     private ArrayList<DataFlowNode> criticalPath = new ArrayList<>();
     private String code;
-    private int iterations = 1;
+    private long iterations = 1;
     public static String HEADER = "ID,Statement,Iterations,LoadsVar,LoadsArr,StoresVar,StoresArr,Ops,Calls,Depth,Critical Path";
 
     public DataFlowSubgraphMetrics(DataFlowNode root) {
@@ -100,8 +100,8 @@ public class DataFlowSubgraphMetrics {
 	this.code = code;
     }
 
-    public void setIterations(int freq) {
-	this.iterations = freq;
+    public void setIterations(long l) {
+	this.iterations = l;
     }
 
     @Override
@@ -115,7 +115,7 @@ public class DataFlowSubgraphMetrics {
 	return sb.toString();
     }
 
-    public int getIterations() {
+    public long getIterations() {
 	return iterations;
     }
 

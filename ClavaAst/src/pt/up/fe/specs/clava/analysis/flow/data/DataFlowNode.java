@@ -26,7 +26,7 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 public class DataFlowNode extends FlowNode implements Cloneable {
 
     private DataFlowNodeType type;
-    private int nIterations = 0;
+    private long nIterations = 0;
     private int subgraphID = -1;
     private boolean isSubgraphRoot = false;
     private boolean isTopLevel = false;
@@ -49,11 +49,11 @@ public class DataFlowNode extends FlowNode implements Cloneable {
 	return sb.toString();
     }
 
-    public void setIterations(int numIter) {
+    public void setIterations(long numIter) {
 	nIterations = numIter;
     }
 
-    public int getIterations() {
+    public long getIterations() {
 	return nIterations;
     }
 

@@ -85,8 +85,8 @@ public class DFGUtils {
 	return nodes;
     }
 
-    public static int estimateNodeFrequency(DataFlowNode node) {
-	int count = node.getIterations() == 0 ? 1 : node.getIterations();
+    public static long estimateNodeFrequency(DataFlowNode node) {
+	long count = node.getIterations() == 0 ? 1 : node.getIterations();
 	if (node.isTopLevel())
 	    return count;
 	DataFlowNode loop = getLoopOfNode(node);

@@ -21,7 +21,7 @@ import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 
 public class DataFlowEdge extends FlowEdge {
-    public int repeating = 0;
+    public long repeating = 0;
     public boolean directed = true;
     private DataFlowEdgeType type = DataFlowEdgeType.DATAFLOW;
 
@@ -57,7 +57,7 @@ public class DataFlowEdge extends FlowEdge {
      * @param dest
      * @param repeating
      */
-    public DataFlowEdge(FlowNode source, FlowNode dest, int repeating) {
+    public DataFlowEdge(FlowNode source, FlowNode dest, long repeating) {
 	super(source, dest);
 	this.repeating = repeating;
 	// this.directed = false;
