@@ -69,10 +69,10 @@ public class ClavaHLS {
 	loopUnfolding.analyze();
 	loopUnfolding.apply();
 
-	log("defining if code regions can be pipelined");
+	log("detecting if code regions can be pipelined");
 	CodeRegionPipelining pipelining = new CodeRegionPipelining(dfg);
 	pipelining.analyze();
-	pipelining.apply();
+	// pipelining.apply();
 
 	log("finished HLS restructuring");
 	log(separator);

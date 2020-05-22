@@ -17,22 +17,22 @@
 
 package pt.up.fe.specs.clava.hls.heuristics;
 
-import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraphMetrics;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 
-public class Metrics {
-    public static DataFlowSubgraphMetrics merge(DataFlowSubgraphMetrics... metrics) {
-	DataFlowSubgraphMetrics merged = new DataFlowSubgraphMetrics(null);
-	int nStores = 0;
-	int nLoads = 0;
-	int nOps = 0;
-	for (DataFlowSubgraphMetrics metricsObj : metrics) {
-	    nStores += metricsObj.getNumArrayStores();
-	    nLoads += metricsObj.getNumArrayStores();
-	    nOps += metricsObj.getNumOp();
+public class UnrollHeuristic {
+    public static final int UPPER_BOUND = 4;
+
+    public static boolean calculate(DataFlowNode parent, DataFlowNode child) {
+	long pIter = parent.getIterations();
+	long cIter = parent.getIterations();
+	if (pIter < cIter)
+	    return false;
+	if (pIter > cIter) {
+	    return false;
 	}
-	merged.setNumArrayLoads(nLoads);
-	merged.setNumArrayStores(nStores);
-	merged.setNumOp(nOps);
-	return merged;
+	if (pIter == cIter) {
+	    return pIter < UPPER_BOUND;
+	}
+	return false;
     }
 }
