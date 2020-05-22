@@ -15,22 +15,14 @@
  *  under the License.
  */
 
-package pt.up.fe.specs.clava.hls;
+package pt.up.fe.specs.clava.analysis.flow.data;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
-import pt.up.fe.specs.clava.analysis.flow.data.DataFlowEdge;
-import pt.up.fe.specs.clava.analysis.flow.data.DataFlowEdgeType;
-import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
-import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
-import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
-import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraph;
-import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraphMetrics;
-import pt.up.fe.specs.util.SpecsIo;
 
 public class DFGUtils {
     public static DataFlowNode getLoopOfNode(DataFlowNode node) {
@@ -93,8 +85,8 @@ public class DFGUtils {
 	return nodes;
     }
 
-    public static int estimateNodeFrequency(DataFlowNode node) {
-	int count = node.getIterations() == 0 ? 1 : node.getIterations();
+    public static long estimateNodeFrequency(DataFlowNode node) {
+	long count = node.getIterations() == 0 ? 1 : node.getIterations();
 	if (node.isTopLevel())
 	    return count;
 	DataFlowNode loop = getLoopOfNode(node);
@@ -102,14 +94,15 @@ public class DFGUtils {
 	while (!loop.isTopLevel()) {
 	    loop = getLoopOfLoop(loop);
 	    count *= loop.getIterations();
+	    count = count > Integer.MAX_VALUE ? Integer.MAX_VALUE : count;
 	}
 	return count == 0 ? 1 : count;
     }
 
-    public static int sumLoads(ArrayList<DataFlowSubgraphMetrics> metrics) {
+    public static int sumArrayLoads(ArrayList<DataFlowSubgraphMetrics> metrics) {
 	int sum = 0;
 	for (DataFlowSubgraphMetrics m : metrics)
-	    sum += m.getNumLoads() * m.getIterations();
+	    sum += m.getNumArrayLoads() * m.getIterations();
 	return sum;
     }
 
@@ -120,17 +113,6 @@ public class DFGUtils {
 		nodes.add(node);
 	}
 	return nodes;
-    }
-
-    public static void saveFile(File weavingFolder, String reportType, String fileName, String fileContents) {
-	SpecsIo.mkdir(weavingFolder);
-	StringBuilder path = new StringBuilder();
-	path.append(weavingFolder.getPath().toString()).append(File.separator).append(reportType).append(File.separator)
-		.append(fileName);
-	if (SpecsIo.write(new File(path.toString()), fileContents))
-	    ClavaHLS.log("file \"" + fileName + "\" saved to \"" + path.toString() + "\"");
-	else
-	    ClavaHLS.log("failed to save file \"" + fileName + "\"");
     }
 
     public static boolean isIndex(DataFlowNode node) {
@@ -152,5 +134,37 @@ public class DFGUtils {
     public static String getIteratorOfLoop(DataFlowNode loop) {
 	String tokens[] = loop.getLabel().split(" ");
 	return tokens.length == 2 ? tokens[1] : "__undefined";
+    }
+
+    public static boolean isSameArrayAccess(DataFlowNode n1, DataFlowNode n2) {
+	ArrayList<DataFlowNode> f1 = getIndexExpr(n1);
+	ArrayList<DataFlowNode> f2 = getIndexExpr(n2);
+	return compareFlows(f1, f2);
+    }
+
+    public static ArrayList<DataFlowNode> getIndexExpr(DataFlowNode n) {
+	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	Stack<DataFlowNode> s = new Stack<>();
+	s.add(n);
+	while (!s.isEmpty()) {
+	    DataFlowNode node = s.pop();
+	    if (!nodes.contains(node)) {
+		nodes.add(node);
+		for (FlowNode child : node.getInNodes()) {
+		    s.add((DataFlowNode) child);
+		}
+	    }
+	}
+	return nodes;
+    }
+
+    public static boolean compareFlows(ArrayList<DataFlowNode> f1, ArrayList<DataFlowNode> f2) {
+	if (f1.size() != f2.size())
+	    return false;
+	for (int i = 0; i < f1.size(); i++) {
+	    if (f1.get(i).getLabel() != f2.get(i).getLabel())
+		return false;
+	}
+	return true;
     }
 }

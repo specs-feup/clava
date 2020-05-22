@@ -15,8 +15,24 @@
  *  under the License.
  */
 
-package pt.up.fe.specs.clava.analysis.flow;
+package pt.up.fe.specs.clava.hls.heuristics;
 
-public class FlowAnalysisPreprocessing {
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 
+public class UnrollHeuristic {
+    public static final int UPPER_BOUND = 4;
+
+    public static boolean calculate(DataFlowNode parent, DataFlowNode child) {
+	long pIter = parent.getIterations();
+	long cIter = parent.getIterations();
+	if (pIter < cIter)
+	    return false;
+	if (pIter > cIter) {
+	    return false;
+	}
+	if (pIter == cIter) {
+	    return pIter < UPPER_BOUND;
+	}
+	return false;
+    }
 }

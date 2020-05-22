@@ -20,6 +20,7 @@ package pt.up.fe.specs.clava.hls.strategies;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import pt.up.fe.specs.clava.analysis.flow.data.DFGUtils;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
@@ -29,16 +30,15 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.hls.ClavaHLS;
-import pt.up.fe.specs.clava.hls.DFGUtils;
 import pt.up.fe.specs.clava.hls.directives.HLSInline;
 import pt.up.fe.specs.clava.hls.directives.HLSInline.InlineType;
 import pt.up.fe.specs.clava.hls.heuristics.InlineHeuristic;
 
 public class FunctionInlining extends RestructuringStrategy {
-    private HashMap<DataFlowNode, Integer> callFreq;
+    private HashMap<DataFlowNode, Long> callFreq;
     private HashMap<String, DataFlowGraph> functions;
     private HashMap<String, Boolean> isFunctionInlinable;
-    private HashMap<String, Integer> functionCosts;
+    private HashMap<String, Long> functionCosts;
     private HashMap<DataFlowNode, Boolean> isCallInlinable;
 
     public FunctionInlining(DataFlowGraph dfg) {
@@ -64,12 +64,12 @@ public class FunctionInlining extends RestructuringStrategy {
 	});
 
 	// Check if each call is inlinable
-	int mainFunCost = analyzeFunction(dfg);
+	long mainFunCost = analyzeFunction(dfg);
 	estimateCallFrequencies(calls);
 
 	for (DataFlowNode call : calls) {
-	    int freq = callFreq.get(call);
-	    int funCost = functionCosts.get(call.getLabel());
+	    long freq = callFreq.get(call);
+	    long funCost = functionCosts.get(call.getLabel());
 
 	    // HEURISTIC HERE
 	    boolean inline = InlineHeuristic.calculate(freq, funCost, mainFunCost);
@@ -117,7 +117,7 @@ public class FunctionInlining extends RestructuringStrategy {
 
     public void printFrequencies() {
 	for (DataFlowNode node : callFreq.keySet()) {
-	    int freq = callFreq.get(node);
+	    long freq = callFreq.get(node);
 	    StringBuilder sb = new StringBuilder();
 	    sb.append("Call to \"").append(node.getLabel()).append("\" (l:")
 		    .append(node.getStmt().getLocation().getStartLine()).append(")");
@@ -129,12 +129,12 @@ public class FunctionInlining extends RestructuringStrategy {
 	}
     }
 
-    public int analyzeFunction(String fun) {
+    public long analyzeFunction(String fun) {
 	DataFlowGraph dfg = functions.get(fun);
 	return analyzeFunction(dfg);
     }
 
-    public int analyzeFunction(DataFlowGraph dfg) {
+    public long analyzeFunction(DataFlowGraph dfg) {
 	ArrayList<DataFlowSubgraphMetrics> metrics = new ArrayList<>();
 	for (DataFlowNode root : dfg.getSubgraphRoots()) {
 	    DataFlowSubgraph sub = dfg.getSubgraph(root);
@@ -144,7 +144,7 @@ public class FunctionInlining extends RestructuringStrategy {
 	}
 //	for (DataFlowSubgraphMetrics m : metrics)
 //	    System.out.println(m.toString());
-	return DFGUtils.sumLoads(metrics);
+	return DFGUtils.sumArrayLoads(metrics);
     }
 
     @Override

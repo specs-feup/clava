@@ -36,9 +36,31 @@ public class CFGConverter {
 	    while (itr.hasNext()) {
 		Stmt s = itr.next();
 		if (s.isWrapper()) {
-		    itr.remove();
+		    if (!isValidPragma(s.getCode()))
+			itr.remove();
 		}
 	    }
 	}
+    }
+
+    private static boolean isValidPragma(String code) {
+	return parsePragma(code) != -1;
+    }
+
+    public static int parsePragma(String code) {
+	String[] tokens = code.replace("\n", "").split(" ");
+	if (tokens.length == 3) {
+	    if (!tokens[0].toLowerCase().equals("#pragma"))
+		return -1;
+	    if (!tokens[1].toLowerCase().equals("max_iter"))
+		return -1;
+	    try {
+		int i = Integer.parseInt(tokens[2].strip());
+		return i;
+	    } catch (NumberFormatException e) {
+		return -1;
+	    }
+	}
+	return -1;
     }
 }

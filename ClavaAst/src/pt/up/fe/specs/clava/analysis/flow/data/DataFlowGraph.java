@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.analysis.flow.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaLog;
@@ -27,6 +28,7 @@ import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockEdgeType;
 import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNode;
 import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNodeType;
 import pt.up.fe.specs.clava.analysis.flow.control.ControlFlowGraph;
+import pt.up.fe.specs.clava.analysis.flow.preprocessing.FlowAnalysisPreprocessing;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -36,6 +38,7 @@ import pt.up.fe.specs.clava.ast.expr.CStyleCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
@@ -64,6 +67,9 @@ public class DataFlowGraph extends FlowGraph {
 
     public DataFlowGraph(CompoundStmt body) {
 	super("Data-flow Graph - " + ((FunctionDecl) body.getParent()).getDeclName(), "n");
+	FlowAnalysisPreprocessing pre = new FlowAnalysisPreprocessing(body);
+	pre.applyConstantFolding();
+	pre.applyUnwrapSingleLineMultipleDecls();
 	this.body = body;
 	this.firstStmt = body.getChild(0);
 	this.cfg = new ControlFlowGraph(body);
@@ -97,7 +103,6 @@ public class DataFlowGraph extends FlowGraph {
 	    HashMap<String, ArrayList<DataFlowNode>> map = subgraphs.get(root).getMultipleVarLoads();
 	    map.forEach((key, value) -> {
 		mergeNodes(value);
-		// ClavaLog.info("Merged accesses to variable " + key);
 	    });
 	}
     }
@@ -229,26 +234,32 @@ public class DataFlowGraph extends FlowGraph {
 	    blocks.add(topBlock);
 
 	// Build and connect the dataflows of each block
+	int pragmaIter = -1;
 	DataFlowNode previous = DataFlowGraph.nullNode;
 	for (BasicBlockNode block : blocks) {
 	    processed.add(block.getId());
 	    if (block.getType() == BasicBlockNodeType.NORMAL || block.getType() == BasicBlockNodeType.EXIT) {
 		for (Stmt statement : block.getStmts()) {
-		    DataFlowNode node = buildStatement(statement);
-		    if (node == nullNode)
-			continue;
-		    node.setTopLevel(true);
-		    if (previous == DataFlowGraph.nullNode) {
-			previous = node;
+		    if (statement.isWrapper()) {
+			pragmaIter = CFGConverter.parsePragma(statement.getCode());
 		    } else {
-			this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.CONTROL));
-			previous = node;
+			DataFlowNode node = buildStatement(statement);
+			if (node == nullNode)
+			    continue;
+			node.setTopLevel(true);
+			if (previous == DataFlowGraph.nullNode) {
+			    previous = node;
+			} else {
+			    this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.CONTROL));
+			    previous = node;
+			}
 		    }
 		}
 	    }
 	    if (block.getType() == BasicBlockNodeType.LOOP) {
-		DataFlowNode node = buildLoopNode(block);
+		DataFlowNode node = buildLoopNode(block, pragmaIter);
 		node.setTopLevel(true);
+		pragmaIter = -1;
 
 		// Build and attach loop children to loop node
 		ArrayList<DataFlowNode> descendants = buildGraphLoop(block);
@@ -268,6 +279,7 @@ public class DataFlowGraph extends FlowGraph {
 
     private ArrayList<DataFlowNode> buildGraphLoop(BasicBlockNode loopBlock) {
 	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	int pragmaIter = -1;
 
 	BasicBlockNode topBlock = null;
 	for (FlowEdge e : loopBlock.getOutEdges()) {
@@ -292,12 +304,17 @@ public class DataFlowGraph extends FlowGraph {
 	for (BasicBlockNode block : blocks) {
 	    if (block.getType() == BasicBlockNodeType.NORMAL) {
 		for (Stmt statement : block.getStmts()) {
-		    DataFlowNode node = buildStatement(statement);
-		    nodes.add(node);
+		    if (statement.isWrapper()) {
+			pragmaIter = CFGConverter.parsePragma(statement.getCode());
+		    } else {
+			DataFlowNode node = buildStatement(statement);
+			nodes.add(node);
+		    }
 		}
 	    }
 	    if (block.getType() == BasicBlockNodeType.LOOP) {
-		DataFlowNode node = buildLoopNode(block);
+		DataFlowNode node = buildLoopNode(block, pragmaIter);
+		pragmaIter = -1;
 
 		// Build and attach loop children to loop node
 		ArrayList<DataFlowNode> descendants = buildGraphLoop(block);
@@ -473,14 +490,16 @@ public class DataFlowGraph extends FlowGraph {
     }
 
     private DataFlowNode buildArraySubExprNode(ArraySubscriptExpr arr) {
-	if (arr.getChild(0) instanceof ArraySubscriptExpr)
-	    return buildArraySubExprNode((ArraySubscriptExpr) arr.getChild(0));
-
-	String label = ((DeclRefExpr) arr.getChild(0)).getName();
+	// array variable
+	String label = ((DeclRefExpr) arr.getArrayExpr()).getName();
 	DataFlowNode arrNode = new DataFlowNode(DataFlowNodeType.LOAD_ARRAY, label, arr);
 	this.addNode(arrNode);
-	DataFlowNode indexNode = buildExpression(arr.getChild(1));
-	this.addEdge(new DataFlowEdge(indexNode, arrNode, DataFlowEdgeType.DATAFLOW_INDEX));
+
+	// subscripts
+	for (Expr subscript : arr.getSubscripts()) {
+	    DataFlowNode indexNode = buildExpression(subscript);
+	    this.addEdge(new DataFlowEdge(indexNode, arrNode, DataFlowEdgeType.DATAFLOW_INDEX));
+	}
 	return arrNode;
     }
 
@@ -515,7 +534,7 @@ public class DataFlowGraph extends FlowGraph {
 	return callNode;
     }
 
-    private DataFlowNode buildLoopNode(BasicBlockNode block) {
+    private DataFlowNode buildLoopNode(BasicBlockNode block, int pragmaIter) {
 	ForStmt root = (ForStmt) block.getLeader();
 	int initVal = -1;
 	int limitVal = -1;
@@ -549,6 +568,8 @@ public class DataFlowGraph extends FlowGraph {
 	    IntegerLiteral limit = (IntegerLiteral) root.getChild(1).getChild(0).getChild(1);
 	    limitVal = limit.getValue().intValue();
 	}
+	if (limitVal == -1 && pragmaIter != -1)
+	    limitVal = pragmaIter;
 
 	// Loop increment (if different than i++)
 	if (!(root.getChild(2) instanceof UnaryOperator)) {
@@ -559,6 +580,8 @@ public class DataFlowGraph extends FlowGraph {
 	    numIter = (limitVal - initVal) / increment;
 	DataFlowNode node = new DataFlowNode(DataFlowNodeType.LOOP, "loop " + counterName, null);
 	node.setIterations(numIter);
+	node.setClavaNode(root.getBody().getChild(0));
+	node.setStmt((Stmt) root.getBody().getChild(0));
 	this.addNode(node);
 	return node;
     }
@@ -588,19 +611,34 @@ public class DataFlowGraph extends FlowGraph {
     }
 
     public void mergeNodes(ArrayList<DataFlowNode> nodes) {
+	nodes = (ArrayList<DataFlowNode>) nodes.stream().distinct().collect(Collectors.toList());
 	DataFlowNode master = nodes.get(0);
-	for (int i = 1; i < nodes.size(); i++) {
-	    DataFlowNode node = nodes.get(i);
+	Iterator<DataFlowNode> nodeIter = nodes.iterator();
+	nodeIter.next();
+	while (nodeIter.hasNext()) {
+	    DataFlowNode node = nodeIter.next();
 	    if (node.getSubgraphID() != master.getSubgraphID())
 		continue;
-	    for (FlowEdge inEdge : node.getInEdges()) {
+
+	    if (DataFlowNodeType.isArray(master.getType()) && DataFlowNodeType.isArray(node.getType())) {
+		System.out.println("COMPARING");
+		boolean isSame = DFGUtils.isSameArrayAccess(master, node);
+		if (!isSame)
+		    continue;
+	    }
+
+	    Iterator<FlowEdge> iter = node.getInEdges().iterator();
+	    while (iter.hasNext()) {
+		FlowEdge inEdge = iter.next();
 		FlowNode inNode = inEdge.getSource();
 		inNode.removeOutEdge(inEdge);
 		inEdge.setDest(master);
 		inNode.addOutEdge(inEdge);
 		master.addInEdge(inEdge);
 	    }
-	    for (FlowEdge outEdge : node.getOutEdges()) {
+	    iter = node.getOutEdges().iterator();
+	    while (iter.hasNext()) {
+		FlowEdge outEdge = iter.next();
 		FlowNode outNode = outEdge.getDest();
 		outNode.removeInEdge(outEdge);
 		outEdge.setSource(master);
@@ -608,7 +646,7 @@ public class DataFlowGraph extends FlowGraph {
 		master.addOutEdge(outEdge);
 	    }
 	    node.clear();
-	    removeNode(node);
+	    this.nodes.remove(node);
 	}
     }
 

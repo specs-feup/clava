@@ -19,19 +19,19 @@ package pt.up.fe.specs.clava.hls.heuristics;
 
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraphMetrics;
 
-public class Metrics {
+public class MergeMetrics {
     public static DataFlowSubgraphMetrics merge(DataFlowSubgraphMetrics... metrics) {
 	DataFlowSubgraphMetrics merged = new DataFlowSubgraphMetrics(null);
 	int nStores = 0;
 	int nLoads = 0;
 	int nOps = 0;
 	for (DataFlowSubgraphMetrics metricsObj : metrics) {
-	    nStores += metricsObj.getNumStores();
-	    nLoads += metricsObj.getNumStores();
+	    nStores += metricsObj.getNumArrayStores();
+	    nLoads += metricsObj.getNumArrayStores();
 	    nOps += metricsObj.getNumOp();
 	}
-	merged.setNumLoads(nLoads);
-	merged.setNumStores(nStores);
+	merged.setNumArrayLoads(nLoads);
+	merged.setNumArrayStores(nStores);
 	merged.setNumOp(nOps);
 	return merged;
     }

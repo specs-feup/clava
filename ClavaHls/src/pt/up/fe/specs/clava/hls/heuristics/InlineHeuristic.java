@@ -18,7 +18,7 @@
 package pt.up.fe.specs.clava.hls.heuristics;
 
 public class InlineHeuristic {
-    public static boolean calculate(int callFreq, int funCost, int mainCost) {
+    public static boolean calculate(long callFreq, long funCost, long mainCost) {
 	System.out.println("callFreq = " + callFreq + ", funCost = " + funCost + ", mainCost = " + mainCost);
 	return true;
     }

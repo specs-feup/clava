@@ -37,7 +37,7 @@ public class HLSUnroll extends HLSDirective {
     @Override
     public String toString() {
 	StringBuilder sb = new StringBuilder();
-	sb.append(super.toString()).append("unroll ");
+	sb.append(super.toString()).append("unroll");
 	if (factor > 0)
 	    sb.append(" factor=").append(factor);
 	if (region)

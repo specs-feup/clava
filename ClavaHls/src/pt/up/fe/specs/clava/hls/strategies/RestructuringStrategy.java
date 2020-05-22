@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.hls.strategies;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
+import pt.up.fe.specs.clava.hls.ClavaHLS;
 import pt.up.fe.specs.clava.hls.directives.HLSDirective;
 import pt.up.fe.specs.clava.utils.NodePosition;
 
@@ -27,7 +28,11 @@ public abstract class RestructuringStrategy {
     }
 
     public void insertDirective(ClavaNode node, HLSDirective directive) {
-	ClavaNodes.insertAsStmt(node, directive.toString(), NodePosition.BEFORE);
+	try {
+	    ClavaNodes.insertAsStmt(node, directive.toString(), NodePosition.BEFORE);
+	} catch (NullPointerException e) {
+	    ClavaHLS.log("error - could not insert directive \"" + directive.toString() + "\"");
+	}
     }
 
     public abstract void analyze();

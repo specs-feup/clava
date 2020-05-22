@@ -19,16 +19,20 @@ package pt.up.fe.specs.clava.hls.strategies;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
 
 import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
+import pt.up.fe.specs.clava.analysis.flow.data.DFGUtils;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowEdge;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowEdgeType;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.hls.ClavaHLS;
 import pt.up.fe.specs.clava.hls.directives.HLSUnroll;
+import pt.up.fe.specs.clava.hls.heuristics.UnrollHeuristic;
 
 public class NestedLoopUnrolling extends RestructuringStrategy {
     private HashMap<DataFlowNode, Integer> loopsToUnroll = new HashMap<>();
@@ -40,43 +44,49 @@ public class NestedLoopUnrolling extends RestructuringStrategy {
 
     @Override
     public void analyze() {
-	ArrayList<DataFlowNode> loops = findMasterLoops();
-	for (DataFlowNode loop : loops)
-	    evaluateLoopNest(loop);
-
-    }
-
-    private int evaluateLoopNest(DataFlowNode loop) {
-	boolean hasNested = false;
-	int currFactor = 0;
-	for (FlowNode n : loop.getOutNodes()) {
-	    DataFlowNode node = (DataFlowNode) n;
-	    if (node.getType() == DataFlowNodeType.LOOP) {
-		hasNested = true;
-		int prevFactor = evaluateLoopNest(node);
-		if (prevFactor == Integer.MAX_VALUE)
-		    return Integer.MAX_VALUE;
+	ArrayList<DataFlowNode> masterLoops = findMasterLoops();
+	for (DataFlowNode masterLoop : masterLoops) {
+	    ArrayList<DataFlowNode> bottomLoops = getBottomLoops(masterLoop);
+	    for (DataFlowNode bottomLoop : bottomLoops) {
+		ClavaHLS.log("trying to unroll loop nest starting by bottom loop \"" + bottomLoop.getLabel()
+			+ "\" (trip count = " + bottomLoop.getIterations() + ")");
+		evaluateLoopNest(bottomLoop);
 	    }
 	}
-	if (!hasNested) {
-	    int iter = loop.getIterations();
-	    if (iter != Integer.MAX_VALUE)
-		currFactor = iter;
+    }
+
+    private void evaluateLoopNest(DataFlowNode loop) {
+	this.loopsToUnroll.put(loop, Integer.MAX_VALUE);
+	DataFlowNode parent = DFGUtils.getLoopOfLoop(loop);
+	while (parent != loop) {
+	    if (UnrollHeuristic.calculate(parent, loop)) {
+		this.loopsToUnroll.put(parent, Integer.MAX_VALUE);
+		loop = parent;
+		parent = DFGUtils.getLoopOfLoop(loop);
+	    } else
+		return;
 	}
-	return currFactor;
     }
 
     @Override
     public void apply() {
+	ClavaHLS.log("unrolling " + loopsToUnroll.size() + " loops");
 	for (DataFlowNode node : loopsToUnroll.keySet()) {
 	    int factor = loopsToUnroll.get(node);
 	    Stmt stmt = node.getStmt();
 	    HLSUnroll directive = new HLSUnroll();
-	    if (factor != Integer.MAX_VALUE)
-		directive.setFactor(factor);
-	    insertDirective(stmt, directive);
-	}
+	    StringBuilder sb = new StringBuilder("unrolling \"");
+	    sb.append(node.getLabel()).append("\" (trip count = ").append(node.getIterations()).append(") ");
 
+	    if (factor != Integer.MAX_VALUE) {
+		directive.setFactor(factor);
+		sb.append("with factor = ").append(factor);
+	    } else {
+		sb.append("fully");
+	    }
+	    insertDirective(stmt, directive);
+	    ClavaHLS.log(sb.toString());
+	}
     }
 
     private ArrayList<DataFlowNode> findMasterLoops() {
@@ -105,4 +115,25 @@ public class NestedLoopUnrolling extends RestructuringStrategy {
 	return loops;
     }
 
+    private ArrayList<DataFlowNode> getBottomLoops(DataFlowNode masterLoop) {
+	ArrayList<DataFlowNode> loops = new ArrayList<>();
+	Stack<DataFlowNode> nodes = new Stack<>();
+	nodes.add(masterLoop);
+	while (!nodes.isEmpty()) {
+	    DataFlowNode node = nodes.pop();
+	    int cnt = 0;
+	    for (FlowEdge e : node.getOutEdges()) {
+		DataFlowEdge edge = (DataFlowEdge) e;
+		if (edge.getType() == DataFlowEdgeType.CONTROL_REPEATING) {
+		    if (((DataFlowNode) edge.getDest()).getType() == DataFlowNodeType.LOOP) {
+			cnt++;
+			nodes.add((DataFlowNode) edge.getDest());
+		    }
+		}
+	    }
+	    if (cnt == 0)
+		loops.add(node);
+	}
+	return loops;
+    }
 }

@@ -15,19 +15,28 @@
  *  under the License.
  */
 
-package pt.up.fe.specs.clang.transforms;
+package pt.up.fe.specs.clava.analysis.flow.preprocessing;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.transform.SimplePreClavaRule;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
-public class ConstantFolding implements SimplePreClavaRule {
+public class UnwrapSingleLineMultipleDecls implements SimplePreClavaRule {
 
     @Override
     public void applySimple(ClavaNode node, TransformQueue<ClavaNode> queue) {
-	System.out.println("HERE");
-	queue.addChild(node, node);
+	if (!(node instanceof DeclStmt))
+	    return;
+	DeclStmt decl = (DeclStmt) node;
+	ClavaNode parent = decl.getParent();
 
+	for (VarDecl varDecl : decl.getVarDecls()) {
+	    DeclStmt newDecl = parent.getFactory().declStmt(varDecl);
+	    queue.addChildHead(parent, newDecl);
+	}
+	queue.delete(decl);
     }
 
 }

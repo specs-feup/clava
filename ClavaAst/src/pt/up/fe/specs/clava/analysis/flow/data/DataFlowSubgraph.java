@@ -90,11 +90,17 @@ public class DataFlowSubgraph {
 	ArrayList<DataFlowNode> path = root.getCurrPath();
 	metrics.setCriticalPath(path);
 	metrics.setDepth(calculateDepth(path));
-	metrics.setNumLoads(findLoads());
-	metrics.setNumStores(findStores());
+
+	metrics.setNumVarLoads(findLoads(false));
+	metrics.setNumArrayLoads(findLoads(true));
+
+	metrics.setNumVarStores(findStores(false));
+	metrics.setNumArrayStores(findStores(true));
+
 	metrics.setNumOp(findOps());
 	metrics.setNumCalls(findCalls());
 	metrics.setCode(root.getStmt().getCode());
+//	System.out.println(this.toString());
 	return metrics;
     }
 
@@ -120,36 +126,46 @@ public class DataFlowSubgraph {
 	return counter;
     }
 
-    private int findStores() {
+    private int findStores(boolean array) {
 	ArrayList<DataFlowNode> nodes = this.getNodes();
 	int counter = 0;
-	System.out.println("-----------------");
-	System.out.println("Finding nodes of " + nodes.get(0).getStmt());
 	for (DataFlowNode node : nodes) {
-	    if (DataFlowNodeType.isStore(node.getType())) {
-		counter++;
-		System.out.println("FOUND STORE: " + node.toDot());
+	    if (array) {
+		if (node.getType() == DataFlowNodeType.STORE_ARRAY)
+		    counter++;
+	    } else {
+		if (node.getType() == DataFlowNodeType.STORE_VAR)
+		    counter++;
 	    }
 	}
 	return counter;
     }
 
-    private int findLoads() {
+    private int findLoads(boolean array) {
 	ArrayList<DataFlowNode> nodes = this.getNodes();
 	int counter = 0;
 	for (DataFlowNode node : nodes) {
 	    if (DataFlowNodeType.isLoad(node.getType())) {
-		counter++;
+		if (array) {
+		    if (node.getType() == DataFlowNodeType.LOAD_ARRAY)
+			counter++;
+		} else {
+		    if (node.getType() == DataFlowNodeType.LOAD_VAR || node.getType() == DataFlowNodeType.LOAD_INDEX)
+			counter++;
+		}
 	    }
 	}
 
-	if (isRootAlsoALoad())
-	    counter++;
+	if (root.getOutEdges().size() >= 1) {
+	    DataFlowEdge edge = (DataFlowEdge) root.getOutEdges().get(0);
+	    if (edge.getType() == DataFlowEdgeType.DATAFLOW) {
+		if (root.getType() == DataFlowNodeType.STORE_ARRAY && array)
+		    counter++;
+		if (root.getType() == DataFlowNodeType.STORE_VAR && !array)
+		    counter++;
+	    }
+	}
 	return counter;
-    }
-
-    private boolean isRootAlsoALoad() {
-	return root.getOutEdges().size() == 1;
     }
 
     private int calculateCriticalPath(DataFlowNode node) {
@@ -194,5 +210,15 @@ public class DataFlowSubgraph {
 
     public DataFlowNode getRoot() {
 	return root;
+    }
+
+    @Override
+    public String toString() {
+	StringBuilder sb = new StringBuilder("Subgraph of ");
+	sb.append(this.root.getStmt().getCode()).append("\n");
+	for (DataFlowNode n : this.getNodes()) {
+	    sb.append(n.getLabel()).append(", type = ").append(n.getType()).append("\n");
+	}
+	return sb.toString();
     }
 }

@@ -22,12 +22,12 @@ import java.util.HashMap;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
+import pt.up.fe.specs.clava.analysis.flow.data.DFGUtils;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowParam;
 import pt.up.fe.specs.clava.hls.ClavaHLS;
-import pt.up.fe.specs.clava.hls.DFGUtils;
 import pt.up.fe.specs.clava.hls.directives.HLSStream;
 
 public class ArrayStreamDetector extends RestructuringStrategy {
