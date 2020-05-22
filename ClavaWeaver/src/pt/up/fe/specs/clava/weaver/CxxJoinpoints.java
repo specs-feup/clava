@@ -196,10 +196,10 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(TypedefType.class, CxxTypedefType::new);
         // JOINPOINT_FACTORY.put(ElaboratedType.class, CxxElaboratedType::new);
         JOINPOINT_FACTORY.put(Type.class, CxxType::new);
-        JOINPOINT_FACTORY.put(Pragma.class, CxxPragma::new);
         JOINPOINT_FACTORY.put(LaraMarkerPragma.class, CxxMarker::new);
         JOINPOINT_FACTORY.put(LaraTagPragma.class, CxxTag::new);
         JOINPOINT_FACTORY.put(OmpPragma.class, CxxOmp::new);
+        JOINPOINT_FACTORY.put(Pragma.class, CxxPragma::new);
         JOINPOINT_FACTORY.put(TranslationUnit.class, CxxFile::new);
         JOINPOINT_FACTORY.put(App.class, CxxJoinpoints::programFactory);
         JOINPOINT_FACTORY.put(NullExpr.class, CxxJoinpoints::nullNode);
@@ -290,6 +290,7 @@ public class CxxJoinpoints {
         if (targetClass == null) {
             throw new RuntimeException("Check if you meant to call 'create' with a single argument");
         }
+
         return targetClass.cast(create(node));
     }
 
