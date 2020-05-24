@@ -1,0 +1,14 @@
+
+var HLSAnalysis = {};
+
+HLSAnalysis.optimizeWithDirectives = function(func, params) {
+	println("Optimizing with directives");
+}
+
+HLSAnalysis.optimizeWithTrace = function(func) {
+	println("Optimizing with trace");
+}
+
+HLSAnalysis.optimizeBest = function(func, params) {
+	println("Optimizing with the best strategy");
+}
