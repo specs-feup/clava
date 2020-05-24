@@ -621,7 +621,6 @@ public class DataFlowGraph extends FlowGraph {
 		continue;
 
 	    if (DataFlowNodeType.isArray(master.getType()) && DataFlowNodeType.isArray(node.getType())) {
-		System.out.println("COMPARING");
 		boolean isSame = DFGUtils.isSameArrayAccess(master, node);
 		if (!isSame)
 		    continue;
