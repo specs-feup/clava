@@ -1,14 +1,34 @@
+import clava.hls.TraceInstrumentation;
+import clava.hls.MathAnalysis;
+import weaver.WeaverJps;
 
 var HLSAnalysis = {};
 
-HLSAnalysis.optimizeWithDirectives = function(func, params) {
+HLSAnalysis.optimizeWithDirectives = function(funName, params) {
 	println("Optimizing with directives");
+	for (var elem of WeaverJps.search("function", {name: funName}).search("scope")){
+		if (elem.parent.joinPointType == "function")
+			elem.dfg();
+	}
 }
 
-HLSAnalysis.optimizeWithTrace = function(func) {
+HLSAnalysis.optimizeWithTrace = function(funName) {
 	println("Optimizing with trace");
+	/*
+	select file.function{funName}.body end
+	apply
+		$body.exec dfg();
+	end
+	//TraceInstrumentation.instrument(func);
+	*/
 }
 
-HLSAnalysis.optimizeBest = function(func, params) {
+HLSAnalysis.optimizeWithBest = function(funName, params) {
 	println("Optimizing with the best strategy");
+	/*
+	select file.function{funName}.body end
+	apply
+		$body.exec dfg();
+	end
+	*/
 }
