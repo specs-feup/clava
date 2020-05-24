@@ -56,7 +56,11 @@ Clava.getWeavingFolder = function() {
 	return weavingFolderResult.weavingFolder;
 }; 
 
+/**
+ * @param {$file} file The file to add to the AST.
+ */
 Clava.addFile = function($file) {
+
 	if(!$file.instanceOf('file')) {
 		println("Clava.addFile: Input must be a 'file' join point, it is a '" + $file.joinPointType + "'");
 		return;

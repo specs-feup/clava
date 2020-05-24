@@ -115,7 +115,7 @@ ClavaJoinPoints.typeLiteral = function(typeString) {
 /**
  * Creates a new join point 'file'.
  *
- * @param {string} filename The name of the file
+ * @param {string|J#java.io.File} filename - Name of the source file. If filename represents a path to an already existing file, literally adds the contents of the file to the join point.
  * @param {string} [path=""] The path of the new file, relative to the output folder. Absolute paths are not allowed. This path will be required when including the file (e.g., #include "<path>/<filename>")
  */
 ClavaJoinPoints.file = function(filename, path) {
@@ -125,6 +125,22 @@ ClavaJoinPoints.file = function(filename, path) {
 	}
 	
 	return AstFactory.file(filename, path);
+}
+
+/**
+ * @param {String} filename - Name of the source file.
+ * @param {String} source - The contents of the source file.
+ * @param {String} [path=""] - The path of the new file, relative to the output folder. Absolute paths are not allowed. This path will be required when including the file (e.g., #include "<path>/<filename>")
+ */
+ClavaJoinPoints.fileWithSource = function(filename, source, path) {
+	Check.isDefined(filename);
+	Check.isDefined(source);
+
+	filename = filename.toString();
+	source = source.toString();
+	path = path !== undefined ? path.toString() : '';
+	
+	return AstFactory.file(filename, source, path);
 }
 
 /**

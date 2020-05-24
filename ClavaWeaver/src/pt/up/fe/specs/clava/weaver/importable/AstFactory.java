@@ -289,6 +289,23 @@ public class AstFactory {
     }
 
     /**
+     * Overload that accepts the contents of the file, to be inserted literally.
+     * 
+     * @param filename
+     * @param contents
+     * @param relativePath
+     * @return
+     */
+    public static AFile file(String filename, String contents, String relativePath) {
+        var fileJp = file(new File(filename), relativePath);
+
+        // Add contents
+        fileJp.getNode().setOptional(TranslationUnit.LITERAL_SOURCE, contents);
+
+        return fileJp;
+    }
+
+    /**
      * Overload that accepts a String instead of a File.
      *
      * @param filename
