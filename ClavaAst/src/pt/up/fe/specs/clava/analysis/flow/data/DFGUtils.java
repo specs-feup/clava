@@ -34,6 +34,11 @@ public class DFGUtils {
 	}
 	if (DataFlowNodeType.isLoad(node.getType()) || DataFlowNodeType.isOp(node.getType())) {
 	    // TODO: Case for flows with no stores (e.g. calls)
+
+	    if (node.getType() == DataFlowNodeType.OP_CALL) {
+		if (node.getOutEdges().size() == 0)
+		    return node;
+	    }
 	    return getLoopOfStore(getStoreOfNode(node));
 	}
 	return node;
@@ -59,7 +64,10 @@ public class DFGUtils {
 
     public static DataFlowNode getStoreOfNode(DataFlowNode node) {
 	while (!DataFlowNodeType.isStore(node.getType())) {
-	    node = (DataFlowNode) node.getOutNodes().get(0);
+	    if (node.getOutNodes().size() > 0)
+		node = (DataFlowNode) node.getOutNodes().get(0);
+	    else
+		break;
 	}
 	return node;
     }

@@ -37,6 +37,7 @@ import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CStyleCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
+import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
@@ -428,9 +429,40 @@ public class DataFlowGraph extends FlowGraph {
 	if (n instanceof UnaryOperator) {
 	    node = buildUnaryOperationNode((UnaryOperator) n);
 	}
+	if (n instanceof ConditionalOperator) {
+	    node = buildConditionalOperatorNode((ConditionalOperator) n);
+	}
 	if (node == nullNode)
-	    ClavaLog.warning("Unsupported note type for dfg: " + n.toString());
+	    ClavaLog.info("Unsupported note type for dfg: " + n.toString());
 	return node;
+    }
+
+    private DataFlowNode buildConditionalOperatorNode(ConditionalOperator n) {
+	DeclRefExpr t = null;
+	DeclRefExpr f = null;
+	ParenExpr cond = null;
+	if (n.getChild(0) instanceof ParenExpr)
+	    cond = (ParenExpr) n.getChild(0);
+	else
+	    return nullNode;
+	if (n.getChild(1) instanceof DeclRefExpr)
+	    t = (DeclRefExpr) n.getChild(1);
+	else
+	    return nullNode;
+	if (n.getChild(2) instanceof DeclRefExpr)
+	    f = (DeclRefExpr) n.getChild(2);
+	else
+	    return nullNode;
+
+	DataFlowNode op = buildExpression(cond.getChild(0));
+	DataFlowNode trueNode = buildDeclRefNode(t);
+	DataFlowNode falseNode = buildDeclRefNode(f);
+	DataFlowNode muxNode = new DataFlowNode(DataFlowNodeType.OP_COND, "mux", n);
+	this.addNode(muxNode);
+	this.addEdge(new DataFlowEdge(trueNode, muxNode));
+	this.addEdge(new DataFlowEdge(falseNode, muxNode));
+	this.addEdge(new DataFlowEdge(op, muxNode));
+	return muxNode;
     }
 
     private DataFlowNode buildUnaryOperationNode(UnaryOperator n) {
