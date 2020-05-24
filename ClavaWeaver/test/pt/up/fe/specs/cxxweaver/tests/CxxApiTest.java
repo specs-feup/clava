@@ -128,4 +128,9 @@ public class CxxApiTest {
     public void testAddHeaderFile() {
         newTester().test("AddHeaderFileTest.lara", "add_header_file.h");
     }
+
+    @Test
+    public void testClava() {
+        newTester().test("ClavaTest.lara", "clava.cpp");
+    }
 }
