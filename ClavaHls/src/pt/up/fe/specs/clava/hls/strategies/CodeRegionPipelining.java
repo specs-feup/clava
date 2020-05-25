@@ -69,7 +69,7 @@ public class CodeRegionPipelining extends RestructuringStrategy {
 	});
 	ClavaNode firstStmt = dfg.getFirstStmt();
 	for (DataFlowParam param : dfg.getParams()) {
-	    if (param.isArray()) {
+	    if (param.isArray() && !param.isStream()) {
 		int factor = (param.getMaxSize() != 0) ? param.getMaxSize() / 4 : 2;
 		HLSArrayPartition directive = new HLSArrayPartition(PartitionType.CYCLIC, param.getName(), factor);
 		directive.setDim(param.getDim());

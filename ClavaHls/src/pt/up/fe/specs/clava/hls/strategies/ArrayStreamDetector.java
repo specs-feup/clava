@@ -101,6 +101,8 @@ public class ArrayStreamDetector extends RestructuringStrategy {
 	    if (isStream.get(variable)) {
 		HLSStream directive = new HLSStream(variable);
 		insertDirective(node, directive);
+		DataFlowParam param = DFGUtils.getParamByName(dfg, variable);
+		param.setStream(true);
 		ClavaHLS.log("declaring parameter array \"" + variable + "\" as stream");
 	    }
 	}
