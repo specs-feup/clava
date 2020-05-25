@@ -175,4 +175,12 @@ public class DFGUtils {
 	}
 	return true;
     }
+
+    public static DataFlowParam getParamByName(DataFlowGraph dfg, String variable) {
+	for (DataFlowParam param : dfg.getParams()) {
+	    if (param.getName().equals(variable))
+		return param;
+	}
+	return null;
+    }
 }

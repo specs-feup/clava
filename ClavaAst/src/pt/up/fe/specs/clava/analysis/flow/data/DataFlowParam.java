@@ -28,6 +28,7 @@ public class DataFlowParam {
     private boolean isArray = false;
     private int maxSize = 0;
     private int dim = 1;
+    private boolean isStream = false;
 
     public DataFlowParam(String name, String type, boolean isArray) {
 	this.name = name;
@@ -95,5 +96,13 @@ public class DataFlowParam {
 
     public int getDim() {
 	return dim;
+    }
+
+    public boolean isStream() {
+	return isStream;
+    }
+
+    public void setStream(boolean isStream) {
+	this.isStream = isStream;
     }
 }
