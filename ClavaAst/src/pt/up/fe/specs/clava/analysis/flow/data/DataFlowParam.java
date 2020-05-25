@@ -17,12 +17,17 @@
 
 package pt.up.fe.specs.clava.analysis.flow.data;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 
 public class DataFlowParam {
     private String name;
     private String type;
     private boolean isArray = false;
+    private int maxSize = 0;
+    private int dim = 1;
 
     public DataFlowParam(String name, String type, boolean isArray) {
 	this.name = name;
@@ -33,9 +38,22 @@ public class DataFlowParam {
     public DataFlowParam(ParmVarDecl paramNode) {
 	name = paramNode.getDeclName();
 	isArray = paramNode.getTypeCode().contains("[");
-	if (isArray)
+	if (isArray) {
 	    type = paramNode.getTypeCode().substring(0, paramNode.getTypeCode().indexOf('['));
-	else
+	    Pattern p = Pattern.compile("-?\\d+");
+	    Matcher m = p.matcher(paramNode.getTypeCode());
+	    int max = 0;
+	    int dim = 0;
+	    while (m.find()) {
+		String n = m.group();
+		int num = Integer.parseUnsignedInt(n);
+		if (num > max)
+		    max = num;
+		dim++;
+	    }
+	    this.maxSize = max;
+	    this.dim = dim;
+	} else
 	    type = paramNode.getTypeCode();
     }
 
@@ -69,5 +87,13 @@ public class DataFlowParam {
 	s += type + " " + name;
 	s += (!isArray) ? ", scalar" : ", array";
 	return s;
+    }
+
+    public int getMaxSize() {
+	return maxSize;
+    }
+
+    public int getDim() {
+	return dim;
     }
 }
