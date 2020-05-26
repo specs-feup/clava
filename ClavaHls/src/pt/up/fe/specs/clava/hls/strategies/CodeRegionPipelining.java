@@ -33,6 +33,7 @@ import pt.up.fe.specs.clava.hls.heuristics.PipelineHeuristic;
 public class CodeRegionPipelining extends RestructuringStrategy {
     private HashMap<DataFlowNode, Integer> toPipeline;
     private HashMap<DataFlowNode, Integer> unrolledLoops;
+    private boolean pipelineFunction = false;
 
     public CodeRegionPipelining(DataFlowGraph dfg, HashMap<DataFlowNode, Integer> unrolledLoops) {
 	super(dfg);
@@ -49,6 +50,10 @@ public class CodeRegionPipelining extends RestructuringStrategy {
 		    int II = PipelineHeuristic.calculate(loop);
 		    if (II != 0)
 			toPipeline.put(loop, II);
+		} else {
+		    if (DFGUtils.getTopLoopCount(dfg) == 1) {
+			// pipelineFunction = true;
+		    }
 		}
 	    }
 	});
@@ -56,17 +61,25 @@ public class CodeRegionPipelining extends RestructuringStrategy {
 
     @Override
     public void apply() {
-	toPipeline.forEach((k, v) -> {
-	    StringBuilder sb = new StringBuilder("pipelining body of loop \"").append(k.getLabel()).append("\" with ");
+
+	if (pipelineFunction) {
 	    HLSPipeline directive = new HLSPipeline();
-	    if (v != Integer.MAX_VALUE) {
-		directive.setII(v);
-		sb.append("II = ").append(v);
-	    } else
-		sb.append(" undetermined II");
-	    insertDirective(k.getStmt(), directive);
-	    ClavaHLS.log(sb.toString());
-	});
+	    insertDirective(dfg.getFirstStmt(), directive);
+	    ClavaHLS.log("pipelining the whole function");
+	} else {
+	    toPipeline.forEach((k, v) -> {
+		StringBuilder sb = new StringBuilder("pipelining body of loop \"").append(k.getLabel())
+			.append("\" with ");
+		HLSPipeline directive = new HLSPipeline();
+		if (v != Integer.MAX_VALUE) {
+		    directive.setII(v);
+		    sb.append("II = ").append(v);
+		} else
+		    sb.append(" undetermined II");
+		insertDirective(k.getStmt(), directive);
+		ClavaHLS.log(sb.toString());
+	    });
+	}
 	ClavaNode firstStmt = dfg.getFirstStmt();
 	for (DataFlowParam param : dfg.getParams()) {
 	    if (param.isArray() && !param.isStream()) {

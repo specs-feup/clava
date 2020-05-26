@@ -38,7 +38,7 @@ public class HLSPipeline extends HLSDirective {
     public String toString() {
 	StringBuilder sb = new StringBuilder();
 	sb.append(super.toString());
-	sb.append(" pipeline");
+	sb.append("pipeline");
 	if (ii > 0)
 	    sb.append(" II=").append(ii);
 	if (enable_flush)

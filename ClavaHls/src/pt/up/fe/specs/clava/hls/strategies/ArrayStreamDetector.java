@@ -18,7 +18,6 @@
 package pt.up.fe.specs.clava.hls.strategies;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -104,7 +103,7 @@ public class ArrayStreamDetector extends RestructuringStrategy {
 	    return false;
 
 	// Check if each index matches the parent loops
-	Collections.reverse(indexes);
+	// Collections.reverse(indexes);
 	for (int i = indexes.size() - 1; i >= 0; i--) {
 	    int dist = getDistanceToLoop(indexes.get(i), node);
 	    if (dist != i)
