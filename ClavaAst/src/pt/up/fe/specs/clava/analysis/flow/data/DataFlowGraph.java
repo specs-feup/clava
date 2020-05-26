@@ -231,7 +231,8 @@ public class DataFlowGraph extends FlowGraph {
 		    topBlock = (BasicBlockNode) edge.getDest();
 	    }
 	}
-	if (blocks.size() == 0)
+	// Last BB has no edges, so it is not accounted for in the loop; add it here
+	if (!blocks.contains(topBlock))
 	    blocks.add(topBlock);
 
 	// Build and connect the dataflows of each block
