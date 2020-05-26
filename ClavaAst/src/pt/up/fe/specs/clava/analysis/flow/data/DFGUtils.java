@@ -183,4 +183,14 @@ public class DFGUtils {
 	}
 	return null;
     }
+
+    public static int getTopLoopCount(DataFlowGraph dfg) {
+	int cnt = 0;
+	for (FlowNode n : dfg.getNodes()) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (DataFlowNodeType.isLoop(node.getType()) && node.isTopLevel())
+		cnt++;
+	}
+	return cnt;
+    }
 }
