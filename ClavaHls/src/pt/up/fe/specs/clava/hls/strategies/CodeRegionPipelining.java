@@ -86,6 +86,8 @@ public class CodeRegionPipelining extends RestructuringStrategy {
 		int n = param.getMaxSize();
 		if (n > 1024) {
 		    int factor = (param.getMaxSize() != 0) ? param.getMaxSize() / 4 : 2;
+		    if (factor > 100)
+			factor = 100;
 		    HLSArrayPartition directive = new HLSArrayPartition(PartitionType.CYCLIC, param.getName(), factor);
 		    directive.setDim(param.getDim());
 		    this.insertDirective(firstStmt, directive);
