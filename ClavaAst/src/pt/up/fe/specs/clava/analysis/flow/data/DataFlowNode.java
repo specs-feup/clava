@@ -25,6 +25,10 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 
 public class DataFlowNode extends FlowNode implements Cloneable {
 
+    public enum BooleanSelector {
+	NONE, TRUE, FALSE;
+    }
+
     private DataFlowNodeType type;
     private long nIterations = 0;
     private int subgraphID = -1;
@@ -33,6 +37,7 @@ public class DataFlowNode extends FlowNode implements Cloneable {
     private Stmt stmt;
     private ArrayList<DataFlowNode> currPath = new ArrayList<>();
     private ClavaNode clavaNode;
+    private BooleanSelector selector = BooleanSelector.NONE;
 
     public DataFlowNode(DataFlowNodeType type, String label, ClavaNode node) {
 	super(label);
@@ -124,5 +129,13 @@ public class DataFlowNode extends FlowNode implements Cloneable {
 	return "DataFlowNode [type=" + type + ", nIterations=" + nIterations + ", subgraphID=" + subgraphID
 		+ ", isSubgraphRoot=" + isSubgraphRoot + ", isTopLevel=" + isTopLevel + ", id=" + id + ", name=" + name
 		+ ", label=" + label + "]";
+    }
+
+    public BooleanSelector getSelector() {
+	return selector;
+    }
+
+    public void setSelector(BooleanSelector selector) {
+	this.selector = selector;
     }
 }
