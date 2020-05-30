@@ -193,4 +193,14 @@ public class DFGUtils {
 	}
 	return cnt;
     }
+
+    public ArrayList<DataFlowNode> getSubgraphsOfLoop(DataFlowNode loop) {
+	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	for (FlowNode n : loop.getOutNodes()) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (DataFlowNodeType.isStore(node.getType()) || DataFlowNodeType.isOp(node.getType()))
+		nodes.add(node);
+	}
+	return nodes;
+    }
 }
