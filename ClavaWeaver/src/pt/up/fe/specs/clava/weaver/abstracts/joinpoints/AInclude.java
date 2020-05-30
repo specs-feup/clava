@@ -13,7 +13,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AInclude
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Represents an include directive (e.g., #include <stdio.h>)
  * @author Lara Weaver Generator
  */
 public abstract class AInclude extends ADecl {

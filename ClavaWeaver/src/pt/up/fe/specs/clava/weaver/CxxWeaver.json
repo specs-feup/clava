@@ -2674,7 +2674,8 @@
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -4759,17 +4760,20 @@
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "left"
+                  "alias": "left",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "right"
+                  "alias": "right",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -7009,17 +7013,20 @@
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "callee"
+                  "alias": "callee",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "arg"
+                  "alias": "arg",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -8035,7 +8042,8 @@
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -9082,97 +9090,116 @@
                {
                   "type": "select",
                   "clazz": "statement",
-                  "alias": "init"
+                  "alias": "init",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "statement",
-                  "alias": "cond"
+                  "alias": "cond",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "statement",
-                  "alias": "step"
+                  "alias": "step",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "scope",
-                  "alias": "body"
+                  "alias": "body",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "expr"
+                  "alias": "expr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "childExpr"
+                  "alias": "childExpr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": "stmtCall"
+                  "alias": "stmtCall",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberCall",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "arrayAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "varref",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "op",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "binaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "unaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "newExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "deleteExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "cilkSpawn",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -10434,17 +10461,20 @@
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "callee"
+                  "alias": "callee",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "arg"
+                  "alias": "arg",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -11409,77 +11439,92 @@
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "expr"
+                  "alias": "expr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "childExpr"
+                  "alias": "childExpr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": "stmtCall"
+                  "alias": "stmtCall",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberCall",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "arrayAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "varref",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "op",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "binaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "unaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "newExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "deleteExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "cilkSpawn",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -12411,12 +12456,14 @@
                {
                   "type": "select",
                   "clazz": "method",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "field",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -12729,6 +12776,7 @@
          "type": "joinpoint",
          "name": "clavaException",
          "extends": "joinpoint"      ,
+         "tooltip": "Utility joinpoint, to represent certain problems when generating join points",
          "children": [
                {
                   "type": "attribute",
@@ -16971,7 +17019,8 @@
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -18389,6 +18438,7 @@
          "type": "joinpoint",
          "name": "empty",
          "extends": "joinpoint"      ,
+         "tooltip": "Utility joinpoint, to represent empty nodes when directly accessing the tree",
          "children": [
                {
                   "type": "attribute",
@@ -19905,7 +19955,8 @@
                {
                   "type": "select",
                   "clazz": "enumeratorDecl",
-                  "alias": "enumerator"
+                  "alias": "enumerator",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -22946,7 +22997,8 @@
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -24162,6 +24214,7 @@
          "type": "joinpoint",
          "name": "file",
          "extends": "joinpoint"      ,
+         "tooltip": "Represents a source file (.c, .cpp., .cl, etc)",
          "children": [
                {
                   "type": "attribute",
@@ -24906,77 +24959,92 @@
                {
                   "type": "select",
                   "clazz": "statement",
-                  "alias": "stmt"
+                  "alias": "stmt",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "statement",
-                  "alias": "childStmt"
+                  "alias": "childStmt",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "function",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "method",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "record",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "struct",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "class",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "pragma",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "marker",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "tag",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "comment",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "include",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "typedefDecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "decl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -25434,6 +25502,7 @@
          "type": "joinpoint",
          "name": "function",
          "extends": "declarator"      ,
+         "tooltip": "Represents a function declaration or definition",
          "children": [
                {
                   "type": "attribute",
@@ -26221,17 +26290,20 @@
                {
                   "type": "select",
                   "clazz": "scope",
-                  "alias": "body"
+                  "alias": "body",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "param",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "decl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -28543,102 +28615,122 @@
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "cond"
+                  "alias": "cond",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": "condDecl"
+                  "alias": "condDecl",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "scope",
-                  "alias": "then"
+                  "alias": "then",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "scope",
-                  "alias": "else"
+                  "alias": "else",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "scope",
-                  "alias": "body"
+                  "alias": "body",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "expr"
+                  "alias": "expr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "childExpr"
+                  "alias": "childExpr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": "stmtCall"
+                  "alias": "stmtCall",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberCall",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "arrayAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "varref",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "op",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "binaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "unaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "newExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "deleteExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "cilkSpawn",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -28951,6 +29043,7 @@
          "type": "joinpoint",
          "name": "include",
          "extends": "decl"      ,
+         "tooltip": "Represents an include directive (e.g., #include <stdio.h>)",
          "children": [
                {
                   "type": "attribute",
@@ -30625,97 +30718,116 @@
                {
                   "type": "select",
                   "clazz": "statement",
-                  "alias": "init"
+                  "alias": "init",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "statement",
-                  "alias": "cond"
+                  "alias": "cond",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "statement",
-                  "alias": "step"
+                  "alias": "step",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "scope",
-                  "alias": "body"
+                  "alias": "body",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "expr"
+                  "alias": "expr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "childExpr"
+                  "alias": "childExpr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": "stmtCall"
+                  "alias": "stmtCall",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberCall",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "arrayAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "varref",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "op",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "binaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "unaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "newExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "deleteExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "cilkSpawn",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -31843,12 +31955,14 @@
                {
                   "type": "select",
                   "clazz": "scope",
-                  "alias": "contents"
+                  "alias": "contents",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "joinpoint",
-                  "alias": "target"
+                  "alias": "target",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -32809,7 +32923,8 @@
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -33876,17 +33991,20 @@
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "callee"
+                  "alias": "callee",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "arg"
+                  "alias": "arg",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -34230,7 +34348,7 @@
          "type": "joinpoint",
          "name": "method",
          "extends": "function"      ,
-         "tooltip": "C++ function",
+         "tooltip": " Represents a C++ class method declaration or definition",
          "children": [
                {
                   "type": "attribute",
@@ -35026,17 +35144,20 @@
                {
                   "type": "select",
                   "clazz": "scope",
-                  "alias": "body"
+                  "alias": "body",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "param",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "decl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -37111,7 +37232,8 @@
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -38194,7 +38316,8 @@
                {
                   "type": "select",
                   "clazz": "joinpoint",
-                  "alias": "target"
+                  "alias": "target",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -39420,7 +39543,8 @@
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -40381,7 +40505,8 @@
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "init"
+                  "alias": "init",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -43629,7 +43754,8 @@
                {
                   "type": "select",
                   "clazz": "joinpoint",
-                  "alias": "target"
+                  "alias": "target",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -43926,6 +44052,7 @@
          "type": "joinpoint",
          "name": "program",
          "extends": "joinpoint"      ,
+         "tooltip": "Represents the complete program and is the topmost joinpoint in the hierarchy",
          "children": [
                {
                   "type": "attribute",
@@ -44660,7 +44787,8 @@
                {
                   "type": "select",
                   "clazz": "file",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -46295,6 +46423,7 @@
          "type": "joinpoint",
          "name": "record",
          "extends": "namedDecl"      ,
+         "tooltip": "Common class of struct, union and class",
          "children": [
                {
                   "type": "attribute",
@@ -46948,7 +47077,8 @@
                {
                   "type": "select",
                   "clazz": "field",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -47890,82 +48020,98 @@
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "returnExpr"
+                  "alias": "returnExpr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "expr"
+                  "alias": "expr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "childExpr"
+                  "alias": "childExpr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": "stmtCall"
+                  "alias": "stmtCall",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberCall",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "arrayAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "varref",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "op",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "binaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "unaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "newExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "deleteExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "cilkSpawn",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -48236,6 +48382,7 @@
          "type": "joinpoint",
          "name": "scope",
          "extends": "statement"      ,
+         "tooltip": "Represents a group of statements",
          "children": [
                {
                   "type": "attribute",
@@ -48921,142 +49068,170 @@
                {
                   "type": "select",
                   "clazz": "statement",
-                  "alias": "stmt"
+                  "alias": "stmt",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "statement",
-                  "alias": "childStmt"
+                  "alias": "childStmt",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "scope",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "if",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "loop",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "pragma",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "marker",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "tag",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "omp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "comment",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "returnStmt",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "cilkFor",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "cilkSync",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "expr"
+                  "alias": "expr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "childExpr"
+                  "alias": "childExpr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": "stmtCall"
+                  "alias": "stmtCall",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberCall",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "arrayAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "varref",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "op",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "binaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "unaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "newExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "deleteExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "cilkSpawn",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -50084,77 +50259,92 @@
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "expr"
+                  "alias": "expr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "childExpr"
+                  "alias": "childExpr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": "stmtCall"
+                  "alias": "stmtCall",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberCall",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "arrayAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "varref",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "op",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "binaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "unaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "newExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "deleteExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "cilkSpawn",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -51078,7 +51268,8 @@
                {
                   "type": "select",
                   "clazz": "field",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -52030,7 +52221,8 @@
                {
                   "type": "select",
                   "clazz": "joinpoint",
-                  "alias": "target"
+                  "alias": "target",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -59440,7 +59632,8 @@
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -60403,12 +60596,14 @@
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "operand"
+                  "alias": "operand",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -62488,7 +62683,8 @@
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "init"
+                  "alias": "init",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -64669,7 +64865,8 @@
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",
@@ -65590,77 +65787,92 @@
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "expr"
+                  "alias": "expr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "expression",
-                  "alias": "childExpr"
+                  "alias": "childExpr",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "call",
-                  "alias": "stmtCall"
+                  "alias": "stmtCall",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberCall",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "memberAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "arrayAccess",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "vardecl",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "varref",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "op",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "binaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "unaryOp",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "newExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "deleteExpr",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "select",
                   "clazz": "cilkSpawn",
-                  "alias": ""
+                  "alias": "",
+                  "tooltip": ""
                },
                {
                   "type": "action",

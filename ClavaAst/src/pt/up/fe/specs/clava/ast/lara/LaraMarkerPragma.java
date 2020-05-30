@@ -22,6 +22,12 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 
+/**
+ * Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1).
+ * 
+ * @author jbispo
+ *
+ */
 public class LaraMarkerPragma extends Pragma {
 
     private static final String LARA_MARKER_PREFIX = "lara marker ";

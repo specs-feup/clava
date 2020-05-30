@@ -14,7 +14,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point ARecord
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Common class of struct, union and class
  * @author Lara Weaver Generator
  */
 public abstract class ARecord extends ANamedDecl {

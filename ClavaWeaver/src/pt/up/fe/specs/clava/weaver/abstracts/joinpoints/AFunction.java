@@ -16,7 +16,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AFunction
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Represents a function declaration or definition
  * @author Lara Weaver Generator
  */
 public abstract class AFunction extends ADeclarator {

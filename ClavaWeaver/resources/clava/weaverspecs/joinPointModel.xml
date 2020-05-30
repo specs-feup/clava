@@ -13,21 +13,18 @@
 	 -->
 	 
 	<!-- EMPTY -->
-	<!-- Utility joinpoint, to represent empty nodes when directly accessing the tree -->
-	<joinpoint class="empty"/>
+	<joinpoint class="empty" tooltip="Utility joinpoint, to represent empty nodes when directly accessing the tree"/>
 	
 	<!--  CLAVA EXCEPTION -->
-	<!-- Utility joinpoint, to represent certain problems when generating join points -->
-	<joinpoint class="clavaException"/>
+	<joinpoint class="clavaException" tooltip="Utility joinpoint, to represent certain problems when generating join points"/>
 	
 	<!-- PROGRAM -->
-	<!-- Represents the complete program and is the topmost joinpoint in the hierarchy.  -->
-	<joinpoint class="program">
+	<joinpoint class="program" tooltip="Represents the complete program and is the topmost joinpoint in the hierarchy">
 		<select class="file"/>
 	</joinpoint>
 	
 	<!-- FILE-->
-	<joinpoint class="file">
+	<joinpoint class="file" tooltip="Represents a source file (.c, .cpp., .cl, etc)">
 		<select alias="stmt"			class="statement"/>
 		<select alias="childStmt"		class="statement"/>
 		<select 						class="function"/>
@@ -45,37 +42,37 @@
 		<select 						class="decl"/>		
 	</joinpoint>
 	
-	<joinpoint class="include" extends="decl">
+	<joinpoint class="include" extends="decl" tooltip="Represents an include directive (e.g., #include &lt;stdio.h&gt;)">
 	</joinpoint>
 	
 	<!-- RECORD -->
-	<joinpoint class="record" extends="namedDecl">
+	<joinpoint class="record" extends="namedDecl" tooltip="Common class of struct, union and class">
 		<select 	class="field"/>		
 	</joinpoint>
 	
 	<!-- FIELD -->
-	<joinpoint class="field" extends="declarator">
+	<joinpoint class="field" extends="declarator" tooltip="Represents a member of a struct/union/class">
 	</joinpoint>
 	
 	<!-- STRUCT -->
-	<joinpoint class="struct" extends="record">
+	<joinpoint class="struct" extends="record" tooltip="Represets a struct declaration">
 <!--		<select alias="field"	class="namedDecl"/> -->
 	</joinpoint>
 
 
 	<!--  CLASS -->
-	<joinpoint class="class" extends="record">
+	<joinpoint class="class" extends="record" tooltip="Represents a C++ class">
 		<select class="method"/>
 	</joinpoint>	
 	
 	<!-- PRAGMA -->
-	<joinpoint class="pragma">
+	<joinpoint class="pragma" tooltip="Represents a pragma in the code (e.g., #pragma kernel)">
 		<select alias="target" class="joinpoint"/>
 	</joinpoint>
 	
 	
 	<!-- MARKER -->
-	<joinpoint class="marker" extends="pragma">
+	<joinpoint class="marker" extends="pragma" tooltip="Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)">
 		<select alias="contents"			class="scope"/>
 	</joinpoint>
 	
@@ -84,36 +81,36 @@
 	</joinpoint>
 	
 	<!-- OMP PRAGMA -->
-	<joinpoint class="omp" extends="pragma">
+	<joinpoint class="omp" extends="pragma" tooltip="Represents an OpenMP pragma (e.g., #pragma omp parallel)">
 	</joinpoint>
 	
 	
 	<!-- DECL -->
-	<joinpoint class="decl"/>
+	<joinpoint class="decl" tooltip="Represents one declaration (e.g., int foo(){return 0;}) or definition (e.g., int foo();) in the code"/>
 	
 	<!-- NAMED DECL -->
-	<joinpoint class="namedDecl" extends="decl"/>
+	<joinpoint class="namedDecl" extends="decl" tooltip="Represents a decl with a name"/>
 	
 	<!-- DECLARATOR DECL -->
-	<joinpoint class="declarator" extends="namedDecl"/>
+	<joinpoint class="declarator" extends="namedDecl" tooltip="Represents a decl that comes from a declarator (e.g., function, field, variable)"/>
 	
 	
 	<!-- VAR DECLARATION -->
- 	<joinpoint class="vardecl" extends="declarator">
+ 	<joinpoint class="vardecl" extends="declarator" tooltip="Represents a variable declaration or definition">
  		<select alias="init"			class="expression"/>
  	</joinpoint>  		
 	
 	
 	<!-- TYPEDEF NAME DECL -->
-	<joinpoint class="typedefNameDecl" extends="namedDecl">
+	<joinpoint class="typedefNameDecl" extends="namedDecl" tooltip="Base node for declarations which introduce a typedef-name">
  	</joinpoint>  		
 	
 	<!-- TYPEDEF DECL -->
-	<joinpoint class="typedefDecl" extends="typedefNameDecl">
+	<joinpoint class="typedefDecl" extends="typedefNameDecl" tooltip="Declaration of a typedef-name via the 'typedef' type specifier">
  	</joinpoint>  		
 	
 	<!-- ENUM DECL -->
-	<joinpoint class="enumDecl" extends="namedDecl">
+	<joinpoint class="enumDecl" extends="namedDecl" tooltip="Represents an enum">
 		<select alias="enumerator" 		class="enumeratorDecl"/>		
  	</joinpoint>  
  	
@@ -127,7 +124,7 @@
 
 
 	<!-- FUNCTION -->
-	<joinpoint class="function" extends="declarator">
+	<joinpoint class="function" extends="declarator" tooltip="Represents a function declaration or definition">
 		<!--  <select 						class="body"/>   -->
 	 	<select alias="body" 			class="scope"/>
 		<select 						class="param"/>
@@ -135,13 +132,13 @@
 	</joinpoint>
 		
 	<!-- METHOD -->
-	<joinpoint class="method" extends="function" tooltip="C++ function">
+	<joinpoint class="method" extends="function" tooltip=" Represents a C++ class method declaration or definition">
 	</joinpoint>			
 
 		
 		
 	<!-- SCOPE-->
-	<joinpoint class="scope" extends="statement">
+	<joinpoint class="scope" extends="statement" tooltip="Represents a group of statements">
 		<select alias="stmt"			class="statement"/> 
 		<select alias="childStmt"		class="statement"/>
 		

@@ -20,7 +20,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 
 /**
- * Represents a ValueDecl that originated from a declarator.
+ * Represents a ValueDecl that originated from a declarator (e.g., function, field, variable).
  * 
  * @author JoaoBispo
  *

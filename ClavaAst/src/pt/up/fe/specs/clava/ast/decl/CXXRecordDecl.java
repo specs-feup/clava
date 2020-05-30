@@ -25,6 +25,12 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.data.CXXBaseSpecifier;
 
+/**
+ * Represents a C++ class.
+ * 
+ * @author jbispo
+ *
+ */
 public class CXXRecordDecl extends RecordDecl {
 
     /// DATAKEYS BEGIN
