@@ -15,16 +15,17 @@
  *  under the License.
  */
 
-package pt.up.fe.specs.clava.analysis.flow.data;
+package pt.up.fe.specs.clava.analysis.flow.control;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
-import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNode;
-import pt.up.fe.specs.clava.analysis.flow.control.ControlFlowGraph;
+import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 
-public class CFGConverter {
+public class CFGUtils {
     public static void convert(ControlFlowGraph cfg) {
 	removeComments(cfg);
     }
@@ -62,5 +63,42 @@ public class CFGConverter {
 	    }
 	}
 	return -1;
+    }
+
+    public static boolean hasBasicBlockOfType(ControlFlowGraph cfg, BasicBlockNodeType type) {
+	for (FlowNode n : cfg.getNodes()) {
+	    BasicBlockNode node = (BasicBlockNode) n;
+	    if (node.getType() == type)
+		return true;
+	}
+	return false;
+    }
+
+    public static ArrayList<BasicBlockNode> getTopLevelBlocks(ControlFlowGraph cfg) {
+	ArrayList<BasicBlockNode> bbs = new ArrayList<>();
+	for (FlowNode n : cfg.getNodes()) {
+	    BasicBlockNode node = (BasicBlockNode) n;
+	    if (node.getStmts().size() > 0) {
+		Stmt stmt = node.getStmts().get(0);
+		if (stmt.getScope().isPresent()) {
+		    CompoundStmt scope = (CompoundStmt) stmt.getScope().get();
+		    if (scope.getParent() instanceof FunctionDecl) {
+			bbs.add(node);
+		    }
+		}
+	    }
+	}
+	return bbs;
+    }
+
+    public static BasicBlockNode getTopLevelIfDescendant(ControlFlowGraph cfg, BasicBlockNode ifBlock) {
+	ArrayList<BasicBlockNode> topBBs = getTopLevelBlocks(cfg);
+	// Possibly does not cover all cases
+	int startId = ifBlock.getId();
+	for (BasicBlockNode bb : topBBs) {
+	    if (bb.getId() > startId)
+		return bb;
+	}
+	return ifBlock;
     }
 }

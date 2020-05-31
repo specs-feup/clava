@@ -61,19 +61,16 @@ public class ControlFlowGraph extends FlowGraph {
 	    Stmt last = bb.last();
 
 	    if (last instanceof LoopStmt) {
-
 		bb.setType(BasicBlockNodeType.LOOP);
 	    } else if (last instanceof IfStmt) {
-
 		bb.setType(BasicBlockNodeType.IF);
+		IfStmt ifs = (IfStmt) last;
+		// ifs.get
 	    } else if (last instanceof ReturnStmt) {
-
 		bb.setType(BasicBlockNodeType.EXIT);
 	    } else if (last instanceof ExprStmt && last.getChild(0) instanceof CXXThrowExpr) {
-
 		bb.setType(BasicBlockNodeType.EXIT);
 	    } else {
-
 		bb.setType(BasicBlockNodeType.NORMAL);
 	    }
 	}
@@ -94,6 +91,7 @@ public class ControlFlowGraph extends FlowGraph {
 		Stmt firstOfThen = (Stmt) lastIf.getThen().get().getChild(0);
 		BasicBlockNode thenBB = bbs.get(firstOfThen);
 		this.addEdge(BasicBlockEdge.newTrueEdge(bb, thenBB));
+
 		// from IfStmt to its Else, or SE
 		Optional<CompoundStmt> possibleElse = lastIf.getElse();
 		if (possibleElse.isPresent()) {
@@ -105,6 +103,7 @@ public class ControlFlowGraph extends FlowGraph {
 		    if (ifSe.isPresent()) {
 			BasicBlockNode elseBB = bbs.get(ifSe.get());
 			this.addEdge(BasicBlockEdge.newFalseEdge(bb, elseBB));
+			// this.addEdge(BasicBlockEdge.newEdge(bb, elseBB));
 		    } // else: there is no SE so it must mean this is the last stmt of the function
 		}
 

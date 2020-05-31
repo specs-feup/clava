@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockEdge;
 import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockEdgeType;
 import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNode;
 import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNodeType;
+import pt.up.fe.specs.clava.analysis.flow.control.CFGUtils;
 import pt.up.fe.specs.clava.analysis.flow.control.ControlFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.preprocessing.FlowAnalysisPreprocessing;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -74,11 +75,17 @@ public class DataFlowGraph extends FlowGraph {
 	this.body = body;
 	this.firstStmt = body.getChild(0);
 	this.cfg = new ControlFlowGraph(body);
-	CFGConverter.convert(this.cfg);
+	CFGUtils.convert(this.cfg);
 	this.addNode(nullNode);
 
 	BasicBlockNode start = (BasicBlockNode) cfg.findNode(0);
-	buildGraphTopLevel(start);
+	if (CFGUtils.hasBasicBlockOfType(cfg, BasicBlockNodeType.IF)) {
+	    // buildGraphTopLevelConditional(start);
+	    System.out.println(cfg.toDot());
+	    CFGUtils.getTopLevelBlocks(cfg);
+	    return;
+	} else
+	    buildGraphTopLevel(start);
 	findSubgraphs();
 	pruneDuplicatedNodes();
 	findDuplicatedNodes();
@@ -105,36 +112,6 @@ public class DataFlowGraph extends FlowGraph {
 	    map.forEach((key, value) -> {
 		mergeNodes(value);
 	    });
-	}
-    }
-
-    @Deprecated
-    private void findSubgraphsByEdge() {
-	for (FlowNode n : this.nodes) {
-	    DataFlowNode node = (DataFlowNode) n;
-	    if (node.getSubgraphID() == -1) {
-		boolean inEdge = false;
-		for (FlowEdge e : node.getInEdges()) {
-		    DataFlowEdge edge = (DataFlowEdge) e;
-		    if (edge.getType() == DataFlowEdgeType.CONTROL_REPEATING)
-			inEdge = true;
-		}
-		boolean outEdge = true;
-		for (FlowEdge e : node.getOutEdges()) {
-		    DataFlowEdge edge = (DataFlowEdge) e;
-		    if (edge.getType() == DataFlowEdgeType.CONTROL_REPEATING)
-			inEdge = false;
-		}
-		if (inEdge && outEdge) {
-		    buildSubgraph(node, subgraphCounter);
-		    node.setSubgraphRoot(true);
-		    this.subgraphRoots.add(node);
-		    this.subgraphs.put(node, new DataFlowSubgraph(node, this));
-		    subgraphCounter++;
-		} else {
-		    node.setSubgraphID(0);
-		}
-	    }
 	}
     }
 
@@ -243,7 +220,68 @@ public class DataFlowGraph extends FlowGraph {
 	    if (block.getType() == BasicBlockNodeType.NORMAL || block.getType() == BasicBlockNodeType.EXIT) {
 		for (Stmt statement : block.getStmts()) {
 		    if (statement.isWrapper()) {
-			pragmaIter = CFGConverter.parsePragma(statement.getCode());
+			pragmaIter = CFGUtils.parsePragma(statement.getCode());
+		    } else {
+			DataFlowNode node = buildStatement(statement);
+			if (node == nullNode)
+			    continue;
+			node.setTopLevel(true);
+			if (previous == DataFlowGraph.nullNode) {
+			    previous = node;
+			} else {
+			    this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.CONTROL));
+			    previous = node;
+			}
+		    }
+		}
+	    }
+	    if (block.getType() == BasicBlockNodeType.LOOP) {
+		DataFlowNode node = buildLoopNode(block, pragmaIter);
+		node.setTopLevel(true);
+		pragmaIter = -1;
+
+		// Build and attach loop children to loop node
+		ArrayList<DataFlowNode> descendants = buildGraphLoop(block);
+		for (DataFlowNode child : descendants)
+		    this.addEdge(new DataFlowEdge(node, child, node.getIterations()));
+
+		// Connect loop to other control nodes
+		if (previous == DataFlowGraph.nullNode) {
+		    previous = node;
+		} else {
+		    this.addEdge(new DataFlowEdge(previous, node, DataFlowEdgeType.CONTROL));
+		    previous = node;
+		}
+	    }
+	}
+    }
+
+    private void buildGraphTopLevelConditional(BasicBlockNode topBlock) {
+	// Get top basic blocks
+	ArrayList<BasicBlockNode> blocks = new ArrayList<>();
+	while (topBlock.hasOutEdges()) {
+	    if (blocks.contains(topBlock))
+		break;
+	    blocks.add(topBlock);
+	    for (FlowEdge e : topBlock.getOutEdges()) {
+		BasicBlockEdge edge = (BasicBlockEdge) e;
+		if (edge.getType() == BasicBlockEdgeType.UNCONDITIONAL || edge.getType() == BasicBlockEdgeType.NOLOOP)
+		    topBlock = (BasicBlockNode) edge.getDest();
+	    }
+	}
+	// Last BB has no edges, so it is not accounted for in the loop; add it here
+	if (!blocks.contains(topBlock))
+	    blocks.add(topBlock);
+
+	// Build and connect the dataflows of each block
+	int pragmaIter = -1;
+	DataFlowNode previous = DataFlowGraph.nullNode;
+	for (BasicBlockNode block : blocks) {
+	    processed.add(block.getId());
+	    if (block.getType() == BasicBlockNodeType.NORMAL || block.getType() == BasicBlockNodeType.EXIT) {
+		for (Stmt statement : block.getStmts()) {
+		    if (statement.isWrapper()) {
+			pragmaIter = CFGUtils.parsePragma(statement.getCode());
 		    } else {
 			DataFlowNode node = buildStatement(statement);
 			if (node == nullNode)
@@ -307,7 +345,7 @@ public class DataFlowGraph extends FlowGraph {
 	    if (block.getType() == BasicBlockNodeType.NORMAL) {
 		for (Stmt statement : block.getStmts()) {
 		    if (statement.isWrapper()) {
-			pragmaIter = CFGConverter.parsePragma(statement.getCode());
+			pragmaIter = CFGUtils.parsePragma(statement.getCode());
 		    } else {
 			DataFlowNode node = buildStatement(statement);
 			nodes.add(node);
