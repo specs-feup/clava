@@ -20,7 +20,7 @@ package pt.up.fe.specs.clava.analysis.flow.data;
 public enum DataFlowNodeType {
     LOOP("blue1"), MASTER_LOOP("#b54707"), OP_ARITH("darkorchid2"), OP_COND("darkorchid2"), OP_CALL("darkorchid2"),
     LOAD_VAR("darkgreen"), LOAD_ARRAY("darkgreen"), LOAD_INDEX("red"), STORE_VAR("goldenrod2"),
-    STORE_ARRAY("goldenrod2"), CONSTANT("gray36"), TEMP("gray36"), NULL("white");
+    STORE_ARRAY("goldenrod2"), CONSTANT("gray36"), TEMP("gray36"), INTERFACE("#b54707"), NULL("white");
 
     private String color;
 

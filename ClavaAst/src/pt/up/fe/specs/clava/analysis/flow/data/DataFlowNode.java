@@ -38,6 +38,7 @@ public class DataFlowNode extends FlowNode implements Cloneable {
     private ArrayList<DataFlowNode> currPath = new ArrayList<>();
     private ClavaNode clavaNode;
     private BooleanSelector selector = BooleanSelector.NONE;
+    private String shape = "circle";
 
     public DataFlowNode(DataFlowNodeType type, String label, ClavaNode node) {
 	super(label);
@@ -49,8 +50,10 @@ public class DataFlowNode extends FlowNode implements Cloneable {
     @Override
     public String toDot() {
 	StringBuilder sb = new StringBuilder();
-	sb.append(name).append(" [label=\"").append(label).append("\" color=\"").append(type.getColor()).append("\"")
-		.append("]");
+	sb.append(name).append(" [label=\"").append(label).append("\" color=\"").append(type.getColor()).append("\"");
+	if (!shape.equals("circle"))
+	    sb.append("shape=\"").append(shape).append("\"");
+	sb.append("]");
 	return sb.toString();
     }
 
@@ -137,5 +140,13 @@ public class DataFlowNode extends FlowNode implements Cloneable {
 
     public void setSelector(BooleanSelector selector) {
 	this.selector = selector;
+    }
+
+    public String getShape() {
+	return shape;
+    }
+
+    public void setShape(String shape) {
+	this.shape = shape;
     }
 }

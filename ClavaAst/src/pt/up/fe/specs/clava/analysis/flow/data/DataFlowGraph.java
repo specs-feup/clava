@@ -62,6 +62,8 @@ public class DataFlowGraph extends FlowGraph {
     private CompoundStmt body;
     private ClavaNode firstStmt;
     public static final DataFlowNode nullNode = new DataFlowNode(DataFlowNodeType.NULL, "", null);
+    private DataFlowNode interfaceNode;
+    private String funName;
 
     public DataFlowGraph(FunctionDecl func) {
 	this(func.getBody().get());
@@ -69,23 +71,36 @@ public class DataFlowGraph extends FlowGraph {
 
     public DataFlowGraph(CompoundStmt body) {
 	super("Data-flow Graph - " + ((FunctionDecl) body.getParent()).getDeclName(), "n");
+
+	// Standardize function code
 	FlowAnalysisPreprocessing pre = new FlowAnalysisPreprocessing(body);
 	pre.applyConstantFolding();
 	pre.applyUnwrapSingleLineMultipleDecls();
+
+	// Build CFG
+	this.funName = ((FunctionDecl) body.getParent()).getDeclName();
 	this.body = body;
 	this.firstStmt = body.getChild(0);
 	this.cfg = new ControlFlowGraph(body);
 	CFGUtils.convert(this.cfg);
-	this.addNode(nullNode);
 
+	// Build DFG
+	this.addNode(nullNode);
+	this.interfaceNode = new DataFlowNode(DataFlowNodeType.INTERFACE, funName, this.firstStmt);
+	this.interfaceNode.setShape("box");
+	this.addNode(interfaceNode);
 	BasicBlockNode start = (BasicBlockNode) cfg.findNode(0);
 	if (CFGUtils.hasBasicBlockOfType(cfg, BasicBlockNodeType.IF)) {
 	    // buildGraphTopLevelConditional(start);
 	    System.out.println(cfg.toDot());
 	    CFGUtils.getTopLevelBlocks(cfg);
 	    return;
-	} else
-	    buildGraphTopLevel(start);
+	} else {
+	    // buildGraphTopLevel(start);
+	    buildGraphTopLevelWithInterface(start);
+	}
+
+	// Modify DFG
 	findSubgraphs();
 	pruneDuplicatedNodes();
 	findDuplicatedNodes();
@@ -104,6 +119,11 @@ public class DataFlowGraph extends FlowGraph {
 		params.add(param);
 	    }
 	}
+	StringBuilder sb = new StringBuilder(interfaceNode.getLabel()).append("\n");
+	for (DataFlowParam param : params) {
+	    sb.append(param.getName()).append(" : ").append(param.getType()).append("\n");
+	}
+	interfaceNode.setLabel(sb.toString());
     }
 
     private void findDuplicatedNodes() {
@@ -170,6 +190,9 @@ public class DataFlowGraph extends FlowGraph {
 	StringBuilder sb = new StringBuilder();
 	String NL = "\n";
 	sb.append("Digraph G {").append(NL).append("node [penwidth=2.5]").append(NL);
+
+	// Interface node
+	sb.append(interfaceNode.toDot()).append(NL);
 
 	// Data flow nodes
 	for (int i = subgraphCounter - 1; i >= 0; i--) {
@@ -253,6 +276,57 @@ public class DataFlowGraph extends FlowGraph {
 		    previous = node;
 		}
 	    }
+	}
+    }
+
+    private void buildGraphTopLevelWithInterface(BasicBlockNode topBlock) {
+	// Get top basic blocks
+	ArrayList<BasicBlockNode> blocks = new ArrayList<>();
+	while (topBlock.hasOutEdges()) {
+	    if (blocks.contains(topBlock))
+		break;
+	    blocks.add(topBlock);
+	    for (FlowEdge e : topBlock.getOutEdges()) {
+		BasicBlockEdge edge = (BasicBlockEdge) e;
+		if (edge.getType() == BasicBlockEdgeType.UNCONDITIONAL || edge.getType() == BasicBlockEdgeType.NOLOOP)
+		    topBlock = (BasicBlockNode) edge.getDest();
+	    }
+	}
+	// Last BB has no edges, so it is not accounted for in the loop; add it here
+	if (!blocks.contains(topBlock))
+	    blocks.add(topBlock);
+
+	// Build and connect the dataflows of each block
+	int pragmaIter = -1;
+	for (BasicBlockNode block : blocks) {
+	    processed.add(block.getId());
+	    if (block.getType() == BasicBlockNodeType.NORMAL || block.getType() == BasicBlockNodeType.EXIT) {
+		for (Stmt statement : block.getStmts()) {
+		    if (statement.isWrapper()) {
+			pragmaIter = CFGUtils.parsePragma(statement.getCode());
+		    } else {
+			DataFlowNode node = buildStatement(statement);
+			if (node == nullNode)
+			    continue;
+			node.setTopLevel(true);
+		    }
+		}
+	    }
+	    if (block.getType() == BasicBlockNodeType.LOOP) {
+		DataFlowNode node = buildLoopNode(block, pragmaIter);
+		node.setTopLevel(true);
+		pragmaIter = -1;
+
+		// Build and attach loop children to loop node
+		ArrayList<DataFlowNode> descendants = buildGraphLoop(block);
+		for (DataFlowNode child : descendants)
+		    this.addEdge(new DataFlowEdge(node, child, node.getIterations()));
+	    }
+	}
+	for (FlowNode n : this.nodes) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.isTopLevel())
+		this.addEdge(new DataFlowEdge(interfaceNode, node, DataFlowEdgeType.CONTROL_REPEATING));
 	}
     }
 
