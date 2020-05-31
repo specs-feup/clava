@@ -46,6 +46,8 @@ public class ClavaHLS {
 
     public void run() {
 	log(separator);
+	if (dfg.getNodes().size() < 2)
+	    return;
 	log("starting HLS restructuring");
 	preprocessDfg();
 	printDfg();
