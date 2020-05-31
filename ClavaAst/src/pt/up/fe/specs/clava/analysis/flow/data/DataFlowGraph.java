@@ -103,7 +103,7 @@ public class DataFlowGraph extends FlowGraph {
 	// Modify DFG
 	findSubgraphs();
 	pruneDuplicatedNodes();
-	findDuplicatedNodes();
+	mergeLoadNodes();
 	findFunctionParams();
     }
 
@@ -126,9 +126,19 @@ public class DataFlowGraph extends FlowGraph {
 	interfaceNode.setLabel(sb.toString());
     }
 
-    private void findDuplicatedNodes() {
+    private void mergeLoadNodes() {
+	// First merge within a subgraph
 	for (DataFlowNode root : subgraphRoots) {
 	    HashMap<String, ArrayList<DataFlowNode>> map = subgraphs.get(root).getMultipleVarLoads();
+	    map.forEach((key, value) -> {
+		mergeNodes(value);
+	    });
+	}
+	// Then merge between same-level subgraphs
+	ArrayList<DataFlowNode> nodes = DFGUtils.getAllNodesOfType(this, DataFlowNodeType.LOOP);
+	for (DataFlowNode loop : nodes) {
+	    ArrayList<DataFlowNode> subs = DFGUtils.getSubgraphsOfLoop(loop);
+	    HashMap<String, ArrayList<DataFlowNode>> map = DFGUtils.mergeSubgraphs(subs);
 	    map.forEach((key, value) -> {
 		mergeNodes(value);
 	    });
@@ -218,6 +228,7 @@ public class DataFlowGraph extends FlowGraph {
 	return sb.toString();
     }
 
+    @Deprecated
     private void buildGraphTopLevel(BasicBlockNode topBlock) {
 	// Get top basic blocks
 	ArrayList<BasicBlockNode> blocks = new ArrayList<>();

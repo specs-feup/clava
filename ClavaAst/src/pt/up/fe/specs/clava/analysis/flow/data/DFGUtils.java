@@ -1,4 +1,5 @@
 /**
+
  *  Copyright 2020 SPeCS.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +19,7 @@
 package pt.up.fe.specs.clava.analysis.flow.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
@@ -194,7 +196,7 @@ public class DFGUtils {
 	return cnt;
     }
 
-    public ArrayList<DataFlowNode> getSubgraphsOfLoop(DataFlowNode loop) {
+    public static ArrayList<DataFlowNode> getSubgraphsOfLoop(DataFlowNode loop) {
 	ArrayList<DataFlowNode> nodes = new ArrayList<>();
 	for (FlowNode n : loop.getOutNodes()) {
 	    DataFlowNode node = (DataFlowNode) n;
@@ -202,5 +204,10 @@ public class DFGUtils {
 		nodes.add(node);
 	}
 	return nodes;
+    }
+
+    public static HashMap<String, ArrayList<DataFlowNode>> mergeSubgraphs(ArrayList<DataFlowNode> subs) {
+	HashMap<String, ArrayList<DataFlowNode>> toMerge = new HashMap<>();
+	return toMerge;
     }
 }
