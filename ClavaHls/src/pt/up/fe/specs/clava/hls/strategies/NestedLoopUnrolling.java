@@ -136,4 +136,8 @@ public class NestedLoopUnrolling extends RestructuringStrategy {
 	}
 	return loops;
     }
+
+    public HashMap<DataFlowNode, Integer> getLoopsToUnroll() {
+	return loopsToUnroll;
+    }
 }

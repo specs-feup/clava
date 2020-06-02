@@ -21,8 +21,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DFGUtils;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowEdge;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowEdgeType;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
@@ -32,6 +35,7 @@ import pt.up.fe.specs.clava.hls.directives.HLSStream;
 
 public class ArrayStreamDetector extends RestructuringStrategy {
     private HashMap<String, Boolean> isStream = new HashMap<>();
+    private final int OVERFLOW = 100000;
 
     public ArrayStreamDetector(DataFlowGraph dfg) {
 	super(dfg);
@@ -74,15 +78,49 @@ public class ArrayStreamDetector extends RestructuringStrategy {
     }
 
     private boolean analyzeLoads(ArrayList<DataFlowNode> nodes) {
+	// TODO: edge case of more than one load
 	if (nodes.size() != 1)
-	    return false; // TODO: support more than one load
+	    return false;
 	DataFlowNode node = nodes.get(0);
+
+	// undetermined iterations -> undetermined access pattern
 	if (node.getIterations() == Integer.MAX_VALUE)
-	    return false; // TODO: not sure if necessary
-	DataFlowNode loopNode = DFGUtils.getLoopOfNode(node);
-	String loopIterator = loopNode.getLabel().split(" ")[1];
-	String iterator = DFGUtils.getIndexesOfArray(node).get(0).getLabel();
-	return loopIterator.compareTo(iterator) == 0;
+	    return false;
+
+	// Get indexes of access
+	ArrayList<String> indexes = new ArrayList<>();
+	for (FlowEdge e : node.getInEdges()) {
+	    DataFlowEdge edge = (DataFlowEdge) e;
+	    if (edge.getType() == DataFlowEdgeType.DATAFLOW_INDEX) {
+		DataFlowNode idx = (DataFlowNode) edge.getSource();
+		if (idx.getType() == DataFlowNodeType.LOAD_INDEX) {
+		    indexes.add(idx.getLabel());
+		} else
+		    return false;
+	    }
+	}
+	if (indexes.size() == 0)
+	    return false;
+
+	// Check if each index matches the parent loops
+	// Collections.reverse(indexes);
+	for (int i = indexes.size() - 1; i >= 0; i--) {
+	    int dist = getDistanceToLoop(indexes.get(i), node);
+	    if (dist != i)
+		return false;
+	}
+	return true;
+
+    }
+
+    private int getDistanceToLoop(String idx, DataFlowNode node) {
+	DataFlowNode loop = DFGUtils.getLoopOfNode(node);
+	if (loop == node)
+	    return OVERFLOW;
+	if (loop.getLabel().equals("loop " + idx))
+	    return 0;
+	else
+	    return 1 + getDistanceToLoop(idx, loop);
     }
 
     public int detectedCases() {
@@ -101,6 +139,8 @@ public class ArrayStreamDetector extends RestructuringStrategy {
 	    if (isStream.get(variable)) {
 		HLSStream directive = new HLSStream(variable);
 		insertDirective(node, directive);
+		DataFlowParam param = DFGUtils.getParamByName(dfg, variable);
+		param.setStream(true);
 		ClavaHLS.log("declaring parameter array \"" + variable + "\" as stream");
 	    }
 	}

@@ -20,6 +20,7 @@ package pt.up.fe.specs.clava.hls.strategies;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DFGUtils;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
@@ -35,11 +36,11 @@ import pt.up.fe.specs.clava.hls.directives.HLSInline.InlineType;
 import pt.up.fe.specs.clava.hls.heuristics.InlineHeuristic;
 
 public class FunctionInlining extends RestructuringStrategy {
-    private HashMap<DataFlowNode, Long> callFreq;
+    private HashMap<String, Long> callFreq;
     private HashMap<String, DataFlowGraph> functions;
     private HashMap<String, Boolean> isFunctionInlinable;
     private HashMap<String, Long> functionCosts;
-    private HashMap<DataFlowNode, Boolean> isCallInlinable;
+    private HashMap<String, Boolean> canInline;
 
     public FunctionInlining(DataFlowGraph dfg) {
 	super(dfg);
@@ -47,14 +48,16 @@ public class FunctionInlining extends RestructuringStrategy {
 	functions = new HashMap<>();
 	isFunctionInlinable = new HashMap<>();
 	functionCosts = new HashMap<>();
-	isCallInlinable = new HashMap<>();
+	isFunctionInlinable = new HashMap<>();
+	canInline = new HashMap<>();
     }
 
     @Override
     public void analyze() {
 	ArrayList<DataFlowNode> calls = DFGUtils.getAllNodesOfType(dfg, DataFlowNodeType.OP_CALL);
 
-	// Check if called functions are inlinable
+	// Check if called functions are inlinable, and get their costs
+	long mainFunCost = analyzeFunction(dfg);
 	findDistinctFunctions(calls);
 
 	// Remove calls to non-inlinable functions
@@ -64,16 +67,13 @@ public class FunctionInlining extends RestructuringStrategy {
 	});
 
 	// Check if each call is inlinable
-	long mainFunCost = analyzeFunction(dfg);
 	estimateCallFrequencies(calls);
 
-	for (DataFlowNode call : calls) {
-	    long freq = callFreq.get(call);
-	    long funCost = functionCosts.get(call.getLabel());
-
-	    // HEURISTIC HERE
-	    boolean inline = InlineHeuristic.calculate(freq, funCost, mainFunCost);
-	    isCallInlinable.put(call, inline);
+	for (String funName : functions.keySet()) {
+	    Long freq = callFreq.get(funName);
+	    Long cost = functionCosts.get(funName);
+	    boolean inline = InlineHeuristic.calculate(freq, cost, mainFunCost);
+	    canInline.put(funName, inline);
 	}
     }
 
@@ -94,38 +94,30 @@ public class FunctionInlining extends RestructuringStrategy {
     private DataFlowGraph getCallDfg(DataFlowNode call) {
 	CallExpr callNode = (CallExpr) call.getClavaNode();
 	if (!callNode.getDefinition().isPresent()) {
-	    ClavaHLS.log("function defininion of \"" + call.getLabel() + "\" not found");
+	    ClavaHLS.log("function defininion of \"" + call.getLabel() + "\" not found (cannot be inlined)");
 	    return null;
 	}
 	FunctionDecl fun = callNode.getDefinition().get();
 
 	if (!fun.getBody().isPresent()) {
-	    ClavaHLS.log("function body of \"" + call.getLabel() + "\" not found");
+	    ClavaHLS.log("function body of \"" + call.getLabel() + "\" not found (cannot be inlined)");
 	    return null;
 	}
 	CompoundStmt scope = fun.getBody().get();
-
+	ClavaHLS.log("function body of \"" + call.getLabel() + "\" found (can be inlined)");
 	DataFlowGraph funDFG = new DataFlowGraph(scope);
 	return funDFG;
     }
 
     private void estimateCallFrequencies(ArrayList<DataFlowNode> calls) {
 	for (DataFlowNode call : calls) {
-	    callFreq.put(call, DFGUtils.estimateNodeFrequency(call));
-	}
-    }
-
-    public void printFrequencies() {
-	for (DataFlowNode node : callFreq.keySet()) {
-	    long freq = callFreq.get(node);
-	    StringBuilder sb = new StringBuilder();
-	    sb.append("Call to \"").append(node.getLabel()).append("\" (l:")
-		    .append(node.getStmt().getLocation().getStartLine()).append(")");
-	    if (freq == Integer.MAX_VALUE)
-		sb.append(" is executed an undetermined number of times");
-	    else
-		sb.append(" is executed ").append(freq).append(" time(s)");
-	    ClavaHLS.log(sb.toString());
+	    String funName = call.getLabel();
+	    long freq = DFGUtils.estimateNodeFrequency(call);
+	    if (callFreq.containsKey(funName)) {
+		if (callFreq.get(funName) < freq)
+		    callFreq.put(funName, freq);
+	    } else
+		callFreq.put(funName, freq);
 	}
     }
 
@@ -142,20 +134,19 @@ public class FunctionInlining extends RestructuringStrategy {
 	    m.setIterations(DFGUtils.estimateNodeFrequency(root));
 	    metrics.add(m);
 	}
-//	for (DataFlowSubgraphMetrics m : metrics)
-//	    System.out.println(m.toString());
 	return DFGUtils.sumArrayLoads(metrics);
     }
 
     @Override
     public void apply() {
-	isCallInlinable.forEach((k, v) -> {
-	    if (v) {
+	canInline.forEach((funName, canInline) -> {
+	    if (canInline) {
 		HLSInline pragma = new HLSInline(InlineType.NONE);
-		insertDirective(k.getStmt(), pragma);
-		ClavaHLS.log("Inlining call to \"" + k.getLabel() + "\" (l:" + k.getStmt().getLocation().getStartLine()
-			+ ")");
-	    }
+		ClavaNode astNode = functions.get(funName).getFirstStmt();
+		insertDirective(astNode, pragma);
+		ClavaHLS.log("inlining function \"" + funName + "\"");
+	    } else
+		ClavaHLS.log("function \"" + funName + "\" is not fit to be inlined");
 	});
     }
 

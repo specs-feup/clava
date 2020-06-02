@@ -1,4 +1,5 @@
 /**
+
  *  Copyright 2020 SPeCS.
  * 
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +19,7 @@
 package pt.up.fe.specs.clava.analysis.flow.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
@@ -34,6 +36,11 @@ public class DFGUtils {
 	}
 	if (DataFlowNodeType.isLoad(node.getType()) || DataFlowNodeType.isOp(node.getType())) {
 	    // TODO: Case for flows with no stores (e.g. calls)
+
+	    if (node.getType() == DataFlowNodeType.OP_CALL) {
+		if (node.getOutEdges().size() == 0)
+		    return node;
+	    }
 	    return getLoopOfStore(getStoreOfNode(node));
 	}
 	return node;
@@ -59,7 +66,10 @@ public class DFGUtils {
 
     public static DataFlowNode getStoreOfNode(DataFlowNode node) {
 	while (!DataFlowNodeType.isStore(node.getType())) {
-	    node = (DataFlowNode) node.getOutNodes().get(0);
+	    if (node.getOutNodes().size() > 0)
+		node = (DataFlowNode) node.getOutNodes().get(0);
+	    else
+		break;
 	}
 	return node;
     }
@@ -166,5 +176,38 @@ public class DFGUtils {
 		return false;
 	}
 	return true;
+    }
+
+    public static DataFlowParam getParamByName(DataFlowGraph dfg, String variable) {
+	for (DataFlowParam param : dfg.getParams()) {
+	    if (param.getName().equals(variable))
+		return param;
+	}
+	return null;
+    }
+
+    public static int getTopLoopCount(DataFlowGraph dfg) {
+	int cnt = 0;
+	for (FlowNode n : dfg.getNodes()) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (DataFlowNodeType.isLoop(node.getType()) && node.isTopLevel())
+		cnt++;
+	}
+	return cnt;
+    }
+
+    public static ArrayList<DataFlowNode> getSubgraphsOfLoop(DataFlowNode loop) {
+	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	for (FlowNode n : loop.getOutNodes()) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (DataFlowNodeType.isStore(node.getType()) || DataFlowNodeType.isOp(node.getType()))
+		nodes.add(node);
+	}
+	return nodes;
+    }
+
+    public static HashMap<String, ArrayList<DataFlowNode>> mergeSubgraphs(ArrayList<DataFlowNode> subs) {
+	HashMap<String, ArrayList<DataFlowNode>> toMerge = new HashMap<>();
+	return toMerge;
     }
 }

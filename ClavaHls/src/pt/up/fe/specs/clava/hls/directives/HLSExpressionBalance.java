@@ -17,34 +17,14 @@
 
 package pt.up.fe.specs.clava.hls.directives;
 
-public class HLSPipeline extends HLSDirective {
-    private int ii = 0;
-    private boolean enable_flush = false;
-    private boolean rewind = false;
-
-    public void setII(int ii) {
-	this.ii = ii;
-    }
-
-    public void setEnableFlush(boolean enableFlush) {
-	this.enable_flush = enableFlush;
-    }
-
-    public void setRewind(boolean rewind) {
-	this.rewind = rewind;
-    }
+public class HLSExpressionBalance extends HLSDirective {
+    boolean off = false;
 
     @Override
     public String toString() {
-	StringBuilder sb = new StringBuilder();
-	sb.append(super.toString());
-	sb.append("pipeline");
-	if (ii > 0)
-	    sb.append(" II=").append(ii);
-	if (enable_flush)
-	    sb.append(" enable_flush");
-	if (rewind)
-	    sb.append(" rewind");
+	StringBuilder sb = new StringBuilder(super.toString()).append("expression_balance");
+	if (off)
+	    sb.append(" off");
 	return sb.toString();
     }
 }

@@ -17,34 +17,32 @@
 
 package pt.up.fe.specs.clava.hls.directives;
 
-public class HLSPipeline extends HLSDirective {
-    private int ii = 0;
-    private boolean enable_flush = false;
-    private boolean rewind = false;
+public class HLSArrayPartition extends HLSDirective {
+    private PartitionType type;
+    private String variable;
+    private int factor;
+    private int dim = -1;
 
-    public void setII(int ii) {
-	this.ii = ii;
+    public enum PartitionType {
+	CYCLIC, BLOCK, COMPLETE
     }
 
-    public void setEnableFlush(boolean enableFlush) {
-	this.enable_flush = enableFlush;
+    public HLSArrayPartition(PartitionType type, String variable, int factor) {
+	this.type = type;
+	this.variable = variable;
+	this.factor = factor;
     }
 
-    public void setRewind(boolean rewind) {
-	this.rewind = rewind;
+    public void setDim(int dim) {
+	this.dim = dim;
     }
 
     @Override
     public String toString() {
-	StringBuilder sb = new StringBuilder();
-	sb.append(super.toString());
-	sb.append("pipeline");
-	if (ii > 0)
-	    sb.append(" II=").append(ii);
-	if (enable_flush)
-	    sb.append(" enable_flush");
-	if (rewind)
-	    sb.append(" rewind");
+	StringBuilder sb = new StringBuilder(super.toString()).append("array_partition variable=").append(variable)
+		.append(" ").append(type.toString().toLowerCase()).append(" factor=").append(factor);
+	if (dim != -1)
+	    sb.append(" dim=").append(dim);
 	return sb.toString();
     }
 }

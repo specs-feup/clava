@@ -46,6 +46,8 @@ public class ClavaHLS {
 
     public void run() {
 	log(separator);
+	if (dfg.getNodes().size() < 2)
+	    return;
 	log("starting HLS restructuring");
 	preprocessDfg();
 	printDfg();
@@ -70,9 +72,9 @@ public class ClavaHLS {
 	loopUnfolding.apply();
 
 	log("detecting if code regions can be pipelined");
-	CodeRegionPipelining pipelining = new CodeRegionPipelining(dfg);
+	CodeRegionPipelining pipelining = new CodeRegionPipelining(dfg, loopUnfolding.getLoopsToUnroll());
 	pipelining.analyze();
-	// pipelining.apply();
+	pipelining.apply();
 
 	log("finished HLS restructuring");
 	log(separator);

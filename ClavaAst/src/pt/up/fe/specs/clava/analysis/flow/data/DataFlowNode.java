@@ -25,6 +25,10 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 
 public class DataFlowNode extends FlowNode implements Cloneable {
 
+    public enum BooleanSelector {
+	NONE, TRUE, FALSE;
+    }
+
     private DataFlowNodeType type;
     private long nIterations = 0;
     private int subgraphID = -1;
@@ -33,6 +37,8 @@ public class DataFlowNode extends FlowNode implements Cloneable {
     private Stmt stmt;
     private ArrayList<DataFlowNode> currPath = new ArrayList<>();
     private ClavaNode clavaNode;
+    private BooleanSelector selector = BooleanSelector.NONE;
+    private String shape = "circle";
 
     public DataFlowNode(DataFlowNodeType type, String label, ClavaNode node) {
 	super(label);
@@ -44,8 +50,10 @@ public class DataFlowNode extends FlowNode implements Cloneable {
     @Override
     public String toDot() {
 	StringBuilder sb = new StringBuilder();
-	sb.append(name).append(" [label=\"").append(label).append("\" color=\"").append(type.getColor()).append("\"")
-		.append("]");
+	sb.append(name).append(" [label=\"").append(label).append("\" color=\"").append(type.getColor()).append("\"");
+	if (!shape.equals("circle"))
+	    sb.append("shape=\"").append(shape).append("\"");
+	sb.append("]");
 	return sb.toString();
     }
 
@@ -124,5 +132,21 @@ public class DataFlowNode extends FlowNode implements Cloneable {
 	return "DataFlowNode [type=" + type + ", nIterations=" + nIterations + ", subgraphID=" + subgraphID
 		+ ", isSubgraphRoot=" + isSubgraphRoot + ", isTopLevel=" + isTopLevel + ", id=" + id + ", name=" + name
 		+ ", label=" + label + "]";
+    }
+
+    public BooleanSelector getSelector() {
+	return selector;
+    }
+
+    public void setSelector(BooleanSelector selector) {
+	this.selector = selector;
+    }
+
+    public String getShape() {
+	return shape;
+    }
+
+    public void setShape(String shape) {
+	this.shape = shape;
     }
 }
