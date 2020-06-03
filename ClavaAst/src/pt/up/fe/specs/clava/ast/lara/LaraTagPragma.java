@@ -22,6 +22,12 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 
+/**
+ * A pragma that references a point in the code and sticks to it.
+ * 
+ * @author jbispo
+ *
+ */
 public class LaraTagPragma extends Pragma {
 
     private static final String LARA_TAG_PREFIX = "lara tag ";

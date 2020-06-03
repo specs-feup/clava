@@ -15,7 +15,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AScope
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Represents a group of statements
  * @author Lara Weaver Generator
  */
 public abstract class AScope extends AStatement {

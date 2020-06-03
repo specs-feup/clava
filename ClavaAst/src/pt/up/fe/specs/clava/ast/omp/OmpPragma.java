@@ -28,6 +28,12 @@ import pt.up.fe.specs.clava.ast.omp.clauses.OmpClauses;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.util.SpecsLogs;
 
+/**
+ * OpenMP pragma.
+ * 
+ * @author jbispo
+ *
+ */
 public abstract class OmpPragma extends Pragma {
 
     /// DATAKEYS BEGIN

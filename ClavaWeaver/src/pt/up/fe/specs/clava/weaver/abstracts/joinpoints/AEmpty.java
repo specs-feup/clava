@@ -11,7 +11,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AEmpty
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Utility joinpoint, to represent empty nodes when directly accessing the tree
  * @author Lara Weaver Generator
  */
 public abstract class AEmpty extends ACxxWeaverJoinPoint {

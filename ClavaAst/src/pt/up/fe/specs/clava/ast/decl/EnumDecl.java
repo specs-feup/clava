@@ -33,7 +33,7 @@ import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
 /**
- * Represents a declaration of a struct, union, class or enum.
+ * Represents an enum.
  * 
  * @author JoaoBispo
  *

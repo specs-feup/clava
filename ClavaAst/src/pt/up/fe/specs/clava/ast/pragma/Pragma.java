@@ -26,6 +26,12 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 
+/**
+ * Represents a pragma in the code (e.g., #pragma kernel)
+ * 
+ * @author jbispo
+ *
+ */
 public abstract class Pragma extends ClavaNode {
 
     public Pragma(DataStore data, Collection<? extends ClavaNode> children) {
