@@ -17,24 +17,24 @@
 
 package pt.up.fe.specs.clava.analysis.flow.data;
 
-public enum DataFlowEdgeType {
-    DATAFLOW("black"), DATAFLOW_INDEX("red"), REPEATING("blue"), DEPENDENCY("orange");
+import java.util.ArrayList;
+import java.util.HashMap;
 
-    private String color;
+public class DependencyTracker {
+    private DataFlowGraph dfg;
+    private HashMap<String, String> dependencies;
 
-    private DataFlowEdgeType(String color) {
-	this.color = color;
+    public DependencyTracker(DataFlowGraph dfg) {
+	this.dfg = dfg;
+	this.dependencies = new HashMap<>();
     }
 
-    public String getColor() {
-	return color;
+    public HashMap<String, String> getDependencies() {
+	return dependencies;
     }
 
-    public static boolean isControl(DataFlowEdgeType type) {
-	return type == REPEATING;
-    }
+    public void findDependencies() {
+	ArrayList<String> allVariables = DFGUtils.findAllVariables(dfg);
 
-    public static boolean isDirected(DataFlowEdgeType type) {
-	return type == DATAFLOW || type == DATAFLOW_INDEX || type == REPEATING;
     }
 }

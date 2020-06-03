@@ -45,7 +45,7 @@ public class DataFlowEdge extends FlowEdge {
     public DataFlowEdge(FlowNode source, FlowNode dest, DataFlowEdgeType type) {
 	super(source, dest);
 	this.type = type;
-	if (type == DataFlowEdgeType.CONTROL_REPEATING)
+	if (type == DataFlowEdgeType.REPEATING)
 	    this.directed = false;
     }
 
@@ -61,7 +61,7 @@ public class DataFlowEdge extends FlowEdge {
 	super(source, dest);
 	this.repeating = repeating;
 	// this.directed = false;
-	this.type = DataFlowEdgeType.CONTROL_REPEATING;
+	this.type = DataFlowEdgeType.REPEATING;
     }
 
     /**

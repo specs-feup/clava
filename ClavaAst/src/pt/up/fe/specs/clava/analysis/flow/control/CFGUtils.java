@@ -78,15 +78,8 @@ public class CFGUtils {
 	ArrayList<BasicBlockNode> bbs = new ArrayList<>();
 	for (FlowNode n : cfg.getNodes()) {
 	    BasicBlockNode node = (BasicBlockNode) n;
-	    if (node.getStmts().size() > 0) {
-		Stmt stmt = node.getStmts().get(0);
-		if (stmt.getScope().isPresent()) {
-		    CompoundStmt scope = (CompoundStmt) stmt.getScope().get();
-		    if (scope.getParent() instanceof FunctionDecl) {
-			bbs.add(node);
-		    }
-		}
-	    }
+	    if (isTopLevel(node))
+		bbs.add(node);
 	}
 	return bbs;
     }
@@ -100,5 +93,18 @@ public class CFGUtils {
 		return bb;
 	}
 	return ifBlock;
+    }
+
+    public static boolean isTopLevel(BasicBlockNode node) {
+	if (node.getStmts().size() > 0) {
+	    Stmt stmt = node.getStmts().get(0);
+	    if (stmt.getScope().isPresent()) {
+		CompoundStmt scope = (CompoundStmt) stmt.getScope().get();
+		if (scope.getParent() instanceof FunctionDecl) {
+		    return true;
+		}
+	    }
+	}
+	return false;
     }
 }
