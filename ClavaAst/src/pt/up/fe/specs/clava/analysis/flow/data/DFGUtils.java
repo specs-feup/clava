@@ -210,4 +210,25 @@ public class DFGUtils {
 	HashMap<String, ArrayList<DataFlowNode>> toMerge = new HashMap<>();
 	return toMerge;
     }
+
+    public static ArrayList<String> findAllVariables(DataFlowGraph dfg) {
+	ArrayList<String> vars = new ArrayList<>();
+	for (FlowNode n : dfg.getNodes()) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (DataFlowNodeType.isLoad(node.getType()) || DataFlowNodeType.isStore(node.getType())) {
+		if (!vars.contains(node.getLabel()))
+		    vars.add(node.getLabel());
+	    }
+	}
+	return vars;
+    }
+
+    public static ArrayList<DataFlowNode> getAllReferences(DataFlowGraph dfg, String label) {
+	ArrayList<DataFlowNode> refs = new ArrayList<>();
+	for (FlowNode n : dfg.getNodes()) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    // if (node.)
+	}
+	return refs;
+    }
 }

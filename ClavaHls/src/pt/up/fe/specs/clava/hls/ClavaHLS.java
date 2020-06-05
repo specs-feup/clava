@@ -46,8 +46,11 @@ public class ClavaHLS {
 
     public void run() {
 	log(separator);
-	if (dfg.getNodes().size() < 2)
+	if (dfg.hasConditionals()) {
+	    this.verbose = true;
+	    printDfg();
 	    return;
+	}
 	log("starting HLS restructuring");
 	preprocessDfg();
 	printDfg();
@@ -91,7 +94,7 @@ public class ClavaHLS {
 	saveFile(weavingFolder, "graphs", sb.toString(), dfg.toDot());
 
 	if (verbose) {
-	    log("using the following CDFG as input:");
+	    log("using the following DFG as input:");
 	    log("----------------------------------");
 	    ClavaHLS.log("\n" + dot);
 	    log("----------------------------------");

@@ -124,7 +124,7 @@ public class NestedLoopUnrolling extends RestructuringStrategy {
 	    int cnt = 0;
 	    for (FlowEdge e : node.getOutEdges()) {
 		DataFlowEdge edge = (DataFlowEdge) e;
-		if (edge.getType() == DataFlowEdgeType.CONTROL_REPEATING) {
+		if (edge.getType() == DataFlowEdgeType.REPEATING) {
 		    if (((DataFlowNode) edge.getDest()).getType() == DataFlowNodeType.LOOP) {
 			cnt++;
 			nodes.add((DataFlowNode) edge.getDest());
