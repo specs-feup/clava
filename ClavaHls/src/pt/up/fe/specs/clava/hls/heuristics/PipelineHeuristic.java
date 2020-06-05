@@ -18,6 +18,8 @@
 package pt.up.fe.specs.clava.hls.heuristics;
 
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowParam;
+import pt.up.fe.specs.clava.hls.directives.HLSArrayPartition;
 
 /**
  * Returns II number for pipeline directive - Integer.MAX_VALUE if II can't be
@@ -30,5 +32,9 @@ import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 public class PipelineHeuristic {
     public static int calculate(DataFlowNode node) {
 	return Integer.MAX_VALUE;
+    }
+
+    public static HLSArrayPartition partition(DataFlowParam p) {
+	return null;
     }
 }
