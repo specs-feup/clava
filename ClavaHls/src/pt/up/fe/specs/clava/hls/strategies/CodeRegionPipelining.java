@@ -85,7 +85,6 @@ public class CodeRegionPipelining extends RestructuringStrategy {
 		HLSArrayPartition dir = PipelineHeuristic.partition(param);
 		this.insertDirective(firstStmt, dir);
 	    }
-
 	}
     }
 
