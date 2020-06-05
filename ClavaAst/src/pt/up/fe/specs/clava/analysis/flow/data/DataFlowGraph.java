@@ -128,7 +128,7 @@ public class DataFlowGraph extends FlowGraph {
 	}
 	StringBuilder sb = new StringBuilder(interfaceNode.getLabel()).append("\n");
 	for (DataFlowParam param : params) {
-	    sb.append(param.getName()).append(" : ").append(param.getType()).append("\n");
+	    sb.append(param.toString()).append("\n");
 	}
 	interfaceNode.setLabel(sb.toString());
     }

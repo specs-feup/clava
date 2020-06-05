@@ -41,6 +41,7 @@ public class FunctionInlining extends RestructuringStrategy {
     private HashMap<String, Boolean> isFunctionInlinable;
     private HashMap<String, Long> functionCosts;
     private HashMap<String, Boolean> canInline;
+    private float N = 2;
 
     public FunctionInlining(DataFlowGraph dfg) {
 	super(dfg);
@@ -72,7 +73,7 @@ public class FunctionInlining extends RestructuringStrategy {
 	for (String funName : functions.keySet()) {
 	    Long freq = callFreq.get(funName);
 	    Long cost = functionCosts.get(funName);
-	    boolean inline = InlineHeuristic.calculate(freq, cost, mainFunCost);
+	    boolean inline = InlineHeuristic.calculate(freq, cost, mainFunCost, N);
 	    canInline.put(funName, inline);
 	}
     }

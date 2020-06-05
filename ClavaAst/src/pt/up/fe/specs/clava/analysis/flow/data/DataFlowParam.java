@@ -17,6 +17,9 @@
 
 package pt.up.fe.specs.clava.analysis.flow.data;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,14 +29,36 @@ public class DataFlowParam {
     private String name;
     private String type;
     private boolean isArray = false;
-    private int maxSize = 0;
-    private int dim = 1;
+    private ArrayList<Integer> dim = new ArrayList<>();
     private boolean isStream = false;
+    private int dataTypeSize;
+    public String[] commonTypes = { "char", "short", "int", "long", "float", "double" };
+    public HashMap<String, Integer> typeSizes = new HashMap<>() {
+	{
+	    put("char", 1);
+	    put("short", 2);
+	    put("int", 4);
+	    put("long", 8);
+	    put("float", 4);
+	    put("double", 8);
+	}
+    };
 
-    public DataFlowParam(String name, String type, boolean isArray) {
-	this.name = name;
-	this.type = type;
-	this.isArray = isArray;
+//    public DataFlowParam(String name, String varType, boolean isArray) {
+//	this.name = name;
+//	this.type = filterType(varType).strip();
+//	this.isArray = isArray;
+//	System.out.println("TYPE: \"" + type + "\"");
+//	this.dataTypeSize = (typeSizes.get(this.type) != null) ? typeSizes.get(this.type) : 4;
+//    }
+
+    private String filterType(String type) {
+	String[] tokens = type.split(" ");
+	for (String s : tokens) {
+	    if (Arrays.asList(commonTypes).contains(s))
+		return s;
+	}
+	return type;
     }
 
     public DataFlowParam(ParmVarDecl paramNode) {
@@ -43,19 +68,17 @@ public class DataFlowParam {
 	    type = paramNode.getTypeCode().substring(0, paramNode.getTypeCode().indexOf('['));
 	    Pattern p = Pattern.compile("-?\\d+");
 	    Matcher m = p.matcher(paramNode.getTypeCode());
-	    int max = 0;
-	    int dim = 0;
 	    while (m.find()) {
 		String n = m.group();
 		int num = Integer.parseUnsignedInt(n);
-		if (num > max)
-		    max = num;
-		dim++;
+		dim.add(num);
 	    }
-	    this.maxSize = max;
-	    this.dim = dim;
 	} else
 	    type = paramNode.getTypeCode();
+
+	this.type = filterType(this.type).strip();
+	System.out.println("TYPE: \"" + type + "\"");
+	this.dataTypeSize = (typeSizes.get(this.type) != null) ? typeSizes.get(this.type) : 4;
     }
 
     public String getName() {
@@ -84,17 +107,16 @@ public class DataFlowParam {
 
     @Override
     public String toString() {
-	String s = "Param: ";
-	s += type + " " + name;
-	s += (!isArray) ? ", scalar" : ", array";
-	return s;
+	StringBuilder sb = new StringBuilder();
+	sb.append(this.name);
+	for (Integer i : this.dim) {
+	    sb.append("[").append(i).append("]");
+	}
+	sb.append(": ").append(this.type).append(" (").append(this.dataTypeSize * 8).append("-bit)");
+	return sb.toString();
     }
 
-    public int getMaxSize() {
-	return maxSize;
-    }
-
-    public int getDim() {
+    public ArrayList<Integer> getDim() {
 	return dim;
     }
 
@@ -104,5 +126,13 @@ public class DataFlowParam {
 
     public void setStream(boolean isStream) {
 	this.isStream = isStream;
+    }
+
+    public int getDataTypeSize() {
+	return dataTypeSize;
+    }
+
+    public void setDataTypeSize(int dataTypeSize) {
+	this.dataTypeSize = dataTypeSize;
     }
 }
