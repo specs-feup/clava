@@ -18,12 +18,12 @@
 package pt.up.fe.specs.clava.hls;
 
 public class ClavaHLSOptions {
-    boolean unsafe = false;
-    boolean decide = false;
-    boolean trace = false;
-    boolean directives = false;
+    public boolean unsafe = false;
+    public boolean decide = false;
+    public boolean trace = false;
+    public boolean directives = false;
 
-    ClavaHLSOptions() {
+    public ClavaHLSOptions() {
 
     }
 }
