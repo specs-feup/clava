@@ -44,7 +44,34 @@ public class ClavaHLS {
 	this.weavingFolder = weavingFolder;
     }
 
-    public void run() {
+    public void run(ClavaHLSOptions mode) {
+	if (mode.decide) {
+	    if (canBeInstrumented()) {
+		mode.trace = true;
+	    } else {
+		mode.directives = true;
+	    }
+	}
+	if (mode.trace) {
+	    // Call LARA?
+	}
+	if (mode.directives) {
+	    applyDirectives(mode.unsafe);
+	}
+    }
+
+    private boolean canBeInstrumented() {
+	log("checking if function can be turned into a trace");
+	TracingValidator valid = new TracingValidator(dfg);
+	boolean able = valid.validate();
+	if (able)
+	    log("function can be turned into a trace!");
+	else
+	    log("function cannot be turned into a trace");
+	return able;
+    }
+
+    public void applyDirectives(boolean unsafe) {
 	log(separator);
 	if (dfg.hasConditionals()) {
 	    this.verbose = true;
