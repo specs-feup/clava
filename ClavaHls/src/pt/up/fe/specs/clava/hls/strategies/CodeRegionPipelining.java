@@ -25,6 +25,7 @@ import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowParam;
 import pt.up.fe.specs.clava.hls.ClavaHLS;
+import pt.up.fe.specs.clava.hls.directives.HLSArrayPartition;
 import pt.up.fe.specs.clava.hls.directives.HLSPipeline;
 import pt.up.fe.specs.clava.hls.heuristics.PipelineHeuristic;
 
@@ -81,19 +82,8 @@ public class CodeRegionPipelining extends RestructuringStrategy {
 	ClavaNode firstStmt = dfg.getFirstStmt();
 	for (DataFlowParam param : dfg.getParams()) {
 	    if (param.isArray() && !param.isStream()) {
-		int n = param.getMaxSize();
-//		if (n > 1024) {
-//		    int factor = (param.getMaxSize() != 0) ? param.getMaxSize() / 4 : 2;
-//		    if (factor > 100)
-//			factor = 100;
-//		    HLSArrayPartition directive = new HLSArrayPartition(PartitionType.CYCLIC, param.getName(), factor);
-//		    directive.setDim(param.getDim());
-//		    this.insertDirective(firstStmt, directive);
-//		} else {
-//		    HLSArrayPartition directive = new HLSArrayPartition(PartitionType.COMPLETE, param.getName(), n);
-//		    directive.setDim(param.getDim());
-//		    this.insertDirective(firstStmt, directive);
-//		}
+		HLSArrayPartition dir = PipelineHeuristic.partition(param);
+		this.insertDirective(firstStmt, dir);
 	    }
 
 	}

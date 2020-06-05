@@ -20,6 +20,7 @@ package pt.up.fe.specs.clava.hls.heuristics;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowParam;
 import pt.up.fe.specs.clava.hls.directives.HLSArrayPartition;
+import pt.up.fe.specs.clava.hls.directives.HLSArrayPartition.PartitionType;
 
 /**
  * Returns II number for pipeline directive - Integer.MAX_VALUE if II can't be
@@ -30,11 +31,24 @@ import pt.up.fe.specs.clava.hls.directives.HLSArrayPartition;
  *
  */
 public class PipelineHeuristic {
+    private static int limit = 1024 * 4;
+
     public static int calculate(DataFlowNode node) {
 	return Integer.MAX_VALUE;
     }
 
     public static HLSArrayPartition partition(DataFlowParam p) {
-	return null;
+	int nElems = 1;
+	for (Integer i : p.getDim())
+	    nElems *= i;
+
+	if (p.getDataTypeSize() * nElems < limit) {
+	    HLSArrayPartition dir = new HLSArrayPartition(PartitionType.COMPLETE, p.getName(), -1);
+	    return dir;
+	} else {
+	    int factor = (nElems * 10) / 1024;
+	    HLSArrayPartition dir = new HLSArrayPartition(PartitionType.CYCLIC, p.getName(), factor);
+	    return dir;
+	}
     }
 }
