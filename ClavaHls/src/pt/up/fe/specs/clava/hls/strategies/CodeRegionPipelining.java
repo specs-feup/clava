@@ -1,18 +1,14 @@
 /**
- *  Copyright 2020 SPeCS.
+ * Copyright 2020 SPeCS.
  * 
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  * 
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *  under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License. under the License.
  */
 
 package pt.up.fe.specs.clava.hls.strategies;
@@ -34,69 +30,69 @@ public class CodeRegionPipelining extends RestructuringStrategy {
     private boolean pipelineFunction = false;
 
     public CodeRegionPipelining(DataFlowGraph dfg, HashMap<DataFlowNode, Integer> unrolledLoops) {
-	super(dfg);
-	toPipeline = new HashMap<>();
-	this.unrolledLoops = unrolledLoops;
+        super(dfg);
+        toPipeline = new HashMap<>();
+        this.unrolledLoops = unrolledLoops;
     }
 
     @Override
     public void analyze() {
-	this.unrolledLoops.forEach((k, v) -> {
-	    if (v == Integer.MAX_VALUE && toPipeline.get(k) == null) {
-		DataFlowNode loop = DFGUtils.getLoopOfLoop(k);
-		if (!loop.equals(k)) {
-		    int II = PipelineHeuristic.calculate(loop);
-		    if (II != 0)
-			toPipeline.put(loop, II);
-		} else {
-		    if (DFGUtils.getTopLoopCount(dfg) == 1) {
-			// pipelineFunction = true;
-		    }
-		}
-	    }
-	});
+        this.unrolledLoops.forEach((k, v) -> {
+            if (v == Integer.MAX_VALUE && toPipeline.get(k) == null) {
+                DataFlowNode loop = DFGUtils.getLoopOfLoop(k);
+                if (!loop.equals(k)) {
+                    int II = PipelineHeuristic.calculate(loop);
+                    if (II != 0)
+                        toPipeline.put(loop, II);
+                } else {
+                    if (DFGUtils.getTopLoopCount(dfg) == 1) {
+                        // pipelineFunction = true;
+                    }
+                }
+            }
+        });
     }
 
     @Override
     public void apply() {
 
-	if (pipelineFunction) {
-	    HLSPipeline directive = new HLSPipeline();
-	    insertDirective(dfg.getFirstStmt(), directive);
-	    ClavaHLS.log("pipelining the whole function");
-	} else {
-	    toPipeline.forEach((k, v) -> {
-		StringBuilder sb = new StringBuilder("pipelining body of loop \"").append(k.getLabel())
-			.append("\" with ");
-		HLSPipeline directive = new HLSPipeline();
-		if (v != Integer.MAX_VALUE) {
-		    directive.setII(v);
-		    sb.append("II = ").append(v);
-		} else
-		    sb.append(" undetermined II");
-		insertDirective(k.getStmt(), directive);
-		ClavaHLS.log(sb.toString());
-	    });
-	}
-	ClavaNode firstStmt = dfg.getFirstStmt();
-	for (DataFlowParam param : dfg.getParams()) {
-	    if (param.isArray() && !param.isStream()) {
-		int n = param.getMaxSize();
-//		if (n > 1024) {
-//		    int factor = (param.getMaxSize() != 0) ? param.getMaxSize() / 4 : 2;
-//		    if (factor > 100)
-//			factor = 100;
-//		    HLSArrayPartition directive = new HLSArrayPartition(PartitionType.CYCLIC, param.getName(), factor);
-//		    directive.setDim(param.getDim());
-//		    this.insertDirective(firstStmt, directive);
-//		} else {
-//		    HLSArrayPartition directive = new HLSArrayPartition(PartitionType.COMPLETE, param.getName(), n);
-//		    directive.setDim(param.getDim());
-//		    this.insertDirective(firstStmt, directive);
-//		}
-	    }
+        if (pipelineFunction) {
+            HLSPipeline directive = new HLSPipeline();
+            insertDirective(dfg.getFirstStmt(), directive);
+            ClavaHLS.log("pipelining the whole function");
+        } else {
+            toPipeline.forEach((k, v) -> {
+                StringBuilder sb = new StringBuilder("pipelining body of loop \"").append(k.getLabel())
+                        .append("\" with ");
+                HLSPipeline directive = new HLSPipeline();
+                if (v != Integer.MAX_VALUE) {
+                    directive.setII(v);
+                    sb.append("II = ").append(v);
+                } else
+                    sb.append(" undetermined II");
+                insertDirective(k.getStmt(), directive);
+                ClavaHLS.log(sb.toString());
+            });
+        }
+        ClavaNode firstStmt = dfg.getFirstStmt();
+        for (DataFlowParam param : dfg.getParams()) {
+            if (param.isArray() && !param.isStream()) {
+                // int n = param.getMaxSize();
+                // if (n > 1024) {
+                // int factor = (param.getMaxSize() != 0) ? param.getMaxSize() / 4 : 2;
+                // if (factor > 100)
+                // factor = 100;
+                // HLSArrayPartition directive = new HLSArrayPartition(PartitionType.CYCLIC, param.getName(), factor);
+                // directive.setDim(param.getDim());
+                // this.insertDirective(firstStmt, directive);
+                // } else {
+                // HLSArrayPartition directive = new HLSArrayPartition(PartitionType.COMPLETE, param.getName(), n);
+                // directive.setDim(param.getDim());
+                // this.insertDirective(firstStmt, directive);
+                // }
+            }
 
-	}
+        }
     }
 
 }
