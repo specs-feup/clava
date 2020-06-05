@@ -1963,4 +1963,12 @@ public class CxxWeaver extends ACxxWeaver {
     protected LanguageSpecificationV2 buildLangSpecsV2() {
         return buildLanguageSpecification();
     }
+
+    @Override
+    public List<String> getPredefinedExternalDependencies() {
+        return Arrays.asList("LAT - Lara Autotuning Tool",
+                "https://github.com/specs-feup/LAT-Lara-Autotuning-Tool.git",
+                "Benchmark - NAS > import lara.benchmark.NasBenchmarkSet",
+                "https://github.com/specs-feup/clava.git?folder=benchmarks/NAS");
+    }
 }
