@@ -38,6 +38,7 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.hls.ClavaHLS;
+import pt.up.fe.specs.clava.hls.ClavaHLSOptions;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
@@ -419,6 +420,9 @@ public class CxxScope extends AScope {
     public void dfgImpl() {
 	DataFlowGraph dfg = new DataFlowGraph(scope);
 	ClavaHLS hls = new ClavaHLS(dfg, CxxWeaver.getCxxWeaver().getWeavingFolder());
-	hls.run();
+	ClavaHLSOptions options = new ClavaHLSOptions();
+	options.unsafe = true;
+	options.directives = true;
+	hls.run(options);
     }
 }
