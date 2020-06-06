@@ -21,6 +21,7 @@ import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowParam;
 import pt.up.fe.specs.clava.hls.ClavaHLS;
+import pt.up.fe.specs.clava.hls.directives.HLSArrayPartition;
 import pt.up.fe.specs.clava.hls.directives.HLSPipeline;
 import pt.up.fe.specs.clava.hls.heuristics.PipelineHeuristic;
 
@@ -56,43 +57,31 @@ public class CodeRegionPipelining extends RestructuringStrategy {
     @Override
     public void apply() {
 
-        if (pipelineFunction) {
-            HLSPipeline directive = new HLSPipeline();
-            insertDirective(dfg.getFirstStmt(), directive);
-            ClavaHLS.log("pipelining the whole function");
-        } else {
-            toPipeline.forEach((k, v) -> {
-                StringBuilder sb = new StringBuilder("pipelining body of loop \"").append(k.getLabel())
-                        .append("\" with ");
-                HLSPipeline directive = new HLSPipeline();
-                if (v != Integer.MAX_VALUE) {
-                    directive.setII(v);
-                    sb.append("II = ").append(v);
-                } else
-                    sb.append(" undetermined II");
-                insertDirective(k.getStmt(), directive);
-                ClavaHLS.log(sb.toString());
-            });
-        }
-        ClavaNode firstStmt = dfg.getFirstStmt();
-        for (DataFlowParam param : dfg.getParams()) {
-            if (param.isArray() && !param.isStream()) {
-                // int n = param.getMaxSize();
-                // if (n > 1024) {
-                // int factor = (param.getMaxSize() != 0) ? param.getMaxSize() / 4 : 2;
-                // if (factor > 100)
-                // factor = 100;
-                // HLSArrayPartition directive = new HLSArrayPartition(PartitionType.CYCLIC, param.getName(), factor);
-                // directive.setDim(param.getDim());
-                // this.insertDirective(firstStmt, directive);
-                // } else {
-                // HLSArrayPartition directive = new HLSArrayPartition(PartitionType.COMPLETE, param.getName(), n);
-                // directive.setDim(param.getDim());
-                // this.insertDirective(firstStmt, directive);
-                // }
-            }
-
-        }
+	if (pipelineFunction) {
+	    HLSPipeline directive = new HLSPipeline();
+	    insertDirective(dfg.getFirstStmt(), directive);
+	    ClavaHLS.log("pipelining the whole function");
+	} else {
+	    toPipeline.forEach((k, v) -> {
+		StringBuilder sb = new StringBuilder("pipelining body of loop \"").append(k.getLabel())
+			.append("\" with ");
+		HLSPipeline directive = new HLSPipeline();
+		if (v != Integer.MAX_VALUE) {
+		    directive.setII(v);
+		    sb.append("II = ").append(v);
+		} else
+		    sb.append(" undetermined II");
+		insertDirective(k.getStmt(), directive);
+		ClavaHLS.log(sb.toString());
+	    });
+	}
+	ClavaNode firstStmt = dfg.getFirstStmt();
+	for (DataFlowParam param : dfg.getParams()) {
+	    if (param.isArray() && !param.isStream()) {
+		HLSArrayPartition dir = PipelineHeuristic.partition(param);
+		this.insertDirective(firstStmt, dir);
+	    }
+	}
     }
 
 }

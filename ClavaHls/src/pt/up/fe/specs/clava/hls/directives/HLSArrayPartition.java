@@ -20,7 +20,7 @@ package pt.up.fe.specs.clava.hls.directives;
 public class HLSArrayPartition extends HLSDirective {
     private PartitionType type;
     private String variable;
-    private int factor;
+    private int factor = -1;
     private int dim = -1;
 
     public enum PartitionType {
@@ -40,7 +40,9 @@ public class HLSArrayPartition extends HLSDirective {
     @Override
     public String toString() {
 	StringBuilder sb = new StringBuilder(super.toString()).append("array_partition variable=").append(variable)
-		.append(" ").append(type.toString().toLowerCase()).append(" factor=").append(factor);
+		.append(" ").append(type.toString().toLowerCase());
+	if (factor != -1)
+	    sb.append(" factor=").append(factor);
 	if (dim != -1)
 	    sb.append(" dim=").append(dim);
 	return sb.toString();

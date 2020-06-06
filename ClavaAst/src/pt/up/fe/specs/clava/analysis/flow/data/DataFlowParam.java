@@ -44,14 +44,6 @@ public class DataFlowParam {
 	}
     };
 
-//    public DataFlowParam(String name, String varType, boolean isArray) {
-//	this.name = name;
-//	this.type = filterType(varType).strip();
-//	this.isArray = isArray;
-//	System.out.println("TYPE: \"" + type + "\"");
-//	this.dataTypeSize = (typeSizes.get(this.type) != null) ? typeSizes.get(this.type) : 4;
-//    }
-
     private String filterType(String type) {
 	String[] tokens = type.split(" ");
 	for (String s : tokens) {
