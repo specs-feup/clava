@@ -144,6 +144,10 @@ public class ClavaContext extends ADataClass<ClavaContext> {
         return appStack.isEmpty();
     }
 
+    public int getStackSize() {
+        return appStack.size();
+    }
+
     public App getApp() {
         if (appStack.isEmpty()) {
             throw new RuntimeException("No App has been set yet");

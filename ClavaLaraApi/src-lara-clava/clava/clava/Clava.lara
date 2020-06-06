@@ -2,6 +2,7 @@ import lara.Io;
 import clava.ClavaAspects;
 import clava.util.ClavaDataStore;
 import weaver.WeaverOptions;
+import weaver.Weaver;
 
 /**
  * @class
@@ -132,6 +133,12 @@ Clava.popAst = function() {
 	call PopAst();
 }
 
+/**
+ * The current number of elements in the AST stack.
+ */
+Clava.getStackSize = function() {
+	return Weaver.getWeaverEngine().getStackSize();
+}
 
 /**
  * Looks for a join point in the current AST.

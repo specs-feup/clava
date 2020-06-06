@@ -1971,4 +1971,8 @@ public class CxxWeaver extends ACxxWeaver {
                 "Benchmark - NAS > import lara.benchmark.NasBenchmarkSet",
                 "https://github.com/specs-feup/clava.git?folder=benchmarks/NAS");
     }
+
+    public int getStackSize() {
+        return context.getStackSize();
+    }
 }
