@@ -13,7 +13,9 @@ aspectdef RebuildTest
 	//println("Header code: " + $file.code);
 
 	//println("Pushing");
+	println("Stack size before push: " + Clava.getStackSize());
 	Clava.pushAst();
+	println("Stack size after push: " + Clava.getStackSize());
 	
 	select function{"main"} end
 	apply
@@ -26,6 +28,7 @@ aspectdef RebuildTest
 	
 	//println("Poping");
 	Clava.popAst();
+	println("Stack size after pop: " + Clava.getStackSize());
 	//println("Rebuilding");
 	
 	
