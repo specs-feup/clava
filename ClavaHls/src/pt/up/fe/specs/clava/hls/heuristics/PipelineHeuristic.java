@@ -42,11 +42,12 @@ public class PipelineHeuristic {
 	for (Integer i : p.getDim())
 	    nElems *= i;
 
-	if (p.getDataTypeSize() * nElems < limit) {
+	if (p.getDataTypeSize() * nElems <= limit) {
 	    HLSArrayPartition dir = new HLSArrayPartition(PartitionType.COMPLETE, p.getName(), -1);
 	    return dir;
 	} else {
-	    int factor = (nElems * 10) / 1024;
+	    // int factor = (nElems * 10) / 1024;
+	    int factor = 64;
 	    HLSArrayPartition dir = new HLSArrayPartition(PartitionType.CYCLIC, p.getName(), factor);
 	    return dir;
 	}

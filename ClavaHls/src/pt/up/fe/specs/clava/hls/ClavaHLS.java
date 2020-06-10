@@ -52,6 +52,7 @@ public class ClavaHLS {
 		mode.directives = true;
 	    }
 	}
+	mode.directives = true; // JUST FOR DEBUG
 	if (mode.trace) {
 	    // Call LARA?
 	}
