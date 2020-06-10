@@ -846,4 +846,8 @@ public class DataFlowGraph extends FlowGraph {
     public boolean hasConditionals() {
 	return hasConditionals;
     }
+
+    public ControlFlowGraph getCfg() {
+	return this.cfg;
+    }
 }

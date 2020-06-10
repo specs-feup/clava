@@ -45,7 +45,7 @@ public class CFGUtils {
     }
 
     private static boolean isValidPragma(String code) {
-	return parsePragma(code) != -1;
+	return parsePragma(code) != -1 || code.toLowerCase().contains("#pragma hls inline");
     }
 
     public static int parsePragma(String code) {
