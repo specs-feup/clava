@@ -423,6 +423,7 @@ public class CxxScope extends AScope {
 	ClavaHLSOptions options = new ClavaHLSOptions();
 	options.unsafe = true;
 	options.directives = true;
+	options.decide = true;
 	hls.run(options);
     }
 }
