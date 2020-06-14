@@ -17,6 +17,8 @@
 
 package pt.up.fe.specs.clava.hls;
 
+import java.util.ArrayList;
+
 import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockEdge;
@@ -70,6 +72,31 @@ public class TracingValidator {
     }
 
     private boolean checkAccessPatterns() {
+	for (DataFlowNode node : DFGUtils.getAllNodesOfType(dfg, DataFlowNodeType.LOAD_ARRAY)) {
+	    if (!matchesTemplate(node))
+		return false;
+	}
+	for (DataFlowNode node : DFGUtils.getAllNodesOfType(dfg, DataFlowNodeType.STORE_ARRAY)) {
+	    if (!matchesTemplate(node))
+		return false;
+	}
+	return true;
+    }
+
+    private boolean matchesTemplate(DataFlowNode node) {
+	ArrayList<DataFlowNode> idx = DFGUtils.getIndexesOfArray(node);
+	for (DataFlowNode n : idx) {
+	    ArrayList<DataFlowNode> expr = DFGUtils.getIndexExpr(n);
+	    for (DataFlowNode i : expr) {
+		if (i.getType() != DataFlowNodeType.LOAD_INDEX && i.getType() != DataFlowNodeType.CONSTANT
+			&& i.getType() != DataFlowNodeType.OP_ARITH)
+		    return false;
+		if (i.getType() == DataFlowNodeType.OP_ARITH) {
+		    if (!i.getLabel().equals("+") && !i.getLabel().equals("-"))
+			return false;
+		}
+	    }
+	}
 	return true;
     }
 }

@@ -45,6 +45,7 @@ public class ClavaHLS {
     }
 
     public void run(ClavaHLSOptions mode) {
+	preprocessDfg();
 	if (mode.decide) {
 	    if (canBeInstrumented()) {
 		mode.trace = true;
@@ -80,7 +81,6 @@ public class ClavaHLS {
 	    return;
 	}
 	log("starting HLS restructuring");
-	preprocessDfg();
 	printDfg();
 	printSubgraphCosts();
 
