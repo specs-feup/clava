@@ -48,7 +48,7 @@ import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.parsing.snippet.rules.InlineCommentRule;
 import pt.up.fe.specs.clava.parsing.snippet.rules.MultiLineCommentRule;
-import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 import pt.up.fe.specs.util.utilities.LineStream;
@@ -220,12 +220,15 @@ public class TextParser {
                 continue;
             }
 
+            SpecsLogs.info("Could not insert comment: " + textElement.getCode());
+            /*
             // If current node has start line smaller than text element, insert after
             if (textStartLine > insertionPoint.getLocation().getStartLine(tuFilepath)) {
+                System.out.println("Insert after: " + textElement);
                 queue.moveAfter(insertionPoint, textElement);
                 continue;
             }
-
+            */
         }
 
         // Remove guard nodes
@@ -406,9 +409,13 @@ public class TextParser {
         // ClavaNodeFactory.dummyDecl("Textparser_StartGuard", dummyStartInfo,Collections.emptyList());
 
         // Get last end line
-        int endLine = SpecsCollections.lastTry(tu.getChildren()).map(lastNode -> lastNode.getLocation().getEndLine())
-                .orElse(0);
-
+        // int endLine = SpecsCollections.lastTry(tu.getChildren()).map(lastNode -> lastNode.getLocation().getEndLine())
+        // .orElse(0);
+        int lastLine = tu.getLocation().getEndLine();
+        SpecsCheck.checkArgument(lastLine >= 0, () -> "Expected line to be greater or equal than 0: " + lastLine);
+        int endLine = lastLine + 1;
+        // System.out.println("End line original: " + endLine);
+        // System.out.println("End line new: " + tu.getLocation().getEndLine());
         SourceRange dummyEndLoc = new SourceRange(tu.getLocation().getFilepath(), endLine + 1, 0, endLine + 1, 0);
         // ClavaNodeInfo dummyEndInfo = new ClavaNodeInfo(null, dummyEndLoc);
         // DummyDecl endGuard = ClavaNodeFactory.dummyDecl("Textparser_EndGuard", dummyEndInfo,
