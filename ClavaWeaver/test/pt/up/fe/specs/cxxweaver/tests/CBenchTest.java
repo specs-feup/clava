@@ -48,4 +48,9 @@ public class CBenchTest {
                 .test("HamidRegion.lara", "hamid_region.c", "hamid_region.h");
     }
 
+    @Test
+    public void testDspMatmul() {
+        newTester().test("DspMatmul.lara", "dsp_matmul.c");
+    }
+
 }
