@@ -63,6 +63,7 @@ import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.collections.AccumulatorMap;
 import pt.up.fe.specs.util.csv.CsvField;
 import pt.up.fe.specs.util.csv.CsvWriter;
@@ -446,10 +447,12 @@ public class CxxWeaver extends ACxxWeaver {
         }
 
         // weaverData.pushAst(createApp(sources, parserOptions));
-        weaverData.pushAst(createApp(getSources(), parserOptions));
-
+        App app = createApp(getSources(), parserOptions);
+        weaverData.pushAst(app);
         // TODO: Option to dump clang and clava
-        SpecsIo.write(new File("clavaDump.txt"), getApp().toString());
+        if (SpecsSystem.isDebug()) {
+            SpecsIo.write(new File("clavaDump.txt"), getApp().toString());
+        }
 
         return true;
     }
