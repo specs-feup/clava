@@ -29,6 +29,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.utils.StmtWithCondition;
+import pt.up.fe.specs.symja.SymjaPlusUtils;
 import pt.up.fe.specs.util.SpecsStrings;
 
 public abstract class LoopStmt extends Stmt implements StmtWithCondition {
@@ -86,8 +87,9 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition {
             return iterations;
         }
 
-        // Try to parse the iterations expression
-        return getIterationsExpr().map(expr -> SpecsStrings.parseInteger(expr.getCode())).orElse(null);
+        // Try to parse the simplified iterations expression
+        return getIterationsExpr().map(expr -> SpecsStrings.parseInteger(SymjaPlusUtils.simplify(expr.getCode())))
+                .orElse(null);
         // return iterations;
     }
 
