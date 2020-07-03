@@ -19,6 +19,7 @@ aspectdef Loop
 			continue;
 		}
 		println("iterations expr: " + $loop.iterationsExpr.code);
+		println("iterations: " + $loop.iterations);		
 	end
 
 /*	

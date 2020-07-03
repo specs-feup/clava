@@ -64,13 +64,24 @@ is outermost? false
 nested level: 1
 rank: 9,1
 iterations expr: 10
+iterations: 10
 iterations expr: 10 + 1
+iterations: 11
 iterations expr: 10 - 1
+iterations: 9
 iterations expr: 10 + 1
+iterations: 11
 iterations expr: 10
+iterations: 10
 iterations expr: 10 + 1
+iterations: 11
 iterations expr: 10
+iterations: 10
 iterations expr: (10.0 - 0.0) / 1.5
+iterations: undefined
 iterations expr: (11 - 1) / 2
+iterations: 5
 iterations expr: (11 - 1 + 2) / 2
+iterations: 6
 iterations expr: (end - 1) - (start) + 1
+iterations: undefined
