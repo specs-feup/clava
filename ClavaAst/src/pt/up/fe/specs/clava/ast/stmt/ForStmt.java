@@ -28,7 +28,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
-import pt.up.fe.specs.util.SpecsStrings;
+import pt.up.fe.specs.clava.utils.foriter.ForIterationsExpression;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class ForStmt extends LoopStmt {
@@ -184,6 +184,18 @@ public class ForStmt extends LoopStmt {
         return getInit().flatMap(init -> getInitValueExpr(init.getChild(0)));
     }
 
+    public Optional<VarDecl> getInitVar() {
+        return getInit()
+                // Only for DeclStmt
+                .filter(stmt -> stmt instanceof DeclStmt)
+                // Get VarDecls
+                .map(declStmt -> ((DeclStmt) declStmt).getVarDecls())
+                // Only one variable
+                .filter(varDecls -> varDecls.size() == 1)
+                // Return VarDecl
+                .map(varDecls -> varDecls.get(0));
+    }
+
     private Optional<Expr> getInitValueExpr(ClavaNode initExpr) {
 
         if (initExpr instanceof VarDecl) {
@@ -263,64 +275,74 @@ public class ForStmt extends LoopStmt {
      * 
      * @return an expression that represents the number of iterations of the loop
      */
+    @Override
     public Optional<Expr> getIterationsExpr() {
+        return ForIterationsExpression.newInstance(this).flatMap(iter -> iter.getIterationsExpr());
+    }
+
+    /**
+     * @return an expression that represents the number of iterations of the loop
+     */
+    /*
+    public Optional<Expr> getIterationsExprV1() {
         // Calculate diff between begin and end
         Expr beginEndDiff = getBeginEndDiff().orElse(null);
         if (beginEndDiff == null) {
             return Optional.empty();
         }
-
+    
         Expr stepValue = getStepValueExpr().orElse(null);
         if (stepValue == null) {
             return Optional.empty();
         }
-
+    
         Integer stepValueInteger = SpecsStrings.parseInteger(stepValue.getCode());
         // Special case: step value 1
         if (stepValueInteger != null && stepValueInteger.intValue() == 1) {
             return Optional.of(beginEndDiff);
         }
-
+    
         return Optional
                 .of(getFactory().binaryOperator(BinaryOperatorKind.Div, beginEndDiff.get(Expr.TYPE).get(), beginEndDiff,
                         stepValue));
-
+    
         // return Optional.of(ClavaNodeFactory.binaryOperator(BinaryOperatorKind.DIV, beginEndDiff, stepValue));
     }
-
+    */
+    /*
     private Optional<Expr> getBeginEndDiff() {
         Expr endExpr = getConditionValueExpr().orElse(null);
         if (endExpr == null) {
             return Optional.empty();
         }
-
+    
         BinaryOperator binOp = getCondOperator().orElse(null);
         if (binOp == null) {
             return Optional.empty();
         }
-
+    
         Expr initExpr = getInitValueExpr().orElse(null);
         if (initExpr == null) {
             return Optional.empty();
         }
-
+    
         Integer initExprInteger = SpecsStrings.parseInteger(initExpr.getCode());
-
+    
         // Special case: relation < and begin 0
         if (binOp.getOp() == BinaryOperatorKind.LT && initExprInteger != null && initExprInteger.intValue() == 0) {
             return Optional.of(endExpr);
         }
-
+    
         // Special case: relation <= and begin 1
         if (binOp.getOp() == BinaryOperatorKind.LE && initExprInteger != null && initExprInteger.intValue() == 1) {
             return Optional.of(endExpr);
         }
-
+    
         return Optional
                 .of(getFactory().binaryOperator(BinaryOperatorKind.Sub, initExpr.get(Expr.TYPE).get(), endExpr,
                         initExpr));
-
+    
         // return Optional.of(ClavaNodeFactory.binaryOperator(BinaryOperatorKind.SUB, endExpr, initExpr));
     }
-
+    */
 }
