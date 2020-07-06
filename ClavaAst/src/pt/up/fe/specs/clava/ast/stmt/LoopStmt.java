@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -30,7 +31,7 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.utils.StmtWithCondition;
 import pt.up.fe.specs.symja.SymjaPlusUtils;
-import pt.up.fe.specs.util.SpecsStrings;
+import pt.up.fe.specs.util.SpecsLogs;
 
 public abstract class LoopStmt extends Stmt implements StmtWithCondition {
 
@@ -87,10 +88,22 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition {
             return iterations;
         }
 
-        // Try to parse the simplified iterations expression
-        return getIterationsExpr().map(expr -> SpecsStrings.parseInteger(SymjaPlusUtils.simplify(expr.getCode())))
+        // Simplify iterations expression
+        String simplifiedIterations = getIterationsExpr().map(expr -> SymjaPlusUtils.simplify(expr.getCode()))
                 .orElse(null);
-        // return iterations;
+
+        if (simplifiedIterations == null) {
+            return null;
+        }
+
+        // Try to parse as number
+        try {
+            return new BigDecimal(simplifiedIterations).intValue();
+        } catch (Exception e) {
+            SpecsLogs.debug(() -> "LoopStmt.getIterations(): could not convert iterations '" + simplifiedIterations
+                    + "' to a number ");
+            return null;
+        }
     }
 
     /**
