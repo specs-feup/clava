@@ -78,7 +78,7 @@ iterations: 11
 iterations expr: 10
 iterations: 10
 iterations expr: (10.0 - 0.0) / 1.5
-iterations: undefined
+iterations: 6
 iterations expr: (11 - 1) / 2
 iterations: 5
 iterations expr: (11 - 1 + 2) / 2
