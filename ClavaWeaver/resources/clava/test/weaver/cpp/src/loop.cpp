@@ -44,7 +44,12 @@ void iterationsExpr() {
 	int start;
 	int end;
 	for(int a = end - 1; a >= start; a--) {
-	}		
+	}	
+
+	// 10
+	int a1;
+	for(a1=0; a1<10; a1++) {
+	}	
 }
 
 int main() {

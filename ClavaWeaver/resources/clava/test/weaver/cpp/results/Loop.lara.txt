@@ -85,3 +85,5 @@ iterations expr: (11 - 1 + 2) / 2
 iterations: 6
 iterations expr: (end - 1) - (start) + 1
 iterations: undefined
+iterations expr: 10
+iterations: 10
