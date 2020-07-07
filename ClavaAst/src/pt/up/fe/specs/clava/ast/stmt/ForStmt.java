@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
+import pt.up.fe.specs.clava.utils.Nameable;
 import pt.up.fe.specs.clava.utils.foriter.ForIterationsExpression;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
@@ -194,6 +195,78 @@ public class ForStmt extends LoopStmt {
                 .filter(varDecls -> varDecls.size() == 1)
                 // Return VarDecl
                 .map(varDecls -> varDecls.get(0));
+    }
+
+    // public Optional<String> getIterationVarName() {
+    //
+    // }
+
+    /**
+     * A ClavaNode that implements Nameable, that represents the iteration variable.
+     * 
+     * @return
+     */
+    public Optional<ClavaNode> getIterationVarNode() {
+        var initStmt = getInit().orElse(null);
+
+        if (initStmt == null) {
+            return Optional.empty();
+        }
+
+        // Check DeclStmt
+        if (initStmt instanceof DeclStmt) {
+            var decls = ((DeclStmt) initStmt).getVarDecls();
+
+            if (decls.size() != 1) {
+                ClavaLog.debug(
+                        () -> "ForStmt.getIterationVarName(): more than one iteration variable detected, " + decls);
+                return Optional.empty();
+            }
+
+            return Optional.of(decls.get(0));
+        }
+
+        // Check ExprStmt
+        if (initStmt instanceof ExprStmt) {
+            var expr = ((ExprStmt) initStmt).getExpr();
+
+            if (!(expr instanceof BinaryOperator)) {
+                ClavaLog.debug(() -> "ForStmt.getIterationVarName(): expression not supported, " + expr);
+                return Optional.empty();
+            }
+
+            var binaryOp = (BinaryOperator) expr;
+
+            if (binaryOp.getOp() != BinaryOperatorKind.Assign) {
+                ClavaLog.debug(
+                        () -> "ForStmt.getIterationVarName(): binary operatior not supported, " + binaryOp.getOp());
+                return Optional.empty();
+            }
+
+            var lhs = binaryOp.getLhs();
+
+            if (!(lhs instanceof Nameable)) {
+                ClavaLog.debug(
+                        () -> "ForStmt.getIterationVarName(): could not determin name from left-hand expression, "
+                                + lhs);
+                return Optional.empty();
+            }
+
+            return Optional.of(lhs);
+        }
+
+        ClavaLog.debug(() -> "ForStmt.getIterationVarName(): statement not supported, " + initStmt);
+
+        return Optional.empty();
+        // return getInit()
+        // // Only for DeclStmt
+        // .filter(stmt -> stmt instanceof DeclStmt)
+        // // Get VarDecls
+        // .map(declStmt -> ((DeclStmt) declStmt).getVarDecls())
+        // // Only one variable
+        // .filter(varDecls -> varDecls.size() == 1)
+        // // Return VarDecl
+        // .map(varDecls -> varDecls.get(0));
     }
 
     private Optional<Expr> getInitValueExpr(ClavaNode initExpr) {

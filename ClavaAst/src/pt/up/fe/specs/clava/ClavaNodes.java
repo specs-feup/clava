@@ -28,6 +28,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CXXOperatorCallExpr;
@@ -50,6 +51,7 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.parsing.snippet.SnippetParser;
+import pt.up.fe.specs.clava.utils.Nameable;
 import pt.up.fe.specs.clava.utils.NodePosition;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -636,5 +638,22 @@ public class ClavaNodes {
         }
 
         return stmt.get();
+    }
+
+    /**
+     * 
+     * @param node
+     * @return the name, if the node has one, or null otherwise
+     */
+    public static String getName(ClavaNode node) {
+        if (node instanceof Nameable) {
+            return ((Nameable) node).getName();
+        }
+
+        if (node instanceof NamedDecl) {
+            return ((NamedDecl) node).getDeclName();
+        }
+
+        return null;
     }
 }

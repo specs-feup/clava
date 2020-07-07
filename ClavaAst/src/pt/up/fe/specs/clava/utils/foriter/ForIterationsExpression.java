@@ -17,7 +17,6 @@ import java.util.Optional;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -29,25 +28,39 @@ import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
+import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 public class ForIterationsExpression {
 
-    private final VarDecl iterVar;
+    // private final VarDecl iterVar;
+    private final String iterVarName;
+    private final Type iterVarType;
     private final Expr initExpr;
     private final StepData stepData;
     private final ConditionData conditionData;
 
-    public ForIterationsExpression(VarDecl iterVar, Expr initExpr, StepData stepData, ConditionData conditionData) {
-        this.iterVar = iterVar;
+    public ForIterationsExpression(String iterVarName, Type iterVarType, Expr initExpr,
+            StepData stepData, ConditionData conditionData) {
+        // this.iterVar = iterVar;
+        this.iterVarName = iterVarName;
+        this.iterVarType = iterVarType;
         this.initExpr = initExpr;
         this.stepData = stepData;
         this.conditionData = conditionData;
 
     }
 
-    public VarDecl getIterVar() {
-        return iterVar;
+    // public VarDecl getIterVar() {
+    // return iterVar;
+    // }
+    public String getIterVarName() {
+        return iterVarName;
+    }
+
+    public Type getIterVarType() {
+        return iterVarType;
     }
 
     public Expr getInitExpr() {
@@ -71,7 +84,7 @@ public class ForIterationsExpression {
 
         // If start is not zero, include subtraction
         if (!start.getCode().equals("0")) {
-            interval = iterVar.getFactory().binaryOperator(BinaryOperatorKind.Sub, iterVar.getType(), end, start);
+            interval = start.getFactory().binaryOperator(BinaryOperatorKind.Sub, iterVarType, end, start);
         }
 
         // Adjust interval, if needed
@@ -85,7 +98,7 @@ public class ForIterationsExpression {
         // Divide by step value
         interval = protectTerm(interval);
         var step = protectTerm(stepData.getStepValue());
-        interval = iterVar.getFactory().binaryOperator(BinaryOperatorKind.Div, iterVar.getType(), interval, step);
+        interval = step.getFactory().binaryOperator(BinaryOperatorKind.Div, iterVarType, interval, step);
 
         return Optional.of(interval);
     }
@@ -97,7 +110,7 @@ public class ForIterationsExpression {
         }
 
         // Only adjust if GE or LE
-        return iterVar.getFactory().binaryOperator(BinaryOperatorKind.Add, iterVar.getType(), interval,
+        return interval.getFactory().binaryOperator(BinaryOperatorKind.Add, iterVarType, interval,
                 stepData.getStepValue());
     }
 
@@ -132,25 +145,37 @@ public class ForIterationsExpression {
 
     public static Optional<ForIterationsExpression> newInstance(ForStmt forStmt) {
         // Get init variable
-        var iterVar = forStmt.getInitVar().orElse(null);
+        // var iterVar = forStmt.getInitVar().orElse(null);
+        //
+        // if (iterVar == null) {
+        // ClavaLog.debug("ForIterationsExpression: could not determine iteration variable of 'for' at "
+        // + forStmt.getLocation());
+        // return Optional.empty();
+        // }
 
-        if (iterVar == null) {
+        var iterVarNode = forStmt.getIterationVarNode().orElse(null);
+
+        if (iterVarNode == null) {
             ClavaLog.debug("ForIterationsExpression: could not determine iteration variable of 'for' at "
                     + forStmt.getLocation());
             return Optional.empty();
         }
 
+        var iterVarName = ClavaNodes.getName(iterVarNode);
+        var iterVarType = ((Typable) iterVarNode).getType();
+
         // Get init value
-        var initExpr = iterVar.getInit().orElse(null);
+        // var initExpr = iterVar.getInit().orElse(null);
+        var initExpr = forStmt.getInitValueExpr().orElse(null);
         if (initExpr == null) {
             ClavaLog.debug(
-                    "ForIterationsExpression: could not determine initial value of iteration variable ("
-                            + iterVar.getCode() + ")");
+                    "ForIterationsExpression: could not determine initial value of iteration variable "
+                            + iterVarName + " at " + forStmt.getLocation());
             return Optional.empty();
         }
 
         // Get step value and step direction
-        var stepData = forStmt.getInc().flatMap(incStmt -> getStepData(incStmt, iterVar)).orElse(null);
+        var stepData = forStmt.getInc().flatMap(incStmt -> getStepData(incStmt, iterVarName)).orElse(null);
         if (stepData == null) {
             ClavaLog.debug(
                     "ForIterationsExpression: could not determine step data of 'for' at " + forStmt.getLocation());
@@ -158,7 +183,7 @@ public class ForIterationsExpression {
         }
 
         // Get condition data
-        var conditionData = forStmt.getCond().flatMap(cond -> getConditionData(cond, iterVar)).orElse(null);
+        var conditionData = forStmt.getCond().flatMap(cond -> getConditionData(cond, iterVarName)).orElse(null);
 
         if (conditionData == null) {
             ClavaLog.debug("ForIterationsExpression: could not determine condition data of 'for' at "
@@ -170,7 +195,8 @@ public class ForIterationsExpression {
         // System.out.println("COND DATA: " + conditionData);
 
         // Verify data
-        var forIterations = new ForIterationsExpression(iterVar, initExpr, stepData, conditionData);
+        var forIterations = new ForIterationsExpression(iterVarName, iterVarType, initExpr, stepData,
+                conditionData);
         if (!verify(forIterations)) {
             return Optional.empty();
         }
@@ -199,7 +225,7 @@ public class ForIterationsExpression {
 
         // LE and GE are only supported when iteration variable in an integer
         if (condRelation == ForCondRelation.GE || condRelation == ForCondRelation.LE) {
-            var iterVarType = forIterations.getIterVar().getType().desugarAll();
+            var iterVarType = forIterations.getIterVarType().desugarAll();
 
             // Only supports built-in type (after desugaring)
             if (!(iterVarType instanceof BuiltinType)) {
@@ -223,7 +249,7 @@ public class ForIterationsExpression {
         return true;
     }
 
-    private static Optional<ConditionData> getConditionData(Stmt conditionStmt, VarDecl iterVar) {
+    private static Optional<ConditionData> getConditionData(Stmt conditionStmt, String iterVarName) {
 
         // Only supports ExprStmt
         if (!(conditionStmt instanceof ExprStmt)) {
@@ -241,7 +267,7 @@ public class ForIterationsExpression {
         var binaryOp = (BinaryOperator) condExpr;
 
         // Find iteration var
-        int iterVarIndex = getVarIndex(iterVar.getDeclName(), binaryOp);
+        int iterVarIndex = getVarIndex(iterVarName, binaryOp);
         if (iterVarIndex == -1) {
             ClavaLog.debug(
                     () -> "ForIterationsExpression: could not find iteration variable on one of the sides of the condition  expression, "
@@ -307,7 +333,7 @@ public class ForIterationsExpression {
         return -1;
     }
 
-    private static Optional<StepData> getStepData(Stmt incStmt, VarDecl iterVar) {
+    private static Optional<StepData> getStepData(Stmt incStmt, String iterVarName) {
 
         // Only supports ExprStmt
         if (!(incStmt instanceof ExprStmt)) {
@@ -326,10 +352,10 @@ public class ForIterationsExpression {
         if (incExpr instanceof BinaryOperator) {
             BinaryOperator binaryOp = (BinaryOperator) incExpr;
 
-            boolean hasIterVar = isVarReference(iterVar.getDeclName(), binaryOp.getLhs());
+            boolean hasIterVar = isVarReference(iterVarName, binaryOp.getLhs());
             if (!hasIterVar) {
                 ClavaLog.debug(
-                        () -> "ForIterationsExpression: could not find iteration variable '" + iterVar.getDeclName()
+                        () -> "ForIterationsExpression: could not find iteration variable '" + iterVarName
                                 + "' on left-hand side of step expression, " + binaryOp.getLhs());
                 return Optional.empty();
             }
@@ -357,10 +383,10 @@ public class ForIterationsExpression {
         if (incExpr instanceof UnaryOperator) {
             UnaryOperator unaryOp = (UnaryOperator) incExpr;
 
-            boolean hasIterVar = isVarReference(iterVar.getDeclName(), unaryOp.getSubExpr());
+            boolean hasIterVar = isVarReference(iterVarName, unaryOp.getSubExpr());
             if (!hasIterVar) {
                 ClavaLog.debug(
-                        () -> "ForIterationsExpression: could not find iteration variable '" + iterVar.getDeclName()
+                        () -> "ForIterationsExpression: could not find iteration variable '" + iterVarName
                                 + "' on unary operator sub-expression, " + unaryOp.getSubExpr());
                 return Optional.empty();
             }
