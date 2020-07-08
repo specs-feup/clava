@@ -14,14 +14,16 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
+import pt.up.fe.specs.clava.utils.NodeWithScope;
 
-public class CXXCatchStmt extends Stmt {
+public class CXXCatchStmt extends Stmt implements NodeWithScope {
 
     public CXXCatchStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -46,6 +48,11 @@ public class CXXCatchStmt extends Stmt {
 
     public CompoundStmt getBody() {
         return getChild(CompoundStmt.class, 1);
+    }
+
+    @Override
+    public Optional<CompoundStmt> getNodeScope() {
+        return Optional.of(getBody());
     }
 
     @Override

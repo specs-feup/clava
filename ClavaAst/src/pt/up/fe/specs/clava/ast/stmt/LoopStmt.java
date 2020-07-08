@@ -29,11 +29,12 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.utils.NodeWithScope;
 import pt.up.fe.specs.clava.utils.StmtWithCondition;
 import pt.up.fe.specs.symja.SymjaPlusUtils;
 import pt.up.fe.specs.util.SpecsLogs;
 
-public abstract class LoopStmt extends Stmt implements StmtWithCondition {
+public abstract class LoopStmt extends Stmt implements StmtWithCondition, NodeWithScope {
 
     // private static final Integer DEFAULT_ITERATIONS = null;
 
@@ -72,6 +73,11 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition {
         setChild(bodyIndex, newBody);
 
         return oldBody;
+    }
+
+    @Override
+    public Optional<CompoundStmt> getNodeScope() {
+        return Optional.of(getBody());
     }
 
     public boolean isParallel() {
