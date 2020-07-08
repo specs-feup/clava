@@ -19,6 +19,15 @@ aspectdef QueryTest
 	//for(var query of Query.search("function", "query_loop").search("loop", {"isOutermost": true}).children("loop").chain()) {
 	for(var query of Query.search("function", "query_loop").search("loop", {"isOutermost": true}).scope("loop").chain()) {
 		println("loop:" + query["loop"].rank);
+	}
+
+	println("query_empty 1");
+	for(var query of Query.search("function", "query_empty").scope().chain()) {		
+		println("joinpoint: " + query["joinpoint"].joinPointType);				
 	}	
 
+
+	for(var query of Query.search("function", "query_loop").search("loop").search("loop").search("loop").chain()) {
+		println("chain keys: " + getKeys(query).sort());
+	}
 end

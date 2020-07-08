@@ -18,3 +18,11 @@ void query_loop() {
 	
 }
 
+
+int query_empty() {
+	
+	int a;
+	return a + 2;
+	
+}
+
