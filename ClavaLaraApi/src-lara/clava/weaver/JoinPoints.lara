@@ -21,6 +21,15 @@ JoinPoints.prototype._all_descendants = function($jp) {
 	return $jp.descendants;
 }
 
+/**
+ * 
+ * @return {$jp[]} all the nodes that are inside the scope of a given node
+ */
+JoinPoints.prototype._all_scope_nodes = function($jp) {
+	return $jp.scopeNodes;
+}
+
+
 /*
 JoinPoints.prototype.children = function($jp, jpType) {
 	if($jp === undefined) {
