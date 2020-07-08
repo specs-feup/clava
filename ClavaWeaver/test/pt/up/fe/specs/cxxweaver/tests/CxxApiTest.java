@@ -133,4 +133,9 @@ public class CxxApiTest {
     public void testClava() {
         newTester().test("ClavaTest.lara", "clava.cpp");
     }
+
+    @Test
+    public void testQuery() {
+        newTester().test("QueryTest.lara", "query.cpp");
+    }
 }

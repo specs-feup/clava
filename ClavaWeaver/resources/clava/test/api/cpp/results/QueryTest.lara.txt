@@ -1,0 +1,12 @@
+query_loop 1
+loop:2,1
+loop:3,1
+loop:3,1,1
+loop:3,1,1
+query_loop 2
+loop:2,1
+loop:3,1
+loop:3,1,1
+query_loop 3
+loop:2,1
+loop:3,1
