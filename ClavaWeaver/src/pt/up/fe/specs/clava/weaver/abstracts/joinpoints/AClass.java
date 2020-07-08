@@ -14,7 +14,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AClass
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Represents a C++ class
  * @author Lara Weaver Generator
  */
 public abstract class AClass extends ARecord {
@@ -481,6 +481,7 @@ public abstract class AClass extends ARecord {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

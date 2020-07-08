@@ -11,7 +11,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point ATypedefDecl
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Declaration of a typedef-name via the 'typedef' type specifier
  * @author Lara Weaver Generator
  */
 public abstract class ATypedefDecl extends ATypedefNameDecl {
@@ -397,6 +397,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

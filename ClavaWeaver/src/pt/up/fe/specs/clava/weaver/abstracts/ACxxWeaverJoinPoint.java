@@ -29,6 +29,7 @@ import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.utils.ClassesService;
+import pt.up.fe.specs.clava.utils.NodeWithScope;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.clava.weaver.CxxActions;
@@ -717,13 +718,63 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public Integer getNumChildrenImpl() {
         return (int) getNode().getChildren().stream()
+                // return (int) getChildrenPrivate().stream()
                 .filter(node -> !(node instanceof NullNode))
                 .count();
     }
 
+    /**
+     * Handles special cases, such as nodes with bodies (Loops, Functions) which return the body contents instead of the
+     * body itself as children.
+     * 
+     * @return
+     */
+    @Override
+    public AJoinPoint[] getScopeNodesArrayImpl() {
+        var node = getNode();
+
+        if (!(node instanceof NodeWithScope)) {
+            return new AJoinPoint[0];
+        }
+
+        AJoinPoint[] scopeChildren = ((NodeWithScope) node).getNodeScope()
+                .map(scope -> scope.getChildren()).orElse(Collections.emptyList())
+                .stream()
+                .filter(child -> !(child instanceof NullNode))
+                .map(child -> CxxJoinpoints.create(child))
+                .collect(Collectors.toList())
+                .toArray(new AJoinPoint[0]);
+
+        // Count as selected nodes
+        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS, scopeChildren.length);
+        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, scopeChildren.length);
+
+        // Count as a select
+        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
+
+        return scopeChildren;
+    }
+
+    /*
+    public List<ClavaNode> getDirectNodes() {
+        var node = getNode();
+    
+        if (node instanceof LoopStmt) {
+            return ((LoopStmt) node).getBody().getChildren();
+        }
+    
+        if (node instanceof FunctionDecl) {
+            return ((FunctionDecl) node).getBody().map(body -> body.getChildren()).orElse(Collections.emptyList());
+        }
+    
+        return node.getChildren();
+    }
+    */
+
     @Override
     public AJoinPoint[] getChildrenArrayImpl() {
         AJoinPoint[] children = getNode().getChildren().stream()
+                // AJoinPoint[] children = getChildrenPrivate().stream()
                 .filter(node -> !(node instanceof NullNode))
                 .map(node -> CxxJoinpoints.create(node))
                 .collect(Collectors.toList())
@@ -742,6 +793,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint childImpl(Integer index) {
         return getNode().getChildren().stream()
+                // return getChildrenPrivate().stream()
                 .filter(node -> !(node instanceof NullNode))
                 .skip(index)
                 .findFirst()

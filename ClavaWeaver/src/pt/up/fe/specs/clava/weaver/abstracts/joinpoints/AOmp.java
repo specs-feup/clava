@@ -14,7 +14,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AOmp
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Represents an OpenMP pragma (e.g., #pragma omp parallel)
  * @author Lara Weaver Generator
  */
 public abstract class AOmp extends APragma {
@@ -1496,6 +1496,7 @@ public abstract class AOmp extends APragma {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

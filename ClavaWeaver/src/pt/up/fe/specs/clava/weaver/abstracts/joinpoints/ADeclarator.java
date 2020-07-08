@@ -11,7 +11,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point ADeclarator
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Represents a decl that comes from a declarator (e.g., function, field, variable)
  * @author Lara Weaver Generator
  */
 public abstract class ADeclarator extends ANamedDecl {
@@ -424,6 +424,7 @@ public abstract class ADeclarator extends ANamedDecl {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
