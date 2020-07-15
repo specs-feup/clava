@@ -104,6 +104,11 @@ public class CxxWeaver extends ACxxWeaver {
                 ClavaWeaverResource.ACTIONS, true);
     }
 
+    private static final List<String> CLAVA_PREDEFINED_EXTERNAL_DEPS = Arrays.asList("LAT - Lara Autotuning Tool",
+            "https://github.com/specs-feup/LAT-Lara-Autotuning-Tool.git",
+            "Benchmark - NAS (import lara.benchmark.NasBenchmarkSet)",
+            "https://github.com/specs-feup/clava.git?folder=benchmarks/NAS");
+
     /**
      * @deprecated
      * @return
@@ -1969,10 +1974,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     @Override
     public List<String> getPredefinedExternalDependencies() {
-        return Arrays.asList("LAT - Lara Autotuning Tool",
-                "https://github.com/specs-feup/LAT-Lara-Autotuning-Tool.git",
-                "Benchmark - NAS > import lara.benchmark.NasBenchmarkSet",
-                "https://github.com/specs-feup/clava.git?folder=benchmarks/NAS");
+        return SpecsCollections.concatList(super.getPredefinedExternalDependencies(), CLAVA_PREDEFINED_EXTERNAL_DEPS);
     }
 
     public int getStackSize() {
