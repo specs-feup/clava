@@ -56,13 +56,13 @@ public class MergedMemoiReport {
         this.elements = new ArrayList<Integer>();
         this.elements.add(report.getElements());
 
-        this.calls = new ArrayList<Integer>(report.getCalls());
+        this.calls = new ArrayList<Integer>();
         this.calls.add(report.getCalls());
 
-        this.hits = new ArrayList<Integer>(report.getHits());
+        this.hits = new ArrayList<Integer>();
         this.hits.add(report.getHits());
 
-        this.misses = new ArrayList<Integer>(report.getMisses());
+        this.misses = new ArrayList<Integer>();
         this.misses.add(report.getMisses());
 
         this.counts = new HashMap<String, MergedMemoiEntry>();
@@ -128,6 +128,8 @@ public class MergedMemoiReport {
             }
 
         }
+
+        this.reportCount += 1;
     }
 
     private void testReport(MemoiReport tempReport) {
@@ -236,10 +238,6 @@ public class MergedMemoiReport {
 
     public int getReportCount() {
         return reportCount;
-    }
-
-    public void setReportCount(int reportCount) {
-        this.reportCount = reportCount;
     }
 
     public void printStats() {
