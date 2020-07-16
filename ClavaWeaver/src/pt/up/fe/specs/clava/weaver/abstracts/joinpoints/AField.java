@@ -11,7 +11,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AField
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Represents a member of a struct/union/class
  * @author Lara Weaver Generator
  */
 public abstract class AField extends ADeclarator {
@@ -397,6 +397,7 @@ public abstract class AField extends ADeclarator {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

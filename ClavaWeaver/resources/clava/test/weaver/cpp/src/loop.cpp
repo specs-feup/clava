@@ -1,3 +1,57 @@
+void iterationsExpr() {
+	
+	// 10
+	for(int a=0; a<10; a++) {
+	}
+	
+	// 11
+	for(int a=0; a<=10; a++) {
+	}	
+	
+	// 9
+	for(int a=1; a<10; a++) {
+	}	
+
+	// 11
+	for(int a = 10; a >= 0; a--) {
+	}		
+
+	// 10
+	for(int a = 0; 10 > a; a++) {
+	}		
+	
+	// 11
+	for(int a = 0; 10 >= a; a++) {
+	}		
+
+	// 10
+	for(int a=0; (a) < 10; a++) {
+	}
+	
+	// 6
+	for(float a = 0.0; a < 10.0; a+=1.5) {
+	}
+
+	// 5
+	for(int a=1; a<11; a+=2) {
+	}
+	
+	// 6
+	for(int a=1; a<=11; a+=2) {
+	}
+
+	// ((end - 1) - start + 1) / 1
+	int start;
+	int end;
+	for(int a = end - 1; a >= start; a--) {
+	}	
+
+	// 10
+	int a1;
+	for(a1=0; a1<10; a1++) {
+	}	
+}
+
 int main() {
 
 	for(int a=0; a<10; a++) {

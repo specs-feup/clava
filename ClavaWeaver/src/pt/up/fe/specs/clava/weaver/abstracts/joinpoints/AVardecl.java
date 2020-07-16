@@ -16,7 +16,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AVardecl
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Represents a variable declaration or definition
  * @author Lara Weaver Generator
  */
 public abstract class AVardecl extends ADeclarator {
@@ -645,6 +645,7 @@ public abstract class AVardecl extends ADeclarator {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

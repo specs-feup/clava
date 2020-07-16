@@ -22,6 +22,7 @@ import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.language.specification.LanguageSpecification;
+import org.lara.language.specification.dsl.LanguageSpecificationV2;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
@@ -33,7 +34,6 @@ import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.SupportedPlatform;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
-import pt.up.fe.specs.clang.textparser.SnippetParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -43,6 +43,7 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.clava.parsing.snippet.SnippetParser;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
 import pt.up.fe.specs.clava.weaver.gears.InsideApplyGear;
@@ -56,11 +57,13 @@ import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
 import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.lara.LaraExtraApis;
+import pt.up.fe.specs.lara.langspec.LangSpecsXmlParser;
 import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.collections.AccumulatorMap;
 import pt.up.fe.specs.util.csv.CsvField;
 import pt.up.fe.specs.util.csv.CsvWriter;
@@ -90,7 +93,28 @@ public class CxxWeaver extends ACxxWeaver {
         // true, true);
     }
 
-    public static LanguageSpecification buildLanguageSpecification() {
+    public static LanguageSpecificationV2 buildLanguageSpecification() {
+        // var langSpecV1 = LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS,
+        // ClavaWeaverResource.ARTIFACTS,
+        // ClavaWeaverResource.ACTIONS, true);
+        //
+        // return JoinPointFactory.fromOld(langSpecV1);
+        // System.out.println("JPS: " + ClavaWeaverResource.JOINPOINTS.read());
+        return LangSpecsXmlParser.parse(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
+                ClavaWeaverResource.ACTIONS, true);
+    }
+
+    private static final List<String> CLAVA_PREDEFINED_EXTERNAL_DEPS = Arrays.asList("LAT - Lara Autotuning Tool",
+            "https://github.com/specs-feup/LAT-Lara-Autotuning-Tool.git",
+            "Benchmark - NAS (import lara.benchmark.NasBenchmarkSet)",
+            "https://github.com/specs-feup/clava.git?folder=benchmarks/NAS");
+
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated
+    public static LanguageSpecification buildLanguageSpecificationOld() {
         return LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
                 ClavaWeaverResource.ACTIONS, true);
     }
@@ -207,7 +231,7 @@ public class CxxWeaver extends ACxxWeaver {
     // private CxxJoinpoints jpFactory = null;
 
     // private File baseFolder = null;
-    private List<String> parserOptions = new ArrayList<>();
+    // private List<String> parserOptions = new ArrayList<>();
 
     // private Logger infoLogger = null;
     // private Level previousLevel = null;
@@ -231,11 +255,11 @@ public class CxxWeaver extends ACxxWeaver {
         args = null;
 
         // outputDir = null;
-        currentSources = null;
+        currentSources = new ArrayList<>();
         userFlags = null;
 
         // baseFolder = null;
-        parserOptions = new ArrayList<>();
+        // parserOptions = new ArrayList<>();
 
         // infoLogger = null;
         // previousLevel = null;
@@ -403,6 +427,44 @@ public class CxxWeaver extends ACxxWeaver {
             this.args.add(ClavaOptions.STANDARD, getStandard());
         }
 
+        var parserOptions = buildParserOptions(args);
+
+        // Initialize weaver with the input file/folder
+
+        // First folder is considered the base folder
+        // Only needs folder if we are doing weaving
+        // if (!disableWeaving) {
+        // baseFolder = getFirstSourceFolder(sources);
+        // }
+
+        // Init messages to user
+        messagesToUser = new LinkedHashSet<>();
+
+        // If weaving disabled, create empty App
+        if (args.get(CxxWeaverOption.DISABLE_WEAVING)) {
+            SpecsLogs.msgInfo("Initial parsing disabled, creating empty 'program'");
+
+            App emptyApp = context.get(ClavaContext.FACTORY).app(Collections.emptyList());
+            // First app, add it to context
+            context.pushApp(emptyApp);
+            weaverData.pushAst(emptyApp);
+            return true;
+        }
+
+        // weaverData.pushAst(createApp(sources, parserOptions));
+        App app = createApp(getSources(), parserOptions);
+        weaverData.pushAst(app);
+        // TODO: Option to dump clang and clava
+        if (SpecsSystem.isDebug()) {
+            SpecsIo.write(new File("clavaDump.txt"), getApp().toString());
+        }
+
+        return true;
+    }
+
+    private List<String> buildParserOptions(DataStore args) {
+        List<String> parserOptions = new ArrayList<>();
+
         // Initialize list of options for parser
         parserOptions = new ArrayList<>();
 
@@ -436,35 +498,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         parserOptions.addAll(userFlags);
 
-        // Initialize weaver with the input file/folder
-
-        // First folder is considered the base folder
-        // Only needs folder if we are doing weaving
-        // if (!disableWeaving) {
-        // baseFolder = getFirstSourceFolder(sources);
-        // }
-
-        // Init messages to user
-        messagesToUser = new LinkedHashSet<>();
-
-        // If weaving disabled, create empty App
-        if (args.get(CxxWeaverOption.DISABLE_WEAVING)) {
-            SpecsLogs.msgInfo("Initial parsing disabled, creating empty 'program'");
-
-            App emptyApp = context.get(ClavaContext.FACTORY).app(Collections.emptyList());
-            // First app, add it to context
-            context.pushApp(emptyApp);
-            weaverData.pushAst(emptyApp);
-            return true;
-        }
-
-        // weaverData.pushAst(createApp(sources, parserOptions));
-        weaverData.pushAst(createApp(getSources(), parserOptions));
-
-        // TODO: Option to dump clang and clava
-        SpecsIo.write(new File("clavaDump.txt"), getApp().toString());
-
-        return true;
+        return parserOptions;
     }
 
     /**
@@ -939,6 +973,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Add header files in normal include folders to the tree
         if (!skipHeaderFiles) {
             // Use parser options instead of weaver options, it can be a rebuild with other folders
+            // TODO: Remove dependency to parserOptions, instead ask for list of includes?
             List<File> headerIncludes = parserOptions.stream()
                     .map(CxxWeaver::headerFlagToFile)
                     .filter(Optional::isPresent)
@@ -1293,7 +1328,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     @Override
     public LanguageSpecification getLanguageSpecification() {
-        return buildLanguageSpecification();
+        return buildLanguageSpecificationOld();
     }
 
     @Override
@@ -1323,6 +1358,7 @@ public class CxxWeaver extends ACxxWeaver {
         List<String> rebuildOptions = new ArrayList<>();
 
         // Copy current options, removing previous normal includes
+        var parserOptions = buildParserOptions(args);
         parserOptions.stream()
                 .filter(option -> !option.startsWith("-I"))
                 .forEach(rebuildOptions::add);
@@ -1505,6 +1541,7 @@ public class CxxWeaver extends ACxxWeaver {
         List<String> rebuildOptions = new ArrayList<>();
 
         // Copy current options, removing previous normal includes
+        var parserOptions = buildParserOptions(args);
         parserOptions.stream()
                 .filter(option -> !option.startsWith("-I"))
                 .forEach(rebuildOptions::add);
@@ -1897,6 +1934,7 @@ public class CxxWeaver extends ACxxWeaver {
      * Normalizes key paths to be only files
      */
     private Map<File, File> obtainFiles(Map<File, File> filesToBases) {
+        var parserOptions = buildParserOptions(args);
 
         Map<File, File> processedFiles = new HashMap<>();
 
@@ -1907,14 +1945,14 @@ public class CxxWeaver extends ACxxWeaver {
             }
 
             // Process folder
-            obtainFiles(sourceAndBase.getKey(), sourceAndBase.getValue(), processedFiles);
+            obtainFiles(sourceAndBase.getKey(), sourceAndBase.getValue(), processedFiles, parserOptions);
         }
 
         return processedFiles;
 
     }
 
-    private void obtainFiles(File folder, File baseFolder, Map<File, File> processedFiles) {
+    private void obtainFiles(File folder, File baseFolder, Map<File, File> processedFiles, List<String> parserOptions) {
         // All files specified by the user, header and implementation
         Set<String> extensions = SourceType.getPermittedExtensions();
 
@@ -1927,5 +1965,19 @@ public class CxxWeaver extends ACxxWeaver {
         ClavaLog.debug(() -> "All sources: " + allFiles);
 
         allFiles.stream().forEach(filename -> processedFiles.put(new File(filename), baseFolder));
+    }
+
+    @Override
+    protected LanguageSpecificationV2 buildLangSpecsV2() {
+        return buildLanguageSpecification();
+    }
+
+    @Override
+    public List<String> getPredefinedExternalDependencies() {
+        return SpecsCollections.concatList(super.getPredefinedExternalDependencies(), CLAVA_PREDEFINED_EXTERNAL_DEPS);
+    }
+
+    public int getStackSize() {
+        return context.getStackSize();
     }
 }

@@ -157,4 +157,8 @@ public class UnaryOperator extends Operator {
     // return super.toContentString() + ", op:" + opcode;
     // }
 
+    @Override
+    public String getOperatorCode() {
+        return getOp().getCode();
+    }
 }

@@ -16,8 +16,6 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
-import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
@@ -28,6 +26,8 @@ import pt.up.fe.specs.clava.ast.cilk.CilkSync;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.lara.LaraMarkerPragma;
+import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -37,6 +37,8 @@ import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.hls.ClavaHLS;
+import pt.up.fe.specs.clava.hls.ClavaHLSOptions;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
@@ -123,7 +125,9 @@ public class CxxScope extends AScope {
     }
 
     private AJoinPoint insertBodyImplJp(String position, ClavaNode newNode) {
-	Stmt newStmt = CxxActions.getValidStatement(newNode, Insert.valueOf(position.toUpperCase()));
+	// Stmt newStmt = CxxActions.getValidStatement(newNode,
+	// Insert.valueOf(position.toUpperCase()));
+	Stmt newStmt = ClavaNodes.getValidStatement(newNode, Insert.valueOf(position.toUpperCase()).toPosition());
 	if (newStmt == null) {
 	    return null;
 	}
@@ -409,12 +413,17 @@ public class CxxScope extends AScope {
     @Override
     public void cfgImpl() {
 	ControlFlowGraph cfg = new ControlFlowGraph(scope);
-	cfg.generateDot(false);
+	ClavaLog.info(cfg.toDot());
     }
 
     @Override
     public void dfgImpl() {
-	DataFlowGraph dfg = new DataFlowGraph(scope, null, null);
-	dfg.generateDot(false);
+	DataFlowGraph dfg = new DataFlowGraph(scope);
+	ClavaHLS hls = new ClavaHLS(dfg, CxxWeaver.getCxxWeaver().getWeavingFolder());
+	ClavaHLSOptions options = new ClavaHLSOptions();
+	options.unsafe = true;
+	options.directives = true;
+	options.decide = true;
+	hls.run(options);
     }
 }

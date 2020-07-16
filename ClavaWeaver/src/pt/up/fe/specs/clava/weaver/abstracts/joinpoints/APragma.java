@@ -15,7 +15,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point APragma
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Represents a pragma in the code (e.g., #pragma kernel)
  * @author Lara Weaver Generator
  */
 public abstract class APragma extends ACxxWeaverJoinPoint {
@@ -257,6 +257,7 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

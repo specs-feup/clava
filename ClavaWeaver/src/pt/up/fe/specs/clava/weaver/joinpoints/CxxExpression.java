@@ -52,14 +52,14 @@ public class CxxExpression extends AExpression {
         if (!(expr instanceof DeclRefExpr)) {
             return null;
         }
-
+        
         Optional<DeclaratorDecl> varDecl = ((DeclRefExpr) expr).getVariableDeclaration();
         // Optional<DeclaratorDecl> varDecl = declRefExpr.getVariableDeclaration();
-
+        
         if (!varDecl.isPresent()) {
             return null;
         }
-
+        
         return CxxJoinpoints.create(varDecl.get(), null);
         */
     }
@@ -69,11 +69,11 @@ public class CxxExpression extends AExpression {
         if (node instanceof DeclRefExpr) {
             return (DeclRefExpr) node;
         }
-
+    
         if (node.getNumChildren() == 1) {
             return toDeclRefExpr(node.getChild(0));
         }
-
+    
         return null;
     }
     */
@@ -96,7 +96,7 @@ public class CxxExpression extends AExpression {
     }
 
     public static List<? extends AVardecl> selectVarDecl(AExpression expression) {
-        AVardecl vardecl = (AVardecl) expression.getVardeclImpl();
+        AVardecl vardecl = expression.getVardeclImpl();
         if (vardecl == null) {
             return Collections.emptyList();
         }
@@ -116,6 +116,9 @@ public class CxxExpression extends AExpression {
 
     @Override
     public ACast getImplicitCastImpl() {
+        // // Check if expr has an implicit cast
+        // expr.hasValue(key)
+
         return expr.getImplicitCast()
                 .map(castExpr -> CxxJoinpoints.create(castExpr, ACast.class))
                 .orElse(null);

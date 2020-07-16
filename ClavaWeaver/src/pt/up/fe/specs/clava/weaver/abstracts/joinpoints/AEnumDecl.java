@@ -14,7 +14,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AEnumDecl
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Represents an enum
  * @author Lara Weaver Generator
  */
 public abstract class AEnumDecl extends ANamedDecl {
@@ -476,6 +476,7 @@ public abstract class AEnumDecl extends ANamedDecl {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

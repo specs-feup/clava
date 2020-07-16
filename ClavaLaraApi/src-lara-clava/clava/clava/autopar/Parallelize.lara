@@ -103,9 +103,21 @@ Parallelize.forLoopsAsText = function($loops, outputFolder) {
 }
 
 
-Parallelize.getForLoopsPragmas = function($loops, insertPragma) {
+/**
+ *
+ * @param {$loop[]} [$loops=<All program loops>] - Array of loops to parallelize.
+ * @param {boolean} insertPragma - If true, inserts the found pragmas in the code.
+ * @param {boolean} useLoopId - If true, the returning map uses $loop.id instead of $loop.astId as keys.
+ *
+ * @return {Object[parallelLoops, unparallelizableLoops]} an object with the pragmas of the parallelized loops, and the error messages of the loops that could not be parallelized.
+ */
+Parallelize.getForLoopsPragmas = function($loops, insertPragma, useLoopId) {
 	if(insertPragma === undefined) {
 		insertPragma = false;
+	}
+	
+	if(useLoopId === undefined) {
+		useLoopId = false;
 	}
 
 	// Reset stats
@@ -219,10 +231,11 @@ Parallelize.getForLoopsPragmas = function($loops, insertPragma) {
 
 		//	parallelLoops[$pragma.content] = OmpPragmas[loopindex].pragmaCode;
 			var pragmaCode = OmpPragmas[loopindex].pragmaCode;
+			var loopId = useLoopId ? $loop.id : $loop.astId;
 			if(pragmaCode.startsWith("#pragma")) {
-				parallelLoops[$loop.astId] = pragmaCode;			
+				parallelLoops[loopId] = pragmaCode;			
 			} else {
-				unparallelizableLoops[$loop.astId] = pragmaCode;
+				unparallelizableLoops[loopId] = pragmaCode;
 			}
 
 		}

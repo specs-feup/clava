@@ -14,28 +14,41 @@
 package pt.up.fe.specs.clava.analysis.flow.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.stream.Collectors;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
 import pt.up.fe.specs.clava.analysis.flow.FlowGraph;
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
+import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockEdge;
+import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockEdgeType;
 import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNode;
 import pt.up.fe.specs.clava.analysis.flow.control.BasicBlockNodeType;
+import pt.up.fe.specs.clava.analysis.flow.control.CFGUtils;
 import pt.up.fe.specs.clava.analysis.flow.control.ControlFlowGraph;
+import pt.up.fe.specs.clava.analysis.flow.preprocessing.FlowAnalysisPreprocessing;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CStyleCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
+import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
+import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
+import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 
 public class DataFlowGraph extends FlowGraph {
@@ -44,48 +57,110 @@ public class DataFlowGraph extends FlowGraph {
     private int tempCounter = 0;
     private boolean tempEnabled = false;
     private int subgraphCounter = 1;
-    public static final DataFlowNode nullNode = new DataFlowNode(DataFlowNodeType.NULL, "");
+    private ArrayList<DataFlowParam> params = new ArrayList<>();
+    private ArrayList<DataFlowNode> subgraphRoots = new ArrayList<>();
+    private HashMap<DataFlowNode, DataFlowSubgraph> subgraphs = new HashMap<>();
+    private CompoundStmt body;
+    private ClavaNode firstStmt;
+    public static final DataFlowNode nullNode = new DataFlowNode(DataFlowNodeType.NULL, "", null);
+    private DataFlowNode interfaceNode;
+    private String funName;
+    private boolean hasConditionals = false;
 
-    public DataFlowGraph(FunctionDecl func, Stmt beginning, Stmt end) {
-	this(func.getBody().get(), beginning, end);
+    public DataFlowGraph(FunctionDecl func) {
+	this(func.getBody().get());
     }
 
-    public DataFlowGraph(CompoundStmt body, Stmt beginning, Stmt end) {
+    public DataFlowGraph(CompoundStmt body) {
 	super("Data-flow Graph - " + ((FunctionDecl) body.getParent()).getDeclName(), "n");
+
+	// Standardize function code
+	FlowAnalysisPreprocessing pre = new FlowAnalysisPreprocessing(body);
+	pre.applyConstantFolding();
+	pre.applyUnwrapSingleLineMultipleDecls();
+
+	// Build CFG
+	this.funName = ((FunctionDecl) body.getParent()).getDeclName();
+	this.body = body;
+	this.firstStmt = body.getChild(0);
 	this.cfg = new ControlFlowGraph(body);
-	this.cfg = CFGConverter.convert(this.cfg);
-	// this.beginning = beginning;
-	// this.end = end;
+	CFGUtils.convert(this.cfg);
 
-	BasicBlockNode start = (BasicBlockNode) cfg.findNode(0);
-
+	// Build DFG
 	this.addNode(nullNode);
-	buildGraph(start, -1);
+	this.interfaceNode = new DataFlowNode(DataFlowNodeType.INTERFACE, funName, this.firstStmt);
+	this.interfaceNode.setShape("box");
+	this.addNode(interfaceNode);
+	BasicBlockNode start = (BasicBlockNode) cfg.findNode(0);
+	if (CFGUtils.hasBasicBlockOfType(cfg, BasicBlockNodeType.IF)) {
+	    System.out.println(cfg.toDot());
+	    buildGraphTopLevelConditional(start);
+	    // Join all top-level flows to the interface node
+	    for (FlowNode n : this.nodes) {
+		DataFlowNode node = (DataFlowNode) n;
+		if (node.isTopLevel())
+		    this.addEdge(new DataFlowEdge(interfaceNode, node, DataFlowEdgeType.REPEATING));
+	    }
+	    this.hasConditionals = true;
+	    return;
+	} else {
+	    buildGraphTopLevelWithInterface(start);
+	}
 
+	// Modify DFG
 	findSubgraphs();
+	pruneDuplicatedNodes();
+	mergeLoadNodes();
+	findFunctionParams();
+    }
+
+    private void pruneDuplicatedNodes() {
+	this.nodes = (ArrayList<FlowNode>) nodes.stream().distinct().collect(Collectors.toList());
+    }
+
+    private void findFunctionParams() {
+	for (int i = 0; i < body.getParent().getChildren().size(); i++) {
+	    if (body.getParent().getChild(i) instanceof ParmVarDecl) {
+		ParmVarDecl paramNode = (ParmVarDecl) body.getParent().getChild(i);
+		DataFlowParam param = new DataFlowParam(paramNode);
+		params.add(param);
+	    }
+	}
+	StringBuilder sb = new StringBuilder(interfaceNode.getLabel()).append("\n");
+	for (DataFlowParam param : params) {
+	    sb.append(param.toString()).append("\n");
+	}
+	interfaceNode.setLabel(sb.toString());
+    }
+
+    private void mergeLoadNodes() {
+	// First merge within a subgraph
+	for (DataFlowNode root : subgraphRoots) {
+	    HashMap<String, ArrayList<DataFlowNode>> map = subgraphs.get(root).getMultipleVarLoads();
+	    map.forEach((key, value) -> {
+		mergeNodes(value);
+	    });
+	}
+	// Then merge between same-level subgraphs
+	ArrayList<DataFlowNode> nodes = DFGUtils.getAllNodesOfType(this, DataFlowNodeType.LOOP);
+	for (DataFlowNode loop : nodes) {
+	    ArrayList<DataFlowNode> subs = DFGUtils.getSubgraphsOfLoop(loop);
+	    HashMap<String, ArrayList<DataFlowNode>> map = DFGUtils.mergeSubgraphs(subs);
+	    map.forEach((key, value) -> {
+		mergeNodes(value);
+	    });
+	}
     }
 
     private void findSubgraphs() {
 	for (FlowNode n : this.nodes) {
 	    DataFlowNode node = (DataFlowNode) n;
 	    if (node.getSubgraphID() == -1) {
-		boolean inEdge = false;
-		for (FlowEdge e : node.getInEdges()) {
-		    DataFlowEdge edge = (DataFlowEdge) e;
-		    if (edge.getType() == DataFlowEdgeType.REPEATING)
-			inEdge = true;
-		}
-		boolean outEdge = true;
-		for (FlowEdge e : node.getOutEdges()) {
-		    DataFlowEdge edge = (DataFlowEdge) e;
-		    if (edge.getType() == DataFlowEdgeType.REPEATING)
-			inEdge = false;
-		}
-		if (inEdge && outEdge) {
+		if (DataFlowNodeType.isStore(node.getType())) {
 		    buildSubgraph(node, subgraphCounter);
+		    this.subgraphRoots.add(node);
+		    this.subgraphs.put(node, new DataFlowSubgraph(node, this));
 		    subgraphCounter++;
-		} else {
-		    node.setSubgraphID(0);
 		}
 	    }
 	}
@@ -98,24 +173,58 @@ public class DataFlowGraph extends FlowGraph {
 	ArrayList<FlowEdge> edges = node.getInEdges();
 	for (FlowEdge e : edges) {
 	    DataFlowEdge edge = (DataFlowEdge) e;
-	    if (edge.getType() != DataFlowEdgeType.REPEATING) {
+	    if (!DataFlowEdgeType.isControl(edge.getType())) {
 		buildSubgraph((DataFlowNode) edge.getSource(), id);
 	    }
 	}
     }
 
+    private ArrayList<DataFlowNode> getSubgraphNodes(int id) {
+	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	for (FlowNode n : this.nodes) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getSubgraphID() == id)
+		nodes.add(node);
+	}
+	return nodes;
+    }
+
+    public int getSubgraphCounter() {
+	return subgraphCounter;
+    }
+
+    public DataFlowSubgraph getSubgraph(DataFlowNode root) {
+	return this.subgraphs.get(root);
+    }
+
+    public DataFlowSubgraph getSubgraph(int id) {
+	DataFlowNode node = this.subgraphRoots.get(id);
+	return this.subgraphs.get(node);
+    }
+
     @Override
-    protected String buildDot() {
+    public String toDot() {
 	StringBuilder sb = new StringBuilder();
 	String NL = "\n";
 	sb.append("Digraph G {").append(NL).append("node [penwidth=2.5]").append(NL);
 
+	// Interface node
+	sb.append(interfaceNode.toDot()).append(NL);
+
+	// Data flow nodes
 	for (int i = subgraphCounter - 1; i >= 0; i--) {
 	    ArrayList<DataFlowNode> sub = getSubgraphNodes(i);
 	    sb.append("subgraph cluster").append(i).append("{").append(NL);
 	    for (DataFlowNode node : sub)
 		sb.append(node.toDot()).append(NL);
 	    sb.append("}").append(NL);
+	}
+
+	// Control flow nodes (e.g. loops, isolated function calls)
+	for (FlowNode n : nodes) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.getSubgraphID() == -1)
+		sb.append(node.toDot()).append(NL);
 	}
 
 	for (FlowEdge edge : edges) {
@@ -126,40 +235,238 @@ public class DataFlowGraph extends FlowGraph {
 	return sb.toString();
     }
 
-    private ArrayList<DataFlowNode> buildGraph(BasicBlockNode currBlock, int loopAncestorID) {
-	processed.add(currBlock.getId());
+    /**
+     * 
+     * 
+     * Version that supports if-statements, experimental
+     * 
+     * 
+     */
 
-	// Build sub-graph for each statement of basic block
+    private ArrayList<DataFlowNode> buildGraphTopLevelConditional(BasicBlockNode block) {
+	boolean topLevel = CFGUtils.isTopLevel(block);
+	int pragmaIter = -1;
+	processed.add(block.getId());
 	ArrayList<DataFlowNode> nodes = new ArrayList<>();
-	if (currBlock.getType() == BasicBlockNodeType.LOOP) {
-	    DataFlowNode loopNode = buildLoopNode(currBlock);
-	    nodes.add(loopNode);
-	    loopAncestorID = loopNode.getId();
-	}
-	if (currBlock.getType() == BasicBlockNodeType.NORMAL) {
-	    for (Stmt statement : currBlock.getStmts()) {
-		DataFlowNode node = buildStatement(statement);
-		nodes.add(node);
-	    }
-	    if (loopAncestorID == -1) {
-		for (int i = 1; i < nodes.size(); i++)
-		    this.addEdge(new DataFlowEdge(nodes.get(i - 1), nodes.get(i), 0));
-	    }
-	}
-	DataFlowNode lastNode = (loopAncestorID != -1) ? (DataFlowNode) this.findNode(loopAncestorID)
-		: nodes.get(nodes.size() - 1);
-	loopAncestorID = lastNode.getId();
 
-	// Get subgraphs of children basic blocks and connect them
-	for (FlowNode nextBlock : currBlock.getOutNodes()) {
-	    ArrayList<DataFlowNode> children = new ArrayList<>();
-	    if (!processed.contains(nextBlock.getId())) {
-		children = buildGraph((BasicBlockNode) nextBlock, loopAncestorID);
-		for (DataFlowNode child : children) {
-		    if (!child.isDisabled())
-			this.addEdge(new DataFlowEdge(lastNode, child, lastNode.getIterations()));
+	// NORMAL BLOCK
+	if (block.getType() == BasicBlockNodeType.NORMAL || block.getType() == BasicBlockNodeType.EXIT) {
+	    for (Stmt statement : block.getStmts()) {
+		if (statement.isWrapper()) {
+		    pragmaIter = CFGUtils.parsePragma(statement.getCode());
+		} else {
+		    DataFlowNode node = buildStatement(statement);
+		    if (node == nullNode)
+			continue;
+		    node.setTopLevel(topLevel);
+		    nodes.add(node);
 		}
 	    }
+	    // Get next BB and connect
+	    if (block.getOutEdges().size() > 0) {
+		BasicBlockNode next = (BasicBlockNode) block.getOutEdges().get(0).getDest();
+		if (!processed.contains(next.getId()))
+		    nodes.addAll(buildGraphTopLevelConditional(next));
+	    }
+	}
+
+	// LOOP BLOCK
+	if (block.getType() == BasicBlockNodeType.LOOP) {
+
+	    DataFlowNode node = buildLoopNode(block, pragmaIter);
+	    node.setTopLevel(topLevel);
+	    pragmaIter = -1;
+	    nodes.add(node);
+
+	    BasicBlockNode inLoopBlock = null;
+	    BasicBlockNode noLoopBlock = null;
+	    for (FlowEdge e : block.getOutEdges()) {
+		BasicBlockEdge edge = (BasicBlockEdge) e;
+		if (edge.getType() == BasicBlockEdgeType.LOOP)
+		    inLoopBlock = (BasicBlockNode) edge.getDest();
+		if (edge.getType() == BasicBlockEdgeType.NOLOOP)
+		    noLoopBlock = (BasicBlockNode) edge.getDest();
+	    }
+
+	    if (inLoopBlock != null) {
+		// Build and attach loop children to loop node
+		ArrayList<DataFlowNode> descendants = buildGraphTopLevelConditional(inLoopBlock);
+		for (DataFlowNode child : descendants)
+		    this.addEdge(new DataFlowEdge(node, child, node.getIterations()));
+	    }
+	    if (noLoopBlock != null) {
+		if (!processed.contains(noLoopBlock.getId()))
+		    nodes.addAll(buildGraphTopLevelConditional(noLoopBlock));
+	    }
+	}
+
+	// IF BLOCK
+	if (block.getType() == BasicBlockNodeType.IF) {
+	    // Get the node with the conditional expression
+	    DataFlowNode condition = null;
+	    for (Stmt statement : block.getStmts()) {
+		if (statement.isWrapper()) {
+		    pragmaIter = CFGUtils.parsePragma(statement.getCode());
+		} else {
+		    DataFlowNode node = buildStatement(statement);
+		    System.out.println(node.toDot());
+		    if (node == nullNode)
+			continue;
+		    node.setTopLevel(topLevel);
+		    nodes.add(node);
+		    if (node.getType() == DataFlowNodeType.OP_ARITH)
+			condition = node;
+		}
+	    }
+	    // Set multiplexer as top level
+	    condition.setTopLevel(false);
+	    DataFlowNode mux = new DataFlowNode(DataFlowNodeType.OP_COND, "mux", condition.getClavaNode());
+	    this.addNode(mux);
+	    this.addEdge(new DataFlowEdge(condition, mux));
+	    mux.setTopLevel(topLevel);
+	    nodes.add(mux);
+	    nodes.remove(condition);
+
+	    // See if true and false basic blocks are present
+	    BasicBlockEdge trueEdge = null;
+	    BasicBlockEdge falseEdge = null;
+	    for (FlowEdge e : block.getOutEdges()) {
+		BasicBlockEdge edge = (BasicBlockEdge) e;
+		if (edge.getType() == BasicBlockEdgeType.FALSE)
+		    falseEdge = edge;
+		if (edge.getType() == BasicBlockEdgeType.TRUE)
+		    trueEdge = edge;
+	    }
+
+	    // Handle true BB based on type
+	    if (trueEdge != null) {
+		BasicBlockNode trueBlock = (BasicBlockNode) trueEdge.getDest();
+		ArrayList<DataFlowNode> descendants = new ArrayList<>();
+		descendants = buildGraphTopLevelConditional(trueBlock);
+		for (DataFlowNode child : descendants)
+		    this.addEdge(new DataFlowEdge(child, mux));
+	    }
+	    // Handle false BB based on type
+	    if (falseEdge != null) {
+		BasicBlockNode falseBlock = (BasicBlockNode) falseEdge.getDest();
+		ArrayList<DataFlowNode> descendants = new ArrayList<>();
+		descendants = buildGraphTopLevelConditional(falseBlock);
+		for (DataFlowNode child : descendants)
+		    this.addEdge(new DataFlowEdge(child, mux));
+	    }
+	    // Get next BB
+	    BasicBlockNode next = CFGUtils.getTopLevelIfDescendant(cfg, block);
+	    if (next != block && !this.processed.contains(next.getId()))
+		nodes.addAll(buildGraphTopLevelConditional(next));
+	}
+	return nodes;
+    }
+
+    /**
+     * 
+     * 
+     * Stable version with no support for if-statements
+     * 
+     * 
+     */
+
+    private void buildGraphTopLevelWithInterface(BasicBlockNode topBlock) {
+	// Get top basic blocks
+	ArrayList<BasicBlockNode> blocks = new ArrayList<>();
+	while (topBlock.hasOutEdges()) {
+	    if (blocks.contains(topBlock))
+		break;
+	    blocks.add(topBlock);
+	    for (FlowEdge e : topBlock.getOutEdges()) {
+		BasicBlockEdge edge = (BasicBlockEdge) e;
+		if (edge.getType() == BasicBlockEdgeType.UNCONDITIONAL || edge.getType() == BasicBlockEdgeType.NOLOOP)
+		    topBlock = (BasicBlockNode) edge.getDest();
+	    }
+	}
+	// Last BB has no edges, so it is not accounted for in the loop; add it here
+	if (!blocks.contains(topBlock))
+	    blocks.add(topBlock);
+
+	// Build and connect the dataflows of each block
+	int pragmaIter = -1;
+	for (BasicBlockNode block : blocks) {
+	    processed.add(block.getId());
+	    if (block.getType() == BasicBlockNodeType.NORMAL || block.getType() == BasicBlockNodeType.EXIT) {
+		for (Stmt statement : block.getStmts()) {
+		    if (statement.isWrapper()) {
+			pragmaIter = CFGUtils.parsePragma(statement.getCode());
+		    } else {
+			DataFlowNode node = buildStatement(statement);
+			if (node == nullNode)
+			    continue;
+			node.setTopLevel(true);
+		    }
+		}
+	    }
+	    if (block.getType() == BasicBlockNodeType.LOOP) {
+		DataFlowNode node = buildLoopNode(block, pragmaIter);
+		node.setTopLevel(true);
+		pragmaIter = -1;
+
+		// Build and attach loop children to loop node
+		ArrayList<DataFlowNode> descendants = buildGraphLoop(block);
+		for (DataFlowNode child : descendants)
+		    this.addEdge(new DataFlowEdge(node, child, node.getIterations()));
+	    }
+	}
+	for (FlowNode n : this.nodes) {
+	    DataFlowNode node = (DataFlowNode) n;
+	    if (node.isTopLevel())
+		this.addEdge(new DataFlowEdge(interfaceNode, node, DataFlowEdgeType.REPEATING));
+	}
+    }
+
+    private ArrayList<DataFlowNode> buildGraphLoop(BasicBlockNode loopBlock) {
+	ArrayList<DataFlowNode> nodes = new ArrayList<>();
+	int pragmaIter = -1;
+
+	BasicBlockNode topBlock = null;
+	for (FlowEdge e : loopBlock.getOutEdges()) {
+	    BasicBlockEdge edge = (BasicBlockEdge) e;
+	    if (edge.getType() == BasicBlockEdgeType.LOOP)
+		topBlock = (BasicBlockNode) edge.getDest();
+	}
+
+	// Get top basic blocks
+	ArrayList<BasicBlockNode> blocks = new ArrayList<>();
+	while (topBlock != loopBlock) {
+	    blocks.add(topBlock);
+	    for (FlowEdge e : topBlock.getOutEdges()) {
+		BasicBlockEdge edge = (BasicBlockEdge) e;
+		if (edge.getType() == BasicBlockEdgeType.UNCONDITIONAL || edge.getType() == BasicBlockEdgeType.NOLOOP) {
+		    topBlock = (BasicBlockNode) edge.getDest();
+		}
+	    }
+	}
+
+	// Build the dataflow of each block
+	for (BasicBlockNode block : blocks) {
+	    if (block.getType() == BasicBlockNodeType.NORMAL) {
+		for (Stmt statement : block.getStmts()) {
+		    if (statement.isWrapper()) {
+			pragmaIter = CFGUtils.parsePragma(statement.getCode());
+		    } else {
+			DataFlowNode node = buildStatement(statement);
+			nodes.add(node);
+		    }
+		}
+	    }
+	    if (block.getType() == BasicBlockNodeType.LOOP) {
+		DataFlowNode node = buildLoopNode(block, pragmaIter);
+		pragmaIter = -1;
+
+		// Build and attach loop children to loop node
+		ArrayList<DataFlowNode> descendants = buildGraphLoop(block);
+		for (DataFlowNode child : descendants)
+		    this.addEdge(new DataFlowEdge(node, child, node.getIterations()));
+		nodes.add(node);
+	    }
+	    processed.add(block.getId());
 	}
 	return nodes;
     }
@@ -169,13 +476,17 @@ public class DataFlowGraph extends FlowGraph {
 	DataFlowNode node = nullNode;
 
 	if (n instanceof VarDecl) {
-	    node = buildVarDecl((VarDecl) n);
+	    if (n.getNumChildren() > 0)
+		node = buildVarDecl((VarDecl) n);
 	}
 	if ((n instanceof BinaryOperator) || (n instanceof CompoundAssignOperator)) {
 	    node = buildBinaryOp(n);
 	}
 	if (n instanceof CallExpr) {
 	    node = buildCallNode((CallExpr) n);
+	}
+	if (statement instanceof IfStmt) {
+	    node = buildExpression(((IfStmt) statement).getCondition());
 	}
 	return node;
     }
@@ -189,7 +500,7 @@ public class DataFlowGraph extends FlowGraph {
 	if (n instanceof CompoundAssignOperator) { // x += y
 	    CompoundAssignOperator assign = (CompoundAssignOperator) n;
 	    String op = assign.getOp().getOpString().replace("=", "");
-	    assignNode = new DataFlowNode(DataFlowNodeType.OP_ARITH, op);
+	    assignNode = new DataFlowNode(DataFlowNodeType.OP_ARITH, op, n);
 	    this.addNode(assignNode);
 	}
 
@@ -223,7 +534,7 @@ public class DataFlowGraph extends FlowGraph {
     }
 
     private DataFlowNode buildVarDecl(VarDecl decl) {
-	DataFlowNode lhsNode = new DataFlowNode(DataFlowNodeType.STORE_VAR, decl.getDeclName());
+	DataFlowNode lhsNode = new DataFlowNode(DataFlowNodeType.STORE_VAR, decl.getDeclName(), decl);
 	this.addNode(lhsNode);
 	if (decl.getNumChildren() > 0) {
 	    ClavaNode rhs = decl.getChild(0);
@@ -261,44 +572,118 @@ public class DataFlowGraph extends FlowGraph {
 	if (n instanceof ParenExpr) {
 	    node = buildExpression(n.getChild(0));
 	}
+	if (n instanceof UnaryOperator) {
+	    node = buildUnaryOperationNode((UnaryOperator) n);
+	}
+	if (n instanceof ConditionalOperator) {
+	    node = buildConditionalOperatorNode((ConditionalOperator) n);
+	}
 	if (node == nullNode)
-	    System.out.println(n.toString());
+	    ClavaLog.info("Unsupported note type for dfg: " + n.toString());
 	return node;
+    }
+
+    private DataFlowNode buildConditionalOperatorNode(ConditionalOperator n) {
+	DeclRefExpr t = null;
+	DeclRefExpr f = null;
+	ParenExpr cond = null;
+	if (n.getChild(0) instanceof ParenExpr)
+	    cond = (ParenExpr) n.getChild(0);
+	else
+	    return nullNode;
+	if (n.getChild(1) instanceof DeclRefExpr)
+	    t = (DeclRefExpr) n.getChild(1);
+	else
+	    return nullNode;
+	if (n.getChild(2) instanceof DeclRefExpr)
+	    f = (DeclRefExpr) n.getChild(2);
+	else
+	    return nullNode;
+
+	DataFlowNode op = buildExpression(cond.getChild(0));
+	DataFlowNode trueNode = buildDeclRefNode(t);
+	DataFlowNode falseNode = buildDeclRefNode(f);
+	DataFlowNode muxNode = new DataFlowNode(DataFlowNodeType.OP_COND, "mux", n);
+	this.addNode(muxNode);
+	this.addEdge(new DataFlowEdge(trueNode, muxNode));
+	this.addEdge(new DataFlowEdge(falseNode, muxNode));
+	this.addEdge(new DataFlowEdge(op, muxNode));
+	return muxNode;
+    }
+
+    private DataFlowNode buildUnaryOperationNode(UnaryOperator n) {
+	UnaryOperatorKind kind = n.getOp();
+	switch (kind) {
+	case Minus:
+	case Plus: {
+	    DataFlowNode child = buildExpression(n.getChild(0));
+	    String literal = kind == UnaryOperatorKind.Minus ? "-1" : "1";
+	    DataFlowNode constant = new DataFlowNode(DataFlowNodeType.CONSTANT, literal, n);
+	    this.addNode(constant);
+	    DataFlowNode op = new DataFlowNode(DataFlowNodeType.OP_ARITH, "*", n);
+	    this.addNode(op);
+	    this.addEdge(new DataFlowEdge(constant, op));
+	    this.addEdge(new DataFlowEdge(child, op));
+	    return op;
+	}
+	case PreInc:
+	case PostInc:
+	case PreDec:
+	case PostDec: {
+	    // TODO: store is also load
+	    DataFlowNode child = buildExpression(n.getChild(0));
+	    String opSymbol = (kind == UnaryOperatorKind.PostDec || kind == UnaryOperatorKind.PreDec) ? "-" : "+";
+	    DataFlowNode constant = new DataFlowNode(DataFlowNodeType.CONSTANT, "1", n);
+	    this.addNode(constant);
+	    DataFlowNode op = new DataFlowNode(DataFlowNodeType.OP_ARITH, opSymbol, n);
+	    this.addNode(op);
+	    this.addEdge(new DataFlowEdge(constant, op));
+	    this.addEdge(new DataFlowEdge(child, op));
+	    return op;
+	}
+	default:
+	    return nullNode;
+	}
     }
 
     private DataFlowNode buildIntegerLitNode(IntegerLiteral intL) {
 	String label = intL.getLiteral();
-	DataFlowNode constNode = new DataFlowNode(DataFlowNodeType.CONSTANT, label);
+	DataFlowNode constNode = new DataFlowNode(DataFlowNodeType.CONSTANT, label, intL);
 	this.addNode(constNode);
 	return constNode;
     }
 
     private DataFlowNode buildFloatingLitNode(FloatingLiteral floatL) {
 	String label = floatL.getLiteral();
-	DataFlowNode constNode = new DataFlowNode(DataFlowNodeType.CONSTANT, label);
+	DataFlowNode constNode = new DataFlowNode(DataFlowNodeType.CONSTANT, label, floatL);
 	this.addNode(constNode);
 	return constNode;
     }
 
     private DataFlowNode buildDeclRefNode(DeclRefExpr var) {
 	String label = var.getName();
-	DataFlowNode varNode = new DataFlowNode(DataFlowNodeType.LOAD_VAR, label);
+	DataFlowNode varNode = new DataFlowNode(DataFlowNodeType.LOAD_VAR, label, var);
 	this.addNode(varNode);
 	return varNode;
     }
 
     private DataFlowNode buildArraySubExprNode(ArraySubscriptExpr arr) {
-	String label = ((DeclRefExpr) arr.getChild(0)).getName();
-	DataFlowNode arrNode = new DataFlowNode(DataFlowNodeType.LOAD_ARRAY, label);
+	// array variable
+	String label = ((DeclRefExpr) arr.getArrayExpr()).getName();
+	DataFlowNode arrNode = new DataFlowNode(DataFlowNodeType.LOAD_ARRAY, label, arr);
 	this.addNode(arrNode);
-	DataFlowNode indexNode = buildExpression(arr.getChild(1));
-	this.addEdge(new DataFlowEdge(indexNode, arrNode, DataFlowEdgeType.INDEX));
+
+	// subscripts
+	for (Expr subscript : arr.getSubscripts()) {
+	    DataFlowNode indexNode = buildExpression(subscript);
+	    this.addEdge(new DataFlowEdge(indexNode, arrNode, DataFlowEdgeType.DATAFLOW_INDEX));
+	}
 	return arrNode;
     }
 
     private DataFlowNode buildBinaryOperationNode(BinaryOperator op) {
 	String label = op.getOp().getOpString();
-	DataFlowNode opNode = new DataFlowNode(DataFlowNodeType.OP_ARITH, label);
+	DataFlowNode opNode = new DataFlowNode(DataFlowNodeType.OP_ARITH, label, op);
 	this.addNode(opNode);
 	DataFlowNode lhsNode = buildExpression(op.getChild(0));
 	DataFlowNode rhsNode = buildExpression(op.getChild(1));
@@ -307,7 +692,7 @@ public class DataFlowGraph extends FlowGraph {
 	if (tempEnabled) {
 	    String tempLabel = "temp_" + this.tempCounter;
 	    this.tempCounter += 1;
-	    DataFlowNode tempNode = new DataFlowNode(DataFlowNodeType.TEMP, tempLabel);
+	    DataFlowNode tempNode = new DataFlowNode(DataFlowNodeType.TEMP, tempLabel, op);
 	    this.addNode(tempNode);
 	    this.addEdge(new DataFlowEdge(opNode, tempNode));
 	    return tempNode;
@@ -318,7 +703,7 @@ public class DataFlowGraph extends FlowGraph {
     private DataFlowNode buildCallNode(CallExpr call) {
 	DeclRefExpr fun = (DeclRefExpr) call.getChild(0);
 	String funName = fun.getName();
-	DataFlowNode callNode = new DataFlowNode(DataFlowNodeType.OP_CALL, funName);
+	DataFlowNode callNode = new DataFlowNode(DataFlowNodeType.OP_CALL, funName, call);
 	this.addNode(callNode);
 	for (int i = 1; i < call.getNumChildren(); i++) {
 	    DataFlowNode argNode = buildExpression(call.getChild(i));
@@ -327,20 +712,31 @@ public class DataFlowGraph extends FlowGraph {
 	return callNode;
     }
 
-    private DataFlowNode buildLoopNode(BasicBlockNode block) {
+    private DataFlowNode buildLoopNode(BasicBlockNode block, int pragmaIter) {
 	ForStmt root = (ForStmt) block.getLeader();
 	int initVal = -1;
 	int limitVal = -1;
 	int increment = 1;
-	int numIter = -1;
+	int numIter = Integer.MAX_VALUE;
 	String counterName = "";
 
 	// Loop counter
+	// Case "int i = 0"
 	if (root.getChild(0).getChild(0) instanceof VarDecl) {
 	    VarDecl counter = (VarDecl) root.getChild(0).getChild(0);
 	    counterName = counter.getDeclName();
 	    if (root.getChild(0).getChild(0).getChild(0) instanceof IntegerLiteral) {
 		IntegerLiteral init = (IntegerLiteral) root.getChild(0).getChild(0).getChild(0);
+		initVal = init.getValue().intValue();
+	    }
+	}
+	// Case "i = 0"
+	if (root.getChild(0).getChild(0) instanceof BinaryOperator) {
+	    BinaryOperator op = (BinaryOperator) root.getChild(0).getChild(0);
+	    DeclRefExpr ref = (DeclRefExpr) op.getLhs();
+	    counterName = ref.getName();
+	    if (op.getRhs() instanceof IntegerLiteral) {
+		IntegerLiteral init = (IntegerLiteral) op.getRhs();
 		initVal = init.getValue().intValue();
 	    }
 	}
@@ -350,6 +746,8 @@ public class DataFlowGraph extends FlowGraph {
 	    IntegerLiteral limit = (IntegerLiteral) root.getChild(1).getChild(0).getChild(1);
 	    limitVal = limit.getValue().intValue();
 	}
+	if (limitVal == -1 && pragmaIter != -1)
+	    limitVal = pragmaIter;
 
 	// Loop increment (if different than i++)
 	if (!(root.getChild(2) instanceof UnaryOperator)) {
@@ -358,8 +756,10 @@ public class DataFlowGraph extends FlowGraph {
 
 	if (limitVal != -1 && initVal != -1)
 	    numIter = (limitVal - initVal) / increment;
-	DataFlowNode node = new DataFlowNode(DataFlowNodeType.LOOP, "loop " + counterName);
+	DataFlowNode node = new DataFlowNode(DataFlowNodeType.LOOP, "loop " + counterName, null);
 	node.setIterations(numIter);
+	node.setClavaNode(root.getBody().getChild(0));
+	node.setStmt((Stmt) root.getBody().getChild(0));
 	this.addNode(node);
 	return node;
     }
@@ -384,13 +784,70 @@ public class DataFlowGraph extends FlowGraph {
 	return sinks;
     }
 
-    public ArrayList<DataFlowNode> getSubgraphNodes(int id) {
-	ArrayList<DataFlowNode> nodes = new ArrayList<>();
-	for (FlowNode n : this.nodes) {
-	    DataFlowNode node = (DataFlowNode) n;
-	    if (node.getSubgraphID() == id)
-		nodes.add(node);
+    public ArrayList<DataFlowNode> getSubgraphRoots() {
+	return subgraphRoots;
+    }
+
+    public void mergeNodes(ArrayList<DataFlowNode> nodes) {
+	nodes = (ArrayList<DataFlowNode>) nodes.stream().distinct().collect(Collectors.toList());
+	DataFlowNode master = nodes.get(0);
+	Iterator<DataFlowNode> nodeIter = nodes.iterator();
+	nodeIter.next();
+	while (nodeIter.hasNext()) {
+	    DataFlowNode node = nodeIter.next();
+	    if (node.getSubgraphID() != master.getSubgraphID())
+		continue;
+
+	    if (DataFlowNodeType.isArray(master.getType()) && DataFlowNodeType.isArray(node.getType())) {
+		boolean isSame = DFGUtils.isSameArrayAccess(master, node);
+		if (!isSame)
+		    continue;
+	    }
+
+	    Iterator<FlowEdge> iter = node.getInEdges().iterator();
+	    while (iter.hasNext()) {
+		FlowEdge inEdge = iter.next();
+		FlowNode inNode = inEdge.getSource();
+		inNode.removeOutEdge(inEdge);
+		inEdge.setDest(master);
+		inNode.addOutEdge(inEdge);
+		master.addInEdge(inEdge);
+	    }
+	    iter = node.getOutEdges().iterator();
+	    while (iter.hasNext()) {
+		FlowEdge outEdge = iter.next();
+		FlowNode outNode = outEdge.getDest();
+		outNode.removeInEdge(outEdge);
+		outEdge.setSource(master);
+		outNode.addInEdge(outEdge);
+		master.addOutEdge(outEdge);
+	    }
+	    node.clear();
+	    this.nodes.remove(node);
 	}
-	return nodes;
+    }
+
+    public CompoundStmt getBody() {
+	return body;
+    }
+
+    public ArrayList<DataFlowParam> getParams() {
+	return params;
+    }
+
+    public ClavaNode getFirstStmt() {
+	return firstStmt;
+    }
+
+    public String getFunctionName() {
+	return ((FunctionDecl) body.getParent()).getDeclName();
+    }
+
+    public boolean hasConditionals() {
+	return hasConditionals;
+    }
+
+    public ControlFlowGraph getCfg() {
+	return this.cfg;
     }
 }

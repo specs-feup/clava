@@ -1,6 +1,6 @@
 {
    "root": "program",
-   "rootAlias": "",
+   "rootAlias": "program",
    "children": [
       {
          "type": "joinpoint",
@@ -563,6 +563,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -1610,6 +1619,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -2614,6 +2632,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -3677,6 +3704,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -4111,6 +4147,14 @@
                            {
                               "type": "String",
                               "name": "kind"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "operator"
                            }]
                },
                {
@@ -4703,6 +4747,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -5822,6 +5875,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -6957,6 +7019,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -7979,6 +8050,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -9030,6 +9110,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -9073,11 +9162,6 @@
                },
                {
                   "type": "select",
-                  "clazz": "scope",
-                  "alias": "body"
-               },
-               {
-                  "type": "select",
                   "clazz": "statement",
                   "alias": "init"
                },
@@ -9093,33 +9177,8 @@
                },
                {
                   "type": "select",
-                  "clazz": "arrayAccess",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "binaryOp",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "call",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "call",
-                  "alias": "stmtCall"
-               },
-               {
-                  "type": "select",
-                  "clazz": "cilkSpawn",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "deleteExpr",
-                  "alias": ""
+                  "clazz": "scope",
+                  "alias": "body"
                },
                {
                   "type": "select",
@@ -9133,8 +9192,13 @@
                },
                {
                   "type": "select",
-                  "clazz": "memberAccess",
+                  "clazz": "call",
                   "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "call",
+                  "alias": "stmtCall"
                },
                {
                   "type": "select",
@@ -9143,17 +9207,12 @@
                },
                {
                   "type": "select",
-                  "clazz": "newExpr",
+                  "clazz": "memberAccess",
                   "alias": ""
                },
                {
                   "type": "select",
-                  "clazz": "op",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "unaryOp",
+                  "clazz": "arrayAccess",
                   "alias": ""
                },
                {
@@ -9164,6 +9223,36 @@
                {
                   "type": "select",
                   "clazz": "varref",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "op",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "binaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "unaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "newExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "deleteExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSpawn",
                   "alias": ""
                },
                {
@@ -10382,6 +10471,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -11357,6 +11455,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -11400,13 +11507,13 @@
                },
                {
                   "type": "select",
-                  "clazz": "arrayAccess",
-                  "alias": ""
+                  "clazz": "expression",
+                  "alias": "expr"
                },
                {
                   "type": "select",
-                  "clazz": "binaryOp",
-                  "alias": ""
+                  "clazz": "expression",
+                  "alias": "childExpr"
                },
                {
                   "type": "select",
@@ -11420,23 +11527,8 @@
                },
                {
                   "type": "select",
-                  "clazz": "cilkSpawn",
+                  "clazz": "memberCall",
                   "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "deleteExpr",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "expression",
-                  "alias": "expr"
-               },
-               {
-                  "type": "select",
-                  "clazz": "expression",
-                  "alias": "childExpr"
                },
                {
                   "type": "select",
@@ -11445,22 +11537,7 @@
                },
                {
                   "type": "select",
-                  "clazz": "memberCall",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "newExpr",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "op",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "unaryOp",
+                  "clazz": "arrayAccess",
                   "alias": ""
                },
                {
@@ -11471,6 +11548,36 @@
                {
                   "type": "select",
                   "clazz": "varref",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "op",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "binaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "unaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "newExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "deleteExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSpawn",
                   "alias": ""
                },
                {
@@ -11742,6 +11849,7 @@
          "type": "joinpoint",
          "name": "class",
          "extends": "record"      ,
+         "tooltip": "Represents a C++ class",
          "children": [
                {
                   "type": "attribute",
@@ -12359,6 +12467,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -12721,6 +12838,7 @@
          "type": "joinpoint",
          "name": "clavaException",
          "extends": "joinpoint"      ,
+         "tooltip": "Utility joinpoint, to represent certain problems when generating join points",
          "children": [
                {
                   "type": "attribute",
@@ -13302,6 +13420,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -14185,6 +14312,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -14508,6 +14644,7 @@
          "type": "joinpoint",
          "name": "decl",
          "extends": "joinpoint"      ,
+         "tooltip": "Represents one declaration (e.g., int foo(){return 0;}) or definition (e.g., int foo();) in the code",
          "children": [
                {
                   "type": "attribute",
@@ -15069,6 +15206,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -15379,6 +15525,7 @@
          "type": "joinpoint",
          "name": "declarator",
          "extends": "namedDecl"      ,
+         "tooltip": "Represents a decl that comes from a declarator (e.g., function, field, variable)",
          "children": [
                {
                   "type": "attribute",
@@ -15968,6 +16115,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -16915,6 +17071,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -17986,6 +18151,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -18381,6 +18555,7 @@
          "type": "joinpoint",
          "name": "empty",
          "extends": "joinpoint"      ,
+         "tooltip": "Utility joinpoint, to represent empty nodes when directly accessing the tree",
          "children": [
                {
                   "type": "attribute",
@@ -18942,6 +19117,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -19252,6 +19436,7 @@
          "type": "joinpoint",
          "name": "enumDecl",
          "extends": "namedDecl"      ,
+         "tooltip": "Represents an enum",
          "children": [
                {
                   "type": "attribute",
@@ -19849,6 +20034,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -20959,6 +21153,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -21947,6 +22150,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -22894,6 +23106,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -23209,6 +23430,7 @@
          "type": "joinpoint",
          "name": "field",
          "extends": "declarator"      ,
+         "tooltip": "Represents a member of a struct/union/class",
          "children": [
                {
                   "type": "attribute",
@@ -23802,6 +24024,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -24154,6 +24385,7 @@
          "type": "joinpoint",
          "name": "file",
          "extends": "joinpoint"      ,
+         "tooltip": "Represents a source file (.c, .cpp., .cl, etc)",
          "children": [
                {
                   "type": "attribute",
@@ -24854,6 +25086,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -24897,51 +25138,6 @@
                },
                {
                   "type": "select",
-                  "clazz": "class",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "comment",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "decl",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "function",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "include",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "marker",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "method",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "pragma",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "record",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
                   "clazz": "statement",
                   "alias": "stmt"
                },
@@ -24952,7 +25148,37 @@
                },
                {
                   "type": "select",
+                  "clazz": "function",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "method",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "record",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
                   "clazz": "struct",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "class",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "pragma",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "marker",
                   "alias": ""
                },
                {
@@ -24962,12 +25188,27 @@
                },
                {
                   "type": "select",
+                  "clazz": "vardecl",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "comment",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "include",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
                   "clazz": "typedefDecl",
                   "alias": ""
                },
                {
                   "type": "select",
-                  "clazz": "vardecl",
+                  "clazz": "decl",
                   "alias": ""
                },
                {
@@ -25426,6 +25667,7 @@
          "type": "joinpoint",
          "name": "function",
          "extends": "declarator"      ,
+         "tooltip": "Represents a function declaration or definition",
          "children": [
                {
                   "type": "attribute",
@@ -26169,6 +26411,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -26212,8 +26463,8 @@
                },
                {
                   "type": "select",
-                  "clazz": "decl",
-                  "alias": ""
+                  "clazz": "scope",
+                  "alias": "body"
                },
                {
                   "type": "select",
@@ -26222,8 +26473,8 @@
                },
                {
                   "type": "select",
-                  "clazz": "scope",
-                  "alias": "body"
+                  "clazz": "decl",
+                  "alias": ""
                },
                {
                   "type": "action",
@@ -27454,6 +27705,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -28491,6 +28751,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -28539,6 +28808,11 @@
                },
                {
                   "type": "select",
+                  "clazz": "vardecl",
+                  "alias": "condDecl"
+               },
+               {
+                  "type": "select",
                   "clazz": "scope",
                   "alias": "then"
                },
@@ -28554,18 +28828,13 @@
                },
                {
                   "type": "select",
-                  "clazz": "vardecl",
-                  "alias": "condDecl"
+                  "clazz": "expression",
+                  "alias": "expr"
                },
                {
                   "type": "select",
-                  "clazz": "arrayAccess",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "binaryOp",
-                  "alias": ""
+                  "clazz": "expression",
+                  "alias": "childExpr"
                },
                {
                   "type": "select",
@@ -28579,23 +28848,8 @@
                },
                {
                   "type": "select",
-                  "clazz": "cilkSpawn",
+                  "clazz": "memberCall",
                   "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "deleteExpr",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "expression",
-                  "alias": "expr"
-               },
-               {
-                  "type": "select",
-                  "clazz": "expression",
-                  "alias": "childExpr"
                },
                {
                   "type": "select",
@@ -28604,22 +28858,7 @@
                },
                {
                   "type": "select",
-                  "clazz": "memberCall",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "newExpr",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "op",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "unaryOp",
+                  "clazz": "arrayAccess",
                   "alias": ""
                },
                {
@@ -28630,6 +28869,36 @@
                {
                   "type": "select",
                   "clazz": "varref",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "op",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "binaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "unaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "newExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "deleteExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSpawn",
                   "alias": ""
                },
                {
@@ -28943,6 +29212,7 @@
          "type": "joinpoint",
          "name": "include",
          "extends": "decl"      ,
+         "tooltip": "Represents an include directive (e.g., #include <stdio.h>)",
          "children": [
                {
                   "type": "attribute",
@@ -29527,6 +29797,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -30573,6 +30852,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -30616,11 +30904,6 @@
                },
                {
                   "type": "select",
-                  "clazz": "scope",
-                  "alias": "body"
-               },
-               {
-                  "type": "select",
                   "clazz": "statement",
                   "alias": "init"
                },
@@ -30636,33 +30919,8 @@
                },
                {
                   "type": "select",
-                  "clazz": "arrayAccess",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "binaryOp",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "call",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "call",
-                  "alias": "stmtCall"
-               },
-               {
-                  "type": "select",
-                  "clazz": "cilkSpawn",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "deleteExpr",
-                  "alias": ""
+                  "clazz": "scope",
+                  "alias": "body"
                },
                {
                   "type": "select",
@@ -30676,8 +30934,13 @@
                },
                {
                   "type": "select",
-                  "clazz": "memberAccess",
+                  "clazz": "call",
                   "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "call",
+                  "alias": "stmtCall"
                },
                {
                   "type": "select",
@@ -30686,17 +30949,12 @@
                },
                {
                   "type": "select",
-                  "clazz": "newExpr",
+                  "clazz": "memberAccess",
                   "alias": ""
                },
                {
                   "type": "select",
-                  "clazz": "op",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "unaryOp",
+                  "clazz": "arrayAccess",
                   "alias": ""
                },
                {
@@ -30707,6 +30965,36 @@
                {
                   "type": "select",
                   "clazz": "varref",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "op",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "binaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "unaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "newExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "deleteExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSpawn",
                   "alias": ""
                },
                {
@@ -31189,6 +31477,7 @@
          "type": "joinpoint",
          "name": "marker",
          "extends": "pragma"      ,
+         "tooltip": "Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)",
          "children": [
                {
                   "type": "attribute",
@@ -31787,6 +32076,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -32753,6 +33051,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -33824,6 +34131,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -34222,7 +34538,7 @@
          "type": "joinpoint",
          "name": "method",
          "extends": "function"      ,
-         "tooltip": "C++ function",
+         "tooltip": " Represents a C++ class method declaration or definition",
          "children": [
                {
                   "type": "attribute",
@@ -34974,6 +35290,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -35017,8 +35342,8 @@
                },
                {
                   "type": "select",
-                  "clazz": "decl",
-                  "alias": ""
+                  "clazz": "scope",
+                  "alias": "body"
                },
                {
                   "type": "select",
@@ -35027,8 +35352,8 @@
                },
                {
                   "type": "select",
-                  "clazz": "scope",
-                  "alias": "body"
+                  "clazz": "decl",
+                  "alias": ""
                },
                {
                   "type": "action",
@@ -35519,6 +35844,7 @@
          "type": "joinpoint",
          "name": "namedDecl",
          "extends": "decl"      ,
+         "tooltip": "Represents a decl with a name",
          "children": [
                {
                   "type": "attribute",
@@ -36108,6 +36434,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -37059,6 +37394,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -37374,6 +37718,7 @@
          "type": "joinpoint",
          "name": "omp",
          "extends": "pragma"      ,
+         "tooltip": "Represents an OpenMP pragma (e.g., #pragma omp parallel)",
          "children": [
                {
                   "type": "attribute",
@@ -38142,6 +38487,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -38768,6 +39122,14 @@
                },
                {
                   "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "operator"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise",
                   "children": [
                            {
@@ -39356,6 +39718,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -40317,6 +40688,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -41435,6 +41815,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -42575,6 +42964,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -42984,6 +43382,7 @@
          "type": "joinpoint",
          "name": "pragma",
          "extends": "joinpoint"      ,
+         "tooltip": "Represents a pragma in the code (e.g., #pragma kernel)",
          "children": [
                {
                   "type": "attribute",
@@ -43569,6 +43968,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -43910,6 +44318,7 @@
          "type": "joinpoint",
          "name": "program",
          "extends": "joinpoint"      ,
+         "tooltip": "Represents the complete program and is the topmost joinpoint in the hierarchy",
          "children": [
                {
                   "type": "attribute",
@@ -44596,6 +45005,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -45884,6 +46302,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -46279,6 +46706,7 @@
          "type": "joinpoint",
          "name": "record",
          "extends": "namedDecl"      ,
+         "tooltip": "Common class of struct, union and class",
          "children": [
                {
                   "type": "attribute",
@@ -46884,6 +47312,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -47830,6 +48267,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -47878,13 +48324,13 @@
                },
                {
                   "type": "select",
-                  "clazz": "arrayAccess",
-                  "alias": ""
+                  "clazz": "expression",
+                  "alias": "expr"
                },
                {
                   "type": "select",
-                  "clazz": "binaryOp",
-                  "alias": ""
+                  "clazz": "expression",
+                  "alias": "childExpr"
                },
                {
                   "type": "select",
@@ -47898,23 +48344,8 @@
                },
                {
                   "type": "select",
-                  "clazz": "cilkSpawn",
+                  "clazz": "memberCall",
                   "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "deleteExpr",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "expression",
-                  "alias": "expr"
-               },
-               {
-                  "type": "select",
-                  "clazz": "expression",
-                  "alias": "childExpr"
                },
                {
                   "type": "select",
@@ -47923,22 +48354,7 @@
                },
                {
                   "type": "select",
-                  "clazz": "memberCall",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "newExpr",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "op",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "unaryOp",
+                  "clazz": "arrayAccess",
                   "alias": ""
                },
                {
@@ -47949,6 +48365,36 @@
                {
                   "type": "select",
                   "clazz": "varref",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "op",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "binaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "unaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "newExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "deleteExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSpawn",
                   "alias": ""
                },
                {
@@ -48220,6 +48666,7 @@
          "type": "joinpoint",
          "name": "scope",
          "extends": "statement"      ,
+         "tooltip": "Represents a group of statements",
          "children": [
                {
                   "type": "attribute",
@@ -48861,6 +49308,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -48904,17 +49360,17 @@
                },
                {
                   "type": "select",
-                  "clazz": "cilkFor",
-                  "alias": ""
+                  "clazz": "statement",
+                  "alias": "stmt"
                },
                {
                   "type": "select",
-                  "clazz": "cilkSync",
-                  "alias": ""
+                  "clazz": "statement",
+                  "alias": "childStmt"
                },
                {
                   "type": "select",
-                  "clazz": "comment",
+                  "clazz": "scope",
                   "alias": ""
                },
                {
@@ -48929,7 +49385,17 @@
                },
                {
                   "type": "select",
+                  "clazz": "pragma",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
                   "clazz": "marker",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "tag",
                   "alias": ""
                },
                {
@@ -48939,7 +49405,7 @@
                },
                {
                   "type": "select",
-                  "clazz": "pragma",
+                  "clazz": "comment",
                   "alias": ""
                },
                {
@@ -48949,52 +49415,12 @@
                },
                {
                   "type": "select",
-                  "clazz": "scope",
+                  "clazz": "cilkFor",
                   "alias": ""
                },
                {
                   "type": "select",
-                  "clazz": "statement",
-                  "alias": "stmt"
-               },
-               {
-                  "type": "select",
-                  "clazz": "statement",
-                  "alias": "childStmt"
-               },
-               {
-                  "type": "select",
-                  "clazz": "tag",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "arrayAccess",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "binaryOp",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "call",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "call",
-                  "alias": "stmtCall"
-               },
-               {
-                  "type": "select",
-                  "clazz": "cilkSpawn",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "deleteExpr",
+                  "clazz": "cilkSync",
                   "alias": ""
                },
                {
@@ -49009,8 +49435,13 @@
                },
                {
                   "type": "select",
-                  "clazz": "memberAccess",
+                  "clazz": "call",
                   "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "call",
+                  "alias": "stmtCall"
                },
                {
                   "type": "select",
@@ -49019,17 +49450,12 @@
                },
                {
                   "type": "select",
-                  "clazz": "newExpr",
+                  "clazz": "memberAccess",
                   "alias": ""
                },
                {
                   "type": "select",
-                  "clazz": "op",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "unaryOp",
+                  "clazz": "arrayAccess",
                   "alias": ""
                },
                {
@@ -49040,6 +49466,36 @@
                {
                   "type": "select",
                   "clazz": "varref",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "op",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "binaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "unaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "newExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "deleteExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSpawn",
                   "alias": ""
                },
                {
@@ -49101,6 +49557,15 @@
                            {
                               "type": "void",
                               "name": "clear"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "DFG tester",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "dfg"
                            }]
                },
                {
@@ -50015,6 +50480,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -50058,13 +50532,13 @@
                },
                {
                   "type": "select",
-                  "clazz": "arrayAccess",
-                  "alias": ""
+                  "clazz": "expression",
+                  "alias": "expr"
                },
                {
                   "type": "select",
-                  "clazz": "binaryOp",
-                  "alias": ""
+                  "clazz": "expression",
+                  "alias": "childExpr"
                },
                {
                   "type": "select",
@@ -50078,23 +50552,8 @@
                },
                {
                   "type": "select",
-                  "clazz": "cilkSpawn",
+                  "clazz": "memberCall",
                   "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "deleteExpr",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "expression",
-                  "alias": "expr"
-               },
-               {
-                  "type": "select",
-                  "clazz": "expression",
-                  "alias": "childExpr"
                },
                {
                   "type": "select",
@@ -50103,22 +50562,7 @@
                },
                {
                   "type": "select",
-                  "clazz": "memberCall",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "newExpr",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "op",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "unaryOp",
+                  "clazz": "arrayAccess",
                   "alias": ""
                },
                {
@@ -50129,6 +50573,36 @@
                {
                   "type": "select",
                   "clazz": "varref",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "op",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "binaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "unaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "newExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "deleteExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSpawn",
                   "alias": ""
                },
                {
@@ -50400,6 +50874,7 @@
          "type": "joinpoint",
          "name": "struct",
          "extends": "record"      ,
+         "tooltip": "Represets a struct declaration",
          "children": [
                {
                   "type": "attribute",
@@ -51005,6 +51480,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -51957,6 +52441,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -53039,6 +53532,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -54194,6 +54696,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -55313,6 +55824,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -55708,6 +56228,7 @@
          "type": "joinpoint",
          "name": "typedefDecl",
          "extends": "typedefNameDecl"      ,
+         "tooltip": "Declaration of a typedef-name via the 'typedef' type specifier",
          "children": [
                {
                   "type": "attribute",
@@ -56297,6 +56818,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -56653,6 +57183,7 @@
          "type": "joinpoint",
          "name": "typedefNameDecl",
          "extends": "namedDecl"      ,
+         "tooltip": "Base node for declarations which introduce a typedef-name",
          "children": [
                {
                   "type": "attribute",
@@ -57242,6 +57773,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -58341,6 +58881,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -59371,6 +59920,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -59730,6 +60288,14 @@
                            {
                               "type": "String",
                               "name": "kind"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "operator"
                            }]
                },
                {
@@ -60322,6 +60888,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -61370,6 +61945,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -61765,6 +62349,7 @@
          "type": "joinpoint",
          "name": "vardecl",
          "extends": "declarator"      ,
+         "tooltip": "Represents a variable declaration or definition",
          "children": [
                {
                   "type": "attribute",
@@ -62407,6 +62992,15 @@
                            {
                               "type": "joinpoint",
                               "name": "root"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
                            }]
                },
                {
@@ -63545,6 +64139,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -64592,6 +65195,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -65513,6 +66125,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -65556,13 +66177,13 @@
                },
                {
                   "type": "select",
-                  "clazz": "arrayAccess",
-                  "alias": ""
+                  "clazz": "expression",
+                  "alias": "expr"
                },
                {
                   "type": "select",
-                  "clazz": "binaryOp",
-                  "alias": ""
+                  "clazz": "expression",
+                  "alias": "childExpr"
                },
                {
                   "type": "select",
@@ -65576,23 +66197,8 @@
                },
                {
                   "type": "select",
-                  "clazz": "cilkSpawn",
+                  "clazz": "memberCall",
                   "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "deleteExpr",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "expression",
-                  "alias": "expr"
-               },
-               {
-                  "type": "select",
-                  "clazz": "expression",
-                  "alias": "childExpr"
                },
                {
                   "type": "select",
@@ -65601,22 +66207,7 @@
                },
                {
                   "type": "select",
-                  "clazz": "memberCall",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "newExpr",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "op",
-                  "alias": ""
-               },
-               {
-                  "type": "select",
-                  "clazz": "unaryOp",
+                  "clazz": "arrayAccess",
                   "alias": ""
                },
                {
@@ -65627,6 +66218,36 @@
                {
                   "type": "select",
                   "clazz": "varref",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "op",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "binaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "unaryOp",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "newExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "deleteExpr",
+                  "alias": ""
+               },
+               {
+                  "type": "select",
+                  "clazz": "cilkSpawn",
                   "alias": ""
                },
                {

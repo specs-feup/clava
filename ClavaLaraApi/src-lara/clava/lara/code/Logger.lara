@@ -8,7 +8,8 @@ import clava.Clava;
 Logger.prototype.Type.LONGLONG = 100;
 
 // 64-bit int
-Logger.prototype.printfFormat[Logger.prototype.Type.LONGLONG] = "%I64d";
+//Logger.prototype.printfFormat[Logger.prototype.Type.LONGLONG] = "%I64d";
+Logger.prototype.printfFormat[Logger.prototype.Type.LONGLONG] = "%I64lld";
 //Logger.prototype.printfFormat[Logger.prototype.Type.LONGLONG] = "%lld";
 
 // Replace 64-bit int

@@ -32,7 +32,7 @@ void testAppend() {
 	long aLong;
 	long long aLongLong;
 	int a;
-	printf("%ld%I64d", aLong, aLongLong);
+	printf("%ld%I64lld", aLong, aLongLong);
 }
 
 void testAppendJp() {

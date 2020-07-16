@@ -28,4 +28,6 @@ public abstract class Operator extends Expr {
     public abstract boolean isBitwise();
 
     public abstract String getKindName();
+
+    public abstract String getOperatorCode();
 }

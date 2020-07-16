@@ -1,3 +1,5 @@
+Stack size before push: 1
+Stack size after push: 2
 Temporary code:
 /**** File 'cxx_weaver_output/rebuild.cpp' ****/
 
@@ -29,6 +31,7 @@ int main() {
 #endif
 /**** End File ****/
 
+Stack size after pop: 1
 Original code:
 /**** File 'cxx_weaver_output/rebuild.cpp' ****/
 

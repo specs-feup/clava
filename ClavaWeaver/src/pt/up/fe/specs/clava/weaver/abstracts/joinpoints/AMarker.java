@@ -14,7 +14,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AMarker
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)
  * @author Lara Weaver Generator
  */
 public abstract class AMarker extends APragma {
@@ -441,6 +441,7 @@ public abstract class AMarker extends APragma {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

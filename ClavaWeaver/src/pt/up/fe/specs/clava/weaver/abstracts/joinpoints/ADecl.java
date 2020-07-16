@@ -11,7 +11,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point ADecl
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Represents one declaration (e.g., int foo(){return 0;}) or definition (e.g., int foo();) in the code
  * @author Lara Weaver Generator
  */
 public abstract class ADecl extends ACxxWeaverJoinPoint {
@@ -106,6 +106,7 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

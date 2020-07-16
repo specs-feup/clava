@@ -18,9 +18,9 @@
 package pt.up.fe.specs.clava.analysis.flow.data;
 
 public enum DataFlowNodeType {
-    LOOP("blue1"), OP_ARITH("darkorchid2"), OP_CALL("darkorchid2"), LOAD_VAR("darkgreen"), LOAD_ARRAY("darkgreen"),
-    LOAD_INDEX("red"), STORE_VAR("goldenrod2"), STORE_ARRAY("goldenrod2"), CONSTANT("gray36"), TEMP("gray36"),
-    NULL("white");
+    LOOP("blue1"), OP_ARITH("darkorchid2"), OP_COND("darkorchid2"), OP_CALL("darkorchid2"), LOAD_VAR("darkgreen"),
+    LOAD_ARRAY("darkgreen"), LOAD_INDEX("red"), STORE_VAR("goldenrod2"), STORE_ARRAY("goldenrod2"), CONSTANT("gray36"),
+    TEMP("gray36"), INTERFACE("#b54707"), NULL("white");
 
     private String color;
 
@@ -30,5 +30,29 @@ public enum DataFlowNodeType {
 
     public String getColor() {
 	return color;
+    }
+
+    public static boolean isLoad(DataFlowNodeType type) {
+	return type == LOAD_VAR || type == LOAD_ARRAY || type == LOAD_INDEX;
+    }
+
+    public static boolean isStore(DataFlowNodeType type) {
+	return type == STORE_VAR || type == STORE_ARRAY;
+    }
+
+    public static boolean isOp(DataFlowNodeType type) {
+	return type == OP_ARITH || type == OP_CALL || type == OP_CALL;
+    }
+
+    public static boolean isLoop(DataFlowNodeType type) {
+	return type == LOOP;
+    }
+
+    public static boolean isArray(DataFlowNodeType type) {
+	return type == LOAD_ARRAY || type == STORE_ARRAY;
+    }
+
+    public static boolean isVar(DataFlowNodeType type) {
+	return type == LOAD_VAR || type == LOAD_INDEX || type == STORE_VAR;
     }
 }

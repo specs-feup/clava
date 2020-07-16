@@ -14,7 +14,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AMethod
  * This class is overwritten by the Weaver Generator.
  * 
- * C++ function
+ *  Represents a C++ class method declaration or definition
  * @author Lara Weaver Generator
  */
 public abstract class AMethod extends AFunction {
@@ -820,6 +820,7 @@ public abstract class AMethod extends AFunction {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

@@ -11,7 +11,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AStruct
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Represets a struct declaration
  * @author Lara Weaver Generator
  */
 public abstract class AStruct extends ARecord {
@@ -429,6 +429,7 @@ public abstract class AStruct extends ARecord {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

@@ -13,18 +13,25 @@
 
 package pt.up.fe.specs.cxxweaver.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.lara.loc.LaraStats;
 import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.providers.ResourceProvider;
 
 public class LaraLocTest {
+
+    @BeforeClass
+    public static void init() {
+        SpecsSystem.programStandardInit();
+    }
 
     @Test
     public void test() {

@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.weaver;
 
 import java.util.Optional;
 
-import pt.up.fe.specs.clang.clava.lara.LaraMarkerPragma;
-import pt.up.fe.specs.clang.clava.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.cilk.CilkFor;
 import pt.up.fe.specs.clava.ast.cilk.CilkSpawn;
@@ -52,6 +50,8 @@ import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.lara.LaraMarkerPragma;
+import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -196,10 +196,10 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(TypedefType.class, CxxTypedefType::new);
         // JOINPOINT_FACTORY.put(ElaboratedType.class, CxxElaboratedType::new);
         JOINPOINT_FACTORY.put(Type.class, CxxType::new);
-        JOINPOINT_FACTORY.put(Pragma.class, CxxPragma::new);
         JOINPOINT_FACTORY.put(LaraMarkerPragma.class, CxxMarker::new);
         JOINPOINT_FACTORY.put(LaraTagPragma.class, CxxTag::new);
         JOINPOINT_FACTORY.put(OmpPragma.class, CxxOmp::new);
+        JOINPOINT_FACTORY.put(Pragma.class, CxxPragma::new);
         JOINPOINT_FACTORY.put(TranslationUnit.class, CxxFile::new);
         JOINPOINT_FACTORY.put(App.class, CxxJoinpoints::programFactory);
         JOINPOINT_FACTORY.put(NullExpr.class, CxxJoinpoints::nullNode);
@@ -290,6 +290,7 @@ public class CxxJoinpoints {
         if (targetClass == null) {
             throw new RuntimeException("Check if you meant to call 'create' with a single argument");
         }
+
         return targetClass.cast(create(node));
     }
 

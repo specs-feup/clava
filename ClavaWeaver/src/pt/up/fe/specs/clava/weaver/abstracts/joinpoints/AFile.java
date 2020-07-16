@@ -15,7 +15,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AFile
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Represents a source file (.c, .cpp., .cl, etc)
  * @author Lara Weaver Generator
  */
 public abstract class AFile extends ACxxWeaverJoinPoint {
@@ -1040,6 +1040,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

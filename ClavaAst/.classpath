@@ -7,10 +7,11 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Clava&amp;ivyXmlPath=ivy.xml&amp;confs=*"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/GitPlus"/>
-	<classpathentry kind="src" path="/tdrcLibrary"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jOptions"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SpecsUtils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/GsonPlus"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SpecsUtils"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jOptions"/>
+	<classpathentry kind="src" path="/tdrcLibrary"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GitPlus"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SymjaPlus"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -13,7 +13,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AClavaException
  * This class is overwritten by the Weaver Generator.
  * 
- * 
+ * Utility joinpoint, to represent certain problems when generating join points
  * @author Lara Weaver Generator
  */
 public abstract class AClavaException extends ACxxWeaverJoinPoint {
@@ -189,6 +189,7 @@ public abstract class AClavaException extends ACxxWeaverJoinPoint {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

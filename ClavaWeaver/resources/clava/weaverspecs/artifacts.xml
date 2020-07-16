@@ -131,7 +131,9 @@
 		<attribute name="depth" type="Integer" tooltip="the depth of this join point in the AST. If it is the root join point returns 0, if it is a child of the root node returns 1, etc.">
 		</attribute>
 		<attribute name="jpId" type="String" tooltip="Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)">
-		</attribute>		
+		</attribute>	
+		<attribute name="scopeNodes" type="joinpoint[]" tooltip="the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array">
+		</attribute>			
 		
 	</global>
 
@@ -465,6 +467,7 @@
 	</artifact>
 
 	<artifact class="op">
+		<attribute name="operator" type="String" />	
 		<attribute name="kind" type="String" />
 		<attribute name="isBitwise" type="Boolean" />
 	</artifact>

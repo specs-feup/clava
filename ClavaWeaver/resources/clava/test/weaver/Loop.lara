@@ -1,6 +1,6 @@
 aspectdef Loop
 
-	select loop end
+	select function{"main"}.loop end
 	apply
 		println("loop control var: " + $loop.controlVar);
 		println("is innermost? " + $loop.isInnermost);
@@ -8,6 +8,18 @@ aspectdef Loop
 		println("nested level: " + $loop.nestedLevel + "\n");
 		println("rank: " + $loop.rank + "\n");
 		//println("Loop inc:" + $loop.incrementValue);
+	end
+	
+	
+	// Test iterationsExpr
+	select function{"iterationsExpr"}.loop end
+	apply
+		if($loop.iterationsExpr === undefined) {
+			println("iterations expr: undefined");
+			continue;
+		}
+		println("iterations expr: " + $loop.iterationsExpr.code);
+		println("iterations: " + $loop.iterations);		
 	end
 
 /*	

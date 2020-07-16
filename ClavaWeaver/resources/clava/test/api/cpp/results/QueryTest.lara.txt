@@ -1,0 +1,16 @@
+query_loop 1
+loop:2,1
+loop:3,1
+loop:3,1,1
+loop:3,1,1
+query_loop 2
+loop:2,1
+loop:3,1
+loop:3,1,1
+query_loop 3
+loop:2,1
+loop:3,1
+query_empty 1
+joinpoint: statement
+joinpoint: returnStmt
+chain keys: _counter,_starting_point,function,function_0,loop,loop_0,loop_1,loop_2

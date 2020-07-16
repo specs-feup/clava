@@ -168,6 +168,21 @@ OpsCounter.prototype.log = function($insertionPoint) {
 		logger.log($insertionPoint);
 };
 
+/**
+ * @return {$function} Creates a function that prints the operation counting report and returns its definition.
+ */
+ /*
+OpsCounter.prototype.buildLogFunction = function($insertionPoint) {
+
+		var logger = new Logger();		
+		for(counterName in this._counters) {	
+			var counter = this._counters[counterName];
+			logger.text(counterName + ": ").longLong(counter.getRef($insertionPoint).code).ln();
+		}
+
+		logger.log($insertionPoint);
+};
+*/
 
 
 OpsCounter.prototype._isValidOp = function($op) {

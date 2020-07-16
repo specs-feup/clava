@@ -187,6 +187,15 @@ public abstract class ABinaryOp extends AOp {
     }
 
     /**
+     * Get value on attribute operator
+     * @return the attribute's value
+     */
+    @Override
+    public String getOperatorImpl() {
+        return this.aOp.getOperatorImpl();
+    }
+
+    /**
      * Get value on attribute kind
      * @return the attribute's value
      */
@@ -563,6 +572,7 @@ public abstract class ABinaryOp extends AOp {
         LEFT("left"),
         RIGHT("right"),
         ISASSIGNMENT("isAssignment"),
+        OPERATOR("operator"),
         KIND("kind"),
         ISBITWISE("isBitwise"),
         VARDECL("vardecl"),
@@ -578,6 +588,7 @@ public abstract class ABinaryOp extends AOp {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

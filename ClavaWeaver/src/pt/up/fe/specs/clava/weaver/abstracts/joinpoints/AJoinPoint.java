@@ -612,6 +612,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("isCilk");
         attributes.add("depth");
         attributes.add("jpId");
+        attributes.add("scopeNodes");
     }
 
     /**
@@ -2106,6 +2107,39 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "jpId", e);
+        }
+    }
+
+    /**
+     * Get value on attribute scopeNodes
+     * @return the attribute's value
+     */
+    public abstract AJoinPoint[] getScopeNodesArrayImpl();
+
+    /**
+     * the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array
+     */
+    public Object getScopeNodesImpl() {
+        AJoinPoint[] aJoinPointArrayImpl0 = getScopeNodesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array
+     */
+    public final Object getScopeNodes() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "scopeNodes", Optional.empty());
+        	}
+        	Object result = this.getScopeNodesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "scopeNodes", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "scopeNodes", e);
         }
     }
 

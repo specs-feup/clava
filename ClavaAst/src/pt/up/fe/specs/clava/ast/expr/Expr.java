@@ -51,7 +51,8 @@ public abstract class Expr extends ClavaNode implements Typable {
             .setDefault(() -> ObjectKind.ORDINARY);
 
     public final static DataKey<ImplicitCastExpr> IMPLICIT_CAST = KeyFactory
-            .object("implicitCast", ImplicitCastExpr.class);
+            .object("implicitCast", ImplicitCastExpr.class)
+            .setDefault(() -> null);
 
     public final static DataKey<Boolean> IS_DEFAULT_ARGUMENT = KeyFactory.bool("isDefaultArgument");
 

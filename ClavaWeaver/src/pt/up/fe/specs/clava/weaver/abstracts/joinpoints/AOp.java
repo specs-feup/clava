@@ -27,6 +27,31 @@ public abstract class AOp extends AExpression {
         this.aExpression = aExpression;
     }
     /**
+     * Get value on attribute operator
+     * @return the attribute's value
+     */
+    public abstract String getOperatorImpl();
+
+    /**
+     * Get value on attribute operator
+     * @return the attribute's value
+     */
+    public final Object getOperator() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "operator", Optional.empty());
+        	}
+        	String result = this.getOperatorImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "operator", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "operator", e);
+        }
+    }
+
+    /**
      * Get value on attribute kind
      * @return the attribute's value
      */
@@ -362,6 +387,7 @@ public abstract class AOp extends AExpression {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         this.aExpression.fillWithAttributes(attributes);
+        attributes.add("operator");
         attributes.add("kind");
         attributes.add("isBitwise");
     }
@@ -407,6 +433,7 @@ public abstract class AOp extends AExpression {
      * 
      */
     protected enum OpAttributes {
+        OPERATOR("operator"),
         KIND("kind"),
         ISBITWISE("isBitwise"),
         VARDECL("vardecl"),
@@ -422,6 +449,7 @@ public abstract class AOp extends AExpression {
         TYPE("type"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
+        SCOPENODES("scopeNodes"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

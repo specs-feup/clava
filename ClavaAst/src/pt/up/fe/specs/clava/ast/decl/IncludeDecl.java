@@ -22,6 +22,12 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Include;
 
+/**
+ * Represents an include directive (e.g., #include <stdio.h>)
+ * 
+ * @author jbispo
+ *
+ */
 public class IncludeDecl extends Decl {
 
     /// DATAKEYS BEGIN
