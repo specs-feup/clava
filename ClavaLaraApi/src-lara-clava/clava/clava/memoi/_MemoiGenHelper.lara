@@ -100,7 +100,7 @@ aspectdef _Memoi_InsertTableCode
 			call _Memoi_AddMainDebug(totalName, missesName, wrapperName);
 		}
 		
-		var tableCode = _makeTableCode(insertPred, countComparator, report, $function, tableSize, isMemoiEmpty);	
+		var tableCode = _makeTableCode(insertPred, countComparator, report, $function, tableSize, isMemoiEmpty, isMemoiOnline);	
 		insert before tableCode;
 		
 		if(isMemoiOnline) {
@@ -136,7 +136,7 @@ function _baseLog(num, base) {
 	return Math.log(num) / Math.log(base);
 }
 
-function _makeTableCode(insertPred, countComparator, report, $function, tableSize, isMemoiEmpty) {
+function _makeTableCode(insertPred, countComparator, report, $function, tableSize, isMemoiEmpty, isMemoiOnline) {
 	
 	var indexBits = _baseLog(tableSize, 2);
 
@@ -148,7 +148,7 @@ function _makeTableCode(insertPred, countComparator, report, $function, tableSiz
 		paramNames.push($param.name);
 	}
 	
-	var code = MemoiCodeGen.generateDmtCode(report, tableSize, paramNames, isMemoiEmpty);
+	var code = MemoiCodeGen.generateDmtCode(report, tableSize, paramNames, isMemoiEmpty, isMemoiOnline);
 
 	return code;
 }

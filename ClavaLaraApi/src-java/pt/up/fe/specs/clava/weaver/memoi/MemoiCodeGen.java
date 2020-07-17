@@ -34,23 +34,23 @@ public class MemoiCodeGen {
      * @return
      */
     public static String generateDmtCode(MergedMemoiReport report, int numSets, List<String> paramNames,
-            boolean isMemoiEmpty) {
+            boolean isMemoiEmpty, boolean isMemoiOnline) {
 
         Map<String, MergedMemoiEntry> table = new HashMap<String, MergedMemoiEntry>();
         if (!isMemoiEmpty) {
             table = new DirectMappedTable(report, numSets).generate();
         }
 
-        return generateDmtCode(table, report, numSets, paramNames);
+        return generateDmtCode(table, report, numSets, paramNames, isMemoiOnline);
     }
 
     private static String generateDmtCode(Map<String, MergedMemoiEntry> table, MergedMemoiReport report,
-            int numSets, List<String> paramNames) {
+            int numSets, List<String> paramNames, boolean isMemoiOnline) {
 
         int inputCount = report.getInputCount();
         int outputCount = report.getOutputCount();
 
-        String tableCode = dmtCode(table, inputCount, outputCount, numSets);
+        String tableCode = dmtCode(table, inputCount, outputCount, numSets, isMemoiOnline);
 
         String logicCode = dmtLogicCode(report, paramNames, numSets);
 
@@ -294,9 +294,15 @@ public class MemoiCodeGen {
         return maxVarBits;
     }
 
-    private static String dmtCode(Map<String, MergedMemoiEntry> table, int inputCount, int outputCount, int numSets) {
+    private static String dmtCode(Map<String, MergedMemoiEntry> table, int inputCount, int outputCount, int numSets,
+            boolean isMemoiOnline) {
 
-        StringBuilder code = new StringBuilder("static const uint64_t table[");
+        StringBuilder code = new StringBuilder("static");
+        if (!isMemoiOnline) {
+            code.append(" const");
+        }
+        code.append(" uint64_t table[");
+
         code.append(numSets);
         code.append("][");
         code.append(inputCount + outputCount);
