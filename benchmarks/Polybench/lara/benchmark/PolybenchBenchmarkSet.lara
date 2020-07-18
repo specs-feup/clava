@@ -1,0 +1,192 @@
+import lara.benchmark.PolybenchBenchmarkInstance;
+
+import lara.benchmark.BenchmarkSet;
+
+import lara.util.StringSet;
+
+/**
+ * C-version of the Polybench benchmarks.
+ */
+function PolybenchBenchmarkSet() {
+    // Parent constructor
+    BenchmarkSet.call(this, "PolybenchBenchmarkSet");
+	
+	this._testBenchmarks = ["2mm", "3mm", "adi"];	
+	this._testInputSizes = ["SMALL"];
+}
+// Inheritance
+PolybenchBenchmarkSet.prototype = Object.create(BenchmarkSet.prototype);
+
+/*
+ * Available benchmarks
+ */
+PolybenchBenchmarkSet._benchmarkNames = new StringSet("2mm", "3mm", "adi");
+
+/*
+ * Available sizes
+ */
+PolybenchBenchmarkSet._inputSizes = new StringSet("MINI", "SMALL", "MEDIUM", "LARGE", "EXTRALARGE");
+
+
+/**
+ * @return {String[]} Names of the available benchmarks.
+ */
+PolybenchBenchmarkSet.getBenchmarkNames = function() {
+	return PolybenchBenchmarkSet._benchmarkNames.values();
+}
+
+/**
+ * @return {String[]} Available input sizes (some benchmarks might not support all sizes).
+ */
+PolybenchBenchmarkSet.getInputSizes = function() {
+	return PolybenchBenchmarkSet._inputSizes.values();
+}
+
+/**
+ * @return {boolean} true if the given String is a valid benchmark name.
+ */
+PolybenchBenchmarkSet.isValidName = function(benchName) {
+	return PolybenchBenchmarkSet._benchmarkNames.has(benchName);
+}
+
+/**
+ * @return {boolean} true if the given String is a valid input size.
+ */
+PolybenchBenchmarkSet.isValidSize = function(inputSize) {
+	return PolybenchBenchmarkSet._inputSizes.has(inputSize);
+}
+
+PolybenchBenchmarkSet.isSizeSupported = function(benchName, inputSize) {
+	// Check if name and inputSize are valid
+	PolybenchBenchmarkSet._checkBenchName(benchName, true);
+	PolybenchBenchmarkSet._checkInputSize(inputSize, true);	
+
+/*
+	// Benchmarks supported sizes map:
+	//BT: S, W, A, B, C, D, E
+	//CG: S, W, A, B, C
+	//EP: S, W, A, B, C, D, E
+	//FT: S, W, A, B, C, D, E
+	//IS: S, W, A, B, C, D
+	//LU: S, W, A, B, C, D, E
+	//MG: S, W, A, B, C, D, E
+	//SP: S, W, A, B, C, D, E
+	//UA: S, W, A, B, C, D	
+	
+	if(benchName === "CG" && (inputSize === "D" || inputSize === "E")) {
+		return false;
+	}
+
+	if(benchName === "IS" && (inputSize === "E")) {
+		return false;
+	}	
+	
+	if(benchName === "UA" && (inputSize === "E")) {
+		return false;
+	}	
+*/	
+	return true;
+}
+
+
+PolybenchBenchmarkSet._checkBenchName = function(benchName, strict) {
+	if(!PolybenchBenchmarkSet.isValidName(benchName)) {
+		var message = "Invalid benchmark name '" + benchName + "'. Valid names: " + PolybenchBenchmarkSet.getBenchmarkNames();
+		if(strict) {
+			throw message;
+		} 
+				
+		println(message);
+		return false;
+	}
+	
+	return true;
+}
+
+PolybenchBenchmarkSet._checkInputSize = function(inputSize, strict) {
+	if(!PolybenchBenchmarkSet.isValidSize(inputSize)) {
+		var message = "Use invalid input size '" + inputSize + "'. Valid sizes: " + PolybenchBenchmarkSet.getInputSizes();
+		if(strict) {
+			throw message;
+		} 
+			
+		println(message);
+		return false;
+	}
+	
+	return true;
+}
+
+PolybenchBenchmarkSet.prototype.setBenchmarks = function() {
+ 	var argsArray = arrayFromArgs(arguments);
+	
+	// Clear benchmarks
+	this._testBenchmarks = [];
+	for(var arg of argsArray) {
+		if(!PolybenchBenchmarkSet._checkBenchName(arg)) {
+			continue;
+		}
+		
+		this._testBenchmarks.push(arg);
+	}
+}
+
+PolybenchBenchmarkSet.prototype.setInputSizes = function() {
+ 	var argsArray = arrayFromArgs(arguments);
+	
+	// Clear sizes
+	this._testInputSizes = [];
+	for(var arg of argsArray) {
+		if(!PolybenchBenchmarkSet._checkInputSize(arg)) {
+			continue;
+		}
+		
+		this._testInputSizes.push(arg);
+	}
+}
+
+
+/**
+ * Prints the current Polybench benchmark set.
+ */
+PolybenchBenchmarkSet.prototype.print = function() {
+	println("BenchmarkSet: " + this.getName());
+	println("Benchmark names: " + this._testBenchmarks);
+	println("Benchmark sizes: " + this._testInputSizes);	
+
+	for(var benchName of this._testBenchmarks) {
+
+		print(benchName+":");
+
+		for(var inputSize of this._testInputSizes) {
+
+			if(PolybenchBenchmarkSet.isSizeSupported(benchName, inputSize)) {
+				print(" " + inputSize);
+			}
+		}
+		
+		println();
+	}
+}
+
+/*** IMPLEMENTATIONS ***/
+
+PolybenchBenchmarkSet.prototype._getInstancesPrivate = function() {
+
+	var instances = [];
+
+	for(var benchName of this._testBenchmarks) {
+	
+		for(var inputSize of this._testInputSizes) {
+		
+			if(!PolybenchBenchmarkSet.isSizeSupported (benchName, inputSize)) {
+				continue;
+			}
+		
+			instances.push(new PolybenchBenchmarkInstance(benchName, inputSize));
+		
+		}	
+	}
+	
+	return instances;
+}
