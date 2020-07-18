@@ -17,10 +17,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MemoiCodeGen {
 
-    private static final int BASE = 16;
+    private static final String NAN_BITS = "fff8000000000000";
 
     /**
      * 
@@ -32,41 +33,127 @@ public class MemoiCodeGen {
      * @param func
      * @return
      */
-    public static String generateDirectMappedTableCode(MergedMemoiReport report, int numSets, List<String> paramNames) {
+    public static String generateDmtCode(MergedMemoiReport report, int numSets, List<String> paramNames,
+            boolean isMemoiEmpty, boolean isMemoiOnline) {
 
-        var table = new DirectMappedTable(report, numSets).generate();
+        Map<String, MergedMemoiEntry> table = new HashMap<String, MergedMemoiEntry>();
+        if (!isMemoiEmpty) {
+            table = new DirectMappedTable(report, numSets).generate();
+        }
 
-        return generateDirectMappedTableCode(table, report, numSets, paramNames);
+        return generateDmtCode(table, report, numSets, paramNames, isMemoiOnline);
     }
 
-    private static String generateDirectMappedTableCode(Map<String, MergedMemoiEntry> table, MergedMemoiReport report,
-            int numSets, List<String> paramNames) {
+    private static String generateDmtCode(Map<String, MergedMemoiEntry> table, MergedMemoiReport report,
+            int numSets, List<String> paramNames, boolean isMemoiOnline) {
 
-        String tableCode = dmtCode(table, report, numSets);
+        int inputCount = report.getInputCount();
+        int outputCount = report.getOutputCount();
+
+        String tableCode = dmtCode(table, inputCount, outputCount, numSets, isMemoiOnline);
 
         String logicCode = dmtLogicCode(report, paramNames, numSets);
 
         return tableCode + "\n\n" + logicCode;
     }
 
+    public static String generateUpdateCode(MergedMemoiReport report, int numSets, List<String> paramNames,
+            boolean isUpdateAlways) {
+
+        int indexBits = (int) MemoiUtils.log2(numSets);
+
+        return updateCode(report, indexBits, paramNames, isUpdateAlways);
+    }
+
+    private static List<String> makeVarNames(List<String> paramNames) {
+
+        return paramNames.stream().map(s -> s + "_bits").collect(Collectors.toList());
+    }
+
     private static String dmtLogicCode(MergedMemoiReport report, List<String> paramNames, int numSets) {
 
         StringBuilder code = new StringBuilder();
-        List<String> varNames = new ArrayList<>();
         int indexBits = (int) MemoiUtils.log2(numSets);
 
-        int maxVarBits = varBitsCode(report, paramNames, code, varNames);
+        int maxVarBits = varBitsCode(report, paramNames, code);
 
-        mergeBitsCode(code, varNames, maxVarBits, indexBits);
+        mergeBitsCode(code, paramNames, maxVarBits, indexBits);
 
-        lookupCode(report, code, varNames, indexBits, paramNames);
+        lookupCode(report, code, indexBits, paramNames);
 
         return code.toString();
     }
 
-    private static void lookupCode(MergedMemoiReport report, StringBuilder code, List<String> varNames, int indexBits,
+    private static String updateCode(MergedMemoiReport report, int indexBits,
+            List<String> paramNames, boolean isUpdateAlways) {
+
+        StringBuilder code = new StringBuilder();
+
+        var varNames = makeVarNames(paramNames);
+
+        List<String> inputUpdates = new ArrayList<>();
+        StringBuilder access = new StringBuilder("table[hash_").append(indexBits).append("_bits]");
+
+        for (int v = 0; v < varNames.size(); v++) {
+
+            StringBuilder inputUpdate = new StringBuilder(access);
+            inputUpdate.append("[");
+            inputUpdate.append(v);
+            inputUpdate.append("] = ");
+            inputUpdate.append(varNames.get(v));
+            inputUpdate.append(";");
+
+            inputUpdates.add(inputUpdate.toString());
+        }
+        code.append(String.join("\n", inputUpdates));
+        code.append("\n");
+
+        final int outputCount = report.getOutputCount();
+        final int inputCount = report.getInputCount();
+
+        if (outputCount == 1) {
+
+            code.append(access);
+            code.append("[");
+            code.append(varNames.size());
+            code.append("] = *(uint64_t*) &result;");
+
+        } else {
+
+            // FIXME: this generates wrong code
+            for (int o = 0; o < outputCount; o++) {
+
+                int outputIndex = o + inputCount;
+
+                code.append(access);
+                code.append("[");
+                code.append(outputIndex);
+                code.append("] = *(uint64_t*) ");
+                code.append(paramNames.get(outputIndex));
+                code.append(";");
+            }
+            code.append("\treturn;\n}\n");
+        }
+
+        if (!isUpdateAlways) {
+            StringBuilder condition = new StringBuilder("if(");
+            condition.append(access);
+            condition.append("[0] == 0x");
+            condition.append(NAN_BITS);
+            condition.append(") {\n");
+
+            code.insert(0, condition);
+            code.append("\n}\n");
+        }
+
+        return code.toString();
+    }
+
+    private static void lookupCode(MergedMemoiReport report, StringBuilder code, int indexBits,
             List<String> paramNames) {
         code.append("\nif(");
+
+        List<String> varNames = makeVarNames(paramNames);
 
         List<String> testClauses = new ArrayList<>();
         StringBuilder access = new StringBuilder("table[hash_").append(indexBits).append("_bits]");
@@ -115,7 +202,9 @@ public class MemoiCodeGen {
         }
     }
 
-    private static void mergeBitsCode(StringBuilder code, List<String> varNames, int maxVarBits, int indexBits) {
+    private static void mergeBitsCode(StringBuilder code, List<String> paramNames, int maxVarBits, int indexBits) {
+
+        List<String> varNames = makeVarNames(paramNames);
 
         code.append("\n");
         code.append("uint");
@@ -169,13 +258,14 @@ public class MemoiCodeGen {
         }
     }
 
-    private static int varBitsCode(MergedMemoiReport report, List<String> paramNames, StringBuilder code,
-            List<String> varNames) {
+    private static int varBitsCode(MergedMemoiReport report, List<String> paramNames, StringBuilder code) {
 
         Map<String, Integer> sizeMap = new HashMap<>();
         sizeMap.put("float", 32);
         sizeMap.put("int", 32);
         sizeMap.put("double", 64);
+
+        List<String> varNames = makeVarNames(paramNames);
 
         int maxVarBits = 0;
 
@@ -190,13 +280,10 @@ public class MemoiCodeGen {
                 maxVarBits = varBits;
             }
 
-            String varName = paramName + "_bits";
-            varNames.add(varName);
-
             code.append("uint");
             code.append(varBits);
             code.append("_t ");
-            code.append(varName);
+            code.append(varNames.get(p));
             code.append(" = *(uint");
             code.append(varBits);
             code.append("_t*)&");
@@ -207,13 +294,15 @@ public class MemoiCodeGen {
         return maxVarBits;
     }
 
-    private static String dmtCode(Map<String, MergedMemoiEntry> table, MergedMemoiReport report, int numSets) {
+    private static String dmtCode(Map<String, MergedMemoiEntry> table, int inputCount, int outputCount, int numSets,
+            boolean isMemoiOnline) {
 
-        String nanBits = "fff8000000000000";
-        int inputCount = report.getInputCount();
-        int outputCount = report.getOutputCount();
+        StringBuilder code = new StringBuilder("static");
+        if (!isMemoiOnline) {
+            code.append(" const");
+        }
+        code.append(" uint64_t table[");
 
-        StringBuilder code = new StringBuilder("static const uint64_t table[");
         code.append(numSets);
         code.append("][");
         code.append(inputCount + outputCount);
@@ -233,7 +322,7 @@ public class MemoiCodeGen {
 
                 for (int ic = 0; ic < inputCount; ic++) {
                     code.append(H);
-                    code.append(nanBits);
+                    code.append(NAN_BITS);
                     code.append(", ");
                 }
 

@@ -18,126 +18,11 @@ function _isPowerOf2(num) {
 }
 
 /**
- * 		Reads memoization profiling reports and sorts the counts.
- * */
-function _readReports(reportsPaths) {
-
-	var reports = {};
-	var counter = 0;
-	
-	for (var reportPath of reportsPaths) {
-		
-		var report = Io.readJson(reportPath);
-		
-		// add the path to uniquely identify this report
-		report.path = reportPath;
-		
-		// add report to map
-		_mapReport(reports, report);
-		
-		counter++;
-	}
-	
-	debug('read reports: ' + counter);
-	return _combineReports(reports);
-}
-
-/**
- * 		Maps reports into a double map.
- * 		target function -> call site -> list of reports
- * */
-function _mapReport(reportsMap, report) {
-	
-	if (reportsMap[report.funcSig] === undefined) {
-		
-		reportsMap[report.funcSig] = {};
-	}
-	
-	if (reportsMap[report.funcSig][report.call_sites] === undefined) {
-		
-		reportsMap[report.funcSig][report.call_sites] = [];
-	}
-	
-	reportsMap[report.funcSig][report.call_sites].push(report);
-	
-}
-
-/**
- * 		Combines reports of the same function and same call site from
- * 	different profiling runs.
- * */
-function _combineReports(originalReports) {
-			
-	var finalReports = [];
-	
-	for(var func in originalReports) {
-		debug('combining reports for function ' + func);
-		for(var callSite in originalReports[func]) {
-			debug('combining reports for call site ' + callSite);
-			// get old reports for the current <func, call>
-			var reports = originalReports[func][callSite];
-	
-			// new report stores every run info in arrays
-			var newReport = {
-				funcSig : func,
-				call_sites : callSite,
-				reportCount : reports.length,
-				elements : [],
-				calls : [],
-				hits : [],
-				misses : [],
-				inputCount : reports[0].inputCount,
-				inputTypes : reports[0].inputTypes,
-				counts : {} // counts is temporarily a map to ease the combination
-			};
-			
-			// iterate all old reports
-			for(var oldReport of reports) {
-				
-				// add all info to the corresponding arrays
-				newReport.elements.push(oldReport.elements);
-				newReport.calls.push(oldReport.calls);
-				newReport.hits.push(oldReport.hits);
-				newReport.misses.push(oldReport.misses);
-				
-				// iterate all counts of the old report
-				for(var count of oldReport.counts) {
-					
-					var key = count.key;
-					
-					// build new counts using the key attribute as a key
-					if(newReport.counts[key] === undefined || newReport.counts[key] === null) {
-					//~ if(!(key in newReport.counts)) {
-						
-						newReport.counts[key] = {
-							key : key,
-							output : count.output,
-							counter : []
-						};
-					}
-
-					var oldCounter = count.counter;
-					newReport.counts[key].counter.push(oldCounter);		
-				}
-			}
-			// convert counts from a map to an array
-			_convertCounts(newReport);
-	
-			finalReports.push(newReport);
-		}
-	}
-	
-	debug('combined reports: ' + finalReports.length);
-	
-	return finalReports;
-}
-
-/**
  * 		Generates the table and supporting code for this report.
  * 		
  * 		Inserts elements in the table based on the predicate insertPred.
  * */
-function _generate(insertPred, countComparator, report, isMemoiDebug, tableSize, signature, callSite) {
+function _generate(insertPred, countComparator, report, isMemoiDebug, isMemoiOnline, isMemoiEmpty, isMemoiUpdateAlways, tableSize, signature, callSite) {
 	
 	var wt;
 	
@@ -146,7 +31,7 @@ function _generate(insertPred, countComparator, report, isMemoiDebug, tableSize,
 	} else {
 		wt = call _Memoi_WrapSingleTarget(signature, callSite);
 	}
-	call _Memoi_InsertTableCode(insertPred, countComparator, report, wt.wrapperName, isMemoiDebug, tableSize);
+	call _Memoi_InsertTableCode(insertPred, countComparator, report, wt.wrapperName, isMemoiDebug, isMemoiOnline, isMemoiEmpty, isMemoiUpdateAlways, tableSize);
 }
 
 aspectdef _Memoi_WrapGlobalTarget
@@ -200,7 +85,7 @@ aspectdef _Memoi_WrapSingleTarget
 end
 
 aspectdef _Memoi_InsertTableCode
-	input insertPred, countComparator, report, wrapperName, isMemoiDebug, tableSize end
+	input insertPred, countComparator, report, wrapperName, isMemoiDebug, isMemoiOnline, isMemoiEmpty, isMemoiUpdateAlways, tableSize end
 	
 	select file.function{wrapperName}.call end
 	apply
@@ -215,8 +100,15 @@ aspectdef _Memoi_InsertTableCode
 			call _Memoi_AddMainDebug(totalName, missesName, wrapperName);
 		}
 		
-		var tableCode = _makeTableCode(insertPred, countComparator, report, $function, tableSize);
+		var tableCode = _makeTableCode(insertPred, countComparator, report, $function, tableSize, isMemoiEmpty, isMemoiOnline);	
 		insert before tableCode;
+		
+		if(isMemoiOnline) {
+			
+			var updateCode = _makeUpdateCode(report, $function, tableSize, isMemoiUpdateAlways);
+			insert after updateCode;
+		}
+		
 		$file.exec addInclude('stdint.h', true);
 	end
 end
@@ -244,27 +136,33 @@ function _baseLog(num, base) {
 	return Math.log(num) / Math.log(base);
 }
 
-function _makeTableCode(insertPred, countComparator, report, $function, tableSize) {
+function _makeTableCode(insertPred, countComparator, report, $function, tableSize, isMemoiEmpty, isMemoiOnline) {
 	
 	var indexBits = _baseLog(tableSize, 2);
 
 	debug('table size: ' + tableSize);
 	debug('index bits: ' + indexBits);
 
-	/** VERSION 1 */
-	//~ var table = _makeTable(insertPred, countComparator, report, $function, indexBits, tableSize);
-	//~ var code = _makeCode(table, indexBits, tableSize, $function, report);
-	
-	/** VERSION 2 */
-	//~ var code = _makeCode2(indexBits, report, tableSize, $function);
-
-	/** VERSION 3 */
 	var paramNames = [];
 	for(var $param of $function.params) {
 		paramNames.push($param.name);
 	}
 	
-	var code = MemoiCodeGen.generateDirectMappedTableCode(report, tableSize, paramNames);
+	var code = MemoiCodeGen.generateDmtCode(report, tableSize, paramNames, isMemoiEmpty, isMemoiOnline);
+
+	return code;
+}
+
+function _makeUpdateCode(report, $function, tableSize, isMemoiUpdateAlways) {
+	
+	var indexBits = _baseLog(tableSize, 2);
+
+	var paramNames = [];
+	for(var $param of $function.params) {
+		paramNames.push($param.name);
+	}
+	
+	var code = MemoiCodeGen.generateUpdateCode(report, tableSize, paramNames, isMemoiUpdateAlways);
 
 	return code;
 }
@@ -274,265 +172,6 @@ var sizeMap = {
 	'int': 32,
 	'double': 64
 };
-
-function _makeCode2(indexBits, report, tableSize, $function) {
-	
-	var paramNames = [];
-	for(var $param of $function.params) {
-		paramNames.push($param.name);
-	}
-	var tableCode = MemoiCodeGen.generateDirectMappedTableCode(report, tableSize, paramNames);
-	
-	var inputCount = report.inputCount;
-	
-	// logic code
-	var logicCode = '';
-	var maxVarBits = 0;
-	var varNames = [];
-	
-	// get the bits of all parameters
-	for(var $param of $function.params) {
-	
-		var name = $param.name;
-		var varBits = sizeMap[$param.type.code];
-		
-		if(varBits > maxVarBits) {maxVarBits = varBits;}
-		
-		var varName = name +'_bits';
-		varNames.push(varName);
-		logicCode += 'uint' + varBits + '_t ' + varName + ' = *(uint' + varBits + '_t*)&' + name + ';\n';
-	}
-	debug('max var bits: ' + maxVarBits);
-	
-	// merge all bits
-	logicCode += '\nuint' + maxVarBits + '_t hash_' + maxVarBits +'_bits = ';
-	logicCode += varNames.join(' ^ ');
-	logicCode += ';\n';
-	
-	var iters = _baseLog(maxVarBits / indexBits, 2);
-	var intIters = parseInt(iters, 10);
-
-	var large = maxVarBits;
-	for(var i = 0; i < intIters; i++) {
-
-		var small = large / 2;
-		logicCode += 'uint' + small + '_t hash_' + small + '_bits = (hash_' + large +'_bits ^ (hash_' + large +'_bits >> ' + small + '));\n';
-		large = large / 2;
-	}
-	
-	// if not integer, we need to mask bits at the end
-	if(iters !== intIters) {
-		var numMaskBits = small - indexBits;
-		logicCode += 'uint' + small + '_t mask = 0xffff >> (16 - ' + indexBits + ');\n';
-		logicCode += 'uint' + small + '_t hash_' + indexBits + '_bits = hash_' + small +'_bits & mask;\n';			
-	}
-	
-	// lookup code
-	logicCode += '\nif(';
-	
-	var access = 'table[hash_' + indexBits + '_bits]';
-	var testClauses = [];
-	for(var v = 0; v < varNames.length; v++) {
-		
-		testClauses.push(access + '[' + v + '] == ' + varNames[v]);
-	}
-	logicCode += testClauses.join(' && ');
-	
-	logicCode += ') {';
-	logicCode += '\n\treturn *(' + $function.functionType.returnType.code + ' *) &table[hash_' + indexBits + '_bits][' + inputCount + '];\n}\n';	
-	
-
-	// concat
-	return tableCode + '\n\n' + logicCode;
-}
-
-function _makeCode(table, indexBits, tableSize, $function, report) {
-	
-	// table code
-	var nanBits = 'fff8000000000000';
-	var inputCount = report.inputCount;
-	
-	var tableCode = 'static const uint64_t table[' + tableSize + '][' + (inputCount + 1)  + '] = {\n';
-	for(var i = 0; i < tableSize; i++) {
-
-		tableCode += '\t{';
-		if(table[i] === undefined) {
-
-			for(var ic = 0; ic < inputCount; ic++) {
-				tableCode += '0x' + nanBits + ', ';
-			}
-			tableCode += '0';
-		} else {
-			
-			var fullKey = table[i].fullKey;
-			var keys = fullKey.split('#');
-			for(var k = 0; k < keys.length; k++) {
-				tableCode += '0x' + keys[k] + ', ';
-			}
-			tableCode += '0x' + table[i].output;
-		}
-		tableCode += '},\n';
-	}
-	tableCode += '};';
-
-
-
-	// logic code
-	var logicCode = '';
-	var maxVarBits = 0;
-	var varNames = [];
-	
-	// get the bits of all parameters
-	for(var $param of $function.params) {
-	
-		var name = $param.name;
-		var varBits = sizeMap[$param.type.code];
-		
-		if(varBits > maxVarBits) {maxVarBits = varBits;}
-		
-		var varName = name +'_bits';
-		varNames.push(varName);
-		logicCode += 'uint' + varBits + '_t ' + varName + ' = *(uint' + varBits + '_t*)&' + name + ';\n';
-	}
-	debug('max var bits: ' + maxVarBits);
-	
-	// merge all bits
-	logicCode += '\nuint' + maxVarBits + '_t hash_' + maxVarBits +'_bits = ';
-	logicCode += varNames.join(' ^ ');
-	logicCode += ';\n';
-	
-	var iters = _baseLog(maxVarBits / indexBits, 2);
-	var intIters = parseInt(iters, 10);
-
-	var large = maxVarBits;
-	for(var i = 0; i < intIters; i++) {
-
-		var small = large / 2;
-		logicCode += 'uint' + small + '_t hash_' + small + '_bits = (hash_' + large +'_bits ^ (hash_' + large +'_bits >> ' + small + '));\n';
-		large = large / 2;
-	}
-	
-	// if not integer, we need to mask bits at the end
-	if(iters !== intIters) {
-		var numMaskBits = small - indexBits;
-		logicCode += 'uint' + small + '_t mask = 0xffff >> (16 - ' + indexBits + ');\n';
-		logicCode += 'uint' + small + '_t hash_' + indexBits + '_bits = hash_' + small +'_bits & mask;\n';			
-	}
-	
-	// lookup code
-	logicCode += '\nif(';
-	
-	var access = 'table[hash_' + indexBits + '_bits]';
-	var testClauses = [];
-	for(var v = 0; v < varNames.length; v++) {
-		
-		testClauses.push(access + '[' + v + '] == ' + varNames[v]);
-	}
-	logicCode += testClauses.join(' && ');
-	
-	logicCode += ') {';
-	logicCode += '\n\treturn *(' + $function.functionType.returnType.code + ' *) &table[hash_' + indexBits + '_bits][' + inputCount + '];\n}\n';	
-	
-
-	// concat
-	return tableCode + '\n\n' + logicCode;
-}
-
-function _combineKeys(keys) {
-	
-	var numKeys = keys.length;
-	var key = '';
-
-	var keyLength = 16;
-	var base = 16;
-	for(var i = 0; i < keyLength; i++) {
-		
-		var currentNumber = parseInt(keys[0].charAt(i), base);
-		
-		for(var n = 1; n < numKeys; n++) {
-			
-			var newNumber = parseInt(keys[n].charAt(i), base);
-			currentNumber = currentNumber ^ newNumber;
-		}
-		
-		key += currentNumber.toString(16);
-	}
-	
-	return key;
-}
-
-function _makeTable(insertPred, countComparator, report, $function, indexBits, tableSize) {
-	
-	var collisions = 0;
-	var collisionPercentage;
-	var maxCollision = 0;
-	var hashMaxCollision;
-	var coverage;
-	var code = "";
-	var table = [];
-	
-	//~ var counts = report.counts.values();
-	//~ counts.sort(countComparator);
-	
-	switch(countComparator) {
-		case MemoiComparator.MEAN:
-			var counts = report.getMeanSorted();
-			break;
-		default:
-			throw 'The possible comparators are {MemoiComparator.MEAN}.';
-	}
-	
-	var totalElements = counts.length;
-	
-	for(var i = 0; i < totalElements; i++) {
-		
-		var count = counts[i];
-		
-		if(!insertPred(count, report)) {
-			continue;
-		}
-
-		var keys = count.key.split('#');
-		
-		if(keys.length > 1) {
-			var key = _combineKeys(keys);
-		} else {
-			var key = count.key;
-		}
-		
-		
-		var hash = _hashFunction(key, indexBits);
-		
-		if(table[hash] === undefined) {
-
-			table[hash] = {'key' : key,
-						'output' : count.output,
-						'collisions' : 0,
-						'counter' : count.counter,
-						'fullKey' : count.key};
-		} else {
-			table[hash].key = key;
-			table[hash].output = count.output;
-			table[hash].counter = count.counter;
-			table[hash].fullKey = count.key;
-
-			// collisions on this specific position
-			table[hash].collisions++;
-			if(table[hash].collisions > maxCollision) {maxCollision = table[hash].collisions; hashMaxCollision = hash;}
-			
-			// total collisions
-			collisions++;
-		}
-	}
-	
-	_printTableReport(collisions, totalElements, maxCollision, report, tableSize, table);
-	if(isDebug()) {
-		
-		_printTable(table, tableSize);
-	}
-	
-	return table;
-}
 
 function _printTable(table, tableSize) {
 	
