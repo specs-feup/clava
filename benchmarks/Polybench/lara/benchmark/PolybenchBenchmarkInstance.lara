@@ -49,7 +49,7 @@ PolybenchBenchmarkInstance.prototype._loadPrivate = function() {
 
 	// Set define
 	this._previousFlags = Clava.getData().getFlags();
-	var modifiedFlags = this._previousFlags + " -D" + this._inputSize + "_DATASET -DPOLYBENCH_TIME";
+	var modifiedFlags = this._previousFlags + " -D" + this._inputSize + "_DATASET -DPOLYBENCH_TIME -lm";
 	Clava.getData().setFlags(modifiedFlags);
 
 	// Rebuild
