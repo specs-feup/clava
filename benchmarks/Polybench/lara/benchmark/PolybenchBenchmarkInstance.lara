@@ -20,11 +20,8 @@ function PolybenchBenchmarkInstance(benchmarkName, inputSize, version) {
 	this._previousStandard = undefined;
 	this._previousFlags = undefined;
 	
+	// Add -lm
 	this.getCMaker().addLibs("m");
-
-// Add .c, .h and utils	
-//	var filename = "NAS_" + benchmarkName + ".c";
-//	this._file = PolybenchBenchmarkResources.getFile(filename);
 }
 // Inheritance
 PolybenchBenchmarkInstance.prototype = Object.create(ClavaBenchmarkInstance.prototype);
@@ -43,8 +40,6 @@ PolybenchBenchmarkInstance.prototype._loadPrivate = function() {
 
 	// Add code
 	this._addCode();
-//	var clavaJPFile = ClavaJoinPoints.file(this._file);
-//	Clava.addFile(clavaJPFile);	
 	
 	// Set standard
 	this._previousStandard = Clava.getData().getStandard();
