@@ -18,6 +18,8 @@ function PolybenchBenchmarkInstance(benchmarkName, inputSize) {
 	
 	this._previousStandard = undefined;
 	this._previousFlags = undefined;
+	
+	this.getCMaker().addFlags("m");
 
 // Add .c, .h and utils	
 //	var filename = "NAS_" + benchmarkName + ".c";
@@ -49,7 +51,7 @@ PolybenchBenchmarkInstance.prototype._loadPrivate = function() {
 
 	// Set define
 	this._previousFlags = Clava.getData().getFlags();
-	var modifiedFlags = this._previousFlags + " -D" + this._inputSize + "_DATASET -DPOLYBENCH_TIME -lm";
+	var modifiedFlags = this._previousFlags + " -D" + this._inputSize + "_DATASET -DPOLYBENCH_TIME";
 	Clava.getData().setFlags(modifiedFlags);
 
 	// Rebuild
