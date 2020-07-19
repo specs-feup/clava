@@ -19,7 +19,7 @@ function PolybenchBenchmarkInstance(benchmarkName, inputSize) {
 	this._previousStandard = undefined;
 	this._previousFlags = undefined;
 	
-	this.getCMaker().addFlags("m");
+	this.getCMaker().addLibs("m");
 
 // Add .c, .h and utils	
 //	var filename = "NAS_" + benchmarkName + ".c";
