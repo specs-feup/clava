@@ -1,94 +1,156 @@
 import lara.benchmark.PolybenchBenchmarkInstance;
+import lara.benchmark.PolybenchBenchmarkResources;
 
 import lara.benchmark.BenchmarkSet;
 
+import lara.util.PredefinedStrings;
 import lara.util.StringSet;
+import lara.Io;
 
 /**
  * C-version of the Polybench benchmarks.
  */
-function PolybenchBenchmarkSet() {
+function PolybenchBenchmarkSet(version) {
     // Parent constructor
     BenchmarkSet.call(this, "PolybenchBenchmarkSet");
+
+
+	// Default version is 4.2
+	this._version = version !== undefined ? version.toString() : "4.2";
+
+	// Check if version is supported
+	if(!PolybenchBenchmarkSet.getVersions().isValid(this._version)) {
+	//if(!PolybenchBenchmarkResources.hasFolder(this._version)) {
+		throw "Version '" + this._version + "' not supported. Supported versions: " + PolybenchBenchmarkSet.getVersions().values();
+	}
+
+
+	var benchData = PolybenchBenchmarkResources.getJson(this._version + "/data.json");
+	
+	//printlnObject(benchData);
+	
+	this._benchmarkNames = new PredefinedStrings("benchmark name", true, benchData["names"]);
+	this._inputSizes = new PredefinedStrings("input size", false, benchData["sizes"]);	
+	
+//	println("Resources:");
+//	printlnObject(PolybenchBenchmarkResources);
+//	println("Version folder: " + PolybenchBenchmarkResources.getFolder(this._version));
 	
 	this._testBenchmarks = ["2mm", "3mm", "adi", "atax", "bicg", "cholesky", "correlation", "covariance", "deriche", "doitgen", "durbin", "gemm", "gemver", "gesummv", "gramschmidt", "heat-3d", "jacobi-1d", "jacobi-2d", "lu", "ludcmp", "mvt", "seidel-2d", "symm", "syr2k", "syrk", "trisolv", "trmm"];	
 	this._testInputSizes = ["SMALL"];
+
 }
 // Inheritance
 PolybenchBenchmarkSet.prototype = Object.create(BenchmarkSet.prototype);
 
+
+/**
+ * @return {lara.util.PredefinedStrings} the benchmark names.
+ */
+PolybenchBenchmarkSet.prototype.getBenchmarkNames = function() {
+	return this._benchmarkNames;
+}
+
+
+
+
 /*
  * Available benchmarks
  */
+ /*
 PolybenchBenchmarkSet._benchmarkNames = new StringSet("2mm", "3mm", "adi", "atax", "bicg", "cholesky", "correlation", "covariance", "deriche", "doitgen", "durbin", "gemm", "gemver", "gesummv", "gramschmidt", "heat-3d", "jacobi-1d", "jacobi-2d", "lu", "ludcmp", "mvt", "seidel-2d", "symm", "syr2k", "syrk", "trisolv", "trmm");
+*/
 
 /*
  * Available sizes
  */
-PolybenchBenchmarkSet._inputSizes = new StringSet("MINI", "SMALL", "MEDIUM", "LARGE", "EXTRALARGE");
+//PolybenchBenchmarkSet._inputSizes = new StringSet("MINI", "SMALL", "MEDIUM", "LARGE", "EXTRALARGE");
+
+
+/*
+ * Available versions
+ */
+//PolybenchBenchmarkSet._versions = new StringSet("4.2");
 
 
 /**
  * @return {String[]} Names of the available benchmarks.
  */
+ /*
 PolybenchBenchmarkSet.getBenchmarkNames = function() {
 	return PolybenchBenchmarkSet._benchmarkNames.values();
 }
+*/
 
 /**
- * @return {String[]} Available input sizes (some benchmarks might not support all sizes).
+ * @return {lara.util.PredefinedStrings} Available input sizes.
  */
-PolybenchBenchmarkSet.getInputSizes = function() {
-	return PolybenchBenchmarkSet._inputSizes.values();
+ PolybenchBenchmarkSet.prototype.getInputSizes = function() {
+	return this._inputSizes;
 }
+ 
+ /*
+PolybenchBenchmarkSet.getInputSizes = function() {
+	return this._inputSizes.values();
+}
+*/
+
+/**
+ * @return {lara.util.PredefinedStrings} Available versions.
+ */
+PolybenchBenchmarkSet.getVersions = function() {
+	return PolybenchBenchmarkSet._VERSIONS;
+	//return PolybenchBenchmarkSet._calculateVersions();
+}
+
+
+PolybenchBenchmarkSet._calculateVersions = function() {
+	var versions = Io.getFolders(PolybenchBenchmarkResources.getBaseFolder()).map(function(value) {return value.getName();});
+	return new PredefinedStrings("versions", false, versions);
+}
+
+PolybenchBenchmarkSet._VERSIONS = PolybenchBenchmarkSet._calculateVersions();
+
 
 /**
  * @return {boolean} true if the given String is a valid benchmark name.
  */
+ /*
 PolybenchBenchmarkSet.isValidName = function(benchName) {
 	return PolybenchBenchmarkSet._benchmarkNames.has(benchName);
 }
+*/
 
 /**
  * @return {boolean} true if the given String is a valid input size.
  */
+ /*
 PolybenchBenchmarkSet.isValidSize = function(inputSize) {
 	return PolybenchBenchmarkSet._inputSizes.has(inputSize);
 }
+*/
 
+
+/**
+ * @return {boolean} true if the given String is a version.
+ */
+ /*
+PolybenchBenchmarkSet.isValidVersion = function(version) {
+	//return PolybenchBenchmarkSet._versions.has(inputSize);
+}
+*/
+
+/*
 PolybenchBenchmarkSet.isSizeSupported = function(benchName, inputSize) {
 	// Check if name and inputSize are valid
 	PolybenchBenchmarkSet._checkBenchName(benchName, true);
 	PolybenchBenchmarkSet._checkInputSize(inputSize, true);	
 
-/*
-	// Benchmarks supported sizes map:
-	//BT: S, W, A, B, C, D, E
-	//CG: S, W, A, B, C
-	//EP: S, W, A, B, C, D, E
-	//FT: S, W, A, B, C, D, E
-	//IS: S, W, A, B, C, D
-	//LU: S, W, A, B, C, D, E
-	//MG: S, W, A, B, C, D, E
-	//SP: S, W, A, B, C, D, E
-	//UA: S, W, A, B, C, D	
-	
-	if(benchName === "CG" && (inputSize === "D" || inputSize === "E")) {
-		return false;
-	}
-
-	if(benchName === "IS" && (inputSize === "E")) {
-		return false;
-	}	
-	
-	if(benchName === "UA" && (inputSize === "E")) {
-		return false;
-	}	
-*/	
 	return true;
 }
+*/
 
-
+/*
 PolybenchBenchmarkSet._checkBenchName = function(benchName, strict) {
 	if(!PolybenchBenchmarkSet.isValidName(benchName)) {
 		var message = "Invalid benchmark name '" + benchName + "'. Valid names: " + PolybenchBenchmarkSet.getBenchmarkNames();
@@ -102,7 +164,8 @@ PolybenchBenchmarkSet._checkBenchName = function(benchName, strict) {
 	
 	return true;
 }
-
+*/
+/*
 PolybenchBenchmarkSet._checkInputSize = function(inputSize, strict) {
 	if(!PolybenchBenchmarkSet.isValidSize(inputSize)) {
 		var message = "Use invalid input size '" + inputSize + "'. Valid sizes: " + PolybenchBenchmarkSet.getInputSizes();
@@ -116,8 +179,27 @@ PolybenchBenchmarkSet._checkInputSize = function(inputSize, strict) {
 	
 	return true;
 }
+*/
+
+/*
+PolybenchBenchmarkSet._checkVersion = function(version, strict) {
+	if(!PolybenchBenchmarkSet.isValidVersion(version)) {
+		var message = "Used invalid version '" + version + "'. Valid versions: " + PolybenchBenchmarkSet.getVersions();
+		if(strict) {
+			throw message;
+		} 
+			
+		println(message);
+		return false;
+	}
+	
+	return true;
+}
+*/
 
 PolybenchBenchmarkSet.prototype.setBenchmarks = function() {
+	this._testBenchmarks = this.getBenchmarkNames().parse(arrayFromArgs(arguments));
+	/*
  	var argsArray = arrayFromArgs(arguments);
 	
 	// Clear benchmarks
@@ -129,9 +211,12 @@ PolybenchBenchmarkSet.prototype.setBenchmarks = function() {
 		
 		this._testBenchmarks.push(arg);
 	}
+	*/
 }
 
 PolybenchBenchmarkSet.prototype.setInputSizes = function() {
+	this._testInputSizes = this.getInputSizes().parse(arrayFromArgs(arguments));
+/*
  	var argsArray = arrayFromArgs(arguments);
 	
 	// Clear sizes
@@ -143,8 +228,24 @@ PolybenchBenchmarkSet.prototype.setInputSizes = function() {
 		
 		this._testInputSizes.push(arg);
 	}
+*/	
 }
 
+/*
+PolybenchBenchmarkSet.prototype.setVersions = function() {
+ 	var argsArray = arrayFromArgs(arguments);
+	
+	// Clear sizes
+	this._testVersions = [];
+	for(var arg of argsArray) {
+		if(!PolybenchBenchmarkSet._checkVersion(arg)) {
+			continue;
+		}
+		
+		this._testVersions.push(arg);
+	}
+}
+*/
 
 /**
  * Prints the current Polybench benchmark set.
@@ -153,20 +254,22 @@ PolybenchBenchmarkSet.prototype.print = function() {
 	println("BenchmarkSet: " + this.getName());
 	println("Benchmark names: " + this._testBenchmarks);
 	println("Benchmark sizes: " + this._testInputSizes);	
-
+	println("Benchmark version: " + this._version);		
+/*
 	for(var benchName of this._testBenchmarks) {
 
 		print(benchName+":");
 
 		for(var inputSize of this._testInputSizes) {
 
-			if(PolybenchBenchmarkSet.isSizeSupported(benchName, inputSize)) {
+			//if(PolybenchBenchmarkSet.isSizeSupported(benchName, inputSize)) {
 				print(" " + inputSize);
-			}
+			//}
 		}
 		
 		println();
 	}
+*/	
 }
 
 /*** IMPLEMENTATIONS ***/
@@ -179,11 +282,11 @@ PolybenchBenchmarkSet.prototype._getInstancesPrivate = function() {
 	
 		for(var inputSize of this._testInputSizes) {
 		
-			if(!PolybenchBenchmarkSet.isSizeSupported (benchName, inputSize)) {
-				continue;
-			}
+			//if(!PolybenchBenchmarkSet.isSizeSupported(benchName, inputSize)) {
+			//	continue;
+			//}
 		
-			instances.push(new PolybenchBenchmarkInstance(benchName, inputSize));
+			instances.push(new PolybenchBenchmarkInstance(benchName, inputSize, this._version));
 		
 		}	
 	}

@@ -9,12 +9,13 @@ import weaver.WeaverJps;
 /**
  * Instance of a C Polybench benchmark.
  */
-function PolybenchBenchmarkInstance(benchmarkName, inputSize) {
+function PolybenchBenchmarkInstance(benchmarkName, inputSize, version) {
     // Parent constructor
     ClavaBenchmarkInstance.call(this, "Polybench-" + benchmarkName + "-" + inputSize);
 	
 	this._benchmarkName = benchmarkName;
 	this._inputSize = inputSize;
+	this._version = version;
 	
 	this._previousStandard = undefined;
 	this._previousFlags = undefined;
@@ -86,7 +87,7 @@ PolybenchBenchmarkInstance.prototype._addCode = function() {
 
 	// Add files to tree
 	for(var filename of sourceFiles) {
-		var file = PolybenchBenchmarkResources.getFile(filename);
+		var file = PolybenchBenchmarkResources.getFile(this._version + "/" + filename);
 		var clavaJPFile = ClavaJoinPoints.file(file);
 		Clava.addFile(clavaJPFile);	
 	}
