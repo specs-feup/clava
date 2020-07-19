@@ -2,6 +2,7 @@ import lara.benchmark.NasBenchmarkInstance;
 
 import lara.benchmark.BenchmarkSet;
 
+import lara.util.PredefinedStrings;
 import lara.util.StringSet;
 
 /**
@@ -11,7 +12,6 @@ function NasBenchmarkSet() {
     // Parent constructor
     BenchmarkSet.call(this, "NasBenchmarkSet");
 	
-	//this._testBenchmarks = ["BT", "CG", "EP", "FT", "IS", "LU", "MG", "SP", "UA"];
 	this._testBenchmarks = ["BT", "CG", "EP", "FT", "IS", "LU", "MG", "SP"];	
 	this._testInputSizes = ["W"];
 }
@@ -22,46 +22,57 @@ NasBenchmarkSet.prototype = Object.create(BenchmarkSet.prototype);
  * Available benchmarks
  */
 //NasBenchmarkSet._benchmarkNames = new StringSet("BT", "CG", "EP", "FT", "IS", "LU", "MG", "SP", "UA"); // UA is currently having compilation problems, disabled
-NasBenchmarkSet._benchmarkNames = new StringSet("BT", "CG", "EP", "FT", "IS", "LU", "MG", "SP");
+//NasBenchmarkSet._benchmarkNames = new StringSet("BT", "CG", "EP", "FT", "IS", "LU", "MG", "SP");
+
+NasBenchmarkSet._benchmarkNames = new PredefinedStrings("benchmark name", true, ["BT", "CG", "EP", "FT", "IS", "LU", "MG", "SP"]);
 
 /*
  * Available sizes
  */
-NasBenchmarkSet._inputSizes = new StringSet("S", "W", "A", "B", "C", "D", "E");
+//NasBenchmarkSet._inputSizes = new StringSet("S", "W", "A", "B", "C", "D", "E");
+NasBenchmarkSet._inputSizes = new PredefinedStrings("input size", true, ["S", "W", "A", "B", "C", "D", "E"]);		
 
 
 /**
- * @return {String[]} Names of the available benchmarks.
+ * @return {lara.util.PredefinedStrings} Names of the available benchmarks.
  */
 NasBenchmarkSet.getBenchmarkNames = function() {
-	return NasBenchmarkSet._benchmarkNames.values();
+	return NasBenchmarkSet._benchmarkNames;
+//	return NasBenchmarkSet._benchmarkNames.values();
 }
 
 /**
- * @return {String[]} Available input sizes (some benchmarks might not support all sizes).
+ * @return {lara.util.PredefinedStrings} Available input sizes (some benchmarks might not support all sizes).
  */
 NasBenchmarkSet.getInputSizes = function() {
-	return NasBenchmarkSet._inputSizes.values();
+	return NasBenchmarkSet._inputSizes;
+	//return NasBenchmarkSet._inputSizes.values();
 }
 
 /**
  * @return {boolean} true if the given String is a valid benchmark name.
  */
+ /*
 NasBenchmarkSet.isValidName = function(benchName) {
 	return NasBenchmarkSet._benchmarkNames.has(benchName);
 }
+*/
 
 /**
  * @return {boolean} true if the given String is a valid input size.
  */
+ /*
 NasBenchmarkSet.isValidSize = function(inputSize) {
 	return NasBenchmarkSet._inputSizes.has(inputSize);
 }
+*/
 
 NasBenchmarkSet.isSizeSupported = function(benchName, inputSize) {
 	// Check if name and inputSize are valid
-	NasBenchmarkSet._checkBenchName(benchName, true);
-	NasBenchmarkSet._checkInputSize(inputSize, true);	
+	NasBenchmarkSet.getBenchmarkNames().test(benchName);
+	NasBenchmarkSet.getInputSizes().test(inputSize);
+	//NasBenchmarkSet._checkBenchName(benchName, true);
+	//NasBenchmarkSet._checkInputSize(inputSize, true);	
 
 	// Benchmarks supported sizes map:
 	//BT: S, W, A, B, C, D, E
@@ -89,10 +100,10 @@ NasBenchmarkSet.isSizeSupported = function(benchName, inputSize) {
 	return true;
 }
 
-
+/*
 NasBenchmarkSet._checkBenchName = function(benchName, strict) {
 	if(!NasBenchmarkSet.isValidName(benchName)) {
-		var message = "Invalid benchmark name '" + benchName + "'. Valid names: " + NasBenchmarkSet.getBenchmarkNames();
+		var message = "Invalid benchmark name '" + benchName + "'. Valid names: " + NasBenchmarkSet.getBenchmarkNames().values();
 		if(strict) {
 			throw message;
 		} 
@@ -103,7 +114,8 @@ NasBenchmarkSet._checkBenchName = function(benchName, strict) {
 	
 	return true;
 }
-
+*/
+/*
 NasBenchmarkSet._checkInputSize = function(inputSize, strict) {
 	if(!NasBenchmarkSet.isValidSize(inputSize)) {
 		var message = "Use invalid input size '" + inputSize + "'. Valid sizes: " + NasBenchmarkSet.getInputSizes();
@@ -117,8 +129,11 @@ NasBenchmarkSet._checkInputSize = function(inputSize, strict) {
 	
 	return true;
 }
+*/
 
 NasBenchmarkSet.prototype.setBenchmarks = function() {
+	this._testBenchmarks = getBenchmarkNames().parse(arrayFromArgs(arguments));
+/*
  	var argsArray = arrayFromArgs(arguments);
 	
 	// Clear benchmarks
@@ -130,9 +145,13 @@ NasBenchmarkSet.prototype.setBenchmarks = function() {
 		
 		this._testBenchmarks.push(arg);
 	}
+*/	
 }
 
 NasBenchmarkSet.prototype.setInputSizes = function() {
+	this._testInputSizes = getInputSizes().parse(arrayFromArgs(arguments));
+
+/*
  	var argsArray = arrayFromArgs(arguments);
 	
 	// Clear sizes
@@ -144,6 +163,7 @@ NasBenchmarkSet.prototype.setInputSizes = function() {
 		
 		this._testInputSizes.push(arg);
 	}
+*/	
 }
 
 
