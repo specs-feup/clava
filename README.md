@@ -10,6 +10,8 @@ There is an [installation script](http://specs.fe.up.pt/tools/clava/clava-update
 
 For an online demo version of Clava, please click [here](http://specs.fe.up.pt/tools/clava/).
 
+To call Clava from within CMake, please click [here](https://github.com/specs-feup/clava/tree/master/CMake).
+
 For a tutorial on how to use Clava, please click [here](https://github.com/specs-feup/specs-lara/tree/master/2018-PACT).
 
 For a sample of Clava examples, please click [here](https://github.com/specs-feup/clava-examples/).

@@ -20,8 +20,11 @@ function MemoiGen(reports) {
 	// generate the <target, site> map
 	var list = JavaInterop.arrayToList(reports);
 	this._reportsMap = MemoiReportsMap.fromFiles(list);
-	
+
+	this._isEmpty = false;
 	this._isDebug = false;
+	this._isOnline = false;
+	this._isUpdateAlways = false;
 }
 
 /**
@@ -127,22 +130,6 @@ var MemoiInsert = {
 	}
 };
 
-//~ var MemoiComparator = {
-	//~ MEAN: function(count1, count2, total) {
-			
-		//~ var mean1 = mean(count1.counter, total);
-		//~ var mean2 = mean(count2.counter, total);
-		
-		//~ if(mean1 > mean2) {
-			//~ return 1;
-		//~ } else if (mean1 < mean2) {
-			//~ return -1;
-		//~ } else {
-			//~ return 0;
-		//~ }
-	//~ }
-//~ };
-
 var MemoiComparator = new Enumeration('MEAN');
 
 /**
@@ -153,6 +140,37 @@ MemoiGen.prototype.setDebug = function(isDebug) {
 	isDebug = isDebug === undefined ? true : isDebug;
 	
 	this._isDebug = isDebug;
+}
+
+/**
+ * 		Sets whether to generate update code in the final application.
+ * 	THE TABLE IS ALWAYS UPDATED ON A MISS, REGARDLESS OF WHETHER THE POSITION IS EMPTY
+ * */
+MemoiGen.prototype.setOnline = function(isOnline) {
+	
+	isOnline = isOnline === undefined ? true : isOnline;
+	
+	this._isOnline = isOnline;
+}
+
+/**
+ * 		Sets whether to generate an empty table in the final application.
+ * */
+MemoiGen.prototype.setEmpty = function(isEmpty) {
+	
+	isEmpty = isEmpty === undefined ? true : isEmpty;
+	
+	this._isEmpty = isEmpty;
+}
+
+/**
+ * 		Sets whether to always update the table on a miss, even if not vacant.
+ * */
+MemoiGen.prototype.setUpdateAlways = function(isUpdateAlways) {
+	
+	isUpdateAlways = isUpdateAlways === undefined ? true : isUpdateAlways;
+	
+	this._isUpdateAlways = isUpdateAlways;
 }
 
 /**
@@ -177,6 +195,13 @@ MemoiGen.prototype.setDebug = function(isDebug) {
  * 	based on the mean and can be found at MemoiComparator.MEAN.
  * */
 MemoiGen.prototype.generate = function(applyPred, insertPred, countComparator, tableSize) {
+	
+	if(this._isEmpty && !this._isOnline) {
+		
+		debug('----------------------------------------------------------------------');
+		debug("can't have empty and offline table: skipping generation");
+		return;
+	}
 	
 	// test table size
 	var allowedSizes = [256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536];
@@ -209,7 +234,7 @@ MemoiGen.prototype.generate = function(applyPred, insertPred, countComparator, t
 				//~ return countComparator(count1, count2, report.reportCounter);
 			//~ };
 			
-			_generate(insertPred, countComparator, report, this._isDebug, tableSize, target, site);
+			_generate(insertPred, countComparator, report, this._isDebug, this._isOnline, this._isEmpty, this._isUpdateAlways, tableSize, target, site);
 		}
 	}
 }

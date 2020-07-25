@@ -54,7 +54,6 @@ public class MemoiReport {
     public static MergedMemoiReport mergeReportsFromNames(List<String> fileNames, boolean check) {
 
         MergedMemoiReport report = null;
-        int counter = 0;
 
         for (String fileName : fileNames) {
 
@@ -67,11 +66,7 @@ public class MemoiReport {
 
                 report.mergeReport(tempReport, check);
             }
-
-            counter += 1;
         }
-
-        report.setReportCount(counter);
 
         report.makeStats();
         report.printStats();
