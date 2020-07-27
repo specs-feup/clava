@@ -34,25 +34,25 @@ public class MemoiCodeGen {
      * @return
      */
     public static String generateDmtCode(MergedMemoiReport report, int numSets, List<String> paramNames,
-            boolean isMemoiEmpty, boolean isMemoiOnline) {
+            boolean isMemoiEmpty, boolean isMemoiOnline, int memoiApproxBits) {
 
         Map<String, MergedMemoiEntry> table = new HashMap<String, MergedMemoiEntry>();
         if (!isMemoiEmpty) {
             table = new DirectMappedTable(report, numSets).generate();
         }
 
-        return generateDmtCode(table, report, numSets, paramNames, isMemoiOnline);
+        return generateDmtCode(table, report, numSets, paramNames, isMemoiOnline, memoiApproxBits);
     }
 
     private static String generateDmtCode(Map<String, MergedMemoiEntry> table, MergedMemoiReport report,
-            int numSets, List<String> paramNames, boolean isMemoiOnline) {
+            int numSets, List<String> paramNames, boolean isMemoiOnline, int memoiApproxBits) {
 
         int inputCount = report.getInputCount();
         int outputCount = report.getOutputCount();
 
         String tableCode = dmtCode(table, inputCount, outputCount, numSets, isMemoiOnline);
 
-        String logicCode = dmtLogicCode(report, paramNames, numSets);
+        String logicCode = dmtLogicCode(report, paramNames, numSets, memoiApproxBits);
 
         return tableCode + "\n\n" + logicCode;
     }
@@ -70,14 +70,16 @@ public class MemoiCodeGen {
         return paramNames.stream().map(s -> s + "_bits").collect(Collectors.toList());
     }
 
-    private static String dmtLogicCode(MergedMemoiReport report, List<String> paramNames, int numSets) {
+    private static String dmtLogicCode(MergedMemoiReport report, List<String> paramNames, int numSets,
+            int memoiApproxBits) {
 
         StringBuilder code = new StringBuilder();
+
         int indexBits = (int) MemoiUtils.log2(numSets);
 
-        int maxVarBits = varBitsCode(report, paramNames, code);
+        int maxVarBits = varBitsCode(report, paramNames, code, memoiApproxBits);
 
-        mergeBitsCode(code, paramNames, maxVarBits, indexBits);
+        mergeBitsCode(report, code, paramNames, maxVarBits, indexBits);
 
         lookupCode(report, code, indexBits, paramNames);
 
@@ -87,6 +89,9 @@ public class MemoiCodeGen {
     private static String updateCode(MergedMemoiReport report, int indexBits,
             List<String> paramNames, boolean isUpdateAlways) {
 
+        final int outputCount = report.getOutputCount();
+        final int inputCount = report.getInputCount();
+
         StringBuilder code = new StringBuilder();
 
         var varNames = makeVarNames(paramNames);
@@ -94,7 +99,7 @@ public class MemoiCodeGen {
         List<String> inputUpdates = new ArrayList<>();
         StringBuilder access = new StringBuilder("table[hash_").append(indexBits).append("_bits]");
 
-        for (int v = 0; v < varNames.size(); v++) {
+        for (int v = 0; v < inputCount; v++) {
 
             StringBuilder inputUpdate = new StringBuilder(access);
             inputUpdate.append("[");
@@ -108,9 +113,6 @@ public class MemoiCodeGen {
         code.append(String.join("\n", inputUpdates));
         code.append("\n");
 
-        final int outputCount = report.getOutputCount();
-        final int inputCount = report.getInputCount();
-
         if (outputCount == 1) {
 
             code.append(access);
@@ -120,7 +122,6 @@ public class MemoiCodeGen {
 
         } else {
 
-            // FIXME: this generates wrong code
             for (int o = 0; o < outputCount; o++) {
 
                 int outputIndex = o + inputCount;
@@ -130,9 +131,9 @@ public class MemoiCodeGen {
                 code.append(outputIndex);
                 code.append("] = *(uint64_t*) ");
                 code.append(paramNames.get(outputIndex));
-                code.append(";");
+                code.append(";\n");
             }
-            code.append("\treturn;\n}\n");
+            code.append("\treturn;\n\n");
         }
 
         if (!isUpdateAlways) {
@@ -153,12 +154,15 @@ public class MemoiCodeGen {
             List<String> paramNames) {
         code.append("\nif(");
 
+        final int outputCount = report.getOutputCount();
+        final int inputCount = report.getInputCount();
+
         List<String> varNames = makeVarNames(paramNames);
 
         List<String> testClauses = new ArrayList<>();
         StringBuilder access = new StringBuilder("table[hash_").append(indexBits).append("_bits]");
 
-        for (int v = 0; v < varNames.size(); v++) {
+        for (int v = 0; v < inputCount; v++) {
 
             StringBuilder testClause = new StringBuilder(access);
             testClause.append("[");
@@ -169,9 +173,6 @@ public class MemoiCodeGen {
             testClauses.add(testClause.toString());
         }
         code.append(String.join(" && ", testClauses));
-
-        final int outputCount = report.getOutputCount();
-        final int inputCount = report.getInputCount();
 
         code.append(") {\n");
 
@@ -202,9 +203,12 @@ public class MemoiCodeGen {
         }
     }
 
-    private static void mergeBitsCode(StringBuilder code, List<String> paramNames, int maxVarBits, int indexBits) {
+    private static void mergeBitsCode(MergedMemoiReport report, StringBuilder code, List<String> paramNames,
+            int maxVarBits, int indexBits) {
 
-        List<String> varNames = makeVarNames(paramNames);
+        int inputCount = report.getInputCount();
+
+        List<String> varNames = makeVarNames(paramNames).subList(0, inputCount);
 
         code.append("\n");
         code.append("uint");
@@ -258,7 +262,9 @@ public class MemoiCodeGen {
         }
     }
 
-    private static int varBitsCode(MergedMemoiReport report, List<String> paramNames, StringBuilder code) {
+    private static int varBitsCode(MergedMemoiReport report, List<String> paramNames, StringBuilder code,
+
+            int memoiApproxBits) {
 
         Map<String, Integer> sizeMap = new HashMap<>();
         sizeMap.put("float", 32);
@@ -289,6 +295,19 @@ public class MemoiCodeGen {
             code.append("_t*)&");
             code.append(paramName);
             code.append(";\n");
+
+            if (memoiApproxBits != 0) {
+
+                code.append(varNames.get(p));
+                code.append(" = ");
+                code.append(varNames.get(p));
+                code.append(" & (");
+                code.append("(0xffffffffffffffff >> ");
+                code.append(memoiApproxBits);
+                code.append(") << ");
+                code.append(memoiApproxBits);
+                code.append(");\n");
+            }
         }
 
         return maxVarBits;
