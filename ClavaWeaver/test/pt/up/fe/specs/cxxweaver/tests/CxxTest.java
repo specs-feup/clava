@@ -262,4 +262,9 @@ public class CxxTest {
     public void testVarDeclV2() {
         newTester().test("VardeclV2.lara", "vardeclv2.cpp");
     }
+
+    @Test
+    public void testFile() {
+        newTester().test("File.lara", "file.cpp");
+    }
 }
