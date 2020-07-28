@@ -1194,6 +1194,18 @@ public class CxxWeaver extends ACxxWeaver {
 
         File cmakeIncludes = new File(getWeavingFolder(), CMAKE_INCLUDE_DIRS_FILENAME);
         SpecsIo.write(cmakeIncludes, includeFoldersContent);
+
+        String cmakeSubProjectsContent = getApp().getExternalDependencies().getProjects().stream()
+                .map(SpecsIo::getCanonicalPath)
+                .map(SpecsIo::normalizePath)
+                .collect(Collectors.joining(";"));
+        File cmakeSubProjects = new File(getWeavingFolder(), "clava_sub_projects.txt");
+        SpecsIo.write(cmakeSubProjects, cmakeSubProjectsContent);
+
+        String cmakeSubLibsContent = getApp().getExternalDependencies().getProjectsLibs().stream()
+                .collect(Collectors.joining(";"));
+        File cmakeSubLibs = new File(getWeavingFolder(), "clava_sub_libs.txt");
+        SpecsIo.write(cmakeSubLibs, cmakeSubLibsContent);
     }
 
     @Override
