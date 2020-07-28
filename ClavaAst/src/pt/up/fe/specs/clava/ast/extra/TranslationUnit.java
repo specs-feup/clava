@@ -652,6 +652,10 @@ public class TranslationUnit extends ClavaNode {
         addInclude(include.getInclude().getInclude(), include.getInclude().isAngled());
     }
 
+    public void addCInclude(String includeName, boolean isAngled) {
+        addIncludePrivate(getFactory().cIncludeDecl(includeName, isAngled));
+    }
+
     public void addDeclaration(NamedDecl namedDecl) {
         // Find insertion point. Insert before first function declaration
         Optional<ClavaNode> firstFunction = getChildrenStream()
