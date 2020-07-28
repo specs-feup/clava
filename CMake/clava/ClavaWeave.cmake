@@ -205,4 +205,29 @@ function(clava_weave ORIG_TARGET ASPECT)
 		message(FATAL_ERROR "Could not find Clava file 'clava_include_dirs.txt'")
 	endif()
 	
+	# Read new sub projects
+	if(EXISTS "${WOVEN_DIR}/clava_sub_projects.txt")
+        file(READ "${WOVEN_DIR}/clava_sub_projects.txt" CLAVA_SUB_PROJECTS)
+        string(STRIP "${CLAVA_SUB_PROJECTS}" CLAVA_SUB_PROJECTS)
+
+		# Set new sub projects
+		foreach(SUB_PROJ IN LISTS CLAVA_SUB_PROJECTS)
+			add_subdirectory(${SUB_PROJ} "${SUB_PROJ}/bin")
+		endforeach(SUB_PROJ)
+	else()
+		message(FATAL_ERROR "Could not find Clava file 'clava_sub_projects.txt'")
+	endif()
+
+	# Read new sub libs
+	if(EXISTS "${WOVEN_DIR}/clava_sub_libs.txt")
+        file(READ "${WOVEN_DIR}/clava_sub_libs.txt" CLAVA_SUB_LIBS)
+        string(STRIP "${CLAVA_SUB_LIBS}" CLAVA_SUB_LIBS)
+
+		# Set new sub libs
+		foreach(SUB_LIB IN LISTS CLAVA_SUB_LIBS)
+			target_link_libraries(${ORIG_TARGET} ${SUB_LIB})
+		endforeach(SUB_LIB)
+	else()
+		message(FATAL_ERROR "Could not find Clava file 'clava_sub_libs.txt'")
+	endif()
 endfunction(clava_weave)

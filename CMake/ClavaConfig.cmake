@@ -62,7 +62,7 @@ if(DOWNLOADED_CLAVA)
 		message(STATUS "Unzipping Clava")
 		execute_process(COMMAND ${CMAKE_COMMAND} -E tar -xf ${CLAVA_ZIP_PATH}
                   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-		
+
 		# Delete zip
 		file(REMOVE ${CLAVA_ZIP_PATH})
 		
