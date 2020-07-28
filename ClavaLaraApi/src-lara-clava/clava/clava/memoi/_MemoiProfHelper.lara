@@ -473,13 +473,14 @@ aspectdef _Memoi_Setup
 		var memoiReportPath = "path_" + monitorName;
 		
 		call _Memoi_AddCallSiteInfo($body, callSiteInfo, monitorName);
+		$body.exec insertBegin(%{free([[memoiReportPath]]);}%); // can free here, since mp_init duped it
 		$body.exec insertBegin(%{[[monitorName]] = mp_init("[[targetSig]]", "[[id]]", [[memoiReportPath]], [[inputTypes.length]], [[outputTypes.length]], [[inputsCode]], [[outputsCode]]);}%);
-		$body.exec insertBegin(%{char* [[memoiReportPath]] = make_report_path("[[dir]]", "[[monitorName]]");}%);
+		$body.exec insertBegin(%{char* [[memoiReportPath]] = mp_make_report_path("[[dir]]", "[[monitorName]]");}%);
 		
 		/* add functions to print and clean up at every return on main */
 		$function.exec insertReturn(%{mp_to_json([[monitorName]]);}%);
 		$function.exec insertReturn(%{[[monitorName]] = mp_destroy([[monitorName]]);}%);
-		$function.exec insertReturn(%{free([[memoiReportPath]]);}%);
+		
 
 		$file.exec addGlobal(monitorName, monitorType, 'NULL');
 
@@ -510,17 +511,6 @@ aspectdef _Memoi_AddCallSiteInfo
 	$mainBody.exec insertBegin(code);
 end
 
-/**
- * 		Inserts the functions needed to make the report file path.
- * 	@aspect
- *	@private
- * */
-aspectdef _Memoi_AddReportCode
-	select file.function{'main'}.body end
-	apply
-		$function.insert before _Memoi_ReportPath();
-	end	
-end
 
 /**
  * 		Tests if the type is one of the provided types.
@@ -568,55 +558,3 @@ function _isMathFunction(sig) {
 	return mathFunctionSigs.indexOf(sig) !== -1;
 }
 
-/**
- * 		Template with the code needed to make the path of the report file with a
- * timestamp.
- * 
- * @codedef
- * @private
- * */
-codedef _Memoi_ReportPath %{
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-
-static char* timestamp() {
-    
-    size_t length = 16;
-    char* stamp = malloc(length);
-    
-    time_t current_time = time(NULL);
-    struct tm * tm = localtime(&current_time);
-    
-    snprintf(stamp, length, "%d%02d%02d_%02d%02d%02d", tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
-    
-    return stamp;
-}
-
-static char* make_report_path(const char* dir, const char* id) {
-    
-    char * stamp = timestamp();
-    char * ext = ".json";
-    char * sep = "/";
-    char * under = "_";
-    
-    size_t stamp_len = strlen(stamp);
-    size_t ext_len = strlen(ext);
-    size_t sep_len = strlen(sep);
-    size_t under_len = strlen(under);
-    size_t dir_len = strlen(dir);
-    size_t id_len = strlen(id);
-    
-    size_t total_len = stamp_len + ext_len + sep_len + under_len + dir_len + id_len + 1; // 1 is for the \0
-    
-    char * path = malloc(total_len);
-    
-    snprintf(path, total_len, "%s%s%s%s%s%s", dir, sep, stamp, under, id, ext);
-    
-    free(stamp);
-    
-    return path;
-}
-}%
-end

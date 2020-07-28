@@ -29,22 +29,12 @@ function MemoiProf(targetSig, id, reportDir, numInputs, numOutputs) {
 	this._numOutputs = numOutputs;
 	this._outputTypes = [];
 	this._findDataTypes();
-	
-	if(!MemoiProf._reportCodeDone) {
-		call _Memoi_AddReportCode();
-		MemoiProf._reportCodeDone = true;
-	}
-	
+
 	// Deal with dependecy to memoiprof
 	PrintOnce.message("Woven code has dependency to project memoiprof, which can be found at https://github.com/cc187/memoiprof");
 	Compilation.addProjectFromGit('https://github.com/cc187/memoiprof.git', ['mp']);
 }
 
-MemoiProf._reportCodeDone = false;
-
-MemoiProf.resetReportCode = function() {
-	MemoiProf._reportCodeDone = false;
-};
 
 /**
  * 		The C data types the memoization instrumentation library can handle.
