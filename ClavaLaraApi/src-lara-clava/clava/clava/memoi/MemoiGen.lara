@@ -25,6 +25,7 @@ function MemoiGen(reports) {
 	this._isDebug = false;
 	this._isOnline = false;
 	this._isUpdateAlways = false;
+	this._approxBits = 0;
 }
 
 /**
@@ -164,6 +165,17 @@ MemoiGen.prototype.setEmpty = function(isEmpty) {
 }
 
 /**
+ * 		Sets the approximation bits in the final application.
+ * 		Defaults to 0.
+ * */
+MemoiGen.prototype.setApproxBits = function(bits) {
+	
+	bits = bits === undefined ? 0 : bits;
+	
+	this._approxBits = bits;
+}
+
+/**
  * 		Sets whether to always update the table on a miss, even if not vacant.
  * */
 MemoiGen.prototype.setUpdateAlways = function(isUpdateAlways) {
@@ -234,7 +246,7 @@ MemoiGen.prototype.generate = function(applyPred, insertPred, countComparator, t
 				//~ return countComparator(count1, count2, report.reportCounter);
 			//~ };
 			
-			_generate(insertPred, countComparator, report, this._isDebug, this._isOnline, this._isEmpty, this._isUpdateAlways, tableSize, target, site);
+			_generate(insertPred, countComparator, report, this._isDebug, this._isOnline, this._isEmpty, this._isUpdateAlways, this._approxBits, tableSize, target, site);
 		}
 	}
 }

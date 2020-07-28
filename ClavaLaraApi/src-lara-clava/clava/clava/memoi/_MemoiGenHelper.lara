@@ -22,7 +22,7 @@ function _isPowerOf2(num) {
  * 		
  * 		Inserts elements in the table based on the predicate insertPred.
  * */
-function _generate(insertPred, countComparator, report, isMemoiDebug, isMemoiOnline, isMemoiEmpty, isMemoiUpdateAlways, tableSize, signature, callSite) {
+function _generate(insertPred, countComparator, report, isMemoiDebug, isMemoiOnline, isMemoiEmpty, isMemoiUpdateAlways, memoiApproxBits, tableSize, signature, callSite) {
 	
 	var wt;
 	
@@ -31,7 +31,7 @@ function _generate(insertPred, countComparator, report, isMemoiDebug, isMemoiOnl
 	} else {
 		wt = call _Memoi_WrapSingleTarget(signature, callSite);
 	}
-	call _Memoi_InsertTableCode(insertPred, countComparator, report, wt.wrapperName, isMemoiDebug, isMemoiOnline, isMemoiEmpty, isMemoiUpdateAlways, tableSize);
+	call _Memoi_InsertTableCode(insertPred, countComparator, report, wt.wrapperName, isMemoiDebug, isMemoiOnline, isMemoiEmpty, isMemoiUpdateAlways, memoiApproxBits, tableSize);
 }
 
 aspectdef _Memoi_WrapGlobalTarget
@@ -85,7 +85,7 @@ aspectdef _Memoi_WrapSingleTarget
 end
 
 aspectdef _Memoi_InsertTableCode
-	input insertPred, countComparator, report, wrapperName, isMemoiDebug, isMemoiOnline, isMemoiEmpty, isMemoiUpdateAlways, tableSize end
+	input insertPred, countComparator, report, wrapperName, isMemoiDebug, isMemoiOnline, isMemoiEmpty, isMemoiUpdateAlways, memoiApproxBits, tableSize end
 	
 	select file.function{wrapperName}.call end
 	apply
@@ -100,7 +100,7 @@ aspectdef _Memoi_InsertTableCode
 			call _Memoi_AddMainDebug(totalName, missesName, wrapperName);
 		}
 		
-		var tableCode = _makeTableCode(insertPred, countComparator, report, $function, tableSize, isMemoiEmpty, isMemoiOnline);	
+		var tableCode = _makeTableCode(insertPred, countComparator, report, $function, tableSize, isMemoiEmpty, isMemoiOnline, memoiApproxBits);	
 		insert before tableCode;
 		
 		if(isMemoiOnline) {
@@ -136,7 +136,7 @@ function _baseLog(num, base) {
 	return Math.log(num) / Math.log(base);
 }
 
-function _makeTableCode(insertPred, countComparator, report, $function, tableSize, isMemoiEmpty, isMemoiOnline) {
+function _makeTableCode(insertPred, countComparator, report, $function, tableSize, isMemoiEmpty, isMemoiOnline, memoiApproxBits) {
 	
 	var indexBits = _baseLog(tableSize, 2);
 
@@ -148,7 +148,7 @@ function _makeTableCode(insertPred, countComparator, report, $function, tableSiz
 		paramNames.push($param.name);
 	}
 	
-	var code = MemoiCodeGen.generateDmtCode(report, tableSize, paramNames, isMemoiEmpty, isMemoiOnline);
+	var code = MemoiCodeGen.generateDmtCode(report, tableSize, paramNames, isMemoiEmpty, isMemoiOnline, memoiApproxBits);
 
 	return code;
 }
