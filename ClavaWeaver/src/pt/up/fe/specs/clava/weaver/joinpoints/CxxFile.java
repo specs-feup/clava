@@ -143,6 +143,16 @@ public class CxxFile extends AFile {
     }
 
     @Override
+    public void addCIncludeImpl(String name, boolean isAngled) {
+        tunit.addCInclude(name, isAngled);
+    }
+
+    @Override
+    public void addCIncludeImpl(String name) {
+        addCIncludeImpl(name, false);
+    }
+
+    @Override
     public AJoinPoint[] insertImpl(String position, String code) {
         var tentativeNode = CxxWeaver.getSnippetParser().parseStmt(code);
         ClavaNode nodeToInsert = tentativeNode instanceof WrapperStmt ? tentativeNode.getChild(0)
