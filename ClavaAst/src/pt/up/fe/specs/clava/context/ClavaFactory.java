@@ -37,6 +37,7 @@ import pt.up.fe.specs.clava.ast.attr.DummyAttr;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
+import pt.up.fe.specs.clava.ast.decl.CIncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyNamedDecl;
@@ -579,6 +580,21 @@ public class ClavaFactory {
         return includeDecl(include, null);
     }
 
+    public CIncludeDecl cIncludeDecl(Include include, String filepath) {
+        DataStore data = newDataStore(CIncludeDecl.class);
+
+        data.set(IncludeDecl.INCLUDE, include);
+        if (filepath != null) {
+            data.set(IncludeDecl.LOCATION, new SourceRange(filepath, -1, -1, -1, -1));
+        }
+
+        return new CIncludeDecl(data, Collections.emptyList());
+    }
+
+    public CIncludeDecl cIncludeDecl(String include, boolean isAngled) {
+        return cIncludeDecl(new Include(include, isAngled), null);
+    }
+
     public LiteralDecl literalDecl(String code) {
         DataStore data = newDataStore(LiteralDecl.class);
 
@@ -695,9 +711,9 @@ public class ClavaFactory {
      * 
      * @param condition
      * @param thenBody
-     *            can be null (i.e., empty body)
+     *                      can be null (i.e., empty body)
      * @param elseBody
-     *            can be null (i.e., no else)
+     *                      can be null (i.e., no else)
      * @return
      */
     public IfStmt ifStmt(Expr condition, CompoundStmt thenBody, CompoundStmt elseBody) {

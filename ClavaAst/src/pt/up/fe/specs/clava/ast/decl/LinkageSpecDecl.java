@@ -35,6 +35,11 @@ public class LinkageSpecDecl extends Decl {
 
     public final static DataKey<LanguageId> LINKAGE_TYPE = KeyFactory.enumeration("linkageType", LanguageId.class);
 
+    /**
+     * If true, uses #if/def guards when generating code,
+     */
+    public final static DataKey<Boolean> USE_GUARDS = KeyFactory.bool("useGuards");
+
     /// DATAKEYS END
 
     public LinkageSpecDecl(DataStore data, Collection<? extends ClavaNode> children) {
@@ -58,12 +63,32 @@ public class LinkageSpecDecl extends Decl {
     @Override
     public String getCode() {
         StringBuilder builder = new StringBuilder();
+
+        var useGuards = get(USE_GUARDS);
+
+        if (useGuards) {
+            builder.append("#ifdef __cplusplus");
+        }
+
         builder.append(ln() + "extern \"" + get(LINKAGE_TYPE) + "\" {" + ln());
+
+        if (useGuards) {
+            builder.append("#endif");
+        }
 
         String childrenCode = getChildrenStream().map(child -> child.getCode())
                 .collect(Collectors.joining(ln() + getTab(), getTab(), ln()));
         builder.append(childrenCode);
+
+        if (useGuards) {
+            builder.append("#ifdef __cplusplus");
+        }
+
         builder.append("}" + ln());
+
+        if (useGuards) {
+            builder.append("#endif");
+        }
 
         return builder.toString();
     }

@@ -25213,6 +25213,39 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Adds a C include to the current file. If the file already has the include, it does nothing",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addCInclude"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "boolean",
+                              "name": "isAngled",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which sets 'isAngled' to false",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addCInclude"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Adds a function to the file that returns void and has no parameters",
                   "children": [
                            {

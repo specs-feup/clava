@@ -179,4 +179,8 @@ public class CTest {
         newTester().test("TagDecl.lara", "tag_decl.c");
     }
 
+    @Test
+    public void testFile() {
+        newTester().test("File.lara", "file.c");
+    }
 }

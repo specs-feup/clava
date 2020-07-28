@@ -159,6 +159,18 @@
 	<action name="addIncludeJp" class="file" tooltip="Overload of addInclude which accepts a join point">
 		<parameter name="jp" type="joinpoint" />
 	</action>
+	
+	
+	<!-- Adds a C include to the file, which implies extern "C" linkage with guards for C++ -->
+	<action name="addCInclude" class="file" tooltip="Adds a C include to the current file. If the file already has the include, it does nothing">
+		<parameter name="name" type="string" />
+		<parameter name="isAngled" type="boolean" />
+	</action>
+	
+	<!-- Overload which sets 'isAngled' to false -->
+	<action name="addCInclude" class="file" tooltip="Overload which sets 'isAngled' to false">
+		<parameter name="name" type="string" />
+	</action>
 
 	<action name="addGlobal" class="file" return="vardecl" tooltip="Adds a global variable to this file">
 		<parameter name="name" type="String" />

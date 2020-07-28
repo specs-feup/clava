@@ -577,6 +577,60 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Adds a C include to the current file. If the file already has the include, it does nothing
+     * @param name 
+     * @param isAngled 
+     */
+    public void addCIncludeImpl(String name, boolean isAngled) {
+        throw new UnsupportedOperationException(get_class()+": Action addCInclude not implemented ");
+    }
+
+    /**
+     * Adds a C include to the current file. If the file already has the include, it does nothing
+     * @param name 
+     * @param isAngled 
+     */
+    public final void addCInclude(String name, boolean isAngled) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addCInclude", this, Optional.empty(), name, isAngled);
+        	}
+        	this.addCIncludeImpl(name, isAngled);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addCInclude", this, Optional.empty(), name, isAngled);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addCInclude", e);
+        }
+    }
+
+    /**
+     * Overload which sets 'isAngled' to false
+     * @param name 
+     */
+    public void addCIncludeImpl(String name) {
+        throw new UnsupportedOperationException(get_class()+": Action addCInclude not implemented ");
+    }
+
+    /**
+     * Overload which sets 'isAngled' to false
+     * @param name 
+     */
+    public final void addCInclude(String name) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addCInclude", this, Optional.empty(), name);
+        	}
+        	this.addCIncludeImpl(name);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addCInclude", this, Optional.empty(), name);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addCInclude", e);
+        }
+    }
+
+    /**
      * Adds a global variable to this file
      * @param name 
      * @param type 
@@ -993,6 +1047,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         actions.add("void addInclude(string, boolean)");
         actions.add("void addInclude(string)");
         actions.add("void addIncludeJp(joinpoint)");
+        actions.add("void addCInclude(string, boolean)");
+        actions.add("void addCInclude(string)");
         actions.add("vardecl addGlobal(String, joinpoint, String)");
         actions.add("String write(String)");
         actions.add("file rebuild()");

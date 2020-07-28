@@ -1,0 +1,14 @@
+#include "user_include.h"
+#include <system_include.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include "c_include.h"
+#ifdef __cplusplus
+}
+#endif
+
+int main() {
+   
+   return 0;
+}
