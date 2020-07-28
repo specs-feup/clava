@@ -30,11 +30,91 @@ function MemoiProf(targetSig, id, reportDir, numInputs, numOutputs) {
 	this._outputTypes = [];
 	this._findDataTypes();
 
+	// options for memoiprof
+	this._memoiprofOptions = {
+	
+		samplingKind: "off",
+		samplingRate: 0,
+		
+		periodicReportKind: false,
+		periodicReportRate: 0,
+		
+		cullingKind: false,
+		cullingRatio: 0.0,
+		
+		approxKind: false,
+		approxBits: 0
+	}
+	
+
 	// Deal with dependecy to memoiprof
 	PrintOnce.message("Woven code has dependency to project memoiprof, which can be found at https://github.com/cc187/memoiprof");
 	Compilation.addProjectFromGit('https://github.com/cc187/memoiprof.git', ['mp']);
 }
 
+/**
+ * Supported samplingKind values are: 'random', 'fixed', 'off'.
+ * For 1/x sampling, samplingRate should be x.
+ * */
+MemoiProf.prototype.setSampling = function(samplingKind, samplingRate) {
+	
+	if(	samplingKind !== "random" &&
+		samplingKind !== "fixed" && 
+		samplingKind !== "off") {
+				
+		throw "samplingKind should be one of 'random', 'fixed', or 'off'";
+	}
+	
+	this._memoiprofOptions.samplingKind = samplingKind;
+	this._memoiprofOptions.samplingRate = samplingRate;
+}
+
+/**
+ * Supported periodicReportKind values are: true, false.
+ * periodicReportRate is the number of calls between writes of periodic reports.
+ * */
+MemoiProf.prototype.setPeriodicReporting = function(periodicReportKind, periodicReportRate) {
+	
+	if (periodicReportKind !== true &&
+		periodicReportKind !== false) {
+				
+		throw "periodicReportKind should be one of true, false";
+	}
+	
+	this._memoiprofOptions.periodicReportKind = periodicReportKind;
+	this._memoiprofOptions.periodicReportRate = periodicReportRate;
+}
+
+/**
+ * Supported cullingKind values are: true, false.
+ * cullingRatio is the threshold (% of calls) for printing to the JSON.
+ * */
+MemoiProf.prototype.setCulling = function(cullingKind, cullingRatio) {
+
+	if (cullingKind !== true &&
+		cullingKind !== false) {
+			
+		throw "cullingKind should be one of true, false";
+	}
+	
+	this._memoiprofOptions.cullingKind = cullingKind;
+	this._memoiprofOptions.cullingRatio = cullingRatio;
+}
+
+/**
+ * Supported approxKind values are: true, false.
+ * */
+MemoiProf.prototype.setApprox = function(approxKind, approxBits) {
+
+	if (approxKind !== true &&
+		approxKind !== false) {
+			
+		throw "approxKind should be one of true, false";
+	}
+	
+	this._memoiprofOptions.approxKind = approxKind;
+	this._memoiprofOptions.approxBits = approxBits;
+}
 
 /**
  * 		The C data types the memoization instrumentation library can handle.
@@ -98,7 +178,8 @@ MemoiProf.prototype.profAll = function() {
 			this._targetSig, this._normalizedSig, this._wrapperName,
 			this._monitorType, this._monitorName,
 			this._id, this._reportDir,
-			this._outputTypes, this._inputTypes);
+			this._outputTypes, this._inputTypes,
+			this._memoiprofOptions);
 }
 
 
@@ -113,7 +194,8 @@ MemoiProf.prototype.profEach = function() {
 			this._targetSig, this._normalizedSig, this._wrapperName,
 			this._monitorType, this._monitorName,
 			this._id, this._reportDir,
-			this._outputTypes, this._inputTypes);
+			this._outputTypes, this._inputTypes,
+			this._memoiprofOptions);
 }
 
 /**

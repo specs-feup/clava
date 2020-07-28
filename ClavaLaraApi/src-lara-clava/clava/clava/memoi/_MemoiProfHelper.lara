@@ -328,7 +328,7 @@ function _isValidMemoiRecursive($call, processed) {
 aspectdef _Memoi_GlobalWrapper
 	input
 		targetSig, normalizedSig, wrapperName, monitorType, monitorName,
-		id, reportDir, outputTypes, inputTypes
+		id, reportDir, outputTypes, inputTypes, memoiprofOptions
 	end
 	
 	// make the wrapper
@@ -347,7 +347,7 @@ aspectdef _Memoi_GlobalWrapper
 	call _Memoi_InstrumentWrapper(wrapperName, monitorName, monitorType, inputTypes.length, outputTypes.length);
 	
 	// setup
-	call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir,  outputTypes, inputTypes, ['global']);
+	call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir,  outputTypes, inputTypes, ['global'], memoiprofOptions);
 end
 
 /**
@@ -359,8 +359,8 @@ end
  * */
 aspectdef _Memoi_IndividualWrapper
 	input
-		targetSig, normalizedSig, wrapperNameBase, monitorType,
-		monitorNameBase, idBase, reportDir, outputTypes, inputTypes
+		targetSig, normalizedSig, wrapperNameBase, monitorType,	monitorNameBase,
+		idBase, reportDir, outputTypes, inputTypes, memoiprofOptions
 	end
 	
 	select file.stmt.call end
@@ -386,7 +386,7 @@ aspectdef _Memoi_IndividualWrapper
 		
 		// setup
 		var id = IdGenerator.next(idBase + '_');
-		call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir,  outputTypes, inputTypes, [callSiteInfo]);
+		call _Memoi_Setup(monitorName, monitorType, targetSig, id, reportDir,  outputTypes, inputTypes, [callSiteInfo], memoiprofOptions);
 	end
 end
 
@@ -457,7 +457,8 @@ aspectdef _Memoi_Setup
 		id,
 		dir,
 		outputTypes, inputTypes,
-		callSiteInfo
+		callSiteInfo,
+		memoiprofOptions
 	end
 
 	var inputsCode = inputTypes.map(function(e){return "mp_" + e;}).join(',').toUpperCase();
@@ -471,6 +472,24 @@ aspectdef _Memoi_Setup
 		mainFound = true;
 		
 		var memoiReportPath = "path_" + monitorName;
+		
+		// memoiprof options
+		if(memoiprofOptions.samplingKind !== "off") {
+			var samplingKind = "MP_SAMPLING_" + memoiprofOptions.samplingKind.toUpper();
+			$body.exec insertBegin(%{mp_set_sampling([[monitorName]], [[samplingKind]], [[memoiprofOptions.samplingRate]]);}%);
+		}
+		
+		if(memoiprofOptions.periodicReportKind) {
+			$body.exec insertBegin(%{mp_set_periodic_reporting([[monitorName]], "MP_PERIODIC_ON", [[memoiprofOptions.periodicReportRate]]);}%);
+		}
+		
+		if(memoiprofOptions.cullingKind) {
+			$body.exec insertBegin(%{mp_set_culling([[monitorName]], "MP_CULLING_ON", [[memoiprofOptions.cullingRatio]]);}%);
+		}
+		
+		if(memoiprofOptions.approxKind) {
+			$body.exec insertBegin(%{mp_set_approx([[monitorName]], "MP_APPROX_ON", [[memoiprofOptions.approxBits]]);}%);
+		}
 		
 		call _Memoi_AddCallSiteInfo($body, callSiteInfo, monitorName);
 		$body.exec insertBegin(%{free([[memoiReportPath]]);}%); // can free here, since mp_init duped it
