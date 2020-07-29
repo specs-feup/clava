@@ -24,11 +24,6 @@ function MemoiProf(targetSig, id, reportDir, numInputs, numOutputs) {
 	this._wrapperName =  'mw_' + this._normalizedSig;
 	this._monitorName = 'mp_' + this._normalizedSig;
 	this._monitorType = ClavaJoinPoints.typeLiteral('MemoiProf*');
-	this._numInputs = numInputs;
-	this._inputTypes = [];
-	this._numOutputs = numOutputs;
-	this._outputTypes = [];
-	this._findDataTypes();
 
 	// options for memoiprof
 	this._memoiprofOptions = {
@@ -44,7 +39,7 @@ function MemoiProf(targetSig, id, reportDir, numInputs, numOutputs) {
 		
 		approxKind: false,
 		approxBits: 0
-	}
+	};
 	
 
 	// Deal with dependecy to memoiprof
@@ -116,56 +111,6 @@ MemoiProf.prototype.setApprox = function(approxKind, approxBits) {
 	this._memoiprofOptions.approxBits = approxBits;
 }
 
-/**
- * 		The C data types the memoization instrumentation library can handle.
- * 
- * @enum
- * */
-var MemoiDataType = new Enumeration({INT: 'INT', DOUBLE: 'DOUBLE', FLOAT: 'FLOAT'});
-
-/**
- * 		Finds the data types of the target function. If any of the types is not
- * supported, this function will throw an exception.
- * 
- * @private
- * */
-MemoiProf.prototype._findDataTypes = function() {
-
-	var ret = call _Memoi_FindTypes(this._targetSig, this._numInputs, this._numOutputs);
-	
-	this._inputTypes = ret.inputTypes;
-	this._outputTypes = ret.outputTypes;
-	
-	this._checkDataTypes();
-}
-
-MemoiProf.prototype._checkDataTypes = function() {
-	
-	var normalTypes = ["double", "float", "int"];
-	var pointerTypes = ["double *", "float *", "int *"];
-	var outputTestArray;
-	
-	var inputsInvalid = this._inputTypes.some(function(e){return !_arrayContains(normalTypes, e);});
-
-	if(inputsInvalid) {
-		throw "The inputs of the target function '" + this._targetSig + "' are not supported.";
-	}
-
-	outputTestArray = this._numOutputs == 1 ? normalTypes : pointerTypes;
-	var outputsInvalid = this._outputTypes.some(function(e){return !_arrayContains(outputTestArray, e);});
-	
-	if(outputsInvalid) {
-		throw "The outputs of the target function '" + this._targetSig + "' are not supported.";
-	}	
-
-	// if the output are valid, drop the pointer from the type
-	this._outputTypes = this._outputTypes.map(function(e){return Strings.replacer(e, /\*/, '').trim();});
-}
-
-function _arrayContains(array, element) {
-	
-	return array.indexOf(element) != -1;
-}
 
 /**
  * 		Profiles all calls of the target function. This includes making a single
@@ -196,72 +141,4 @@ MemoiProf.prototype.profEach = function() {
 			this._id, this._reportDir,
 			this._outputTypes, this._inputTypes,
 			this._memoiprofOptions);
-}
-
-/**
- * 		Finds valid targets for memoization according to the constraints
- * 	of the predicate passed or the default one.
- * 
- * @return A list with the signatures of the valid targets
- * */
-MemoiProf.findTargets = function(pred) {
-	
-	return MemoiProf.findTargetsReport(false, pred);
-}
-
-MemoiProf.findTargetsReport = function(isReport, pred) {
-	
-	checkDefined(isReport, "isReport (bool) of findTargetsReport needs to be defined");
-	
-	var ret = call _Memoi_FindTargets(pred);
-	
-	if(isReport) {
-		MemoiProf._printFindReport(ret.report);
-	}
-	
-	return ret.targets;
-}
-
-MemoiProf.findTargetsComplete = function(pred) {
-	
-	var ret = call _Memoi_FindTargets(pred);
-	return new MemoiCompleteReport(ret.targets, ret.report);
-}
-
-MemoiProf._printFindReport = function(report) {
-	
-	println("Reasons to fail:");
-	
-	if(report.paramsNum > 0) {
-		println("\tWrong number of params: " + report.paramsNum);
-		print("\t\t{");
-		var arr = [];
-		for(var i in report.unsupportedNums) {
-			arr.push(i + ': ' + report.unsupportedNums[i]);
-		}
-		print(arr.join(', '));
-		println("}");
-	}
-	
-	if(report.paramsType > 0)
-		println("\tWrong type of params: " + report.paramsType);
-		
-	if(report.returnType > 0)
-		println("\tWrong type of return: " + report.returnType);
-		
-	if(report.paramsType > 0 || report.returnType > 0) {
-		print("\t\t{");
-		var arr = [];
-		for(var i in report.unsupportedTypes) {
-			arr.push(i + ': ' + report.unsupportedTypes[i]);
-		}
-		print(arr.join(', '));
-		println("}");
-	}
-	
-	if(report.global > 0)
-		println("\tGlobal accesses: " + report.global);
-		
-	if(report.calls > 0)
-		println("\tCalls to invalid functions: " + report.calls);
 }

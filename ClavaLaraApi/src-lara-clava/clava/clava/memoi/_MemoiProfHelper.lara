@@ -1,62 +1,6 @@
 import lara.util.IdGenerator;
 import lara.Strings;
-
-function MemoiTarget(sig, $func, isUser) {
-	
-	this.sig = sig;
-	this.$func = $func;
-	this.isUser = isUser;
-	this.numInputs = $func.params.length;
-	this.numOutputs = 1;
-}
-
-function MemoiCompleteReport(targets, report) {
-	
-	this.targets = targets;
-	this.failSummary = {
-		numParams		: report.paramsNum,
-		typeParams		: report.paramsType,
-		typeReturn		: report.returnType,
-		globalAccess	: report.global,
-		invalidCalls	: report.calls
-	};
-}
-
-MemoiCompleteReport.prototype.isTarget = function($func) {
-	
-	var sig = Strings.replacer($func.signature, / /g, '');
-	for(var i in this.targets) {
-		if(this.targets[i].sig == sig) {
-			return true;
-		}
-	}
-	
-	return false;
-}
-
-function _normalizeSig(sig) {
-	var tmp = Strings.replacer(sig, /\(/g, '_');
-	tmp = Strings.replacer(tmp, /\*/g, '_p');
-	tmp = Strings.replacer(tmp, / /g, '_');
-	tmp = Strings.replacer(tmp, /,/g, '_');
-	return Strings.replacer(tmp, /\)/g, '_');
-}
-
-/**
- * 		Enum with the results of the validity test.
- * */
-var _Res = {VALID:1, INVALID:0, WAITING:-1};
-
-function _isProcessed(sig, processed) {
-	
-	return processed[sig] === _Res.VALID 
-		|| processed[sig] === _Res.INVALID;
-}
-
-function _isWaiting(sig, processed) {
-	
-	return processed[sig] === _Res.WAITING;
-}
+import clava.memoi.MemoiUtils;
 
 var _Memoi_FindTargets_Report = {};
 
@@ -91,9 +35,7 @@ aspectdef _Memoi_FindTargets
 		if($func === undefined) {
 			continue;
 		}
-		var sig = $func.signature;
-		
-		sig = Strings.replacer(sig, / /g, '');
+		var sig = MemoiUtils.normalizeSig($func.signature);
 
 		// if we've processed this one before (valid or not), skip
 		if(_isProcessed(sig, processed)) {
@@ -104,7 +46,7 @@ aspectdef _Memoi_FindTargets
 		// test if valid
 		var valid = filter($call, processed);
 		if(valid === _Res.VALID) {
-			var isUser = !_isWhiteListed(sig); // it's a user function if it's not a whitelisted function
+			var isUser = !MemoiUtils.isWhiteListed(sig); // it's a user function if it's not a whitelisted function
 			var target = new MemoiTarget(sig, $func, isUser);
 			targets.push(target);
 		}
@@ -113,210 +55,6 @@ aspectdef _Memoi_FindTargets
 	report = _Memoi_FindTargets_Report;
 end
 
-/**
- * 		Finds the target function and gets its types.
- * 
- * @aspect
- * @private
- * */
-aspectdef _Memoi_FindTypes
-	input
-		targetSig,
-		numInputs,
-		numOutputs
-	end
-	output
-		inputTypes = [],
-		outputTypes = []
-	end
-
-	select stmt.call end
-	apply
-		var sig = $call.signature;
-		sig = Strings.replacer(sig, / /g, '');
-		
-		if(sig != targetSig) {
-			continue;
-		}
-		
-		//~ var valid = _isValidMemoi($call, {});
-		//~ if(valid === _Res.VALID) {
-		var $functionType = $call.function.functionType;
-		
-		_getTypes($functionType, numInputs, numOutputs, inputTypes, outputTypes);
-		return;
-		//~ }
-	end
-	throw 'Target function "' + targetSig + '" not found.';
-end
-
-function _getTypes($functionType, numInputs, numOutputs, inputTypes, outputTypes) {
-	
-	if(numOutputs == 1) {
-		outputTypes.push($functionType.returnType.code);
-		$functionType.paramTypes.forEach(function(e){inputTypes.push(e.code);});
-
-	} else {
-
-		var typeCodes = $functionType.paramTypes.map(function(e){return e.code;});
-		
-		typeCodes.filter(function(e,i){return i < numInputs;}).forEach(function(e){inputTypes.push(e);});
-		typeCodes.filter(function(e,i){return i >= numInputs;}).forEach(function(e){outputTypes.push(e);});
-	}
-}
-
-function _isValidMemoi($call, processed) {
-	
-	var test = _isValidMemoiRecursive($call, processed);
-	
-	if(test === _Res.WAITING) {
-		
-		var sig = $call.signature;
-		
-		processed[sig] = _Res.VALID;
-		return _Res.VALID;
-	}
-	
-	return test;
-}
-
-/**
- * 		Checks if the target function is valid.
- *
- *	The constraints are:
- *	1) has between 1 and 3 parameters
- *	2) type of inputs and outputs is one of {int, float, double}
- * 	3) It doesn't access global state;
- *	4) It doesn't call non-valid functions.
- **/
-function _isValidMemoiRecursive($call, processed) {
-
-	var sig = $call.signature;
-	sig = Strings.replacer(sig, ' ', '');
-	
-	// 0) check if this function was processed before
-	if(_isProcessed(sig, processed)) {
-		
-		return processed[sig];
-	}
-	
-	// mark this as being processed
-	processed[sig] = _Res.WAITING;
-	
-	var $func = $call.function;
-	var $functionType = $func.functionType;
-	var $returnType = $functionType.returnType;
-	var paramTypes = $functionType.paramTypes;
-
-	// 1) has between 1 and 3 parameters
-	if(paramTypes.length < 1 || paramTypes.length > 3) {
-		
-		debug(sig + ' - wrong number of parameters: ' + paramTypes.length);
-		_Memoi_FindTargets_Report.paramsNum++;
-		_Memoi_FindTargets_Report.unsupportedNums[paramTypes.length] ? 
-			_Memoi_FindTargets_Report.unsupportedNums[paramTypes.length]++ :
-			_Memoi_FindTargets_Report.unsupportedNums[paramTypes.length] = 1;
-		
-		processed[sig] = _Res.INVALID;
-		return _Res.INVALID;
-	}
-	
-	
-	// 2) type of return and params is one of {int, float, double}
-	if(!_testType($returnType, ['int', 'float', 'double'])) {
-		
-		debug(sig + ' - return type is not supported: ' + $returnType.code);
-		_Memoi_FindTargets_Report.returnType++;
-		_Memoi_FindTargets_Report.unsupportedTypes[$returnType.code] ? 
-			_Memoi_FindTargets_Report.unsupportedTypes[$returnType.code]++ :
-			_Memoi_FindTargets_Report.unsupportedTypes[$returnType.code] = 1;
-		
-		processed[sig] = _Res.INVALID;
-		return _Res.INVALID;
-	}
-	
-	for(var $type of paramTypes) {
-		if(!_testType($type, ['int', 'float', 'double'])) {
-		
-		debug(sig + ' - param type is not supported: ' + $type.code);
-		_Memoi_FindTargets_Report.paramsType++;
-		_Memoi_FindTargets_Report.unsupportedTypes[$type.code] ? 
-			_Memoi_FindTargets_Report.unsupportedTypes[$type.code]++ :
-			_Memoi_FindTargets_Report.unsupportedTypes[$type.code] = 1;
-		
-		processed[sig] = _Res.INVALID;
-		return _Res.INVALID;
-	}	
-	}
-	
-	// Try to get the definition
-	var $def = $call.definition;
-	if($def === undefined) {
-		
-		if(!_isWhiteListed(sig)) {
-			
-			debug(sig + ' - definition not found, not whitelisted');
-			
-			processed[sig] = _Res.INVALID;
-			return _Res.INVALID;
-		} else {
-
-			processed[sig] = _Res.VALID;
-			return _Res.VALID;
-		}
-	}
-	
-	// 3) It doesn't access global state (unless constants)
-	var varRefs = $def.descendants('varref');
-	for(var $ref of varRefs) {
-	
-		var $varDecl = $ref.declaration;
-		
-		if($varDecl.isGlobal && (!$ref.type.constant || $ref.type.isPointer)) {
-			
-			debug(sig + ' - accesses non-const global storage variable ' + $ref.code);
-			_Memoi_FindTargets_Report.global++;
-	
-			processed[sig] = _Res.INVALID;
-			return _Res.INVALID;
-		}
-	}
-
-	// 4) It doesn't call non-valid functions
-	var isChildWaiting = false;
-	var $calls = $def.descendants('call');
-	for(var $childCall of $calls) {
-		
-		var childSig = $childCall.signature;
-		
-		if(_isWaiting(childSig, processed)) {
-			isChildWaiting = true;
-			continue;
-		}
-		
-		var test = _isValidMemoiRecursive($childCall, processed);
-		if(test === _Res.INVALID) {
-			debug(sig + ' - calls invalid function ' + childSig);
-			_Memoi_FindTargets_Report.calls++;
-			
-			processed[sig] = _Res.INVALID;
-			return _Res.INVALID;
-		} else if (test === _Res.WAITING) {
-			
-			isChildWaiting = true;
-		}
-	}
-	
-	if(isChildWaiting) {
-
-		processed[sig] = undefined;
-		return _Res.WAITING;
-	}
-	
-	// Everything checked OK
-	processed[sig] = _Res.VALID;
-	return _Res.VALID;
-}
 
 /**
  * 		Makes a single global wrapper for all calls of the target
@@ -531,49 +269,7 @@ aspectdef _Memoi_AddCallSiteInfo
 end
 
 
-/**
- * 		Tests if the type is one of the provided types.
- * */
-function _testType($type, typesToTest) {
-	
-	var code = $type.code;
-	return typesToTest.indexOf(code) !== -1;
-}
 
-/**
- * 		Tests whether the function with the given signature is whitelisted.
- * */
-function _isWhiteListed(sig) {
-	
-	if(_isMathFunction(sig)) {
-		return true;
-	}
-	
-	return false;
-}
 
-/**
- * 		Tests whether the function with the given signature is a math.h function.
- * */
-function _isMathFunction(sig) {
 
-	var mathFunctionSigs =[ 
-		/* double, 1 parameter */ 
-		"acos(double)", "acosh(double)", "asin(double)", "asinh(double)", "atan(double)", "atanh(double)", 
-		"cbrt(double)", "ceil(double)", "cos(double)", "cosh(double)", "erf(double)", "erfc(double)", "exp(double)", "exp2(double)", "expm1(double)", 
-		"fabs(double)", "floor(double)", "j0(double)", "j1(double)", "lgamma(double)", "log(double)", "log10(double)", "log1p(double)", "log2(double)", 
-		"logb(double)", "nearbyint(double)", "rint(double)", "round(double)", "sin(double)", "sinh(double)", "sqrt(double)", "tan(double)", "tanh(double)", "tgamma(double)", "trunc(double)", 
-		/* float, 1 parameter */
-		"acosf(float)", "acoshf(float)", "asinf(float)", "asinhf(float)", "atanf(float)", "atanhf(float)", 
-		"cbrtf(float)", "ceilf(float)", "cosf(float)", "coshf(float)", "erfcf(float)", "erff(float)", "exp2f(float)", "expf(float)", "expm1f(float)", 
-		"fabsf(float)", "floorf(float)", "lgammaf(float)", "log10f(float)", "log1pf(float)", "log2f(float)", "logbf(float)", "logf(float)", "nearbyintf(float)", 
-		"rintf(float)", "roundf(float)", "sinf(float)", "sinhf(float)", "sqrtf(float)", "tanf(float)", "tanhf(float)", "tgammaf(float)", "truncf(float)", 
-		/* double,2 parameters */
-		"atan2(double,double)", "copysign(double,double)", "fdim(double,double)", "fmax(double,double)", "fmin(double,double)", "fmod(double,double)", "hypot(double,double)", "nextafter(double,double)", "pow(double,double)", "remainder(double,double)", "scalb(double,double)",
-		/* float, 2 parameters */
-		"atan2f(float,float)", "copysignf(float,float)", "fdimf(float,float)", "fmaxf(float,float)", "fminf(float,float)", "fmodf(float,float)", "hypotf(float,float)", "nextafterf(float,float)", "powf(float,float)", "remainderf(float,float)"
-	];
-	
-	return mathFunctionSigs.indexOf(sig) !== -1;
-}
 

@@ -1,0 +1,107 @@
+import clava.memoi.MemoiUtils;
+
+import weaver.Query;
+
+function MemoiTarget(sig, $func, isUser, numInputs, numOuputs, inputTypes, outputTypes) {
+	
+	this.sig = MemoiUtils.normalizeSig(sig);
+	this.$func = $func;
+	this.isUser = isUser;
+	this.numInputs = numInputs === undefined ? $func.params.length : numInputs;
+	this.numOutputs = numOuputs === undefined? 1 : numOuputs;
+	
+	if(inputTypes === undefined || outputTypes === undefined) {
+		this._findDataTypes();
+	} else {
+		this.inputTypes = inputTypes;
+		this.outputTypes = outputTypes;
+	}
+	
+	// check data types
+}
+
+MemoiTarget.fromFunction = function($func) {
+	
+	var sig = MemoiUtils.normalizeSig($func.signature);
+	var isUser = !MemoiUtils.isWhiteListed(sig);
+	var numInputs = $func.params.length;
+	var numOutputs = 1;
+	
+	return new MemoiTarget(sig, $func, isUser, numInputs, numOutputs, undefined, undefined); // input and output types are found in the constructor
+}
+
+MemoiTarget.fromCall = function($call) {
+	
+	var $func = $call.function;
+	if($func === undefined) {
+		throw "Could not find function of call '" + $call.code + "'";
+	}
+	
+	return MemoiTarget.fromFunction($func);
+}
+
+MemoiTarget.fromSig = function(sig) {
+	
+	sig = MemoiUtils.normalizeSig(sig);
+	
+	var $func = Query.search("function",{"signature": signature => sig === MemoiUtils.normalizeSig(signature)}).first();
+	if($func === undefined) {
+		
+		var $call = Query.search("call",{"signature": signature => sig === MemoiUtils.normalizeSig(signature)}).first();
+		if($call === undefined) {
+		
+			throw "Could not find function of sig '" + sig + "'";	
+		}
+		
+		return MemoiTarget.fromCall($call);
+	}
+
+	return MemoiTarget.fromFunction($func);
+}
+
+MemoiTarget.prototype._findDataTypes = function() {
+	
+	var $functionType = this.$func.functionType;
+	
+	if(this.numOutputs == 1) {
+		
+		this.outputTypes.push($functionType.returnType.code);
+		$functionType.paramTypes.forEach(function(e){this.inputTypes.push(e.code);});
+
+	} else {
+
+		var typeCodes = $functionType.paramTypes.map(function(e){return e.code;});
+		
+		typeCodes.forEach(function(e, i){
+			if(i < this.numInputs) {
+				this.inputTypes.push(e);
+			} else {
+				this.outputTypes.push(e);
+			}
+		});
+	}
+}
+
+// FIXME: ADAPT TO CLASS
+MemoiTarget.prototype._checkDataTypes = function() {
+	
+	var normalTypes = ["double", "float", "int"];
+	var pointerTypes = ["double *", "float *", "int *"];
+	var outputTestArray;
+	
+	var inputsInvalid = this._inputTypes.some(function(e){return !_arrayContains(normalTypes, e);});
+
+	if(inputsInvalid) {
+		throw "The inputs of the target function '" + this._targetSig + "' are not supported.";
+	}
+
+	outputTestArray = this._numOutputs == 1 ? normalTypes : pointerTypes;
+	var outputsInvalid = this._outputTypes.some(function(e){return !_arrayContains(outputTestArray, e);});
+	
+	if(outputsInvalid) {
+		throw "The outputs of the target function '" + this._targetSig + "' are not supported.";
+	}	
+
+	// if the output are valid, drop the pointer from the type
+	this._outputTypes = this._outputTypes.map(function(e){return Strings.replacer(e, /\*/, '').trim();});
+}

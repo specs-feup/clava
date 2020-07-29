@@ -2,14 +2,6 @@ import lara.Io;
 import lara.Strings;
 import clava.ClavaJoinPoints;
 
-function _normalizeSig(sig) {
-	var tmp = Strings.replacer(sig, /\(/g, '_');
-	tmp = Strings.replacer(tmp, /\*/g, '_p');
-	tmp = Strings.replacer(tmp, / /g, '_');
-	tmp = Strings.replacer(tmp, /,/g, '_');
-	return Strings.replacer(tmp, /\)/g, '_');
-}
-
 function _isPowerOf2(num) {
 	
 	var log = _baseLog(num, 2);
