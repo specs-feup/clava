@@ -34,7 +34,7 @@ else()
 	# Set default URL for clava.jar
 	set(CLAVA_ZIP_URL "http://specs.fe.up.pt/tools/clava.zip")
 	set(CLAVA_ZIP_PATH "${CMAKE_CURRENT_BINARY_DIR}/clava.zip")
-	set(CLAVA_JAR_PATH "${CMAKE_CURRENT_BINARY_DIR}/clava.jar")
+	set(CLAVA_JAR_PATH "${CMAKE_CURRENT_BINARY_DIR}/Clava.jar")
 	set(DOWNLOADED_CLAVA true)
 endif()
 
