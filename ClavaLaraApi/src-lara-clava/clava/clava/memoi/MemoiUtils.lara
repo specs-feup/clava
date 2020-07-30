@@ -59,3 +59,7 @@ MemoiUtils.normalizeSig = function(sig) {
 	
 	return Strings.replacer(sig, / /g, '');
 }
+
+MemoiUtils.arrayContains = function(a, e) {
+	return a.indexOf(e) != -1;
+}

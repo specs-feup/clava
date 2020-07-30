@@ -4,20 +4,21 @@ import weaver.Query;
 
 function MemoiTarget(sig, $func, isUser, numInputs, numOuputs, inputTypes, outputTypes) {
 	
-	this.sig = MemoiUtils.normalizeSig(sig);
-	this.$func = $func;
-	this.isUser = isUser;
-	this.numInputs = numInputs === undefined ? $func.params.length : numInputs;
-	this.numOutputs = numOuputs === undefined? 1 : numOuputs;
+	this._sig = MemoiUtils.normalizeSig(sig);
+	this._$func = $func;
+	this._isUser = isUser;
+	this._numInputs = numInputs === undefined ? $func.params.length : numInputs;
+	this._numOutputs = numOuputs === undefined? 1 : numOuputs;
 	
 	if(inputTypes === undefined || outputTypes === undefined) {
+		
 		this._findDataTypes();
 	} else {
-		this.inputTypes = inputTypes;
-		this.outputTypes = outputTypes;
+		this._inputTypes = inputTypes;
+		this._outputTypes = outputTypes;
 	}
 	
-	// check data types
+	this._checkDataTypes();
 }
 
 MemoiTarget.fromFunction = function($func) {
@@ -61,45 +62,50 @@ MemoiTarget.fromSig = function(sig) {
 
 MemoiTarget.prototype._findDataTypes = function() {
 	
-	var $functionType = this.$func.functionType;
+	inputTypes = [];
+	outputTypes = [];
 	
-	if(this.numOutputs == 1) {
+	var $functionType = this._$func.functionType;
+	
+	if(this._numOutputs == 1) {
 		
-		this.outputTypes.push($functionType.returnType.code);
-		$functionType.paramTypes.forEach(function(e){this.inputTypes.push(e.code);});
+		outputTypes.push($functionType.returnType.code);
+		$functionType.paramTypes.forEach(function(e){inputTypes.push(e.code);});
 
 	} else {
 
 		var typeCodes = $functionType.paramTypes.map(function(e){return e.code;});
 		
 		typeCodes.forEach(function(e, i){
-			if(i < this.numInputs) {
-				this.inputTypes.push(e);
+			if(i < this._numInputs) {
+				inputTypes.push(e);
 			} else {
-				this.outputTypes.push(e);
+				outputTypes.push(e);
 			}
 		});
 	}
+	
+	this._inputTypes = inputTypes;
+	this._outputTypes = outputTypes;
 }
 
-// FIXME: ADAPT TO CLASS
 MemoiTarget.prototype._checkDataTypes = function() {
 	
 	var normalTypes = ["double", "float", "int"];
 	var pointerTypes = ["double *", "float *", "int *"];
 	var outputTestArray;
 	
-	var inputsInvalid = this._inputTypes.some(function(e){return !_arrayContains(normalTypes, e);});
+	var inputsInvalid = this._inputTypes.some(function(e){return !MemoiUtils.arrayContains(normalTypes, e);});
 
 	if(inputsInvalid) {
-		throw "The inputs of the target function '" + this._targetSig + "' are not supported.";
+		throw "The inputs of the target function '" + this._sig + "' are not supported.";
 	}
 
 	outputTestArray = this._numOutputs == 1 ? normalTypes : pointerTypes;
-	var outputsInvalid = this._outputTypes.some(function(e){return !_arrayContains(outputTestArray, e);});
+	var outputsInvalid = this._outputTypes.some(function(e){return !MemoiUtils.arrayContains(outputTestArray, e);});
 	
 	if(outputsInvalid) {
-		throw "The outputs of the target function '" + this._targetSig + "' are not supported.";
+		throw "The outputs of the target function '" + this._sig + "' are not supported.";
 	}	
 
 	// if the output are valid, drop the pointer from the type
