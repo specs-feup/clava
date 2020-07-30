@@ -7,4 +7,11 @@ aspectdef SelectorTest
 	}
 
 
+	// Test iterator
+	var iteratorsStmts = 0;
+	for(var $stmt of search("function", "iterators").search("statement")) {	
+		iteratorsStmts++;	
+	}
+	println("Stmts in iterators: " + iteratorsStmts);
+
 end

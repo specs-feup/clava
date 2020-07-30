@@ -81,6 +81,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxArrayAccess;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxBinaryOp;
+import pt.up.fe.specs.clava.weaver.joinpoints.CxxBody;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxCall;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxCast;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxClass;
@@ -165,7 +166,8 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(Expr.class, CxxExpression::new);
         JOINPOINT_FACTORY.put(IfStmt.class, CxxIf::new);
         JOINPOINT_FACTORY.put(LoopStmt.class, CxxLoop::new);
-        JOINPOINT_FACTORY.put(CompoundStmt.class, CxxScope::new);
+        // JOINPOINT_FACTORY.put(CompoundStmt.class, CxxScope::new);
+        JOINPOINT_FACTORY.put(CompoundStmt.class, CxxJoinpoints::compoundStmtFactory);
         JOINPOINT_FACTORY.put(ReturnStmt.class, CxxReturnStmt::new);
         JOINPOINT_FACTORY.put(Stmt.class, CxxStatement::new);
         JOINPOINT_FACTORY.put(CXXMethodDecl.class, CxxMethod::new);
@@ -262,6 +264,21 @@ public class CxxJoinpoints {
     public static CxxProgram programFactory(App app) {
         CxxWeaver weaver = CxxWeaver.getCxxWeaver();
         return new CxxProgram(weaver.getProgramName(), app, weaver);
+    }
+
+    private static ACxxWeaverJoinPoint compoundStmtFactory(CompoundStmt stmt) {
+        // If no parent, use Scope as default
+        if (!stmt.hasParent()) {
+            return new CxxScope(stmt);
+        }
+
+        // If CompoundStmt parent is another CompoundStmt, is a Scope.
+        if (stmt.getParent() instanceof CompoundStmt) {
+            return new CxxScope(stmt);
+        }
+
+        // Otherwise, is a Body
+        return new CxxBody(stmt);
     }
 
     private static ACxxWeaverJoinPoint recordDeclFactory(RecordDecl record) {

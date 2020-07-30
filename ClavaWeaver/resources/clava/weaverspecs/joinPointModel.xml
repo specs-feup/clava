@@ -125,8 +125,8 @@
 
 	<!-- FUNCTION -->
 	<joinpoint class="function" extends="declarator" tooltip="Represents a function declaration or definition">
-		<!--  <select 						class="body"/>   -->
-	 	<select alias="body" 			class="scope"/>
+		<select 						class="body"/> 
+	 	<!--  <select alias="body" 			class="scope"/> -->
 		<select 						class="param"/>
 		<select 						class="decl"/>
 	</joinpoint>
@@ -156,8 +156,8 @@
 	</joinpoint>
 	
 	<!-- BODY -->
-	<!-- <joinpoint class="body" extends="scope">
-	</joinpoint>  -->
+	<joinpoint class="body" extends="scope">
+	</joinpoint> 
 	
 	
 	<!-- STATEMENT -->

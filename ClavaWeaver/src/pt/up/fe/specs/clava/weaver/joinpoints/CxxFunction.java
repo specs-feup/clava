@@ -40,6 +40,7 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABody;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
@@ -71,8 +72,8 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public List<? extends AScope> selectBody() {
-        AScope body = getBodyImpl();
+    public List<? extends ABody> selectBody() {
+        var body = getBodyImpl();
 
         return body == null ? Collections.emptyList() : Arrays.asList(body);
 
@@ -186,12 +187,12 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AScope getBodyImpl() {
+    public ABody getBodyImpl() {
         if (!function.hasBody()) {
             return null;
         }
 
-        return (AScope) CxxJoinpoints.create(function.getBody().get());
+        return (ABody) CxxJoinpoints.create(function.getBody().get());
     }
 
     // TODO check if the new name clashes with other symbol?
