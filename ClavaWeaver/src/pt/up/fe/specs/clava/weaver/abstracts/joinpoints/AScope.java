@@ -930,7 +930,7 @@ public abstract class AScope extends AStatement {
      * 
      */
     @Override
-    public final List<? extends JoinPoint> select(String selectName) {
+    public List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	case "stmt": 
@@ -1028,7 +1028,7 @@ public abstract class AScope extends AStatement {
      * 
      */
     @Override
-    public final void defImpl(String attribute, Object value) {
+    public void defImpl(String attribute, Object value) {
         switch(attribute){
         case "type": {
         	if(value instanceof AJoinPoint){
@@ -1066,7 +1066,7 @@ public abstract class AScope extends AStatement {
      * 
      */
     @Override
-    protected final void fillWithAttributes(List<String> attributes) {
+    protected void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
         attributes.add("numStatements");
         attributes.add("numStatements");
@@ -1081,7 +1081,7 @@ public abstract class AScope extends AStatement {
      * 
      */
     @Override
-    protected final void fillWithSelects(List<String> selects) {
+    protected void fillWithSelects(List<String> selects) {
         this.aStatement.fillWithSelects(selects);
         selects.add("stmt");
         selects.add("childStmt");
@@ -1102,7 +1102,7 @@ public abstract class AScope extends AStatement {
      * 
      */
     @Override
-    protected final void fillWithActions(List<String> actions) {
+    protected void fillWithActions(List<String> actions) {
         this.aStatement.fillWithActions(actions);
         actions.add("joinpoint insertBegin(joinpoint)");
         actions.add("joinpoint insertBegin(String)");
@@ -1121,7 +1121,7 @@ public abstract class AScope extends AStatement {
      * @return The join point type
      */
     @Override
-    public final String get_class() {
+    public String get_class() {
         return "scope";
     }
 
@@ -1130,7 +1130,7 @@ public abstract class AScope extends AStatement {
      * @return True if this join point is an instanceof the given class
      */
     @Override
-    public final boolean instanceOf(String joinpointClass) {
+    public boolean instanceOf(String joinpointClass) {
         boolean isInstance = get_class().equals(joinpointClass);
         if(isInstance) {
         	return true;

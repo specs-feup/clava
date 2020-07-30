@@ -547,8 +547,8 @@ public abstract class AFunction extends ADeclarator {
      * Default implementation of the method used by the lara interpreter to select bodys
      * @return 
      */
-    public List<? extends AScope> selectBody() {
-        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope.class, SelectOp.DESCENDANTS);
+    public List<? extends ABody> selectBody() {
+        return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABody.class, SelectOp.DESCENDANTS);
     }
 
     /**

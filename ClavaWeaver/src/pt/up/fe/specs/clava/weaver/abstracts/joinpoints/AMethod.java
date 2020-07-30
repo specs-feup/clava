@@ -220,7 +220,7 @@ public abstract class AMethod extends AFunction {
      * @return 
      */
     @Override
-    public List<? extends AScope> selectBody() {
+    public List<? extends ABody> selectBody() {
         return this.aFunction.selectBody();
     }
 
