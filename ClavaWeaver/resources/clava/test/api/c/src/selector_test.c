@@ -9,3 +9,9 @@ int loops() {
 	}
 	return a;
 }
+
+int iterators() {
+	int a;
+	a = 10;
+	return a;
+}
