@@ -107,7 +107,9 @@ public class CxxWeaver extends ACxxWeaver {
     private static final List<String> CLAVA_PREDEFINED_EXTERNAL_DEPS = Arrays.asList("LAT - Lara Autotuning Tool",
             "https://github.com/specs-feup/LAT-Lara-Autotuning-Tool.git",
             "Benchmark - NAS (import lara.benchmark.NasBenchmarkSet)",
-            "https://github.com/specs-feup/clava.git?folder=benchmarks/NAS");
+            "https://github.com/specs-feup/clava.git?folder=benchmarks/NAS",
+            "Benchmark - Polybench (import lara.benchmark.PolybenchBenchmarkSet)",
+            "https://github.com/specs-feup/clava.git?folder=benchmarks/Polybench");
 
     /**
      * @deprecated
