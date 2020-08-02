@@ -90,7 +90,7 @@ public enum LaraApiResource implements LaraResourceProvider {
 
     // Memoization
     MEMOI_PROF("memoi/MemoiProf.lara"),
-    MEMOI_PROF_HELPER("memoi/_MemoiProfHelper.lara"),
+    // MEMOI_PROF_HELPER("memoi/_MemoiProfHelper.lara"),
     MEMOI_GEN("memoi/MemoiGen.lara"),
     MEMOI_GEN_HELPER("memoi/_MemoiGenHelper.lara"),
     MEMOI_TARGET("memoi/MemoiTarget.lara"),

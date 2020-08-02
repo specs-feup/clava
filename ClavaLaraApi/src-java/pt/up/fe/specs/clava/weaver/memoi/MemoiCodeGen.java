@@ -27,42 +27,44 @@ public class MemoiCodeGen {
      * 
      * list of param names
      * 
-     * 
-     * @param report
      * @param numSets
+     * @param report
      * @param func
+     * 
+     * 
      * @return
      */
-    public static String generateDmtCode(MergedMemoiReport report, int numSets, List<String> paramNames,
-            boolean isMemoiEmpty, boolean isMemoiOnline, int memoiApproxBits) {
+    public static String generateDmtCode(int numSets, List<String> paramNames, boolean isMemoiEmpty,
+            boolean isMemoiOnline, int memoiApproxBits, MergedMemoiReport report, int inputCount, int outputCount,
+            List<String> inputTypes, List<String> outputTypes) {
 
         Map<String, MergedMemoiEntry> table = new HashMap<String, MergedMemoiEntry>();
         if (!isMemoiEmpty) {
             table = new DirectMappedTable(report, numSets).generate();
         }
 
-        return generateDmtCode(table, report, numSets, paramNames, isMemoiOnline, memoiApproxBits);
+        return generateDmtCode(table, numSets, paramNames, isMemoiOnline, memoiApproxBits, inputCount, outputCount,
+                inputTypes, outputTypes);
     }
 
-    private static String generateDmtCode(Map<String, MergedMemoiEntry> table, MergedMemoiReport report,
-            int numSets, List<String> paramNames, boolean isMemoiOnline, int memoiApproxBits) {
-
-        int inputCount = report.getInputCount();
-        int outputCount = report.getOutputCount();
+    private static String generateDmtCode(Map<String, MergedMemoiEntry> table, int numSets,
+            List<String> paramNames, boolean isMemoiOnline, int memoiApproxBits, int inputCount, int outputCount,
+            List<String> inputTypes, List<String> outputTypes) {
 
         String tableCode = dmtCode(table, inputCount, outputCount, numSets, isMemoiOnline);
 
-        String logicCode = dmtLogicCode(report, paramNames, numSets, memoiApproxBits);
+        String logicCode = dmtLogicCode(paramNames, numSets, memoiApproxBits, inputCount, outputCount,
+                inputTypes, outputTypes);
 
         return tableCode + "\n\n" + logicCode;
     }
 
-    public static String generateUpdateCode(MergedMemoiReport report, int numSets, List<String> paramNames,
-            boolean isUpdateAlways) {
+    public static String generateUpdateCode(int numSets, List<String> paramNames,
+            boolean isUpdateAlways, int inputCount, int outputCount) {
 
         int indexBits = (int) MemoiUtils.log2(numSets);
 
-        return updateCode(report, indexBits, paramNames, isUpdateAlways);
+        return updateCode(inputCount, outputCount, indexBits, paramNames, isUpdateAlways);
     }
 
     private static List<String> makeVarNames(List<String> paramNames) {
@@ -70,27 +72,24 @@ public class MemoiCodeGen {
         return paramNames.stream().map(s -> s + "_bits").collect(Collectors.toList());
     }
 
-    private static String dmtLogicCode(MergedMemoiReport report, List<String> paramNames, int numSets,
-            int memoiApproxBits) {
+    private static String dmtLogicCode(List<String> paramNames, int numSets,
+            int memoiApproxBits, int inputCount, int outputCount, List<String> inputTypes, List<String> outputTypes) {
 
         StringBuilder code = new StringBuilder();
 
         int indexBits = (int) MemoiUtils.log2(numSets);
 
-        int maxVarBits = varBitsCode(report, paramNames, code, memoiApproxBits);
+        int maxVarBits = varBitsCode(paramNames, code, memoiApproxBits, inputCount, inputTypes);
 
-        mergeBitsCode(report, code, paramNames, maxVarBits, indexBits);
+        mergeBitsCode(code, paramNames, maxVarBits, indexBits, inputCount);
 
-        lookupCode(report, code, indexBits, paramNames);
+        lookupCode(code, indexBits, paramNames, inputCount, outputCount, outputTypes);
 
         return code.toString();
     }
 
-    private static String updateCode(MergedMemoiReport report, int indexBits,
+    private static String updateCode(int inputCount, int outputCount, int indexBits,
             List<String> paramNames, boolean isUpdateAlways) {
-
-        final int outputCount = report.getOutputCount();
-        final int inputCount = report.getInputCount();
 
         StringBuilder code = new StringBuilder();
 
@@ -150,12 +149,10 @@ public class MemoiCodeGen {
         return code.toString();
     }
 
-    private static void lookupCode(MergedMemoiReport report, StringBuilder code, int indexBits,
-            List<String> paramNames) {
-        code.append("\nif(");
+    private static void lookupCode(StringBuilder code, int indexBits,
+            List<String> paramNames, int inputCount, int outputCount, List<String> outputTypes) {
 
-        final int outputCount = report.getOutputCount();
-        final int inputCount = report.getInputCount();
+        code.append("\nif(");
 
         List<String> varNames = makeVarNames(paramNames);
 
@@ -179,7 +176,7 @@ public class MemoiCodeGen {
         if (outputCount == 1) {
 
             code.append("\treturn *(");
-            code.append(report.getOutputTypes().get(0));
+            code.append(outputTypes.get(0));
             code.append(" *) &table[hash_");
             code.append(indexBits);
             code.append("_bits][");
@@ -192,7 +189,7 @@ public class MemoiCodeGen {
                 code.append("\t*");
                 code.append(paramNames.get(o + inputCount));
                 code.append(" = *(");
-                code.append(report.getOutputTypes().get(o));
+                code.append(outputTypes.get(o));
                 code.append(" *) &table[hash_");
                 code.append(indexBits);
                 code.append("_bits][");
@@ -203,10 +200,8 @@ public class MemoiCodeGen {
         }
     }
 
-    private static void mergeBitsCode(MergedMemoiReport report, StringBuilder code, List<String> paramNames,
-            int maxVarBits, int indexBits) {
-
-        int inputCount = report.getInputCount();
+    private static void mergeBitsCode(StringBuilder code, List<String> paramNames,
+            int maxVarBits, int indexBits, int inputCount) {
 
         List<String> varNames = makeVarNames(paramNames).subList(0, inputCount);
 
@@ -262,9 +257,8 @@ public class MemoiCodeGen {
         }
     }
 
-    private static int varBitsCode(MergedMemoiReport report, List<String> paramNames, StringBuilder code,
-
-            int memoiApproxBits) {
+    private static int varBitsCode(List<String> paramNames, StringBuilder code,
+            int memoiApproxBits, int inputCount, List<String> inputTypes) {
 
         Map<String, Integer> sizeMap = new HashMap<>();
         sizeMap.put("float", 32);
@@ -275,11 +269,11 @@ public class MemoiCodeGen {
 
         int maxVarBits = 0;
 
-        for (int p = 0; p < report.getInputCount(); p++) {
+        for (int p = 0; p < inputCount; p++) {
 
             String paramName = paramNames.get(p);
 
-            String paramType = report.getInputTypes().get(p);
+            String paramType = inputTypes.get(p);
             int varBits = sizeMap.get(paramType);
 
             if (varBits > maxVarBits) {

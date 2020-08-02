@@ -2,12 +2,6 @@ import lara.Io;
 import lara.Strings;
 import clava.ClavaJoinPoints;
 
-function _isPowerOf2(num) {
-	
-	var log = _baseLog(num, 2);
-	
-	return log === parseInt(log, 10);
-}
 
 /**
  * 		Generates the table and supporting code for this report.

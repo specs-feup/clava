@@ -1,157 +1,29 @@
 import clava.memoi._MemoiGenHelper;
 
+import clava.memoi.MemoiTarget;
+
 import lara.util.IdGenerator;
 import lara.Io;
 import lara.Check;
 import lara.JavaInterop;
 
-/**
- * 		Library to generate memoization tables based on the results from
- * 	the memoiprof profiling library.
- * 
- * @constructor
- * 
- * @param {string[]|...string} reports - the paths of the report files
- * */
-function MemoiGen(reports) {
-	
-	this._reportsPaths = arrayFromArgs(arguments);
+function MemoiGen(target) {
 
-	// generate the <target, site> map
-	var list = JavaInterop.arrayToList(reports);
-	this._reportsMap = MemoiReportsMap.fromFiles(list);
-
-	this._isEmpty = false;
-	this._isDebug = false;
-	this._isOnline = false;
-	this._isUpdateAlways = false;
-	this._approxBits = 0;
-}
-
-/**
- * 		Helper constructor that takes a dir name and looks for JSON
- *  files there.
- * 
- * @constructor
- * 
- * @param {string} dir - the path of the directory containing the report files
- * */
-MemoiGen.fromDir = function(dir) {
-
-	Check.isString(dir, "MemoiGen.fromDir");
-	
-	var files = Io.getFiles(dir, "*.json", false);
-
-	return new MemoiGen(files);
-};
-
-/**
- * 		Helper constructor that takes file names.
- * 
- * @constructor
- * 
- * @param {string[]|...string} names - the paths of the report files
- * */
-MemoiGen.fromFileNames = function(names) {
-	
-	var namesArray = arrayFromArgs(arguments);
-	var files = [];
-	
-	for(var name in namesArray) {
+		this._target = target;
 		
-		var file = Io._newFile(name);
-		Check.isTrue(Io.isFile(file), name + " is not a file", "MemoiGen.fromFileNames");
-		files.push(file);
-	}
-
-	return new MemoiGen(files);	
-}
-
-/**
- * 		Prints detailed metrics for each <target function, call site>.
- * 		The data is the average of all reports read.
- * */
-MemoiGen.prototype.printAverageMetrics = function() {
-	
-	for(var report of this._reports) {
+		this._isEmpty = true;
 		
-		println('=== profile metrics ===');
+		this._isOnline = true;
+		this._isUpdateAlways = false;
 		
-		println('  > target function: ' + report.funcSig);
-		println('  > call sites: ' + report.call_sites);
-		println('  > report count: ' + report.reportCount);
+		this._approxBits = 0;
+		this._isProf = false;
 		
-		var unique = mean(report.elements);
-		var total = mean(report.calls);
+		this._profReportFiles = [];
 		
-		var repetition = 100 * (total - unique) / total;
+		this._tableSize = 65536;
 		
-		var averageRepetition = total / unique;
-		
-		var top3total = totalTopN(report, 3, report.reportCount);
-		var top3percentage = top3total / total * 100;
-		
-		var top5total = totalTopN(report, 5, report.reportCount);
-		var top5percentage = top5total / total * 100;
-		
-		var top10total = totalTopN(report, 10, report.reportCount);
-		var top10percentage = top10total / total * 100;
-		
-		// print metrics
-		println('  > unique inputs: ' + unique);
-		println('  > total calls: ' + total);
-		println('  > repetition: ' + repetition.toFixed(2) + '%');
-		println('  > average repetition: ' + averageRepetition.toFixed(4));
-		println('  > top 3: ' + top3percentage.toFixed(2) + '%');
-		println('  > top 5: ' + top5percentage.toFixed(2) + '%');
-		println('  > top 10: ' + top10percentage.toFixed(2) + '%');
-		println('  > elements for 5%: ' + elementsForRatio(report, total, 0.05, report.reportCount));
-		println('  > elements for 10%: ' + elementsForRatio(report, total, 0.1, report.reportCount));
-		println('  > elements for 25%: ' + elementsForRatio(report, total, 0.25,report.reportCount));
-		println('  > elements for 50%: ' + elementsForRatio(report, total, 0.5, report.reportCount));
-		print('  > bwp:  '); printBwp(report, report.reportCount);
-		println('\n');
-	}
-}
-
-var MemoiApply = {
-	ALWAYS : function(report) {
-		if(mean(report.elements, report.reportCount) === 0) {
-			debug('skipped - no calls');
-			return false;
-		}
-		
-		return true;
-	}
-};
-
-var MemoiInsert = {
-	ALL : function(count, report) {
-		return true;
-	}
-};
-
-var MemoiComparator = new Enumeration('MEAN');
-
-/**
- * 		Sets whether to generate debug code in the final application.
- * */
-MemoiGen.prototype.setDebug = function(isDebug) {
-	
-	isDebug = isDebug === undefined ? true : isDebug;
-	
-	this._isDebug = isDebug;
-}
-
-/**
- * 		Sets whether to generate update code in the final application.
- * 	THE TABLE IS ALWAYS UPDATED ON A MISS, REGARDLESS OF WHETHER THE POSITION IS EMPTY
- * */
-MemoiGen.prototype.setOnline = function(isOnline) {
-	
-	isOnline = isOnline === undefined ? true : isOnline;
-	
-	this._isOnline = isOnline;
+		this._isDebug = false;
 }
 
 /**
@@ -162,6 +34,26 @@ MemoiGen.prototype.setEmpty = function(isEmpty) {
 	isEmpty = isEmpty === undefined ? true : isEmpty;
 	
 	this._isEmpty = isEmpty;
+}
+
+/**
+ * 		Sets whether to generate update code in the final application.
+ * */
+MemoiGen.prototype.setOnline = function(isOnline) {
+	
+	isOnline = isOnline === undefined ? true : isOnline;
+	
+	this._isOnline = isOnline;
+}
+
+/**
+ * 		Sets whether to always update the table on a miss, even if not vacant.
+ * */
+MemoiGen.prototype.setUpdateAlways = function(isUpdateAlways) {
+	
+	isUpdateAlways = isUpdateAlways === undefined ? true : isUpdateAlways;
+	
+	this._isUpdateAlways = isUpdateAlways;
 }
 
 /**
@@ -176,78 +68,458 @@ MemoiGen.prototype.setApproxBits = function(bits) {
 }
 
 /**
- * 		Sets whether to always update the table on a miss, even if not vacant.
+ * 		Sets the table size in the final application.
+ * 		Defaults to 65536.
  * */
-MemoiGen.prototype.setUpdateAlways = function(isUpdateAlways) {
+MemoiGen.prototype.setTableSize = function(size) {
 	
-	isUpdateAlways = isUpdateAlways === undefined ? true : isUpdateAlways;
-	
-	this._isUpdateAlways = isUpdateAlways;
-}
-
-/**
- * 		Makes a table for each <target function, call site> pair. The
- * 	table will have a number of elements equal to the provided number, 
- * 	which should be 2^b, with b in [8, 16].
- * 
- * 		Decides whether to apply memoization to that specific call site
- * 	based on the result of the predicate applyPred, which receives the 
- *  entire report. The default predicate is MemoiApply.ALWAYS.
- * 
- * 		Decides whether to include any single element based on the
- * 	result of the predicate insertPred, which receives the count for
- *  that specific element and the entire report. The default predicate
- *  is MemoiInsert.ALL.
- * 
- * 		In case of a collision, decides which element to use based on
- * 	the order of the counts array, which is ordered from the least
- * 	important element to the most important element. The function
- * 	countComparator will be used as the comparator of each pair of
- * 	elements in the array. The default comparison function will sort
- * 	based on the mean and can be found at MemoiComparator.MEAN.
- * */
-MemoiGen.prototype.generate = function(applyPred, insertPred, countComparator, tableSize) {
-	
-	if(this._isEmpty && !this._isOnline) {
-		
-		debug('----------------------------------------------------------------------');
-		debug("can't have empty and offline table: skipping generation");
-		return;
-	}
+	Check.isNumber(size, "MemoiGen.setTableSize");
 	
 	// test table size
 	var allowedSizes = [256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536];
-	if(allowedSizes.indexOf(tableSize) === -1) {
-		throw 'The possible table sizes are 2^b, with b in [8, 16].';
-	}
+	Check.arrayContains(allowedSizes, size, "The possible table sizes are 2^b, with b in [8, 16].", "MemoiGen.setTableSize");
 	
-	// test comparator
-	if(!MemoiComparator.isValidEnum(countComparator)) {
-		throw 'The possible comparators are {MemoiComparator.MEAN}.';
-	}
-	
-	for(var target in this._reportsMap) {
-		
-		var siteMap = this._reportsMap.get(target);
-		for(var site in siteMap) {
+	this._tableSize = size;
+}
 
-			var reportPathList = siteMap.get(site);		
-			var report = MemoiReport.mergeReportsFromNames(reportPathList);
+/**
+ * 		Sets whether to generate debug code in the final application.
+ * */
+MemoiGen.prototype.setDebug = function(isDebug) {
+	
+	isDebug = isDebug === undefined ? true : isDebug;
+	
+	this._isDebug = isDebug;
+}
+
+/**
+ * Checks files with the given names for reports matching the current target.
+ * @param {string[]|...string} names - the paths of the report files
+ * */
+MemoiGen.prototype.setProfFromFileNames = function(names) {
+	
+	this._isProf = true;
+	this._isEmpty = false;
+	
+	var namesArray = arrayFromArgs(arguments);
+	
+	for(var name in namesArray) {
+		
+		var file = Io._newFile(name);
+		Check.isTrue(Io.isFile(file), name + " is not a file", "MemoiGen.setProfFromFileNames");
+		this._profReportFiles.push(file);
+	}	
+}
+
+/**
+ * Checks dir for reports matching the current target.
+ * * @param {string} dir - the path to the directory of the report files
+ * */
+MemoiGen.prototype.setProfFromDir = function(dir) {
+	
+	this._isProf = true;
+	this._isEmpty = false;
+	
+	this._profReportFiles = Io.getFiles(dir, "*.json", false);
+}
+
+/**
+ * 		Generates a table for all calls of the target function.
+ * 
+ * 		If a profiling reports are provided, the reports are used to
+ * 	determine whether to generate for all target or for each single
+ * 	target.
+ * */
+MemoiGen.prototype.generate = function() {
+	this._generateAll();
+}
+
+/**
+ * 		Generates a table for each call of the target function.
+ * 
+ * 		If a profiling reports are provided, the reports are used to
+ * 	determine whether to generate for all target or for each single
+ * 	target.
+ * */
+MemoiGen.prototype.generateEach = function() {
+	
+	this._checkParams("generateEach");
+
+	if(this._isProf) {
 			
-			debug('----------------------------------------------------------------------');
-			debug('analysing ' + target + ' at ' + site + ' (' + report.reportCount + ' reports)');
-			
-			if(!applyPred(report)) {
-				continue;
-			}
-			
-			//~ // define the comparator based on this report
-			//~ var comparatorToUse = function(count1, count2){
-				//~ return countComparator(count1, count2, report.reportCounter);
-			//~ };
-			
-			_generate(insertPred, countComparator, report, this._isDebug, this._isOnline, this._isEmpty, this._isUpdateAlways, this._approxBits, tableSize, target, site);
+		this._generateFromReport();
+	} else {
+		
+		this._generateEach(undefined);
+	}
+}
+
+/**
+ * 		Generates a table for all calls of the target function.
+ * 
+ * 		If a profiling reports are provided, the reports are used to
+ * 	determine whether to generate for all target or for each single
+ * 	target.
+ * */
+MemoiGen.prototype.generateAll = function() {
+	
+	this._checkParams("generateAll");
+
+	if(this._isProf) {
+		
+		this._generateFromReport();
+	} else {
+		
+		this._generateAll(undefined);
+	}
+}
+
+MemoiGen.prototype._generateFromReport = function() {
+	
+	//~ var list = JavaInterop.arrayToList(this._profReportFiles);
+	var reportsMap = MemoiReportsMap.fromFiles(this._profReportFiles); // maybe this needs list
+	
+	var siteMap = reportsMap.get(this._target._sig);
+	
+	if(siteMap === null || siteMap === undefined) {
+		
+		throw "Could not find report for target " + this._target._sig + " in files " + this._profReportFiles;
+	}
+	
+	for(var site in siteMap) {
+
+		// merge all reports for this <target, site>
+		var reportPathList = siteMap.get(site);		
+		var report = MemoiReport.mergeReportsFromNames(reportPathList);
+		
+		if(site === "global") {
+			this._generateAll(report);
+		} else {
+			this._generateEach(report); // this generates for all call sites found for the target, not for the call site analyzed
 		}
 	}
 }
 
+MemoiGen.prototype._generateEach = function(report) {
+	
+	var cSig = MemoiUtils.cSig(this._target._sig);
+	
+	for(var $call of Query.search("call", {"signature": s => this._target._sig === MemoiUtils.normalizeSig(s)})) {
+
+		var wrapperName = IdGenerator.next("mw_" + cSig);
+
+		$call.wrap(wrapperName);
+
+		this._generateGeneric(wrapperName, report);
+	}
+}
+
+MemoiGen.prototype._generateAll = function(report) {
+	
+	var cSig = MemoiUtils.cSig(this._target._sig);
+	var wrapperName = "mw_" + cSig;
+	
+	for(var $call of Query.search("call", {"signature": s => this._target._sig === MemoiUtils.normalizeSig(s)})) {
+
+		$call.wrap(wrapperName);
+	}
+	this._generateGeneric(wrapperName, report);
+}
+
+MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
+	
+	for(var chain of Query.search("file").search("function", {"name": wrapperName}).search("call").chain()) {
+		
+		var $file = chain["file"];
+		var $function = chain["function"];
+		var $call = chain["call"];
+		
+		if(this.isDebug) {
+			var totalName = wrapperName + '_total_calls';
+			var missesName = wrapperName + '_total_misses';
+			$file.addGlobal(totalName, ClavaJoinPoints.builtinType("int"), '0');
+			$file.addGlobal(missesName, ClavaJoinPoints.builtinType("int"), '0');
+			$call.insert("before",  '[[totalName]]++;');
+			$call.insert("after", '[[missesName]]++;');
+			
+			this._addMainDebug(totalName, missesName, wrapperName);
+		}
+		
+		$call.insert("before", this._makeTableCode($function, report));
+		
+		if(this._isOnline) {
+			$call.insert("after", this._makeUpdateCode($function));
+		}
+		
+		$file.addInclude('stdint.h', true);
+	}
+}
+
+MemoiGen.prototype._makeTableCode = function($function, report) {
+
+	var paramNames = [];
+	for(var $param of $function.params) {
+		paramNames.push($param.name);
+	}
+
+	var code = MemoiCodeGen.generateDmtCode(
+		this._tableSize,
+		paramNames,
+		this._isEmpty,
+		this._isOnline,
+		this._approxBits,
+		report,
+		this._target._numInputs, this._target._numOutputs,
+		this._target._inputTypes, this._target._outputTypes
+	);
+
+	return code;
+}
+
+MemoiGen.prototype._makeUpdateCode = function($function) {
+	
+	var paramNames = [];
+	for(var $param of $function.params) {
+		paramNames.push($param.name);
+	}
+	
+	var code = MemoiCodeGen.generateUpdateCode(this._tableSize, paramNames, this._isUpdateAlways, this._target._numInputs, this._target._numOutputs);
+
+	return code;
+}
+
+function _addMainDebug(totalName, missesName, wrapperName) {
+	
+	var chain = Query.search("file").search("function", {"name":"main"}).chain()[0];
+	var $file = chain["file"];
+	var $function = chain["function"];
+
+	$file.addGlobal(totalName, ClavaJoinPoints.builtinType("int"), '0');
+	$file.addGlobal(missesName, ClavaJoinPoints.builtinType("int"), '0');
+	$file.addInclude('stdio.h', true);
+	
+	$function.insertReturn(%{
+		printf("[[wrapperName]]\t%d / %d (%.2f%%)\n",
+			[[totalName]] - [[missesName]],
+			[[totalName]],
+			([[totalName]] - [[missesName]]) * 100.0 / [[totalName]]);
+	}%);
+}
+
+MemoiGen.prototype._checkParams = function(source) {
+
+	
+	Check.isTrue(
+		this._isEmpty && this._isOnline || !this._isEmpty,
+		"Can't have empty and offline table",
+		"MemoiGen." + source
+	);
+	Check.isTrue(
+		this._isEmpty ?  !this._isProf : this._isProf,
+		"Empty table and profile are mutually exclusive table",
+		"MemoiGen." + source
+	);
+}
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////
+
+
+//~ /**
+ //~ * 		Library to generate memoization tables based on the results from
+ //~ * 	the memoiprof profiling library.
+ //~ * 
+ //~ * @constructor
+ //~ * 
+ //~ * @param {string[]|...string} reports - the paths of the report files
+ //~ * */
+//~ function MemoiGen(reports) {
+	
+	//~ this._reportsPaths = arrayFromArgs(arguments);
+
+	//~ // generate the <target, site> map
+	//~ var list = JavaInterop.arrayToList(reports);
+	//~ this._reportsMap = MemoiReportsMap.fromFiles(list);
+
+	//~ this._isEmpty = false;
+	//~ this._isDebug = false;
+	//~ this._isOnline = false;
+	//~ this._isUpdateAlways = false;
+	//~ this._approxBits = 0;
+//~ }
+
+//~ /**
+ //~ * 		Helper constructor that takes a dir name and looks for JSON
+ //~ *  files there.
+ //~ * 
+ //~ * @constructor
+ //~ * 
+ //~ * @param {string} dir - the path of the directory containing the report files
+ //~ * */
+//~ MemoiGen.fromDir = function(dir) {
+
+	//~ Check.isString(dir, "MemoiGen.fromDir");
+	
+	//~ var files = Io.getFiles(dir, "*.json", false);
+
+	//~ return new MemoiGen(files);
+//~ };
+
+//~ /**
+ //~ * 		Helper constructor that takes file names.
+ //~ * 
+ //~ * @constructor
+ //~ * 
+ //~ * @param {string[]|...string} names - the paths of the report files
+ //~ * */
+//~ MemoiGen.fromFileNames = function(names) {
+	
+	//~ var namesArray = arrayFromArgs(arguments);
+	//~ var files = [];
+	
+	//~ for(var name in namesArray) {
+		
+		//~ var file = Io._newFile(name);
+		//~ Check.isTrue(Io.isFile(file), name + " is not a file", "MemoiGen.fromFileNames");
+		//~ files.push(file);
+	//~ }
+
+	//~ return new MemoiGen(files);	
+//~ }
+
+//~ /**
+ //~ * 		Prints detailed metrics for each <target function, call site>.
+ //~ * 		The data is the average of all reports read.
+ //~ * */
+//~ MemoiGen.prototype.printAverageMetrics = function() {
+	
+	//~ for(var report of this._reports) {
+		
+		//~ println('=== profile metrics ===');
+		
+		//~ println('  > target function: ' + report.funcSig);
+		//~ println('  > call sites: ' + report.call_sites);
+		//~ println('  > report count: ' + report.reportCount);
+		
+		//~ var unique = mean(report.elements);
+		//~ var total = mean(report.calls);
+		
+		//~ var repetition = 100 * (total - unique) / total;
+		
+		//~ var averageRepetition = total / unique;
+		
+		//~ var top3total = totalTopN(report, 3, report.reportCount);
+		//~ var top3percentage = top3total / total * 100;
+		
+		//~ var top5total = totalTopN(report, 5, report.reportCount);
+		//~ var top5percentage = top5total / total * 100;
+		
+		//~ var top10total = totalTopN(report, 10, report.reportCount);
+		//~ var top10percentage = top10total / total * 100;
+		
+		//~ // print metrics
+		//~ println('  > unique inputs: ' + unique);
+		//~ println('  > total calls: ' + total);
+		//~ println('  > repetition: ' + repetition.toFixed(2) + '%');
+		//~ println('  > average repetition: ' + averageRepetition.toFixed(4));
+		//~ println('  > top 3: ' + top3percentage.toFixed(2) + '%');
+		//~ println('  > top 5: ' + top5percentage.toFixed(2) + '%');
+		//~ println('  > top 10: ' + top10percentage.toFixed(2) + '%');
+		//~ println('  > elements for 5%: ' + elementsForRatio(report, total, 0.05, report.reportCount));
+		//~ println('  > elements for 10%: ' + elementsForRatio(report, total, 0.1, report.reportCount));
+		//~ println('  > elements for 25%: ' + elementsForRatio(report, total, 0.25,report.reportCount));
+		//~ println('  > elements for 50%: ' + elementsForRatio(report, total, 0.5, report.reportCount));
+		//~ print('  > bwp:  '); printBwp(report, report.reportCount);
+		//~ println('\n');
+	//~ }
+//~ }
+
+//~ var MemoiApply = {
+	//~ ALWAYS : function(report) {
+		//~ if(mean(report.elements, report.reportCount) === 0) {
+			//~ debug('skipped - no calls');
+			//~ return false;
+		//~ }
+		
+		//~ return true;
+	//~ }
+//~ };
+
+//~ var MemoiInsert = {
+	//~ ALL : function(count, report) {
+		//~ return true;
+	//~ }
+//~ };
+
+//~ var MemoiComparator = new Enumeration('MEAN');
+
+
+
+//~ /**
+ //~ * 		Makes a table for each <target function, call site> pair. The
+ //~ * 	table will have a number of elements equal to the provided number, 
+ //~ * 	which should be 2^b, with b in [8, 16].
+ //~ * 
+ //~ * 		Decides whether to apply memoization to that specific call site
+ //~ * 	based on the result of the predicate applyPred, which receives the 
+ //~ *  entire report. The default predicate is MemoiApply.ALWAYS.
+ //~ * 
+ //~ * 		Decides whether to include any single element based on the
+ //~ * 	result of the predicate insertPred, which receives the count for
+ //~ *  that specific element and the entire report. The default predicate
+ //~ *  is MemoiInsert.ALL.
+ //~ * 
+ //~ * 		In case of a collision, decides which element to use based on
+ //~ * 	the order of the counts array, which is ordered from the least
+ //~ * 	important element to the most important element. The function
+ //~ * 	countComparator will be used as the comparator of each pair of
+ //~ * 	elements in the array. The default comparison function will sort
+ //~ * 	based on the mean and can be found at MemoiComparator.MEAN.
+ //~ * */
+//~ MemoiGen.prototype.generate = function(applyPred, insertPred, countComparator, tableSize) {
+	
+	//~ if(this._isEmpty && !this._isOnline) {
+		
+		//~ debug('----------------------------------------------------------------------');
+		//~ debug("can't have empty and offline table: skipping generation");
+		//~ return;
+	//~ }
+	
+	//~ // test table size
+	//~ var allowedSizes = [256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536];
+	//~ if(allowedSizes.indexOf(tableSize) === -1) {
+		//~ throw 'The possible table sizes are 2^b, with b in [8, 16].';
+	//~ }
+	
+	//~ // test comparator
+	//~ if(!MemoiComparator.isValidEnum(countComparator)) {
+		//~ throw 'The possible comparators are {MemoiComparator.MEAN}.';
+	//~ }
+	
+	//~ for(var target in this._reportsMap) {
+		
+		//~ var siteMap = this._reportsMap.get(target);
+		//~ for(var site in siteMap) {
+
+			//~ var reportPathList = siteMap.get(site);		
+			//~ var report = MemoiReport.mergeReportsFromNames(reportPathList);
+			
+			//~ debug('----------------------------------------------------------------------');
+			//~ debug('analysing ' + target + ' at ' + site + ' (' + report.reportCount + ' reports)');
+			
+			//~ if(!applyPred(report)) {
+				//~ continue;
+			//~ }
+			
+			// define the comparator based on this report
+			//~ var comparatorToUse = function(count1, count2){
+				//~ return countComparator(count1, count2, report.reportCounter);
+			//~ };
+			
+			//~ _generate(insertPred, countComparator, report, this._isDebug, this._isOnline, this._isEmpty, this._isUpdateAlways, this._approxBits, tableSize, target, site);
+		//~ }
+	//~ }
+//~ }
