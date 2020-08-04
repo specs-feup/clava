@@ -69,10 +69,10 @@ MemoiProf.prototype.profAll = function() {
 	}
 	
 	// instrument the wrapper
-	_memoiInstrumentWrapper(wrapperName, monitorName, monitorType, this._target);
+	this._memoiInstrumentWrapper(wrapperName, monitorName, monitorType);
 	
 	// setup
-	_memoiSetup(monitorName, monitorType, this._target, this._id, this._reportDir, ['global'], this._memoiprofOptions);
+	this._memoiSetup(monitorName, monitorType, this._id, ['global']);
 }
 
 /**
@@ -95,20 +95,20 @@ MemoiProf.prototype.profEach = function() {
 		
 		// instrument the wrapper
 		var monitorName = IdGenerator.next(monitorNameBase);
-		_memoiInstrumentWrapper(wrapperName, monitorName, monitorType, this._target);
+		this._memoiInstrumentWrapper(wrapperName, monitorName, monitorType);
 		
 		var callSiteInfo = $call.location;
 		
 		// setup
 		var id = IdGenerator.next(this._id + '_');
-		_memoiSetup(monitorName, monitorType, this._target, id, this._reportDir, [callSiteInfo], this._memoiprofOptions);
+		this._memoiSetup(monitorName, monitorType, id, [callSiteInfo]);
 	}
 }
 
-function _memoiInstrumentWrapper(wrapperName, monitorName, monitorType, target) {
+MemoiProf.prototype._memoiInstrumentWrapper = function(wrapperName, monitorName, monitorType) {
 	
-	var numInputs = target.numInputs;
-	var numOutputs = target.numOutputs;
+	var numInputs = this._target._numInputs;
+	var numOutputs = this._target._numOutputs;
 	
 	var query = Query
 		.search("file")
@@ -149,10 +149,10 @@ function _memoiInstrumentWrapper(wrapperName, monitorName, monitorType, target) 
 	}
 }
 
-function _memoiSetup(monitorName, monitorType, target, id, reportDir, callSiteInfo, memoiprofOptions) {
+MemoiProf.prototype._memoiSetup = function(monitorName, monitorType, id, callSiteInfo) {
 	
-	var inputsCode = target._inputTypes.map(function(e){return "mp_" + e;}).join(',').toUpperCase();
-	var outputsCode = target._outputTypes.map(function(e){return "mp_" + e;}).join(',').toUpperCase();
+	var inputsCode = this._target._inputTypes.map(function(e){return "mp_" + e;}).join(',').toUpperCase();
+	var outputsCode = this._target._outputTypes.map(function(e){return "mp_" + e;}).join(',').toUpperCase();
 	
 	var query = Query
 			.search("file")
@@ -167,27 +167,27 @@ function _memoiSetup(monitorName, monitorType, target, id, reportDir, callSiteIn
 	var $body = query["scope"];
 	
 	// memoiprof options
-	if(memoiprofOptions._samplingKind !== "off") {
-		var samplingKind = "MP_SAMPLING_" + memoiprofOptions._samplingKind.toUpperCase();
-		$body.insertBegin(%{mp_set_sampling([[monitorName]], [[samplingKind]], [[memoiprofOptions._samplingRate]]);}%);
+	if(this._memoiprofOptions._samplingKind !== "off") {
+		var samplingKind = "MP_SAMPLING_" + this._memoiprofOptions._samplingKind.toUpperCase();
+		$body.insertBegin(%{mp_set_sampling([[monitorName]], [[samplingKind]], [[this._memoiprofOptions._samplingRate]]);}%);
 	}
 	
-	if(memoiprofOptions._periodicReportKind) {
-		$body.insertBegin(%{mp_set_periodic_reporting([[monitorName]], MP_PERIODIC_ON, [[memoiprofOptions._periodicReportRate]]);}%);
+	if(this._memoiprofOptions._periodicReportKind) {
+		$body.insertBegin(%{mp_set_periodic_reporting([[monitorName]], MP_PERIODIC_ON, [[this._memoiprofOptions._periodicReportRate]]);}%);
 	}
 	
-	if(memoiprofOptions._cullingKind) {
-		$body.insertBegin(%{mp_set_culling([[monitorName]], MP_CULLING_ON, [[memoiprofOptions._cullingRatio]]);}%);
+	if(this._memoiprofOptions._cullingKind) {
+		$body.insertBegin(%{mp_set_culling([[monitorName]], MP_CULLING_ON, [[this._memoiprofOptions._cullingRatio]]);}%);
 	}
 	
-	if(memoiprofOptions._approxKind) {
-		$body.insertBegin(%{mp_set_approx([[monitorName]], MP_APPROX_ON, [[memoiprofOptions._approxBits]]);}%);
+	if(this._memoiprofOptions._approxKind) {
+		$body.insertBegin(%{mp_set_approx([[monitorName]], MP_APPROX_ON, [[this._memoiprofOptions._approxBits]]);}%);
 	}
 	
 	_memoiAddCallSiteInfo($body, callSiteInfo, monitorName);
 	$body.insertBegin(%{free([[memoiReportPath]]);}%); // can free here, since mp_init duped it
-	$body.insertBegin(%{[[monitorName]] = mp_init("[[target._sig]]", "[[id]]", [[memoiReportPath]], [[target._inputTypes.length]], [[target._outputTypes.length]], [[inputsCode]], [[outputsCode]]);}%);
-	$body.insertBegin(%{char* [[memoiReportPath]] = mp_make_report_path("[[reportDir]]", "[[monitorName]]");}%);
+	$body.insertBegin(%{[[monitorName]] = mp_init("[[this._target._sig]]", "[[id]]", [[memoiReportPath]], [[this._target._inputTypes.length]], [[this._target._outputTypes.length]], [[inputsCode]], [[outputsCode]]);}%);
+	$body.insertBegin(%{char* [[memoiReportPath]] = mp_make_report_path("[[this._reportDir]]", "[[monitorName]]");}%);
 	
 	/* add functions to print and clean up at every return on main */
 	var $function = query["function"];

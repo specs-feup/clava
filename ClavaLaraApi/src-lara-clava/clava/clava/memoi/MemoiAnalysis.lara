@@ -23,7 +23,7 @@ MemoiAnalysis.findTargets = function(pred) {
 MemoiAnalysis.findTargetsReport = function(pred) {
 	
 	var targets = [];
-	var report = new FailSummary();
+	var report = new FailReport();
 	
 	// use default predicate if user doesn't provide one
 	if(pred === undefined) {
@@ -50,6 +50,7 @@ MemoiAnalysis.findTargetsReport = function(pred) {
 		// test if valid
 		var valid = pred($call, processed, report);
 		if(valid === _PRED.VALID) {
+			
 			
 			targets.push(MemoiTarget.fromFunction($func));
 		}
@@ -119,8 +120,7 @@ function _defaultMemoiPredRecursive($call, processed, report) {
 		
 		debug(sig + ' - wrong number of parameters: ' + paramTypes.length);
 		
-		report.incNumParams();
-		report.addUnsupportedNumParams(paramTypes.length);
+		report.incNumParams($func.signature, paramTypes.length);
 		
 		processed[sig] = _PRED.INVALID;
 		return _PRED.INVALID;
@@ -132,8 +132,7 @@ function _defaultMemoiPredRecursive($call, processed, report) {
 		
 		debug(sig + ' - return type is not supported: ' + $returnType.code);
 		
-		report.incTypeReturn();
-		report.addUnsupportedTypes($returnType.code);
+		report.incTypeReturn($func.signature, $returnType.code);
 
 		processed[sig] = _PRED.INVALID;
 		return _PRED.INVALID;
@@ -144,8 +143,7 @@ function _defaultMemoiPredRecursive($call, processed, report) {
 		
 		debug(sig + ' - param type is not supported: ' + $type.code);
 		
-		report.incTypeParams();
-		report.addUnsupportedTypes($type.code);
+		report.incTypeParams($func.signature, $type.code);
 		
 		processed[sig] = _PRED.INVALID;
 		return _PRED.INVALID;
@@ -179,7 +177,7 @@ function _defaultMemoiPredRecursive($call, processed, report) {
 			
 			debug(sig + ' - accesses non-const global storage variable ' + $ref.code);
 			
-			report.incGlobalAccess();
+			report.incGlobalAccess($func.signature);
 	
 			processed[sig] = _PRED.INVALID;
 			return _PRED.INVALID;
@@ -235,10 +233,10 @@ function _testType($type, typesToTest) {
 /**
  * Class to hold info about target finding (targets and reports).
  * */
-function MemoiTargetReport(targets, failSummary) {
+function MemoiTargetReport(targets, failReport) {
 	
 	this.targets = targets;
-	this.failSummary = failSummary;
+	this.failReport = failReport;
 }
 
 MemoiTargetReport.prototype.isTarget = function($func) {
@@ -254,48 +252,54 @@ MemoiTargetReport.prototype.isTarget = function($func) {
 	return false;
 }
 
-MemoiTargetReport.prototype.printFailSummary = function() {
+MemoiTargetReport.prototype.toJson = function(jsonPath) {
+	Io.writeJson(jsonPath, this);
+}
+
+MemoiTargetReport.prototype.printFailReport = function() {
 
 	println("Reasons to fail:");
 	
-	if(this.failSummary._numParams > 0) {
-		println("\tWrong number of params: " + this.failSummary._numParams);
+	if(this.failReport._numParams > 0) {
+		println("\tWrong number of params: " + this.failReport._numParams);
 		print("\t\t{");
 		var arr = [];
-		for(var i in this.failSummary._unsupportedNumParams) {
-			arr.push(i + ': ' + this.failSummary._unsupportedNumParams[i]);
+		for(var i in this.failReport._unsupportedNumParams) {
+			arr.push(i + ': ' + this.failReport._unsupportedNumParams[i]);
 		}
 		print(arr.join(', '));
 		println("}");
 	}
 	
-	if(this.failSummary._typeParams > 0)
-		println("\tWrong type of params: " + this.failSummary._typeParams);
+	if(this.failReport._typeParams > 0)
+		println("\tWrong type of params: " + this.failReport._typeParams);
 		
-	if(this.failSummary._typeReturn > 0)
-		println("\tWrong type of return: " + this.failSummary._typeReturn);
+	if(this.failReport._typeReturn > 0)
+		println("\tWrong type of return: " + this.failReport._typeReturn);
 		
-	if(this.failSummary._typeParams > 0 || this.failSummary._typeReturn > 0) {
+	if(this.failReport._typeParams > 0 || this.failReport._typeReturn > 0) {
 		print("\t\t{");
 		var arr = [];
-		for(var i in this.failSummary._unsupportedTypes) {
-			arr.push(i + ': ' + this.failSummary._unsupportedTypes[i]);
+		for(var i in this.failReport._unsupportedTypes) {
+			arr.push(i + ': ' + this.failReport._unsupportedTypes[i]);
 		}
 		print(arr.join(', '));
 		println("}");
 	}
 	
-	if(this.failSummary._globalAccess > 0)
-		println("\tGlobal accesses: " + this.failSummary._globalAccess);
+	if(this.failReport._globalAccess > 0)
+		println("\tGlobal accesses: " + this.failReport._globalAccess);
 		
-	if(this.failSummary._invalidCalls > 0)
-		println("\tCalls to invalid functions: " + this.failSummary._invalidCalls);
+	if(this.failReport._invalidCalls > 0)
+		println("\tCalls to invalid functions: " + this.failReport._invalidCalls);
 }
 
 /**
  * Class to hold info about failed targets.
  * */
-function FailSummary() {
+function FailReport() {
+	
+	this._failMap = {};
 	
 	this._numParams = 0;
 	this._unsupportedNumParams = {};
@@ -306,41 +310,57 @@ function FailSummary() {
 	this._invalidCalls = 0;
 }
 
-FailSummary.prototype.incNumParams = function() {
+FailReport.prototype.incNumParams = function(sig, num) {
+	
+	this._failMap[sig] = "Wrong number of params";
 	
 	this._numParams++;
+	
+	this._addUnsupportedNumParams(num);
 }
 
-FailSummary.prototype.addUnsupportedNumParams = function(num) {
+FailReport.prototype._addUnsupportedNumParams = function(num) {
 	
 	this._unsupportedNumParams[num] ? 
 		this._unsupportedNumParams[num]++ :
 		this._unsupportedNumParams[num] = 1;
 }
 
-FailSummary.prototype.incTypeParams = function() {
+FailReport.prototype.incTypeParams = function(sig, type) {
+	
+	this._failMap[sig] = "Wrong type of params";
 	
 	this._typeParams++;
+	
+	this._addUnsupportedTypes(type);
 }
 
-FailSummary.prototype.incTypeReturn = function() {
+FailReport.prototype.incTypeReturn = function(sig, type) {
+	
+	this._failMap[sig] = "Wrong type of return";
 	
 	this._typeReturn++;
+	
+	this._addUnsupportedTypes(type);
 }
 
-FailSummary.prototype.addUnsupportedTypes = function(type) {
+FailReport.prototype._addUnsupportedTypes = function(type) {
 	
 	this._unsupportedTypes[type] ? 
 		this._unsupportedTypes[type]++ :
 		this._unsupportedTypes[type] = 1;
 }
 
-FailSummary.prototype.incGlobalAccess = function() {
+FailReport.prototype.incGlobalAccess = function(sig) {
+	
+	this._failMap[sig] = "Global accesses";
 	
 	this._globalAccess++;
 }
 
-FailSummary.prototype.incInvalidCalls = function() {
+FailReport.prototype.incInvalidCalls = function(sig) {
+	
+	this._failMap[sig] = "Calls to invalid functions";
 	
 	this._invalidCalls++;
 }

@@ -1,5 +1,3 @@
-import clava.memoi._MemoiGenHelper;
-
 import clava.memoi.MemoiTarget;
 
 import lara.util.IdGenerator;
@@ -119,7 +117,6 @@ MemoiGen.prototype.setProfFromDir = function(dir) {
 	
 	this._isProf = true;
 	this._isEmpty = false;
-	
 	this._profReportFiles = Io.getFiles(dir, "*.json", false);
 }
 
@@ -234,7 +231,7 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 		var $function = chain["function"];
 		var $call = chain["call"];
 		
-		if(this.isDebug) {
+		if(this._isDebug) {
 			var totalName = wrapperName + '_total_calls';
 			var missesName = wrapperName + '_total_misses';
 			$file.addGlobal(totalName, ClavaJoinPoints.builtinType("int"), '0');
@@ -288,7 +285,7 @@ MemoiGen.prototype._makeUpdateCode = function($function) {
 	return code;
 }
 
-function _addMainDebug(totalName, missesName, wrapperName) {
+MemoiGen.prototype._addMainDebug = function(totalName, missesName, wrapperName) {
 	
 	var chain = Query.search("file").search("function", {"name":"main"}).chain()[0];
 	var $file = chain["file"];
