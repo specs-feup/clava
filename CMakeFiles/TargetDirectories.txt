@@ -1,0 +1,3 @@
+/home/estudio/CLionProjects/clava/CMakeFiles/rebuild_cache.dir
+/home/estudio/CLionProjects/clava/CMakeFiles/ClangAstDumper.dir
+/home/estudio/CLionProjects/clava/CMakeFiles/edit_cache.dir
