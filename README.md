@@ -29,7 +29,9 @@ Check if you have at least Java 11 installed, this is the minimum version.
 
 On Fedora >28 systems this can be solved by installing the package `ncurses-compat-libs`
 
+## Error 'cannot find -lz'
 
+Install libz package (e.g., in Ubuntu `sudo apt-get install libz-dev`)
 
 
 
