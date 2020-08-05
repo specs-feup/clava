@@ -11,4 +11,4 @@ cmake_minimum_required(VERSION 3.2)
 #set(SYSTEM_PLATFORM "MacOS")
 
 # DEPS_COMPILER: Manually set the compiler
-#set(DEPS_COMPILER "gcc5")
+set(DEPS_COMPILER "gcc5")
