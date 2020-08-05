@@ -249,6 +249,12 @@ public class CallWrap {
 
         updatedFile.addChild(index + 1, wrapperFunctionDeclImpl);
 
+        // when generating in place, adds forward declaration before the original function
+        // this is needed when there is recursion and the original will call the wrapper
+        FunctionDecl forwardDecl = (FunctionDecl) wrapperFunctionDeclImpl.copy();
+        forwardDecl.getBody().get().detach();
+        updatedFile.addChild(index - 1, forwardDecl);
+
         // HACK END
 
         // Save function implementation declaration
