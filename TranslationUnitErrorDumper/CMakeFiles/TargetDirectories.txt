@@ -1,0 +1,3 @@
+/home/estudio/CLionProjects/clava/TranslationUnitErrorDumper/CMakeFiles/rebuild_cache.dir
+/home/estudio/CLionProjects/clava/TranslationUnitErrorDumper/CMakeFiles/edit_cache.dir
+/home/estudio/CLionProjects/clava/TranslationUnitErrorDumper/CMakeFiles/TranslationUnitErrorDumper.dir

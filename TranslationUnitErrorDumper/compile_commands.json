@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/estudio/CLionProjects/clava/test",
+  "command": "/usr/bin/g++   -isystem /home/estudio/CLionProjects/clava/deps/deps-lib/../artifacts/llvm7-Linux-gcc5/src/include -isystem /home/estudio/CLionProjects/clava/deps/deps-lib/../artifacts/llvm7-Linux-gcc5/build/include -isystem /home/estudio/CLionProjects/clava/deps/deps-lib/../artifacts/llvm7-Linux-gcc5/src/tools/clang/include -isystem /home/estudio/CLionProjects/clava/deps/deps-lib/../artifacts/llvm7-Linux-gcc5/build/tools/clang/include   -std=c++11 -pthread -fno-rtti -std=c++11 -O3 -Wall -Wno-unused-function -static-libgcc -static-libstdc++ -g   -std=gnu++11 -o CMakeFiles/test.dir/test.cpp.o -c /home/estudio/CLionProjects/clava/test/test.cpp",
+  "file": "/home/estudio/CLionProjects/clava/test/test.cpp"
+},
+{
+  "directory": "/home/estudio/CLionProjects/clava/test",
+  "command": "/usr/bin/g++   -isystem /home/estudio/CLionProjects/clava/deps/deps-lib/../artifacts/llvm7-Linux-gcc5/src/include -isystem /home/estudio/CLionProjects/clava/deps/deps-lib/../artifacts/llvm7-Linux-gcc5/build/include -isystem /home/estudio/CLionProjects/clava/deps/deps-lib/../artifacts/llvm7-Linux-gcc5/src/tools/clang/include -isystem /home/estudio/CLionProjects/clava/deps/deps-lib/../artifacts/llvm7-Linux-gcc5/build/tools/clang/include   -std=c++11 -pthread -fno-rtti -std=c++11 -O3 -Wall -Wno-unused-function -static-libgcc -static-libstdc++ -g   -std=gnu++11 -o CMakeFiles/test.dir/DiagnosticAction.cpp.o -c /home/estudio/CLionProjects/clava/test/DiagnosticAction.cpp",
+  "file": "/home/estudio/CLionProjects/clava/test/DiagnosticAction.cpp"
+}
+]
