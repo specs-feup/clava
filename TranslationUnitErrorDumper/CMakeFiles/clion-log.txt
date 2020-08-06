@@ -1,0 +1,5 @@
+/home/estudio/CLion-2020.2/clion-2020.2/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/usr/bin/make -DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -G "CodeBlocks - Unix Makefiles" /home/estudio/CLionProjects/clava/TranslationUnitErrorDumper
+-- [Deps] Setting compiled library environment to 'gcc5'
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/estudio/CLionProjects/clava/TranslationUnitErrorDumper
