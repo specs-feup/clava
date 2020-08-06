@@ -1,4 +1,5 @@
 import clava.memoi.MemoiUtils;
+import clava.memoi.MemoiUtils;
 
 import clava.ClavaJoinPoints;
 import clava.Clava;

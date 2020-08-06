@@ -1,4 +1,5 @@
 import clava.memoi.MemoiUtils;
+import clava.memoi.MemoiTarget;
 
 import weaver.Query;
 

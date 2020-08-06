@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "clava_wrappers/clava_weaver_wrappers.h"
 
+int wrap_fooNoDecl(int a);
+
 int foo(int a) {
    
    return a + 1;

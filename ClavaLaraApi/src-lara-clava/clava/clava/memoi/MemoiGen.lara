@@ -4,6 +4,7 @@ import lara.util.IdGenerator;
 import lara.Io;
 import lara.Check;
 import lara.JavaInterop;
+import clava.ClavaJoinPoints;
 
 function MemoiGen(target) {
 
