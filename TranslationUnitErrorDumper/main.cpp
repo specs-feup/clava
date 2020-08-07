@@ -29,5 +29,19 @@ int main(int argc, const char **argv) {
                    OptionsParser.getSourcePathList());
     int diagnosticReturnCode = Tool.run(newFrontendActionFactory<DiagnosticAction>().get());
 
-    cout << endl << "Return code: " << diagnosticReturnCode;
+    cout << endl << "Return code: " << diagnosticReturnCode << "\n";
+	
+	llvm::errs() << "<EXAMPLE_WORKER>" << "\n";
+	llvm::errs() << "3" << "\n";	
+	
+	
+	llvm::errs() << "<STORE_KEY_VALUE>" << "\n";
+	llvm::errs() << "key1" << "\n";		
+	llvm::errs() << "value1" << "\n";		
+	
+	
+	llvm::errs() << "<STORE_KEY_VALUE>" << "\n";
+	llvm::errs() << "antoher_key" << "\n";		
+	llvm::errs() << "another_value" << "\n";	
+	
 }
