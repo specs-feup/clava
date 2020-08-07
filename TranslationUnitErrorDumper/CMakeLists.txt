@@ -51,7 +51,7 @@ unset(USE_CLAVA CACHE) # So that the value is refreshed
 
 
 set(SOURCE_FILES
-        main.cpp DiagnosticAction.cpp DiagnosticAction.h)
+        main.cpp DiagnosticAction.cpp DiagnosticAction.h DiagnosticConsumer.cpp DiagnosticConsumer.h)
 
 add_executable(TranslationUnitErrorDumper ${SOURCE_FILES})
 
