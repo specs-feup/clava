@@ -28,6 +28,7 @@ import pt.up.fe.specs.util.utilities.LineStream;
 public class TUPatcherLauncher {
 
     public static void main(String[] args) {
+        SpecsSystem.programStandardInit();
 
         List<String> command = new ArrayList<>();
         command.add("clang");
