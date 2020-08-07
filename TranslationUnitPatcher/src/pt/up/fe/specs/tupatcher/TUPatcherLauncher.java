@@ -13,10 +13,15 @@
 
 package pt.up.fe.specs.tupatcher;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.suikasoft.jOptions.streamparser.LineStreamParser;
+
+import pt.up.fe.specs.tupatcher.parser.TUErrorData;
+import pt.up.fe.specs.tupatcher.parser.TUErrorParser;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -28,7 +33,7 @@ public class TUPatcherLauncher {
         command.add("clang");
 
         var output = SpecsSystem.runProcess(command, TUPatcherLauncher::outputProcessor,
-                TUPatcherLauncher::errorProcessor);
+                TUPatcherLauncher::lineStreamProcessor);
 
         System.out.println("Program status: " + output.getReturnValue());
         System.out.println("Std out result: " + output.getStdOut());
@@ -55,6 +60,28 @@ public class TUPatcherLauncher {
         }
 
         return "Hello";
+    }
+
+    public static TUErrorData lineStreamProcessor(InputStream stream) {
+        // Create LineStreamParser
+        try (LineStreamParser<TUErrorData> lineStreamParser = TUErrorParser.newInstance()) {
+
+            File dumpFile = null;
+
+            // Parse input stream
+            String linesNotParsed = lineStreamParser.parse(stream, dumpFile);
+
+            var data = lineStreamParser.getData();
+
+            System.out.println("[TEST] lines not parsed:\n" + linesNotParsed);
+
+            System.out.println("[TEST] Collected data:\n" + data);
+
+            // Return data
+            return data;
+        } catch (Exception e) {
+            throw new RuntimeException("Error while parsing output of Clang error dumper", e);
+        }
     }
 
 }
