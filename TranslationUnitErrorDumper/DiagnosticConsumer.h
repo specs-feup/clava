@@ -16,17 +16,20 @@ public:
 
     void HandleDiagnostic(clang::DiagnosticsEngine::Level DiagLevel,
                           const clang::Diagnostic& Info) override {
-
-        llvm::errs() << "Diag Id: " << Info.getID() << '\n';
-
+        unsigned diagId = Info.getID();
+        if (diagId == 3822) //id for 'unknown type name'
+            llvm::errs() << diagId << ' ';
+        /*
+        \\(a funcao getNumArgs sempre retorna 0 aqui)
         llvm::errs() << "Num args: " << Info.getNumArgs()  << '\n';
-        for(int argIndex=0; argIndex<Info.getNumArgs(); argIndex++) {
+        for(unsigned argIndex=0; argIndex<Info.getNumArgs(); argIndex++) {
             llvm::errs() << "Arg kind: " <<  Info.getArgKind(argIndex) << "\n";
-        }
+        }*/
 
+/*
         llvm::SmallVector<char, 128> message;
         Info.FormatDiagnostic(message);
-        llvm::errs() << message << '\n';
+        llvm::errs() << message << '\n';*/
 
     }
 };
