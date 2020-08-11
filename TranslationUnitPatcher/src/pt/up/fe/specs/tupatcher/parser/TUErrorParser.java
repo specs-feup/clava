@@ -27,9 +27,8 @@ public class TUErrorParser {
     private static final Map<String, LineStreamWorker<TUErrorsData>> WORKERS;
     static {
         WORKERS = new HashMap<>();
-        for (int i = 0; i < 5; i++)
-            addWorker(new ErrorWorker());
-        //addWorker(ExampleWorkers.newStoreKeyValueWorker());
+        addWorker(new ErrorWorker());
+        // addWorker(ExampleWorkers.newStoreKeyValueWorker());
     }
 
     /**

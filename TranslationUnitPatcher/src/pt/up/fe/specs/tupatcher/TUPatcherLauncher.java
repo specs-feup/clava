@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
-import pt.up.fe.specs.tupatcher.parser.TUErrorData;
 import pt.up.fe.specs.tupatcher.parser.TUErrorParser;
 import pt.up.fe.specs.tupatcher.parser.TUErrorsData;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -30,7 +29,10 @@ public class TUPatcherLauncher {
 
     public static void main(String[] args) {
         SpecsSystem.programStandardInit();
-        
+
+        var patchData = new PatchData();
+
+        // while()...
 
         List<String> command = new ArrayList<>();
         command.add("../TranslationUnitErrorDumper/cmake-build-debug/TranslationUnitErrorDumper");
@@ -39,12 +41,12 @@ public class TUPatcherLauncher {
         command.add("--");
 
         var output = SpecsSystem.runProcess(command, TUPatcherLauncher::outputProcessor,
-                TUPatcherLauncher::lineStreamProcessor);
+                inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
 
-        PatchData.write(args[0]);
+        patchData.write(args[0]);
         /*
         List<String> command2 = new ArrayList<>();
-
+        
         command2.add("../TranslationUnitErrorDumper/cmake-build-debug/TranslationUnitErrorDumper");
         command2.add("output/file.cpp");
         command2.add("--");
@@ -80,7 +82,7 @@ public class TUPatcherLauncher {
         return "Hello";
     }
 
-    public static TUErrorsData lineStreamProcessor(InputStream stream) {
+    public static TUErrorsData lineStreamProcessor(InputStream stream, PatchData patchData) {
         // Create LineStreamParser
         try (LineStreamParser<TUErrorsData> lineStreamParser = TUErrorParser.newInstance()) {
 
@@ -95,8 +97,8 @@ public class TUPatcherLauncher {
 
             System.out.println("[TEST] Collected data:\n" + data);
 
-            ErrorPatcher.patch(data);
-
+            new ErrorPatcher(patchData).patch(data);
+            // ErrorPatcher.patch(data);
 
             // Return data
             return data;
