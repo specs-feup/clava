@@ -24,11 +24,12 @@ public class TUErrorParser {
     /**
      * Workers for the LineStreamParser.
      */
-    private static final Map<String, LineStreamWorker<TUErrorData>> WORKERS;
+    private static final Map<String, LineStreamWorker<TUErrorsData>> WORKERS;
     static {
         WORKERS = new HashMap<>();
-        addWorker(new ExampleWorker());
-        addWorker(ExampleWorkers.newStoreKeyValueWorker());
+        for (int i = 0; i < 5; i++)
+            addWorker(new ErrorWorker());
+        //addWorker(ExampleWorkers.newStoreKeyValueWorker());
     }
 
     /**
@@ -36,7 +37,7 @@ public class TUErrorParser {
      * 
      * @param worker
      */
-    private static void addWorker(LineStreamWorker<TUErrorData> worker) {
+    private static void addWorker(LineStreamWorker<TUErrorsData> worker) {
         // Add worker
         WORKERS.put(worker.getId(), worker);
     }
@@ -46,10 +47,10 @@ public class TUErrorParser {
      * 
      * @return
      */
-    public static LineStreamParser<TUErrorData> newInstance() {
-        TUErrorData errorData = new TUErrorData();
+    public static LineStreamParser<TUErrorsData> newInstance() {
+        TUErrorsData errorsData = new TUErrorsData();
 
-        LineStreamParser<TUErrorData> streamParser = LineStreamParser.newInstance(errorData, WORKERS);
+        LineStreamParser<TUErrorsData> streamParser = LineStreamParser.newInstance(errorsData, WORKERS);
         streamParser.setLineIgnore(TUErrorParser::ignoreLine);
 
         return streamParser;

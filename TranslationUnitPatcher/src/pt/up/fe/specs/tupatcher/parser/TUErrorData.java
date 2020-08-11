@@ -25,12 +25,13 @@ public class TUErrorData extends ADataClass<TUErrorData> {
     /**
      * Example of an Integer field.
      */
-    public final static DataKey<Integer> INTEGER_EXAMPLE = KeyFactory.integer("integerExample")
+    public final static DataKey<Integer> ERROR_NUMBER = KeyFactory.integer("errorNumber")
             .setDefault(() -> 20);
 
     /**
      * Example of a Map field.
      */
-    public final static DataKey<Map<String, String>> MAP_EXAMPLE = KeyFactory.generic("mapExample",
-            () -> (Map<String, String>) new HashMap<String, String>());
+    public final static DataKey<Map<String, String>> MAP = KeyFactory.generic("map",
+            () -> (Map<String, String>) new HashMap<String, String>())
+            .setDefault(() -> new HashMap<String, String>());
 }

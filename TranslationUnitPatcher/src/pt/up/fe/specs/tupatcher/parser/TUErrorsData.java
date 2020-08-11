@@ -13,24 +13,17 @@
 
 package pt.up.fe.specs.tupatcher.parser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
-import org.suikasoft.jOptions.streamparser.LineStreamWorker;
+import org.suikasoft.jOptions.DataStore.ADataClass;
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 
-import pt.up.fe.specs.util.utilities.LineStream;
+public class TUErrorsData extends ADataClass<TUErrorsData> {
 
-public class ExampleWorkers {
-
-    public static LineStreamWorker<TUErrorData> newStoreKeyValueWorker() {
-        return LineStreamWorker.newInstance("<STORE_KEY_VALUE>",
-                data -> data.set(TUErrorData.MAP, new HashMap<>()), ExampleWorkers::storeKeyValue);
-    }
-
-    private static void storeKeyValue(LineStream lines, TUErrorData data) {
-        // Expects two lines, one with the key, another with the value
-        String key = lines.nextLine();
-        String value = lines.nextLine();
-
-        data.get(TUErrorData.MAP).put(key, value);
-    }
+    public final static DataKey<ArrayList<TUErrorData>> ERRORS = 
+            KeyFactory.generic("errors", () -> new ArrayList<TUErrorData>())
+            .setDefault(() ->new ArrayList<TUErrorData>()).setDefault(() -> new ArrayList<TUErrorData>());
 }

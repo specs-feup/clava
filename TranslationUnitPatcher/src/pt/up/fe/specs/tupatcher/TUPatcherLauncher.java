@@ -22,6 +22,7 @@ import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
 import pt.up.fe.specs.tupatcher.parser.TUErrorData;
 import pt.up.fe.specs.tupatcher.parser.TUErrorParser;
+import pt.up.fe.specs.tupatcher.parser.TUErrorsData;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -29,12 +30,28 @@ public class TUPatcherLauncher {
 
     public static void main(String[] args) {
         SpecsSystem.programStandardInit();
+        
 
         List<String> command = new ArrayList<>();
-        command.add("clang");
+        command.add("../TranslationUnitErrorDumper/cmake-build-debug/TranslationUnitErrorDumper");
+        for (String arg : args)
+            command.add(arg);
+        command.add("--");
 
         var output = SpecsSystem.runProcess(command, TUPatcherLauncher::outputProcessor,
                 TUPatcherLauncher::lineStreamProcessor);
+
+        PatchData.write(args[0]);
+        /*
+        List<String> command2 = new ArrayList<>();
+
+        command2.add("../TranslationUnitErrorDumper/cmake-build-debug/TranslationUnitErrorDumper");
+        command2.add("output/file.cpp");
+        command2.add("--");
+        for (int i=0; i<3; i++) {
+            output = SpecsSystem.runProcess(command2, TUPatcherLauncher::outputProcessor,
+                    TUPatcherLauncher::lineStreamProcessor);
+        }*/
 
         System.out.println("Program status: " + output.getReturnValue());
         System.out.println("Std out result: " + output.getStdOut());
@@ -63,9 +80,9 @@ public class TUPatcherLauncher {
         return "Hello";
     }
 
-    public static TUErrorData lineStreamProcessor(InputStream stream) {
+    public static TUErrorsData lineStreamProcessor(InputStream stream) {
         // Create LineStreamParser
-        try (LineStreamParser<TUErrorData> lineStreamParser = TUErrorParser.newInstance()) {
+        try (LineStreamParser<TUErrorsData> lineStreamParser = TUErrorParser.newInstance()) {
 
             File dumpFile = null;
 
@@ -77,6 +94,9 @@ public class TUPatcherLauncher {
             System.out.println("[TEST] lines not parsed:\n" + linesNotParsed);
 
             System.out.println("[TEST] Collected data:\n" + data);
+
+            ErrorPatcher.patch(data);
+
 
             // Return data
             return data;

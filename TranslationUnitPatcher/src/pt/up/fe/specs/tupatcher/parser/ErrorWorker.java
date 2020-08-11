@@ -17,23 +17,37 @@ import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class ExampleWorker implements LineStreamWorker<TUErrorData> {
+public class ErrorWorker implements LineStreamWorker<TUErrorsData> {
+
 
     @Override
     public String getId() {
-        return "<EXAMPLE_WORKER>";
+        return "<Clang Error>";
     }
 
     @Override
-    public void init(TUErrorData data) {
+    public void init(TUErrorsData data) {
         // Do nothing
+        
     }
 
     @Override
-    public void apply(LineStream lineStream, TUErrorData data) {
+    public void apply(LineStream lineStream, TUErrorsData data) {
+        var errors = data.get(TUErrorsData.ERRORS);
+        errors.add(new TUErrorData());
+        TUErrorData error = errors.get(errors.size()-1);
         // Expects next line to be an integer, parse it and store
         var decodedInteger = Integer.decode(lineStream.nextLine());
-        data.set(TUErrorData.INTEGER_EXAMPLE, decodedInteger);
+        System.out.println(decodedInteger);
+        error.set(TUErrorData.ERROR_NUMBER, decodedInteger);
+        String argKind="", argValue="";
+        argKind = lineStream.nextLine();
+        argValue = lineStream.nextLine();
+        while (!argKind.equals("end")) {
+            error.get(TUErrorData.MAP).put(argKind, argValue);
+            argKind = lineStream.nextLine();
+            argValue = lineStream.nextLine();
+        }
     }
 
 }
