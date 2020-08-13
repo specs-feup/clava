@@ -43,7 +43,7 @@ public class ErrorWorker implements LineStreamWorker<TUErrorsData> {
         String argKind="", argValue="";
         argKind = lineStream.nextLine();
         argValue = lineStream.nextLine();
-        while (!argKind.equals("<Clang Error End>")) {
+        while (!(argKind.equals("<Clang Error End>") || argValue.equals("<Clang Error End>"))) {
             error.get(TUErrorData.MAP).put(argKind, argValue);
             argKind = lineStream.nextLine();
             argValue = lineStream.nextLine();

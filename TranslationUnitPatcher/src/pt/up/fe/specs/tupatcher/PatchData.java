@@ -14,11 +14,6 @@
 package pt.up.fe.specs.tupatcher;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 
 import pt.up.fe.specs.util.SpecsIo;
@@ -61,45 +56,34 @@ public class PatchData {
         SpecsIo.write(destFile, result);
     }
 
-    public void write(String filepath) {
-        try {
-            String header_path = "output/patch.h";
-            File header = new File(header_path);
-
-            Path output_dir = Paths.get("output");
-            Files.createDirectories(output_dir);
-            header.createNewFile();
-
-            FileWriter hwriter = new FileWriter(header_path);
-            for (String typeName : missingTypes.keySet()) {
-                TypeInfo type = missingTypes.get(typeName);
-                String kind = type.getKind();
-                if (kind == "struct") {
-                    hwriter.write("typedef struct {\n");
-                    for (String field : type.getFields().keySet()) {
-                        hwriter.write(type.getFields().get(field).getName() + " ");
-                        hwriter.write(field);
-                    }
-                    hwriter.write("} " + typeName + ";\n");
+    public String str() {
+        String result = "";               
+        for (String typeName : missingTypes.keySet()) {
+            TypeInfo type = missingTypes.get(typeName);
+            String kind = type.getKind();
+            if (kind == "struct") {
+                result += "typedef struct {\n";
+                for (String field : type.getFields().keySet()) {
+                    result += type.getFields().get(field).getName() + " ";
+                    result += field;
                 }
-                else {
-                    hwriter.write("typedef " + kind + " " + typeName + ";\n");                    
-                }
+                result += "} " + typeName + ";\n";
             }
-            
-
-            for (String varName : missingVariables.keySet()) {
-                String type = missingVariables.get(varName);
-                hwriter.write(type + " " + varName + ";\n");
+            else {
+                result += "typedef " + kind + " " + typeName + ";\n";                    
             }
-
-            hwriter.close();
-
-            copySource(filepath);
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        for (String varName : missingVariables.keySet()) {
+            String type = missingVariables.get(varName);
+            result += type + " " + varName + ";\n";
+        }
+        return result;
+    }
+        
+    public void write(String filepath) {
+        File patchFile = new File("output/patch.h");
+        SpecsIo.write(patchFile, str());
+        copySource(filepath);
 
     }
 
