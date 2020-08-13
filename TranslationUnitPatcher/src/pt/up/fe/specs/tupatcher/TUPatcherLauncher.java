@@ -44,7 +44,7 @@ public class TUPatcherLauncher {
                 inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
 
         patchData.write(args[0]);
-        /*
+        
         List<String> command2 = new ArrayList<>();
         
         command2.add("../TranslationUnitErrorDumper/cmake-build-debug/TranslationUnitErrorDumper");
@@ -52,8 +52,9 @@ public class TUPatcherLauncher {
         command2.add("--");
         for (int i=0; i<3; i++) {
             output = SpecsSystem.runProcess(command2, TUPatcherLauncher::outputProcessor,
-                    TUPatcherLauncher::lineStreamProcessor);
-        }*/
+                    inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
+            patchData.write(args[0]);
+        }
 
         System.out.println("Program status: " + output.getReturnValue());
         System.out.println("Std out result: " + output.getStdOut());
@@ -103,6 +104,7 @@ public class TUPatcherLauncher {
             // Return data
             return data;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Error while parsing output of Clang error dumper", e);
         }
     }

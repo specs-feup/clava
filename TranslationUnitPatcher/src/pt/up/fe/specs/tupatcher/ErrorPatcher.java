@@ -28,8 +28,10 @@ public class ErrorPatcher {
         ERROR_PATCHERS = new HashMap<>();
 
         ERROR_PATCHERS.put(ErrorKind.UNKNOWN_TYPE, ErrorPatcher::unknownType);
+        ERROR_PATCHERS.put(ErrorKind.UNDECLARED_IDENTIFIER, ErrorPatcher::undeclaredIdentifier);
+        ERROR_PATCHERS.put(ErrorKind.UNKNOWN_TYPE_DID_YOU_MEAN, ErrorPatcher::unknownTypeDidYouMean);
+        ERROR_PATCHERS.put(ErrorKind.NOT_STRUCT_OR_UNION, ErrorPatcher::notStructOrUnion);
     }
-    // final public static int UNKNOWN_TYPE = 3822;
 
     private final PatchData patchData;
 
@@ -62,33 +64,38 @@ public class ErrorPatcher {
             throw new RuntimeException("Error kind not supported yet: " + error);
         }
 
+        System.out.println("patch true "+errorNumber);
         errorPatcher.accept(data, patchData);
         return true;
-        /*
-        switch (error) {
-        case UNKNOWN_TYPE:
-            // unknown type identifier
-            String typeName = ((HashMap<String, String>) (data.getValue("map"))).get("identifier_name");
-            patchData.addType(typeName);
-            break;
-        }
-        // if (errorNumber == ErrorKind.UNKNOWN_TYPE.getId()) {
-        // // unknown type identifier
-        // String typeName = ((HashMap<String, String>) (data.getValue("map"))).get("identifier_name");
-        // PatchData.addType(typeName);
-        //
-        // }
-                */
-        // }
-        // else if (...) other errors
-
-        // return;
 
     }
 
     public static void unknownType(TUErrorData data, PatchData patchData) {
         String typeName = data.get(TUErrorData.MAP).get("identifier_name");
         patchData.addType(typeName);
+        
     }
 
+    public static void unknownTypeDidYouMean(TUErrorData data, PatchData patchData) {
+        String typeName = data.get(TUErrorData.MAP).get("identifier_name");
+        String suggestion = data.get(TUErrorData.MAP).get("string");
+        suggestion = suggestion.substring(1, suggestion.length()-1);
+        TypeInfo typeInfo = new TypeInfo();
+        typeInfo.setAs(suggestion);
+        patchData.setType(typeName, typeInfo);
+        
+    }
+    
+    public static void notStructOrUnion(TUErrorData data, PatchData patchData) {
+        String qualType = data.get(TUErrorData.MAP).get("qualtype");
+        patchData.getType(qualType).setAsStruct();
+        
+    }
+    public static void undeclaredIdentifier(TUErrorData data, PatchData patchData) {
+        
+        String name = data.get(TUErrorData.MAP).get("identifier_name");
+        patchData.addVariable(name);
+
+    }
+    
 }

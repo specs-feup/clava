@@ -25,54 +25,40 @@ import pt.up.fe.specs.util.SpecsIo;
 
 public class PatchData {
 
-    private final HashMap<String, Object> missingTypes;
+    private final HashMap<String, TypeInfo> missingTypes;
+    private final HashMap<String, String> missingVariables;
 
     public PatchData() {
-        this.missingTypes = new HashMap<String, Object>();
+        this.missingTypes = new HashMap<String, TypeInfo>();
+        this.missingVariables = new HashMap<String, String>();
     }
 
     public void addType(String typeName) {
         if (typeName != null) {
-            missingTypes.put(typeName, "int");
+            missingTypes.put(typeName, new TypeInfo());
         }
     }
 
-    /* public static static void setType(String typeName, Object type) {
-         missingTypes.remove(typeName);
+    public void addVariable(String varName) {
+        if (varName != null) {
+            missingVariables.put(varName, "int");
+        }
+    }
+    
+    public TypeInfo getType(String typeName) {
+        return missingTypes.get(typeName);
+    }
+
+     public void setType(String typeName, TypeInfo type) {
+         //missingTypes.remove(typeName);
          missingTypes.put(typeName, type);
-     }*/
+     }
 
     public void copySource(String filepath) {
         // copy source file adding #include "patch.h" at the top of it
         var result = "#include \"patch.h\"\n" + SpecsIo.read(SpecsIo.existingFile(filepath));
         File destFile = new File("output/file.cpp");
         SpecsIo.write(destFile, result);
-        /*
-        File srcFile = new File(filepath);
-        
-        FileInputStream fis;
-        try {
-            fis = new FileInputStream(srcFile);
-            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-            String result = "";
-            String line = "";
-            while ((line = br.readLine()) != null) {
-                result = result + line + "\n";
-            }
-            result = "#include \"patch.h\"\n" + result;
-        
-            File destFile = new File("output/file.cpp");
-            destFile.createNewFile();
-            FileOutputStream fos;
-            fos = new FileOutputStream(destFile);
-            fos.write(result.getBytes());
-            fos.flush();
-            fos.close();
-            br.close();
-        } catch (IOException e) {
-            SpecsLogs.msgWarn("Error message:\n", e);
-        }
-        */
     }
 
     public void write(String filepath) {
@@ -85,8 +71,26 @@ public class PatchData {
             header.createNewFile();
 
             FileWriter hwriter = new FileWriter(header_path);
-            for (String type : missingTypes.keySet()) {
-                hwriter.write("typedef " + missingTypes.get(type) + " " + type + ";\n");
+            for (String typeName : missingTypes.keySet()) {
+                TypeInfo type = missingTypes.get(typeName);
+                String kind = type.getKind();
+                if (kind == "struct") {
+                    hwriter.write("typedef struct {\n");
+                    for (String field : type.getFields().keySet()) {
+                        hwriter.write(type.getFields().get(field).getName() + " ");
+                        hwriter.write(field);
+                    }
+                    hwriter.write("} " + typeName + ";\n");
+                }
+                else {
+                    hwriter.write("typedef " + kind + " " + typeName + ";\n");                    
+                }
+            }
+            
+
+            for (String varName : missingVariables.keySet()) {
+                String type = missingVariables.get(varName);
+                hwriter.write(type + " " + varName + ";\n");
             }
 
             hwriter.close();
