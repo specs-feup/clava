@@ -29,8 +29,12 @@ public class ErrorPatcher {
 
         ERROR_PATCHERS.put(ErrorKind.UNKNOWN_TYPE, ErrorPatcher::unknownType);
         ERROR_PATCHERS.put(ErrorKind.UNDECLARED_IDENTIFIER, ErrorPatcher::undeclaredIdentifier);
-        ERROR_PATCHERS.put(ErrorKind.UNKNOWN_TYPE_DID_YOU_MEAN, ErrorPatcher::unknownTypeDidYouMean);
+        ERROR_PATCHERS.put(ErrorKind.UNKNOWN_TYPE_DID_YOU_MEAN, ErrorPatcher::unknownType);
         ERROR_PATCHERS.put(ErrorKind.NOT_STRUCT_OR_UNION, ErrorPatcher::notStructOrUnion);
+        ERROR_PATCHERS.put(ErrorKind.NOT_A_FUNCTION_OR_FUNCTION_POINTER, ErrorPatcher::notAFunctionOrFunctionPointer);
+        ERROR_PATCHERS.put(ErrorKind.NO_MEMBER, ErrorPatcher::noMember);
+        
+        
     }
 
     private final PatchData patchData;
@@ -64,7 +68,7 @@ public class ErrorPatcher {
             throw new RuntimeException("Error kind not supported yet: " + error);
         }
 
-        System.out.println("patch true "+errorNumber);
+        
         errorPatcher.accept(data, patchData);
         return true;
 
@@ -93,9 +97,39 @@ public class ErrorPatcher {
     }
     public static void undeclaredIdentifier(TUErrorData data, PatchData patchData) {
         
-        String name = data.get(TUErrorData.MAP).get("identifier_name");
+        String message = data.get(TUErrorData.MAP).get("message");
+        
+        //find identifier between single quotes
+        String name = message.substring(message.indexOf('\'')+1, message.indexOf('\'',message.indexOf('\'')+1));
+        
         patchData.addVariable(name);
 
+    }
+    public static void noMember(TUErrorData data, PatchData patchData) {
+        
+        String message = data.get(TUErrorData.MAP).get("message");
+        
+        //find identifiers between single quotes
+        int index1 = message.indexOf('\'');
+        int index2 = message.indexOf('\'', index1 + 1);
+        int index3 = message.indexOf('\'', index2 + 1);
+        int index4 = message.indexOf('\'', index3 + 1);
+        
+        String field = message.substring(index1+1, index2);
+
+        String struct_or_class = message.substring(index3+1, index4);
+        
+        patchData.getType(struct_or_class).addField(field, new TypeInfo());
+
+    }
+    
+    public static void notAFunctionOrFunctionPointer(TUErrorData data, PatchData patchData) {
+
+        String function_name = data.get(TUErrorData.MAP).get("source");
+        patchData.removeVariable(function_name);
+        patchData.addFunction(function_name);
+        
+        
     }
     
 }

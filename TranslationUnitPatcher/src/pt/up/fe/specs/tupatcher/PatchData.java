@@ -21,10 +21,12 @@ import pt.up.fe.specs.util.SpecsIo;
 public class PatchData {
 
     private final HashMap<String, TypeInfo> missingTypes;
+    private final HashMap<String, FunctionInfo> missingFunctions;
     private final HashMap<String, String> missingVariables;
 
     public PatchData() {
         this.missingTypes = new HashMap<String, TypeInfo>();
+        this.missingFunctions = new HashMap<String, FunctionInfo>();
         this.missingVariables = new HashMap<String, String>();
     }
 
@@ -38,8 +40,14 @@ public class PatchData {
         if (varName != null) {
             missingVariables.put(varName, "int");
         }
+    }    
+    public void addFunction(String functionName) {
+        missingFunctions.put(functionName, new FunctionInfo(functionName));
     }
-    
+
+    public void removeVariable(String varName) {
+        missingVariables.remove(varName);
+    }
     public TypeInfo getType(String typeName) {
         return missingTypes.get(typeName);
     }
@@ -64,8 +72,8 @@ public class PatchData {
             if (kind == "struct") {
                 result += "typedef struct {\n";
                 for (String field : type.getFields().keySet()) {
-                    result += type.getFields().get(field).getName() + " ";
-                    result += field;
+                result += "\t" + type.getFields().get(field).getKind() + " ";
+                    result += field + ";\n";
                 }
                 result += "} " + typeName + ";\n";
             }
@@ -76,6 +84,14 @@ public class PatchData {
         for (String varName : missingVariables.keySet()) {
             String type = missingVariables.get(varName);
             result += type + " " + varName + ";\n";
+        }
+        for (String functionName : missingFunctions.keySet()) {
+            String returnType = missingFunctions.get(functionName).getReturnType().getName();
+            result += returnType + " " + functionName + "() {";
+            if (returnType == "int") {
+                result += "\n\treturn 0;";
+            }
+            result += "\n}\n";
         }
         return result;
     }

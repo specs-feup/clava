@@ -38,7 +38,7 @@ public class ErrorWorker implements LineStreamWorker<TUErrorsData> {
         TUErrorData error = errors.get(errors.size()-1);
         // Expects next line to be an integer, parse it and store
         var decodedInteger = Integer.decode(lineStream.nextLine());
-        System.out.println(decodedInteger);
+
         error.set(TUErrorData.ERROR_NUMBER, decodedInteger);
         String argKind="", argValue="";
         argKind = lineStream.nextLine();

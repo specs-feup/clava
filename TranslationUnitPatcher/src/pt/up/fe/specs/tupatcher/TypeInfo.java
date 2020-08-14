@@ -26,9 +26,15 @@ public class TypeInfo {
     HashMap<String, TypeInfo> fields;
     
     public TypeInfo() {
+        name = "int";
         kind = "int";
         fields = new HashMap<String, TypeInfo>();
-        
+    }
+    
+    public TypeInfo(String name) {
+        kind = "int";
+        this.name = name;
+        fields = new HashMap<String, TypeInfo>();
     }
     
     public void addField(String name, TypeInfo type) {
