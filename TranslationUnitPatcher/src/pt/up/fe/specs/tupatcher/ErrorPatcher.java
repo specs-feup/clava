@@ -32,6 +32,7 @@ public class ErrorPatcher {
         ERROR_PATCHERS.put(ErrorKind.UNKNOWN_TYPE_DID_YOU_MEAN, ErrorPatcher::unknownType);
         ERROR_PATCHERS.put(ErrorKind.NOT_STRUCT_OR_UNION, ErrorPatcher::notStructOrUnion);
         ERROR_PATCHERS.put(ErrorKind.NOT_A_FUNCTION_OR_FUNCTION_POINTER, ErrorPatcher::notAFunctionOrFunctionPointer);
+        ERROR_PATCHERS.put(ErrorKind.NO_MATCHING_FUNCTION, ErrorPatcher::noMatchingFunction);
         ERROR_PATCHERS.put(ErrorKind.NO_MEMBER, ErrorPatcher::noMember);
         
         
@@ -129,6 +130,28 @@ public class ErrorPatcher {
         patchData.removeVariable(function_name);
         patchData.addFunction(function_name);
         
+    }
+    
+    public static void noMatchingFunction(TUErrorData data, PatchData patchData) {
+        
+        String call = data.get(TUErrorData.MAP).get("source");
+        
+        //find identifiers between parenthesis
+        int index1 = call.indexOf('(');
+        int index2 = call.indexOf(')');
+        
+        String functionName = call.substring(0, index1);
+        FunctionInfo function = patchData.getFunction(functionName);
+        if (function == null) {
+            patchData.addFunction(functionName);
+            function = patchData.getFunction(functionName);
+        }      
+        
+        
+        int numArgs = call.substring(index1+1, index2).split(",").length;
+        for (int i = 0; i < numArgs; i++) {
+            function.addArgument(new TypeInfo("undefined"));
+        }
         
     }
     

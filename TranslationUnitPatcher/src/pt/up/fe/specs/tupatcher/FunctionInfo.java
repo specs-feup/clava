@@ -35,5 +35,13 @@ public class FunctionInfo {
     TypeInfo getReturnType() {
         return returnType;
     }
+    
+    public void addArgument(TypeInfo argType) {
+        arguments.add(argType);
+    }
+    
+    public int getNumArgs() {
+        return arguments.size();
+    }
 
 }

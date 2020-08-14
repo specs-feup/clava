@@ -41,6 +41,9 @@ public class PatchData {
             missingVariables.put(varName, "int");
         }
     }    
+    public FunctionInfo getFunction(String functionName) {
+        return missingFunctions.get(functionName);
+    }
     public void addFunction(String functionName) {
         missingFunctions.put(functionName, new FunctionInfo(functionName));
     }
@@ -86,12 +89,38 @@ public class PatchData {
             result += type + " " + varName + ";\n";
         }
         for (String functionName : missingFunctions.keySet()) {
-            String returnType = missingFunctions.get(functionName).getReturnType().getName();
-            result += returnType + " " + functionName + "() {";
-            if (returnType == "int") {
-                result += "\n\treturn 0;";
+            FunctionInfo function = missingFunctions.get(functionName);
+            String returnType = function.getReturnType().getName();
+            int numArgs = function.getNumArgs();
+            if (numArgs > 0) {
+                result += "template<";
+                for (int i=0; i < numArgs; i++) {
+                    result += "class TemplateClass"+i;
+                    if (i + 1 < numArgs){
+                        result += ", ";
+                    }
+                }
+                result += ">\n";
+                result += returnType + " " + functionName + "(";
+                for (int i=0; i < numArgs; i++) {
+                    result += "TemplateClass" + i + " arg" + i;
+                    if (i + 1 < numArgs){
+                        result += ", ";
+                    }
+                }
+                result += ") {";
+                if (returnType == "int") {
+                    result += "\n\treturn 0;";
+                }
+                result += "\n}\n";
             }
-            result += "\n}\n";
+            else {
+                result += returnType + " " + functionName + "() {";
+                if (returnType == "int") {
+                    result += "\n\treturn 0;";
+                }
+                result += "\n}\n";
+            }
         }
         return result;
     }
