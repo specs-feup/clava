@@ -66,8 +66,16 @@ public class PatchData {
         File destFile = new File("output/file.cpp");
         SpecsIo.write(destFile, result);
     }
-
-    public String str() {
+    
+    public String variablesPatches() {
+        String result = "";
+        for (String varName : missingVariables.keySet()) {
+            String type = missingVariables.get(varName);
+            result += type + " " + varName + ";\n";
+        }
+        return result;
+    }
+    public String typePatches() {
         String result = "";               
         for (String typeName : missingTypes.keySet()) {
             TypeInfo type = missingTypes.get(typeName);
@@ -80,16 +88,29 @@ public class PatchData {
                 }
                 result += "} " + typeName + ";\n";
             }
+            else if (kind == "class") {
+
+                result += "class " + typeName + "{\npublic:\n";
+                for (String field : type.getFields().keySet()) {
+                    result += "\t" + type.getFields().get(field).getKind() + " ";
+                    result += field + ";\n";
+                }
+                result += functionPatches(type.getFunctions());
+                
+                result += "};" + "\n";
+            }
             else {
                 result += "typedef " + kind + " " + typeName + ";\n";                    
             }
         }
-        for (String varName : missingVariables.keySet()) {
-            String type = missingVariables.get(varName);
-            result += type + " " + varName + ";\n";
-        }
-        for (String functionName : missingFunctions.keySet()) {
-            FunctionInfo function = missingFunctions.get(functionName);
+        return result;
+    }
+    
+    public String functionPatches(HashMap<String, FunctionInfo> functions) {
+
+        String result = "";
+        for (String functionName : functions.keySet()) {
+            FunctionInfo function = functions.get(functionName);
             String returnType = function.getReturnType().getName();
             int numArgs = function.getNumArgs();
             if (numArgs > 0) {
@@ -110,18 +131,26 @@ public class PatchData {
                 }
                 result += ") {";
                 if (returnType == "int") {
-                    result += "\n\treturn 0;";
+                    result += "return 0;";
                 }
-                result += "\n}\n";
+                result += "}\n";
             }
             else {
                 result += returnType + " " + functionName + "() {";
                 if (returnType == "int") {
-                    result += "\n\treturn 0;";
+                    result += "return 0;";
                 }
-                result += "\n}\n";
+                result += "}\n";
             }
         }
+        return result;
+    }
+
+    public String str() {
+        String result = "";
+        result += typePatches();
+        result += variablesPatches();
+        result += functionPatches(missingFunctions);
         return result;
     }
         

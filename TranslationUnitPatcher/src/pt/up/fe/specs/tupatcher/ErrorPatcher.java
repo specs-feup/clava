@@ -118,17 +118,26 @@ public class ErrorPatcher {
         
         String field = message.substring(index1+1, index2);
 
-        String struct_or_class = message.substring(index3+1, index4);
-        
-        patchData.getType(struct_or_class).addField(field, new TypeInfo());
+        String structOrClass = message.substring(index3+1, index4);
+
+        String source = data.get(TUErrorData.MAP).get("source");
+                
+        if (source.charAt(source.indexOf(field)+field.length())=='(') {
+            patchData.getType(structOrClass).addFunction(field);
+        }
+        else {
+            patchData.getType(structOrClass).addField(field);
+        }
 
     }
     
     public static void notAFunctionOrFunctionPointer(TUErrorData data, PatchData patchData) {
 
-        String function_name = data.get(TUErrorData.MAP).get("source");
-        patchData.removeVariable(function_name);
-        patchData.addFunction(function_name);
+        String functionName = data.get(TUErrorData.MAP).get("source");
+        patchData.removeVariable(functionName);
+        if (!functionName.contains(".")) {
+            patchData.addFunction(functionName);
+        }
         
     }
     

@@ -39,10 +39,10 @@ class DiagnosticConsumer : public clang::DiagnosticConsumer {
         for (int i=0; i < line_number; i++) {
             std::getline(file, line);
         }
-        std::string sourceCode = line.substr(pos_begin-1, pos_end - pos_begin);
-        if (sourceCode.empty()){
-            sourceCode = line.substr(pos_begin-1);
-        }
+        //std::string sourceCode = line.substr(pos_begin-1, pos_end - pos_begin);
+        //if (sourceCode.empty()){
+        std::string sourceCode = line.substr(pos_begin-1);
+        //}
         llvm::errs() << "source\n";
         llvm::errs() << sourceCode << "\n";
 

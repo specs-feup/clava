@@ -24,19 +24,26 @@ public class TypeInfo {
     String kind;//int, char, struct, union, class, etc
     String name;
     HashMap<String, TypeInfo> fields;
+    HashMap<String, FunctionInfo> functions;
     
     public TypeInfo() {
         name = "int";
         kind = "int";
         fields = new HashMap<String, TypeInfo>();
+        functions = new HashMap<String, FunctionInfo>();
     }
     
     public TypeInfo(String name) {
         kind = "int";
         this.name = name;
         fields = new HashMap<String, TypeInfo>();
+        functions = new HashMap<String, FunctionInfo>();
     }
-    
+
+    public void addField(String name) {
+        if (!(kind=="struct" || kind=="union" || kind=="class")) kind = "struct";
+        fields.put(name, new TypeInfo(name));
+    }
     public void addField(String name, TypeInfo type) {
         if (!(kind=="struct" || kind=="union" || kind=="class")) kind = "struct";
         fields.put(name, type);
@@ -52,7 +59,11 @@ public class TypeInfo {
     
     public void setAsStruct() {
         kind = "struct";        
+    }    
+    public void setAsClass() {
+        kind = "class";        
     }
+    
     
     public void setAs(String kind) {
         this.kind = kind;        
@@ -60,6 +71,14 @@ public class TypeInfo {
     
     public String getName(){
         return name;
+    }
+    
+    public void addFunction(String name) {
+        if (! (kind == "class")) kind = "class";
+        functions.put(name, new FunctionInfo(name));
+    }
+    public HashMap<String, FunctionInfo> getFunctions(){
+        return functions;
     }
     
 
