@@ -90,16 +90,6 @@ public class ErrorPatcher {
         patchData.addType(typeName);
         
     }
-
-   /* public static void unknownTypeDidYouMean(TUErrorData data, PatchData patchData) {
-        String typeName = data.get(TUErrorData.MAP).get("identifier_name");
-        String suggestion = data.get(TUErrorData.MAP).get("string");
-        suggestion = suggestion.substring(1, suggestion.length()-1);
-        TypeInfo typeInfo = new TypeInfo(typeName);
-        typeInfo.setAs(suggestion);
-        patchData.setType(typeName, typeInfo);
-        
-    }*/
     
     public static void notStructOrUnion(TUErrorData data, PatchData patchData) {
         String qualType = data.get(TUErrorData.MAP).get("qualtype");
@@ -117,15 +107,9 @@ public class ErrorPatcher {
         
         String message = data.get(TUErrorData.MAP).get("message");
         
-        //find identifiers between single quotes
-        int index1 = message.indexOf('\'');
-        int index2 = message.indexOf('\'', index1 + 1);
-        int index3 = message.indexOf('\'', index2 + 1);
-        int index4 = message.indexOf('\'', index3 + 1);
-        
-        String field = message.substring(index1+1, index2);
+        String field = TUPatcherUtils.getTypesFromMessage(message).get(0);
 
-        String structOrClass = message.substring(index3+1, index4);
+        String structOrClass = TUPatcherUtils.getTypesFromMessage(message).get(1);
 
         //String source = data.get(TUErrorData.MAP).get("source");
         /*if (source != null) {
@@ -166,20 +150,15 @@ public class ErrorPatcher {
     public static void noMatchingFunction(TUErrorData data, PatchData patchData) {
         
         String call = data.get(TUErrorData.MAP).get("source");
-        
-        //find identifiers between parenthesis
-        int index1 = call.indexOf('(');
-        int index2 = call.indexOf(')');
-        
-        String functionName = call.substring(0, index1);
+                
+        String functionName = call.substring(0, call.indexOf('('));
         FunctionInfo function = patchData.getFunction(functionName);
         if (function == null) {
             patchData.addFunction(functionName);
             function = patchData.getFunction(functionName);
-        }
+        }        
         
-        
-        int numArgs = call.substring(index1+1, index2).split(",").length;
+        int numArgs = TUPatcherUtils.getTypesFromMessage(call).get(0).split(",").length;
         function.addNumArgs(numArgs);
     }
     

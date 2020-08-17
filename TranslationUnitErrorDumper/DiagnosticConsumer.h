@@ -46,8 +46,6 @@ class DiagnosticConsumer : public clang::DiagnosticConsumer {
         else {
             pos_begin = fmin(std::stoi(begin.substr(index2)), std::stoi(location.substr(index2)));
         }
-        llvm::errs() << line_number_str << "\n,,,\n";
-        llvm::errs() << pos_begin << "\n,,,\n";
         int line_number = stoi(line_number_str);
         std::ifstream file;
         file.open(filepath);

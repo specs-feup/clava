@@ -1,3 +1,4 @@
+#include "patch.h"
 char * foo(X a) {
 	return a.bar().jjj();
 }
