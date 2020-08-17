@@ -50,7 +50,7 @@ public class TUPatcherLauncher {
         command2.add("../TranslationUnitErrorDumper/cmake-build-debug/TranslationUnitErrorDumper");
         command2.add("output/file.cpp");
         command2.add("--");
-        for (int i=0; i<15; i++) {
+        for (int i=0; i<55; i++) {
             output = SpecsSystem.runProcess(command2, TUPatcherLauncher::outputProcessor,
                     inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
             patchData.write(args[0]);

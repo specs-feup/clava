@@ -19,29 +19,108 @@ package pt.up.fe.specs.tupatcher;
 
 import java.util.ArrayList;
 
-public class FunctionInfo {
+public class FunctionInfo implements Definition {
     
     String name;
-    ArrayList<TypeInfo> arguments;
+    ArrayList<Integer> numArgs;
     TypeInfo returnType;
     
-    public FunctionInfo(String name) {
+    public FunctionInfo(String name, TypeInfo returnType) {
         this.name = name;
-        arguments = new ArrayList<>();
-        returnType = new TypeInfo();
+        numArgs = new ArrayList<Integer>();
+        numArgs.add(0);
+        this.returnType = returnType;
         
     }
+
+    public void setReturnType(String typeName) {
+        returnType.setName(typeName);
+    }
     
-    TypeInfo getReturnType() {
+    public TypeInfo getReturnType() {
         return returnType;
     }
-    
-    public void addArgument(TypeInfo argType) {
-        arguments.add(argType);
+        
+    public ArrayList<Integer> getNumArgs() {
+        return numArgs;
+    }
+    public void addNumArgs(int n) {
+        numArgs.add(n);
+    }
+
+    @Override
+    public ArrayList<Definition> getDependencies() {
+        ArrayList<Definition> result = new ArrayList<Definition>();
+        result.add(returnType);
+        return result;
+    }
+
+    public String getName() {
+        return name;
     }
     
-    public int getNumArgs() {
-        return arguments.size();
+
+    @Override
+    public boolean equals(Definition def) {
+        return this.name.equals(def.getName());
+    }
+    
+    public String template(int numArgs) {
+        String result = "template<";
+        for (int i=0; i < numArgs; i++) {
+            result += "class TemplateClass"+i;
+            if (i + 1 < numArgs){
+                result += ", ";
+            }
+        }
+        result += ">\n";
+        return result;
+    }
+    public String arguments(int numArgs) {
+        String result = "(";
+        for (int i=0; i < numArgs; i++) {
+            result += "TemplateClass" + i + " arg" + i;
+            if (i + 1 < numArgs){
+                result += ", ";
+            }
+        }
+        result += ")";
+        return result;
+    }
+    
+    public String str() {
+        String result = "";
+        //using "..."
+        result += returnType.getName() + " " + name + "(...) { return ";
+        if (returnType.getKind() == "struct" || returnType.getKind() == "class") {
+            result += returnType.getName() + "()";
+        }
+        else {
+            result += "0";
+        }
+        result += ";}\n";
+        /*using templates
+         for (Integer numArgs : this.numArgs) {   
+            if (numArgs > 0) {
+                result += template(numArgs);
+                result += returnType.getName() + " " + name;
+                result += arguments(numArgs);
+                result += " {";
+                if (returnType.getKind() == "int") {
+                    result += "return 0;";
+                }
+                result += "}\n";
+            }
+            else {
+                result += returnType.getName() + " " + name + "() {";
+                if (returnType.getKind() == "int") {
+                    result += "return 0;";
+                }
+                result += "}\n";
+            }
+        }*/
+        return result;
+        
     }
 
 }

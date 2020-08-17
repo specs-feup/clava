@@ -29,22 +29,43 @@ class DiagnosticConsumer : public clang::DiagnosticConsumer {
         int index1 = begin.find(':') + 1;
         int index2 = begin.find(':', index1) + 1;
         std::string line_number_str = begin.substr(index1, index2-index1-1);
+        int pos_begin = 0;
+        if ((begin.compare("<invalid loc>")==0) && (location.compare("<invalid loc>")==0)) {
+            return;
+        }
+        else if (begin.compare("<invalid loc>")==0) {
+            int index1 = location.find(':') + 1;
+            int index2 = location.find(':', index1) + 1;
+            line_number_str = location.substr(index1, index2-index1-1);
+        }
+        else if (location.compare("<invalid loc>")==0) {
+            int index1 = begin.find(':') + 1;
+            int index2 = begin.find(':', index1) + 1;
 
-        int pos_begin = std::stoi(begin.substr(index2));
-        int pos_end = fmax(std::stoi(end.substr(index2)), std::stoi(location.substr(index2)));
+        }
+        else {
+            pos_begin = fmin(std::stoi(begin.substr(index2)), std::stoi(location.substr(index2)));
+        }
+        llvm::errs() << line_number_str << "\n,,,\n";
+        llvm::errs() << pos_begin << "\n,,,\n";
         int line_number = stoi(line_number_str);
         std::ifstream file;
         file.open(filepath);
         std::string line;
-        for (int i=0; i < line_number; i++) {
+        //std::string sourceCode = "";
+        for (int i=0; i <line_number; i++) {
             std::getline(file, line);
+            //sourceCode += line;
         }
         //std::string sourceCode = line.substr(pos_begin-1, pos_end - pos_begin);
         //if (sourceCode.empty()){
-        std::string sourceCode = line.substr(pos_begin-1);
+        if (pos_begin > 0) {
+            pos_begin -= 1;
+        }
+        std::string snippet = line.substr(pos_begin);
         //}
         llvm::errs() << "source\n";
-        llvm::errs() << sourceCode << "\n";
+        llvm::errs() << snippet << "\n";
 
         return;
     }
@@ -76,14 +97,14 @@ public:
                         llvm::errs() << Info.getArgStdStr(i);
                         break;
                     case clang::DiagnosticsEngine::ak_c_string:
-                        llvm::errs() << "ak_c_string\n";
+                        llvm::errs() << "c_string\n";
                         llvm::errs() << Info.getArgCStr(i);
                         break;
                     case clang::DiagnosticsEngine::ak_sint:
-                        llvm::errs() << "ak_sint\n" << Info.getArgSInt(i);
+                        llvm::errs() << "sint\n" << Info.getArgSInt(i);
                         break;
                     case clang::DiagnosticsEngine::ak_uint:
-                        llvm::errs() << "ak_uint\n" << Info.getArgUInt(i);
+                        llvm::errs() << "uint\n" << Info.getArgUInt(i);
                         break;
                     case clang::DiagnosticsEngine::ArgumentKind::ak_qualtype:
                         llvm::errs() << "qualtype\n";
@@ -131,10 +152,10 @@ public:
 
                 printRange(Info, Info.getRange(i), SM);
             }
-            //llvm::errs() << "location\n";
-            //llvm::errs() << Info.getLocation().printToString(Info.getSourceManager()) << "\n";
 
         }
+        llvm::errs() << "location\n";
+        llvm::errs() << Info.getLocation().printToString(Info.getSourceManager()) << "\n";
 
         llvm::errs() << "message\n";
         llvm::SmallVector<char, 128> message;

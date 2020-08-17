@@ -14,6 +14,7 @@
 package pt.up.fe.specs.tupatcher;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import pt.up.fe.specs.util.SpecsIo;
@@ -22,30 +23,37 @@ public class PatchData {
 
     private final HashMap<String, TypeInfo> missingTypes;
     private final HashMap<String, FunctionInfo> missingFunctions;
-    private final HashMap<String, String> missingVariables;
+    private final HashMap<String, TypeInfo> missingVariables;
 
     public PatchData() {
         this.missingTypes = new HashMap<String, TypeInfo>();
         this.missingFunctions = new HashMap<String, FunctionInfo>();
-        this.missingVariables = new HashMap<String, String>();
+        this.missingVariables = new HashMap<String, TypeInfo>();
     }
 
     public void addType(String typeName) {
         if (typeName != null) {
-            missingTypes.put(typeName, new TypeInfo());
+            missingTypes.put(typeName, new TypeInfo(typeName));
         }
+    }
+    public void addType(TypeInfo type) {
+        missingTypes.put(type.getName(), type);
     }
 
     public void addVariable(String varName) {
         if (varName != null) {
-            missingVariables.put(varName, "int");
+            TypeInfo type = new TypeInfo();
+            missingVariables.put(varName, type);
+            missingTypes.put(type.getName(), type);
         }
     }    
     public FunctionInfo getFunction(String functionName) {
         return missingFunctions.get(functionName);
     }
     public void addFunction(String functionName) {
-        missingFunctions.put(functionName, new FunctionInfo(functionName));
+        TypeInfo returnType = new TypeInfo();
+        addType(returnType);
+        missingFunctions.put(functionName, new FunctionInfo(functionName, returnType));
     }
 
     public void removeVariable(String varName) {
@@ -70,87 +78,35 @@ public class PatchData {
     public String variablesPatches() {
         String result = "";
         for (String varName : missingVariables.keySet()) {
-            String type = missingVariables.get(varName);
+            String type = missingVariables.get(varName).getName();
             result += type + " " + varName + ";\n";
         }
         return result;
     }
-    public String typePatches() {
-        String result = "";               
-        for (String typeName : missingTypes.keySet()) {
-            TypeInfo type = missingTypes.get(typeName);
-            String kind = type.getKind();
-            if (kind == "struct") {
-                result += "typedef struct {\n";
-                for (String field : type.getFields().keySet()) {
-                result += "\t" + type.getFields().get(field).getKind() + " ";
-                    result += field + ";\n";
-                }
-                result += "} " + typeName + ";\n";
-            }
-            else if (kind == "class") {
+    
 
-                result += "class " + typeName + "{\npublic:\n";
-                for (String field : type.getFields().keySet()) {
-                    result += "\t" + type.getFields().get(field).getKind() + " ";
-                    result += field + ";\n";
-                }
-                result += functionPatches(type.getFunctions());
-                
-                result += "};" + "\n";
-            }
-            else {
-                result += "typedef " + kind + " " + typeName + ";\n";                    
-            }
-        }
-        return result;
-    }
     
     public String functionPatches(HashMap<String, FunctionInfo> functions) {
-
         String result = "";
         for (String functionName : functions.keySet()) {
             FunctionInfo function = functions.get(functionName);
-            String returnType = function.getReturnType().getName();
-            int numArgs = function.getNumArgs();
-            if (numArgs > 0) {
-                result += "template<";
-                for (int i=0; i < numArgs; i++) {
-                    result += "class TemplateClass"+i;
-                    if (i + 1 < numArgs){
-                        result += ", ";
-                    }
-                }
-                result += ">\n";
-                result += returnType + " " + functionName + "(";
-                for (int i=0; i < numArgs; i++) {
-                    result += "TemplateClass" + i + " arg" + i;
-                    if (i + 1 < numArgs){
-                        result += ", ";
-                    }
-                }
-                result += ") {";
-                if (returnType == "int") {
-                    result += "return 0;";
-                }
-                result += "}\n";
-            }
-            else {
-                result += returnType + " " + functionName + "() {";
-                if (returnType == "int") {
-                    result += "return 0;";
-                }
-                result += "}\n";
-            }
+            result += function.str();
         }
         return result;
     }
 
     public String str() {
         String result = "";
-        result += typePatches();
+   /*     result += typePatches();
         result += variablesPatches();
-        result += functionPatches(missingFunctions);
+        result += functionPatches(missingFunctions);*/
+        
+        ArrayList<Definition> defs = orderedDefinitions();
+        for (Definition def : defs) {
+            result += def.str();
+        }
+        result += variablesPatches();
+        
         return result;
     }
         
@@ -159,6 +115,47 @@ public class PatchData {
         SpecsIo.write(patchFile, str());
         copySource(filepath);
 
+    }
+    
+    public ArrayList<Definition> orderedDefinitions(){
+        ArrayList<Definition> notSorted = new ArrayList<Definition>();
+        ArrayList<Definition> result = new ArrayList<Definition>();
+        
+        for (TypeInfo type : missingTypes.values()) {
+            if (type.getKind()!="struct" && type.getKind()!="class") {
+                result.add(type);
+            }
+            else {
+                notSorted.add(type);                
+            }
+        }        
+        for (FunctionInfo function : missingFunctions.values()) {
+            notSorted.add(function);
+        }
+        while (! notSorted.isEmpty()) {
+            for (Definition def : notSorted) {
+                boolean ok = true;
+                for (Definition dependency : def.getDependencies()) {
+                    boolean contains = false;
+                    for (Definition def2: notSorted) {
+                        if (dependency.getName().equals(def2.getName())) {
+                            contains = true;
+                            break;
+                        }                            
+                    }
+                    if (contains) {
+                        ok = false;
+                        break;
+                    }                    
+                }
+                if (ok) {
+                    notSorted.remove(def);
+                    result.add(def);
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
 }
