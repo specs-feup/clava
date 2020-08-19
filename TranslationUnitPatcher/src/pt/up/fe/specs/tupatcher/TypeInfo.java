@@ -20,7 +20,11 @@ package pt.up.fe.specs.tupatcher;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/**
+ * 
+ * @author Pedro Galvao
+ *
+ */
 public class TypeInfo implements Definition {
 
     String kind;//int, char, struct, union, class, etc

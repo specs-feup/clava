@@ -43,10 +43,14 @@ public class ErrorWorker implements LineStreamWorker<TUErrorsData> {
         String argKind="", argValue="";
         argKind = lineStream.nextLine();
         argValue = lineStream.nextLine();
-        while (!(argKind.equals("<Clang Error End>") || argValue.equals("<Clang Error End>"))) {
+        while (!(argKind.equals("<Clang Error End>"))) {
             error.get(TUErrorData.MAP).put(argKind, argValue);
             argKind = lineStream.nextLine();
             argValue = lineStream.nextLine();
+            if (argValue.equals("<Clang Error End>")) {
+                System.out.println("Warning: There is something wrong with the messages in llvm::errs()");
+                break;
+            }
         }
     }
 

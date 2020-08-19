@@ -22,6 +22,11 @@ import pt.up.fe.specs.tupatcher.parser.TUErrorData;
 import pt.up.fe.specs.tupatcher.parser.TUErrorsData;
 import pt.up.fe.specs.util.SpecsLogs;
 
+/**
+ * 
+ * @author Pedro Galvao
+ *
+ */
 public class ErrorPatcher {
 
     private final static Map<ErrorKind, BiConsumer<TUErrorData, PatchData>> ERROR_PATCHERS;
@@ -40,6 +45,7 @@ public class ErrorPatcher {
         ERROR_PATCHERS.put(ErrorKind.NO_MEMBER_DID_YOU_MEAN, ErrorPatcher::noMember);
         ERROR_PATCHERS.put(ErrorKind.CANT_INITIALIZE_WITH_TYPE, ErrorPatcher::incompatibleType);
         ERROR_PATCHERS.put(ErrorKind.INCOMPLETE_TYPE_STRUCT, ErrorPatcher::incompleteTypeStruct);
+        ERROR_PATCHERS.put(ErrorKind.VARIABLE_INCOMPLETE_TYPE_STRUCT, ErrorPatcher::incompleteTypeStruct);
         ERROR_PATCHERS.put(ErrorKind.EXCESS_ELEMENTS_IN_INITIALIZER, ErrorPatcher::excessElementsInInitializer);
         ERROR_PATCHERS.put(ErrorKind.NO_MATCHING_CONSTRUCTOR, ErrorPatcher::noMatchingConstructor);
         ERROR_PATCHERS.put(ErrorKind.INCOMPATIBLE_TYPE, ErrorPatcher::incompatibleType);
@@ -73,6 +79,8 @@ public class ErrorPatcher {
         int errorNumber = (int) data.getValue("errorNumber");
 
         var error = ErrorKind.getKind(errorNumber);
+        
+        patchData.addError(error);        
 
         var errorPatcher = ERROR_PATCHERS.get(error);
         if (errorPatcher == null) {
@@ -98,9 +106,19 @@ public class ErrorPatcher {
     }
     
     public static void undeclaredIdentifier(TUErrorData data, PatchData patchData) {
+
+        String location = data.get(TUErrorData.MAP).get("location");
         String message = data.get(TUErrorData.MAP).get("message");
-        String name = TUPatcherUtils.extractFromSingleQuotes(message).get(0);        
-        patchData.addVariable(name);
+        String name = TUPatcherUtils.extractFromSingleQuotes(message).get(0);
+        if (TUPatcherUtils.isFunctionCall(location)) {
+            patchData.addFunction(name);            
+        }
+        else if (TUPatcherUtils.getTypeFromDeclaration(location).equals(name)) {
+            patchData.addType(name);            
+        }
+        else {
+            patchData.addVariable(name);
+        }
     }
     
     public static void noMember(TUErrorData data, PatchData patchData) {

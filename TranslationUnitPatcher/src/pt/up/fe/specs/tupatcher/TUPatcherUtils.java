@@ -21,6 +21,11 @@ import pt.up.fe.specs.util.SpecsIo;
  *  under the License.
  */
 
+/**
+ * 
+ * @author Pedro Galvao
+ *
+ */
 public class TUPatcherUtils {
     
     public static int nthIndexOf(String str, char ch, int n) {

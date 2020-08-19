@@ -17,18 +17,35 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 import pt.up.fe.specs.util.SpecsIo;
 
+
+/**
+ * 
+ * @author Pedro Galvao
+ *
+ */
 public class PatchData {
 
     private final HashMap<String, TypeInfo> missingTypes;
     private final HashMap<String, FunctionInfo> missingFunctions;
     private final HashMap<String, TypeInfo> missingVariables;
+    private ArrayList<ErrorKind> errors; 
 
     public PatchData() {
         this.missingTypes = new HashMap<String, TypeInfo>();
         this.missingFunctions = new HashMap<String, FunctionInfo>();
         this.missingVariables = new HashMap<String, TypeInfo>();
+        this.errors = new ArrayList<ErrorKind>(); 
+    }
+    
+    public void addError(ErrorKind errorKind) {
+        errors.add(errorKind);
+    }
+    
+    public ArrayList<ErrorKind> getErrors() {
+        return errors;
     }
 
     public void addType(String typeName) {
@@ -122,7 +139,7 @@ public class PatchData {
         ArrayList<Definition> result = new ArrayList<Definition>();
         
         for (TypeInfo type : missingTypes.values()) {
-            if (type.getKind()!="struct" && type.getKind()!="class") {
+            if (type.getKind().equals("struct") && type.getKind().equals("class")) {
                 result.add(type);
             }
             else {

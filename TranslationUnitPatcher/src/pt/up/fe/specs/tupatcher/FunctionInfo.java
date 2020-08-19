@@ -19,6 +19,11 @@ package pt.up.fe.specs.tupatcher;
 
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author Pedro Galvao
+ *
+ */
 public class FunctionInfo implements Definition {
     
     String name;
