@@ -7,8 +7,6 @@
 
 void DiagnosticAction::ExecuteAction() {
 
-    std::cout << "ExecuteAction" << std::endl;
-
     clang::CompilerInstance &CI = getCompilerInstance();
     clang::DiagnosticsEngine &DE = CI.getDiagnostics();
 
@@ -26,7 +24,14 @@ void DiagnosticAction::ExecuteAction() {
 
         for(auto diag : D.getDiags()->getDiagnosticMappings()){
             if(diag.getSecond().isErrorOrFatal()) {
-                DE.Report(diag.getFirst());
+                auto DB = DE.Report(diag.getFirst());
+               //DE.Report(Op->getOperatorLoc(), ID);
+                //DB.AddString(Op->getLHS()->IgnoreImpCasts()->getType().getAsString());
+               // DB.AddString(Op->getRHS()->getType().getAsString());
+
+              //  const auto Range =
+                //        clang::CharSourceRange::getCharRange();
+              //  DB.AddSourceRange(Range);
                 //std::cout << "Diag ID: " << diag.getFirst() << std::endl;
                 //std::cout << "Diag Report: " << DE.Report(diag.getFirst()) << std::endl;
                 //auto diagId = diag.getFirst();

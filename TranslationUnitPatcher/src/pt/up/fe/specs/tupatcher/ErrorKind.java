@@ -17,8 +17,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ErrorKind {
+    
+    UNKNOWN_TYPE(3822),
+    UNKNOWN_TYPE_DID_YOU_MEAN(3823),
+    INCOMPATIBLE_TYPE(3717),
+    UNDECLARED_IDENTIFIER(3797),
+    UNDECLARED_IDENTIFIER_DID_YOU_MEAN(3798),
+    NOT_STRUCT_OR_UNION(3748),
+    NOT_A_FUNCTION_OR_FUNCTION_POINTER(3692),
+    EXCESS_ELEMENTS_IN_INITIALIZER(2594),
+    NO_MATCHING_FUNCTION(3363),
+    TOO_MANY_ARGUMENTS(3699),
+    NO_MEMBER(2997),
+    NO_MEMBER_DID_YOU_MEAN(2999),
+    CANT_INITIALIZE_WITH_TYPE(2773),
+    INCOMPLETE_TYPE_STRUCT(2752),
+    VARIABLE_INCOMPLETE_TYPE_STRUCT(3722),
+    NO_MATCHING_CONSTRUCTOR(3364),
+    DELEGATION_CYCLE(4833);
 
-    UNKNOWN_TYPE(3822);
 
     private static final Map<Integer, ErrorKind> KIND_MAP = new HashMap<>();
     static {
@@ -40,5 +57,7 @@ public enum ErrorKind {
     public int getId() {
         return id;
     }
+
+
 
 }

@@ -14,13 +14,16 @@
 package pt.up.fe.specs.tupatcher.parser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.suikasoft.jOptions.DataStore.ADataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
+/**
+ * 
+ * @author Pedro Galvao
+ *
+ */
 public class TUErrorsData extends ADataClass<TUErrorsData> {
 
     public final static DataKey<ArrayList<TUErrorData>> ERRORS = 

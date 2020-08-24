@@ -38,15 +38,19 @@ public class ErrorWorker implements LineStreamWorker<TUErrorsData> {
         TUErrorData error = errors.get(errors.size()-1);
         // Expects next line to be an integer, parse it and store
         var decodedInteger = Integer.decode(lineStream.nextLine());
-        System.out.println(decodedInteger);
+
         error.set(TUErrorData.ERROR_NUMBER, decodedInteger);
         String argKind="", argValue="";
         argKind = lineStream.nextLine();
         argValue = lineStream.nextLine();
-        while (!argKind.equals("end")) {
+        while (!(argKind.equals("<Clang Error End>"))) {
             error.get(TUErrorData.MAP).put(argKind, argValue);
             argKind = lineStream.nextLine();
             argValue = lineStream.nextLine();
+            if (argValue.equals("<Clang Error End>")) {
+                System.out.println("Warning: There is something wrong with the messages in llvm::errs()");
+                break;
+            }
         }
     }
 

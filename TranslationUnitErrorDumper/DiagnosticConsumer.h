@@ -5,64 +5,26 @@
 #ifndef TRANSLATIONUNITERRORDUMPER_DIAGNOSTICCONSUMER_H
 #define TRANSLATIONUNITERRORDUMPER_DIAGNOSTICCONSUMER_H
 
+#include "clang/AST/DeclBase.h"
+#include "clang/AST/DeclContextInternals.h"
 #include <llvm/Support/raw_ostream.h>
+#include "llvm/ADT/APFloat.h"
 #include <iostream>
+#include <clang/AST/Type.h>
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/IdentifierTable.h"
+#include <string>
+#include <fstream>
+
+
+
+
 
 class DiagnosticConsumer : public clang::DiagnosticConsumer {
-
-
 public:
-
-
+    void printRange(clang::Diagnostic Info, clang::CharSourceRange range, clang::SourceManager & SM);
     void HandleDiagnostic(clang::DiagnosticsEngine::Level DiagLevel,
-                          const clang::Diagnostic& Info) override {
-        unsigned diagId = Info.getID();
-        llvm::errs() << "<Clang Error>" << "\n";
-        llvm::errs() << diagId << '\n';
-
-        if (Info.getNumArgs() > 0) {
-            for (unsigned int i = 0; i < Info.getNumArgs(); i++){
-                auto argKind = Info.getArgKind(i);
-                if(argKind == clang::DiagnosticsEngine::ak_identifierinfo){
-                  //  llvm::errs() << "<STORE_KEY_VALUE>\n";
-                    llvm::errs() << "identifier_name\n";
-                    llvm::errs() << Info.getArgIdentifier(i)->getName();
-                    llvm::errs() << "\n";
-                }
-                /*if(argKind == clang::DiagnosticsEngine::ak_std_string) {
-                    llvm::errs() << " : " << D.getArgStdStr(i);
-                }
-                if(argKind == clang::DiagnosticsEngine::ak_c_string) {
-                    llvm::errs() << " ak_c_string: " << D.getArgCStr(i);
-                }
-                if(argKind == clang::DiagnosticsEngine::ak_sint) {
-                    llvm::errs() << " ak_sint: " << D.getArgSInt(i);
-                }
-                if(argKind == clang::DiagnosticsEngine::ak_uint) {
-                    llvm::errs() << " ak_uint: " << D.getArgUInt(i);
-                }
-                if(argKind == clang::DiagnosticsEngine::ArgumentKind::ak_qualtype) {
-                    llvm::errs() << " : " << "qualtype";
-                }
-                if(argKind == clang::DiagnosticsEngine::ArgumentKind::ak_declarationname) {
-                    llvm::errs() << " : " << "declarationname";
-                }
-                if(argKind == clang::DiagnosticsEngine::ArgumentKind::ak_declcontext) {
-                    llvm::errs() << " : " << "ak_declcontext";
-                }*/
-            }
-        }
-
-        llvm::errs() << "end\n";
-        llvm::errs() << " \n";
-/*
-        llvm::SmallVector<char, 128> message;
-        Info.FormatDiagnostic(message);
-        llvm::errs() << message << '\n';*/
-
-    }
+                          const clang::Diagnostic& Info) override;
 };
 
 

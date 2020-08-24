@@ -1,3 +1,4 @@
+#include "patch.h"
 SRETBer sys_unlink(void)
 {
   struct inode *ip, *dp;
