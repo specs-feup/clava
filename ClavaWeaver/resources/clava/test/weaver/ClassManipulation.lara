@@ -1,0 +1,33 @@
+import clava.ClavaJoinPoints;
+
+import weaver.Query;
+
+aspectdef ClassManipulation
+
+	var $class = Query.search("class").first();
+
+	
+	var $method = Query.searchFrom($class, "method").first();
+	
+
+	//println("Method: " + $method.code);
+
+	var $newMethod = $method.deepCopy();
+	$newMethod.name = "new_" + $newMethod.name;
+
+	var $newClass = ClavaJoinPoints.classDecl("newClass");
+
+	$newClass.addMethod($newMethod);
+	
+	
+	
+	println("CLASS: " + $class.code);
+
+	println("NEW CLASS: " + $newClass.code);
+
+	// Change class of method
+	
+	
+	// Copy class and change
+
+end

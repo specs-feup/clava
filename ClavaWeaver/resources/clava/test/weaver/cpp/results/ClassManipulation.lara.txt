@@ -1,0 +1,12 @@
+CLASS: 
+class originalClass {
+   
+   
+   public:
+   void foo(int n);
+};
+
+NEW CLASS: 
+class newClass {
+   void new_foo(int n);
+};

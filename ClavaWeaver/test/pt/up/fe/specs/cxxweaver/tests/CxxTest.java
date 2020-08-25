@@ -272,4 +272,9 @@ public class CxxTest {
     public void testDataClass() {
         newTester().test("DataClass.lara", "dataclass.cpp");
     }
+
+    @Test
+    public void testClassManipulation() {
+        newTester().test("ClassManipulation.lara", "class_manipulation.cpp");
+    }
 }
