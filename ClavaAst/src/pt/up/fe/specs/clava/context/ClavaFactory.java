@@ -38,6 +38,7 @@ import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
 import pt.up.fe.specs.clava.ast.decl.CIncludeDecl;
+import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyNamedDecl;
@@ -553,6 +554,20 @@ public class ClavaFactory {
         return decl;
     }
 
+    public CXXRecordDecl cxxRecordDecl(String declName, Collection<FieldDecl> fields) {
+
+        DataStore data = newDataStore(CXXRecordDecl.class)
+                .put(RecordDecl.DECL_NAME, declName)
+                .put(RecordDecl.TAG_KIND, TagKind.CLASS)
+                .put(CXXRecordDecl.RECORD_BASES, new ArrayList<>());
+
+        CXXRecordDecl decl = new CXXRecordDecl(data, fields);
+        decl.set(RecordDecl.TYPE_FOR_DECL, Optional.of(recordType(decl)));
+        decl.set(RecordDecl.IS_COMPLETE_DEFINITION);
+
+        return decl;
+    }
+
     public FieldDecl fieldDecl(String fieldName, Type fieldType) {
         DataStore data = newDataStore(FieldDecl.class)
                 .put(FieldDecl.DECL_NAME, fieldName)
@@ -711,9 +726,9 @@ public class ClavaFactory {
      * 
      * @param condition
      * @param thenBody
-     *                      can be null (i.e., empty body)
+     *            can be null (i.e., empty body)
      * @param elseBody
-     *                      can be null (i.e., no else)
+     *            can be null (i.e., no else)
      * @return
      */
     public IfStmt ifStmt(Expr condition, CompoundStmt thenBody, CompoundStmt elseBody) {
