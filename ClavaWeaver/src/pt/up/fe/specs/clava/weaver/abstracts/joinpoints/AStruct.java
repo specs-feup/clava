@@ -44,6 +44,15 @@ public abstract class AStruct extends ARecord {
     }
 
     /**
+     * Get value on attribute functionsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AFunction[] getFunctionsArrayImpl() {
+        return this.aRecord.getFunctionsArrayImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select fields
      * @return 
      */
@@ -416,6 +425,7 @@ public abstract class AStruct extends ARecord {
     protected enum StructAttributes {
         KIND("kind"),
         FIELDS("fields"),
+        FUNCTIONS("functions"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),

@@ -13107,6 +13107,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "function[]",
+                              "name": "functions"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "kind"
                            }]
@@ -36626,20 +36634,6 @@
                },
                {
                   "type": "action",
-                  "tooltip": "Sets the class of the method",
-                  "children": [
-                           {
-                              "type": "void",
-                              "name": "setRecord"
-                           },
-                           {
-                              "type": "class",
-                              "name": "classJp",
-                              "defaultValue": ""
-                           }]
-               },
-               {
-                  "type": "action",
                   "tooltip": "Clones this function assigning it a new name, inserts the cloned function after the original function",
                   "children": [
                            {
@@ -48003,6 +47997,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "function[]",
+                              "name": "functions"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "String",
                               "name": "kind"
                            }]
@@ -52165,6 +52167,14 @@
                            {
                               "type": "joinpoint[]",
                               "name": "fields"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "function[]",
+                              "name": "functions"
                            }]
                },
                {

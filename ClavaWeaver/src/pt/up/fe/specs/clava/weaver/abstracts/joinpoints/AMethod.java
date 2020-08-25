@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import org.lara.interpreter.exception.ActionException;
 import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import java.util.List;
 import java.util.Map;
@@ -51,39 +50,6 @@ public abstract class AMethod extends AFunction {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "record", e);
-        }
-    }
-
-    /**
-     * 
-     */
-    public void defRecordImpl(AClass value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def record with type AClass not implemented ");
-    }
-
-    /**
-     * Sets the class of the method
-     * @param classJp 
-     */
-    public void setRecordImpl(AClass classJp) {
-        throw new UnsupportedOperationException(get_class()+": Action setRecord not implemented ");
-    }
-
-    /**
-     * Sets the class of the method
-     * @param classJp 
-     */
-    public final void setRecord(AClass classJp) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setRecord", this, Optional.empty(), classJp);
-        	}
-        	this.setRecordImpl(classJp);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setRecord", this, Optional.empty(), classJp);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setRecord", e);
         }
     }
 
@@ -715,13 +681,6 @@ public abstract class AMethod extends AFunction {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "record": {
-        	if(value instanceof AClass){
-        		this.defRecordImpl((AClass)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "functionType": {
         	if(value instanceof AFunctionType){
         		this.defFunctionTypeImpl((AFunctionType)value);
@@ -802,7 +761,6 @@ public abstract class AMethod extends AFunction {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aFunction.fillWithActions(actions);
-        actions.add("void setRecord(class)");
     }
 
     /**

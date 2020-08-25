@@ -90,6 +90,15 @@ public abstract class AClass extends ARecord {
     }
 
     /**
+     * Get value on attribute functionsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AFunction[] getFunctionsArrayImpl() {
+        return this.aRecord.getFunctionsArrayImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select fields
      * @return 
      */
@@ -468,6 +477,7 @@ public abstract class AClass extends ARecord {
         METHODS("methods"),
         KIND("kind"),
         FIELDS("fields"),
+        FUNCTIONS("functions"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),

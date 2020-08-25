@@ -89,6 +89,41 @@ public abstract class ARecord extends ANamedDecl {
     }
 
     /**
+     * Get value on attribute functions
+     * @return the attribute's value
+     */
+    public abstract AFunction[] getFunctionsArrayImpl();
+
+    /**
+     * Get value on attribute functions
+     * @return the attribute's value
+     */
+    public Object getFunctionsImpl() {
+        AFunction[] aFunctionArrayImpl0 = getFunctionsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aFunctionArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute functions
+     * @return the attribute's value
+     */
+    public final Object getFunctions() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "functions", Optional.empty());
+        	}
+        	Object result = this.getFunctionsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "functions", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "functions", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select fields
      * @return 
      */
@@ -444,6 +479,7 @@ public abstract class ARecord extends ANamedDecl {
         this.aNamedDecl.fillWithAttributes(attributes);
         attributes.add("kind");
         attributes.add("fields");
+        attributes.add("functions");
     }
 
     /**
@@ -490,6 +526,7 @@ public abstract class ARecord extends ANamedDecl {
     protected enum RecordAttributes {
         KIND("kind"),
         FIELDS("fields"),
+        FUNCTIONS("functions"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),
