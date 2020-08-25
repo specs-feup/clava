@@ -1105,10 +1105,16 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public Object getValueImpl(String key) {
-        // Get key
-        DataKey<?> datakey = getNode().getKeys().getKey(key);
+        var keys = getNode().getKeys();
+        if (!keys.hasKey(key)) {
+            ClavaLog.info("getValue(): key '" + key + "' not supported for join point '" + getJoinPointType() + "'");
+            return null;
+        }
 
-        Object value = getNode().get(datakey);
+        // Get key
+        DataKey<?> datakey = keys.getKey(key);
+
+        var value = getNode().get(datakey);
 
         return CxxAttributes.adaptValue(value);
     }
