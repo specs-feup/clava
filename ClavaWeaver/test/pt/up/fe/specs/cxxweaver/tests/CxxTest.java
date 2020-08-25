@@ -267,4 +267,9 @@ public class CxxTest {
     public void testFile() {
         newTester().test("File.lara", "file.cpp");
     }
+
+    @Test
+    public void testDataClass() {
+        newTester().test("DataClass.lara", "dataclass.cpp");
+    }
 }

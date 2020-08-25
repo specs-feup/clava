@@ -1,0 +1,2 @@
+InitExpr class: class pt.up.fe.specs.clava.weaver.joinpoints.CxxCast
+InitExpr class: class pt.up.fe.specs.clava.weaver.joinpoints.CxxNewExpr
