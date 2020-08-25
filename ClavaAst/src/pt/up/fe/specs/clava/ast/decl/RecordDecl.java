@@ -239,6 +239,22 @@ public class RecordDecl extends TagDecl {
         return functions;
     }
 
+    public List<FunctionDecl> getFunctions() {
+        List<FunctionDecl> functions = new ArrayList<>();
+
+        for (Decl recordField : getRecordFields()) {
+            if (!(recordField instanceof FunctionDecl)) {
+                continue;
+            }
+
+            FunctionDecl functionDecl = (FunctionDecl) recordField;
+
+            functions.add(functionDecl);
+        }
+
+        return functions;
+    }
+
     @Override
     public String getDeclName() {
         // If anonymous, create name
