@@ -13773,6 +13773,19 @@
                },
                {
                   "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addMethod"
+                           },
+                           {
+                              "type": "method",
+                              "name": "method",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Sets the name of this namedDecl",
                   "children": [
                            {

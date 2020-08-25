@@ -220,6 +220,16 @@
 		<parameter name="name" type="string" />
 	</action>
  	-->
+ 	<!-- 
+ 	<action name="addFunction" class="record">
+		<parameter name="function" type="function" />
+	</action>
+ 	-->
+
+	<!-- CLASS -->
+	<action name="addMethod" class="class">
+		<parameter name="method" type="method" />
+	</action>
 
 	<!-- CALL -->
 	<!-- Changes the name of the call -->

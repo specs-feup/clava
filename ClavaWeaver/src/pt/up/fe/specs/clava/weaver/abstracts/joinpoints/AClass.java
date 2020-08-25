@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
+import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -69,6 +70,32 @@ public abstract class AClass extends ARecord {
      */
     public List<? extends AMethod> selectMethod() {
         return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod.class, SelectOp.DESCENDANTS);
+    }
+
+    /**
+     * 
+     * @param method 
+     */
+    public void addMethodImpl(AMethod method) {
+        throw new UnsupportedOperationException(get_class()+": Action addMethod not implemented ");
+    }
+
+    /**
+     * 
+     * @param method 
+     */
+    public final void addMethod(AMethod method) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addMethod", this, Optional.empty(), method);
+        	}
+        	this.addMethodImpl(method);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addMethod", this, Optional.empty(), method);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addMethod", e);
+        }
     }
 
     /**
@@ -447,6 +474,7 @@ public abstract class AClass extends ARecord {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aRecord.fillWithActions(actions);
+        actions.add("void addMethod(method)");
     }
 
     /**
