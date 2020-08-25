@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
@@ -69,9 +70,11 @@ import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AElaboratedType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AField;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
@@ -683,6 +686,22 @@ public class AstFactory {
         var cast = CxxWeaver.getFactory().cStyleCastExpr((Type) type.getNode(), (Expr) expr.getNode());
 
         return CxxJoinpoints.create(cast, ACast.class);
+    }
+
+    /**
+     * Creates a join point representing a new class.
+     *
+     * @param varName
+     * @param joinpoint
+     * @return
+     */
+    public static AClass classDecl(String className, AField... fields) {
+        var fieldsNodes = Arrays.stream(fields).map(field -> (FieldDecl) field.getNode())
+                .collect(Collectors.toList());
+
+        var classDecl = CxxWeaver.getFactory().cxxRecordDecl(className, fieldsNodes);
+        return CxxJoinpoints.create(classDecl, AClass.class);
+
     }
 
 }
