@@ -64,6 +64,9 @@ public class PatchData {
             missingTypes.put(type.getName(), type);
         }
     }    
+    public TypeInfo getVariable(String varName) {
+        return missingVariables.get(varName);
+    }
     public FunctionInfo getFunction(String functionName) {
         return missingFunctions.get(functionName);
     }
@@ -114,6 +117,16 @@ public class PatchData {
 
     public String str() {
         String result = "";
+        for (TypeInfo type : missingTypes.values()) {
+            if (type.getKind().equals("class")) {
+                result += "class " + type.getName() + ";\n"; 
+            }
+            else if (type.getKind().equals("struct")) {
+                if (!type.getTypedefStruct()) {
+                    result += "struct " + type.getName() + ";\n"; 
+                }
+            }
+        }
    /*     result += typePatches();
         result += variablesPatches();
         result += functionPatches(missingFunctions);*/
@@ -135,21 +148,17 @@ public class PatchData {
     }
     
     public ArrayList<Definition> orderedDefinitions(){
+        //topological sorting of a graph of dependencies between types and functions
         ArrayList<Definition> notSorted = new ArrayList<Definition>();
         ArrayList<Definition> result = new ArrayList<Definition>();
-        
         for (TypeInfo type : missingTypes.values()) {
-            if (type.getKind().equals("struct") && type.getKind().equals("class")) {
-                result.add(type);
-            }
-            else {
-                notSorted.add(type);                
-            }
+            notSorted.add(type);       
         }        
         for (FunctionInfo function : missingFunctions.values()) {
             notSorted.add(function);
         }
         while (! notSorted.isEmpty()) {
+            boolean cyclic = true;
             for (Definition def : notSorted) {
                 boolean ok = true;
                 for (Definition dependency : def.getDependencies()) {
@@ -168,8 +177,23 @@ public class PatchData {
                 if (ok) {
                     notSorted.remove(def);
                     result.add(def);
+                    cyclic = false;
                     break;
                 }
+            }
+            if (cyclic) {
+                for (Definition def: notSorted) {
+                    if (!(((TypeInfo)def).getKind().equals("class") || ((TypeInfo)def).getKind().equals("struct"))) {
+                        result.add(def);
+                    }
+                }
+                for (Definition def: notSorted) {
+                    if (((TypeInfo)def).getKind().equals("class") || ((TypeInfo)def).getKind().equals("struct")) {
+                        result.add(def);
+                    }
+                }
+                return result;
+                //throw new RuntimeException("Cyclic dependencies");
             }
         }
         return result;

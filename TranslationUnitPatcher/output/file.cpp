@@ -1,102 +1,21 @@
 #include "patch.h"
-SRETBer sys_unlink(void)
+void grd_FDIST (struct GRDMATH_INFO *info, float *stack[], GMT_LONG *constant, double *factor, GMT_LONG last)
+/*OPERATOR: FDIST 3 1 F-distribution Q(F,n1,n2), with F = A, n1 = B, and n2 = C.  */
 {
-  struct inode *ip, *dp;
-  struct dirent de;
-  char name[DIRSIZ], *path;
-  uint off;
+	GMT_LONG i, nu1, nu2, prev1, prev2;
+	double F, chisq1, chisq2 = 1.0, prob;
 
-  if(argstr(0, &path) < 0)
-    return -1;
-  if((dp = nameiparent(path, name)) == 0)
-    return -1;
-  ilock(dp);
-
-  // Cannot unlink "." or "..".
-  if(namecmp(name, ".") == 0 || namecmp(name, "..") == 0){
-    iunlockput(dp);
-    return -1;
-  }
-
-  if((ip = dirlookup(dp, name, &off)) == 0){
-    iunlockput(dp);
-    return -1;
-  }
-  ilock(ip);
-
-  if(ip->nlink < 1)
-    panic("unlink: nlink < 1");
-  if(ip->type == T_DIR && !isdirempty(ip)){
-    iunlockput(ip);
-    iunlockput(dp);
-    return -1;
-  }
-
-  memset(&de, 0, sizeof(de));
-  if(writei(dp, (char*)&de, off, sizeof(de)) != sizeof(de))
-    panic("unlink: writei");
-  iunlockput(dp);
-
-  ip->nlink--;
-  iupdate(ip);
-  iunlockput(ip);
-  return 0;
-}
-
-char * foo(X a) {
-	return a.bar().jjj();
-}
-
-int xfs_qm_quotacheck_dqadjust(
-	struct xfs_inode	*ip,
-	xfs_dqid_t		id,
-	uint			type,
-	xfs_qcnt_t		nblks,
-	xfs_qcnt_t		rtblks)
-{
-	struct xfs_mount	*mp = ip->i_mount;
-	struct xfs_dquot	*dqp;
-	int			error;
-
-	error = xfs_qm_dqget(mp, ip, id, type,
-			     XFS_QMOPT_DQALLOC | XFS_QMOPT_DOWARN, &dqp);
-	if (error) {
-		/*
-		 * Shouldn't be able to turn off quotas here.
-		 */
-		ASSERT(error != -ESRCH);
-		ASSERT(error != -ENOENT);
-		return error;
+	prev1 = last - 1;
+	prev2 = last - 2;
+	if (gmtdefs.verbose && constant[prev1] && factor[prev1] == 0.0) fprintf (stderr, "%s: Warning, operand two == 0 for FDIST!\n", GMT_program);
+	if (gmtdefs.verbose && constant[last] && factor[last] == 0.0) fprintf (stderr, "%s: Warning, operand three == 0 for FDIST!\n", GMT_program);
+	for (i = 0; i < info->nm; i++) {
+		F = (constant[prev2]) ? factor[prev2] : stack[prev2][i];
+		nu1 = (GMT_LONG)(irint ((double)((constant[prev1]) ? factor[prev1] : stack[prev1][i])));
+		nu2 = (GMT_LONG)(irint ((double)((constant[last]) ? factor[last] : stack[last][i])));
+		/* Since GMT_f_q needs chisq1 and chisq2, we set chisq2 = 1 and solve for chisq1 */
+		chisq1 = F * nu1 / nu2;
+		(void) GMT_f_q (chisq1, nu1, chisq2, nu2, &prob);
+		stack[prev2][i] = (float)prob;
 	}
-
-	trace_xfs_dqadjust(dqp);
-
-	/*
-	 * Adjust the inode count and the block count to reflect this inode's
-	 * resource usage.
-	 */
-	be64_add_cpu(&dqp->q_core.d_icount, 1);
-	dqp->q_res_icount++;
-	if (nblks) {
-		be64_add_cpu(&dqp->q_core.d_bcount, nblks);
-		dqp->q_res_bcount += nblks;
-	}
-	if (rtblks) {
-		be64_add_cpu(&dqp->q_core.d_rtbcount, rtblks);
-		dqp->q_res_rtbcount += rtblks;
-	}
-
-	/*
-	 * Set default limits, adjust timers (since we changed usages)
-	 *
-	 * There are no timers for the default values set in the root dquot.
-	 */
-	if (dqp->q_core.d_id) {
-		xfs_qm_adjust_dqlimits(mp, dqp);
-		xfs_qm_adjust_dqtimers(mp, &dqp->q_core);
-	}
-
-	dqp->dq_flags |= XFS_DQ_DIRTY;
-	xfs_qm_dqput(dqp);
-	return 0;
 }

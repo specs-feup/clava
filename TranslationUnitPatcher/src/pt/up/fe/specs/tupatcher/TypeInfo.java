@@ -20,6 +20,7 @@ package pt.up.fe.specs.tupatcher;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 /**
  * 
  * @author Pedro Galvao
@@ -33,6 +34,7 @@ public class TypeInfo implements Definition {
     HashMap<String, FunctionInfo> functions = new HashMap<String, FunctionInfo>();
     ArrayList<Integer> constructors = new ArrayList<>();
     boolean useTypedefStruct = true;
+    HashMap<String, Boolean> isStatic = new HashMap<String, Boolean>();
     
     static int counter = 0;
     
@@ -40,6 +42,15 @@ public class TypeInfo implements Definition {
         kind = "int";
         this.name = "TYPE_PATCH_"+counter;
         counter++;
+    }
+    public void setStatic(String field) {
+        isStatic.put(field, true);
+    }
+    public boolean getStatic(String field) {
+        return isStatic.get(field);
+    }
+    public boolean getTypedefStruct() {
+        return useTypedefStruct;
     }
     
     public TypeInfo(String name) {
@@ -51,12 +62,14 @@ public class TypeInfo implements Definition {
         if (!(kind=="struct" || kind=="union" || kind=="class")) kind = "struct";
         TypeInfo type = new TypeInfo("TYPE_PATCH_"+counter);
         fields.put(name, type);
+        isStatic.put(name, false);
         patchData.addType(type);                
         counter++;
     }
     public void addField(String name, TypeInfo type, PatchData patchData) {
         if (!(kind=="struct" || kind=="union" || kind=="class")) kind = "struct";
         fields.put(name, type);
+        isStatic.put(name, false);
         patchData.addType(type);
     }
     
@@ -101,6 +114,7 @@ public class TypeInfo implements Definition {
         if (! (kind == "class")) kind = "class";
         TypeInfo returnType = new TypeInfo();
         functions.put(name, new FunctionInfo(name, returnType));
+        isStatic.put(name, false);
         patchData.addType(returnType);
     }
     public HashMap<String, FunctionInfo> getFunctions(){
@@ -111,10 +125,18 @@ public class TypeInfo implements Definition {
         if (! (kind == "class")) kind = "class";
         constructors.add(numArgs);        
     }
+    public void setMemberAsPointer(String member, PatchData patchData) {
+       fields.remove(member, patchData);
+       addField(member+" *",  patchData);
+    }
     
     
     public ArrayList<Definition> getDependencies(){
         ArrayList<Definition> result = new ArrayList<Definition>();
+        String kind2 = kind.split(" ")[0];
+        if (!(TUPatcherUtils.getPrimitiveTypes().contains(kind2))) {
+            result.add(new TypeInfo(kind2));
+        }
         for (Definition def : fields.values()) {
             result.add(def);
         }
@@ -154,11 +176,19 @@ public class TypeInfo implements Definition {
 
             result += "class " + name + "{\npublic:\n";
             for (String field :fields.keySet()) {
-                result += "\t" + fields.get(field).getName() + " ";
+                result += "\t";
+                if (isStatic.get(field)) {
+                    result += "static ";
+                }
+                result += fields.get(field).getName() + " ";
                 result += field + ";\n";
             }
             for (FunctionInfo function: functions.values()) {
-                result += "\t" +function.str();
+                result += "\t";
+                if (isStatic.get(function.getName())) {
+                    result += "static ";
+                }
+                result += function.str();
             }
             //constructor using "..."
             result += "\t" + name + "(...) {}\n";
