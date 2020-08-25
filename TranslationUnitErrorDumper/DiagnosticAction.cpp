@@ -9,7 +9,7 @@ void DiagnosticAction::ExecuteAction() {
 
     clang::CompilerInstance &CI = getCompilerInstance();
     clang::DiagnosticsEngine &DE = CI.getDiagnostics();
-
+    DE.setIgnoreAllWarnings(true);
     DE.setClient(new DiagnosticConsumer(), /*ShouldOwnClient=*/true);
     SyntaxOnlyAction::ExecuteAction();
 

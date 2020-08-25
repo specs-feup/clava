@@ -1,0 +1,17 @@
+aspectdef DataClass
+
+	select method end
+    apply
+       var tinits = $method.getValue("constructorInits"); 
+       //println("TINITS CLASS: " + tinits.getClass());
+       for(var tinit of tinits) {
+        
+        //println("TINIT: " + typeof tinit);       
+        //println("Class: " + tinit.getClass());
+        //tinit.getRaw("anyMemberDecl");
+        println("InitExpr class: " + tinit.getValue("initExpr").getClass());
+       }
+
+    end
+
+end

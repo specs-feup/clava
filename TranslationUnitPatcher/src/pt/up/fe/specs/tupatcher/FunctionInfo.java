@@ -29,13 +29,20 @@ public class FunctionInfo implements Definition {
     String name;
     ArrayList<Integer> numArgs;
     TypeInfo returnType;
+    boolean isStatic = false;
     
     public FunctionInfo(String name, TypeInfo returnType) {
         this.name = name;
         numArgs = new ArrayList<Integer>();
         numArgs.add(0);
         this.returnType = returnType;
-        
+    }
+    
+    public void setStatic() {
+        isStatic = true;
+    }
+    public boolean getStatic() {
+        return isStatic;
     }
 
     public void setReturnType(String typeName) {
@@ -96,12 +103,31 @@ public class FunctionInfo implements Definition {
     public String str() {
         String result = "";
         //using "..."
-        result += returnType.getName() + " " + name + "(...) { return ";
+        if (isStatic) {
+            result += "static ";
+        }
+        result += returnType.getName() + " " + name + "(...) { ";
         if (returnType.getKind() == "struct" || returnType.getKind() == "class") {
-            result += returnType.getName() + "()";
+            result += "return "+returnType.getName() + "()";
+        }
+        else if (TUPatcherUtils.getPrimitiveTypes().contains(returnType.getKind().replace(" *", ""))) {
+            result += "return 0";
         }
         else {
-            result += "0";
+            String returnTypeName = returnType.getKind().replace(" &","");
+            if (returnTypeName.contains("struct ")) {
+                result += " " + returnTypeName.replace("*", "") + " x = {};";
+            }
+            else {
+                result += " " + returnTypeName.replace("*", "") + " x = " + returnTypeName.replace("*", "") + "();";
+                
+            }
+            if (returnTypeName.contains("*")) {
+                result += " return &x";
+            }
+            else {
+                result += " return x";
+            }
         }
         result += ";}\n";
         /*using templates
