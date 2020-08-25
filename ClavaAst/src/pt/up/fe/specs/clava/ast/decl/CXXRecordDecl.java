@@ -122,4 +122,14 @@ public class CXXRecordDecl extends RecordDecl {
                 .collect(Collectors.toList());
     }
 
+    public void addMethod(CXXMethodDecl method) {
+
+        // Add method
+        addChild(method);
+
+        // Set record of method
+        method.set(CXXMethodDecl.RECORD, this);
+
+    }
+
 }

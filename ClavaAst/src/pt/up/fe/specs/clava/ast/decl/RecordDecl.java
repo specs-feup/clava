@@ -265,4 +265,19 @@ public class RecordDecl extends TagDecl {
         return super.getDeclName();
     }
 
+    /*
+    public void addFunction(FunctionDecl node) {
+        // Check if kind supports function
+        var kind = getTagKind();
+        if (kind != TagKind.CLASS && kind != TagKind.STRUCT) {
+            throw new RuntimeException("Record of kind '" + kind + "' does not support functions");
+        }
+    
+        // Add function
+        addChild(node);
+    
+        // Set record of function
+    
+    }
+    */
 }
