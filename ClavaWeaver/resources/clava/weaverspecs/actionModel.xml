@@ -346,6 +346,11 @@
 		<parameter name="newType" type="type" />
 	</action>	
 
+	<!-- METHOD -->
+	<action name="setRecord" class="method" tooltip="Sets the class of the method">
+		<parameter name="classJp" type="class" />
+	</action>	
+
 	<!-- NAMED DECL -->
 	<action name="setName" class="namedDecl" tooltip="Sets the name of this namedDecl">
 		<parameter name="name" type="String" />

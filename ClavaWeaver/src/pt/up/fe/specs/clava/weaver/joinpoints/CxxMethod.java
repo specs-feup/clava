@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
+import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod;
@@ -39,4 +40,13 @@ public class CxxMethod extends AMethod {
         return (AClass) CxxJoinpoints.create(method.getRecordDecl());
     }
 
+    @Override
+    public void defRecordImpl(AClass value) {
+        method.set(CXXMethodDecl.RECORD, (CXXRecordDecl) value.getNode());
+    }
+
+    @Override
+    public void setRecordImpl(AClass classJp) {
+        defRecordImpl(classJp);
+    }
 }

@@ -218,7 +218,9 @@
 	
 	<!-- METHOD -->
 	<artifact class="method" default="name">
-		<attribute name="record" type="class" />	
+		<attribute name="record" type="class">
+			<def/>
+		</attribute>	
 	</artifact>
 
 
