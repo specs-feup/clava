@@ -227,7 +227,7 @@
  	-->
 
 	<!-- CLASS -->
-	<action name="addMethod" class="class">
+	<action name="addMethod" class="class" tooltip="Adds a method to a class. If the given method has a definition, creates an equivalent declaration and adds it to the class, otherwise simply added the declaration to the class. In both cases, the declaration is only added to the class if there is no declaration already with the same signature.">
 		<parameter name="method" type="method" />
 	</action>
 

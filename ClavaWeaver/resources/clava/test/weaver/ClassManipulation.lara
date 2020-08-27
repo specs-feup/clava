@@ -20,8 +20,6 @@ function testCopyMethodDeclaration()  {
 
 	var $newClass = ClavaJoinPoints.classDecl("newClass");
 	$newClass.addMethod($newMethod);
-
-//	$newMethod.name = "new_" + $newMethod.name;	
 	
 	println("Test Copy Method Declaration");
 	println("CLASS: " + $class.code);
@@ -52,16 +50,4 @@ function testCopyMethodDefinition()  {
 	println("METHOD: " + $method.code);
 	println("NEW CLASS: " + $newClass.code);
 	println("NEW METHOD: " + $newMethod.code);
-
-	
-/*
-
-
-
-	
-	
-	println("Test Copy Method Declaration");
-	println("CLASS: " + $class.code);
-	println("NEW CLASS: " + $newClass.code);
-*/
 }
