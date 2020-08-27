@@ -1,33 +1,67 @@
 import clava.ClavaJoinPoints;
-
 import weaver.Query;
 
 aspectdef ClassManipulation
 
-	var $class = Query.search("class").first();
-
-	
-	var $method = Query.searchFrom($class, "method").first();
-	
-
-	//println("Method: " + $method.code);
-
-	var $newMethod = $method.deepCopy();
-	$newMethod.name = "new_" + $newMethod.name;
-
-	var $newClass = ClavaJoinPoints.classDecl("newClass");
-
-	$newClass.addMethod($newMethod);
-	
-	
-	
-	println("CLASS: " + $class.code);
-
-	println("NEW CLASS: " + $newClass.code);
-
-	// Change class of method
-	
-	
-	// Copy class and change
+	testCopyMethodDeclaration();
+	testCopyMethodDefinition();
 
 end
+
+
+function testCopyMethodDeclaration()  {
+
+	var $class = Query.search("class", "originalClass").first();
+
+	
+	var $method = Query.searchFrom($class, "method", "foo").first();
+
+	var $newMethod = $method.clone("new_" + $method.name, false);
+
+	var $newClass = ClavaJoinPoints.classDecl("newClass");
+	$newClass.addMethod($newMethod);
+
+//	$newMethod.name = "new_" + $newMethod.name;	
+	
+	println("Test Copy Method Declaration");
+	println("CLASS: " + $class.code);
+	println("NEW CLASS: " + $newClass.code);
+
+}
+
+function testCopyMethodDefinition()  {
+
+	var $class = Query.search("class", "originalClass2").first();
+
+	
+	var $method = Query.search("method", {name: "foo2", hasDefinition: true}).first();
+
+
+
+	var $newMethod = $method.clone("new_" + $method.name, false);
+
+	//var $newMethod = $method.deepCopy();
+	var $newClass = ClavaJoinPoints.classDecl("newClass2");
+	$newClass.addMethod($newMethod);
+	
+	//$newMethod.name = "new_" + $newMethod.name;
+
+
+	println("Test Copy Method Definition");
+	println("CLASS: " + $class.code);
+	println("METHOD: " + $method.code);
+	println("NEW CLASS: " + $newClass.code);
+	println("NEW METHOD: " + $newMethod.code);
+
+	
+/*
+
+
+
+	
+	
+	println("Test Copy Method Declaration");
+	println("CLASS: " + $class.code);
+	println("NEW CLASS: " + $newClass.code);
+*/
+}
