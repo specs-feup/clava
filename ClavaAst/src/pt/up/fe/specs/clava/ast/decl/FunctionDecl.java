@@ -854,15 +854,15 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
      * @return the definition or the declaration of the cloned function, according to this node being a definition or a
      *         declaration.
      */
-    public FunctionDecl cloneAndInsert(String newName) {
-        return cloneAndInsert(newName, null);
+    public FunctionDecl cloneAndInsert(String newName, boolean insert) {
+        return cloneAndInsert(newName, null, insert);
     }
 
-    public FunctionDecl cloneAndInsertOnFile(String newName, TranslationUnit destinationUnit) {
-        return cloneAndInsert(newName, destinationUnit);
+    public FunctionDecl cloneAndInsertOnFile(String newName, TranslationUnit destinationUnit, boolean insert) {
+        return cloneAndInsert(newName, destinationUnit, insert);
     }
 
-    private FunctionDecl cloneAndInsert(String newName, TranslationUnit destinationUnit) {
+    private FunctionDecl cloneAndInsert(String newName, TranslationUnit destinationUnit, boolean insert) {
         // Get both declaration and definition (if present)
         Optional<FunctionDecl> definition = getDefinition();
         Optional<FunctionDecl> declaration = getDeclaration();
@@ -871,22 +871,24 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
         Optional<FunctionDecl> newDeclaration = declaration.map(decl -> ((FunctionDecl) decl.copy()).setName(newName));
 
-        if (destinationUnit == null) {
-            definition.ifPresent(def -> NodeInsertUtils.insertAfter(def, newDefinition.get()));
-            declaration.ifPresent(decl -> NodeInsertUtils.insertAfter(decl, newDeclaration.get()));
-        } else {
-            definition.ifPresent(def -> destinationUnit.addChild(newDefinition.get()));
-
-            // Declarationn should still be inserted next to their original declarations
-            declaration.ifPresent(decl -> NodeInsertUtils.insertAfter(decl, newDeclaration.get()));
-            /*
-            if (this instanceof CXXMethodDecl) {
+        if (insert) {
+            if (destinationUnit == null) {
+                definition.ifPresent(def -> NodeInsertUtils.insertAfter(def, newDefinition.get()));
                 declaration.ifPresent(decl -> NodeInsertUtils.insertAfter(decl, newDeclaration.get()));
             } else {
-                declaration.ifPresent(decl -> destinationUnit.addChild(newDeclaration.get()));
-            }
-            */
+                definition.ifPresent(def -> destinationUnit.addChild(newDefinition.get()));
 
+                // Declarationn should still be inserted next to their original declarations
+                declaration.ifPresent(decl -> NodeInsertUtils.insertAfter(decl, newDeclaration.get()));
+                /*
+                if (this instanceof CXXMethodDecl) {
+                declaration.ifPresent(decl -> NodeInsertUtils.insertAfter(decl, newDeclaration.get()));
+                } else {
+                declaration.ifPresent(decl -> destinationUnit.addChild(newDeclaration.get()));
+                }
+                */
+
+            }
         }
 
         // Return corresponding clone
