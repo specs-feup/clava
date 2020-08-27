@@ -302,6 +302,11 @@
 	<!-- FUNCTION -->
 	<action name="clone" class="function" return="function" tooltip="Clones this function assigning it a new name, inserts the cloned function after the original function">
 		<parameter name="newName" type="String" />
+		<parameter name="insert" type="Boolean" />		
+	</action>
+
+	<action name="clone" class="function" return="function" tooltip="Overload which inserts the cloned function by default">
+		<parameter name="newName" type="String" />
 	</action>
 
 	<action name="cloneOnFile" class="function" return="String" tooltip="Generates a clone of the provided function on a new file (with a weaver-generated name).">

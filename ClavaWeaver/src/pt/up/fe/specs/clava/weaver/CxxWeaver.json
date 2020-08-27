@@ -27778,6 +27778,25 @@
                               "type": "String",
                               "name": "newName",
                               "defaultValue": ""
+                           },
+                           {
+                              "type": "Boolean",
+                              "name": "insert",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which inserts the cloned function by default",
+                  "children": [
+                           {
+                              "type": "function",
+                              "name": "clone"
+                           },
+                           {
+                              "type": "String",
+                              "name": "newName",
+                              "defaultValue": ""
                            }]
                },
                {
@@ -36648,6 +36667,25 @@
                {
                   "type": "action",
                   "tooltip": "Clones this function assigning it a new name, inserts the cloned function after the original function",
+                  "children": [
+                           {
+                              "type": "function",
+                              "name": "clone"
+                           },
+                           {
+                              "type": "String",
+                              "name": "newName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "Boolean",
+                              "name": "insert",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Overload which inserts the cloned function by default",
                   "children": [
                            {
                               "type": "function",

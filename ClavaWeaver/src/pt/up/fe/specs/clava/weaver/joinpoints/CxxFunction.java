@@ -198,12 +198,16 @@ public class CxxFunction extends AFunction {
     // TODO check if the new name clashes with other symbol?
     @Override
     public AFunction cloneImpl(String newName) {
-
-        /* make clone and insert after the function of this join point */
-        return makeCloneAndInsert(newName, function);
+        return cloneImpl(newName, true);
     }
 
-    private AFunction makeCloneAndInsert(String newName, ClavaNode reference) {
+    @Override
+    public AFunction cloneImpl(String newName, Boolean insert) {
+        /* make clone and insert after the function of this join point */
+        return makeCloneAndInsert(newName, function, insert);
+    }
+
+    private AFunction makeCloneAndInsert(String newName, ClavaNode reference, boolean insert) {
 
         // if (function instanceof CXXMethodDecl) {
         //
@@ -218,9 +222,9 @@ public class CxxFunction extends AFunction {
         if (reference instanceof FunctionDecl) {
 
             // NodeInsertUtils.insertAfter(function, newFunc);
-            newFunc = function.cloneAndInsert(newName);
+            newFunc = function.cloneAndInsert(newName, insert);
         } else if (reference instanceof TranslationUnit) {
-            newFunc = function.cloneAndInsertOnFile(newName, (TranslationUnit) reference);
+            newFunc = function.cloneAndInsertOnFile(newName, (TranslationUnit) reference, insert);
             // ((TranslationUnit) reference).addChild(newFunc);
 
         } else {
@@ -323,7 +327,7 @@ public class CxxFunction extends AFunction {
                 file = Optional.of(tu);
             }
 
-            makeCloneAndInsert(newName, file.get());
+            makeCloneAndInsert(newName, file.get(), true);
 
             /* copy headers from the current file to the file with the clone */
             List<IncludeDecl> allIncludes = getWrapperIncludesFromFile(file.get());
@@ -332,7 +336,7 @@ public class CxxFunction extends AFunction {
         } else {
             /*otherwise, add the clone to the original place in order to be included where needed */
 
-            makeCloneAndInsert(newName, function);
+            makeCloneAndInsert(newName, function, true);
         }
 
         return fileName;
