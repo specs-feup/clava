@@ -31,10 +31,13 @@ public class TypeInfo implements Definition {
     String kind;//int, char, struct, union, class, etc
     String name;
     HashMap<String, TypeInfo> fields = new HashMap<String, TypeInfo>();
+    HashMap<String, TypeInfo> nestedTypes = new HashMap<String, TypeInfo>();
     HashMap<String, FunctionInfo> functions = new HashMap<String, FunctionInfo>();
     ArrayList<Integer> constructors = new ArrayList<>();
     boolean useTypedefStruct = true;
     HashMap<String, Boolean> isStatic = new HashMap<String, Boolean>();
+    ArrayList<String> operators = new ArrayList<>();
+    boolean nested = false;
     
     static int counter = 0;
     
@@ -43,6 +46,18 @@ public class TypeInfo implements Definition {
         this.name = "TYPE_PATCH_"+counter;
         counter++;
     }
+    public void addOperator(String operator){
+        if (!operators.contains(operator)) {
+            operators.add(operator);
+        }
+    }
+    public void setNested() {
+        nested = true;
+    }
+    public boolean isNested() {
+        return nested;
+    }
+    
     public void setStatic(String field) {
         isStatic.put(field, true);
     }
@@ -66,6 +81,18 @@ public class TypeInfo implements Definition {
         patchData.addType(type);                
         counter++;
     }
+    
+    public void addNestedType(String name, PatchData patchData) {
+        if (!(kind=="struct" || kind=="union" || kind=="class")) kind = "class";
+        TypeInfo type = new TypeInfo(name);
+        nestedTypes.put(name, type);
+        isStatic.put(name, false);
+        patchData.addType(type);
+    }    
+    public TypeInfo getNestedType(String name) {
+        return nestedTypes.get(name);
+    }    
+
     public void addField(String name, TypeInfo type, PatchData patchData) {
         if (!(kind=="struct" || kind=="union" || kind=="class")) kind = "struct";
         fields.put(name, type);
@@ -133,8 +160,8 @@ public class TypeInfo implements Definition {
     
     public ArrayList<Definition> getDependencies(){
         ArrayList<Definition> result = new ArrayList<Definition>();
-        String kind2 = kind.split(" ")[0];
-        if (!(TUPatcherUtils.getPrimitiveTypes().contains(kind2))) {
+        String kind2 = TUPatcherUtils.getTypeName(kind);
+        if (!TUPatcherUtils.isPrimitiveType(kind2)) {
             result.add(new TypeInfo(kind2));
         }
         for (Definition def : fields.values()) {
@@ -143,6 +170,11 @@ public class TypeInfo implements Definition {
         for (FunctionInfo def : functions.values()) {
             result.add(def.getReturnType());
             result.add(def);
+        }
+        for (TypeInfo type : nestedTypes.values()) {
+            for (Definition def : type.getDependencies()) {
+                result.add(def);
+            }
         }
         
         return result;
@@ -190,21 +222,19 @@ public class TypeInfo implements Definition {
                 }
                 result += function.str();
             }
-            //constructor using "..."
+            for (String operator : operators) {
+                result += "\ttemplate <class T>\n";
+            result += "\tfriend bool operator"+operator+"(const " + name + "& t1, T& t2) { return 0;}\n";
+            }
+            for (TypeInfo type : nestedTypes.values()) {
+                result += type.str();
+            }
+            //constructor
             result += "\t" + name + "(...) {}\n";
-            /*using templates
-            for (int numArgs : constructors) {
-                FunctionInfo function = new FunctionInfo(name);
-                function.setReturnType("");
-                result += function.template(numArgs);
-                result += name;
-                result += function.arguments(numArgs);
-                result += "{}\n";
-            }*/
             result += "};" + "\n";
         }
         else {
-            result += "typedef " + kind + " " + name + ";\n";                    
+            result += "typedef " + kind + " " + name + ";\n";         
         }
         return result;
     }

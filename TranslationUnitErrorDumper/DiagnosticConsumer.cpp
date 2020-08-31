@@ -59,6 +59,10 @@ void  DiagnosticConsumer::HandleDiagnostic(clang::DiagnosticsEngine::Level DiagL
     llvm::errs() << "<Clang Error>" << "\n";
     llvm::errs() << diagId << '\n';
 
+    llvm::errs() << "message\n";
+    llvm::SmallVector<char, 128> message;
+    Info.FormatDiagnostic(message);
+    llvm::errs() << message << '\n';
     if (Info.getNumArgs() > 0) {
         for (unsigned int i = 0; i < Info.getNumArgs(); i++){
             auto argKind = Info.getArgKind(i);
@@ -135,10 +139,6 @@ void  DiagnosticConsumer::HandleDiagnostic(clang::DiagnosticsEngine::Level DiagL
     llvm::errs() << "location\n";
     llvm::errs() << Info.getLocation().printToString(Info.getSourceManager()) << "\n";
 
-    llvm::errs() << "message\n";
-    llvm::SmallVector<char, 128> message;
-    Info.FormatDiagnostic(message);
-    llvm::errs() << message << '\n';
     llvm::errs() << "<Clang Error End>\n";
     llvm::errs() << " \n";
 

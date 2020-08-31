@@ -41,25 +41,34 @@ public class ErrorPatcher {
         ERROR_PATCHERS.put(ErrorKind.CANT_BE_REFERENCED_WITH_STRUCT, ErrorPatcher::incompleteTypeStruct);
         ERROR_PATCHERS.put(ErrorKind.NOT_A_FUNCTION_OR_FUNCTION_POINTER, ErrorPatcher::notAFunctionOrFunctionPointer);
         ERROR_PATCHERS.put(ErrorKind.NO_MATCHING_FUNCTION, ErrorPatcher::noMatchingFunction);
-        ERROR_PATCHERS.put(ErrorKind.TOO_MANY_ARGUMENTS, ErrorPatcher::tooManyArguments);
         ERROR_PATCHERS.put(ErrorKind.NO_MEMBER, ErrorPatcher::noMember);
         ERROR_PATCHERS.put(ErrorKind.NO_MEMBER_DID_YOU_MEAN, ErrorPatcher::noMember);
         ERROR_PATCHERS.put(ErrorKind.CANT_INITIALIZE_WITH_TYPE, ErrorPatcher::incompatibleType);
         ERROR_PATCHERS.put(ErrorKind.COMPARISON_BETWEEN, ErrorPatcher::incompatibleType);
         ERROR_PATCHERS.put(ErrorKind.REDEFINITION_WITH_DIFFERENT_TYPE, ErrorPatcher::incompatibleType);
-        ERROR_PATCHERS.put(ErrorKind.COMPARISON_OF_DISTINCT_POINTER_TYPES, ErrorPatcher::incompatibleType);
+        ERROR_PATCHERS.put(ErrorKind.COMPARISON_OF_DISTINCT_POINTER_TYPES, ErrorPatcher::invalidOperandsToBinaryExpression);
         ERROR_PATCHERS.put(ErrorKind.INCOMPLETE_TYPE_STRUCT, ErrorPatcher::incompleteTypeStruct);
         ERROR_PATCHERS.put(ErrorKind.VARIABLE_INCOMPLETE_TYPE_STRUCT, ErrorPatcher::incompleteTypeStruct);
         ERROR_PATCHERS.put(ErrorKind.EXCESS_ELEMENTS_IN_INITIALIZER, ErrorPatcher::excessElementsInInitializer);
         ERROR_PATCHERS.put(ErrorKind.NO_MATCHING_CONSTRUCTOR, ErrorPatcher::noMatchingConstructor);
         ERROR_PATCHERS.put(ErrorKind.INCOMPATIBLE_TYPE, ErrorPatcher::incompatibleType);
+        ERROR_PATCHERS.put(ErrorKind.INCOMPATIBLE_OPERAND_TYPES, ErrorPatcher::incompatibleType);
+        ERROR_PATCHERS.put(ErrorKind.REFERENCE_TO_TYPE_COULD_NOT_BIND_TO_RVALUE, ErrorPatcher::incompatibleType);
         ERROR_PATCHERS.put(ErrorKind.NO_VIABLE_CONVERSION, ErrorPatcher::incompatibleType);
         ERROR_PATCHERS.put(ErrorKind.TYPE_IS_NOT_POINTER, ErrorPatcher::typeIsNotPointer);
+        ERROR_PATCHERS.put(ErrorKind.INDIRECTION_REQUIRES_POINTER_OPERAND, ErrorPatcher::typeIsNotPointer);
         ERROR_PATCHERS.put(ErrorKind.CXX_REQUIRES_TYPE_SPECIFIER, ErrorPatcher::cxxRequiresTypeSpecifier);
         ERROR_PATCHERS.put(ErrorKind.NOT_CLASS_NAMESPACE_OR_ENUMERATION, ErrorPatcher::notClassNamespaceOrEnumeration);
         ERROR_PATCHERS.put(ErrorKind.INVALID_USE_OF_NON_STATIC, ErrorPatcher::invalidUseOfNonStatic);
         ERROR_PATCHERS.put(ErrorKind.NON_STATIC_MEMBER_FUNCTION, ErrorPatcher::nonStaticMemberFunction);
         ERROR_PATCHERS.put(ErrorKind.NON_CONST_CANT_BIND_TO_TEMPORARY, ErrorPatcher::nonConstCantBindToTemporary);
+        ERROR_PATCHERS.put(ErrorKind.INVALID_OPERANDS_TO_BINARY_EXPRESSION, ErrorPatcher::invalidOperandsToBinaryExpression);
+        ERROR_PATCHERS.put(ErrorKind.NO_VIABLE_OVERLOADED, ErrorPatcher::noViableOverloaded);
+        ERROR_PATCHERS.put(ErrorKind.IS_NOT_ARRAY_POINTER_OR_VECTOR, ErrorPatcher::isNotArrayPointerOrVector);
+        ERROR_PATCHERS.put(ErrorKind.NO_TYPE_NAMED_IN, ErrorPatcher::noTypeNamedIn);
+        ERROR_PATCHERS.put(ErrorKind.FUNCTION_IS_NOT_MARKED_CONST, ErrorPatcher::functionIsNotMarkedConst);
+        ERROR_PATCHERS.put(ErrorKind.CASE_VALUE_IS_NOT_CONST, ErrorPatcher::caseValueIsNotConst);
+        
         
         
     }
@@ -116,6 +125,7 @@ public class ErrorPatcher {
     
     public static void notStructOrUnion(TUErrorData data, PatchData patchData) {
         String qualType = data.get(TUErrorData.MAP).get("qualtype");
+        qualType = qualType.replace(" (void)","");
         patchData.getType(qualType).setAsStruct();
         
     }
@@ -126,10 +136,16 @@ public class ErrorPatcher {
         String message = data.get(TUErrorData.MAP).get("message");
         String name = TUPatcherUtils.extractFromSingleQuotes(message).get(0);
         if (TUPatcherUtils.isFunctionCall(location)) {
-            patchData.addFunction(name);            
+            patchData.addFunction(name);
+        }
+        else if (TUPatcherUtils.isVariable(location)) {
+            patchData.addVariable(name);
         }
         else if (TUPatcherUtils.getTypeFromDeclaration(location).equals(name)) {
             patchData.addType(name);            
+        }
+        else if (TUPatcherUtils.isCast(location)) {
+            patchData.addType(name);
         }
         else {
             patchData.addVariable(name);
@@ -175,6 +191,9 @@ public class ErrorPatcher {
             patchData.removeVariable(functionName);
             patchData.addFunction(functionName);
         }
+        else {
+            throw new RuntimeException("Can't solve this error. Don't know in which class the function is defined");
+        }
         
     }
     
@@ -191,11 +210,6 @@ public class ErrorPatcher {
         
         int numArgs = TUPatcherUtils.getTypesFromMessage(call).get(0).split(",").length;
         function.addNumArgs(numArgs);
-    }
-    
-    public static void tooManyArguments(TUErrorData data, PatchData patchData) {
-        //int numArgs = Integer.parseInt(data.get(TUErrorData.MAP).get("uint"));
-    //    function.addNumArgs(numArgs);
     }
     
     public static void excessElementsInInitializer(TUErrorData data, PatchData patchData) {
@@ -217,25 +231,7 @@ public class ErrorPatcher {
         }
         
     }
-    /*public static void cantInitializeMemberWithType(TUErrorData data, PatchData patchData) {
-
-        String qualType = data.get(TUErrorData.MAP).get("qualtype");
-        String message = data.get(TUErrorData.MAP).get("message");
-
-        ArrayList<String> types = TUPatcherUtils.getTypesFromMessage(message);
-        TypeInfo toType = patchData.getType(types.get(0));
-        TypeInfo fromType = patchData.getType(types.get(1));
-        
-        
-        if (qualType.contains("[")) {
-            String fix = qualType.substring(0, qualType.indexOf('['));
-            fix += "*";
-            qualType = fix;
-        }
-        
-        patchData.getType(typeName).setAs(qualType);
-        
-    }*/
+    
     public static void noMatchingConstructor(TUErrorData data, PatchData patchData) {
 
 //        String call = data.get(TUErrorData.MAP).get("source");      
@@ -267,10 +263,6 @@ public class ErrorPatcher {
         }
         fromTypeName = TUPatcherUtils.removeBracketsFromType(fromTypeName);
         toTypeName = TUPatcherUtils.removeBracketsFromType(toTypeName);
-        /*System.out.println("from q: "+fromTypeName);
-        System.out.println("to q: "+toTypeName);
-        System.out.println("from: "+TUPatcherUtils.getTypeName(fromTypeName));
-        System.out.println("to: "+TUPatcherUtils.getTypeName(toTypeName));*/
         TypeInfo fromType;
         TypeInfo toType;
         fromType = patchData.getType(TUPatcherUtils.getTypeName(fromTypeName));
@@ -284,8 +276,6 @@ public class ErrorPatcher {
                 toType.setAs(fromTypeName);                
             }
             else if (toType.getKind().equals("int")) {
-                /*System.out.println("to int");
-                System.out.println("aka2: "+aka2);*/
                 if (aka2.equals("")) {
                     toType.setAs(fromTypeName);
                 }
@@ -294,8 +284,6 @@ public class ErrorPatcher {
                 }
             }
             else if ( fromType.getKind().equals("int")){
-                /*System.out.println("from int");
-                System.out.println("aka1: "+aka1);*/
                 if (aka1.equals("")) {
                     fromType.setAs(toTypeName);                    
                 }
@@ -311,8 +299,6 @@ public class ErrorPatcher {
             if (fromTypeName.contains("*") && toTypeName.contains("*")) {
                 fromTypeName = fromTypeName.replace("*", "");
             }
-            /*System.out.println("to type != null");
-            System.out.println("aka2: "+aka2);*/
             if (aka2.equals("")) {
                 toType.setAs(fromTypeName);                    
             }
@@ -324,10 +310,6 @@ public class ErrorPatcher {
             if (fromTypeName.contains("*") && toTypeName.contains("*")) {
                 toTypeName = toTypeName.replace("*", "");
             }
-           /* System.out.println("totype == null");
-            System.out.println("aka1: "+aka1);
-            System.out.println("totypeName: "+toTypeName);
-            System.out.println("fromtypeName: "+fromTypeName);*/
             if (aka1.equals("")) {
                 fromType.setAs(toTypeName);                 
             }
@@ -367,7 +349,6 @@ public class ErrorPatcher {
         ArrayList<String> args = TUPatcherUtils.getArguments(location);
         TypeInfo type = patchData.getType(typeName);
         for (String arg : args) {
-                System.out.println("arg: "+arg);
             if (patchData.getType(arg)==null && patchData.getVariable(arg)==null && patchData.getFunction(arg)==null) {
                 patchData.addVariable(arg);
             }
@@ -415,6 +396,89 @@ public class ErrorPatcher {
         String typeName2 = TUPatcherUtils.extractFromSingleQuotes(message).get(0);
         patchData.getType(typeName).setAs(typeName2+" &");
         patchData.getType(typeName2).setAsClass();
+        
+    }
+    public static void invalidOperandsToBinaryExpression(TUErrorData data, PatchData patchData) {
+        String source = data.get(TUErrorData.MAP).get("source");
+        String operator = TUPatcherUtils.extractOperator(source);
+        String typeName = data.get(TUErrorData.MAP).get("qualtype");
+        if (typeName.contains("class ")) {
+            TypeInfo type = patchData.getType(TUPatcherUtils.getTypeName(typeName));
+            type.addOperator(operator);            
+        }
+        else {
+            TypeInfo type = patchData.getType(TUPatcherUtils.getTypeName(typeName));
+            type.setAsClass();
+            type.addOperator(operator);
+        }
+    }
+    public static void noViableOverloaded(TUErrorData data, PatchData patchData) {
+        String operator = data.get(TUErrorData.MAP).get("string");
+        //the error message does not indicate which class needs the operator, so I am adding it to all of them
+        for (TypeInfo type : patchData.getTypes().values()) {
+            if (type.getKind().equals("class")) {
+                type.addOperator(operator);
+            }
+        }
+    }
+    public static void isNotArrayPointerOrVector(TUErrorData data, PatchData patchData) {
+        String location = data.get(TUErrorData.MAP).get("location");
+        String variableName = TUPatcherUtils.getTokenBeforeLocation(location);
+        variableName = TUPatcherUtils.removeBracketsFromType(variableName).replace("*","");
+        TypeInfo type = patchData.getVariable(variableName);
+        if (type != null) {
+            TypeInfo type2 = new TypeInfo();
+            patchData.addType(type2);
+            type.setAs(type2.getName()+" *");
+        }
+        else {
+            TypeInfo fieldType = null;
+            for (TypeInfo type2 : patchData.getTypes().values()) {
+                for (String fieldName : type2.getFields().keySet()) {
+                    if (fieldName.equals(variableName)) {
+                        fieldType = type2.getFields().get(fieldName);
+                        break;
+                    }
+                }
+            }
+            if (fieldType != null) {
+                TypeInfo type3 = new TypeInfo();
+                patchData.addType(type3);
+                fieldType.setAs(type3.getName()+" *");
+            }
+            else {
+                throw new RuntimeException("Variable is not pointer array or vector. Cannot identify type of the variable");
+            }
+        }
+    }
+    public static void noTypeNamedIn(TUErrorData data, PatchData patchData) {
+        String typeName = data.get(TUErrorData.MAP).get("identifier_name");
+        String message = data.get(TUErrorData.MAP).get("message");
+        String className = TUPatcherUtils.getTypesFromMessage(message).get(1);
+        TypeInfo classInfo = patchData.getType(className);
+        classInfo.addNestedType(typeName, patchData);
+    }
+
+    public static void functionIsNotMarkedConst(TUErrorData data, PatchData patchData) {
+        String message = data.get(TUErrorData.MAP).get("message");
+        String functionName = TUPatcherUtils.extractFromSingleQuotes(message).get(1);
+        FunctionInfo function = patchData.getFunction(functionName);
+        if (function == null) {
+            for (TypeInfo type : patchData.getTypes().values()) {
+                function = type.getFunctions().get(functionName);
+                if (function!=null) {
+                    break;
+                }
+            }
+        }
+        TypeInfo returnType = function.getReturnType();
+        returnType.setAs("const " + returnType.getKind().replace("const ", ""));
+        function.setConst();
+    }
+    public static void caseValueIsNotConst(TUErrorData data, PatchData patchData) {
+        String varName = data.get(TUErrorData.MAP).get("source").replace(":", "");
+        patchData.removeVariable(varName);
+        patchData.addConstVariable(varName);
         
     }
 }

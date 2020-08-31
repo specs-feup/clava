@@ -44,18 +44,18 @@ public class TUPatcherLauncher {
         else {
             data.add(patchOneFile(args[0]));
         }
-        
+        /*
         for (PatchData d : data) {
             if (d.getErrors().size() > 0)
             System.out.println(d.getErrors().get(d.getErrors().size()-1));            
-        }
+        }*/
     }
     
     public static ArrayList<PatchData> patchDirectory(File dir) {
         String path = dir.getAbsolutePath();
         String[] fileNames = dir.list(); 
         int numErrors = 0, numSuccess = 0;
-        int maxNumFiles = 30, n=0;
+        int maxNumFiles = 200, n=0;
         List<String> fileNamesList = Arrays.asList(fileNames);
         Collections.shuffle(fileNamesList);
         ArrayList<String> errorMessages = new ArrayList<>();
@@ -103,9 +103,9 @@ public class TUPatcherLauncher {
         System.out.println("Number of cpp files: " + (numSuccess + numErrors));
         System.out.println("Number of errors: " + numErrors);
         System.out.println("Number of successful patches: " + numSuccess);
-        for (String message : errorMessages) {
+        /*for (String message : errorMessages) {
             System.out.println(message);
-        }
+        }*/
         
         return patchesData;
 
@@ -131,7 +131,7 @@ public class TUPatcherLauncher {
         command2.add("output/file.cpp");
         command2.add("--");
         int n = 0;
-        int maxIterations = 201;
+        int maxIterations = 100;
         while (!output.getStdErr().get(TUErrorsData.ERRORS).isEmpty() && n < maxIterations) {
             output = SpecsSystem.runProcess(command2, TUPatcherLauncher::outputProcessor,
                     inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
@@ -139,22 +139,25 @@ public class TUPatcherLauncher {
             n++;
             if (n >= maxIterations) {
                 System.out.println();
-                for (ErrorKind error : patchData.getErrors()) {
+                /*for (ErrorKind error : patchData.getErrors()) {
                     System.out.println(error);
-                }
+                }*/
+                System.out.println("Program status: " + output.getReturnValue());
+                System.out.println("Std out result: " + output.getStdOut());
+                System.out.println("Std err result: " + output.getStdErr());
                 throw new RuntimeException("Maximum number of iterations exceeded. Could not solve errors");
             }
-            System.out.print('.');
+           // System.out.print('.');
         }
         System.out.println();
         System.out.println("Program status: " + output.getReturnValue());
-        //System.out.println("Std out result: " + output.getStdOut());
+        System.out.println("Std out result: " + output.getStdOut());
         System.out.println("Std err result: " + output.getStdErr());
         
-        System.out.println("Errors found: ");
+       /* System.out.println("Errors found: ");
         for (ErrorKind error : patchData.getErrors()) {
             System.out.println(error);
-        }
+        }*/
         return patchData;
         
     }
@@ -188,18 +191,17 @@ public class TUPatcherLauncher {
             File dumpFile = null;
 
             // Parse input stream
-            String linesNotParsed = lineStreamParser.parse(stream, dumpFile);
+            //String linesNotParsed = 
+            lineStreamParser.parse(stream, dumpFile);
 
             var data = lineStreamParser.getData();
 
-           // System.out.println("[TEST] lines not parsed:\n" + linesNotParsed);
+            //System.out.println("[TEST] lines not parsed:\n" + linesNotParsed);
 
             //System.out.println("[TEST] Collected data:\n" + data);
 
             new ErrorPatcher(patchData).patch(data);
-            // ErrorPatcher.patch(data);
 
-            // Return data
             return data;
         } catch (Exception e) {
             e.printStackTrace();

@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import pt.up.fe.specs.tupatcher.parser.TUErrorData;
 import pt.up.fe.specs.util.SpecsIo;
 
 /**
@@ -29,21 +28,47 @@ import pt.up.fe.specs.util.SpecsIo;
  *
  */
 public class TUPatcherUtils {
-    
+    interface CharFunction {
+        boolean run(char ch);
+    }
+    static class StringInt {
+        public String str;
+        public int number;
+    }
+    static CharFunction isTokenChar = (char ch)->{ return Character.isLetterOrDigit(ch) || ch =='_'; };
+    static CharFunction isNotTokenChar = (char ch)->{ return !isTokenChar.run(ch); };
 
+    /**
+     * List of primitive types in c/c++
+     */
     static final List<String> primitiveTypes = Arrays.asList("int", "char", "bool", "void", "long", "unsigned", "struct", "class");
+
+    /**
+     * List of operators used in c/c++
+     */
+    static List<String> operators;
+    static {
+        String[] temp = { "+", "-", "*", "/", "%", "^", "&", "|", "~", "!", 
+                            "=", "<", ">", "+=", "-=", "*=", "/=", "%=", 
+                            "^=", "&=", "|=", "<<", ">>", ">>=", "<<=",
+                            "==", "!=", "<=", ">=", "<=>", "&&", "||", 
+                            "++", "--", "->*", "->"};
+        operators = Arrays.asList(temp);
+    }
+    
     
     static List<String> getPrimitiveTypes(){
         return primitiveTypes;
     }
     
     public static int nthIndexOf(String str, char ch, int n) {
-        int result = 0;
+        int result = -1;
         for (int i=0; i < n; i++) {
             result = str.indexOf(ch, result+1);
         }
         return result;
     }    
+
     public static int nthIndexOf(String str, String substr, int n) {
         int result = 0;
         for (int i=0; i < n; i++) {
@@ -67,243 +92,161 @@ public class TUPatcherUtils {
         int index1 = location.lastIndexOf(':', index2-1);
         return location.substring(0,index1);
     }
+    
+    /**
+     * For a given location in the source code find the index of the character in this location
+     */
     public static int locationIndex(String location, String source) {
         int column = locationColumn(location);
         int line = locationLine(location);
         return nthIndexOf(source, '\n', line-1) + column - 1;
     }
     
-    public static String getTokenFromLocation(String location) {
-        String filepath = locationFilepath(location); 
-        String source = SpecsIo.read(filepath);
-        int n = locationIndex(location, source);
-        char ch = source.charAt(n);
+
+
+    /**
+     * Read source code while the condition is true
+     * <p>
+     *  
+     * @return  String with the code read and int indicating position in source where it stopped reading.   
+     *
+     */
+    public static StringInt readWhile(String source, int startIndex, CharFunction condition, boolean forward) {
+        int n = startIndex;
         String token = "";
-        while (!(Character.isLetterOrDigit(ch) || ch=='_')) {
-            n++;
-            if (n > source.length()) return token;
-            ch = source.charAt(n);
-        }
-        while (Character.isLetterOrDigit(ch) || ch=='_')  {
+        char ch = source.charAt(n);
+        while (condition.run(ch)) {
             token += ch;
-            n++;
-            ch = source.charAt(n);
-        }
-        return token;
-        
-    }
-    public static String getTokenBeforeLocation(String location) {
-        String filepath = locationFilepath(location); 
-        String source = SpecsIo.read(filepath);
-        int n = locationIndex(location, source);
-        char ch = source.charAt(n);
-        String token = "";
-        while (!(Character.isLetterOrDigit(ch) || ch=='_')) {
-            n--;
-            if (n > source.length()) return token;
-            ch = source.charAt(n);
-        }
-        while (Character.isLetterOrDigit(ch) || ch=='_') {
-            n--;
-            if (n > source.length()) return token;
-            ch = source.charAt(n);
-        }
-        n++;
-        ch = source.charAt(n);
-        while (Character.isLetterOrDigit(ch) || ch=='_')  {
-            token += ch;
-            n++;
-            ch = source.charAt(n);
-        }
-        return token;
-        
-    }
-    
-    public static boolean isFunctionCall(String location) {
-        String filepath = locationFilepath(location); 
-        String source = SpecsIo.read(filepath);
-        int n = locationIndex(location, source);
-        char ch = source.charAt(n);
-        String token = "";
-        while (!(Character.isLetterOrDigit(ch) || ch=='_')) {
-            n++;
-            if (n > source.length()) return false;
-            ch = source.charAt(n);
-        }
-        while (Character.isLetterOrDigit(ch) || ch=='_') {
-            token += ch;
-            n++;
-            ch = source.charAt(n);
-            if (ch == ':') {
-                token = "";
-                if (source.charAt(n+1)==':') {
-                    n+=2;
-                    ch = source.charAt(n);
-                }
-                else {
-                    return false;
-                }
-            }
-            if (ch == '[') {
-                for (; ch != ']'; n++) {
-                    ch = source.charAt(n);                    
-                }
-            }
-            if (ch == ' ') {
-                for (; ch == ' '; n++) {
-                    ch = source.charAt(n);                    
-                }
-            }
-            if (ch == '(') return true;
-        }
-        
-        return false;
-    }
-    
-    public static int getNumArguments(String location) {
-        
-        String filepath = locationFilepath(location); 
-        String source = SpecsIo.read(filepath);
-        int n = locationIndex(location, source);
-        char ch = source.charAt(n);
-        int counter = 0;
-        while (ch!='(') {
-            n--;
-            if (n < 0) return -1;
-            ch = source.charAt(n);
-        }
-        n++;
-        ch = source.charAt(n);
-        if (ch==')') return 0;
-        counter++;
-        while (ch !=')') {
-            n++;
-            ch = source.charAt(n);
-            if (ch == ',') {
-                counter++;
-            }
-        }
-        return counter;
-        
-    }
-    
-    public static ArrayList<String> getArguments(String location) {
-        ArrayList<String> result = new ArrayList<>();
-        String filepath = locationFilepath(location); 
-        String source = SpecsIo.read(filepath);
-        int n = locationIndex(location, source);
-        char ch = source.charAt(n);
-        int counter = 0;
-        while (ch != '(') {
-            n--;
-            if (n < 0) return null;
-            ch = source.charAt(n);
-        }
-        n++;
-        ch = source.charAt(n);
-        if (ch==')') return result;
-        counter++;
-        String token = "";
-        while (ch !=')') {
-            n++;
-            ch = source.charAt(n);
-            if (!(Character.isLetterOrDigit(ch) || ch=='_')) {
-                //System.out.println("token: "+token);
-                result.add(token);
-                token = new String();
+            if (forward) {
+                n++;
             }
             else {
-                token += ch;
+                if (ch == ']') {
+                    while (ch!='[') {
+                        n--;
+                        ch = source.charAt(n);
+                    }
+                }
+                n--;
             }
+            if (n > source.length() || n < 0) break;
+            ch = source.charAt(n);
         }
+        StringInt result = new StringInt();
+        result.str = token;
+        result.number = n;
         return result;
+    }
+
+    /**
+     * Get the token in a given location of source code.
+     */
+    public static String getTokenFromLocation(String location) {
+        String filepath = locationFilepath(location); 
+        String source = removeComments(SpecsIo.read(filepath));
+        StringInt result;
+        int n = locationIndex(location, source);
+        result = readWhile(source, n, isNotTokenChar, true);
+        result = readWhile(source, result.number, isTokenChar, true);
+        return result.str;
         
     }
+    /**
+     * Same as the function getTokenFromLocation, but assuming that the location indicates some character after the beginning of the token.
+     */
+    public static String getTokenBeforeLocation(String location) {
+        String filepath = locationFilepath(location); 
+        String source = removeComments(SpecsIo.read(filepath));
+        int n = locationIndex(location, source);
+        StringInt result = readWhile(source, n, isNotTokenChar, false);
+        result = readWhile(source, result.number, isTokenChar, false);
+        result = readWhile(source, result.number+1, isTokenChar, true);
+        return result.str;
+        
+    }
+
+    /**
+     * Check if there is a function call in the given location. 
+     */
+    public static boolean isFunctionCall(String location) {
+        String filepath = locationFilepath(location); 
+        String source = removeComments(SpecsIo.read(filepath));
+        int n = locationIndex(location, source);
+        StringInt result = readWhile(source, n, isNotTokenChar, true);
+        result = readWhile(source, result.number, (char ch)->{return (Character.isLetterOrDigit(ch) || ch=='_' || ch == ' ' || ch == ':');}, true);
+        char ch = source.charAt(result.number);
+        if (ch == '(') {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
+     * Get number of arguments in a function call.
+     */
+    public static int getNumArguments(String location) {
+        String filepath = locationFilepath(location); 
+        String source = removeComments(SpecsIo.read(filepath));
+        int n = locationIndex(location, source);
+        StringInt si = readWhile(source, n, (char c)->{return c != '(';}, false);
+        si = readWhile(source, si.number, (char c)->{return c != ')';}, true);
+        int numArgs = si.str.split(",").length;
+        return numArgs;
+    }
+
+    /**
+     * Get names of variables used as arguments in a function call.
+     */
+    public static ArrayList<String> getArguments(String location) {
+        String filepath = locationFilepath(location); 
+        String source = removeComments(SpecsIo.read(filepath));
+        int n = locationIndex(location, source);
+        StringInt si = readWhile(source, n, (char c)->{return c != '(';}, false);
+        si = readWhile(source, si.number, (char c)->{return c != ')';}, true);
+        ArrayList<String> result = new ArrayList<String>(Arrays.asList(si.str.replace("(", "").replace(" ", "").split(",")));
+        return result;
+    }
     
-    
+    /**
+     * Find the type name in a variable declaration.
+     */
     public static String getTypeFromDeclaration(String location) {
-        //esta função não funciona em todos os casos
         String filepath = locationFilepath(location); 
-        String source = SpecsIo.read(filepath);
+        String source = removeComments(SpecsIo.read(filepath));
         int n = locationIndex(location, source);
-        char ch = source.charAt(n);
-        String token = "";
-        while (!(ch==';' || ch=='{')) {
-            n--;
-            if (n < 0) return null;
-            ch = source.charAt(n);
-            if (ch == '/' && source.charAt(n-1)=='*') {
-                break;
-            }
-        }
-        while (!(Character.isLetterOrDigit(ch) || ch=='_')) {
-            n++;
-            if (n > source.length()) return null;
-            ch = source.charAt(n);
-        }
-        while (Character.isLetterOrDigit(ch) || ch=='_') {            
-            token += ch;
-            n++;
-            ch = source.charAt(n);
-        }
-        return token;
-    }    
+        StringInt si = readWhile(source, n, (char c)->{return !(c==';' || c=='{');}, false);
+        si = readWhile(source, si.number, isNotTokenChar, true);
+        si = readWhile(source, si.number, isTokenChar, true);
+        return si.str;
+    }
+
+    /**
+     * Find the struct name when a variable is declared in the following format (or something similar):
+     * struct foo bar = {0, 1, 2};
+     * This function only works if the initialization uses curly brackets.
+     */
     public static String getTypeFromStructDeclaration(String location) {
-        //esta função não funciona em todos os casos
         String filepath = locationFilepath(location); 
-        String source = SpecsIo.read(filepath);
+        String source = removeComments(SpecsIo.read(filepath));
         int n = locationIndex(location, source);
-        char ch = source.charAt(n);
-        String token = "";
-        while (!(ch=='{')) {
-            n--;
-            if (n < 0) return null;
-            ch = source.charAt(n);
-            if (ch == '/' && source.charAt(n-1)=='*') {
-                n+=2;
-                ch = source.charAt(n);
-                break;
-            }
+        StringInt si = readWhile(source, n, (char c)->{return c!='}';}, true);
+        si = readWhile(source, si.number-1, (char c)->{return c!='{';}, false);
+        si = readWhile(source, si.number-1, (char c)->{return !(c==';' || c=='{');}, false);
+        si = readWhile(source, si.number+1, isNotTokenChar, true);
+        si = readWhile(source, si.number, isTokenChar, true);
+        if (si.str.equals("struct")) {
+            si = readWhile(source, si.number, isNotTokenChar, true);
+            si = readWhile(source, si.number, isTokenChar, true);
         }
-        n--;
-        ch = source.charAt(n);
-        while (!(ch==';' || ch=='{')) {
-            n--;
-            if (n < 0) return null;
-            ch = source.charAt(n);
-            //System.out.println(ch);
-            if (ch == '/' && source.charAt(n-1)=='*') {
-                n++;
-                ch = source.charAt(n);
-                break;
-            }
-        }
-        while (!(Character.isLetterOrDigit(ch) || ch=='_')) {
-            n++;
-            if (n > source.length()) return null;
-            ch = source.charAt(n);
-            //System.out.println(ch);
-        }
-        while (Character.isLetterOrDigit(ch) || ch=='_') {            
-            token += ch;
-            n++;
-            ch = source.charAt(n);
-            //System.out.println(ch);
-        }
-        if (token.equals("struct")) {
-            token = "";
-            n++;
-            ch = source.charAt(n);
-            while (Character.isLetterOrDigit(ch) || ch=='_') {            
-                token += ch;
-                n++;
-                ch = source.charAt(n);
-            }
-        }
-        return token;
+        return si.str;
     }    
     
-    
+
+    /**
+     * Extract substrings between parenthesis from error messages 
+     */
     public static ArrayList<String> extractFromParenthesis(String message) {
         ArrayList<String> result = new ArrayList<String>();
         int index1 = nthIndexOf(message, '(', 1);
@@ -317,9 +260,13 @@ public class TUPatcherUtils {
         }
         return result;
     }
-    
+
+    /**
+     * Extract substrings between single quotes from error messages 
+     */
     public static ArrayList<String> extractFromSingleQuotes(String message) {
         ArrayList<String> result = new ArrayList<String>();
+        message = " "+message;
         int index1 = nthIndexOf(message, '\'', 1);
         int index2 = nthIndexOf(message, '\'', 2);
         int n=0;
@@ -331,7 +278,12 @@ public class TUPatcherUtils {
         }
         return result;
     }
-    
+
+    /**
+     * Extract "aka" from error messages (if there is any)
+     * Example:  "member reference base type 'TYPE_PATCH_1872' (aka 'int') is not a structure or union" -> "int"
+     * When no "aka" is found for the type, it returns an empty string. The result is always an ArrayList with 2 strings.
+     */
     public static ArrayList<String> getTypesFromMessage(String message) {
         ArrayList<String> types = extractFromSingleQuotes(message);
         if (message.contains("did you mean")) {
@@ -365,9 +317,14 @@ public class TUPatcherUtils {
         result.add(fromTypeName);
         return result;
     }
+    
+    /**
+     * Extract "aka" from error messages (if there is any)
+     * Example:  "member reference base type 'TYPE_PATCH_1872' (aka 'int') is not a structure or union" -> "int"
+     * When no "aka" is found for the type, it returns an empty string. The result is always an ArrayList with size=2
+     */
     public static ArrayList<String> getAkaFromMessage(String message) {
         ArrayList<String> result = new ArrayList<>();
-        ArrayList<String> types = extractFromSingleQuotes(message);
         int indexAka1 = message.indexOf("aka");
         int indexAka2 = message.indexOf("aka", indexAka1+1);
         if (indexAka1 < 0) {
@@ -399,7 +356,11 @@ public class TUPatcherUtils {
         }
     }
     
-    
+
+    /**
+     * remove brackets and substitute with *
+     * Example: char[3] -> char*
+     */
     public static String removeBracketsFromType(String typeName) {
         if (typeName.contains("[")) {
             String fix = typeName.substring(0, typeName.indexOf('['));
@@ -410,7 +371,164 @@ public class TUPatcherUtils {
     }
     
 
+    /**
+     * Takes as argument a type with qualifiers and returns the type name without the qualifiers.
+     * Example: 
+     * const foo *  ->  foo 
+     */
     public static String getTypeName(String qualtype) {
-        return removeBracketsFromType(qualtype).replace("struct ", "").replace("class ", "").replace("*", "").replace("&","").replace(" ","");
+        return removeBracketsFromType(qualtype).replace("struct ", "").replace("class ", "").replace("*", "").replace("&","").replace("const ", "").replace("static ", "").replace(" ","").replace("(void)","").replace("()","");
     }
+
+    /**
+     * Takes as argument a fragment of source code and detects which operator is found in the first characters.
+     */
+    public static String extractOperator(String source) {
+        if (operators.contains(source.substring(0,3))) {
+            return source.substring(0,3);
+        }
+        else if (operators.contains(source.substring(0,2))) {
+            return source.substring(0,2);            
+        }
+        else if (operators.contains(source.substring(0,1))) {
+            return source.substring(0,1);            
+        }
+        else {
+            throw new RuntimeException("Could not identify operator");
+        }
+    }
+    
+
+    /**
+     * Identify if an arrow or dot is used after the identifier in the location.
+     */
+    public static boolean hasArrowOrDot(String location) {
+        String filepath = locationFilepath(location); 
+        String source = removeComments(SpecsIo.read(filepath));
+        int n = locationIndex(location, source);
+        char ch = source.charAt(n);
+        if (!(Character.isLetterOrDigit(ch)|| ch=='_')) {
+            n++;
+            ch = source.charAt(n);
+        }
+        StringInt si = readWhile(source, n, isTokenChar, true);
+        si.number++;
+        ch = source.charAt(si.number);
+        if (ch == '.' || (ch == '-' && source.charAt(n+1)=='>')) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
+     * Identify if the token in a given location in source code has an operator after it.
+     * This function is useful to identify if the identifier is the name of a variable.
+     * Example:  foo += bar;
+     */
+    public static boolean usingOperator(String location) {
+        String filepath = locationFilepath(location); 
+        String source = removeComments(SpecsIo.read(filepath));
+        int n = locationIndex(location, source);
+        char ch = source.charAt(n);
+        if (!(Character.isLetterOrDigit(ch)|| ch=='_')) {
+            n++;
+        }
+        StringInt si = readWhile(source, n, isTokenChar, true);
+        si = readWhile(source, si.number, (char c)->{return c==' ';}, true);
+        ch = source.charAt(si.number);
+        String op = String.valueOf(ch);
+        if (operators.contains(op) && ch != '*') {
+            return true;
+        }
+        else if (operators.contains(op+source.charAt(n+1))) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
+     * Identify if the token in a given location in source code is used to cast a variable.
+     * This function is useful to identify if the identifier is the name of a type (not a variable or function).
+     * Example:  x = (Foo *)y;
+     */
+    public static boolean isCast(String location) {
+        String filepath = locationFilepath(location); 
+        String source = removeComments(SpecsIo.read(filepath));
+        int n = locationIndex(location, source);
+        char ch = source.charAt(n);
+        if (!(Character.isLetterOrDigit(ch) || ch=='_' || ch==' '|| ch=='(')) {
+            return false;
+        }
+        StringInt result = readWhile(source, n, (char c)->{return c!='(';}, false);
+        if (result.str.contains(")")) {
+            return false;
+        }
+        result = readWhile(source, result.number+1, (char c)->{return c!=')';}, true);
+        result.str += source.charAt(result.number+1);
+        if (result.str.matches("^[a-zA-Z0-9&\s\\*]*$")) {
+            return true;
+        }
+        else {
+            return false;
+        }
+        
+    }
+    
+    
+    public static boolean isVariable(String location) {
+        if (hasArrowOrDot(location)) {
+            return true;
+        }
+        else if (usingOperator(location)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public static boolean isPrimitiveType(String type) {
+        return primitiveTypes.contains(getTypeName(type));
+    }
+    
+    public static String removeComments(String source) {
+        String[] lines = source.split("\n");
+        for (int i=0; i < lines.length; i++) {
+            if (lines[i].contains("//")) {
+                lines[i] = lines[i].substring(0, lines[i].indexOf("//"));
+            }
+        }
+        source = String.join("\n", lines);
+        String result = "";
+        for (int i=0; i < source.length(); i++) {
+            char ch = source.charAt(i);
+            if (ch=='/') {
+                i++;
+                result += ' ';
+                ch = source.charAt(i);
+                if (ch == '*') {
+                    i++;
+                    result += ' ';
+                    while(!(source.charAt(i)=='*' && source.charAt(i+1)=='/')) {
+                        i++;
+                        if(source.charAt(i)=='\n')
+                            result += '\n';
+                        else
+                            result+=' ';
+                    }
+                }
+                i++;
+                result += " ";
+            }
+            else {
+                result += ch;
+            }
+        }
+        return result;
+    }
+    
 }

@@ -31,12 +31,14 @@ public class PatchData {
     private final HashMap<String, TypeInfo> missingTypes;
     private final HashMap<String, FunctionInfo> missingFunctions;
     private final HashMap<String, TypeInfo> missingVariables;
+    private final HashMap<String, TypeInfo> missingConstVariables;
     private ArrayList<ErrorKind> errors; 
 
     public PatchData() {
         this.missingTypes = new HashMap<String, TypeInfo>();
         this.missingFunctions = new HashMap<String, FunctionInfo>();
         this.missingVariables = new HashMap<String, TypeInfo>();
+        this.missingConstVariables = new HashMap<String, TypeInfo>();
         this.errors = new ArrayList<ErrorKind>(); 
     }
     
@@ -50,10 +52,18 @@ public class PatchData {
 
     public void addType(String typeName) {
         if (typeName != null) {
-            missingTypes.put(typeName, new TypeInfo(typeName));
+            if (typeName.contains("::")) {
+                return;
+            }
+            else {
+                missingTypes.put(typeName, new TypeInfo(typeName));
+            }
         }
     }
     public void addType(TypeInfo type) {
+        if (type.getName().contains("::")) {
+            return;
+        }
         missingTypes.put(type.getName(), type);
     }
 
@@ -64,6 +74,13 @@ public class PatchData {
             missingTypes.put(type.getName(), type);
         }
     }    
+    public void addConstVariable(String varName) {
+        if (varName != null) {
+            TypeInfo type = new TypeInfo();
+            missingConstVariables.put(varName, type);
+            missingTypes.put(type.getName(), type);
+        }
+    }
     public TypeInfo getVariable(String varName) {
         return missingVariables.get(varName);
     }
@@ -80,12 +97,29 @@ public class PatchData {
         missingVariables.remove(varName);
     }
     public TypeInfo getType(String typeName) {
-        return missingTypes.get(typeName);
+        typeName = typeName.replace("class ", "").replace("struct ", "");
+        if (typeName.contains("::")) {
+            String[] classNames = typeName.split("::");
+            TypeInfo type = missingTypes.get(classNames[0]);
+            for (int i = 1; i < classNames.length; i++) {
+                String className = classNames[i];
+                System.out.println("className");
+                System.out.println(className);
+                type = type.getNestedType(className);
+            }
+            return type;
+        }
+        else {
+            return missingTypes.get(typeName);
+        }
     }
 
      public void setType(String typeName, TypeInfo type) {
          //missingTypes.remove(typeName);
          missingTypes.put(typeName, type);
+     }
+     public HashMap<String, TypeInfo> getTypes(){
+         return missingTypes;
      }
 
     public void copySource(String filepath) {
@@ -101,11 +135,20 @@ public class PatchData {
             String type = missingVariables.get(varName).getName();
             result += type + " " + varName + ";\n";
         }
+        for (String varName : missingConstVariables.keySet()) {
+            TypeInfo type = missingConstVariables.get(varName);
+            String typeName = type.getName();
+            result += "const "+ typeName + " " + varName;
+            if (TUPatcherUtils.isPrimitiveType(type.getKind())){
+                result += " = 0;\n";
+            }
+            else {
+                result += " = " + typeName + "();\n";
+            }
+        }
         return result;
     }
-    
 
-    
     public String functionPatches(HashMap<String, FunctionInfo> functions) {
         String result = "";
         for (String functionName : functions.keySet()) {
@@ -115,8 +158,11 @@ public class PatchData {
         return result;
     }
 
+    /**
+     * Return a string with the content to write to the file patch.h 
+     */
     public String str() {
-        String result = "";
+        String result = "#define NULL 0\n";
         for (TypeInfo type : missingTypes.values()) {
             if (type.getKind().equals("class")) {
                 result += "class " + type.getName() + ";\n"; 
@@ -127,9 +173,6 @@ public class PatchData {
                 }
             }
         }
-   /*     result += typePatches();
-        result += variablesPatches();
-        result += functionPatches(missingFunctions);*/
         
         ArrayList<Definition> defs = orderedDefinitions();
         for (Definition def : defs) {
@@ -139,20 +182,29 @@ public class PatchData {
         
         return result;
     }
-        
+
+    /**
+     * Writes in the files patch.h and file.cpp in the output directory.
+     */
     public void write(String filepath) {
         File patchFile = new File("output/patch.h");
         SpecsIo.write(patchFile, str());
         copySource(filepath);
-
     }
     
+    /**
+     * Topological sorting of a graph of dependencies between types and functions.
+     * <p>
+     * When there is cyclic dependency between two or more types or functions, this function returns a list with only partially ordered.
+     * When it happens this problem may be solved by the fact that all structs and classes are declared (but not defined) in the beginning of patch.h
+     */
     public ArrayList<Definition> orderedDefinitions(){
-        //topological sorting of a graph of dependencies between types and functions
         ArrayList<Definition> notSorted = new ArrayList<Definition>();
         ArrayList<Definition> result = new ArrayList<Definition>();
         for (TypeInfo type : missingTypes.values()) {
-            notSorted.add(type);       
+            if (!type.isNested()) {
+                notSorted.add(type);
+            }
         }        
         for (FunctionInfo function : missingFunctions.values()) {
             notSorted.add(function);
@@ -167,7 +219,7 @@ public class PatchData {
                         if (dependency.getName().equals(def2.getName())) {
                             contains = true;
                             break;
-                        }                            
+                        }
                     }
                     if (contains) {
                         ok = false;
@@ -183,12 +235,22 @@ public class PatchData {
             }
             if (cyclic) {
                 for (Definition def: notSorted) {
-                    if (!(((TypeInfo)def).getKind().equals("class") || ((TypeInfo)def).getKind().equals("struct"))) {
+                    if (def instanceof TypeInfo) {
+                        if (!(((TypeInfo)def).getKind().equals("class") || ((TypeInfo)def).getKind().equals("struct"))) {
+                            result.add(def);
+                        }
+                    }
+                    else {
                         result.add(def);
                     }
                 }
                 for (Definition def: notSorted) {
-                    if (((TypeInfo)def).getKind().equals("class") || ((TypeInfo)def).getKind().equals("struct")) {
+                    if (def instanceof TypeInfo) {
+                        if (((TypeInfo)def).getKind().equals("class") || ((TypeInfo)def).getKind().equals("struct")) {
+                            result.add(def);
+                        }
+                    }
+                    else {
                         result.add(def);
                     }
                 }

@@ -30,6 +30,7 @@ public class FunctionInfo implements Definition {
     ArrayList<Integer> numArgs;
     TypeInfo returnType;
     boolean isStatic = false;
+    boolean isConst = false;
     
     public FunctionInfo(String name, TypeInfo returnType) {
         this.name = name;
@@ -43,6 +44,12 @@ public class FunctionInfo implements Definition {
     }
     public boolean getStatic() {
         return isStatic;
+    }
+    public void setConst() {
+        isConst = true;
+    }
+    public boolean getConst() {
+        return isConst;
     }
 
     public void setReturnType(String typeName) {
@@ -106,11 +113,15 @@ public class FunctionInfo implements Definition {
         if (isStatic) {
             result += "static ";
         }
-        result += returnType.getName() + " " + name + "(...) { ";
+        result += returnType.getName() + " " + name + "(...) ";
+        if (isConst) {
+            result += "const ";
+        }
+        result += "{ ";
         if (returnType.getKind() == "struct" || returnType.getKind() == "class") {
             result += "return "+returnType.getName() + "()";
         }
-        else if (TUPatcherUtils.getPrimitiveTypes().contains(returnType.getKind().replace(" *", ""))) {
+        else if (TUPatcherUtils.isPrimitiveType(returnType.getKind())) {
             result += "return 0";
         }
         else {
@@ -119,7 +130,7 @@ public class FunctionInfo implements Definition {
                 result += " " + returnTypeName.replace("*", "") + " x = {};";
             }
             else {
-                result += " " + returnTypeName.replace("*", "") + " x = " + returnTypeName.replace("*", "") + "();";
+                result += " " + returnTypeName.replace("*", "") + " x = " + returnTypeName.replace("*", "").replace("const ", "") + "();";
                 
             }
             if (returnTypeName.contains("*")) {
@@ -130,26 +141,6 @@ public class FunctionInfo implements Definition {
             }
         }
         result += ";}\n";
-        /*using templates
-         for (Integer numArgs : this.numArgs) {   
-            if (numArgs > 0) {
-                result += template(numArgs);
-                result += returnType.getName() + " " + name;
-                result += arguments(numArgs);
-                result += " {";
-                if (returnType.getKind() == "int") {
-                    result += "return 0;";
-                }
-                result += "}\n";
-            }
-            else {
-                result += returnType.getName() + " " + name + "() {";
-                if (returnType.getKind() == "int") {
-                    result += "return 0;";
-                }
-                result += "}\n";
-            }
-        }*/
         return result;
         
     }
