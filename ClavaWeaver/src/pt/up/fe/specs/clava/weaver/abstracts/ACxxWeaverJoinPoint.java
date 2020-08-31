@@ -14,7 +14,6 @@ import org.lara.interpreter.profile.ReportField;
 import org.lara.interpreter.utils.DefMap;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.interf.SelectOp;
-import org.suikasoft.jOptions.DataStore.DataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 
@@ -37,7 +36,6 @@ import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxAttributes;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
-import pt.up.fe.specs.clava.weaver.CxxWeaverDataClass;
 import pt.up.fe.specs.clava.weaver.Insert;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
@@ -1107,25 +1105,18 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public Object getValueImpl(String key) {
+        var keys = getNode().getKeys();
+        if (!keys.hasKey(key)) {
+            ClavaLog.info("getValue(): key '" + key + "' not supported for join point '" + getJoinPointType() + "'");
+            return null;
+        }
+
         // Get key
-        DataKey<?> datakey = getNode().getKeys().getKey(key);
+        DataKey<?> datakey = keys.getKey(key);
 
-        Object value = getNode().get(datakey);
+        var value = getNode().get(datakey);
 
-        // Special cases
-
-        // If Clava node, convert to join point
-        if (value instanceof ClavaNode) {
-            value = CxxJoinpoints.create((ClavaNode) value);
-        }
-
-        // If DataClass, wrap around special version that converts nodes into join points
-        if (value instanceof DataClass) {
-            var dataClass = (DataClass<?>) value;
-            return new CxxWeaverDataClass(dataClass);
-        }
-
-        return value;
+        return CxxAttributes.adaptValue(value);
     }
 
     @Override

@@ -570,13 +570,42 @@ public abstract class AFunction extends ADeclarator {
     /**
      * Clones this function assigning it a new name, inserts the cloned function after the original function
      * @param newName 
+     * @param insert 
+     */
+    public AFunction cloneImpl(String newName, Boolean insert) {
+        throw new UnsupportedOperationException(get_class()+": Action clone not implemented ");
+    }
+
+    /**
+     * Clones this function assigning it a new name, inserts the cloned function after the original function
+     * @param newName 
+     * @param insert 
+     */
+    public final AFunction clone(String newName, Boolean insert) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "clone", this, Optional.empty(), newName, insert);
+        	}
+        	AFunction result = this.cloneImpl(newName, insert);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "clone", this, Optional.ofNullable(result), newName, insert);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "clone", e);
+        }
+    }
+
+    /**
+     * Overload which inserts the cloned function by default
+     * @param newName 
      */
     public AFunction cloneImpl(String newName) {
         throw new UnsupportedOperationException(get_class()+": Action clone not implemented ");
     }
 
     /**
-     * Clones this function assigning it a new name, inserts the cloned function after the original function
+     * Overload which inserts the cloned function by default
      * @param newName 
      */
     public final AFunction clone(String newName) {
@@ -1283,6 +1312,7 @@ public abstract class AFunction extends ADeclarator {
     @Override
     protected void fillWithActions(List<String> actions) {
         this.aDeclarator.fillWithActions(actions);
+        actions.add("function clone(String, Boolean)");
         actions.add("function clone(String)");
         actions.add("String cloneOnFile(String)");
         actions.add("String cloneOnFile(String, String)");

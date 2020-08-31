@@ -122,4 +122,38 @@ public class CXXRecordDecl extends RecordDecl {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Adds a method to a class. If the given method has a definition, creates an equivalent declaration and adds it to
+     * the class. In any case, the record of the method is changed to this class.
+     * 
+     * @param method
+     */
+    public void addMethod(CXXMethodDecl method) {
+
+        // Set record of method
+        method.set(CXXMethodDecl.RECORD, this);
+
+        var methodDeclaration = method;
+
+        // If method has a body, create a declaration based on this method
+        if (method.hasBody()) {
+            methodDeclaration = (CXXMethodDecl) method.deepCopy();
+            methodDeclaration.getBody().get().detach();
+        }
+
+        var methodSig = methodDeclaration.getSignature();
+
+        boolean hasDeclaration = getMethods().stream()
+                .map(CXXMethodDecl::getSignature)
+                .filter(signature -> signature.equals(methodSig))
+                .findFirst()
+                .isPresent();
+
+        if (!hasDeclaration) {
+            // Add method
+            addChild(methodDeclaration);
+        }
+
+    }
+
 }

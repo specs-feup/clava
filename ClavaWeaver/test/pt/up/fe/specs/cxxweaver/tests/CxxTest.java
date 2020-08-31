@@ -267,4 +267,16 @@ public class CxxTest {
     public void testFile() {
         newTester().test("File.lara", "file.cpp");
     }
+
+    @Test
+    public void testDataClass() {
+        newTester().test("DataClass.lara", "dataclass.cpp");
+    }
+
+    @Test
+    public void testClassManipulation() {
+        newTester()
+                .set(CxxWeaverOption.PARSE_INCLUDES)
+                .test("ClassManipulation.lara", "class_manipulation.cpp", "class_manipulation.h");
+    }
 }

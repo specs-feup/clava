@@ -13,9 +13,13 @@
 
 package pt.up.fe.specs.clava.weaver;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+
+import org.suikasoft.jOptions.DataStore.DataClass;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -72,22 +76,19 @@ public class CxxAttributes {
      */
     private static boolean isInsideHeader(ClavaNode node, Collection<Class<?>> headerClasses) {
 
-
-        
         // If node is a header or a CompoundStmt, return immediately
-        if(node instanceof CompoundStmt || isHeader(node, headerClasses)) {
+        if (node instanceof CompoundStmt || isHeader(node, headerClasses)) {
             return false;
         }
-        
+
         ClavaNode currentNode = node.getParent();
 
-        
         while (currentNode != null) {
             // If we find a CompoundStmt before the loop, is not in a loop header
             if (currentNode instanceof CompoundStmt) {
                 return false;
             }
-            
+
             ClavaNode nodeToTest = currentNode;
 
             boolean isHeader = isHeader(nodeToTest, headerClasses);
@@ -195,5 +196,41 @@ public class CxxAttributes {
         default:
             throw new RuntimeException("Case not defined:" + use);
         }
+    }
+
+    /**
+     * Adapts a given value to the LARA environemnt, e.g., converts ClavaNode instances into Join point instances.
+     * 
+     * @param value
+     * @return
+     */
+    public static Object adaptValue(Object value) {
+        // Special cases
+
+        // If Clava node, convert to join point
+        if (value instanceof ClavaNode) {
+            return CxxJoinpoints.create((ClavaNode) value);
+        }
+
+        // If DataClass, wrap around special version that converts nodes into join points
+        if (value instanceof DataClass) {
+            // System.out.println("ASDADASD");
+            var dataClass = (DataClass<?>) value;
+            return new CxxWeaverDataClass(dataClass);
+        }
+
+        // If a List, apply adapt over all elements of the list
+        if (value instanceof List) {
+            var valueList = (List<?>) value;
+            var newValue = new ArrayList<Object>(valueList.size());
+
+            for (var valueElement : valueList) {
+                newValue.add(adaptValue(valueElement));
+            }
+
+            return newValue;
+        }
+
+        return value;
     }
 }

@@ -39,4 +39,15 @@ public class CxxMethod extends AMethod {
         return (AClass) CxxJoinpoints.create(method.getRecordDecl());
     }
 
+    /*
+    @Override
+    public void defRecordImpl(AClass value) {
+        method.set(CXXMethodDecl.RECORD, (CXXRecordDecl) value.getNode());
+    }
+    
+    @Override
+    public void setRecordImpl(AClass classJp) {
+        defRecordImpl(classJp);
+    }
+    */
 }

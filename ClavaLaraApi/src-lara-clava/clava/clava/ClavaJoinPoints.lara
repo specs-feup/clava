@@ -379,3 +379,23 @@ ClavaJoinPoints.cStyleCast = function($type, $expr) {
 	
 	return AstFactory.cStyleCast($type, $expr);
 }
+
+/**
+ * Creates an empty class with the given name and fields.
+ *
+ * @param {String} className
+ * @param {...$field} [fields = []] 
+ *
+ * @return {class}
+ */
+ClavaJoinPoints.classDecl = function(className) {
+	Check.isString(className);
+	
+	var fields = arrayFromArgs(arguments, 1);
+	for(var $field of fields) {
+		Check.isJoinPoint($field, "field");	
+	}
+	
+	
+	return AstFactory.classDecl(className, fields);
+}

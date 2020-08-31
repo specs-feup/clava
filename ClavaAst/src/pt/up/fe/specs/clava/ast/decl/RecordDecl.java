@@ -239,6 +239,22 @@ public class RecordDecl extends TagDecl {
         return functions;
     }
 
+    public List<FunctionDecl> getFunctions() {
+        List<FunctionDecl> functions = new ArrayList<>();
+
+        for (Decl recordField : getRecordFields()) {
+            if (!(recordField instanceof FunctionDecl)) {
+                continue;
+            }
+
+            FunctionDecl functionDecl = (FunctionDecl) recordField;
+
+            functions.add(functionDecl);
+        }
+
+        return functions;
+    }
+
     @Override
     public String getDeclName() {
         // If anonymous, create name
@@ -249,4 +265,19 @@ public class RecordDecl extends TagDecl {
         return super.getDeclName();
     }
 
+    /*
+    public void addFunction(FunctionDecl node) {
+        // Check if kind supports function
+        var kind = getTagKind();
+        if (kind != TagKind.CLASS && kind != TagKind.STRUCT) {
+            throw new RuntimeException("Record of kind '" + kind + "' does not support functions");
+        }
+    
+        // Add function
+        addChild(node);
+    
+        // Set record of function
+    
+    }
+    */
 }

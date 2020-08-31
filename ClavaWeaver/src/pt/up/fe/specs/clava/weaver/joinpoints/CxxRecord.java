@@ -20,6 +20,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AField;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ARecord;
 
@@ -57,6 +58,13 @@ public class CxxRecord extends ARecord {
     @Override
     public String getKindImpl() {
         return recordDecl.getTagKind().getCode();
+    }
+
+    @Override
+    public AFunction[] getFunctionsArrayImpl() {
+        return recordDecl.getFunctions().stream()
+                .map(function -> (AFunction) CxxJoinpoints.create(function))
+                .toArray(size -> new AFunction[size]);
     }
 
 }

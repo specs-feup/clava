@@ -209,6 +209,7 @@
 		<attribute name="kind" type="String" />
 		<!-- <attribute name="name" type="{struct,interface,union,class,enum}"/> -->
 		<attribute name="fields" type="joinpoint[]" />
+		<attribute name="functions" type="function[]" />		
 	</artifact>
 	
 	<!-- CLASS -->
@@ -218,7 +219,12 @@
 	
 	<!-- METHOD -->
 	<artifact class="method" default="name">
-		<attribute name="record" type="class" />	
+			<attribute name="record" type="class"/>
+<!-- 
+		<attribute name="record" type="class">
+			<def/>
+		</attribute>	
+ -->
 	</artifact>
 
 

@@ -488,6 +488,16 @@ public abstract class AMethod extends AFunction {
     /**
      * Clones this function assigning it a new name, inserts the cloned function after the original function
      * @param newName 
+     * @param insert 
+     */
+    @Override
+    public AFunction cloneImpl(String newName, Boolean insert) {
+        return this.aFunction.cloneImpl(newName, insert);
+    }
+
+    /**
+     * Overload which inserts the cloned function by default
+     * @param newName 
      */
     @Override
     public AFunction cloneImpl(String newName) {

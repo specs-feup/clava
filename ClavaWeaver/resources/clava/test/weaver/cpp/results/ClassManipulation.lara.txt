@@ -1,0 +1,37 @@
+Test Copy Method Declaration
+CLASS: 
+class originalClass {
+   
+   
+   public:
+   void foo(int n);
+};
+
+NEW CLASS: 
+class newClass {
+   void new_foo(int n);
+};
+
+Test Copy Method Definition
+CLASS: 
+class originalClass2 {
+   
+   
+   public:
+   int foo2(int n);
+};
+
+METHOD: int originalClass2::foo2(int n) {
+   
+   return n + 10;
+}
+
+NEW CLASS: 
+class newClass2 {
+   int new_foo2(int n);
+};
+
+NEW METHOD: int newClass2::new_foo2(int n) {
+   
+   return n + 10;
+}

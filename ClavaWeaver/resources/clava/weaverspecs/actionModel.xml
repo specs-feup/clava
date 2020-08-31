@@ -220,6 +220,16 @@
 		<parameter name="name" type="string" />
 	</action>
  	-->
+ 	<!-- 
+ 	<action name="addFunction" class="record">
+		<parameter name="function" type="function" />
+	</action>
+ 	-->
+
+	<!-- CLASS -->
+	<action name="addMethod" class="class" tooltip="Adds a method to a class. If the given method has a definition, creates an equivalent declaration and adds it to the class, otherwise simply added the declaration to the class. In both cases, the declaration is only added to the class if there is no declaration already with the same signature.">
+		<parameter name="method" type="method" />
+	</action>
 
 	<!-- CALL -->
 	<!-- Changes the name of the call -->
@@ -292,6 +302,11 @@
 	<!-- FUNCTION -->
 	<action name="clone" class="function" return="function" tooltip="Clones this function assigning it a new name, inserts the cloned function after the original function">
 		<parameter name="newName" type="String" />
+		<parameter name="insert" type="Boolean" />		
+	</action>
+
+	<action name="clone" class="function" return="function" tooltip="Overload which inserts the cloned function by default">
+		<parameter name="newName" type="String" />
 	</action>
 
 	<action name="cloneOnFile" class="function" return="String" tooltip="Generates a clone of the provided function on a new file (with a weaver-generated name).">
@@ -345,6 +360,13 @@
 		<parameter name="index" type="Integer" />
 		<parameter name="newType" type="type" />
 	</action>	
+
+	<!-- METHOD -->
+	<!-- 
+	<action name="setRecord" class="method" tooltip="Sets the class of the method">
+		<parameter name="classJp" type="class" />
+	</action>
+	 -->	
 
 	<!-- NAMED DECL -->
 	<action name="setName" class="namedDecl" tooltip="Sets the name of this namedDecl">
