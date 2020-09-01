@@ -52,7 +52,7 @@ public class TUPatcherUtils {
      */
     static List<String> operators;
     static {
-        String[] temp = { "+", "-", "*", "/", "%", "^", "&", "|", "~", "!",
+        String[] temp = { "+", "-", "/", "%", "^", "|", "~", "!",
                 "=", "<", ">", "+=", "-=", "*=", "/=", "%=",
                 "^=", "&=", "|=", "<<", ">>", ">>=", "<<=",
                 "==", "!=", "<=", ">=", "<=>", "&&", "||",
@@ -78,6 +78,14 @@ public class TUPatcherUtils {
             result = str.indexOf(substr, result + 1);
         }
         return result;
+    }
+    public static int countChar(char ch, String str) {
+        int counter = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i)==ch)
+            counter++;
+        }
+        return counter;
     }
 
     public static int locationColumn(String location) {
@@ -116,6 +124,10 @@ public class TUPatcherUtils {
     public static StringInt readWhile(String source, int startIndex, CharFunction condition, boolean forward) {
         int n = startIndex;
         String token = "";
+        StringInt result = new StringInt();
+        if (n >= source.length() || n < 0) {
+            return result;
+        }
         char ch = source.charAt(n);
         while (condition.run(ch)) {
             token += ch;
@@ -130,11 +142,10 @@ public class TUPatcherUtils {
                 }
                 n--;
             }
-            if (n > source.length() || n < 0)
+            if (n >= source.length() || n < 0)
                 break;
             ch = source.charAt(n);
         }
-        StringInt result = new StringInt();
         result.str = token;
         result.number = n;
         return result;
@@ -478,9 +489,30 @@ public class TUPatcherUtils {
             return c != ')';
         }, true);
         result.str += source.charAt(result.number + 1);
+        System.out.println("________________result.str_________________");
+        System.out.println(result.str);
         if (result.str.matches("^[a-zA-Z0-9&\\s\\*]*$")) {
-            return true;
+            System.out.println("before if");
+            result = readWhile(source, n, isNotTokenChar, false);
+            System.out.println(result.str);
+            if (countChar('(', result.str) <= 1) {
+                System.out.println("after if");
+                result = readWhile(source, result.number, isTokenChar, false);
+                System.out.println(result.str);
+                result = readWhile(source, result.number+1, isTokenChar, true);
+                System.out.println(result.str);
+                if (result.str.equals("if") || result.str.equals("while")  || result.str.equals("switch")) {
+                    System.out.println("FALsE");
+                    return false;
+                }
+                else {
+                    System.out.println("TRUE");
+                    return true;
+                }
+            }
+            else return true;
         } else {
+            System.out.println("FALSE");
             return false;
         }
 

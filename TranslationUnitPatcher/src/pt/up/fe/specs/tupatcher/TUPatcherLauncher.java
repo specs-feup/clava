@@ -198,7 +198,7 @@ public class TUPatcherLauncher {
 
             //System.out.println("[TEST] lines not parsed:\n" + linesNotParsed);
 
-            //System.out.println("[TEST] Collected data:\n" + data);
+            System.out.println("[TEST] Collected data:\n" + data);
 
             new ErrorPatcher(patchData).patch(data);
 

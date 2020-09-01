@@ -32,7 +32,7 @@ public class PatchData {
     private final HashMap<String, FunctionInfo> missingFunctions;
     private final HashMap<String, TypeInfo> missingVariables;
     private final HashMap<String, TypeInfo> missingConstVariables;
-    private ArrayList<ErrorKind> errors; 
+    private ArrayList<ErrorKind> errors;
 
     public PatchData() {
         this.missingTypes = new HashMap<String, TypeInfo>();
@@ -135,16 +135,18 @@ public class PatchData {
             String type = missingVariables.get(varName).getName();
             result += type + " " + varName + ";\n";
         }
+        int i = 0;
         for (String varName : missingConstVariables.keySet()) {
             TypeInfo type = missingConstVariables.get(varName);
             String typeName = type.getName();
             result += "const "+ typeName + " " + varName;
             if (TUPatcherUtils.isPrimitiveType(type.getKind())){
-                result += " = 0;\n";
+                result += " = " + i + ";\n";
             }
             else {
                 result += " = " + typeName + "();\n";
             }
+            i++;
         }
         return result;
     }

@@ -1,3 +1,4 @@
+#include "patch.h"
 //rr
 void cassttt(){
 	i =	(K)s;
