@@ -52,7 +52,7 @@ public class TUPatcherUtils {
      */
     static List<String> operators;
     static {
-        String[] temp = { "+", "-", "/", "%", "^", "|", "~", "!",
+        String[] temp = { "+", "-", "*", "&", "/", "%", "^", "|", "~", "!",
                 "=", "<", ">", "+=", "-=", "*=", "/=", "%=",
                 "^=", "&=", "|=", "<<", ">>", ">>=", "<<=",
                 "==", "!=", "<=", ">=", "<=>", "&&", "||",
@@ -250,7 +250,9 @@ public class TUPatcherUtils {
     }
 
     /**
-     * Find the struct name when a variable is declared in the following format (or something similar): struct foo bar =
+     * Find struct name in a declaration
+     * <p>
+     * This function should be used when a variable is declared in the following format (or something similar): struct foo bar =
      * {0, 1, 2}; This function only works if the initialization uses curly brackets.
      */
     public static String getTypeFromStructDeclaration(String location) {
@@ -258,8 +260,11 @@ public class TUPatcherUtils {
         String source = removeComments(SpecsIo.read(filepath));
         int n = locationIndex(location, source);
         StringInt si = readWhile(source, n, (char c) -> {
-            return c != '}';
+            return c != '}' && c != ';';
         }, true);
+        if (source.charAt(si.number) == ';') {
+            return "";
+        }
         si = readWhile(source, si.number - 1, (char c) -> {
             return c != '{';
         }, false);
@@ -311,9 +316,7 @@ public class TUPatcherUtils {
     }
 
     /**
-     * Extract "aka" from error messages (if there is any) Example: "member reference base type 'TYPE_PATCH_1872' (aka
-     * 'int') is not a structure or union" -> "int" When no "aka" is found for the type, it returns an empty string. The
-     * result is always an ArrayList with 2 strings.
+     * Extract type names from error messages
      */
     public static ArrayList<String> getTypesFromMessage(String message) {
         ArrayList<String> types = extractFromSingleQuotes(message);
@@ -347,9 +350,10 @@ public class TUPatcherUtils {
     }
 
     /**
-     * Extract "aka" from error messages (if there is any) Example: "member reference base type 'TYPE_PATCH_1872' (aka
-     * 'int') is not a structure or union" -> "int" When no "aka" is found for the type, it returns an empty string. The
-     * result is always an ArrayList with size=2
+     * Extract "aka" from error messages (if there is any)
+     * <p>
+     * Example: "member reference base type 'TYPE_PATCH_1872' (aka 'int') is not a structure or union" -> "int" 
+     * When no "aka" is found for the type, it returns an empty string. The result is always an ArrayList with size=2.
      */
     public static ArrayList<String> getAkaFromMessage(String message) {
         ArrayList<String> result = new ArrayList<>();
@@ -394,8 +398,8 @@ public class TUPatcherUtils {
     }
 
     /**
-     * Takes as argument a type with qualifiers and returns the type name without the qualifiers. Example: const foo *
-     * -> foo
+     * Takes as argument a type with qualifiers and returns the type name without the qualifiers. 
+     * Example: const foo * -> foo
      */
     public static String getTypeName(String qualtype) {
         return removeBracketsFromType(qualtype).replace("struct ", "").replace("class ", "").replace("*", "")
@@ -441,8 +445,10 @@ public class TUPatcherUtils {
     }
 
     /**
-     * Identify if the token in a given location in source code has an operator after it. This function is useful to
-     * identify if the identifier is the name of a variable. Example: foo += bar;
+     * Identify if the token in a given location in source code has an operator after it. 
+     * <p>
+     * This function is useful to check if the identifier is the name of a variable. 
+     * Example: foo += bar;
      */
     public static boolean usingOperator(String location) {
         String filepath = locationFilepath(location);
@@ -458,7 +464,7 @@ public class TUPatcherUtils {
         }, true);
         ch = source.charAt(si.number);
         String op = String.valueOf(ch);
-        if (operators.contains(op) && ch != '*') {
+        if (operators.contains(op) && ch != '*' && ch != '&') {
             return true;
         } else if (operators.contains(op + source.charAt(n + 1))) {
             return true;
@@ -468,8 +474,9 @@ public class TUPatcherUtils {
     }
 
     /**
-     * Identify if the token in a given location in source code is used to cast a variable. This function is useful to
-     * identify if the identifier is the name of a type (not a variable or function). Example: x = (Foo *)y;
+     * Identify if the token in a given location in source code is used to cast a variable. 
+     * <p>
+     * This function is useful to check if the identifier is the name of a type (not a variable or function). Example: x = (Foo *)y;
      */
     public static boolean isCast(String location) {
         String filepath = locationFilepath(location);
@@ -488,36 +495,52 @@ public class TUPatcherUtils {
         result = readWhile(source, result.number + 1, (char c) -> {
             return c != ')';
         }, true);
-        result.str += source.charAt(result.number + 1);
-        System.out.println("________________result.str_________________");
-        System.out.println(result.str);
         if (result.str.matches("^[a-zA-Z0-9&\\s\\*]*$")) {
-            System.out.println("before if");
             result = readWhile(source, n, isNotTokenChar, false);
-            System.out.println(result.str);
             if (countChar('(', result.str) <= 1) {
-                System.out.println("after if");
                 result = readWhile(source, result.number, isTokenChar, false);
-                System.out.println(result.str);
                 result = readWhile(source, result.number+1, isTokenChar, true);
-                System.out.println(result.str);
                 if (result.str.equals("if") || result.str.equals("while")  || result.str.equals("switch")) {
-                    System.out.println("FALsE");
                     return false;
                 }
                 else {
-                    System.out.println("TRUE");
-                    return true;
+                    result = readWhile(source, n, isNotTokenChar, true);
+                    result = readWhile(source, result.number, isTokenChar, true);
+                    result = readWhile(source, result.number, (char c)->{
+                        return c != '{' && c != '}' && c != ';';                        
+                    }, true);
+                    if (result.str.matches("^[a-zA-Z0-9&()\\s\\*]*$") && result.str.matches(".*[a-zA-Z].*")) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
                 }
             }
-            else return true;
+            else {
+                result = readWhile(source, n, isNotTokenChar, true);
+                result = readWhile(source, result.number, isTokenChar, true);
+                result = readWhile(source, result.number, (char c)->{
+                    return c != '{' && c != '}' && c != ';';                        
+                }, true);
+                if (result.str.matches("^[a-zA-Z0-9&()\\s\\*]*$") && result.str.matches(".*[a-zA-Z].*")) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
         } else {
-            System.out.println("FALSE");
             return false;
         }
 
     }
 
+    /**
+     * Check if the identifier in the given location is a variable.
+     * @param location
+     * @return true if it is possible to assure that the identifier is a variable, false otherwise.
+     */
     public static boolean isVariable(String location) {
         if (hasArrowOrDot(location)) {
             return true;
@@ -532,6 +555,11 @@ public class TUPatcherUtils {
         return primitiveTypes.contains(getTypeName(type));
     }
 
+    /**
+     * Remove all line and block comments in source code.
+     * @param source
+     * @return
+     */
     public static String removeComments(String source) {
         String[] lines = source.split("\n");
         for (int i = 0; i < lines.length; i++) {

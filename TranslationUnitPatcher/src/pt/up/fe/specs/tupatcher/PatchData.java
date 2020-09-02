@@ -82,6 +82,17 @@ public class PatchData {
         }
     }
     public TypeInfo getVariable(String varName) {
+        if (varName.contains("::")) {
+            String[] classNames = varName.split("::");
+            TypeInfo type = missingTypes.get(classNames[0]);
+            for (int i = 1; i < classNames.length; i++) {
+                String className = classNames[i];
+                System.out.println("className");
+                System.out.println(className);
+                type = type.getNestedType(className);
+            }
+            return type;
+        }
         return missingVariables.get(varName);
     }
     public FunctionInfo getFunction(String functionName) {

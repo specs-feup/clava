@@ -1,83 +1,34 @@
 #include "patch.h"
-//rr
-void cassttt(){
-	i =	(K)s;
-	a = (A2)s;
-	b = B(t).k;
-	if ((eee)kkkk == (aaaa *) oooo){
-		b = (CC*)cccc;
-		b = ( KKEF & )cccc;
-	}
-	switch ( ( type0)var0){
-		case CASE_VAUE:
-			return;
-	}	
-	switch (effe) {
-		case CASE_VAUE:
-			return;
-	}
-}
+void LZe_fill_distance_prices( struct LZ_encoder * const encoder )
+  {
+  int dis, dis_state;
+  for( dis = start_dis_model; dis < modeled_distances; ++dis )
+    {
+    const int dis_slot = dis_slots[dis];
+    const int direct_bits = ( dis_slot >> 1 ) - 1;
+    const int base = ( 2 | ( dis_slot & 1 ) ) << direct_bits;
+    const int price =
+      price_symbol_reversed( encoder->bm_dis + base - dis_slot - 1,
+                             dis - base, direct_bits );
+    for( dis_state = 0; dis_state < max_dis_states; ++dis_state )
+      encoder->dis_prices[dis_state][dis] = price;
+    }
 
-void sttrructt(){
-	struct ooo omoo = {1,2,3};
-	struct ooo2 omoo2 = {1,2,3};
-	//e
-	/*ee*/
-	ooo3 omoo3 = {1,2,3};
-}
+  for( dis_state = 0; dis_state < max_dis_states; ++dis_state )
+    {
+    int * const dsp = encoder->dis_slot_prices[dis_state];
+    int * const dp = encoder->dis_prices[dis_state];
+    const Bit_model * const bmds = encoder->bm_dis_slot[dis_state];
+    int slot = 0;
+    for( ; slot < end_dis_model && slot < encoder->num_dis_slots; ++slot )
+      dsp[slot] = price_symbol( bmds, slot, dis_slot_bits );
+    for( ; slot < encoder->num_dis_slots; ++slot )
+      dsp[slot] = price_symbol( bmds, slot, dis_slot_bits ) +
+                  (((( slot >> 1 ) - 1 ) - dis_align_bits ) << price_shift_bits );
 
-void f() {
-	A &a = A::e();
-}
-void f2() {
-/*dependência cíclica*/
-	A &a = A::e();
-}
-
-/*void f3() {
-//dependência cíclica
-	A a = A();
-	B &b = a.create_b(); //no viable conversion
-	A &a2 = b.create_a();
-	a2.create_b();
-}*/
-
-bool f4() {
-	//tests with binary operators
-	Aww a = Aww();
-	Bww b = Bww();
-	a.f();
-	a += b;
-	a = a + b;
-	Dww d;
-	a = d.dd;
-	Cww c;
-	c += d;
-	return a == b;
-}
-
-A f5() {
-	vvvv = ee + 4;
-	return vvvv;
-}
-UJ f8(Aee ee){
-	switch (ee){
-		case EE1:
-			return 0;
-		case EE2:
-			return 0;
-		default:
-			return 1;
-	}
-}
-/*
-int f6()
-{
-	return m[0][0];
-}
-
-int f7(Matrix m)
-{
-	return m[0][0];
-}
-*/
+    for( dis = 0; dis < start_dis_model; ++dis )
+      dp[dis] = dsp[dis];
+    for( ; dis < modeled_distances; ++dis )
+      dp[dis] += dsp[dis_slots[dis]];
+    }
+  }

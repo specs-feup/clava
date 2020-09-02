@@ -212,6 +212,9 @@ public class ErrorPatcher {
         function.addNumArgs(numArgs);
     }
     
+    /**
+     * Increase number of fields in a struct to match the number of elements in the initializer.
+     */
     public static void excessElementsInInitializer(TUErrorData data, PatchData patchData) {
 
         //int sint = Integer.parseInt(data.get(TUErrorData.MAP).get("sint"));
@@ -245,7 +248,12 @@ public class ErrorPatcher {
        
         type.addConstructor(numArgs);*/
     }
-        
+
+    /**
+     * This function is used to solve many different errors. 
+     * <p>
+     * All these errors are caused by incompatibility between two types, meaning that one of them must be modified. 
+     */
     public static void incompatibleType(TUErrorData data, PatchData patchData) {
         
         String message = data.get(TUErrorData.MAP).get("message");
@@ -359,6 +367,9 @@ public class ErrorPatcher {
     
     }
 
+    /**
+     *  Transform the type into a class. 
+     */
     public static void notClassNamespaceOrEnumeration(TUErrorData data, PatchData patchData) {
         String typeName = data.get(TUErrorData.MAP).get("identifier_name");
         if (typeName == null) {
@@ -373,8 +384,10 @@ public class ErrorPatcher {
             type.setAsClass();
         }
     }
-    
-    
+
+    /**
+     *  Make a variable static. 
+     */
     public static void invalidUseOfNonStatic(TUErrorData data, PatchData patchData) {
         String message = data.get(TUErrorData.MAP).get("message");
         String source = data.get(TUErrorData.MAP).get("source");
@@ -383,6 +396,10 @@ public class ErrorPatcher {
         TypeInfo type = patchData.getType(className);
         type.setStatic(identifier);
     }
+
+    /**
+     *  Make a function static. 
+     */
     public static void nonStaticMemberFunction(TUErrorData data, PatchData patchData) {
         String location = data.get(TUErrorData.MAP).get("location");
         String functionName = TUPatcherUtils.getTokenFromLocation(location);
@@ -390,6 +407,10 @@ public class ErrorPatcher {
         TypeInfo type = patchData.getType(className);
         type.setStatic(functionName);
     }
+
+    /**
+     *  . 
+     */
     public static void nonConstCantBindToTemporary(TUErrorData data, PatchData patchData) {
         String typeName = data.get(TUErrorData.MAP).get("qualtype");
         String message = data.get(TUErrorData.MAP).get("message");
@@ -398,6 +419,10 @@ public class ErrorPatcher {
         patchData.getType(typeName2).setAsClass();
         
     }
+
+    /**
+     *  Define a binary operator for a class. 
+     */
     public static void invalidOperandsToBinaryExpression(TUErrorData data, PatchData patchData) {
         String source = data.get(TUErrorData.MAP).get("source");
         String operator = TUPatcherUtils.extractOperator(source);
@@ -408,19 +433,41 @@ public class ErrorPatcher {
         }
         else {
             TypeInfo type = patchData.getType(TUPatcherUtils.getTypeName(typeName));
-            type.setAsClass();
-            type.addOperator(operator);
+            if (type != null) {
+                type.setAsClass();
+                type.addOperator(operator);
+            }
+            else {
+                typeName = TUPatcherUtils.getTypesFromMessage(data.get(TUErrorData.MAP).get("message")).get(0);
+                type = patchData.getType(TUPatcherUtils.getTypeName(typeName));
+                if (type != null) {
+                    type.setAsClass();
+                    type.addOperator(operator);
+                }
+                else {
+                    typeName = TUPatcherUtils.getTypesFromMessage(data.get(TUErrorData.MAP).get("message")).get(1);
+                    type = patchData.getType(TUPatcherUtils.getTypeName(typeName));
+                    type.setAsClass();
+                    type.addOperator(operator);
+                }
+            }
         }
     }
+
+    /**
+     *  Define an operator for a class. 
+     *  <p>
+     *  The error message does not indicate which class needs the operator, so it is added to all of them.
+     */
     public static void noViableOverloaded(TUErrorData data, PatchData patchData) {
         String operator = data.get(TUErrorData.MAP).get("string");
-        //the error message does not indicate which class needs the operator, so I am adding it to all of them
         for (TypeInfo type : patchData.getTypes().values()) {
             if (type.getKind().equals("class")) {
                 type.addOperator(operator);
             }
         }
     }
+    
     public static void isNotArrayPointerOrVector(TUErrorData data, PatchData patchData) {
         String location = data.get(TUErrorData.MAP).get("location");
         String variableName = TUPatcherUtils.getTokenBeforeLocation(location);
@@ -451,6 +498,10 @@ public class ErrorPatcher {
             }
         }
     }
+
+    /**
+     * Define a nested type in a class.
+     */
     public static void noTypeNamedIn(TUErrorData data, PatchData patchData) {
         String typeName = data.get(TUErrorData.MAP).get("identifier_name");
         String message = data.get(TUErrorData.MAP).get("message");
@@ -459,6 +510,9 @@ public class ErrorPatcher {
         classInfo.addNestedType(typeName, patchData);
     }
 
+    /**
+     *  Set the return type of a function as const. 
+     */
     public static void functionIsNotMarkedConst(TUErrorData data, PatchData patchData) {
         String message = data.get(TUErrorData.MAP).get("message");
         String functionName = TUPatcherUtils.extractFromSingleQuotes(message).get(1);
@@ -475,10 +529,23 @@ public class ErrorPatcher {
         returnType.setAs("const " + returnType.getKind().replace("const ", ""));
         function.setConst();
     }
+
+    /**
+     *  Set a variable as const.
+     *  <p>
+     *  Still not working for variables in nested types.
+     */
     public static void caseValueIsNotConst(TUErrorData data, PatchData patchData) {
-        String varName = data.get(TUErrorData.MAP).get("source").replace(":", "");
-        patchData.removeVariable(varName);
-        patchData.addConstVariable(varName);
+        String completeName = data.get(TUErrorData.MAP).get("source");
+        if (!completeName.contains("::")) {
+            String varName = completeName.replace(":", "");
+            patchData.removeVariable(varName);
+            patchData.addConstVariable(varName);
+        }
+        else {
+            //variable in a nested type
+            throw new RuntimeException("There is no patch for const variables in nested types.");
+        }
         
     }
 }
