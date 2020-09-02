@@ -34,15 +34,17 @@ public class TUPatcherLauncher {
     public static void main (String[] args) {
 
         SpecsSystem.programStandardInit();
-        File file = new File(args[0]);
         
         ArrayList<PatchData> data = new ArrayList<>();
         // Get list of all the files in form of String Array
-        if (file.isDirectory()) {
-            data = patchDirectory(file);
-        }
-        else {
-            data.add(patchOneFile(args[0]));
+        for (String arg : args) {
+            File file = new File(arg);
+            if (file.isDirectory()) {
+                data = patchDirectory(file);
+            }
+            else {
+                data.add(patchOneFile(arg));
+            }
         }
         /*
         for (PatchData d : data) {
