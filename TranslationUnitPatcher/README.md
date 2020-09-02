@@ -13,10 +13,10 @@ As informações sobre o erro podem vir na forma de argumentos dados pela API do
 
 As informações sobre as correções a serem aplicadas são guardadas em um objeto da classe PatchData. Este objeto contém Hashmaps com objetos das classes TypeInfo e FunctionInfo, os quais contém as informações necessárias para escrever as definições de cada tipo, função ou variável.
 
-Observações:
-Todas as funções no patch.h são declaradas com número variável de argumentos.
-Não são gerados namespaces, unions ou enums. Os erros relacionados a isso são resolvidos com classes e structs.
-A pasta test contém exemplos de casos de erro que o programa é capaz de resolver e alguns exemplos (comentados) em que o programa não é capaz de encontrar solução adequada.
+Observações:<br/>
+Todas as funções no patch.h são declaradas com número variável de argumentos.<br/>
+Não são gerados namespaces, unions ou enums. Os erros relacionados a isso são resolvidos com classes e structs.<br/>
+A pasta test contém exemplos de casos de erro que o programa é capaz de resolver e alguns exemplos (comentados) em que o programa não é capaz de encontrar solução adequada.<br/>
 
 
 **Para tratar mais tipos de erros:**
