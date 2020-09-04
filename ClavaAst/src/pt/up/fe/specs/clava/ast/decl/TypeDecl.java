@@ -25,7 +25,9 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.utils.Typable;
+import pt.up.fe.specs.util.SpecsCheck;
 
 /**
  * Represents a declaration of a type.
@@ -86,7 +88,7 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
     @Override
     public ClavaNode copy(boolean keepId, boolean copyChildren) {
         var declCopy = (TypeDecl) super.copy(keepId, copyChildren);
-
+        // System.out.println("TYPE DECL: " + getClass());
         // TypeForDecl type is linked to this Decl, also copy the type and replace the Decl
         var type = get(TYPE_FOR_DECL);
         // System.out.println("TYPE FOR DECL: " + type);
@@ -112,6 +114,15 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
                 // tagType.set(Type.TYPE_AS_STRING, newTypeAsString);
 
                 // System.out.println("TYPE COPY TYPE AS STRING: " + typeCopy.get(Type.TYPE_AS_STRING));
+            }
+            if (typeCopy instanceof TypedefType) {
+                TypedefType typedefType = (TypedefType) typeCopy;
+
+                SpecsCheck.checkArgument(declCopy instanceof TypedefNameDecl,
+                        () -> "TypeDecl.copy: expected declCopy to be an instance of TypedefNameDecl, it is "
+                                + declCopy.getClass() + " instead");
+
+                typedefType.set(TypedefType.DECL, (TypedefNameDecl) declCopy);
             } else {
                 ClavaLog.warning("TypeDecl.copy: not defined when type is " + typeCopy.getClass());
             }
