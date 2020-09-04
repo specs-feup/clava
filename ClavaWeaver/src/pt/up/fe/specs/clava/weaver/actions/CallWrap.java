@@ -144,6 +144,7 @@ public class CallWrap {
 
         // System.out.println("DEF IMPL:" + cxxCall.getDefinitionImpl());
         FunctionDecl declaration = (FunctionDecl) cxxCall.getDefinitionImpl().getNode();
+
         // System.out.println("FUNCTION BEFORE:" + declaration.getCode());
         addWrapperFunctionInPlace(name, declaration);
         // System.out.println("FUNCTION AFTER:" + declaration.getCode());
@@ -320,15 +321,21 @@ public class CallWrap {
             if (functionDefJp == null) {
                 return CallWrapType.SYSTEM_INCLUDE;
             }
+
+            // If definition but no declaration, check if it is associated with a File. If not, consider it a system
+            // header function
+            if (functionDefJp.getNode().getAncestorTry(TranslationUnit.class).isEmpty()) {
+                return CallWrapType.SYSTEM_INCLUDE;
+            }
+
             // If no declaration but definition is present, this most likely indicates that the function is defined in
             // the
             // file of the function call
-            else {
-                FunctionDecl funcDef = (FunctionDecl) functionDefJp.getNode();
-                SpecsLogs.msgLib("Could not find declaration of function '" + funcDef.getDeclName() + "' at "
-                        + funcDef.getLocation());
-                return CallWrapType.NO_INCLUDE;
-            }
+            FunctionDecl funcDef = (FunctionDecl) functionDefJp.getNode();
+            SpecsLogs.msgLib("Could not find declaration of function '" + funcDef.getDeclName() + "' at "
+                    + funcDef.getLocation());
+            return CallWrapType.NO_INCLUDE;
+
         }
 
         FunctionDecl functionDecl = (FunctionDecl) functionDeclJp.getNode();
