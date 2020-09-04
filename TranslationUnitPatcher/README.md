@@ -1,6 +1,6 @@
 # TUErrorPatcher
 
-Modo de utilização
+###Modo de utilização
 Invocar o programa indicando nos argumentos os ficheiros e diretórios a processar.
 Os ficheiros devem ter extensão .c ou .cpp. 
 
