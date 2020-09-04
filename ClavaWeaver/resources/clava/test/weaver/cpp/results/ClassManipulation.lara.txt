@@ -35,3 +35,5 @@ NEW METHOD: int newClass2::new_foo2(int n) {
    
    return n + 10;
 }
+
+Typedef: typedef int intType

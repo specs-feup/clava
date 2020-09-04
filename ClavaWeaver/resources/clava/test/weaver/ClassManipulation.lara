@@ -5,7 +5,7 @@ aspectdef ClassManipulation
 
 	testCopyMethodDeclaration();
 	testCopyMethodDefinition();
-
+	testCopyTypedef();
 end
 
 
@@ -50,4 +50,26 @@ function testCopyMethodDefinition()  {
 	println("METHOD: " + $method.code);
 	println("NEW CLASS: " + $newClass.code);
 	println("NEW METHOD: " + $newMethod.code);
+}
+
+
+function testCopyTypedef()  {
+	// This should trigger a case where a copy() override in TypeDecl needs to handle a case with a typedef
+	var $typedefCopy = Query.search("typedefDecl").first().deepCopy();
+	println("Typedef: " + $typedefCopy.code);
+/*
+	var $class = Query.search("class", "originalClass3").first();
+
+	
+	var $method = Query.searchFrom($class, "method", "foo3").first();
+
+	var $newMethod = $method.clone("new_" + $method.name, false);
+
+	var $newClass = ClavaJoinPoints.classDecl("newClass3");
+	$newClass.addMethod($newMethod);
+	
+	println("Test Copy Method With Typedef");
+	println("CLASS: " + $class.code);
+	println("NEW CLASS: " + $newClass.code);
+*/
 }
