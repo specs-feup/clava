@@ -27,6 +27,10 @@ import java.util.ArrayList;
 public class FunctionInfo implements Definition {
     
     String name;
+    /**
+     * List of numbers of arguments to use in different definitions of the same function. 
+     * Currently, this field is unused.
+     */
     ArrayList<Integer> numArgs;
     TypeInfo returnType;
     boolean isStatic = false;
@@ -83,7 +87,12 @@ public class FunctionInfo implements Definition {
     public boolean equals(Definition def) {
         return this.name.equals(def.getName());
     }
-    
+
+    /**
+     * String with template to use before function declaration.
+     * <p>
+     * Currently this function is not being used, since all the functions are declared with variable number of arguments.
+     */
     public String template(int numArgs) {
         String result = "template<";
         for (int i=0; i < numArgs; i++) {
@@ -95,6 +104,12 @@ public class FunctionInfo implements Definition {
         result += ">\n";
         return result;
     }
+    
+    /**
+     * String with the function's arguments when using templates.
+     * <p>
+     * Currently this function is not being used, since all the functions are declared with variable number of arguments.
+     */
     public String arguments(int numArgs) {
         String result = "(";
         for (int i=0; i < numArgs; i++) {

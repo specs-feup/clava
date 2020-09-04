@@ -23,6 +23,7 @@ import pt.up.fe.specs.tupatcher.parser.TUErrorsData;
 import pt.up.fe.specs.util.SpecsLogs;
 
 /**
+ * This class contains functions to fix the data in the PatchData according to the errors received.
  * 
  * @author Pedro Galvao
  *
@@ -40,7 +41,6 @@ public class ErrorPatcher {
         ERROR_PATCHERS.put(ErrorKind.NOT_STRUCT_OR_UNION, ErrorPatcher::notStructOrUnion);
         ERROR_PATCHERS.put(ErrorKind.CANT_BE_REFERENCED_WITH_STRUCT, ErrorPatcher::incompleteTypeStruct);
         ERROR_PATCHERS.put(ErrorKind.NOT_A_FUNCTION_OR_FUNCTION_POINTER, ErrorPatcher::notAFunctionOrFunctionPointer);
-        ERROR_PATCHERS.put(ErrorKind.NO_MATCHING_FUNCTION, ErrorPatcher::noMatchingFunction);
         ERROR_PATCHERS.put(ErrorKind.NO_MEMBER, ErrorPatcher::noMember);
         ERROR_PATCHERS.put(ErrorKind.NO_MEMBER_DID_YOU_MEAN, ErrorPatcher::noMember);
         ERROR_PATCHERS.put(ErrorKind.CANT_INITIALIZE_WITH_TYPE, ErrorPatcher::incompatibleType);
@@ -117,19 +117,28 @@ public class ErrorPatcher {
 
     }
 
+    /**
+     * Add new type to the patch data
+     */
     public static void unknownType(TUErrorData data, PatchData patchData) {
         String typeName = data.get(TUErrorData.MAP).get("identifier_name");
         patchData.addType(typeName);
         
     }
     
+    /**
+     * Transform a type into struct.
+     */
     public static void notStructOrUnion(TUErrorData data, PatchData patchData) {
         String qualType = data.get(TUErrorData.MAP).get("qualtype");
         qualType = qualType.replace(" (void)","");
         patchData.getType(qualType).setAsStruct();
         
     }
-    
+
+    /**
+     * Add a new variable, function or type to the patch data.
+     */
     public static void undeclaredIdentifier(TUErrorData data, PatchData patchData) {
 
         String location = data.get(TUErrorData.MAP).get("location");
@@ -152,6 +161,9 @@ public class ErrorPatcher {
         }
     }
     
+    /**
+     * Add field or function to struct or class. 
+     */
     public static void noMember(TUErrorData data, PatchData patchData) {
         
         String message = data.get(TUErrorData.MAP).get("message");
@@ -160,29 +172,21 @@ public class ErrorPatcher {
 
         String structOrClass = TUPatcherUtils.getTypesFromMessage(message).get(1);
 
-        //String source = data.get(TUErrorData.MAP).get("source");
-        /*if (source != null) {
-            if (source.charAt(source.indexOf(field)+field.length())=='(') {
-                patchData.getType(structOrClass).addFunction(field);
-            }
-            else {
-                patchData.getType(structOrClass).addField(field);
-            }
+        String location = data.get(TUErrorData.MAP).get("location");
+        if (TUPatcherUtils.isFunctionCall(location)) {
+            patchData.getType(structOrClass).addFunction(field, patchData);
+            return;
         }
-        else {*/
-            String location = data.get(TUErrorData.MAP).get("location");
-            if (TUPatcherUtils.isFunctionCall(location)) {
-                patchData.getType(structOrClass).addFunction(field, patchData);
-                return;
-            }
-            else {
-                patchData.getType(structOrClass).addField(field, patchData);
-                return;
-            }
-        //}
+        else {
+            patchData.getType(structOrClass).addField(field, patchData);
+            return;
+        }
 
     }
     
+    /**
+     * An identifier that was incorrectly declared as a variable is declared as a function.
+     */
     public static void notAFunctionOrFunctionPointer(TUErrorData data, PatchData patchData) {
 
         String source = data.get(TUErrorData.MAP).get("source");
@@ -195,21 +199,6 @@ public class ErrorPatcher {
             throw new RuntimeException("Can't solve this error. Don't know in which class the function is defined");
         }
         
-    }
-    
-    public static void noMatchingFunction(TUErrorData data, PatchData patchData) {
-        
-        String call = data.get(TUErrorData.MAP).get("source");
-                
-        String functionName = call.substring(0, call.indexOf('('));
-        FunctionInfo function = patchData.getFunction(functionName);
-        if (function == null) {
-            patchData.addFunction(functionName);
-            function = patchData.getFunction(functionName);
-        }        
-        
-        int numArgs = TUPatcherUtils.getTypesFromMessage(call).get(0).split(",").length;
-        function.addNumArgs(numArgs);
     }
     
     /**
@@ -235,18 +224,15 @@ public class ErrorPatcher {
         
     }
     
-    public static void noMatchingConstructor(TUErrorData data, PatchData patchData) {
 
-//        String call = data.get(TUErrorData.MAP).get("source");      
+    /**
+     * Set a type as class.
+     */
+    public static void noMatchingConstructor(TUErrorData data, PatchData patchData) {
         //int numArgs = TUPatcherUtils.extractFromParenthesis(call).get(0).split(",").length;
         String typeName = data.get(TUErrorData.MAP).get("qualtype");
         TypeInfo type = patchData.getType(typeName);
         type.setAsClass();
-/*
-        String message = data.get(TUErrorData.MAP).get("message");
-        String typeName = message.substring(message.indexOf('\'')+1, message.indexOf('\'',message.indexOf('\'')+1));
-       
-        type.addConstructor(numArgs);*/
     }
 
     /**
@@ -327,6 +313,9 @@ public class ErrorPatcher {
         }
     }
 
+    /**
+     * The type is changed so that its declaration does not use typedef.
+     */
     public static void incompleteTypeStruct(TUErrorData data, PatchData patchData) {
         String typeName = data.get(TUErrorData.MAP).get("qualtype");
         if (typeName == null) {
@@ -341,6 +330,8 @@ public class ErrorPatcher {
         type.setAsStructWithoutTipedef();
         patchData.addType(type);
     }
+    
+    
     public static void typeIsNotPointer(TUErrorData data, PatchData patchData) {
         String typeName = data.get(TUErrorData.MAP).get("qualtype");
         TypeInfo type = new TypeInfo();
@@ -368,7 +359,7 @@ public class ErrorPatcher {
     }
 
     /**
-     *  Transform the type into a class. 
+     *  Set the type as a class. 
      */
     public static void notClassNamespaceOrEnumeration(TUErrorData data, PatchData patchData) {
         String typeName = data.get(TUErrorData.MAP).get("identifier_name");
@@ -468,6 +459,9 @@ public class ErrorPatcher {
         }
     }
     
+    /**
+     * Change the type of a variable to pointer.
+     */
     public static void isNotArrayPointerOrVector(TUErrorData data, PatchData patchData) {
         String location = data.get(TUErrorData.MAP).get("location");
         String variableName = TUPatcherUtils.getTokenBeforeLocation(location);
@@ -479,6 +473,7 @@ public class ErrorPatcher {
             type.setAs(type2.getName()+" *");
         }
         else {
+            //the variable may be a field in a struct or class
             TypeInfo fieldType = null;
             for (TypeInfo type2 : patchData.getTypes().values()) {
                 for (String fieldName : type2.getFields().keySet()) {

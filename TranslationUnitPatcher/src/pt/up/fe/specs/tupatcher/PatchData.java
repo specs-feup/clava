@@ -32,6 +32,10 @@ public class PatchData {
     private final HashMap<String, FunctionInfo> missingFunctions;
     private final HashMap<String, TypeInfo> missingVariables;
     private final HashMap<String, TypeInfo> missingConstVariables;
+    
+    /**
+     * List of all the errors fixed by the patch.
+     */
     private ArrayList<ErrorKind> errors;
 
     public PatchData() {
@@ -129,17 +133,23 @@ public class PatchData {
          //missingTypes.remove(typeName);
          missingTypes.put(typeName, type);
      }
+     
      public HashMap<String, TypeInfo> getTypes(){
          return missingTypes;
      }
 
+     /**
+      * Copy the source file to the output folder adding #include "patch.h" at the top of it
+      */
     public void copySource(String filepath) {
-        // copy source file adding #include "patch.h" at the top of it
         var result = "#include \"patch.h\"\n" + SpecsIo.read(SpecsIo.existingFile(filepath));
         File destFile = new File("output/file.cpp");
         SpecsIo.write(destFile, result);
     }
-    
+
+    /**
+     * @return String with all the variables declarations.
+     */
     public String variablesPatches() {
         String result = "";
         for (String varName : missingVariables.keySet()) {
@@ -162,6 +172,9 @@ public class PatchData {
         return result;
     }
 
+    /**
+     * @return String with the definitions of all the functions.
+     */
     public String functionPatches(HashMap<String, FunctionInfo> functions) {
         String result = "";
         for (String functionName : functions.keySet()) {
@@ -172,7 +185,7 @@ public class PatchData {
     }
 
     /**
-     * Return a string with the content to write to the file patch.h 
+     * @return String with the content to write to the file patch.h 
      */
     public String str() {
         String result = "#define NULL 0\n";
@@ -208,7 +221,7 @@ public class PatchData {
     /**
      * Topological sorting of a graph of dependencies between types and functions.
      * <p>
-     * When there is cyclic dependency between two or more types or functions, this function returns a list with only partially ordered.
+     * When there is cyclic dependency between two or more types or functions, this function returns a list that is only partially ordered.
      * When it happens this problem may be solved by the fact that all structs and classes are declared (but not defined) in the beginning of patch.h
      */
     public ArrayList<Definition> orderedDefinitions(){

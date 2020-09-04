@@ -156,8 +156,14 @@ public class TypeInfo implements Definition {
        fields.remove(member, patchData);
        addField(member+" *",  patchData);
     }
-    
-    
+
+    /**
+     * List of all the types and functions that must be defined/declared before this one.
+     * <p>
+     * It includes the types of all the fields, return types of the functions and dependencies of nested types.
+     * When the type is not a struct or class it has only one or zero dependencies.
+     * @return List of all the types and functions.
+     */
     public ArrayList<Definition> getDependencies(){
         ArrayList<Definition> result = new ArrayList<Definition>();
         String kind2 = TUPatcherUtils.getTypeName(kind);

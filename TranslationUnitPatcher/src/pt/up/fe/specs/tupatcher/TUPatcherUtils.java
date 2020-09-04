@@ -20,6 +20,7 @@ import pt.up.fe.specs.util.SpecsIo;
  */
 
 /**
+ * Functions to help extract information from error messages and source code.
  * 
  * @author Pedro Galvao
  *
@@ -117,7 +118,7 @@ public class TUPatcherUtils {
     /**
      * Read source code while the condition is true
      * <p>
-     * 
+     * @param forward : true to read forward, false to read backwards.
      * @return String with the code read and int indicating position in source where it stopped reading.
      *
      */
@@ -386,7 +387,9 @@ public class TUPatcherUtils {
     }
 
     /**
-     * remove brackets and substitute with * Example: char[3] -> char*
+     * Remove brackets and substitute with * 
+     * <p>
+     * Example: char[3] -> char*
      */
     public static String removeBracketsFromType(String typeName) {
         if (typeName.contains("[")) {
@@ -399,6 +402,7 @@ public class TUPatcherUtils {
 
     /**
      * Takes as argument a type with qualifiers and returns the type name without the qualifiers. 
+     * <p>
      * Example: const foo * -> foo
      */
     public static String getTypeName(String qualtype) {

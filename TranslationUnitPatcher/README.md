@@ -18,9 +18,10 @@ Todas as funções no patch.h são declaradas com número variável de argumento
 Não são gerados namespaces, unions ou enums. Os erros relacionados a isso são resolvidos com classes e structs.
 A pasta test contém exemplos de casos de erro que o programa é capaz de resolver e alguns exemplos (comentados) em que o programa não é capaz de encontrar solução adequada.
 
+# Quickstart
 
 Para tratar mais tipos de erros:
-1 - Adicionar número e nome do erro em “enum ErrorKind”
+1 - Adicionar número e nome do erro em “enum ErrorKind”.
 2 - Criar na classe ErrorPatcher uma função para tratar deste erro.
 3 - Adicionar o ErrorKind e a função ao HashMap ERROR_PATCHERS na classe ErrorPatcher.
 
