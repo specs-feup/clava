@@ -127,7 +127,12 @@ public abstract class Type extends ClavaNode {
 
     @Override
     public Type copy(boolean keepId) {
-        Type copy = (Type) super.copy(keepId);
+        return (Type) super.copy(keepId);
+    }
+
+    @Override
+    public Type copy(boolean keepId, boolean copyChildren) {
+        Type copy = (Type) super.copy(keepId, copyChildren);
         // Type copy = deepCopy(keepId, new HashSet<>());
 
         // All copy the descendants

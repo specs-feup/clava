@@ -84,12 +84,16 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
     }
 
     @Override
-    public ClavaNode copy(boolean keepId) {
-        var declCopy = (TypeDecl) super.copy(keepId);
+    public ClavaNode copy(boolean keepId, boolean copyChildren) {
+        var declCopy = (TypeDecl) super.copy(keepId, copyChildren);
 
         // TypeForDecl type is linked to this Decl, also copy the type and replace the Decl
         var type = get(TYPE_FOR_DECL);
+        // System.out.println("TYPE FOR DECL: " + type);
         if (type.isPresent()) {
+            // System.out.println("TYPE: " + this.getCode());
+            // System.out.println("TYPE FOR DECL: " + type.get().getCode());
+
             // Copy the type
             var typeCopy = type.get().copy(keepId);
 
