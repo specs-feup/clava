@@ -450,6 +450,10 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     // }
 
     public ClavaNode copy(boolean keepId) {
+        return copy(keepId, true);
+    }
+
+    public ClavaNode copy(boolean keepId, boolean copyChildren) {
 
         get(CONTEXT).get(ClavaContext.METRICS).incrementNumCopies();
 
@@ -468,11 +472,14 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
                     + newToken.getNodeName() + "' still has children after copyPrivate(), check implementation");
         }
 
-        for (ClavaNode child : getChildren()) {
-            // Copy children of token
-            // ClavaNode newChildToken = deepCopy ? child.deepCopy(keepId, new HashSet<>()) : child.copy(keepId);
-            ClavaNode newChildToken = child.copy(keepId);
-            newToken.addChild(newChildToken);
+        if (copyChildren) {
+
+            for (ClavaNode child : getChildren()) {
+                // Copy children of token
+                // ClavaNode newChildToken = deepCopy ? child.deepCopy(keepId, new HashSet<>()) : child.copy(keepId);
+                ClavaNode newChildToken = child.copy(keepId);
+                newToken.addChild(newChildToken);
+            }
         }
 
         return newToken;
@@ -1062,7 +1069,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         }
 
         // Simple copy of the node, without children
-        copy = copyPrivate(keepId);
+        // copy = copyPrivate(keepId);
+        copy = copy(keepId, false);
 
         // Add to replacement map
         copiedNodes.put(getId(), copy);
