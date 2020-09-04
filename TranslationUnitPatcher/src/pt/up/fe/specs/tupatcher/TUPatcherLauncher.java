@@ -53,11 +53,16 @@ public class TUPatcherLauncher {
         }*/
     }
     
+    /**
+     * Create patches for all .c and .cpp files in a directory 
+     * @param dir
+     * @return ArrayList with a PatchData for each file
+     */
     public static ArrayList<PatchData> patchDirectory(File dir) {
         String path = dir.getAbsolutePath();
         String[] fileNames = dir.list(); 
         int numErrors = 0, numSuccess = 0;
-        int maxNumFiles = 200, n=0;
+        int maxNumFiles = 600, n=0;
         List<String> fileNamesList = Arrays.asList(fileNames);
         Collections.shuffle(fileNamesList);
         ArrayList<String> errorMessages = new ArrayList<>();
@@ -112,7 +117,12 @@ public class TUPatcherLauncher {
         return patchesData;
 
     }
-
+    
+    /**
+     * Create patch for a single .cpp file 
+     * @param filepath
+     * @return PatchData
+     */
     public static PatchData patchOneFile(String filepath) {
 
         var patchData = new PatchData();

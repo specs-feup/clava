@@ -17,4 +17,18 @@ void test_cast(){
 		case CASE_VALUE:
 			return;
 	}
+	((C*) k )->p();
+	((D&) k )->p();
+	((E) k )->p();
+	f = (g*h);
+	i = ( *j * l);
+	m = ( (*n) * o);
+	const A p = ( (const A) * q);
+	const A * r = ( (const A *) * t);
+	u->f();
+	(*u).f();
+	(*v).f();
+	(&w)->f();
 }
+
+

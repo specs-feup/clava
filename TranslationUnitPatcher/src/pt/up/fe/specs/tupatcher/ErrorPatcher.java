@@ -150,11 +150,11 @@ public class ErrorPatcher {
         else if (TUPatcherUtils.isVariable(location)) {
             patchData.addVariable(name);
         }
-        else if (TUPatcherUtils.getTypeFromDeclaration(location).equals(name)) {
-            patchData.addType(name);            
-        }
         else if (TUPatcherUtils.isCast(location)) {
             patchData.addType(name);
+        }
+        else if (TUPatcherUtils.getTypeFromDeclaration(location).equals(name)) {
+            patchData.addType(name);            
         }
         else {
             patchData.addVariable(name);
