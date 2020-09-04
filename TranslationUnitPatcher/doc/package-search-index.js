@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"pt.up.fe.specs.tupatcher"},{"l":"pt.up.fe.specs.tupatcher.parser"}]
