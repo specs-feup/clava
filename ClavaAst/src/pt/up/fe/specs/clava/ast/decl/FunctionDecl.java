@@ -331,6 +331,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         }
 
         // Search for the declaration
+
         return getAppTry().flatMap(app -> app.getFunctionDeclaration(getDeclName(), getFunctionType()));
 
         // // If no body, this node already is the declaration

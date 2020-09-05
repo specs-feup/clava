@@ -89,6 +89,9 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
     public ClavaNode copy(boolean keepId, boolean copyChildren) {
         var declCopy = (TypeDecl) super.copy(keepId, copyChildren);
         // System.out.println("TYPE DECL: " + getClass());
+
+        // Each TypeDecl appears to have a corresponding Type node that is linked to this decl
+        // If the Decl is copied, the type must be copied too and linked
         // TypeForDecl type is linked to this Decl, also copy the type and replace the Decl
         var type = get(TYPE_FOR_DECL);
         // System.out.println("TYPE FOR DECL: " + type);
@@ -105,7 +108,8 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
             // System.out.println("TYPE AS STRING: " + typeCopy.get(Type.TYPE_AS_STRING));
             // Erase TypeAsString
             typeCopy.set(Type.TYPE_AS_STRING, "<INVALID TYPE_AS_STRING>");
-
+            // System.out.println(
+            // "SETTING IN TYPE COPY " + typeCopy.getClass() + " THE DECL COPY " + declCopy.getClass());
             // Link new decl copy
             if (typeCopy instanceof TagType) {
                 TagType tagType = (TagType) typeCopy;
@@ -114,8 +118,7 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
                 // tagType.set(Type.TYPE_AS_STRING, newTypeAsString);
 
                 // System.out.println("TYPE COPY TYPE AS STRING: " + typeCopy.get(Type.TYPE_AS_STRING));
-            }
-            if (typeCopy instanceof TypedefType) {
+            } else if (typeCopy instanceof TypedefType) {
                 TypedefType typedefType = (TypedefType) typeCopy;
 
                 SpecsCheck.checkArgument(declCopy instanceof TypedefNameDecl,
