@@ -280,4 +280,8 @@ public class RecordDecl extends TagDecl {
     
     }
     */
+
+    public void addField(FieldDecl field) {
+        addChild(field);
+    }
 }
