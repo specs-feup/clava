@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
+import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.stream.Collectors;
@@ -129,6 +130,32 @@ public abstract class ARecord extends ANamedDecl {
      */
     public List<? extends AField> selectField() {
         return select(pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AField.class, SelectOp.DESCENDANTS);
+    }
+
+    /**
+     * Adds a field to a record (struct, class).
+     * @param field 
+     */
+    public void addFieldImpl(AField field) {
+        throw new UnsupportedOperationException(get_class()+": Action addField not implemented ");
+    }
+
+    /**
+     * Adds a field to a record (struct, class).
+     * @param field 
+     */
+    public final void addField(AField field) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addField", this, Optional.empty(), field);
+        	}
+        	this.addFieldImpl(field);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addField", this, Optional.empty(), field);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addField", e);
+        }
     }
 
     /**
@@ -497,6 +524,7 @@ public abstract class ARecord extends ANamedDecl {
     @Override
     protected void fillWithActions(List<String> actions) {
         this.aNamedDecl.fillWithActions(actions);
+        actions.add("void addField(field)");
     }
 
     /**

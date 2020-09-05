@@ -711,7 +711,7 @@ public class AstFactory {
      * @param fieldType
      * @return
      */
-    public static AField classDecl(String fieldName, AType fieldType) {
+    public static AField field(String fieldName, AType fieldType) {
 
         var fieldDecl = CxxWeaver.getFactory().fieldDecl(fieldName, (Type) fieldType.getNode());
         return CxxJoinpoints.create(fieldDecl, AField.class);

@@ -270,6 +270,15 @@ public abstract class AStruct extends ARecord {
     }
 
     /**
+     * Adds a field to a record (struct, class).
+     * @param field 
+     */
+    @Override
+    public void addFieldImpl(AField field) {
+        this.aRecord.addFieldImpl(field);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 

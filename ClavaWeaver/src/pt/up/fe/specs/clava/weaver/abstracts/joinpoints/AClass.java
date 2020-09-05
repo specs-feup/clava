@@ -73,7 +73,7 @@ public abstract class AClass extends ARecord {
     }
 
     /**
-     * 
+     * Adds a method to a class. If the given method has a definition, creates an equivalent declaration and adds it to the class, otherwise simply added the declaration to the class. In both cases, the declaration is only added to the class if there is no declaration already with the same signature.
      * @param method 
      */
     public void addMethodImpl(AMethod method) {
@@ -81,7 +81,7 @@ public abstract class AClass extends ARecord {
     }
 
     /**
-     * 
+     * Adds a method to a class. If the given method has a definition, creates an equivalent declaration and adds it to the class, otherwise simply added the declaration to the class. In both cases, the declaration is only added to the class if there is no declaration already with the same signature.
      * @param method 
      */
     public final void addMethod(AMethod method) {
@@ -340,6 +340,15 @@ public abstract class AClass extends ARecord {
     @Override
     public void setLastChildImpl(AJoinPoint node) {
         this.aRecord.setLastChildImpl(node);
+    }
+
+    /**
+     * Adds a field to a record (struct, class).
+     * @param field 
+     */
+    @Override
+    public void addFieldImpl(AField field) {
+        this.aRecord.addFieldImpl(field);
     }
 
     /**

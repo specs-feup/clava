@@ -13773,6 +13773,7 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Adds a method to a class. If the given method has a definition, creates an equivalent declaration and adds it to the class, otherwise simply added the declaration to the class. In both cases, the declaration is only added to the class if there is no declaration already with the same signature.",
                   "children": [
                            {
                               "type": "void",
@@ -13781,6 +13782,20 @@
                            {
                               "type": "method",
                               "name": "method",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds a field to a record (struct, class).",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addField"
+                           },
+                           {
+                              "type": "field",
+                              "name": "field",
                               "defaultValue": ""
                            }]
                },
@@ -48709,6 +48724,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Adds a field to a record (struct, class).",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addField"
+                           },
+                           {
+                              "type": "field",
+                              "name": "field",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Sets the name of this namedDecl",
                   "children": [
                            {
@@ -52882,6 +52911,20 @@
                   "type": "select",
                   "clazz": "field",
                   "alias": ""
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds a field to a record (struct, class).",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addField"
+                           },
+                           {
+                              "type": "field",
+                              "name": "field",
+                              "defaultValue": ""
+                           }]
                },
                {
                   "type": "action",

@@ -214,6 +214,10 @@
 
 	<!-- RECORD -->
 
+	<action name="addField" class="record" tooltip="Adds a field to a record (struct, class).">
+		<parameter name="field" type="field" />
+	</action>
+
 	<!-- Adds an include to the file -->
 	<!--  
 	<action name="setName" class="record">
@@ -230,6 +234,8 @@
 	<action name="addMethod" class="class" tooltip="Adds a method to a class. If the given method has a definition, creates an equivalent declaration and adds it to the class, otherwise simply added the declaration to the class. In both cases, the declaration is only added to the class if there is no declaration already with the same signature.">
 		<parameter name="method" type="method" />
 	</action>
+	
+
 
 	<!-- CALL -->
 	<!-- Changes the name of the call -->

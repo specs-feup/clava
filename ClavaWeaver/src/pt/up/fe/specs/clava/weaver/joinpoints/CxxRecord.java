@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AField;
@@ -67,4 +68,8 @@ public class CxxRecord extends ARecord {
                 .toArray(size -> new AFunction[size]);
     }
 
+    @Override
+    public void addFieldImpl(AField field) {
+        recordDecl.addField((FieldDecl) field.getNode());
+    }
 }
