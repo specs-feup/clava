@@ -40,3 +40,10 @@ METHOD DECL BEFORE ADDING CLASS: undefined
 METHOD DECL AFTER ADDING CLASS: Joinpoint 'decl'
 
 Typedef: typedef int intType
+
+CLASS WITH NEW FIELD: 
+class originalClass4 { 
+   public:
+   int a;
+   double b;
+};

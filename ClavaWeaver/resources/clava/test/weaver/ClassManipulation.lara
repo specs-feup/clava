@@ -7,6 +7,7 @@ aspectdef ClassManipulation
 	testCopyMethodDeclaration();
 	testCopyMethodDefinition();
 	testCopyTypedef();
+	testAddField();
 end
 
 
@@ -84,4 +85,11 @@ function testCopyTypedef()  {
 	println("CLASS: " + $class.code);
 	println("NEW CLASS: " + $newClass.code);
 */
+}
+
+function testAddField()  {
+	var $class = Query.search("class", "originalClass4").first();
+	var $newField = ClavaJoinPoints.field("b", ClavaJoinPoints.builtinType("double"));
+	$class.addField($newField);
+	println("CLASS WITH NEW FIELD: " + $class.code);
 }

@@ -29,3 +29,12 @@ public:
     int foo3(originalClass3::intType n);
 
 };
+
+
+class originalClass4 {
+
+public:
+
+	int a;
+
+};
