@@ -248,7 +248,7 @@ public class ClangDumperParser {
 
         /*
         String tempDir = System.getProperty("java.io.tmpdir");
-
+        
         // String baseFilename = new JarPath(ClangAstLauncher.class, "clangjar").buildJarPath();
         // File resourceFolder = new File(baseFilename, "clang_ast_exe");
         File resourceFolder = new File(tempDir, "clang_ast_exe");
@@ -320,28 +320,28 @@ public class ClangDumperParser {
                 .writeVersioned(resourceFolder, ClangAstParser.class);
         // ResourceWriteData builtinIncludesZip = ClangAstWebResource.BUILTIN_INCLUDES_3_8.writeVersioned(
         // resourceFolder, ClangAstParser.class);
-
+        
         // boolean hasFolderBeenCleared = false;
-
+        
         zipManager.extract(builtinIncludesZip);
-
+        
         // Test if include files are available
         boolean hasLibC = hasLibC(clangExecutable);
         // boolean hasLibC = true;
-
+        
         if (!hasLibC) {
             // Obtain correct version of libc/c++
             FileResourceProvider libcResource = getLibCResource(SupportedPlatform.getCurrentPlatform());
-
+        
             if (libcResource == null) {
                 ClavaLog.info("Could not detect LibC/C++, and currently there is no bundled alternative for platform '"
                         + SupportedPlatform.getCurrentPlatform() + "'. System includes might not work.");
             } else {
-
+        
                 // Write Clang headers
                 ResourceWriteData libcZip = libcResource.writeVersioned(resourceFolder,
                         ClangAstParser.class);
-
+        
                 zipManager.extract(libcZip);
             }
         }
@@ -372,37 +372,37 @@ public class ClangDumperParser {
         if (SupportedPlatform.getCurrentPlatform().isWindows()) {
             return false;
         }
-
+        
         File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
-
+        
         // Test C
         ProcessOutput<String, ClangParserData> outputC = testFile(clangExecutable, clangTest,
                 ClangAstResource.TEST_INCLUDES_C);
         boolean foundCIncludes = !outputC.getStdOut().isEmpty();
-
+        
         if (!foundCIncludes) {
             ClavaLog.debug("Could not find C includes, output of test: " + outputC.getStdOut() + "\n----\n"
                     + outputC.getStdErr());
         }
-
+        
         // Test C++
         ProcessOutput<String, ClangParserData> outputCpp = testFile(clangExecutable, clangTest,
                 ClangAstResource.TEST_INCLUDES_CPP);
         boolean foundCppIncludes = !outputCpp.getStdOut().isEmpty();
-
+        
         if (!foundCppIncludes) {
             ClavaLog.debug("Could not find C++ includes, output of test: " + outputCpp.getStdOut() + "\n----\n"
                     + outputCpp.getStdErr());
         }
-
+        
         boolean hasLibs = foundCIncludes && foundCppIncludes;
-
+        
         return hasLibs;
-
+        
         // boolean needsLib = !foundCIncludes || !foundCppIncludes;
         //
         // return !needsLib;
-
+        
         // boolean needsLib = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
         // .parallelStream()
         // .map(resource -> testFile(clangExecutable, clangTest, resource))
@@ -416,13 +416,20 @@ public class ClangDumperParser {
         // } else {
         // SpecsLogs.msgLib("Detected libc and licxx installed in the system");
         // }
-
+        
         // return !needsLib;
          */
     }
 
     private FileResourceProvider getLibCResource(SupportedPlatform platform) {
-        return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
+        switch (platform) {
+        case WINDOWS:
+            return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
+        default:
+            return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
+        }
+
+        // return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
         /*
         switch (platform) {
         case WINDOWS:

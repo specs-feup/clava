@@ -973,7 +973,14 @@ public class ClangAstParser {
     }
 
     private FileResourceProvider getLibCResource(SupportedPlatform platform) {
-        return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
+        switch (platform) {
+        case WINDOWS:
+            return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
+        default:
+            return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
+        }
+
+        // return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
         /*
         switch (platform) {
         case WINDOWS:

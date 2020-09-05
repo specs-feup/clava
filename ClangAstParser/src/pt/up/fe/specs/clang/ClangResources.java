@@ -199,7 +199,7 @@ public class ClangResources {
         if (!usePlatformIncludes) {
             return true;
         }
-
+        
         // If headers of both libc and libc++ are available, do not use built-in libc
         return !hasLibC(clangExecutable);
         */
@@ -214,27 +214,27 @@ public class ClangResources {
     /*
     private boolean hasLibC(File clangExecutable) {
         // return false;
-
+    
         // If Windows, return false and always use bundled LIBC++
         // if (SupportedPlatform.getCurrentPlatform().isWindows()) {
         // return false;
         // }
-
+    
         File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
-
+    
         // Write test files
         List<File> testFiles = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
                 .stream()
                 .map(resource -> resource.write(clangTest))
                 .collect(Collectors.toList());
-
+    
         // If on linux, make folders and files accessible to all users
         if (SupportedPlatform.getCurrentPlatform().isLinux()) {
             SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", clangTest.getAbsolutePath()), false, true);
         }
-
+    
         // boolean needsLib = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
-
+    
         boolean needsLib = false;
         for (File testFile : testFiles) {
             ProcessOutput<List<ClangNode>, DataStore> output = testFile(clangExecutable, clangTest, testFile);
@@ -242,32 +242,32 @@ public class ClangResources {
             // System.out.println("RETURN VALUE:" + output.getReturnValue());
             // System.out.println("STD OUT:" + output.getStdOut());
             // System.out.println("STD ERR:" + output.getStdErr().get(StreamKeys.WARNINGS));
-
+    
             // boolean foundInclude = !output.getStdOut().isEmpty();
             boolean foundInclude = output.getReturnValue() == 0;
-
+    
             if (foundInclude) {
                 SpecsCheck.checkArgument(output.getStdOut().isEmpty(),
                         () -> "Expected std output to be empty: " + output.getStdOut());
                 SpecsCheck.checkArgument(output.getStdErr().get(StreamKeys.WARNINGS).isEmpty(),
                         () -> "Expected err output to be empty: " + output.getStdErr().get(StreamKeys.WARNINGS));
             }
-
+    
             if (!foundInclude) {
                 needsLib = true;
                 break;
             }
             // return foundInclude;
         }
-
+    
         if (needsLib) {
             ClavaLog.debug("Could not find system libc/licxx");
         } else {
             ClavaLog.debug("Detected system's libc and licxx");
         }
-
+    
         return !needsLib;
-
+    
     }
     */
     // private boolean testFile(File clangExecutable, File testFolder, ResourceProvider testResource) {
@@ -327,7 +327,13 @@ public class ClangResources {
     }
 
     private FileResourceProvider getLibCResource(SupportedPlatform platform) {
-        return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
+        switch (platform) {
+        case WINDOWS:
+            return clangAstResources.get(ClangAstFileResource.LIBC_CXX_WINDOWS);
+        default:
+            return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
+        }
+        // return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
     }
 
 }
