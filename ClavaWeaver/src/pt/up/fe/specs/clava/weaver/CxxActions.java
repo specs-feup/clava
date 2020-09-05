@@ -19,6 +19,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.utils.NodePosition;
@@ -51,6 +52,9 @@ public class CxxActions {
      * @param from
      */
     public static AJoinPoint insertAsStmt(ClavaNode target, String code, Insert insert, CxxWeaver weaver) {
+        // If target is part of App, clear caches
+        target.getAncestorTry(App.class).ifPresent(app -> app.clearCache());
+
         // Convert Insert to NodePosition
         var position = insert.toPosition();
         ClavaNode node = ClavaNodes.insertAsStmt(target, code, position);
@@ -143,6 +147,8 @@ public class CxxActions {
     // }
 
     public static AJoinPoint[] insertAsChild(String position, ClavaNode base, ClavaNode node, CxxWeaver weaver) {
+        // If base is part of App, clear caches
+        base.getAncestorTry(App.class).ifPresent(app -> app.clearCache());
 
         switch (position) {
         case "before":
@@ -224,6 +230,9 @@ public class CxxActions {
 
         insertFunction.accept(adaptedBase, adaptedNew);
 
+        // If base is part of App, clear caches
+        adaptedBase.getAncestorTry(App.class).ifPresent(app -> app.clearCache());
+
         return CxxJoinpoints.create(adaptedNew);
     }
 
@@ -273,6 +282,8 @@ public class CxxActions {
      * @param position
      */
     public static AJoinPoint insertJp(AJoinPoint baseJp, AJoinPoint newJp, String position, CxxWeaver weaver) {
+        // If baseJp is part of App, clear caches
+        baseJp.getNode().getAncestorTry(App.class).ifPresent(app -> app.clearCache());
 
         switch (position) {
         case "before":
@@ -298,6 +309,10 @@ public class CxxActions {
 
     public static void insertStmt(String position, Stmt body, Stmt stmt, CxxWeaver weaver) {
         Preconditions.checkArgument(body instanceof CompoundStmt);
+
+        // If body is part of App, clear caches
+        body.getAncestorTry(App.class).ifPresent(app -> app.clearCache());
+
         switch (position) {
         case "before":
             // Insert before all statements in body
@@ -321,6 +336,9 @@ public class CxxActions {
     }
 
     public static void removeChildren(ClavaNode node, CxxWeaver weaver) {
+        // If node is part of App, clear caches
+        node.getAncestorTry(App.class).ifPresent(app -> app.clearCache());
+
         // Clear use fields
         for (ClavaNode child : node.getChildren()) {
             weaver.clearUserField(child);
