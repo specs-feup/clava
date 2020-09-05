@@ -399,3 +399,18 @@ ClavaJoinPoints.classDecl = function(className) {
 	
 	return AstFactory.classDecl(className, fields);
 }
+
+/**
+ * Creates a field for a class.
+ *
+ * @param {String} fieldName
+ * @param {$type} fieldType 
+ *
+ * @return {$field}
+ */
+ClavaJoinPoints.field = function(fieldName, $fieldType) {
+	Check.isString(fieldName);
+	Check.isJoinPoint($fieldType, 'type');
+	
+	return AstFactory.field(fieldName, $fieldType);
+}
