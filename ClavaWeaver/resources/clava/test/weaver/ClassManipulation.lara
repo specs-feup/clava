@@ -1,4 +1,5 @@
 import clava.ClavaJoinPoints;
+import clava.Clava;
 import weaver.Query;
 
 aspectdef ClassManipulation
@@ -41,8 +42,7 @@ function testCopyMethodDefinition()  {
 	//var $newMethod = $method.deepCopy();
 	var $newClass = ClavaJoinPoints.classDecl("newClass2");
 	$newClass.addMethod($newMethod);
-	
-	//$newMethod.name = "new_" + $newMethod.name;
+
 
 
 	println("Test Copy Method Definition");
@@ -50,6 +50,18 @@ function testCopyMethodDefinition()  {
 	println("METHOD: " + $method.code);
 	println("NEW CLASS: " + $newClass.code);
 	println("NEW METHOD: " + $newMethod.code);
+	
+	
+	// If $newMethod.declarationJp is called before adding $newClass to the program, 
+	// it will returned undefined due to Clava caching queries to declarationJp/definitionJp 
+	println("METHOD DECL BEFORE ADDING CLASS: " + $newMethod.declarationJp);		
+	$class.ancestor("file").insertAfter($newClass);
+	println("METHOD DECL AFTER ADDING CLASS: " + $newMethod.declarationJp);	
+
+	
+	
+	//$newMethod.name = "new_" + $newMethod.name;
+
 }
 
 
