@@ -26,3 +26,8 @@ int query_empty() {
 	
 }
 
+
+int query_regex() {	
+	return 0;
+}
+

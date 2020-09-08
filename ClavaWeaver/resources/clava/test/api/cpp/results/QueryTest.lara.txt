@@ -14,3 +14,4 @@ query_empty 1
 joinpoint: statement
 joinpoint: returnStmt
 chain keys: _counter,_starting_point,function,function_0,loop,loop_0,loop_1,loop_2
+regex: query_regex

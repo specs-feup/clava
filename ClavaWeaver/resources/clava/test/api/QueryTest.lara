@@ -30,4 +30,8 @@ aspectdef QueryTest
 	for(var query of Query.search("function", "query_loop").search("loop").search("loop").search("loop").chain()) {
 		println("chain keys: " + getKeys(query).sort());
 	}
+	
+	for(var query of Query.search("function", /_regex/)) {
+		println("regex: " + query.name);
+	}
 end
