@@ -16,7 +16,14 @@
 #include <assert.h>
 #include <time.h>
 #include <sys/time.h>
-#include <sys/resource.h>
+#ifdef __linux__ 
+	#include <sys/resource.h>
+#elif _WIN32
+    // Do not include <sys/resource.h>
+#else
+	#include <sys/resource.h>
+#endif
+
 #include <sched.h>
 #include <math.h>
 #ifdef _OPENMP
