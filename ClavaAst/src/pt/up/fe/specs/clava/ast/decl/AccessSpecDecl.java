@@ -22,6 +22,12 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 
+/**
+ * Represents an access specifier followed by colon ':'.
+ * 
+ * @author JBispo
+ *
+ */
 public class AccessSpecDecl extends Decl {
     /// DATAKEYS BEGIN
 

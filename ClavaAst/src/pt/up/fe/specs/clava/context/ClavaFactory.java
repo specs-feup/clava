@@ -37,6 +37,7 @@ import pt.up.fe.specs.clava.ast.attr.DummyAttr;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.comment.MultiLineComment;
+import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.CIncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
@@ -121,6 +122,7 @@ import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
+import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.utils.ClassesService;
@@ -628,6 +630,14 @@ public class ClavaFactory {
         data.set(LinkageSpecDecl.LINKAGE_TYPE, language);
 
         return new LinkageSpecDecl(data, decls);
+    }
+
+    public AccessSpecDecl accessSpecDecl(AccessSpecifier accessSpecifier) {
+        DataStore data = newDataStore(AccessSpecDecl.class);
+
+        data.set(AccessSpecDecl.ACCESS_SPECIFIER, accessSpecifier);
+
+        return new AccessSpecDecl(data, Collections.emptyList());
     }
 
     /// STMTS
