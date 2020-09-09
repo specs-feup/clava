@@ -3,7 +3,8 @@ aspectdef Expression
 	// MemberAccess chains
 	select function{"analyse"}.memberAccess end
 	apply
-		println("MemberChain:" + $memberAccess.memberChain);
+		println("MemberChain Types:" + $memberAccess.memberChain.map(m => m.joinPointType));
+		println("MemberChain Names:" + $memberAccess.memberChainNames);
 	end
 
 	// Obtain corresponding declaration for each varref

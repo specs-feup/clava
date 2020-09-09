@@ -1,10 +1,17 @@
-MemberChain:ts,a
-MemberChain:ts,d
-MemberChain:ts,a
-MemberChain:ts,a
-MemberChain:ts2,a
-MemberChain:ts2,a
-MemberChain:classVar,id
+MemberChain Types:varref,memberAccess
+MemberChain Names:ts,a
+MemberChain Types:varref,memberAccess
+MemberChain Names:ts,d
+MemberChain Types:varref,memberAccess
+MemberChain Names:ts,a
+MemberChain Types:varref,memberAccess
+MemberChain Names:ts,a
+MemberChain Types:varref,memberAccess
+MemberChain Names:ts2,a
+MemberChain Types:varref,memberAccess
+MemberChain Names:ts2,a
+MemberChain Types:varref,memberAccess
+MemberChain Names:classVar,id
 varref:ts
 has decl:true
 varref:ts
