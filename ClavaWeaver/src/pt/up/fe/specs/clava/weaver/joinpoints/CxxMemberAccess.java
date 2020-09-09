@@ -45,7 +45,14 @@ public class CxxMemberAccess extends AMemberAccess {
     }
 
     @Override
-    public String[] getMemberChainArrayImpl() {
+    public AExpression[] getMemberChainArrayImpl() {
+        return memberExpr.getExprChain().stream()
+                .map(member -> (AExpression) CxxJoinpoints.create(member))
+                .toArray(size -> new AExpression[size]);
+    }
+
+    @Override
+    public String[] getMemberChainNamesArrayImpl() {
         return memberExpr.getChain().toArray(new String[0]);
     }
 }

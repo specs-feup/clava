@@ -33773,8 +33773,16 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "String[]",
+                              "type": "expression[]",
                               "name": "memberChain"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "String[]",
+                              "name": "memberChainNames"
                            }]
                },
                {

@@ -55,15 +55,15 @@ public abstract class AMemberAccess extends AExpression {
      * Get value on attribute memberChain
      * @return the attribute's value
      */
-    public abstract String[] getMemberChainArrayImpl();
+    public abstract AExpression[] getMemberChainArrayImpl();
 
     /**
      * Get value on attribute memberChain
      * @return the attribute's value
      */
     public Object getMemberChainImpl() {
-        String[] stringArrayImpl0 = getMemberChainArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        AExpression[] aExpressionArrayImpl0 = getMemberChainArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
         return nativeArray0;
     }
 
@@ -83,6 +83,41 @@ public abstract class AMemberAccess extends AExpression {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "memberChain", e);
+        }
+    }
+
+    /**
+     * Get value on attribute memberChainNames
+     * @return the attribute's value
+     */
+    public abstract String[] getMemberChainNamesArrayImpl();
+
+    /**
+     * Get value on attribute memberChainNames
+     * @return the attribute's value
+     */
+    public Object getMemberChainNamesImpl() {
+        String[] stringArrayImpl0 = getMemberChainNamesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute memberChainNames
+     * @return the attribute's value
+     */
+    public final Object getMemberChainNames() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "memberChainNames", Optional.empty());
+        	}
+        	Object result = this.getMemberChainNamesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "memberChainNames", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "memberChainNames", e);
         }
     }
 
@@ -397,6 +432,7 @@ public abstract class AMemberAccess extends AExpression {
         this.aExpression.fillWithAttributes(attributes);
         attributes.add("name");
         attributes.add("memberChain");
+        attributes.add("memberChainNames");
         attributes.add("base");
     }
 
@@ -443,6 +479,7 @@ public abstract class AMemberAccess extends AExpression {
     protected enum MemberAccessAttributes {
         NAME("name"),
         MEMBERCHAIN("memberChain"),
+        MEMBERCHAINNAMES("memberChainNames"),
         BASE("base"),
         VARDECL("vardecl"),
         USE("use"),

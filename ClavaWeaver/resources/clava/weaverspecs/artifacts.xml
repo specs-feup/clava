@@ -517,7 +517,8 @@
 	<!-- MEMBER ACCESS -->
 	<artifact class="memberAccess">
 		<attribute name="name" type="String" />
-		<attribute name="memberChain" type="String[]" />
+		<attribute name="memberChain" type="expression[]" />
+		<attribute name="memberChainNames" type="String[]" />
 		<attribute name="base" type="expression"
 			tooltip="expression of the base of this member access" />
 	</artifact>
