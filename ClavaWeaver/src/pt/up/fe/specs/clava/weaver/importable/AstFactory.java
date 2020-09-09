@@ -61,12 +61,14 @@ import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
+import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.parsing.omp.OmpParser;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AAccessSpecifier;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
@@ -91,6 +93,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
 import pt.up.fe.specs.util.Preconditions;
 import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsEnums;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -716,5 +719,19 @@ public class AstFactory {
         var fieldDecl = CxxWeaver.getFactory().fieldDecl(fieldName, (Type) fieldType.getNode());
         return CxxJoinpoints.create(fieldDecl, AField.class);
 
+    }
+
+    /**
+     * Creates a join point representing a new accessSpecifier.
+     *
+     * @param fieldName
+     * @param fieldType
+     * @return
+     */
+    public static AAccessSpecifier accessSpecifier(String accessSpecifierString) {
+        var accessSpecifier = SpecsEnums.fromName(AccessSpecifier.class, accessSpecifierString.toUpperCase());
+
+        var accessSpecifierDecl = CxxWeaver.getFactory().accessSpecDecl(accessSpecifier);
+        return CxxJoinpoints.create(accessSpecifierDecl, AAccessSpecifier.class);
     }
 }
