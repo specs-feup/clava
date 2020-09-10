@@ -1,0 +1,11 @@
+import weaver.Query;
+
+aspectdef SwitchTest
+
+	println("Test foo1");
+	for(var chain of Query.search("switch").search("case").chain()) {
+		println("Switch line: " + chain["switch"].line);
+		println("Case line: " + chain["case"].line);
+	}
+
+end

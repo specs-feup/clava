@@ -183,4 +183,9 @@ public class CTest {
     public void testFile() {
         newTester().test("File.lara", "file.c");
     }
+
+    @Test
+    public void testSwitch() {
+        newTester().test("SwitchTest.lara", "switch.c");
+    }
 }

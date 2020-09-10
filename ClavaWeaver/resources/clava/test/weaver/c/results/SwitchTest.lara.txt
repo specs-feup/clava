@@ -1,0 +1,7 @@
+Test foo1
+Switch line: 4
+Case line: 5
+Switch line: 4
+Case line: 7
+Switch line: 4
+Case line: 9
