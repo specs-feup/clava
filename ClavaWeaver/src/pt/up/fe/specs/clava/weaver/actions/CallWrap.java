@@ -102,13 +102,13 @@ public class CallWrap {
                 // "action 'wrap' is not supported yet when the call refers to a function that has no declaration in a
                 // header file: "
                 // + cxxCall.getNode().getLocation());
-                createInPlaceWrapper(name);
-                cxxCall.setName(name); // nned to call this here before returning
+                addWrapperFunctionInPlace(name, false);
+                cxxCall.setName(name); // need to call this here before returning
                 return;
             case DECLARATION_IN_IMPLEMENTATION:
-                SpecsLogs.msgInfo(
-                        "Found a call to a function whose declaration is not in a header file, will not perform action 'wrap': "
-                                + cxxCall.getNode().getLocation());
+
+                addWrapperFunctionInPlace(name, true);
+                cxxCall.setName(name);
                 return;
             }
             // System.out.println("INCLUDES:" + getWrapperIncludes(cxxCall));
@@ -132,22 +132,6 @@ public class CallWrap {
 
         // Set call name
         cxxCall.setName(name);
-
-    }
-
-    /**
-     * Creates a wrapper below the found implementation of the original function.
-     *
-     * @param name
-     */
-    private void createInPlaceWrapper(String name) {
-
-        // System.out.println("DEF IMPL:" + cxxCall.getDefinitionImpl());
-        FunctionDecl declaration = (FunctionDecl) cxxCall.getDefinitionImpl().getNode();
-
-        // System.out.println("FUNCTION BEFORE:" + declaration.getCode());
-        addWrapperFunctionInPlace(name, declaration);
-        // System.out.println("FUNCTION AFTER:" + declaration.getCode());
     }
 
     /**
@@ -206,9 +190,20 @@ public class CallWrap {
         app.getAppData().get(WRAPPER_CALLS).add(name);
     }
 
-    private void addWrapperFunctionInPlace(String name, FunctionDecl declaration) {
+    /**
+     * Creates a wrapper below the found implementation of the original function.
+     *
+     * @param name
+     */
+    private void addWrapperFunctionInPlace(String name, boolean hasDecl) {
 
-        FunctionDecl wrapperFunctionDeclImpl = (FunctionDecl) declaration.copy();
+        FunctionDecl originalDeclaration = null;
+        FunctionDecl originalDefinition = (FunctionDecl) cxxCall.getDefinitionImpl().getNode();
+        if (hasDecl) {
+            originalDeclaration = (FunctionDecl) cxxCall.getDeclarationImpl().getNode();
+        }
+
+        FunctionDecl wrapperFunctionDeclImpl = (FunctionDecl) originalDefinition.copy();
         wrapperFunctionDeclImpl.setDeclName(name);
 
         // Create code that calls previous function
@@ -221,45 +216,42 @@ public class CallWrap {
         wrapperFunctionDeclImpl.setBody(factory.compoundStmt(functionCallCode));
 
         // add to original file
-        TranslationUnit originalFile = declaration.getAncestor(TranslationUnit.class);
-
-        // int indexOfOriginal = declaration.indexOfSelf();
-        // originalFile.addChild(indexOfOriginal + 1, wrapperFunctionDeclImpl);
-
-        // HACK BEGIN
-        // TODO: Temporary, while conversion is not finished
-        // Find corresponding TranslationUnit in App of join point call
-        // TranslationUnit jpFile = cxxCall.getNode().getAncestor(TranslationUnit.class);
+        TranslationUnit originalFile = originalDefinition.getAncestor(TranslationUnit.class);
         TranslationUnit updatedFile = cxxCall.getNode().getApp().getTranslationUnit(originalFile.getLocation());
 
-        // System.out.println("CXX CALL TU LOCATION:" + jpFile.getLocation());
-        // System.out.println("CXX CALL TU HASH:" + jpFile.hashCode());
-        // System.out.println("ORIGINAL TU LOCATION:" + originalFile.getLocation());
-        // System.out.println("ORIGINAL TU HASH:" + originalFile.hashCode());
+        // adds the wrapper implementation after the implementation of the original
+        int originalDefinitionIndex = getIndex(originalDefinition, updatedFile);
+        updatedFile.addChild(originalDefinitionIndex + 1, wrapperFunctionDeclImpl);
 
-        // System.out.println("FILE AST:\n" + originalFile.toTree());
-        int index = -1;
-        for (int i = 0; i < updatedFile.getNumChildren(); i++) {
-            ClavaNode child = updatedFile.getChild(i);
-
-            if (child.getLocation().toString().equals(declaration.getLocation().toString())) {
-                index = i;
-                break;
-            }
-        }
-
-        updatedFile.addChild(index + 1, wrapperFunctionDeclImpl);
-
-        // when generating in place, adds forward declaration before the original function
-        // this is needed when there is recursion and the original will call the wrapper
+        // adds a wrapper forward declaration...
         FunctionDecl forwardDecl = (FunctionDecl) wrapperFunctionDeclImpl.copy();
         forwardDecl.getBody().get().detach();
-        updatedFile.addChild(index - 1, forwardDecl);
-
-        // HACK END
+        if (hasDecl) {
+            // ... after the declaration of the original
+            int originalDeclarationIndex = getIndex(originalDeclaration, updatedFile);
+            updatedFile.addChild(originalDeclarationIndex + 1, forwardDecl);
+        } else {
+            // ... before the definition of the original
+            // this is needed when there is recursion and the original will call the wrapper
+            updatedFile.addChild(originalDefinitionIndex, forwardDecl);
+        }
 
         // Save function implementation declaration
         app.getAppData().get(WRAPPER_CALLS).add(name);
+    }
+
+    private int getIndex(FunctionDecl decl, TranslationUnit tu) {
+
+        int originalDefinitionIndex = -1;
+        for (int i = 0; i < tu.getNumChildren(); i++) {
+            ClavaNode child = tu.getChild(i);
+
+            if (child.getLocation().toString().equals(decl.getLocation().toString())) {
+                originalDefinitionIndex = i;
+                break;
+            }
+        }
+        return originalDefinitionIndex;
     }
 
     private void createSystemIncludeWrapper(String name) {
