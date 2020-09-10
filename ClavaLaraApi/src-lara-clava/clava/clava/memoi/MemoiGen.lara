@@ -235,8 +235,8 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 		if(this._isDebug) {
 			var totalName = wrapperName + '_total_calls';
 			var missesName = wrapperName + '_total_misses';
-			$file.addGlobal(totalName, ClavaJoinPoints.builtinType("int"), '0');
-			$file.addGlobal(missesName, ClavaJoinPoints.builtinType("int"), '0');
+			$file.addGlobal(totalName, ClavaJoinPoints.builtinType("unsigned int"), '0');
+			$file.addGlobal(missesName, ClavaJoinPoints.builtinType("unsigned int"), '0');
 			$call.insert("before",  '[[totalName]]++;');
 			$call.insert("after", '[[missesName]]++;');
 			
@@ -292,12 +292,12 @@ MemoiGen.prototype._addMainDebug = function(totalName, missesName, wrapperName) 
 	var $file = chain["file"];
 	var $function = chain["function"];
 
-	$file.addGlobal(totalName, ClavaJoinPoints.builtinType("int"), '0');
-	$file.addGlobal(missesName, ClavaJoinPoints.builtinType("int"), '0');
+	$file.addGlobal(totalName, ClavaJoinPoints.builtinType("unsigned int"), '0');
+	$file.addGlobal(missesName, ClavaJoinPoints.builtinType("unsigned int"), '0');
 	$file.addInclude('stdio.h', true);
 	
 	$function.insertReturn(%{
-		printf("[[wrapperName]]\t%d / %d (%.2f%%)\n",
+		printf("[[wrapperName]]\t%u / %u (%.2f%%)\n",
 			[[totalName]] - [[missesName]],
 			[[totalName]],
 			([[totalName]] - [[missesName]]) * 100.0 / [[totalName]]);
