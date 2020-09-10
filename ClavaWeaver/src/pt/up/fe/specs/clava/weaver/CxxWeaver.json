@@ -14978,6 +14978,14 @@
                   "type": "attribute",
                   "children": [
                            {
+                              "type": "class[]",
+                              "name": "bases"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
                               "type": "method[]",
                               "name": "methods"
                            }]

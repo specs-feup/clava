@@ -215,6 +215,7 @@
 	<!-- CLASS -->
 	<artifact class="class" default="name">
 		<attribute name="methods" type="method[]" />	
+		<attribute name="bases" type="class[]" />			
 	</artifact>
 	
 	<!-- METHOD -->
