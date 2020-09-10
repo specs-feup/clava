@@ -414,3 +414,14 @@ ClavaJoinPoints.field = function(fieldName, $fieldType) {
 	
 	return AstFactory.field(fieldName, $fieldType);
 }
+
+/**
+ * Creates an access specifier (e.g., public:), for classes.
+ *
+ * @param {String} accessSpecifier one of public, protected, private or none.
+ */
+ClavaJoinPoints.accessSpecifier = function(accessSpecifier) {
+	Check.isString(accessSpecifier);
+	
+	return AstFactory.accessSpecifier(accessSpecifier);
+}

@@ -368,6 +368,12 @@
 		<attribute name="isGlobal" type="Boolean" tooltip="true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function." />
 	</artifact>
 
+	<artifact class="accessSpecifier" default="kind">
+		<attribute name="kind" type="String" tooltip="the type of specifier. Can return 'public', 'protected', 'private' or 'none'"/>
+	</artifact>
+
+
+
 	<!-- VARREF -->
 	<artifact class="varref" default="name">
 		<attribute name="name" type="String">

@@ -117,6 +117,10 @@
  	<!-- ENUMERATOR DECL -->
 	<joinpoint class="enumeratorDecl" extends="namedDecl">
  	</joinpoint>  
+ 	
+ 	<!-- ACCESS SPECIFIER -->
+	<joinpoint class="accessSpecifier" extends="decl">
+ 	</joinpoint>  	
 	
 	<!--  FUNCTION PARAMETER -->
 	<joinpoint class="param" extends="vardecl">
