@@ -8,6 +8,7 @@ aspectdef ClassManipulation
 	testCopyMethodDefinition();
 	testCopyTypedef();
 	testAddField();
+	testBases();
 end
 
 
@@ -92,4 +93,12 @@ function testAddField()  {
 	var $newField = ClavaJoinPoints.field("b", ClavaJoinPoints.builtinType("double"));
 	$class.addField($newField);
 	println("CLASS WITH NEW FIELD: " + $class.code);
+}
+
+
+function testBases()  {
+
+	var pig = Query.search("class", "Pig").first();
+	println("Pig bases: " + pig.bases[0].name);
+
 }
