@@ -20,6 +20,29 @@ import java.util.Arrays;
 public abstract class AExpression extends ACxxWeaverJoinPoint {
 
     /**
+     * a 'decl' join point that represents the declaration associated with this expression, or undefined if there is none
+     */
+    public abstract ADecl getDeclImpl();
+
+    /**
+     * a 'decl' join point that represents the declaration associated with this expression, or undefined if there is none
+     */
+    public final Object getDecl() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "decl", Optional.empty());
+        	}
+        	ADecl result = this.getDeclImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "decl", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "decl", e);
+        }
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
@@ -177,6 +200,7 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
+        attributes.add("decl");
         attributes.add("vardecl");
         attributes.add("use");
         attributes.add("isFunctionArgument");
@@ -212,6 +236,7 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
      * 
      */
     protected enum ExpressionAttributes {
+        DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),

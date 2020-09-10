@@ -20,6 +20,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AArrayAccess;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
@@ -60,6 +61,11 @@ public class CxxArrayAccess extends AArrayAccess {
 
         return ((AVarref) arrayVar).getVardeclImpl();
 
+    }
+
+    @Override
+    public ADecl getDeclImpl() {
+        return getVardeclImpl();
     }
 
     @Override

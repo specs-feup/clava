@@ -272,6 +272,11 @@
 	<!-- UnaryExprOrType -->
 	<joinpoint class="unaryExprOrType" extends="expression"/>	
 
+
+	<!-- THIS -->
+	<joinpoint class="this" extends="expression"/>
+
+
 	<!-- COMMENT -->
 	<joinpoint class="comment"/>
 

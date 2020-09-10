@@ -145,6 +145,15 @@ public abstract class AMemberAccess extends AExpression {
     }
 
     /**
+     * Get value on attribute decl
+     * @return the attribute's value
+     */
+    @Override
+    public ADecl getDeclImpl() {
+        return this.aExpression.getDeclImpl();
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
@@ -481,6 +490,7 @@ public abstract class AMemberAccess extends AExpression {
         MEMBERCHAIN("memberChain"),
         MEMBERCHAINNAMES("memberChainNames"),
         BASE("base"),
+        DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),
