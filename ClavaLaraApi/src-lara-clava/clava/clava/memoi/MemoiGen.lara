@@ -235,8 +235,8 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 		if(this._isDebug) {
 			var totalName = wrapperName + '_total_calls';
 			var missesName = wrapperName + '_total_misses';
-			$file.addGlobal(totalName, ClavaJoinPoints.builtinType("int"), '0');
-			$file.addGlobal(missesName, ClavaJoinPoints.builtinType("int"), '0');
+			$file.addGlobal(totalName, ClavaJoinPoints.builtinType("unsigned int"), '0');
+			$file.addGlobal(missesName, ClavaJoinPoints.builtinType("unsigned int"), '0');
 			$call.insert("before",  '[[totalName]]++;');
 			$call.insert("after", '[[missesName]]++;');
 			
@@ -288,16 +288,23 @@ MemoiGen.prototype._makeUpdateCode = function($function) {
 
 MemoiGen.prototype._addMainDebug = function(totalName, missesName, wrapperName) {
 	
-	var chain = Query.search("file").search("function", {"name":"main"}).chain()[0];
-	var $file = chain["file"];
-	var $function = chain["function"];
+	var chain = Query.search("file").search("function", {"name":"main"}).chain();
+	var firstAndOnly = chain[0];
+	
+	if(firstAndOnly === undefined) {
+		println("Could not find a main function. It may be impossible to print debug stats if this is a library code.");
+		return;
+	}
+	
+	var $file = firstAndOnly["file"];
+	var $function = firstAndOnly["function"];
 
-	$file.addGlobal(totalName, ClavaJoinPoints.builtinType("int"), '0');
-	$file.addGlobal(missesName, ClavaJoinPoints.builtinType("int"), '0');
+	$file.addGlobal(totalName, ClavaJoinPoints.builtinType("unsigned int"), '0');
+	$file.addGlobal(missesName, ClavaJoinPoints.builtinType("unsigned int"), '0');
 	$file.addInclude('stdio.h', true);
 	
 	$function.insertReturn(%{
-		printf("[[wrapperName]]\t%d / %d (%.2f%%)\n",
+		printf("[[wrapperName]]\t%u / %u (%.2f%%)\n",
 			[[totalName]] - [[missesName]],
 			[[totalName]],
 			([[totalName]] - [[missesName]]) * 100.0 / [[totalName]]);
