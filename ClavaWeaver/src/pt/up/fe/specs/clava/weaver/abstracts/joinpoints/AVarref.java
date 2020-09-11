@@ -182,6 +182,15 @@ public abstract class AVarref extends AExpression {
     }
 
     /**
+     * Get value on attribute decl
+     * @return the attribute's value
+     */
+    @Override
+    public ADecl getDeclImpl() {
+        return this.aExpression.getDeclImpl();
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
@@ -528,6 +537,7 @@ public abstract class AVarref extends AExpression {
         USEEXPR("useExpr"),
         ISFUNCTIONCALL("isFunctionCall"),
         DECLARATION("declaration"),
+        DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),

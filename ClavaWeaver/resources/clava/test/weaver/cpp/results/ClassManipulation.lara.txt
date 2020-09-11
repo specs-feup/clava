@@ -47,3 +47,5 @@ class originalClass4 {
    int a;
    double b;
 };
+
+Pig bases: Animal

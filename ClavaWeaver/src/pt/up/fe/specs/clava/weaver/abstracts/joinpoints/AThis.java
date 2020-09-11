@@ -8,20 +8,20 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point ANewExpr
+ * Auto-Generated class for join point AThis
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class ANewExpr extends AExpression {
+public abstract class AThis extends AExpression {
 
     protected AExpression aExpression;
 
     /**
      * 
      */
-    public ANewExpr(AExpression aExpression){
+    public AThis(AExpression aExpression){
         this.aExpression = aExpression;
     }
     /**
@@ -343,7 +343,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public final String get_class() {
-        return "newExpr";
+        return "this";
     }
 
     /**
@@ -361,7 +361,7 @@ public abstract class ANewExpr extends AExpression {
     /**
      * 
      */
-    protected enum NewExprAttributes {
+    protected enum ThisAttributes {
         DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),
@@ -428,13 +428,13 @@ public abstract class ANewExpr extends AExpression {
         /**
          * 
          */
-        private NewExprAttributes(String name){
+        private ThisAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<NewExprAttributes> fromString(String name) {
+        public static Optional<ThisAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -442,7 +442,7 @@ public abstract class ANewExpr extends AExpression {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(NewExprAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(ThisAttributes::name).collect(Collectors.toList());
         }
 
         /**

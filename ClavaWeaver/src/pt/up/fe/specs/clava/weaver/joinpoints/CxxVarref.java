@@ -19,6 +19,7 @@ import java.util.Optional;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeclarator;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
@@ -68,7 +69,7 @@ public class CxxVarref extends AVarref {
     @Override
     public String getUseImpl() {
         ExprUse use = ((Expr) getUseExprImpl().getNode()).use();
-
+    
         return CxxAttributes.convertUse(use);
     }
     */
@@ -99,5 +100,10 @@ public class CxxVarref extends AVarref {
         }
 
         return CxxJoinpoints.create(declarator.get(), ADeclarator.class);
+    }
+
+    @Override
+    public ADecl getDeclImpl() {
+        return super.getVardeclImpl();
     }
 }

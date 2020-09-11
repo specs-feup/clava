@@ -22,6 +22,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.weaver.CxxAttributes;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 
@@ -122,6 +123,11 @@ public class CxxExpression extends AExpression {
         return expr.getImplicitCast()
                 .map(castExpr -> CxxJoinpoints.create(castExpr, ACast.class))
                 .orElse(null);
+    }
+
+    @Override
+    public ADecl getDeclImpl() {
+        return null;
     }
 
 }

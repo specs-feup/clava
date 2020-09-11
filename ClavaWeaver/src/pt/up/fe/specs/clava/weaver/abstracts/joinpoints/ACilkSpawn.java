@@ -53,15 +53,6 @@ public abstract class ACilkSpawn extends ACall {
     }
 
     /**
-     * Get value on attribute decl
-     * @return the attribute's value
-     */
-    @Override
-    public AFunction getDeclImpl() {
-        return this.aCall.getDeclImpl();
-    }
-
-    /**
      * Get value on attribute declaration
      * @return the attribute's value
      */
@@ -185,6 +176,15 @@ public abstract class ACilkSpawn extends ACall {
     @Override
     public List<? extends AExpression> selectArg() {
         return this.aCall.selectArg();
+    }
+
+    /**
+     * Get value on attribute decl
+     * @return the attribute's value
+     */
+    @Override
+    public ADecl getDeclImpl() {
+        return this.aCall.getDeclImpl();
     }
 
     /**
@@ -585,7 +585,6 @@ public abstract class ACilkSpawn extends ACall {
         NAME("name"),
         NUMARGS("numArgs"),
         MEMBERNAMES("memberNames"),
-        DECL("decl"),
         DECLARATION("declaration"),
         DEFINITION("definition"),
         ARGLIST("argList"),
@@ -598,6 +597,7 @@ public abstract class ACilkSpawn extends ACall {
         ISSTMTCALL("isStmtCall"),
         FUNCTION("function"),
         SIGNATURE("signature"),
+        DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),

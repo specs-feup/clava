@@ -25,6 +25,15 @@ public abstract class ADeleteExpr extends AExpression {
         this.aExpression = aExpression;
     }
     /**
+     * Get value on attribute decl
+     * @return the attribute's value
+     */
+    @Override
+    public ADecl getDeclImpl() {
+        return this.aExpression.getDeclImpl();
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
@@ -353,6 +362,7 @@ public abstract class ADeleteExpr extends AExpression {
      * 
      */
     protected enum DeleteExprAttributes {
+        DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),

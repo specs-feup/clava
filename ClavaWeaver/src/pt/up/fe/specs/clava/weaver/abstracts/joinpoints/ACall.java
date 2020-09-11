@@ -121,29 +121,6 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * a 'function' join point that represents the function declaration or definition of the call, whatever appears first; 'undefined' if nothing was found
-     */
-    public abstract AFunction getDeclImpl();
-
-    /**
-     * a 'function' join point that represents the function declaration or definition of the call, whatever appears first; 'undefined' if nothing was found
-     */
-    public final Object getDecl() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "decl", Optional.empty());
-        	}
-        	AFunction result = this.getDeclImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "decl", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "decl", e);
-        }
-    }
-
-    /**
      * a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found
      */
     public abstract AJoinPoint getDeclarationImpl();
@@ -598,6 +575,15 @@ public abstract class ACall extends AExpression {
     }
 
     /**
+     * Get value on attribute decl
+     * @return the attribute's value
+     */
+    @Override
+    public ADecl getDeclImpl() {
+        return this.aExpression.getDeclImpl();
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
@@ -899,7 +885,6 @@ public abstract class ACall extends AExpression {
         attributes.add("name");
         attributes.add("numArgs");
         attributes.add("memberNames");
-        attributes.add("decl");
         attributes.add("declaration");
         attributes.add("definition");
         attributes.add("argList");
@@ -965,7 +950,6 @@ public abstract class ACall extends AExpression {
         NAME("name"),
         NUMARGS("numArgs"),
         MEMBERNAMES("memberNames"),
-        DECL("decl"),
         DECLARATION("declaration"),
         DEFINITION("definition"),
         ARGLIST("argList"),
@@ -978,6 +962,7 @@ public abstract class ACall extends AExpression {
         ISSTMTCALL("isStmtCall"),
         FUNCTION("function"),
         SIGNATURE("signature"),
+        DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),

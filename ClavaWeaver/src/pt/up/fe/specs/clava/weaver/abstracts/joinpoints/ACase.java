@@ -8,65 +8,101 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point ANewExpr
+ * Auto-Generated class for join point ACase
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class ANewExpr extends AExpression {
+public abstract class ACase extends AStatement {
 
-    protected AExpression aExpression;
+    protected AStatement aStatement;
 
     /**
      * 
      */
-    public ANewExpr(AExpression aExpression){
-        this.aExpression = aExpression;
+    public ACase(AStatement aStatement){
+        this.aStatement = aStatement;
     }
     /**
-     * Get value on attribute decl
+     * Get value on attribute isFirst
      * @return the attribute's value
      */
     @Override
-    public ADecl getDeclImpl() {
-        return this.aExpression.getDeclImpl();
-    }
-
-    /**
-     * Get value on attribute vardecl
-     * @return the attribute's value
-     */
-    @Override
-    public AVardecl getVardeclImpl() {
-        return this.aExpression.getVardeclImpl();
+    public Boolean getIsFirstImpl() {
+        return this.aStatement.getIsFirstImpl();
     }
 
     /**
-     * Get value on attribute use
+     * Get value on attribute isLast
      * @return the attribute's value
      */
     @Override
-    public String getUseImpl() {
-        return this.aExpression.getUseImpl();
+    public Boolean getIsLastImpl() {
+        return this.aStatement.getIsLastImpl();
     }
 
     /**
-     * Get value on attribute isFunctionArgument
-     * @return the attribute's value
+     * Method used by the lara interpreter to select exprs
+     * @return 
      */
     @Override
-    public Boolean getIsFunctionArgumentImpl() {
-        return this.aExpression.getIsFunctionArgumentImpl();
+    public List<? extends AExpression> selectExpr() {
+        return this.aStatement.selectExpr();
     }
 
     /**
-     * Get value on attribute implicitCast
-     * @return the attribute's value
+     * Method used by the lara interpreter to select childExprs
+     * @return 
      */
     @Override
-    public ACast getImplicitCastImpl() {
-        return this.aExpression.getImplicitCastImpl();
+    public List<? extends AExpression> selectChildExpr() {
+        return this.aStatement.selectChildExpr();
+    }
+
+    /**
+     * Method used by the lara interpreter to select calls
+     * @return 
+     */
+    @Override
+    public List<? extends ACall> selectCall() {
+        return this.aStatement.selectCall();
+    }
+
+    /**
+     * Method used by the lara interpreter to select stmtCalls
+     * @return 
+     */
+    @Override
+    public List<? extends ACall> selectStmtCall() {
+        return this.aStatement.selectStmtCall();
+    }
+
+    /**
+     * Method used by the lara interpreter to select memberCalls
+     * @return 
+     */
+    @Override
+    public List<? extends AMemberCall> selectMemberCall() {
+        return this.aStatement.selectMemberCall();
+    }
+
+    /**
+     * Method used by the lara interpreter to select memberAccesss
+     * @return 
+     */
+    @Override
+    public List<? extends AMemberAccess> selectMemberAccess() {
+        return this.aStatement.selectMemberAccess();
+    }
+
+    /**
+     * Method used by the lara interpreter to select arrayAccesss
+     * @return 
+     */
+    @Override
+    public List<? extends AArrayAccess> selectArrayAccess() {
+        return this.aStatement.selectArrayAccess();
     }
 
     /**
@@ -75,7 +111,70 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public List<? extends AVardecl> selectVardecl() {
-        return this.aExpression.selectVardecl();
+        return this.aStatement.selectVardecl();
+    }
+
+    /**
+     * Method used by the lara interpreter to select varrefs
+     * @return 
+     */
+    @Override
+    public List<? extends AVarref> selectVarref() {
+        return this.aStatement.selectVarref();
+    }
+
+    /**
+     * Method used by the lara interpreter to select ops
+     * @return 
+     */
+    @Override
+    public List<? extends AOp> selectOp() {
+        return this.aStatement.selectOp();
+    }
+
+    /**
+     * Method used by the lara interpreter to select binaryOps
+     * @return 
+     */
+    @Override
+    public List<? extends ABinaryOp> selectBinaryOp() {
+        return this.aStatement.selectBinaryOp();
+    }
+
+    /**
+     * Method used by the lara interpreter to select unaryOps
+     * @return 
+     */
+    @Override
+    public List<? extends AUnaryOp> selectUnaryOp() {
+        return this.aStatement.selectUnaryOp();
+    }
+
+    /**
+     * Method used by the lara interpreter to select newExprs
+     * @return 
+     */
+    @Override
+    public List<? extends ANewExpr> selectNewExpr() {
+        return this.aStatement.selectNewExpr();
+    }
+
+    /**
+     * Method used by the lara interpreter to select deleteExprs
+     * @return 
+     */
+    @Override
+    public List<? extends ADeleteExpr> selectDeleteExpr() {
+        return this.aStatement.selectDeleteExpr();
+    }
+
+    /**
+     * Method used by the lara interpreter to select cilkSpawns
+     * @return 
+     */
+    @Override
+    public List<? extends ACilkSpawn> selectCilkSpawn() {
+        return this.aStatement.selectCilkSpawn();
     }
 
     /**
@@ -84,7 +183,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aExpression.replaceWithImpl(node);
+        return this.aStatement.replaceWithImpl(node);
     }
 
     /**
@@ -93,7 +192,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public AJoinPoint replaceWithImpl(String node) {
-        return this.aExpression.replaceWithImpl(node);
+        return this.aStatement.replaceWithImpl(node);
     }
 
     /**
@@ -102,7 +201,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aExpression.insertBeforeImpl(node);
+        return this.aStatement.insertBeforeImpl(node);
     }
 
     /**
@@ -111,7 +210,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aExpression.insertBeforeImpl(node);
+        return this.aStatement.insertBeforeImpl(node);
     }
 
     /**
@@ -120,7 +219,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aExpression.insertAfterImpl(node);
+        return this.aStatement.insertAfterImpl(node);
     }
 
     /**
@@ -129,7 +228,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aExpression.insertAfterImpl(code);
+        return this.aStatement.insertAfterImpl(code);
     }
 
     /**
@@ -137,7 +236,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public void detachImpl() {
-        this.aExpression.detachImpl();
+        this.aStatement.detachImpl();
     }
 
     /**
@@ -146,7 +245,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public void setTypeImpl(AJoinPoint type) {
-        this.aExpression.setTypeImpl(type);
+        this.aStatement.setTypeImpl(type);
     }
 
     /**
@@ -154,7 +253,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aExpression.copyImpl();
+        return this.aStatement.copyImpl();
     }
 
     /**
@@ -162,7 +261,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public AJoinPoint deepCopyImpl() {
-        return this.aExpression.deepCopyImpl();
+        return this.aStatement.deepCopyImpl();
     }
 
     /**
@@ -172,7 +271,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aExpression.setUserFieldImpl(fieldName, value);
+        return this.aStatement.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -181,7 +280,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aExpression.setUserFieldImpl(fieldNameAndValue);
+        return this.aStatement.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -191,7 +290,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
-        return this.aExpression.setValueImpl(key, value);
+        return this.aStatement.setValueImpl(key, value);
     }
 
     /**
@@ -200,7 +299,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aExpression.messageToUserImpl(message);
+        this.aStatement.messageToUserImpl(message);
     }
 
     /**
@@ -208,7 +307,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public void removeChildrenImpl() {
-        this.aExpression.removeChildrenImpl();
+        this.aStatement.removeChildrenImpl();
     }
 
     /**
@@ -217,7 +316,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public void setFirstChildImpl(AJoinPoint node) {
-        this.aExpression.setFirstChildImpl(node);
+        this.aStatement.setFirstChildImpl(node);
     }
 
     /**
@@ -226,7 +325,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public void setLastChildImpl(AJoinPoint node) {
-        this.aExpression.setLastChildImpl(node);
+        this.aStatement.setLastChildImpl(node);
     }
 
     /**
@@ -236,7 +335,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aExpression.insertImpl(position, code);
+        return this.aStatement.insertImpl(position, code);
     }
 
     /**
@@ -246,7 +345,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aExpression.insertImpl(position, code);
+        return this.aStatement.insertImpl(position, code);
     }
 
     /**
@@ -254,15 +353,15 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public String toString() {
-        return this.aExpression.toString();
+        return this.aStatement.toString();
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends AExpression> getSuper() {
-        return Optional.of(this.aExpression);
+    public Optional<? extends AStatement> getSuper() {
+        return Optional.of(this.aStatement);
     }
 
     /**
@@ -272,11 +371,53 @@ public abstract class ANewExpr extends AExpression {
     public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
+        	case "expr": 
+        		joinPointList = selectExpr();
+        		break;
+        	case "childExpr": 
+        		joinPointList = selectChildExpr();
+        		break;
+        	case "call": 
+        		joinPointList = selectCall();
+        		break;
+        	case "stmtCall": 
+        		joinPointList = selectStmtCall();
+        		break;
+        	case "memberCall": 
+        		joinPointList = selectMemberCall();
+        		break;
+        	case "memberAccess": 
+        		joinPointList = selectMemberAccess();
+        		break;
+        	case "arrayAccess": 
+        		joinPointList = selectArrayAccess();
+        		break;
         	case "vardecl": 
         		joinPointList = selectVardecl();
         		break;
+        	case "varref": 
+        		joinPointList = selectVarref();
+        		break;
+        	case "op": 
+        		joinPointList = selectOp();
+        		break;
+        	case "binaryOp": 
+        		joinPointList = selectBinaryOp();
+        		break;
+        	case "unaryOp": 
+        		joinPointList = selectUnaryOp();
+        		break;
+        	case "newExpr": 
+        		joinPointList = selectNewExpr();
+        		break;
+        	case "deleteExpr": 
+        		joinPointList = selectDeleteExpr();
+        		break;
+        	case "cilkSpawn": 
+        		joinPointList = selectCilkSpawn();
+        		break;
         	default:
-        		joinPointList = this.aExpression.select(selectName);
+        		joinPointList = this.aStatement.select(selectName);
         		break;
         }
         return joinPointList;
@@ -318,7 +459,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
-        this.aExpression.fillWithAttributes(attributes);
+        this.aStatement.fillWithAttributes(attributes);
     }
 
     /**
@@ -326,7 +467,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     protected final void fillWithSelects(List<String> selects) {
-        this.aExpression.fillWithSelects(selects);
+        this.aStatement.fillWithSelects(selects);
     }
 
     /**
@@ -334,7 +475,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     protected final void fillWithActions(List<String> actions) {
-        this.aExpression.fillWithActions(actions);
+        this.aStatement.fillWithActions(actions);
     }
 
     /**
@@ -343,7 +484,7 @@ public abstract class ANewExpr extends AExpression {
      */
     @Override
     public final String get_class() {
-        return "newExpr";
+        return "case";
     }
 
     /**
@@ -356,17 +497,14 @@ public abstract class ANewExpr extends AExpression {
         if(isInstance) {
         	return true;
         }
-        return this.aExpression.instanceOf(joinpointClass);
+        return this.aStatement.instanceOf(joinpointClass);
     }
     /**
      * 
      */
-    protected enum NewExprAttributes {
-        DECL("decl"),
-        VARDECL("vardecl"),
-        USE("use"),
-        ISFUNCTIONARGUMENT("isFunctionArgument"),
-        IMPLICITCAST("implicitCast"),
+    protected enum CaseAttributes {
+        ISFIRST("isFirst"),
+        ISLAST("isLast"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
@@ -428,13 +566,13 @@ public abstract class ANewExpr extends AExpression {
         /**
          * 
          */
-        private NewExprAttributes(String name){
+        private CaseAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<NewExprAttributes> fromString(String name) {
+        public static Optional<CaseAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -442,7 +580,7 @@ public abstract class ANewExpr extends AExpression {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(NewExprAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(CaseAttributes::name).collect(Collectors.toList());
         }
 
         /**

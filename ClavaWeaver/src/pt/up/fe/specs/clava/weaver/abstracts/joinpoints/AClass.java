@@ -65,6 +65,41 @@ public abstract class AClass extends ARecord {
     }
 
     /**
+     * Get value on attribute bases
+     * @return the attribute's value
+     */
+    public abstract AClass[] getBasesArrayImpl();
+
+    /**
+     * Get value on attribute bases
+     * @return the attribute's value
+     */
+    public Object getBasesImpl() {
+        AClass[] aClassArrayImpl0 = getBasesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aClassArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Get value on attribute bases
+     * @return the attribute's value
+     */
+    public final Object getBases() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "bases", Optional.empty());
+        	}
+        	Object result = this.getBasesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "bases", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "bases", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select methods
      * @return 
      */
@@ -466,6 +501,7 @@ public abstract class AClass extends ARecord {
     protected final void fillWithAttributes(List<String> attributes) {
         this.aRecord.fillWithAttributes(attributes);
         attributes.add("methods");
+        attributes.add("bases");
     }
 
     /**
@@ -512,6 +548,7 @@ public abstract class AClass extends ARecord {
      */
     protected enum ClassAttributes {
         METHODS("methods"),
+        BASES("bases"),
         KIND("kind"),
         FIELDS("fields"),
         FUNCTIONS("functions"),

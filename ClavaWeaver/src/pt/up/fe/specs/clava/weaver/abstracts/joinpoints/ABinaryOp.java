@@ -214,6 +214,15 @@ public abstract class ABinaryOp extends AOp {
     }
 
     /**
+     * Get value on attribute decl
+     * @return the attribute's value
+     */
+    @Override
+    public ADecl getDeclImpl() {
+        return this.aOp.getDeclImpl();
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
@@ -575,6 +584,7 @@ public abstract class ABinaryOp extends AOp {
         OPERATOR("operator"),
         KIND("kind"),
         ISBITWISE("isBitwise"),
+        DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),

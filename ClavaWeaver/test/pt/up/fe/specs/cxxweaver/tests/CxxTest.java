@@ -279,4 +279,9 @@ public class CxxTest {
                 .set(CxxWeaverOption.PARSE_INCLUDES)
                 .test("ClassManipulation.lara", "class_manipulation.cpp", "class_manipulation.h");
     }
+
+    @Test
+    public void testThis() {
+        newTester().test("ThisTest.lara", "this.cpp");
+    }
 }

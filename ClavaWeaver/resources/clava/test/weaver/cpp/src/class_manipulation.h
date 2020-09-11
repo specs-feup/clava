@@ -38,3 +38,14 @@ public:
 	int a;
 
 };
+
+
+// Base class
+class Animal {
+
+};
+
+// Derived class
+class Pig : public Animal {
+
+};

@@ -186,6 +186,15 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
+     * Get value on attribute decl
+     * @return the attribute's value
+     */
+    @Override
+    public ADecl getDeclImpl() {
+        return this.aExpression.getDeclImpl();
+    }
+
+    /**
      * Get value on attribute vardecl
      * @return the attribute's value
      */
@@ -532,6 +541,7 @@ public abstract class AUnaryExprOrType extends AExpression {
         HASARGEXPR("hasArgExpr"),
         ARGTYPE("argType"),
         ARGEXPR("argExpr"),
+        DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),

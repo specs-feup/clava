@@ -213,6 +213,12 @@
 		<select	alias="returnExpr"			class="expression"/>	
 	</joinpoint>
 
+	<!-- SWITCH -->
+	<joinpoint class="switch" extends="statement"/>
+	
+	<!-- CASE -->
+	<joinpoint class="case" extends="statement"/>	
+
 
 	<!-- CALL -->	
 	<joinpoint class="call" 	extends="expression">
@@ -271,6 +277,11 @@
 
 	<!-- UnaryExprOrType -->
 	<joinpoint class="unaryExprOrType" extends="expression"/>	
+
+
+	<!-- THIS -->
+	<joinpoint class="this" extends="expression"/>
+
 
 	<!-- COMMENT -->
 	<joinpoint class="comment"/>
