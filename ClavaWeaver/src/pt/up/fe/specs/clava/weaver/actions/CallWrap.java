@@ -197,11 +197,7 @@ public class CallWrap {
      */
     private void addWrapperFunctionInPlace(String name, boolean hasDecl) {
 
-        FunctionDecl originalDeclaration = null;
         FunctionDecl originalDefinition = (FunctionDecl) cxxCall.getDefinitionImpl().getNode();
-        if (hasDecl) {
-            originalDeclaration = (FunctionDecl) cxxCall.getDeclarationImpl().getNode();
-        }
 
         FunctionDecl wrapperFunctionDeclImpl = (FunctionDecl) originalDefinition.copy();
         wrapperFunctionDeclImpl.setDeclName(name);
@@ -228,6 +224,7 @@ public class CallWrap {
         forwardDecl.getBody().get().detach();
         if (hasDecl) {
             // ... after the declaration of the original
+            FunctionDecl originalDeclaration = (FunctionDecl) cxxCall.getDeclarationImpl().getNode();
             int originalDeclarationIndex = getIndex(originalDeclaration, updatedFile);
             updatedFile.addChild(originalDeclarationIndex + 1, forwardDecl);
         } else {
