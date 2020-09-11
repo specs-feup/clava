@@ -5,23 +5,23 @@
 #include <stdio.h>
 #include "clava_wrappers/clava_weaver_wrappers.h"
 
-int wrap_fooNoDecl(int a);
+void voidFooFileDecl(int *a);
+
+void wrap_voidFooFileDecl(int *a);
 
 int foo(int a) {
-   
-   return a + 1;
+	return a + 1;
 }
 
+int wrap_fooNoDecl(int a);
 
-int fooNoDecl(int a) {
-   
+int fooNoDecl(int a) {   
    return a + 10;
 }
 
 int wrap_fooNoDecl(int a) {
    int result;
    result = fooNoDecl(a);
-   
    return result;
 }
 
@@ -29,11 +29,23 @@ void voidFoo(int *a) {
    (*a)++;
 }
 
+void voidFooFileDecl(int *a) {
+	(*a)++;
+}
+
+void wrap_voidFooFileDecl(int *a) {
+	voidFooFileDecl(a);
+}
+
 int main() {
+
    wrap_foo(10);
    wrap_fooNoDecl(20);
+   
    int a = 100;
    wrap_voidFoo(&a);
+   wrap_voidFooFileDecl(&a);
+   
    wrap_printf("Hello");
 }
 
