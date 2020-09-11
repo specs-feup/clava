@@ -1,6 +1,8 @@
 #include "wrap.h"
 #include <stdio.h>
 
+void voidFooFileDecl(int *a);
+
 int foo(int a) {
 	return a + 1;
 }
@@ -13,6 +15,9 @@ void voidFoo(int *a) {
 	(*a)++;
 }
 
+void voidFooFileDecl(int *a) {
+	(*a)++;
+}
 
 int main() {
 
@@ -22,6 +27,7 @@ int main() {
 
 	int a = 100;
 	voidFoo(&a);
+	voidFooFileDecl(&a);
 	
 	printf("Hello");
 }
