@@ -104,6 +104,6 @@ public class CxxVarref extends AVarref {
 
     @Override
     public ADecl getDeclImpl() {
-        return super.getVardeclImpl();
+        return getVardeclImpl();
     }
 }
