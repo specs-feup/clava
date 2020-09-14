@@ -10,6 +10,7 @@ aspectdef BuildPetitFileInput
 
 	var replace_vars = [];
 	var loopindex = GetLoopIndex($ForStmt);
+
 	if (LoopOmpAttributes[loopindex].msgError.length !== 0)
 		return;
 
@@ -200,7 +201,22 @@ aspectdef CovertLoopToPetitForm
 
 	loopPetitForm = tabOP.join('') + 'for ';
 	var loopindex = GetLoopIndex($ForStmt);
-	var loopControlVarname = LoopOmpAttributes[loopindex].loopControlVarname;
+	//println("DEBUG - Loop Index: " + loopindex); 
+	//println("DEBUG - For Stmt: " + $ForStmt.location); 	
+	//println("DEBUG - LoopOmpAttributes[loopindex]: " + LoopOmpAttributes[loopindex]);
+	var loopAttributes = LoopOmpAttributes[loopindex];
+	if(loopAttributes === undefined) {
+		var message = "";
+		message += "Could not find the loop attributes of loop " + loopindex + "@" + $ForStmt.location + ". Current attributes:\n";
+		for(var key in LoopOmpAttributes) {
+			message += key + ": " + LoopOmpAttributes[key];
+		}	
+		
+		throw message;
+	}
+	
+	//var loopControlVarname = LoopOmpAttributes[loopindex].loopControlVarname;
+	var loopControlVarname = loopAttributes.loopControlVarname;
 
 	var cloneJP = null;
 
