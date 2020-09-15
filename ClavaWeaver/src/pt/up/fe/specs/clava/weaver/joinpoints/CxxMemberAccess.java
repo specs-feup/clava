@@ -55,4 +55,5 @@ public class CxxMemberAccess extends AMemberAccess {
     public String[] getMemberChainNamesArrayImpl() {
         return memberExpr.getChain().toArray(new String[0]);
     }
+
 }

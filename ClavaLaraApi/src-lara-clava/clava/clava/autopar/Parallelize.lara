@@ -13,6 +13,7 @@ import lara.util.CodeInserter;
 import lara.Io;
 
 import weaver.WeaverJps;
+import weaver.Query;
 
 /**
  * Utility methods for parallelization.
@@ -282,3 +283,50 @@ Parallelize.saveStats = function($loops) {
 	Parallelize._stats.write();
 }
 */
+
+
+/**
+ * Comments OpenMP pragmas that are nested inside other OpenMP pragmas.
+ *
+ * @return {String} the loop ids of loops whose OpenMP pragmas where commented.
+ */
+Parallelize.removeNestedPragmas = function() {
+
+	var pragmasToComment = [];
+	var commentedLoopIds = [];	
+    
+	for(var $omp of Query.search("omp")) {
+        if(Parallelize.isNestedOpenMP($omp)) {
+            pragmasToComment.push($omp);
+			commentedLoopIds.push($omp.target.id);
+        }
+	}
+    
+    for(var $pragma of pragmasToComment) {
+        $pragma.replaceWith("// " + $pragma.code);
+    }
+
+	return commentedLoopIds;
+}
+
+
+Parallelize.isNestedOpenMP = function($omp) {
+    
+    // Check if OpenMP pragma is inside a loop with another OpenMP pragma
+    var $loop = $omp.target;
+        
+    var $ancestor = $loop.parent;
+    while($ancestor !== undefined) {
+        if($ancestor.instanceOf("loop")) {
+            for(var $pragma of $ancestor.pragmas) {
+                if($pragma.instanceOf("omp")) {
+                    return true;
+                }                
+            }
+        }
+        
+        $ancestor = $ancestor.parent;
+    }
+
+    return false;
+}
