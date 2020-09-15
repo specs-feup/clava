@@ -23,6 +23,8 @@ function MemoiGen(target) {
 		this._tableSize = 65536;
 		
 		this._isDebug = false;
+		
+		this._applyPolicy = MemoiApplyPolicy.NOT_EMPTY;
 }
 
 /**
@@ -89,6 +91,54 @@ MemoiGen.prototype.setDebug = function(isDebug) {
 	isDebug = isDebug === undefined ? true : isDebug;
 	
 	this._isDebug = isDebug;
+}
+
+var MemoiApplyPolicy = {
+	ALWAYS : function(report) {
+		return true;
+	},
+	NOT_EMPTY : function(report) {
+		if(mean(report.elements, report.reportCount) === 0) {
+			debug('skipped - no calls');
+			return false;
+		}
+				
+		return true;
+	},
+	_OVER_X_PCT : function(report, x) {
+		var hits = mean(report.hits, report.reportCount);
+		var calls = mean(report.calls, report.reportCount)
+		
+		if(hits/calls < x) {
+			return false;
+		}
+		
+		return true;
+	},
+	OVER_15_PCT : function(report) {
+
+		return this._OVER_X_PCT(0.15);
+	},
+	OVER_25_PCT : function(report) {
+
+		return this._OVER_X_PCT(0.25);
+	},
+	OVER_50_PCT : function(report) {
+
+		return this._OVER_X_PCT(0.5);
+	},
+};
+
+/**
+ *		Sets the apply policy.
+ *		Defaults to MemoiApplyPolicy.NOT_EMPTY.
+ * */
+MemoiGen.prototype.setApplyPolicy = function(policy) {
+
+	var allowedPolicies = [MemoiApplyPolicy.ALWAYS, MemoiApplyPolicy.NOT_EMPTY];
+	Check.arrayContains(allowedPolicies, policy, "The possible apply policies are {MemoiApplyPolicy.ALWAYS, MemoiApplyPolicy.NOT_EMPTY}.", "MemoiGen.setApplyPolicy");
+	
+	this._applyPolicy = policy;
 }
 
 /**

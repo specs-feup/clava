@@ -1,4 +1,5 @@
 package pt.up.fe.specs.clava.weaver.memoi;
+
 import java.util.function.Predicate;
 
 /**
@@ -14,6 +15,12 @@ import java.util.function.Predicate;
  * specific language governing permissions and limitations under the License. under the License.
  */
 
+/**
+ * Policies for inserting specific entries into the table.
+ * 
+ * @author pedro
+ *
+ */
 public class InsertPolicy {
 
     public static final Predicate<MergedMemoiEntry> ALWAYS = (e) -> true;

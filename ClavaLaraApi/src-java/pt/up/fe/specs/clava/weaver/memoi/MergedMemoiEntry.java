@@ -22,16 +22,23 @@ public class MergedMemoiEntry {
     private final String output;
     private final List<Integer> counter;
     private int collisions;
+    private final MergedMemoiReport parentReport;
 
-    public MergedMemoiEntry(MemoiEntry previousEntry) {
+    public MergedMemoiEntry(MemoiEntry previousEntry, MergedMemoiReport parentReport) {
 
         this.key = previousEntry.getKey();
         this.output = previousEntry.getOutput();
         this.counter = new ArrayList<>();
         this.counter.add(previousEntry.getCounter());
         this.collisions = 0;
+        this.parentReport = parentReport;
     }
 
+    public double getCountMean() {
+        
+        return MemoiUtils.mean(counter, parentReport.getReportCount());
+    }
+    
     public String getKey() {
         return key;
     }

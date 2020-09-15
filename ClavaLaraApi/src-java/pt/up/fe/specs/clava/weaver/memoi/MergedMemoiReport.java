@@ -69,7 +69,7 @@ public class MergedMemoiReport {
         for (MemoiEntry oldEntry : report.getCounts()) {
 
             String key = oldEntry.getKey();
-            MergedMemoiEntry newEntry = new MergedMemoiEntry(oldEntry);
+            MergedMemoiEntry newEntry = new MergedMemoiEntry(oldEntry, this);
             counts.put(key, newEntry);
         }
     }
@@ -119,7 +119,7 @@ public class MergedMemoiReport {
 
             if (!counts.containsKey(key)) {
 
-                MergedMemoiEntry newEntry = new MergedMemoiEntry(oldEntry);
+                MergedMemoiEntry newEntry = new MergedMemoiEntry(oldEntry, this);
 
                 counts.put(key, newEntry);
             } else {
