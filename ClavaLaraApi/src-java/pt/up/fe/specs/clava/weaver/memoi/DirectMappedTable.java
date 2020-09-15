@@ -76,7 +76,7 @@ public class DirectMappedTable {
 
         this(report, numSets, InsertPolicy.ALWAYS, MemoiComparator.mean(report));
     }
-
+    
     public DirectMappedTable(MergedMemoiReport report, int numSets,
             Predicate<MergedMemoiEntry> insertPred,
             Comparator<MergedMemoiEntry> countComparator) {
