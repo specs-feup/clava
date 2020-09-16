@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.exception.ActionException;
 import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,30 @@ public abstract class AMethod extends AFunction {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "record", e);
+        }
+    }
+
+    /**
+     * Removes the of the method
+     */
+    public void removeRecordImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action removeRecord not implemented ");
+    }
+
+    /**
+     * Removes the of the method
+     */
+    public final void removeRecord() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "removeRecord", this, Optional.empty());
+        	}
+        	this.removeRecordImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "removeRecord", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "removeRecord", e);
         }
     }
 
@@ -771,6 +796,7 @@ public abstract class AMethod extends AFunction {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aFunction.fillWithActions(actions);
+        actions.add("void removeRecord()");
     }
 
     /**

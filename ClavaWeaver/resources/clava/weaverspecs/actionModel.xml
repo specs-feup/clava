@@ -306,7 +306,7 @@
 	<action name="dfg" class="scope"	tooltip="DFG tester" />
 
 	<!-- FUNCTION -->
-	<action name="clone" class="function" return="function" tooltip="Clones this function assigning it a new name, inserts the cloned function after the original function">
+	<action name="clone" class="function" return="function" tooltip="Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class">
 		<parameter name="newName" type="String" />
 		<parameter name="insert" type="Boolean" />		
 	</action>
@@ -373,6 +373,7 @@
 		<parameter name="classJp" type="class" />
 	</action>
 	 -->	
+	<action name="removeRecord" class="method" tooltip="Removes the of the method"/>
 
 	<!-- NAMED DECL -->
 	<action name="setName" class="namedDecl" tooltip="Sets the name of this namedDecl">
