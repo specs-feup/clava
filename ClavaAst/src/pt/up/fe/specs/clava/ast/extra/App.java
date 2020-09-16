@@ -443,8 +443,8 @@ public class App extends ClavaNode {
      * @param baseInputFolder
      * @param destinationFolder
      * @param modifiedFiles
-     *                              a set of filenames which is a white-list for files that should be generated from the
-     *                              AST. If null, generates all files from the AST
+     *            a set of filenames which is a white-list for files that should be generated from the AST. If null,
+     *            generates all files from the AST
      * @return
      */
     public Map<File, String> getCode(File destinationFolder, Set<String> modifiedFiles) {
@@ -563,21 +563,28 @@ public class App extends ClavaNode {
     // return unaliasedId != null ? unaliasedId : id;
     // }
 
-    public Optional<FunctionDecl> getFunctionDeclaration(String declName, FunctionType functionType) {
-        return getFunctionDeclaration(declName, functionType, functionDeclarationCache, false);
+    public Optional<FunctionDecl> getFunctionDeclaration(FunctionDecl function) {
+        // return getFunctionDeclaration(declName, functionType, functionDeclarationCache, false);
+        return getFunctionDeclaration(function, functionDeclarationCache, false);
     }
 
-    public Optional<FunctionDecl> getFunctionDefinition(String declName, FunctionType functionType) {
-        return getFunctionDeclaration(declName, functionType, functionDefinitionCache, true);
+    public Optional<FunctionDecl> getFunctionDefinition(FunctionDecl function) {
+        // return getFunctionDeclaration(declName, functionType, functionDefinitionCache, true);
+        return getFunctionDeclaration(function, functionDefinitionCache, true);
     }
 
-    private Optional<FunctionDecl> getFunctionDeclaration(String declName, FunctionType functionType,
-            Map<String, FunctionDecl> cache, boolean hasBody) {
+    // private Optional<FunctionDecl> getFunctionDeclaration(String declName, FunctionType functionType,
+    // Map<String, FunctionDecl> cache, boolean hasBody) {
+    private Optional<FunctionDecl> getFunctionDeclaration(FunctionDecl function, Map<String, FunctionDecl> cache,
+            boolean hasBody) {
 
         // ClavaLog.debug("Looking for function declaration for " + declName);
 
         // Check if node was already asked
-        FunctionDecl cachedNode = cache.get(getFunctionId(declName, functionType));
+        // FunctionDecl cachedNode = cache.get(getFunctionId(declName, functionType));
+        var functionId = function.getFunctionId();
+
+        FunctionDecl cachedNode = cache.get(functionId);
         if (cachedNode != null) {
             // Check if no function is available
             if (cachedNode == getNoFunctionFound()) {
@@ -592,19 +599,22 @@ public class App extends ClavaNode {
                 .map(FunctionDecl.class::cast)
                 // Check hasBody flag
                 .filter(fdecl -> fdecl.hasBody() == hasBody)
+                // Filter by id
+                .filter(fdecl -> fdecl.getFunctionId().equals(functionId))
                 // Filter by name
-                .filter(fdecl -> fdecl.getDeclName().equals(declName))
+                // .filter(fdecl -> fdecl.getDeclName().equals(declName))
                 // Filter by type
                 // .filter(fdecl -> fdecl.getFunctionType().getCode().equals(functionType.getCode()))
-                .filter(fdecl -> fdecl.getFunctionType().equals(functionType))
+                // .filter(fdecl -> fdecl.getFunctionType().equals(functionType))
                 // Filter by const
-                .filter(fdecl -> fdecl.getFunctionType().isConst() == functionType.isConst())
+                // .filter(fdecl -> fdecl.getFunctionType().isConst() == functionType.isConst())
                 .findFirst()
                 // Normalize FunctionDecl before returning
                 .map(fdecl -> (FunctionDecl) ClavaNodes.normalizeDecl(fdecl));
 
         // Store return in cache
-        cache.put(getFunctionId(declName, functionType), functionDeclaration.orElse(getNoFunctionFound()));
+        // cache.put(getFunctionId(declName, functionType), functionDeclaration.orElse(getNoFunctionFound()));
+        cache.put(functionId, functionDeclaration.orElse(getNoFunctionFound()));
 
         return functionDeclaration;
     }

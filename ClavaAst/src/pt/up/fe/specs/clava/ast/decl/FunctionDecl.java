@@ -332,7 +332,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
         // Search for the declaration
 
-        return getAppTry().flatMap(app -> app.getFunctionDeclaration(getDeclName(), getFunctionType()));
+        return getAppTry().flatMap(app -> app.getFunctionDeclaration(this));
 
         // // If no body, this node already is the declaration
         // if (!hasBody()) {
@@ -369,7 +369,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         }
 
         // Search for the definition
-        return getAppTry().flatMap(app -> app.getFunctionDefinition(getDeclName(), getFunctionType()));
+        return getAppTry().flatMap(app -> app.getFunctionDefinition(this));
     }
 
     // private FunctionDecl findDeclaration() {
@@ -868,9 +868,12 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         Optional<FunctionDecl> definition = getDefinition();
         Optional<FunctionDecl> declaration = getDeclaration();
 
-        Optional<FunctionDecl> newDefinition = definition.map(def -> ((FunctionDecl) def.copy()).setName(newName));
+        // Optional<FunctionDecl> newDefinition = definition.map(def -> ((FunctionDecl) def.copy()).setName(newName));
+        // Optional<FunctionDecl> newDeclaration = declaration.map(decl -> ((FunctionDecl)
+        // decl.copy()).setName(newName));
 
-        Optional<FunctionDecl> newDeclaration = declaration.map(decl -> ((FunctionDecl) decl.copy()).setName(newName));
+        Optional<FunctionDecl> newDefinition = definition.map(def -> def.copyFunction(newName));
+        Optional<FunctionDecl> newDeclaration = declaration.map(decl -> decl.copyFunction(newName));
 
         if (insert) {
             if (destinationUnit == null) {
@@ -902,6 +905,13 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         // declaration.ifPresent(node -> System.out.println("DECL:\n" + node.getCode()));
     }
 
+    protected FunctionDecl copyFunction(String newName) {
+        var copy = (FunctionDecl) copy();
+        copy.setName(newName);
+
+        return copy;
+    }
+
     /**
      * Makes sure the type changes in both the declaration and definition.
      *
@@ -922,6 +932,21 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         String functionId = "function$" + getDeclarationId(false);
 
         return fileId + getNodeIdSeparator() + functionId;
+    }
+
+    public String getFunctionId() {
+        return getSignature();
+        // StringBuilder id = new StringBuilder();
+        //
+        // var ftype = getFunctionType();
+        // // Check if function is const
+        // if (ftype.isConst()) {
+        // id.append("const ");
+        // }
+        //
+        // id.append(getFunctionType().getCode(getDeclName()));
+        //
+        // return id.toString();
     }
 
 }
