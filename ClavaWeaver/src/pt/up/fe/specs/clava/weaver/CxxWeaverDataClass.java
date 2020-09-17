@@ -18,13 +18,21 @@ import org.suikasoft.jOptions.DataStore.DataClassWrapper;
 
 public class CxxWeaverDataClass extends DataClassWrapper<CxxWeaverDataClass> {
 
+    private final DataClass<?> originalData;
+
     public CxxWeaverDataClass(DataClass<?> data) {
         super(data);
+
+        this.originalData = data;
     }
 
     @Override
     protected CxxWeaverDataClass getThis() {
         return this;
+    }
+
+    public DataClass<?> getOriginalData() {
+        return originalData;
     }
 
     public Object getValue(Object key) {
@@ -49,9 +57,13 @@ public class CxxWeaverDataClass extends DataClassWrapper<CxxWeaverDataClass> {
     }
 
     // @Override
-    // public Object setValue(String key, Object value) {
-    //
-    // return super.setValue(key, value);
-    // }
+    @Override
+    public Object setValue(String key, Object value) {
+        return super.setValue(key, CxxAttributes.fromLara(value));
+    }
+
+    public Object setValue(Object key, Object value) {
+        return setValue(key.toString(), value);
+    }
 
 }
