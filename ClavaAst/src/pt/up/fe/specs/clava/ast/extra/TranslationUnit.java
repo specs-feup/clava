@@ -835,7 +835,7 @@ public class TranslationUnit extends ClavaNode {
     }
 
     @Override
-    public String getNodeId() {
+    public String getStableId() {
         return "file$" + getRelativeFilepath();
     }
 

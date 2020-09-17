@@ -1296,6 +1296,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public String getJpIdImpl() {
-        return getNode().getNodeId();
+        return getNode().getStableId();
     }
 }

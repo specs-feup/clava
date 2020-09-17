@@ -923,10 +923,10 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     @Override
-    public String getNodeId() {
+    public String getStableId() {
         // Get id of file
         String fileId = getAncestorTry(TranslationUnit.class)
-                .map(tunit -> tunit.getNodeId())
+                .map(tunit -> tunit.getStableId())
                 .orElse("<no_file>");
 
         String functionId = "function$" + getDeclarationId(false);
