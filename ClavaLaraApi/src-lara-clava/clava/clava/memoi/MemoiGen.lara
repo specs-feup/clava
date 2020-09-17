@@ -1,4 +1,5 @@
 import clava.memoi.MemoiTarget;
+import clava.memoi.MemoiUtils;
 
 import lara.util.IdGenerator;
 import lara.Io;
@@ -24,7 +25,7 @@ function MemoiGen(target) {
 		
 		this._isDebug = false;
 		
-		this._applyPolicy = MemoiApplyPolicy.NOT_EMPTY;
+		this._applyPolicy = MemoiGen.ApplyPolicy.NOT_EMPTY;
 }
 
 /**
@@ -93,12 +94,12 @@ MemoiGen.prototype.setDebug = function(isDebug) {
 	this._isDebug = isDebug;
 }
 
-var MemoiApplyPolicy = {
+MemoiGen.ApplyPolicy = {
 	ALWAYS : function(report) {
 		return true;
 	},
 	NOT_EMPTY : function(report) {
-		if(mean(report.elements, report.reportCount) === 0) {
+		if(MemoiUtils.mean(report.elements, report.reportCount) === 0) {
 			debug('skipped - no calls');
 			return false;
 		}
@@ -106,27 +107,34 @@ var MemoiApplyPolicy = {
 		return true;
 	},
 	_OVER_X_PCT : function(report, x) {
-		var hits = mean(report.hits, report.reportCount);
-		var calls = mean(report.calls, report.reportCount)
+		var hits = MemoiUtils.mean(report.hits, report.reportCount);
+		var calls = MemoiUtils.mean(report.calls, report.reportCount);
 		
-		if(hits/calls < x) {
-			return false;
-		}
+		var ratio = hits/calls;
 		
-		return true;
+		println("_OVER_X_PCT " + x);
+		println("hits: " + hits);
+		println("calls: " + calls);
+		println("ratio: " + ratio);
+		
+		return ratio > x;
 	},
 	OVER_15_PCT : function(report) {
 
-		return this._OVER_X_PCT(0.15);
+		return MemoiGen.ApplyPolicy._OVER_X_PCT(report, 0.15);
 	},
 	OVER_25_PCT : function(report) {
 
-		return this._OVER_X_PCT(0.25);
+		return MemoiGen.ApplyPolicy._OVER_X_PCT(report, 0.25);
 	},
 	OVER_50_PCT : function(report) {
 
-		return this._OVER_X_PCT(0.5);
+		return MemoiGen.ApplyPolicy._OVER_X_PCT(report, 0.5);
 	},
+	OVER_75_PCT : function(report) {
+
+		return MemoiGen.ApplyPolicy._OVER_X_PCT(report, 0.75);
+	}
 };
 
 /**
@@ -135,8 +143,22 @@ var MemoiApplyPolicy = {
  * */
 MemoiGen.prototype.setApplyPolicy = function(policy) {
 
-	var allowedPolicies = [MemoiApplyPolicy.ALWAYS, MemoiApplyPolicy.NOT_EMPTY];
-	Check.arrayContains(allowedPolicies, policy, "The possible apply policies are {MemoiApplyPolicy.ALWAYS, MemoiApplyPolicy.NOT_EMPTY}.", "MemoiGen.setApplyPolicy");
+	var allowedPolicies = [
+		MemoiGen.ApplyPolicy.ALWAYS,
+		MemoiGen.ApplyPolicy.NOT_EMPTY,
+		MemoiGen.ApplyPolicy.OVER_15_PCT,
+		MemoiGen.ApplyPolicy.OVER_25_PCT,
+		MemoiGen.ApplyPolicy.OVER_50_PCT,
+		MemoiGen.ApplyPolicy.OVER_75_PCT
+	];
+	
+	Check.arrayContains(allowedPolicies, policy, "The possible apply policies are{ \
+		MemoiGen.ApplyPolicy.ALWAYS, \
+		MemoiGen.ApplyPolicy.NOT_EMPTY, \
+		MemoiGen.ApplyPolicy.OVER_15_PCT, \
+		MemoiGen.ApplyPolicy.OVER_25_PCT, \
+		MemoiGen.ApplyPolicy.OVER_50_PCT, \
+		MemoiGen.ApplyPolicy.OVER_75_PCT}.", "MemoiGen.setApplyPolicy");
 	
 	this._applyPolicy = policy;
 }
@@ -239,6 +261,11 @@ MemoiGen.prototype._generateFromReport = function() {
 		// merge all reports for this <target, site>
 		var reportPathList = siteMap.get(site);		
 		var report = MemoiReport.mergeReportsFromNames(reportPathList);
+		
+		// report-wide apply policy
+		if(!this._applyPolicy(report)) {
+			continue;
+		}
 		
 		if(site === "global") {
 			this._generateAll(report);
