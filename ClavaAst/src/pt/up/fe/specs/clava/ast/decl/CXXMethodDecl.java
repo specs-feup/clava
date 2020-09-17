@@ -363,11 +363,11 @@ public class CXXMethodDecl extends FunctionDecl {
 
     @Override
     protected FunctionDecl copyFunction(String newName) {
-        var copy = super.copyFunction(newName);
+        var copy = (CXXMethodDecl) super.copyFunction(newName);
 
         // If new name is the same as the current name, remove record from copy
         if (getDeclName().equals(newName)) {
-            removeRecord();
+            copy.removeRecord();
         }
 
         return copy;
