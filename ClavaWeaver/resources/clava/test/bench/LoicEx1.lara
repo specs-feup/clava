@@ -1,0 +1,81 @@
+import lara.Io;
+import clava.Clava;
+import clava.ClavaJoinPoints;
+import weaver.Query;
+
+
+aspectdef Launcher
+  var $vclass = Query.search("class").first();
+  var $newClass1 = duplicate ($vclass, "FIRST_DUPLICATION"); 
+  var $newClass2 = duplicate ($vclass, "SECOND_DUPLICATION"); 
+  printLinksDeclarationDefinition($newClass1);
+  printLinksDeclarationDefinition($newClass2);
+end
+
+function duplicate($vclass, idNewClass) {
+  var $newClass = ClavaJoinPoints.classDecl(idNewClass);
+  $vclass.insertAfter($newClass);
+  for (var i=0; i < $vclass.astNumChildren; i++) {
+   var $vtchild = $vclass.child(i);
+   var astName =  $vtchild.astName;
+   switch (astName) {
+      case "CXXMethodDecl":
+      case "CXXDestructorDecl":  
+      case "CXXConstructorDecl":
+          duplicateMethod( $vtchild, $newClass );
+      break;
+      case "FieldDecl":  
+	     var $nf = ClavaJoinPoints.field($vtchild.name, $vtchild.type);
+          $newClass.addField($nf);
+       break;
+       default: //  AccessSpecDecl , InlineComment 
+          var $vcopy = $vtchild.deepCopy ;
+          if ( $newClass.astNumChildren == 0 )  
+            $newClass.setFirstChild($vcopy);
+          else
+           $newClass.lastChild.insertAfter($vcopy);
+        }
+  	 }
+  return $newClass;
+}
+
+
+ function duplicateMethod( $m, $newClass ) {
+
+// function setNameMethod ($nm, originalMethodName) {
+ function setNameMethod ($nm) { 
+   if ($nm.astIsInstance("CXXConstructorDecl")) 
+     $nm.setName($newClass.name);
+   else if ($nm.astIsInstance("CXXDestructorDecl")) 
+       $nm.setName("~" + $newClass.name);
+//   else {
+//	   $nm.setName(originalMethodName);
+//    }
+   }  
+    
+    if ( ! $m.hasDefinition ) var $m = $m.definitionJp;
+	//var originalMethodName = $m.name;
+	// Set new name, of if name is the same, automatically removes method from the class
+    var $newMethod = $m.clone($m.name, false) ;
+	//var $newMethod = $m.clone( $newClass.name + "_" + $m.name, false) ;
+	//$newMethod.removeRecord();
+
+    setNameMethod($newMethod);
+    //setNameMethod($newMethod, originalMethodName);
+    $newClass.addMethod($newMethod);
+    $newClass.insertAfter ($newMethod);
+}
+
+function printLinksDeclarationDefinition($Class) {
+   var methods = $Class.methods;
+   // println( " class = " + $Class.name);
+   for (var $m of methods) {
+      println ( " ==================================");
+      println( " Declaration of the method = " + $m.code + " of the class " + $Class.name);
+      if ( $m.definitionJp !== undefined ) {
+      	 var $vdef = $m.definitionJp;
+      	 println( " Associated definition = " + $vdef.code);
+      	 println ( " The class of the record field is = " + $vdef.record.name); 
+      }
+   }
+}

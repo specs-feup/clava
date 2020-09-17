@@ -38611,6 +38611,15 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Removes the of the method",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "removeRecord"
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Clones this function assigning it a new name, inserts the cloned function after the original function",
                   "children": [
                            {

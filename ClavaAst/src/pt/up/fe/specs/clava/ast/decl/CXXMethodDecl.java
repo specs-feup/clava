@@ -224,8 +224,18 @@ public class CXXMethodDecl extends FunctionDecl {
         return code.toString();
     }
 
-    public CXXRecordDecl getRecordDecl() {
-        return (CXXRecordDecl) get(RECORD);
+    /**
+     * 
+     * @return the class of this method, or null if no class is associated
+     */
+    public Optional<CXXRecordDecl> getRecordDecl() {
+
+        var record = get(RECORD);
+        if (record instanceof NullDecl) {
+            return Optional.empty();
+        }
+
+        return Optional.of((CXXRecordDecl) record);
         // return (CXXRecordDecl) getApp().getNode(get(RECORD_ID));
         // // Check if this node is inside the record
         // Optional<CXXRecordDecl> ancestor = getAncestorTry(CXXRecordDecl.class);
@@ -261,7 +271,9 @@ public class CXXMethodDecl extends FunctionDecl {
         // String namespace = getMethodData().getNamespace();
         // namespace = namespace == null ? "" : namespace + "::";
 
-        namespace = namespace + getRecordDecl().getDeclName() + "::";
+        var recordName = getRecordDecl().map(record -> record.getDeclName() + "::").orElse("");
+        namespace = namespace + recordName;
+        // namespace = namespace + getRecordDecl().getDeclName() + "::";
 
         String signature = namespace + baseSignature;
         // System.out.println("CXX METHOD DECL:" + this);
@@ -316,6 +328,53 @@ public class CXXMethodDecl extends FunctionDecl {
     }
     */
     public String getRecordName() {
-        return getRecordDecl().getDeclName();
+        return getRecordDecl().map(record -> record.getDeclName()).orElse(null);
+    }
+
+    /*
+    @Override
+    public String getFunctionId() {
+        // return getDeclarationId(false);
+        StringBuilder id = new StringBuilder();
+    
+        var ftype = getFunctionType();
+        // Check if function is const
+        if (ftype.isConst()) {
+            id.append("const ");
+        }
+    
+        if (addNamespace()) {
+            String namespace = getNamespace(getRecordName()).map(str -> str + "::").orElse("");
+            id.append(namespace);
+        }
+    
+        // Add record if not inside record decl
+    
+        if (!isInsideRecordDecl()) {
+            // code.append(getMethodData().getRecord()).append("::");
+            id.append(getRecordName()).append("::");
+        }
+    
+        id.append(getFunctionType().getCode(getDeclName()));
+    
+        return id.toString();
+    }
+    */
+
+    @Override
+    protected FunctionDecl copyFunction(String newName) {
+        var copy = super.copyFunction(newName);
+
+        // If new name is the same as the current name, remove record from copy
+        if (getDeclName().equals(newName)) {
+            removeRecord();
+        }
+
+        return copy;
+    }
+
+    public void removeRecord() {
+        set(CXXMethodDecl.RECORD, getFactory().nullDecl());
+        set(CXXMethodDecl.RECORD_ID, "null");
     }
 }

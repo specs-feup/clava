@@ -36,7 +36,12 @@ public class CxxMethod extends AMethod {
 
     @Override
     public AClass getRecordImpl() {
-        return (AClass) CxxJoinpoints.create(method.getRecordDecl());
+        return method.getRecordDecl().map(record -> (AClass) CxxJoinpoints.create(record)).orElse(null);
+    }
+
+    @Override
+    public void removeRecordImpl() {
+        method.removeRecord();
     }
 
     /*
