@@ -132,6 +132,7 @@ public class CXXRecordDecl extends RecordDecl {
 
         // Set record of method
         method.set(CXXMethodDecl.RECORD, this);
+        method.set(CXXMethodDecl.RECORD_ID, getId());
 
         var methodDeclaration = method;
 
