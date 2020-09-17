@@ -199,12 +199,12 @@ public class CxxAttributes {
     }
 
     /**
-     * Adapts a given value to the LARA environemnt, e.g., converts ClavaNode instances into Join point instances.
+     * Adapts a given value to the LARA environment, e.g., converts ClavaNode instances into Join point instances.
      * 
      * @param value
      * @return
      */
-    public static Object adaptValue(Object value) {
+    public static Object toLara(Object value) {
         // Special cases
 
         // If Clava node, convert to join point
@@ -225,7 +225,7 @@ public class CxxAttributes {
             var newValue = new ArrayList<Object>(valueList.size());
 
             for (var valueElement : valueList) {
-                newValue.add(adaptValue(valueElement));
+                newValue.add(toLara(valueElement));
             }
 
             return newValue;

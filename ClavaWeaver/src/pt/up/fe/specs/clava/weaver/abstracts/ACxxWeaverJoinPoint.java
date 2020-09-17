@@ -1116,7 +1116,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         var value = getNode().get(datakey);
 
-        return CxxAttributes.adaptValue(value);
+        return CxxAttributes.toLara(value);
     }
 
     @Override
