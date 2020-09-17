@@ -63,3 +63,19 @@ MemoiUtils.normalizeSig = function(sig) {
 MemoiUtils.arrayContains = function(a, e) {
 	return a.indexOf(e) != -1;
 }
+
+MemoiUtils.mean = function(values, count) {
+	
+	var sum = 0;
+	
+	for(var value of values) {
+		
+		sum += value;
+	}
+	
+	if(count === undefined) {
+		return sum / values.length;
+	} else {
+		return sum / count;
+	}
+}
