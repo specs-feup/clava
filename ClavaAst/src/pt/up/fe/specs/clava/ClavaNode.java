@@ -222,7 +222,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
      * 
      * @return
      */
-    public String getNodeId() {
+    public String getStableId() {
         throw new NotImplementedException(this);
     }
 

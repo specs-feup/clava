@@ -16,12 +16,14 @@ package pt.up.fe.specs.clava.weaver;
 import org.suikasoft.jOptions.DataStore.DataClass;
 import org.suikasoft.jOptions.DataStore.DataClassWrapper;
 
-import pt.up.fe.specs.clava.ClavaNode;
-
 public class CxxWeaverDataClass extends DataClassWrapper<CxxWeaverDataClass> {
+
+    private final DataClass<?> originalData;
 
     public CxxWeaverDataClass(DataClass<?> data) {
         super(data);
+
+        this.originalData = data;
     }
 
     @Override
@@ -29,17 +31,39 @@ public class CxxWeaverDataClass extends DataClassWrapper<CxxWeaverDataClass> {
         return this;
     }
 
+    public DataClass<?> getOriginalData() {
+        return originalData;
+    }
+
+    public Object getValue(Object key) {
+        return getValue(key.toString());
+    }
+
     @Override
     public Object getValue(String key) {
+
         var value = super.getValue(key);
 
-        // Special case
+        // Adapt value
+        return CxxAttributes.toLara(value);
 
-        if (value instanceof ClavaNode) {
-            return CxxJoinpoints.create((ClavaNode) value);
-        }
+        // // Special case
+        //
+        // if (value instanceof ClavaNode) {
+        // return CxxJoinpoints.create((ClavaNode) value);
+        // }
+        //
+        // return value;
+    }
 
-        return value;
+    // @Override
+    @Override
+    public Object setValue(String key, Object value) {
+        return super.setValue(key, CxxAttributes.fromLara(value));
+    }
+
+    public Object setValue(Object key, Object value) {
+        return setValue(key.toString(), value);
     }
 
 }

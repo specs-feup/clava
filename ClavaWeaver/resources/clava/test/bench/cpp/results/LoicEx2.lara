@@ -1,0 +1,12 @@
+ === The first child of the call is : foo<float, 2>
+ *** type  detected  = pt.up.fe.specs.clava.weaver.CxxWeaverDataClass@5584b2d7
+ === AFTER MY TRANSFO, The first child of the call is : foo<newType0, 2>
+ *** expression detected = pt.up.fe.specs.clava.weaver.CxxWeaverDataClass@46947093
+ === The first child of the call is : foo<bool, 4>
+ *** type  detected  = pt.up.fe.specs.clava.weaver.CxxWeaverDataClass@6f1d530a
+ === AFTER MY TRANSFO, The first child of the call is : foo<newType1, 4>
+ *** expression detected = pt.up.fe.specs.clava.weaver.CxxWeaverDataClass@64cba058
+ === The first child of the call is : foo<string, 6>
+ *** type  detected  = pt.up.fe.specs.clava.weaver.CxxWeaverDataClass@f239df2
+ === AFTER MY TRANSFO, The first child of the call is : foo<newType2, 6>
+ *** expression detected = pt.up.fe.specs.clava.weaver.CxxWeaverDataClass@6ad6746d

@@ -923,30 +923,15 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     @Override
-    public String getNodeId() {
+    public String getStableId() {
         // Get id of file
         String fileId = getAncestorTry(TranslationUnit.class)
-                .map(tunit -> tunit.getNodeId())
+                .map(tunit -> tunit.getStableId())
                 .orElse("<no_file>");
 
         String functionId = "function$" + getDeclarationId(false);
 
         return fileId + getNodeIdSeparator() + functionId;
-    }
-
-    public String getFunctionId() {
-        return getSignature();
-        // StringBuilder id = new StringBuilder();
-        //
-        // var ftype = getFunctionType();
-        // // Check if function is const
-        // if (ftype.isConst()) {
-        // id.append("const ");
-        // }
-        //
-        // id.append(getFunctionType().getCode(getDeclName()));
-        //
-        // return id.toString();
     }
 
 }

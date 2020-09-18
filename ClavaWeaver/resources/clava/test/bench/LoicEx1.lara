@@ -5,11 +5,12 @@ import weaver.Query;
 
 
 aspectdef Launcher
-  var $vclass = Query.search("class").first();
+  var $vclass = Query.search("class").first();  
   var $newClass1 = duplicate ($vclass, "FIRST_DUPLICATION"); 
   var $newClass2 = duplicate ($vclass, "SECOND_DUPLICATION"); 
   printLinksDeclarationDefinition($newClass1);
   printLinksDeclarationDefinition($newClass2);
+  printLinksDeclarationDefinition($vclass);  
 end
 
 function duplicate($vclass, idNewClass) {
@@ -75,7 +76,12 @@ function printLinksDeclarationDefinition($Class) {
       if ( $m.definitionJp !== undefined ) {
       	 var $vdef = $m.definitionJp;
       	 println( " Associated definition = " + $vdef.code);
-      	 println ( " The class of the record field is = " + $vdef.record.name); 
+		 if($vdef.record !== undefined) {
+			println ( " The class of the record field is = " + $vdef.record.name); 
+		 } else {
+			println ( " The class of the record field is = " + $vdef.record); 		 
+		 }
+
       }
    }
 }

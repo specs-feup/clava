@@ -251,7 +251,7 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition, NodeWi
 
         // Get function id
         String functionId = getAncestorTry(FunctionDecl.class)
-                .map(functionDecl -> functionDecl.getNodeId())
+                .map(functionDecl -> functionDecl.getStableId())
                 .orElse("<no_function>");
 
         String rankId = "rank$" + getRank().stream()
@@ -263,7 +263,7 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition, NodeWi
     }
 
     @Override
-    public String getNodeId() {
+    public String getStableId() {
         return getLoopId();
     }
 

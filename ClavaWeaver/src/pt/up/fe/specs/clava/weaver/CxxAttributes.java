@@ -28,6 +28,8 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.utils.StmtWithCondition;
+import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.enums.AExpressionUseEnum;
 
 public class CxxAttributes {
@@ -199,12 +201,12 @@ public class CxxAttributes {
     }
 
     /**
-     * Adapts a given value to the LARA environemnt, e.g., converts ClavaNode instances into Join point instances.
+     * Adapts a given value to the LARA environment, e.g., converts ClavaNode instances into Join point instances.
      * 
      * @param value
      * @return
      */
-    public static Object adaptValue(Object value) {
+    public static Object toLara(Object value) {
         // Special cases
 
         // If Clava node, convert to join point
@@ -225,7 +227,41 @@ public class CxxAttributes {
             var newValue = new ArrayList<Object>(valueList.size());
 
             for (var valueElement : valueList) {
-                newValue.add(adaptValue(valueElement));
+                newValue.add(toLara(valueElement));
+            }
+
+            return newValue;
+        }
+
+        return value;
+    }
+
+    /**
+     * Adapts a given LARA value to the Java environment, e.g., converts Join point instances into ClavaNode instances.
+     * 
+     * @param value
+     * @return
+     */
+    public static Object fromLara(Object value) {
+        // Special cases
+
+        // If join point , convert to Clava node
+        if (value instanceof AJoinPoint) {
+            return ((ACxxWeaverJoinPoint) value).getNode();
+        }
+
+        // If CxxWeaverDataClass, unwrap to conventional DataClass
+        if (value instanceof CxxWeaverDataClass) {
+            return ((CxxWeaverDataClass) value).getOriginalData();
+        }
+
+        // If a List, apply adapt over all elements of the list
+        if (value instanceof List) {
+            var valueList = (List<?>) value;
+            var newValue = new ArrayList<Object>(valueList.size());
+
+            for (var valueElement : valueList) {
+                newValue.add(fromLara(valueElement));
             }
 
             return newValue;

@@ -582,7 +582,7 @@ public class App extends ClavaNode {
 
         // Check if node was already asked
         // FunctionDecl cachedNode = cache.get(getFunctionId(declName, functionType));
-        var functionId = function.getFunctionId();
+        var functionId = function.getSignature();
 
         FunctionDecl cachedNode = cache.get(functionId);
         if (cachedNode != null) {
@@ -600,7 +600,7 @@ public class App extends ClavaNode {
                 // Check hasBody flag
                 .filter(fdecl -> fdecl.hasBody() == hasBody)
                 // Filter by id
-                .filter(fdecl -> fdecl.getFunctionId().equals(functionId))
+                .filter(fdecl -> fdecl.getSignature().equals(functionId))
                 // Filter by name
                 // .filter(fdecl -> fdecl.getDeclName().equals(declName))
                 // Filter by type
