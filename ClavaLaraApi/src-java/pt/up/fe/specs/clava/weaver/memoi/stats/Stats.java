@@ -55,16 +55,9 @@ public class Stats {
         var calls = report.getCalls();
         var entries = report.getSortedCounts(MemoiComparator.mean(report).reversed());
 
-        File file = new File("/home/pedro/Desktop/parboil_sunday_experiment/entries.txt");
-
         var meanCounts = entries.stream()
                 .map(c -> (int) MemoiUtils.mean(c.getCounter(), reportCount))
                 .collect(Collectors.toList());
-
-        SpecsIo.delete(file);
-        entries.forEach(e -> {
-            SpecsIo.append(file, e.toString() + "\n");
-        });
 
         this.unique = MemoiUtils.mean(elements, reportCount);
         this.totalCalls = MemoiUtils.mean(calls, reportCount);

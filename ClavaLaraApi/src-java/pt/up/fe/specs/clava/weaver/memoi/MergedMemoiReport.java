@@ -66,12 +66,23 @@ public class MergedMemoiReport {
         this.misses.add(report.getMisses());
 
         this.counts = new HashMap<String, MergedMemoiEntry>();
-        for (MemoiEntry oldEntry : report.getCounts()) {
+//        for (MemoiEntry oldEntry : report.getCounts()) {
+//
+//            String key = oldEntry.getKey();
+//            MergedMemoiEntry newEntry = new MergedMemoiEntry(oldEntry, this);
+//            counts.put(key, newEntry);
+//        }
 
-            String key = oldEntry.getKey();
-            MergedMemoiEntry newEntry = new MergedMemoiEntry(oldEntry, this);
-            counts.put(key, newEntry);
-        }
+//        report.getCounts().forEach(
+//                (k, v) -> {
+//                    MergedMemoiEntry newEntry = new MergedMemoiEntry(v, this);
+//                    counts.put(k, newEntry);
+//                });
+        
+        report.getCounts().values()
+                .stream()
+                .map(me -> new MergedMemoiEntry(me, this))
+                .forEach(mme -> counts.put(mme.getKey(), mme));
     }
 
     public List<MergedMemoiEntry> getMeanSorted() {
@@ -113,21 +124,34 @@ public class MergedMemoiReport {
         hits.add(tempReport.getHits());
         misses.add(tempReport.getMisses());
 
-        for (MemoiEntry oldEntry : tempReport.getCounts()) {
+        tempReport.getCounts().forEach(
+                (k, v) -> {
 
-            String key = oldEntry.getKey();
+                    if (counts.containsKey(k)) {
 
-            if (!counts.containsKey(key)) {
+                        counts.get(k).addCounter(v.getCounter());
+                    } else {
 
-                MergedMemoiEntry newEntry = new MergedMemoiEntry(oldEntry, this);
+                        MergedMemoiEntry newEntry = new MergedMemoiEntry(v, this);
+                        counts.put(k, newEntry);
+                    }
+                });
 
-                counts.put(key, newEntry);
-            } else {
-
-                counts.get(key).addCounter(oldEntry.getCounter());
-            }
-
-        }
+        // for (MemoiEntry oldEntry : tempReport.getCounts()) {
+        //
+        // String key = oldEntry.getKey();
+        //
+        // if (!counts.containsKey(key)) {
+        //
+        // MergedMemoiEntry newEntry = new MergedMemoiEntry(oldEntry, this);
+        //
+        // counts.put(key, newEntry);
+        // } else {
+        //
+        // counts.get(key).addCounter(oldEntry.getCounter());
+        // }
+        //
+        // }
 
         this.reportCount += 1;
     }
@@ -247,7 +271,7 @@ public class MergedMemoiReport {
         System.out.println("call sites: " + callSites);
         System.out.println("report count: " + reportCount);
 
-        stats.print();
+        // stats.print();
     }
 
     public void makeStats() {

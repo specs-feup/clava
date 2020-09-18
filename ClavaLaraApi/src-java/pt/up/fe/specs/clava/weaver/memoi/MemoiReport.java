@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +42,7 @@ public class MemoiReport {
     private int hits;
     private int misses;
 
-    private List<MemoiEntry> counts;
+    private Map<String, MemoiEntry> counts; // maps a key to a memoi entry
 
     public static MergedMemoiReport mergeReportsFromNames(List<String> fileNames) {
 
@@ -93,9 +91,10 @@ public class MemoiReport {
             finalReport.mergePart(partReport);
         }
 
-        // finalReport.setElements(finalReport.getCounts().size());
-        // finalReport.setMisses(finalReport.getElements());
-        // finalReport.setHits(finalReport.getCalls() - finalReport.getMisses());
+        // calculate the correct number of elements, misses, and hits
+        finalReport.setElements(finalReport.getCounts().size());
+        finalReport.setMisses(finalReport.getElements());
+        finalReport.setHits(finalReport.getCalls() - finalReport.getMisses());
 
         return finalReport;
     }
@@ -116,37 +115,52 @@ public class MemoiReport {
         return fromJson;
     }
 
+    /**
+     * The number of calls is correct after each merge. The number of hits and misses is not and is calculated at the
+     * end based on the number of elements.
+     * 
+     * @param otherReport
+     */
     private void mergePart(MemoiReport otherReport) {
 
-        Map<String, MemoiEntry> tempMap = makeMap();
+        // Map<String, MemoiEntry> tempMap = makeMap();
+        //
+        // for (MemoiEntry entry : otherReport.counts) {
+        //
+        // var key = entry.getKey();
+        // if (tempMap.containsKey(key)) {
+        //
+        // tempMap.get(key).inc(entry.getCounter());
+        // } else {
+        //
+        // tempMap.put(key, new MemoiEntry(entry));
+        // }
+        // }
+        // counts = new ArrayList<MemoiEntry>(tempMap.values());
 
-        for (MemoiEntry entry : otherReport.counts) {
-
-            var key = entry.getKey();
-            if (tempMap.containsKey(key)) {
-
-                tempMap.get(key).inc(entry.getCounter());
-            } else {
-
-                tempMap.put(key, new MemoiEntry(entry));
-            }
-        }
+        otherReport.counts.forEach(
+                (k, v) -> counts.merge(
+                        k,
+                        v,
+                        (v1, v2) -> {
+                            v1.inc(v2.getCounter());
+                            return v1;
+                        }));
 
         this.calls += otherReport.calls;
-        this.elements += otherReport.elements;
-        this.misses += otherReport.misses;
-        this.hits += otherReport.hits;
-        counts = new ArrayList<MemoiEntry>(tempMap.values());
+        // this.elements += otherReport.elements;
+        // this.misses += otherReport.misses;
+        // this.hits += otherReport.hits;
     }
 
-    private Map<String, MemoiEntry> makeMap() {
-
-        Map<String, MemoiEntry> map = new HashMap<>(this.counts.size());
-
-        counts.stream().forEach(e -> map.put(e.getKey(), e));
-
-        return map;
-    }
+    // private Map<String, MemoiEntry> makeMap() {
+    //
+    // Map<String, MemoiEntry> map = new HashMap<>(this.counts.size());
+    //
+    // counts.stream().forEach(e -> map.put(e.getKey(), e));
+    //
+    // return map;
+    // }
 
     public void toJson(String fileName) {
 
@@ -242,11 +256,11 @@ public class MemoiReport {
         this.misses = misses;
     }
 
-    public List<MemoiEntry> getCounts() {
+    public Map<String, MemoiEntry> getCounts() {
         return counts;
     }
 
-    public void setCounts(List<MemoiEntry> counts) {
+    public void setCounts(Map<String, MemoiEntry> counts) {
         this.counts = counts;
     }
 }

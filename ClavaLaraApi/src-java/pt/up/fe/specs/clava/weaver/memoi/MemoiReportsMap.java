@@ -27,7 +27,7 @@ public class MemoiReportsMap {
 
     public static Map<String, Map<String, List<String>>> fromDirName(String dirName) {
 
-        System.out.println("buildReportsMap(dirName)");
+//        System.out.println("buildReportsMap(dirName)");
 
         File dir = new File(dirName);
 
@@ -41,14 +41,14 @@ public class MemoiReportsMap {
 
     public static Map<String, Map<String, List<String>>> fromNames(String[] fileNames) {
 
-        System.out.println("buildReportsMapFromNames(fileNames)");
+//        System.out.println("buildReportsMapFromNames(fileNames)");
 
         return fromNames(Arrays.asList(fileNames));
     }
 
     public static Map<String, Map<String, List<String>>> fromNames(List<String> fileNames) {
 
-        System.out.println("buildReportsMapFromNames(L[fileNames)");
+//        System.out.println("buildReportsMapFromNames(L[fileNames)");
 
         List<File> files = new ArrayList<>();
 
@@ -67,7 +67,7 @@ public class MemoiReportsMap {
 
     public static Map<String, Map<String, List<String>>> fromFiles(List<File> reportFiles) {
 
-        System.out.println("buildReportsMapFromFiles(reportFiles)");
+//        System.out.println("buildReportsMapFromFiles(reportFiles)");
 
         Map<String, Map<String, List<String>>> map = new HashMap<String, Map<String, List<String>>>();
 
