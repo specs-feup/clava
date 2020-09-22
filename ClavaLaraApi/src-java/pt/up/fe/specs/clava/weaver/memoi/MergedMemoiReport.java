@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.weaver.memoi.stats.Stats;
 import pt.up.fe.specs.util.SpecsCheck;
@@ -66,23 +67,29 @@ public class MergedMemoiReport {
         this.misses.add(report.getMisses());
 
         this.counts = new HashMap<String, MergedMemoiEntry>();
-//        for (MemoiEntry oldEntry : report.getCounts()) {
-//
-//            String key = oldEntry.getKey();
-//            MergedMemoiEntry newEntry = new MergedMemoiEntry(oldEntry, this);
-//            counts.put(key, newEntry);
-//        }
+        // for (MemoiEntry oldEntry : report.getCounts()) {
+        //
+        // String key = oldEntry.getKey();
+        // MergedMemoiEntry newEntry = new MergedMemoiEntry(oldEntry, this);
+        // counts.put(key, newEntry);
+        // }
 
-//        report.getCounts().forEach(
-//                (k, v) -> {
-//                    MergedMemoiEntry newEntry = new MergedMemoiEntry(v, this);
-//                    counts.put(k, newEntry);
-//                });
-        
+        // report.getCounts().forEach(
+        // (k, v) -> {
+        // MergedMemoiEntry newEntry = new MergedMemoiEntry(v, this);
+        // counts.put(k, newEntry);
+        // });
+
         report.getCounts().values()
                 .stream()
                 .map(me -> new MergedMemoiEntry(me, this))
                 .forEach(mme -> counts.put(mme.getKey(), mme));
+
+//        this.counts = report.getCounts().values()
+//                .parallelStream()
+//                .map(me -> new MergedMemoiEntry(me, this))
+//                .collect(
+//                        Collectors.toMap(MergedMemoiEntry::getKey, mme -> mme));
     }
 
     public List<MergedMemoiEntry> getMeanSorted() {

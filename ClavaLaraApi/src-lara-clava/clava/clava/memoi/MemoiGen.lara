@@ -134,6 +134,10 @@ MemoiGen.ApplyPolicy = {
 	OVER_75_PCT : function(report) {
 
 		return MemoiGen.ApplyPolicy._OVER_X_PCT(report, 0.75);
+	},
+	OVER_90_PCT : function(report) {
+
+		return MemoiGen.ApplyPolicy._OVER_X_PCT(report, 0.9);
 	}
 };
 
@@ -149,7 +153,8 @@ MemoiGen.prototype.setApplyPolicy = function(policy) {
 		MemoiGen.ApplyPolicy.OVER_15_PCT,
 		MemoiGen.ApplyPolicy.OVER_25_PCT,
 		MemoiGen.ApplyPolicy.OVER_50_PCT,
-		MemoiGen.ApplyPolicy.OVER_75_PCT
+		MemoiGen.ApplyPolicy.OVER_75_PCT,
+		MemoiGen.ApplyPolicy.OVER_90_PCT
 	];
 	
 	Check.arrayContains(allowedPolicies, policy, "The possible apply policies are{ \
@@ -158,7 +163,8 @@ MemoiGen.prototype.setApplyPolicy = function(policy) {
 		MemoiGen.ApplyPolicy.OVER_15_PCT, \
 		MemoiGen.ApplyPolicy.OVER_25_PCT, \
 		MemoiGen.ApplyPolicy.OVER_50_PCT, \
-		MemoiGen.ApplyPolicy.OVER_75_PCT}.", "MemoiGen.setApplyPolicy");
+		MemoiGen.ApplyPolicy.OVER_75_PCT, \
+		MemoiGen.ApplyPolicy.OVER_90_PCT}.", "MemoiGen.setApplyPolicy");
 	
 	this._applyPolicy = policy;
 }
