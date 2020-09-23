@@ -1756,6 +1756,16 @@ public class CxxWeaver extends ACxxWeaver {
         // weaverData.pushAst(clonedApp);
     }
 
+    public void pushAst(App app) {
+        // Adjust context in case it is different
+        if (app.getContext() != getContex()) {
+            ClavaLog.debug("Pushing app with different context, might happen due to serialization/deserialization");
+            app.set(ClavaNode.CONTEXT, getContex());
+        }
+
+        weaverData.pushAst(app);
+    }
+
     public void popAst() {
         // Discard app and user values
         weaverData.popAst();
