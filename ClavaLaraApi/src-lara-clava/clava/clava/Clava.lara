@@ -1,4 +1,5 @@
 import lara.Io;
+import lara.Check;
 import clava.ClavaAspects;
 import clava.util.ClavaDataStore;
 import weaver.WeaverOptions;
@@ -120,10 +121,18 @@ Clava.runClavaParallel = function(argsLists, threads) {
 }
 
 /**
- * Creates a clone of the current AST and pushes the clone to the top of the current AST stack.
+ * Creates a clone of the current AST and pushes the clone to the top of the current AST stack. If a $program join point is passed, that join point is added to the top of the stack instead.
+ * 
+ * @param {$program} [$program = undefined] program to push to the AST.
  */
-Clava.pushAst = function() {
-	call PushAst();
+Clava.pushAst = function($program) {
+	if($program === undefined) {
+		call PushAst();
+		return;
+	}
+
+	Check.isJoinPoint($program, "program");
+	Weaver.getWeaverEngine().pushAst($program.node);
 }
 
 /**

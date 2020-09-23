@@ -45,6 +45,7 @@ import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.parsing.snippet.SnippetParser;
 import pt.up.fe.specs.clava.utils.SourceType;
+import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
 import pt.up.fe.specs.clava.weaver.gears.InsideApplyGear;
 import pt.up.fe.specs.clava.weaver.gears.ModifiedFilesGear;
@@ -1755,6 +1756,16 @@ public class CxxWeaver extends ACxxWeaver {
         // weaverData.pushAst(clonedApp);
     }
 
+    public void pushAst(App app) {
+        // Adjust context in case it is different
+        if (app.getContext() != getContex()) {
+            ClavaLog.debug("Pushing app with different context, might happen due to serialization/deserialization");
+            app.set(ClavaNode.CONTEXT, getContex());
+        }
+
+        weaverData.pushAst(app);
+    }
+
     public void popAst() {
         // Discard app and user values
         weaverData.popAst();
@@ -1993,5 +2004,14 @@ public class CxxWeaver extends ACxxWeaver {
 
     public int getStackSize() {
         return context.getStackSize();
+    }
+
+    @Override
+    public ACxxWeaverJoinPoint fromNode(Object node) {
+        if (!(node instanceof ClavaNode)) {
+            throw new RuntimeException("Expected a ClavaNode, but got a " + node.getClass());
+        }
+
+        return CxxJoinpoints.create((ClavaNode) node);
     }
 }

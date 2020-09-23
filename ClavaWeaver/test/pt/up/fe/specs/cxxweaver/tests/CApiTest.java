@@ -113,4 +113,9 @@ public class CApiTest {
         // TODO: No expected output, code has bugs to solve - does not take into account existing variable names
         newTester().test("AutoParInlineTest.lara", "autopar_inline.c");
     }
+
+    @Test
+    public void testSerializeNode() {
+        newTester().test("SerializeNode.lara", "serialize_node.c");
+    }
 }
