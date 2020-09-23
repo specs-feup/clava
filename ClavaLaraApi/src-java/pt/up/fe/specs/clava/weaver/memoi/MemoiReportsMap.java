@@ -73,8 +73,8 @@ public class MemoiReportsMap {
 
         for (File reportFile : reportFiles) {
 
-            String prefix = "index_";
-            String indexFilePath = prefix + SpecsIo.getPath(reportFile);
+            String indexExt = ".index";
+            String indexFilePath = reportFile.getAbsolutePath() + indexExt;
             File indexFile = new File(indexFilePath);
                     
             MemoiReport report = MemoiReport.fromFile(indexFile);
