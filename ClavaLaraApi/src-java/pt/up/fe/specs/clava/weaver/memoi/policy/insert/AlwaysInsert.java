@@ -1,6 +1,8 @@
-package pt.up.fe.specs.clava.weaver.memoi;
+package pt.up.fe.specs.clava.weaver.memoi.policy.insert;
 
 import java.util.function.Predicate;
+
+import pt.up.fe.specs.clava.weaver.memoi.MergedMemoiEntry;
 
 /**
  * Copyright 2019 SPeCS.
@@ -21,7 +23,12 @@ import java.util.function.Predicate;
  * @author pedro
  *
  */
-public class InsertPolicy {
+public class AlwaysInsert implements Predicate<MergedMemoiEntry>, java.io.Serializable {
 
-    public static final Predicate<MergedMemoiEntry> ALWAYS = (e) -> true;
+    private static final long serialVersionUID = 645571394428346494L;
+
+    @Override
+    public boolean test(MergedMemoiEntry t) {
+        return true;
+    }
 }

@@ -12,8 +12,10 @@ package pt.up.fe.specs.clava.weaver.memoi;
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-public class MemoiEntry {
+public class MemoiEntry implements java.io.Serializable {
 
+    private static final long serialVersionUID = -3537659135548907637L;
+    
     private String key;
     private String output;
     private int counter;

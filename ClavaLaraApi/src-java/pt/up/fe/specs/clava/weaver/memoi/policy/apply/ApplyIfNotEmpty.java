@@ -1,6 +1,9 @@
-package pt.up.fe.specs.clava.weaver.memoi;
+package pt.up.fe.specs.clava.weaver.memoi.policy.apply;
+
 import java.util.List;
 import java.util.function.Predicate;
+
+import pt.up.fe.specs.clava.weaver.memoi.MergedMemoiReport;
 
 /**
  * Copyright 2019 SPeCS.
@@ -15,20 +18,15 @@ import java.util.function.Predicate;
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-public class ApplyPolicy {
+public class ApplyIfNotEmpty implements Predicate<MergedMemoiReport>, java.io.Serializable {
 
-    public static final Predicate<MergedMemoiReport> IF_NOT_EMPTY = (r) -> {
+    private static final long serialVersionUID = 4039863189233044476L;
 
-        List<Integer> reportElements = r.getElements();
+    @Override
+    public boolean test(MergedMemoiReport t) {
 
-        /*
-        int reportCount = r.getReportCount();
-        
-        double mean = reportElements.stream().reduce(0, Integer::sum) / reportCount;
-        
-        return mean != 0.0;
-        
-        */
+        List<Integer> reportElements = t.getElements();
+
         return reportElements.stream().anyMatch(e -> e != 0.0);
-    };
+    }
 }

@@ -16,29 +16,40 @@ import java.util.List;
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-public class MergedMemoiEntry {
+public class MergedMemoiEntry implements java.io.Serializable {
+
+    private static final long serialVersionUID = -3654548405691045308L;
 
     private final String key;
     private final String output;
     private final List<Integer> counter;
     private int collisions;
-    private final MergedMemoiReport parentReport;
+    // private final MergedMemoiReport parentReport;
 
-    public MergedMemoiEntry(MemoiEntry previousEntry, MergedMemoiReport parentReport) {
+    public MergedMemoiEntry(MemoiEntry previousEntry) {
 
         this.key = previousEntry.getKey();
         this.output = previousEntry.getOutput();
         this.counter = new ArrayList<>();
         this.counter.add(previousEntry.getCounter());
         this.collisions = 0;
-        this.parentReport = parentReport;
     }
 
-    public double getCountMean() {
-        
-        return MemoiUtils.mean(counter, parentReport.getReportCount());
-    }
-    
+    // public MergedMemoiEntry(MemoiEntry previousEntry, MergedMemoiReport parentReport) {
+    //
+    // this.key = previousEntry.getKey();
+    // this.output = previousEntry.getOutput();
+    // this.counter = new ArrayList<>();
+    // this.counter.add(previousEntry.getCounter());
+    // this.collisions = 0;
+    // this.parentReport = parentReport;
+    // }
+
+    // public double getCountMean() {
+    //
+    // return MemoiUtils.mean(counter, parentReport.getReportCount());
+    // }
+
     public String getKey() {
         return key;
     }

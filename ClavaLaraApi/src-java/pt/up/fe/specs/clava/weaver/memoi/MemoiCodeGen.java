@@ -13,11 +13,14 @@
 
 package pt.up.fe.specs.clava.weaver.memoi;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import pt.up.fe.specs.util.SpecsIo;
 
 public class MemoiCodeGen {
 
@@ -39,8 +42,21 @@ public class MemoiCodeGen {
             List<String> inputTypes, List<String> outputTypes) {
 
         Map<String, MergedMemoiEntry> table = new HashMap<String, MergedMemoiEntry>();
+        
         if (!isMemoiEmpty) {
-            table = new DirectMappedTable(report, numSets).generate();
+            File tmpDir = SpecsIo.getTempFolder("dmt");
+            File cache = new File(tmpDir, report.getUuid());
+
+            if (cache.exists()) {
+
+                DirectMappedTable dmt = DirectMappedTable.load(cache);
+                table = dmt.getTable();  
+            } else {
+
+                DirectMappedTable dmt = new DirectMappedTable(report, numSets);
+                table = dmt.getTable();
+                DirectMappedTable.save(cache, dmt);
+            }
         }
 
         return generateDmtCode(table, numSets, paramNames, isMemoiOnline, memoiApproxBits, inputCount, outputCount,

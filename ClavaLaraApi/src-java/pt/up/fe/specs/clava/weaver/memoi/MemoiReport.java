@@ -27,8 +27,11 @@ import pt.up.fe.specs.util.io.PathFilter;
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-public class MemoiReport {
+public class MemoiReport implements java.io.Serializable {
 
+    private static final long serialVersionUID = 2478911300859975647L;
+
+    private String uuid;
     private String id;
     private String funcSig;
     private int inputCount;
@@ -66,7 +69,7 @@ public class MemoiReport {
             }
         }
 
-        report.makeStats();
+        // report.makeStats();
         report.printStats();
         return report;
     }
@@ -262,5 +265,9 @@ public class MemoiReport {
 
     public void setCounts(Map<String, MemoiEntry> counts) {
         this.counts = counts;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 }

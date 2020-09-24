@@ -13,6 +13,12 @@
 
 package pt.up.fe.specs.clava.weaver.memoi;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -21,9 +27,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import pt.up.fe.specs.clava.weaver.memoi.comparator.MeanComparator;
+import pt.up.fe.specs.clava.weaver.memoi.policy.insert.AlwaysInsert;
 import pt.up.fe.specs.util.SpecsCheck;
 
-public class DirectMappedTable {
+public class DirectMappedTable implements java.io.Serializable {
+
+    private static final long serialVersionUID = 3951666310732380835L;
 
     private static final List<Integer> ALLOWED_SIZES = Arrays.asList(256, 512, 1024, 2048, 4096, 8192, 16384, 32768,
             65536);
@@ -34,6 +44,11 @@ public class DirectMappedTable {
     private final int numSets;
     private final Predicate<MergedMemoiEntry> insertPred;
     private final Comparator<MergedMemoiEntry> countComparator;
+
+    private final Map<String, MergedMemoiEntry> table;
+    int totalCollisions;
+    int totalElements;
+    int maxCollision;
 
     private boolean debug;
 
@@ -48,7 +63,7 @@ public class DirectMappedTable {
     public DirectMappedTable(MergedMemoiReport report, int numSets,
             Predicate<MergedMemoiEntry> insertPred) {
 
-        this(report, numSets, insertPred, MemoiComparator.mean(report));
+        this(report, numSets, insertPred, new MeanComparator(report));
     }
 
     /**
@@ -62,7 +77,7 @@ public class DirectMappedTable {
     public DirectMappedTable(MergedMemoiReport report, int numSets,
             Comparator<MergedMemoiEntry> countComparator) {
 
-        this(report, numSets, InsertPolicy.ALWAYS, countComparator);
+        this(report, numSets, new AlwaysInsert(), countComparator);
     }
 
     /**
@@ -74,9 +89,9 @@ public class DirectMappedTable {
      */
     public DirectMappedTable(MergedMemoiReport report, int numSets) {
 
-        this(report, numSets, InsertPolicy.ALWAYS, MemoiComparator.mean(report));
+        this(report, numSets, new AlwaysInsert(), new MeanComparator(report));
     }
-    
+
     public DirectMappedTable(MergedMemoiReport report, int numSets,
             Predicate<MergedMemoiEntry> insertPred,
             Comparator<MergedMemoiEntry> countComparator) {
@@ -94,6 +109,9 @@ public class DirectMappedTable {
         this.numSets = numSets;
 
         this.debug = false;
+
+        this.table = generateTable();
+        printTableReport();
     }
 
     public void setDebug() {
@@ -108,12 +126,14 @@ public class DirectMappedTable {
         return debug;
     }
 
-    public Map<String, MergedMemoiEntry> generate() {
+    public Map<String, MergedMemoiEntry> getTable() {
+
+        return table;
+    }
+
+    private HashMap<String, MergedMemoiEntry> generateTable() {
 
         var table = new HashMap<String, MergedMemoiEntry>();
-
-        int totalCollisions = 0;
-        int maxCollision = 0;
 
         List<MergedMemoiEntry> counts = report.getSortedCounts(countComparator.reversed());
 
@@ -147,17 +167,12 @@ public class DirectMappedTable {
             }
         }
 
-        printTableReport(totalCollisions, counts.size(), maxCollision, table);
-
-        if (isDebug()) {
-            printTable(table);
-        }
+        totalElements = (int) MemoiUtils.mean(report.getElements(), report.getReportCount());
 
         return table;
     }
 
-    private void printTableReport(int totalCollisions, int totalElements, int maxCollision,
-            HashMap<String, MergedMemoiEntry> table) {
+    public void printTableReport() {
 
         int reportCount = report.getReportCount();
 
@@ -293,5 +308,36 @@ public class DirectMappedTable {
         }
 
         return combinedKey.toString();
+    }
+
+    public static DirectMappedTable load(File file) {
+
+        try {
+            FileInputStream fileIn = new FileInputStream(file);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            DirectMappedTable dmt = (DirectMappedTable) in.readObject();
+            in.close();
+            fileIn.close();
+            return dmt;
+        } catch (IOException i) {
+            i.printStackTrace();
+            return null;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void save(File file, DirectMappedTable dmt) {
+
+        try {
+            FileOutputStream fileOut = new FileOutputStream(file);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(dmt);
+            out.close();
+            fileOut.close();
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
     }
 }

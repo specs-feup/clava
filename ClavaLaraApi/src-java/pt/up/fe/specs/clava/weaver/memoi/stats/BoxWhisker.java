@@ -15,8 +15,10 @@ package pt.up.fe.specs.clava.weaver.memoi.stats;
 
 import java.util.List;
 
-public class BoxWhisker {
+public class BoxWhisker implements java.io.Serializable {
 
+    private static final long serialVersionUID = 1193463067709042297L;
+    
     private static final double ONE_QUARTER = 0.25;
     private static final double HALF = 0.5;
     private static final double THREE_QUARTERS = 0.75;

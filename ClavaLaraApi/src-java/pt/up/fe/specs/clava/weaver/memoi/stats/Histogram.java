@@ -17,7 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class Histogram {
+public class Histogram implements java.io.Serializable {
+
+    private static final long serialVersionUID = 5726323419689661888L;
 
     private Map<Integer, Integer> map;
 

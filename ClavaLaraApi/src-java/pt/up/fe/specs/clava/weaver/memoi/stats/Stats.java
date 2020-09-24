@@ -17,12 +17,14 @@ import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import pt.up.fe.specs.clava.weaver.memoi.MemoiComparator;
 import pt.up.fe.specs.clava.weaver.memoi.MemoiUtils;
 import pt.up.fe.specs.clava.weaver.memoi.MergedMemoiReport;
+import pt.up.fe.specs.clava.weaver.memoi.comparator.MeanComparator;
 import pt.up.fe.specs.util.SpecsIo;
 
-public class Stats {
+public class Stats implements java.io.Serializable {
+
+    private static final long serialVersionUID = -3810845133276540446L;
 
     final private double unique;
     final private double totalCalls;
@@ -53,7 +55,7 @@ public class Stats {
         var elements = report.getElements();
         var reportCount = report.getReportCount();
         var calls = report.getCalls();
-        var entries = report.getSortedCounts(MemoiComparator.mean(report).reversed());
+        var entries = report.getSortedCounts(new MeanComparator(report).reversed());
 
         var meanCounts = entries.stream()
                 .map(c -> (int) MemoiUtils.mean(c.getCounter(), reportCount))

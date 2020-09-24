@@ -5,9 +5,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import pt.up.fe.specs.clava.weaver.memoi.stats.Stats;
+import pt.up.fe.specs.clava.weaver.memoi.comparator.MeanComparator;
 import pt.up.fe.specs.util.SpecsCheck;
 
 /**
@@ -23,8 +22,17 @@ import pt.up.fe.specs.util.SpecsCheck;
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-public class MergedMemoiReport {
+/**
+ * Represents the merge of several profiling runs for the same function (signature) and call site.
+ * 
+ * @author pedro
+ *
+ */
+public class MergedMemoiReport implements java.io.Serializable {
 
+    private static final long serialVersionUID = -8261433007204000797L;
+
+    private String uuid;
     private String id;
     private String funcSig;
     private int inputCount;
@@ -42,10 +50,11 @@ public class MergedMemoiReport {
 
     private int reportCount = 1;
 
-    private Stats stats;
+    // private Stats stats;
 
     public MergedMemoiReport(MemoiReport report) {
 
+        this.uuid = report.getUuid();
         this.id = report.getId();
         this.funcSig = report.getFuncSig();
         this.outputTypes = report.getOutputTypes();
@@ -82,20 +91,20 @@ public class MergedMemoiReport {
 
         report.getCounts().values()
                 .stream()
-                .map(me -> new MergedMemoiEntry(me, this))
+                .map(me -> new MergedMemoiEntry(me))
                 .forEach(mme -> counts.put(mme.getKey(), mme));
 
-//        this.counts = report.getCounts().values()
-//                .parallelStream()
-//                .map(me -> new MergedMemoiEntry(me, this))
-//                .collect(
-//                        Collectors.toMap(MergedMemoiEntry::getKey, mme -> mme));
+        // this.counts = report.getCounts().values()
+        // .parallelStream()
+        // .map(me -> new MergedMemoiEntry(me, this))
+        // .collect(
+        // Collectors.toMap(MergedMemoiEntry::getKey, mme -> mme));
     }
 
     public List<MergedMemoiEntry> getMeanSorted() {
 
         var list = new ArrayList<MergedMemoiEntry>(counts.values());
-        list.sort(MemoiComparator.mean(this));
+        list.sort(new MeanComparator(this));
 
         return list;
     }
@@ -126,6 +135,7 @@ public class MergedMemoiReport {
             testReport(tempReport);
         }
 
+        uuid.concat(tempReport.getUuid());
         elements.add(tempReport.getElements());
         calls.add(tempReport.getCalls());
         hits.add(tempReport.getHits());
@@ -139,7 +149,7 @@ public class MergedMemoiReport {
                         counts.get(k).addCounter(v.getCounter());
                     } else {
 
-                        MergedMemoiEntry newEntry = new MergedMemoiEntry(v, this);
+                        MergedMemoiEntry newEntry = new MergedMemoiEntry(v);
                         counts.put(k, newEntry);
                     }
                 });
@@ -281,7 +291,11 @@ public class MergedMemoiReport {
         // stats.print();
     }
 
-    public void makeStats() {
-        this.stats = new Stats(this);
+    // public void makeStats() {
+    // this.stats = new Stats(this);
+    // }
+
+    public String getUuid() {
+        return uuid;
     }
 }
