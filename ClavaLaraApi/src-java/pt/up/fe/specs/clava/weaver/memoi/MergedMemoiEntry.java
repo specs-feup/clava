@@ -20,9 +20,9 @@ public class MergedMemoiEntry implements java.io.Serializable {
 
     private static final long serialVersionUID = -3654548405691045308L;
 
-    private final String key;
-    private final String output;
-    private final List<Integer> counter;
+    private String key;
+    private String output;
+    private List<Integer> counter;
     private int collisions;
     // private final MergedMemoiReport parentReport;
 
@@ -30,9 +30,13 @@ public class MergedMemoiEntry implements java.io.Serializable {
 
         this.key = previousEntry.getKey();
         this.output = previousEntry.getOutput();
-        this.counter = new ArrayList<>(50);
+        this.counter = new ArrayList<>(10);
         this.counter.add(previousEntry.getCounter());
         this.collisions = 0;
+    }
+
+    public MergedMemoiEntry() {
+
     }
 
     // public MergedMemoiEntry(MemoiEntry previousEntry, MergedMemoiReport parentReport) {
@@ -75,6 +79,22 @@ public class MergedMemoiEntry implements java.io.Serializable {
         return this.collisions;
     }
 
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setOutput(String output) {
+        this.output = output;
+    }
+
+    public void setCounter(List<Integer> counter) {
+        this.counter = counter;
+    }
+
+    public void setCollisions(int collisions) {
+        this.collisions = collisions;
+    }
+
     @Override
     public String toString() {
 
@@ -84,7 +104,9 @@ public class MergedMemoiEntry implements java.io.Serializable {
         builder.append(output);
         builder.append(", ");
         builder.append(counter);
-        builder.append("}");
+        builder.append("} (");
+        builder.append(collisions);
+        builder.append(")");
 
         return builder.toString();
     }
