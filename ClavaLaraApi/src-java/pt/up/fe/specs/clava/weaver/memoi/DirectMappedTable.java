@@ -14,11 +14,6 @@
 package pt.up.fe.specs.clava.weaver.memoi;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -27,6 +22,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import pt.up.fe.specs.JacksonPlus.SpecsJackson;
 import pt.up.fe.specs.clava.weaver.memoi.comparator.MeanComparator;
 import pt.up.fe.specs.clava.weaver.memoi.policy.insert.AlwaysInsert;
 import pt.up.fe.specs.util.SpecsCheck;
@@ -39,18 +35,21 @@ public class DirectMappedTable implements java.io.Serializable {
             65536);
     private static final int BASE = 16;
     private static final int KEY_STRING_LENGTH = 16;
-    private final MergedMemoiReport report;
-    private final int indexBits;
-    private final int numSets;
-    private final Predicate<MergedMemoiEntry> insertPred;
-    private final Comparator<MergedMemoiEntry> countComparator;
+    private MergedMemoiReport report;
+    private int indexBits;
+    private int numSets;
+    private Predicate<MergedMemoiEntry> insertPred;
+    private Comparator<MergedMemoiEntry> countComparator;
 
-    private final Map<String, MergedMemoiEntry> table;
+    private Map<String, MergedMemoiEntry> table;
     int totalCollisions;
     int totalElements;
     int maxCollision;
 
     private boolean debug;
+
+    public DirectMappedTable() {
+    }
 
     /**
      * Defaults to using mean comparator.
@@ -312,32 +311,92 @@ public class DirectMappedTable implements java.io.Serializable {
 
     public static DirectMappedTable load(File file) {
 
-        try {
-            FileInputStream fileIn = new FileInputStream(file);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            DirectMappedTable dmt = (DirectMappedTable) in.readObject();
-            in.close();
-            fileIn.close();
-            return dmt;
-        } catch (IOException i) {
-            i.printStackTrace();
-            return null;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
+        // FileInputStream fileIn = new FileInputStream(file);
+        // ObjectInputStream in = new ObjectInputStream(fileIn);
+        // DirectMappedTable dmt = (DirectMappedTable) in.readObject();
+        // in.close();
+        // fileIn.close();
+
+        return SpecsJackson.fromFile(file, DirectMappedTable.class);
     }
 
     public static void save(File file, DirectMappedTable dmt) {
 
-        try {
-            FileOutputStream fileOut = new FileOutputStream(file);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(dmt);
-            out.close();
-            fileOut.close();
-        } catch (IOException i) {
-            i.printStackTrace();
-        }
+        // FileOutputStream fileOut = new FileOutputStream(file);
+        // ObjectOutputStream out = new ObjectOutputStream(fileOut);
+        // out.writeObject(dmt);
+        // out.close();
+        // fileOut.close();
+
+        SpecsJackson.toFile(dmt, file);
     }
+
+    public MergedMemoiReport getReport() {
+        return report;
+    }
+
+    public void setReport(MergedMemoiReport report) {
+        this.report = report;
+    }
+
+    public int getIndexBits() {
+        return indexBits;
+    }
+
+    public void setIndexBits(int indexBits) {
+        this.indexBits = indexBits;
+    }
+
+    public int getNumSets() {
+        return numSets;
+    }
+
+    public void setNumSets(int numSets) {
+        this.numSets = numSets;
+    }
+
+    public Predicate<MergedMemoiEntry> getInsertPred() {
+        return insertPred;
+    }
+
+    public void setInsertPred(Predicate<MergedMemoiEntry> insertPred) {
+        this.insertPred = insertPred;
+    }
+
+    public Comparator<MergedMemoiEntry> getCountComparator() {
+        return countComparator;
+    }
+
+    public void setCountComparator(Comparator<MergedMemoiEntry> countComparator) {
+        this.countComparator = countComparator;
+    }
+
+    public int getTotalCollisions() {
+        return totalCollisions;
+    }
+
+    public void setTotalCollisions(int totalCollisions) {
+        this.totalCollisions = totalCollisions;
+    }
+
+    public int getTotalElements() {
+        return totalElements;
+    }
+
+    public void setTotalElements(int totalElements) {
+        this.totalElements = totalElements;
+    }
+
+    public int getMaxCollision() {
+        return maxCollision;
+    }
+
+    public void setMaxCollision(int maxCollision) {
+        this.maxCollision = maxCollision;
+    }
+
+    public void setTable(Map<String, MergedMemoiEntry> table) {
+        this.table = table;
+    }
+
 }
