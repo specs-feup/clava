@@ -26,6 +26,6 @@
 	</info>
 	
 	<dependencies>
-		<dependency org="com.google.code.gson" name="gson" rev="2.4"/>	
+		<dependency org="com.google.code.gson" name="gson" rev="2.4"/>
 	</dependencies>
 </ivy-module>

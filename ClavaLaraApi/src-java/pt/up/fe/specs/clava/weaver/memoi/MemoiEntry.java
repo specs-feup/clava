@@ -1,4 +1,5 @@
 package pt.up.fe.specs.clava.weaver.memoi;
+
 /**
  * Copyright 2019 SPeCS.
  * 
@@ -15,10 +16,16 @@ package pt.up.fe.specs.clava.weaver.memoi;
 public class MemoiEntry implements java.io.Serializable {
 
     private static final long serialVersionUID = -3537659135548907637L;
-    
+
     private String key;
     private String output;
     private int counter;
+
+    public MemoiEntry() {
+        this.key = "";
+        this.output = "";
+        this.counter = 0;
+    }
 
     public MemoiEntry(MemoiEntry otherEntry) {
 

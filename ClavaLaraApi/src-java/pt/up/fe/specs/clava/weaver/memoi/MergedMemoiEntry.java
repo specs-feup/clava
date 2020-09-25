@@ -30,7 +30,7 @@ public class MergedMemoiEntry implements java.io.Serializable {
 
         this.key = previousEntry.getKey();
         this.output = previousEntry.getOutput();
-        this.counter = new ArrayList<>();
+        this.counter = new ArrayList<>(50);
         this.counter.add(previousEntry.getCounter());
         this.collisions = 0;
     }

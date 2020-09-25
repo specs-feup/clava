@@ -42,7 +42,7 @@ public class MemoiCodeGen {
             List<String> inputTypes, List<String> outputTypes) {
 
         Map<String, MergedMemoiEntry> table = new HashMap<String, MergedMemoiEntry>();
-        
+
         if (!isMemoiEmpty) {
             File tmpDir = SpecsIo.getTempFolder("dmt");
             File cache = new File(tmpDir, report.getUuid());
@@ -50,7 +50,7 @@ public class MemoiCodeGen {
             if (cache.exists()) {
 
                 DirectMappedTable dmt = DirectMappedTable.load(cache);
-                table = dmt.getTable();  
+                table = dmt.getTable();
             } else {
 
                 DirectMappedTable dmt = new DirectMappedTable(report, numSets);

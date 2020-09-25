@@ -63,19 +63,19 @@ public class MergedMemoiReport implements java.io.Serializable {
         this.inputTypes = new ArrayList<>(report.getInputTypes());
         this.callSites = new ArrayList<>(report.getCall_sites());
 
-        this.elements = new ArrayList<Integer>();
+        this.elements = new ArrayList<Integer>(50);
         this.elements.add(report.getElements());
 
-        this.calls = new ArrayList<Integer>();
+        this.calls = new ArrayList<Integer>(50);
         this.calls.add(report.getCalls());
 
-        this.hits = new ArrayList<Integer>();
+        this.hits = new ArrayList<Integer>(50);
         this.hits.add(report.getHits());
 
-        this.misses = new ArrayList<Integer>();
+        this.misses = new ArrayList<Integer>(50);
         this.misses.add(report.getMisses());
 
-        this.counts = new HashMap<String, MergedMemoiEntry>();
+        this.counts = new HashMap<String, MergedMemoiEntry>(report.getCounts().size());
         // for (MemoiEntry oldEntry : report.getCounts()) {
         //
         // String key = oldEntry.getKey();

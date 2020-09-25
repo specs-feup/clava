@@ -115,6 +115,7 @@ public class MemoiReport implements java.io.Serializable {
 
         BufferedReader br = new BufferedReader(fr);
         MemoiReport fromJson = new Gson().fromJson(br, MemoiReport.class);
+
         return fromJson;
     }
 
