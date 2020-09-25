@@ -121,8 +121,16 @@ public class TranslationUnit extends ClavaNode {
         // .collect(Collectors.toList());
         //
         // includes = new IncludeManager(includesList, this);
+        // @SuppressWarnings("unchecked")
+        // var isCxxUnitSupplier = (Supplier<Boolean> & Serializable) this::testIsCXXUnit;
+        // SerializableSupplier<Boolean> isCxxUnitSupplier = SerializableSupplier.newInstance(() ->
+        // this.testIsCXXUnit());
+        // isCxxUnit = Lazy.newInstance(SerializableSupplier.newInstance(this::testIsCXXUnit));
+        // isCxxUnit = Lazy.newInstance((Supplier<Boolean> & Serializable) this::testIsCXXUnit);
 
-        isCxxUnit = Lazy.newInstance(this::testIsCXXUnit);
+        // var isCxxUnitSupplier = (Supplier<Boolean> & Serializable) this::testIsCXXUnit;
+
+        isCxxUnit = Lazy.newInstanceSerializable(this::testIsCXXUnit);
     }
 
     // @Override
