@@ -1,14 +1,12 @@
 package pt.up.fe.specs.clava.weaver.memoi;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
 
+import pt.up.fe.specs.JacksonPlus.SpecsJackson;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -81,7 +79,7 @@ public class MemoiReport implements java.io.Serializable {
         SpecsCheck.checkArgument(file.exists(), () -> "the file " + fileName + " doesn't exist");
 
         // get the final report
-        MemoiReport finalReport = fromFile(file);
+        MemoiReport finalReport = fromFile(file, false);
 
         // get the other reports and merge them
         File parentDir = SpecsIo.getParent(file);
@@ -90,7 +88,7 @@ public class MemoiReport implements java.io.Serializable {
 
         for (var partFile : partFiles) {
 
-            MemoiReport partReport = fromFile(partFile);
+            MemoiReport partReport = fromFile(partFile, false);
             finalReport.mergePart(partReport);
         }
 
@@ -104,17 +102,30 @@ public class MemoiReport implements java.io.Serializable {
 
     public static MemoiReport fromFile(File file) {
 
+        return fromFile(file, false);
+    }
+
+    public static MemoiReport fromFile(File file, boolean time) {
+
         SpecsCheck.checkArgument(file.exists(), () -> "the file " + file + " doesn't exist");
 
-        FileReader fr = null;
-        try {
-            fr = new FileReader(file);
-        } catch (FileNotFoundException e) {
-            SpecsLogs.warn("Could not find the file " + file.getAbsolutePath());
+        long start = 0;
+        if (time) {
+            start = System.currentTimeMillis();
         }
 
-        BufferedReader br = new BufferedReader(fr);
-        MemoiReport fromJson = new Gson().fromJson(br, MemoiReport.class);
+        // MemoiReport fromJson = null;
+        // FileReader fr = new FileReader(file);
+        // BufferedReader br = new BufferedReader(fr);
+        // fromJson = new Gson().fromJson(br, MemoiReport.class);
+
+        MemoiReport fromJson = SpecsJackson.fromFile(file, MemoiReport.class);
+
+        if (time) {
+            long end = System.currentTimeMillis();
+            long delta = end - start;
+            SpecsLogs.info("fromFile took " + delta + "ms");
+        }
 
         return fromJson;
     }

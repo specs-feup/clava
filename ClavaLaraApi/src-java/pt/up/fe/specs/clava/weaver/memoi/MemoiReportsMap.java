@@ -77,7 +77,7 @@ public class MemoiReportsMap {
             String indexFilePath = reportFile.getAbsolutePath() + indexExt;
             File indexFile = new File(indexFilePath);
                     
-            MemoiReport report = MemoiReport.fromFile(indexFile);
+            MemoiReport report = MemoiReport.fromFile(indexFile, false);
             put(map, report.getFuncSig(), String.join("#", report.getCall_sites()), reportFile.getAbsolutePath());
         }
 
