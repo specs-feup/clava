@@ -157,14 +157,7 @@ MemoiGen.prototype.setApplyPolicy = function(policy) {
 		MemoiGen.ApplyPolicy.OVER_90_PCT
 	];
 	
-	Check.arrayContains(allowedPolicies, policy, "The possible apply policies are{ \
-		MemoiGen.ApplyPolicy.ALWAYS, \
-		MemoiGen.ApplyPolicy.NOT_EMPTY, \
-		MemoiGen.ApplyPolicy.OVER_15_PCT, \
-		MemoiGen.ApplyPolicy.OVER_25_PCT, \
-		MemoiGen.ApplyPolicy.OVER_50_PCT, \
-		MemoiGen.ApplyPolicy.OVER_75_PCT, \
-		MemoiGen.ApplyPolicy.OVER_90_PCT}.", "MemoiGen.setApplyPolicy");
+	Check.arrayContains(allowedPolicies, policy, "The possible apply policies are{MemoiGen.ApplyPolicy.ALWAYS, MemoiGen.ApplyPolicy.NOT_EMPTY, MemoiGen.ApplyPolicy.OVER_15_PCT, MemoiGen.ApplyPolicy.OVER_25_PCT,MemoiGen.ApplyPolicy.OVER_50_PCT, MemoiGen.ApplyPolicy.OVER_75_PCT, MemoiGen.ApplyPolicy.OVER_90_PCT}.", "MemoiGen.setApplyPolicy");
 	
 	this._applyPolicy = policy;
 }
