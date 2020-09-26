@@ -68,10 +68,10 @@ public class ParallelCodeParser extends CodeParser {
     /// DATAKEY BEGIN
 
     public static final DataKey<Boolean> PARALLEL_PARSING = KeyFactory.bool("parallelParsing")
-            // .setDefault(() -> true)
+            .setDefault(() -> true)
             .setLabel("Parallel parsing of source files");
 
-    public static final DataKey<Integer> PARSING_NUM_THREADS = KeyFactory.integer("parsingNumThreads", 1)
+    public static final DataKey<Integer> PARSING_NUM_THREADS = KeyFactory.integer("parsingNumThreads", 0)
             .setLabel("Number of threads to use for parallel parsing");
 
     public static final DataKey<Integer> SYSTEM_INCLUDES_THRESHOLD = KeyFactory.integer("systemIncludesThreshold", 1)
@@ -143,8 +143,10 @@ public class ParallelCodeParser extends CodeParser {
 
         long tic = System.nanoTime();
 
-        // TODO: Allow parameter to specify parallelism
         int numThreads = get(PARALLEL_PARSING) ? get(PARSING_NUM_THREADS) : 1;
+        if (numThreads <= 0) {
+            numThreads = Runtime.getRuntime().availableProcessors();
+        }
 
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
