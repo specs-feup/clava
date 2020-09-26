@@ -568,7 +568,7 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Clones this function assigning it a new name, inserts the cloned function after the original function
+     * Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class
      * @param newName 
      * @param insert 
      */
@@ -577,7 +577,7 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Clones this function assigning it a new name, inserts the cloned function after the original function
+     * Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class
      * @param newName 
      * @param insert 
      */
