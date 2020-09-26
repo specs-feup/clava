@@ -282,6 +282,8 @@
 	<!-- THIS -->
 	<joinpoint class="this" extends="expression"/>
 
+	<!-- LITERAL -->
+	<joinpoint class="literal" extends="expression"/>
 
 	<!-- COMMENT -->
 	<joinpoint class="comment"/>
