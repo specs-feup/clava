@@ -315,14 +315,19 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 			$file.addGlobal(missesName, ClavaJoinPoints.builtinType("unsigned int"), '0');
 			$call.insert("before",  '[[totalName]]++;');
 			$call.insert("after", '[[missesName]]++;');
+	
+			if(this._isOnline) {			
+				var updatesName = wrapperName + '_total_updates';
+				$file.addGlobal(updatesName, ClavaJoinPoints.builtinType("unsigned int"), '0');
+			}
 			
-			this._addMainDebug(totalName, missesName, wrapperName);
+			this._addMainDebug(totalName, missesName, updatesName, wrapperName);
 		}
 		
 		$call.insert("before", this._makeTableCode($function, report));
 		
 		if(this._isOnline) {
-			$call.insert("after", this._makeUpdateCode($function));
+			$call.insert("after", this._makeUpdateCode($function, updatesName));
 		}
 		
 		$file.addInclude('stdint.h', true);
@@ -350,19 +355,19 @@ MemoiGen.prototype._makeTableCode = function($function, report) {
 	return code;
 }
 
-MemoiGen.prototype._makeUpdateCode = function($function) {
+MemoiGen.prototype._makeUpdateCode = function($function, updatesName) {
 	
 	var paramNames = [];
 	for(var $param of $function.params) {
 		paramNames.push($param.name);
 	}
 	
-	var code = MemoiCodeGen.generateUpdateCode(this._tableSize, paramNames, this._isUpdateAlways, this._target._numInputs, this._target._numOutputs);
+	var code = MemoiCodeGen.generateUpdateCode(this._tableSize, paramNames, this._isUpdateAlways, this._target._numInputs, this._target._numOutputs, updatesName);
 
 	return code;
 }
 
-MemoiGen.prototype._addMainDebug = function(totalName, missesName, wrapperName) {
+MemoiGen.prototype._addMainDebug = function(totalName, missesName, updatesName, wrapperName) {
 	
 	var chain = Query.search("file").search("function", {"name":"main"}).chain();
 	var firstAndOnly = chain[0];
@@ -377,15 +382,56 @@ MemoiGen.prototype._addMainDebug = function(totalName, missesName, wrapperName) 
 
 	$file.addGlobal(totalName, ClavaJoinPoints.builtinType("unsigned int"), '0');
 	$file.addGlobal(missesName, ClavaJoinPoints.builtinType("unsigned int"), '0');
-	$file.addInclude('stdio.h', true);
+	if(this._isOnline) {
+		$file.addGlobal(updatesName, ClavaJoinPoints.builtinType("unsigned int"), '0');
+	}
 	
+	$file.addInclude('stdio.h', true);
+	$file.addInclude('sys/stat.h', true);
+	$file.addInclude('sys/types.h', true);
+	$file.addInclude('errno.h', true);
+	
+	var updatesStringCode = "";
+	var updatesValuesCode = "";
+	
+	if(this._isOnline) {
+		updatesStringCode = ", \\\"updates\\\": %u";
+		updatesValuesCode = ", " + updatesName;
+	}
+	
+	var json = %{
+		{
+		errno = 0;
+		int dir_result = mkdir("memoi-exec-report", 0755);
+		if(dir_result != 0 && errno != EEXIST){
+			perror("Could not create directory for memoi execution reports");
+		}
+		else{
+			errno = 0;
+			FILE * _memoi_rep_file = fopen ("memoi-exec-report/[[wrapperName]].json","w");
+			if(_memoi_rep_file == NULL) {
+				perror("Could not create file for memoi execution report");
+			} else {
+				fprintf(_memoi_rep_file, "{\"name\": \"[[wrapperName]]\", \"total\": %u, \"hits\": %u, \"misses\": %u[[updatesStringCode]]}\n", [[totalName]], [[totalName]] - [[missesName]], [[missesName]][[updatesValuesCode]]);
+				fclose(_memoi_rep_file);
+			}
+		}
+		}
+	}%;
+	
+	$function.insertReturn(json);
+	
+	/*
 	$function.insertReturn(%{
 		printf("[[wrapperName]]\t%u / %u (%.2f%%)\n",
 			[[totalName]] - [[missesName]],
 			[[totalName]],
 			([[totalName]] - [[missesName]]) * 100.0 / [[totalName]]);
 	}%);
+	*/
 }
+
+
 
 MemoiGen.prototype._checkParams = function(source) {
 

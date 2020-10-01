@@ -76,11 +76,11 @@ public class MemoiCodeGen {
     }
 
     public static String generateUpdateCode(int numSets, List<String> paramNames,
-            boolean isUpdateAlways, int inputCount, int outputCount) {
+            boolean isUpdateAlways, int inputCount, int outputCount, String updatesName) {
 
         int indexBits = (int) MemoiUtils.log2(numSets);
 
-        return updateCode(inputCount, outputCount, indexBits, paramNames, isUpdateAlways);
+        return updateCode(inputCount, outputCount, indexBits, paramNames, isUpdateAlways, updatesName);
     }
 
     private static List<String> makeVarNames(List<String> paramNames) {
@@ -105,7 +105,7 @@ public class MemoiCodeGen {
     }
 
     private static String updateCode(int inputCount, int outputCount, int indexBits,
-            List<String> paramNames, boolean isUpdateAlways) {
+            List<String> paramNames, boolean isUpdateAlways, String updatesName) {
 
         StringBuilder code = new StringBuilder();
 
@@ -135,6 +135,10 @@ public class MemoiCodeGen {
             code.append(varNames.size());
             code.append("] = *(uint64_t*) &result;");
 
+            code.append("\n");
+            code.append(updatesName);
+            code.append("++;\n");
+
         } else {
 
             for (int o = 0; o < outputCount; o++) {
@@ -148,6 +152,11 @@ public class MemoiCodeGen {
                 code.append(paramNames.get(outputIndex));
                 code.append(";\n");
             }
+
+            code.append("\n");
+            code.append(updatesName);
+            code.append("++;\n");
+
             code.append("\treturn;\n\n");
         }
 
