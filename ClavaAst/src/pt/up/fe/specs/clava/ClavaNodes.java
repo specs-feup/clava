@@ -348,11 +348,17 @@ public class ClavaNodes {
             // return CompoundStmt.newNakedInstance(stmt.getInfo(), Collections.emptyList());
         }
 
-        // Create naked CompoundStmt
+        // Create CompoundStmt
         // Location is important, for insertion of text (e.g., TextParser)
         CompoundStmt newStmt = stmt.getFactory()
-                .compoundStmt(stmt)
-                .setNaked(true);
+                .compoundStmt(stmt);
+        // .setNaked(true);
+
+        // Only make a naked CompoundStmt if node is not a LiteralStmt, we don't know how many statement it represents
+        // in that case.
+        if (!(stmt instanceof LiteralStmt)) {
+            newStmt.setNaked(true);
+        }
 
         newStmt.setLocation(stmt.get(ClavaNode.LOCATION));
 
