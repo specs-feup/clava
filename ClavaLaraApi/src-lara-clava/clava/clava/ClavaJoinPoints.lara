@@ -425,3 +425,23 @@ ClavaJoinPoints.accessSpecifier = function(accessSpecifier) {
 	
 	return AstFactory.accessSpecifier(accessSpecifier);
 }
+
+
+
+/**
+ * Creates a new join point 'if'. 
+ *
+ * @param {String|$statement} [$init=undefined] - The initialization of the for statement. If a string, it is converted to a literal expression.
+ * @param {String|$statement} [$condition=undefined] - The condition of the for statement. If a string, it is converted to a literal expression.
+ * @param {String|$statement} [$inc=undefined] - The increment of the for statement. If a string, it is converted to a literal expression.
+ * @param {String|$statement} [$body=undefined] - The body of the for statement.
+ * 
+ */
+ClavaJoinPoints.forStmt = function($init, $condition, $inc, $body) {
+	$init = ClavaType.asStatement($init, true);
+	$condition = ClavaType.asStatement($condition, true);
+	$inc = ClavaType.asStatement($inc, true);
+	$body = ClavaType.asStatement($body, true);
+		
+	return AstFactory.forStmt($init, $condition, $inc, $body);
+}

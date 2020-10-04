@@ -62,8 +62,20 @@ ClavaType.getVarrefsInTypeCopy = function($type, varrefs) {
  *  Makes sure the given parameter is an expression join point.
  *
  * @param {String|$expr} $expression - If a string, returns a literal expression with the code of the string. Otherwise, returns $expression
+ * @param {boolean} [isOptional=false] - If false and $expression is undefined, throws an exception. Otherwise, returns undefined if $expression is undefined. 
  */
-ClavaType.asExpression = function($expression) {
+ClavaType.asExpression = function($expression, isOptional) {
+	if(isOptional === undefined) {
+		isOptional = false;
+	}
+	
+	if($expression === undefined) {
+		if(isOptional) {
+			return undefined;
+		} else {
+			throw "ClavaType.asExpression: $expression is undefined. If this is allowed, set 'isOptional' to true.";
+		}
+	}
 
 	if(isString($expression)) {
 		return ClavaJoinPoints.exprLiteral($expression);
@@ -71,6 +83,34 @@ ClavaType.asExpression = function($expression) {
 
 	Check.isJoinPoint($expression, 'expression');
 	return $expression;
+}
+
+
+/**
+ *  Makes sure the given parameter is a statement join point.
+ *
+ * @param {String|$expr} $statement - If a string, returns a literal statement with the code of the string. Otherwise, returns $statement
+ * @param {boolean} [isOptional=false] - If false and $statement is undefined, throws an exception. Otherwise, returns undefined if $statement is undefined. 
+ */
+ClavaType.asStatement = function($statement, isOptional) {
+	if(isOptional === undefined) {
+		isOptional = false;
+	}
+	
+	if($statement === undefined) {
+		if(isOptional) {
+			return undefined;
+		} else {
+			throw "ClavaType.asStatement: $statement is undefined. If this is allowed, set 'isOptional' to true.";
+		}
+	}
+
+	if(isString($statement)) {
+		return ClavaJoinPoints.stmtLiteral($statement);
+	}
+
+	Check.isJoinPoint($statement, 'statement');
+	return $statement;
 }
 
 /**
