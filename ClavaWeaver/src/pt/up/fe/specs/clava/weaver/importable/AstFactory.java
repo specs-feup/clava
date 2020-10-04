@@ -82,6 +82,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANamedDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
@@ -633,7 +634,6 @@ public class AstFactory {
     }
 
     public static AIf ifStmt(AExpression condition, AStatement thenBody, AStatement elseBody) {
-
         var thenNode = thenBody != null ? ClavaNodes.toCompoundStmt((Stmt) thenBody.getNode()) : null;
         var elseNode = elseBody != null ? ClavaNodes.toCompoundStmt((Stmt) elseBody.getNode()) : null;
         // CompoundStmt emptyBody = CxxWeaver.getFactory().compoundStmt();
@@ -733,5 +733,21 @@ public class AstFactory {
 
         var accessSpecifierDecl = CxxWeaver.getFactory().accessSpecDecl(accessSpecifier);
         return CxxJoinpoints.create(accessSpecifierDecl, AAccessSpecifier.class);
+    }
+
+    public static ALoop forStmt(AStatement init, AStatement condition, AStatement inc, AStatement body) {
+        // If null, create NullStmt
+        var initStmt = init != null ? (Stmt) init.getNode() : CxxWeaver.getFactory().nullStmt();
+        var condStmt = condition != null ? (Stmt) condition.getNode() : CxxWeaver.getFactory().nullStmt();
+        var incStmt = inc != null ? (Stmt) inc.getNode() : CxxWeaver.getFactory().nullStmt();
+        var bodyStmt = body != null ? (Stmt) body.getNode() : CxxWeaver.getFactory().nullStmt();
+
+        // If body is not a CompoundStmt, make it
+
+        var compoundStmt = ClavaNodes.toCompoundStmt(bodyStmt);
+
+        var forStmt = CxxWeaver.getFactory().forStmt(initStmt, condStmt, incStmt, compoundStmt);
+
+        return CxxJoinpoints.create(forStmt, ALoop.class);
     }
 }

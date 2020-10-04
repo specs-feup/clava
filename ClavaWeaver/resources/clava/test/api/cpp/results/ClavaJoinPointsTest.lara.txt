@@ -6,9 +6,23 @@ C-Style cast: (double) a
 Empty if:
 if(a == 0) {
 }
+
 If with then:
-if(a == 0) a = 1;
+if(a == 0) {
+   a = 1;
+}
+
 If with else:
 if(a == 0) {
 }
-else a = 2;
+else {
+   a = 2;
+}
+
+Empty for:
+for(;;);
+Complete for:
+for(int i=0; i<10; i++) {
+   i = i+1;
+   i = i - 1;
+}
