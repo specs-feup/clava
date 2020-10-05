@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import org.lara.interpreter.profile.WeavingReport;
+import org.lara.interpreter.weaver.ast.AstMethods;
+import org.lara.interpreter.weaver.ast.TreeNodeAstMethods;
 import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.options.WeaverOption;
@@ -2013,5 +2015,10 @@ public class CxxWeaver extends ACxxWeaver {
         }
 
         return CxxJoinpoints.create((ClavaNode) node);
+    }
+
+    @Override
+    public AstMethods<?> getAstMethods() {
+        return new TreeNodeAstMethods<>(node -> CxxJoinpoints.create((ClavaNode) node));
     }
 }
