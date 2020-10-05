@@ -1,3 +1,6 @@
+import weaver.Query;
+import weaver.Ast;
+
 aspectdef AstNodes
 
     select function{"testNodes"}.if end
@@ -10,6 +13,15 @@ aspectdef AstNodes
         println('child(0) = ' + $if.child(0));
 		println('astAncestor("Decl") = ' + $if.astAncestor('Decl').name);        
     end
+	
+	println("\n\nAst API:");
+	for(var $if of Query.search("function", "testNodes").search("if")) {
+		var astNode = $if.getNode();
+		
+        println('astNumChildren  = ' +  Ast.getNumChildren(astNode));		
+        println('astChildren = ' + Ast.getChildren(astNode).map(node => node.getClass().getSimpleName()));		
+	}
+	
 end
 
 

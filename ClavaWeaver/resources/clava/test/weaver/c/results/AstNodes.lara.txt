@@ -5,3 +5,7 @@ numChildren  = 2
 children = Joinpoint 'expression',Joinpoint 'statement'
 child(0) = Joinpoint 'expression'
 astAncestor("Decl") = testNodes
+
+Ast API:
+astNumChildren  = 4
+astChildren = NullDecl,BinaryOperator,CompoundStmt,NullStmt
