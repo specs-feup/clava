@@ -2009,6 +2009,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     @Override
     public AstMethods getAstMethods() {
-        return new TreeNodeAstMethods<>(this, ClavaNode.class, node -> CxxJoinpoints.create(node));
+        return new TreeNodeAstMethods<>(this, ClavaNode.class, node -> CxxJoinpoints.create(node),
+                node -> ClavaCommonLanguage.getJoinPointName(node));
     }
 }
