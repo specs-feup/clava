@@ -14,30 +14,43 @@
 package pt.up.fe.specs.clava.weaver;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
-import pt.up.fe.specs.util.classmap.ClassMap;
+import pt.up.fe.specs.util.classmap.FunctionClassMap;
 
 public class ClavaCommonLanguage {
 
-    private static final ClassMap<ClavaNode, String> JOINPOINT_MAPPER;
+    private static final FunctionClassMap<ClavaNode, String> JOINPOINT_MAPPER;
     static {
-        JOINPOINT_MAPPER = new ClassMap<>();
-        JOINPOINT_MAPPER.put(CallExpr.class, "CallJp");
-        JOINPOINT_MAPPER.put(Expr.class, "ExprJp");
-        JOINPOINT_MAPPER.put(FunctionDecl.class, "FunctionJp");
-        JOINPOINT_MAPPER.put(Decl.class, "DeclJp");
-        JOINPOINT_MAPPER.put(TranslationUnit.class, "FileJp");
-        JOINPOINT_MAPPER.put(App.class, "ProgramJp");
-        JOINPOINT_MAPPER.put(ClavaNode.class, "JoinPoint");
+        JOINPOINT_MAPPER = new FunctionClassMap<>();
+        JOINPOINT_MAPPER.put(CallExpr.class, node -> "CallJp");
+        JOINPOINT_MAPPER.put(Expr.class, node -> "ExprJp");
+        JOINPOINT_MAPPER.put(FunctionDecl.class, node -> "FunctionJp");
+        JOINPOINT_MAPPER.put(CXXRecordDecl.class, ClavaCommonLanguage::cxxRecordDecl);
+        JOINPOINT_MAPPER.put(Decl.class, node -> "DeclJp");
+        JOINPOINT_MAPPER.put(TranslationUnit.class, node -> "FileJp");
+        JOINPOINT_MAPPER.put(App.class, node -> "ProgramJp");
+        JOINPOINT_MAPPER.put(ClavaNode.class, node -> "JoinPoint");
     }
 
     public static String getJoinPointName(ClavaNode node) {
-        return JOINPOINT_MAPPER.get(node.getClass());
+        return JOINPOINT_MAPPER.apply(node);
+    }
+
+    private static String cxxRecordDecl(CXXRecordDecl node) {
+        switch (node.getTagKind()) {
+        case CLASS:
+            return "ClassJp";
+        case STRUCT:
+            return "StructJp";
+        default:
+            return "JoinPoint";
+        }
     }
 
 }
