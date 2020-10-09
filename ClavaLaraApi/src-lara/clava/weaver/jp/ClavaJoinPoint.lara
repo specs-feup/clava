@@ -1,0 +1,7 @@
+import weaver.jp.JoinPoint;
+import weaver.Weaver;
+
+JoinPoint.prototype.line = function() {
+	return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).line;
+}
+
