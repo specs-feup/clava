@@ -6,7 +6,7 @@ aspectdef LaraCommonLanguageTest
 
 	var $file = Query.search("file").first();
 	printlnObject($file);
-	println("line: " + $file.line());
+	println("line: " + $file.line);
 	println("is FileJP? : " + ($file instanceof FileJp));
 
 end
