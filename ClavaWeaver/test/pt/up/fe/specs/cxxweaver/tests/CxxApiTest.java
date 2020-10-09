@@ -138,4 +138,10 @@ public class CxxApiTest {
     public void testQuery() {
         newTester().test("QueryTest.lara", "query.cpp");
     }
+
+    @Test
+    public void testLaraCommonLanguage() {
+        newTester().test("LaraCommonLanguageTest.lara", "lara_common_language.cpp");
+    }
+
 }
