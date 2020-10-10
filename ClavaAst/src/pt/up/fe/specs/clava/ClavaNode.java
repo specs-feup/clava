@@ -48,6 +48,7 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
+import pt.up.fe.specs.clava.utils.NodeWithScope;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.utils.StmtWithCondition;
 import pt.up.fe.specs.util.SpecsCheck;
@@ -1520,4 +1521,20 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     // Type pointeeCopy = type.get(PointerType.POINTEE_TYPE).copy();
     // type.set(PointerType.POINTEE_TYPE, pointeeCopy);
     // }
+
+    /**
+     * 
+     * @return the children inside the scope declared by this node (e.g., body of a loop), or empty list if node does
+     *         not have a scope
+     */
+    public List<ClavaNode> getScopeChildren() {
+
+        if (!(this instanceof NodeWithScope)) {
+            return Collections.emptyList();
+        }
+
+        return ((NodeWithScope) this).getNodeScope()
+                .map(scope -> scope.getChildren())
+                .orElse(Collections.emptyList());
+    }
 }

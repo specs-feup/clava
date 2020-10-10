@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import org.lara.interpreter.profile.WeavingReport;
+import org.lara.interpreter.weaver.ast.AstMethods;
+import org.lara.interpreter.weaver.ast.TreeNodeAstMethods;
 import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.options.WeaverOption;
@@ -45,7 +47,6 @@ import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.parsing.snippet.SnippetParser;
 import pt.up.fe.specs.clava.utils.SourceType;
-import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
 import pt.up.fe.specs.clava.weaver.gears.InsideApplyGear;
 import pt.up.fe.specs.clava.weaver.gears.ModifiedFilesGear;
@@ -2007,11 +2008,8 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     @Override
-    public ACxxWeaverJoinPoint fromNode(Object node) {
-        if (!(node instanceof ClavaNode)) {
-            throw new RuntimeException("Expected a ClavaNode, but got a " + node.getClass());
-        }
-
-        return CxxJoinpoints.create((ClavaNode) node);
+    public AstMethods getAstMethods() {
+        return new TreeNodeAstMethods<>(this, ClavaNode.class, node -> CxxJoinpoints.create(node),
+                node -> ClavaCommonLanguage.getJoinPointName(node), node -> node.getScopeChildren());
     }
 }

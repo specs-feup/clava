@@ -26,4 +26,8 @@ aspectdef ClavaJoinPointsTest
 	println("Empty if:\n" + ClavaJoinPoints.ifStmt("a == 0").code);
 	println("If with then:\n" + ClavaJoinPoints.ifStmt("a == 0", ClavaJoinPoints.stmtLiteral("a = 1;")).code);
 	println("If with else:\n" + ClavaJoinPoints.ifStmt("a == 0", undefined, ClavaJoinPoints.stmtLiteral("a = 2;")).code);
+	
+	// For Stmt
+	println("Empty for:\n" + ClavaJoinPoints.forStmt().code);
+	println("Complete for:\n" + ClavaJoinPoints.forStmt("int i=0;", "i<10;", "i++;", "i = i+1;\ni = i - 1;").code);	
 end

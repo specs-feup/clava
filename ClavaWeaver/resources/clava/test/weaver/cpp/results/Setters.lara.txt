@@ -3,16 +3,28 @@ Changed qualified name 1: now
 Changed qualified name 2: std::now
 Changed qualified name 3: std::chrono::_V2::system_clock::now
 Changed then:
-if(a == 0) a = 3;
-else {
-a = 2;
+if(a == 0) {
+   a = 3;
 }
+else {
+   a = 2;
+}
+
 Changed else:
-if(a == 0) a = 3;
-else a = 4;
+if(a == 0) {
+   a = 3;
+}
+else {
+   a = 4;
+}
+
 Changed condition:
-if(a == 3) a = 3;
-else a = 4;
+if(a == 3) {
+   a = 3;
+}
+else {
+   a = 4;
+}
 Changed Function:
 double testFunctionType(int a) {
    

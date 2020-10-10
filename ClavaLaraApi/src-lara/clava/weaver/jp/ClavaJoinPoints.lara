@@ -1,0 +1,6 @@
+// Enable Clava version of common join points
+import weaver.jp.ClavaJoinPoint;
+
+// Patches weaver.JoinPoint and other classes
+import weaver.jp.JoinPointsCommonPath;
+
