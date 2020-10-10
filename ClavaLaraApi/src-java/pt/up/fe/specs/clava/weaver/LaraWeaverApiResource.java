@@ -20,7 +20,8 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
  *
  */
 public enum LaraWeaverApiResource implements LaraResourceProvider {
-
+	
+	CLAVA_CLASS_JP("jp/ClavaClassJp.lara"),
     CLAVA_JOIN_POINT("jp/ClavaJoinPoint.lara"),
     CLAVA_JOIN_POINTS("jp/ClavaJoinPoints.lara"),
     JOIN_POINTS("JoinPoints.lara"),
