@@ -136,8 +136,10 @@ public class MemoiCodeGen {
             code.append("] = *(uint64_t*) &result;");
 
             code.append("\n");
-            code.append(updatesName);
-            code.append("++;\n");
+            if (updatesName != null) {
+                code.append(updatesName);
+                code.append("++;\n");
+            }
 
         } else {
 
@@ -154,8 +156,10 @@ public class MemoiCodeGen {
             }
 
             code.append("\n");
-            code.append(updatesName);
-            code.append("++;\n");
+            if (updatesName != null) {
+                code.append(updatesName);
+                code.append("++;\n");
+            }
 
             code.append("\treturn;\n\n");
         }
