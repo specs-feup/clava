@@ -43,6 +43,7 @@ public class MemoiCodeGen {
 
         Map<String, MergedMemoiEntry> table = new HashMap<String, MergedMemoiEntry>();
 
+        // TODO: for 0% or 100% -> use empty table
         if (!isMemoiEmpty) {
             File tmpDir = SpecsIo.getTempFolder("dmt");
             File cache = new File(tmpDir, report.getUuid());
@@ -120,7 +121,7 @@ public class MemoiCodeGen {
             inputUpdate.append("[");
             inputUpdate.append(v);
             inputUpdate.append("] = ");
-            inputUpdate.append(varNames.get(v));
+            inputUpdate.append(varNames.get(v)); // TODO: for 0% -> assign NaN
             inputUpdate.append(";");
 
             inputUpdates.add(inputUpdate.toString());
@@ -198,7 +199,7 @@ public class MemoiCodeGen {
 
             testClauses.add(testClause.toString());
         }
-        code.append(String.join(" && ", testClauses));
+        code.append(String.join(" && ", testClauses)); // TODO: for 100% -> negate the condition, use parenthesis
 
         code.append(") {\n");
 

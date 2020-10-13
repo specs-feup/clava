@@ -22,6 +22,9 @@ public class ApplyIfNotEmpty implements Predicate<MergedMemoiReport>, java.io.Se
 
     private static final long serialVersionUID = 4039863189233044476L;
 
+    public ApplyIfNotEmpty() {
+    }
+
     @Override
     public boolean test(MergedMemoiReport t) {
 

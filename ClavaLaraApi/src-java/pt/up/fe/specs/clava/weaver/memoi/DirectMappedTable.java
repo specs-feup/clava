@@ -89,6 +89,7 @@ public class DirectMappedTable implements java.io.Serializable {
     public DirectMappedTable(MergedMemoiReport report, int numSets) {
 
         this(report, numSets, new AlwaysInsert(), new MeanComparator(report));
+        // this(report, numSets, InsertPolicy.ALWAYS, new MeanComparator(report));
     }
 
     public DirectMappedTable(MergedMemoiReport report, int numSets,
@@ -317,7 +318,7 @@ public class DirectMappedTable implements java.io.Serializable {
         // in.close();
         // fileIn.close();
 
-        return SpecsJackson.fromFile(file, DirectMappedTable.class);
+        return SpecsJackson.fromFile(file, DirectMappedTable.class, true);
     }
 
     public static void save(File file, DirectMappedTable dmt) {
@@ -328,7 +329,7 @@ public class DirectMappedTable implements java.io.Serializable {
         // out.close();
         // fileOut.close();
 
-        SpecsJackson.toFile(dmt, file);
+        SpecsJackson.toFile(dmt, file, true);
     }
 
     public MergedMemoiReport getReport() {

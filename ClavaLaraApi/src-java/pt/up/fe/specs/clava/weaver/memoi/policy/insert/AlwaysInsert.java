@@ -27,6 +27,9 @@ public class AlwaysInsert implements Predicate<MergedMemoiEntry>, java.io.Serial
 
     private static final long serialVersionUID = 645571394428346494L;
 
+    public AlwaysInsert() {
+    }
+
     @Override
     public boolean test(MergedMemoiEntry t) {
         return true;

@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import pt.up.fe.specs.clava.weaver.memoi.comparator.MeanComparator;
 import pt.up.fe.specs.util.SpecsCheck;
 
 /**
@@ -51,6 +50,10 @@ public class MergedMemoiReport implements java.io.Serializable {
     private int reportCount = 1;
 
     // private Stats stats;
+
+    public MergedMemoiReport() {
+
+    }
 
     public MergedMemoiReport(MemoiReport report) {
 
@@ -101,13 +104,13 @@ public class MergedMemoiReport implements java.io.Serializable {
         // Collectors.toMap(MergedMemoiEntry::getKey, mme -> mme));
     }
 
-    public List<MergedMemoiEntry> getMeanSorted() {
-
-        var list = new ArrayList<MergedMemoiEntry>(counts.values());
-        list.sort(new MeanComparator(this));
-
-        return list;
-    }
+    // public List<MergedMemoiEntry> getMeanSorted() {
+    //
+    // var list = new ArrayList<MergedMemoiEntry>(counts.values());
+    // list.sort(new MeanComparator(this));
+    //
+    // return list;
+    // }
 
     public List<MergedMemoiEntry> getSortedCounts(Comparator<MergedMemoiEntry> countComparator) {
 
@@ -281,6 +284,18 @@ public class MergedMemoiReport implements java.io.Serializable {
         return reportCount;
     }
 
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public void setOutputTypes(List<String> outputTypes) {
+        this.outputTypes = outputTypes;
+    }
+
+    public void setReportCount(int reportCount) {
+        this.reportCount = reportCount;
+    }
+
     public void printStats() {
 
         System.out.println("\n\n=== profile stats ===");
@@ -298,4 +313,5 @@ public class MergedMemoiReport implements java.io.Serializable {
     public String getUuid() {
         return uuid;
     }
+
 }

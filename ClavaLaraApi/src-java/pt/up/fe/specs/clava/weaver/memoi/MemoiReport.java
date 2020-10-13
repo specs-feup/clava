@@ -119,7 +119,7 @@ public class MemoiReport implements java.io.Serializable {
         // BufferedReader br = new BufferedReader(fr);
         // fromJson = new Gson().fromJson(br, MemoiReport.class);
 
-        MemoiReport fromJson = SpecsJackson.fromFile(file, MemoiReport.class);
+        MemoiReport fromJson = SpecsJackson.fromFile(file, MemoiReport.class, false);
 
         if (time) {
             long end = System.currentTimeMillis();
@@ -282,4 +282,9 @@ public class MemoiReport implements java.io.Serializable {
     public String getUuid() {
         return uuid;
     }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
 }
