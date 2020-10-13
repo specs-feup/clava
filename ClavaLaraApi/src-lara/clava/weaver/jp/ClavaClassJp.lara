@@ -2,10 +2,14 @@ import weaver.jp.ClassJp;
 import weaver.Weaver;
 import weaver.jp.CommonJoinPoints;
 
-ClassJp.prototype.name = function() {
-	return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).name;
-}
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'name', {
+	get: function () { 
+		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).name; 
+	}
+});
 
-ClassJp.prototype.superClasses = function() {
-	return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getBases()));
-}
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'superClasses', {
+	get: function () { 
+		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getBases())); 
+	}
+});
