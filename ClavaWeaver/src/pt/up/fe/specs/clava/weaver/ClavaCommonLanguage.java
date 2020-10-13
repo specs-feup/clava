@@ -34,7 +34,7 @@ public class ClavaCommonLanguage {
         JOINPOINT_MAPPER.put(CXXRecordDecl.class, ClavaCommonLanguage::cxxRecordDecl);
         JOINPOINT_MAPPER.put(Decl.class, node -> "DeclJp");
         JOINPOINT_MAPPER.put(TranslationUnit.class, node -> "FileJp");
-        JOINPOINT_MAPPER.put(App.class, node -> "ProgramJp");
+        JOINPOINT_MAPPER.put(App.class, node -> "ProgramJp");        
         JOINPOINT_MAPPER.put(ClavaNode.class, node -> "JoinPoint");
     }
 
@@ -46,8 +46,10 @@ public class ClavaCommonLanguage {
         switch (node.getTagKind()) {
         case CLASS:
             return "ClassJp";
+        /*
         case STRUCT:
             return "StructJp";
+        */
         default:
             return "JoinPoint";
         }
