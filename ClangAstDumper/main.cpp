@@ -9,6 +9,7 @@
 
 #include <iostream>
 
+
 using namespace clang::tooling;
 
 static llvm::cl::OptionCategory MyToolCategory("my-tool options");
@@ -18,6 +19,9 @@ static llvm::cl::opt<int> UserSystemHeaderThresholdOption("system-header-thresho
 int main(int argc, const char *argv[])
 {
 
+    // Errs is the main way we dump information, we tested if making it buffered improved performance
+    // but could not detect a significant difference
+    //llvm::errs().SetBuffered();
 
     CommonOptionsParser OptionsParser(argc, argv, MyToolCategory);
     ClangTool Tool(OptionsParser.getCompilations(),
@@ -38,6 +42,7 @@ int main(int argc, const char *argv[])
 
     DumpResources::finish();
 
+
     int returnCode = 0;
 
     if(includesReturnCode != 0) {
@@ -49,6 +54,9 @@ int main(int argc, const char *argv[])
         std::cout << "Error while running DumpAstAction (return code "<< dumpReturnCode <<")";
         returnCode = 1;
     }
+
+    //std::cout << "llvm:errs() buffer size: " << llvm::errs().GetBufferSize() << "\n";
+
 
     return returnCode;
 }
