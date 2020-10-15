@@ -1,6 +1,5 @@
 import weaver.jp.ClassJp;
 import weaver.Weaver;
-import weaver.jp.CommonJoinPoints;
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'name', {
 	get: function () { 
