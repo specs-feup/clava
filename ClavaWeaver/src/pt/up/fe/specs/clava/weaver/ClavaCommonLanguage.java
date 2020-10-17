@@ -14,9 +14,11 @@
 package pt.up.fe.specs.clava.weaver;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -28,9 +30,11 @@ public class ClavaCommonLanguage {
     private static final FunctionClassMap<ClavaNode, String> JOINPOINT_MAPPER;
     static {
         JOINPOINT_MAPPER = new FunctionClassMap<>();
+        JOINPOINT_MAPPER.put(CXXMemberCallExpr.class, node -> "MemberCallJp");
         JOINPOINT_MAPPER.put(CallExpr.class, node -> "CallJp");
         JOINPOINT_MAPPER.put(Expr.class, node -> "ExprJp");
         JOINPOINT_MAPPER.put(FunctionDecl.class, node -> "FunctionJp");
+        JOINPOINT_MAPPER.put(CXXMethodDecl.class, node -> "MethodJp");
         JOINPOINT_MAPPER.put(CXXRecordDecl.class, ClavaCommonLanguage::cxxRecordDecl);
         JOINPOINT_MAPPER.put(Decl.class, node -> "DeclJp");
         JOINPOINT_MAPPER.put(TranslationUnit.class, node -> "FileJp");

@@ -1,0 +1,16 @@
+import weaver.jp.FunctionJp;
+import weaver.Weaver;
+
+_lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'name', {
+	configurable: true,
+	get: function () {  
+		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).name; 
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'signature', {
+	configurable: true,
+	get: function () {  
+		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).signature; 
+	}
+});

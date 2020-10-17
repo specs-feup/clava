@@ -1,6 +1,5 @@
 import weaver.jp.ClassJp;
 import weaver.Weaver;
-import weaver.jp.CommonJoinPoints;
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'name', {
 	get: function () { 
@@ -11,5 +10,11 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'name', {
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'superClasses', {
 	get: function () { 
 		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getBases())); 
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'methods', {
+	get: function () { 	
+		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getMethods()));
 	}
 });
