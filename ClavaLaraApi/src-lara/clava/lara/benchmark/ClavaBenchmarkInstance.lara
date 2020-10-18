@@ -107,6 +107,11 @@ ClavaBenchmarkInstance.prototype._loadCached = function(astFile) {
 
 
 
+
+ClavaBenchmarkInstance.prototype._loadPrologue = function() {
+	// by default, does nothing
+}
+
 /*** IMPLEMENTATIONS ***/
 
 
@@ -155,6 +160,7 @@ ClavaBenchmarkInstance.prototype.getKernel = function() {
 }
 
 
+
 /** RE-IMPLEMENTATIONS **/
 
 /**
@@ -201,6 +207,4 @@ ClavaBenchmarkInstance.prototype.load = function() {
 	return result;
 }
 
-ClavaBenchmarkInstance.prototype._loadPrologue = function() {
-	// by default, does nothing
-}
+
