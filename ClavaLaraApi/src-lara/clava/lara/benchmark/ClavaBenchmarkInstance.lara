@@ -170,9 +170,6 @@ ClavaBenchmarkInstance.prototype.load = function() {
 	// Execute things that are common to cache and AST parsing
 	this._loadPrologue();
 
-	result = this._loadCached(cachedFile);	
-
-
 	var result = undefined;
 
 	// Check if a chached version of the tree has already been cached
