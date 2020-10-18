@@ -28,6 +28,19 @@ NasBenchmarkInstance.prototype = Object.create(ClavaBenchmarkInstance.prototype)
 
 /*** IMPLEMENTATIONS ***/
 
+PolybenchBenchmarkInstance.prototype._loadPrologue = function() {
+
+	// Set standard
+	this._previousStandard = Clava.getData().getStandard();
+	Clava.getData().setStandard("c99");	
+
+	// Set define
+	this._previousFlags = Clava.getData().getFlags();
+	var modifiedFlags = this._previousFlags + " -DCLASS_" + this._inputSize;
+	Clava.getData().setFlags(modifiedFlags);
+
+}
+
 NasBenchmarkInstance.prototype._loadPrivate = function() {
 
 
@@ -40,15 +53,6 @@ NasBenchmarkInstance.prototype._loadPrivate = function() {
 	// Add code
 	var clavaJPFile = ClavaJoinPoints.file(this._file);
 	Clava.addFile(clavaJPFile);	
-	
-	// Set standard
-	this._previousStandard = Clava.getData().getStandard();
-	Clava.getData().setStandard("c99");	
-
-	// Set define
-	this._previousFlags = Clava.getData().getFlags();
-	var modifiedFlags = this._previousFlags + " -DCLASS_" + this._inputSize;
-	Clava.getData().setFlags(modifiedFlags);
 
 	// Rebuild
 	Clava.rebuild();
