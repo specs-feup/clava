@@ -64,6 +64,7 @@ import pt.up.fe.specs.clava.ast.expr.enums.StringKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
+import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CastKind;
 import pt.up.fe.specs.clava.language.UnaryExprOrTypeTrait;
 import pt.up.fe.specs.util.SpecsBits;
@@ -232,6 +233,9 @@ public class ExprDataParser {
 
         data.add(MemberExpr.IS_ARROW, LineStreamParsers.oneOrZero(lines));
         data.add(MemberExpr.MEMBER_NAME, lines.nextLine());
+        dataStore.getClavaNodes().queueSetNode(data, MemberExpr.MEMBER_DECL, lines.nextLine());
+        dataStore.getClavaNodes().queueSetNode(data, MemberExpr.FOUND_DECL, lines.nextLine());
+        data.add(MemberExpr.FOUND_DECL_ACCESS_SPECIFIER, LineStreamParsers.enumFromName(AccessSpecifier.class, lines));
 
         return data;
     }
