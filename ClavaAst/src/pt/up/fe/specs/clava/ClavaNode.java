@@ -176,6 +176,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return this.dataI.getStoreDefinition().orElseThrow(() -> new RuntimeException(""));
     }
 
+    @Override
+    public Optional<StoreDefinition> getStoreDefinition() {
+        return this.dataI.getStoreDefinition();
+    }
+
     protected static String toContentString(String previousContentString, String suffix) {
 
         // Use bridge if there is content and a suffix
