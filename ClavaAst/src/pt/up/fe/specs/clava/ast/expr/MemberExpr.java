@@ -99,6 +99,10 @@ public class MemberExpr extends Expr {
     public Expr getBase() {
         return getChild(Expr.class, 0);
     }
+        
+    public ValueDecl getMemberDecl() {
+        return get(MEMBER_DECL);
+    }
 
     // @Override
     // public String toContentString() {
@@ -253,4 +257,5 @@ public class MemberExpr extends Expr {
     public SpecsList<DataKey<?>> getSignatureKeys() {
         return super.getSignatureKeys().andAdd(MEMBER_NAME);
     }
+
 }
