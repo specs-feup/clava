@@ -1,4 +1,4 @@
-import weaver.jp.ClavaJoinPoints;
+import weaver.jp.ClavaJoinPoint;
 import weaver.jp.FileJp;
 import weaver.Query;
 
