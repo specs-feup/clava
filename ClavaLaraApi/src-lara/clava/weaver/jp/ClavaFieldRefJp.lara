@@ -1,0 +1,21 @@
+import weaver.jp.FieldRefJp;
+import weaver.Weaver;
+
+_lara_dummy_ = Object.defineProperty(FieldRefJp.prototype, 'name', {
+	get: function () { 
+		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).name; 
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(FieldRefJp.prototype, 'class', {
+	get: function () {
+		return this.field.class;
+	}
+});
+
+
+_lara_dummy_ = Object.defineProperty(FieldRefJp.prototype, 'field', {
+	get: function () {
+		return CommonJoinPoints.toJoinPoint(this.astNode.getMemberDecl());
+	}
+});
