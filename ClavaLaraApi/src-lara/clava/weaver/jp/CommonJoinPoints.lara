@@ -10,3 +10,4 @@ import weaver.jp.ClavaCallJp;
 import weaver.jp.ClavaMemberCallJp;
 import weaver.jp.ClavaFieldJp;
 import weaver.jp.ClavaFieldRefJp;
+import weaver.jp.ClavaTypeJp;
