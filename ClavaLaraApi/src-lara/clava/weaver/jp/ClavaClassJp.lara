@@ -13,8 +13,28 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'superClasses', {
 	}
 });
 
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'allSuperClasses', {
+	get: function () {
+		var allSuperClasses = [];
+
+		for(superClass of this.superClasses){
+			allSuperClasses.push(superClass);
+			allSuperClasses = allSuperClasses.concat(superClass.allSuperClasses);
+		}
+			 
+		return allSuperClasses;
+	}
+});
+
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'methods', {
 	get: function () { 	
 		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getMethods()));
 	}
 });
+
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'kind', {
+	get: function () { 	
+		return "class";
+	}
+});
+

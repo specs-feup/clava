@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.classmap.FunctionClassMap;
 
 
@@ -35,6 +36,7 @@ public class ClavaCommonLanguage {
 	private static final FunctionClassMap<ClavaNode, String> JOINPOINT_MAPPER;
 	static {
 		JOINPOINT_MAPPER = new FunctionClassMap<>();
+		JOINPOINT_MAPPER.put(Type.class, node -> "TypeJp");
 		JOINPOINT_MAPPER.put(MemberExpr.class, ClavaCommonLanguage::memberExpr);
 		JOINPOINT_MAPPER.put(FieldDecl.class, node -> "FieldJp");
 		JOINPOINT_MAPPER.put(CXXMemberCallExpr.class, node -> "MemberCallJp");

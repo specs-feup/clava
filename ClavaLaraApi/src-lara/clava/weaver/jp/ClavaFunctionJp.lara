@@ -14,3 +14,10 @@ _lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'signature', {
 		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).signature; 
 	}
 });
+
+_lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'returnType', {
+	configurable: true,
+	get: function () {  	
+		return CommonJoinPoints.toJoinPoint(this.astNode.getReturnType()); 
+	}
+});
