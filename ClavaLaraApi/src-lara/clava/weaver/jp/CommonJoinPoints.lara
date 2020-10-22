@@ -11,3 +11,6 @@ import weaver.jp.ClavaMemberCallJp;
 import weaver.jp.ClavaFieldJp;
 import weaver.jp.ClavaFieldRefJp;
 import weaver.jp.ClavaTypeJp;
+import weaver.jp.ClavaVarDeclJp;
+import weaver.jp.ClavaVarRefJp;
+import weaver.jp.ClavaParamJp;
