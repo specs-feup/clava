@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -29,6 +30,7 @@ import pt.up.fe.specs.clang.astlineparser.AstParser;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
 import pt.up.fe.specs.clang.streamparser.StreamParser;
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.context.ClavaContext;
@@ -46,6 +48,8 @@ public class ClangResources {
 
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
+    private final static String CLANG_FOLDERNAME = "clang_ast_exe";
+    private final static String CLANG_INCLUDES_FOLDERNAME = "clang_includes";
 
     private final boolean dumpStdout;
     private final FileResourceManager clangAstResources;
@@ -56,30 +60,73 @@ public class ClangResources {
     }
 
     public ClangFiles getClangFiles(String version, boolean usePlatformIncludes) {
+        // Check if there is a local version of the Clang files
+        ClangFiles localClangFiles = SpecsIo.getJarPath(ClangResources.class)
+                .map(jarFolder -> new File(jarFolder, CLANG_FOLDERNAME))
+                .filter(File::isDirectory)
+                .flatMap(clangFolder -> loadLocalClangFiles(clangFolder, version))
+                .orElse(null);
+
+        if (localClangFiles != null) {
+            ClavaLog.info("Using local version of ClangAstDumper ("
+                    + localClangFiles.getClangExecutable().getAbsolutePath()
+                    + "). Option ' use platform includes' will be ignored");
+            return localClangFiles;
+        }
+
         File clangExecutable = prepareResources(version);
         List<String> builtinIncludes = prepareIncludes(clangExecutable, usePlatformIncludes);
 
         return new ClangFiles(clangExecutable, builtinIncludes);
     }
 
+    private Optional<ClangFiles> loadLocalClangFiles(File clangFolder, String version) {
+        // Get versioned filename of dumper
+        SupportedPlatform platform = SupportedPlatform.getCurrentPlatform();
+        FileResourceProvider executableResource = getVersionedExecutableResource(version, platform);
+
+        var clangDumperExe = new File(clangFolder, executableResource.getFilename());
+        if (!clangDumperExe.isFile()) {
+            ClavaLog.info("!Found local ClangDumper folder '" + clangFolder.getAbsolutePath()
+                    + "', but does not contain required file '"
+                    + executableResource.getFilename() + "'. Please update the contents of the folder.");
+            return Optional.empty();
+        }
+
+        // Get clang includes folder
+        var clangIncludesFolder = new File(clangFolder, CLANG_INCLUDES_FOLDERNAME);
+        if (!clangIncludesFolder.isDirectory()) {
+            ClavaLog.info("!Found local ClangDumper folder '" + clangFolder.getAbsolutePath()
+                    + "', but does not contain folder '" + CLANG_INCLUDES_FOLDERNAME
+                    + "'. Please update the contents of the folder.");
+            return Optional.empty();
+        }
+
+        // Get include folders
+        var clangIncludes = SpecsIo.getFolders(clangIncludesFolder).stream()
+                .map(File::getAbsolutePath)
+                .collect(Collectors.toList());
+
+        if (clangIncludes.isEmpty()) {
+            ClavaLog.info("!Found local ClangDumper folder '" + clangFolder.getAbsolutePath()
+                    + "', but folder '" + CLANG_INCLUDES_FOLDERNAME
+                    + "' is empty. Please update the contents of the folder.");
+            return Optional.empty();
+        }
+
+        return Optional.of(new ClangFiles(clangDumperExe, clangIncludes));
+    }
+
     /**
      *
      * @return path to the executable that was copied
      */
-    public File prepareResources(String version) {
+    private File prepareResources(String version) {
 
         File resourceFolder = getClangResourceFolder();
 
         SupportedPlatform platform = SupportedPlatform.getCurrentPlatform();
-        FileResourceProvider executableResource = getExecutableResource(platform);
-
-        // If version not defined, use the latest version of the resource
-        if (version.isEmpty()) {
-            version = executableResource.getVersion();
-        }
-
-        // ClangAst executable versions are separated by an underscore
-        executableResource = executableResource.createResourceVersion("_" + version);
+        FileResourceProvider executableResource = getVersionedExecutableResource(version, platform);
 
         // Copy executable
         ResourceWriteData executable = executableResource.writeVersioned(resourceFolder, ClangAstParser.class);
@@ -104,15 +151,21 @@ public class ClangResources {
         return executable.getFile();
     }
 
+    private FileResourceProvider getVersionedExecutableResource(String version, SupportedPlatform platform) {
+        FileResourceProvider executableResource = getExecutableResource(platform);
+
+        // If version not defined, use the latest version of the resource
+        if (version.isEmpty()) {
+            version = executableResource.getVersion();
+        }
+
+        // ClangAst executable versions are separated by an underscore
+        executableResource = executableResource.createResourceVersion("_" + version);
+        return executableResource;
+    }
+
     public File getClangResourceFolder() {
-        return SpecsIo.getTempFolder("clang_ast_exe");
-        /*
-        String tempDir = System.getProperty("java.io.tmpdir");
-        // String baseFilename = new JarPath(ClangAstLauncher.class, "clangjar").buildJarPath();
-        // File resourceFolder = new File(baseFilename, "clang_ast_exe");
-        File resourceFolder = new File(tempDir, "clang_ast_exe");
-        return resourceFolder;
-        */
+        return SpecsIo.getTempFolder(CLANG_FOLDERNAME);
     }
 
     private FileResourceProvider getExecutableResource(SupportedPlatform platform) {
@@ -145,7 +198,7 @@ public class ClangResources {
         // return Arrays.asList(WIN_DLL1, WIN_DLL2, WIN_DLL3);
     }
 
-    public List<String> prepareIncludes(File clangExecutable, boolean usePlatformIncludes) {
+    private List<String> prepareIncludes(File clangExecutable, boolean usePlatformIncludes) {
 
         if (usePlatformIncludes) {
             return Collections.emptyList();
@@ -153,7 +206,7 @@ public class ClangResources {
 
         File resourceFolder = getClangResourceFolder();
 
-        File includesBaseFolder = SpecsIo.mkdir(resourceFolder, "clang_includes");
+        File includesBaseFolder = SpecsIo.mkdir(resourceFolder, CLANG_INCLUDES_FOLDERNAME);
         // ZipResourceManager zipManager = new ZipResourceManager(includesBaseFolder);
 
         // Create list of include zips
