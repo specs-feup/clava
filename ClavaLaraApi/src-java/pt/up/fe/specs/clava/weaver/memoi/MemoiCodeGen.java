@@ -24,7 +24,8 @@ import pt.up.fe.specs.util.SpecsIo;
 
 public class MemoiCodeGen {
 
-    private static final String NAN_BITS = "fff8000000000000";
+    private static final String H = "0x";
+    private static final String NAN_BITS = "0xfff8000000000000";
 
     /**
      * 
@@ -77,11 +78,11 @@ public class MemoiCodeGen {
     }
 
     public static String generateUpdateCode(int numSets, List<String> paramNames,
-            boolean isUpdateAlways, int inputCount, int outputCount, String updatesName) {
+            boolean isUpdateAlways, int inputCount, int outputCount, String updatesName, boolean isZeroSim) {
 
         int indexBits = (int) MemoiUtils.log2(numSets);
 
-        return updateCode(inputCount, outputCount, indexBits, paramNames, isUpdateAlways, updatesName);
+        return updateCode(inputCount, outputCount, indexBits, paramNames, isUpdateAlways, updatesName, isZeroSim);
     }
 
     private static List<String> makeVarNames(List<String> paramNames) {
@@ -106,7 +107,7 @@ public class MemoiCodeGen {
     }
 
     private static String updateCode(int inputCount, int outputCount, int indexBits,
-            List<String> paramNames, boolean isUpdateAlways, String updatesName) {
+            List<String> paramNames, boolean isUpdateAlways, String updatesName, boolean isZeroSim) {
 
         StringBuilder code = new StringBuilder();
 
@@ -121,7 +122,11 @@ public class MemoiCodeGen {
             inputUpdate.append("[");
             inputUpdate.append(v);
             inputUpdate.append("] = ");
-            inputUpdate.append(varNames.get(v)); // TODO: for 0% -> assign NaN
+            if (isZeroSim) {
+                inputUpdate.append(NAN_BITS); // for 0% -> assign NaN
+            } else {
+                inputUpdate.append(varNames.get(v));
+            }
             inputUpdate.append(";");
 
             inputUpdates.add(inputUpdate.toString());
@@ -168,7 +173,7 @@ public class MemoiCodeGen {
         if (!isUpdateAlways) {
             StringBuilder condition = new StringBuilder("if(");
             condition.append(access);
-            condition.append("[0] == 0x");
+            condition.append("[0] == ");
             condition.append(NAN_BITS);
             condition.append(") {\n");
 
@@ -360,11 +365,9 @@ public class MemoiCodeGen {
 
             MergedMemoiEntry entry = table.get(key);
 
-            final String H = "0x";
             if (entry == null) {
 
                 for (int ic = 0; ic < inputCount; ic++) {
-                    code.append(H);
                     code.append(NAN_BITS);
                     code.append(", ");
                 }
