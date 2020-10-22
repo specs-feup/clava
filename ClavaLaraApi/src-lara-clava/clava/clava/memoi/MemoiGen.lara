@@ -1,6 +1,7 @@
 import clava.memoi.MemoiTarget;
 import clava.memoi.MemoiUtils;
 
+import lara.code.Timer;
 import lara.util.IdGenerator;
 import lara.Io;
 import lara.Check;
@@ -26,6 +27,18 @@ function MemoiGen(target) {
 		this._isDebug = false;
 		
 		this._applyPolicy = MemoiGen.ApplyPolicy.NOT_EMPTY;
+		
+		this._isZeroSim = false;
+}
+
+/**
+ * 		Sets whether to generate code for a 0% sim.
+ * */
+MemoiGen.prototype.setZeroSim = function(isZeroSim) {
+	
+	isZeroSim = isZeroSim === undefined ? true : isZeroSim;
+	
+	this._isZeroSim = isZeroSim;
 }
 
 /**
@@ -300,6 +313,68 @@ MemoiGen.prototype._generateAll = function(report) {
 	this._generateGeneric(wrapperName, report);
 }
 
+MemoiGen.prototype.generatePerfectInst = function() {
+	
+	var cSig = MemoiUtils.cSig(this._target._sig);
+	var wrapperName = "mw_" + cSig;
+	var globalName = "memoi_target_timer";
+	var printName = "print_perfect_inst";
+	
+	// wrap every call to the target
+	for(var $call of Query.search("call", {"signature": s => this._target._sig === MemoiUtils.normalizeSig(s)})) {
+
+		$call.wrap(wrapperName);
+	}
+	
+	// change the wrapper by timing around the original call
+	for(var chain of Query.search("file").search("function", {"name": wrapperName}).search("call").chain()) {
+		
+		var $file = chain["file"];
+		var $function = chain["function"];
+		var $call = chain["call"];
+		
+		var t = new Timer("MILLISECONDS");
+
+		$file.addGlobal(globalName, ClavaJoinPoints.builtinType("double"), '0.0');
+
+		var tVar = t.time($call);
+		$function.insertReturn(%{memoi_target_timer += [[tVar]];}%);
+	}
+
+	// if print_perfect_inst function is found, some other target has dealt with the main code and we're done
+	for(var chain of Query.search("file", {"hasMain": true}).search("function", {"name": printName}).chain()) {
+		println("found " + printName + " - returning");
+		return;
+	}
+
+	
+    // change the main function to print the time to a file
+    for(var chain of Query.search("file").search("function", {"name": "main"}).chain()) {
+
+		var $file = chain["file"];
+		var $main = chain["function"];
+
+		$file.addGlobal(globalName, ClavaJoinPoints.builtinType("double"), '0.0');
+		
+		$main.insertReturn(printName + "();");
+		$main.insertBefore("void " + printName + "();");
+		
+		$function = $file.addFunction(printName);
+		
+		$function.insertReturn(%{
+			
+			errno = 0;
+			FILE * [[globalName]]_file = fopen ("./[[globalName]].json","a");
+			if([[globalName]]_file == NULL) {
+				perror("Could not create file for memoi perfect instrumentation");
+			} else {
+				fprintf([[globalName]]_file, "%f\n", [[globalName]]);
+				fclose([[globalName]]_file);
+			}
+		}%);
+	}
+}
+
 MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 	
 	for(var chain of Query.search("file").search("function", {"name": wrapperName}).search("call").chain()) {
@@ -344,7 +419,7 @@ MemoiGen.prototype._makeTableCode = function($function, report) {
 	var code = MemoiCodeGen.generateDmtCode(
 		this._tableSize,
 		paramNames,
-		this._isEmpty,
+		this._isZeroSim ? true : this._isEmpty, // table is always empty if 0% sim is on
 		this._isOnline,
 		this._approxBits,
 		report,
@@ -362,7 +437,13 @@ MemoiGen.prototype._makeUpdateCode = function($function, updatesName) {
 		paramNames.push($param.name);
 	}
 	
-	var code = MemoiCodeGen.generateUpdateCode(this._tableSize, paramNames, this._isUpdateAlways, this._target._numInputs, this._target._numOutputs, updatesName);
+	var code = MemoiCodeGen.generateUpdateCode(
+		this._tableSize, paramNames,
+		this._isUpdateAlways,
+		this._target._numInputs, this._target._numOutputs,
+		updatesName,
+		this._isZeroSim
+	);
 
 	return code;
 }
