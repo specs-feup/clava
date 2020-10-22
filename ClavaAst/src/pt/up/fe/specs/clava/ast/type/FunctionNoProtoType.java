@@ -54,4 +54,9 @@ public class FunctionNoProtoType extends FunctionType {
         ClavaLog.debug("FunctionNoProtoType.setParamType(): ignoring, no parameters to set");
     }
 
+    @Override
+    public void setParamTypes(List<Type> paramType) {
+        ClavaLog.debug("FunctionNoProtoType.setParamTypes(): ignoring, no parameters to set");
+    }
+
 }
