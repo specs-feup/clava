@@ -55,6 +55,13 @@ public class ClangResources {
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
     }
 
+    public ClangFiles getClangFiles(String version, boolean usePlatformIncludes) {
+        File clangExecutable = prepareResources(version);
+        List<String> builtinIncludes = prepareIncludes(clangExecutable, usePlatformIncludes);
+
+        return new ClangFiles(clangExecutable, builtinIncludes);
+    }
+
     /**
      *
      * @return path to the executable that was copied

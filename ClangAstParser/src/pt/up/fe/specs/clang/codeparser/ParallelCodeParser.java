@@ -127,10 +127,10 @@ public class ParallelCodeParser extends CodeParser {
 
         // Prepare resources before execution
         ClangResources clangResources = new ClangResources(get(SHOW_CLANG_DUMP));
-        File clangExecutable = clangResources.prepareResources(version);
-
-        List<String> builtinIncludes = clangResources.prepareIncludes(clangExecutable,
-                get(ClangAstKeys.USE_PLATFORM_INCLUDES));
+        var clangFiles = clangResources.getClangFiles(version, get(ClangAstKeys.USE_PLATFORM_INCLUDES));
+        // File clangExecutable = clangResources.prepareResources(version);
+        // List<String> builtinIncludes = clangResources.prepareIncludes(clangExecutable,
+        // get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         ClavaLog.info("Found " + sources.size() + " source files");
         // ClavaLog.debug(() -> "[ParallelCodeParser] Files to parse:" + sources);
@@ -157,7 +157,7 @@ public class ParallelCodeParser extends CodeParser {
 
             Future<ClangParserData> tUnit = executor
                     .submit(() -> parseSource(source, id, standard, options, clangDump,
-                            counter, parsingFolder, clangExecutable, builtinIncludes));
+                            counter, parsingFolder, clangFiles.getClangExecutable(), clangFiles.getBuiltinIncludes()));
 
             futureTUnits.add(tUnit);
 

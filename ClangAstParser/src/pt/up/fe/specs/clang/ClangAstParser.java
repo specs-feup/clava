@@ -161,15 +161,16 @@ public class ClangAstParser {
 
         // Prepare resources before execution
         ClangResources clangResources = new ClangResources(config.get(CodeParser.SHOW_CLANG_DUMP));
+        var clangFiles = clangResources.getClangFiles(version, config.get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         // Copy executable
-        File clangExecutable = clangResources.prepareResources(version);
+        // File clangExecutable = clangResources.prepareResources(version);
 
         // Copy resources
         // File clangExecutable = prepareResources(version);
 
         List<String> arguments = new ArrayList<>();
-        arguments.add(clangExecutable.getAbsolutePath());
+        arguments.add(clangFiles.getClangExecutable().getAbsolutePath());
 
         arguments.addAll(files);
 
@@ -186,9 +187,9 @@ public class ClangAstParser {
         List<String> systemIncludes = new ArrayList<>();
 
         // Add includes bundled with program
-        List<String> builtinIncludes = clangResources.prepareIncludes(clangExecutable,
-                config.get(ClangAstKeys.USE_PLATFORM_INCLUDES));
-        systemIncludes.addAll(builtinIncludes);
+        // List<String> builtinIncludes = clangResources.prepareIncludes(clangExecutable,
+        // config.get(ClangAstKeys.USE_PLATFORM_INCLUDES));
+        systemIncludes.addAll(clangFiles.getBuiltinIncludes());
 
         // (only on Windows, it is expected that a Linux system has its own headers for libc/libc++)
         // if (Platforms.isWindows()) {
