@@ -846,12 +846,33 @@ public abstract class Type extends ClavaNode {
                 .collect(Collectors.toList());
     }
 
+    public List<Type> getTypeDescendants() {
+        return getTypeDescendantsStream().collect(Collectors.toList());
+    }
+
     public Stream<Type> getTypeDescendantsStream() {
-        return getTypeChildren().stream().flatMap(c -> c.getTypeDescendantsAndSelfStream());
+        return getTypeDescendantsStream(new HashSet<>());
+        // return getTypeChildren().stream().flatMap(c -> c.getTypeDescendantsAndSelfStream());
+    }
+
+    private Stream<Type> getTypeDescendantsStream(Set<Type> seenNodes) {
+        // Add current node to seen nodes
+        seenNodes.add(this);
+
+        // Get types directly referenced by this Type
+        return getTypeChildren().stream()
+                // Do not consider types already seen
+                .filter(type -> !seenNodes.contains(type))
+                // For each children type, return itself and its descendants
+                .flatMap(c -> c.getTypeDescendantsAndSelfStream(seenNodes));
     }
 
     public Stream<Type> getTypeDescendantsAndSelfStream() {
         return Stream.concat(Stream.of(this), getTypeDescendantsStream());
+    }
+
+    private Stream<Type> getTypeDescendantsAndSelfStream(Set<Type> seenNodes) {
+        return Stream.concat(Stream.of(this), getTypeDescendantsStream(seenNodes));
     }
 
     public String toFieldTree() {

@@ -284,4 +284,9 @@ public class CxxTest {
     public void testThis() {
         newTester().test("ThisTest.lara", "this.cpp");
     }
+
+    @Test
+    public void testMember() {
+        newTester().test("Member.lara", "member.cpp");
+    }
 }

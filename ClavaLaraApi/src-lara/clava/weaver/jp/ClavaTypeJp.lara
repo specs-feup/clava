@@ -1,0 +1,147 @@
+import weaver.jp.TypeJp;
+import weaver.Weaver;
+
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'kind', {
+	get: function () { 
+		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).kind;  
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'isArray', {
+	get: function () { 
+		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).isArray;  
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'isPointer', {
+	get: function () { 
+		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).isPointer;  
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'isPrimitive', {
+	get: function () { 
+		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).isBuiltin;  
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'isClass', {
+	get: function () {
+		if(this.kind !== 'RecordType')
+			return false;
+		return this.astNode.getTagKind().toString()==="CLASS";
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'hasSugar', {
+	get: function () {
+		return this.astNode.hasSugar();
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'desugar', {
+	get: function () {
+		return CommonJoinPoints.toJoinPoint(this.astNode.desugar());
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'unwrap', {
+	get: function () {
+		return CommonJoinPoints.toJoinPoint(this.astNode.getElementType());
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'desugarAll', {
+	get: function () {
+		return CommonJoinPoints.toJoinPoint(this.astNode.desugarAll());
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'decl', {
+	get: function () {
+		return CommonJoinPoints.toJoinPoint(this.astNode.getDecl());
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'usedClasses', {
+	get: function () {
+		if(this.isPrimitive)
+			return [];
+		
+		if(this.kind === 'TemplateTypeParmType')
+			return [];
+	
+		if(this.kind === 'RecordType'){
+			if(this.decl.kind === 'class') // could also be struct
+				return [this.decl];
+			else 
+				return [];
+		}
+	
+		if(this.isArray)
+			return this.usedClasses(this.unwrap);
+	
+		if(this.isPointer)
+			return this.usedClasses(this.unwrap);
+	
+		if(this.kind === 'ElaboratedType' || this.kind === 'TemplateSpecializationType'){
+			var $classesUsed = [];
+
+			$classesUsed.push(this.desugarAll.decl);
+			
+			var templateArgumentTypes = this.astNode.getTemplateArgumentTypes();
+			templateArgumentTypes = CommonJoinPoints.toJoinPoints(Weaver.toJs(templateArgumentTypes));
+			
+			for ($typeArg of templateArgumentTypes)
+				$classesUsed = $classesUsed.concat($typeArg.usedClasses);
+	
+			return $classesUsed;
+		}		
+	
+		throw new Error('TypeJp.usedClasses not implemented when type is ' + this.kind); 
+	}
+});
+
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'usedTypes', {
+	get: function () {
+		if(this.isPrimitive)
+			return [this];
+		
+		if(this.kind === 'TemplateTypeParmType')
+			return [this];
+	
+		if(this.kind === 'RecordType'){
+			return [this];
+		}
+	
+		if(this.isArray)
+			return [this, this.usedTypes(this.unwrap)];
+	
+		if(this.isPointer)
+			return [this, this.usedTypes(this.unwrap)];
+	
+		if(this.kind === 'ElaboratedType' || this.kind === 'TemplateSpecializationType'){
+			var $typesUsed = [this];
+						
+			var typeWithSugar = this;
+			while(typeWithSugar.hasSugar){
+				typeWithSugar = typeWithSugar.desugar;
+				$typesUsed.push(typeWithSugar);
+			}
+				
+			
+			var templateArgumentTypes = this.astNode.getTemplateArgumentTypes();
+			templateArgumentTypes = CommonJoinPoints.toJoinPoints(Weaver.toJs(templateArgumentTypes));
+			
+			for ($typeArg of templateArgumentTypes)
+				$typesUsed = $typesUsed.concat($typeArg.usedTypes);
+	
+			return $typesUsed;
+		}		
+	
+		throw new Error('TypeJp.usedTypes not implemented when type is ' + this.kind); 
+	}
+});
+
