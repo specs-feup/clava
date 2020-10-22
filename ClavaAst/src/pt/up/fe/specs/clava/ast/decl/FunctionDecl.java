@@ -802,9 +802,13 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
         // Update FunctionType
         var newFunctionType = (FunctionType) getFunctionType().copy();
-        for (int i = 0; i < params.size(); i++) {
-            newFunctionType.setParamType(i, params.get(i).getType());
-        }
+
+        var paramsTypes = params.stream()
+                .map(ParmVarDecl::getType)
+                .collect(Collectors.toList());
+
+        newFunctionType.setParamTypes(paramsTypes);
+
         set(TYPE, newFunctionType);
     }
 

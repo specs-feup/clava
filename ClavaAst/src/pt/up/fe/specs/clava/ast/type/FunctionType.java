@@ -160,6 +160,8 @@ public abstract class FunctionType extends Type {
 
     public abstract void setParamType(int paramIndex, Type paramType);
 
+    public abstract void setParamTypes(List<Type> paramType);
+
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
         // Special case: if function type contains a VLA parameter which refers to a DeclRefExpr
