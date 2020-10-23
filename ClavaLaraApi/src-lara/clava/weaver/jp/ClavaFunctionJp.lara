@@ -1,6 +1,12 @@
 import weaver.jp.FunctionJp;
 import weaver.Weaver;
 
+_lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'id', {
+	get: function () { 
+		return this.name; 
+	}
+});
+
 _lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'name', {
 	configurable: true,
 	get: function () {  

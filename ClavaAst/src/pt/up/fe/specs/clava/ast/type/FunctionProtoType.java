@@ -125,4 +125,9 @@ public class FunctionProtoType extends FunctionType {
         get(PARAMETERS_TYPES).set(paramIndex, paramType);
         // setChild(getIndexParamStart() + paramIndex, paramType);
     }
+
+    @Override
+    public void setParamTypes(List<Type> paramTypes) {
+        set(PARAMETERS_TYPES, paramTypes);
+    }
 }

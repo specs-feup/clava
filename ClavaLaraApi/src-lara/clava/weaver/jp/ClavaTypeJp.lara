@@ -64,84 +64,46 @@ _lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'decl', {
 	}
 });
 
-_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'usedClasses', {
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'hasTemplateArgs', {
 	get: function () {
-		if(this.isPrimitive)
-			return [];
-		
-		if(this.kind === 'TemplateTypeParmType')
-			return [];
-	
-		if(this.kind === 'RecordType'){
-			if(this.decl.kind === 'class') // could also be struct
-				return [this.decl];
-			else 
-				return [];
-		}
-	
-		if(this.isArray)
-			return this.usedClasses(this.unwrap);
-	
-		if(this.isPointer)
-			return this.usedClasses(this.unwrap);
-	
-		if(this.kind === 'ElaboratedType' || this.kind === 'TemplateSpecializationType'){
-			var $classesUsed = [];
-
-			$classesUsed.push(this.desugarAll.decl);
-			
-			var templateArgumentTypes = this.astNode.getTemplateArgumentTypes();
-			templateArgumentTypes = CommonJoinPoints.toJoinPoints(Weaver.toJs(templateArgumentTypes));
-			
-			for ($typeArg of templateArgumentTypes)
-				$classesUsed = $classesUsed.concat($typeArg.usedClasses);
-	
-			return $classesUsed;
-		}		
-	
-		throw new Error('TypeJp.usedClasses not implemented when type is ' + this.kind); 
+		return this.astNode.hasTemplateArgs();
 	}
 });
 
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'templateArgsTypes', {
+	get: function () {
+		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getTemplateArgumentTypes()));
+	}
+});
 
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'typeDescendants', {
+	get: function () {
+		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getTypeDescendants()));
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'typeDescendantsAndSelf', {
+	get: function () {
+		return [this].concat(this.typeDescendants);
+	}
+});
+
+// TODO: It currently returns duplicates
 _lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'usedTypes', {
 	get: function () {
-		if(this.isPrimitive)
-			return [this];
+		var usedTypes = [];
 		
-		if(this.kind === 'TemplateTypeParmType')
-			return [this];
-	
-		if(this.kind === 'RecordType'){
-			return [this];
+		for(type of this.typeDescendantsAndSelf){
+			usedTypes.push(type);
+			
+			if(type.hasTemplateArgs)
+				for(templateType of type.templateArgsTypes)
+					usedTypes = usedTypes.concat(templateType.usedTypes);
+			
 		}
+		
+		return usedTypes;
 	
-		if(this.isArray)
-			return [this, this.usedTypes(this.unwrap)];
-	
-		if(this.isPointer)
-			return [this, this.usedTypes(this.unwrap)];
-	
-		if(this.kind === 'ElaboratedType' || this.kind === 'TemplateSpecializationType'){
-			var $typesUsed = [this];
-						
-			var typeWithSugar = this;
-			while(typeWithSugar.hasSugar){
-				typeWithSugar = typeWithSugar.desugar;
-				$typesUsed.push(typeWithSugar);
-			}
-				
-			
-			var templateArgumentTypes = this.astNode.getTemplateArgumentTypes();
-			templateArgumentTypes = CommonJoinPoints.toJoinPoints(Weaver.toJs(templateArgumentTypes));
-			
-			for ($typeArg of templateArgumentTypes)
-				$typesUsed = $typesUsed.concat($typeArg.usedTypes);
-	
-			return $typesUsed;
-		}		
-	
-		throw new Error('TypeJp.usedTypes not implemented when type is ' + this.kind); 
 	}
 });
 

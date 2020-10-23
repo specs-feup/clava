@@ -17,12 +17,13 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
+import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
@@ -36,6 +37,9 @@ public class ClavaCommonLanguage {
 	private static final FunctionClassMap<ClavaNode, String> JOINPOINT_MAPPER;
 	static {
 		JOINPOINT_MAPPER = new FunctionClassMap<>();
+		JOINPOINT_MAPPER.put(DeclRefExpr.class, node -> "VarRefJp");
+		JOINPOINT_MAPPER.put(VarDecl.class, node -> "VarDeclJp");
+		JOINPOINT_MAPPER.put(ParmVarDecl.class, node -> "ParamJp");
 		JOINPOINT_MAPPER.put(Type.class, node -> "TypeJp");
 		JOINPOINT_MAPPER.put(MemberExpr.class, ClavaCommonLanguage::memberExpr);
 		JOINPOINT_MAPPER.put(FieldDecl.class, node -> "FieldJp");
