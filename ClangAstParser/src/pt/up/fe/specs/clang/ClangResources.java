@@ -70,7 +70,7 @@ public class ClangResources {
         if (localClangFiles != null) {
             ClavaLog.info("Using local version of ClangAstDumper ("
                     + localClangFiles.getClangExecutable().getAbsolutePath()
-                    + "). Option ' use platform includes' will be ignored");
+                    + "). Option 'use platform includes' will be ignored");
             return localClangFiles;
         }
 
