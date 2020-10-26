@@ -397,7 +397,9 @@ public class CxxWeaver extends ACxxWeaver {
             }
 
             if (source.isDirectory()) {
-                allSources.put(source, source);
+                var sourceMapping = args.get(CxxWeaverOption.FLAT_OUTPUT_FOLDER) ? null : source;
+                allSources.put(source, sourceMapping);
+                // allSources.put(source, source);
                 continue;
             }
 

@@ -120,6 +120,9 @@ public class CxxWeaverOptions {
 
         addBooleanOption(CxxWeaverOption.COPY_FILES_IN_SOURCES, "cfs", "copy-files-in-sources",
                 "Copies all files found in sources");
+
+        addBooleanOption(CxxWeaverOption.FLAT_OUTPUT_FOLDER, "flo", "flat-output-folder",
+                "Puts sources directly in the output folder, ignoring original base folders");
     }
 
     private static final void addBooleanOption(DataKey<?> key, String shortOption, String longOption,

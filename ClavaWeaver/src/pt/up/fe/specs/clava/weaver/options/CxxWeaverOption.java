@@ -72,6 +72,9 @@ public interface CxxWeaverOption {
     DataKey<Boolean> GENERATE_CMAKE_HELPER_FILES = KeyFactory.bool("Generate CMake Integration Helper Files")
             .setLabel("Generate helper files to be used by Clava CMake integration modules");
 
+    DataKey<Boolean> FLAT_OUTPUT_FOLDER = KeyFactory.bool("flatOutputFolder")
+            .setLabel("Puts sources directly in the output folder, ignoring original base folders");
+
     // DataKey<Boolean> FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE = KeyFactory.bool("Flatten woven code folder structure");
 
     DataKey<Boolean> UNIT_TESTING_MODE = KeyFactory.bool("Unit Testing Mode")
@@ -92,7 +95,7 @@ public interface CxxWeaverOption {
                     // GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES)
                     GENERATE_MODIFIED_CODE_ONLY, GENERATE_CMAKE_HELPER_FILES,
                     // FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE,
-                    COPY_FILES_IN_SOURCES)
+                    COPY_FILES_IN_SOURCES, FLAT_OUTPUT_FOLDER)
             // GENERATE_MODIFIED_CODE_ONLY, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE, UNIT_TESTING_MODE)
             .addKey(ClangAstKeys.USE_PLATFORM_INCLUDES)
             .startSection("Parsing Options")
