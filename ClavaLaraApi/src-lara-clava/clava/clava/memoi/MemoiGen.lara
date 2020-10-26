@@ -333,7 +333,7 @@ MemoiGen.prototype.generatePerfectInst = function() {
 		var $function = chain["function"];
 		var $call = chain["call"];
 		
-		var t = new Timer("MILLISECONDS");
+		var t = new Timer("SECONDS");
 
 		$file.addGlobal(globalName, ClavaJoinPoints.builtinType("double"), '0.0');
 
@@ -343,7 +343,7 @@ MemoiGen.prototype.generatePerfectInst = function() {
 
 	// if print_perfect_inst function is found, some other target has dealt with the main code and we're done
 	for(var chain of Query.search("file", {"hasMain": true}).search("function", {"name": printName}).chain()) {
-		println("found " + printName + " - returning");
+		
 		return;
 	}
 
@@ -355,16 +355,28 @@ MemoiGen.prototype.generatePerfectInst = function() {
 		var $main = chain["function"];
 
 		$file.addGlobal(globalName, ClavaJoinPoints.builtinType("double"), '0.0');
+		$file.addInclude('stdio.h', true);
+		$file.addInclude('sys/stat.h', true);
+		$file.addInclude('sys/types.h', true);
+		$file.addInclude('errno.h', true);
+		$file.addInclude('string.h', true);
+		$file.addInclude('libgen.h', true);
 		
-		$main.insertReturn(printName + "();");
-		$main.insertBefore("void " + printName + "();");
+		$main.insertReturn(printName + "(argv[0]);");
+		$main.insertBefore("void " + printName + "(char*);");
 		
 		$function = $file.addFunction(printName);
+		$function.setParamsFromStrings(["char* name"]);
 		
 		$function.insertReturn(%{
 			
+			
 			errno = 0;
-			FILE * [[globalName]]_file = fopen ("./[[globalName]].json","a");
+			char* prog_name = basename(name);
+			char* file_name = malloc(strlen(prog_name) + strlen("[[globalName]].txt") + 1 + 1);
+			sprintf(file_name, "%s.%s", prog_name, "[[globalName]].txt");
+
+			FILE * [[globalName]]_file = fopen (file_name,"a");
 			if([[globalName]]_file == NULL) {
 				perror("Could not create file for memoi perfect instrumentation");
 			} else {

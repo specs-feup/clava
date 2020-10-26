@@ -7,3 +7,9 @@ _lara_dummy_ = Object.defineProperty(VarDeclJp.prototype, 'name', {
 	}
 });
 
+_lara_dummy_ = Object.defineProperty(VarDeclJp.prototype, 'type', {
+	get: function () { 
+		return CommonJoinPoints.toJoinPoint(this.astNode.getType()); 
+	}
+});
+
