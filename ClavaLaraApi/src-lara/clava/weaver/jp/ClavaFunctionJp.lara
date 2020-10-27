@@ -1,6 +1,21 @@
 import weaver.jp.FunctionJp;
 import weaver.Weaver;
 
+
+// Override FunctionJp contructor
+var oldFunctionJp = FunctionJp.prototype;
+
+FunctionJp = function(astNode) {
+	// check for definition
+	if(astNode.getDefinition().isPresent())
+		astNode = astNode.getDefinition().get();
+		
+	// Parent constructor
+    DeclJp.call(this,astNode);
+}
+
+FunctionJp.prototype = oldFunctionJp;
+
 _lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'id', {
 	get: function () { 
 		return this.name; 
@@ -27,3 +42,4 @@ _lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'returnType', {
 		return CommonJoinPoints.toJoinPoint(this.astNode.getReturnType()); 
 	}
 });
+
