@@ -48,6 +48,7 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDRE
         {"SizeOfPackExpr", clava::StmtNode::SIZE_OF_PACK_EXPR},
         {"UnaryExprOrTypeTraitExpr", clava::StmtNode::UNARY_EXPR_OR_TYPE_TRAIT_EXPR},
         {"DesignatedInitExpr", clava::StmtNode::DESIGNATED_INIT_EXPR},
+        {"CXXConstructExpr", clava::StmtNode::CXX_CONSTRUCT_EXPR},
 
 
         //{"SubstNonTypeTemplateParmExpr", clava::StmtNode::SUBST_NON_TYPE_TEMPLATE_PARM_EXPR},
@@ -154,6 +155,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitSizeOfPackExprChildren(static_cast<const SizeOfPackExpr *>(S), visitedChildren); break;
         case clava::StmtNode::DESIGNATED_INIT_EXPR:
             VisitDesignatedInitExprChildren(static_cast<const DesignatedInitExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::CXX_CONSTRUCT_EXPR:
+            VisitCXXConstructExprChildren(static_cast<const CXXConstructExpr *>(S), visitedChildren); break;
 
 
 
@@ -415,8 +418,8 @@ void ClangAstDumper::VisitMemberExprChildren(const MemberExpr *E, std::vector<st
     VisitExprChildren(E, children);
 
     // Visit decls
-    //VisitDeclTop(E->getMemberDecl());
-    //VisitDeclTop(E->getFoundDecl().getDecl());
+    VisitDeclTop(E->getMemberDecl());
+    VisitDeclTop(E->getFoundDecl().getDecl());
 }
 
 void ClangAstDumper::VisitMaterializeTemporaryExprChildren(const MaterializeTemporaryExpr *E, std::vector<std::string> &children) {
@@ -541,6 +544,17 @@ void ClangAstDumper::VisitDesignatedInitExprChildren(const DesignatedInitExpr *E
     //}
 
 }
+
+void ClangAstDumper::VisitCXXConstructExprChildren(const CXXConstructExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+
+    VisitDeclTop(E->getConstructor());
+}
+
+
+
 
 /*
 void ClangAstDumper::VisitSubstNonTypeTemplateParmExprChildren(const SubstNonTypeTemplateParmExpr *E, std::vector<std::string> &children) {

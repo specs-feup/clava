@@ -33,9 +33,21 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'allSuperClasses', {
 	}
 });
 
-_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'methods', {
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'allMethods', {
 	get: function () { 	
 		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getMethods()));
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'methods', {
+	get: function () { 	
+		return this.allMethods.filter(method => method.joinPointType === "method");
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'constructors', {
+	get: function () { 	
+		return this.allMethods.filter(method => method.joinPointType === "constructor");
 	}
 });
 

@@ -1,0 +1,22 @@
+import weaver.jp.ConstructorCallJp;
+import weaver.Weaver;
+
+_lara_dummy_ = Object.defineProperty(ConstructorCallJp.prototype, 'function', {
+	get: function () {
+		//TODO
+		var functionDecl = this.astNode.getFunctionDecl();
+		if(functionDecl.isPresent())
+			return CommonJoinPoints.toJoinPoint(functionDecl.get());
+		else 
+			return null;
+	}
+});
+
+
+_lara_dummy_ = Object.defineProperty(ConstructorCallJp.prototype, 'constructor', {
+	configurable: true,
+	get: function () { 
+		return this.method;
+	}
+});
+

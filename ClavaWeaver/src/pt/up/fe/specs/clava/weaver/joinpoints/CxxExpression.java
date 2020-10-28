@@ -127,7 +127,9 @@ public class CxxExpression extends AExpression {
 
     @Override
     public ADecl getDeclImpl() {
-        return null;
+        return expr.getDecl()
+                .map(decl -> CxxJoinpoints.create(decl, ADecl.class))
+                .orElse(null);
     }
 
 }
