@@ -224,6 +224,7 @@ public class ExprDataParser {
         data.add(CXXConstructExpr.IS_STD_LIST_INITIALIZATION, LineStreamParsers.oneOrZero(lines));
         data.add(CXXConstructExpr.CONSTRUCTION_KIND, LineStreamParsers.enumFromName(ConstructionKind.class, lines));
         data.add(CXXConstructExpr.IS_TEMPORARY_OBJECT, LineStreamParsers.oneOrZero(lines));
+        dataStore.getClavaNodes().queueSetNode(data, CXXConstructExpr.CONSTRUCTOR_DECL, lines.nextLine());
 
         return data;
     }
