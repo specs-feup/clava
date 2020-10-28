@@ -1,0 +1,10 @@
+import weaver.Query;
+
+aspectdef ExpressionDecls
+
+	for(var $expr of Query.search("function", "expressionDecls").search("expression")) {
+		println("Expr: " + $expr.node.getClass());
+		println("Decl: " + $expr.decl.node.getClass());		
+	}
+
+end

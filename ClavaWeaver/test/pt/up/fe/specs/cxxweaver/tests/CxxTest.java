@@ -294,4 +294,9 @@ public class CxxTest {
     public void testFieldRef() {
         newTester().test("FieldRef.lara", "fieldRef.cpp");
     }
+
+    @Test
+    public void testExpressionDecls() {
+        newTester().test("ExpressionDecls.lara", "expressionDecls.cpp");
+    }
 }
