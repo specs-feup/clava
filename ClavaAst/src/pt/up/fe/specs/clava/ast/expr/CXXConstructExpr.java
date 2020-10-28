@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -24,6 +25,8 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.expr.enums.ConstructionKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 import pt.up.fe.specs.clava.ast.type.NullType;
@@ -59,6 +62,9 @@ public class CXXConstructExpr extends Expr {
             ConstructionKind.class);
 
     public final static DataKey<Boolean> IS_TEMPORARY_OBJECT = KeyFactory.bool("isTemporaryObject");
+
+    public final static DataKey<CXXConstructorDecl> CONSTRUCTOR_DECL = KeyFactory.object("constructorDecl",
+            CXXConstructorDecl.class);
 
     /// DATAKEYS END
 
@@ -255,6 +261,11 @@ public class CXXConstructExpr extends Expr {
         }
 
         return list;
+    }
+
+    @Override
+    public Optional<Decl> getDecl() {
+        return Optional.of(get(CONSTRUCTOR_DECL));
     }
 
     // @Override
