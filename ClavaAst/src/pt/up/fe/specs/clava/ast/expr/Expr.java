@@ -24,6 +24,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
@@ -161,4 +162,12 @@ public abstract class Expr extends ClavaNode implements Typable {
         return Optional.ofNullable(get(IMPLICIT_CAST));
     }
 
+    /**
+     * If this expression has an associated declaration, returns that declaration.
+     * 
+     * @return
+     */
+    public Optional<Decl> getDecl() {
+        return Optional.empty();
+    }
 }
