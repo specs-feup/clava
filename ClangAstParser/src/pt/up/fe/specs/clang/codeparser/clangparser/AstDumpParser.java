@@ -347,6 +347,12 @@ public class AstDumpParser implements ClangParser {
             if (output.isError()) {
                 ClavaLog.debug("Dumper returned an error value: '" + output.getReturnValue() + "'");
             }
+
+            // If exception happened while processing output, throw exception
+            output.getOutputException().ifPresent(exception -> {
+                throw new RuntimeException("Exception while processing the output streams", exception);
+            });
+
             parsedData = output.getStdErr();
             SpecsCheck.checkNotNull(parsedData, () -> "Did not expect error output to be null");
             parsedData.set(ClangParserData.HAS_ERRORS, output.isError());

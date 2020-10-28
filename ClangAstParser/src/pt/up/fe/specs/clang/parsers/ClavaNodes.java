@@ -266,9 +266,7 @@ public class ClavaNodes {
     // }
 
     public <T extends ClavaNode> void queueSetNode(DataClass<?> data, DataKey<T> key, String nodeId) {
-
         Runnable nodeToAdd = () -> {
-
             // If null id, throw exception
             if (isNullId(nodeId)) {
                 // return;
