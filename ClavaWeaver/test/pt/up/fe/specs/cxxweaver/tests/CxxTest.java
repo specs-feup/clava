@@ -289,4 +289,9 @@ public class CxxTest {
     public void testMember() {
         newTester().test("Member.lara", "member.cpp");
     }
+
+    @Test
+    public void testFieldRef() {
+        newTester().test("FieldRef.lara", "fieldRef.cpp");
+    }
 }
