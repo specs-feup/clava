@@ -11,3 +11,9 @@ void expressionDecls() {
   MyClass myObj;    // Create an object of MyClass (this will call the constructor)
 
 }
+
+struct X { X(int, float); };
+
+X temporaryExpressionDecl() {
+  return X(1, 3.14f); // creates a CXXTemporaryObjectExpr
+}

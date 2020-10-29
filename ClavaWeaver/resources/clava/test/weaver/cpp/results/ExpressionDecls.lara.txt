@@ -1,2 +1,6 @@
 Expr: class pt.up.fe.specs.clava.ast.expr.CXXConstructExpr
 Decl: class pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl
+Expr: class pt.up.fe.specs.clava.ast.expr.CXXConstructExpr
+Decl: class pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl
+Expr: class pt.up.fe.specs.clava.ast.expr.CXXTemporaryObjectExpr
+Decl: class pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl
