@@ -229,6 +229,12 @@ public class ExprDataParser {
         return data;
     }
 
+    public static DataStore parseCXXTemporaryObjectExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseCXXConstructExprData(lines, dataStore);
+
+        return data;
+    }
+
     public static DataStore parseMemberExprData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseExprData(lines, dataStore);
 
