@@ -184,7 +184,7 @@ public class CxxTest {
 
     @Test
     public void testIncludes() {
-        new CxxTester("includes.cpp", "includes.h", "includes2.h", "includes2.cpp").test();
+        new CxxTester("includes.cpp", "includes.h", "includes2.h", "includes2.cpp", "data1.dat").showCode().test();
     }
 
     @Test

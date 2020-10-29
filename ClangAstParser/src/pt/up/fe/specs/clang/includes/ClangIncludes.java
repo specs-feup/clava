@@ -31,34 +31,58 @@ public class ClangIncludes {
     private final MultiMap<String, Include> includes;
 
     private ClangIncludes() {
-	includes = new MultiMap<>();
+        includes = new MultiMap<>();
     }
 
     public static ClangIncludes newInstance(File includesFile) {
-	ClangIncludes includes = new ClangIncludes();
+        ClangIncludes includes = new ClangIncludes();
 
-	ClangIncludesParser parser = new ClangIncludesParser();
-	try (LineStream lines = LineStream.newInstance(includesFile)) {
-	    lines.stream()
-		    .flatMap(line -> SpecsCollections.toStream(parser.parse(line)))
-		    .forEach(include -> includes.add(include));
-	}
+        ClangIncludesParser parser = new ClangIncludesParser();
+        try (LineStream lines = LineStream.newInstance(includesFile)) {
+            lines.stream()
+                    .flatMap(line -> SpecsCollections.toStream(parser.parse(line)))
+                    // .filter(ClangIncludes::filterHeaderFile)
+                    .forEach(include -> includes.add(include));
+        }
 
-	return includes;
+        return includes;
     }
 
+    // private static final boolean isValidInclude(Include include) {
+    //
+    // if (include.isAngled()) {
+    // return true;
+    // }
+    //
+    // return SourceType.isHeader(new File(include.getInclude()));
+    //
+    // // System.out.println("INCLUDE: " + include.getInclude());
+    // // System.out.println("IS HEADER? " + isHeader);
+    // // return isHeader;
+    // // var isHeader = SourceType.isHeader(include.getSourceFile());
+    //
+    // //
+    // // return isHeader;
+    // }
+
     private void add(Include include) {
-	includes.put(SpecsIo.getCanonicalPath(include.getSourceFile()), include);
+        // if (!isValidInclude(include)) {
+        // ClavaLog.info(() -> "ClangIncludes: filtering out include '" + include.getInclude() + "' in source file "
+        // + include.getSourceFile());
+        // return;
+        // }
+
+        includes.put(SpecsIo.getCanonicalPath(include.getSourceFile()), include);
     }
 
     public List<Include> getIncludes(File sourceFile) {
-	List<Include> sourceIncludes = includes.get(SpecsIo.getCanonicalPath(sourceFile));
+        List<Include> sourceIncludes = includes.get(SpecsIo.getCanonicalPath(sourceFile));
 
-	if (sourceIncludes == null) {
-	    throw new RuntimeException("Could not find includes for source file '" + sourceFile + "'");
-	}
+        if (sourceIncludes == null) {
+            throw new RuntimeException("Could not find includes for source file '" + sourceFile + "'");
+        }
 
-	return sourceIncludes;
+        return sourceIncludes;
     }
 
     /**
@@ -67,34 +91,34 @@ public class ClangIncludes {
      * @return
      */
     public Map<String, Include> buildIncludeMap() {
-	Map<String, Include> allIncludes = new HashMap<>();
+        Map<String, Include> allIncludes = new HashMap<>();
 
-	for (List<Include> includesList : includes.values()) {
-	    for (Include include : includesList) {
-		allIncludes.put(include.getInclude(), include);
-	    }
-	}
+        for (List<Include> includesList : includes.values()) {
+            for (Include include : includesList) {
+                allIncludes.put(include.getInclude(), include);
+            }
+        }
 
-	return allIncludes;
+        return allIncludes;
     }
 
     @Override
     public String toString() {
-	StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-	for (List<Include> includes : includes.values()) {
-	    // Get filename from first include
-	    String source = includes.get(0).getSourceFile().getName();
-	    builder.append("Includes for '" + source + "':\n");
+        for (List<Include> includes : includes.values()) {
+            // Get filename from first include
+            String source = includes.get(0).getSourceFile().getName();
+            builder.append("Includes for '" + source + "':\n");
 
-	    builder.append(includes.stream()
-		    .map(Include::toString)
-		    .collect(Collectors.joining(", ")));
+            builder.append(includes.stream()
+                    .map(Include::toString)
+                    .collect(Collectors.joining(", ")));
 
-	    builder.append("\n");
-	}
+            builder.append("\n");
+        }
 
-	return builder.toString();
+        return builder.toString();
     }
 
 }

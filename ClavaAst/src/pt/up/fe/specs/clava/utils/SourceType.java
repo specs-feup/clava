@@ -28,7 +28,7 @@ import pt.up.fe.specs.util.lazy.Lazy;
 
 public enum SourceType {
 
-    HEADER("h", "hpp"),
+    HEADER("h", "hpp", "h++"),
     IMPLEMENTATION("c", "cpp", "cl", "cc"),
     // Files that are not parsed by Clava (e.g., include files such as .incl or .inc)
     OUT_OF_SOURCE();
