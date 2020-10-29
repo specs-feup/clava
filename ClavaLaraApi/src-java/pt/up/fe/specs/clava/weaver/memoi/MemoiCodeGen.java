@@ -57,7 +57,7 @@ public class MemoiCodeGen {
 
                 DirectMappedTable dmt = new DirectMappedTable(report, numSets);
                 table = dmt.getTable();
-                DirectMappedTable.save(cache, dmt);
+                // DirectMappedTable.save(cache, dmt); // cache disabled for now
             }
         }
 

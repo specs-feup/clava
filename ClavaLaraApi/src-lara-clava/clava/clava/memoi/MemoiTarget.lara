@@ -2,7 +2,7 @@ import clava.memoi.MemoiUtils;
 
 import weaver.Query;
 
-function MemoiTarget(sig, $func, isUser, numInputs, numOuputs, inputTypes, outputTypes) {
+function MemoiTarget(sig, $func, isUser, numInputs, numOuputs, inputTypes, outputTypes, numCallSites) {
 	
 	this._sig = MemoiUtils.normalizeSig(sig);
 	this._$func = $func;
@@ -18,6 +18,12 @@ function MemoiTarget(sig, $func, isUser, numInputs, numOuputs, inputTypes, outpu
 		this._outputTypes = outputTypes;
 	}
 	
+	if(numCallSites === undefined) {
+		this._findNumCallSites();
+	} else {
+		this._numCallSites = numCallSites;
+	}
+	
 	this._checkDataTypes();
 }
 
@@ -28,7 +34,8 @@ MemoiTarget.fromFunction = function($func) {
 	var numInputs = $func.params.length;
 	var numOutputs = 1;
 	
-	return new MemoiTarget(sig, $func, isUser, numInputs, numOutputs, undefined, undefined); // input and output types are found in the constructor
+	// input types, output types, and num of call sites are found in the constructor
+	return new MemoiTarget(sig, $func, isUser, numInputs, numOutputs, undefined, undefined);
 }
 
 MemoiTarget.fromCall = function($call) {
@@ -58,6 +65,17 @@ MemoiTarget.fromSig = function(sig) {
 	}
 
 	return MemoiTarget.fromFunction($func);
+}
+
+MemoiTarget.prototype._findNumCallSites = function() {
+	
+	var numCallSites = 0;
+	
+	for(var $call of Query.search("call", {"signature": signature => this._sig === MemoiUtils.normalizeSig(signature)})) {
+		numCallSites++;
+	}
+	
+	this._numCallSites = numCallSites;
 }
 
 MemoiTarget.prototype._findDataTypes = function() {

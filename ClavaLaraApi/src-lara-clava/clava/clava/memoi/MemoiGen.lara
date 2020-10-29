@@ -267,13 +267,15 @@ MemoiGen.prototype._generateFromReport = function() {
 		
 		throw "Could not find report for target " + this._target._sig + " in files " + this._profReportFiles;
 	}
-	
+
 	for(var site in siteMap) {
+
 
 		// merge all reports for this <target, site>
 		var reportPathList = siteMap.get(site);		
 		var report = MemoiReport.mergeReportsFromNames(reportPathList);
 		
+
 		// report-wide apply policy
 		if(!this._applyPolicy(report)) {
 			continue;
@@ -282,7 +284,7 @@ MemoiGen.prototype._generateFromReport = function() {
 		if(site === "global") {
 			this._generateAll(report);
 		} else {
-			this._generateEach(report); // this generates for all call sites found for the target, not for the call site analyzed
+			this._generateEach(report);	
 		}
 	}
 }
@@ -291,7 +293,12 @@ MemoiGen.prototype._generateEach = function(report) {
 	
 	var cSig = MemoiUtils.cSig(this._target._sig);
 	
-	for(var $call of Query.search("call", {"signature": s => this._target._sig === MemoiUtils.normalizeSig(s)})) {
+	var filter = {"signature": s => this._target._sig === MemoiUtils.normalizeSig(s)};
+	if(report !== undefined) {
+		filter.location = l => report.callSites[0] === l; // if there is a report, we also filter by site
+	}
+
+	for(var $call of Query.search("call", filter)) {
 
 		var wrapperName = IdGenerator.next("mw_" + cSig);
 
