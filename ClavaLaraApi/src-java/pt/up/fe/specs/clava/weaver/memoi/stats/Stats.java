@@ -13,14 +13,12 @@
 
 package pt.up.fe.specs.clava.weaver.memoi.stats;
 
-import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.weaver.memoi.MemoiUtils;
 import pt.up.fe.specs.clava.weaver.memoi.MergedMemoiReport;
 import pt.up.fe.specs.clava.weaver.memoi.comparator.MeanComparator;
-import pt.up.fe.specs.util.SpecsIo;
 
 public class Stats implements java.io.Serializable {
 
@@ -118,22 +116,44 @@ public class Stats implements java.io.Serializable {
 
     public void print() {
 
-        System.out.println("unique inputs: " + unique);
-        System.out.println("total calls: " + totalCalls);
+        System.out.println(toString());
+    }
 
-        System.out.println("repetition: " + repetition);
-        System.out.println("average repetition: " + averageRepetition);
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
 
-        System.out.println("top 3: " + String.format("%.2f%%", top3percentage));
-        System.out.println("top 5: " + String.format("%.2f%%", top5percentage));
-        System.out.println("top 10: " + String.format("%.2f%%", top10percentage));
+        b.append("unique inputs: " + unique);
+        b.append(System.lineSeparator());
+        b.append("total calls: " + totalCalls);
+        b.append(System.lineSeparator());
 
-        System.out.println("elements for 5%: " + elements5);
-        System.out.println("elements for 10%: " + elements10);
-        System.out.println("elements for 25%: " + elements25);
-        System.out.println("elements for 50%: " + elements50);
+        b.append("repetition: " + String.format("%.2f%%", repetition));
+        b.append(System.lineSeparator());
+        b.append("average repetition: " + averageRepetition);
+        b.append(System.lineSeparator());
 
-        System.out.println(bw);
-        System.out.println(hist);
+        b.append("top 3: " + String.format("%.2f%%", top3percentage));
+        b.append(System.lineSeparator());
+        b.append("top 5: " + String.format("%.2f%%", top5percentage));
+        b.append(System.lineSeparator());
+        b.append("top 10: " + String.format("%.2f%%", top10percentage));
+        b.append(System.lineSeparator());
+
+        b.append("elements for 5%: " + elements5);
+        b.append(System.lineSeparator());
+        b.append("elements for 10%: " + elements10);
+        b.append(System.lineSeparator());
+        b.append("elements for 25%: " + elements25);
+        b.append(System.lineSeparator());
+        b.append("elements for 50%: " + elements50);
+        b.append(System.lineSeparator());
+
+        b.append(bw);
+        b.append(System.lineSeparator());
+        b.append(hist);
+        b.append(System.lineSeparator());
+
+        return b.toString();
     }
 }
