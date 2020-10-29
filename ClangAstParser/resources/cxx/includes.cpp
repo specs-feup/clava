@@ -11,3 +11,8 @@ int main() {
 	DECL_1_FULL
 	DECL_1_1_FULL
 }
+
+
+const int myData[2] = {
+  #include "data1.dat"
+};

@@ -8,3 +8,5 @@ int main() {
    int decl1_full = 3;
    int decl2_full = 30;
 }
+
+int const myData[2] = {9999};
