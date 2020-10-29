@@ -67,6 +67,9 @@ int main() {
 	std::array<int, 3> listInitialized1 = {512, 256, 128};
 	std::array<int, 3> listInitialized2{{512, 256, 128}};
 	
+	// Another idiom for constructor with initializer list
+	std::vector<int> v3 { 34,23 };
+	
 	// Static assert
     static_assert(true, "This is a static decl");
 	
