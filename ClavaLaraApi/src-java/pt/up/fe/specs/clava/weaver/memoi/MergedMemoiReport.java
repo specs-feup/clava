@@ -1,12 +1,15 @@
 package pt.up.fe.specs.clava.weaver.memoi;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import pt.up.fe.specs.clava.weaver.memoi.stats.Stats;
 import pt.up.fe.specs.util.SpecsCheck;
+import pt.up.fe.specs.util.SpecsIo;
 
 /**
  * Copyright 2019 SPeCS.
@@ -49,7 +52,7 @@ public class MergedMemoiReport implements java.io.Serializable {
 
     private int reportCount = 1;
 
-    // private Stats stats;
+    private Stats stats;
 
     public MergedMemoiReport() {
 
@@ -304,11 +307,14 @@ public class MergedMemoiReport implements java.io.Serializable {
         System.out.println("report count: " + reportCount);
 
         // stats.print();
+        File d = SpecsIo.mkdir("./memoi-report-stats/" + funcSig);
+        File f = new File(d, callSites.toString());
+        SpecsIo.write(f, stats.toString());
     }
 
-    // public void makeStats() {
-    // this.stats = new Stats(this);
-    // }
+    public void makeStats() {
+        this.stats = new Stats(this);
+    }
 
     public String getUuid() {
         return uuid;

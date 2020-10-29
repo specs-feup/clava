@@ -67,7 +67,7 @@ public class MemoiReport implements java.io.Serializable {
             }
         }
 
-        // report.makeStats();
+        report.makeStats();
         report.printStats();
         return report;
     }
