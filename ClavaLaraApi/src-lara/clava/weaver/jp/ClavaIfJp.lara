@@ -1,0 +1,9 @@
+import weaver.jp.IfJp;
+import weaver.Weaver;
+
+_lara_dummy_ = Object.defineProperty(IfJp.prototype, 'condition', {
+	get: function () {
+		return CommonJoinPoints.toJoinPoint(this.astNode.getCondition());
+	}
+});
+
