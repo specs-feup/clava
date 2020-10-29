@@ -123,7 +123,7 @@ MemoiGen.ApplyPolicy = {
 		var hits = MemoiUtils.mean(report.hits, report.reportCount);
 		var calls = MemoiUtils.mean(report.calls, report.reportCount);
 		
-		var ratio = hits/calls;
+		var ratio = calls === 0 ? 0 : hits/calls;
 		
 		println("_OVER_X_PCT " + x);
 		println("hits: " + hits);
