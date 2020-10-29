@@ -49,7 +49,7 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDRE
         {"UnaryExprOrTypeTraitExpr", clava::StmtNode::UNARY_EXPR_OR_TYPE_TRAIT_EXPR},
         {"DesignatedInitExpr", clava::StmtNode::DESIGNATED_INIT_EXPR},
         {"CXXConstructExpr", clava::StmtNode::CXX_CONSTRUCT_EXPR},
-
+        {"CXXTemporaryObjectExpr", clava::StmtNode::CXX_TEMPORARY_OBJECT_EXPR},
 
         //{"SubstNonTypeTemplateParmExpr", clava::StmtNode::SUBST_NON_TYPE_TEMPLATE_PARM_EXPR},
 };
@@ -157,7 +157,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitDesignatedInitExprChildren(static_cast<const DesignatedInitExpr *>(S), visitedChildren); break;
         case clava::StmtNode::CXX_CONSTRUCT_EXPR:
             VisitCXXConstructExprChildren(static_cast<const CXXConstructExpr *>(S), visitedChildren); break;
-
+        case clava::StmtNode::CXX_TEMPORARY_OBJECT_EXPR:
+            VisitCXXTemporaryObjectExprChildren(static_cast<const CXXTemporaryObjectExpr *>(S), visitedChildren); break;
 
 
             //        case clava::StmtNode::SUBST_NON_TYPE_TEMPLATE_PARM_EXPR:
@@ -553,6 +554,10 @@ void ClangAstDumper::VisitCXXConstructExprChildren(const CXXConstructExpr *E, st
     VisitDeclTop(E->getConstructor());
 }
 
+void ClangAstDumper::VisitCXXTemporaryObjectExprChildren(const CXXTemporaryObjectExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitCXXConstructExprChildren(E, children);
+}
 
 
 

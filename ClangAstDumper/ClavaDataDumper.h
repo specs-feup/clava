@@ -150,6 +150,7 @@ namespace clava {
         void DumpUnresolvedMemberExprData(const UnresolvedMemberExpr *E);
         void DumpUnresolvedLookupExprData(const UnresolvedLookupExpr *E);
         void DumpCXXConstructExprData(const CXXConstructExpr *E);
+        void DumpCXXTemporaryObjectExprData(const CXXTemporaryObjectExpr *E);
         void DumpMemberExprData(const MemberExpr *E);
         void DumpMaterializeTemporaryExprData(const MaterializeTemporaryExpr *E);
         void DumpBinaryOperatorData(const BinaryOperator *E);

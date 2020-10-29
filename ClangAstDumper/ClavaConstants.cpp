@@ -50,6 +50,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::UNRESOLVED_LOOKUP_EXPR: return "UnresolvedLookupExpr";
         case clava::StmtNode::UNRESOLVED_MEMBER_EXPR: return "UnresolvedMemberExpr";
         case clava::StmtNode::CXX_CONSTRUCT_EXPR: return "CXXConstructExpr";
+        case clava::StmtNode::CXX_TEMPORARY_OBJECT_EXPR: return "CXXTemporaryObjectExpr";
         case clava::StmtNode::MEMBER_EXPR: return "MemberExpr";
         case clava::StmtNode::MATERIALIZE_TEMPORARY_EXPR: return "MaterializeTemporaryExpr";
         case clava::StmtNode::OFFSET_OF_EXPR: return "OffsetOfExpr";
