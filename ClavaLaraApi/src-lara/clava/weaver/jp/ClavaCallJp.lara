@@ -2,7 +2,6 @@ import weaver.jp.CallJp;
 import weaver.Weaver;
 
 _lara_dummy_ = Object.defineProperty(CallJp.prototype, 'name', {
-	configurable: true,
 	get: function () {  
 		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).name; 
 	}

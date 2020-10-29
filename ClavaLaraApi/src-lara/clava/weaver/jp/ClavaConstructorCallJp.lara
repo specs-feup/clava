@@ -3,8 +3,7 @@ import weaver.Weaver;
 
 _lara_dummy_ = Object.defineProperty(ConstructorCallJp.prototype, 'function', {
 	get: function () {
-		//TODO
-		var functionDecl = this.astNode.getFunctionDecl();
+		var functionDecl = this.astNode.getDecl();
 		if(functionDecl.isPresent())
 			return CommonJoinPoints.toJoinPoint(functionDecl.get());
 		else 
@@ -14,7 +13,6 @@ _lara_dummy_ = Object.defineProperty(ConstructorCallJp.prototype, 'function', {
 
 
 _lara_dummy_ = Object.defineProperty(ConstructorCallJp.prototype, 'constructor', {
-	configurable: true,
 	get: function () { 
 		return this.method;
 	}
