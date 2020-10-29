@@ -56,6 +56,7 @@ import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.parsing.snippet.SnippetParser;
 import pt.up.fe.specs.clava.parsing.snippet.TextElements;
 import pt.up.fe.specs.clava.parsing.snippet.TextParser;
+import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
@@ -466,6 +467,7 @@ public class ClangStreamParser {
         // Create includes map
         MultiMap<String, Include> includesMap = new MultiMap<>();
         includes.stream()
+                .filter(ClangStreamParser::filterInclude)
                 .forEach(include -> includesMap.put(SpecsIo.getCanonicalPath(include.getSourceFile()), include));
 
         // For each enty in MultiMap, create a Translation Unit
@@ -556,4 +558,27 @@ public class ClangStreamParser {
         return tUnit;
     }
 
+    private static final boolean filterInclude(Include include) {
+
+        if (include.isAngled()) {
+            return true;
+        }
+
+        var isValidInclude = SourceType.isHeader(new File(include.getInclude()));
+
+        if (!isValidInclude) {
+            ClavaLog.debug(
+                    () -> "ClangIncludes: filtering out #include '\"" + include.getInclude() + "\"' in source file "
+                            + include.getSourceFile());
+        }
+
+        return isValidInclude;
+        // System.out.println("INCLUDE: " + include.getInclude());
+        // System.out.println("IS HEADER? " + isHeader);
+        // return isHeader;
+        // var isHeader = SourceType.isHeader(include.getSourceFile());
+
+        //
+        // return isHeader;
+    }
 }
