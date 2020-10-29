@@ -19,8 +19,6 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.expr.InitListExpr;
-import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -103,9 +101,10 @@ public enum InitializationStyle implements StringProvider {
     private String listInitCode(VarDecl node) {
         // Must be present
         Expr initList = node.getInit().get();
-        SpecsCheck.checkArgument(initList instanceof InitListExpr,
-                () -> "Expected argument to be an instance of " + InitListExpr.class + ", it is a "
-                        + initList.getClass());
+
+        // SpecsCheck.checkArgument(initList instanceof InitListExpr,
+        // () -> "Expected argument to be an instance of " + InitListExpr.class + ", it is a "
+        // + initList.getClass());
 
         return initList.getCode();
         // return getInit().map(ClavaNode::getCode)
