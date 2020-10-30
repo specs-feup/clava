@@ -141,6 +141,11 @@ public class CXXRecordDecl extends RecordDecl {
         if (method.hasBody()) {
             methodDeclaration = (CXXMethodDecl) method.deepCopy();
             methodDeclaration.getBody().get().detach();
+
+            // If declaration is a constructor, remove initializer list, remove it
+            if (methodDeclaration instanceof CXXConstructorDecl) {
+                methodDeclaration.set(CXXConstructorDecl.CONSTRUCTOR_INITS, new ArrayList<>());
+            }
         }
 
         var methodSig = methodDeclaration.getSignature();
@@ -157,11 +162,11 @@ public class CXXRecordDecl extends RecordDecl {
         }
 
     }
-    
-	public List<Decl> getBases() {
-		return get(RECORD_BASES).stream()
-				.map(baseSpec -> baseSpec.get(CXXBaseSpecifier.TYPE).get(TagType.DECL))
-				.collect(Collectors.toList());
-	}
-	
+
+    public List<Decl> getBases() {
+        return get(RECORD_BASES).stream()
+                .map(baseSpec -> baseSpec.get(CXXBaseSpecifier.TYPE).get(TagType.DECL))
+                .collect(Collectors.toList());
+    }
+
 }
