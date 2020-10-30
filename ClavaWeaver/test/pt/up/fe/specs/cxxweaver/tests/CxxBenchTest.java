@@ -50,4 +50,10 @@ public class CxxBenchTest {
         newTester().setCheckWovenCodeSyntax(false).test("LoicEx2.lara", "loic_ex2.cpp");
     }
 
+    @Test
+    public void testLoicEx3() {
+        // newTester().setCheckWovenCodeSyntax(false).test("LoicEx3.lara", "loic_ex3.cpp");
+        newTester().test("LoicEx3.lara", "loic_ex3.cpp");
+    }
+
 }
