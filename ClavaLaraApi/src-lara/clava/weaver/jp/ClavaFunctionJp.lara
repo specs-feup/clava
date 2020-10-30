@@ -23,23 +23,31 @@ _lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'id', {
 });
 
 _lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'name', {
-	configurable: true,
 	get: function () {  
 		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).name; 
 	}
 });
 
 _lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'signature', {
-	configurable: true,
 	get: function () {  
 		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).signature; 
 	}
 });
 
 _lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'returnType', {
-	configurable: true,
 	get: function () {  	
 		return CommonJoinPoints.toJoinPoint(this.astNode.getReturnType()); 
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'stmts', {
+	get: function () {
+		var functionBody = this.astNode.getBody();
+		if(!functionBody.isPresent())
+			return [];
+			
+		var functionStmts = functionBody.get().getStatements();
+		return CommonJoinPoints.toJoinPoints(Weaver.toJs(functionStmts)); 
 	}
 });
 

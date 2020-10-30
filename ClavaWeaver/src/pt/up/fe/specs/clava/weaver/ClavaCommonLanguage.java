@@ -22,23 +22,39 @@ import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
+import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
+import pt.up.fe.specs.clava.ast.stmt.IfStmt;
+import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
+import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.classmap.FunctionClassMap;
-
 
 public class ClavaCommonLanguage {
 
 	private static final FunctionClassMap<ClavaNode, String> JOINPOINT_MAPPER;
 	static {
 		JOINPOINT_MAPPER = new FunctionClassMap<>();
+		// JOINPOINT_MAPPER.put(ForStmt.class, node -> "ForJp");
+		// JOINPOINT_MAPPER.put(DoStmt.class, node -> "DoJp");
+		// JOINPOINT_MAPPER.put(WhileStmt.class, node -> "WhileJp");
+		JOINPOINT_MAPPER.put(BinaryOperator.class, node -> "BinaryJp");
+		JOINPOINT_MAPPER.put(ConditionalOperator.class, node -> "TernaryJp");
+		JOINPOINT_MAPPER.put(LoopStmt.class, node -> "LoopJp");
+		JOINPOINT_MAPPER.put(CaseStmt.class, node -> "CaseJp");
+		JOINPOINT_MAPPER.put(SwitchStmt.class, node -> "SwitchJp");
+		JOINPOINT_MAPPER.put(IfStmt.class, node -> "IfJp");
+		JOINPOINT_MAPPER.put(Stmt.class, node -> "StmtJp");
 		JOINPOINT_MAPPER.put(CXXConstructExpr.class, node -> "ConstructorCallJp");
 		JOINPOINT_MAPPER.put(CXXConstructorDecl.class, node -> "ConstructorJp");
 		JOINPOINT_MAPPER.put(DeclRefExpr.class, node -> "VarRefJp");
@@ -81,15 +97,12 @@ public class ClavaCommonLanguage {
 		if (node.getMemberDecl() instanceof FieldDecl)
 			return "FieldRefJp";
 		/*
-		if (node.getMemberDecl() instanceof VarDecl)
-			return "JoinPoint";
-
-		if (node.getMemberDecl() instanceof CXXMethodDecl)
-			return "JoinPoint";
-
-		if (node.getMemberDecl() instanceof EnumConstantDecl)
-			return "JoinPoint";
-		*/
+		 * if (node.getMemberDecl() instanceof VarDecl) return "JoinPoint";
+		 * 
+		 * if (node.getMemberDecl() instanceof CXXMethodDecl) return "JoinPoint";
+		 * 
+		 * if (node.getMemberDecl() instanceof EnumConstantDecl) return "JoinPoint";
+		 */
 
 		return "JoinPoint";
 

@@ -51,6 +51,12 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'constructors', {
 	}
 });
 
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'fields', {
+	get: function () {
+		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getFields())); 
+	}
+});
+
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'kind', {
 	get: function () { 	
 		return "class";
