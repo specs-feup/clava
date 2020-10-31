@@ -13,3 +13,9 @@ _lara_dummy_ = Object.defineProperty(VarDeclJp.prototype, 'type', {
 	}
 });
 
+_lara_dummy_ = Object.defineProperty(VarDeclJp.prototype, 'isParam', {
+	get: function () { 
+		return false; 
+	}
+});
+

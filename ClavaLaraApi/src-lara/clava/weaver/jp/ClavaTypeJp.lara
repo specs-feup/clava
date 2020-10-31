@@ -34,25 +34,25 @@ _lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'isClass', {
 	}
 });
 
-_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'hasSugar', {
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, '_hasSugar', {
 	get: function () {
 		return this.astNode.hasSugar();
 	}
 });
 
-_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'desugar', {
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, '_desugar', {
 	get: function () {
 		return CommonJoinPoints.toJoinPoint(this.astNode.desugar());
 	}
 });
 
-_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'unwrap', {
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, '_unwrap', {
 	get: function () {
 		return CommonJoinPoints.toJoinPoint(this.astNode.getElementType());
 	}
 });
 
-_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'desugarAll', {
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, '_desugarAll', {
 	get: function () {
 		return CommonJoinPoints.toJoinPoint(this.astNode.desugarAll());
 	}
@@ -64,25 +64,25 @@ _lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'decl', {
 	}
 });
 
-_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'hasTemplateArgs', {
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, '_hasTemplateArgs', {
 	get: function () {
 		return this.astNode.hasTemplateArgs();
 	}
 });
 
-_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'templateArgsTypes', {
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, '_templateArgsTypes', {
 	get: function () {
 		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getTemplateArgumentTypes()));
 	}
 });
 
-_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'typeDescendants', {
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, '_typeDescendants', {
 	get: function () {
 		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getTypeDescendants()));
 	}
 });
 
-_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'typeDescendantsAndSelf', {
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, '_typeDescendantsAndSelf', {
 	get: function () {
 		return [this].concat(this.typeDescendants);
 	}
@@ -93,11 +93,11 @@ _lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'usedTypes', {
 	get: function () {
 		var usedTypes = [];
 		
-		for(type of this.typeDescendantsAndSelf){
+		for(type of this._typeDescendantsAndSelf){
 			usedTypes.push(type);
 			
-			if(type.hasTemplateArgs)
-				for(templateType of type.templateArgsTypes)
+			if(type._hasTemplateArgs)
+				for(templateType of type._templateArgsTypes)
 					usedTypes = usedTypes.concat(templateType.usedTypes);
 			
 		}

@@ -2,7 +2,6 @@ import weaver.jp.BinaryJp;
 import weaver.Weaver;
 
 _lara_dummy_ = Object.defineProperty(BinaryJp.prototype, 'kind', {
-	configurable: true,
 	get: function () { 
 		return this.astNode.getOperatorCode(); 
 	}
