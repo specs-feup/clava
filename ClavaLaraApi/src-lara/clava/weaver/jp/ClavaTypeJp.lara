@@ -84,7 +84,7 @@ _lara_dummy_ = Object.defineProperty(TypeJp.prototype, '_typeDescendants', {
 
 _lara_dummy_ = Object.defineProperty(TypeJp.prototype, '_typeDescendantsAndSelf', {
 	get: function () {
-		return [this].concat(this.typeDescendants);
+		return [this].concat(this._typeDescendants);
 	}
 });
 
