@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 
 import pt.up.fe.specs.JacksonPlus.SpecsJackson;
 import pt.up.fe.specs.clava.weaver.memoi.comparator.MeanComparator;
+import pt.up.fe.specs.clava.weaver.memoi.policy.apply.SimplePolicies;
 import pt.up.fe.specs.clava.weaver.memoi.policy.insert.AlwaysInsert;
 import pt.up.fe.specs.util.SpecsCheck;
 
@@ -48,53 +49,77 @@ public class DirectMappedTable implements java.io.Serializable {
 
     private boolean debug;
 
-    public DirectMappedTable() {
-    }
+    private DmtStats stats;
+
+    private Predicate<DirectMappedTable> applyPolicy;
 
     /**
-     * Defaults to using mean comparator.
+     * Defaults to using {@link AlwaysInsert}, {@link MeanComparator}, and {@link ApplyIfNotEmpty}.
      * 
      * @param report
-     * @param indexBits
-     * @param numSets
-     * @param insertPred
-     */
-    public DirectMappedTable(MergedMemoiReport report, int numSets,
-            Predicate<MergedMemoiEntry> insertPred) {
-
-        this(report, numSets, insertPred, new MeanComparator(report));
-    }
-
-    /**
-     * Defaults to using the ALWAYS predicate.
-     * 
-     * @param report
-     * @param indexBits
-     * @param numSets
-     * @param countComparator
-     */
-    public DirectMappedTable(MergedMemoiReport report, int numSets,
-            Comparator<MergedMemoiEntry> countComparator) {
-
-        this(report, numSets, new AlwaysInsert(), countComparator);
-    }
-
-    /**
-     * Defaults to using the ALWAYS predicate and the mean comparator.
-     * 
-     * @param report
-     * @param indexBits
      * @param numSets
      */
     public DirectMappedTable(MergedMemoiReport report, int numSets) {
 
-        this(report, numSets, new AlwaysInsert(), new MeanComparator(report));
-        // this(report, numSets, InsertPolicy.ALWAYS, new MeanComparator(report));
+        this(report, numSets, new AlwaysInsert(), new MeanComparator(report), SimplePolicies.NOT_EMPTY);
     }
 
+    /**
+     * Defaults to using {@link MeanComparator} and {@link ApplyIfNotEmpty}.
+     * 
+     * @param report
+     * @param numSets
+     * @param insertPred
+     * @return
+     */
+    public static DirectMappedTable fromInsertPredicate(MergedMemoiReport report, int numSets,
+            Predicate<MergedMemoiEntry> insertPred) {
+
+        return new DirectMappedTable(report, numSets, insertPred, new MeanComparator(report), SimplePolicies.NOT_EMPTY);
+    }
+
+    /**
+     * Defaults to using {@link AlwaysInsert} and {@link ApplyIfNotEmpty}.
+     * 
+     * @param report
+     * @param numSets
+     * @param countComparator
+     * @return
+     */
+    public static DirectMappedTable fromCountComparator(MergedMemoiReport report, int numSets,
+            Comparator<MergedMemoiEntry> countComparator) {
+
+        return new DirectMappedTable(report, numSets, new AlwaysInsert(), countComparator, SimplePolicies.NOT_EMPTY);
+    }
+
+    /**
+     * Defaults to using {@link AlwaysInsert} and {@link MeanComparator}.
+     * 
+     * @param report
+     * @param numSets
+     * @param applyPolicy
+     * @return
+     */
+    public static DirectMappedTable fromApplyPolicy(MergedMemoiReport report, int numSets,
+            Predicate<DirectMappedTable> applyPolicy) {
+
+        return new DirectMappedTable(report, numSets, new AlwaysInsert(), new MeanComparator(report),
+                applyPolicy);
+    }
+
+    /**
+     * Full constructor.
+     * 
+     * @param report
+     * @param numSets
+     * @param insertPred
+     * @param countComparator
+     * @param applyPolicy
+     */
     public DirectMappedTable(MergedMemoiReport report, int numSets,
             Predicate<MergedMemoiEntry> insertPred,
-            Comparator<MergedMemoiEntry> countComparator) {
+            Comparator<MergedMemoiEntry> countComparator,
+            Predicate<DirectMappedTable> applyPolicy) {
 
         int maxSize = ALLOWED_SIZES.get(ALLOWED_SIZES.size() - 1);
 
@@ -106,12 +131,14 @@ public class DirectMappedTable implements java.io.Serializable {
         this.indexBits = (int) MemoiUtils.log2(numSets);
         this.insertPred = insertPred;
         this.countComparator = countComparator;
+        this.applyPolicy = applyPolicy;
         this.numSets = numSets;
 
         this.debug = false;
 
         this.table = generateTable();
-        printTableReport();
+        this.stats = new DmtStats(this);
+        System.out.println(this.stats);
     }
 
     public void setDebug() {
@@ -400,4 +427,12 @@ public class DirectMappedTable implements java.io.Serializable {
         this.table = table;
     }
 
+    public DmtStats getStats() {
+        return stats;
+    }
+
+    public boolean testPolicy() {
+
+        return applyPolicy.test(this);
+    }
 }

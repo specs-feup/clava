@@ -13,52 +13,74 @@
 
 package pt.up.fe.specs.clava.weaver.memoi;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.clava.weaver.memoi.policy.apply.DmtRepetition;
+import pt.up.fe.specs.clava.weaver.memoi.policy.apply.SimplePolicies;
 
 public class MemoiCodeGen {
 
     private static final String H = "0x";
     private static final String NAN_BITS = "0xfff8000000000000";
+    private static Map<String, Predicate<DirectMappedTable>> policyMap;
+    static {
+        policyMap = new HashMap<>();
+        policyMap.put("ALWAYS", SimplePolicies.ALWAYS);
+        policyMap.put("NOT_EMPTY", SimplePolicies.NOT_EMPTY);
+        policyMap.put("OVER_25_PCT", DmtRepetition.OVER_25_PCT);
+        policyMap.put("OVER_50_PCT", DmtRepetition.OVER_50_PCT);
+        policyMap.put("OVER_75_PCT", DmtRepetition.OVER_75_PCT);
+        policyMap.put("OVER_90_PCT", DmtRepetition.OVER_90_PCT);
+    }
 
     /**
-     * 
-     * list of param names
+     * Generates the {@link DirectMappedTable} based on the report.
      * 
      * @param numSets
      * @param report
-     * @param func
+     * @param applyPolicyName
+     * @return
+     */
+    public static DirectMappedTable generateDmt(int numSets, MergedMemoiReport report, String applyPolicyName) {
+
+        Predicate<DirectMappedTable> applyPolicy = policyMap.get(applyPolicyName);
+        if (applyPolicy == null) {
+
+            throw new RuntimeException("Could not translate the apply policy '" + applyPolicyName + "'.");
+        }
+
+        return DirectMappedTable.fromApplyPolicy(report, numSets, applyPolicy);
+    }
+
+    /**
+     * Generates the table code based on the {@link DirectMappedTable} and the parameters.
      * 
-     * 
+     * @param numSets
+     * @param paramNames
+     * @param isMemoiEmpty
+     * @param isMemoiOnline
+     * @param memoiApproxBits
+     * @param dmt
+     * @param inputCount
+     * @param outputCount
+     * @param inputTypes
+     * @param outputTypes
      * @return
      */
     public static String generateDmtCode(int numSets, List<String> paramNames, boolean isMemoiEmpty,
-            boolean isMemoiOnline, int memoiApproxBits, MergedMemoiReport report, int inputCount, int outputCount,
+            boolean isMemoiOnline, int memoiApproxBits, DirectMappedTable dmt, int inputCount, int outputCount,
             List<String> inputTypes, List<String> outputTypes) {
 
         Map<String, MergedMemoiEntry> table = new HashMap<String, MergedMemoiEntry>();
 
-        // TODO: for 0% or 100% -> use empty table
         if (!isMemoiEmpty) {
-            File tmpDir = SpecsIo.getTempFolder("dmt");
-            File cache = new File(tmpDir, report.getUuid());
 
-            if (cache.exists()) {
-
-                DirectMappedTable dmt = DirectMappedTable.load(cache);
-                table = dmt.getTable();
-            } else {
-
-                DirectMappedTable dmt = new DirectMappedTable(report, numSets);
-                table = dmt.getTable();
-                // DirectMappedTable.save(cache, dmt); // cache disabled for now
-            }
+            table = dmt.getTable();
         }
 
         return generateDmtCode(table, numSets, paramNames, isMemoiOnline, memoiApproxBits, inputCount, outputCount,
