@@ -375,7 +375,7 @@ public class AstDumpParser implements ClangParser {
             throw new RuntimeException("Error while running Clang AST dumper", e);
         }
 
-        ClangStreamParser clangStreamParser = new ClangStreamParser(parsedData, SpecsSystem.isDebug());
+        ClangStreamParser clangStreamParser = new ClangStreamParser(parsedData, SpecsSystem.isDebug(), config);
 
         TranslationUnit tUnit = clangStreamParser.parseTu(sourceFile);
 
