@@ -123,6 +123,10 @@ public class CxxWeaverOptions {
 
         addBooleanOption(CxxWeaverOption.FLAT_OUTPUT_FOLDER, "flo", "flat-output-folder",
                 "Puts sources directly in the output folder, ignoring original base folders");
+
+        addOneArgOption(ClangAstKeys.IGNORE_HEADER_INCLUDES, ClangAstKeys.getFlagIgnoreIncludes(),
+                "ignore-header-includes", "<Java regex list>",
+                "Headers to ignore when recreating #include directives (Java regexes)");
     }
 
     private static final void addBooleanOption(DataKey<?> key, String shortOption, String longOption,
