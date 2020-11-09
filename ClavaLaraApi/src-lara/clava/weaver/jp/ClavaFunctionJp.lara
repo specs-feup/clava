@@ -51,3 +51,8 @@ _lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'stmts', {
 	}
 });
 
+_lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'hasBody', {
+	get: function () {  	
+		return this.astNode.getBody().isPresent(); 
+	}
+});

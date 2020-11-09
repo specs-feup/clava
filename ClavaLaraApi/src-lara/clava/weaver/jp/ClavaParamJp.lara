@@ -7,3 +7,8 @@ _lara_dummy_ = Object.defineProperty(ParamJp.prototype, 'function', {
 	}
 });
 
+_lara_dummy_ = Object.defineProperty(ParamJp.prototype, 'isParam', {
+	get: function () { 
+		return true; 
+	}
+});

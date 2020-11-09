@@ -107,6 +107,7 @@ MemoiGen.prototype.setDebug = function(isDebug) {
 	this._isDebug = isDebug;
 }
 
+/*
 MemoiGen.ApplyPolicy = {
 	ALWAYS : function(report) {
 		return true;
@@ -153,6 +154,16 @@ MemoiGen.ApplyPolicy = {
 		return MemoiGen.ApplyPolicy._OVER_X_PCT(report, 0.9);
 	}
 };
+*/
+
+MemoiGen.ApplyPolicy = {
+	ALWAYS: "ALWAYS",
+	NOT_EMPTY: "NOT_EMPTY",
+	OVER_25_PCT: "OVER_25_PCT",
+	OVER_50_PCT: "OVER_50_PCT",
+	OVER_75_PCT: "OVER_75_PCT",
+	OVER_90_PCT: "OVER_90_PCT"
+};
 
 /**
  *		Sets the apply policy.
@@ -163,14 +174,13 @@ MemoiGen.prototype.setApplyPolicy = function(policy) {
 	var allowedPolicies = [
 		MemoiGen.ApplyPolicy.ALWAYS,
 		MemoiGen.ApplyPolicy.NOT_EMPTY,
-		MemoiGen.ApplyPolicy.OVER_15_PCT,
 		MemoiGen.ApplyPolicy.OVER_25_PCT,
 		MemoiGen.ApplyPolicy.OVER_50_PCT,
 		MemoiGen.ApplyPolicy.OVER_75_PCT,
 		MemoiGen.ApplyPolicy.OVER_90_PCT
 	];
 	
-	Check.arrayContains(allowedPolicies, policy, "The possible apply policies are{MemoiGen.ApplyPolicy.ALWAYS, MemoiGen.ApplyPolicy.NOT_EMPTY, MemoiGen.ApplyPolicy.OVER_15_PCT, MemoiGen.ApplyPolicy.OVER_25_PCT,MemoiGen.ApplyPolicy.OVER_50_PCT, MemoiGen.ApplyPolicy.OVER_75_PCT, MemoiGen.ApplyPolicy.OVER_90_PCT}.", "MemoiGen.setApplyPolicy");
+	Check.arrayContains(allowedPolicies, policy, "The possible apply policies are{MemoiGen.ApplyPolicy.ALWAYS, MemoiGen.ApplyPolicy.NOT_EMPTY, MemoiGen.ApplyPolicy.OVER_25_PCT,MemoiGen.ApplyPolicy.OVER_50_PCT, MemoiGen.ApplyPolicy.OVER_75_PCT, MemoiGen.ApplyPolicy.OVER_90_PCT}.", "MemoiGen.setApplyPolicy");
 	
 	this._applyPolicy = policy;
 }
@@ -275,11 +285,12 @@ MemoiGen.prototype._generateFromReport = function() {
 		var reportPathList = siteMap.get(site);		
 		var report = MemoiReport.mergeReportsFromNames(reportPathList);
 		
-
+/*
 		// report-wide apply policy
 		if(!this._applyPolicy(report)) {
 			continue;
 		}
+*/
 		
 		if(site === "global") {
 			this._generateAll(report);
@@ -402,6 +413,14 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 		var $function = chain["function"];
 		var $call = chain["call"];
 		
+		// build the DMT and test the apply policy
+		var dmt = MemoiCodeGen.generateDmt(this._tableSize, report, this._applyPolicy);
+		if(!dmt.testPolicy()){
+			
+			println(this._target._sig + "[" + report.callSites[0] + "]" + " fails the apply policy " + this._applyPolicy + ". Not applying memoization.");
+			return;
+		}
+			
 		if(this._isDebug) {
 			var totalName = wrapperName + '_total_calls';
 			var missesName = wrapperName + '_total_misses';
@@ -418,7 +437,9 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 			this._addMainDebug(totalName, missesName, updatesName, wrapperName);
 		}
 		
-		$call.insert("before", this._makeTableCode($function, report));
+		// take the DMT and generate the code
+		var tableCode = this._makeTableCode($function, dmt);
+		$call.insert("before", tableCode);
 		
 		if(this._isOnline) {
 			$call.insert("after", this._makeUpdateCode($function, updatesName));
@@ -428,20 +449,22 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 	}
 }
 
-MemoiGen.prototype._makeTableCode = function($function, report) {
+MemoiGen.prototype._makeTableCode = function($function, dmt) {
 
 	var paramNames = [];
 	for(var $param of $function.params) {
 		paramNames.push($param.name);
 	}
 
+	var isEmpty = this._isZeroSim ? true : this._isEmpty; // table is always empty if 0% sim is on
+
 	var code = MemoiCodeGen.generateDmtCode(
 		this._tableSize,
 		paramNames,
-		this._isZeroSim ? true : this._isEmpty, // table is always empty if 0% sim is on
+		isEmpty,
 		this._isOnline,
 		this._approxBits,
-		report,
+		dmt,
 		this._target._numInputs, this._target._numOutputs,
 		this._target._inputTypes, this._target._outputTypes
 	);

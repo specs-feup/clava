@@ -57,7 +57,7 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'fields', {
 	}
 });
 
-_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'kind', {
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, '_kind', {
 	get: function () { 	
 		return "class";
 	}
