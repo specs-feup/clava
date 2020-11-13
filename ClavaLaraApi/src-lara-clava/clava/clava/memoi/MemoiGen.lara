@@ -413,12 +413,16 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 		var $function = chain["function"];
 		var $call = chain["call"];
 		
-		// build the DMT and test the apply policy
-		var dmt = MemoiCodeGen.generateDmt(this._tableSize, report, this._applyPolicy);
-		if(!dmt.testPolicy()){
-			
-			println(this._target._sig + "[" + report.callSites[0] + "]" + " fails the apply policy " + this._applyPolicy + ". Not applying memoization.");
-			return;
+		if(report !== undefined) {
+			// build the DMT and test the apply policy
+			var dmt = MemoiCodeGen.generateDmt(this._tableSize, report, this._applyPolicy);
+			if(!dmt.testPolicy()){
+				
+				println(this._target._sig + "[" + report.callSites[0] + "]" + " fails the apply policy " + this._applyPolicy + ". Not applying memoization.");
+				return;
+			}
+		} else {
+			var dmt = undefined;
 		}
 			
 		if(this._isDebug) {
