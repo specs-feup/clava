@@ -98,6 +98,7 @@ public interface CxxWeaverOption {
                     COPY_FILES_IN_SOURCES, FLAT_OUTPUT_FOLDER)
             // GENERATE_MODIFIED_CODE_ONLY, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE, UNIT_TESTING_MODE)
             .addKey(ClangAstKeys.USE_PLATFORM_INCLUDES)
+            .addKey(ClangAstKeys.IGNORE_HEADER_INCLUDES)
             .startSection("Parsing Options")
             .addKey(ParallelCodeParser.PARALLEL_PARSING)
             .addKey(ParallelCodeParser.PARSING_NUM_THREADS)

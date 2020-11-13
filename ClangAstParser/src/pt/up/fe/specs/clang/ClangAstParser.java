@@ -139,7 +139,6 @@ public class ClangAstParser {
     }
 
     public ClangRootNode parse(Collection<String> files, List<String> options) {
-
         ClangRootNode output = parse(files, ClangAstKeys.toDataStore(options));
 
         return output;
@@ -150,7 +149,6 @@ public class ClangAstParser {
     }
 
     public ClangRootNode parse(Collection<String> files, DataStore config, Integer id) {
-
         DataStore localData = JOptionsUtils.loadDataStore(ClangAstParser.LOCAL_OPTIONS_FILE, getClass(),
                 LocalOptionsKeys.getProvider().getStoreDefinition());
 
@@ -254,7 +252,7 @@ public class ClangAstParser {
         // Error output has information about types, separate this information from the warnings
         DataStore stderr = output.getStdErr();
 
-        ClangStreamParser clangStreamParser = new ClangStreamParser(parsedData, SpecsSystem.isDebug());
+        ClangStreamParser clangStreamParser = new ClangStreamParser(parsedData, SpecsSystem.isDebug(), config);
         App newApp = clangStreamParser.parse();
 
         // Set app in context

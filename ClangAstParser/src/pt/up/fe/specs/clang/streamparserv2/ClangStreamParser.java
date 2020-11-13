@@ -22,10 +22,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import com.google.common.base.Preconditions;
 
+import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.cilk.CilkAstAdapter;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
@@ -56,11 +60,11 @@ import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.parsing.snippet.SnippetParser;
 import pt.up.fe.specs.clava.parsing.snippet.TextElements;
 import pt.up.fe.specs.clava.parsing.snippet.TextParser;
-import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -99,9 +103,16 @@ public class ClangStreamParser {
             new CilkAstAdapter());
 
     private final ClangParserData data;
+    private final DataStore config;
 
-    public ClangStreamParser(ClangParserData data, boolean debug) {
+    // Cache
+    private List<Pattern> headerExcludePatterns;
+
+    public ClangStreamParser(ClangParserData data, boolean debug, DataStore config) {
         this.data = data;
+        this.config = config;
+
+        headerExcludePatterns = null;
     }
 
     private ClavaFactory getFactory() {
@@ -467,7 +478,7 @@ public class ClangStreamParser {
         // Create includes map
         MultiMap<String, Include> includesMap = new MultiMap<>();
         includes.stream()
-                .filter(ClangStreamParser::filterInclude)
+                .filter(this::filterInclude)
                 .forEach(include -> includesMap.put(SpecsIo.getCanonicalPath(include.getSourceFile()), include));
 
         // For each enty in MultiMap, create a Translation Unit
@@ -558,21 +569,54 @@ public class ClangStreamParser {
         return tUnit;
     }
 
-    private static final boolean filterInclude(Include include) {
+    private List<Pattern> getHeaderExcludePatterns() {
+        if (headerExcludePatterns != null) {
+            return headerExcludePatterns;
+        }
+
+        // Build patterns
+        var headerExcludes = config.get(ClangAstKeys.IGNORE_HEADER_INCLUDES);
+
+        headerExcludePatterns = headerExcludes.stream()
+                .map(Pattern::compile)
+                .collect(Collectors.toList());
+
+        return headerExcludePatterns;
+    }
+
+    private final boolean filterInclude(Include include) {
+
+        var excludePatterns = getHeaderExcludePatterns();
+
+        if (excludePatterns.isEmpty()) {
+            return true;
+        }
 
         if (include.isAngled()) {
             return true;
         }
 
-        var isValidInclude = SourceType.isHeader(new File(include.getInclude()));
+        var includeText = include.getInclude();
 
-        if (!isValidInclude) {
+        var excludeInclude = excludePatterns.stream()
+                .map(pattern -> SpecsStrings.matches(includeText, pattern))
+                .filter(match -> match)
+                .findFirst()
+                .orElse(false);
+
+        // var isValidInclude = SourceType.isHeader(new File(include.getInclude()));
+
+        // if (!isValidInclude) {
+        if (excludeInclude) {
             ClavaLog.debug(
                     () -> "ClangIncludes: filtering out #include '\"" + include.getInclude() + "\"' in source file "
                             + include.getSourceFile());
+
+            return false;
         }
 
-        return isValidInclude;
+        return true;
+        // return isValidInclude;
         // System.out.println("INCLUDE: " + include.getInclude());
         // System.out.println("IS HEADER? " + isHeader);
         // return isHeader;

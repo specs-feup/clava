@@ -23,6 +23,8 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.util.SpecsCheck;
+import pt.up.fe.specs.util.utilities.StringList;
 
 public interface ClangAstKeys {
 
@@ -36,6 +38,13 @@ public interface ClangAstKeys {
             .setLabel("Disable built-in lib C/C++ includes");
 
     DataKey<Boolean> USES_CILK = KeyFactory.bool("usesCilk");
+
+    DataKey<StringList> IGNORE_HEADER_INCLUDES = KeyFactory.stringList("ignoreHeaderIncludes")
+            .setLabel("Headers to ignore when recreating #include directives (Java regexes)");
+
+    public static String getFlagIgnoreIncludes() {
+        return "ihi";
+    }
 
     /**
      * Transform flags to the ClangAstDumper into a DataStore.
@@ -79,6 +88,18 @@ public interface ClangAstKeys {
             // If Cilk flag, add option
             if (flag.equals(cilkFlag)) {
                 config.set(ClangAstKeys.USES_CILK);
+                continue;
+            }
+
+            if (flag.equals(getFlagIgnoreIncludes())) {
+                // Must have another argument
+                SpecsCheck.checkSize(flags, i + 2);
+
+                String value = flags.get(i + 1);
+                config.set(ClangAstKeys.IGNORE_HEADER_INCLUDES, StringList.getCodec().decode(value));
+
+                // Advance an extra flag
+                i++;
                 continue;
             }
 

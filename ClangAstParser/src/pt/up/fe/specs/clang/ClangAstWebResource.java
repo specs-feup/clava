@@ -40,7 +40,7 @@ public interface ClangAstWebResource {
 
     WebResourceProvider LINUX_EXE = create("linux_ubuntu_18/clang_ast", "v4.2.10");
 
-    WebResourceProvider LINUX_ARMV7_EXE = create("linux_ubuntu_14_armv7/clang_ast", "v4.2.5");
+    WebResourceProvider LINUX_ARMV7_EXE = create("linux_ubuntu_14_armv7/clang_ast", "v4.2.10");
 
     WebResourceProvider CENTOS_EXE = create("centos7/clang_ast", "v4.2.10");
 
