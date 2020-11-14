@@ -34,8 +34,12 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'allSuperClasses', {
 });
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'allMethods', {
-	get: function () { 	
-		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getMethods()));
+	get: function () {
+		var allMethods = CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getMethods()));
+		// filter only methods with definitions
+		
+		return allMethods.filter(method => method.hasBody);
+		//return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getMethods()));
 	}
 });
 
@@ -60,6 +64,17 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'fields', {
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, '_kind', {
 	get: function () { 	
 		return "class";
+	}
+});
+
+// TODO
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'isCustom', {
+	get: function () {
+		for($class of Query.search("class"))
+			if($class.id === this.id)
+				return true;
+		
+		return false;	
 	}
 });
 

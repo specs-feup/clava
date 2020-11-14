@@ -16,6 +16,7 @@ import weaver.jp.ClavaConstructorCallJp;
 import weaver.jp.ClavaLoopJp;
 import weaver.jp.ClavaIfJp;
 import weaver.jp.ClavaBinaryJp;
+import weaver.jp.ClavaFileJp;
 
 // Patches weaver.JoinPoint and other classes
 import weaver.jp.JoinPointsCommonPath;
