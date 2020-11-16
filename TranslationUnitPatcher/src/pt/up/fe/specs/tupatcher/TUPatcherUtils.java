@@ -87,14 +87,17 @@ public class TUPatcherUtils {
     public static int countChar(char ch, String str) {
         int counter = 0;
         for (int i = 0; i < str.length(); i++) {
-            if (str.charAt(i)==ch)
-            counter++;
+            if (str.charAt(i) == ch)
+                counter++;
         }
         return counter;
     }
+
     /**
      * Number of column of source code location
-     * @param location - location in source code in the format  <filepath>:<line-number>:<column-number>
+     * 
+     * @param location
+     *            - location in source code in the format <filepath>:<line-number>:<column-number>
      */
     public static int locationColumn(String location) {
         int index2 = location.lastIndexOf(':');
@@ -103,7 +106,9 @@ public class TUPatcherUtils {
 
     /**
      * Number of the line of source code location
-     * @param location - location in source code in the format  <filepath>:<line-number>:<column-number>
+     * 
+     * @param location
+     *            - location in source code in the format <filepath>:<line-number>:<column-number>
      */
     public static int locationLine(String location) {
         int index2 = location.lastIndexOf(':');
@@ -113,7 +118,9 @@ public class TUPatcherUtils {
 
     /**
      * Filepath in source code location
-     * @param location - location in source code in the format  <filepath>:<line-number>:<column-number>
+     * 
+     * @param location
+     *            - location in source code in the format <filepath>:<line-number>:<column-number>
      */
     public static String locationFilepath(String location) {
         int index2 = location.lastIndexOf(':');
@@ -123,7 +130,9 @@ public class TUPatcherUtils {
 
     /**
      * For a given location in the source code find the index of the character in this location
-     * @param location - location in source code in the format  <filepath>:<line-number>:<column-number>
+     * 
+     * @param location
+     *            - location in source code in the format <filepath>:<line-number>:<column-number>
      */
     public static int locationIndex(String location, String source) {
         int column = locationColumn(location);
@@ -134,7 +143,9 @@ public class TUPatcherUtils {
     /**
      * Read source code while the condition is true
      * <p>
-     * @param forward : true to read forward, false to read backwards.
+     * 
+     * @param forward
+     *            : true to read forward, false to read backwards.
      * @return String with the code read and int indicating position in source where it stopped reading.
      *
      */
@@ -170,7 +181,9 @@ public class TUPatcherUtils {
 
     /**
      * Get the token in a given location of source code.
-     * @param location - location in source code in the format  <filepath>:<line-number>:<column-number>
+     * 
+     * @param location
+     *            - location in source code in the format <filepath>:<line-number>:<column-number>
      */
     public static String getTokenFromLocation(String location) {
         String filepath = locationFilepath(location);
@@ -186,7 +199,9 @@ public class TUPatcherUtils {
     /**
      * Same as the function getTokenFromLocation, but assuming that the location indicates some character after the
      * beginning of the token.
-     * @param location - location in source code in the format  <filepath>:<line-number>:<column-number>
+     * 
+     * @param location
+     *            - location in source code in the format <filepath>:<line-number>:<column-number>
      */
     public static String getTokenBeforeLocation(String location) {
         String filepath = locationFilepath(location);
@@ -201,7 +216,9 @@ public class TUPatcherUtils {
 
     /**
      * Check if there is a function call in the given location.
-     * @param location - location in source code in the format  <filepath>:<line-number>:<column-number>
+     * 
+     * @param location
+     *            - location in source code in the format <filepath>:<line-number>:<column-number>
      */
     public static boolean isFunctionCall(String location) {
         String filepath = locationFilepath(location);
@@ -221,7 +238,9 @@ public class TUPatcherUtils {
 
     /**
      * Get number of arguments in a function call.
-     * @param location - location in source code in the format  <filepath>:<line-number>:<column-number>
+     * 
+     * @param location
+     *            - location in source code in the format <filepath>:<line-number>:<column-number>
      */
     public static int getNumArguments(String location) {
         String filepath = locationFilepath(location);
@@ -239,7 +258,9 @@ public class TUPatcherUtils {
 
     /**
      * Get names of variables used as arguments in a function call.
-     * @param location - location in source code in the format  <filepath>:<line-number>:<column-number>
+     * 
+     * @param location
+     *            - location in source code in the format <filepath>:<line-number>:<column-number>
      */
     public static ArrayList<String> getArguments(String location) {
         String filepath = locationFilepath(location);
@@ -258,7 +279,9 @@ public class TUPatcherUtils {
 
     /**
      * Find the type name in a variable declaration.
-     * @param location - location in source code in the format  <filepath>:<line-number>:<column-number>
+     * 
+     * @param location
+     *            - location in source code in the format <filepath>:<line-number>:<column-number>
      * @return String with type name or empty string if there is no declaration in the location.
      */
     public static String getTypeFromDeclaration(String location) {
@@ -270,7 +293,7 @@ public class TUPatcherUtils {
         }, false);
         si = readWhile(source, si.number, isNotTokenChar, true);
         if (si.str.matches("^[^a-zA-Z]*[&\\*)]+.*")) {
-            //no declaration in this location
+            // no declaration in this location
             return "";
         }
         si = readWhile(source, si.number, isTokenChar, true);
@@ -280,9 +303,11 @@ public class TUPatcherUtils {
     /**
      * Find struct name in a declaration
      * <p>
-     * This function should be used when a variable is declared in the following format (or something similar): struct foo bar =
-     * {0, 1, 2}; This function only works if the initialization uses curly brackets.
-     * @param location - location in source code in the format  <filepath>:<line-number>:<column-number>
+     * This function should be used when a variable is declared in the following format (or something similar): struct
+     * foo bar = {0, 1, 2}; This function only works if the initialization uses curly brackets.
+     * 
+     * @param location
+     *            - location in source code in the format <filepath>:<line-number>:<column-number>
      */
     public static String getTypeFromStructDeclaration(String location) {
         String filepath = locationFilepath(location);
@@ -381,8 +406,8 @@ public class TUPatcherUtils {
     /**
      * Extract "aka" from error messages (if there is any)
      * <p>
-     * Example: "member reference base type 'TYPE_PATCH_1872' (aka 'int') is not a structure or union" -> "int" 
-     * When no "aka" is found for the type, it returns an empty string. The result is always an ArrayList with size=2.
+     * Example: "member reference base type 'TYPE_PATCH_1872' (aka 'int') is not a structure or union" -> "int" When no
+     * "aka" is found for the type, it returns an empty string. The result is always an ArrayList with size=2.
      */
     public static ArrayList<String> getAkaFromMessage(String message) {
         ArrayList<String> result = new ArrayList<>();
@@ -415,7 +440,7 @@ public class TUPatcherUtils {
     }
 
     /**
-     * Remove brackets and substitute with * 
+     * Remove brackets and substitute with *
      * <p>
      * Example: char[3] -> char*
      */
@@ -429,11 +454,13 @@ public class TUPatcherUtils {
     }
 
     /**
-     * Takes as argument a type with qualifiers and returns the type name without the qualifiers. 
+     * Takes as argument a type with qualifiers and returns the type name without the qualifiers.
      * <p>
      * Example: const foo * -> foo
-     * @param qualtype - type name with qualifiers
-     * @return type name without qualifiers 
+     * 
+     * @param qualtype
+     *            - type name with qualifiers
+     * @return type name without qualifiers
      */
     public static String getTypeName(String qualtype) {
         return removeBracketsFromType(qualtype).replace("struct ", "").replace("class ", "").replace("*", "")
@@ -445,20 +472,22 @@ public class TUPatcherUtils {
      * Takes as argument a fragment of source code and detects which operator is found in the first characters.
      */
     public static String extractOperator(String source) {
-        if (operators.contains(source.substring(0, 3))) {
+        if (source.length() >= 3 && operators.contains(source.substring(0, 3))) {
             return source.substring(0, 3);
-        } else if (operators.contains(source.substring(0, 2))) {
+        } else if (source.length() >= 2 && operators.contains(source.substring(0, 2))) {
             return source.substring(0, 2);
-        } else if (operators.contains(source.substring(0, 1))) {
+        } else if (source.length() >= 1 && operators.contains(source.substring(0, 1))) {
             return source.substring(0, 1);
         } else {
-            throw new RuntimeException("Could not identify operator");
+            throw new RuntimeException("Could not identify operator: " + source);
         }
     }
 
     /**
      * Identify if an arrow or dot is used after the identifier in the location.
-     * @param location - location in source code in the format  <filepath>:<line-number>:<column-number>
+     * 
+     * @param location
+     *            - location in source code in the format <filepath>:<line-number>:<column-number>
      */
     public static boolean hasArrowOrDot(String location) {
         String filepath = locationFilepath(location);
@@ -480,11 +509,12 @@ public class TUPatcherUtils {
     }
 
     /**
-     * Identify if the token in a given location in source code has an operator after it. 
+     * Identify if the token in a given location in source code has an operator after it.
      * <p>
-     * This function is useful to check if the identifier is the name of a variable. 
-     * Example: foo += bar;
-     * @param location - location in source code in the format  <filepath>:<line-number>:<column-number>
+     * This function is useful to check if the identifier is the name of a variable. Example: foo += bar;
+     * 
+     * @param location
+     *            - location in source code in the format <filepath>:<line-number>:<column-number>
      */
     public static boolean usingOperator(String location) {
         String filepath = locationFilepath(location);
@@ -511,10 +541,13 @@ public class TUPatcherUtils {
     }
 
     /**
-     * Identify if the token in a given location in source code is used to cast a variable. 
+     * Identify if the token in a given location in source code is used to cast a variable.
      * <p>
-     * This function is useful to check if the identifier is the name of a type (not a variable or function). Example: x = (Foo *)y;
-     * @param location - location in source code in the format  <filepath>:<line-number>:<column-number>
+     * This function is useful to check if the identifier is the name of a type (not a variable or function). Example: x
+     * = (Foo *)y;
+     * 
+     * @param location
+     *            - location in source code in the format <filepath>:<line-number>:<column-number>
      */
     public static boolean isCast(String location) {
         String filepath = locationFilepath(location);
@@ -534,22 +567,19 @@ public class TUPatcherUtils {
             return c != ')';
         }, true);
         if (result.str.matches("^.*[&\\*]+[^a-zA-Z0-9]*")) {
-            //if there is char '*' or '&' before the char ')'
+            // if there is char '*' or '&' before the char ')'
             return true;
-        }
-        else if (result.str.matches("^.*[a-zA-Z0-9]+[^a-zA-Z0-9]+[a-zA-Z0-9]+.*")) {
-            //operation with a variable
+        } else if (result.str.matches("^.*[a-zA-Z0-9]+[^a-zA-Z0-9]+[a-zA-Z0-9]+.*")) {
+            // operation with a variable
             return false;
-        }
-        else {
-            result = readWhile(source, result.number + 1, (char c)->{
+        } else {
+            result = readWhile(source, result.number + 1, (char c) -> {
                 return c == ' ';
             }, true);
             result = readWhile(source, result.number, isNotTokenChar, true);
-            if (result.str.replace(")","").equals("")) {
+            if (result.str.replace(")", "").equals("")) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -558,6 +588,7 @@ public class TUPatcherUtils {
 
     /**
      * Check if the identifier in the given location is a variable.
+     * 
      * @param location
      * @return true if it is possible to assure that the identifier is a variable, false otherwise.
      */
@@ -579,6 +610,7 @@ public class TUPatcherUtils {
 
     /**
      * Remove all line and block comments in source code.
+     * 
      * @param source
      * @return
      */
