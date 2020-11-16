@@ -19,7 +19,6 @@ import pt.up.fe.specs.util.utilities.LineStream;
 
 public class ErrorWorker implements LineStreamWorker<TUErrorsData> {
 
-
     @Override
     public String getId() {
         return "<Clang Error>";
@@ -28,28 +27,39 @@ public class ErrorWorker implements LineStreamWorker<TUErrorsData> {
     @Override
     public void init(TUErrorsData data) {
         // Do nothing
-        
+
     }
 
     @Override
     public void apply(LineStream lineStream, TUErrorsData data) {
         var errors = data.get(TUErrorsData.ERRORS);
         errors.add(new TUErrorData());
-        TUErrorData error = errors.get(errors.size()-1);
+        TUErrorData error = errors.get(errors.size() - 1);
         // Expects next line to be an integer, parse it and store
         var decodedInteger = Integer.decode(lineStream.nextLine());
 
         error.set(TUErrorData.ERROR_NUMBER, decodedInteger);
-        String argKind="", argValue="";
+        String argKind = "", argValue = "";
         argKind = lineStream.nextLine();
         argValue = lineStream.nextLine();
+
+        // System.out.println("ARG KIND 1: " + argKind);
+        // System.out.println("ARG VALUE 1: " + argValue);
+
         while (!(argKind.equals("<Clang Error End>"))) {
             error.get(TUErrorData.MAP).put(argKind, argValue);
             argKind = lineStream.nextLine();
             argValue = lineStream.nextLine();
+
+            // System.out.println("ARG KIND: " + argKind);
+            // System.out.println("ARG VALUE: " + argValue);
+
             if (argValue == null || argValue.equals("<Clang Error End>")) {
-                System.out.println("Warning: There is something wrong with the messages in llvm::errs()");
-                break;
+                throw new RuntimeException(
+                        "There is something wrong with the messages in llvm::errs(). Arg value: " + argValue);
+                // System.out.println(
+                // "Warning: There is something wrong with the messages in llvm::errs(). Arg value: " + argValue);
+                // break;
             }
         }
     }
