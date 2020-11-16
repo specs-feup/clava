@@ -14,6 +14,12 @@ void DiagnosticConsumer::printRange(clang::Diagnostic Info, clang::CharSourceRan
         return;
     }
 
+    /*
+    if(range.getBegin().isInvalid() || range.getEnd().isInvalid()) {
+        return;
+    }
+    */
+
     // Get first line of source code
     auto sourceCode = clang::Lexer::getSourceText(range, SM, CI.getLangOpts());
     auto sourceLine = sourceCode.substr(0, sourceCode.find("\n"));

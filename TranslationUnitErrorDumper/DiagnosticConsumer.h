@@ -27,7 +27,10 @@ private:
     clang::CompilerInstance& CI;
 
 public:
-    DiagnosticConsumer(clang::CompilerInstance &CI_) : CI(CI_) {}
+    DiagnosticConsumer(clang::CompilerInstance &CI_) : CI(CI_) {
+
+    }
+
     void printRange(clang::Diagnostic Info, clang::CharSourceRange range, clang::SourceManager & SM);
     void HandleDiagnostic(clang::DiagnosticsEngine::Level DiagLevel,
                           const clang::Diagnostic& Info) override;

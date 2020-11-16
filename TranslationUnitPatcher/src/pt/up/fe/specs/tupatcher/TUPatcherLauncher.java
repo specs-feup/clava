@@ -20,15 +20,18 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.app.App;
+import org.suikasoft.jOptions.persistence.PropertiesPersistence;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
 import pt.up.fe.specs.tupatcher.parser.TUErrorParser;
 import pt.up.fe.specs.tupatcher.parser.TUErrorsData;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
-import pt.up.fe.specs.util.properties.SpecsProperties;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class TUPatcherLauncher {
@@ -41,28 +44,39 @@ public class TUPatcherLauncher {
     // "../TranslationUnitErrorDumper/cmake-build-debug/TranslationUnitErrorDumper";
     private static final String DUMPER_EXE = "../../TranslationUnitErrorDumper/build/TranslationUnitErrorDumper.exe";
 
-    private final SpecsProperties properties;
+    // private final SpecsProperties properties;
+    private final DataStore dataStore;
 
-    public TUPatcherLauncher(SpecsProperties properties) {
-        this.properties = properties;
+    // public TUPatcherLauncher(SpecsProperties properties) {
+    public TUPatcherLauncher(DataStore dataStore) {
+        this.dataStore = dataStore;
+
+        // this.properties = properties;
     }
 
     public static void main(String[] args) {
 
         SpecsSystem.programStandardInit();
 
-        File propertiesFile = new File("patcher.properties");
-        SpecsProperties properties = propertiesFile.isFile() ? SpecsProperties.newInstance(propertiesFile)
-                : parseArguments(args);
+        var storeDefinition = new TUPatcherConfig().getStoreDefinition().get();
+        var app = App.newInstance("Translation Unit Patcher", storeDefinition,
+                new PropertiesPersistence(storeDefinition),
+                dataStore -> new TUPatcherLauncher(dataStore).execute());
 
-        var tuPatcher = new TUPatcherLauncher(properties);
-        tuPatcher.execute();
+        JOptionsUtils.executeApp(app, Arrays.asList(args));
+
+        // File propertiesFile = new File("patcher.properties");
+        // SpecsProperties properties = propertiesFile.isFile() ? SpecsProperties.newInstance(propertiesFile)
+        // : parseArguments(args);
+        //
+        // var tuPatcher = new TUPatcherLauncher(properties);
+        // tuPatcher.execute();
 
     }
 
-    public void execute() {
-        var sourcePaths = properties.get(SOURCE_PATHS).split(";");
-        System.out.println("SOURCE PATHS: " + Arrays.toString(sourcePaths));
+    public int execute() {
+        var sourcePaths = dataStore.get(TUPatcherConfig.SOURCE_PATHS).getStringList();
+        // System.out.println("SOURCE PATHS: " + sourcePaths);
         ArrayList<PatchData> data = new ArrayList<>();
         // Get list of all the files in form of String Array
         for (String arg : sourcePaths) {
@@ -78,12 +92,14 @@ public class TUPatcherLauncher {
             if (d.getErrors().size() > 0)
             System.out.println(d.getErrors().get(d.getErrors().size()-1));            
         }*/
+
+        return 0;
     }
 
-    private static SpecsProperties parseArguments(String[] args) {
-        // Doing nothing, for now
-        return SpecsProperties.newEmpty();
-    }
+    // private static SpecsProperties parseArguments(String[] args) {
+    // // Doing nothing, for now
+    // return SpecsProperties.newEmpty();
+    // }
 
     /**
      * Create patches for all .c and .cpp files in a directory
@@ -97,7 +113,7 @@ public class TUPatcherLauncher {
         // String path = SpecsIo.getCanonicalPath(dir);
         // String[] fileNames = dir.list();
         int numErrors = 0, numSuccess = 0;
-        int maxNumFiles = properties.getInt(MAX_FILES), n = 0;
+        int maxNumFiles = dataStore.get(TUPatcherConfig.MAX_FILES), n = 0;
         // List<String> fileNamesList = Arrays.asList(fileNames);
         // Collections.shuffle(fileNamesList);
         ArrayList<String> errorMessages = new ArrayList<>();
@@ -217,7 +233,7 @@ public class TUPatcherLauncher {
      * @return PatchData
      */
     public PatchData patchOneFile(String filepath) {
-        System.out.println("PATCHING " + filepath);
+        // System.out.println("PATCHING " + filepath);
         var patchData = new PatchData();
 
         List<String> command = new ArrayList<>();
@@ -229,10 +245,10 @@ public class TUPatcherLauncher {
         // Always compile as C++
         command.add("-x");
         command.add("c++");
-        System.out.println("RUNNING... " + command);
+        // System.out.println("RUNNING... " + command);
         var output = SpecsSystem.runProcess(command, TUPatcherLauncher::outputProcessor,
                 inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
-        System.out.println("FINISHED");
+        // System.out.println("FINISHED");
         patchData.write(filepath);
 
         List<String> command2 = new ArrayList<>();
