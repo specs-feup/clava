@@ -34,7 +34,6 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
  * <p>
  * Structure of children:<br>
  * - Parameters (ParmVarDecl)<br>
- * - Initializers (CXXCtorInitializer)<br>
  * - Definition (Stmt)
  * 
  * @author JoaoBispo
