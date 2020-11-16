@@ -20,6 +20,7 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
  *
  */
 public enum LaraWeaverApiResource implements LaraResourceProvider {
+	CLAVA_ELSE_JP("jp/ClavaElseJp.lara"),
 	CLAVA_FILE_JP("jp/ClavaFileJp.lara"),
 	CLAVA_LOOP_JP("jp/ClavaLoopJp.lara"),
 	CLAVA_IF_JP("jp/ClavaIfJp.lara"),

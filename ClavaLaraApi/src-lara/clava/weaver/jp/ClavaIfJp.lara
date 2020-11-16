@@ -7,3 +7,29 @@ _lara_dummy_ = Object.defineProperty(IfJp.prototype, 'condition', {
 	}
 });
 
+_lara_dummy_ = Object.defineProperty(IfJp.prototype, 'then', {
+	get: function () {
+		return CommonJoinPoints.toJoinPoint(this.astNode.getThen().get());
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(IfJp.prototype, 'else', {
+	get: function () {
+		if(this.hasElse)
+			return CommonJoinPoints.toJoinPoint(this.astNode.getElse().get());
+		return null;
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(IfJp.prototype, 'hasElse', {
+	get: function () {
+		return this.astNode.getElse().isPresent();
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(IfJp.prototype, 'isElseIf', {
+	get: function () { 
+		return this.parent.instanceOf("else") && this.parent.isElseIf; 
+	}
+});
+
