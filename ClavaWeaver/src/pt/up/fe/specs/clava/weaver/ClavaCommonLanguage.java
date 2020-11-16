@@ -47,6 +47,7 @@ import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.classmap.FunctionClassMap;
 
+
 public class ClavaCommonLanguage {
 
 	private static final FunctionClassMap<ClavaNode, String> JOINPOINT_MAPPER;
@@ -68,7 +69,7 @@ public class ClavaCommonLanguage {
 		JOINPOINT_MAPPER.put(CaseStmt.class, node -> "CaseJp");
 		JOINPOINT_MAPPER.put(SwitchStmt.class, node -> "SwitchJp");
 		JOINPOINT_MAPPER.put(IfStmt.class, node -> "IfJp");
-		JOINPOINT_MAPPER.put(Stmt.class, node -> "StmtJp");
+		JOINPOINT_MAPPER.put(Stmt.class, ClavaCommonLanguage::stmt);
 		JOINPOINT_MAPPER.put(CXXConstructExpr.class, node -> "ConstructorCallJp");
 		JOINPOINT_MAPPER.put(CXXConstructorDecl.class, node -> "ConstructorJp");
 		JOINPOINT_MAPPER.put(DeclRefExpr.class, node -> "VarRefJp");
@@ -119,6 +120,23 @@ public class ClavaCommonLanguage {
 		 */
 
 		return "JoinPoint";
+
+	}
+	
+	private static String stmt(Stmt node) {
+
+		if (node.getParent() instanceof IfStmt) {
+			IfStmt ifStmt = (IfStmt) node.getParent();
+			
+			if(ifStmt.getThen().isPresent() && ifStmt.getThen().get() == node)
+				return "ThenJp";
+			
+			if(ifStmt.getElse().isPresent() && ifStmt.getElse().get() == node)
+				return "ElseJp";
+			
+			
+		}
+			return "StmtJp";
 
 	}
 }
