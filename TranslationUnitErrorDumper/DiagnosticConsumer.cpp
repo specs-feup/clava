@@ -3,8 +3,51 @@
 //
 
 #include "DiagnosticConsumer.h"
+#include "clang/Lex/Lexer.h"
+
+#include <iostream>
 
 void DiagnosticConsumer::printRange(clang::Diagnostic Info, clang::CharSourceRange range, clang::SourceManager & SM) {
+
+    // No available source code
+    if(range.isInvalid()) {
+        return;
+    }
+
+    // Get first line of source code
+    auto sourceCode = clang::Lexer::getSourceText(range, SM, CI.getLangOpts());
+    auto sourceLine = sourceCode.substr(0, sourceCode.find("\n"));
+
+    llvm::errs() << "source\n";
+    llvm::errs() << sourceLine << "\n";
+
+    /*
+    auto begin2 = range.getBegin();
+    if(begin2.isFileID()) {
+        auto presumedBegin = SM.getPresumedLoc(begin2);
+        std::cout << "Begin Line: " << presumedBegin.getLine() << "\n";
+        std::cout << "End Line: " << SM.getPresumedLoc(range.getEnd()).getLine() << "\n";
+        std::cout << "Column: " << presumedBegin.getColumn() << "\n";
+        std::cout << "Char: " << SM.getCharacterData(begin2) << "\n";
+
+
+        std::cout << "Range: " << clang::Lexer::getSourceText(range, SM, CI.getLangOpts()).data() << "\nEnd\n";
+        //range.getAsRange()
+        //std::cout <<  SM->getBuffer(begin2.getRawEncoding(), begin2);
+    }
+
+
+
+    auto beginLoc = range.getBegin();
+    auto endLoc = range.getEnd();
+    auto loc = Info.getLocation();
+
+    unsigned int lineNumber = 0;
+
+    if(beginLoc.isInvalid() && loc.isInvalid()) {
+        return;
+    }
+
     std::string begin = range.getBegin().printToString(SM);
     std::string location = Info.getLocation().printToString(SM);
     std::string end = range.getEnd().printToString(SM);
@@ -27,8 +70,11 @@ void DiagnosticConsumer::printRange(clang::Diagnostic Info, clang::CharSourceRan
 
     }
     else {
+        //llvm::outs() << "begin.substr(index2): " << begin.substr(index2);
+        //llvm::outs() << "location.substr(index2): " << location.substr(index2);
         pos_begin = fmin(std::stoi(begin.substr(index2)), std::stoi(location.substr(index2)));
     }
+    std::cout << "line number: " << line_number_str << "\n";
     int line_number = stoi(line_number_str);
     std::ifstream file;
     file.open(filepath);
@@ -49,6 +95,7 @@ void DiagnosticConsumer::printRange(clang::Diagnostic Info, clang::CharSourceRan
     llvm::errs() << snippet << "\n";
 
     return;
+     */
 }
 
 

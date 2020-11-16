@@ -10,7 +10,7 @@ void DiagnosticAction::ExecuteAction() {
     clang::CompilerInstance &CI = getCompilerInstance();
     clang::DiagnosticsEngine &DE = CI.getDiagnostics();
     DE.setIgnoreAllWarnings(true);
-    DE.setClient(new DiagnosticConsumer(), /*ShouldOwnClient=*/true);
+    DE.setClient(new DiagnosticConsumer(CI), /*ShouldOwnClient=*/true);
     SyntaxOnlyAction::ExecuteAction();
 
     //DE.setSeverity(4833, clang::diag::Severity::Ignored, clang::SourceLocation());

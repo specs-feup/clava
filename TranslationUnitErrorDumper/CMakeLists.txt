@@ -17,6 +17,7 @@ include("../deps.cmake")
 deps_find_package(llvm7 REQUIRED) # LLVM
 
 set(COMMON_CXX_FLAGS "-std=c++11 -O3 -Wall -Wno-unused-function")
+#set(COMMON_CXX_FLAGS "-std=c++11 -g -O1 -Wall -Wno-unused-function")
 #-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS
 
 #add_definitions(-DOLD_OUTPUT)
