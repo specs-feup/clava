@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.suikasoft.jOptions.JOptionsUtils;
@@ -84,7 +83,7 @@ public class TUPatcherLauncher {
             if (file.isDirectory()) {
                 data = patchDirectory(file);
             } else {
-                data.add(patchOneFile(arg));
+                data.add(patchOneFile(file));
             }
         }
         /*
@@ -140,7 +139,7 @@ public class TUPatcherLauncher {
             }
             // String a = path + "/" + arg;
             try {
-                patchesData.add(patchOneFile(SpecsIo.getCanonicalPath(sourceFile)));
+                patchesData.add(patchOneFile(sourceFile));
             } catch (Exception e) {
                 numErrors++;
                 errorMessages.add(e.toString() + "\n\n" + e.getLocalizedMessage() + "\n" + e.getMessage());
@@ -162,83 +161,21 @@ public class TUPatcherLauncher {
 
     }
 
-    public ArrayList<PatchData> patchDirectoryV1(File dir) {
-
-        String path = SpecsIo.getCanonicalPath(dir);
-        String[] fileNames = dir.list();
-        int numErrors = 0, numSuccess = 0;
-        int maxNumFiles = 600, n = 0;
-        List<String> fileNamesList = Arrays.asList(fileNames);
-        Collections.shuffle(fileNamesList);
-        ArrayList<String> errorMessages = new ArrayList<>();
-        ArrayList<PatchData> patchesData = new ArrayList<>();
-
-        for (String arg : fileNamesList) {
-
-            n++;
-            if (n > maxNumFiles)
-                break;
-            String[] splitted = arg.split("\\.");
-
-            // if (splitted.length > 1) {
-            if (splitted[1].equals("c")) {
-                // if (sourceExtension.equals("c")) {
-                File cFile = new File(path + "/" + arg);
-                File cppFile = new File(path + "/" + arg + "pp");
-                cFile.renameTo(cppFile);
-            }
-            if (splitted[1].equals("cpp")) {
-                // if (sourceExtension.equals("cpp")) {
-                System.out.println();
-                System.out.println("filename: " + arg);
-                String fileContent = SpecsIo.read(SpecsIo.existingFile(path + "/" + arg));
-                if (!(fileContent.substring(0, 4).equals("void")
-                        || fileContent.substring(0, 13).equals("TYPE_PATCH_00"))) {
-                    // assure the function declaration has a return type
-                    File cppFile = new File(path + "/" + arg);
-                    if (fileContent.contains("return;") || !fileContent.contains("return")) {
-                        SpecsIo.write(cppFile, "void " + fileContent);
-                    } else if (fileContent.contains("return")) {
-                        SpecsIo.write(cppFile, "TYPE_PATCH_00 " + fileContent);
-                    }
-                }
-                String a = path + "/" + arg;
-                try {
-                    patchesData.add(patchOneFile(a));
-                } catch (Exception e) {
-                    numErrors++;
-                    errorMessages.add(e.toString() + "\n\n" + e.getLocalizedMessage() + "\n" + e.getMessage());
-                    continue;
-                }
-                numSuccess++;
-            }
-            // }
-        }
-
-        System.out.println("Number of cpp files: " + (numSuccess + numErrors));
-        System.out.println("Number of errors: " + numErrors);
-        System.out.println("Number of successful patches: " + numSuccess);
-        /*for (String message : errorMessages) {
-            System.out.println(message);
-        }*/
-
-        return patchesData;
-
-    }
-
     /**
      * Create patch for a single .cpp file
      * 
      * @param filepath
      * @return PatchData
      */
-    public PatchData patchOneFile(String filepath) {
+    public PatchData patchOneFile(File filepath) {
+        //
+
         // System.out.println("PATCHING " + filepath);
         var patchData = new PatchData();
 
         List<String> command = new ArrayList<>();
         command.add(DUMPER_EXE);
-        command.add(filepath);
+        command.add(filepath.getAbsolutePath());
         command.add("--");
         command.add("-ferror-limit=1");
 
