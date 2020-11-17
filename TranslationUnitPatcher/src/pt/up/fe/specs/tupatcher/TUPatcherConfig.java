@@ -18,6 +18,8 @@ import java.io.File;
 import org.suikasoft.jOptions.DataStore.ADataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
+import org.suikasoft.jOptions.Interfaces.DataStore;
+import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 
 import pt.up.fe.specs.util.utilities.StringList;
 
@@ -27,4 +29,17 @@ public class TUPatcherConfig extends ADataClass<TUPatcherConfig> {
     public static final DataKey<File> OUTPUT_FOLDER = KeyFactory.file("outputFolder");
     public static final DataKey<Integer> MAX_FILES = KeyFactory.integer("maxFiles", 600);
     public static final DataKey<Integer> MAX_ITERATIONS = KeyFactory.integer("maxIterations", 100);
+
+    public TUPatcherConfig() {
+
+    }
+
+    public TUPatcherConfig(DataStore dataStore) {
+        super(dataStore);
+    }
+
+    public static StoreDefinition getDefinition() {
+        return new TUPatcherConfig().getStoreDefinition().get();
+    }
+
 }

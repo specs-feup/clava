@@ -22,7 +22,6 @@ import java.util.List;
 import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
-import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.app.App;
 import org.suikasoft.jOptions.persistence.PropertiesPersistence;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
@@ -44,11 +43,11 @@ public class TUPatcherLauncher {
     private static final String DUMPER_EXE = "../../TranslationUnitErrorDumper/build/TranslationUnitErrorDumper.exe";
 
     // private final SpecsProperties properties;
-    private final DataStore dataStore;
+    private final TUPatcherConfig config;
 
     // public TUPatcherLauncher(SpecsProperties properties) {
-    public TUPatcherLauncher(DataStore dataStore) {
-        this.dataStore = dataStore;
+    public TUPatcherLauncher(TUPatcherConfig config) {
+        this.config = config;
 
         // this.properties = properties;
     }
@@ -57,10 +56,10 @@ public class TUPatcherLauncher {
 
         SpecsSystem.programStandardInit();
 
-        var storeDefinition = new TUPatcherConfig().getStoreDefinition().get();
+        var storeDefinition = TUPatcherConfig.getDefinition();
         var app = App.newInstance("Translation Unit Patcher", storeDefinition,
                 new PropertiesPersistence(storeDefinition),
-                dataStore -> new TUPatcherLauncher(dataStore).execute());
+                dataStore -> new TUPatcherLauncher(new TUPatcherConfig(dataStore)).execute());
 
         JOptionsUtils.executeApp(app, Arrays.asList(args));
 
@@ -74,7 +73,7 @@ public class TUPatcherLauncher {
     }
 
     public int execute() {
-        var sourcePaths = dataStore.get(TUPatcherConfig.SOURCE_PATHS).getStringList();
+        var sourcePaths = config.get(TUPatcherConfig.SOURCE_PATHS).getStringList();
         // System.out.println("SOURCE PATHS: " + sourcePaths);
         ArrayList<PatchData> data = new ArrayList<>();
         // Get list of all the files in form of String Array
@@ -83,7 +82,7 @@ public class TUPatcherLauncher {
             if (file.isDirectory()) {
                 data = patchDirectory(file);
             } else {
-                data.add(patchOneFile(file));
+                data.add(patchOneFile(file, null));
             }
         }
         /*
@@ -112,7 +111,7 @@ public class TUPatcherLauncher {
         // String path = SpecsIo.getCanonicalPath(dir);
         // String[] fileNames = dir.list();
         int numErrors = 0, numSuccess = 0;
-        int maxNumFiles = dataStore.get(TUPatcherConfig.MAX_FILES), n = 0;
+        int maxNumFiles = config.get(TUPatcherConfig.MAX_FILES), n = 0;
         // List<String> fileNamesList = Arrays.asList(fileNames);
         // Collections.shuffle(fileNamesList);
         ArrayList<String> errorMessages = new ArrayList<>();
@@ -139,7 +138,7 @@ public class TUPatcherLauncher {
             }
             // String a = path + "/" + arg;
             try {
-                patchesData.add(patchOneFile(sourceFile));
+                patchesData.add(patchOneFile(sourceFile, dir));
             } catch (Exception e) {
                 numErrors++;
                 errorMessages.add(e.toString() + "\n\n" + e.getLocalizedMessage() + "\n" + e.getMessage());
@@ -167,8 +166,10 @@ public class TUPatcherLauncher {
      * @param filepath
      * @return PatchData
      */
-    public PatchData patchOneFile(File filepath) {
-        //
+    public PatchData patchOneFile(File filepath, File baseFolder) {
+
+        // Get base output folder of file
+        SpecsIo.getRelativePath(filepath, baseFolder);
 
         // System.out.println("PATCHING " + filepath);
         var patchData = new PatchData();
@@ -234,7 +235,8 @@ public class TUPatcherLauncher {
     public static Boolean outputProcessor(InputStream stream) {
         try (var lines = LineStream.newInstance(stream, "Input Stream");) {
             while (lines.hasNextLine()) {
-                var line = lines.nextLine();
+                lines.nextLine();
+                // var line = lines.nextLine();
                 // System.out.println("StdOut: " + line);
             }
         }
