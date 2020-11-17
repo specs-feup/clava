@@ -259,7 +259,10 @@
 		<parameter name="expr" type="expression" />
 	</action>
 	
-
+	<action name="addArg" class="call">
+		<parameter name="arg" type="String" />
+		<parameter name="type" type="joinpoint" />
+	</action>
 
 	<!-- SCOPE -->
 
@@ -366,6 +369,10 @@
 		<parameter name="index" type="Integer" />
 		<parameter name="newType" type="type" />
 	</action>	
+
+	<action name="addParam" class="function" tooltip="Adds a new parameter to the function">
+		<parameter name="param" type="String" />
+	</action>
 
 	<!-- METHOD -->
 	<!-- 

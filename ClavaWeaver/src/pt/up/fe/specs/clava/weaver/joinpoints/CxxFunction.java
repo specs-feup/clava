@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -619,5 +620,14 @@ public class CxxFunction extends AFunction {
     @Override
     public void setParamTypeImpl(Integer index, AType newType) {
         function.setParamType(index, (Type) newType.getNode());
+    }
+
+    @Override
+    public void addParamImpl(String param) {
+
+        var l = new ArrayList<>(Arrays.asList(getParamNamesArrayImpl()));
+        l.add(param);
+
+        defParamsImpl(l.toArray(new String[0]));
     }
 }

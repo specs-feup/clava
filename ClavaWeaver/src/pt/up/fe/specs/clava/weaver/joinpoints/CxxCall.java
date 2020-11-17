@@ -241,6 +241,26 @@ public class CxxCall extends ACall {
     }
 
     @Override
+    public void addArgImpl(String arg, AJoinPoint type) {
+
+        // Check if joinpoint is a CxxType
+        if (!(type instanceof AType)) {
+            SpecsLogs.msgInfo("addArgImpl: the provided join point (" + type.getJoinPointType() + ") is not a type");
+            return;
+        }
+
+        Type typeNode = (Type) type.getNode();
+
+        System.out.println("type code: " + typeNode.getCode());
+
+        Expr literalExpr = CxxWeaver.getFactory().literalExpr(arg, typeNode);
+
+        System.out.println("expr: " + literalExpr.getCode());
+
+        call.addChild(literalExpr);
+    }
+
+    @Override
     public void setArgImpl(Integer index, AExpression expr) {
         // Check num args
         // int numArgs = getArgListArrayImpl().length;
