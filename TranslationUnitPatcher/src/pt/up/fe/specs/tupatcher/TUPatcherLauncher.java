@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.suikasoft.jOptions.JOptionsUtils;
@@ -31,6 +32,7 @@ import pt.up.fe.specs.tupatcher.parser.TUErrorParser;
 import pt.up.fe.specs.tupatcher.parser.TUErrorsData;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.csv.CsvWriter;
 import pt.up.fe.specs.util.lazy.Lazy;
@@ -38,6 +40,7 @@ import pt.up.fe.specs.util.providers.FileResourceProvider;
 import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
 import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.LineStream;
+import pt.up.fe.specs.util.utilities.ProgressCounter;
 
 public class TUPatcherLauncher {
 
@@ -159,7 +162,12 @@ public class TUPatcherLauncher {
      * @return ArrayList with a PatchData for each file
      */
     public ArrayList<PatchData> patchDirectory(File dir) {
+        SpecsLogs.info("Processing folder '" + dir + "'...");
         var sourceFiles = SpecsIo.getFilesRecursive(dir, Arrays.asList("c", "cpp"));
+        SpecsLogs.info("Found '" + sourceFiles.size() + " files to process");
+
+        // Sort, to maintain consistent order between executions
+        Collections.sort(sourceFiles);
 
         // String path = SpecsIo.getCanonicalPath(dir);
         // String[] fileNames = dir.list();
@@ -170,14 +178,17 @@ public class TUPatcherLauncher {
         ArrayList<String> errorMessages = new ArrayList<>();
         ArrayList<PatchData> patchesData = new ArrayList<>();
 
+        var counter = new ProgressCounter(sourceFiles.size());
         for (var sourceFile : sourceFiles) {
+
             n++;
             if (maxNumFiles > 0 && n > maxNumFiles)
                 break;
 
             // var sourceExtension = SpecsIo.getExtension(sourceFile);
-            // Does some pre-processing on the files... this should be moved to patchOneFile
-            System.out.println("filename: " + sourceFile);
+            // TODO: Does some pre-processing on the files... this should be moved to patchOneFile
+            SpecsLogs.info("Processing file '" + sourceFile + "' " + counter.next());
+
             String fileContent = SpecsIo.read(sourceFile);
             if (!(fileContent.substring(0, 4).equals("void")
                     || fileContent.substring(0, 13).equals("TYPE_PATCH_00"))) {
@@ -273,32 +284,42 @@ public class TUPatcherLauncher {
         ProcessOutput<Boolean, TUErrorsData> output = null;
         var startTime = System.nanoTime();
         while (n < maxIterations) {
-            output = SpecsSystem.runProcess(command,
-                    TUPatcherLauncher::outputProcessor,
-                    inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
-            patchData.write(filepath, patchedFile);
-            n++;
-            // if (n >= maxIterations) {
-            // System.out.println();
-            // /*for (ErrorKind error : patchData.getErrors()) {
-            // System.out.println(error);
-            // }*/
-            // System.out.println("Program status: " + output.getReturnValue());
-            // System.out.println("Std out result: " + output.getStdOut());
-            // System.out.println("Std err result: " + output.getStdErr());
-            // throw new RuntimeException("Maximum number of iterations exceeded. Could not solve errors");
-            // }
-            // System.out.print('.');
 
-            // No more errors, break
-            if (output.getStdErr().get(TUErrorsData.ERRORS).isEmpty()) {
-                break;
+            try {
+                output = SpecsSystem.runProcess(command,
+                        TUPatcherLauncher::outputProcessor,
+                        inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
+                patchData.write(filepath, patchedFile);
+                n++;
+                // if (n >= maxIterations) {
+                // System.out.println();
+                // /*for (ErrorKind error : patchData.getErrors()) {
+                // System.out.println(error);
+                // }*/
+                // System.out.println("Program status: " + output.getReturnValue());
+                // System.out.println("Std out result: " + output.getStdOut());
+                // System.out.println("Std err result: " + output.getStdErr());
+                // throw new RuntimeException("Maximum number of iterations exceeded. Could not solve errors");
+                // }
+                // System.out.print('.');
+
+                // No more errors, break
+                if (output.getStdErr().get(TUErrorsData.ERRORS).isEmpty()) {
+                    break;
+                }
+            } catch (Exception e) {
+                var endTime = System.nanoTime();
+                addStats(filepath, false, n, endTime - startTime);
+                throw new RuntimeException("Could not patch file", e);
             }
+
         }
         var endTime = System.nanoTime();
 
+        var success = n < maxIterations;
+
         // Add stats
-        addStats(filepath, n < maxIterations, n, endTime - startTime);
+        addStats(filepath, success, n, endTime - startTime);
 
         // Write file
         SpecsIo.write(new File("tu_patcher_stats.csv"), stats.buildCsv());
@@ -310,6 +331,7 @@ public class TUPatcherLauncher {
         if (output == null) {
             System.out.println("Did not run patcher even once!");
         } else {
+            SpecsLogs.info("");
             System.out.println();
             System.out.println("Program status: " + output.getReturnValue());
             System.out.println("Std out result: " + output.getStdOut());
