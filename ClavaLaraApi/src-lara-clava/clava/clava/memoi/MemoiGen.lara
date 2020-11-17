@@ -8,6 +8,8 @@ import lara.Check;
 import lara.JavaInterop;
 import clava.ClavaJoinPoints;
 
+import lara.util.StringSet;
+
 function MemoiGen(target) {
 
 		this._target = target;
@@ -51,6 +53,7 @@ MemoiGen.prototype.setZeroSim = function(isZeroSim) {
 	isZeroSim = isZeroSim === undefined ? true : isZeroSim;
 	
 	this._isZeroSim = isZeroSim;
+	//~ this._isZeroSim = isZeroSim ?? true;
 }
 
 /**
@@ -235,7 +238,7 @@ MemoiGen.prototype.setProfFromDir = function(dir) {
  * 	target.
  * */
 MemoiGen.prototype.generate = function() {
-	this._generateAll();
+	return this._generateAll();
 }
 
 /**
@@ -251,10 +254,10 @@ MemoiGen.prototype.generateEach = function() {
 
 	if(this._isProf) {
 			
-		this._generateFromReport();
+		return this._generateFromReport();
 	} else {
 		
-		this._generateEach(undefined);
+		return this._generateEach(undefined);
 	}
 }
 
@@ -271,14 +274,16 @@ MemoiGen.prototype.generateAll = function() {
 
 	if(this._isProf) {
 		
-		this._generateFromReport();
+		return this._generateFromReport();
 	} else {
 		
-		this._generateAll(undefined);
+		return this._generateAll(undefined);
 	}
 }
 
 MemoiGen.prototype._generateFromReport = function() {
+	
+	var s = new StringSet();
 	
 	//~ var list = JavaInterop.arrayToList(this._profReportFiles);
 	var reportsMap = MemoiReportsMap.fromFiles(this._profReportFiles); // maybe this needs list
@@ -305,14 +310,24 @@ MemoiGen.prototype._generateFromReport = function() {
 */
 		
 		if(site === "global") {
-			this._generateAll(report);
+			var sTmp = this._generateAll(report);
+			for(var sT of sTmp) {
+				s.add(sT);
+			}
 		} else {
-			this._generateEach(report);	
+			var sTmp = this._generateEach(report);	
+			for(var sT of sTmp) {
+				s.add(sT);
+			}
 		}
 	}
+	
+	return s;
 }
 
 MemoiGen.prototype._generateEach = function(report) {
+	
+	var s = new StringSet();
 	
 	var cSig = MemoiUtils.cSig(this._target._sig);
 	
@@ -324,18 +339,24 @@ MemoiGen.prototype._generateEach = function(report) {
 	for(var $call of Query.search("call", filter)) {
 
 		var wrapperName = IdGenerator.next("mw_" + cSig);
+		s.add(wrapperName);
 
 		$call.wrap(wrapperName); // TODO: change call to have reset arg with false
 		$call.addArg("0", ClavaJoinPoints.builtinType("unsigned char"));
 
 		this._generateGeneric(wrapperName, report);
 	}
+	
+	return s;
 }
 
 MemoiGen.prototype._generateAll = function(report) {
 	
+	var s = new StringSet();
+	
 	var cSig = MemoiUtils.cSig(this._target._sig);
 	var wrapperName = "mw_" + cSig;
+	s.add(wrapperName);
 	
 	for(var $call of Query.search("call", {"signature": s => this._target._sig === MemoiUtils.normalizeSig(s)})) {
 
@@ -343,6 +364,8 @@ MemoiGen.prototype._generateAll = function(report) {
 		$call.addArg("0", ClavaJoinPoints.builtinType("unsigned char"));
 	}
 	this._generateGeneric(wrapperName, report);
+	
+	return s;
 }
 
 MemoiGen.prototype.generatePerfectInst = function() {

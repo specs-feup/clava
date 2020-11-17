@@ -98,7 +98,7 @@ public class MemoiCodeGen {
         String logicCode = dmtLogicCode(paramNames, numSets, memoiApproxBits, inputCount, outputCount,
                 inputTypes, outputTypes);
 
-        return resetCode + "\n\n" + tableCode + "\n\n" + logicCode;
+        return tableCode + "\n\n" + resetCode + "\n\n" + logicCode;
     }
 
     private static String resetCode(int tableSize, boolean isReset) {
@@ -108,7 +108,7 @@ public class MemoiCodeGen {
         if (isReset) {
             b.append("if(reset) { for(int i = 0; i<");
             b.append(tableSize);
-            b.append(";i++) {table[i][0]} = ");
+            b.append(";i++) {table[i][0] = ");
             b.append(NAN_BITS);
             b.append(";} return 0;}");
         }

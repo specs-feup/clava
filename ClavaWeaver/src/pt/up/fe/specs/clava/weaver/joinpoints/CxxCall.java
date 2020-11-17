@@ -251,11 +251,7 @@ public class CxxCall extends ACall {
 
         Type typeNode = (Type) type.getNode();
 
-        System.out.println("type code: " + typeNode.getCode());
-
         Expr literalExpr = CxxWeaver.getFactory().literalExpr(arg, typeNode);
-
-        System.out.println("expr: " + literalExpr.getCode());
 
         call.addChild(literalExpr);
     }
