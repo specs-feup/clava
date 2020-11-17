@@ -490,6 +490,16 @@ public abstract class AMemberCall extends ACall {
 
     /**
      * 
+     * @param arg 
+     * @param type 
+     */
+    @Override
+    public void addArgImpl(String arg, AJoinPoint type) {
+        this.aCall.addArgImpl(arg, type);
+    }
+
+    /**
+     * 
      * @param position 
      * @param code 
      */

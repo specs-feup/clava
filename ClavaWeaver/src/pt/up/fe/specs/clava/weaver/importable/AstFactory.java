@@ -58,6 +58,7 @@ import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.NullType;
+import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
 import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
@@ -502,6 +503,16 @@ public class AstFactory {
         BuiltinType type = CxxWeaver.getFactory().builtinType(typeCode);
 
         return CxxJoinpoints.create(type);
+    }
+
+    public static ACxxWeaverJoinPoint pointerTypeFromBuiltin(String typeCode) {
+
+        BuiltinType pointeeType = CxxWeaver.getFactory().builtinType(typeCode);
+        PointerType pointerType = CxxWeaver.getFactory().pointerType(pointeeType);
+
+        ACxxWeaverJoinPoint jp = CxxJoinpoints.create(pointerType);
+
+        return jp;
     }
 
     public static AExpression doubleLiteral(String floating) {

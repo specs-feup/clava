@@ -9230,6 +9230,24 @@
                },
                {
                   "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addArg"
+                           },
+                           {
+                              "type": "String",
+                              "name": "arg",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Tries to inline this call",
                   "children": [
                            {
@@ -13659,6 +13677,24 @@
                   "type": "select",
                   "clazz": "vardecl",
                   "alias": ""
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addArg"
+                           },
+                           {
+                              "type": "String",
+                              "name": "arg",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
                },
                {
                   "type": "action",
@@ -29697,6 +29733,20 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Adds a new parameter to the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addParam"
+                           },
+                           {
+                              "type": "String",
+                              "name": "param",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class",
                   "children": [
                            {
@@ -38381,6 +38431,24 @@
                },
                {
                   "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addArg"
+                           },
+                           {
+                              "type": "String",
+                              "name": "arg",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "joinpoint",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Tries to inline this call",
                   "children": [
                            {
@@ -39545,6 +39613,20 @@
                            {
                               "type": "void",
                               "name": "removeRecord"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds a new parameter to the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addParam"
+                           },
+                           {
+                              "type": "String",
+                              "name": "param",
+                              "defaultValue": ""
                            }]
                },
                {

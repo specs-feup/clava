@@ -1,0 +1,9 @@
+int foo(char* str) {
+	return 0;
+}
+
+int bar(char *str, int num) {
+	return 0;
+}
+
+---------------

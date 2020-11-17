@@ -575,6 +575,34 @@ public abstract class ACall extends AExpression {
     }
 
     /**
+     * 
+     * @param arg 
+     * @param type 
+     */
+    public void addArgImpl(String arg, AJoinPoint type) {
+        throw new UnsupportedOperationException(get_class()+": Action addArg not implemented ");
+    }
+
+    /**
+     * 
+     * @param arg 
+     * @param type 
+     */
+    public final void addArg(String arg, AJoinPoint type) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addArg", this, Optional.empty(), arg, type);
+        	}
+        	this.addArgImpl(arg, type);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addArg", this, Optional.empty(), arg, type);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addArg", e);
+        }
+    }
+
+    /**
      * Get value on attribute decl
      * @return the attribute's value
      */
@@ -920,6 +948,7 @@ public abstract class ACall extends AExpression {
         actions.add("void inline()");
         actions.add("void setArgFromString(int, string)");
         actions.add("void setArg(Integer, expression)");
+        actions.add("void addArg(String, joinpoint)");
     }
 
     /**

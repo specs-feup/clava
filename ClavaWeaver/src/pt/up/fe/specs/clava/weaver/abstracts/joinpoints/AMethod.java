@@ -631,6 +631,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Adds a new parameter to the function
+     * @param param 
+     */
+    @Override
+    public void addParamImpl(String param) {
+        this.aFunction.addParamImpl(param);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 

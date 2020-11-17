@@ -32,6 +32,10 @@ ClavaJoinPoints.builtinType = function(code) {
 	return AstFactory.builtinType(code);
 }
 
+ClavaJoinPoints.pointerFromBuiltin = function(code) {
+	return AstFactory.pointerTypeFromBuiltin(code);
+}
+
 /**
  * Builds an array type of constant dimensions.
  * 

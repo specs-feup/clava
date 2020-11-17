@@ -74,7 +74,7 @@ public class MemoiCodeGen {
      */
     public static String generateDmtCode(int numSets, List<String> paramNames, boolean isMemoiEmpty,
             boolean isMemoiOnline, int memoiApproxBits, DirectMappedTable dmt, int inputCount, int outputCount,
-            List<String> inputTypes, List<String> outputTypes) {
+            List<String> inputTypes, List<String> outputTypes, boolean isReset) {
 
         Map<String, MergedMemoiEntry> table = new HashMap<String, MergedMemoiEntry>();
 
@@ -84,19 +84,36 @@ public class MemoiCodeGen {
         }
 
         return generateDmtCode(table, numSets, paramNames, isMemoiOnline, memoiApproxBits, inputCount, outputCount,
-                inputTypes, outputTypes);
+                inputTypes, outputTypes, isReset);
     }
 
     private static String generateDmtCode(Map<String, MergedMemoiEntry> table, int numSets,
             List<String> paramNames, boolean isMemoiOnline, int memoiApproxBits, int inputCount, int outputCount,
-            List<String> inputTypes, List<String> outputTypes) {
+            List<String> inputTypes, List<String> outputTypes, boolean isReset) {
+
+        String resetCode = resetCode(numSets, isReset);
 
         String tableCode = dmtCode(table, inputCount, outputCount, numSets, isMemoiOnline);
 
         String logicCode = dmtLogicCode(paramNames, numSets, memoiApproxBits, inputCount, outputCount,
                 inputTypes, outputTypes);
 
-        return tableCode + "\n\n" + logicCode;
+        return resetCode + "\n\n" + tableCode + "\n\n" + logicCode;
+    }
+
+    private static String resetCode(int tableSize, boolean isReset) {
+
+        StringBuilder b = new StringBuilder();
+
+        if (isReset) {
+            b.append("if(reset) { for(int i = 0; i<");
+            b.append(tableSize);
+            b.append(";i++) {table[i][0]} = ");
+            b.append(NAN_BITS);
+            b.append(";} return 0;}");
+        }
+
+        return b.toString();
     }
 
     public static String generateUpdateCode(int numSets, List<String> paramNames,

@@ -919,6 +919,32 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Adds a new parameter to the function
+     * @param param 
+     */
+    public void addParamImpl(String param) {
+        throw new UnsupportedOperationException(get_class()+": Action addParam not implemented ");
+    }
+
+    /**
+     * Adds a new parameter to the function
+     * @param param 
+     */
+    public final void addParam(String param) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addParam", this, Optional.empty(), param);
+        	}
+        	this.addParamImpl(param);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addParam", this, Optional.empty(), param);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addParam", e);
+        }
+    }
+
+    /**
      * Get value on attribute name
      * @return the attribute's value
      */
@@ -1325,6 +1351,7 @@ public abstract class AFunction extends ADeclarator {
         actions.add("void setFunctionType(functionType)");
         actions.add("void setReturnType(type)");
         actions.add("void setParamType(Integer, type)");
+        actions.add("void addParam(String)");
     }
 
     /**

@@ -188,4 +188,14 @@ public class CTest {
     public void testSwitch() {
         newTester().test("SwitchTest.lara", "switch.c");
     }
+
+    @Test
+    public void testAddParam() {
+        newTester().test("AddParamTest.lara", "add_param.c");
+    }
+
+    @Test
+    public void testAddArg() {
+        newTester().test("AddArgTest.lara", "add_arg.c");
+    }
 }

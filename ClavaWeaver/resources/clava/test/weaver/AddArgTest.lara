@@ -1,0 +1,31 @@
+import clava.ClavaJoinPoints;
+
+aspectdef AddArgTest
+
+	select function{'foo'} end
+	apply
+		exec addParam("char* str");
+	end
+
+	select function{'bar'} end
+	apply
+		exec addParam("int num");
+	end
+	
+	select call{'bar'} end
+	apply
+		exec addArg("0", ClavaJoinPoints.builtinType("int"));
+	end	
+	
+	select call{'foo'} end
+	apply
+		var type = ClavaJoinPoints.pointerFromBuiltin("unsigned char");
+		exec addArg('"foo"', type);
+	end
+
+	select program end
+	apply
+		println($program.code);
+		println("---------------");
+	end
+end

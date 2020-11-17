@@ -29,6 +29,18 @@ function MemoiGen(target) {
 		this._applyPolicy = MemoiGen.ApplyPolicy.NOT_EMPTY;
 		
 		this._isZeroSim = false;
+		
+		this._isResetFunc = false;
+}
+
+/**
+ * 		Sets whether to generate a reset function.
+ * */
+MemoiGen.prototype.setResetFunc = function(isResetFunc) {
+	
+	isResetFunc = isResetFunc === undefined ? true : isResetFunc;
+	
+	this._isResetFunc = isResetFunc;
 }
 
 /**
@@ -313,7 +325,8 @@ MemoiGen.prototype._generateEach = function(report) {
 
 		var wrapperName = IdGenerator.next("mw_" + cSig);
 
-		$call.wrap(wrapperName);
+		$call.wrap(wrapperName); // TODO: change call to have reset arg with false
+		$call.addArg("0", ClavaJoinPoints.builtinType("unsigned char"));
 
 		this._generateGeneric(wrapperName, report);
 	}
@@ -326,7 +339,8 @@ MemoiGen.prototype._generateAll = function(report) {
 	
 	for(var $call of Query.search("call", {"signature": s => this._target._sig === MemoiUtils.normalizeSig(s)})) {
 
-		$call.wrap(wrapperName);
+		$call.wrap(wrapperName); // TODO: change call to have reset arg with false
+		$call.addArg("0", ClavaJoinPoints.builtinType("unsigned char"));
 	}
 	this._generateGeneric(wrapperName, report);
 }
@@ -424,7 +438,12 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 		} else {
 			var dmt = undefined;
 		}
-			
+		
+		// change function to have reset parameter if needed
+		if(this._isResetFunc) {
+			$function.addParam("char reset");
+		}
+		
 		if(this._isDebug) {
 			var totalName = wrapperName + '_total_calls';
 			var missesName = wrapperName + '_total_misses';
@@ -470,7 +489,8 @@ MemoiGen.prototype._makeTableCode = function($function, dmt) {
 		this._approxBits,
 		dmt,
 		this._target._numInputs, this._target._numOutputs,
-		this._target._inputTypes, this._target._outputTypes
+		this._target._inputTypes, this._target._outputTypes,
+		this._isResetFunc
 	);
 
 	return code;
