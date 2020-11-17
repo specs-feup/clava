@@ -26,6 +26,9 @@ import pt.up.fe.specs.util.SpecsIo;
  *
  */
 public class TUPatcherUtils {
+
+    private static final String PATCHED_SUFFIX = "_patched";
+
     interface CharFunction {
         boolean run(char ch);
     }
@@ -649,4 +652,16 @@ public class TUPatcherUtils {
         return result;
     }
 
+    public static String getPatchedFilename(String originalFilename) {
+        var extension = SpecsIo.getExtension(originalFilename);
+        var name = SpecsIo.removeExtension(originalFilename);
+
+        return name + PATCHED_SUFFIX + "." + extension;
+    }
+
+    public static String getPatchedHeaderFilename(String originalFilename) {
+        var name = SpecsIo.removeExtension(originalFilename);
+
+        return name + PATCHED_SUFFIX + ".h";
+    }
 }

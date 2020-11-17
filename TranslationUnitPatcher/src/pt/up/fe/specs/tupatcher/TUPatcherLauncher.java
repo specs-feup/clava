@@ -30,6 +30,7 @@ import pt.up.fe.specs.tupatcher.parser.TUErrorParser;
 import pt.up.fe.specs.tupatcher.parser.TUErrorsData;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
+import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class TUPatcherLauncher {
@@ -168,8 +169,115 @@ public class TUPatcherLauncher {
      */
     public PatchData patchOneFile(File filepath, File baseFolder) {
 
-        // Get base output folder of file
-        SpecsIo.getRelativePath(filepath, baseFolder);
+        var outputFolder = SpecsIo.mkdir(config.get(TUPatcherConfig.OUTPUT_FOLDER));
+
+        // Get base output folder for the file
+        var fileOutputFolder = baseFolder != null
+                ? new File(outputFolder, SpecsIo.getRelativePath(filepath.getParentFile(), baseFolder))
+                : outputFolder;
+
+        var patchedFile = new File(fileOutputFolder, TUPatcherUtils.getPatchedFilename(filepath.getName()));
+
+        // Copy file to output folder of file
+        SpecsIo.copy(filepath, patchedFile);
+
+        // System.out.println("PATCHING " + filepath);
+        var patchData = new PatchData();
+
+        List<String> command = new ArrayList<>();
+        command.add(DUMPER_EXE);
+        command.add(patchedFile.getAbsolutePath());
+        command.add("--");
+        command.add("-ferror-limit=1");
+
+        // Always compile as C++
+        command.add("-x");
+        command.add("c++");
+
+        // // System.out.println("RUNNING... " + command);
+        // var output = SpecsSystem.runProcess(command, TUPatcherLauncher::outputProcessor,
+        // inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
+        // // System.out.println("FINISHED");
+        // patchData.write(patchedFile);
+        //
+        // List<String> command2 = new ArrayList<>();
+        //
+        // command2.add(DUMPER_EXE);
+        // command2.add("output/file.cpp");
+        // command2.add("--");
+        // command2.add("-ferror-limit=1");
+        //
+        // // Always compile as C++
+        // command2.add("-x");
+        // command2.add("c++");
+
+        int n = 0;
+        int maxIterations = 100;
+        ProcessOutput<Boolean, TUErrorsData> output = null;
+        while (n < maxIterations) {
+            output = SpecsSystem.runProcess(command,
+                    TUPatcherLauncher::outputProcessor,
+                    inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
+            patchData.write(filepath, patchedFile);
+            n++;
+            if (n >= maxIterations) {
+                System.out.println();
+                /*for (ErrorKind error : patchData.getErrors()) {
+                    System.out.println(error);
+                }*/
+                System.out.println("Program status: " + output.getReturnValue());
+                System.out.println("Std out result: " + output.getStdOut());
+                System.out.println("Std err result: " + output.getStdErr());
+                throw new RuntimeException("Maximum number of iterations exceeded. Could not solve errors");
+            }
+            // System.out.print('.');
+
+            // No more errors, break
+            if (output.getStdErr().get(TUErrorsData.ERRORS).isEmpty()) {
+                break;
+            }
+        }
+
+        if (n >= maxIterations) {
+            System.out.println("!Maximum number of iterations exceeded. Could not solve all errors");
+        }
+
+        if (output == null) {
+            System.out.println("Did not run patcher even once!");
+        } else {
+            System.out.println();
+            System.out.println("Program status: " + output.getReturnValue());
+            System.out.println("Std out result: " + output.getStdOut());
+            System.out.println("Std err result: " + output.getStdErr());
+        }
+
+        /* System.out.println("Errors found: ");
+        for (ErrorKind error : patchData.getErrors()) {
+            System.out.println(error);
+        }*/
+        return patchData;
+
+    }
+
+    /**
+     * Create patch for a single .cpp file
+     * 
+     * @param filepath
+     * @return PatchData
+     */
+    public PatchData patchOneFileV1(File filepath, File baseFolder) {
+
+        var outputFolder = SpecsIo.mkdir(config.get(TUPatcherConfig.OUTPUT_FOLDER));
+
+        // Get base output folder for the file
+        var fileOutputFolder = baseFolder != null
+                ? new File(outputFolder, SpecsIo.getRelativePath(filepath.getParentFile(), baseFolder))
+                : outputFolder;
+
+        var patchedFile = new File(fileOutputFolder, filepath.getName());
+
+        // Copy file to output folder of file
+        SpecsIo.copy(filepath, patchedFile);
 
         // System.out.println("PATCHING " + filepath);
         var patchData = new PatchData();
@@ -187,7 +295,7 @@ public class TUPatcherLauncher {
         var output = SpecsSystem.runProcess(command, TUPatcherLauncher::outputProcessor,
                 inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
         // System.out.println("FINISHED");
-        patchData.write(filepath);
+        patchData.write(filepath, filepath);
 
         List<String> command2 = new ArrayList<>();
 
@@ -205,7 +313,7 @@ public class TUPatcherLauncher {
         while (!output.getStdErr().get(TUErrorsData.ERRORS).isEmpty() && n < maxIterations) {
             output = SpecsSystem.runProcess(command2, TUPatcherLauncher::outputProcessor,
                     inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
-            patchData.write(filepath);
+            patchData.write(filepath, filepath);
             n++;
             if (n >= maxIterations) {
                 System.out.println();
@@ -269,7 +377,7 @@ public class TUPatcherLauncher {
 
             // System.out.println("[TEST] lines not parsed:\n" + linesNotParsed);
 
-            System.out.println("[TEST] Collected data:\n" + data);
+            // System.out.println("[TEST] Collected data:\n" + data);
 
             new ErrorPatcher(patchData).patch(data);
 

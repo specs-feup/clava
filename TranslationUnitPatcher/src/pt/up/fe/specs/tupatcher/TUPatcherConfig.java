@@ -26,7 +26,7 @@ import pt.up.fe.specs.util.utilities.StringList;
 public class TUPatcherConfig extends ADataClass<TUPatcherConfig> {
 
     public static final DataKey<StringList> SOURCE_PATHS = KeyFactory.stringList("sourcePaths");
-    public static final DataKey<File> OUTPUT_FOLDER = KeyFactory.file("outputFolder");
+    public static final DataKey<File> OUTPUT_FOLDER = KeyFactory.folder("outputFolder");
     public static final DataKey<Integer> MAX_FILES = KeyFactory.integer("maxFiles", 600);
     public static final DataKey<Integer> MAX_ITERATIONS = KeyFactory.integer("maxIterations", 100);
 

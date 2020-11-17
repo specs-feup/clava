@@ -143,10 +143,10 @@ public class PatchData {
     /**
      * Copy the source file to the output folder adding #include "patch.h" at the top of it
      */
-    public void copySource(File filepath) {
-        var result = "#include \"patch.h\"\n" + SpecsIo.read(filepath);
-        File destFile = new File("output/file.cpp");
-        SpecsIo.write(destFile, result);
+    public void copySource(File originalFile, File patchedFile, String headerFilename) {
+        var result = "#include \"" + headerFilename + "\"\n" + SpecsIo.read(originalFile);
+        // File destFile = new File("output/file.cpp");
+        SpecsIo.write(patchedFile, result);
     }
 
     /**
@@ -210,12 +210,15 @@ public class PatchData {
     }
 
     /**
-     * Writes in the files patch.h and file.cpp in the output directory.
+     * Writes in the patched file and corresponding header in the output directory.
      */
-    public void write(File filepath) {
-        File patchFile = new File("output/patch.h");
-        SpecsIo.write(patchFile, str());
-        copySource(filepath);
+    public void write(File originalFile, File patchedFile) {
+        var headerFilename = TUPatcherUtils.getPatchedHeaderFilename(originalFile.getName());
+        File patchHeaderFile = new File(patchedFile.getParentFile(), headerFilename);
+
+        SpecsIo.write(patchHeaderFile, str());
+
+        copySource(originalFile, patchedFile, headerFilename);
     }
 
     /**
