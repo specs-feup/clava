@@ -32,6 +32,7 @@ import pt.up.fe.specs.tupatcher.parser.TUErrorsData;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
+import pt.up.fe.specs.util.csv.CsvWriter;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
 import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
@@ -51,13 +52,20 @@ public class TUPatcherLauncher {
     // private final SpecsProperties properties;
     private final TUPatcherConfig config;
     private final Lazy<File> dumper;
+    private final CsvWriter stats;
 
     // public TUPatcherLauncher(SpecsProperties properties) {
     public TUPatcherLauncher(TUPatcherConfig config) {
         this.config = config;
         this.dumper = Lazy.newInstance(() -> TUPatcherLauncher.getDumper());
 
+        this.stats = new CsvWriter("File", "Success", "Iterations", "Execution Time (ns)");
         // this.properties = properties;
+    }
+
+    private void addStats(File file, boolean success, int iterations, long executionTime) {
+        this.stats.addLine(SpecsIo.getCanonicalPath(file), Boolean.toString(success), Integer.toString(iterations),
+                Long.toString(executionTime));
     }
 
     private static File getDumper() {
@@ -263,6 +271,7 @@ public class TUPatcherLauncher {
         int n = 0;
         int maxIterations = config.get(TUPatcherConfig.MAX_ITERATIONS);
         ProcessOutput<Boolean, TUErrorsData> output = null;
+        var startTime = System.nanoTime();
         while (n < maxIterations) {
             output = SpecsSystem.runProcess(command,
                     TUPatcherLauncher::outputProcessor,
@@ -286,6 +295,13 @@ public class TUPatcherLauncher {
                 break;
             }
         }
+        var endTime = System.nanoTime();
+
+        // Add stats
+        addStats(filepath, n < maxIterations, n, endTime - startTime);
+
+        // Write file
+        SpecsIo.write(new File("tu_patcher_stats.csv"), stats.buildCsv());
 
         if (n >= maxIterations) {
             System.out.println("!Maximum number of iterations exceeded. Could not solve all errors");
