@@ -26,10 +26,15 @@ import org.suikasoft.jOptions.app.App;
 import org.suikasoft.jOptions.persistence.PropertiesPersistence;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
+import pt.up.fe.specs.clang.SupportedPlatform;
 import pt.up.fe.specs.tupatcher.parser.TUErrorParser;
 import pt.up.fe.specs.tupatcher.parser.TUErrorsData;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
+import pt.up.fe.specs.util.lazy.Lazy;
+import pt.up.fe.specs.util.providers.FileResourceProvider;
+import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
 import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.LineStream;
 
@@ -41,16 +46,55 @@ public class TUPatcherLauncher {
 
     // private static final String DUMPER_EXE =
     // "../TranslationUnitErrorDumper/cmake-build-debug/TranslationUnitErrorDumper";
-    private static final String DUMPER_EXE = "../../TranslationUnitErrorDumper/build/TranslationUnitErrorDumper.exe";
+    // private static final String DUMPER_EXE = "../../TranslationUnitErrorDumper/build/TranslationUnitErrorDumper.exe";
 
     // private final SpecsProperties properties;
     private final TUPatcherConfig config;
+    private final Lazy<File> dumper;
 
     // public TUPatcherLauncher(SpecsProperties properties) {
     public TUPatcherLauncher(TUPatcherConfig config) {
         this.config = config;
+        this.dumper = Lazy.newInstance(() -> TUPatcherLauncher.getDumper());
 
         // this.properties = properties;
+    }
+
+    private static File getDumper() {
+        SupportedPlatform platform = SupportedPlatform.getCurrentPlatform();
+
+        var dumperResource = getDumperResource(platform);
+
+        // Use the latest version of the resource
+        var version = dumperResource.getVersion();
+
+        // Executable versions are separated by an underscore
+        dumperResource = dumperResource.createResourceVersion("_" + version);
+
+        // Copy executable
+        var resourceFolder = SpecsIo.getTempFolder("TU_Patcher");
+        ResourceWriteData executable = dumperResource.writeVersioned(resourceFolder, TUPatcherLauncher.class);
+
+        executable.makeExecutable(platform.isLinux());
+
+        return executable.getFile();
+    }
+
+    private static FileResourceProvider getDumperResource(SupportedPlatform platform) {
+        switch (platform) {
+        case WINDOWS:
+            return TUPatcherWebResource.WIN_EXE;
+        case LINUX:
+            return TUPatcherWebResource.LINUX_EXE;
+        // case CENTOS:
+        // return CLANG_AST_RESOURCES.get(ClangAstFileResource.CENTOS_EXE);
+        // case LINUX_ARMV7:
+        // return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_ARMV7_EXE);
+        // case MAC_OS:
+        // return CLANG_AST_RESOURCES.get(ClangAstFileResource.MAC_OS_EXE);
+        default:
+            throw new RuntimeException("Platform not supported yet: '" + platform + "'");
+        }
     }
 
     public static void main(String[] args) {
@@ -120,7 +164,7 @@ public class TUPatcherLauncher {
 
         for (var sourceFile : sourceFiles) {
             n++;
-            if (n > maxNumFiles)
+            if (maxNumFiles > 0 && n > maxNumFiles)
                 break;
 
             // var sourceExtension = SpecsIo.getExtension(sourceFile);
@@ -184,8 +228,13 @@ public class TUPatcherLauncher {
         // System.out.println("PATCHING " + filepath);
         var patchData = new PatchData();
 
+        var dumperExe = dumper.get();
+        SpecsCheck.checkArgument(dumperExe.isFile(), () -> "Could not obtain dumper executable!");
+        // System.out.println("DUMPER: " + dumperExe);
+
         List<String> command = new ArrayList<>();
-        command.add(DUMPER_EXE);
+        // command.add(DUMPER_EXE);
+        command.add(dumperExe.getAbsolutePath());
         command.add(patchedFile.getAbsolutePath());
         command.add("--");
         command.add("-ferror-limit=1");
@@ -212,7 +261,7 @@ public class TUPatcherLauncher {
         // command2.add("c++");
 
         int n = 0;
-        int maxIterations = 100;
+        int maxIterations = config.get(TUPatcherConfig.MAX_ITERATIONS);
         ProcessOutput<Boolean, TUErrorsData> output = null;
         while (n < maxIterations) {
             output = SpecsSystem.runProcess(command,
@@ -220,16 +269,16 @@ public class TUPatcherLauncher {
                     inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
             patchData.write(filepath, patchedFile);
             n++;
-            if (n >= maxIterations) {
-                System.out.println();
-                /*for (ErrorKind error : patchData.getErrors()) {
-                    System.out.println(error);
-                }*/
-                System.out.println("Program status: " + output.getReturnValue());
-                System.out.println("Std out result: " + output.getStdOut());
-                System.out.println("Std err result: " + output.getStdErr());
-                throw new RuntimeException("Maximum number of iterations exceeded. Could not solve errors");
-            }
+            // if (n >= maxIterations) {
+            // System.out.println();
+            // /*for (ErrorKind error : patchData.getErrors()) {
+            // System.out.println(error);
+            // }*/
+            // System.out.println("Program status: " + output.getReturnValue());
+            // System.out.println("Std out result: " + output.getStdOut());
+            // System.out.println("Std err result: " + output.getStdErr());
+            // throw new RuntimeException("Maximum number of iterations exceeded. Could not solve errors");
+            // }
             // System.out.print('.');
 
             // No more errors, break
@@ -265,29 +314,30 @@ public class TUPatcherLauncher {
      * @param filepath
      * @return PatchData
      */
+    /*
     public PatchData patchOneFileV1(File filepath, File baseFolder) {
-
+    
         var outputFolder = SpecsIo.mkdir(config.get(TUPatcherConfig.OUTPUT_FOLDER));
-
+    
         // Get base output folder for the file
         var fileOutputFolder = baseFolder != null
                 ? new File(outputFolder, SpecsIo.getRelativePath(filepath.getParentFile(), baseFolder))
                 : outputFolder;
-
+    
         var patchedFile = new File(fileOutputFolder, filepath.getName());
-
+    
         // Copy file to output folder of file
         SpecsIo.copy(filepath, patchedFile);
-
+    
         // System.out.println("PATCHING " + filepath);
         var patchData = new PatchData();
-
+    
         List<String> command = new ArrayList<>();
         command.add(DUMPER_EXE);
         command.add(filepath.getAbsolutePath());
         command.add("--");
         command.add("-ferror-limit=1");
-
+    
         // Always compile as C++
         command.add("-x");
         command.add("c++");
@@ -296,18 +346,18 @@ public class TUPatcherLauncher {
                 inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
         // System.out.println("FINISHED");
         patchData.write(filepath, filepath);
-
+    
         List<String> command2 = new ArrayList<>();
-
+    
         command2.add(DUMPER_EXE);
         command2.add("output/file.cpp");
         command2.add("--");
         command2.add("-ferror-limit=1");
-
+    
         // Always compile as C++
         command2.add("-x");
         command2.add("c++");
-
+    
         int n = 0;
         int maxIterations = 100;
         while (!output.getStdErr().get(TUErrorsData.ERRORS).isEmpty() && n < maxIterations) {
@@ -317,9 +367,7 @@ public class TUPatcherLauncher {
             n++;
             if (n >= maxIterations) {
                 System.out.println();
-                /*for (ErrorKind error : patchData.getErrors()) {
-                    System.out.println(error);
-                }*/
+           
                 System.out.println("Program status: " + output.getReturnValue());
                 System.out.println("Std out result: " + output.getStdOut());
                 System.out.println("Std err result: " + output.getStdErr());
@@ -331,15 +379,12 @@ public class TUPatcherLauncher {
         System.out.println("Program status: " + output.getReturnValue());
         System.out.println("Std out result: " + output.getStdOut());
         System.out.println("Std err result: " + output.getStdErr());
-
-        /* System.out.println("Errors found: ");
-        for (ErrorKind error : patchData.getErrors()) {
-            System.out.println(error);
-        }*/
+    
+       
         return patchData;
-
+    
     }
-
+    */
     public static Boolean outputProcessor(InputStream stream) {
         try (var lines = LineStream.newInstance(stream, "Input Stream");) {
             while (lines.hasNextLine()) {
