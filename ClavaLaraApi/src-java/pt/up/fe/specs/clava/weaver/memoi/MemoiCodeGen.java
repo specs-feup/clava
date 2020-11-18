@@ -177,7 +177,7 @@ public class MemoiCodeGen {
 
             code.append(access);
             code.append("[");
-            code.append(varNames.size());
+            code.append(inputCount);
             code.append("] = *(uint64_t*) &result;");
 
             code.append("\n");
@@ -254,7 +254,7 @@ public class MemoiCodeGen {
             code.append(" *) &table[hash_");
             code.append(indexBits);
             code.append("_bits][");
-            code.append(varNames.size());
+            code.append(inputCount);
             code.append("];\n}\n");
         } else {
 
