@@ -28,6 +28,7 @@ import org.suikasoft.jOptions.persistence.PropertiesPersistence;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
 import pt.up.fe.specs.clang.SupportedPlatform;
+import pt.up.fe.specs.tupatcher.parallel.ParallelPatcher;
 import pt.up.fe.specs.tupatcher.parser.TUErrorParser;
 import pt.up.fe.specs.tupatcher.parser.TUErrorsData;
 import pt.up.fe.specs.util.SpecsCheck;
@@ -129,6 +130,12 @@ public class TUPatcherLauncher {
     }
 
     public int execute() {
+
+        // If parallel execution, use parallel version
+        if (config.get(TUPatcherConfig.PARALLEL)) {
+            return new ParallelPatcher(config).execute();
+        }
+
         var sourcePaths = config.get(TUPatcherConfig.SOURCE_PATHS).getStringList();
         // System.out.println("SOURCE PATHS: " + sourcePaths);
         ArrayList<PatchData> data = new ArrayList<>();
@@ -201,14 +208,26 @@ public class TUPatcherLauncher {
                 }
             }
             // String a = path + "/" + arg;
+            // PatchData patchData = null;
             try {
+                // patchData = patchOneFile(sourceFile, dir);
                 patchesData.add(patchOneFile(sourceFile, dir));
+                numSuccess++;
             } catch (Exception e) {
                 numErrors++;
                 errorMessages.add(e.toString() + "\n\n" + e.getLocalizedMessage() + "\n" + e.getMessage());
                 continue;
             }
-            numSuccess++;
+
+            // if (patchData == null) {
+            // numErrors++;
+            // } else {
+            // patchesData.add(patchData);
+            // numSuccess++;
+            // }
+
+            // patchesData.add(patchData);
+            // numSuccess++;
 
             // }
         }
