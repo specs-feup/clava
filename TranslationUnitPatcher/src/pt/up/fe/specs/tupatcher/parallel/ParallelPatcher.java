@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -27,6 +28,7 @@ import java.util.stream.IntStream;
 import pt.up.fe.specs.tupatcher.TUPatcherConfig;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.collections.concurrentchannel.ConcurrentChannel;
 
@@ -39,6 +41,8 @@ public class ParallelPatcher {
     }
 
     public int execute() {
+        long startTime = System.nanoTime();
+
         var sourcePaths = config.get(TUPatcherConfig.SOURCE_PATHS).getStringList();
 
         var validExtensions = new HashSet<>(config.get(TUPatcherConfig.SOURCE_EXTENSIONS).getStringList());
@@ -67,18 +71,33 @@ public class ParallelPatcher {
         // Create consumer
         var consumer = new ResultsConsumer(numThreads, channel.createConsumer());
         var executor = Executors.newSingleThreadExecutor();
-        futures.add(executor.submit(() -> consumer.execute()));
+        var consumerFuture = executor.submit(() -> consumer.execute());
         executor.shutdown();
 
         // Obtain values of futures, to synchronize execution
         int acc = 1;
         for (var future : futures) {
             SpecsSystem.get(future);
-            System.out.println("Main " + acc);
+            System.out.println("Producer future" + acc);
             acc++;
         }
 
+        var results = SpecsSystem.get(consumerFuture);
+
         System.out.println("FINISHED!");
+
+        long endTime = System.nanoTime();
+
+        // Sum times of all producers
+        var producersTime = results.stream().mapToLong(patcherResult -> patcherResult.getExecutionTime())
+                .sum();
+        var programTime = endTime - startTime;
+        var producersProgramRatio = (double) producersTime / (double) programTime;
+
+        System.out.println("Program execution: " + SpecsStrings.parseTime(programTime));
+        System.out.println("Producers execution: " + SpecsStrings.parseTime(producersTime));
+        System.out.println("Producers/Program ration: " + String.format(Locale.UK, "%f", producersProgramRatio));
+        System.out.println("Num threads: " + numThreads);
         // var subLists = Lists.partition(sourceFiles, sourceFiles.size() / numThreads);
         // for(int i=0; i<)
         // Create as many producers as threads
@@ -87,6 +106,7 @@ public class ParallelPatcher {
         // Have a single consumer that collects results
 
         return 0;
+
     }
 
     private List<Map<File, File>> partitionFiles(Map<File, File> sourceFiles, Integer numThreads) {

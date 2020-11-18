@@ -72,7 +72,7 @@ public class TUPatcherLauncher {
                 Long.toString(executionTime));
     }
 
-    private static File getDumper() {
+    public static File getDumper() {
         SupportedPlatform platform = SupportedPlatform.getCurrentPlatform();
 
         var dumperResource = getDumperResource(platform);

@@ -14,18 +14,28 @@
 package pt.up.fe.specs.tupatcher.parallel;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import pt.up.fe.specs.tupatcher.PatchData;
 import pt.up.fe.specs.tupatcher.TUPatcherConfig;
+import pt.up.fe.specs.tupatcher.TUPatcherLauncher;
 import pt.up.fe.specs.tupatcher.TUPatcherUtils;
+import pt.up.fe.specs.tupatcher.parser.TUErrorsData;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.collections.concurrentchannel.ChannelProducer;
+import pt.up.fe.specs.util.lazy.Lazy;
+import pt.up.fe.specs.util.system.ProcessOutput;
 
 public class PatcherProducer {
 
     private final Map<File, File> sourceFiles;
     private final ChannelProducer<PatcherResult> producer;
     private final TUPatcherConfig config;
+    private final Lazy<File> dumper;
 
     public PatcherProducer(Map<File, File> sourceFiles, ChannelProducer<PatcherResult> producer,
             TUPatcherConfig config) {
@@ -33,6 +43,7 @@ public class PatcherProducer {
         this.sourceFiles = sourceFiles;
         this.producer = producer;
         this.config = config;
+        this.dumper = Lazy.newInstance(() -> TUPatcherLauncher.getDumper());
     }
 
     public boolean execute() {
@@ -59,64 +70,53 @@ public class PatcherProducer {
                 : outputFolder;
 
         var patchedFile = new File(fileOutputFolder, TUPatcherUtils.getPatchedFilename(sourceFile.getName()));
-        /*
+
         // Copy file to output folder of file
-        SpecsIo.copy(filepath, patchedFile);
-        
-        // System.out.println("PATCHING " + filepath);
+        SpecsIo.copy(sourceFile, patchedFile);
+
         var patchData = new PatchData();
-        
+
         var dumperExe = dumper.get();
         SpecsCheck.checkArgument(dumperExe.isFile(), () -> "Could not obtain dumper executable!");
         // System.out.println("DUMPER: " + dumperExe);
-        
+
         List<String> command = new ArrayList<>();
-        // command.add(DUMPER_EXE);
         command.add(dumperExe.getAbsolutePath());
         command.add(patchedFile.getAbsolutePath());
         command.add("--");
         command.add("-ferror-limit=1");
-        
+
         // Always compile as C++
         command.add("-x");
         command.add("c++");
-        
+
         int n = 0;
         int maxIterations = config.get(TUPatcherConfig.MAX_ITERATIONS);
         ProcessOutput<Boolean, TUErrorsData> output = null;
         var startTime = System.nanoTime();
         while (n < maxIterations) {
-        
+
             try {
                 output = SpecsSystem.runProcess(command,
                         TUPatcherLauncher::outputProcessor,
                         inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
-                patchData.write(filepath, patchedFile);
+                patchData.write(sourceFile, patchedFile);
                 n++;
-                // if (n >= maxIterations) {
-                // System.out.println();
-                // System.out.println("Program status: " + output.getReturnValue());
-                // System.out.println("Std out result: " + output.getStdOut());
-                // System.out.println("Std err result: " + output.getStdErr());
-                // throw new RuntimeException("Maximum number of iterations exceeded. Could not solve errors");
-                // }
-                // System.out.print('.');
-        
+
                 // No more errors, break
                 if (output.getStdErr().get(TUErrorsData.ERRORS).isEmpty()) {
                     break;
                 }
             } catch (Exception e) {
                 var endTime = System.nanoTime();
-                addStats(filepath, false, n, endTime - startTime);
-                throw new RuntimeException("Could not patch file", e);
+                return new PatcherResult(sourceFile, false, n, endTime - startTime);
             }
-        
+
         }
         var endTime = System.nanoTime();
-        
+
         var success = n < maxIterations;
-        
+        /*
         // Add stats
         addStats(filepath, success, n, endTime - startTime);
         
@@ -137,7 +137,7 @@ public class PatcherProducer {
             System.out.println("Std err result: " + output.getStdErr());
         }
         */
-        return new PatcherResult(patchedFile.toString());
+        return new PatcherResult(sourceFile, success, n, endTime - startTime);
     }
 
 }

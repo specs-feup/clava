@@ -13,6 +13,9 @@
 
 package pt.up.fe.specs.tupatcher.parallel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.concurrentchannel.ChannelConsumer;
 
@@ -26,7 +29,9 @@ public class ResultsConsumer {
         this.consumer = consumer;
     }
 
-    public boolean execute() {
+    public List<PatcherResult> execute() {
+
+        List<PatcherResult> results = new ArrayList<>();
 
         int currentProducers = numProducers;
         var poison = PatcherResult.getPoison();
@@ -36,6 +41,7 @@ public class ResultsConsumer {
             try {
                 // Get element from channel
                 var result = consumer.take();
+                results.add(result);
 
                 System.out.println("Consumer: " + result);
 
@@ -54,7 +60,7 @@ public class ResultsConsumer {
 
         }
 
-        return true;
+        return results;
     }
 
 }

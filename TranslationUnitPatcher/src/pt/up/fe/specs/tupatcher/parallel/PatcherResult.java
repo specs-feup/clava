@@ -13,23 +13,48 @@
 
 package pt.up.fe.specs.tupatcher.parallel;
 
+import java.io.File;
+
 public class PatcherResult {
 
-    private static final PatcherResult POISON = new PatcherResult("POISON");
+    private static final PatcherResult POISON = new PatcherResult(new File("POISON"), false, -1, 0);
 
     public static PatcherResult getPoison() {
         return POISON;
     }
 
-    private final String test;
+    private final File file;
+    private final boolean success;
+    private final int iterations;
+    private final long executionTime;
 
-    public PatcherResult(String test) {
-        this.test = test;
+    public PatcherResult(File file, boolean success, int iterations, long executionTime) {
+        this.file = file;
+        this.success = success;
+        this.iterations = iterations;
+        this.executionTime = executionTime;
     }
 
     @Override
     public String toString() {
-        return "PatcherResult: " + test;
+        return "PatcherResult [file=" + file + ", success=" + success + ", iterations=" + iterations
+                + ", executionTime=" + executionTime + "]";
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public int getIterations() {
+        return iterations;
+    }
+
+    public long getExecutionTime() {
+        return executionTime;
     }
 
 }
