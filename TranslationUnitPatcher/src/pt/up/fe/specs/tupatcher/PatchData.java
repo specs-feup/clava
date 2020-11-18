@@ -17,9 +17,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 import pt.up.fe.specs.util.SpecsIo;
-
 
 /**
  * 
@@ -32,7 +30,7 @@ public class PatchData {
     private final HashMap<String, FunctionInfo> missingFunctions;
     private final HashMap<String, TypeInfo> missingVariables;
     private final HashMap<String, TypeInfo> missingConstVariables;
-    
+
     /**
      * List of all the errors fixed by the patch.
      */
@@ -43,13 +41,13 @@ public class PatchData {
         this.missingFunctions = new HashMap<String, FunctionInfo>();
         this.missingVariables = new HashMap<String, TypeInfo>();
         this.missingConstVariables = new HashMap<String, TypeInfo>();
-        this.errors = new ArrayList<ErrorKind>(); 
+        this.errors = new ArrayList<ErrorKind>();
     }
-    
+
     public void addError(ErrorKind errorKind) {
         errors.add(errorKind);
     }
-    
+
     public ArrayList<ErrorKind> getErrors() {
         return errors;
     }
@@ -58,12 +56,12 @@ public class PatchData {
         if (typeName != null) {
             if (typeName.contains("::")) {
                 return;
-            }
-            else {
+            } else {
                 missingTypes.put(typeName, new TypeInfo(typeName));
             }
         }
     }
+
     public void addType(TypeInfo type) {
         if (type.getName().contains("::")) {
             return;
@@ -77,7 +75,8 @@ public class PatchData {
             missingVariables.put(varName, type);
             missingTypes.put(type.getName(), type);
         }
-    }    
+    }
+
     public void addConstVariable(String varName) {
         if (varName != null) {
             TypeInfo type = new TypeInfo();
@@ -85,6 +84,7 @@ public class PatchData {
             missingTypes.put(type.getName(), type);
         }
     }
+
     public TypeInfo getVariable(String varName) {
         if (varName.contains("::")) {
             String[] classNames = varName.split("::");
@@ -99,9 +99,11 @@ public class PatchData {
         }
         return missingVariables.get(varName);
     }
+
     public FunctionInfo getFunction(String functionName) {
         return missingFunctions.get(functionName);
     }
+
     public void addFunction(String functionName) {
         TypeInfo returnType = new TypeInfo();
         addType(returnType);
@@ -111,6 +113,7 @@ public class PatchData {
     public void removeVariable(String varName) {
         missingVariables.remove(varName);
     }
+
     public TypeInfo getType(String typeName) {
         typeName = typeName.replace("class ", "").replace("struct ", "");
         if (typeName.contains("::")) {
@@ -123,28 +126,27 @@ public class PatchData {
                 type = type.getNestedType(className);
             }
             return type;
-        }
-        else {
+        } else {
             return missingTypes.get(typeName);
         }
     }
 
-     public void setType(String typeName, TypeInfo type) {
-         //missingTypes.remove(typeName);
-         missingTypes.put(typeName, type);
-     }
-     
-     public HashMap<String, TypeInfo> getTypes(){
-         return missingTypes;
-     }
+    public void setType(String typeName, TypeInfo type) {
+        // missingTypes.remove(typeName);
+        missingTypes.put(typeName, type);
+    }
 
-     /**
-      * Copy the source file to the output folder adding #include "patch.h" at the top of it
-      */
-    public void copySource(String filepath) {
-        var result = "#include \"patch.h\"\n" + SpecsIo.read(SpecsIo.existingFile(filepath));
-        File destFile = new File("output/file.cpp");
-        SpecsIo.write(destFile, result);
+    public HashMap<String, TypeInfo> getTypes() {
+        return missingTypes;
+    }
+
+    /**
+     * Copy the source file to the output folder adding #include "patch.h" at the top of it
+     */
+    public void copySource(File originalFile, File patchedFile, String headerFilename) {
+        var result = "#include \"" + headerFilename + "\"\n" + SpecsIo.read(originalFile);
+        // File destFile = new File("output/file.cpp");
+        SpecsIo.write(patchedFile, result);
     }
 
     /**
@@ -160,11 +162,10 @@ public class PatchData {
         for (String varName : missingConstVariables.keySet()) {
             TypeInfo type = missingConstVariables.get(varName);
             String typeName = type.getName();
-            result += "const "+ typeName + " " + varName;
-            if (TUPatcherUtils.isPrimitiveType(type.getKind())){
+            result += "const " + typeName + " " + varName;
+            if (TUPatcherUtils.isPrimitiveType(type.getKind())) {
                 result += " = " + i + ";\n";
-            }
-            else {
+            } else {
                 result += " = " + typeName + "();\n";
             }
             i++;
@@ -185,63 +186,66 @@ public class PatchData {
     }
 
     /**
-     * @return String with the content to write to the file patch.h 
+     * @return String with the content to write to the file patch.h
      */
     public String str() {
         String result = "#define NULL 0\n";
         for (TypeInfo type : missingTypes.values()) {
             if (type.getKind().equals("class")) {
-                result += "class " + type.getName() + ";\n"; 
-            }
-            else if (type.getKind().equals("struct")) {
+                result += "class " + type.getName() + ";\n";
+            } else if (type.getKind().equals("struct")) {
                 if (!type.getTypedefStruct()) {
-                    result += "struct " + type.getName() + ";\n"; 
+                    result += "struct " + type.getName() + ";\n";
                 }
             }
         }
-        
+
         ArrayList<Definition> defs = orderedDefinitions();
         for (Definition def : defs) {
             result += def.str();
         }
         result += variablesPatches();
-        
+
         return result;
     }
 
     /**
-     * Writes in the files patch.h and file.cpp in the output directory.
+     * Writes in the patched file and corresponding header in the output directory.
      */
-    public void write(String filepath) {
-        File patchFile = new File("output/patch.h");
-        SpecsIo.write(patchFile, str());
-        copySource(filepath);
+    public void write(File originalFile, File patchedFile) {
+        var headerFilename = TUPatcherUtils.getPatchedHeaderFilename(originalFile.getName());
+        File patchHeaderFile = new File(patchedFile.getParentFile(), headerFilename);
+
+        SpecsIo.write(patchHeaderFile, str());
+
+        copySource(originalFile, patchedFile, headerFilename);
     }
-    
+
     /**
      * Topological sorting of a graph of dependencies between types and functions.
      * <p>
-     * When there is cyclic dependency between two or more types or functions, this function returns a list that is only partially ordered.
-     * When it happens this problem may be solved by the fact that all structs and classes are declared (but not defined) in the beginning of patch.h
+     * When there is cyclic dependency between two or more types or functions, this function returns a list that is only
+     * partially ordered. When it happens this problem may be solved by the fact that all structs and classes are
+     * declared (but not defined) in the beginning of patch.h
      */
-    public ArrayList<Definition> orderedDefinitions(){
+    public ArrayList<Definition> orderedDefinitions() {
         ArrayList<Definition> notSorted = new ArrayList<Definition>();
         ArrayList<Definition> result = new ArrayList<Definition>();
         for (TypeInfo type : missingTypes.values()) {
             if (!type.isNested()) {
                 notSorted.add(type);
             }
-        }        
+        }
         for (FunctionInfo function : missingFunctions.values()) {
             notSorted.add(function);
         }
-        while (! notSorted.isEmpty()) {
+        while (!notSorted.isEmpty()) {
             boolean cyclic = true;
             for (Definition def : notSorted) {
                 boolean ok = true;
                 for (Definition dependency : def.getDependencies()) {
                     boolean contains = false;
-                    for (Definition def2: notSorted) {
+                    for (Definition def2 : notSorted) {
                         if (dependency.getName().equals(def2.getName())) {
                             contains = true;
                             break;
@@ -250,7 +254,7 @@ public class PatchData {
                     if (contains) {
                         ok = false;
                         break;
-                    }                    
+                    }
                 }
                 if (ok) {
                     notSorted.remove(def);
@@ -260,28 +264,27 @@ public class PatchData {
                 }
             }
             if (cyclic) {
-                for (Definition def: notSorted) {
+                for (Definition def : notSorted) {
                     if (def instanceof TypeInfo) {
-                        if (!(((TypeInfo)def).getKind().equals("class") || ((TypeInfo)def).getKind().equals("struct"))) {
+                        if (!(((TypeInfo) def).getKind().equals("class")
+                                || ((TypeInfo) def).getKind().equals("struct"))) {
                             result.add(def);
                         }
-                    }
-                    else {
+                    } else {
                         result.add(def);
                     }
                 }
-                for (Definition def: notSorted) {
+                for (Definition def : notSorted) {
                     if (def instanceof TypeInfo) {
-                        if (((TypeInfo)def).getKind().equals("class") || ((TypeInfo)def).getKind().equals("struct")) {
+                        if (((TypeInfo) def).getKind().equals("class") || ((TypeInfo) def).getKind().equals("struct")) {
                             result.add(def);
                         }
-                    }
-                    else {
+                    } else {
                         result.add(def);
                     }
                 }
                 return result;
-                //throw new RuntimeException("Cyclic dependencies");
+                // throw new RuntimeException("Cyclic dependencies");
             }
         }
         return result;

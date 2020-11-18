@@ -46,43 +46,4 @@ public interface ClangAstWebResource {
 
     WebResourceProvider MAC_OS_EXE = create("macos/clang_ast", "v4.2.10");
 
-    // private static final String BASE_URL = "http://specs.fe.up.pt/resources/clangast/";
-    // private static final String BASE_URL = "http://192.168.55.89/resources/clangast/";
-    /*
-    private final String urlString;
-    private final String version;
-    
-    private ClangAstWebResource(String path) {
-        this(path, "v1.0");
-    }
-    
-    private ClangAstWebResource(String path, String version) {
-        this.urlString = path;
-        this.version = version;
-    }
-    */
-    // @Override
-    // public String getUrlString() {
-    // return urlString;
-    // }
-    /*
-    @Override
-    public String getResourceUrl() {
-        return urlString;
-    }
-    
-    @Override
-    public String getRootUrl() {
-        return BASE_URL;
-    }
-    
-    @Override
-    public String getVersion() {
-        return version;
-    }
-    */
-    // static List<WebResourceProvider> getWindowsResources() {
-    // return Arrays.asList(WIN_DLL1, WIN_DLL2, WIN_DLL3);
-    // }
-
 }
