@@ -13,23 +13,32 @@
 
 package pt.up.fe.specs.tupatcher.parallel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.concurrentchannel.ChannelConsumer;
 
 public class ResultsConsumer {
 
+    private static final String CSV_SEP = ";";
+
     private final int numProducers;
     private final ChannelConsumer<PatcherResult> consumer;
+    private final File csvFile;
 
     public ResultsConsumer(int numProducers, ChannelConsumer<PatcherResult> consumer) {
         this.numProducers = numProducers;
         this.consumer = consumer;
+        this.csvFile = new File("tu_patcher_stats.csv");
     }
 
     public List<PatcherResult> execute() {
+
+        // Reset stats file
+        startCsvFile();
 
         List<PatcherResult> results = new ArrayList<>();
 
@@ -52,6 +61,8 @@ public class ResultsConsumer {
                 }
 
                 // Process results
+                // Append line with results
+                csvAppend(result);
 
             } catch (InterruptedException e) {
                 SpecsLogs.info("Interrupted while ResultsConsumer.execute(): " + e.getMessage());
@@ -61,6 +72,20 @@ public class ResultsConsumer {
         }
 
         return results;
+    }
+
+    private void csvAppend(PatcherResult result) {
+        String csvLine = result.getFile().getAbsolutePath() + CSV_SEP + result.isSuccess() + CSV_SEP
+                + result.getIterations() + CSV_SEP + result.getExecutionTime() + "\n";
+
+        SpecsIo.append(csvFile, csvLine);
+    }
+
+    private void startCsvFile() {
+        String csvInit = "sep=" + CSV_SEP + "\n"
+                + "File" + CSV_SEP + "Success" + CSV_SEP + "Iterations" + CSV_SEP + "Execution Time (ns)\n";
+
+        SpecsIo.write(csvFile, csvInit);
     }
 
 }
