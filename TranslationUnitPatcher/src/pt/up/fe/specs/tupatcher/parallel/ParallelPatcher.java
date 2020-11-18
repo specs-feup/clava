@@ -15,8 +15,10 @@ package pt.up.fe.specs.tupatcher.parallel;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -47,7 +49,7 @@ public class ParallelPatcher {
         var numThreads = config.get(TUPatcherConfig.NUM_THREADS);
         numThreads = numThreads > 0 ? numThreads : Runtime.getRuntime().availableProcessors();
 
-        List<List<File>> partitionedSourceFiles = partitionFiles(sourceFiles, numThreads);
+        List<Map<File, File>> partitionedSourceFiles = partitionFiles(sourceFiles, numThreads);
 
         // Create ConcurrentChannel
         var channel = new ConcurrentChannel<PatcherResult>(numThreads);
@@ -56,7 +58,7 @@ public class ParallelPatcher {
 
         // Create producers
         for (var subSourceFiles : partitionedSourceFiles) {
-            var producer = new PatcherProducer(subSourceFiles, channel.createProducer());
+            var producer = new PatcherProducer(subSourceFiles, channel.createProducer(), config);
             var executor = Executors.newSingleThreadExecutor();
             futures.add(executor.submit(() -> producer.execute()));
             executor.shutdown();
@@ -87,26 +89,34 @@ public class ParallelPatcher {
         return 0;
     }
 
-    private List<List<File>> partitionFiles(List<File> sourceFiles, Integer numThreads) {
+    private List<Map<File, File>> partitionFiles(Map<File, File> sourceFiles, Integer numThreads) {
         // System.out.println("NUM THREADS: " + numThreads);
 
-        // Create arrays
+        // Create maps
         var partitioned = IntStream.range(0, numThreads)
-                .mapToObj(i -> (List<File>) new ArrayList<File>())
+                .mapToObj(i -> (Map<File, File>) new HashMap<File, File>())
                 .collect(Collectors.toList());
         // System.out.println("PARTITIONED SIZE: " + partitioned.size());
-        for (int i = 0; i < sourceFiles.size(); i++) {
-            int partitionedIndex = i % numThreads;
+        // for (int i = 0; i < sourceFiles.size(); i++) {
+        // int partitionedIndex = i % numThreads;
+        // // System.out.println("INDEX: " + partitionedIndex);
+        // partitioned.get(partitionedIndex).add(sourceFiles.get(i));
+        // }
+
+        int index = 0;
+        for (var key : sourceFiles.keySet()) {
+            int partitionedIndex = index % numThreads;
             // System.out.println("INDEX: " + partitionedIndex);
-            partitioned.get(partitionedIndex).add(sourceFiles.get(i));
+            partitioned.get(partitionedIndex).put(key, sourceFiles.get(key));
+            index++;
         }
 
         return partitioned;
     }
 
-    private List<File> getSourceFiles(List<String> sourcePaths, HashSet<String> validExtensions) {
+    private Map<File, File> getSourceFiles(List<String> sourcePaths, HashSet<String> validExtensions) {
 
-        var sourceFiles = new ArrayList<File>();
+        var sourceFiles = new HashMap<File, File>();
         for (var sourcePathname : sourcePaths) {
             SpecsLogs.info("Processing path '" + sourcePathname + "'...");
 
@@ -114,13 +124,14 @@ public class ParallelPatcher {
 
             if (sourcePath.isFile()) {
                 if (validExtensions.contains(SpecsIo.getExtension(sourcePath))) {
-                    sourceFiles.add(sourcePath);
+                    sourceFiles.put(sourcePath, null);
                     continue;
                 }
             }
 
             if (sourcePath.isDirectory()) {
-                sourceFiles.addAll(SpecsIo.getFilesRecursive(sourcePath, validExtensions));
+                SpecsIo.getFilesRecursive(sourcePath, validExtensions).stream()
+                        .forEach(file -> sourceFiles.put(file, sourcePath));
                 continue;
             }
 
