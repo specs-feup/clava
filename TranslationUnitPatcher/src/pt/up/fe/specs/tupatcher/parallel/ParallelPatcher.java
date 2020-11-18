@@ -96,7 +96,7 @@ public class ParallelPatcher {
 
         System.out.println("Program execution: " + SpecsStrings.parseTime(programTime));
         System.out.println("Producers execution: " + SpecsStrings.parseTime(producersTime));
-        System.out.println("Producers/Program ration: " + String.format(Locale.UK, "%f", producersProgramRatio));
+        System.out.println("Producers/Program ratio: " + String.format(Locale.UK, "%f", producersProgramRatio));
         System.out.println("Num threads: " + numThreads);
         // var subLists = Lists.partition(sourceFiles, sourceFiles.size() / numThreads);
         // for(int i=0; i<)
