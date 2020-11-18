@@ -316,7 +316,7 @@ MemoiGen.prototype._generateFromReport = function() {
 			}
 		} else {
 			var sTmp = this._generateEach(report);	
-			for(var sT of sTmp) {
+			for(var sT of sTmp.values()) {
 				s.add(sT);
 			}
 		}
@@ -341,7 +341,7 @@ MemoiGen.prototype._generateEach = function(report) {
 		var wrapperName = IdGenerator.next("mw_" + cSig);
 		s.add(wrapperName);
 
-		$call.wrap(wrapperName); // TODO: change call to have reset arg with false
+		$call.wrap(wrapperName);
 		$call.addArg("0", ClavaJoinPoints.builtinType("unsigned char"));
 
 		this._generateGeneric(wrapperName, report);
@@ -360,7 +360,7 @@ MemoiGen.prototype._generateAll = function(report) {
 	
 	for(var $call of Query.search("call", {"signature": s => this._target._sig === MemoiUtils.normalizeSig(s)})) {
 
-		$call.wrap(wrapperName); // TODO: change call to have reset arg with false
+		$call.wrap(wrapperName);
 		$call.addArg("0", ClavaJoinPoints.builtinType("unsigned char"));
 	}
 	this._generateGeneric(wrapperName, report);
@@ -465,6 +465,12 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 		// change function to have reset parameter if needed
 		if(this._isResetFunc) {
 			$function.addParam("char reset");
+			// change every found declaration
+			for(var chain of Query.search("function", {"name": wrapperName, "hasDefinition": false}).chain()) {
+		
+				var $decl = chain["function"];
+				$decl.addParam("char reset");
+			}
 		}
 		
 		if(this._isDebug) {
