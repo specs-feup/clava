@@ -5,3 +5,4 @@ https://github.com/specs-feup/clava
 --build
 --project ClavaWeaver
 --main pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher
+--jar subfolder
