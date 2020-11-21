@@ -1,3 +1,13 @@
 import weaver.jp.ConstructorJp;
 import weaver.Weaver;
 
+_lara_dummy_ = Object.defineProperty(ConstructorJp.prototype, 'superCalls', {
+	get: function () {
+		var initializers = Weaver.toJs(this.astNode.getInitializers());
+		// Filter Constructor calls
+		initializers = initializers.filter(init => init.getValue("initKind").getString() === "BaseInitializer");
+		// Get Constructor calls
+		initializers = initializers.map(init => init.getValue("initExpr").getSubExpr());
+		return CommonJoinPoints.toJoinPoints(initializers);
+	}
+});
