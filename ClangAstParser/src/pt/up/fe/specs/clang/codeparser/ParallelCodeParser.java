@@ -167,9 +167,24 @@ public class ParallelCodeParser extends CodeParser {
         executor.shutdown();
 
         // Collect parsing results
-        List<ClangParserData> clangParserResults = futureTUnits.stream()
-                .map(SpecsSystem::get)
-                .collect(Collectors.toList());
+        List<ClangParserData> clangParserResults = new ArrayList<>();
+        for (int i = 0; i < sources.size(); i++) {
+            var future = futureTUnits.get(i);
+            try {
+                // var parserData = getParserData(future);
+                var parserData = SpecsSystem.get(future);
+                clangParserResults.add(parserData);
+            } catch (Exception e) {
+                ClavaLog.info("Could not parse file '" + sources.get(i) + "', will be ignored.");
+                continue;
+            }
+
+        }
+
+        // List<ClangParserData> clangParserResults = futureTUnits.stream()
+        // .map(future -> getParserData(future))
+        // .filter(parser -> parser != null)
+        // .collect(Collectors.toList());
         // for (var data : clangParserResults) {
         // System.out.println("CLANG PARSER NODES:\n" + data.get(ClangParserData.CLAVA_NODES).getNodes());
         // }
@@ -294,6 +309,16 @@ public class ParallelCodeParser extends CodeParser {
         return app;
 
     }
+
+    // private ClangParserData getParserData(Future<ClangParserData> future) {
+    // try {
+    // return SpecsSystem.get(future);
+    // } catch (Exception e) {
+    // ClavaLog.info(e.getMessage());
+    // return null;
+    // }
+    // }
+
     //
     // private <T> Stream<T> getSourceFileStream(Collection<T> sourceFiles) {
     // if (get(PARALLEL_PARSING)) {

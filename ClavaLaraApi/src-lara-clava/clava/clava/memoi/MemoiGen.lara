@@ -342,7 +342,9 @@ MemoiGen.prototype._generateEach = function(report) {
 		s.add(wrapperName);
 
 		$call.wrap(wrapperName);
-		$call.addArg("0", ClavaJoinPoints.builtinType("unsigned char"));
+		if(this._isResetFunc) {
+			$call.addArg("0", ClavaJoinPoints.builtinType("unsigned char"));
+		}
 
 		this._generateGeneric(wrapperName, report);
 	}
@@ -361,7 +363,9 @@ MemoiGen.prototype._generateAll = function(report) {
 	for(var $call of Query.search("call", {"signature": s => this._target._sig === MemoiUtils.normalizeSig(s)})) {
 
 		$call.wrap(wrapperName);
-		$call.addArg("0", ClavaJoinPoints.builtinType("unsigned char"));
+		if(this._isResetFunc) {
+			$call.addArg("0", ClavaJoinPoints.builtinType("unsigned char"));
+		}
 	}
 	this._generateGeneric(wrapperName, report);
 	
