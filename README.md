@@ -1,5 +1,13 @@
 # Clava
-Clava is a C/C++ source-to-source compiler. It applies analysis and transformations written in Javascript-like scripts, and can be installed in under a minute.
+Clava is a C/C++ source-to-source compiler. It applies analysis and transformations written in LARA scripts (which is based on JavaScript), and can be installed in under a minute.
+
+# Quickstart
+
+Tutorial on how to use Clava: [Clava Tutorial - 2018 PACT](https://github.com/specs-feup/specs-lara/tree/master/2018-PACT).
+
+Start using LARA with examples: [LARA Reference Guide](http://specs.fe.up.pt/tools/lara/doku.php?id=lara:docs:sheet).
+
+For a sample of Clava examples, please click [here](https://github.com/specs-feup/clava-examples/).
 
 
 # Resources
@@ -11,10 +19,6 @@ There is an [installation script](http://specs.fe.up.pt/tools/clava/clava-update
 For an online demo version of Clava, please click [here](http://specs.fe.up.pt/tools/clava/).
 
 To call Clava from within CMake, please click [here](https://github.com/specs-feup/clava/tree/master/CMake).
-
-For a tutorial on how to use Clava, please click [here](https://github.com/specs-feup/specs-lara/tree/master/2018-PACT).
-
-For a sample of Clava examples, please click [here](https://github.com/specs-feup/clava-examples/).
 
 To build Clava, please check the [ClavaWeaver](https://github.com/specs-feup/clava/tree/master/ClavaWeaver) project folder.
 
@@ -34,7 +38,12 @@ On Fedora >28 systems this can be solved by installing the package `ncurses-comp
 Install libz package (e.g., in Ubuntu `sudo apt-get install libz-dev`)
 
 
+# Citing Clava
 
-# acknowledgments
+If you want to reference Clava in your work, please use the following publication:
+
+*João Bispo, and João MP Cardoso. Clava: C/C++ source-to-source compilation using LARA. SoftwareX, Volume 12, 2020, Article 100565.* [[Elsevier](https://github.com/specs-feup/clava/tree/master/ClavaWeaver)] [[bibtex](http://specs.fe.up.pt/tools/clava/clava_softwarex2020.bib)]
+
+# Acknowledgments
 
 This work has been partially funded by the [ANTAREX project](http://antarex-project.eu) through the EU H2020 FET-HPC program under grant no. 671623. João Bispo acknowledges the support provided by Fundação para a Ciência e a Tecnologia, Portugal, under Post-Doctoral grant SFRH/BPD/118211/2016.
