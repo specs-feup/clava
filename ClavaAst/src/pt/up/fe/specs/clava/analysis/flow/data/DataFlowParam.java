@@ -25,6 +25,12 @@ import java.util.regex.Pattern;
 
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 
+/**
+ * Class that holds information about a function parameter for the DFG
+ * 
+ * @author Tiago
+ *
+ */
 public class DataFlowParam {
     private String name;
     private String type;
@@ -44,15 +50,28 @@ public class DataFlowParam {
 	}
     };
 
+    /**
+     * Checks whether the parameter type is a type supported by the DFG. Filters
+     * things like "unsigned short" into being just "short", since the
+     * signed/unsigned information does not matter
+     * 
+     * @param type
+     * @return the simplified name of the type if it is supported, or null otherwise
+     */
     private String filterType(String type) {
 	String[] tokens = type.split(" ");
 	for (String s : tokens) {
 	    if (Arrays.asList(commonTypes).contains(s))
 		return s;
 	}
-	return type;
+	return null;
     }
 
+    /**
+     * Constructor from a Clava parameter node
+     * 
+     * @param paramNode
+     */
     public DataFlowParam(ParmVarDecl paramNode) {
 	name = paramNode.getDeclName();
 	isArray = paramNode.getTypeCode().contains("[");
@@ -73,28 +92,31 @@ public class DataFlowParam {
 	this.dataTypeSize = (typeSizes.get(this.type) != null) ? typeSizes.get(this.type) : 4;
     }
 
+    /**
+     * Gets the name of the parameter
+     * 
+     * @return
+     */
     public String getName() {
 	return name;
     }
 
-    public void setName(String name) {
-	this.name = name;
-    }
-
+    /**
+     * Gets the simplified type of the parameter
+     * 
+     * @return
+     */
     public String getType() {
 	return type;
     }
 
-    public void setType(String type) {
-	this.type = type;
-    }
-
+    /**
+     * Checks if the parameter is an array
+     * 
+     * @return true if it is an array, false otherwise
+     */
     public boolean isArray() {
 	return isArray;
-    }
-
-    public void setArray(boolean isArray) {
-	this.isArray = isArray;
     }
 
     @Override
@@ -108,23 +130,40 @@ public class DataFlowParam {
 	return sb.toString();
     }
 
+    /**
+     * Gets the dimension of the parameter, if it is an array
+     * 
+     * @return The dimension if it is an array, 0 if it is a variable
+     */
     public ArrayList<Integer> getDim() {
 	return dim;
     }
 
+    /**
+     * Checks whether the parameter can be considered a stream. Relevant only for
+     * HLS
+     * 
+     * @return true if it can be a stream, false otherwise
+     */
     public boolean isStream() {
 	return isStream;
     }
 
+    /**
+     * Sets the parameter as being a stream. Relevant only for HLS
+     *
+     * @param isStream
+     */
     public void setStream(boolean isStream) {
 	this.isStream = isStream;
     }
 
+    /**
+     * Gets the size of the data type, in bytes
+     * 
+     * @return the size of the data type in bytes
+     */
     public int getDataTypeSize() {
 	return dataTypeSize;
-    }
-
-    public void setDataTypeSize(int dataTypeSize) {
-	this.dataTypeSize = dataTypeSize;
     }
 }
