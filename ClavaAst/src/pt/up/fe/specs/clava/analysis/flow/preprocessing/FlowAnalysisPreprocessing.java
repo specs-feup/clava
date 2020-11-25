@@ -28,6 +28,13 @@ import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
+/**
+ * Class to perform preprocessing on the code before generating a DFG Each
+ * preprocessing step should be a public method
+ * 
+ * @author Tiago
+ *
+ */
 public class FlowAnalysisPreprocessing {
     private CompoundStmt body;
 
@@ -35,6 +42,9 @@ public class FlowAnalysisPreprocessing {
 	this.body = body;
     }
 
+    /**
+     * Applies constant folding using the ConstantFolding transformation
+     */
     public void applyConstantFolding() {
 	ConstantFolding cf = new ConstantFolding();
 	TransformQueue<ClavaNode> queue = new TransformQueue<>("Constant Folding Queue");
@@ -54,10 +64,10 @@ public class FlowAnalysisPreprocessing {
 	} while (detected != 0);
     }
 
-    private boolean isLiteral(Expr expr) {
-	return ((expr instanceof IntegerLiteral) || (expr instanceof FloatingLiteral));
-    }
-
+    /**
+     * Applies a transformation that unwraps multiple declarations on a single line
+     * using a UnwrapSingleLineMultipleDecls transformation
+     */
     public void applyUnwrapSingleLineMultipleDecls() {
 	UnwrapSingleLineMultipleDecls unwrap = new UnwrapSingleLineMultipleDecls();
 	TransformQueue<ClavaNode> queue = new TransformQueue<>("Unwrapping Decls Queue");
@@ -68,5 +78,16 @@ public class FlowAnalysisPreprocessing {
 	    }
 	}
 	queue.apply();
+    }
+
+    /**
+     * Helper method that checks if an expression is a literal (e.g., an integer or
+     * floating point number)
+     * 
+     * @param expr
+     * @return true if it is a a literal, false otherwise
+     */
+    private boolean isLiteral(Expr expr) {
+	return ((expr instanceof IntegerLiteral) || (expr instanceof FloatingLiteral));
     }
 }

@@ -20,6 +20,12 @@ package pt.up.fe.specs.clava.analysis.flow.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Class to track variable dependencies using a DFG (early prototype)
+ * 
+ * @author Tiago
+ *
+ */
 public class DependencyTracker {
     private DataFlowGraph dfg;
     private HashMap<String, String> dependencies;

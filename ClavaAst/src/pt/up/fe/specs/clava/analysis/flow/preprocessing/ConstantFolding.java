@@ -26,6 +26,13 @@ import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
 import pt.up.fe.specs.clava.transform.SimplePreClavaRule;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
+/**
+ * Transformation that applies constant folding to an arbitrary AST Works with
+ * both integers and floating point
+ * 
+ * @author Tiago
+ *
+ */
 public class ConstantFolding implements SimplePreClavaRule {
 
     @Override
@@ -38,30 +45,39 @@ public class ConstantFolding implements SimplePreClavaRule {
 	Expr rhs = op.getRhs();
 
 	if ((lhs instanceof FloatingLiteral) && (rhs instanceof FloatingLiteral)) {
-	    float l1 = Float.parseFloat(((FloatingLiteral) lhs).getLiteral());
-	    float l2 = Float.parseFloat(((FloatingLiteral) rhs).getLiteral());
+	    double l1 = Double.parseDouble(((FloatingLiteral) lhs).getLiteral());
+	    double l2 = Double.parseDouble(((FloatingLiteral) rhs).getLiteral());
 	    queue.replace(node, performFloatOperation(l1, l2, op));
 	}
 	if ((lhs instanceof FloatingLiteral) && (rhs instanceof IntegerLiteral)) {
-	    float l1 = Float.parseFloat(((FloatingLiteral) lhs).getLiteral());
-	    float l2 = Integer.parseInt(((IntegerLiteral) rhs).getLiteral());
+	    double l1 = Double.parseDouble(((FloatingLiteral) lhs).getLiteral());
+	    double l2 = Long.parseLong(((IntegerLiteral) rhs).getLiteral());
 	    queue.replace(node, performFloatOperation(l1, l2, op));
 	}
 	if ((lhs instanceof IntegerLiteral) && (rhs instanceof FloatingLiteral)) {
-	    float l1 = Integer.parseInt(((IntegerLiteral) lhs).getLiteral());
-	    float l2 = Float.parseFloat(((FloatingLiteral) rhs).getLiteral());
+	    double l1 = Integer.parseInt(((IntegerLiteral) lhs).getLiteral());
+	    double l2 = Long.parseLong(((FloatingLiteral) rhs).getLiteral());
 	    queue.replace(node, performFloatOperation(l1, l2, op));
 	}
 	if ((lhs instanceof IntegerLiteral) && (rhs instanceof IntegerLiteral)) {
-	    int l1 = Integer.parseInt(((IntegerLiteral) lhs).getLiteral());
-	    int l2 = Integer.parseInt(((IntegerLiteral) rhs).getLiteral());
+	    long l1 = Long.parseLong(((IntegerLiteral) lhs).getLiteral());
+	    long l2 = Long.parseLong(((IntegerLiteral) rhs).getLiteral());
 	    queue.replace(node, performIntegerOperation(l1, l2, op));
 	}
     }
 
-    private FloatingLiteral performFloatOperation(float l1, float l2, BinaryOperator op) {
+    /**
+     * Creates a FloatingIntegral by calculating an expression involving two
+     * floating point numbers and an arithmetic operation
+     * 
+     * @param l1
+     * @param l2
+     * @param op
+     * @return a FloatingLiteral node with the result
+     */
+    private FloatingLiteral performFloatOperation(double l1, double l2, BinaryOperator op) {
 	String operator = op.getOperatorCode();
-	float res = 0;
+	double res = 0;
 	switch (operator) {
 	case "-": {
 	    res = l1 - l2;
@@ -80,13 +96,22 @@ public class ConstantFolding implements SimplePreClavaRule {
 	    break;
 	}
 	}
-	FloatingLiteral lit = op.getFactory().floatingLiteral(FloatKind.FLOAT, res);
+	FloatingLiteral lit = op.getFactory().floatingLiteral(FloatKind.LONG_DOUBLE, res);
 	return lit;
     }
 
-    private IntegerLiteral performIntegerOperation(int l1, int l2, BinaryOperator op) {
+    /**
+     * Creates an IntegerIntegral by calculating an expression involving two
+     * integers and an arithmetic operation
+     * 
+     * @param l1
+     * @param l2
+     * @param op
+     * @return an IntegerIntegral node with the result
+     */
+    private IntegerLiteral performIntegerOperation(long l1, long l2, BinaryOperator op) {
 	String operator = op.getOperatorCode();
-	int res = 0;
+	long res = 0;
 	switch (operator) {
 	case "-": {
 	    res = l1 - l2;
@@ -105,7 +130,7 @@ public class ConstantFolding implements SimplePreClavaRule {
 	    break;
 	}
 	}
-	IntegerLiteral lit = op.getFactory().integerLiteral(res);
+	IntegerLiteral lit = op.getFactory().integerLiteral((int) res);
 	return lit;
     }
 }
