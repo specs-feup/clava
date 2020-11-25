@@ -118,6 +118,7 @@ public class CXXConstructExpr extends Expr {
 
     @Override
     public String getCode() {
+
         // If only one non-default arg, most of the time the constructor should be omitted
         if (ommitConstructor()) {
             return getArgs().get(0).getCode();
@@ -197,6 +198,7 @@ public class CXXConstructExpr extends Expr {
 
         // If is elidable, check that has a single non-default argument and remove
         if (isElidable()) {
+
             // System.out.println("IS ELIDABLE");
             List<Expr> args = getArgs();
             Preconditions.checkArgument(args.size() == 1);
@@ -232,9 +234,21 @@ public class CXXConstructExpr extends Expr {
         // }
 
         if (argsCode.isEmpty()) {
+
+            // Nameless temporary object created with the initializer consisting of an empty pair of parentheses
+            // https://en.cppreference.com/w/cpp/language/value_initialization
             if (isTemporary()) {
                 return "()";
             }
+
+            if (get(REQUIRES_ZERO_INITIALIZATION)) {
+                return "()";
+            }
+            // Non-static data member or a base class initialized using a member initializer with an empty pair of
+            // parentheses
+
+            // System.out.println("THIS: " + get(REQUIRES_ZERO_INITIALIZATION));
+
             return "";
         }
 
@@ -249,7 +263,17 @@ public class CXXConstructExpr extends Expr {
 
     protected boolean isTemporary() {
         return false;
+        // return get(IS_TEMPORARY_OBJECT);
     }
+
+    /**
+     * https://en.cppreference.com/w/cpp/language/value_initialization
+     * 
+     * @return true if this
+     */
+    // public boolean isValueInitialization()) {
+    //
+    // }
 
     @Override
     public SpecsList<DataKey<?>> getSignatureKeys() {
