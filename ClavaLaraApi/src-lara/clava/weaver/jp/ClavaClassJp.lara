@@ -72,11 +72,9 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, '_kind', {
 // TODO
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'isCustom', {
 	get: function () {
-		for($class of Query.search("class"))
-			if($class.id === this.id)
-				return true;
-		
-		return false;	
+	
+		return this.ancestor("file") != null;
+	
 	}
 });
 
