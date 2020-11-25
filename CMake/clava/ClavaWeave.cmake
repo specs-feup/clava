@@ -52,7 +52,7 @@ function(clava_weave ORIG_TARGET ASPECT)
 	
 
 	# Get CMakeLists.txt dir
-	get_target_property(ORIG_CMAKE_DIR ${ORIG_TARGET} SOURCE_DIR)
+	clava_get_target_property(ORIG_CMAKE_DIR ${ORIG_TARGET} SOURCE_DIR)
 	#message(STATUS "ORIG_CMAKE_DIR: ${ORIG_CMAKE_DIR}")
 
 
@@ -65,7 +65,7 @@ function(clava_weave ORIG_TARGET ASPECT)
 
 	
 	# Get original source files
-	get_target_property(ORIG_SOURCES ${ORIG_TARGET} SOURCES)
+	clava_get_target_property(ORIG_SOURCES ${ORIG_TARGET} SOURCES)
 	#message(STATUS "ORIG_SOURCES: ${ORIG_SOURCES}")
 	
 	# Initialize processed sources
@@ -94,7 +94,7 @@ function(clava_weave ORIG_TARGET ASPECT)
 	#message(STATUS "ORIG_INCLUDES: '${ORIG_INCLUDES}'")
 	
 #	# Get original include folders
-#	get_target_property(ORIG_INCLUDES ${ORIG_TARGET} INCLUDE_DIRECTORIES)
+#	clava_get_target_property(ORIG_INCLUDES ${ORIG_TARGET} INCLUDE_DIRECTORIES)
 #	#message(STATUS "ORIG_INCLUDES: '${ORIG_INCLUDES}'")
 #	
 #	# If not found, set to empty list
@@ -103,7 +103,7 @@ function(clava_weave ORIG_TARGET ASPECT)
 #	endif()
 #
 #	# Add includes of target link libraries
-#	get_target_property(ORIG_LINK_LIBRARIES ${ORIG_TARGET} LINK_LIBRARIES)
+#	clava_get_target_property(ORIG_LINK_LIBRARIES ${ORIG_TARGET} LINK_LIBRARIES)
 #	#message(STATUS "ORIG_LINK_LIBRARIES: ${ORIG_LINK_LIBRARIES}")		
 #	
 #	# If not found, set to empty list
@@ -116,7 +116,7 @@ function(clava_weave ORIG_TARGET ASPECT)
 #	# Add include directories of linked targets
 #	foreach(ORIG_LINK_LIB IN LISTS ORIG_LINK_LIBRARIES)
 #		#message(STATUS "ORIG_LINK_LIB: ${ORIG_LINK_LIB}")
-#		get_target_property(ORIG_LINK_LIB_INC ${ORIG_LINK_LIB} INCLUDE_DIRECTORIES)
+#		clava_get_target_property(ORIG_LINK_LIB_INC ${ORIG_LINK_LIB} INCLUDE_DIRECTORIES)
 #		if("${ORIG_LINK_LIB_INC}" MATCHES "ORIG_LINK_LIB_INC-NOTFOUND")
 #			set(ORIG_LINK_LIB_INC "")
 #		endif()

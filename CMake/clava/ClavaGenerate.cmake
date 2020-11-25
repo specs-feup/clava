@@ -55,7 +55,7 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	#message(STATUS "ASPECT ARGS: ${ASPECT_ARGS}")
 	
 	# get CMakeLists.txt dir
-	get_target_property(ORIG_CMAKE_DIR ${ORIG_TARGET} SOURCE_DIR)
+	clava_get_target_property(ORIG_CMAKE_DIR ${ORIG_TARGET} SOURCE_DIR)
 	#message(STATUS "ORIG_CMAKE_DIR: ${ORIG_CMAKE_DIR}")
 	
 	# set absolute path of aspect file relative to the source folder, in case path is relative
@@ -85,7 +85,7 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	#message(STATUS "WOVEN_DIR: ${WOVEN_DIR}")	
 	
 	# get original source files
-	get_target_property(ORIG_SOURCES ${ORIG_TARGET} SOURCES)
+	clava_get_target_property(ORIG_SOURCES ${ORIG_TARGET} SOURCES)
 	#message(STATUS "ORIG_SOURCES: ${ORIG_SOURCES}")
 	
 	# process original source file list
@@ -99,7 +99,7 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	
 	
 	# get original include folders
-	get_target_property(ORIG_INCLUDES ${ORIG_TARGET} INCLUDE_DIRECTORIES)
+	clava_get_target_property(ORIG_INCLUDES ${ORIG_TARGET} INCLUDE_DIRECTORIES)
 	set(INCLUDE_HEADERS_FLAG "-ih")
     if((${ORIG_INCLUDES} MATCHES "ORIG_INCLUDES-NOTFOUND") OR ("${ORIG_INCLUDES}" STREQUAL ""))
         set(INCLUDE_HEADERS_FLAG "")
@@ -200,7 +200,7 @@ function(clava_generate ORIG_TARGET GENERATED_TARGET ASPECT)
 	target_include_directories(${GENERATED_TARGET} PUBLIC "${ORIG_INCLUDES}")
 	
 
-	get_target_property(GEN_INCLUDES ${GENERATED_TARGET} INCLUDE_DIRECTORIES)
+	clava_get_target_property(GEN_INCLUDES ${GENERATED_TARGET} INCLUDE_DIRECTORIES)
 	#message(STATUS "Generated Includes: ${GEN_INCLUDES}")
 	
 

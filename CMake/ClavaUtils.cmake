@@ -17,7 +17,7 @@ function(target_include_directories_recursive CURRENT_TARGET INCLUDE_DIRECTORIES
 	endif()
 	
 	# Get original include folders
-	get_target_property(ORIG_INCLUDES ${CURRENT_TARGET} INCLUDE_DIRECTORIES)
+	clava_get_target_property(ORIG_INCLUDES ${CURRENT_TARGET} INCLUDE_DIRECTORIES)
 	#message(STATUS "ORIG_INCLUDES of ${CURRENT_TARGET}: '${ORIG_INCLUDES}'")
 	
 	# If not found, set to empty list
@@ -32,7 +32,7 @@ function(target_include_directories_recursive CURRENT_TARGET INCLUDE_DIRECTORIES
 
 
 	# Add includes of target link libraries
-	get_target_property(ORIG_LINK_LIBRARIES "${CURRENT_TARGET}" LINK_LIBRARIES)
+	clava_get_target_property(ORIG_LINK_LIBRARIES "${CURRENT_TARGET}" LINK_LIBRARIES)	
 	#message(STATUS "ORIG_LINK_LIBRARIES of ${CURRENT_TARGET}: ${ORIG_LINK_LIBRARIES}")		
 	
 	# If not found, set to empty list
@@ -111,3 +111,22 @@ function(clava_get_all_targets _result _dir)
 	get_property(_sub_targets DIRECTORY "${_dir}" PROPERTY BUILDSYSTEM_TARGETS)
 	set(${_result} ${${_result}} ${_sub_targets} PARENT_SCOPE)
 endfunction(clava_get_all_targets)
+
+# Wrapper around get_target_property that takes into account special case INTERFACE_LIBRARY
+# 
+# Parameter 1: _var - variable where value of the property will be stored
+# Parameter 2: _target - the target where we will read the property from
+# Parameter 3: _property - the target property to read
+function(clava_get_target_property _var _target _property)
+
+	get_target_property(_TARGET_TYPE ${_target} TYPE)
+	if(_TARGET_TYPE STREQUAL "INTERFACE_LIBRARY")
+		#unset(_var)
+		set(_value "")
+	else()
+		get_target_property(_value ${_target} ${_property})
+	endif()
+
+	set(${_var} ${_value} PARENT_SCOPE)
+
+endfunction(clava_get_target_property)
