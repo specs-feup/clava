@@ -25,3 +25,21 @@ clava_weave(<TARGET_NAME> <LARA_FILE>)
 ```
 
 Where `<TARGET_NAME>` is the name of a CMake target (e.g., created with `add_library` or `add_executable`) and `<LARA_FILE>` is a .lara file.
+
+To pass arguments to the LARA scripts, use the argument `ARGS` followed by a single string:
+
+```
+clava_weave(foo Bar.lara ARGS "inputFile:'data.json', execute:true, iterations:10")  
+```
+
+You can pass flags as you would when calling Clava from the command-line with the argument `FLAGS` followed by the flags:
+
+```
+clava_weave(foo Bar.lara FLAGS --parsing-threads 8)  
+```
+
+Additionally, you can pass flags directly to the JVM that launches Clava using the argument `JAVA_FLAGS`:
+
+```
+clava_weave(foo Bar.lara JAVA_FLAGS -Xmx1024m)  
+```
