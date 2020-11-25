@@ -1,0 +1,33 @@
+#ifndef _CLAVA_ISSUE9_H_
+#define _CLAVA_ISSUE9_H_
+
+
+class Color {
+   
+};
+
+/*
+public:
+Color(int a = 0);
+*/
+/*
+private:
+int a;
+*/
+
+class Cat {
+   
+   
+   public:
+   Cat() : m_age(5), m_color(Color()) {
+   }
+   
+   void miau(int times);
+   
+   
+   private:
+   unsigned int m_age;
+   Color m_color;
+};
+
+#endif
