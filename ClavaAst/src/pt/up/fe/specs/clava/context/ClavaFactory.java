@@ -374,10 +374,14 @@ public class ClavaFactory {
         return new NullExpr(data, Collections.emptyList());
     }
 
-    public IntegerLiteral integerLiteral(int integer) {
+    public IntegerLiteral integerLiteral(long integer) {
+        return integerLiteral(BigInteger.valueOf(integer));
+    }
+
+    public IntegerLiteral integerLiteral(BigInteger integer) {
         DataStore data = newDataStore(IntegerLiteral.class)
-                .put(Literal.SOURCE_LITERAL, Integer.toString(integer))
-                .put(IntegerLiteral.VALUE, BigInteger.valueOf(integer))
+                .put(Literal.SOURCE_LITERAL, integer.toString())
+                .put(IntegerLiteral.VALUE, integer)
                 .put(Expr.TYPE, Optional.of(builtinType(BuiltinKind.Int)));
 
         return new IntegerLiteral(data, Collections.emptyList());
