@@ -27,3 +27,16 @@ int main () {
   cout << foo.area() << '\n';
   return 0;
 }
+
+
+template <typename T>
+class A {
+   friend int foo(T);
+   friend class B;
+   friend T;
+   template <typename U>
+   friend class C;
+   template <typename U>
+   friend A<T>& operator+=(A<T>&, U const&) {
+   }
+};
