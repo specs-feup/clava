@@ -148,9 +148,16 @@ public class RecordDecl extends TagDecl {
     }
 
     protected String getCode(String bases) {
+        boolean addNewlines = addNewLines();
 
         StringBuilder code = new StringBuilder();
-        code.append(ln()).append(getTagKind().getCode());
+
+        if (addNewlines) {
+            code.append(ln());
+        }
+
+        code.append(getTagKind().getCode());
+
         if (hasDeclName()) {
             code.append(" ").append(getDeclName());
         }
@@ -188,13 +195,28 @@ public class RecordDecl extends TagDecl {
             code.append(" ").append(postAttributesCode);
         }
 
-        code.append(";" + ln());
+        code.append(";");
+
+        if (addNewlines) {
+            code.append(ln());
+        }
 
         // System.out.println("CXXRECORD CODE:\n" + code);
         // System.out.println("HAS DECL NAME: " + hasDeclName());
         // System.out.println("DECL NAME: " + getDeclName());
 
         return code.toString();
+    }
+
+    private boolean addNewLines() {
+        // If inside a Template declaration, do not add new lines
+        var parent = getParent();
+
+        if (parent instanceof TemplateDecl) {
+            return false;
+        }
+
+        return true;
     }
 
     protected String getDefinitionCode() {
