@@ -51,6 +51,12 @@ import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 
+/**
+ * Class that represents a Data Flow Graph (DFG)
+ * 
+ * @author Tiago
+ *
+ */
 public class DataFlowGraph extends FlowGraph {
     private ControlFlowGraph cfg;
     private ArrayList<Integer> processed = new ArrayList<>();
@@ -114,10 +120,16 @@ public class DataFlowGraph extends FlowGraph {
 	findFunctionParams();
     }
 
+    /**
+     * Prunes all duplicated nodes, which may happen due to consistency issues
+     */
     private void pruneDuplicatedNodes() {
 	this.nodes = (ArrayList<FlowNode>) nodes.stream().distinct().collect(Collectors.toList());
     }
 
+    /**
+     * Finds and builds the function parameters
+     */
     private void findFunctionParams() {
 	for (int i = 0; i < body.getParent().getChildren().size(); i++) {
 	    if (body.getParent().getChild(i) instanceof ParmVarDecl) {
@@ -133,6 +145,10 @@ public class DataFlowGraph extends FlowGraph {
 	interfaceNode.setLabel(sb.toString());
     }
 
+    /**
+     * Finds all load nodes that refer to the same access, and merges them in a
+     * single node
+     */
     private void mergeLoadNodes() {
 	// First merge within a subgraph
 	for (DataFlowNode root : subgraphRoots) {
@@ -152,6 +168,9 @@ public class DataFlowGraph extends FlowGraph {
 	}
     }
 
+    /**
+     * Finds all subgraphs of the DFG
+     */
     private void findSubgraphs() {
 	for (FlowNode n : this.nodes) {
 	    DataFlowNode node = (DataFlowNode) n;
@@ -166,6 +185,12 @@ public class DataFlowGraph extends FlowGraph {
 	}
     }
 
+    /**
+     * Builds a subgraph recursively
+     * 
+     * @param node
+     * @param id
+     */
     private void buildSubgraph(DataFlowNode node, int id) {
 	if (node.getSubgraphID() == id)
 	    return;
@@ -179,6 +204,12 @@ public class DataFlowGraph extends FlowGraph {
 	}
     }
 
+    /**
+     * Gets all nodes of the subgraph with the given ID
+     * 
+     * @param id
+     * @return a list of subgraph nodes
+     */
     private ArrayList<DataFlowNode> getSubgraphNodes(int id) {
 	ArrayList<DataFlowNode> nodes = new ArrayList<>();
 	for (FlowNode n : this.nodes) {
@@ -189,19 +220,41 @@ public class DataFlowGraph extends FlowGraph {
 	return nodes;
     }
 
+    /**
+     * Gets the subgraph counter, used to assign subgraph IDs
+     * 
+     * @return
+     */
     public int getSubgraphCounter() {
 	return subgraphCounter;
     }
 
+    /**
+     * Gets the subgraph of the given root
+     * 
+     * @param root
+     * @return a dataflow subgraph
+     */
     public DataFlowSubgraph getSubgraph(DataFlowNode root) {
 	return this.subgraphs.get(root);
     }
 
+    /**
+     * Gets the subgraph with the given ID
+     * 
+     * @param id
+     * @return a dataflow subgraph
+     */
     public DataFlowSubgraph getSubgraph(int id) {
 	DataFlowNode node = this.subgraphRoots.get(id);
 	return this.subgraphs.get(node);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see pt.up.fe.specs.clava.analysis.flow.FlowGraph#toDot()
+     */
     @Override
     public String toDot() {
 	StringBuilder sb = new StringBuilder();
@@ -236,13 +289,11 @@ public class DataFlowGraph extends FlowGraph {
     }
 
     /**
+     * Method that starts building the DFG for a function with conditionals
      * 
-     * 
-     * Version that supports if-statements, experimental
-     * 
-     * 
+     * @param block
+     * @return a list with the DFG nodes
      */
-
     private ArrayList<DataFlowNode> buildGraphTopLevelConditional(BasicBlockNode block) {
 	boolean topLevel = CFGUtils.isTopLevel(block);
 	int pragmaIter = -1;
@@ -363,13 +414,10 @@ public class DataFlowGraph extends FlowGraph {
     }
 
     /**
+     * Method that starts building the DFG for a function with no conditionals
      * 
-     * 
-     * Stable version with no support for if-statements
-     * 
-     * 
+     * @param topBlock
      */
-
     private void buildGraphTopLevelWithInterface(BasicBlockNode topBlock) {
 	// Get top basic blocks
 	ArrayList<BasicBlockNode> blocks = new ArrayList<>();
@@ -421,6 +469,12 @@ public class DataFlowGraph extends FlowGraph {
 	}
     }
 
+    /**
+     * Building step for Loops
+     * 
+     * @param loopBlock
+     * @return
+     */
     private ArrayList<DataFlowNode> buildGraphLoop(BasicBlockNode loopBlock) {
 	ArrayList<DataFlowNode> nodes = new ArrayList<>();
 	int pragmaIter = -1;
@@ -471,6 +525,12 @@ public class DataFlowGraph extends FlowGraph {
 	return nodes;
     }
 
+    /**
+     * Building step for statements
+     * 
+     * @param statement
+     * @return
+     */
     private DataFlowNode buildStatement(Stmt statement) {
 	ClavaNode n = statement.getChild(0);
 	DataFlowNode node = nullNode;
@@ -491,6 +551,12 @@ public class DataFlowGraph extends FlowGraph {
 	return node;
     }
 
+    /**
+     * Building step for binary operations
+     * 
+     * @param n
+     * @return
+     */
     private DataFlowNode buildBinaryOp(ClavaNode n) {
 	ClavaNode rhs = n.getChild(1);
 	ClavaNode lhs = n.getChild(0);
@@ -533,6 +599,12 @@ public class DataFlowGraph extends FlowGraph {
 	return lhsNode;
     }
 
+    /**
+     * Building step for declarations
+     * 
+     * @param decl
+     * @return
+     */
     private DataFlowNode buildVarDecl(VarDecl decl) {
 	DataFlowNode lhsNode = new DataFlowNode(DataFlowNodeType.STORE_VAR, decl.getDeclName(), decl);
 	this.addNode(lhsNode);
@@ -545,6 +617,12 @@ public class DataFlowGraph extends FlowGraph {
 	return lhsNode;
     }
 
+    /**
+     * Building step for expressions
+     * 
+     * @param n
+     * @return
+     */
     private DataFlowNode buildExpression(ClavaNode n) {
 	DataFlowNode node = nullNode;
 
@@ -583,6 +661,12 @@ public class DataFlowGraph extends FlowGraph {
 	return node;
     }
 
+    /**
+     * Building step for conditional operators
+     * 
+     * @param n
+     * @return
+     */
     private DataFlowNode buildConditionalOperatorNode(ConditionalOperator n) {
 	DeclRefExpr t = null;
 	DeclRefExpr f = null;
@@ -611,6 +695,12 @@ public class DataFlowGraph extends FlowGraph {
 	return muxNode;
     }
 
+    /**
+     * Building step for unary operators
+     * 
+     * @param n
+     * @return
+     */
     private DataFlowNode buildUnaryOperationNode(UnaryOperator n) {
 	UnaryOperatorKind kind = n.getOp();
 	switch (kind) {
@@ -646,6 +736,12 @@ public class DataFlowGraph extends FlowGraph {
 	}
     }
 
+    /**
+     * Building step for integer literals
+     * 
+     * @param intL
+     * @return
+     */
     private DataFlowNode buildIntegerLitNode(IntegerLiteral intL) {
 	String label = intL.getLiteral();
 	DataFlowNode constNode = new DataFlowNode(DataFlowNodeType.CONSTANT, label, intL);
@@ -653,6 +749,12 @@ public class DataFlowGraph extends FlowGraph {
 	return constNode;
     }
 
+    /**
+     * Building step for floating literals
+     * 
+     * @param floatL
+     * @return
+     */
     private DataFlowNode buildFloatingLitNode(FloatingLiteral floatL) {
 	String label = floatL.getLiteral();
 	DataFlowNode constNode = new DataFlowNode(DataFlowNodeType.CONSTANT, label, floatL);
@@ -660,6 +762,12 @@ public class DataFlowGraph extends FlowGraph {
 	return constNode;
     }
 
+    /**
+     * Building step for references
+     * 
+     * @param var
+     * @return
+     */
     private DataFlowNode buildDeclRefNode(DeclRefExpr var) {
 	String label = var.getName();
 	DataFlowNode varNode = new DataFlowNode(DataFlowNodeType.LOAD_VAR, label, var);
@@ -667,6 +775,12 @@ public class DataFlowGraph extends FlowGraph {
 	return varNode;
     }
 
+    /**
+     * Building step for array access expressions (e.g., the "i+1" part of "a[i+1]")
+     * 
+     * @param arr
+     * @return
+     */
     private DataFlowNode buildArraySubExprNode(ArraySubscriptExpr arr) {
 	// array variable
 	String label = ((DeclRefExpr) arr.getArrayExpr()).getName();
@@ -681,6 +795,12 @@ public class DataFlowGraph extends FlowGraph {
 	return arrNode;
     }
 
+    /**
+     * Building step for binary operations
+     * 
+     * @param op
+     * @return
+     */
     private DataFlowNode buildBinaryOperationNode(BinaryOperator op) {
 	String label = op.getOp().getOpString();
 	DataFlowNode opNode = new DataFlowNode(DataFlowNodeType.OP_ARITH, label, op);
@@ -700,6 +820,12 @@ public class DataFlowGraph extends FlowGraph {
 	    return opNode;
     }
 
+    /**
+     * Building step for function calls
+     * 
+     * @param call
+     * @return
+     */
     private DataFlowNode buildCallNode(CallExpr call) {
 	DeclRefExpr fun = (DeclRefExpr) call.getChild(0);
 	String funName = fun.getName();
@@ -712,6 +838,13 @@ public class DataFlowGraph extends FlowGraph {
 	return callNode;
     }
 
+    /**
+     * Building step for loops
+     * 
+     * @param block
+     * @param pragmaIter
+     * @return
+     */
     private DataFlowNode buildLoopNode(BasicBlockNode block, int pragmaIter) {
 	ForStmt root = (ForStmt) block.getLeader();
 	int initVal = -1;
@@ -764,11 +897,21 @@ public class DataFlowGraph extends FlowGraph {
 	return node;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see pt.up.fe.specs.clava.analysis.flow.FlowGraph#getSources()
+     */
     @Override
     protected ArrayList<FlowNode> getSources() {
 	return new ArrayList<FlowNode>();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see pt.up.fe.specs.clava.analysis.flow.FlowGraph#getSinks()
+     */
     @Override
     protected ArrayList<FlowNode> getSinks() {
 	ArrayList<FlowNode> sinks = new ArrayList<>();
@@ -784,10 +927,21 @@ public class DataFlowGraph extends FlowGraph {
 	return sinks;
     }
 
+    /**
+     * Gets all subgraph roots
+     * 
+     * @return a list of nodes where every node is a subgraph root
+     */
     public ArrayList<DataFlowNode> getSubgraphRoots() {
 	return subgraphRoots;
     }
 
+    /**
+     * Merges a list of nodes into a single node, using the first node on the list
+     * as the pivot
+     * 
+     * @param nodes
+     */
     public void mergeNodes(ArrayList<DataFlowNode> nodes) {
 	nodes = (ArrayList<DataFlowNode>) nodes.stream().distinct().collect(Collectors.toList());
 	DataFlowNode master = nodes.get(0);
@@ -827,26 +981,56 @@ public class DataFlowGraph extends FlowGraph {
 	}
     }
 
+    /**
+     * Gets the body of the function this DFG refers to
+     * 
+     * @return
+     */
     public CompoundStmt getBody() {
 	return body;
     }
 
+    /**
+     * Gets all function parameters
+     * 
+     * @return
+     */
     public ArrayList<DataFlowParam> getParams() {
 	return params;
     }
 
+    /**
+     * Gets the first statement of the function this DFG refers to
+     * 
+     * @return
+     */
     public ClavaNode getFirstStmt() {
 	return firstStmt;
     }
 
+    /**
+     * Gets the name of the function this DFG refers to
+     * 
+     * @return
+     */
     public String getFunctionName() {
 	return ((FunctionDecl) body.getParent()).getDeclName();
     }
 
+    /**
+     * Checks whether the function has conditionals
+     * 
+     * @return
+     */
     public boolean hasConditionals() {
 	return hasConditionals;
     }
 
+    /**
+     * Gets the Control Flow Graph (CFG) used to build this DFG
+     * 
+     * @return
+     */
     public ControlFlowGraph getCfg() {
 	return this.cfg;
     }
