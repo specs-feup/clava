@@ -586,7 +586,15 @@ void ClangAstDumper::VisitFriendDeclChildren(const FriendDecl *D, std::vector<st
     // Hierarchy
     VisitDeclChildren(D, children);
 
-    addChild(D->getFriendDecl(), children);
+    if(D->getFriendDecl() != nullptr) {
+        addChild(D->getFriendDecl(), children);
+    } else if (D->getFriendType() != nullptr) {
+        addChild(D->getFriendType()->getType(), children);
+    } else {
+        // Add a null node
+        addChild(D->getFriendDecl(), children);
+    }
+
     //addChildren(D->decls(), children);
 
     //llvm::errs() << "IS OROGINAL NAMESPACE? " << D->isOriginalNamespace() << "\n";
