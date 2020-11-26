@@ -34,8 +34,12 @@ public class CxxIssuesTest {
 
     @Test
     public void testClavaIssue9() {
-        // new CxxTester("issues/clava_issue9.h").showClavaAst().showCode().test();
         new CxxTester("issues/clava_issue9.h").test();
+    }
+
+    @Test
+    public void testClavaIssue14() {
+        new CxxTester("issues/clava_issue14.h").test();
     }
 
 }

@@ -1,0 +1,14 @@
+#ifndef _CLAVA_ISSUE14_H_
+#define _CLAVA_ISSUE14_H_
+
+
+class Cat {
+   
+};
+
+
+class Dog {
+   friend class Cat;
+};
+
+#endif
