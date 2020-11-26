@@ -17,6 +17,9 @@
 
 package pt.up.fe.specs.clava.analysis.flow.preprocessing;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -45,24 +48,28 @@ public class ConstantFolding implements SimplePreClavaRule {
 	Expr rhs = op.getRhs();
 
 	if ((lhs instanceof FloatingLiteral) && (rhs instanceof FloatingLiteral)) {
-	    double l1 = Double.parseDouble(((FloatingLiteral) lhs).getLiteral());
-	    double l2 = Double.parseDouble(((FloatingLiteral) rhs).getLiteral());
-	    queue.replace(node, performFloatOperation(l1, l2, op));
+	    String l1 = ((FloatingLiteral) lhs).getLiteral();
+	    String l2 = ((FloatingLiteral) rhs).getLiteral();
+	    l1 = l1.replaceAll("(?i)f", "");
+	    l2 = l2.replaceAll("(?i)f", "");
+	    queue.replace(node, performFloatOperation(new BigDecimal(l1), new BigDecimal(l2), op));
 	}
 	if ((lhs instanceof FloatingLiteral) && (rhs instanceof IntegerLiteral)) {
-	    double l1 = Double.parseDouble(((FloatingLiteral) lhs).getLiteral());
-	    double l2 = Long.parseLong(((IntegerLiteral) rhs).getLiteral());
-	    queue.replace(node, performFloatOperation(l1, l2, op));
+	    String l1 = ((FloatingLiteral) lhs).getLiteral();
+	    String l2 = ((IntegerLiteral) rhs).getLiteral();
+	    l1 = l1.replaceAll("(?i)f", "");
+	    queue.replace(node, performFloatOperation(new BigDecimal(l1), new BigDecimal(l2), op));
 	}
 	if ((lhs instanceof IntegerLiteral) && (rhs instanceof FloatingLiteral)) {
-	    double l1 = Integer.parseInt(((IntegerLiteral) lhs).getLiteral());
-	    double l2 = Long.parseLong(((FloatingLiteral) rhs).getLiteral());
-	    queue.replace(node, performFloatOperation(l1, l2, op));
+	    String l1 = ((IntegerLiteral) lhs).getLiteral();
+	    String l2 = ((FloatingLiteral) rhs).getLiteral();
+	    l2 = l2.replaceAll("(?i)f", "");
+	    queue.replace(node, performFloatOperation(new BigDecimal(l1), new BigDecimal(l2), op));
 	}
 	if ((lhs instanceof IntegerLiteral) && (rhs instanceof IntegerLiteral)) {
-	    long l1 = Long.parseLong(((IntegerLiteral) lhs).getLiteral());
-	    long l2 = Long.parseLong(((IntegerLiteral) rhs).getLiteral());
-	    queue.replace(node, performIntegerOperation(l1, l2, op));
+	    String l1 = ((IntegerLiteral) lhs).getLiteral();
+	    String l2 = ((IntegerLiteral) rhs).getLiteral();
+	    queue.replace(node, performIntegerOperation(new BigInteger(l1), new BigInteger(l2), op));
 	}
     }
 
@@ -75,28 +82,28 @@ public class ConstantFolding implements SimplePreClavaRule {
      * @param op
      * @return a FloatingLiteral node with the result
      */
-    private FloatingLiteral performFloatOperation(double l1, double l2, BinaryOperator op) {
+    private FloatingLiteral performFloatOperation(BigDecimal l1, BigDecimal l2, BinaryOperator op) {
 	String operator = op.getOperatorCode();
-	double res = 0;
+	BigDecimal res = new BigDecimal("0");
 	switch (operator) {
 	case "-": {
-	    res = l1 - l2;
+	    res = l1.subtract(l2);
 	    break;
 	}
 	case "+": {
-	    res = l1 + l2;
+	    res = l1.add(l2);
 	    break;
 	}
 	case "/": {
-	    res = l1 / l2;
+	    res = l1.divide(l2);
 	    break;
 	}
 	case "*": {
-	    res = l1 * l2;
+	    res = l1.multiply(l2);
 	    break;
 	}
 	}
-	FloatingLiteral lit = op.getFactory().floatingLiteral(FloatKind.LONG_DOUBLE, res);
+	FloatingLiteral lit = op.getFactory().floatingLiteral(FloatKind.LONG_DOUBLE, res.doubleValue());
 	return lit;
     }
 
@@ -109,28 +116,28 @@ public class ConstantFolding implements SimplePreClavaRule {
      * @param op
      * @return an IntegerIntegral node with the result
      */
-    private IntegerLiteral performIntegerOperation(long l1, long l2, BinaryOperator op) {
+    private IntegerLiteral performIntegerOperation(BigInteger l1, BigInteger l2, BinaryOperator op) {
 	String operator = op.getOperatorCode();
-	long res = 0;
+	BigInteger res = new BigInteger("0");
 	switch (operator) {
 	case "-": {
-	    res = l1 - l2;
+	    res = l1.subtract(l2);
 	    break;
 	}
 	case "+": {
-	    res = l1 + l2;
+	    res = l1.add(l2);
 	    break;
 	}
 	case "/": {
-	    res = l1 / l2;
+	    res = l1.divide(l2);
 	    break;
 	}
 	case "*": {
-	    res = l1 * l2;
+	    res = l1.multiply(l2);
 	    break;
 	}
 	}
-	IntegerLiteral lit = op.getFactory().integerLiteral((int) res);
+	IntegerLiteral lit = op.getFactory().integerLiteral(res);
 	return lit;
     }
 }
