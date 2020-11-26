@@ -17,6 +17,13 @@
 
 package pt.up.fe.specs.clava.analysis.flow;
 
+/**
+ * Abstract class that represents an edge of a generic flow graph (which, by
+ * definition, is a directed edge)
+ * 
+ * @author Tiago
+ *
+ */
 public abstract class FlowEdge implements ToDot {
     private FlowNode source;
     private FlowNode dest;
@@ -27,26 +34,56 @@ public abstract class FlowEdge implements ToDot {
 	this.dest = dest;
     }
 
+    /**
+     * Gets the label of the edge
+     * 
+     * @return
+     */
     public String getLabel() {
 	return label;
     }
 
+    /**
+     * Sets the label of the edge
+     * 
+     * @param label
+     */
     public void setLabel(String label) {
 	this.label = label;
     }
 
+    /**
+     * Gets the source of the edge
+     * 
+     * @return
+     */
     public FlowNode getSource() {
 	return source;
     }
 
+    /**
+     * Sets the source of the edge
+     * 
+     * @param source
+     */
     public void setSource(FlowNode source) {
 	this.source = source;
     }
 
+    /**
+     * Gets the destination of the edge
+     * 
+     * @return
+     */
     public FlowNode getDest() {
 	return dest;
     }
 
+    /**
+     * Sets the destination of the dge
+     * 
+     * @param dest
+     */
     public void setDest(FlowNode dest) {
 	this.dest = dest;
     }

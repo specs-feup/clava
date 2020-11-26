@@ -19,6 +19,13 @@ package pt.up.fe.specs.clava.analysis.flow;
 
 import java.util.ArrayList;
 
+/**
+ * Abstract class that represents a generic flow graph. It is a directed graph
+ * by definition
+ * 
+ * @author Tiago
+ *
+ */
 public abstract class FlowGraph implements ToDot {
     protected ArrayList<FlowNode> nodes = new ArrayList<>();
     protected ArrayList<FlowEdge> edges = new ArrayList<>();
@@ -31,12 +38,23 @@ public abstract class FlowGraph implements ToDot {
 	this.nodePrefix = nodePrefix;
     }
 
+    /**
+     * Adds a new node to the graph, creating a new ID for that node
+     * 
+     * @param node
+     */
     public void addNode(FlowNode node) {
 	nodes.add(node);
 	node.initNode(nodePrefix, nodeID);
 	nodeID++;
     }
 
+    /**
+     * Adds a new edge to the graph, updating the adjacency lists of the edge's
+     * source and destination nodes
+     * 
+     * @param edge
+     */
     public void addEdge(FlowEdge edge) {
 	edges.add(edge);
 	FlowNode source = edge.getSource();
@@ -52,14 +70,29 @@ public abstract class FlowGraph implements ToDot {
     @Override
     public abstract String toDot();
 
+    /**
+     * Gets the graph's nodes
+     * 
+     * @return a list of nodes
+     */
     public ArrayList<FlowNode> getNodes() {
 	return nodes;
     }
 
+    /**
+     * Gets the graph's edges
+     * 
+     * @return a list of edges
+     */
     public ArrayList<FlowEdge> getEdges() {
 	return edges;
     }
 
+    /**
+     * Gets the graph's sources
+     * 
+     * @return a list of nodes
+     */
     protected ArrayList<FlowNode> getSources() {
 	ArrayList<FlowNode> sources = new ArrayList<>();
 	for (FlowNode node : nodes)
@@ -68,6 +101,11 @@ public abstract class FlowGraph implements ToDot {
 	return sources;
     }
 
+    /**
+     * Gets the graph's sinks
+     * 
+     * @return a list of nodes
+     */
     protected ArrayList<FlowNode> getSinks() {
 	ArrayList<FlowNode> sinks = new ArrayList<>();
 	for (FlowNode node : nodes)
@@ -76,6 +114,12 @@ public abstract class FlowGraph implements ToDot {
 	return sinks;
     }
 
+    /**
+     * Fetches the node with the specified ID
+     * 
+     * @param id
+     * @return the node with the specified ID if it exists; null otherwise
+     */
     public FlowNode findNode(int id) {
 	for (FlowNode node : nodes)
 	    if (node.getId() == id)
@@ -83,10 +127,20 @@ public abstract class FlowGraph implements ToDot {
 	return null;
     }
 
+    /**
+     * Removes the specified node from the graph
+     * 
+     * @param node
+     */
     public void removeNode(FlowNode node) {
 	this.nodes.remove(node);
     }
 
+    /**
+     * Removes the specified edge from the graph
+     * 
+     * @param edge
+     */
     public void removeEdge(FlowEdge edge) {
 	System.out.println(this.edges.contains(edge));
 	if (this.edges.contains(edge))

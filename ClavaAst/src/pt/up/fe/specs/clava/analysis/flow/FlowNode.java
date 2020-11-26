@@ -19,6 +19,12 @@ package pt.up.fe.specs.clava.analysis.flow;
 
 import java.util.ArrayList;
 
+/**
+ * Abstract class that implements a flow graph node
+ * 
+ * @author Tiago
+ *
+ */
 public abstract class FlowNode implements ToDot {
     protected ArrayList<FlowEdge> inEdges = new ArrayList<>();
     protected ArrayList<FlowEdge> outEdges = new ArrayList<>();
@@ -32,27 +38,58 @@ public abstract class FlowNode implements ToDot {
 	this.label = label;
     }
 
+    /**
+     * Initializes the node with a prefix and an ID
+     * 
+     * @param prefix
+     * @param id
+     */
     public void initNode(String prefix, int id) {
 	this.id = id;
 	this.name = prefix + id;
     }
 
+    /**
+     * Adds an incoming edge to the adjacency list
+     * 
+     * @param e
+     */
     public void addInEdge(FlowEdge e) {
 	inEdges.add(e);
     }
 
+    /**
+     * Adds an outcoming edge to the adjacency list
+     * 
+     * @param e
+     */
     public void addOutEdge(FlowEdge e) {
 	outEdges.add(e);
     }
 
+    /**
+     * Removes an incoming edge from the adjacency list
+     * 
+     * @param e
+     */
     public void removeInEdge(FlowEdge e) {
 	inEdges.remove(e);
     }
 
+    /**
+     * Removes an outcoming edge from the adjacency list
+     * 
+     * @param e
+     */
     public void removeOutEdge(FlowEdge e) {
 	outEdges.remove(e);
     }
 
+    /**
+     * Gets all incoming nodes
+     * 
+     * @return
+     */
     public ArrayList<FlowNode> getInNodes() {
 	ArrayList<FlowNode> nodes = new ArrayList<>();
 
@@ -61,6 +98,11 @@ public abstract class FlowNode implements ToDot {
 	return nodes;
     }
 
+    /**
+     * Gets all outgoing nodes
+     * 
+     * @return
+     */
     public ArrayList<FlowNode> getOutNodes() {
 	ArrayList<FlowNode> nodes = new ArrayList<>();
 
@@ -69,47 +111,101 @@ public abstract class FlowNode implements ToDot {
 	return nodes;
     }
 
+    /**
+     * Sets a new label for the node
+     * 
+     * @param label
+     */
     public void setLabel(String label) {
 	this.label = label;
     }
 
+    /**
+     * Gets the node label
+     * 
+     * @return
+     */
     public String getLabel() {
 	return label;
     }
 
+    /**
+     * Gets the node ID
+     * 
+     * @return
+     */
     public int getId() {
 	return id;
     }
 
+    /**
+     * Gets the node name
+     * 
+     * @return
+     */
     public String getName() {
 	return name;
     }
 
+    /**
+     * Checks whether the node is disabled
+     * 
+     * @return
+     */
     public boolean isDisabled() {
 	return disabled;
     }
 
+    /**
+     * Sets whether the node is disabled
+     * 
+     * @param disabled
+     */
     public void setDisabled(boolean disabled) {
 	this.disabled = disabled;
     }
 
+    /**
+     * Gets all outgoing edges
+     * 
+     * @return
+     */
     public ArrayList<FlowEdge> getOutEdges() {
 	return outEdges;
     }
 
+    /**
+     * Gets all incoming edges
+     * 
+     * @return
+     */
     public ArrayList<FlowEdge> getInEdges() {
 	return inEdges;
     }
 
+    /**
+     * Clears the entire adjacency list
+     */
     public void clear() {
 	this.inEdges.clear();
 	this.outEdges.clear();
     }
 
+    /**
+     * Checks whether the node was already explored. Useful for graph-based
+     * algorithms such as DFS or Dijkstra's Shortest Path
+     * 
+     * @return
+     */
     public boolean isExplored() {
 	return explored;
     }
 
+    /**
+     * Sets the node as being explored
+     * 
+     * @param explored
+     */
     public void setExplored(boolean explored) {
 	this.explored = explored;
     }
