@@ -23,6 +23,13 @@ import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.transform.SimplePreClavaRule;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
+/**
+ * Transformation that unwraps multiple declarations in a single statement,
+ * e.g., int x, y, z = 2; becomes int x; int y; int z = 2;
+ * 
+ * @author Tiago
+ *
+ */
 public class UnwrapSingleLineMultipleDecls implements SimplePreClavaRule {
 
     @Override
