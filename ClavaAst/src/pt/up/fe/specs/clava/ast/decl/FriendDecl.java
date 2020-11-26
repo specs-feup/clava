@@ -17,7 +17,9 @@ import java.util.Collection;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.type.Type;
 
 /**
  * Represents the declaration of a friend entity.
@@ -53,12 +55,25 @@ public class FriendDecl extends Decl {
 
     @Override
     public String getCode() {
+        var friendNode = getFriendNode();
+        if (friendNode instanceof NullDecl) {
+            ClavaLog.warning(this, "FriendDecl not yet implemented for this case");
+            return "friend";
+        }
 
-        String friendCode = getFriendNode().getCode();
+        String friendCode = friendNode.getCode();
+
+        if (friendNode instanceof Type) {
+            friendCode = friendCode + ";";
+        }
 
         // Check if it has new lines at the beginning
         if (friendCode.startsWith(ln())) {
             friendCode = friendCode.substring(ln().length());
+        }
+
+        if (friendNode instanceof RedeclarableTemplateDecl) {
+            return ((RedeclarableTemplateDecl) friendNode).getCode("friend");
         }
 
         return "friend " + friendCode;
