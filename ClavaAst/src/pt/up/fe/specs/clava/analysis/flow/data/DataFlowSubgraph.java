@@ -22,6 +22,14 @@ import java.util.HashMap;
 
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 
+/**
+ * Class to represent a subgraph. A subgraph is a view over an existing DFG, and
+ * is defined as a group of nodes that converge on a Store node (which serves as
+ * the root of a subgraph).
+ * 
+ * @author Tiago
+ *
+ */
 public class DataFlowSubgraph {
     private DataFlowNode root;
     private int id;
@@ -33,6 +41,11 @@ public class DataFlowSubgraph {
 	this.id = root.getSubgraphID();
     }
 
+    /**
+     * Gets all the nodes of the subgraph
+     * 
+     * @return a list of nodes
+     */
     public ArrayList<DataFlowNode> getNodes() {
 	ArrayList<DataFlowNode> nodes = findNodes(root);
 	nodes.forEach(node -> {
@@ -55,6 +68,12 @@ public class DataFlowSubgraph {
 	return nodes;
     }
 
+    /**
+     * Finds all nodes of the subgraph given the root
+     * 
+     * @param root
+     * @return a list of nodes
+     */
     private ArrayList<DataFlowNode> findNodes(DataFlowNode root) {
 	ArrayList<DataFlowNode> nodes = new ArrayList<>();
 	for (FlowNode n : dfg.getNodes()) {
@@ -65,6 +84,12 @@ public class DataFlowSubgraph {
 	return nodes;
     }
 
+    /**
+     * Gets all var loads with more than one occurrence, e.g., the subgraph of int a
+     * = b + b + c would return the var load node "b", but not of "c"
+     * 
+     * @return a list of nodes
+     */
     public HashMap<String, ArrayList<DataFlowNode>> getMultipleVarLoads() {
 	HashMap<String, ArrayList<DataFlowNode>> map = new HashMap<>();
 	ArrayList<DataFlowNode> nodes = getNodes();
@@ -84,6 +109,11 @@ public class DataFlowSubgraph {
 	return map;
     }
 
+    /**
+     * Calculates the metrics of the subgraph, encapsulating them on a data class
+     * 
+     * @return a data class with the metrics filled in
+     */
     public DataFlowSubgraphMetrics getMetrics() {
 	DataFlowSubgraphMetrics metrics = new DataFlowSubgraphMetrics(root);
 	calculateCriticalPath(root);
@@ -97,14 +127,19 @@ public class DataFlowSubgraph {
 	metrics.setNumVarStores(findStores(false));
 	metrics.setNumArrayStores(findStores(true));
 
-	metrics.setNumOp(findOps());
+	metrics.setNumOp(findArithOps());
 	metrics.setNumCalls(findCalls());
 	metrics.setCode(root.getStmt().getCode());
 //	System.out.println(this.toString());
 	return metrics;
     }
 
-    private int findOps() {
+    /**
+     * Counts all arithmetic operations of the subgraph
+     * 
+     * @return the number of arithmetic operations
+     */
+    private int findArithOps() {
 	ArrayList<DataFlowNode> nodes = this.getNodes();
 	int counter = 0;
 	for (DataFlowNode node : nodes) {
@@ -115,6 +150,11 @@ public class DataFlowSubgraph {
 	return counter;
     }
 
+    /**
+     * Counts all function calls of the subgraph
+     * 
+     * @return the number of function calls
+     */
     private int findCalls() {
 	ArrayList<DataFlowNode> nodes = this.getNodes();
 	int counter = 0;
@@ -126,6 +166,15 @@ public class DataFlowSubgraph {
 	return counter;
     }
 
+    /**
+     * Counts all stores of the subgraph. If array=false, it counts all variable
+     * stores. Otherwise, it counts all array stores. Important note: by the current
+     * definition of subgraph, this should always return 1, as the store node serves
+     * as the subgraph root
+     * 
+     * @param array
+     * @return the number of stores of the specified kind
+     */
     private int findStores(boolean array) {
 	ArrayList<DataFlowNode> nodes = this.getNodes();
 	int counter = 0;
@@ -141,6 +190,12 @@ public class DataFlowSubgraph {
 	return counter;
     }
 
+    /**
+     * Counts all loads of a given type (false for variables, true for arrays)
+     * 
+     * @param array
+     * @return the number of loads of the specified kind
+     */
     private int findLoads(boolean array) {
 	ArrayList<DataFlowNode> nodes = this.getNodes();
 	int counter = 0;
@@ -168,6 +223,15 @@ public class DataFlowSubgraph {
 	return counter;
     }
 
+    /**
+     * Calculates the critical path, that is, the set of nodes, ending at the root,
+     * with the largest number of operations. Recursive algorithm that needs a
+     * starting node. The critical path is dynamically stored in a class attribute,
+     * and this algorithm only returns the depth
+     * 
+     * @param node
+     * @return the depth of the critical path
+     */
     private int calculateCriticalPath(DataFlowNode node) {
 	int count = 0;
 	if (node.getType() == DataFlowNodeType.OP_ARITH || node.getType() == DataFlowNodeType.OP_CALL)
@@ -191,6 +255,12 @@ public class DataFlowSubgraph {
 	return count + max;
     }
 
+    /**
+     * Calculates the depth of a given critical path (number of operations)
+     * 
+     * @param path
+     * @return depth of the path
+     */
     private int calculateDepth(ArrayList<DataFlowNode> path) {
 	int count = 0;
 	for (DataFlowNode node : path) {
@@ -200,14 +270,30 @@ public class DataFlowSubgraph {
 	return count;
     }
 
+    /**
+     * Gets the ID of the subgraph
+     * 
+     * @return the subgraph ID
+     */
     public int getId() {
 	return id;
     }
 
+    /**
+     * Sets an ID for the subgraph. A subgraph must have a unique ID within its DFG,
+     * which must be enforced by the DFG itself, and not by this class
+     * 
+     * @param id
+     */
     public void setId(int id) {
 	this.id = id;
     }
 
+    /**
+     * Gets the root of the subgraph. By definition, it is a store node
+     * 
+     * @return the root of the subgraph
+     */
     public DataFlowNode getRoot() {
 	return root;
     }

@@ -20,6 +20,12 @@ package pt.up.fe.specs.clava.analysis.flow.data;
 import pt.up.fe.specs.clava.analysis.flow.FlowEdge;
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 
+/**
+ * Class that represents a DFG edge
+ * 
+ * @author Tiago
+ *
+ */
 public class DataFlowEdge extends FlowEdge {
     public long repeating = 0;
     public boolean directed = true;
@@ -93,10 +99,20 @@ public class DataFlowEdge extends FlowEdge {
 	return sb.toString();
     }
 
+    /**
+     * Gets the edge type
+     * 
+     * @return
+     */
     public DataFlowEdgeType getType() {
 	return type;
     }
 
+    /**
+     * Sets the edge type
+     * 
+     * @param type
+     */
     public void setType(DataFlowEdgeType type) {
 	this.type = type;
     }
