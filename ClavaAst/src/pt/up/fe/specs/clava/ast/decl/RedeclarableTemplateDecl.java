@@ -54,6 +54,10 @@ public class RedeclarableTemplateDecl extends TemplateDecl implements TemplatePa
 
     @Override
     public String getCode() {
+        return getCode("");
+    }
+
+    public String getCode(String declPrefix) {
 
         StringBuilder code = new StringBuilder();
 
@@ -64,8 +68,12 @@ public class RedeclarableTemplateDecl extends TemplateDecl implements TemplatePa
                 .collect(Collectors.joining(", "));
 
         code.append(parameterList).append(">\n");
-        code.append(getTemplateDecl().getCode());
 
+        if (!declPrefix.isEmpty()) {
+            code.append(declPrefix).append(" ");
+        }
+
+        code.append(getTemplateDecl().getCode());
         return code.toString();
     }
 
