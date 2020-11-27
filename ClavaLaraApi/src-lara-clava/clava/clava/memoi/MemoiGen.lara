@@ -342,9 +342,9 @@ MemoiGen.prototype._generateEach = function(report) {
 		s.add(wrapperName);
 
 		$call.wrap(wrapperName);
-		if(this._isResetFunc) {
-			$call.addArg("0", ClavaJoinPoints.builtinType("unsigned char"));
-		}
+		//~ if(this._isResetFunc) {
+			//~ $call.addArg("0", ClavaJoinPoints.builtinType("unsigned char"));
+		//~ }
 
 		this._generateGeneric(wrapperName, report);
 	}
@@ -363,9 +363,9 @@ MemoiGen.prototype._generateAll = function(report) {
 	for(var $call of Query.search("call", {"signature": s => this._target._sig === MemoiUtils.normalizeSig(s)})) {
 
 		$call.wrap(wrapperName);
-		if(this._isResetFunc) {
-			$call.addArg("0", ClavaJoinPoints.builtinType("unsigned char"));
-		}
+		//~ if(this._isResetFunc) {
+			//~ $call.addArg("0", ClavaJoinPoints.builtinType("unsigned char"));
+		//~ }
 	}
 	this._generateGeneric(wrapperName, report);
 	
@@ -467,15 +467,15 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 		}
 		
 		// change function to have reset parameter if needed
-		if(this._isResetFunc) {
-			$function.addParam("char reset");
-			// change every found declaration
-			for(var chain of Query.search("function", {"name": wrapperName, "hasDefinition": false}).chain()) {
+		//~ if(this._isResetFunc) {
+			//~ $function.addParam("char reset");
+			//~ // change every found declaration
+			//~ for(var chain of Query.search("function", {"name": wrapperName, "hasDefinition": false}).chain()) {
 		
-				var $decl = chain["function"];
-				$decl.addParam("char reset");
-			}
-		}
+				//~ var $decl = chain["function"];
+				//~ $decl.addParam("char reset");
+			//~ }
+		//~ }
 		
 		if(this._isDebug) {
 			var totalName = wrapperName + '_total_calls';
@@ -493,58 +493,47 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 			this._addMainDebug(totalName, missesName, updatesName, wrapperName);
 		}
 		
-		// take the DMT and generate the code
-		var tableCode = this._makeTableCode($function, dmt);
-		$call.insert("before", tableCode);
+		// generate the table (and reset) code and add it before the wrapper
+		var tableCode = MemoiCodeGen.generateTableCode(
+			dmt,
+			this._tableSize,
+			this._target._numInputs, this._target._numOutputs,
+			this._isOnline,
+			this._isResetFunc,
+			this._isZeroSim ? true : this._isEmpty, // whether this is an empty table
+			wrapperName
+		);
+		$function.insert("before", tableCode);
+		
+		// generate the logic code and add it before the original call
+		var paramNames = [];
+		for(var $param of $function.params) {
+			paramNames.push($param.name);
+		}
+		var logicCode = MemoiCodeGen.generateLogicCode(
+			this._tableSize,
+			paramNames,
+			this._approxBits,
+			this._target._numInputs, this._target._numOutputs,
+			this._target._inputTypes, this._target._outputTypes,
+			wrapperName
+		);
+		$call.insert("before", logicCode);
 		
 		if(this._isOnline) {
-			$call.insert("after", this._makeUpdateCode($function, updatesName));
+			var updateCode = MemoiCodeGen.generateUpdateCode(
+				this._tableSize, paramNames,
+				this._isUpdateAlways,
+				this._target._numInputs, this._target._numOutputs,
+				updatesName,
+				this._isZeroSim,
+				wrapperName
+			);
+			$call.insert("after", updateCode);
 		}
 		
 		$file.addInclude('stdint.h', true);
 	}
-}
-
-MemoiGen.prototype._makeTableCode = function($function, dmt) {
-
-	var paramNames = [];
-	for(var $param of $function.params) {
-		paramNames.push($param.name);
-	}
-
-	var isEmpty = this._isZeroSim ? true : this._isEmpty; // table is always empty if 0% sim is on
-
-	var code = MemoiCodeGen.generateDmtCode(
-		this._tableSize,
-		paramNames,
-		isEmpty,
-		this._isOnline,
-		this._approxBits,
-		dmt,
-		this._target._numInputs, this._target._numOutputs,
-		this._target._inputTypes, this._target._outputTypes,
-		this._isResetFunc
-	);
-
-	return code;
-}
-
-MemoiGen.prototype._makeUpdateCode = function($function, updatesName) {
-	
-	var paramNames = [];
-	for(var $param of $function.params) {
-		paramNames.push($param.name);
-	}
-	
-	var code = MemoiCodeGen.generateUpdateCode(
-		this._tableSize, paramNames,
-		this._isUpdateAlways,
-		this._target._numInputs, this._target._numOutputs,
-		updatesName,
-		this._isZeroSim
-	);
-
-	return code;
 }
 
 MemoiGen.prototype._addMainDebug = function(totalName, missesName, updatesName, wrapperName) {
