@@ -225,6 +225,7 @@ private:
     void VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children);
     void VisitCXXMethodDeclChildren(const CXXMethodDecl *D, std::vector<std::string> &children);
     void VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D, std::vector<std::string> &children);
+    void VisitCXXConversionDeclChildren(const CXXConversionDecl *D, std::vector<std::string> &children);
 
     void VisitVarDeclChildren(const VarDecl *D, std::vector<std::string> &children);
     void VisitParmVarDeclChildren(const ParmVarDecl *D, std::vector<std::string> &children);

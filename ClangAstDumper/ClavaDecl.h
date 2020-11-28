@@ -23,6 +23,7 @@ namespace clava {
         FUNCTION_DECL,
         CXX_METHOD_DECL,
         CXX_CONSTRUCTOR_DECL,
+        CXX_CONVERSION_DECL,
         VAR_DECL,
         PARM_VAR_DECL,
         TAG_DECL,

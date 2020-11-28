@@ -109,6 +109,7 @@ namespace clava {
         void DumpFunctionDeclData(const FunctionDecl *D);
         void DumpCXXMethodDeclData(const CXXMethodDecl *D);
         void DumpCXXConstructorDeclData(const CXXConstructorDecl *D);
+        void DumpCXXConversionDeclData(const CXXConversionDecl *D);
         void DumpVarDeclData(const VarDecl *D);
         void DumpParmVarDeclData(const ParmVarDecl *D);
         void DumpTemplateTypeParmDeclData(const TemplateTypeParmDecl *D);

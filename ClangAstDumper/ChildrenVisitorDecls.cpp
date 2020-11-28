@@ -12,7 +12,7 @@
 
 const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDREN_MAP = {
         {"CXXConstructorDecl", clava::DeclNode::CXX_CONSTRUCTOR_DECL},
-        {"CXXConversionDecl", clava::DeclNode::CXX_METHOD_DECL},
+        {"CXXConversionDecl", clava::DeclNode::CXX_CONVERSION_DECL},
         {"CXXDestructorDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"CXXMethodDecl", clava::DeclNode::CXX_METHOD_DECL},
         {"EnumDecl", clava::DeclNode::ENUM_DECL},
@@ -87,6 +87,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitCXXMethodDeclChildren(static_cast<const CXXMethodDecl *>(D), visitedChildren); break;
          case clava::DeclNode::CXX_CONSTRUCTOR_DECL:
             VisitCXXConstructorDeclChildren(static_cast<const CXXConstructorDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::CXX_CONVERSION_DECL:
+            VisitCXXConversionDeclChildren(static_cast<const CXXConversionDecl *>(D), visitedChildren); break;
         case clava::DeclNode::CXX_RECORD_DECL:
             VisitCXXRecordDeclChildren(static_cast<const CXXRecordDecl *>(D), visitedChildren); break;
         case clava::DeclNode::VAR_DECL:
@@ -411,6 +413,14 @@ void ClangAstDumper::VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D
     }
 }
 
+void ClangAstDumper::VisitCXXConversionDeclChildren(const CXXConversionDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitCXXMethodDeclChildren(D, children);
+
+    // Visit fields
+    VisitTypeTop(D->getConversionType());
+}
+
 void ClangAstDumper::VisitRecordDeclChildren(const RecordDecl *D, std::vector<std::string> &children) {
     // Hierarchy
     VisitTagDeclChildren(D, children);
@@ -592,12 +602,12 @@ void ClangAstDumper::VisitFriendDeclChildren(const FriendDecl *D, std::vector<st
         addChild(D->getFriendType()->getType(), children);
     } else {
         // Add a null node
-        addChild(D->getFriendDecl(), children);
+        addChild((const Decl*) nullptr, children);
     }
 
     //addChildren(D->decls(), children);
 
-    //llvm::errs() << "IS OROGINAL NAMESPACE? " << D->isOriginalNamespace() << "\n";
+    //llvm::errs() << "IS ORIGINAL NAMESPACE? " << D->isOriginalNamespace() << "\n";
 }
 
 void ClangAstDumper::VisitNamespaceAliasDeclChildren(const NamespaceAliasDecl *D, std::vector<std::string> &children) {

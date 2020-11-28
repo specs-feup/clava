@@ -12,7 +12,7 @@
 
 const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
         {"CXXConstructorDecl",                     clava::DeclNode::CXX_CONSTRUCTOR_DECL},
-        {"CXXConversionDecl",                      clava::DeclNode::CXX_METHOD_DECL},
+        {"CXXConversionDecl",                      clava::DeclNode::CXX_CONVERSION_DECL},
         {"CXXDestructorDecl",                      clava::DeclNode::CXX_METHOD_DECL},
         {"CXXMethodDecl",                          clava::DeclNode::CXX_METHOD_DECL},
         {"FieldDecl",                              clava::DeclNode::FIELD_DECL},
@@ -105,6 +105,9 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl *D) {
             break;
         case clava::DeclNode::CXX_CONSTRUCTOR_DECL:
             DumpCXXConstructorDeclData(static_cast<const CXXConstructorDecl *>(D));
+            break;
+        case clava::DeclNode::CXX_CONVERSION_DECL:
+            DumpCXXConversionDeclData(static_cast<const CXXConversionDecl *>(D));
             break;
         case clava::DeclNode::VAR_DECL:
             DumpVarDeclData(static_cast<const VarDecl *>(D));
@@ -459,6 +462,17 @@ void clava::ClavaDataDumper::DumpCXXConstructorDeclData(const CXXConstructorDecl
     clava::dump(D->isExplicitSpecified());
 
 }
+
+void clava::ClavaDataDumper::DumpCXXConversionDeclData(const CXXConversionDecl *D) {
+    // Hierarchy
+    DumpCXXMethodDeclData(D);
+
+    clava::dump(D->isExplicit());
+    clava::dump(D->isLambdaToBlockPointerConversion());
+
+    clava::dump(D->getConversionType(), id);
+}
+
 
 void clava::ClavaDataDumper::DumpVarDeclData(const VarDecl *D) {
     // Hierarchy
