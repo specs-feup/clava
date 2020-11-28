@@ -15,37 +15,43 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.type.Type;
 
+/**
+ * Represents a C++ conversion function within a class.
+ * 
+ * @author JBispo
+ *
+ */
 public class CXXConversionDecl extends CXXMethodDecl {
+
+    /**
+     * True if the declaration is already resolved to be explicit.
+     */
+    public final static DataKey<Boolean> IS_EXPLICIT = KeyFactory.bool("isExplicit");
+
+    /**
+     * True if this conversion function is a conversion from a lambda closure type to a block pointer.
+     */
+    public final static DataKey<Boolean> IS_LAMBDA_TO_BLOCK_POINTER_CONVERSION = KeyFactory
+            .bool("isLambdaToBlockPointerConversion");
+
+    /**
+     * The type that this conversion function is converting to.
+     */
+    public final static DataKey<Type> CONVERSION_TYPE = KeyFactory.object("conversionType", Type.class);
 
     public CXXConversionDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
-    /*
-    public CXXConversionDecl(String declName, Type functionType,
-            FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info, List<ParmVarDecl> inputs,
-            Stmt definition) {
-    
-        this(declName, functionType, functionDeclData, declData, info,
-                SpecsCollections.concat(inputs, definition));
-    }
-    
-    private CXXConversionDecl(String declName,
-            Type functionType, FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
-            List<? extends ClavaNode> children) {
-    
-        super(declName, functionType, functionDeclData, declData, info, children);
-    }
-    
     @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXConversionDecl(getDeclName(), getFunctionType(), getFunctionDeclData(),
-                getDeclData(), getInfo(), Collections.emptyList());
+    public String getCode() {
+        return getCode(false);
     }
-    */
-
 }

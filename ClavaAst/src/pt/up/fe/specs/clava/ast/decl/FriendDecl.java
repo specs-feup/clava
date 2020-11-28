@@ -20,6 +20,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.clava.utils.NullNode;
 
 /**
  * Represents the declaration of a friend entity.
@@ -56,7 +57,7 @@ public class FriendDecl extends Decl {
     @Override
     public String getCode() {
         var friendNode = getFriendNode();
-        if (friendNode instanceof NullDecl) {
+        if (friendNode instanceof NullNode) {
             ClavaLog.warning(this, "FriendDecl not yet implemented for this case");
             return "friend";
         }
