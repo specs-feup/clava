@@ -25,6 +25,7 @@ import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
+import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
@@ -288,6 +289,32 @@ public class DeclDataParser {
 
         return data;
     }
+
+    public static DataStore parseCXXConversionDeclData(LineStream lines, ClangParserData dataStore) {
+
+        // Parse CXXMethodDecl data
+        DataStore data = parseCXXMethodDeclData(lines, dataStore);
+
+        data.add(CXXConversionDecl.IS_EXPLICIT, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXConversionDecl.IS_LAMBDA_TO_BLOCK_POINTER_CONVERSION, LineStreamParsers.oneOrZero(lines));
+
+        dataStore.getClavaNodes().queueSetNode(data, CXXConversionDecl.CONVERSION_TYPE, lines.nextLine());
+
+        return data;
+    }
+
+    /*
+    void clava::ClavaDataDumper::DumpCXXConversionDeclData(const CXXConversionDecl *D) {
+    // Hierarchy
+    DumpCXXMethodDeclData(D);
+    
+    clava::dump(D->isExplicit());
+    clava::dump(D->isLambdaToBlockPointerConversion());
+    
+    clava::dump(D->getConversionType(), id);
+    clava::dump(clava::getId(D->getCanonicalDecl(), id));
+    }
+    */
 
     public static DataStore parseVarDeclData(LineStream lines, ClangParserData dataStore) {
 
