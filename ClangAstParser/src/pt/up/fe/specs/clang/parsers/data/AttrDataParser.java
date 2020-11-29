@@ -25,9 +25,11 @@ import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.FormatAttr;
 import pt.up.fe.specs.clava.ast.attr.NonNullAttr;
 import pt.up.fe.specs.clava.ast.attr.OpenCLUnrollHintAttr;
+import pt.up.fe.specs.clava.ast.attr.VisibilityAttr;
 import pt.up.fe.specs.clava.ast.attr.enums.AlignedAttrKind;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
 import pt.up.fe.specs.clava.ast.attr.enums.FormatAttrKind;
+import pt.up.fe.specs.clava.ast.attr.enums.VisibilityType;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class AttrDataParser {
@@ -108,6 +110,14 @@ public class AttrDataParser {
         DataStore data = parseAttributeData(lines, dataStore);
 
         data.add(NonNullAttr.ARGUMENTS, LineStreamParsers.list(lines, l -> Integer.valueOf(l.nextLine())));
+
+        return data;
+    }
+
+    public static DataStore parseVisibilityAttrData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseAttributeData(lines, dataStore);
+
+        data.add(VisibilityAttr.VISIBILITY_TYPE, LineStreamParsers.enumFromName(VisibilityType.class, lines));
 
         return data;
     }
