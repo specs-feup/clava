@@ -43,6 +43,11 @@ public class CxxIssuesTest {
     }
 
     @Test
+    public void testClavaIssue13() {
+        new CxxTester("issues/clava_issue13.cpp").showClavaAst().showCode().test();
+    }
+
+    @Test
     public void testClavaIssue14() {
         new CxxTester("issues/clava_issue14.h").test();
     }
