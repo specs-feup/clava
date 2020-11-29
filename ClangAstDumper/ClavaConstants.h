@@ -143,6 +143,7 @@ namespace clava {
         OPENCL_UNROLL_HINT,
         FORMAT,
         NON_NULL,
+        VISIBILITY,
     };
 
 

@@ -14,6 +14,7 @@ const std::map<const std::string, clava::AttrNode > clava::ATTR_DATA_MAP = {
         {"OpenCLUnrollHintAttr", clava::AttrNode::OPENCL_UNROLL_HINT},
         {"FormatAttr", clava::AttrNode::FORMAT},
         {"NonNullAttr", clava::AttrNode::NON_NULL},
+        {"VisibilityAttr", clava::AttrNode::VISIBILITY},
 };
 
 
@@ -49,6 +50,8 @@ void clava::ClavaDataDumper::dump(clava::AttrNode attrNode, const Attr* A) {
             DumpFormatAttrData(static_cast<const FormatAttr*>(A)); break;
         case clava::AttrNode::NON_NULL:
             DumpNonNullAttrData(static_cast<const NonNullAttr*>(A)); break;
+        case clava::AttrNode::VISIBILITY:
+            DumpVisibilityAttrData(static_cast<const VisibilityAttr*>(A)); break;
         default:
             throw std::invalid_argument("ClangDataDumper::dump(DeclNode):: Case not implemented, '" + getName(attrNode) + "'");
     }
@@ -111,4 +114,11 @@ void clava::ClavaDataDumper::DumpNonNullAttrData(const NonNullAttr *A) {
          ++I) {
         clava::dump((*I).getSourceIndex());
     }
+}
+
+void clava::ClavaDataDumper::DumpVisibilityAttrData(const VisibilityAttr *A) {
+    // Common
+    DumpAttrData(A);
+
+    clava::dump(clava::VISIBILITY_ATTR_TYPE[A->getVisibility()]);
 }

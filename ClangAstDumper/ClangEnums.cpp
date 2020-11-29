@@ -707,6 +707,13 @@ extern const std::string clava::DESIGNATOR_KIND[] {
     "ArrayRange"
 };
 
+extern const std::string clava::VISIBILITY_ATTR_TYPE[] {
+    "Default",
+    "Hidden",
+    "Protected"
+};
+
+
 
 
 //const std::string BUILTIN_KIND[] {};
