@@ -158,13 +158,6 @@ public class RecordDecl extends TagDecl {
 
         code.append(getTagKind().getCode());
 
-        if (hasDeclName()) {
-            code.append(" ").append(getDeclName());
-        }
-
-        // Append bases
-        code.append(bases);
-
         // Add attributes
         // recordDeclData.getAttributes().forEach(attr -> code.append(" ").append(attr.getCode()));
 
@@ -178,6 +171,13 @@ public class RecordDecl extends TagDecl {
         if (!preAttributesCode.isEmpty()) {
             code.append(" ").append(preAttributesCode);
         }
+
+        if (hasDeclName()) {
+            code.append(" ").append(getDeclName());
+        }
+
+        // Append bases
+        code.append(bases);
 
         // if (recordDeclData.isCompleteDefinition()) {
         if (get(IS_COMPLETE_DEFINITION)) {
