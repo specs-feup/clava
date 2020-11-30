@@ -58,70 +58,96 @@ public class MemoiCodeGen {
     }
 
     /**
-     * Generates the table code based on the {@link DirectMappedTable} and the parameters.
+     * Generates the table code as a static global, which is defined above the wrapper that uses it. If necessary, a
+     * reset function is generated and defined below the table.
+     * 
+     * @param table
+     * @param numSets
+     * @param inputCount
+     * @param outputCount
+     * @param isMemoiOnline
+     * @param isReset
+     * @param isEmpty
+     * @param tablePrefix
+     * @return
+     */
+    public static String generateTableCode(Map<String, MergedMemoiEntry> table, int numSets, int inputCount,
+            int outputCount, boolean isMemoiOnline, boolean isReset, boolean isEmpty, String tablePrefix) {
+
+        if (isEmpty) {
+
+            table = new HashMap<String, MergedMemoiEntry>();
+        }
+
+        return dmtCode(table, inputCount, outputCount, numSets, isMemoiOnline, isReset, tablePrefix);
+    }
+
+    /**
+     * Generates the logic code that uses the global static table.
      * 
      * @param numSets
      * @param paramNames
-     * @param isMemoiEmpty
-     * @param isMemoiOnline
      * @param memoiApproxBits
-     * @param dmt
      * @param inputCount
      * @param outputCount
      * @param inputTypes
      * @param outputTypes
+     * @param tablePrefix
      * @return
      */
-    public static String generateDmtCode(int numSets, List<String> paramNames, boolean isMemoiEmpty,
-            boolean isMemoiOnline, int memoiApproxBits, DirectMappedTable dmt, int inputCount, int outputCount,
-            List<String> inputTypes, List<String> outputTypes, boolean isReset) {
+    public static String generateLogicCode(int numSets,
+            List<String> paramNames, int memoiApproxBits, int inputCount, int outputCount,
+            List<String> inputTypes, List<String> outputTypes, String tablePrefix) {
 
-        Map<String, MergedMemoiEntry> table = new HashMap<String, MergedMemoiEntry>();
-
-        if (!isMemoiEmpty) {
-
-            table = dmt.getTable();
-        }
-
-        return generateDmtCode(table, numSets, paramNames, isMemoiOnline, memoiApproxBits, inputCount, outputCount,
-                inputTypes, outputTypes, isReset);
+        return dmtLogicCode(paramNames, numSets, memoiApproxBits, inputCount, outputCount,
+                inputTypes, outputTypes, tablePrefix);
     }
 
-    private static String generateDmtCode(Map<String, MergedMemoiEntry> table, int numSets,
-            List<String> paramNames, boolean isMemoiOnline, int memoiApproxBits, int inputCount, int outputCount,
-            List<String> inputTypes, List<String> outputTypes, boolean isReset) {
+    /**
+     * Generates a reset function that is defined after the table.
+     * 
+     * @param tableSize
+     * @param tablePrefix
+     * @return
+     */
+    private static String resetCode(int tableSize, String tablePrefix) {
 
-        String resetCode = resetCode(numSets, isReset);
-
-        String tableCode = dmtCode(table, inputCount, outputCount, numSets, isMemoiOnline);
-
-        String logicCode = dmtLogicCode(paramNames, numSets, memoiApproxBits, inputCount, outputCount,
-                inputTypes, outputTypes);
-
-        return tableCode + "\n\n" + resetCode + "\n\n" + logicCode;
-    }
-
-    private static String resetCode(int tableSize, boolean isReset) {
-
-        StringBuilder b = new StringBuilder();
-
-        if (isReset) {
-            b.append("if(reset) { for(int i = 0; i<");
-            b.append(tableSize);
-            b.append(";i++) {table[i][0] = ");
-            b.append(NAN_BITS);
-            b.append(";} return 0;}");
-        }
+        StringBuilder b = new StringBuilder("\nvoid ");
+        b.append(tablePrefix);
+        b.append("reset (void) {\n");
+        b.append("for(int i = 0; i < ");
+        b.append(tableSize);
+        b.append("; i++) {\n");
+        b.append(tablePrefix);
+        b.append("table[i][0] = ");
+        b.append(NAN_BITS);
+        b.append(";\n}\n");
+        b.append("}\n");
 
         return b.toString();
     }
 
+    /**
+     * Generates the update logic.
+     * 
+     * @param numSets
+     * @param paramNames
+     * @param isUpdateAlways
+     * @param inputCount
+     * @param outputCount
+     * @param updatesName
+     * @param isZeroSim
+     * @param tablePrefix
+     * @return
+     */
     public static String generateUpdateCode(int numSets, List<String> paramNames,
-            boolean isUpdateAlways, int inputCount, int outputCount, String updatesName, boolean isZeroSim) {
+            boolean isUpdateAlways, int inputCount, int outputCount, String updatesName, boolean isZeroSim,
+            String tablePrefix) {
 
         int indexBits = (int) MemoiUtils.log2(numSets);
 
-        return updateCode(inputCount, outputCount, indexBits, paramNames, isUpdateAlways, updatesName, isZeroSim);
+        return updateCode(inputCount, outputCount, indexBits, paramNames, isUpdateAlways, updatesName, isZeroSim,
+                tablePrefix);
     }
 
     private static List<String> makeVarNames(List<String> paramNames) {
@@ -130,7 +156,8 @@ public class MemoiCodeGen {
     }
 
     private static String dmtLogicCode(List<String> paramNames, int numSets,
-            int memoiApproxBits, int inputCount, int outputCount, List<String> inputTypes, List<String> outputTypes) {
+            int memoiApproxBits, int inputCount, int outputCount, List<String> inputTypes, List<String> outputTypes,
+            String tablePrefix) {
 
         StringBuilder code = new StringBuilder();
 
@@ -140,20 +167,23 @@ public class MemoiCodeGen {
 
         mergeBitsCode(code, paramNames, maxVarBits, indexBits, inputCount);
 
-        lookupCode(code, indexBits, paramNames, inputCount, outputCount, outputTypes);
+        lookupCode(code, indexBits, paramNames, inputCount, outputCount, outputTypes, tablePrefix);
 
         return code.toString();
     }
 
     private static String updateCode(int inputCount, int outputCount, int indexBits,
-            List<String> paramNames, boolean isUpdateAlways, String updatesName, boolean isZeroSim) {
+            List<String> paramNames, boolean isUpdateAlways, String updatesName, boolean isZeroSim,
+            String tablePrefix) {
+
+        String tableName = tablePrefix + "table";
 
         StringBuilder code = new StringBuilder();
 
         var varNames = makeVarNames(paramNames);
 
         List<String> inputUpdates = new ArrayList<>();
-        StringBuilder access = new StringBuilder("table[hash_").append(indexBits).append("_bits]");
+        StringBuilder access = new StringBuilder(tableName).append("[hash_").append(indexBits).append("_bits]");
 
         for (int v = 0; v < inputCount; v++) {
 
@@ -224,14 +254,16 @@ public class MemoiCodeGen {
     }
 
     private static void lookupCode(StringBuilder code, int indexBits,
-            List<String> paramNames, int inputCount, int outputCount, List<String> outputTypes) {
+            List<String> paramNames, int inputCount, int outputCount, List<String> outputTypes, String tablePrefix) {
+
+        String tableName = tablePrefix + "table";
 
         code.append("\nif(");
 
         List<String> varNames = makeVarNames(paramNames);
 
         List<String> testClauses = new ArrayList<>();
-        StringBuilder access = new StringBuilder("table[hash_").append(indexBits).append("_bits]");
+        StringBuilder access = new StringBuilder(tableName).append("[hash_").append(indexBits).append("_bits]");
 
         for (int v = 0; v < inputCount; v++) {
 
@@ -243,7 +275,7 @@ public class MemoiCodeGen {
 
             testClauses.add(testClause.toString());
         }
-        code.append(String.join(" && ", testClauses)); // TODO: for 100% -> negate the condition, use parenthesis
+        code.append(String.join(" && ", testClauses));
 
         code.append(") {\n");
 
@@ -251,7 +283,9 @@ public class MemoiCodeGen {
 
             code.append("\treturn *(");
             code.append(outputTypes.get(0));
-            code.append(" *) &table[hash_");
+            code.append(" *) &");
+            code.append(tableName);
+            code.append("[hash_");
             code.append(indexBits);
             code.append("_bits][");
             code.append(inputCount);
@@ -264,7 +298,9 @@ public class MemoiCodeGen {
                 code.append(paramNames.get(o + inputCount));
                 code.append(" = *(");
                 code.append(outputTypes.get(o));
-                code.append(" *) &table[hash_");
+                code.append(" *) &");
+                code.append(tableName);
+                code.append("[hash_");
                 code.append(indexBits);
                 code.append("_bits][");
                 code.append(o + inputCount);
@@ -382,13 +418,15 @@ public class MemoiCodeGen {
     }
 
     private static String dmtCode(Map<String, MergedMemoiEntry> table, int inputCount, int outputCount, int numSets,
-            boolean isMemoiOnline) {
+            boolean isMemoiOnline, boolean isReset, String tablePrefix) {
 
         StringBuilder code = new StringBuilder("static");
         if (!isMemoiOnline) {
             code.append(" const");
         }
-        code.append(" uint64_t table[");
+        code.append(" uint64_t ");
+        code.append(tablePrefix);
+        code.append("table[");
 
         code.append(numSets);
         code.append("][");
@@ -439,7 +477,12 @@ public class MemoiCodeGen {
             }
             code.append("},\n");
         }
-        code.append("};");
+        code.append("};\n");
+
+        if (isReset) {
+
+            code.append(resetCode(numSets, tablePrefix));
+        }
 
         return code.toString();
     }

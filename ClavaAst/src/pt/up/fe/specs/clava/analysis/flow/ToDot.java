@@ -17,6 +17,13 @@
 
 package pt.up.fe.specs.clava.analysis.flow;
 
+/**
+ * Interface for a method that turns the object into a DOT language entity for
+ * display purposes
+ * 
+ * @author Tiago
+ *
+ */
 public interface ToDot {
     String toDot();
 }

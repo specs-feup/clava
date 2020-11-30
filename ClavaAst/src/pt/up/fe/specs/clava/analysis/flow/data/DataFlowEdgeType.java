@@ -17,6 +17,14 @@
 
 package pt.up.fe.specs.clava.analysis.flow.data;
 
+/**
+ * Enumeration for the DFG edge types Black: normal dataflow edge; Red: index
+ * dataflow edge; Blue: repetitions (usually used for loops); Orange: dependency
+ * tracking (experimental)
+ * 
+ * @author Tiago
+ *
+ */
 public enum DataFlowEdgeType {
     DATAFLOW("black"), DATAFLOW_INDEX("red"), REPEATING("blue"), DEPENDENCY("orange");
 
@@ -26,15 +34,28 @@ public enum DataFlowEdgeType {
 	this.color = color;
     }
 
+    /**
+     * Gets the color of the edge for display purposes
+     * 
+     * @return edge color using DOT language semantics
+     */
     public String getColor() {
 	return color;
     }
 
+    /**
+     * Checks if an edge is used for control purposes (by definition, only the
+     * REPEATING edges are)
+     * 
+     * @param type
+     * @return
+     */
     public static boolean isControl(DataFlowEdgeType type) {
 	return type == REPEATING;
     }
 
-    public static boolean isDirected(DataFlowEdgeType type) {
+    @Deprecated
+    private static boolean isDirected(DataFlowEdgeType type) {
 	return type == DATAFLOW || type == DATAFLOW_INDEX || type == REPEATING;
     }
 }
