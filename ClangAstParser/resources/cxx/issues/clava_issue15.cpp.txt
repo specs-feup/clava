@@ -1,0 +1,8 @@
+inline static long long gettick() {
+   unsigned int a, d;
+   __asm__ __volatile__("rdtsc"
+      :"=a" (a), "=d" (d));
+   __asm__("movl $$$$10, %eax;movl $$$$20, %ebx;addl %ebx, %eax;");
+   
+   return (((long long) a) | (((long long) d) << 32));
+}
