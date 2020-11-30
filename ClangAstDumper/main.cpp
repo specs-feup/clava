@@ -19,6 +19,7 @@ static llvm::cl::opt<int> UserSystemHeaderThresholdOption("system-header-thresho
 int main(int argc, const char *argv[])
 {
 
+
     // Errs is the main way we dump information, we tested if making it buffered improved performance
     // but could not detect a significant difference
     //llvm::errs().SetBuffered();

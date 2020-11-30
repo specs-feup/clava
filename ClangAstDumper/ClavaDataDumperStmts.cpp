@@ -14,6 +14,8 @@ const std::map<const std::string, clava::StmtNode > clava::STMT_DATA_MAP = {
         {"LabelStmt", clava::StmtNode::LABEL_STMT},
         {"GotoStmt", clava::StmtNode::GOTO_STMT},
         {"AttributedStmt", clava::StmtNode::ATTRIBUTED_STMT},
+        {"GCCAsmStmt", clava::StmtNode::GCC_ASM_STMT},
+        {"MSAsmStmt", clava::StmtNode::MS_ASM_STMT},
 
 
         //{"CapturedStmt", clava::StmtNode::CAPTURED_STMT},
@@ -106,6 +108,10 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpGotoStmtData(static_cast<const GotoStmt *>(S)); break;
         case clava::StmtNode::ATTRIBUTED_STMT:
             DumpAttributedStmtData(static_cast<const AttributedStmt *>(S)); break;
+        case clava::StmtNode::GCC_ASM_STMT:
+            DumpGCCAsmStmtData(static_cast<const GCCAsmStmt *>(S)); break;
+        case clava::StmtNode::MS_ASM_STMT:
+            DumpMSAsmStmtData(static_cast<const MSAsmStmt *>(S)); break;
 
 
             //case clava::StmtNode::CAPTURED_STMT:
@@ -233,6 +239,63 @@ void clava::ClavaDataDumper::DumpAttributedStmtData(const AttributedStmt *S) {
     clava::dump(attributesIds);
 }
 
+void clava::ClavaDataDumper::DumpAsmStmtData(const AsmStmt *S) {
+    // Hierarchy
+    DumpStmtData(S);
+
+    clava::dump(S->isSimple());
+    clava::dump(S->isVolatile());
+
+    clava::dump(S->getNumClobbers());
+    for(unsigned i=0; i<S->getNumClobbers(); i++) {
+        clava::dump(S->getClobber(i));
+    }
+
+    // Dump outputs
+    clava::dump(S->getNumOutputs());
+    for(unsigned i=0; i<S->getNumOutputs(); i++) {
+        clava::dump(getId(S->getOutputExpr(i), id));
+        clava::dump(S->getOutputConstraint(i));
+        clava::dump(S->isOutputPlusConstraint(i));
+    }
+
+    // Dump inputs
+    clava::dump(S->getNumInputs());
+    for(unsigned i=0; i<S->getNumInputs(); i++) {
+        clava::dump(getId(S->getInputExpr(i), id));
+        clava::dump(S->getInputConstraint(i));
+    }
+}
+
+void clava::ClavaDataDumper::DumpGCCAsmStmtData(const GCCAsmStmt *S) {
+    // Hierarchy
+    DumpAsmStmtData(S);
+
+    //ASTContext const& obj(this->Context);
+    //this->Context;
+    //clava::dump(S->generateAsmString(const_cast<const ASTContext&>(&(this->Context))));
+/*
+    llvm::errs() << "begin\n";
+    llvm::errs() << S->generateAsmString((ASTContext&)*this->Context) << "\n";
+    llvm::errs() << "end\n";
+*/
+    clava::dump(S->generateAsmString((ASTContext&)*this->Context));
+
+    //clava::dump(S->getAsmString());
+
+    // bool isAsmGoto () const
+    // unsigned 	getNumLabels () const
+    // IdentifierInfo * 	getLabelIdentifier (unsigned i) const
+    // AddrLabelExpr * 	getLabelExpr (unsigned i) const
+    // StringRef 	getLabelName (unsigned i) const
+}
+
+void clava::ClavaDataDumper::DumpMSAsmStmtData(const MSAsmStmt *S) {
+    // Hierarchy
+    DumpAsmStmtData(S);
+
+    clava::dump(S->generateAsmString((ASTContext&)*this->Context));
+}
 
 /*
 void clava::ClavaDataDumper::DumpCapturedStmtData(const CapturedStmt *S) {

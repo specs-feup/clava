@@ -41,6 +41,9 @@ namespace clava {
         GOTO_STMT,
         ATTRIBUTED_STMT,
         CAPTURED_STMT,
+        ASM_STMT,
+        GCC_ASM_STMT,
+        MS_ASM_STMT,
 
         // Expr nodes
         EXPR,

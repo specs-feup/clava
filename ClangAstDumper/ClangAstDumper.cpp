@@ -22,6 +22,7 @@
 
 using namespace clang;
 
+//ClangAstDumper::ClangAstDumper(ASTContext *Context, const ASTContext& constContext, int id, int systemHeaderThreshold) : Context(Context), constContext(constContext), id(id),
 ClangAstDumper::ClangAstDumper(ASTContext *Context, int id, int systemHeaderThreshold) : Context(Context), id(id),
     systemHeaderThreshold(systemHeaderThreshold), dataDumper(Context, id)  {};
 

@@ -25,6 +25,7 @@ class ClangAstDumper : public TypeVisitor<ClangAstDumper>,  public ConstStmtVisi
 
 private:
     ASTContext *Context;
+    //const ASTContext& constContext;
     int id;
 
     int systemHeaderThreshold = 2;
@@ -48,6 +49,7 @@ private:
 
 public:
     explicit ClangAstDumper(ASTContext *Context, int id, int systemHeaderThreashold);
+    //explicit ClangAstDumper(ASTContext *Context, const ASTContext& constContext, int id, int systemHeaderThreashold);
 
     void VisitTypeTop(const Type *T);
     void VisitTypeTop(const QualType& T);

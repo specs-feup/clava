@@ -49,11 +49,13 @@ namespace clava {
     private:
         //ClangAstDumper dumper;
         ASTContext *Context;
-        int id;
+        //const ASTContext& ConstContext;
+        const int id;
 
     public:
         // Constructor
         explicit ClavaDataDumper(ASTContext *Context, int id);
+        //explicit ClavaDataDumper(ASTContext *Context, const ASTContext& ConstContext, int id);
 
         // Utility methods
         //const std::string getId(const void* addr);
@@ -130,6 +132,9 @@ namespace clava {
         void DumpLabelStmtData(const LabelStmt *S);
         void DumpGotoStmtData(const GotoStmt *S);
         void DumpAttributedStmtData(const AttributedStmt *S);
+        void DumpAsmStmtData(const AsmStmt *S);
+        void DumpGCCAsmStmtData(const GCCAsmStmt *S);
+        void DumpMSAsmStmtData(const MSAsmStmt *S);
 
         //void DumpCapturedStmtData(const CapturedStmt *S);
         //void DumpCxxForRangeStmtData(const CXXForRangeStmt *S);
