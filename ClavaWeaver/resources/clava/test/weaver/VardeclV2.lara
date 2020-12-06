@@ -1,3 +1,5 @@
+import weaver.Query;
+
 aspectdef VardeclV2Test
 
 	select function{"removeInit"}.vardecl{"array1"} end
@@ -7,5 +9,47 @@ aspectdef VardeclV2Test
 	end
 	
 	
+	var globalRef = Query.search("function", "externalVar").search("varref").first();
+	println(globalRef.decl.definition.location);
+/*
+	for(var $vardecl of Query.search("vardecl", "GRAD_FILTER")) {
+		println($vardecl.getNode());
+	}
+*/
+/*
+	for(var $vardecl of Query.search("vardecl")) {
+		println("Vardecl: " + $vardecl.getNode().getNodeSignature());
+		var global = getGlobalDecl($vardecl);
+		if(global !== undefined) {
+			println("global location: " + global.location);
+		}
+	}
+	*/
 
 end
+
+function getGlobalDecl($vardecl) {
+	if(!$vardecl.isGlobal) {
+		debug("$vardecl.globalDecl: vardecl '"+$vardecl.name+"' is not global");
+		return undefined;
+	}
+	
+	var storageClass = $vardecl.storageClass;
+	
+	// Is global and storageClass is 'none', this is the global declaration
+	if(storageClass === "none") {
+		return $vardecl;
+	}
+	
+	if(storageClass === "extern") {
+		// Search for the vardecl with storageClass none
+		for(var $vardecl of Query.search("vardecl", $vardecl.name)) {
+			if($vardecl.storageClass === "none") {
+				return $vardecl;
+			}
+		}
+		
+	}
+
+	println("storage class not implemented: " + $vardecl.storageClass);
+}

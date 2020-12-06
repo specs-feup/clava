@@ -260,7 +260,7 @@ public class CxxTest {
 
     @Test
     public void testVarDeclV2() {
-        newTester().test("VardeclV2.lara", "vardeclv2.cpp");
+        newTester().test("VardeclV2.lara", "vardeclv2.cpp", "vardeclv2_2.cpp");
     }
 
     @Test
