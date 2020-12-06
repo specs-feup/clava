@@ -25,9 +25,11 @@ import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TLSKind;
+import pt.up.fe.specs.util.SpecsLogs;
 
 /**
  * Represents a variable declaration or definition.
@@ -378,4 +380,38 @@ public class VarDecl extends DeclaratorDecl {
 
     }
 
+    /**
+     * In most cases, returns this VarDecl. In case of declaration of global variables, returns the VarDecl
+     * corresponding to its definition.
+     * 
+     * @return the VarDecl that corresponds to its definition, or null if it could not be found
+     */
+    public VarDecl getDefinition() {
+        // If no global storage, return itself
+        if (!get(VarDecl.HAS_GLOBAL_STORAGE)) {
+            return this;
+        }
+
+        switch (get(VarDecl.STORAGE_CLASS)) {
+        // Is global and storageClass is 'none', this is the global declaration
+        case NONE:
+            return this;
+        case EXTERN:
+            return getApp().getGlobalVarDefinition(this).orElse(null);
+        default:
+            SpecsLogs.msgWarn("Case not contemplated yet: " + get(VarDecl.STORAGE_CLASS));
+            return this;
+        }
+
+    }
+
+    public static VarDecl getGlobalDefinition(App app, VarDecl varDecl) {
+        return app.getDescendantsStream()
+                .filter(node -> node instanceof VarDecl)
+                .map(node -> (VarDecl) node)
+                .filter(vardecl -> vardecl.get(DECL_NAME).equals(varDecl.get(DECL_NAME)))
+                .filter(vardecl -> vardecl.get(STORAGE_CLASS) == StorageClass.NONE)
+                .findFirst()
+                .orElse(null);
+    }
 }

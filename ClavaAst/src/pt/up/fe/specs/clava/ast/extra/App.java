@@ -37,9 +37,9 @@ import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.extra.data.IdNormalizer;
-import pt.up.fe.specs.clava.ast.type.FunctionType;
 import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.transform.call.CallInliner;
@@ -87,11 +87,13 @@ public class App extends ClavaNode {
     private final Map<String, ClavaNode> nodesCache;
     private final Map<String, FunctionDecl> functionDeclarationCache;
     private final Map<String, FunctionDecl> functionDefinitionCache;
+    private final Map<String, VarDecl> globalVarDefinitionCache;
 
     private final IdNormalizer idNormalizer;
     private final CallInliner callInliner;
 
     private FunctionDecl noFunctionFound = null;
+    private VarDecl noVarDeclFound = null;
 
     // private ExternalDependencies externalDependencies;
     // private Map<String, String> idsAlias;
@@ -147,6 +149,7 @@ public class App extends ClavaNode {
         nodesCache = new HashMap<>();
         functionDeclarationCache = new HashMap<>();
         functionDefinitionCache = new HashMap<>();
+        globalVarDefinitionCache = new HashMap<>();
         // appData = DataStore.newInstance("Clava App Data");
 
         idNormalizer = new IdNormalizer();
@@ -171,6 +174,7 @@ public class App extends ClavaNode {
         nodesCache.clear();
         functionDeclarationCache.clear();
         functionDefinitionCache.clear();
+        globalVarDefinitionCache.clear();
     }
 
     /*
@@ -619,9 +623,42 @@ public class App extends ClavaNode {
         return functionDeclaration;
     }
 
-    private static String getFunctionId(String declName, FunctionType functionType) {
-        return functionType.getCode(declName);
+    public Optional<VarDecl> getGlobalVarDefinition(VarDecl varDecl) {
+        /*
+        var functionId = function.getSignature();
+        
+        FunctionDecl cachedNode = cache.get(functionId);
+        if (cachedNode != null) {
+            // Check if no function is available
+            if (cachedNode == getNoFunctionFound()) {
+                return Optional.empty();
+            }
+        
+            return Optional.of(cachedNode);
+        }
+        */
+        var id = varDecl.get(ID);
+
+        var globalDef = globalVarDefinitionCache.get(id);
+        if (globalDef != null) {
+            // Check if no vardecl was found
+            if (globalDef == getNoVarDeclFound()) {
+                return Optional.empty();
+            }
+
+            return Optional.of(globalDef);
+        }
+
+        globalDef = VarDecl.getGlobalDefinition(this, varDecl);
+        var globalDefToStore = globalDef != null ? globalDef : getNoVarDeclFound();
+        globalVarDefinitionCache.put(id, globalDefToStore);
+
+        return Optional.ofNullable(globalDef);
     }
+
+    // private static String getFunctionId(String declName, FunctionType functionType) {
+    // return functionType.getCode(declName);
+    // }
 
     /**
      * @deprecated use the version that has a namespace as argument
@@ -823,6 +860,15 @@ public class App extends ClavaNode {
         // private static final FunctionDecl NO_FUNCTION_FOUND = ClavaNodeFactory.dummyFunctionDecl("No Function
         // Found");
 
+    }
+
+    private VarDecl getNoVarDeclFound() {
+        if (noVarDeclFound == null) {
+            noVarDeclFound = getFactory().varDecl("No VarDecl Found",
+                    getFactory().dummyType("dummy vardecl type"));
+        }
+
+        return noVarDeclFound;
     }
 
     public TranslationUnit getTranslationUnit(SourceRange location) {
