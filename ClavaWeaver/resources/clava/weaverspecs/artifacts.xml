@@ -368,6 +368,7 @@
 		<attribute name="isParam" type="Boolean" tooltip="true, if vardecl is a function parameter" />
 		<attribute name="storageClass" type="String"/>
 		<attribute name="isGlobal" type="Boolean" tooltip="true, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function." />
+		<attribute name="definition" type="vardecl" tooltip="The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)"/>		
 	</artifact>
 
 	<artifact class="accessSpecifier" default="kind">

@@ -44361,6 +44361,15 @@
          "children": [
                {
                   "type": "attribute",
+                  "tooltip": "The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)",
+                  "children": [
+                           {
+                              "type": "vardecl",
+                              "name": "definition"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true, if vardecl has an initialization value",
                   "children": [
                            {
@@ -68625,6 +68634,15 @@
          "extends": "declarator"      ,
          "tooltip": "Represents a variable declaration or definition",
          "children": [
+               {
+                  "type": "attribute",
+                  "tooltip": "The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)",
+                  "children": [
+                           {
+                              "type": "vardecl",
+                              "name": "definition"
+                           }]
+               },
                {
                   "type": "attribute",
                   "tooltip": "true, if vardecl has an initialization value",

@@ -105,4 +105,9 @@ public class CxxVardecl extends AVardecl {
     public InitializationStyle getInitStyleImpl() {
         return InitializationStyle.valueOf(varDecl.get(VarDecl.INIT_STYLE).name());
     }
+
+    @Override
+    public AVardecl getDefinitionImpl() {
+        return CxxJoinpoints.create(varDecl.getDefinition(), AVardecl.class);
+    }
 }

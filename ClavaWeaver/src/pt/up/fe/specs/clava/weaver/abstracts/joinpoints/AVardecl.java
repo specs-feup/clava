@@ -171,6 +171,29 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
+     * The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)
+     */
+    public abstract AVardecl getDefinitionImpl();
+
+    /**
+     * The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)
+     */
+    public final Object getDefinition() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "definition", Optional.empty());
+        	}
+        	AVardecl result = this.getDefinitionImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "definition", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "definition", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select inits
      * @return 
      */
@@ -579,6 +602,7 @@ public abstract class AVardecl extends ADeclarator {
         attributes.add("isParam");
         attributes.add("storageClass");
         attributes.add("isGlobal");
+        attributes.add("definition");
     }
 
     /**
@@ -632,6 +656,7 @@ public abstract class AVardecl extends ADeclarator {
         ISPARAM("isParam"),
         STORAGECLASS("storageClass"),
         ISGLOBAL("isGlobal"),
+        DEFINITION("definition"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),

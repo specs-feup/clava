@@ -81,6 +81,15 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
+     * Get value on attribute definition
+     * @return the attribute's value
+     */
+    @Override
+    public AVardecl getDefinitionImpl() {
+        return this.aVardecl.getDefinitionImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select inits
      * @return 
      */
@@ -483,6 +492,7 @@ public abstract class AParam extends AVardecl {
         ISPARAM("isParam"),
         STORAGECLASS("storageClass"),
         ISGLOBAL("isGlobal"),
+        DEFINITION("definition"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),
