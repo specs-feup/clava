@@ -30,6 +30,8 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDRE
         {"InitListExpr", clava::StmtNode::INIT_LIST_EXPR},
         {"DeclRefExpr", clava::StmtNode::DECL_REF_EXPR},
         {"OffsetOfExpr", clava::StmtNode::OFFSET_OF_EXPR},
+        {"MemberExpr", clava::StmtNode::MEMBER_EXPR},
+        {"MaterializeTemporaryExpr", clava::StmtNode::MATERIALIZE_TEMPORARY_EXPR},
         {"UnresolvedLookupExpr", clava::StmtNode::OVERLOAD_EXPR},
         {"UnresolvedMemberExpr", clava::StmtNode::OVERLOAD_EXPR},
         {"CallExpr", clava::StmtNode::CALL_EXPR},
