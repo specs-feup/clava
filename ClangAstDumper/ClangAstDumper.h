@@ -266,6 +266,7 @@ private:
     void VisitExprChildren(const Expr *S, std::vector<std::string> &children);
     void VisitInitListExprChildren(const InitListExpr *E, std::vector<std::string> &children);
     void VisitDeclRefExprChildren(const DeclRefExpr *E, std::vector<std::string> &children);
+    void VisitDependentScopeDeclRefExprChildren(const DependentScopeDeclRefExpr *E, std::vector<std::string> &children);
     void VisitOffsetOfExprChildren(const OffsetOfExpr *E, std::vector<std::string> &children);
     void VisitMemberExprChildren(const MemberExpr *E, std::vector<std::string> &children);
     void VisitMaterializeTemporaryExprChildren(const MaterializeTemporaryExpr *E, std::vector<std::string> &children);

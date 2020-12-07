@@ -40,6 +40,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"InitListExpr", clava::StmtNode::INIT_LIST_EXPR},
         {"StringLiteral", clava::StmtNode::STRING_LITERAL},
         {"DeclRefExpr", clava::StmtNode::DECL_REF_EXPR},
+        {"DependentScopeDeclRefExpr", clava::StmtNode::DEPENDENT_SCOPE_DECL_REF_EXPR},
         {"UnresolvedLookupExpr", clava::StmtNode::UNRESOLVED_LOOKUP_EXPR},
         {"UnresolvedMemberExpr", clava::StmtNode::UNRESOLVED_MEMBER_EXPR},
         {"CXXConstructExpr", clava::StmtNode::CXX_CONSTRUCT_EXPR},
@@ -145,6 +146,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpInitListExprData(static_cast<const InitListExpr *>(S)); break;
         case clava::StmtNode ::DECL_REF_EXPR:
             DumpDeclRefExprData(static_cast<const DeclRefExpr *>(S)); break;
+        case clava::StmtNode ::DEPENDENT_SCOPE_DECL_REF_EXPR:
+            DumpDependentScopeDeclRefExprData(static_cast<const DependentScopeDeclRefExpr *>(S)); break;
 //        case clava::StmtNode ::OVERLOAD_EXPR:
 //            DumpOverloadExprData(static_cast<const OverloadExpr *>(S)); break;
         case clava::StmtNode ::UNRESOLVED_MEMBER_EXPR:
@@ -507,6 +510,34 @@ void clava::ClavaDataDumper::DumpDeclRefExprData(const DeclRefExpr *E) {
 
     clava::dump(clava::getId(E->getDecl(), id));
 }
+
+void clava::ClavaDataDumper::DumpDependentScopeDeclRefExprData(const DependentScopeDeclRefExpr *E) {
+    DumpExprData(E);
+
+    clava::dump(E->getDeclName().getAsString());
+
+    // Dump qualifier
+    clava::dump(E->getQualifier(), Context);
+
+    clava::dump(E->hasTemplateKeyword());
+
+    // Dump template arguments
+    if(E->hasExplicitTemplateArgs()) {
+        // Number of template args
+        clava::dump(E->getNumTemplateArgs());
+
+        auto templateArgs = E->getTemplateArgs();
+        for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
+            auto templateArg = templateArgs + i;
+            clava::dump(templateArg->getArgument(), id);
+            //clava::dump(clava::getSource(Context, templateArg->getSourceRange()));
+        }
+    } else {
+        clava::dump(0);
+    }
+}
+
+
 
 void clava::ClavaDataDumper::DumpOverloadExprData(const OverloadExpr *E) {
     DumpExprData(E);
