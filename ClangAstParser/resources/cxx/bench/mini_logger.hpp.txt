@@ -30,7 +30,7 @@ struct my_logger_t {
    template <class T, class... Ys>
    inline void print(T const what, Ys const ... remainder) {
       print(what);
-      print<Ys...>(remainder...);
+      print<Ys ...>(remainder...);
    }
    
    template <class T>
