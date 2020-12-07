@@ -564,13 +564,13 @@ void clava::ClavaDataDumper::DumpOverloadExprData(const OverloadExpr *E) {
         auto templateArgs = E->getTemplateArgs();
         for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
             auto templateArg = templateArgs + i;
-            clava::dump(clava::getSource(Context, templateArg->getSourceRange()));
+            clava::dump(templateArg->getArgument(), id);
+            //clava::dump(clava::getSource(Context, templateArg->getSourceRange()));
         }
     } else {
         clava::dump(0);
     }
 }
-
 
 void clava::ClavaDataDumper::DumpUnresolvedMemberExprData(const UnresolvedMemberExpr *E) {
     DumpOverloadExprData(E);

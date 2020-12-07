@@ -460,6 +460,13 @@ void ClangAstDumper::VisitOverloadExprChildren(const OverloadExpr *E, std::vecto
         VisitDeclTop(*currentDecl);
     }
 
+    // Visit template arguments
+    auto templateArgs = E->getTemplateArgs();
+    for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
+        auto templateArg = templateArgs + i;
+        VisitTemplateArgument(templateArg->getArgument());
+    }
+
 }
 
 void ClangAstDumper::VisitCallExprChildren(const CallExpr *E, std::vector<std::string> &children) {
