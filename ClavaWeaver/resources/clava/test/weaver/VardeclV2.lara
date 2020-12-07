@@ -28,6 +28,7 @@ aspectdef VardeclV2Test
 
 end
 
+/*
 function getGlobalDecl($vardecl) {
 	if(!$vardecl.isGlobal) {
 		debug("$vardecl.globalDecl: vardecl '"+$vardecl.name+"' is not global");
@@ -53,3 +54,4 @@ function getGlobalDecl($vardecl) {
 
 	println("storage class not implemented: " + $vardecl.storageClass);
 }
+*/
