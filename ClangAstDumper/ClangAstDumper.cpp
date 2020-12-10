@@ -467,15 +467,6 @@ const void ClangAstDumper::addChildren(DeclContext::decl_range decls, std::vecto
 
     for (auto decl = decls.begin(), endDecl = decls.end(); decl != endDecl; ++decl) {
 
-        // If ignore CXXRecordDecl without definition, skip
-        /*
-        if (const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(*decl)) {
-            if (ignoreClassDefinitions && !recordDecl->hasDefinition()) {
-                continue;
-            }
-        }
-         */
-
         // Ignore decls that are not in the source code
         if(decl->isImplicit()) {
             continue;
