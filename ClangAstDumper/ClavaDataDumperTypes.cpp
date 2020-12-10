@@ -20,6 +20,7 @@ const std::map<const std::string, clava::TypeNode > clava::TYPE_DATA_MAP = {
         {"DependentSizedArrayType", clava::TypeNode::DEPENDENT_SIZED_ARRAY_TYPE},
         {"RecordType", clava::TypeNode::TAG_TYPE},
         {"EnumType", clava::TypeNode::TAG_TYPE},
+        //{"EnumType", clava::TypeNode::ENUM_TYPE},
         {"ElaboratedType", clava::TypeNode::ELABORATED_TYPE},
         {"TemplateTypeParmType", clava::TypeNode::TEMPLATE_TYPE_PARM_TYPE},
         {"TemplateSpecializationType", clava::TypeNode::TEMPLATE_SPECIALIZATION_TYPE},
@@ -82,6 +83,8 @@ void clava::ClavaDataDumper::dump(clava::TypeNode typeNode, const Type* T) {
             DumpDependentSizedArrayTypeData(static_cast<const DependentSizedArrayType *>(T)); break;
         case clava::TypeNode::TAG_TYPE:
             DumpTagTypeData(static_cast<const TagType *>(T)); break;
+        //case clava::TypeNode::ENUM_TYPE:
+        //    DumpEnumTypeData(static_cast<const EnumType *>(T)); break;
         case clava::TypeNode::TYPE_WITH_KEYWORD:
             DumpTypeWithKeywordData(static_cast<const TypeWithKeyword *>(T)); break;
         case clava::TypeNode::ELABORATED_TYPE:
@@ -413,6 +416,15 @@ void clava::ClavaDataDumper::DumpTagTypeData(const TagType *T) {
     llvm::errs() << "CLASSNAME: " + classname + " WITH TYPE " << clava::getName(typeNode) << "\n";
 */
 }
+/*
+void clava::ClavaDataDumper::DumpEnumTypeData(const EnumType *T) {
+    DumpTagTypeData(T);
+    clava::dump(clava::getId(T->getDecl(), id));
+}
+ */
+
+
+
 
 /*
 void clava::ClavaDataDumper::DumpRecordTypeData(const RecordType *T) {

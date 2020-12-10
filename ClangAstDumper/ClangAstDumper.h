@@ -311,6 +311,7 @@ private:
     void VisitFunctionTypeChildren(const FunctionType *T, std::vector<std::string> &visitedChildren);
     void VisitFunctionProtoTypeChildren(const FunctionProtoType *T, std::vector<std::string> &visitedChildren);
     void VisitTagTypeChildren(const TagType *T, std::vector<std::string> &visitedChildren);
+    //void VisitEnumTypeChildren(const EnumType *T, std::vector<std::string> &visitedChildren);
     void VisitArrayTypeChildren(const ArrayType *T, std::vector<std::string> &visitedChildren);
     void VisitVariableArrayTypeChildren(const VariableArrayType *T, std::vector<std::string> &visitedChildren);
     void VisitDependentSizedArrayTypeChildren(const DependentSizedArrayType *T, std::vector<std::string> &visitedChildren);

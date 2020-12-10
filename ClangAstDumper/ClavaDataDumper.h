@@ -191,6 +191,7 @@ namespace clava {
         void DumpFunctionTypeData(const FunctionType *T);
         void DumpFunctionProtoTypeData(const FunctionProtoType *T);
         void DumpTagTypeData(const TagType *T);
+        //void DumpEnumTypeData(const EnumType *T);
         //void DumpRecordTypeData(const RecordType *T);
         void DumpArrayTypeData(const ArrayType *T);
         void DumpConstantArrayTypeData(const ConstantArrayType *T);
