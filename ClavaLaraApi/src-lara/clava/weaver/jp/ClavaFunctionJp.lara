@@ -4,6 +4,7 @@ import weaver.Weaver;
 
 // Override FunctionJp contructor
 var oldFunctionJp = FunctionJp.prototype;
+var oldFunction_JP_TYPES = FunctionJp._JP_TYPES;
 
 FunctionJp = function(astNode) {
 	// check for definition
@@ -15,6 +16,7 @@ FunctionJp = function(astNode) {
 }
 
 FunctionJp.prototype = oldFunctionJp;
+FunctionJp._JP_TYPES = oldFunction_JP_TYPES;
 
 _lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'id', {
 	get: function () { 
