@@ -182,7 +182,7 @@ void clava::ClavaDataDumper::DumpTypeData(const Type *T, Qualifiers &qualifiers)
     clava::dump(T->isFromAST());
 
 
-
+    QualType singleStepDesugar = T->getLocallyUnqualifiedSingleStepDesugaredType();
     //if(singleStepDesugar != T) {
     if(singleStepDesugar != QualType(T, 0)) {
         clava::dump(clava::getId(singleStepDesugar, id));
@@ -551,7 +551,7 @@ void clava::ClavaDataDumper::DumpDecltypeTypeData(const DecltypeType *T) {
     // Hierarchy
     DumpTypeData(T);
 
-//    clava::dump(T->isSugared());
+    clava::dump(T->isSugared());
     clava::dump(clava::getId(T->getUnderlyingExpr(), id));
 }
 
@@ -599,6 +599,7 @@ void clava::ClavaDataDumper::DumpTypeOfExprTypeData(const TypeOfExprType *T) {
     // Hierarchy
     DumpTypeData(T);
 
+    clava::dump(T->isSugared());
     clava::dump(clava::getId(T->getUnderlyingExpr(), id));
 }
 

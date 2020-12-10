@@ -26,6 +26,8 @@ public class DecltypeType extends Type {
 
     /// DATAKEYS BEGIN
 
+    public final static DataKey<Boolean> IS_SUGARED = KeyFactory.bool("isSugared");
+
     public final static DataKey<Expr> UNDERLYING_EXPR = KeyFactory.object("underlyingExpr", Expr.class);
 
     /// DATAKEYS END
@@ -53,7 +55,7 @@ public class DecltypeType extends Type {
 
     @Override
     public Type desugar() {
-        if (hasSugar()) {
+        if (get(IS_SUGARED)) {
             return get(UNDERLYING_EXPR).getType();
         }
 

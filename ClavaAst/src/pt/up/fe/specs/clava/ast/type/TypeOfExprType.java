@@ -30,6 +30,8 @@ public class TypeOfExprType extends Type {
 
     /// DATAKEYS BEGIN
 
+    public final static DataKey<Boolean> IS_SUGARED = KeyFactory.bool("isSugared");
+
     public final static DataKey<Expr> UNDERLYING_EXPR = KeyFactory.object("underlingExpr", Expr.class);
 
     /// DATAKEYS END
@@ -40,7 +42,7 @@ public class TypeOfExprType extends Type {
 
     @Override
     public Type desugar() {
-        if (hasSugar()) {
+        if (get(IS_SUGARED)) {
             return get(UNDERLYING_EXPR).getType();
         }
 

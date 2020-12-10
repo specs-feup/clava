@@ -305,6 +305,7 @@ public class TypeDataParser {
 
         DataStore data = parseTypeData(lines, parserData);
 
+        data.add(DecltypeType.IS_SUGARED, LineStreamParsers.oneOrZero(lines));
         parserData.getClavaNodes().queueSetNode(data, DecltypeType.UNDERLYING_EXPR, lines.nextLine());
 
         return data;
@@ -343,6 +344,7 @@ public class TypeDataParser {
 
         DataStore data = parseTypeData(lines, parserData);
 
+        data.add(DecltypeType.IS_SUGARED, LineStreamParsers.oneOrZero(lines));
         parserData.getClavaNodes().queueSetNode(data, TypeOfExprType.UNDERLYING_EXPR, lines.nextLine());
 
         return data;
