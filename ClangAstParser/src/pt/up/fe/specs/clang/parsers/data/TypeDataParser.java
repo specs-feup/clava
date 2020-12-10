@@ -218,6 +218,15 @@ public class TypeDataParser {
         return data;
     }
 
+    // public static DataStore parseEnumTypeData(LineStream lines, ClangParserData parserData) {
+    //
+    // DataStore data = parseTagTypeData(lines, parserData);
+    //
+    // parserData.getClavaNodes().queueSetNode(data, EnumType.ENUM_DECL, lines.nextLine());
+    //
+    // return data;
+    // }
+
     public static DataStore parseTypeWithKeywordData(LineStream lines, ClangParserData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);

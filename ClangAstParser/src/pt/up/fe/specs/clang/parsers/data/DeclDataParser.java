@@ -110,6 +110,7 @@ public class DeclDataParser {
         // data.add(NamedDecl.QUALIFIED_NAME, lines.nextLine());
         data.add(NamedDecl.QUALIFIED_PREFIX, lines.nextLine());
         data.add(NamedDecl.DECL_NAME, lines.nextLine());
+
         data.add(NamedDecl.NAME_KIND, NameKind.getHelper().fromValue(LineStreamParsers.integer(lines)));
 
         data.add(NamedDecl.IS_HIDDEN, LineStreamParsers.oneOrZero(lines));
@@ -142,6 +143,12 @@ public class DeclDataParser {
         // Parse TypeDecl data
         DataStore data = parseTypeDeclData(lines, dataStore);
 
+        // If TagDecl has no name, give it a name
+        if (data.get(NamedDecl.DECL_NAME).isEmpty()) {
+            String anonName = ClavaDataParsers.createAnonName(data.get(ClavaNode.LOCATION));
+            data.set(NamedDecl.DECL_NAME, anonName);
+        }
+
         data.add(TagDecl.TAG_KIND, LineStreamParsers.enumFromName(TagKind.class, lines));
         data.add(TagDecl.IS_COMPLETE_DEFINITION, LineStreamParsers.oneOrZero(lines));
 
@@ -165,23 +172,25 @@ public class DeclDataParser {
         // This does not catch all cases where RecordDecls might not have a name
         data.add(RecordDecl.IS_ANONYMOUS, LineStreamParsers.oneOrZero(lines));
 
+        /*
         // If RecordDecl has no name, give it a name
         if (data.get(NamedDecl.DECL_NAME).isEmpty()) {
             String anonName = ClavaDataParsers.createAnonName(data.get(ClavaNode.LOCATION));
             data.set(NamedDecl.DECL_NAME, anonName);
             // data.set(NamedDecl.QUALIFIED_NAME, anonName);
-
+        
             // After all nodes are parsed, also set the name of the corresponding decl type
             // dataStore.getClavaNodes()
             // .queueAction(
             // () -> {
             // data.get(RecordDecl.TYPE_FOR_DECL).setInPlace(Type.TYPE_AS_STRING, anonName);
             // });
-
+        
             // dataStore.getClavaNodes()
             // .queueAction(() -> System.out.println("TYPE FOR DECL:" + data.get(RecordDecl.TYPE_FOR_DECL)));
-
+        
         }
+        */
 
         return data;
     }
