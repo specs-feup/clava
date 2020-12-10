@@ -56,14 +56,14 @@ public class ClavaNodes {
     // private final ClangParserKeys data;
     private final Map<String, ClavaNode> clavaNodes;
     // private final Map<String, String> skippedNodes;
-    private final List<Runnable> delayedNodesToAdd;
+    private final List<Runnable> queuedActions;
     private final ClavaFactory factory;
 
     public ClavaNodes(ClavaFactory factory) {
         // public ClavaNodes(ClavaFactory factory, Map<String, String> skippedNodes) {
         // this.data = data;
         this.clavaNodes = new HashMap<>();
-        this.delayedNodesToAdd = new ArrayList<>();
+        this.queuedActions = new ArrayList<>();
         this.factory = factory;
         // this.skippedNodes = skippedNodes;
     }
@@ -72,8 +72,8 @@ public class ClavaNodes {
         return clavaNodes;
     }
 
-    public List<Runnable> getQueuedNodesToSet() {
-        return delayedNodesToAdd;
+    public List<Runnable> getQueuedActions() {
+        return queuedActions;
     }
 
     public ClavaNode get(String nodeId) {
@@ -306,7 +306,7 @@ public class ClavaNodes {
             // System.out.println("SETTING node " + nodeId + " for key " + key);
         };
 
-        delayedNodesToAdd.add(nodeToAdd);
+        queuedActions.add(nodeToAdd);
     }
 
     public <T> void queueSetAction(DataClass<?> data, DataKey<T> key,
@@ -321,7 +321,7 @@ public class ClavaNodes {
             data.set(key, value);
         };
 
-        delayedNodesToAdd.add(nodeToAdd);
+        queuedActions.add(nodeToAdd);
     }
 
     private <T extends ClavaNode> ClavaNode adaptNode(ClavaNode node, Class<T> valueClass) {
@@ -411,7 +411,7 @@ public class ClavaNodes {
             data.set(key, value);
         };
 
-        delayedNodesToAdd.add(nodeToAdd);
+        queuedActions.add(nodeToAdd);
     }
 
     public <T extends ClavaNode> void queueSetNullableNode(DataClass<?> data, DataKey<T> key,
@@ -425,7 +425,7 @@ public class ClavaNodes {
             data.set(key, key.getValueClass().cast(value));
         };
 
-        delayedNodesToAdd.add(nodeToAdd);
+        queuedActions.add(nodeToAdd);
     }
 
     // public <T extends ClavaNode> void queueSetNodeList(DataClass<?> dataClass, DataKey<List<T>> key,
@@ -445,10 +445,10 @@ public class ClavaNodes {
             data.set(key, nodes);
         };
 
-        delayedNodesToAdd.add(nodeToAdd);
+        queuedActions.add(nodeToAdd);
     }
 
     public void queueAction(Runnable runnable) {
-        delayedNodesToAdd.add(runnable);
+        queuedActions.add(runnable);
     }
 }
