@@ -309,6 +309,9 @@ public class DeclDataParser {
 
         dataStore.getClavaNodes().queueSetNode(data, CXXConversionDecl.CONVERSION_TYPE, lines.nextLine());
 
+        // Fix DECL_NAME
+        dataStore.getClavaNodes().queueSetAction(data, NamedDecl.DECL_NAME, CXXConversionDecl::buildDeclName);
+
         return data;
     }
 
