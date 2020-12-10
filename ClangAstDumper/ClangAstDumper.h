@@ -177,6 +177,7 @@ public:
      */
     const void addChild(const Decl *addr, std::vector<std::string> &children);
     const void addChildren(DeclContext::decl_range declRange, std::vector<std::string> &children);
+    //const void addChildren(DeclContext::decl_range declRange, std::vector<std::string> &children, bool ignoreClassDefinitions);
     const void addChild(const Stmt *addr, std::vector<std::string> &children);
     const void addChild(const Expr *addr, std::vector<std::string> &children);
     const void addChild(const Type *addr, std::vector<std::string> &children);
