@@ -408,6 +408,7 @@ public class ExprDataParser {
         DataStore data = parseExprData(lines, dataStore);
 
         data.set(PredefinedExpr.PREDEFINED_TYPE, LineStreamParsers.enumFromName(PredefinedIdType.class, lines));
+        // data.set(PredefinedExpr.FUNCTION_NAME, lines.nextLine());
 
         return data;
     }
