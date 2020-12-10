@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.DataStore.DataClass;
@@ -303,6 +304,21 @@ public class ClavaNodes {
             data.set(key, valueClass.cast(adaptedNode));
 
             // System.out.println("SETTING node " + nodeId + " for key " + key);
+        };
+
+        delayedNodesToAdd.add(nodeToAdd);
+    }
+
+    public <T> void queueSetAction(DataClass<?> data, DataKey<T> key,
+            Function<DataClass<?>, T> function) {
+
+        Runnable nodeToAdd = () -> {
+
+            // Calculate value
+            var value = function.apply(data);
+
+            // Set data
+            data.set(key, value);
         };
 
         delayedNodesToAdd.add(nodeToAdd);
