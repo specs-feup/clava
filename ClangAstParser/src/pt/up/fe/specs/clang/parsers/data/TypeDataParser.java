@@ -73,7 +73,7 @@ public class TypeDataParser {
         DataStore clavaData = NodeDataParser.parseNodeData(lines, false, dataStore);
 
         clavaData.add(Type.TYPE_AS_STRING, lines.nextLine());
-        clavaData.add(Type.HAS_SUGAR, LineStreamParsers.oneOrZero(lines));
+        // clavaData.add(Type.HAS_SUGAR, LineStreamParsers.oneOrZero(lines));
         clavaData.add(Type.TYPE_DEPENDENCY, LineStreamParsers.enumFromName(TypeDependency.class, lines));
         clavaData.add(Type.IS_VARIABLY_MODIFIED, LineStreamParsers.oneOrZero(lines));
         clavaData.add(Type.CONTAINS_UNEXPANDED_PARAMETER_PACK, LineStreamParsers.oneOrZero(lines));

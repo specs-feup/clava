@@ -163,9 +163,11 @@ void clava::ClavaDataDumper::DumpTypeData(const Type *T, Qualifiers &qualifiers)
     clava::dump(hasSugar);
     */
 
+    /*
     QualType singleStepDesugar = T->getLocallyUnqualifiedSingleStepDesugaredType();
     bool hasSugar = singleStepDesugar != QualType(T, 0);
     clava::dump(hasSugar);
+    */
 
     if(T->isDependentType()) {
         clava::dump("DEPENDENT");
@@ -549,7 +551,7 @@ void clava::ClavaDataDumper::DumpDecltypeTypeData(const DecltypeType *T) {
     // Hierarchy
     DumpTypeData(T);
 
-
+//    clava::dump(T->isSugared());
     clava::dump(clava::getId(T->getUnderlyingExpr(), id));
 }
 
