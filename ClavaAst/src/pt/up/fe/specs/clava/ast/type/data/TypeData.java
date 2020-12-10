@@ -18,7 +18,7 @@ import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
 public class TypeData {
 
     private String bareType;
-    private final boolean hasSugar;
+    // private final boolean hasSugar;
     private final boolean isDependent;
     private final TypeDependency typeDependency;
     private final boolean isVariablyModified;
@@ -31,19 +31,22 @@ public class TypeData {
      * @param bareType
      */
     public TypeData(String bareType) {
-        this(bareType, false, false, TypeDependency.NONE, false, false, false);
+        // this(bareType, false, false, TypeDependency.NONE, false, false, false);
+        this(bareType, false, TypeDependency.NONE, false, false, false);
     }
 
     public TypeData(String bareType, TypeData data) {
-        this(bareType, data.hasSugar, data.isDependent, data.typeDependency, data.isVariablyModified,
+        // this(bareType, data.hasSugar, data.isDependent, data.typeDependency, data.isVariablyModified,
+        this(bareType, data.isDependent, data.typeDependency, data.isVariablyModified,
                 data.containsUnexpandedParameterPack, data.isFromAst);
     }
 
-    public TypeData(String bareType, boolean hasSugar, boolean isDependent,
+    // public TypeData(String bareType, boolean hasSugar, boolean isDependent,
+    public TypeData(String bareType, boolean isDependent,
             TypeDependency typeDependency, boolean isVariablyModified,
             boolean containsUnexpandedParameterPack, boolean isFromAst) {
         this.bareType = bareType;
-        this.hasSugar = hasSugar;
+        // this.hasSugar = hasSugar;
         this.isDependent = isDependent;
         this.typeDependency = typeDependency;
         this.isVariablyModified = isVariablyModified;
@@ -55,9 +58,9 @@ public class TypeData {
         return bareType;
     }
 
-    public boolean hasSugar() {
-        return hasSugar;
-    }
+    // public boolean hasSugar() {
+    // return hasSugar;
+    // }
 
     public boolean isDependent() {
         return isDependent;
@@ -91,9 +94,9 @@ public class TypeData {
     public int getNumBaseChildren() {
         int counter = 0;
 
-        if (hasSugar) {
-            counter++;
-        }
+        // if (hasSugar) {
+        // counter++;
+        // }
 
         return counter;
     }
@@ -104,7 +107,7 @@ public class TypeData {
         int result = 1;
         result = prime * result + ((bareType == null) ? 0 : bareType.hashCode());
         result = prime * result + (containsUnexpandedParameterPack ? 1231 : 1237);
-        result = prime * result + (hasSugar ? 1231 : 1237);
+        // result = prime * result + (hasSugar ? 1231 : 1237);
         result = prime * result + (isDependent ? 1231 : 1237);
         result = prime * result + (isFromAst ? 1231 : 1237);
         result = prime * result + (isVariablyModified ? 1231 : 1237);
@@ -134,9 +137,9 @@ public class TypeData {
         if (containsUnexpandedParameterPack != other.containsUnexpandedParameterPack) {
             return false;
         }
-        if (hasSugar != other.hasSugar) {
-            return false;
-        }
+        // if (hasSugar != other.hasSugar) {
+        // return false;
+        // }
         if (isDependent != other.isDependent) {
             return false;
         }
@@ -157,7 +160,7 @@ public class TypeData {
         StringBuilder string = new StringBuilder();
 
         string.append("Bare type: ").append(bareType);
-        string.append(", has sugar: ").append(hasSugar);
+        // string.append(", has sugar: ").append(hasSugar);
         string.append(", is dependent: ").append(isDependent);
         string.append(", type dependendy: ").append(typeDependency);
         string.append(", is variably modified: ").append(isVariablyModified);
