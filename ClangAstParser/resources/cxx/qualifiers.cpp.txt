@@ -42,10 +42,10 @@ int main() {
    n4 = 3; // ok, treated as a side-effect
    //  x.n1 = 4; // error: member of a const object is const
    x.n2 = 4; // ok, mutable member of a const object isn't const
-   int const& r1 = n1; // reference to const bound to non-const object
+   int const & r1 = n1; // reference to const bound to non-const object
    //  r1 = 2; // error: attempt to modify through reference to const
-   const_cast<int&>(r1) = 2; // ok, modifies non-const object n1
-   int const& r2 = n2; // reference to const bound to const object
+   const_cast<int &>(r1) = 2; // ok, modifies non-const object n1
+   int const & r2 = n2; // reference to const bound to const object
    //  r2 = 2; // error: attempt to modify through reference to const
    //  const_cast<int&>(r2) = 2; // undefined behavior: attempt to modify const object n2
    // Taken from http://duramecho.com/ComputerInformation/WhyHowCppConst.html

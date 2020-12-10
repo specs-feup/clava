@@ -64,16 +64,16 @@ int main() {
       std::cout << "Accessing the 11th element of the vector...\n";
       std::cout << v.at(10); // vector::at() throws std::out_of_range
    }
-   catch (std::exception const& e) { // caught by reference to base
+   catch (std::exception const & e) { // caught by reference to base
       std::cout << " a standard exception was caught, with message '" << e.what() << "'\n";
       throw;
    }
    try {
    }
-   catch (std::exception const& e) {
+   catch (std::exception const & e) {
       // will be executed if f() throws std::runtime_error
    }
-   catch (std::runtime_error const& e) {
+   catch (std::runtime_error const & e) {
       // dead code!
    }
    catch (...) {

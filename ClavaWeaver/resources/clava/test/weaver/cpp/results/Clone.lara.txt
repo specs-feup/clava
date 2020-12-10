@@ -23,13 +23,13 @@ return ne + 2;
 int bar(int ne = 0) try {
 return ne + 2;
 }
-catch (std::exception const& e) {
+catch (std::exception const & e) {
 return 0;
 }
 int new_bar(int ne = 0) try {
 return ne + 2;
 }
-catch (std::exception const& e) {
+catch (std::exception const & e) {
 return 0;
 }
 int main() {

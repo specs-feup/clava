@@ -15,7 +15,7 @@ inline t Distance2(t const a[3], t const b[3]) {
 }
 
 template <typename T>
-void matrix_mult_tiling(std::vector<T> const& A, std::vector<T> const& B, std::vector<T>& C, int const N, int const M, int const K, int const BS1, int const BS2) {
+void matrix_mult_tiling(std::vector<T> const & A, std::vector<T> const & B, std::vector<T> & C, int const N, int const M, int const K, int const BS1, int const BS2) {
 for(int i = 0; i < N; i++) {
 for(int j = 0; j < K; j++) {
 C[K * i + j] = 0;
