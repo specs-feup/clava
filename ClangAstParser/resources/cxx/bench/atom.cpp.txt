@@ -4,7 +4,7 @@
 #include <stdlib.h>
 using namespace std;
 
-class Atom {
+class Atom { // extracted from miniapp.
    double r[3];
    basic_string<char> const *name;
    basic_string<char> stype;
