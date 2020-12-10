@@ -19,7 +19,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl;
-import pt.up.fe.specs.clava.ast.decl.TagDecl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.lazy.Lazy;
@@ -31,6 +31,8 @@ import pt.up.fe.specs.util.lazy.Lazy;
  *
  */
 public class EnumType extends TagType {
+
+    // public final static DataKey<EnumDecl> ENUM_DECL = KeyFactory.object("enumDecl", EnumDecl.class);
 
     private static final String ANON_ENUM_PREFIX = "anon_enum_";
     // private final String anonName;
@@ -79,21 +81,51 @@ public class EnumType extends TagType {
 
         // System.out.println("SOURCE NODE:" + sourceNode.getClass());
 
-        String baseType = getDecl().get(TagDecl.DECL_NAME);
+        String baseType = getDecl().get(NamedDecl.DECL_NAME);
 
+        // TODO: If base type is empty, means it's an anonymous declaration that has not been deanonymized
+
+        // System.out.println("DECL: " + getDecl());
+        // System.out.println("DECL NAME: " + baseType);
         // System.out.println("DECL NAME:" + baseType);
         // String baseType = getDecl().get(TagDecl.TYPE_FOR_DECL).getCode();
         // String baseType = baseTypeNode.getCode();
         // String baseType = getBareType();
+        /*
+        if (baseType.isEmpty()) {
+            baseType = getBareType();
+        
+            var recordName = getDecl().getAncestorTry(CXXRecordDecl.class).map(record -> record.getDeclName())
+                    .orElse(null);
+        
+            if (recordName != null) {
+                var prefix = recordName + "::";
+                if (baseType.startsWith(prefix)) {
+                    baseType = baseType.substring(prefix.length());
+                } else {
+                    ClavaLog.warning("Enum is inside a class (" + recordName + "), expected bareType to start with '"
+                            + prefix + "', but is '" + baseType + "'");
+                }
+            }
+        
+            // System.out.println("EMPTY, this: " + this);
+        
+        }
+        
         if (baseType.isEmpty()) {
             baseType = getBareType();
         }
-
+        */
+        /*
         if (isAnonymous()) {
             // baseType = "anon_" + getId();
+            System.out.println("BASE TYPE: " + baseType);
+            System.out.println("ANON: " + anonymousId.get());
             baseType = anonymousId.get();
-
+            throw new RuntimeException("STOP");
+        
         }
+        */
 
         // String enumType = getTagKind().getCode() + " " + baseType;
         String enumType = baseType;
@@ -105,10 +137,12 @@ public class EnumType extends TagType {
         return enumType + " " + name;
     }
 
+    /*
     public boolean isAnonymous() {
         // HACK: Is it possible to obtain this info from Clang?
         return getBareType().contains("(anonymous at");
     }
+    */
     /*
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
