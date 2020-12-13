@@ -39,24 +39,24 @@ enum enum_with_typedef {
 typedef enum enum_with_typedef enum_with_typedef;
 // Enum without name in the declaration
 
-enum logical {
+enum anon_enum_h_41 {
    false,
    true,
 };
 
-typedef enum logical logical;
+typedef enum anon_enum_h_41 logical;
 
 // Anonymous enum
-enum anon_enum_1 {
+enum anon_enum_h_44 {
 	BLACK,
 	RED,
 };
 // Anonymous enum with declaration
-enum anon_enum_2 {
+enum anon_enum_h_47 {
 	REQUIRE_ORDER,
 	PERMUTE,
 	RETURN_IN_ORDER,
 };
-static enum anon_enum_2 ordering;
+static enum anon_enum_h_47 ordering;
 
 #endif

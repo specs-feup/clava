@@ -177,6 +177,7 @@ public:
      */
     const void addChild(const Decl *addr, std::vector<std::string> &children);
     const void addChildren(DeclContext::decl_range declRange, std::vector<std::string> &children);
+    //const void addChildren(DeclContext::decl_range declRange, std::vector<std::string> &children, bool ignoreClassDefinitions);
     const void addChild(const Stmt *addr, std::vector<std::string> &children);
     const void addChild(const Expr *addr, std::vector<std::string> &children);
     const void addChild(const Type *addr, std::vector<std::string> &children);
@@ -266,6 +267,7 @@ private:
     void VisitExprChildren(const Expr *S, std::vector<std::string> &children);
     void VisitInitListExprChildren(const InitListExpr *E, std::vector<std::string> &children);
     void VisitDeclRefExprChildren(const DeclRefExpr *E, std::vector<std::string> &children);
+    void VisitDependentScopeDeclRefExprChildren(const DependentScopeDeclRefExpr *E, std::vector<std::string> &children);
     void VisitOffsetOfExprChildren(const OffsetOfExpr *E, std::vector<std::string> &children);
     void VisitMemberExprChildren(const MemberExpr *E, std::vector<std::string> &children);
     void VisitMaterializeTemporaryExprChildren(const MaterializeTemporaryExpr *E, std::vector<std::string> &children);
@@ -310,6 +312,7 @@ private:
     void VisitFunctionTypeChildren(const FunctionType *T, std::vector<std::string> &visitedChildren);
     void VisitFunctionProtoTypeChildren(const FunctionProtoType *T, std::vector<std::string> &visitedChildren);
     void VisitTagTypeChildren(const TagType *T, std::vector<std::string> &visitedChildren);
+    //void VisitEnumTypeChildren(const EnumType *T, std::vector<std::string> &visitedChildren);
     void VisitArrayTypeChildren(const ArrayType *T, std::vector<std::string> &visitedChildren);
     void VisitVariableArrayTypeChildren(const VariableArrayType *T, std::vector<std::string> &visitedChildren);
     void VisitDependentSizedArrayTypeChildren(const DependentSizedArrayType *T, std::vector<std::string> &visitedChildren);

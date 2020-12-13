@@ -41,7 +41,7 @@ public class PragmasLocations {
 
         Integer previousColumn = locations.put(line, column);
         if (previousColumn != null) {
-            ClavaLog.warning("Found multiple pragmas in the same line " + line + " in the file " + sourceFile);
+            ClavaLog.warning("Found multiple pragmas in the same line " + line + " in the file '" + sourceFile + "'");
         }
 
         return previousColumn;

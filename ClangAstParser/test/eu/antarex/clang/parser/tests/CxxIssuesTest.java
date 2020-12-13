@@ -38,6 +38,11 @@ public class CxxIssuesTest {
     }
 
     @Test
+    public void testClavaIssue10() {
+        new CxxTester("issues/clava_issue10.cpp").test();
+    }
+
+    @Test
     public void testClavaIssue11() {
         new CxxTester("issues/clava_issue11.cpp").test();
     }
@@ -55,5 +60,20 @@ public class CxxIssuesTest {
     @Test
     public void testClavaIssue15() {
         new CxxTester("issues/clava_issue15.cpp").test();
+    }
+
+    @Test
+    public void testClavaIssue17() {
+        new CxxTester("issues/clava_issue17.cpp").test();
+    }
+
+    @Test
+    public void testClavaIssue18() {
+        new CxxTester("issues/clava_issue18.cpp").test();
+    }
+
+    @Test
+    public void testClavaIssue19() {
+        new CxxTester("issues/clava_issue19.cpp").test();
     }
 }

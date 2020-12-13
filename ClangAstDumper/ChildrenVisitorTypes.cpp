@@ -17,6 +17,7 @@ const std::map<const std::string, clava::TypeNode > ClangAstDumper::TYPE_CHILDRE
         {"PointerType", clava::TypeNode::POINTER_TYPE},
         //{"TagType", clava::TypeNode::TAG_TYPE},
         {"EnumType", clava::TypeNode::TAG_TYPE},
+        //{"EnumType", clava::TypeNode::ENUM_TYPE},
         {"RecordType", clava::TypeNode::TAG_TYPE},
         {"ElaboratedType", clava::TypeNode::ELABORATED_TYPE},
         //{"ReferenceType", clava::TypeNode::REFERENCE_TYPE},
@@ -69,6 +70,8 @@ void ClangAstDumper::visitChildren(clava::TypeNode typeNode, const Type* T) {
             VisitPointerTypeChildren(static_cast<const PointerType *>(T), visitedChildren); break;
         case clava::TypeNode::TAG_TYPE:
             VisitTagTypeChildren(static_cast<const TagType *>(T), visitedChildren); break;
+        //case clava::TypeNode::ENUM_TYPE:
+        //    VisitEnumTypeChildren(static_cast<const EnumType *>(T), visitedChildren); break;
         case clava::TypeNode::ELABORATED_TYPE:
             VisitElaboratedTypeChildren(static_cast<const ElaboratedType *>(T), visitedChildren); break;
         case clava::TypeNode::REFERENCE_TYPE:
@@ -213,6 +216,17 @@ void ClangAstDumper::VisitTagTypeChildren(const TagType *T, std::vector<std::str
      */
 
 }
+
+/*
+void ClangAstDumper::VisitEnumTypeChildren(const EnumType *T, std::vector<std::string> &visitedChildren) {
+    // Hierarchy
+    VisitTagTypeChildren(T, visitedChildren);
+
+    VisitDeclTop(T->getDecl());
+}
+ */
+
+
 
 void ClangAstDumper::VisitArrayTypeChildren(const ArrayType *T, std::vector<std::string> &visitedChildren) {
     // Hierarchy

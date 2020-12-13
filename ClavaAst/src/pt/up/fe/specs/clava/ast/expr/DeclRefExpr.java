@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -167,17 +166,21 @@ public class DeclRefExpr extends Expr implements Nameable {
         // return refName.substring("operator".length());
         // }
 
-        String refNameSuffix = "";
+        String refNameSuffix = TemplateArgument.getCode(get(TEMPLATE_ARGUMENTS), this);
 
+        /*
+        String refNameSuffix = "";
+        
         // Check if it has template arguments
         List<TemplateArgument> templateArguments = get(TEMPLATE_ARGUMENTS);
         if (!templateArguments.isEmpty()) {
             String templateArgs = templateArguments.stream()
                     .map(templateArg -> templateArg.getCode(this))
                     .collect(Collectors.joining(", "));
-
+        
             refNameSuffix = "<" + templateArgs + ">";
         }
+        */
 
         String qualifier = get(QUALIFIER);
         String refnamePrefix = qualifier == null ? "" : qualifier;

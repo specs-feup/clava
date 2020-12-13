@@ -263,7 +263,8 @@ public class Types {
 
     private static Type toComparable(Type type) {
         if (type instanceof AutoType) {
-            return toComparable(((AutoType) type).getDeducedType().orElse(null));
+            // return toComparable(((AutoType) type).getDeducedType().orElse(null));
+            return ((AutoType) type).getDeducedType().map(Types::toComparable).orElse(type);
         }
 
         return type;

@@ -454,17 +454,22 @@ const void ClangAstDumper::addChild(const Decl *addr, std::vector<std::string> &
 
 };
 
+/*
+const void ClangAstDumper::addChildren(DeclContext::decl_range decls, std::vector<std::string> &children) {
+    return addChildren(decls, children, true);
+}
+*/
+
+//const void ClangAstDumper::addChildren(DeclContext::decl_range decls, std::vector<std::string> &children, bool ignoreClassDefinitions) {
 const void ClangAstDumper::addChildren(DeclContext::decl_range decls, std::vector<std::string> &children) {
 
 
 
     for (auto decl = decls.begin(), endDecl = decls.end(); decl != endDecl; ++decl) {
 
-        // If CXXRecordDecl without definition, skip
-        if (const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(*decl)) {
-            if (!recordDecl->hasDefinition()) {
-                continue;
-            }
+        // Ignore decls that are not in the source code
+        if(decl->isImplicit()) {
+            continue;
         }
 
         if (*decl == nullptr) {

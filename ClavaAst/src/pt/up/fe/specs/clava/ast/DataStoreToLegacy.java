@@ -57,7 +57,7 @@ public class DataStoreToLegacy {
 
     public static TypeData getType(DataStore data) {
         return new TypeData(data.get(Type.TYPE_AS_STRING),
-                data.get(Type.HAS_SUGAR),
+                // data.get(Type.HAS_SUGAR),
                 data.get(Type.TYPE_DEPENDENCY) != TypeDependency.NONE,
                 data.get(Type.TYPE_DEPENDENCY),
                 data.get(Type.IS_VARIABLY_MODIFIED),

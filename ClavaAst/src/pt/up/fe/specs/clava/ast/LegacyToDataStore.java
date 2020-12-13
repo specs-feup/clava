@@ -105,7 +105,7 @@ public class LegacyToDataStore {
     public LegacyToDataStore setType(TypeData data) {
 
         nodeData.add(Type.TYPE_AS_STRING, data.getBareType());
-        nodeData.add(Type.HAS_SUGAR, data.hasSugar());
+        // nodeData.add(Type.HAS_SUGAR, data.hasSugar());
         nodeData.add(Type.TYPE_DEPENDENCY, data.getTypeDependency());
         nodeData.add(Type.IS_VARIABLY_MODIFIED, data.isVariablyModified());
         nodeData.add(Type.CONTAINS_UNEXPANDED_PARAMETER_PACK, data.containsUnexpandedParameterPack());

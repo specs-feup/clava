@@ -54,8 +54,15 @@ public abstract class Type extends ClavaNode {
     // remove it.
     // .setDefault(null);
 
-    public final static DataKey<Boolean> HAS_SUGAR = KeyFactory.bool("hasSugar");
+    /**
+     * @deprecated the information of this variable is not reliable, use the method hasSugar() instead
+     */
+    // @Deprecated
+    // public final static DataKey<Boolean> HAS_SUGAR = KeyFactory.bool("hasSugar");
 
+    /**
+     * 
+     */
     public final static DataKey<TypeDependency> TYPE_DEPENDENCY = KeyFactory.enumeration("typeDependency",
             TypeDependency.class);
 

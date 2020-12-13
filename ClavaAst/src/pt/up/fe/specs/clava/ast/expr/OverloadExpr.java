@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -25,6 +24,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.language.CXXOperator;
 import pt.up.fe.specs.clava.utils.Nameable;
 
@@ -54,9 +54,13 @@ public abstract class OverloadExpr extends Expr implements Nameable {
     public final static DataKey<List<Decl>> UNRESOLVED_DECLS = KeyFactory
             .generic("unresolvedDecls", (List<Decl>) new ArrayList<Decl>());
 
-    public final static DataKey<List<String>> TEMPLATE_ARGUMENTS = KeyFactory
-            .generic("templateArguments", (List<String>) new ArrayList<String>())
+    public final static DataKey<List<TemplateArgument>> TEMPLATE_ARGUMENTS = KeyFactory
+            .generic("templateArguments", (List<TemplateArgument>) new ArrayList<TemplateArgument>())
             .setDefault(() -> new ArrayList<>());
+
+    // public final static DataKey<List<String>> TEMPLATE_ARGUMENTS = KeyFactory
+    // .generic("templateArguments", (List<String>) new ArrayList<String>())
+    // .setDefault(() -> new ArrayList<>());
 
     /// DATAKEYS END
 
@@ -119,10 +123,11 @@ public abstract class OverloadExpr extends Expr implements Nameable {
 
         // code.append(get(NAME));
 
-        List<String> templateArgs = get(TEMPLATE_ARGUMENTS);
-        if (!templateArgs.isEmpty()) {
-            code.append(templateArgs.stream().collect(Collectors.joining(", ", "<", ">")));
-        }
+        code.append(TemplateArgument.getCode(get(TEMPLATE_ARGUMENTS), this));
+        // List<String> templateArgs = get(TEMPLATE_ARGUMENTS);
+        // if (!templateArgs.isEmpty()) {
+        // code.append(templateArgs.stream().collect(Collectors.joining(", ", "<", ">")));
+        // }
 
         return code.toString();
     }

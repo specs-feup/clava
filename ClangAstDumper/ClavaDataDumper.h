@@ -152,6 +152,7 @@ namespace clava {
         void DumpCompoundLiteralExprData(const CompoundLiteralExpr *E);
         void DumpInitListExprData(const InitListExpr *E);
         void DumpDeclRefExprData(const DeclRefExpr *E);
+        void DumpDependentScopeDeclRefExprData(const DependentScopeDeclRefExpr *E);
         void DumpOverloadExprData(const OverloadExpr *E);
         void DumpUnresolvedMemberExprData(const UnresolvedMemberExpr *E);
         void DumpUnresolvedLookupExprData(const UnresolvedLookupExpr *E);
@@ -190,6 +191,7 @@ namespace clava {
         void DumpFunctionTypeData(const FunctionType *T);
         void DumpFunctionProtoTypeData(const FunctionProtoType *T);
         void DumpTagTypeData(const TagType *T);
+        //void DumpEnumTypeData(const EnumType *T);
         //void DumpRecordTypeData(const RecordType *T);
         void DumpArrayTypeData(const ArrayType *T);
         void DumpConstantArrayTypeData(const ConstantArrayType *T);

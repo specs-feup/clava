@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
+import org.suikasoft.jOptions.DataStore.DataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -48,6 +49,18 @@ public class CXXConversionDecl extends CXXMethodDecl {
 
     public CXXConversionDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
+
+        // Fix DECL_NAME
+        // set(DECL_NAME, "operator " + get(CONVERSION_TYPE).getCode());
+    }
+
+    // @Override
+    // public String getDeclName() {
+    // return buildDeclName(this);
+    // }
+
+    public static String buildDeclName(DataClass<?> data) {
+        return "operator " + data.get(CONVERSION_TYPE).getCode();
     }
 
     @Override

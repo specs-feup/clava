@@ -424,6 +424,10 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
         }
 
+        if (get(IS_CONSTEXPR)) {
+            code.append("constexpr ");
+        }
+
         if (get(STORAGE_CLASS) != StorageClass.NONE) {
             code.append(get(STORAGE_CLASS).getString()).append(" ");
         }

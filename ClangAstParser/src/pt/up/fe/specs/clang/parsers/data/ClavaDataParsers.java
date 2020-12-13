@@ -329,6 +329,7 @@ public class ClavaDataParsers {
         }
 
         String sanitizedFilename = location.getFilename().replace('.', '_');
+        sanitizedFilename = sanitizedFilename.replace('-', '_');
         return "anon_" + sanitizedFilename + "_" + location.getStartLine();
     }
 

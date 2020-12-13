@@ -34,6 +34,7 @@ import pt.up.fe.specs.clava.ast.expr.CastExpr;
 import pt.up.fe.specs.clava.ast.expr.CharacterLiteral;
 import pt.up.fe.specs.clava.ast.expr.CompoundLiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
+import pt.up.fe.specs.clava.ast.expr.DependentScopeDeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.DesignatedInitExpr;
 import pt.up.fe.specs.clava.ast.expr.ExplicitCastExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -208,8 +209,9 @@ public class ExprDataParser {
         data.add(OverloadExpr.NAME, lines.nextLine());
         dataStore.getClavaNodes().queueSetNodeList(data, OverloadExpr.UNRESOLVED_DECLS,
                 LineStreamParsers.stringList(lines));
-        data.add(OverloadExpr.TEMPLATE_ARGUMENTS, LineStreamParsers.stringList(lines,
-                ClavaDataParsers::literalSource));
+        data.add(OverloadExpr.TEMPLATE_ARGUMENTS, ClavaDataParsers.templateArguments(lines, dataStore));
+        // data.add(OverloadExpr.TEMPLATE_ARGUMENTS, LineStreamParsers.stringList(lines,
+        // ClavaDataParsers::literalSource));
 
         return data;
     }
@@ -406,6 +408,7 @@ public class ExprDataParser {
         DataStore data = parseExprData(lines, dataStore);
 
         data.set(PredefinedExpr.PREDEFINED_TYPE, LineStreamParsers.enumFromName(PredefinedIdType.class, lines));
+        // data.set(PredefinedExpr.FUNCTION_NAME, lines.nextLine());
 
         return data;
     }
@@ -434,6 +437,17 @@ public class ExprDataParser {
 
         data.set(DesignatedInitExpr.USES_GNU_SYNTAX, LineStreamParsers.oneOrZero(lines));
         data.set(DesignatedInitExpr.DESIGNATORS, LineStreamParsers.list(lines, ClavaDataParsers::designator));
+
+        return data;
+    }
+
+    public static DataStore parseDependentScopeDeclRefExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(DependentScopeDeclRefExpr.DECL_NAME, lines.nextLine());
+        data.add(DependentScopeDeclRefExpr.QUALIFIER, lines.nextLine());
+        data.add(DependentScopeDeclRefExpr.HAS_TEMPLATE_KEYWORD, LineStreamParsers.oneOrZero(lines));
+        data.add(DependentScopeDeclRefExpr.TEMPLATE_ARGUMENTS, ClavaDataParsers.templateArguments(lines, dataStore));
 
         return data;
     }

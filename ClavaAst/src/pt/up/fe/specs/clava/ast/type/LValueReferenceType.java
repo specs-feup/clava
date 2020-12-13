@@ -19,35 +19,23 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
+/**
+ * An lvalue reference type, per C++11 [dcl.ref].
+ * 
+ * @author JBispo
+ *
+ */
 public class LValueReferenceType extends ReferenceType {
 
     public LValueReferenceType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
-    // public LValueReferenceType(TypeData typeData, ClavaNodeInfo info, Type referencee) {
-    // this(typeData, info, Arrays.asList(referencee));
-    // }
-    //
-    // private LValueReferenceType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(typeData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new LValueReferenceType(getTypeData(), getInfo(), Collections.emptyList());
-    // }
-
-    // @Override
-    // public String getCode() {
-    // return getReferencedType().getCode() + "&";
-    // }
-    //
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
-
         StringBuilder code = new StringBuilder();
-        code.append(getReferencee().getCode(sourceNode, null)).append("&");
+
+        code.append(getReferencee().getCode(sourceNode, "&"));
 
         if (name != null) {
             code.append(" ").append(name);
@@ -55,10 +43,5 @@ public class LValueReferenceType extends ReferenceType {
 
         return code.toString();
     }
-    //
-    // @Override
-    // public Type getReferencee() {
-    // return getChild(Type.class, 0);
-    // }
 
 }

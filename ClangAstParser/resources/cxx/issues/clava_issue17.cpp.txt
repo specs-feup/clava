@@ -1,0 +1,9 @@
+class Klass {
+   
+   enum anon_clava_issue17_cpp_2 {
+      value1,
+      value2,
+   };
+   
+   typedef enum anon_clava_issue17_cpp_2 AnEnum;
+};

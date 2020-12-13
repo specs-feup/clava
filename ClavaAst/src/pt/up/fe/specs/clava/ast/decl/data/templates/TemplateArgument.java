@@ -13,6 +13,9 @@
 
 package pt.up.fe.specs.clava.ast.decl.data.templates;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.suikasoft.jOptions.DataStore.ADataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -37,4 +40,16 @@ public class TemplateArgument extends ADataClass<TemplateArgument> {
         throw new NotImplementedException(getClass());
     }
 
+    public static String getCode(List<TemplateArgument> templateArguments, ClavaNode source) {
+        // Check if it has template arguments
+        if (templateArguments.isEmpty()) {
+            return "";
+        }
+
+        String templateArgs = templateArguments.stream()
+                .map(templateArg -> templateArg.getCode(source))
+                .collect(Collectors.joining(", "));
+
+        return "<" + templateArgs + ">";
+    }
 }

@@ -244,6 +244,11 @@ public class CxxTest {
         new CxxTester("namespace.cpp", "namespace.h").test();
     }
 
+    @Test
+    public void testDependentScopeDeclRefExpr() {
+        new CxxTester("dependent_scope_decl_ref_expr.cpp").test();
+    }
+
     // @Test
     // public void testBoost() {
     // new CxxTester("boost.cpp").test();

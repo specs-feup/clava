@@ -4,7 +4,13 @@ import weaver.Weaver;
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'id', {
 	get: function () { 
-		return this.name; 
+		return this._qualifiedName; 
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, '_qualifiedName', {
+	get: function () { 
+		return this.astNode.getQualifiedName(); 
 	}
 });
 
@@ -15,8 +21,8 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'name', {
 });
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'superClasses', {
-	get: function () { 
-		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getBases())); 
+	get: function () {
+		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getBases())).filter($jp=>$jp.instanceOf("class")); 
 	}
 });
 

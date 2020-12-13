@@ -73,7 +73,7 @@ public class TypeDataParser {
         DataStore clavaData = NodeDataParser.parseNodeData(lines, false, dataStore);
 
         clavaData.add(Type.TYPE_AS_STRING, lines.nextLine());
-        clavaData.add(Type.HAS_SUGAR, LineStreamParsers.oneOrZero(lines));
+        // clavaData.add(Type.HAS_SUGAR, LineStreamParsers.oneOrZero(lines));
         clavaData.add(Type.TYPE_DEPENDENCY, LineStreamParsers.enumFromName(TypeDependency.class, lines));
         clavaData.add(Type.IS_VARIABLY_MODIFIED, LineStreamParsers.oneOrZero(lines));
         clavaData.add(Type.CONTAINS_UNEXPANDED_PARAMETER_PACK, LineStreamParsers.oneOrZero(lines));
@@ -218,6 +218,15 @@ public class TypeDataParser {
         return data;
     }
 
+    // public static DataStore parseEnumTypeData(LineStream lines, ClangParserData parserData) {
+    //
+    // DataStore data = parseTagTypeData(lines, parserData);
+    //
+    // parserData.getClavaNodes().queueSetNode(data, EnumType.ENUM_DECL, lines.nextLine());
+    //
+    // return data;
+    // }
+
     public static DataStore parseTypeWithKeywordData(LineStream lines, ClangParserData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
@@ -296,6 +305,7 @@ public class TypeDataParser {
 
         DataStore data = parseTypeData(lines, parserData);
 
+        data.add(DecltypeType.IS_SUGARED, LineStreamParsers.oneOrZero(lines));
         parserData.getClavaNodes().queueSetNode(data, DecltypeType.UNDERLYING_EXPR, lines.nextLine());
 
         return data;
@@ -334,6 +344,7 @@ public class TypeDataParser {
 
         DataStore data = parseTypeData(lines, parserData);
 
+        data.add(DecltypeType.IS_SUGARED, LineStreamParsers.oneOrZero(lines));
         parserData.getClavaNodes().queueSetNode(data, TypeOfExprType.UNDERLYING_EXPR, lines.nextLine());
 
         return data;

@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -34,6 +35,8 @@ public class PredefinedExpr extends Expr {
 
     public final static DataKey<PredefinedIdType> PREDEFINED_TYPE = KeyFactory.enumeration("PREDEFINED_TYPE",
             PredefinedIdType.class);
+
+    // public final static DataKey<String> FUNCTION_NAME = KeyFactory.string("functionName");
 
     /// DATAKEYS END
 
@@ -65,13 +68,15 @@ public class PredefinedExpr extends Expr {
         return get(PREDEFINED_TYPE);
     }
 
-    public Expr getSubExpr() {
-        return getChild(Expr.class, 0);
+    public Optional<Expr> getSubExpr() {
+        return getChildTry(Expr.class, 0);
     }
 
     @Override
     public String getCode() {
-        return getSubExpr().getCode();
+        return getIdentifier().getString();
+        // return get(FUNCTION_NAME);
+        // return getSubExpr().map(Expr::getCode).orElse(get(FUNCTION_NAME));
     }
 
 }

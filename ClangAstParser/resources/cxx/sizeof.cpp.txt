@@ -23,7 +23,7 @@ struct Bit {
 int main() {
    Empty e;
    Derived d;
-   Base& b = d;
+   Base & b = d;
    Bit bit;
    int a[10];
    // empty class

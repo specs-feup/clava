@@ -29,7 +29,10 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::STMT_CHILDRE
 const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDREN_MAP = {
         {"InitListExpr", clava::StmtNode::INIT_LIST_EXPR},
         {"DeclRefExpr", clava::StmtNode::DECL_REF_EXPR},
+        {"DependentScopeDeclRefExpr", clava::StmtNode::DEPENDENT_SCOPE_DECL_REF_EXPR},
         {"OffsetOfExpr", clava::StmtNode::OFFSET_OF_EXPR},
+        {"MemberExpr", clava::StmtNode::MEMBER_EXPR},
+        {"MaterializeTemporaryExpr", clava::StmtNode::MATERIALIZE_TEMPORARY_EXPR},
         {"UnresolvedLookupExpr", clava::StmtNode::OVERLOAD_EXPR},
         {"UnresolvedMemberExpr", clava::StmtNode::OVERLOAD_EXPR},
         {"CallExpr", clava::StmtNode::CALL_EXPR},
@@ -121,6 +124,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitInitListExprChildren(static_cast<const InitListExpr *>(S), visitedChildren); break;
         case clava::StmtNode::DECL_REF_EXPR:
             VisitDeclRefExprChildren(static_cast<const DeclRefExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::DEPENDENT_SCOPE_DECL_REF_EXPR:
+            VisitDependentScopeDeclRefExprChildren(static_cast<const DependentScopeDeclRefExpr *>(S), visitedChildren); break;
 //        case clava::StmtNode::CAST_EXPR:
 //            VisitCastExprChildren(static_cast<const CastExpr *>(S), visitedChildren); break;
         case clava::StmtNode::OFFSET_OF_EXPR:
@@ -390,6 +395,19 @@ void ClangAstDumper::VisitDeclRefExprChildren(const DeclRefExpr *E, std::vector<
     //children.push_back(clava::getId(E->getFoundDecl(), id));
 }
 
+void ClangAstDumper::VisitDependentScopeDeclRefExprChildren(const DependentScopeDeclRefExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    auto templateArgs = E->getTemplateArgs();
+    for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
+        auto templateArg = templateArgs + i;
+        VisitTemplateArgument(templateArg->getArgument());
+    }
+
+}
+
+
 void ClangAstDumper::VisitOffsetOfExprChildren(const OffsetOfExpr *E, std::vector<std::string> &children) {
     // Hierarchy
     VisitExprChildren(E, children);
@@ -440,6 +458,13 @@ void ClangAstDumper::VisitOverloadExprChildren(const OverloadExpr *E, std::vecto
     auto currentDecl = E->decls_begin(), declsEnd = E->decls_end();
     for (; currentDecl != declsEnd; ++currentDecl) {
         VisitDeclTop(*currentDecl);
+    }
+
+    // Visit template arguments
+    auto templateArgs = E->getTemplateArgs();
+    for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
+        auto templateArg = templateArgs + i;
+        VisitTemplateArgument(templateArg->getArgument());
     }
 
 }

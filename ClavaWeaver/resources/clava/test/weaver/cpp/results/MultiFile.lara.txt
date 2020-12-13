@@ -21,19 +21,19 @@ int x;
 int y;
 };
 template <typename T>
-void template_foo_renamed(std::vector<T> const& A);
+void template_foo_renamed(std::vector<T> const & A);
 template <typename T>
-void template_foo_renamed(std::vector<T> const& A) {
+void template_foo_renamed(std::vector<T> const & A) {
 }
 template <typename T>
-void template_foo_2_renamed(std::vector<T> const& A);
+void template_foo_2_renamed(std::vector<T> const & A);
 template <typename T>
-void template_foo_2_renamed(std::vector<T> const& A) {
+void template_foo_2_renamed(std::vector<T> const & A) {
 }
 template <typename T>
-void template_foo_3_renamed(std::vector<T> const& A);
+void template_foo_3_renamed(std::vector<T> const & A);
 template <typename T>
-void template_foo_3_renamed(std::vector<T> const& A) {
+void template_foo_3_renamed(std::vector<T> const & A) {
 }
 #endif
 /**** End File ****/

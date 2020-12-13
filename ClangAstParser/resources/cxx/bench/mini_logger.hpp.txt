@@ -9,7 +9,7 @@
 struct my_logger_t {
    std::filebuf log_file;
    std::ostream out_stream{nullptr};
-   my_logger_t(std::string const& file_name) {
+   my_logger_t(std::string const & file_name) {
       this->log_file.open(file_name, std::ios::out);
       this->out_stream.rdbuf(&this->log_file);
    }
@@ -30,7 +30,7 @@ struct my_logger_t {
    template <class T, class... Ys>
    inline void print(T const what, Ys const ... remainder) {
       print(what);
-      print<Ys...>(remainder...);
+      print<Ys ...>(remainder...);
    }
    
    template <class T>

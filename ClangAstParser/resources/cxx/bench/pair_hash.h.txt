@@ -15,7 +15,7 @@ class A {
       
       public:
       template <typename T, typename U>
-      std::size_t operator()(std::pair<T, U> const& x) const {
+      std::size_t operator()(std::pair<T, U> const & x) const {
          
          return std::hash<T>()(x.first) ^ std::hash<U>()(x.second);
       }

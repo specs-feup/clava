@@ -20,11 +20,11 @@ class Rectangle {
       return this->width * this->height;
    }
    
-   friend Rectangle duplicate(Rectangle const&);
+   friend Rectangle duplicate(Rectangle const &);
 };
 
 
-Rectangle duplicate(Rectangle const& param) {
+Rectangle duplicate(Rectangle const & param) {
    Rectangle res;
    res.width = param.width * 2;
    res.height = param.height * 2;
@@ -52,6 +52,6 @@ class A {
 	template <typename U>
 	friend class C;
 	template <typename U>
-	friend A<T>& operator+=(A<T>&, U const&) {
+	friend A<T> & operator+=(A<T> &, U const &) {
 	}
 };

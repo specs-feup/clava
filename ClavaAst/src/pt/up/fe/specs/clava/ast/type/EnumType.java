@@ -19,83 +19,30 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl;
-import pt.up.fe.specs.clava.ast.decl.TagDecl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
-import pt.up.fe.specs.clava.context.ClavaContext;
-import pt.up.fe.specs.util.lazy.Lazy;
 
 /**
- * Represents an enum.
+ * Represents an enum type.
  * 
  * @author JoaoBispo
  *
  */
 public class EnumType extends TagType {
 
-    private static final String ANON_ENUM_PREFIX = "anon_enum_";
-    // private final String anonName;
-
-    private final Lazy<String> anonymousId = Lazy
-            .newInstance(() -> getContext().get(ClavaContext.ID_GENERATOR).next(ANON_ENUM_PREFIX));
-
     public EnumType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        // SpecsStrings.
-        // UUID.randomUUIDcs()
     }
-
-    /*
-    public EnumType(DeclRef declInfo, TypeData typeData, ClavaNodeInfo info) {
-        this(declInfo, typeData, info, Collections.emptyList());
-    }
-    
-    private EnumType(DeclRef declInfo, TypeData typeData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(declInfo, TagKind.ENUM, typeData, info, children);
-    }
-    
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new EnumType(getDeclInfo(), getTypeData(), getInfo(), Collections.emptyList());
-    }
-    */
 
     public EnumDecl getEnumDecl(App app) {
         return (EnumDecl) get(DECL);
-        /*
-        ClavaNode declNode = app.getNode(getDeclInfo().getDeclId());
-        
-        if (!(declNode instanceof EnumDecl)) {
-            throw new WrongClassException(declNode, EnumDecl.class);
-        }
-        
-        return (EnumDecl) declNode;
-        */
     }
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
 
-        // System.out.println("SOURCE NODE:" + sourceNode.getClass());
+        String baseType = getDecl().get(NamedDecl.DECL_NAME);
 
-        String baseType = getDecl().get(TagDecl.DECL_NAME);
-
-        // System.out.println("DECL NAME:" + baseType);
-        // String baseType = getDecl().get(TagDecl.TYPE_FOR_DECL).getCode();
-        // String baseType = baseTypeNode.getCode();
-        // String baseType = getBareType();
-        if (baseType.isEmpty()) {
-            baseType = getBareType();
-        }
-
-        if (isAnonymous()) {
-            // baseType = "anon_" + getId();
-            baseType = anonymousId.get();
-
-        }
-
-        // String enumType = getTagKind().getCode() + " " + baseType;
         String enumType = baseType;
 
         if (name == null) {
@@ -104,29 +51,5 @@ public class EnumType extends TagType {
 
         return enumType + " " + name;
     }
-
-    public boolean isAnonymous() {
-        // HACK: Is it possible to obtain this info from Clang?
-        return getBareType().contains("(anonymous at");
-    }
-    /*
-    @Override
-    public String getCode(ClavaNode sourceNode, String name) {
-    
-        EnumDecl enumDecl = (EnumDecl) get(DECL);
-    
-        String declName = enumDecl.get(EnumDecl.DECL_NAME);
-    
-        String enumType = getTagKind().getCode();
-        if (name == null || name.isEmpty()) {
-            System.out.println("ENUM TYPE:" + enumType);
-            return enumType;
-        }
-    
-        enumType += " " + declName;
-    
-        return enumType + " " + name;
-    }
-    */
 
 }
