@@ -300,13 +300,16 @@ void clava::ClavaDataDumper::DumpCXXRecordDeclData(const CXXRecordDecl *D) {
         clava::dump(0);
     }
 
-    /*
+    //clava::dump(D->hasDefinition());
+    clava::dump(clava::getId(D->getDefinition(), id));
+
+/*
     if (D->hasDefinition()) {
         clava::dump(clava::getId(D->getDefinition(), id));
     } else {
         clava::dump(clava::getId((const Decl*)nullptr, id));
     }
-     */
+  */
 
 }
 

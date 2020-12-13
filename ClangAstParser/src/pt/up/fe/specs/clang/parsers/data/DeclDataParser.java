@@ -200,6 +200,8 @@ public class DeclDataParser {
         DataStore data = parseRecordDeclData(lines, dataStore);
 
         data.add(CXXRecordDecl.RECORD_BASES, ClavaDataParsers.list(lines, dataStore, ClavaDataParsers::baseSpecifier));
+
+        dataStore.getClavaNodes().queueSetOptionalNode(data, CXXRecordDecl.RECORD_DEFINITION, lines.nextLine());
         // SpecsLogs.debug("RECORD BASES:" + data.get(CXXRecordDecl.RECORD_BASES));
         // data.add(CXXRecordDecl.RECORD_DEFINITION_ID, lines.nextLine());
 

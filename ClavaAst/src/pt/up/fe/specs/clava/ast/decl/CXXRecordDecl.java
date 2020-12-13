@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.ast.decl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -42,7 +43,8 @@ public class CXXRecordDecl extends RecordDecl {
     public final static DataKey<List<CXXBaseSpecifier>> RECORD_BASES = KeyFactory
             .generic("recordBases", (List<CXXBaseSpecifier>) new ArrayList<CXXBaseSpecifier>());
 
-    // public final static DataKey<Optional<CXXRecordDecl>> RECORD_DEFINITION = KeyFactory.optional("recordDefinition");
+    public final static DataKey<Boolean> HAS_DEFINITION = KeyFactory.bool("hasDefinition");
+    public final static DataKey<Optional<CXXRecordDecl>> RECORD_DEFINITION = KeyFactory.optional("recordDefinition");
     // public final static DataKey<String> RECORD_DEFINITION_ID = KeyFactory.string("recordDefinitionId");
 
     /// DATAKEYS END
