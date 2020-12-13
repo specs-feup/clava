@@ -4,31 +4,37 @@ import weaver.WeaverJps;
 
 var HLSAnalysis = {};
 
-HLSAnalysis.optimizeWithDirectives = function(funName, params) {
-	println("Optimizing with directives");
-	for (var elem of WeaverJps.search("function", {name: funName}).search("scope")){
-		if (elem.parent.joinPointType == "function")
-			elem.dfg();
-	}
+HLSAnalysis.getJavaInterface = function() {
+	return Java.type("pt.up.fe.specs.clava.weaver.hls.HighLevelSynthesisAPI");
 }
 
-HLSAnalysis.optimizeWithTrace = function(funName) {
-	println("Optimizing with trace");
-	/*
-	select file.function{funName}.body end
-	apply
-		$body.exec dfg();
-	end
-	//TraceInstrumentation.instrument(func);
-	*/
+
+HLSAnalysis.applyGenericStrategies = function(func, options) {
+	if (options == null)
+		options = "{}";
+	else
+		options = JSON.stringify(options);
+	HLSAnalysis.getJavaInterface().applyGenericStrategies(func, options);
 }
 
-HLSAnalysis.optimizeWithBest = function(funName, params) {
-	println("Optimizing with the best strategy");
-	/*
-	select file.function{funName}.body end
-	apply
-		$body.exec dfg();
-	end
-	*/
+
+HLSAnalysis.applyFunctionInlining = function(func, B) {
+	HLSAnalysis.getJavaInterface().applyFunctionInlining(func, B.toString());
 }
+
+HLSAnalysis.applyArrayStreaming = function(func) {
+	HLSAnalysis.getJavaInterface().applyArrayStreaming(func);
+}
+
+HLSAnalysis.applyLoopStrategies = function(func, P) {
+	HLSAnalysis.getJavaInterface().applyLoopStrategies(func, P.toString());
+}
+
+HLSAnalysis.applyLoadStoresStrategy = function(func, N) {
+	HLSAnalysis.getJavaInterface().applyLoadStoresStrategy(func, N.toString());
+}
+
+HLSAnalysis.canBeInstrumented = function(func) {
+	return HLSAnalysis.getJavaInterface().canBeInstrumented(func);
+}
+
