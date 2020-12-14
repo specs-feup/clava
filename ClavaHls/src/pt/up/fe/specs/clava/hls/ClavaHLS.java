@@ -88,7 +88,14 @@ public class ClavaHLS {
 	log(separator);
 	log("applying load/stores strategy only");
 	LoadStores ls = new LoadStores(dfg, N);
-	ls.apply();
+	ls.analyze();
+	if (ls.isSimpleLoop()) {
+	    log("function is a simple loop, applying directives");
+	    log("chosen Load/Stores factor is " + ls.getLsFactor());
+	    ls.apply();
+	} else {
+	    log("function is not a simple loop, Load/Stores strategy cannot be applied");
+	}
 	log(separator);
     }
 

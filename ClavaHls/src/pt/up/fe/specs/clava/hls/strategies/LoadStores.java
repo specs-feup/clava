@@ -17,8 +17,16 @@
 
 package pt.up.fe.specs.clava.hls.strategies;
 
+import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.analysis.flow.data.DFGUtils;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowParam;
 import pt.up.fe.specs.clava.hls.ClavaHLS;
+import pt.up.fe.specs.clava.hls.directives.HLSArrayPartition;
+import pt.up.fe.specs.clava.hls.directives.HLSArrayPartition.PartitionType;
+import pt.up.fe.specs.clava.hls.directives.HLSPipeline;
+import pt.up.fe.specs.clava.hls.directives.HLSUnroll;
 
 public class LoadStores extends RestructuringStrategy {
     private boolean isSimpleLoop = false;
@@ -27,6 +35,7 @@ public class LoadStores extends RestructuringStrategy {
 
     public LoadStores(DataFlowGraph dfg, int lsFactor) {
 	super(dfg);
+	this.lsFactor = lsFactor;
     }
 
     @Override
@@ -39,8 +48,42 @@ public class LoadStores extends RestructuringStrategy {
     @Override
     public void apply() {
 	if (isSimpleLoop) {
-	    // TODO: Insert directives
+	    ClavaNode loopNode = DFGUtils.getAllNodesOfType(dfg, DataFlowNodeType.LOOP).get(0).getClavaNode();
+	    ClavaNode funNode = dfg.getFirstStmt();
+
+	    // Partitioning arrays
+	    for (DataFlowParam p : dfg.getParams()) {
+		if (p.isArray()) {
+		    var part = new HLSArrayPartition(PartitionType.CYCLIC, p.getName(), lsFactor);
+		    insertDirective(funNode, part);
+		}
+	    }
+
+	    // Unroll loop
+	    HLSUnroll unroll = new HLSUnroll();
+	    unroll.setFactor(lsFactor);
+	    insertDirective(loopNode, unroll);
+
+	    // Pipeline loop
+	    HLSPipeline pip = new HLSPipeline();
+	    insertDirective(loopNode, pip);
 	}
+    }
+
+    public int getLsFactor() {
+	return lsFactor;
+    }
+
+    public void setLsFactor(int lsFactor) {
+	this.lsFactor = lsFactor;
+    }
+
+    public boolean isSimpleLoop() {
+	return isSimpleLoop;
+    }
+
+    public void setSimpleLoop(boolean isSimpleLoop) {
+	this.isSimpleLoop = isSimpleLoop;
     }
 
 }
