@@ -20,6 +20,7 @@ package pt.up.fe.specs.clava.hls.strategies;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DFGUtils;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowGraph;
+import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowParam;
 import pt.up.fe.specs.clava.hls.ClavaHLS;
@@ -40,9 +41,16 @@ public class LoadStores extends RestructuringStrategy {
 
     @Override
     public void analyze() {
-	// TODO: the detection...
 	ClavaHLS.log("checking if the function is a simple loop...");
-	isSimpleLoop = true;
+	this.isSimpleLoop = false;
+	if (DFGUtils.getAllNodesOfType(dfg, DataFlowNodeType.LOOP).size() != 1) {
+	    return;
+	}
+	DataFlowNode loop = DFGUtils.getAllNodesOfType(dfg, DataFlowNodeType.LOOP).get(0);
+	if (loop.getOutNodes().size() != 1) {
+	    return;
+	}
+	this.isSimpleLoop = true;
     }
 
     @Override
