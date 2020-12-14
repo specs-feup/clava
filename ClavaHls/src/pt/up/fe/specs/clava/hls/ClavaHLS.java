@@ -27,9 +27,12 @@ import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNode;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowNodeType;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraph;
 import pt.up.fe.specs.clava.analysis.flow.data.DataFlowSubgraphMetrics;
+import pt.up.fe.specs.clava.hls.heuristics.InlineHeuristic;
+import pt.up.fe.specs.clava.hls.heuristics.PipelineHeuristic;
 import pt.up.fe.specs.clava.hls.strategies.ArrayStreamDetector;
 import pt.up.fe.specs.clava.hls.strategies.CodeRegionPipelining;
 import pt.up.fe.specs.clava.hls.strategies.FunctionInlining;
+import pt.up.fe.specs.clava.hls.strategies.LoadStores;
 import pt.up.fe.specs.clava.hls.strategies.NestedLoopUnrolling;
 import pt.up.fe.specs.util.SpecsIo;
 
@@ -42,27 +45,73 @@ public class ClavaHLS {
     public ClavaHLS(DataFlowGraph dfg, File weavingFolder) {
 	this.dfg = dfg;
 	this.weavingFolder = weavingFolder;
-    }
-
-    public void run(ClavaHLSOptions mode) {
 	preprocessDfg();
-	if (mode.decide) {
-	    if (canBeInstrumented()) {
-		mode.trace = true;
-	    } else {
-		mode.directives = true;
-	    }
-	}
-	mode.directives = true; // JUST FOR DEBUG
-	if (mode.trace) {
-	    // Call LARA?
-	}
-	if (mode.directives) {
-	    applyDirectives(mode.unsafe);
-	}
     }
 
-    private boolean canBeInstrumented() {
+    public void applyFunctionInlining(double B) {
+	log(separator);
+	log("detecting if function calls can be inlined");
+	FunctionInlining inliner = new FunctionInlining(dfg, B);
+	inliner.analyze();
+	inliner.apply();
+
+	log(separator);
+    }
+
+    public void applyArrayStreaming() {
+	log(separator);
+	log("detecting if arrays can be turned into streams");
+	ArrayStreamDetector arrayStream = new ArrayStreamDetector(dfg);
+	arrayStream.analyze();
+	if (arrayStream.detectedCases() > 0) {
+	    log("found " + arrayStream.detectedCases() + " parameter(s) that can be declared as stream");
+	    arrayStream.apply();
+	}
+	log(separator);
+    }
+
+    public void applyLoopStrategies(int p) {
+	log(separator);
+	log("defining unrolling factor for nested loops");
+	NestedLoopUnrolling loopUnfolding = new NestedLoopUnrolling(dfg);
+	loopUnfolding.analyze();
+	loopUnfolding.apply();
+
+	log("detecting if code regions can be pipelined");
+	CodeRegionPipelining pipelining = new CodeRegionPipelining(dfg, loopUnfolding.getLoopsToUnroll(), p);
+	pipelining.analyze();
+	pipelining.apply();
+	log(separator);
+    }
+
+    public void applyLoadStoresStrategy(int N) {
+	log(separator);
+	log("applying load/stores strategy only");
+	LoadStores ls = new LoadStores(dfg, N);
+	ls.apply();
+	log(separator);
+    }
+
+    public void applyGenericStrategies(ClavaHLSOptions options) {
+	log(separator);
+	if (dfg.hasConditionals()) {
+	    this.verbose = true;
+	    printDfg();
+	    return;
+	}
+	log("applying HLS optimization with all generic strategies");
+	printDfg();
+	printSubgraphCosts();
+
+	this.applyArrayStreaming();
+	this.applyFunctionInlining(InlineHeuristic.DEFAULT_B);
+	this.applyLoopStrategies(PipelineHeuristic.DEFAULT_FACTOR);
+
+	log("finished HLS optimization");
+	log(separator);
+    }
+
+    public boolean canBeInstrumented() {
 	log("checking if function can be turned into a trace");
 	TracingValidator valid = new TracingValidator(dfg);
 	boolean able = valid.validate();
@@ -71,44 +120,6 @@ public class ClavaHLS {
 	else
 	    log("function cannot be turned into a trace");
 	return able;
-    }
-
-    public void applyDirectives(boolean unsafe) {
-	log(separator);
-	if (dfg.hasConditionals()) {
-	    this.verbose = true;
-	    printDfg();
-	    return;
-	}
-	log("starting HLS restructuring");
-	printDfg();
-	printSubgraphCosts();
-
-	log("detecting if arrays can be turned into streams");
-	ArrayStreamDetector arrayStream = new ArrayStreamDetector(dfg);
-	arrayStream.analyze();
-	if (arrayStream.detectedCases() > 0) {
-	    log("found " + arrayStream.detectedCases() + " parameter(s) that can be declared as stream");
-	    arrayStream.apply();
-	}
-
-	log("detecting if function calls can be inlined");
-	FunctionInlining inliner = new FunctionInlining(dfg);
-	inliner.analyze();
-	inliner.apply();
-
-	log("defining unrolling factor for nested loops");
-	NestedLoopUnrolling loopUnfolding = new NestedLoopUnrolling(dfg);
-	loopUnfolding.analyze();
-	loopUnfolding.apply();
-
-	log("detecting if code regions can be pipelined");
-	CodeRegionPipelining pipelining = new CodeRegionPipelining(dfg, loopUnfolding.getLoopsToUnroll());
-	pipelining.analyze();
-	pipelining.apply();
-
-	log("finished HLS restructuring");
-	log(separator);
     }
 
     public static void log(String msg) {
@@ -176,5 +187,23 @@ public class ClavaHLS {
 	    ClavaHLS.log("file \"" + fileName + "\" saved to \"" + path.toString() + "\"");
 	else
 	    ClavaHLS.log("failed to save file \"" + fileName + "\"");
+    }
+
+    @Deprecated
+    public void run(ClavaHLSOptions mode) {
+	if (mode.decide) {
+	    if (canBeInstrumented()) {
+		mode.trace = true;
+	    } else {
+		mode.directives = true;
+	    }
+	}
+	mode.directives = true; // JUST FOR DEBUG
+	if (mode.trace) {
+	    // Call LARA?
+	}
+	if (mode.directives) {
+	    applyGenericStrategies(mode);
+	}
     }
 }

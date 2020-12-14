@@ -20,11 +20,13 @@ package pt.up.fe.specs.clava.hls.heuristics;
 import pt.up.fe.specs.clava.hls.ClavaHLS;
 
 public class InlineHeuristic {
-    public static boolean calculate(long callFreq, long funCost, long mainCost, float N) {
-	ClavaHLS.log("callFreq = " + callFreq + ", funCost = " + funCost + ", mainCost = " + mainCost + "N = " + N);
+    public static double DEFAULT_B = 2;
+
+    public static boolean calculate(long callFreq, long funCost, long mainCost, double n) {
+	ClavaHLS.log("callFreq = " + callFreq + ", funCost = " + funCost + ", mainCost = " + mainCost + "N = " + n);
 	long x = callFreq * funCost;
-	boolean res = mainCost > (x / N);
-	ClavaHLS.log(mainCost + " > (" + callFreq + "*" + funCost + ") / " + N + " -> " + res);
+	boolean res = mainCost > (x / n);
+	ClavaHLS.log(mainCost + " > (" + callFreq + "*" + funCost + ") / " + n + " -> " + res);
 	return res;
     }
 }

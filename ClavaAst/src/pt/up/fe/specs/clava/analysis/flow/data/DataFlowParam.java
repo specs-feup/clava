@@ -88,7 +88,6 @@ public class DataFlowParam {
 	    type = paramNode.getTypeCode();
 
 	this.type = filterType(this.type).strip();
-	System.out.println("TYPE: \"" + type + "\"");
 	this.dataTypeSize = (typeSizes.get(this.type) != null) ? typeSizes.get(this.type) : 4;
     }
 

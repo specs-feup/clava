@@ -32,12 +32,13 @@ import pt.up.fe.specs.clava.hls.directives.HLSArrayPartition.PartitionType;
  */
 public class PipelineHeuristic {
     private static int limit = 1024 * 4;
+    public static int DEFAULT_FACTOR = 64;
 
     public static int calculate(DataFlowNode node) {
 	return Integer.MAX_VALUE;
     }
 
-    public static HLSArrayPartition partition(DataFlowParam p) {
+    public static HLSArrayPartition partition(DataFlowParam p, int factor) {
 	int nElems = 1;
 	for (Integer i : p.getDim())
 	    nElems *= i;
@@ -46,8 +47,6 @@ public class PipelineHeuristic {
 	    HLSArrayPartition dir = new HLSArrayPartition(PartitionType.COMPLETE, p.getName(), -1);
 	    return dir;
 	} else {
-	    // int factor = (nElems * 10) / 1024;
-	    int factor = 64;
 	    HLSArrayPartition dir = new HLSArrayPartition(PartitionType.CYCLIC, p.getName(), factor);
 	    return dir;
 	}

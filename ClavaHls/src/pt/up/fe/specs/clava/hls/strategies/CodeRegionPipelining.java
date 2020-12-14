@@ -29,29 +29,31 @@ public class CodeRegionPipelining extends RestructuringStrategy {
     private HashMap<DataFlowNode, Integer> toPipeline;
     private HashMap<DataFlowNode, Integer> unrolledLoops;
     private boolean pipelineFunction = false;
+    private int factor;
 
-    public CodeRegionPipelining(DataFlowGraph dfg, HashMap<DataFlowNode, Integer> unrolledLoops) {
-        super(dfg);
-        toPipeline = new HashMap<>();
-        this.unrolledLoops = unrolledLoops;
+    public CodeRegionPipelining(DataFlowGraph dfg, HashMap<DataFlowNode, Integer> unrolledLoops, int factor) {
+	super(dfg);
+	toPipeline = new HashMap<>();
+	this.unrolledLoops = unrolledLoops;
+	this.factor = factor;
     }
 
     @Override
     public void analyze() {
-        this.unrolledLoops.forEach((k, v) -> {
-            if (v == Integer.MAX_VALUE && toPipeline.get(k) == null) {
-                DataFlowNode loop = DFGUtils.getLoopOfLoop(k);
-                if (!loop.equals(k)) {
-                    int II = PipelineHeuristic.calculate(loop);
-                    if (II != 0)
-                        toPipeline.put(loop, II);
-                } else {
-                    if (DFGUtils.getTopLoopCount(dfg) == 1) {
-                        // pipelineFunction = true;
-                    }
-                }
-            }
-        });
+	this.unrolledLoops.forEach((k, v) -> {
+	    if (v == Integer.MAX_VALUE && toPipeline.get(k) == null) {
+		DataFlowNode loop = DFGUtils.getLoopOfLoop(k);
+		if (!loop.equals(k)) {
+		    int II = PipelineHeuristic.calculate(loop);
+		    if (II != 0)
+			toPipeline.put(loop, II);
+		} else {
+		    if (DFGUtils.getTopLoopCount(dfg) == 1) {
+			// pipelineFunction = true;
+		    }
+		}
+	    }
+	});
     }
 
     @Override
@@ -78,7 +80,7 @@ public class CodeRegionPipelining extends RestructuringStrategy {
 	ClavaNode firstStmt = dfg.getFirstStmt();
 	for (DataFlowParam param : dfg.getParams()) {
 	    if (param.isArray() && !param.isStream()) {
-		HLSArrayPartition dir = PipelineHeuristic.partition(param);
+		HLSArrayPartition dir = PipelineHeuristic.partition(param, factor);
 		this.insertDirective(firstStmt, dir);
 	    }
 	}
