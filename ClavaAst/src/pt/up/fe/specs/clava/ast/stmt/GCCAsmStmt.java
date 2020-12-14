@@ -67,7 +67,9 @@ public class GCCAsmStmt extends AsmStmt {
         }
 
         // Cobblers
-        var cobblers = get(CLOBBERS).stream().collect(Collectors.joining(", "));
+        var cobblers = get(CLOBBERS).stream()
+                .map(clobber -> "\"" + clobber + "\"")
+                .collect(Collectors.joining(", "));
 
         if (!cobblers.isEmpty()) {
             code.append("\n   :").append(cobblers);
