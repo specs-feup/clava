@@ -6,8 +6,13 @@ static __inline__ tick gettick (void) {
 	
 	 __asm__ ( "movl $10, %eax;"
                 "movl $20, %ebx;"
-                "addl %ebx, %eax;"
-    );
+                "addl %ebx, %eax;");
+	
+	int a___d0, a___d1;
+    __asm__ __volatile__("cld; rep; stosq"
+        :"=c" (a___d0), "=D" (a___d1)
+        :"a" (0), "0" (sizeof(long long) / sizeof(int)), "1" (10)
+        :"memory");
 	
     return (((tick)a) | (((tick)d) << 32));
 }
