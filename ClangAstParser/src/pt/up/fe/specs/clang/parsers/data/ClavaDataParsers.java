@@ -36,6 +36,8 @@ import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentKind;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentPack;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentTemplate;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentType;
+import pt.up.fe.specs.clava.ast.decl.data.templates.template.QualifiedTemplate;
+import pt.up.fe.specs.clava.ast.decl.data.templates.template.Template;
 import pt.up.fe.specs.clava.ast.expr.data.designator.ArrayDesignator;
 import pt.up.fe.specs.clava.ast.expr.data.designator.ArrayRangeDesignator;
 import pt.up.fe.specs.clava.ast.expr.data.designator.Designator;
@@ -267,14 +269,20 @@ public class ClavaDataParsers {
             integral.set(TemplateArgumentIntegral.INTEGRAL, LineStreamParsers.integer(lines));
             return integral;
         case Template:
-            TemplateArgumentTemplate template = new TemplateArgumentTemplate();
+            // TemplateArgumentTemplate template = new TemplateArgumentTemplate();
             TemplateNameKind nameKind = LineStreamParsers.enumFromName(TemplateNameKind.class, lines);
+            var template = TemplateArgumentTemplate.newInstance(nameKind);
             template.set(TemplateArgumentTemplate.TEMPLATE_NAME_KIND, nameKind);
 
             switch (nameKind) {
             case Template:
-                parserData.getClavaNodes().queueSetOptionalNode(template, TemplateArgumentTemplate.TEMPLATE_DECL,
-                        lines.nextLine());
+                // parserData.getClavaNodes().queueSetOptionalNode(template, TemplateArgumentTemplate.TEMPLATE_DECL,
+                parserData.getClavaNodes().queueSetOptionalNode(template, Template.TEMPLATE_DECL, lines.nextLine());
+                break;
+            case QualifiedTemplate:
+                template.set(QualifiedTemplate.QUALIFIER, lines.nextLine());
+                template.set(QualifiedTemplate.HAS_TEMPLATE_KEYWORD, LineStreamParsers.oneOrZero(lines));
+                parserData.getClavaNodes().queueSetNode(template, QualifiedTemplate.TEMPLATE_DECL, lines.nextLine());
                 break;
             default:
                 throw new RuntimeException("Case not implemented: " + nameKind);

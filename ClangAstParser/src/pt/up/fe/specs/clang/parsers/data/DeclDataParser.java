@@ -461,7 +461,8 @@ public class DeclDataParser {
 
         boolean hasDefaultArgument = LineStreamParsers.oneOrZero(lines);
         if (hasDefaultArgument) {
-            Optional<TemplateArgument> templateArg = Optional.of(ClavaDataParsers.templateArgument(lines, dataStore));
+            Optional<TemplateArgument> templateArg = Optional
+                    .of(ClavaDataParsers.templateArgument(lines, dataStore));
             data.add(TemplateTemplateParmDecl.DEFAULT_ARGUMENT, templateArg);
         } else {
             data.add(TemplateTemplateParmDecl.DEFAULT_ARGUMENT, Optional.empty());
