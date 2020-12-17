@@ -63,7 +63,7 @@ public abstract class CXXCtorInitializer extends ADataClass<CXXCtorInitializer> 
         case BASE_INITIALIZER:
             return new BaseInit();
         case DELEGATING_INITIALIZER:
-            return new AnyMemberInit();
+            return new DelegatingInit();
         default:
             throw new NotImplementedException(initKind);
         }
