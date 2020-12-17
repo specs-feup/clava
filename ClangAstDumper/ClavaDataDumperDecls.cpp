@@ -371,7 +371,7 @@ void clava::ClavaDataDumper::DumpFunctionDeclData(const FunctionDecl *D) {
     if (templateSpecializationArgs != nullptr) {
         clava::dump(templateSpecializationArgs->size());
         for (auto templateArg : templateSpecializationArgs->asArray()) {
-            clava::dump(templateArg, id);
+            clava::dump(templateArg, id, Context);
         }
     } else {
         clava::dump(0);
@@ -647,7 +647,7 @@ void clava::ClavaDataDumper::DumpTemplateTemplateParmDeclData(const TemplateTemp
 
     clava::dump(D->hasDefaultArgument());
     if (D->hasDefaultArgument()) {
-        clava::dump(D->getDefaultArgument().getArgument(), id);
+        clava::dump(D->getDefaultArgument().getArgument(), id, Context);
     }
 
 

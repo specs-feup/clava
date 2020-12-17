@@ -641,6 +641,9 @@ void ClangAstDumper::VisitTemplateArgument(const TemplateArgument& templateArg) 
                 case TemplateName::NameKind::Template:
                     VisitDeclTop(templateName.getAsTemplateDecl());
                     break;
+                case TemplateName::NameKind::QualifiedTemplate:
+                    VisitDeclTop(templateName.getAsQualifiedTemplateName()->getTemplateDecl());
+                    break;
                 default:
                     throw std::invalid_argument("ClangAstDumper::VisitTemplateArgument(): TemplateName case not implemented, '" +
                                                 clava::TEMPLATE_NAME_KIND[templateName.getKind()] + "'");

@@ -517,7 +517,7 @@ void clava::ClavaDataDumper::DumpTemplateSpecializationTypeData(const TemplateSp
     int numArgs = T->getNumArgs();
     clava::dump(numArgs);
     for(int i=0; i<numArgs; i++) {
-        clava::dump(T->getArg(i), id);
+        clava::dump(T->getArg(i), id, Context);
     }
 
 

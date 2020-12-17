@@ -29,7 +29,7 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"FunctionTemplateDecl", clava::DeclNode::TEMPLATE_DECL},
         {"TypeAliasTemplateDecl", clava::DeclNode::TEMPLATE_DECL},
         {"VarTemplateDecl", clava::DeclNode::TEMPLATE_DECL},
-        {"TemplateTemplateParmDecl", clava::DeclNode::TEMPLATE_DECL},
+        {"TemplateTemplateParmDecl", clava::DeclNode::TEMPLATE_TEMPLATE_PARM_DECL},
         {"TemplateTypeParmDecl", clava::DeclNode::TEMPLATE_TYPE_PARM_DECL},
         {"EnumConstantDecl", clava::DeclNode::ENUM_CONSTANT_DECL},
         {"NonTypeTemplateParmDecl", clava::DeclNode::VALUE_DECL},
@@ -95,6 +95,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitVarDeclChildren(static_cast<const VarDecl *>(D), visitedChildren); break;
         case clava::DeclNode::TEMPLATE_DECL:
             VisitTemplateDeclChildren(static_cast<const TemplateDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::TEMPLATE_TEMPLATE_PARM_DECL:
+            VisitTemplateTemplateParmDeclChildren(static_cast<const TemplateTemplateParmDecl *>(D), visitedChildren); break;
         case clava::DeclNode::TEMPLATE_TYPE_PARM_DECL:
             VisitTemplateTypeParmDeclChildren(static_cast<const TemplateTypeParmDecl *>(D), visitedChildren); break;
         case clava::DeclNode::ENUM_CONSTANT_DECL:
@@ -314,20 +316,6 @@ void ClangAstDumper::VisitFunctionDeclChildren(const FunctionDecl *D, std::vecto
     if(templateSpecializationArgs != nullptr) {
         for(auto templateArg : templateSpecializationArgs->asArray()) {
             VisitTemplateArgument(templateArg);
-            /*
-            switch(templateArg.getKind()) {
-                case TemplateArgument::ArgKind::Type:
-                    VisitTypeTop(templateArg.getAsType());
-                    break;
-                case TemplateArgument::ArgKind::Expression:
-                    VisitStmtTop(templateArg.getAsExpr());
-                    break;
-                case TemplateArgument::ArgKind::Pack:
-                    // Do nothing
-                    break;
-                default: throw std::invalid_argument("ClangAstDumper::VisitFunctionDeclChildren(): Case not implemented, '"+clava::TEMPLATE_ARG_KIND[templateArg.getKind()]+"'");
-            }
-             */
         }
     }
 
@@ -534,14 +522,25 @@ void ClangAstDumper::VisitTemplateDeclChildren(const TemplateDecl *D, std::vecto
 
     auto templateParams = D->getTemplateParameters();
     if(templateParams) {
-        for (auto I = templateParams->begin(), E = templateParams->end(); I != E; ++I)
+        for (auto I = templateParams->begin(), E = templateParams->end(); I != E; ++I) {
             addChild(*I, children);
             //VisitDeclTop(*I);
-    }
+        }
 
+    }
 
     addChild(D->getTemplatedDecl(), children);
 }
+
+void ClangAstDumper::VisitTemplateTemplateParmDeclChildren(const TemplateTemplateParmDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitTemplateDeclChildren(D, children);
+
+    if (D->hasDefaultArgument()) {
+        VisitTemplateArgument(D->getDefaultArgument().getArgument());
+    }
+}
+
 
 
 void ClangAstDumper::VisitTemplateTypeParmDeclChildren(const TemplateTypeParmDecl *D, std::vector<std::string> &children) {

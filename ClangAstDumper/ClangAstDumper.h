@@ -234,6 +234,7 @@ private:
     void VisitParmVarDeclChildren(const ParmVarDecl *D, std::vector<std::string> &children);
 
     void VisitTemplateDeclChildren(const TemplateDecl *D, std::vector<std::string> &children);
+    void VisitTemplateTemplateParmDeclChildren(const TemplateTemplateParmDecl * D, std::vector<std::string> &children);
     void VisitTemplateTypeParmDeclChildren(const TemplateTypeParmDecl *D, std::vector<std::string> &children);
     void VisitEnumConstantDeclChildren(const EnumConstantDecl *D, std::vector<std::string> &children);
     void VisitTypedefNameDeclChildren(const TypedefNameDecl *D, std::vector<std::string> &children);

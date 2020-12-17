@@ -494,7 +494,7 @@ void clava::ClavaDataDumper::DumpDeclRefExprData(const DeclRefExpr *E) {
         auto templateArgs = E->getTemplateArgs();
         for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
             auto templateArg = templateArgs + i;
-            clava::dump(templateArg->getArgument(), id);
+            clava::dump(templateArg->getArgument(), id, Context);
             //clava::dump(clava::getSource(Context, templateArg->getSourceRange()));
         }
     } else {
@@ -529,7 +529,7 @@ void clava::ClavaDataDumper::DumpDependentScopeDeclRefExprData(const DependentSc
         auto templateArgs = E->getTemplateArgs();
         for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
             auto templateArg = templateArgs + i;
-            clava::dump(templateArg->getArgument(), id);
+            clava::dump(templateArg->getArgument(), id, Context);
             //clava::dump(clava::getSource(Context, templateArg->getSourceRange()));
         }
     } else {
@@ -564,7 +564,7 @@ void clava::ClavaDataDumper::DumpOverloadExprData(const OverloadExpr *E) {
         auto templateArgs = E->getTemplateArgs();
         for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
             auto templateArg = templateArgs + i;
-            clava::dump(templateArg->getArgument(), id);
+            clava::dump(templateArg->getArgument(), id, Context);
             //clava::dump(clava::getSource(Context, templateArg->getSourceRange()));
         }
     } else {
@@ -806,7 +806,7 @@ void clava::ClavaDataDumper::DumpLambdaExprData(const LambdaExpr *E) {
         // Template args
         clava::dumpSize(E->getPartialArguments().size());
         for(auto partialArg : E->getPartialArguments()) {
-            clava::dump(partialArg, id);
+            clava::dump(partialArg, id, Context);
         }
     } else {
         clava::dump(0);
