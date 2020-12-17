@@ -93,6 +93,20 @@ aspectdef MathCompare
 	println("");
 end
 
+/**
+ * 		Applies a series of mathemtatical function replacements using the following rules:
+ * - For every function with a signature requiring args of type "double" but with the 
+ * provided args of type "float", it replaces the function by its "float" equivalent, 
+ * if present on the provided math.h info implementation 
+ * - If a square root is found, it is replaced by a fast inverse square root and a multiplication,
+ * for both "double" and "float" types, as required. The implementation of the functions is added
+ * to the source file
+ * - Replaces calls to the "pow" function using an integer exponent with a series of multiplications
+ *
+ * @param {JSON} mathFun - A JSON holding information about the signature of all functions 
+ * present on a math.h. Can be obtained using clava.hls.MathHInfo, or otherwise built manually
+ * (see documentation of clava.hls.MathHInfo for the format)
+ * */
 aspectdef MathReplace
 	input
 		mathFun
@@ -111,14 +125,13 @@ aspectdef MathReplace
 			//sqrtf -> rsqrt32
 			if (fun == "sqrtf" || (fun == "sqrt" && !types.includes("Double", 0))) {
 				println("Replacing sqrtf for rsqrt32");
-				elem['call'].setName("fast_inv_sqrt32");
-				elem['call'].ancestor('file').addInclude("fast_math.h");		
+				elem['call'].setName("mult_rsqrt32");	
 			}
 			//sqrt -> rsqrt64
 			if (fun == "sqrt" && types.includes("Double", 0)) {
 				println("Replacing sqrt for sqrt64");
-				elem['call'].setName("fast_inv_sqrt64");
-				elem['call'].ancestor('file').addInclude("fast_math.h");
+				elem['call'].setName("mult_rsqrt64");
+				
 			}
 			//pow(d, Int) -> d * ... * d
 			if ((fun == "pow" || fun == "powf") && types[1] == "Int" && /[0-9]\d*/.test(args[1].code)) {
@@ -156,7 +169,7 @@ end
 
 codedef rsqrt %{
 
-static inline float rsqrt32(float number) {
+static inline float mult_rsqrt32(float number) {
 	uint32_t i;
 	float x2, y;
 	x2 = number * 0.5F;
@@ -165,10 +178,10 @@ static inline float rsqrt32(float number) {
 	i = 0x5f375a86 - (i >> 1);
 	y = *(float *) &i;
 	y = y * (1.5F - (x2 * y * y));
-	return y;
+	return y * number;
 }
 
-static inline double rsqrt64(double number) {
+static inline double mult_rsqrt64(double number) {
 	uint64_t i;
 	double x2, y;
 	x2 = number * 0.5;
@@ -177,7 +190,7 @@ static inline double rsqrt64(double number) {
 	i = 0x5fe6eb50c7b537a9 - (i >> 1);
 	y = * (double *) &i;
 	y = y * (1.5 - (x2 * y * y));
-	return y;
+	return y * number;
 }
 }%
 end
