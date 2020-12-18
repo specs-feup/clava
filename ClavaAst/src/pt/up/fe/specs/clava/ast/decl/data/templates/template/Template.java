@@ -18,9 +18,11 @@ import java.util.Optional;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.TemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentTemplate;
 import pt.up.fe.specs.clava.ast.type.enums.TemplateNameKind;
@@ -42,6 +44,13 @@ public class Template extends TemplateArgumentTemplate {
     public String getCode(ClavaNode node) {
         TemplateDecl templateDecl = get(TEMPLATE_DECL).get();
         Decl decl = templateDecl.getTemplateDecl();
+
+        if (decl instanceof NullDecl) {
+            ClavaLog.debug(
+                    () -> "pt.up.fe.specs.clava.ast.decl.data.templates.template.Template: Code generation not verified yet");
+            return "";
+        }
+
         SpecsCheck.checkNotNull(decl instanceof NamedDecl, () -> "Check if this should always be a NamedDecl");
         return ((NamedDecl) decl).getDeclName();
     }

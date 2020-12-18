@@ -429,30 +429,42 @@ void clava::dump(const TemplateArgument &templateArg, int id, ASTContext* Contex
 //    clava::dump(source);
             break;
         case TemplateArgument::ArgKind::Template:
+            clava::dump(templateArg.getAsTemplate(), id, Context);
+            break;
+            /*
         {
             TemplateName templateName = templateArg.getAsTemplate();
 
-            clava::dump(clava::TEMPLATE_NAME_KIND[templateName.getKind()]);
 
-            switch(templateName.getKind()) {
-                case TemplateName::NameKind::Template:
-                    clava::dump(clava::getId(templateName.getAsTemplateDecl(), id));
-                    break;
-                case TemplateName::NameKind::QualifiedTemplate:
-                    clava::dump(templateName.getAsQualifiedTemplateName()->getQualifier(), Context);
-                    clava::dump(templateName.getAsQualifiedTemplateName()->hasTemplateKeyword());
-                    clava::dump(clava::getId(templateName.getAsQualifiedTemplateName()->getTemplateDecl(), id));
-                    break;
-                default:
-                    throw std::invalid_argument("ClangNodes::dump(TemplateArgument&): TemplateName case in kind 'Template' not implemented, '" +
-                                                clava::TEMPLATE_NAME_KIND[templateName.getKind()] + "'");
-            }
             break;
         }
+             */
         //case TemplateArgument::ArgKind::Qualified
         default:
             throw std::invalid_argument("ClangNodes::dump(TemplateArgument&): Case not implemented, '" +
                                         clava::TEMPLATE_ARG_KIND[templateArg.getKind()] + "' (" + std::to_string(templateArg.getKind()) +")");
+    }
+}
+
+void clava::dump(const TemplateName &templateName, int id, ASTContext* Context) {
+    clava::dump(clava::TEMPLATE_NAME_KIND[templateName.getKind()]);
+
+    switch(templateName.getKind()) {
+        case TemplateName::NameKind::Template:
+            clava::dump(clava::getId(templateName.getAsTemplateDecl(), id));
+            break;
+        case TemplateName::NameKind::QualifiedTemplate:
+            clava::dump(templateName.getAsQualifiedTemplateName()->getQualifier(), Context);
+            clava::dump(templateName.getAsQualifiedTemplateName()->hasTemplateKeyword());
+            clava::dump(clava::getId(templateName.getAsQualifiedTemplateName()->getTemplateDecl(), id));
+            break;
+        case TemplateName::NameKind::SubstTemplateTemplateParm:
+            clava::dump(clava::getId(templateName.getAsSubstTemplateTemplateParm()->getParameter(), id));
+            clava::dump(templateName.getAsSubstTemplateTemplateParm()->getReplacement(), id, Context);
+            break;
+        default:
+            throw std::invalid_argument("ClangNodes::dump(TemplateArgument&): TemplateName case in kind 'Template' not implemented, '" +
+                                        clava::TEMPLATE_NAME_KIND[templateName.getKind()] + "'");
     }
 }
 

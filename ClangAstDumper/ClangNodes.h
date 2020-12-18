@@ -117,6 +117,7 @@ namespace clava {
     void dump(const Qualifiers& qualifiers, ASTContext* Context);
     void dump(NestedNameSpecifier* qualifier, ASTContext* Context);
     void dump(const TemplateArgument& templateArg, int id, ASTContext* Context);
+    void dump(const TemplateName &templateName, int id, ASTContext* Context);
     void dump(const CXXBaseSpecifier& base, int id);
     //void dump(const TemplateName& templateName);
     void dump(std::function<void(llvm::raw_string_ostream&)> dumper);

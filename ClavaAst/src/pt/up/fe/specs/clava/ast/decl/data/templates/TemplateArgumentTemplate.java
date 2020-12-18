@@ -17,6 +17,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.QualifiedTemplate;
+import pt.up.fe.specs.clava.ast.decl.data.templates.template.SubstTemplateTemplateParm;
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.Template;
 import pt.up.fe.specs.clava.ast.type.enums.TemplateNameKind;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
@@ -33,14 +34,15 @@ public abstract class TemplateArgumentTemplate extends TemplateArgument {
     /// DATAKEYS END
 
     public TemplateArgumentTemplate(TemplateNameKind templateNameKind) {
-        this();
+        // this();
+        super(TemplateArgumentKind.Template);
 
         set(TEMPLATE_NAME_KIND, templateNameKind);
     }
 
-    public TemplateArgumentTemplate() {
-        super(TemplateArgumentKind.Template);
-    }
+    // public TemplateArgumentTemplate() {
+    // super(TemplateArgumentKind.Template);
+    // }
 
     public static TemplateArgumentTemplate newInstance(TemplateNameKind nameKind) {
         switch (nameKind) {
@@ -48,6 +50,8 @@ public abstract class TemplateArgumentTemplate extends TemplateArgument {
             return new Template();
         case QualifiedTemplate:
             return new QualifiedTemplate();
+        case SubstTemplateTemplateParm:
+            return new SubstTemplateTemplateParm();
         default:
             throw new NotImplementedException(nameKind);
         }

@@ -299,10 +299,11 @@ private:
     // Children visitors for Attributes
     void VisitAlignedAttrChildren(const AlignedAttr * A, std::vector<std::string> &children);
     void VisitTemplateArgument(const TemplateArgument& templateArg);
+    void VisitTemplateName(const TemplateName& templateArg);
 
 
 
-    // Dumpers of other kinds of information
+        // Dumpers of other kinds of information
     void dumpIdToClassMap(const void* pointer, std::string className);
     void dumpTopLevelType(const QualType &type);
     void dumpTopLevelAttr(const Attr *attr);
