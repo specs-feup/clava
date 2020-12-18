@@ -691,6 +691,24 @@ void clava::ClavaDataDumper::DumpCXXDependentScopeMemberExprData(const CXXDepend
     clava::dump(E->isArrow());
     clava::dump(E->getMemberNameInfo().getAsString());
 
+    clava::dump(E->isImplicitAccess());
+    clava::dump(E->getQualifier(), Context);
+    clava::dump(E->hasTemplateKeyword());
+
+    // Dump template arguments
+    if(E->hasExplicitTemplateArgs()) {
+        // Number of template args
+        clava::dump(E->getNumTemplateArgs());
+
+        auto templateArgs = E->getTemplateArgs();
+        for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
+            auto templateArg = templateArgs + i;
+            clava::dump(templateArg->getArgument(), id, Context);
+        }
+    } else {
+        clava::dump(0);
+    }
+
  }
 
 void clava::ClavaDataDumper::DumpUnaryOperatorData(const UnaryOperator *E) {

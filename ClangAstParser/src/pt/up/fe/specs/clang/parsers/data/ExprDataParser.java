@@ -327,6 +327,11 @@ public class ExprDataParser {
         data.add(CXXDependentScopeMemberExpr.IS_ARROW, LineStreamParsers.oneOrZero(lines));
         data.add(CXXDependentScopeMemberExpr.MEMBER_NAME, lines.nextLine());
 
+        data.add(CXXDependentScopeMemberExpr.IS_IMPLICIT_ACCESS, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXDependentScopeMemberExpr.QUALIFIER, lines.nextLine());
+        data.add(CXXDependentScopeMemberExpr.HAS_TEMPLATE_KEYWORD, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXDependentScopeMemberExpr.TEMPLATE_ARGUMENTS, ClavaDataParsers.templateArguments(lines, dataStore));
+
         return data;
     }
 
