@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ast.expr.CXXDependentScopeMemberExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNamedCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXNoexceptExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXTypeidExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
@@ -448,6 +449,14 @@ public class ExprDataParser {
         data.add(DependentScopeDeclRefExpr.QUALIFIER, lines.nextLine());
         data.add(DependentScopeDeclRefExpr.HAS_TEMPLATE_KEYWORD, LineStreamParsers.oneOrZero(lines));
         data.add(DependentScopeDeclRefExpr.TEMPLATE_ARGUMENTS, ClavaDataParsers.templateArguments(lines, dataStore));
+
+        return data;
+    }
+
+    public static DataStore parseCXXNoexceptExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(CXXNoexceptExpr.VALUE, LineStreamParsers.oneOrZero(lines));
 
         return data;
     }

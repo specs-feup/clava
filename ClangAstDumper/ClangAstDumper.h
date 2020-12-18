@@ -287,6 +287,7 @@ private:
     void VisitDesignatedInitExprChildren(const DesignatedInitExpr *E, std::vector<std::string> &children);
     void VisitCXXConstructExprChildren(const CXXConstructExpr *E, std::vector<std::string> &children);
     void VisitCXXTemporaryObjectExprChildren(const CXXTemporaryObjectExpr *E, std::vector<std::string> &children);
+    //void VisitCXXNoexceptExprChildren(const CXXNoexceptExpr *E, std::vector<std::string> &children);
 
 
 

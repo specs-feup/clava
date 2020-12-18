@@ -65,6 +65,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"SizeOfPackExpr", clava::StmtNode::SIZE_OF_PACK_EXPR},
         {"ArrayInitLoopExpr", clava::StmtNode::ARRAY_INIT_LOOP_EXPR},
         {"DesignatedInitExpr", clava::StmtNode::DESIGNATED_INIT_EXPR},
+        {"CXXNoexceptExpr", clava::StmtNode::CXX_NOEXCEPT_EXPR},
 
 };
 
@@ -196,7 +197,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpArrayInitLoopExprData(static_cast<const ArrayInitLoopExpr *>(S)); break;
         case clava::StmtNode ::DESIGNATED_INIT_EXPR:
             DumpDesignatedInitExprData(static_cast<const DesignatedInitExpr *>(S)); break;
-
+        case clava::StmtNode ::CXX_NOEXCEPT_EXPR:
+            DumpCXXNoexceptExprData(static_cast<const CXXNoexceptExpr *>(S)); break;
 
             //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
 //            DumpCompoundAssignOperatorData(static_cast<const CompoundAssignOperator *>(S)); break;
@@ -834,3 +836,11 @@ void clava::ClavaDataDumper::DumpLambdaExprData(const LambdaExpr *E) {
     }
 
  }
+
+void clava::ClavaDataDumper::DumpCXXNoexceptExprData(const CXXNoexceptExpr *E) {
+    DumpExprData(E);
+
+//    clava::dump(clava::getId(E->getOperand(), id));
+    clava::dump(E->getValue());
+}
+
