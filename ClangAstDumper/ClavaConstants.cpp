@@ -76,6 +76,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::ARRAY_INIT_LOOP_EXPR: return "ArrayInitLoopExpr";
         case clava::StmtNode::DESIGNATED_INIT_EXPR: return "DesignatedInitExpr";
         case clava::StmtNode::CXX_NOEXCEPT_EXPR: return "CXXNoexceptExpr";
+        case clava::StmtNode::CXX_PSEUDO_DESTRUCTOR_EXPR: return "CXXPseudoDestructorExpr";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<StmtNode>::type>(stmtNode));

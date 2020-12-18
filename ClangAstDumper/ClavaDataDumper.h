@@ -179,6 +179,7 @@ namespace clava {
         void DumpArrayInitLoopExprData(const ArrayInitLoopExpr *E);
         void DumpDesignatedInitExprData(const DesignatedInitExpr *E);
         void DumpCXXNoexceptExprData(const CXXNoexceptExpr *E);
+        void DumpCXXPseudoDestructorExprData(const CXXPseudoDestructorExpr *E);
 
 
 
