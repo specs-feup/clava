@@ -20,6 +20,7 @@ namespace clava {
         DECLARATOR_DECL,
         FIELD_DECL,
         TYPE_DECL,
+        UNRESOLVED_USING_TYPENAME_DECL,
         FUNCTION_DECL,
         CXX_METHOD_DECL,
         CXX_CONSTRUCTOR_DECL,

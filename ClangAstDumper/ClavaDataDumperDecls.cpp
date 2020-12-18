@@ -24,6 +24,7 @@ const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
         {"TemplateTypeParmDecl",                   clava::DeclNode::TEMPLATE_TYPE_PARM_DECL},
         //{"TypedefDecl", clava::DeclNode::NAMED_DECL},
         {"TypeDecl",                               clava::DeclNode::TYPE_DECL},
+        {"UnresolvedUsingTypenameDecl",            clava::DeclNode::UNRESOLVED_USING_TYPENAME_DECL},
         {"EnumDecl",                               clava::DeclNode::ENUM_DECL},
         {"RecordDecl",                             clava::DeclNode::RECORD_DECL},
         {"CXXRecordDecl",                          clava::DeclNode::CXX_RECORD_DECL},
@@ -75,6 +76,9 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl *D) {
             break;
         case clava::DeclNode::TYPE_DECL:
             DumpTypeDeclData(static_cast<const TypeDecl *>(D));
+            break;
+        case clava::DeclNode::UNRESOLVED_USING_TYPENAME_DECL:
+            DumpUnresolvedUsingTypenameDeclData(static_cast<const UnresolvedUsingTypenameDecl *>(D));
             break;
         case clava::DeclNode::TAG_DECL:
             DumpTagDeclData(static_cast<const TagDecl *>(D));
@@ -249,6 +253,15 @@ void clava::ClavaDataDumper::DumpTypeDeclData(const TypeDecl *D) {
     //clava::dump(clava::getId(Context->getTypeDeclType(D), id));
     clava::dump(clava::getId(D->getTypeForDecl(), id));
 }
+
+void clava::ClavaDataDumper::DumpUnresolvedUsingTypenameDeclData(const UnresolvedUsingTypenameDecl *D) {
+    // Hierarchy
+    DumpTypeDeclData(D);
+
+    clava::dump(D->getQualifier(), Context);
+    clava::dump(D->isPackExpansion());
+}
+
 
 void clava::ClavaDataDumper::DumpTagDeclData(const TagDecl *D) {
     // Hierarchy

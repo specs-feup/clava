@@ -46,6 +46,7 @@ import pt.up.fe.specs.clava.ast.decl.TemplateTemplateParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TypeDecl;
 import pt.up.fe.specs.clava.ast.decl.TypedefNameDecl;
+import pt.up.fe.specs.clava.ast.decl.UnresolvedUsingTypenameDecl;
 import pt.up.fe.specs.clava.ast.decl.UsingDecl;
 import pt.up.fe.specs.clava.ast.decl.UsingDirectiveDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
@@ -136,6 +137,16 @@ public class DeclDataParser {
         // System.out.println("TYPE_FOR_DECL ID:" + typeId);
         // dataStore.getClavaNodes().queueSetNode(data, TypeDecl.TYPE_FOR_DECL, typeId);
         // ClavaLog.debug("TYPE DECL ID");
+        return data;
+    }
+
+    public static DataStore parseUnresolvedUsingTypenameDeclData(LineStream lines, ClangParserData dataStore) {
+        // Parse TypeDecl data
+        DataStore data = parseTypeDeclData(lines, dataStore);
+
+        data.add(UnresolvedUsingTypenameDecl.QUALIFIER, lines.nextLine());
+        data.add(UnresolvedUsingTypenameDecl.IS_PACK_EXPANSION, LineStreamParsers.oneOrZero(lines));
+
         return data;
     }
 

@@ -101,6 +101,7 @@ namespace clava {
         void DumpDeclData(const Decl *D);
         void DumpNamedDeclData(const NamedDecl *D);
         void DumpTypeDeclData(const TypeDecl *D);
+        void DumpUnresolvedUsingTypenameDeclData(const UnresolvedUsingTypenameDecl *D);
         void DumpTagDeclData(const TagDecl *D);
         void DumpEnumDeclData(const EnumDecl *D);
         void DumpRecordDeclData(const RecordDecl *D);
