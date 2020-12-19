@@ -31,6 +31,7 @@ Matisse.lara
 **/run/**
 #!**/run/dummy.txt
 !**/run/*.launch
+!**/run/*.deploy
 **/run/*-local.launch
 
 
