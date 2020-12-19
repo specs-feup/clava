@@ -101,6 +101,7 @@ namespace clava {
         void DumpDeclData(const Decl *D);
         void DumpNamedDeclData(const NamedDecl *D);
         void DumpTypeDeclData(const TypeDecl *D);
+        void DumpUnresolvedUsingTypenameDeclData(const UnresolvedUsingTypenameDecl *D);
         void DumpTagDeclData(const TagDecl *D);
         void DumpEnumDeclData(const EnumDecl *D);
         void DumpRecordDeclData(const RecordDecl *D);
@@ -177,6 +178,8 @@ namespace clava {
         void DumpSizeOfPackExprData(const SizeOfPackExpr *E);
         void DumpArrayInitLoopExprData(const ArrayInitLoopExpr *E);
         void DumpDesignatedInitExprData(const DesignatedInitExpr *E);
+        void DumpCXXNoexceptExprData(const CXXNoexceptExpr *E);
+        void DumpCXXPseudoDestructorExprData(const CXXPseudoDestructorExpr *E);
 
 
 

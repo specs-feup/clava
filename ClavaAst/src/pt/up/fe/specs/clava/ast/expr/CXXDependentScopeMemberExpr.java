@@ -13,13 +13,17 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 
 /**
  * A C++ member access expression where the actual member referenced could not be resolved because the base expression
@@ -38,6 +42,16 @@ public class CXXDependentScopeMemberExpr extends Expr {
     public final static DataKey<Boolean> IS_ARROW = KeyFactory.bool("isArrow");
 
     public final static DataKey<String> MEMBER_NAME = KeyFactory.string("memberName");
+
+    public final static DataKey<Boolean> IS_IMPLICIT_ACCESS = KeyFactory.bool("isImplicitAccess");
+
+    public final static DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
+
+    public final static DataKey<Boolean> HAS_TEMPLATE_KEYWORD = KeyFactory.bool("hasTemplateKeyword");
+
+    public final static DataKey<List<TemplateArgument>> TEMPLATE_ARGUMENTS = KeyFactory
+            .generic("templateArguments", (List<TemplateArgument>) new ArrayList<TemplateArgument>())
+            .setDefault(() -> new ArrayList<>());
 
     /// DATAKEYS END
 
@@ -66,8 +80,14 @@ public class CXXDependentScopeMemberExpr extends Expr {
     // return new CXXDependentScopeMemberExpr(isArrow, memberName, getExprData(), getInfo(), Collections.emptyList());
     // }
 
-    public Expr getMemberExpr() {
-        return getChild(Expr.class, 0);
+    // TODO: Rename to getBase(), make it optional, dependent on isImplicit
+    public Optional<Expr> getBase() {
+        return Optional.ofNullable(get(IS_IMPLICIT_ACCESS) ? null : getChild(Expr.class, 0));
+        // if (!get(IS_IMPLICIT_ACCESS)) {
+        // return Optional.of(getChild(Expr.class, 0));
+        // }
+        //
+        // return Optional.empty();
     }
 
     @Override
@@ -76,7 +96,12 @@ public class CXXDependentScopeMemberExpr extends Expr {
         String separator = get(IS_ARROW) ? "->" : ".";
 
         // return getMemberExpr().getCode() + separator + memberName;
-        return getMemberExpr().getCode() + separator + get(MEMBER_NAME);
+        var code = getBase().map(base -> base.getCode() + separator).orElse(get(QUALIFIER)) + get(MEMBER_NAME);
+
+        // System.out.println("LOCATION: " + get(LOCATION));
+        // System.out.println("code: " + code);
+
+        return code;
     }
 
 }

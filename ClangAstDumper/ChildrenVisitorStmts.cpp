@@ -53,6 +53,10 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDRE
         {"DesignatedInitExpr", clava::StmtNode::DESIGNATED_INIT_EXPR},
         {"CXXConstructExpr", clava::StmtNode::CXX_CONSTRUCT_EXPR},
         {"CXXTemporaryObjectExpr", clava::StmtNode::CXX_TEMPORARY_OBJECT_EXPR},
+        {"CXXDependentScopeMemberExpr", clava::StmtNode::CXX_DEPENDENT_SCOPE_MEMBER_EXPR},
+        {"CXXPseudoDestructorExpr", clava::StmtNode::CXX_PSEUDO_DESTRUCTOR_EXPR},
+
+        //{"CXXNoexceptExpr", clava::StmtNode::CXX_NOEXCEPT_EXPR},
 
         //{"SubstNonTypeTemplateParmExpr", clava::StmtNode::SUBST_NON_TYPE_TEMPLATE_PARM_EXPR},
 };
@@ -164,6 +168,12 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitCXXConstructExprChildren(static_cast<const CXXConstructExpr *>(S), visitedChildren); break;
         case clava::StmtNode::CXX_TEMPORARY_OBJECT_EXPR:
             VisitCXXTemporaryObjectExprChildren(static_cast<const CXXTemporaryObjectExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::CXX_DEPENDENT_SCOPE_MEMBER_EXPR:
+            VisitCXXDependentScopeMemberExprChildren(static_cast<const CXXDependentScopeMemberExpr *>(S), visitedChildren); break;
+        case clava::StmtNode::CXX_PSEUDO_DESTRUCTOR_EXPR:
+            VisitCXXPseudoDestructorExprChildren(static_cast<const CXXPseudoDestructorExpr *>(S), visitedChildren); break;
+//        case clava::StmtNode::CXX_NOEXCEPT_EXPR:
+//            VisitCXXNoexceptExprChildren(static_cast<const CXXNoexceptExpr *>(S), visitedChildren); break;
 
 
             //        case clava::StmtNode::SUBST_NON_TYPE_TEMPLATE_PARM_EXPR:
@@ -583,6 +593,35 @@ void ClangAstDumper::VisitCXXTemporaryObjectExprChildren(const CXXTemporaryObjec
     // Hierarchy
     VisitCXXConstructExprChildren(E, children);
 }
+
+void ClangAstDumper::VisitCXXDependentScopeMemberExprChildren(const CXXDependentScopeMemberExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    auto templateArgs = E->getTemplateArgs();
+    for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
+        auto templateArg = templateArgs + i;
+        VisitTemplateArgument(templateArg->getArgument());
+    }
+}
+
+void ClangAstDumper::VisitCXXPseudoDestructorExprChildren(const CXXPseudoDestructorExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    VisitTypeTop(E->getDestroyedType());
+}
+
+
+
+/*
+void ClangAstDumper::VisitCXXNoexceptExprChildren(const CXXNoexceptExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+//    VisitExpr(E->getOperand());
+}
+ */
 
 
 

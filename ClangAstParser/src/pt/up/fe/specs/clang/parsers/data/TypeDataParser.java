@@ -391,4 +391,12 @@ public class TypeDataParser {
 
     }
 
+    public static DataStore parseUnresolvedUsingTypeData(LineStream lines, ClangParserData parserData) {
+        DataStore data = parseTypeData(lines, parserData);
+
+        System.out.println("UNRESOLVED: " + data);
+
+        return data;
+    }
+
 }

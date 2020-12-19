@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 SPeCS.
+ * Copyright 2020 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,36 +11,24 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.expr;
+package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
-/**
- * Represents a C++11 noexcept expression (C++ [expr.unary.noexcept]).
- * 
- * @author JoaoBispo
- *
- */
-public class CXXNoexceptExpr extends Expr {
+public class UnresolvedUsingType extends Type {
 
-    public static final DataKey<Boolean> VALUE = KeyFactory.bool("value");
-
-    public CXXNoexceptExpr(DataStore data, Collection<? extends ClavaNode> children) {
+    public UnresolvedUsingType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-    }
-
-    public Expr getOperand() {
-        return getChild(Expr.class, 0);
     }
 
     @Override
     public String getCode() {
-        return "noexcept(" + getOperand().getCode() + ")";
+        throw new NotImplementedException(this);
     }
+
 }

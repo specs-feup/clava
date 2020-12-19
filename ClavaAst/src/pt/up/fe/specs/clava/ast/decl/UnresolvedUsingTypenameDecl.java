@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 SPeCS.
+ * Copyright 2020 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.expr;
+package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
@@ -22,25 +22,23 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 
 /**
- * Represents a C++11 noexcept expression (C++ [expr.unary.noexcept]).
+ * A dependent using declaration which was marked with typename.
  * 
- * @author JoaoBispo
+ * @author JBispo
  *
  */
-public class CXXNoexceptExpr extends Expr {
+public class UnresolvedUsingTypenameDecl extends TypeDecl {
 
-    public static final DataKey<Boolean> VALUE = KeyFactory.bool("value");
+    public static final DataKey<String> QUALIFIER = KeyFactory.string("qualifier");
 
-    public CXXNoexceptExpr(DataStore data, Collection<? extends ClavaNode> children) {
+    public static final DataKey<Boolean> IS_PACK_EXPANSION = KeyFactory.bool("isPackExpansion");
+
+    public UnresolvedUsingTypenameDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-    }
-
-    public Expr getOperand() {
-        return getChild(Expr.class, 0);
     }
 
     @Override
     public String getCode() {
-        return "noexcept(" + getOperand().getCode() + ")";
+        return "using typename " + get(QUALIFIER) + getDeclName() + (get(IS_PACK_EXPANSION) ? "..." : "") + ";";
     }
 }

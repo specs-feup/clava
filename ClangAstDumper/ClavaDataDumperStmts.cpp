@@ -65,6 +65,8 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"SizeOfPackExpr", clava::StmtNode::SIZE_OF_PACK_EXPR},
         {"ArrayInitLoopExpr", clava::StmtNode::ARRAY_INIT_LOOP_EXPR},
         {"DesignatedInitExpr", clava::StmtNode::DESIGNATED_INIT_EXPR},
+        {"CXXNoexceptExpr", clava::StmtNode::CXX_NOEXCEPT_EXPR},
+        {"CXXPseudoDestructorExpr", clava::StmtNode::CXX_PSEUDO_DESTRUCTOR_EXPR},
 
 };
 
@@ -196,7 +198,10 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpArrayInitLoopExprData(static_cast<const ArrayInitLoopExpr *>(S)); break;
         case clava::StmtNode ::DESIGNATED_INIT_EXPR:
             DumpDesignatedInitExprData(static_cast<const DesignatedInitExpr *>(S)); break;
-
+        case clava::StmtNode ::CXX_NOEXCEPT_EXPR:
+            DumpCXXNoexceptExprData(static_cast<const CXXNoexceptExpr *>(S)); break;
+        case clava::StmtNode ::CXX_PSEUDO_DESTRUCTOR_EXPR:
+            DumpCXXPseudoDestructorExprData(static_cast<const CXXPseudoDestructorExpr *>(S)); break;
 
             //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
 //            DumpCompoundAssignOperatorData(static_cast<const CompoundAssignOperator *>(S)); break;
@@ -494,7 +499,7 @@ void clava::ClavaDataDumper::DumpDeclRefExprData(const DeclRefExpr *E) {
         auto templateArgs = E->getTemplateArgs();
         for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
             auto templateArg = templateArgs + i;
-            clava::dump(templateArg->getArgument(), id);
+            clava::dump(templateArg->getArgument(), id, Context);
             //clava::dump(clava::getSource(Context, templateArg->getSourceRange()));
         }
     } else {
@@ -529,7 +534,7 @@ void clava::ClavaDataDumper::DumpDependentScopeDeclRefExprData(const DependentSc
         auto templateArgs = E->getTemplateArgs();
         for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
             auto templateArg = templateArgs + i;
-            clava::dump(templateArg->getArgument(), id);
+            clava::dump(templateArg->getArgument(), id, Context);
             //clava::dump(clava::getSource(Context, templateArg->getSourceRange()));
         }
     } else {
@@ -564,7 +569,7 @@ void clava::ClavaDataDumper::DumpOverloadExprData(const OverloadExpr *E) {
         auto templateArgs = E->getTemplateArgs();
         for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
             auto templateArg = templateArgs + i;
-            clava::dump(templateArg->getArgument(), id);
+            clava::dump(templateArg->getArgument(), id, Context);
             //clava::dump(clava::getSource(Context, templateArg->getSourceRange()));
         }
     } else {
@@ -689,6 +694,24 @@ void clava::ClavaDataDumper::DumpCXXDependentScopeMemberExprData(const CXXDepend
     clava::dump(E->isArrow());
     clava::dump(E->getMemberNameInfo().getAsString());
 
+    clava::dump(E->isImplicitAccess());
+    clava::dump(E->getQualifier(), Context);
+    clava::dump(E->hasTemplateKeyword());
+
+    // Dump template arguments
+    if(E->hasExplicitTemplateArgs()) {
+        // Number of template args
+        clava::dump(E->getNumTemplateArgs());
+
+        auto templateArgs = E->getTemplateArgs();
+        for (unsigned i = 0; i < E->getNumTemplateArgs(); ++i) {
+            auto templateArg = templateArgs + i;
+            clava::dump(templateArg->getArgument(), id, Context);
+        }
+    } else {
+        clava::dump(0);
+    }
+
  }
 
 void clava::ClavaDataDumper::DumpUnaryOperatorData(const UnaryOperator *E) {
@@ -806,7 +829,7 @@ void clava::ClavaDataDumper::DumpLambdaExprData(const LambdaExpr *E) {
         // Template args
         clava::dumpSize(E->getPartialArguments().size());
         for(auto partialArg : E->getPartialArguments()) {
-            clava::dump(partialArg, id);
+            clava::dump(partialArg, id, Context);
         }
     } else {
         clava::dump(0);
@@ -834,3 +857,24 @@ void clava::ClavaDataDumper::DumpLambdaExprData(const LambdaExpr *E) {
     }
 
  }
+
+void clava::ClavaDataDumper::DumpCXXNoexceptExprData(const CXXNoexceptExpr *E) {
+    DumpExprData(E);
+
+//    clava::dump(clava::getId(E->getOperand(), id));
+    clava::dump(E->getValue());
+}
+
+void clava::ClavaDataDumper::DumpCXXPseudoDestructorExprData(const CXXPseudoDestructorExpr *E) {
+    DumpExprData(E);
+
+    if(E->hasQualifier()) {
+        clava::dump(E->getQualifier(), Context);
+    } else {
+        clava::dump("");
+    }
+
+    clava::dump(E->isArrow());
+    clava::dump(clava::getId(E->getDestroyedType(), id));
+}
+
