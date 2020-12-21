@@ -635,19 +635,44 @@ void ClangAstDumper::VisitTemplateArgument(const TemplateArgument& templateArg) 
             // Do nothing
             break;
         case TemplateArgument::ArgKind::Template:
+            VisitTemplateName(templateArg.getAsTemplate());
+            break;
+            /*
         {
             TemplateName templateName = templateArg.getAsTemplate();
             switch(templateName.getKind()) {
                 case TemplateName::NameKind::Template:
                     VisitDeclTop(templateName.getAsTemplateDecl());
                     break;
+                case TemplateName::NameKind::QualifiedTemplate:
+                    VisitDeclTop(templateName.getAsQualifiedTemplateName()->getTemplateDecl());
+                    break;
                 default:
                     throw std::invalid_argument("ClangAstDumper::VisitTemplateArgument(): TemplateName case not implemented, '" +
                                                 clava::TEMPLATE_NAME_KIND[templateName.getKind()] + "'");
             }
             break;
-        }
 
+        }
+*/
         default: throw std::invalid_argument("ClangAstDumper::VisitTemplateArgument(): Case not implemented, '"+clava::TEMPLATE_ARG_KIND[templateArg.getKind()]+"'");
+    }
+};
+
+void ClangAstDumper::VisitTemplateName(const TemplateName& templateName) {
+
+    switch(templateName.getKind()) {
+        case TemplateName::NameKind::Template:
+            VisitDeclTop(templateName.getAsTemplateDecl());
+            break;
+        case TemplateName::NameKind::QualifiedTemplate:
+            VisitDeclTop(templateName.getAsQualifiedTemplateName()->getTemplateDecl());
+            break;
+        case TemplateName::NameKind::SubstTemplateTemplateParm:
+            VisitDeclTop(templateName.getAsSubstTemplateTemplateParm()->getParameter());
+            VisitTemplateName(templateName.getAsSubstTemplateTemplateParm()->getReplacement());
+        default:
+            throw std::invalid_argument("ClangAstDumper::VisitTemplateArgument(): TemplateName case not implemented, '" +
+                                        clava::TEMPLATE_NAME_KIND[templateName.getKind()] + "'");
     }
 };

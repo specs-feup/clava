@@ -28,6 +28,8 @@ import pt.up.fe.specs.clava.ast.expr.CXXDependentScopeMemberExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNamedCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXNoexceptExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXPseudoDestructorExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXTypeidExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
@@ -326,6 +328,11 @@ public class ExprDataParser {
         data.add(CXXDependentScopeMemberExpr.IS_ARROW, LineStreamParsers.oneOrZero(lines));
         data.add(CXXDependentScopeMemberExpr.MEMBER_NAME, lines.nextLine());
 
+        data.add(CXXDependentScopeMemberExpr.IS_IMPLICIT_ACCESS, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXDependentScopeMemberExpr.QUALIFIER, lines.nextLine());
+        data.add(CXXDependentScopeMemberExpr.HAS_TEMPLATE_KEYWORD, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXDependentScopeMemberExpr.TEMPLATE_ARGUMENTS, ClavaDataParsers.templateArguments(lines, dataStore));
+
         return data;
     }
 
@@ -448,6 +455,24 @@ public class ExprDataParser {
         data.add(DependentScopeDeclRefExpr.QUALIFIER, lines.nextLine());
         data.add(DependentScopeDeclRefExpr.HAS_TEMPLATE_KEYWORD, LineStreamParsers.oneOrZero(lines));
         data.add(DependentScopeDeclRefExpr.TEMPLATE_ARGUMENTS, ClavaDataParsers.templateArguments(lines, dataStore));
+
+        return data;
+    }
+
+    public static DataStore parseCXXNoexceptExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(CXXNoexceptExpr.VALUE, LineStreamParsers.oneOrZero(lines));
+
+        return data;
+    }
+
+    public static DataStore parseCXXPseudoDestructorExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(CXXPseudoDestructorExpr.QUALIFIER, LineStreamParsers.optionalString(lines));
+        data.add(CXXPseudoDestructorExpr.IS_ARROW, LineStreamParsers.oneOrZero(lines));
+        dataStore.getClavaNodes().queueSetNode(data, CXXPseudoDestructorExpr.DESTROYED_TYPE, lines.nextLine());
 
         return data;
     }

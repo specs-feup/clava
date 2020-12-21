@@ -1,0 +1,89 @@
+<SetupData>
+  <dataset>
+    <entry>
+      <string>NameOfOutputJar</string>
+      <FieldValue>
+        <rawValue class="string">Clava.jar</rawValue>
+        <type>string</type>
+      </FieldValue>
+    </entry>
+    <entry>
+      <string>ClassWithMain</string>
+      <FieldValue>
+        <rawValue class="string">pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher</rawValue>
+        <type>string</type>
+      </FieldValue>
+    </entry>
+    <entry>
+      <string>Tasks</string>
+      <FieldValue>
+        <rawValue class="ListOfSetups">
+          <setupList>
+            <SetupData>
+              <dataset>
+                <entry>
+                  <string>OutputJarFilename</string>
+                  <FieldValue>
+                    <rawValue class="string"></rawValue>
+                    <type>string</type>
+                  </FieldValue>
+                </entry>
+                <entry>
+                  <string>DestinationFolder</string>
+                  <FieldValue>
+                    <rawValue class="string">./</rawValue>
+                    <type>string</type>
+                  </FieldValue>
+                </entry>
+              </dataset>
+              <setupName>Copy Task</setupName>
+            </SetupData>
+          </setupList>
+          <mapOfSetups class="linked-hash-map">
+            <entry>
+              <string>Copy Task</string>
+              <SetupData reference="../../../setupList/SetupData"/>
+            </entry>
+          </mapOfSetups>
+        </rawValue>
+        <type>setupList</type>
+      </FieldValue>
+    </entry>
+    <entry>
+      <string>ProjectName</string>
+      <FieldValue>
+        <rawValue class="string">ClavaWeaver</rawValue>
+        <type>string</type>
+      </FieldValue>
+    </entry>
+    <entry>
+      <string>OutputJarType</string>
+      <FieldValue>
+        <rawValue class="string">SubfolderZip</rawValue>
+        <type>multipleChoice</type>
+      </FieldValue>
+    </entry>
+    <entry>
+      <string>DevelopersXml</string>
+      <FieldValue>
+        <rawValue class="string"></rawValue>
+        <type>string</type>
+      </FieldValue>
+    </entry>
+    <entry>
+      <string>PomInfoFile</string>
+      <FieldValue>
+        <rawValue class="string"></rawValue>
+        <type>string</type>
+      </FieldValue>
+    </entry>
+    <entry>
+      <string>WorkspaceFolder</string>
+      <FieldValue>
+        <rawValue class="string"></rawValue>
+        <type>string</type>
+      </FieldValue>
+    </entry>
+  </dataset>
+  <setupName>EclipseDeployment</setupName>
+</SetupData>

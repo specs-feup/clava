@@ -86,6 +86,8 @@ namespace clava {
         SIZE_OF_PACK_EXPR,
         ARRAY_INIT_LOOP_EXPR,
         DESIGNATED_INIT_EXPR,
+        CXX_NOEXCEPT_EXPR,
+        CXX_PSEUDO_DESTRUCTOR_EXPR,
     };
 
     /**

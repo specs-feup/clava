@@ -59,7 +59,7 @@ public class CxxIssuesTest {
 
     @Test
     public void testClavaIssue15() {
-        new CxxTester("issues/clava_issue15.cpp").showCode().test();
+        new CxxTester("issues/clava_issue15.cpp").test();
     }
 
     @Test

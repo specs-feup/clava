@@ -58,6 +58,7 @@ import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
+import pt.up.fe.specs.clava.weaver.utils.ClavaAstMethods;
 import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.lara.LaraExtraApis;
 import pt.up.fe.specs.lara.langspec.LangSpecsXmlParser;
@@ -2017,31 +2018,8 @@ public class CxxWeaver extends ACxxWeaver {
         // .filter(CxxWeaver::lclFilter)
         // .collect(Collectors.toList());
 
-        return new TreeNodeAstMethods<>(this, ClavaNode.class, node -> CxxJoinpoints.create(node),
+        return new ClavaAstMethods(this, ClavaNode.class, node -> CxxJoinpoints.create(node),
                 node -> ClavaCommonLanguage.getJoinPointName(node), node -> node.getScopeChildren());
     }
-
-    public static boolean lclFilter(ClavaNode node) {
-        // Function
-        if (node instanceof FunctionDecl) {
-            var functionDecl = (FunctionDecl) node;
-            var declaration = functionDecl.getDeclaration();
-            var definition = functionDecl.getDefinition();
-
-            SpecsCheck.checkArgument(declaration.isPresent() || definition.isPresent(),
-                    () -> "Expected at least one of them to be present");
-
-            // XOR, if only one of them is present, current node must be one of them
-            if (declaration.isEmpty() ^ definition.isEmpty()) {
-                return true;
-            }
-
-            // Both are present, only return current node if it is the definition
-            // Using == since they must be the same object
-            return definition.get() == node;
-        }
-
-        // No other cases
-        return true;
-    }
+   
 }

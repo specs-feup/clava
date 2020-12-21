@@ -234,6 +234,7 @@ private:
     void VisitParmVarDeclChildren(const ParmVarDecl *D, std::vector<std::string> &children);
 
     void VisitTemplateDeclChildren(const TemplateDecl *D, std::vector<std::string> &children);
+    void VisitTemplateTemplateParmDeclChildren(const TemplateTemplateParmDecl * D, std::vector<std::string> &children);
     void VisitTemplateTypeParmDeclChildren(const TemplateTypeParmDecl *D, std::vector<std::string> &children);
     void VisitEnumConstantDeclChildren(const EnumConstantDecl *D, std::vector<std::string> &children);
     void VisitTypedefNameDeclChildren(const TypedefNameDecl *D, std::vector<std::string> &children);
@@ -286,6 +287,10 @@ private:
     void VisitDesignatedInitExprChildren(const DesignatedInitExpr *E, std::vector<std::string> &children);
     void VisitCXXConstructExprChildren(const CXXConstructExpr *E, std::vector<std::string> &children);
     void VisitCXXTemporaryObjectExprChildren(const CXXTemporaryObjectExpr *E, std::vector<std::string> &children);
+    void VisitCXXDependentScopeMemberExprChildren(const CXXDependentScopeMemberExpr *E, std::vector<std::string> &children);
+    void VisitCXXPseudoDestructorExprChildren(const CXXPseudoDestructorExpr *E, std::vector<std::string> &children);
+
+    //void VisitCXXNoexceptExprChildren(const CXXNoexceptExpr *E, std::vector<std::string> &children);
 
 
 
@@ -298,10 +303,11 @@ private:
     // Children visitors for Attributes
     void VisitAlignedAttrChildren(const AlignedAttr * A, std::vector<std::string> &children);
     void VisitTemplateArgument(const TemplateArgument& templateArg);
+    void VisitTemplateName(const TemplateName& templateArg);
 
 
 
-    // Dumpers of other kinds of information
+        // Dumpers of other kinds of information
     void dumpIdToClassMap(const void* pointer, std::string className);
     void dumpTopLevelType(const QualType &type);
     void dumpTopLevelAttr(const Attr *attr);
