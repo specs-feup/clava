@@ -1,6 +1,25 @@
 import weaver.jp.ClassJp;
 import weaver.Weaver;
 
+// Override ClassJp constructor
+var oldClassJp = ClassJp.prototype;
+var oldClass_JP_TYPES = ClassJp._JP_TYPES;
+
+ClassJp = function(astNode) {
+
+	// check for definition
+	this.originalAstNode = astNode;
+	if(astNode.getDefinition().isPresent())
+		astNode = astNode.getDefinition().get();
+		
+	// Parent constructor
+    DeclJp.call(this,astNode);
+}
+
+ClassJp.prototype = oldClassJp;
+ClassJp._JP_TYPES = oldClass_JP_TYPES;
+
+
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'id', {
 	get: function () { 
