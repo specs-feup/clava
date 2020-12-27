@@ -17,10 +17,10 @@ _lara_dummy_ = Object.defineProperty(JoinPoint.prototype, 'endLine', {
 _lara_dummy_ = Object.defineProperty(JoinPoint.prototype, 'code', {
 	get: function () {
 		try {
-		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).code;
+			return Weaver.toJs(this.astNode.getCode());
 		}
 		catch(err){
-		 return null;
+			 return null;
 		}
 	}
 });

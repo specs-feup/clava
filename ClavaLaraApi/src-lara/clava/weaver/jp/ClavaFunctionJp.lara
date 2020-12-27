@@ -8,10 +8,6 @@ var oldFunction_JP_TYPES = FunctionJp._JP_TYPES;
 
 FunctionJp = function(astNode) {
 	// check for definition
-	//println("astNodeS");
-	//println(astNode.toString());
-	//println("astNodeE");
-	
 	this.originalAstNode = astNode;
 	if(astNode.getDefinition().isPresent())
 		astNode = astNode.getDefinition().get();

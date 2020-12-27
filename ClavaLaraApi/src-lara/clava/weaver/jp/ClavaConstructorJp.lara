@@ -6,8 +6,15 @@ _lara_dummy_ = Object.defineProperty(ConstructorJp.prototype, 'superCalls', {
 		var initializers = Weaver.toJs(this.astNode.getInitializers());
 		// Filter Constructor calls
 		initializers = initializers.filter(init => init.getValue("initKind").getString() === "BaseInitializer");
+		
 		// Get Constructor calls
-		initializers = initializers.map(init => init.getValue("initExpr").getSubExpr());
+		initializers = initializers.map(function(init) {			
+			var initExpr = init.getValue("initExpr");
+			if(initExpr.getClass().getSimpleName()==="CXXConstructExpr")
+				return initExpr;
+			else return initExpr.getSubExpr();
+		});
+
 		return CommonJoinPoints.toJoinPoints(initializers);
 	}
 });
