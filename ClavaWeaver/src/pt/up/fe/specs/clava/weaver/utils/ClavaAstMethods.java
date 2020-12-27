@@ -45,7 +45,7 @@ public class ClavaAstMethods extends TreeNodeAstMethods<ClavaNode> {
     @Override
     protected Object[] getChildrenImpl(ClavaNode node) {
         var children = node.getChildren().stream()
-                .filter(ClavaAstMethods::lclFilter)
+                //.filter(ClavaAstMethods::lclFilter)
                 .toArray();
         return children;
     }
