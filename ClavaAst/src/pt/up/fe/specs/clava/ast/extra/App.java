@@ -622,6 +622,40 @@ public class App extends ClavaNode {
 
         return functionDeclaration;
     }
+    
+    
+    public Optional<CXXRecordDecl> getCxxRecordDeclaration(CXXRecordDecl record) {
+        return getCxxRecordDeclaration(record, false);
+    }
+
+    public Optional<CXXRecordDecl> getCxxRecordDefinition(CXXRecordDecl record) {
+        return getCxxRecordDeclaration(record, true);
+    }
+
+    private Optional<CXXRecordDecl> getCxxRecordDeclaration(CXXRecordDecl record, boolean isCompleteDefinition) {
+    	
+        // Iterate over translation units, NamespaceDecl and CXXRecordDecl without namespace are directly under TUs
+        Stream<ClavaNode> cxxRecordCandidates = getTranslationUnits().stream()
+                .flatMap(tu -> tu.getChildrenStream());
+
+        // If there is a namespace, filter the stream for the corresponding NamespaceDecl first
+        if (record.getCurrentNamespace().isPresent()) {
+            cxxRecordCandidates = cxxRecordCandidates
+                    .filter(child -> child instanceof NamespaceDecl)
+                    .map(namespaceDecl -> (NamespaceDecl) namespaceDecl)
+                    .filter(namespaceDecl -> namespaceDecl.getDeclName().equals(record.getCurrentNamespace().get()))
+                    .flatMap(namespaceDecl -> namespaceDecl.getChildrenStream());
+        }
+
+        // Find CXXRecordDecl
+        return cxxRecordCandidates.filter(child -> child instanceof CXXRecordDecl)
+                .map(child -> (CXXRecordDecl) child)
+                .filter(recordDecl -> recordDecl.getDeclName().equals(record.getDeclName()))
+                .filter(recordDecl -> recordDecl.isCompleteDefinition()==isCompleteDefinition)
+                .findFirst();
+    	
+    }
+
 
     public Optional<VarDecl> getGlobalVarDefinition(VarDecl varDecl) {
         /*

@@ -91,5 +91,9 @@ public abstract class TagDecl extends TypeDecl {
         return get(TAG_KIND);
         // return tagKind;
     }
+    
+    public Boolean isCompleteDefinition() {
+        return get(IS_COMPLETE_DEFINITION);
+    }
 
 }

@@ -170,5 +170,38 @@ public class CXXRecordDecl extends RecordDecl {
                 .map(baseSpec -> baseSpec.get(CXXBaseSpecifier.TYPE).desugarAll().get(TagType.DECL))
                 .collect(Collectors.toList());
     }
+    
+
+    /**
+     *
+     * @return the node representing the declaration of this Record, if it exists
+     */
+    public Optional<CXXRecordDecl> getDeclaration() {
+
+        // If no body, return immediately
+        if (!isCompleteDefinition()) {
+            return Optional.of(this);
+        }
+
+        // Search for the declaration
+        return getAppTry().flatMap(app -> app.getCxxRecordDeclaration(this));
+
+    }
+
+
+    /**
+     *
+     * @return the node representing the definition of this Record, if it exists
+     */
+    public Optional<CXXRecordDecl> getDefinition() {
+
+        // If has body, return immediately
+        if (isCompleteDefinition()) {
+            return Optional.of(this);
+        }
+
+        // Search for the definition
+        return getAppTry().flatMap(app -> app.getCxxRecordDefinition(this));
+    }
 
 }
