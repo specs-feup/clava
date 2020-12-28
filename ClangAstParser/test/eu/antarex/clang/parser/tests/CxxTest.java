@@ -249,6 +249,23 @@ public class CxxTest {
         new CxxTester("dependent_scope_decl_ref_expr.cpp").test();
     }
 
+    @Test
+    public void testNoExcept() {
+        new CxxTester("noexcept.cpp").test();
+    }
+
+    @Test
+    public void testPseudoDestructor() {
+        new CxxTester("pseudo_destructor.cpp").test();
+    }
+
+    /*
+    @Test
+    public void testListInitialization() {
+        new CxxTester("list_initialization.cpp").onePass().showCode().test();
+    }
+    */
+
     // @Test
     // public void testBoost() {
     // new CxxTester("boost.cpp").test();
