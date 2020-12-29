@@ -19,6 +19,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
+import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 
 public class AnyMemberInit extends CXXCtorInitializer {
 
@@ -46,6 +47,19 @@ public class AnyMemberInit extends CXXCtorInitializer {
         // System.out.println(
         // "ANY_MEMBER: " + get(ANY_MEMBER_DECL).get(FieldDecl.DECL_NAME) + "(" + get(INIT_EXPR).getCode() + ")");
 
-        return get(ANY_MEMBER_DECL).get(FieldDecl.DECL_NAME) + "(" + get(INIT_EXPR).getCode() + ")";
+        return get(ANY_MEMBER_DECL).get(FieldDecl.DECL_NAME) + "(" + getArgsCode() + ")";
     }
+
+    public String getArgsCode() {
+        var initExpr = get(INIT_EXPR);
+
+        // As suggested by Piotr Pietraszkiewicz
+        // https://github.com/specs-feup/clava/issues/20#issuecomment-751799537
+        if (initExpr instanceof CXXConstructExpr && ((CXXConstructExpr) initExpr).getArgs().isEmpty()) {
+            return "";
+        }
+
+        return initExpr.getCode();
+    }
+
 }
