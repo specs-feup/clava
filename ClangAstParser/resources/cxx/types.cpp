@@ -7,6 +7,16 @@ class array {
 };
 */
 
+template <class T> class Base {
+
+};
+
+template <class T> class A : public Base<T> {
+  using typename Base<T>::foo;
+};
+
+//using typename Base<int>::NestedBase;
+
 int foo();
 
 int main() {

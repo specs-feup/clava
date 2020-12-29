@@ -33,8 +33,8 @@ public class CxxIssuesTest {
     }
 
     @Test
-    public void testClavaIssue9() {
-        new CxxTester("issues/clava_issue9.h").test();
+    public void testClavaIssue09() {
+        new CxxTester("issues/clava_issue09.h").test();
     }
 
     @Test
@@ -75,5 +75,15 @@ public class CxxIssuesTest {
     @Test
     public void testClavaIssue19() {
         new CxxTester("issues/clava_issue19.cpp").test();
+    }
+
+    @Test
+    public void testClavaIssue20() {
+        new CxxTester("issues/clava_issue20.cpp").test();
+    }
+
+    @Test
+    public void testClavaIssue21() {
+        new CxxTester("issues/clava_issue21.cpp").test();
     }
 }

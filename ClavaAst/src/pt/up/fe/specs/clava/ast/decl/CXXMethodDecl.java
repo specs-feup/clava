@@ -221,6 +221,11 @@ public class CXXMethodDecl extends FunctionDecl {
         // Add except
         // code.append(getCodeExcept());
 
+        // Make method declaration pure
+        if (get(IS_PURE) && get(IS_VIRTUAL)) {
+            code.append(" = 0");
+        }
+
         return code.toString();
     }
 

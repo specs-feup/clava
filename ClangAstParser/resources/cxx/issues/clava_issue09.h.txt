@@ -1,5 +1,5 @@
-#ifndef _CLAVA_ISSUE9_H_
-#define _CLAVA_ISSUE9_H_
+#ifndef _CLAVA_ISSUE09_H_
+#define _CLAVA_ISSUE09_H_
 
 
 class Color {
@@ -19,7 +19,7 @@ class Cat {
    
    
    public:
-   Cat() : m_age(5), m_color(Color()) {
+   Cat() : m_age(5), m_color() {
    }
    
    void miau(int times);
