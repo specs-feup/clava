@@ -81,4 +81,9 @@ public class CxxIssuesTest {
     public void testClavaIssue20() {
         new CxxTester("issues/clava_issue20.cpp").test();
     }
+
+    @Test
+    public void testClavaIssue21() {
+        new CxxTester("issues/clava_issue21.cpp").test();
+    }
 }
