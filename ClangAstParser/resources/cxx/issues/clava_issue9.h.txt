@@ -19,7 +19,7 @@ class Cat {
    
    
    public:
-   Cat() : m_age(5), m_color(Color()) {
+   Cat() : m_age(5), m_color() {
    }
    
    void miau(int times);
