@@ -33,8 +33,8 @@ public class CxxIssuesTest {
     }
 
     @Test
-    public void testClavaIssue9() {
-        new CxxTester("issues/clava_issue9.h").test();
+    public void testClavaIssue09() {
+        new CxxTester("issues/clava_issue09.h").test();
     }
 
     @Test

@@ -1,5 +1,5 @@
-#ifndef _CLAVA_ISSUE9_H_
-#define _CLAVA_ISSUE9_H_
+#ifndef _CLAVA_ISSUE09_H_
+#define _CLAVA_ISSUE09_H_
 
 
 class Color {
