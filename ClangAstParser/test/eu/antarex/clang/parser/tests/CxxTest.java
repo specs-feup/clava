@@ -259,12 +259,15 @@ public class CxxTest {
         new CxxTester("pseudo_destructor.cpp").test();
     }
 
-    /*
     @Test
-    public void testListInitialization() {
-        new CxxTester("list_initialization.cpp").onePass().showCode().test();
+    public void testOperator() {
+        new CxxTester("operator.cpp").test();
     }
-    */
+
+    // @Test
+    // public void testListInitialization() {
+    // new CxxTester("list_initialization.cpp").onePass().showCode().test();
+    // }
 
     // @Test
     // public void testBoost() {
