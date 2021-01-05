@@ -164,6 +164,7 @@ namespace clava {
         void DumpBinaryOperatorData(const BinaryOperator *E);
         void DumpCallExprData(const CallExpr *E);
         void DumpCXXMemberCallExprData(const CXXMemberCallExpr *E);
+        //void DumpCXXOperatorCallExprData(const CXXOperatorCallExpr *E);
         void DumpCXXTypeidExprData(const CXXTypeidExpr *E);
         void DumpExplicitCastExprData(const ExplicitCastExpr *E);
         void DumpCXXNamedCastExprData(const CXXNamedCastExpr *E);

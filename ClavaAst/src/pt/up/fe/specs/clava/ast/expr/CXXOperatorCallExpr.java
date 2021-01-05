@@ -14,52 +14,41 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.language.CXXOperator;
-import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 public class CXXOperatorCallExpr extends CallExpr {
+
+    /// DATAKEYS BEGIN
+    //
+    // public final static DataKey<Boolean> IS_ASSIGNMENT_OP = KeyFactory.bool("isAssignmentOp");
+    //
+    // public final static DataKey<Boolean> IS_INFIX_BINARY_OP = KeyFactory.bool("isInfixBinaryOp");
+    //
+    /// DATAKEYS END
 
     public CXXOperatorCallExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
-    // public CXXOperatorCallExpr(ExprData exprData, ClavaNodeInfo info, Expr function, List<? extends Expr> args) {
-    // this(exprData, info, SpecsCollections.concat(function, args));
-    // }
-    //
-    // private CXXOperatorCallExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXOperatorCallExpr(getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public String getCode() {
+        return getOperator().getCode(getArgs());
+    }
 
+    public CXXOperator getOperator() {
         // Should return string representing the operator
         String operatorRefname = getCallee().getCode();
 
-        CXXOperator cxxOperator = CXXOperator.getHelper().fromValue(operatorRefname);
-
-        // String code = cxxOperator.getCode(getArgs());
-        // if (code.startsWith("it ++")) {
-        // System.out.println("CODE:" + code);
-        // }
-
-        return cxxOperator.getCode(getArgs());
+        return CXXOperator.getHelper().fromValue(operatorRefname);
     }
 
-    @Override
-    public List<String> getCallMemberNames() {
-        throw new NotImplementedException(getClass());
-    }
+    // @Override
+    // public List<String> getCallMemberNames() {
+    // throw new NotImplementedException(getClass());
+    // }
 
 }
