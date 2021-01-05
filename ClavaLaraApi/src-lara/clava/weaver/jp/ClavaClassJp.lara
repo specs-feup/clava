@@ -5,11 +5,14 @@ import weaver.Weaver;
 var oldClassJp = ClassJp.prototype;
 var oldClass_JP_TYPES = ClassJp._JP_TYPES;
 
-ClassJp = function(astNode) {
-
+ClassJp = function(astNode, getDefinition) {
+	// By default, it gets the definition
+	getDefinition = typeof getDefinition !== 'undefined' ? getDefinition : true;
+	
+	//println("getDefinition:" + astNode.getDefinition().isPresent() && getDefinition);
 	// check for definition
 	this.originalAstNode = astNode;
-	if(astNode.getDefinition().isPresent())
+	if(astNode.getDefinition().isPresent() && getDefinition)
 		astNode = astNode.getDefinition().get();
 		
 	// Parent constructor
@@ -60,13 +63,16 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'allSuperClasses', {
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, '_allMethods', {
 	get: function () {
-		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getMethods()));
+		var methods = Weaver.toJs(this.astNode.getMethods());
+		methods = methods.map(method=> method.getDefinition().isPresent()?method.getDefinition().get():method);
+		return CommonJoinPoints.toJoinPoints(Weaver.toJs(methods));
 	}
 });
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'allMethods', {
 	get: function () {		
-		return this._allMethods.filter(method => method.hasBody);
+		//return this._allMethods.filter(method => method.hasBody);
+		return this._allMethods;
 	}
 });
 
@@ -94,12 +100,22 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, '_kind', {
 	}
 });
 
-// TODO
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'isCustom', {
-	get: function () {
-	
+	get: function () {	
 		return this.ancestor("file") != null;
 	
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'children', {
+	get: function () {
+		return new ClassJp(this.originalAstNode,false)._children;
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'members', {
+	get: function () {
+		return  this.fields.concat(this.allMethods);
 	}
 });
 

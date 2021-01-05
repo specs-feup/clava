@@ -14,10 +14,4 @@ _lara_dummy_ = Object.defineProperty(MethodJp.prototype, 'class', {
 
 
 
-// TODO
-_lara_dummy_ = Object.defineProperty(MethodJp.prototype, 'isCustom', {
-	get: function () {
-		//return true;
-		return this.class.isCustom && this.hasBody;		 
-	}
-});
+
