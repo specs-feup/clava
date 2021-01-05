@@ -41,7 +41,7 @@ public class CxxProblematicTester {
     @Test
     public void testOperator() {
         // GCC on Jenkins machine does not support .operator bool()
-        new CxxTester("operator.cpp").test();
+        new CxxTester("problematic/operator.cpp").test();
     }
 
     @Test
