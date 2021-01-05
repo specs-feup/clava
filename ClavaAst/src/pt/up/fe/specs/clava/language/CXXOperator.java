@@ -29,6 +29,11 @@ import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum CXXOperator implements StringProvider {
+
+    NEW("new"),
+    DELETE("delete"),
+    ARRAY_NEW("new[]"),
+    ARRAY_DELETE("delete[]"),
     ADDITION("+"),
     SUBTRACTION("-"),
     MULTIPLICATION("*"),
@@ -48,25 +53,27 @@ public enum CXXOperator implements StringProvider {
     DIVISION_ASSIGNMENT("/="),
     MODULO_ASSIGNMENT("%="),
     BITWISE_XOR_ASSIGNMENT("^="),
-    BITWISE_AND_ASSIGNMENN("-="),
-    BITWISE_OR_ASSIGNMENT("-="),
+    BITWISE_AND_ASSIGNMENN("&="),
+    BITWISE_OR_ASSIGNMENT("|="),
     LEFT_SHIFT("<<"),
     RIGHT_SHIFT(">>"),
-    RIGHT_SHIFT_ASSIGNMENT(">>="),
     LEFT_SHIFT_ASSIGNMENT("<<="),
+    RIGHT_SHIFT_ASSIGNMENT(">>="),
     EQUAL("=="),
     NOT_EQUAL("!="),
     LESS_THAN_OR_EQUAL("<="),
     GREATER_THAN_OR_EQUAL(">="),
+    SPACESHIP("<=>"),
     LOGICAL_AND("&&"),
     LOGICAL_OR("||"),
     INCREMENT("++", CXXOperator::getCodeUnary),
     DECREMENT("--", CXXOperator::getCodeUnary),
+    COMMA(","),
     MEMBER_SELECTED_BY_POINTER("->*"),
     DEREFERENCE("->", CXXOperator::getDereferenceCode),
     FUNCTION_CALL("()", CXXOperator::getFunctionCallCode),
-
     SUBSCRIPT("[]", (op, args) -> args.get(0).getCode() + "[" + args.get(1).getCode() + "]");
+
     // + - * / % ^ & | ~ ! = < > += -= *= /= %= ^= &= |= << >> >>= <<= == != <= >= && || ++ -- , ->* -> ( ) [ ]
 
     private final String operatorCode;
