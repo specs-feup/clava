@@ -88,6 +88,7 @@ namespace clava {
         DESIGNATED_INIT_EXPR,
         CXX_NOEXCEPT_EXPR,
         CXX_PSEUDO_DESTRUCTOR_EXPR,
+        CXX_OPERATOR_CALL_EXPR,
     };
 
     /**

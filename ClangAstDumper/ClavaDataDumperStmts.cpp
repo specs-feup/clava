@@ -53,6 +53,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CallExpr", clava::StmtNode::CALL_EXPR},
         {"CXXMemberCallExpr", clava::StmtNode::CXX_MEMBER_CALL_EXPR},
         {"CXXOperatorCallExpr", clava::StmtNode::CALL_EXPR},
+        //{"CXXOperatorCallExpr", clava::StmtNode::CXX_OPERATOR_CALL_EXPR},
         {"UserDefinedLiteral", clava::StmtNode::CALL_EXPR},
         {"CXXTypeidExpr", clava::StmtNode::CXX_TYPEID_EXPR},
         {"CXXDependentScopeMemberExpr", clava::StmtNode::CXX_DEPENDENT_SCOPE_MEMBER_EXPR},
@@ -170,6 +171,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpCallExprData(static_cast<const CallExpr *>(S)); break;
         case clava::StmtNode ::CXX_MEMBER_CALL_EXPR:
             DumpCXXMemberCallExprData(static_cast<const CXXMemberCallExpr *>(S)); break;
+//        case clava::StmtNode ::CXX_OPERATOR_CALL_EXPR:
+//            DumpCXXOperatorCallExprData(static_cast<const CXXOperatorCallExpr *>(S)); break;
         case clava::StmtNode ::CXX_TYPEID_EXPR:
             DumpCXXTypeidExprData(static_cast<const CXXTypeidExpr *>(S)); break;
         case clava::StmtNode ::EXPLICIT_CAST_EXPR:
@@ -657,6 +660,18 @@ void clava::ClavaDataDumper::DumpCXXMemberCallExprData(const CXXMemberCallExpr *
 
     clava::dump(clava::getId(E->getMethodDecl(), id));
 }
+
+/*
+void clava::ClavaDataDumper::DumpCXXOperatorCallExprData(const CXXOperatorCallExpr *E) {
+    DumpCallExprData(E);
+
+    clava::dump(E->getOperator());
+    clava::dump(E->isAssignmentOp());
+    clava::dump(E->isInfixBinaryOp());
+}
+*/
+
+
 
 //void clava::ClavaDataDumper::DumpCompoundAssignOperatorData(const CompoundAssignOperator *E) {
 //    DumpBinaryOperatorData(E);
