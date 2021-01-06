@@ -334,7 +334,7 @@ public class MemoiCodeGen {
             small = large / 2;
 
             code.append("uint");
-            code.append(small);
+            code.append(maxVarBits); // always use the same type and perform && at the end
             code.append("_t hash_");
             code.append(small);
             code.append("_bits = (hash_");
@@ -364,6 +364,21 @@ public class MemoiCodeGen {
             code.append("_bits = hash_");
             code.append(small);
             code.append("bits & mask;\n");
+        } else { // mask for small, since a larger type is used and the values are not truncated
+
+            StringBuilder mask = new StringBuilder(H);
+            for (int i = 0; i < indexBits / 4; i++) {
+
+                mask.append("f");
+            }
+
+            code.append("hash_");
+            code.append(indexBits);
+            code.append("_bits = hash_");
+            code.append(indexBits);
+            code.append("_bits & ");
+            code.append(mask);
+            code.append(";\n");
         }
     }
 
