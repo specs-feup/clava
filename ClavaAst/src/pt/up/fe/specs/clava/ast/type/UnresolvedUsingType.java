@@ -18,7 +18,6 @@ import java.util.Collection;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 public class UnresolvedUsingType extends Type {
 
@@ -26,9 +25,9 @@ public class UnresolvedUsingType extends Type {
         super(data, children);
     }
 
-    @Override
-    public String getCode() {
-        throw new NotImplementedException(this);
-    }
+    // @Override
+    // public String getCode() {
+    // throw new NotImplementedException(this);
+    // }
 
 }
