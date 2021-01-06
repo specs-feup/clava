@@ -21,7 +21,8 @@ function(target_include_directories_recursive CURRENT_TARGET INCLUDE_DIRECTORIES
 	#message(STATUS "ORIG_INCLUDES of ${CURRENT_TARGET}: '${ORIG_INCLUDES}'")
 	
 	# If not found, set to empty list
-	if(("${ORIG_INCLUDES}" MATCHES "ORIG_INCLUDES-NOTFOUND"))
+	#~ if(("${ORIG_INCLUDES}" MATCHES "ORIG_INCLUDES-NOTFOUND"))
+	if(("${ORIG_INCLUDES}" MATCHES ".*-NOTFOUND"))
 		set(ORIG_INCLUDES "")
 	endif()
 	
@@ -36,7 +37,8 @@ function(target_include_directories_recursive CURRENT_TARGET INCLUDE_DIRECTORIES
 	#message(STATUS "ORIG_LINK_LIBRARIES of ${CURRENT_TARGET}: ${ORIG_LINK_LIBRARIES}")		
 	
 	# If not found, set to empty list
-	if("${ORIG_LINK_LIBRARIES}" MATCHES "ORIG_LINK_LIBRARIES-NOTFOUND")
+	#~ if("${ORIG_LINK_LIBRARIES}" MATCHES "ORIG_LINK_LIBRARIES-NOTFOUND")
+	if("${ORIG_LINK_LIBRARIES}" MATCHES ".*-NOTFOUND")
 		set(ORIG_LINK_LIBRARIES "")
 	endif()
 	
