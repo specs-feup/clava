@@ -299,4 +299,9 @@ public class CxxTest {
     public void testExpressionDecls() {
         newTester().test("ExpressionDecls.lara", "expressionDecls.cpp");
     }
+
+    @Test
+    public void testTemplateSpecializationType() {
+        newTester().test("TemplateSpecializationType.lara", "template_specialization_type.cpp");
+    }
 }
