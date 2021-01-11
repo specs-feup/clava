@@ -269,16 +269,6 @@ public class CxxCall extends ACall {
         call.setArgument(index, (Expr) expr.getNode());
     }
 
-    /**
-     * Method required for Nashorn to disambiguate between String and CxxExpression.
-     *
-     * @param index
-     * @param expr
-     */
-    // public void setArgImpl(Integer index, CxxExpression expr) {
-    // setArgImpl(index, (AExpression) expr);
-    // }
-
     @Override
     public AExpression argImpl(int index) {
         call.checkIndex(index);

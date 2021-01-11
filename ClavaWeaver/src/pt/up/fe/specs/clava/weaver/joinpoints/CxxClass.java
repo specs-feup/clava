@@ -18,8 +18,6 @@ import java.util.List;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
-import pt.up.fe.specs.clava.ast.decl.data.CXXBaseSpecifier;
-import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
@@ -60,8 +58,7 @@ public class CxxClass extends AClass {
 
         return cxxRecordDecl.get(CXXRecordDecl.RECORD_BASES).stream()
                 // Map Decl
-                .map(baseSpec -> CxxJoinpoints.create(baseSpec.get(CXXBaseSpecifier.TYPE).get(TagType.DECL),
-                        AClass.class))
+                .map(baseSpec -> CxxJoinpoints.create(baseSpec.getBaseDecl(cxxRecordDecl), AClass.class))
                 // Collect to array
                 .toArray(size -> new AClass[size]);
     }
