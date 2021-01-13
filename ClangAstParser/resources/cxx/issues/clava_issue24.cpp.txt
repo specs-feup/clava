@@ -1,0 +1,15 @@
+namespace clt {
+   
+   struct enclose {
+      
+      struct inner {
+         static int x;
+         void f();
+      };
+   };
+   
+   int enclose::inner::x = 1;
+   void enclose::inner::f() { // member function definition
+   }
+
+}

@@ -86,4 +86,13 @@ public class CxxIssuesTest {
     public void testClavaIssue21() {
         new CxxTester("issues/clava_issue21.cpp").test();
     }
+
+    @Test
+    public void testClavaIssue24() {
+        new CxxTester("issues/clava_issue24.cpp")
+                // .showCode()
+                // .showClavaAst()
+                // .onePass()
+                .test();
+    }
 }
