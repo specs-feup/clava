@@ -160,6 +160,7 @@ public class VarDecl extends DeclaratorDecl {
         declName = declName.isEmpty() ? null : declName;
 
         code.append(getType().getCode(this, declName));
+
         code.append(getInitializationCode());
 
         // System.out.println("VARDECL CODE:" + code);

@@ -352,12 +352,15 @@ public abstract class NamedDecl extends Decl {
     }
 
     public String getQualifiedName() {
-        String qualifiedPrefix = get(QUALIFIED_PREFIX);
+        var declName = getDeclName();
+
+        String qualifiedPrefix = getCurrentNamespace().orElse("");
+
         if (qualifiedPrefix.isEmpty()) {
-            return get(DECL_NAME);
+            return declName;
         }
 
-        return qualifiedPrefix + "::" + get(DECL_NAME);
+        return qualifiedPrefix + "::" + declName;
     }
 
     @Override
