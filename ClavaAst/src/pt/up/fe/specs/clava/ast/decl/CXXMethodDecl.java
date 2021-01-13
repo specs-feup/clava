@@ -119,11 +119,6 @@ public class CXXMethodDecl extends FunctionDecl {
 
     protected boolean addNamespace() {
 
-        // Do not add if inside namespace
-        if (isInsideNamespaceDecl()) {
-            return false;
-        }
-
         // Do not add if parent is a FunctionTemplateDecl
         if (getAncestorTry(FunctionTemplateDecl.class).isPresent()) {
             return false;
@@ -156,6 +151,7 @@ public class CXXMethodDecl extends FunctionDecl {
 
         // System.out.println("CXXMETHOD DECL CODE:" + getDeclarationId(useReturnType) + getCodeBody());
         // System.out.println("TREE:" + toTree());
+
         return getDeclarationId(useReturnType) + getCodeInitList() + getCodeBody();
     }
 
@@ -201,7 +197,8 @@ public class CXXMethodDecl extends FunctionDecl {
         // if (!isInsideNamespaceDecl()) {
 
         if (addNamespace()) {
-            String namespace = getNamespace(getRecordName()).map(str -> str + "::").orElse("");
+            String namespace = getCurrentNamespace(getRecordName()).map(str -> str + "::").orElse("");
+
             // String namespace = getMethodData().getNamespace();
             // namespace = namespace == null ? "" : namespace + "::";
 
