@@ -1,0 +1,21 @@
+class BaseKlass {
+   
+   
+   public:
+   virtual ~BaseKlass() noexcept {
+   }
+};
+
+
+class DerivedKlass : BaseKlass {
+   
+   
+   public:
+   int f(int x) {
+      
+      return x + 1;
+   }
+};
+
+BaseKlass *base = new BaseKlass();
+DerivedKlass *derived = dynamic_cast<DerivedKlass *>(base);

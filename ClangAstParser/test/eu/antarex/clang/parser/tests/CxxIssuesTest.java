@@ -89,10 +89,11 @@ public class CxxIssuesTest {
 
     @Test
     public void testClavaIssue24() {
-        new CxxTester("issues/clava_issue24.cpp")
-                // .showCode()
-                // .showClavaAst()
-                // .onePass()
-                .test();
+        new CxxTester("issues/clava_issue24.cpp").test();
+    }
+
+    @Test
+    public void testClavaIssue25() {
+        new CxxTester("issues/clava_issue25.cpp").test();
     }
 }

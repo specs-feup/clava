@@ -35,45 +35,20 @@ public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
         super(data, children);
     }
 
-    // private final String castName;
-    // private final String typeAsWritten;
-    // private final CastKind castKind;
-
-    // private final CXXNamedCastExprData cxxNamedCastExprdata;
-
-    // public CXXNamedCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData, ClavaNodeInfo info,
-    // Expr subExpr) {
-    //
-    // this(cxxNamedCastExprdata, exprData, info, Arrays.asList(subExpr));
-    // }
-
-    /**
-     * General constructor.
-     * 
-     * @param castKind
-     * @param location
-     */
-    // protected CXXNamedCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData, ClavaNodeInfo info,
-    // List<? extends ClavaNode> children) {
-    //
-    // super(cxxNamedCastExprdata.getCastKind(), exprData, info, children);
-    //
-    // this.cxxNamedCastExprdata = cxxNamedCastExprdata;
-    // }
-
-    // public CXXNamedCastExprData getCxxNamedCastExprdata() {
-    // return cxxNamedCastExprdata;
-    // }
-
     @Override
     public String getCode() {
         StringBuilder code = new StringBuilder();
-        // System.out.println("BEFORE:" + cxxNamedCastExprdata.getTypeAsWritten());
-        // System.out.println("AFTER:" + getTypeCode());
+
         // HACK: To deal with _Bool in C++ files while it is not properly addressed
         // ExplicitCast has the attribute 'typeAsWritten', which should be used here instead of getType()
-        // String typeCode = cxxNamedCastExprdata.getTypeAsWritten();
-        String typeCode = get(TYPE_AS_WRITTEN).getCode(this);
+
+        var typeAsWritten = get(TYPE_AS_WRITTEN);
+        String typeCode = typeAsWritten.getCode(this);
+
+        // String typeCode = typeAsWritten != null ? typeAsWritten.getCode(this)
+        // : get(TYPE).map(Type::getCode)
+        // .orElseThrow(() -> new RuntimeException("Both TYPE and TYPE_AS_WRITTEN are null"));
+
         if (typeCode.equals("_Bool") && getAncestorTry(TranslationUnit.class)
                 .map(tu -> tu.get(TranslationUnit.LANGUAGE).get(Language.C_PLUS_PLUS)).orElse(false)) {
             typeCode = "bool";
@@ -86,6 +61,7 @@ public abstract class CXXNamedCastExpr extends ExplicitCastExpr {
         // System.out.println("TYPE AS WRITTEN:" + cxxNamedCastExprdata.getTypeAsWritten());
         // code.append(cxxNamedCastExprdata.getCastName());
         code.append(get(CAST_NAME));
+
         // code.append("<").append(cxxNamedCastExprdata.getTypeAsWritten()).append(">");
         code.append("<").append(typeCode).append(">");
         code.append("(").append(getSubExpr().getCode()).append(")");
