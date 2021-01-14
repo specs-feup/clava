@@ -31,10 +31,11 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CastExpr", clava::StmtNode::CAST_EXPR},
         {"CXXFunctionalCastExpr", clava::StmtNode::CAST_EXPR},
         {"CStyleCastExpr", clava::StmtNode::EXPLICIT_CAST_EXPR},
+        {"CXXAddrspaceCastExpr ", clava::StmtNode::CXX_NAMED_CAST_EXPR},
         {"CXXConstCastExpr", clava::StmtNode::CXX_NAMED_CAST_EXPR},
+        {"CXXDynamicCastExpr", clava::StmtNode::CXX_NAMED_CAST_EXPR},
         {"CXXReinterpretCastExpr", clava::StmtNode::CXX_NAMED_CAST_EXPR},
         {"CXXStaticCastExpr", clava::StmtNode::CXX_NAMED_CAST_EXPR},
-
         {"CXXBoolLiteralExpr", clava::StmtNode::CXX_BOOL_LITERAL_EXPR},
         {"CompoundLiteralExpr", clava::StmtNode::COMPOUND_LITERAL_EXPR},
         {"InitListExpr", clava::StmtNode::INIT_LIST_EXPR},
