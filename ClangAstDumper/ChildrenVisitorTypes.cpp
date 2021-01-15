@@ -361,6 +361,8 @@ void ClangAstDumper::VisitTemplateSpecializationTypeChildren(const TemplateSpeci
         VisitTypeTop(T->getAliasedType());
     }
 
+    // Visit template delc, if present
+    VisitDeclTop(T->getTemplateName().getAsTemplateDecl());
 
 };
 

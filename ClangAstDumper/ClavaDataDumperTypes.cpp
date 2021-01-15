@@ -513,6 +513,7 @@ void clava::ClavaDataDumper::DumpTemplateSpecializationTypeData(const TemplateSp
     }
 
     clava::dump([&T](llvm::raw_string_ostream& stream){T->getTemplateName().dump(stream);});
+    clava::dump(clava::getId(T->getTemplateName().getAsTemplateDecl(), id));
 
     int numArgs = T->getNumArgs();
     clava::dump(numArgs);
