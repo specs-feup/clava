@@ -55,12 +55,16 @@ public class CxxClass extends AClass {
 
     @Override
     public AClass[] getBasesArrayImpl() {
-
-        return cxxRecordDecl.get(CXXRecordDecl.RECORD_BASES).stream()
-                // Map Decl
-                .map(baseSpec -> CxxJoinpoints.create(baseSpec.getBaseDecl(cxxRecordDecl), AClass.class))
+        return cxxRecordDecl.getBases().stream()
+                .map(decl -> CxxJoinpoints.create(decl, AClass.class))
                 // Collect to array
                 .toArray(size -> new AClass[size]);
+
+        // return cxxRecordDecl.get(CXXRecordDecl.RECORD_BASES).stream()
+        // // Map Decl
+        // .map(baseSpec -> CxxJoinpoints.create(baseSpec.getBaseDecl(cxxRecordDecl), AClass.class))
+        // // Collect to array
+        // .toArray(size -> new AClass[size]);
     }
 
 }
