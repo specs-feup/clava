@@ -20,7 +20,7 @@ const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
         //{"NamespaceAliasDecl",                     clava::DeclNode::NAMED_DECL},
         {"ObjCImplementationDecl",                 clava::DeclNode::NAMED_DECL},
         {"ParmVarDecl",                            clava::DeclNode::PARM_VAR_DECL},
-        {"TemplateDecl",                           clava::DeclNode::NAMED_DECL},
+        {"TemplateDecl",                           clava::DeclNode::NAMED_DECL}, //TEMPLATE_DECL
         {"TemplateTypeParmDecl",                   clava::DeclNode::TEMPLATE_TYPE_PARM_DECL},
         //{"TypedefDecl", clava::DeclNode::NAMED_DECL},
         {"TypeDecl",                               clava::DeclNode::TYPE_DECL},
@@ -152,6 +152,9 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl *D) {
         case clava::DeclNode::NON_TYPE_TEMPLATE_PARM_DECL:
             DumpNonTypeTemplateParmDeclData(static_cast<const NonTypeTemplateParmDecl *>(D));
             break;
+//        case clava::DeclNode::TEMPLATE_DECL:
+//            DumpTemplateDeclData(static_cast<const TemplateDecl *>(D));
+//            break;
         default:
             throw std::invalid_argument(
                     "ClangDataDumper::dump(DeclNode):: Case not implemented, '" + getName(declNode) + "'");
@@ -712,4 +715,13 @@ void clava::ClavaDataDumper::DumpNonTypeTemplateParmDeclData(const NonTypeTempla
 
 
 }
+/*
+void clava::ClavaDataDumper::DumpTemplateData(const TemplateDecl *D) {
 
+    // Hierarchy
+    DumpNamedDeclData(D);
+
+    D->getTemplatedDecl();
+
+}
+*/

@@ -32,6 +32,8 @@ namespace clava {
         RECORD_DECL,
         CXX_RECORD_DECL,
         TEMPLATE_DECL,
+        //REDECLARABLE_TEMPLATE_DECL,
+        //CLASS_TEMPLATE_DECL,
         TEMPLATE_TYPE_PARM_DECL,
         ENUM_CONSTANT_DECL,
         USING_SHADOW_DECL,

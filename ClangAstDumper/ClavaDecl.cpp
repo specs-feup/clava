@@ -26,6 +26,8 @@ const std::string clava::getName(const DeclNode declNode) {
         case clava::DeclNode::RECORD_DECL: return "RecordDecl";
         case clava::DeclNode::CXX_RECORD_DECL: return "CXXRecordDecl";
         case clava::DeclNode::TEMPLATE_DECL: return "TemplateDecl";
+        //case clava::DeclNode::REDECLARABLE_TEMPLATE_DECL: return "RedeclarableTemplateDecl";
+        //case clava::DeclNode::CLASS_TEMPLATE_DECL: return "ClassTemplateDecl";
         case clava::DeclNode::TEMPLATE_TYPE_PARM_DECL: return "TemplateTypeParmDecl";
         case clava::DeclNode::ENUM_CONSTANT_DECL: return "EnumConstantDecl";
         case clava::DeclNode::USING_SHADOW_DECL: return "UsingShadowDecl";
