@@ -304,4 +304,9 @@ public class CxxTest {
     public void testTemplateSpecializationType() {
         newTester().test("TemplateSpecializationType.lara", "template_specialization_type.cpp");
     }
+
+    @Test
+    public void testReverseIterator() {
+        newTester().test("ReverseIterator.lara", "reverse_iterator.cpp");
+    }
 }
