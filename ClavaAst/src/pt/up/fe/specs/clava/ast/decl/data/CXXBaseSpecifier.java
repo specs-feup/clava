@@ -13,21 +13,17 @@
 
 package pt.up.fe.specs.clava.ast.decl.data;
 
-import java.util.stream.Collectors;
-
 import org.suikasoft.jOptions.DataStore.ADataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.utils.Typable;
-import pt.up.fe.specs.util.SpecsCheck;
 
 public class CXXBaseSpecifier extends ADataClass<CXXBaseSpecifier> implements Typable {
 
@@ -113,7 +109,7 @@ public class CXXBaseSpecifier extends ADataClass<CXXBaseSpecifier> implements Ty
      * @return the declaration of the class of this base
      */
     public Decl getBaseDecl(ClavaNode sourceNode) {
-        var classType = get(TYPE);
+        var classType = get(TYPE).desugarAll();
 
         // TagType has decl directly available
         if (classType instanceof TagType) {
@@ -122,21 +118,31 @@ public class CXXBaseSpecifier extends ADataClass<CXXBaseSpecifier> implements Ty
 
         // TemplateSpecializationType has the class name
         if (classType instanceof TemplateSpecializationType) {
-            var className = classType.get(TemplateSpecializationType.TEMPLATE_NAME);
 
-            var decls = sourceNode.getApp().getDescendantsStream()
-                    .filter(node -> node instanceof CXXRecordDecl)
-                    .map(record -> (CXXRecordDecl) record)
-                    .filter(record -> record.getDeclName().equals(className))
-                    .collect(Collectors.toList());
+            var templateClass = classType.get(TemplateSpecializationType.TEMPLATE_DECL)
+                    .orElseThrow(() -> new RuntimeException("Could not find a declaration for the class with name '"
+                            + classType.get(TemplateSpecializationType.TEMPLATE_NAME) + "'"));
 
-            SpecsCheck.checkArgument(!decls.isEmpty(),
-                    () -> "Could not find a declaration for the class with name '" + className + "'");
+            // SpecsCheck.checkArgument(templateClass instanceof ClassTemplateDecl,
+            // () -> "Expected class to be '" + ClassTemplateDecl.class + "', found '" + templateClass.getClass()
+            // + "'");
 
-            // Prioritize definition
-            return decls.stream()
-                    .filter(record -> record.isCompleteDefinition())
-                    .findFirst().orElse(decls.get(0));
+            return templateClass.getTemplateDecl();
+            // var className = classType.get(TemplateSpecializationType.TEMPLATE_NAME);
+            // System.out.println("TEMPLATE DECL: " + classType.get(TemplateSpecializationType.TEMPLATE_DECL));
+            // var decls = sourceNode.getApp().getDescendantsStream()
+            // .filter(node -> node instanceof CXXRecordDecl)
+            // .map(record -> (CXXRecordDecl) record)
+            // .filter(record -> record.getDeclName().equals(className))
+            // .collect(Collectors.toList());
+            //
+            // SpecsCheck.checkArgument(!decls.isEmpty(),
+            // () -> "Could not find a declaration for the class with name '" + className + "'");
+            //
+            // // Prioritize definition
+            // return decls.stream()
+            // .filter(record -> record.isCompleteDefinition())
+            // .findFirst().orElse(decls.get(0));
         }
 
         throw new RuntimeException("Not yet implemented for class " + classType.getClass() + ": " + classType);
