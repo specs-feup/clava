@@ -26,6 +26,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.TemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentType;
 
@@ -38,6 +39,8 @@ public class TemplateSpecializationType extends Type {
     public final static DataKey<Optional<Type>> ALIASED_TYPE = KeyFactory.optional("aliasedType");
 
     public final static DataKey<String> TEMPLATE_NAME = KeyFactory.string("templateName");
+
+    public final static DataKey<Optional<TemplateDecl>> TEMPLATE_DECL = KeyFactory.optional("templateDecl");
 
     public final static DataKey<List<TemplateArgument>> TEMPLATE_ARGUMENTS = KeyFactory
             .generic("templateArguments", (List<TemplateArgument>) new ArrayList<TemplateArgument>());

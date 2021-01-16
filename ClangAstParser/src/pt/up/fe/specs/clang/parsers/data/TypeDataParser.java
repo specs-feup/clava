@@ -267,6 +267,8 @@ public class TypeDataParser {
         parserData.getClavaNodes().queueSetOptionalNode(data, TemplateSpecializationType.ALIASED_TYPE,
                 lines.nextLine());
         data.add(TemplateSpecializationType.TEMPLATE_NAME, lines.nextLine());
+        parserData.getClavaNodes().queueSetOptionalNode(data, TemplateSpecializationType.TEMPLATE_DECL,
+                lines.nextLine());
         data.add(TemplateSpecializationType.TEMPLATE_ARGUMENTS, ClavaDataParsers.templateArguments(lines, parserData));
 
         return data;
