@@ -240,7 +240,7 @@ public abstract class NamedDecl extends Decl {
     public Optional<String> getCurrentNamespace(String recordName) {
         // Get namespace
         String namespace = getNamespace().orElse(null);
-        // String namespace = getNamespace(recordName).orElse(null);
+
         if (namespace == null) {
             return Optional.empty();
         }
@@ -273,41 +273,6 @@ public abstract class NamedDecl extends Decl {
             }
         }
 
-        /*
-        // Get namespace chain for this node
-        ClavaNode currentNode = this;
-        List<NamespaceDecl> nodeNamespace = new ArrayList<>();
-        while (currentNode != null) {
-            Optional<NamespaceDecl> namespaceDecl = currentNode.getAncestorTry(NamespaceDecl.class);
-        
-            namespaceDecl.ifPresent(node -> nodeNamespace.add(0, node));
-            currentNode = namespaceDecl.orElse(null);
-        }
-        */
-        /*
-        int prefixElementsToRemove = 0;
-        
-        // Remove elements that correspond to the same prefix in current node namespace
-        for (int i = 0; i < nodeNamespace.size(); i++) {
-            if (namespaceElements.get(i).equals(nodeNamespace.get(i).getDeclName())) {
-                prefixElementsToRemove++;
-            } else {
-                break;
-            }
-        }
-        
-        // Check if inside a class
-        var containingClass = getAncestorTry(CXXRecordDecl.class).orElse(null);
-        if (containingClass != null) {
-            // If there are still one more namespace element
-            if (namespaceElements.size() > prefixElementsToRemove
-                    // And is the same as the class where this element is contained
-                    && containingClass.getDeclName().equals(namespaceElements.get(prefixElementsToRemove))) {
-        
-                prefixElementsToRemove++;
-            }
-        }
-        */
         // Remove prefix elements
         var currentNamespaceElements = SpecsCollections.subList(namespaceElements, prefixElementsToRemove);
 
@@ -318,42 +283,18 @@ public abstract class NamedDecl extends Decl {
         return Optional.of(currentNamespaceElements.stream().collect(Collectors.joining("::")));
     }
 
-    // public Optional<String> getNamespace() {
-    // return getNamespace("");
-    // }
-
     public Optional<String> getNamespace() {
         // public Optional<String> getNamespace(String recordName) {
 
         // Qualified name has full name
-        // String qualifiedName = get(QUALIFIED_NAME);
         String qualifiedName = get(QUALIFIED_PREFIX);
 
         if (qualifiedName.isEmpty()) {
             return Optional.empty();
         }
 
-        // if (!qualifiedName.contains("::")) {
-        // return Optional.empty();
-        // }
-
         String currentString = qualifiedName;
 
-        /*
-        // Remove decl name
-        String declName = "::" + get(DECL_NAME);
-        // String declName = get(DECL_NAME);
-        SpecsCheck.checkArgument(qualifiedName.endsWith(declName),
-                () -> "Expected qualified name '" + qualifiedName + "' to end with '" + declName + "'");
-        
-        // String declSuffix = declName;
-        // if (qualifiedName.endsWith("::" + declName)) {
-        // declSuffix = "::" + declSuffix;
-        // }
-        
-        // String currentString = qualifiedName.substring(0, qualifiedName.length() - declSuffix.length());
-        String currentString = qualifiedName.substring(0, qualifiedName.length() - declName.length());
-        */
         // Remove template parameters
         int templateParamStart = currentString.indexOf('<');
         if (templateParamStart != -1) {
@@ -362,31 +303,14 @@ public abstract class NamedDecl extends Decl {
         }
 
         String namespace = currentString;
-        // String namespaceAndRecord = currentString;
-
-        // Removed check due to using the signature before decls are deanonymized, during normalization
-        // SpecsCheck.checkArgument(namespaceAndRecord.endsWith(recordName),
-        // () -> "Expected current string '" + namespaceAndRecord + "' to end with '" + recordName + "'");
-
-        // Remove record name
-        // String namespace = namespaceAndRecord.substring(0, namespaceAndRecord.length() - recordName.length());
 
         // Remove ::, if present
+        // TODO: Unnecessary now?
         if (namespace.endsWith("::")) {
             namespace = namespace.substring(0, namespace.length() - "::".length());
         }
 
         return !namespace.isEmpty() ? Optional.of(namespace) : Optional.empty();
-
-        /*
-        String namespace = parseKeyValue(parser, "namespace");
-        // SpecsLogs.debug("NAMESPACE:" + namespace);
-        // Check record and store next word
-        String record = parseKeyValue(parser, "record");
-        // SpecsLogs.debug("RECORD:" + record);
-        // SpecsLogs.debug("QUALIFIED NAME:" + data.get(CXXMethodDecl.QUALIFIED_NAME));
-        // SpecsLogs.debug("DECL NAME:" + data.get(NamedDecl.DECL_NAME));
-        */
     }
 
     public String getCurrentQualifiedName() {

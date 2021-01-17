@@ -23,6 +23,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
+import pt.up.fe.specs.util.SpecsCheck;
 
 /**
  * Represents a C++ class method declaration or definition.
@@ -367,7 +368,80 @@ public class CXXMethodDecl extends FunctionDecl {
     }
 
     public void removeRecord() {
-        set(CXXMethodDecl.RECORD, getFactory().nullDecl());
-        set(CXXMethodDecl.RECORD_ID, "null");
+        var currentRecordDecl = get(RECORD);
+
+        // Already removed
+        if (currentRecordDecl instanceof NullDecl) {
+            return;
+        }
+
+        // var currentRecordName = ((NamedDecl) currentRecordDecl).getDeclName();
+        // var currentQualifiedPrefix = get(QUALIFIED_PREFIX);
+        //
+        // SpecsCheck.checkArgument(currentQualifiedPrefix.endsWith(currentRecordName),
+        // () -> "Expected current qualified prefix (" + currentQualifiedPrefix
+        // + ") to end with the name of the current record (" + currentRecordName + ")");
+        //
+        // var endIndex = currentQualifiedPrefix.length() - currentRecordName.length();
+        // var newQualifiedPrefix = currentQualifiedPrefix.substring(0, endIndex);
+
+        var newQualifiedPrefix = getQualifiedPrefixWithoutRecord();
+
+        set(RECORD, getFactory().nullDecl());
+        set(RECORD_ID, "null");
+        set(QUALIFIED_PREFIX, newQualifiedPrefix);
+        // Removed record from qualified prefix
+    }
+
+    public String getQualifiedPrefixWithoutRecord() {
+        var currentQualifiedPrefix = get(QUALIFIED_PREFIX);
+        var currentRecordDecl = get(RECORD);
+
+        var currentRecordName = currentRecordDecl instanceof NullDecl ? ""
+                : ((NamedDecl) currentRecordDecl).getDeclName();
+
+        SpecsCheck.checkArgument(currentQualifiedPrefix.endsWith(currentRecordName),
+                () -> "Expected current qualified prefix (" + currentQualifiedPrefix
+                        + ") to end with the name of the current record (" + currentRecordName + ")");
+
+        var endIndex = currentQualifiedPrefix.length() - currentRecordName.length();
+        return currentQualifiedPrefix.substring(0, endIndex);
+    }
+
+    public void setRecord(CXXRecordDecl cxxRecordDecl) {
+
+        // var currentQualifiedPrefix = get(QUALIFIED_PREFIX);
+
+        // var currentRecordDecl = get(RECORD);
+        // System.out.println("CURRENT RECORD: " + currentRecordDecl.getClass());
+        // System.out.println("CURRENT QUALIFIED PREFIX: " + currentQualifiedPrefix);
+        // var currentRecordName = currentRecordDecl instanceof NullDecl
+        // // ? SpecsArray.last(currentQualifiedPrefix.split("::"))
+        // ? ""
+        // : ((NamedDecl) currentRecordDecl).getDeclName();
+        //
+        // SpecsCheck.checkArgument(currentQualifiedPrefix.endsWith(currentRecordName),
+        // () -> "Expected current qualified prefix (" + currentQualifiedPrefix
+        // + ") to end with the name of the current record (" + currentRecordName + ")");
+        //
+        // var endIndex = currentQualifiedPrefix.length() - currentRecordName.length();
+        // var newQualifiedPrefix = currentQualifiedPrefix.substring(0, endIndex) + cxxRecordDecl.getDeclName();
+
+        // Update qualified prefix
+        var newQualifiedPrefix = getQualifiedPrefixWithoutRecord() + cxxRecordDecl.getDeclName();
+
+        // if (newQualifiedPrefix.endsWith("::")) {
+        // newQualifiedPrefix = newQualifiedPrefix.substring(0, newQualifiedPrefix.length() - 2);
+        // }
+
+        // System.out.println("CURRENT RECORD DECL: " + currentRecordDecl.getDeclName());
+        // System.out.println("NEW RECORD DECL: " + cxxRecordDecl.getDeclName());
+        // System.out.println("CURRENT QUAL NAME: " + currentQualifiedPrefix);
+        // System.out.println("NEW QUAL NAME: " + newQualifiedPrefix);
+
+        set(QUALIFIED_PREFIX, newQualifiedPrefix);
+        set(RECORD, cxxRecordDecl);
+        set(RECORD_ID, cxxRecordDecl.getId());
+
     }
 }

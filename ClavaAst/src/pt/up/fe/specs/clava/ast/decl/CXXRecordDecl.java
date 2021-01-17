@@ -133,8 +133,7 @@ public class CXXRecordDecl extends RecordDecl {
     public void addMethod(CXXMethodDecl method) {
 
         // Set record of method
-        method.set(CXXMethodDecl.RECORD, this);
-        method.set(CXXMethodDecl.RECORD_ID, getId());
+        method.setRecord(this);
 
         var methodDeclaration = method;
 
@@ -161,6 +160,10 @@ public class CXXRecordDecl extends RecordDecl {
             // Add method
             addChild(methodDeclaration);
         }
+
+        // System.out.println("METOHD NAME: " + method.getDeclName());
+        // System.out.println("HAS DEF: " + method.hasBody());
+        // System.out.println("QUALIFIED PREFIX: " + method.getFullyQualifiedName());
 
     }
 
