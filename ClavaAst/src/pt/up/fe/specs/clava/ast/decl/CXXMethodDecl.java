@@ -151,7 +151,6 @@ public class CXXMethodDecl extends FunctionDecl {
 
         // System.out.println("CXXMETHOD DECL CODE:" + getDeclarationId(useReturnType) + getCodeBody());
         // System.out.println("TREE:" + toTree());
-
         return getDeclarationId(useReturnType) + getCodeInitList() + getCodeBody();
     }
 
@@ -206,11 +205,11 @@ public class CXXMethodDecl extends FunctionDecl {
         }
 
         // Add record if not inside record decl
-
-        if (!isInsideRecordDecl()) {
-            // code.append(getMethodData().getRecord()).append("::");
-            code.append(getRecordName()).append("::");
-        }
+        // NO LONGER NEEDED, CURRENT NAME SPACE TAKES CARE OF THAT
+        // if (!isInsideRecordDecl()) {
+        // // code.append(getMethodData().getRecord()).append("::");
+        // code.append(getRecordName()).append("::");
+        // }
 
         code.append(getTypelessCode());
 
