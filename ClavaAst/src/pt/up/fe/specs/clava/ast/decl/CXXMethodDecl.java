@@ -269,9 +269,8 @@ public class CXXMethodDecl extends FunctionDecl {
     public String getSignature() {
         String baseSignature = super.getSignature();
 
-        String namespace = getNamespace(getRecordName()).map(str -> str + "::").orElse("");
-        // String namespace = getMethodData().getNamespace();
-        // namespace = namespace == null ? "" : namespace + "::";
+        String namespace = getNamespace().map(str -> str + "::").orElse("");
+        // String namespace = getNamespace(getRecordName()).map(str -> str + "::").orElse("");
 
         var recordName = getRecordDecl().map(record -> record.getDeclName() + "::").orElse("");
         namespace = namespace + recordName;

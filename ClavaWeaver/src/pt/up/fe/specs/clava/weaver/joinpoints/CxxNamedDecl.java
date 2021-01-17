@@ -80,7 +80,7 @@ public class CxxNamedDecl extends ANamedDecl {
 
     @Override
     public String getQualifiedNameImpl() {
-        return namedDecl.getCurrentQualifiedName();
+        return namedDecl.getFullyQualifiedName();
     }
 
     @Override

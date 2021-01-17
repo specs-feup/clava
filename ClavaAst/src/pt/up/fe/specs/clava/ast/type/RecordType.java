@@ -150,8 +150,9 @@ public class RecordType extends TagType {
     */
     public Optional<String> getNamespace() {
         RecordDecl decl = getDecl();
-        String recordName = decl.get(RecordDecl.DECL_NAME);
-        return decl.getNamespace(recordName);
+        // String recordName = decl.get(RecordDecl.DECL_NAME);
+        // return decl.getNamespace(recordName);
+        return decl.getNamespace();
 
         // return Optional.ofNullable(namespace);
         /*

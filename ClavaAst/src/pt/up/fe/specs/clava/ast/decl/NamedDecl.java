@@ -30,7 +30,6 @@ import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
 import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.collections.SpecsList;
 
@@ -239,7 +238,8 @@ public abstract class NamedDecl extends Decl {
 
     public Optional<String> getCurrentNamespace(String recordName) {
         // Get namespace
-        String namespace = getNamespace(recordName).orElse(null);
+        String namespace = getNamespace().orElse(null);
+        // String namespace = getNamespace(recordName).orElse(null);
         if (namespace == null) {
             return Optional.empty();
         }
@@ -290,11 +290,12 @@ public abstract class NamedDecl extends Decl {
         return Optional.of(namespaceElements.stream().collect(Collectors.joining("::")));
     }
 
-    public Optional<String> getNamespace() {
-        return getNamespace("");
-    }
+    // public Optional<String> getNamespace() {
+    // return getNamespace("");
+    // }
 
-    public Optional<String> getNamespace(String recordName) {
+    public Optional<String> getNamespace() {
+        // public Optional<String> getNamespace(String recordName) {
 
         // Qualified name has full name
         // String qualifiedName = get(QUALIFIED_NAME);
@@ -332,19 +333,15 @@ public abstract class NamedDecl extends Decl {
             currentString = currentString.substring(0, templateParamStart);
         }
 
-        String namespaceAndRecord = currentString;
-
-        // TODO: Replace with RECORD, after CXXRecordDecl is implemented
-        // CXXRecordDecl record = getRecordDecl();
-        // String recordName = record.getDeclName();
-        // String recordName = getRecordName();
+        String namespace = currentString;
+        // String namespaceAndRecord = currentString;
 
         // Removed check due to using the signature before decls are deanonymized, during normalization
-        SpecsCheck.checkArgument(namespaceAndRecord.endsWith(recordName),
-                () -> "Expected current string '" + namespaceAndRecord + "' to end with '" + recordName + "'");
+        // SpecsCheck.checkArgument(namespaceAndRecord.endsWith(recordName),
+        // () -> "Expected current string '" + namespaceAndRecord + "' to end with '" + recordName + "'");
 
         // Remove record name
-        String namespace = namespaceAndRecord.substring(0, namespaceAndRecord.length() - recordName.length());
+        // String namespace = namespaceAndRecord.substring(0, namespaceAndRecord.length() - recordName.length());
 
         // Remove ::, if present
         if (namespace.endsWith("::")) {
@@ -374,6 +371,13 @@ public abstract class NamedDecl extends Decl {
         }
 
         return qualifiedPrefix + "::" + declName;
+    }
+
+    public String getFullyQualifiedName() {
+        var declName = getDeclName();
+        return getNamespace()
+                .map(namespace -> namespace + "::" + declName)
+                .orElse(declName);
     }
 
     @Override
