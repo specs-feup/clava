@@ -204,13 +204,6 @@ public class CXXMethodDecl extends FunctionDecl {
             code.append(namespace);
         }
 
-        // Add record if not inside record decl
-        // NO LONGER NEEDED, CURRENT NAME SPACE TAKES CARE OF THAT
-        // if (!isInsideRecordDecl()) {
-        // // code.append(getMethodData().getRecord()).append("::");
-        // code.append(getRecordName()).append("::");
-        // }
-
         code.append(getTypelessCode());
 
         // TODO: Pass above code to typelessCode

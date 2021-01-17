@@ -30,6 +30,7 @@ import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
 import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
 import pt.up.fe.specs.clava.ast.type.Type;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.collections.SpecsList;
 
@@ -248,17 +249,44 @@ public abstract class NamedDecl extends Decl {
         List<String> namespaceElements = new ArrayList<>(Arrays.asList(namespace.split("::")));
 
         // Get namespace chain for this node
+        List<ClavaNode> ancestors = this.getAncestors(Arrays.asList(NamespaceDecl.class, TagDecl.class));
+
+        int prefixElementsToRemove = 0;
+
+        SpecsCheck.checkArgument(ancestors.size() <= namespaceElements.size(),
+                () -> "Expected number of qualifier ancestors (" + ancestors.size()
+                        + ") to be less or equal than the number of namespace elements (" + namespaceElements.size()
+                        + ")");
+
+        // Remove elements that correspond to the same prefix in current node namespace
+        for (int i = 0; i < ancestors.size(); i++) {
+            var ancestor = ancestors.get(i);
+            SpecsCheck.checkArgument(ancestor instanceof NamedDecl, () -> "Expected a NamedDecl, got " + ancestor);
+
+            var namedDecl = (NamedDecl) ancestor;
+            // System.out.println("NAMESPACE " + i + ": " + namespaceElements.get(i));
+            // System.out.println("NAMED DECL " + i + ": " + namedDecl.getDeclName());
+            if (namespaceElements.get(i).equals(namedDecl.getDeclName())) {
+                prefixElementsToRemove++;
+            } else {
+                break;
+            }
+        }
+
+        /*
+        // Get namespace chain for this node
         ClavaNode currentNode = this;
         List<NamespaceDecl> nodeNamespace = new ArrayList<>();
         while (currentNode != null) {
             Optional<NamespaceDecl> namespaceDecl = currentNode.getAncestorTry(NamespaceDecl.class);
-
+        
             namespaceDecl.ifPresent(node -> nodeNamespace.add(0, node));
             currentNode = namespaceDecl.orElse(null);
         }
-
+        */
+        /*
         int prefixElementsToRemove = 0;
-
+        
         // Remove elements that correspond to the same prefix in current node namespace
         for (int i = 0; i < nodeNamespace.size(); i++) {
             if (namespaceElements.get(i).equals(nodeNamespace.get(i).getDeclName())) {
@@ -267,7 +295,7 @@ public abstract class NamedDecl extends Decl {
                 break;
             }
         }
-
+        
         // Check if inside a class
         var containingClass = getAncestorTry(CXXRecordDecl.class).orElse(null);
         if (containingClass != null) {
@@ -275,19 +303,19 @@ public abstract class NamedDecl extends Decl {
             if (namespaceElements.size() > prefixElementsToRemove
                     // And is the same as the class where this element is contained
                     && containingClass.getDeclName().equals(namespaceElements.get(prefixElementsToRemove))) {
-
+        
                 prefixElementsToRemove++;
             }
         }
-
+        */
         // Remove prefix elements
-        namespaceElements = SpecsCollections.subList(namespaceElements, prefixElementsToRemove);
+        var currentNamespaceElements = SpecsCollections.subList(namespaceElements, prefixElementsToRemove);
 
         // No more namespaces, return current namespace elements
-        if (namespaceElements.isEmpty()) {
+        if (currentNamespaceElements.isEmpty()) {
             return Optional.empty();
         }
-        return Optional.of(namespaceElements.stream().collect(Collectors.joining("::")));
+        return Optional.of(currentNamespaceElements.stream().collect(Collectors.joining("::")));
     }
 
     // public Optional<String> getNamespace() {

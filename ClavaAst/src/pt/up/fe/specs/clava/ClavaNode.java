@@ -55,6 +55,7 @@ import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
+import pt.up.fe.specs.util.classmap.ClassSet;
 import pt.up.fe.specs.util.collections.SpecsList;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -1541,5 +1542,31 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return ((NodeWithScope) this).getNodeScope()
                 .map(scope -> scope.getChildren())
                 .orElse(Collections.emptyList());
+    }
+
+    /**
+     * 
+     * 
+     * @param classes
+     * @return a list with the ancestors of the current node of the given classes. The top-most ancestor appears first
+     *         in the list
+     */
+    public List<ClavaNode> getAncestors(Collection<Class<? extends ClavaNode>> classes) {
+        var currentNode = this;
+        ClassSet<ClavaNode> classSet = new ClassSet<>();
+        classSet.addAll(classes);
+
+        List<ClavaNode> ancestors = new ArrayList<>();
+        while (currentNode != null) {
+            var parent = currentNode.getParent();
+
+            if (parent != null && classSet.contains(parent.getClass())) {
+                ancestors.add(0, parent);
+            }
+
+            currentNode = parent;
+        }
+
+        return ancestors;
     }
 }
