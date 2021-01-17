@@ -38,31 +38,20 @@ import pt.up.fe.specs.util.SpecsCollections;
  */
 public abstract class TemplateDecl extends NamedDecl {
 
+    // DATAKEYS BEGIN
+
+    /**
+     * The underlying, templated declaration.
+     */
+    // public static final DataKey<Optional<NamedDecl>> TEMPLATE_DECL = KeyFactory.optional("templateDecl");
+
+    // DATAKEYS END
+
     // private final String declName;
 
     public TemplateDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    // private final List<Decl> specializations;
-
-    // protected TemplateDecl(String declName, List<Decl> specializations, DeclData declData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // super(declName, null, declData, info, children);
-    //
-    // this.specializations = specializations;
-    // // this.declName = declName;
-    // }
-
-    // public List<Decl> getSpecializations() {
-    // return specializations;
-    // }
-
-    // @Override
-    // public String getDeclName() {
-    // return declName;
-    // }
 
     public List<NamedDecl> getTemplateParameters() {
         // return SpecsCollections.peek(getChildren(), TemplateTypeParmDecl.class);
@@ -90,6 +79,10 @@ public abstract class TemplateDecl extends NamedDecl {
     public int getNumTemplateParameters() {
         return getTemplateParameters().size();
     }
+
+    // public Decl getTemplateDecl() {
+    // return get(TEMPLATE_DECL);
+    // }
 
     public Decl getTemplateDecl() {
         int index = getNumTemplateParameters();
