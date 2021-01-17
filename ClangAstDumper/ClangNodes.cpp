@@ -463,7 +463,7 @@ void clava::dump(const TemplateName &templateName, int id, ASTContext* Context) 
             clava::dump(templateName.getAsSubstTemplateTemplateParm()->getReplacement(), id, Context);
             break;
         default:
-            throw std::invalid_argument("ClangNodes::dump(TemplateArgument&): TemplateName case in kind 'Template' not implemented, '" +
+            throw std::invalid_argument("ClangNodes::dump(TemplateName&): TemplateName case in kind 'Template' not implemented, '" +
                                         clava::TEMPLATE_NAME_KIND[templateName.getKind()] + "'");
     }
 }
