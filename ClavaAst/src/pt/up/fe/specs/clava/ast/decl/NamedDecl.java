@@ -257,13 +257,26 @@ public abstract class NamedDecl extends Decl {
             currentNode = namespaceDecl.orElse(null);
         }
 
-        // Remove elements that correspond to the same prefix in current node namespace
         int prefixElementsToRemove = 0;
+
+        // Remove elements that correspond to the same prefix in current node namespace
         for (int i = 0; i < nodeNamespace.size(); i++) {
             if (namespaceElements.get(i).equals(nodeNamespace.get(i).getDeclName())) {
                 prefixElementsToRemove++;
             } else {
                 break;
+            }
+        }
+
+        // Check if inside a class
+        var containingClass = getAncestorTry(CXXRecordDecl.class).orElse(null);
+        if (containingClass != null) {
+            // If there are still one more namespace element
+            if (namespaceElements.size() > prefixElementsToRemove
+                    // And is the same as the class where this element is contained
+                    && containingClass.getDeclName().equals(namespaceElements.get(prefixElementsToRemove))) {
+
+                prefixElementsToRemove++;
             }
         }
 
@@ -291,9 +304,9 @@ public abstract class NamedDecl extends Decl {
             return Optional.empty();
         }
 
-        if (!qualifiedName.contains("::")) {
-            return Optional.empty();
-        }
+        // if (!qualifiedName.contains("::")) {
+        // return Optional.empty();
+        // }
 
         String currentString = qualifiedName;
 
@@ -351,7 +364,7 @@ public abstract class NamedDecl extends Decl {
         */
     }
 
-    public String getQualifiedName() {
+    public String getCurrentQualifiedName() {
         var declName = getDeclName();
 
         String qualifiedPrefix = getCurrentNamespace().orElse("");

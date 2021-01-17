@@ -160,7 +160,6 @@ public class VarDecl extends DeclaratorDecl {
         declName = declName.isEmpty() ? null : declName;
 
         code.append(getType().getCode(this, declName));
-
         code.append(getInitializationCode());
 
         // System.out.println("VARDECL CODE:" + code);
@@ -194,24 +193,28 @@ public class VarDecl extends DeclaratorDecl {
      * @return the code related to the named decl, or null if no name
      */
     private String getDeclNameCode() {
+
+        return getCurrentQualifiedName();
+        /*
         // if (!hasDeclName()) {
         // return null;
         // }
-
+        
         String name = getDeclName();
-
+        
         // if (!getVarDeclData().hasVarDeclDumperInfo()) {
         // if (!getVarDeclData().hasVarDeclV2()) {
         // return name;
         // }
-
+        
         // Check if it is a static member outside of the record
         if (get(IS_STATIC_DATA_MEMBER) && get(IS_OUT_OF_LINE)) {
             // name = get(QUALIFIED_NAME);
-            name = getQualifiedName();
+            name = getCurrentQualifiedName();
         }
-
+        
         return name;
+        */
     }
 
     /*
@@ -400,7 +403,7 @@ public class VarDecl extends DeclaratorDecl {
         case EXTERN:
             return getApp().getGlobalVarDefinition(this).orElse(null);
         default:
-            SpecsLogs.msgWarn("Case not contemplated yet: " + get(VarDecl.STORAGE_CLASS));
+            SpecsLogs.warn("Case not contemplated yet: " + get(VarDecl.STORAGE_CLASS));
             return this;
         }
 
