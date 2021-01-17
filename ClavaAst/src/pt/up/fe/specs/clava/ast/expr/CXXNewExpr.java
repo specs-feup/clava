@@ -182,7 +182,15 @@ public class CXXNewExpr extends Expr {
             case CALL_INIT:
                 code.append("(").append(get(INITIALIZER).get().getCode()).append(")");
                 break;
+            case LIST_INIT:
+                // TODO: This code generation is not yet verified
+                code.append(get(INITIALIZER).get().getCode());
+                break;
             default:
+                // System.out.println("LOCATION: " + get(LOCATION));
+                // System.out.println("DATA: " + this);
+                // System.out.println("CURRENT CODE: " + code);
+                // System.out.println("CALL_INIT CODE: (" + get(INITIALIZER).get().getCode() + ")");
                 throw new NotImplementedException(get(INIT_STYLE));
             }
 
