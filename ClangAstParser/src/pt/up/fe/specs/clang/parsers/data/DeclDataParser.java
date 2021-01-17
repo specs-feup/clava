@@ -469,6 +469,7 @@ public class DeclDataParser {
     public static DataStore parseTemplateTemplateParmDeclData(LineStream lines, ClangParserData dataStore) {
         // Hierarchy
         DataStore data = parseNamedDeclData(lines, dataStore);
+        // DataStore data = parseTemplateDeclData(lines, dataStore);
 
         boolean hasDefaultArgument = LineStreamParsers.oneOrZero(lines);
         if (hasDefaultArgument) {
@@ -502,5 +503,16 @@ public class DeclDataParser {
 
         return data;
     }
+
+    // public static DataStore parseTemplateDeclData(LineStream lines, ClangParserData dataStore) {
+    // // Hierarchy
+    // DataStore data = parseNamedDeclData(lines, dataStore);
+    //
+    // // var templateDeclId = lines.nextLine();
+    // // // System.out.println("TEMPLATE DECL ID: " + templateDeclId);
+    // // dataStore.getClavaNodes().queueSetOptionalNode(data, TemplateDecl.TEMPLATE_DECL, templateDeclId);
+    //
+    // return data;
+    // }
 
 }

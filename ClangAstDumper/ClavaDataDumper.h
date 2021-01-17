@@ -126,7 +126,7 @@ namespace clava {
         void DumpStaticAssertDeclData(const StaticAssertDecl *D);
         void DumpTemplateTemplateParmDeclData(const TemplateTemplateParmDecl *D);
         void DumpNonTypeTemplateParmDeclData(const NonTypeTemplateParmDecl *D);
-        //void DumpTemplateData(const TemplateDecl *D);
+        //void DumpTemplateDeclData(const TemplateDecl *D);
 
 
         // STMTS

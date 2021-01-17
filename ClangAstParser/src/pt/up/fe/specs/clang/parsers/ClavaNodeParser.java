@@ -346,6 +346,14 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
         data.get(ClangParserData.CLAVA_NODES).getQueuedActions().stream()
                 .forEach(Runnable::run);
 
+        // for (var action : data.get(ClangParserData.CLAVA_NODES).getQueuedActions()) {
+        // try {
+        // action.run();
+        // } catch (Exception e) {
+        // throw new RunnerException("Could not complete action for node with data " + data);
+        // }
+        // }
+
         // ClavaLog.metrics("Parsed ClavaNodes: " + data.get(ClangParserData.CLAVA_NODES).getNodes().size());
     }
 

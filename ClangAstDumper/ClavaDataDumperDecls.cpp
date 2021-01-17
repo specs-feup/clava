@@ -20,7 +20,12 @@ const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
         //{"NamespaceAliasDecl",                     clava::DeclNode::NAMED_DECL},
         {"ObjCImplementationDecl",                 clava::DeclNode::NAMED_DECL},
         {"ParmVarDecl",                            clava::DeclNode::PARM_VAR_DECL},
-        {"TemplateDecl",                           clava::DeclNode::NAMED_DECL}, //TEMPLATE_DECL
+        //{"TemplateDecl",                           clava::DeclNode::TEMPLATE_DECL}, //NAMED_DECL
+        //{"RedeclarableTemplateDecl",               clava::DeclNode::REDECLARABLE_TEMPLATE_DECL},
+        {"ClassTemplateDecl",                      clava::DeclNode::NAMED_DECL}, // TEMPLATE_DECL
+        {"FunctionTemplateDecl",                   clava::DeclNode::NAMED_DECL},
+        {"TypeAliasTemplateDecl",                  clava::DeclNode::NAMED_DECL},
+        {"VarTemplateDecl",                        clava::DeclNode::NAMED_DECL},
         {"TemplateTypeParmDecl",                   clava::DeclNode::TEMPLATE_TYPE_PARM_DECL},
         //{"TypedefDecl", clava::DeclNode::NAMED_DECL},
         {"TypeDecl",                               clava::DeclNode::TYPE_DECL},
@@ -146,14 +151,20 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl *D) {
         case clava::DeclNode::STATIC_ASSERT_DECL:
             DumpStaticAssertDeclData(static_cast<const StaticAssertDecl *>(D));
             break;
-        case clava::DeclNode::TEMPLATE_TEMPLATE_PARM_DECL:
-            DumpTemplateTemplateParmDeclData(static_cast<const TemplateTemplateParmDecl *>(D));
-            break;
         case clava::DeclNode::NON_TYPE_TEMPLATE_PARM_DECL:
             DumpNonTypeTemplateParmDeclData(static_cast<const NonTypeTemplateParmDecl *>(D));
             break;
 //        case clava::DeclNode::TEMPLATE_DECL:
 //            DumpTemplateDeclData(static_cast<const TemplateDecl *>(D));
+//            break;
+        case clava::DeclNode::TEMPLATE_TEMPLATE_PARM_DECL:
+            DumpTemplateTemplateParmDeclData(static_cast<const TemplateTemplateParmDecl *>(D));
+            break;
+//        case clava::DeclNode::REDECLARABLE_TEMPLATE_DECL:
+//            DumpRedeclarableTemplateDeclData(static_cast<const RedeclarableTemplateDecl *>(D));
+//            break;
+//        case clava::DeclNode::CLASS_TEMPLATE_DECL:
+//            DumpClassTemplateDeclData(static_cast<const ClassTemplateDecl *>(D));
 //            break;
         default:
             throw std::invalid_argument(
@@ -660,6 +671,7 @@ void clava::ClavaDataDumper::DumpTemplateTemplateParmDeclData(const TemplateTemp
 
     // Hierarchy
     DumpNamedDeclData(D);
+    //DumpTemplateDeclData(D);
 
     clava::dump(D->hasDefaultArgument());
     if (D->hasDefaultArgument()) {
@@ -715,13 +727,14 @@ void clava::ClavaDataDumper::DumpNonTypeTemplateParmDeclData(const NonTypeTempla
 
 
 }
+
 /*
-void clava::ClavaDataDumper::DumpTemplateData(const TemplateDecl *D) {
+void clava::ClavaDataDumper::DumpTemplateDeclData(const TemplateDecl *D) {
 
     // Hierarchy
     DumpNamedDeclData(D);
 
-    D->getTemplatedDecl();
-
+    //clava::dump(clava::getId(D->getTemplatedDecl(), id));
 }
 */
+
