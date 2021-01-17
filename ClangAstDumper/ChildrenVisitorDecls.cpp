@@ -32,7 +32,6 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"TemplateTemplateParmDecl", clava::DeclNode::TEMPLATE_TEMPLATE_PARM_DECL},
         {"TemplateTypeParmDecl", clava::DeclNode::TEMPLATE_TYPE_PARM_DECL},
         {"EnumConstantDecl", clava::DeclNode::ENUM_CONSTANT_DECL},
-        {"NonTypeTemplateParmDecl", clava::DeclNode::VALUE_DECL},
         {"TypeAliasDecl", clava::DeclNode::TYPEDEF_NAME_DECL},
         {"TypedefDecl", clava::DeclNode::TYPEDEF_NAME_DECL},
         {"UsingDirectiveDecl", clava::DeclNode::USING_DIRECTIVE_DECL},
@@ -530,6 +529,7 @@ void ClangAstDumper::VisitTemplateDeclChildren(const TemplateDecl *D, std::vecto
     }
 
     addChild(D->getTemplatedDecl(), children);
+    //VisitDeclTop(D->getTemplatedDecl());
 }
 
 void ClangAstDumper::VisitTemplateTemplateParmDeclChildren(const TemplateTemplateParmDecl *D, std::vector<std::string> &children) {
@@ -642,7 +642,10 @@ void ClangAstDumper::VisitNonTypeTemplateParmDeclChildren(const NonTypeTemplateP
         VisitStmtTop(D->getDefaultArgument());
     }
 
-    for(unsigned int i=0; i<D->getNumExpansionTypes(); i++) {
-        VisitTypeTop(D->getExpansionType(i));
+    if(D->isExpandedParameterPack()) {
+        for(unsigned int i=0; i<D->getNumExpansionTypes(); i++) {
+            VisitTypeTop(D->getExpansionType(i));
+        }
     }
+
 }
