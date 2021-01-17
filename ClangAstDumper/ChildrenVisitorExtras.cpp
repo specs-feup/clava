@@ -26,8 +26,26 @@ void ClangAstDumper::VisitTemplateArgChildren(const TemplateArgument& templateAr
             // Do nothing
             break;
         case TemplateArgument::ArgKind::Template:
-            // Do nothing
+            VisitTemplateNameChildren(templateArg.getAsTemplate());
             break;
         default: throw std::invalid_argument("ClangAstDumper::VisitTemplateArgChildren(const TemplateArgument&): Case not implemented, '"+clava::TEMPLATE_ARG_KIND[templateArg.getKind()]+"'");
+    }
+}
+
+void ClangAstDumper::VisitTemplateNameChildren(const TemplateName& templateName) {
+    switch(templateName.getKind()) {
+        case TemplateName::NameKind::Template:
+            VisitDeclTop(templateName.getAsTemplateDecl());
+            break;
+        case TemplateName::NameKind::QualifiedTemplate:
+            VisitDeclTop(templateName.getAsQualifiedTemplateName()->getTemplateDecl());
+            break;
+        case TemplateName::NameKind::SubstTemplateTemplateParm:
+            VisitDecl(templateName.getAsSubstTemplateTemplateParm()->getParameter());
+            VisitTemplateNameChildren(templateName.getAsSubstTemplateTemplateParm()->getReplacement());
+            break;
+        default:
+            throw std::invalid_argument("ClangAstDumper::VisitTemplateNameChildren(TemplateName&): TemplateName case in kind 'Template' not implemented, '" +
+                                        clava::TEMPLATE_NAME_KIND[templateName.getKind()] + "'");
     }
 }

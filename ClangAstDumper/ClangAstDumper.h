@@ -343,6 +343,7 @@ private:
 
     // Children visitors for other types of classes
     void VisitTemplateArgChildren(const TemplateArgument& arg);
+    void VisitTemplateNameChildren(const TemplateName& templateName);
 
     /* Utility methods for DECLS */
     void dumpNumberTemplateParameters(const Decl *D, const TemplateParameterList *TPL);
