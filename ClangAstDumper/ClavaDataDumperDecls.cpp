@@ -22,10 +22,10 @@ const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
         {"ParmVarDecl",                            clava::DeclNode::PARM_VAR_DECL},
         //{"TemplateDecl",                           clava::DeclNode::TEMPLATE_DECL}, //NAMED_DECL
         //{"RedeclarableTemplateDecl",               clava::DeclNode::REDECLARABLE_TEMPLATE_DECL},
-        {"ClassTemplateDecl",                      clava::DeclNode::NAMED_DECL}, // TEMPLATE_DECL
-        {"FunctionTemplateDecl",                   clava::DeclNode::NAMED_DECL},
-        {"TypeAliasTemplateDecl",                  clava::DeclNode::NAMED_DECL},
-        {"VarTemplateDecl",                        clava::DeclNode::NAMED_DECL},
+        {"ClassTemplateDecl",                      clava::DeclNode::TEMPLATE_DECL}, // NAMED_DECL
+        {"FunctionTemplateDecl",                   clava::DeclNode::TEMPLATE_DECL},
+        {"TypeAliasTemplateDecl",                  clava::DeclNode::TEMPLATE_DECL},
+        {"VarTemplateDecl",                        clava::DeclNode::TEMPLATE_DECL},
         {"TemplateTypeParmDecl",                   clava::DeclNode::TEMPLATE_TYPE_PARM_DECL},
         //{"TypedefDecl", clava::DeclNode::NAMED_DECL},
         {"TypeDecl",                               clava::DeclNode::TYPE_DECL},
@@ -154,9 +154,9 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl *D) {
         case clava::DeclNode::NON_TYPE_TEMPLATE_PARM_DECL:
             DumpNonTypeTemplateParmDeclData(static_cast<const NonTypeTemplateParmDecl *>(D));
             break;
-//        case clava::DeclNode::TEMPLATE_DECL:
-//            DumpTemplateDeclData(static_cast<const TemplateDecl *>(D));
-//            break;
+        case clava::DeclNode::TEMPLATE_DECL:
+            DumpTemplateDeclData(static_cast<const TemplateDecl *>(D));
+            break;
         case clava::DeclNode::TEMPLATE_TEMPLATE_PARM_DECL:
             DumpTemplateTemplateParmDeclData(static_cast<const TemplateTemplateParmDecl *>(D));
             break;
@@ -670,8 +670,8 @@ void clava::ClavaDataDumper::DumpStaticAssertDeclData(const StaticAssertDecl *D)
 void clava::ClavaDataDumper::DumpTemplateTemplateParmDeclData(const TemplateTemplateParmDecl *D) {
 
     // Hierarchy
-    DumpNamedDeclData(D);
-    //DumpTemplateDeclData(D);
+    //DumpNamedDeclData(D);
+    DumpTemplateDeclData(D);
 
     clava::dump(D->hasDefaultArgument());
     if (D->hasDefaultArgument()) {
@@ -728,13 +728,23 @@ void clava::ClavaDataDumper::DumpNonTypeTemplateParmDeclData(const NonTypeTempla
 
 }
 
-/*
+
 void clava::ClavaDataDumper::DumpTemplateDeclData(const TemplateDecl *D) {
 
     // Hierarchy
     DumpNamedDeclData(D);
 
-    //clava::dump(clava::getId(D->getTemplatedDecl(), id));
+    auto templateParams = D->getTemplateParameters();
+    if(templateParams) {
+        clava::dump(templateParams->size());
+        for (auto I = templateParams->begin(), E = templateParams->end(); I != E; ++I) {
+            clava::dump(clava::getId(*I, id));
+        }
+    } else {
+        clava::dump(0);
+    }
+
+    clava::dump(clava::getId(D->getTemplatedDecl(), id));
 }
-*/
+
 

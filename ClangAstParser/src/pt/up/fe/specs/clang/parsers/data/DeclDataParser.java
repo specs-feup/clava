@@ -42,6 +42,7 @@ import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.RecordDecl;
 import pt.up.fe.specs.clava.ast.decl.StaticAssertDecl;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
+import pt.up.fe.specs.clava.ast.decl.TemplateDecl;
 import pt.up.fe.specs.clava.ast.decl.TemplateTemplateParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TemplateTypeParmDecl;
 import pt.up.fe.specs.clava.ast.decl.TypeDecl;
@@ -468,8 +469,8 @@ public class DeclDataParser {
 
     public static DataStore parseTemplateTemplateParmDeclData(LineStream lines, ClangParserData dataStore) {
         // Hierarchy
-        DataStore data = parseNamedDeclData(lines, dataStore);
-        // DataStore data = parseTemplateDeclData(lines, dataStore);
+        // DataStore data = parseNamedDeclData(lines, dataStore);
+        DataStore data = parseTemplateDeclData(lines, dataStore);
 
         boolean hasDefaultArgument = LineStreamParsers.oneOrZero(lines);
         if (hasDefaultArgument) {
@@ -504,15 +505,15 @@ public class DeclDataParser {
         return data;
     }
 
-    // public static DataStore parseTemplateDeclData(LineStream lines, ClangParserData dataStore) {
-    // // Hierarchy
-    // DataStore data = parseNamedDeclData(lines, dataStore);
-    //
-    // // var templateDeclId = lines.nextLine();
-    // // // System.out.println("TEMPLATE DECL ID: " + templateDeclId);
-    // // dataStore.getClavaNodes().queueSetOptionalNode(data, TemplateDecl.TEMPLATE_DECL, templateDeclId);
-    //
-    // return data;
-    // }
+    public static DataStore parseTemplateDeclData(LineStream lines, ClangParserData dataStore) {
+        // Hierarchy
+        DataStore data = parseNamedDeclData(lines, dataStore);
+
+        dataStore.getClavaNodes().queueSetNodeList(data, TemplateDecl.TEMPLATE_PARAMETERS,
+                LineStreamParsers.stringList(lines));
+        dataStore.getClavaNodes().queueSetOptionalNode(data, TemplateDecl.TEMPLATE_DECL, lines.nextLine());
+
+        return data;
+    }
 
 }

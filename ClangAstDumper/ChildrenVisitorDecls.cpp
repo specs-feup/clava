@@ -523,13 +523,13 @@ void ClangAstDumper::VisitTemplateDeclChildren(const TemplateDecl *D, std::vecto
     if(templateParams) {
         for (auto I = templateParams->begin(), E = templateParams->end(); I != E; ++I) {
             addChild(*I, children);
-            //VisitDeclTop(*I);
+            VisitDeclTop(*I);
         }
 
     }
 
     addChild(D->getTemplatedDecl(), children);
-    //VisitDeclTop(D->getTemplatedDecl());
+    VisitDeclTop(D->getTemplatedDecl());
 }
 
 void ClangAstDumper::VisitTemplateTemplateParmDeclChildren(const TemplateTemplateParmDecl *D, std::vector<std::string> &children) {

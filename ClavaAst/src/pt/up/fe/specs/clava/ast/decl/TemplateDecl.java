@@ -13,16 +13,15 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.extra.TemplateParameter;
-import pt.up.fe.specs.util.SpecsCheck;
-import pt.up.fe.specs.util.SpecsCollections;
 
 /**
  * The base class of all kinds of template declarations (e.g., class, function, etc.).
@@ -40,10 +39,13 @@ public abstract class TemplateDecl extends NamedDecl {
 
     // DATAKEYS BEGIN
 
+    public static final DataKey<List<NamedDecl>> TEMPLATE_PARAMETERS = KeyFactory.list("templateParameters",
+            NamedDecl.class);
+
     /**
      * The underlying, templated declaration.
      */
-    // public static final DataKey<Optional<NamedDecl>> TEMPLATE_DECL = KeyFactory.optional("templateDecl");
+    public static final DataKey<Optional<NamedDecl>> TEMPLATE_DECL = KeyFactory.optional("templateDecl");
 
     // DATAKEYS END
 
@@ -54,9 +56,11 @@ public abstract class TemplateDecl extends NamedDecl {
     }
 
     public List<NamedDecl> getTemplateParameters() {
+        return get(TEMPLATE_PARAMETERS);
+        /*        
         // return SpecsCollections.peek(getChildren(), TemplateTypeParmDecl.class);
         List<NamedDecl> templateParameters = new ArrayList<>();
-
+        
         // Number of template parameters
         int numTemplateParameters = 0;
         for (ClavaNode child : getChildren()) {
@@ -64,7 +68,7 @@ public abstract class TemplateDecl extends NamedDecl {
                 numTemplateParameters++;
             }
         }
-
+        
         // Verify they are in sequence, and NamedDecls
         for (int i = 0; i < numTemplateParameters; i++) {
             NamedDecl templateParam = getChild(NamedDecl.class, i);
@@ -72,8 +76,9 @@ public abstract class TemplateDecl extends NamedDecl {
                     () -> "Expected node to be a " + TemplateParameter.class + ": " + templateParam.getClass());
             templateParameters.add(templateParam);
         }
-
+        
         return templateParameters;
+        */
     }
 
     public int getNumTemplateParameters() {
@@ -85,8 +90,17 @@ public abstract class TemplateDecl extends NamedDecl {
     // }
 
     public Decl getTemplateDecl() {
+        return get(TEMPLATE_DECL).map(decl -> (Decl) decl).orElse(getFactory().nullDecl());
+        /*
         int index = getNumTemplateParameters();
+        
+        if (index >= getChildren().size()) {
+            SpecsLogs.warn("No template decl");
+            return null;
+        }
+        
         return (Decl) SpecsCollections.subList(getChildren(), index).get(0);
+        */
     }
 
     // Get template parameters
