@@ -253,13 +253,16 @@ public abstract class NamedDecl extends Decl {
 
         int prefixElementsToRemove = 0;
 
-        SpecsCheck.checkArgument(ancestors.size() <= namespaceElements.size(),
-                () -> "Expected number of qualifier ancestors (" + ancestors.size()
-                        + ") to be less or equal than the number of namespace elements (" + namespaceElements.size()
-                        + ")");
+        var numToCheck = Math.min(ancestors.size(), namespaceElements.size());
+        // SpecsCheck.checkArgument(ancestors.size() <= namespaceElements.size(),
+        // () -> "Expected number of qualifier ancestors ("
+        // + ancestors.stream().map(node -> ((NamedDecl) node).getDeclName()).collect(Collectors.toList())
+        // + ") to be less or equal than the number of namespace elements (" + namespaceElements
+        // + ")");
 
         // Remove elements that correspond to the same prefix in current node namespace
-        for (int i = 0; i < ancestors.size(); i++) {
+        // for (int i = 0; i < ancestors.size(); i++) {
+        for (int i = 0; i < numToCheck; i++) {
             var ancestor = ancestors.get(i);
             SpecsCheck.checkArgument(ancestor instanceof NamedDecl, () -> "Expected a NamedDecl, got " + ancestor);
 
