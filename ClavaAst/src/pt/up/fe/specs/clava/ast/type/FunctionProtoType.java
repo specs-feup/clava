@@ -88,7 +88,6 @@ public class FunctionProtoType extends FunctionType {
             codeElements.add("volatile");
         }
 
-        // String exceptCode = get(EXCEPTION_SPECIFICATION_TYPE).getCode(get(NOEXCEPT_EXPR));
         String exceptCode = get(EXCEPTION_SPECIFICATION).getCode(this);
 
         if (!exceptCode.isEmpty()) {

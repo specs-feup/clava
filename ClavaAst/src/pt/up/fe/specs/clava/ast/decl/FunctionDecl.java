@@ -434,46 +434,14 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     @Override
     public String getTypelessCode() {
         List<String> codeElements = new ArrayList<>();
-        // return getTypelessCode(true);
-        // }
-        //
-        // protected String getTypelessCode(boolean useQualifiedName) {
-        StringBuilder code = new StringBuilder();
 
-        // boolean useQualifiedName = useQualifiedName();
-        // boolean useQualifiedName = false;
-
-        // code.append(getDeclName());
         codeElements.add(getDeclName() + "(" + getParametersCode() + ")");
-
-        // if (useQualifiedName) {
-        // code.append(getQualifiedName());
-        // } else {
-        // code.append(getDeclName());
-        // }
-
-        // String parameters = getParametersCode();
-        // codeElements.add("(" + getParametersCode() + ")");
-
-        // if (!getFunctionTypeTry().isPresent()) {
-        // if (Types.getFunctionType(getType()) == null) {
-        // throw new RuntimeException("Expected type to be a function type: " + getType().toTree());
-        // // return "<no function type>";
-        // }
-
-        // Optional<Type> lastParamType = SpecsCollections.lastTry(getFunctionType().getParamTypes());
-        // boolean hasVariadicArguments = lastParamType.map(type -> type instanceof VariadicType).orElse(false);
-        // parameters = hasVariadicArguments ? parameters + ", ..." : parameters;
-
-        // code.append("(").append(parameters).append(")");
 
         var codeAfterParams = getCodeAfterParams();
         if (!codeAfterParams.isBlank()) {
             codeElements.add(codeAfterParams);
         }
-        // code.append(" ").append(getCodeAfterParams());
 
-        // return code.toString();
         return codeElements.stream().collect(Collectors.joining(" "));
     }
 
@@ -481,17 +449,6 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         return hasBody();
         // return getDefinition().map(def -> def == this).orElse(false);
     }
-
-    // private boolean useQualifiedName() {
-    // // True if this is a function declaration outside a record
-    // if (getDefinition().map(def -> def == this).orElse(false)) {
-    // boolean isInsideRecord = getAncestorTry(RecordDecl.class).isPresent();
-    // // System.out.println("FUNC DECL IS INSIDE RECORD? " + isInsideRecord + " (" + getLocation() + ")");
-    // return !isInsideRecord;
-    // }
-    //
-    // return false;
-    // }
 
     private String getCodeAfterParams() {
         FunctionType functionType = getFunctionType();
