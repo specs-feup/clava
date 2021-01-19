@@ -402,8 +402,6 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     public String getDeclarationId(boolean useReturnType) {
         List<String> codeElements = new ArrayList<>();
 
-        StringBuilder code = new StringBuilder();
-
         if (get(IS_INLINE)) {
             if (getAncestor(TranslationUnit.class).get(TranslationUnit.LANGUAGE).get(Language.GNU_INLINE)) {
                 codeElements.add("__inline__");
@@ -424,22 +422,18 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         if (useReturnType) {
             String returnType = getFunctionType().getReturnType().getCode(this);
             codeElements.add(returnType);
-            // code.append(returnType);
         }
-
-        // code.append(" ");
 
         var currentNamespace = getCurrentNamespace().map(namespace -> namespace + "::").orElse("");
         var typelessCode = currentNamespace + getTypelessCode();
         codeElements.add(typelessCode);
-        // code.append(getTypelessCode());
 
         return codeElements.stream().collect(Collectors.joining(" ")).trim();
-        // return code.toString().trim();
     }
 
     @Override
     public String getTypelessCode() {
+        List<String> codeElements = new ArrayList<>();
         // return getTypelessCode(true);
         // }
         //
@@ -449,14 +443,17 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         // boolean useQualifiedName = useQualifiedName();
         // boolean useQualifiedName = false;
 
-        code.append(getDeclName());
+        // code.append(getDeclName());
+        codeElements.add(getDeclName() + "(" + getParametersCode() + ")");
+
         // if (useQualifiedName) {
         // code.append(getQualifiedName());
         // } else {
         // code.append(getDeclName());
         // }
 
-        String parameters = getParametersCode();
+        // String parameters = getParametersCode();
+        // codeElements.add("(" + getParametersCode() + ")");
 
         // if (!getFunctionTypeTry().isPresent()) {
         // if (Types.getFunctionType(getType()) == null) {
@@ -468,11 +465,16 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         // boolean hasVariadicArguments = lastParamType.map(type -> type instanceof VariadicType).orElse(false);
         // parameters = hasVariadicArguments ? parameters + ", ..." : parameters;
 
-        code.append("(").append(parameters).append(")");
+        // code.append("(").append(parameters).append(")");
 
-        code.append(getCodeAfterParams());
+        var codeAfterParams = getCodeAfterParams();
+        if (!codeAfterParams.isBlank()) {
+            codeElements.add(codeAfterParams);
+        }
+        // code.append(" ").append(getCodeAfterParams());
 
-        return code.toString();
+        // return code.toString();
+        return codeElements.stream().collect(Collectors.joining(" "));
     }
 
     public boolean isDefinition() {

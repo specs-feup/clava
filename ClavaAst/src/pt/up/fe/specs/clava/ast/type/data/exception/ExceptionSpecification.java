@@ -48,17 +48,17 @@ public class ExceptionSpecification extends ADataClass<ExceptionSpecification> {
         case None:
             return "";
         case MSAny:
-            return " throw(...)";
+            return "throw(...)";
         case Dynamic:
             return "throw(" + get(EXCEPTION_TYPES).stream().map(Type::getCode).collect(Collectors.joining(", ")) + ")";
         case DynamicNone:
-            return " throw()";
+            return "throw()";
         case BasicNoexcept:
-            return " noexcept";
+            return "noexcept";
         case NoexceptTrue:
-            return " noexcept(true)";
+            return "noexcept(true)";
         case NoexceptFalse:
-            return " noexcept(false)";
+            return "noexcept(false)";
         default:
             throw new RuntimeException("Not implemented yet for " + get(EXCEPTION_SPECIFICATION_TYPE));
         }
