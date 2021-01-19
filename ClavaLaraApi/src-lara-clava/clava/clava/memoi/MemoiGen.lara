@@ -311,7 +311,7 @@ MemoiGen.prototype._generateFromReport = function() {
 		
 		if(site === "global") {
 			var sTmp = this._generateAll(report);
-			for(var sT of sTmp) {
+			for(var sT of sTmp.values()) {
 				s.add(sT);
 			}
 		} else {
@@ -476,7 +476,7 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 				//~ $decl.addParam("char reset");
 			//~ }
 		//~ }
-		
+
 		if(this._isDebug) {
 			var totalName = wrapperName + '_total_calls';
 			var missesName = wrapperName + '_total_misses';
@@ -495,7 +495,7 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 		
 		// generate the table (and reset) code and add it before the wrapper
 		var tableCode = MemoiCodeGen.generateTableCode(
-			dmt,
+			dmt.getTable(),
 			this._tableSize,
 			this._target._numInputs, this._target._numOutputs,
 			this._isOnline,
@@ -504,6 +504,8 @@ MemoiGen.prototype._generateGeneric = function(wrapperName, report) {
 			wrapperName
 		);
 		$function.insert("before", tableCode);
+		
+
 		
 		// generate the logic code and add it before the original call
 		var paramNames = [];
