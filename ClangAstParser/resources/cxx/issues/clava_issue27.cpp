@@ -1,0 +1,8 @@
+
+class SomeException {
+};
+
+struct Klass
+{
+  void method(int x) const throw ( SomeException );
+};
