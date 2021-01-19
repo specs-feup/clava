@@ -400,50 +400,42 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     // }
 
     public String getDeclarationId(boolean useReturnType) {
+        List<String> codeElements = new ArrayList<>();
+
         StringBuilder code = new StringBuilder();
 
-        // if (hasAttribute(AttributeKind.OpenCLKernel)) {
-        // code.append("__kernel ");
-        // }
-        // get(ATTRIBUTES).stream()
-        // .filter(attr -> attr instanceof OpenCLKernelAttr)
-        // .findFirst()
-        // .ifPresent(attr -> code.append("__kernel "));
-
-        // if (getFunctionDeclData().hasOpenCLKernelAttr()) {
-        // code.append("__kernel ");
-        // }
-
-        // if (getFunctionDeclData().isInline()) {
         if (get(IS_INLINE)) {
             if (getAncestor(TranslationUnit.class).get(TranslationUnit.LANGUAGE).get(Language.GNU_INLINE)) {
-                code.append("__inline__ ");
+                codeElements.add("__inline__");
             } else {
-                code.append("inline ");
+                codeElements.add("inline");
             }
 
         }
 
         if (get(IS_CONSTEXPR)) {
-            code.append("constexpr ");
+            codeElements.add("constexpr");
         }
 
         if (get(STORAGE_CLASS) != StorageClass.NONE) {
-            code.append(get(STORAGE_CLASS).getString()).append(" ");
+            codeElements.add(get(STORAGE_CLASS).getString());
         }
 
         if (useReturnType) {
             String returnType = getFunctionType().getReturnType().getCode(this);
-            code.append(returnType);
+            codeElements.add(returnType);
+            // code.append(returnType);
         }
 
-        code.append(" ");
+        // code.append(" ");
 
-        getCurrentNamespace().ifPresent(namespace -> code.append(namespace).append("::"));
+        var currentNamespace = getCurrentNamespace().map(namespace -> namespace + "::").orElse("");
+        var typelessCode = currentNamespace + getTypelessCode();
+        codeElements.add(typelessCode);
+        // code.append(getTypelessCode());
 
-        code.append(getTypelessCode());
-
-        return code.toString().trim();
+        return codeElements.stream().collect(Collectors.joining(" ")).trim();
+        // return code.toString().trim();
     }
 
     @Override

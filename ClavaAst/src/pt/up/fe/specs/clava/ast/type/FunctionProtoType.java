@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -77,24 +78,23 @@ public class FunctionProtoType extends FunctionType {
     // }
 
     public String getCodeAfterParams() {
-        StringBuilder code = new StringBuilder();
+        List<String> codeElements = new ArrayList<>();
 
         // Add const/volatile
         if (get(IS_CONST)) {
-            // System.out.println("CONSTTTT");
-            code.append(" const");
+            codeElements.add("const");
         }
         if (get(IS_VOLATILE)) {
-            code.append(" volatile");
+            codeElements.add("volatile");
         }
 
         // String exceptCode = get(EXCEPTION_SPECIFICATION_TYPE).getCode(get(NOEXCEPT_EXPR));
         String exceptCode = get(EXCEPTION_SPECIFICATION).getCode(this);
         if (!exceptCode.isEmpty()) {
-            code.append(" ").append(exceptCode);
+            codeElements.add(exceptCode);
         }
 
-        return code.toString();
+        return codeElements.stream().collect(Collectors.joining(" "));
     }
 
     @Override
