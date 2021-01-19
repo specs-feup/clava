@@ -90,7 +90,9 @@ public class FunctionProtoType extends FunctionType {
 
         // String exceptCode = get(EXCEPTION_SPECIFICATION_TYPE).getCode(get(NOEXCEPT_EXPR));
         String exceptCode = get(EXCEPTION_SPECIFICATION).getCode(this);
-        code.append(exceptCode);
+        if (!exceptCode.isEmpty()) {
+            code.append(" ").append(exceptCode);
+        }
 
         return code.toString();
     }
