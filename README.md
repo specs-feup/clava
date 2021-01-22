@@ -1,6 +1,8 @@
 # Clava
 Clava is a C/C++ source-to-source compiler. It applies analysis and transformations written in LARA scripts (which is based on JavaScript), and can be installed in under a minute.
 
+If you have used Clava, please consider filling the [Clava User Experience Feedback form](https://forms.gle/SioZSAv1KL7XpQ5j6) (it's short, really!)
+
 # Quickstart
 
 Tutorial on how to use Clava: [Clava Tutorial - 2018 PACT](https://github.com/specs-feup/specs-lara/tree/master/2018-PACT).
@@ -47,3 +49,7 @@ If you want to reference Clava in your work, please use the following publicatio
 # Acknowledgments
 
 This work has been partially funded by the [ANTAREX project](http://antarex-project.eu) through the EU H2020 FET-HPC program under grant no. 671623. João Bispo acknowledges the support provided by Fundação para a Ciência e a Tecnologia, Portugal, under Post-Doctoral grant SFRH/BPD/118211/2016.
+
+# Contacts
+
+[João Bispo](jbispo@fe.up.pt)
