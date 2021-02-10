@@ -44,7 +44,7 @@ Install libz package (e.g., in Ubuntu `sudo apt-get install libz-dev`)
 
 If you want to reference Clava in your work, please use the following publication:
 
-*João Bispo, and João MP Cardoso. Clava: C/C++ source-to-source compilation using LARA. SoftwareX, Volume 12, 2020, Article 100565.* [[Elsevier](https://github.com/specs-feup/clava/tree/master/ClavaWeaver)] [[bibtex](http://specs.fe.up.pt/tools/clava/clava_softwarex2020.bib)]
+*João Bispo, and João MP Cardoso. Clava: C/C++ source-to-source compilation using LARA. SoftwareX, Volume 12, 2020, Article 100565.* [[ScienceDirect](https://www.sciencedirect.com/science/article/pii/S2352711019302122)] [[bibtex](http://specs.fe.up.pt/tools/clava/clava_softwarex2020.bib)]
 
 # Acknowledgments
 
