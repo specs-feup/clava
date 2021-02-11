@@ -1,0 +1,12 @@
+import weaver.WeaverJps;
+import clava.uve.DetectStream;
+
+var UVE = {};
+
+
+UVE.linearAnalysis = function(func) {
+	println("UVE: detecting streams of function \"" + func.name + "\"");
+	var array = "foo";
+	DetectStream.detectLinear(func, array);
+}
+

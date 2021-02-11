@@ -101,6 +101,11 @@ public enum LaraApiResource implements LaraResourceProvider {
     CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
     FILE_ITERATOR("util/FileIterator.lara"),
     SINGLE_FILE("util/SingleFile.lara"),
+    
+    // UVE
+    UVE("uve/UVE.lara"),
+    UVE_DETECT("uve/DetectStream.lara"),
+    
 
     // Static objects
 

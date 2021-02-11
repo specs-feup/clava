@@ -1,0 +1,7 @@
+import weaver.WeaverJps;
+
+var DetectStream = {};
+
+DetectStream.detectLinear = function(func, arr) {
+	println(func + arr);
+}
