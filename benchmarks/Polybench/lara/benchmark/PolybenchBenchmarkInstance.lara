@@ -90,3 +90,15 @@ PolybenchBenchmarkInstance.prototype._addCode = function() {
 		Clava.addFile(clavaJPFile);	
 	}
 }
+
+
+PolybenchBenchmarkInstance.prototype.getKernel = function() {
+
+	var $call = Query.search("call", /kernel_*/).first();
+	
+	if($call === undefined) {  
+		throw "PolybenchBenchmarkInstance.getKernel: Could not find call to function that starts with 'kernel_' in benchmark " + this.getName();
+	}
+	
+	return $call;
+}
