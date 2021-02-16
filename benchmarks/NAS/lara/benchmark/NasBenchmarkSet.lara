@@ -75,11 +75,11 @@ NasBenchmarkSet.isSizeSupported = function(benchName, inputSize) {
 }
 
 NasBenchmarkSet.prototype.setBenchmarks = function() {
-	this._testBenchmarks = getBenchmarkNames().parse(arrayFromArgs(arguments));
+	this._testBenchmarks = NasBenchmarkSet.getBenchmarkNames().parse(arrayFromArgs(arguments));
 }
 
 NasBenchmarkSet.prototype.setInputSizes = function() {
-	this._testInputSizes = getInputSizes().parse(arrayFromArgs(arguments));
+	this._testInputSizes = NasBenchmarkSet.getInputSizes().parse(arrayFromArgs(arguments));
 }
 
 
