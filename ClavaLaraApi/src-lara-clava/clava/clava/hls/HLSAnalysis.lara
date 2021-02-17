@@ -2,6 +2,9 @@ import clava.hls.TraceInstrumentation;
 import clava.hls.MathAnalysis;
 import weaver.WeaverJps;
 
+/**
+ * @class
+ */
 var HLSAnalysis = {};
 
 HLSAnalysis.getJavaInterface = function() {
@@ -22,7 +25,8 @@ HLSAnalysis.getJavaInterface = function() {
  * @param {JSON} options - an optional argument to specify the HLS options. The format
  * is the following: {"B": 2, "N": 32, "P": 64}
  * If not specified, the compiler will use the values provided in the example above.
- * */
+ * 
+ */
 HLSAnalysis.applyGenericStrategies = function(func, options) {
 	if (options == null)
 		options = "{}";
