@@ -32,7 +32,7 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'id', {
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, '_qualifiedName', {
 	get: function () { 
-		return this.astNode.getQualifiedName(); 
+		return this.astNode.getFullyQualifiedName(); 
 	}
 });
 
