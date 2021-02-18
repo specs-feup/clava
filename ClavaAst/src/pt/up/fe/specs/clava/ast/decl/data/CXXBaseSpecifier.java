@@ -21,6 +21,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
+import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.utils.Typable;
@@ -143,6 +144,11 @@ public class CXXBaseSpecifier extends ADataClass<CXXBaseSpecifier> implements Ty
             // return decls.stream()
             // .filter(record -> record.isCompleteDefinition())
             // .findFirst().orElse(decls.get(0));
+        }
+
+        // TemplateTypeParmType has decl directly available
+        if (classType instanceof TemplateTypeParmType) {
+            return classType.get(TemplateTypeParmType.DECL).get();
         }
 
         throw new RuntimeException("Not yet implemented for class " + classType.getClass() + ": " + classType);
