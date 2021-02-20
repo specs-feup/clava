@@ -86,7 +86,10 @@ public enum LaraApiResource implements LaraResourceProvider {
     BATCH_PARSER("parser/BatchParser.lara"),
 
     // Stats
+    OPS_BLOCK("stats/OpsBlock.lara"),
+    OPS_COST("stats/OpsCost.lara"),
     OPS_COUNTER("stats/OpsCounter.lara"),
+    STATIC_OPS_COUNTER("stats/StaticOpsCounter.lara"),
 
     // Memoization
     MEMOI_PROF("memoi/MemoiProf.lara"),
@@ -101,11 +104,10 @@ public enum LaraApiResource implements LaraResourceProvider {
     CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
     FILE_ITERATOR("util/FileIterator.lara"),
     SINGLE_FILE("util/SingleFile.lara"),
-    
+
     // UVE
     UVE("uve/UVE.lara"),
     UVE_DETECT("uve/DetectStream.lara"),
-    
 
     // Static objects
 

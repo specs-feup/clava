@@ -1,0 +1,239 @@
+import clava.ClavaJoinPoints;
+import clava.code.GlobalVariable;
+import clava.stats.OpsBlock;
+
+import weaver.Query;
+
+import lara.util.StringSet;
+import lara.util.PrintOnce;
+import lara.code.Logger;
+
+import lara.Strings;
+
+
+/**
+ * Instruments an application so that it counts total operations in a region of code.
+ *
+ * @param {function} [filterFunction=undefined] - Function that receives an $op. If returns false, $op will not be counted.
+ */
+var StaticOpsCounter = function(filterFunction) {
+	this._counters = {}; // TODO: To remove
+	this._$counterType = ClavaJoinPoints.builtinType("long long"); // TODO: To remove
+	//this._$counterType = ClavaJoinPoints.builtinType("unsigned long long");
+	this._instrumentedFunctions = new StringSet();
+	this._filterFunction = filterFunction;
+	if(filterFunction !== undefined) {
+		println("StaticOpsCounter: filter function set");
+	}
+};
+
+// Whitelist of ops
+StaticOpsCounter._validOps = new StringSet("mul", "div", "rem", "add", "sub", "shl", "shr", "cmp", "and", "xor", "or", "l_and", "l_or", "mul_assign", "div_assign", "rem_assign", "add_assign", "sub_assign", "shl_assign", "shr_assign", "and_assign", "xor_assign", "or_assign", "post_inc", "post_dec", "pre_inc", "pre_dec");
+
+
+/*
+StaticOpsCounter.prototype.count = function($region) {
+
+	var $scope = $region.instanceOf('scope') ?  $region : $region.ancestor('scope');
+
+	if($scope === undefined) {
+		PrintOnce.message("StaticOpsCounter.instrument: Could not find scope corresponding to the region " + $region.location);
+		return;
+	}
+
+
+	return this.countStmts($scope.stmts);
+}
+*/
+
+/*
+StaticOpsCounter.prototype.countStmts = function(stmtsArray) {
+
+
+
+	// Check if it is already instrumented
+	if(this._instrumentedFunctions.has($function.jpId)) {
+		return;
+	}
+
+	this._instrumentedFunctions.add($function.jpId);
+	
+	println("StaticOpsCounter.instrument: Estimating ops of function "+$function.jpId);
+
+	var opsBlock = new OpsBlock($function.jpId);
+
+	// Go statement-by-statement
+
+	// Apply to all ops found in the region
+	for(var $op of Query.searchFrom($region, 'op')) {
+		this._countOpStatic($op);
+	}
+
+	return opsBlock;
+}
+*/
+
+
+StaticOpsCounter.prototype.count = function($function, opsBlock) {
+
+	var $function= $function.instanceOf('function') ?  $function : $function.ancestor('function');
+
+	if($function=== undefined) {
+		PrintOnce.message("StaticOpsCounter.count: Could not find function corresponding to the join point " + $function.location);
+		return;
+	}
+
+	var functionId = $function.name + "@" + $function.location;
+
+	// Check if it is already instrumented
+	//println("ID: " + $function.location);
+	if(this._instrumentedFunctions.has(functionId)) {	
+	//if(this._instrumentedFunctions.has($function.jpId)) {
+// Not working yet
+		/*
+		if(opsBlock === undefined) {
+			println("Expected opsBlock to be defined!");
+		} else {
+			opsBlock.isRecursive = true;
+		}
+		*/
+		
+		return;
+	}
+
+
+	this._instrumentedFunctions.add(functionId);
+	
+	println("StaticOpsCounter.count: Estimating ops of function "+functionId);
+
+	var opsBlock = new OpsBlock(functionId);
+
+	// Go statement-by-statement
+	var stmts = $function.body.children;
+
+	for(var $stmt of stmts) {
+		this._countOpStatic($stmt, opsBlock);
+	}
+
+	return opsBlock;
+}
+
+
+StaticOpsCounter.prototype._countOpStatic = function($stmt, opsBlock) {
+
+	// If stmt is a loop, count new block, recursively
+
+	if($stmt.instanceOf("loop")) {
+		if($stmt.kind !== "for") {
+			println("Ignoring loops that are not 'fors' (location " + $stmt.location+ ") for now");
+			return;		
+		}
+
+		var rank = $stmt.rank;
+		var nestedId = opsBlock.id + " => " + rank[rank.length - 1];
+
+		// Create block for loop
+		var nestedOpsBlock = new OpsBlock(nestedId);
+
+		// Extract iterations
+		nestedOpsBlock.repetitions = $stmt.iterationsExpr.code;
+
+		// Add to nested blocks
+		opsBlock.nestedOpsBlocks.push(nestedOpsBlock);
+
+		// Go statement-by-statement
+		var nestedStmts = $stmt.body.children;
+
+		for(var $stmt of nestedStmts) {
+			this._countOpStatic($stmt, nestedOpsBlock);
+		}
+
+		return;
+	}
+
+	// If stmt is not a loop, count ops
+	// Apply to all ops found in the stmt
+	for(var $op of Query.searchFrom($stmt, 'op')) {
+
+		// If not a valid op, continue
+		if(!this._isValidOp($op)) {
+			continue;
+		}
+	
+		//println("Op ("+$op.kind+"): " + $op.code);
+		
+		// Calculate type and bitwidth
+		var $builtinType = this._toBuiltinType($op.type);
+		var counterType = this._getCounterType($builtinType);
+		var bitwidth = $builtinType !== undefined ? $builtinType.bitWidth($op) : undefined;
+
+		// Increment counter
+		var opsId = counterType+"-"+bitwidth;
+		opsBlock.add(opsId);
+	}
+
+	// Call function recursively when function calls are found
+	for(var $call of Query.searchFrom($stmt, 'call')) {			
+		var $funcDef = $call.definition;
+		
+		if($funcDef === undefined) {
+			continue;
+		}
+		//println("FUNC DEF: " + $funcDef.joinPointType);
+		this.count($funcDef, opsBlock);
+	}	
+
+
+}
+
+
+
+
+StaticOpsCounter.prototype._getCounterType = function($builtinType) {
+	
+	if($builtinType === undefined) {
+		return undefined;
+	}
+	
+	if($builtinType.isFloat) {
+		return "flops";
+	} else if($builtinType.isInteger) {
+		return "iops";
+	} else {
+		PrintOnce.message("StaticOpsCounter: could not determine if builtinType " + $type.kind + " is integer or float");
+		return undefined;	
+	}
+}
+
+StaticOpsCounter.prototype._toBuiltinType = function($type) {
+	if($type.instanceOf("builtinType")) {
+		return $type;
+	}
+	
+	PrintOnce.message("StaticOpsCounter: could not determine builtinType of " + $type.joinPointType);
+	return undefined;
+}
+
+
+StaticOpsCounter.prototype._isValidOp = function($op) {
+	var isValid = StaticOpsCounter._validOps.has($op.kind);
+	
+	if(!isValid) {
+		return false;
+	}
+	
+	// Ignore operations inside loop headers
+	if($op.isInsideLoopHeader) {
+		return false;
+	}
+
+	//println("FILTER FUNCTION DEFINED? " + (this._filterFunction !== undefined));
+	if(this._filterFunction !== undefined) {
+		//println("Calling filter function");
+		if(!this._filterFunction($op)) {
+			return false;
+		}
+	}
+		
+	return true;
+}
