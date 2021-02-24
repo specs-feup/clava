@@ -1,4 +1,0 @@
-{
-	"names": ["2mm", "3mm", "adi", "atax", "bicg", "cholesky", "correlation", "covariance", "deriche", "doitgen", "durbin", "gemm", "gemver", "gesummv", "gramschmidt", "heat-3d", "jacobi-1d", "jacobi-2d", "lu", "ludcmp", "mvt", "seidel-2d", "symm", "syr2k", "syrk", "trisolv", "trmm"],
-	"sizes": ["MINI", "SMALL", "MEDIUM", "LARGE", "EXTRALARGE"]
-}
