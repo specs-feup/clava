@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import org.lara.interpreter.profile.WeavingReport;
 import org.lara.interpreter.weaver.ast.AstMethods;
-import org.lara.interpreter.weaver.ast.TreeNodeAstMethods;
 import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.options.WeaverOption;
@@ -40,7 +39,6 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Include;
-import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.context.ClavaContext;
@@ -111,9 +109,9 @@ public class CxxWeaver extends ACxxWeaver {
     private static final List<String> CLAVA_PREDEFINED_EXTERNAL_DEPS = Arrays.asList("LAT - Lara Autotuning Tool",
             "https://github.com/specs-feup/LAT-Lara-Autotuning-Tool.git",
             "Benchmark - NAS (import lara.benchmark.NasBenchmarkSet)",
-            "https://github.com/specs-feup/clava.git?folder=benchmarks/NAS",
+            "https://github.com/specs-feup/clava-benchmarks.git?folder=NAS",
             "Benchmark - Polybench (import lara.benchmark.PolybenchBenchmarkSet)",
-            "https://github.com/specs-feup/clava.git?folder=benchmarks/Polybench");
+            "https://github.com/specs-feup/clava-benchmarks.git?folder=Polybench");
 
     /**
      * @deprecated
@@ -2021,5 +2019,5 @@ public class CxxWeaver extends ACxxWeaver {
         return new ClavaAstMethods(this, ClavaNode.class, node -> CxxJoinpoints.create(node),
                 node -> ClavaCommonLanguage.getJoinPointName(node), node -> node.getScopeChildren());
     }
-   
+
 }
