@@ -66,7 +66,8 @@ public class DataFlowNode extends FlowNode implements Cloneable {
 	StringBuilder sb = new StringBuilder();
 	sb.append(name).append(" [label=\"").append(label).append("\" color=\"").append(type.getColor()).append("\"");
 	if (!shape.equals("circle"))
-	    sb.append("shape=\"").append(shape).append("\"");
+	    sb.append("shape=\"").append(shape).append("\" ");
+	sb.append(" nodeType=\"").append(this.type.toString()).append("\"");
 	sb.append("]");
 	return sb.toString();
     }
