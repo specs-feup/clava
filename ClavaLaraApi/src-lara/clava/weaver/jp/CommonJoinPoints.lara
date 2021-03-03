@@ -22,6 +22,7 @@ import weaver.jp.ClavaElseJp;
 // Patches weaver.JoinPoint and other classes
 import weaver.jp.JoinPointsCommonPath;
 
+import weaver.Selector;
 
 ///
 
