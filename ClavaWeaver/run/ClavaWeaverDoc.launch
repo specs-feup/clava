@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
-<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/LaraDoc/src/pt/up/fe/specs/lara/doc/LaraDocLauncher.java"/>
-</listAttribute>
-<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
-<listEntry value="1"/>
-</listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="pt.up.fe.specs.lara.doc.LaraDocLauncher"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--output &quot;${project_loc:ClavaWeaver}/run/doc&quot;&#13;&#10;--clean&#13;&#10;--exclude _&#13;&#10;--weaver pt.up.fe.specs.clava.weaver.CxxWeaver&#13;&#10;--packages &quot;{&#13;&#10;'LARA API': ['${project_loc:LaraApi}/src-lara-base','${project_loc:LaraApi}/src-lara','${project_loc:LARAI}/src-lara','${project_loc:ClavaLaraApi}/src-lara/clava'],&#13;&#10;'Clava API': ['${project_loc:ClavaLaraApi}/src-lara-clava/clava'],&#13;&#10;'ANTAREX API': ['${project_loc:AntarexClavaApi}/src-lara/clava']&#13;&#10;}&quot;"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ClavaWeaver"/>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/LaraDoc/src/pt/up/fe/specs/lara/doc/LaraDocLauncher.java"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="1"/>
+    </listAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="pt.up.fe.specs.lara.doc.LaraDocLauncher"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="ClavaWeaver"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--output &quot;${project_loc:ClavaWeaver}/run/doc&quot;&#13;&#10;--clean&#13;&#10;--exclude _&#13;&#10;--weaver pt.up.fe.specs.clava.weaver.CxxWeaver&#13;&#10;--packages &quot;{&#13;&#10;'LARA API': ['${project_loc:LaraApi}/src-lara-base','${project_loc:LaraApi}/src-lara','${project_loc:LARAI}/src-lara','${project_loc:ClavaLaraApi}/src-lara/clava'],&#13;&#10;'LARA Common Language API': ['${project_loc:LaraCommonLanguageApi}/src-lara'],&#13;&#10;'Clava API': ['${project_loc:ClavaLaraApi}/src-lara-clava/clava'],&#13;&#10;'ANTAREX API': ['${project_loc:AntarexClavaApi}/src-lara/clava']&#13;&#10;}&quot;"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ClavaWeaver"/>
 </launchConfiguration>
