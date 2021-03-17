@@ -106,4 +106,14 @@ public class CxxIssuesTest {
     public void testClavaIssue27() {
         new CxxTester("issues/clava_issue27.cpp").test();
     }
+
+    @Test
+    public void testClavaIssue28() {
+        new CxxTester("issues/clava_issue28.cpp", "issues/clava_issue28.h").test();
+    }
+
+    // @Test
+    // public void testClavaIssue29() {
+    // new CxxTester("issues/clava_issue29.cpp").test();
+    // }
 }
