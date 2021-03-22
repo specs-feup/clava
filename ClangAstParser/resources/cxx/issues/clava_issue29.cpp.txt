@@ -1,0 +1,56 @@
+
+class A {
+   
+};
+
+
+class B {
+   
+   
+   public:
+   // conversion from A (constructor):
+   B(A const & x) {
+   }
+   
+   // conversion from A (assignment):
+   B & operator=(A const & x) {
+      
+      return *this;
+   }
+   
+   // postfix ++, --
+   B operator++(int) {
+      
+      return *this;
+   }
+   
+   B operator--(int) {
+      
+      return *this;
+   }
+   
+   // conversion to A (type-cast operator)
+   operator A() {
+      
+      return A();
+   }
+   
+   // conversion to bool (type-cast operator)
+   operator bool() {
+      
+      return true;
+   }
+};
+
+int main() {
+   A foo;
+   B bar = foo; // calls constructor
+   bar = foo; // calls assignment
+   bar++;
+   bar--;
+   if(bar) { // calls conversions to bool type-cast operator
+      foo = bar; // calls conversion to A type-cast operator
+   }
+   
+   return 0;
+}
