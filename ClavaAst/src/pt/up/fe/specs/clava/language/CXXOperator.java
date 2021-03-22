@@ -132,6 +132,7 @@ public enum CXXOperator implements StringProvider {
      * @return
      */
     private static String getCodeDefault(String operator, List<Expr> args) {
+
         if (args.size() == 1) {
             return operator + args.get(0).getCode();
         }

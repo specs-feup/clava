@@ -99,7 +99,7 @@ public class MemberExpr extends Expr {
     public Expr getBase() {
         return getChild(Expr.class, 0);
     }
-        
+
     public ValueDecl getMemberDecl() {
         return get(MEMBER_DECL);
     }

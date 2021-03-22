@@ -69,7 +69,9 @@ public class CallExpr extends Expr {
     public String getCode() {
 
         // System.out.println("CALLEXPR");
+        // System.out.println("THIS: " + this);
         // System.out.println("CALLEE CODE:" + getCalleeCode());
+        // System.out.println("CALLEE: " + getCallee());
         // System.out.println("ARGS CODE:" + getArgsCode());
         return getCalleeCode() + getArgsCode();
     }
@@ -87,7 +89,6 @@ public class CallExpr extends Expr {
     protected String getCalleeCode() {
         // System.out.println("CALLEE: " + getCallee());
         // System.out.println("DIRECT_CALL: " + get(DIRECT_CALLEE));
-
         return getCallee().getCode();
     }
 

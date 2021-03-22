@@ -24,6 +24,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -322,4 +323,18 @@ public class CXXMemberCallExpr extends CallExpr {
     public SpecsList<String> getSignatureCustomStrings() {
         return super.getSignatureCustomStrings().andAdd(getCalleeNameTry().orElse("<no_calle_name>"));
     }
+
+    @Override
+    public String getCode() {
+
+        var methodDecl = get(METHOD_DECL);
+
+        // Special case: simplifies generated code, only needs first member name
+        if (methodDecl instanceof CXXConversionDecl) {
+            return getCallMemberNames().get(0);
+        }
+
+        return super.getCode();
+    }
+
 }
