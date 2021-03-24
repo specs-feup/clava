@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.7)
+project("${ORIG_TARGET}_weaving")
 
 	#message(STATUS "Aspect: ${ASPECT}")
 	#message(STATUS "Aspect args flags: ${ASPECT_ARGS_FLAG}")
