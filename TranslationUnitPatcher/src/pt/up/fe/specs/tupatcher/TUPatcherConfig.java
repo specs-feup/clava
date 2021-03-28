@@ -30,7 +30,7 @@ public class TUPatcherConfig extends ADataClass<TUPatcherConfig> {
     public static final DataKey<File> OUTPUT_FOLDER = KeyFactory.folder("outputFolder");
     public static final DataKey<Integer> MAX_FILES = KeyFactory.integer("maxFiles", 600);
     public static final DataKey<Integer> MAX_ITERATIONS = KeyFactory.integer("maxIterations", 100);
-    public static final DataKey<Boolean> PARALLEL = KeyFactory.bool("parallel").setDefault(() -> true);
+    public static final DataKey<Boolean> PARALLEL = KeyFactory.bool("parallel").setDefault(() -> false);
     public static final DataKey<Integer> NUM_THREADS = KeyFactory.integer("numThreads");
     public static final DataKey<StringList> SOURCE_EXTENSIONS = KeyFactory.stringList("sourceExtensions",
             Arrays.asList("c", "cpp"));
