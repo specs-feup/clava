@@ -39,8 +39,9 @@ public class PatcherTest {
                 .getTempFolder("TranslationUnitPatcherTest_" + SpecsIo.removeExtension(testResource.getResourceName()));
 
         SpecsIo.deleteFolderContents(tempFolder, true);
+        SpecsIo.deleteOnExit(tempFolder);
 
-        System.out.println("TEMP: " + tempFolder.getAbsolutePath());
+        // System.out.println("TEMP: " + tempFolder.getAbsolutePath());
         var tempSrcs = SpecsIo.mkdir(tempFolder, "src");
         var tempOutput = SpecsIo.mkdir(tempFolder, "output");
         var castFile = testResource.write(tempSrcs);
@@ -94,6 +95,7 @@ public class PatcherTest {
         var tempFolder = SpecsIo.getTempFolder("TranslationUnitPatcherTest_parallel");
 
         SpecsIo.deleteFolderContents(tempFolder, true);
+        SpecsIo.deleteOnExit(tempFolder);
 
         var tempSrcs = SpecsIo.mkdir(tempFolder, "src");
         var tempOutput = SpecsIo.mkdir(tempFolder, "output");
