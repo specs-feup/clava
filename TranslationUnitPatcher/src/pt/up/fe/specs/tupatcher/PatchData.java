@@ -31,6 +31,8 @@ public class PatchData {
     private final HashMap<String, TypeInfo> missingVariables;
     private final HashMap<String, TypeInfo> missingConstVariables;
 
+    private boolean allErrorsPatched;
+
     /**
      * List of all the errors fixed by the patch.
      */
@@ -42,6 +44,19 @@ public class PatchData {
         this.missingVariables = new HashMap<String, TypeInfo>();
         this.missingConstVariables = new HashMap<String, TypeInfo>();
         this.errors = new ArrayList<ErrorKind>();
+        this.allErrorsPatched = false;
+    }
+
+    /**
+     * 
+     * @return true if the patch fixes all errors in the file
+     */
+    public boolean isAllErrorsPatched() {
+        return allErrorsPatched;
+    }
+
+    public void setAllErrorsPatched(boolean allErrorsPatched) {
+        this.allErrorsPatched = allErrorsPatched;
     }
 
     public void addError(ErrorKind errorKind) {

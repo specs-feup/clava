@@ -148,11 +148,16 @@ public class TUPatcherLauncher {
                 data.add(patchOneFile(file, null));
             }
         }
-        /*
+
         for (PatchData d : data) {
-            if (d.getErrors().size() > 0)
-            System.out.println(d.getErrors().get(d.getErrors().size()-1));            
-        }*/
+            if (!d.isAllErrorsPatched()) {
+                return 1;
+            }
+            // if (d.getErrors().size() > 0) {
+            // System.out.println(d.getErrors().get(d.getErrors().size()-1));
+            // }
+
+        }
 
         return 0;
     }
@@ -277,6 +282,7 @@ public class TUPatcherLauncher {
         command.add("--");
         command.add("-ferror-limit=1");
 
+        // TODO: Make this an option, enabled by default; If disabled, Clang will use the type of the file
         // Always compile as C++
         command.add("-x");
         command.add("c++");
@@ -336,6 +342,9 @@ public class TUPatcherLauncher {
         var endTime = System.nanoTime();
 
         var success = n < maxIterations;
+
+        // Add success info to patchData
+        patchData.setAllErrorsPatched(success);
 
         // Add stats
         addStats(filepath, success, n, endTime - startTime);
