@@ -94,10 +94,13 @@ public class ParallelPatcher {
         var programTime = endTime - startTime;
         var producersProgramRatio = (double) producersTime / (double) programTime;
 
+        var parallelismEfficiency = producersProgramRatio / numThreads;
+
         System.out.println("Program execution: " + SpecsStrings.parseTime(programTime));
         System.out.println("Producers execution: " + SpecsStrings.parseTime(producersTime));
         System.out.println("Producers/Program ratio: " + String.format(Locale.UK, "%f", producersProgramRatio));
         System.out.println("Num threads: " + numThreads);
+        System.out.println("Parallelism efficiency: " + SpecsStrings.toPercentage(parallelismEfficiency));
         // var subLists = Lists.partition(sourceFiles, sourceFiles.size() / numThreads);
         // for(int i=0; i<)
         // Create as many producers as threads

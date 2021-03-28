@@ -137,7 +137,7 @@ public class TUPatcherLauncher {
         }
 
         var sourcePaths = config.get(TUPatcherConfig.SOURCE_PATHS).getStringList();
-        // System.out.println("SOURCE PATHS: " + sourcePaths);
+
         ArrayList<PatchData> data = new ArrayList<>();
         // Get list of all the files in form of String Array
         for (String arg : sourcePaths) {

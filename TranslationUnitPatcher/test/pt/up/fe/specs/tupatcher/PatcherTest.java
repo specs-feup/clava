@@ -15,6 +15,10 @@ package pt.up.fe.specs.tupatcher;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -79,6 +83,45 @@ public class PatcherTest {
     @Test
     public void testStructs() {
         var config = newSingleFileConfig(PatcherTestResource.STRUCTS);
+        assertEquals(0, new TUPatcherLauncher(config).execute());
+    }
+
+    @Test
+    public void testParallelExecution() {
+        var baseTests = Arrays.asList(PatcherTestResource.NESTED, PatcherTestResource.CLASSES,
+                PatcherTestResource.POINTERS, PatcherTestResource.STRUCTS);
+
+        var tempFolder = SpecsIo.getTempFolder("TranslationUnitPatcherTest_parallel");
+
+        SpecsIo.deleteFolderContents(tempFolder, true);
+
+        var tempSrcs = SpecsIo.mkdir(tempFolder, "src");
+        var tempOutput = SpecsIo.mkdir(tempFolder, "output");
+
+        // Write resource to the folder
+        int repetitions = 3;
+        for (int i = 0; i < repetitions; i++) {
+            for (var baseTest : baseTests) {
+                var newFilename = SpecsIo.removeExtension(baseTest.getResourceName()) + "_" + i + ".cpp";
+                SpecsIo.write(new File(tempSrcs, newFilename), baseTest.read());
+            }
+        }
+
+        var config = new TUPatcherConfig();
+
+        List<File> files;
+        // files = SpecsIo.getFiles(tempSrcs).stream().map(File::getAbsoluteFile).collect(Collectors.toList());
+        files = SpecsIo.getFiles(tempSrcs);
+        // files = Arrays.asList(SpecsIo.getFiles(tempSrcs).get(0));
+
+        // config.set(TUPatcherConfig.SOURCE_PATHS, StringList.newInstance(tempSrcs.getAbsolutePath()));
+        config.set(TUPatcherConfig.SOURCE_PATHS, StringList.newInstanceFromListOfFiles(files));
+        // SpecsIo.getFiles(tempSrcs).stream().map(File::getAbsoluteFile).collect(Collectors.toList())));
+        // SpecsIo.getFiles(tempSrcs)));
+        // Arrays.asList(SpecsIo.getFiles(tempSrcs).get(0))));
+        config.set(TUPatcherConfig.OUTPUT_FOLDER, tempOutput);
+        config.set(TUPatcherConfig.PARALLEL, true);
+
         assertEquals(0, new TUPatcherLauncher(config).execute());
     }
 }
