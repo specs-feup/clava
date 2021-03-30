@@ -1,0 +1,6 @@
+https://github.com/specs-feup/specs-java-libs
+https://github.com/specs-feup/clava
+--build
+--project TranslationUnitPatcher
+--main pt.up.fe.specs.tupatcher.TUPatcherLauncher
+--jar subfolder
