@@ -18,6 +18,15 @@ Note:<br/>
 * The test folder contains examples of error cases that the program is able to solve and some (commented) examples in which the program is unable to find an adequate solution.
 
 
+### Building TranslationUnitPatcher
+
+Download [eclipse-build](http://specs.fe.up.pt/tools/eclipse-build.jar) (source code can be found [here](https://github.com/specs-feup/specs-java-tools/tree/master/EclipseBuild)) and run the following command:
+
+java -jar eclipse-build.jar --config https://raw.githubusercontent.com/specs-feup/clava/master/TranslationUnitPatcher/eclipse.build
+
+This should create the file TranslationUnitPatcher.jar.
+
+
 ### Quickstart
 
 **To handle more types of errors:**
