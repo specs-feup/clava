@@ -120,10 +120,10 @@ KernelReplacer.prototype._makeGlobalSizeCode = function() {
 KernelReplacer.prototype._makeOutputBuffersCode = function() {
 
 	var code = '\n// Read back buffers\n';
-	for (inOutBuf of this._inOutBuffers) {
+	for (inOutBuf of getValues(this._inOutBuffers)) {
 		code += BufferCopyOut(inOutBuf._bufferName, inOutBuf._size, inOutBuf._argName);
 	}
-	for (outBuf of this._outBuffers) {
+	for (outBuf of getValues(this._outBuffers)) {
 		code += BufferCopyOut(outBuf._bufferName, outBuf._size, outBuf._argName);
 	}
 
@@ -163,24 +163,26 @@ KernelReplacer.prototype._makeArgBindCode = function() {
 KernelReplacer.prototype._makeBuffersCode = function() {
 	var code = '\n// Create device memory buffers\n';
 
-	for (inBuf of this._inBuffers) {
+	for (inBuf of getValues(this._inBuffers)) {
 		code += BufferDecl(inBuf._bufferName, inBuf._kind, inBuf._size);
 	}
-	for (outBuf of this._outBuffers) {
+
+	for (outBuf of getValues(this._outBuffers)) {
 		code += BufferDecl(outBuf._bufferName, outBuf._kind, outBuf._size);
 	}
-	for (inOutBuf of this._inOutBuffers) {
+
+	for (inOutBuf of getValues(this._inOutBuffers)) {
 		code += BufferDecl(inOutBuf._bufferName, inOutBuf._kind, inOutBuf._size);
 	}
 
 	code += '\n// Bind memory buffers\n';
-	for (inBuf of this._inBuffers) {
+	for (inBuf of getValues(this._inBuffers)) {
 		code += BufferCopyIn(inBuf._bufferName, inBuf._size, inBuf._argName);
 	}
-	for (inOutBuf of this._inOutBuffers) {
+	for (inOutBuf of getValues(this._inOutBuffers)) {
 		code += BufferCopyIn(inOutBuf._bufferName, inOutBuf._size, inOutBuf._argName);
 	}
-	
+
 	return code;
 };
 
