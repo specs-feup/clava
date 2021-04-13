@@ -1,5 +1,6 @@
 import lara.Io;
 import lara.Check;
+import lara.JavaInterop;
 import clava.ClavaAspects;
 import clava.util.ClavaDataStore;
 import weaver.WeaverOptions;
@@ -101,15 +102,20 @@ Clava.runClava = function(args) {
  * Launches several Clava weaving sessions in parallel.
  *
  * @param {string[][]} argsLists - An array where each element is an array with the arguments to pass to the weaver, as if it was launched from the command-line
- * @param {int} threads -  Number of threads to use
+ * @param {int} [threads = -1] -  Number of threads to use
+ * @param {string[]|string...} [clavaCommand = []] -  The command we should use to call Clava (e.g., /usr/local/bin/clava)
  *
  * @return {Boolean} true if none of the weaver executions had problems, false otherwise
  */
-Clava.runClavaParallel = function(argsLists, threads) {
+Clava.runClavaParallel = function(argsLists, threads, clavaCommand) {
 
 	if(threads === undefined) {
 		threads = -1;
 	}
+	
+	if(clavaCommand === undefined) {
+		clavaCommand = [];
+	}	
 
 /*
 	// If string, separate arguments
@@ -117,7 +123,7 @@ Clava.runClavaParallel = function(argsLists, threads) {
 		args = ArgumentsParser.newCommandLine().parse(args);
 	}
 */
-	return ClavaWeaverLauncher.executeParallel(argsLists, threads);
+	return ClavaWeaverLauncher.executeParallel(argsLists, threads, JavaInterop.arrayToList(clavaCommand));
 }
 
 /**
