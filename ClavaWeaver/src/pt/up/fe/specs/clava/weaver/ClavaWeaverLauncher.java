@@ -14,10 +14,12 @@
 package pt.up.fe.specs.clava.weaver;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.junit.runner.Result;
@@ -31,6 +33,7 @@ import pt.up.fe.specs.cxxweaver.tests.CTest;
 import pt.up.fe.specs.cxxweaver.tests.CxxApiTest;
 import pt.up.fe.specs.cxxweaver.tests.CxxTest;
 import pt.up.fe.specs.lara.WeaverLauncher;
+import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
 
 public class ClavaWeaverLauncher {
@@ -159,16 +162,25 @@ public class ClavaWeaverLauncher {
     // return Optional.of(docResults != -1);
     // }
 
-    public static boolean executeParallel(String[][] args, int threads) {
+    public static boolean executeParallel(String[][] args, int threads, List<String> clavaCommand) {
 
         var customThreadPool = threads > 0 ? new ForkJoinPool(threads) : new ForkJoinPool();
+
+        // Choose executor
+        Function<String[], Boolean> clavaExecutor = clavaCommand.isEmpty() ? ClavaWeaverLauncher::executeSafe
+                : weaverArgs -> ClavaWeaverLauncher.executeOtherJvm(weaverArgs, clavaCommand);
 
         ClavaLog.info(
                 () -> "Launching " + args.length + " instances of Clava in parallel, using " + threads + " threads");
 
+        if (!clavaCommand.isEmpty()) {
+            ClavaLog.info(
+                    () -> "Each Clava instance will run on a separate process, using the command " + clavaCommand);
+        }
+
         try {
             var results = customThreadPool.submit(() -> Arrays.asList(args).parallelStream()
-                    .map(ClavaWeaverLauncher::executeSafe)
+                    .map(clavaExecutor)
                     .collect(Collectors.toList())).get();
 
             return results.stream()
@@ -188,6 +200,27 @@ public class ClavaWeaverLauncher {
     private static boolean executeSafe(String[] args) {
         try {
             return execute(args);
+        } catch (Exception e) {
+            ClavaLog.info("Exception during Clava execution: " + e);
+            return false;
+        }
+    }
+
+    private static boolean executeOtherJvm(String[] args, List<String> clavaCommand) {
+        try {
+            List<String> newArgs = new ArrayList<>();
+            // newArgs.add("java");
+            // newArgs.add("-jar");
+            // newArgs.add("Clava.jar");
+            // newArgs.add("/usr/local/bin/clava");
+            newArgs.addAll(clavaCommand);
+
+            newArgs.addAll(Arrays.asList(args));
+            var result = SpecsSystem.run(newArgs, SpecsIo.getWorkingDir());
+
+            return result == 0;
+
+            // return execute(args);
         } catch (Exception e) {
             ClavaLog.info("Exception during Clava execution: " + e);
             return false;
