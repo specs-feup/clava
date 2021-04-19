@@ -11531,6 +11531,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The statement of the loop condition",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "cond"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Relation",
@@ -11665,6 +11674,15 @@
                            {
                               "type": "Integer[]",
                               "name": "rank"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The statement of the loop step",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "step"
                            }]
                },
                {
@@ -34347,6 +34365,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The statement of the loop condition",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "cond"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Relation",
@@ -34481,6 +34508,15 @@
                            {
                               "type": "Integer[]",
                               "name": "rank"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The statement of the loop step",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "step"
                            }]
                },
                {

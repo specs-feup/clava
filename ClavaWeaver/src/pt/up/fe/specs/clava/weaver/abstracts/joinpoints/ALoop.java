@@ -389,6 +389,52 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * The statement of the loop condition
+     */
+    public abstract AStatement getCondImpl();
+
+    /**
+     * The statement of the loop condition
+     */
+    public final Object getCond() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "cond", Optional.empty());
+        	}
+        	AStatement result = this.getCondImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "cond", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "cond", e);
+        }
+    }
+
+    /**
+     * The statement of the loop step
+     */
+    public abstract AStatement getStepImpl();
+
+    /**
+     * The statement of the loop step
+     */
+    public final Object getStep() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "step", Optional.empty());
+        	}
+        	AStatement result = this.getStepImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "step", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "step", e);
+        }
+    }
+
+    /**
      * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
      */
     public abstract String getEndValueImpl();
@@ -1436,6 +1482,8 @@ public abstract class ALoop extends AStatement {
         attributes.add("isInterchangeable");
         attributes.add("init");
         attributes.add("initValue");
+        attributes.add("cond");
+        attributes.add("step");
         attributes.add("endValue");
         attributes.add("stepValue");
         attributes.add("hasCondRelation");
@@ -1515,6 +1563,8 @@ public abstract class ALoop extends AStatement {
         ISINTERCHANGEABLE("isInterchangeable"),
         INIT("init"),
         INITVALUE("initValue"),
+        COND("cond"),
+        STEP("step"),
         ENDVALUE("endValue"),
         STEPVALUE("stepValue"),
         HASCONDRELATION("hasCondRelation"),

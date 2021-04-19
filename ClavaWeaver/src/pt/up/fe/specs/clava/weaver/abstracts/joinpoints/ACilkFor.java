@@ -144,6 +144,24 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
+     * Get value on attribute cond
+     * @return the attribute's value
+     */
+    @Override
+    public AStatement getCondImpl() {
+        return this.aLoop.getCondImpl();
+    }
+
+    /**
+     * Get value on attribute step
+     * @return the attribute's value
+     */
+    @Override
+    public AStatement getStepImpl() {
+        return this.aLoop.getStepImpl();
+    }
+
+    /**
      * Get value on attribute endValue
      * @return the attribute's value
      */
@@ -949,6 +967,8 @@ public abstract class ACilkFor extends ALoop {
         ISINTERCHANGEABLE("isInterchangeable"),
         INIT("init"),
         INITVALUE("initValue"),
+        COND("cond"),
+        STEP("step"),
         ENDVALUE("endValue"),
         STEPVALUE("stepValue"),
         HASCONDRELATION("hasCondRelation"),

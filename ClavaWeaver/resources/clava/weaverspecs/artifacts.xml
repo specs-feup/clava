@@ -282,6 +282,8 @@
 		<attribute name="initValue" type="String" tooltip="The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')">
 			<def/>
 		</attribute>		
+		<attribute name="cond" type="statement" tooltip="The statement of the loop condition"/>
+		<attribute name="step" type="statement" tooltip="The statement of the loop step"/>
 		<attribute name="endValue" type="String" tooltip="The expression of the last value of the control variable (e.g. 'length' in 'i &lt; length;')"/>
 		<attribute name="stepValue" type="String" tooltip="The expression of the iteration step"/>		
 		<attribute name="hasCondRelation" type="Boolean" tooltip="True if the condition of the loop in the canonical format, and is one of: &lt;, &lt;=, >, >="/>

@@ -234,28 +234,42 @@ public class CxxLoop extends ALoop {
 
     @Override
     public List<? extends AStatement> selectCond() {
+        var condition = getCondImpl();
+
+        return condition != null ? Arrays.asList(condition) : Collections.emptyList();
+    }
+
+    @Override
+    public AStatement getCondImpl() {
         ClavaNode condition = loop.getStmtCondition().orElse(null);
 
         if (condition == null) {
-            return Collections.emptyList();
+            return null;
         }
 
-        return Arrays.asList(CxxJoinpoints.create(ClavaNodes.toStmt(condition), AStatement.class));
+        return CxxJoinpoints.create(ClavaNodes.toStmt(condition), AStatement.class);
     }
 
     @Override
     public List<? extends AStatement> selectStep() {
+        var step = getStepImpl();
+
+        return step != null ? Arrays.asList(step) : Collections.emptyList();
+    }
+
+    @Override
+    public AStatement getStepImpl() {
         if (!(loop instanceof ForStmt)) {
-            return Collections.emptyList();
+            return null;
         }
 
         Stmt inc = ((ForStmt) loop).getInc().orElse(null);
         if (inc == null) {
-            return Collections.emptyList();
+            return null;
 
         }
 
-        return Arrays.asList(CxxJoinpoints.create(inc, AStatement.class));
+        return CxxJoinpoints.create(inc, AStatement.class);
     }
 
     @Override
