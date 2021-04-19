@@ -19,12 +19,18 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.lara.interpreter.profile.ReportField;
+import org.lara.interpreter.weaver.interf.WeaverEngine;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
+import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.util.utilities.Incrementer;
 
 public class CxxSelects {
 
@@ -101,4 +107,77 @@ public class CxxSelects {
 
         return true;
     }
+
+    // public static AJoinPoint[] selectedNodesToJps(List<? extends ClavaNode> selectedNodes, WeaverEngine weaverEngine)
+    // {
+    // return selectedNodesToJps(selectedNodes.stream(), jp -> true, weaverEngine);
+    // }
+
+    public static AJoinPoint[] selectedNodesToJps(Stream<? extends ClavaNode> selectedNodes,
+            WeaverEngine weaverEngine) {
+        return selectedNodesToJps(selectedNodes, jp -> true, weaverEngine);
+    }
+
+    public static AJoinPoint[] selectedNodesToJps(Stream<? extends ClavaNode> selectedNodes,
+            Predicate<AJoinPoint> filter, WeaverEngine weaverEngine) {
+
+        Incrementer excludedJoinpoints = new Incrementer();
+
+        AJoinPoint[] selectedJps = selectedNodes
+                // Ignore null nodes
+                .filter(sibling -> !(sibling instanceof NullNode))
+                .map(CxxJoinpoints::create)
+                .filter(jp -> {
+
+                    boolean accepted = filter.test(jp);
+
+                    if (!accepted) {
+                        excludedJoinpoints.increment();
+                    }
+                    return accepted;
+                })
+                // Null nodes should have been filtered by previous filter
+                // .filter(jp -> jp != null)
+                .collect(Collectors.toList())
+                // .toArray(new AJoinPoint[0]);
+                .toArray(AJoinPoint[]::new);
+
+        // Count as selected nodes
+        var report = weaverEngine.getWeaverProfiler().getReport();
+        report.inc(ReportField.JOIN_POINTS, selectedJps.length + excludedJoinpoints.getCurrent());
+        report.inc(ReportField.FILTERED_JOIN_POINTS, selectedJps.length);
+
+        // Count as a select
+        report.inc(ReportField.SELECTS);
+
+        return selectedJps;
+    }
+
+    /*
+    Incrementer nullJoinpoints = new Incrementer();
+    Incrementer excludedJoinpoints = new Incrementer();
+    AJoinPoint[] descendants = getNode().getDescendantsStream()
+            .map(descendant -> CxxJoinpoints.create(descendant))
+            .filter(jp -> {
+                // Count null join points separately
+                if (jp == null) {
+                    nullJoinpoints.increment();
+                    return false;
+                }
+    
+                boolean accepted = jp.instanceOf(type);
+                if (!accepted) {
+                    excludedJoinpoints.increment();
+                }
+                return accepted;
+            })
+            // .filter(jp -> jp.getJoinpointType().equals(type))
+            .toArray(AJoinPoint[]::new);
+    
+    // Count as selected nodes
+    getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS,
+            descendants.length + excludedJoinpoints.getCurrent());
+    getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, descendants.length);
+    */
+
 }

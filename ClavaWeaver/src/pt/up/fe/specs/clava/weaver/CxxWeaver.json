@@ -576,6 +576,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -1461,6 +1479,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -2517,6 +2553,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -3539,6 +3593,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -4611,6 +4683,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -5668,6 +5758,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -6665,6 +6773,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -8032,6 +8158,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -9172,6 +9316,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -10170,6 +10332,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -11201,6 +11381,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -12275,6 +12473,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -13640,6 +13856,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -14638,6 +14872,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -15670,6 +15922,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -16655,6 +16925,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -17539,6 +17827,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -18433,6 +18739,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -19346,6 +19670,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -20311,6 +20653,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -21391,6 +21751,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -22357,6 +22735,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -23274,6 +23670,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -24393,6 +24807,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -25390,6 +25822,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -26355,6 +26805,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -27269,6 +27737,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -28331,6 +28817,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -29693,6 +30197,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -31020,6 +31542,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -32062,6 +32602,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -33116,6 +33674,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -34035,6 +34611,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -35109,6 +35703,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -36341,6 +36953,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -37329,6 +37959,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -38405,6 +39053,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -39582,6 +40248,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -40776,6 +41460,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -41737,6 +42439,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -42830,6 +43550,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -44079,6 +44817,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -45054,6 +45810,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -46181,6 +46955,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -47330,6 +48122,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -48330,6 +49140,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -49371,6 +50199,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -50668,6 +51514,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -51690,6 +52554,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -52651,6 +53533,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -53692,6 +54592,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -54868,6 +55786,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -55880,6 +56816,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -56833,6 +57787,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -57822,6 +58794,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -58913,6 +59903,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -60077,6 +61085,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -61081,6 +62107,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -62133,6 +63177,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -63131,6 +64193,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -64082,6 +65162,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -65190,6 +66288,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -66238,6 +67354,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -67216,6 +68350,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -68269,6 +69421,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -69329,6 +70499,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {
@@ -70476,6 +71664,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -71541,6 +72747,24 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -72467,6 +73691,24 @@
                            {
                               "type": "joinpoint[]",
                               "name": "scopeNodes"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that came before this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsLeft"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns an array with the siblings that come after this node",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "siblingsRight"
                            }]
                },
                {

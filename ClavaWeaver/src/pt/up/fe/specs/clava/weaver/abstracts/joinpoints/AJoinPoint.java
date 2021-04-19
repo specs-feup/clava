@@ -588,6 +588,8 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("numChildren");
         attributes.add("children");
         attributes.add("child(Integer index)");
+        attributes.add("siblingsLeft");
+        attributes.add("siblingsRight");
         attributes.add("astIsInstance(String className)");
         attributes.add("hasNode(Object nodeOrJp)");
         attributes.add("chain");
@@ -1461,6 +1463,72 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "child", e);
+        }
+    }
+
+    /**
+     * Get value on attribute siblingsLeft
+     * @return the attribute's value
+     */
+    public abstract AJoinPoint[] getSiblingsLeftArrayImpl();
+
+    /**
+     * Returns an array with the siblings that came before this node
+     */
+    public Object getSiblingsLeftImpl() {
+        AJoinPoint[] aJoinPointArrayImpl0 = getSiblingsLeftArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Returns an array with the siblings that came before this node
+     */
+    public final Object getSiblingsLeft() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "siblingsLeft", Optional.empty());
+        	}
+        	Object result = this.getSiblingsLeftImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "siblingsLeft", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "siblingsLeft", e);
+        }
+    }
+
+    /**
+     * Get value on attribute siblingsRight
+     * @return the attribute's value
+     */
+    public abstract AJoinPoint[] getSiblingsRightArrayImpl();
+
+    /**
+     * Returns an array with the siblings that come after this node
+     */
+    public Object getSiblingsRightImpl() {
+        AJoinPoint[] aJoinPointArrayImpl0 = getSiblingsRightArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Returns an array with the siblings that come after this node
+     */
+    public final Object getSiblingsRight() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "siblingsRight", Optional.empty());
+        	}
+        	Object result = this.getSiblingsRightImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "siblingsRight", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "siblingsRight", e);
         }
     }
 

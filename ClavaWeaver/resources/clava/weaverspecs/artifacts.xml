@@ -70,6 +70,8 @@
 		<attribute name="child" type="joinpoint" tooltip="Returns the child of the node at the given index, ignoring null nodes">
 			<parameter name="index" type="Integer" />
 		</attribute>		
+		<attribute name="siblingsLeft" type="joinpoint[]" tooltip="Returns an array with the siblings that came before this node"/>
+		<attribute name="siblingsRight" type="joinpoint[]" tooltip="Returns an array with the siblings that come after this node"/>
 		<attribute name="astIsInstance" type="boolean">
 			<parameter name="className" type="String" />
 		</attribute>
