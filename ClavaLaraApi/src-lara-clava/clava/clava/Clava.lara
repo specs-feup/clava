@@ -114,7 +114,7 @@ Clava.runClavaParallel = function(argsLists, threads, clavaCommand) {
 	}
 	
 	if(clavaCommand === undefined) {
-		clavaCommand = [];
+		clavaCommand = ["clava"];
 	}	
 
 /*
