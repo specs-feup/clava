@@ -116,6 +116,12 @@ Clava.runClavaParallel = function(argsLists, threads, clavaCommand) {
 	if(clavaCommand === undefined) {
 		clavaCommand = ["clava"];
 	}	
+	
+	// Assures all elements in the argsLists are String
+	var safeArgsLists = [];
+	for(var argsList of argsLists) {
+		safeArgsLists.push(argsList.map(value => value.toString()));
+	}
 
 /*
 	// If string, separate arguments
@@ -123,7 +129,10 @@ Clava.runClavaParallel = function(argsLists, threads, clavaCommand) {
 		args = ArgumentsParser.newCommandLine().parse(args);
 	}
 */
-	return ClavaWeaverLauncher.executeParallel(argsLists, threads, JavaInterop.arrayToList(clavaCommand));
+
+	//return ClavaWeaverLauncher.executeParallel(argsLists, threads, JavaInterop.arrayToList(clavaCommand));
+	return ClavaWeaverLauncher.executeParallel(safeArgsLists, threads, JavaInterop.arrayToStringList(clavaCommand));	
+	
 }
 
 /**
