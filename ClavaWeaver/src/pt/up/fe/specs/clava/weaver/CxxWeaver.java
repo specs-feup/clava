@@ -393,6 +393,11 @@ public class CxxWeaver extends ACxxWeaver {
         // Create map with all sources, mapped to the corresponding base folder
         Map<File, File> allSources = new HashMap<>();
         for (var source : sources) {
+            if (!source.exists()) {
+                ClavaLog.info("Source path '" + source + "' does not exist, ignoring");
+                continue;
+            }
+
             if (source.isFile()) {
                 allSources.put(source, null);
                 continue;

@@ -208,14 +208,21 @@ public class ClavaWeaverLauncher {
 
     private static boolean executeOtherJvm(String[] args, List<String> clavaCommand) {
         try {
+            // DEBUG
+            // if (true) {
+            // return ClavaWeaverLauncher.execute(args);
+            // }
+
             List<String> newArgs = new ArrayList<>();
             // newArgs.add("java");
             // newArgs.add("-jar");
             // newArgs.add("Clava.jar");
             // newArgs.add("/usr/local/bin/clava");
             newArgs.addAll(clavaCommand);
-
             newArgs.addAll(Arrays.asList(args));
+
+            // ClavaLog.info(() -> "Launching Clava on another JVM with command: " + newArgs);
+
             var result = SpecsSystem.run(newArgs, SpecsIo.getWorkingDir());
 
             return result == 0;
