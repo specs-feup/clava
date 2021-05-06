@@ -103,7 +103,7 @@ Clava.runClava = function(args) {
  *
  * @param {string[][]} argsLists - An array where each element is an array with the arguments to pass to the weaver, as if it was launched from the command-line
  * @param {int} [threads = -1] -  Number of threads to use
- * @param {string[]|string...} [clavaCommand = []] -  The command we should use to call Clava (e.g., /usr/local/bin/clava)
+ * @param {string[]|string} [clavaCommand = []] -  The command we should use to call Clava (e.g., /usr/local/bin/clava)
  *
  * @return {Boolean} true if none of the weaver executions had problems, false otherwise
  */
@@ -116,6 +116,11 @@ Clava.runClavaParallel = function(argsLists, threads, clavaCommand) {
 	if(clavaCommand === undefined) {
 		clavaCommand = ["clava"];
 	}	
+	
+	if(!isArray(clavaCommand)) {
+		clavaCommand = [clavaCommand.toString()];
+	}
+	
 	
 	// Assures all elements in the argsLists are String
 	var safeArgsLists = [];
