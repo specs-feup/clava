@@ -17,6 +17,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Function;
@@ -162,39 +163,96 @@ public class ClavaWeaverLauncher {
     // return Optional.of(docResults != -1);
     // }
 
-    public static boolean executeParallel(String[][] args, int threads, List<String> clavaCommand) {
+    public static String[] executeParallel(String[][] args, int threads, List<String> clavaCommand) {
+        return executeParallel(args, threads, clavaCommand, SpecsIo.getWorkingDir().getAbsolutePath());
+    }
+
+    /**
+     * 
+     * @param args
+     * @param threads
+     * @param clavaCommand
+     * @param workingDir
+     * @return an array with the same size as the number if args, with strings representing JSON objects that represent
+     *         the outputs of the execution. The order of the results is the same as the args
+     */
+    public static String[] executeParallel(String[][] args, int threads, List<String> clavaCommand, String workingDir) {
+
+        var workingFolder = SpecsIo.sanitizeWorkingDir(workingDir);
 
         var customThreadPool = threads > 0 ? new ForkJoinPool(threads) : new ForkJoinPool();
 
         // Choose executor
         Function<String[], Boolean> clavaExecutor = clavaCommand.isEmpty() ? ClavaWeaverLauncher::executeSafe
-                : weaverArgs -> ClavaWeaverLauncher.executeOtherJvm(weaverArgs, clavaCommand);
+                : weaverArgs -> ClavaWeaverLauncher.executeOtherJvm(weaverArgs, clavaCommand, workingFolder);
 
         ClavaLog.info(
-                () -> "Launching " + args.length + " instances of Clava in parallel, using " + threads + " threads");
+                () -> "Launching " + args.length + " instances of Clava in parallel, using a parallelism level of "
+                        + threads);
 
         if (!clavaCommand.isEmpty()) {
             ClavaLog.info(
                     () -> "Each Clava instance will run on a separate process, using the command " + clavaCommand);
         }
 
+        // Create paths for the results
+        List<File> resultFiles = new ArrayList<>();
+        var resultsFolder = SpecsIo.getTempFolder("clava_parallel_results_" + UUID.randomUUID());
+        ClavaLog.debug(() -> "Create temporary folder for storing results of Clava parallel execution: "
+                + resultsFolder.getAbsolutePath());
+
+        for (int i = 0; i < args.length; i++) {
+            resultFiles.add(new File(resultsFolder, "clava_parallel_result_" + i + ".json"));
+        }
+
         try {
-            var results = customThreadPool.submit(() -> Arrays.asList(args).parallelStream()
+
+            // Adapt the args so that each execution produces a result file
+            String[][] adaptedArgs = new String[args.length][];
+            for (int i = 0; i < args.length; i++) {
+                var newArgs = Arrays.copyOf(args[i], args[i].length + 2);
+                newArgs[newArgs.length - 2] = "-r";
+                newArgs[newArgs.length - 1] = resultFiles.get(i).getAbsolutePath();
+                adaptedArgs[i] = newArgs;
+            }
+
+            // var results =
+            customThreadPool.submit(() -> Arrays.asList(adaptedArgs).parallelStream()
                     .map(clavaExecutor)
                     .collect(Collectors.toList())).get();
 
-            return results.stream()
-                    .filter(result -> result == false)
-                    .findFirst()
-                    .orElse(true);
+            // Find the file for each execution
+            return collectResults(resultFiles);
+
+            // return results.stream()
+            // .filter(result -> result == false)
+            // .findFirst()
+            // .orElse(true);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            return false;
+            return collectResults(resultFiles);
         } catch (ExecutionException e) {
             ClavaLog.info("Unrecoverable exception while executing parallel instances of Clava: " + e);
-            return false;
+            return collectResults(resultFiles);
+        } finally {
+            SpecsIo.deleteFolder(resultsFolder);
         }
 
+    }
+
+    private static String[] collectResults(List<File> resultFiles) {
+        List<String> results = new ArrayList<>();
+        for (var resultFile : resultFiles) {
+            // If file does not exist, create empty object
+            if (!resultFile.isFile()) {
+                results.add("{}");
+                continue;
+            }
+
+            results.add(SpecsIo.read(resultFile));
+        }
+
+        return results.toArray(size -> new String[size]);
     }
 
     private static boolean executeSafe(String[] args) {
@@ -206,7 +264,7 @@ public class ClavaWeaverLauncher {
         }
     }
 
-    private static boolean executeOtherJvm(String[] args, List<String> clavaCommand) {
+    private static boolean executeOtherJvm(String[] args, List<String> clavaCommand, File workingDir) {
         try {
             // DEBUG
             // if (true) {
@@ -223,7 +281,8 @@ public class ClavaWeaverLauncher {
 
             // ClavaLog.info(() -> "Launching Clava on another JVM with command: " + newArgs);
 
-            var result = SpecsSystem.run(newArgs, SpecsIo.getWorkingDir());
+            // var result = SpecsSystem.run(newArgs, SpecsIo.getWorkingDir());
+            var result = SpecsSystem.run(newArgs, workingDir);
 
             return result == 0;
 

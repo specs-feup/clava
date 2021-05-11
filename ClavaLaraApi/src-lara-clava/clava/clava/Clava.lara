@@ -136,8 +136,16 @@ Clava.runClavaParallel = function(argsLists, threads, clavaCommand) {
 */
 
 	//return ClavaWeaverLauncher.executeParallel(argsLists, threads, JavaInterop.arrayToList(clavaCommand));
-	return ClavaWeaverLauncher.executeParallel(safeArgsLists, threads, JavaInterop.arrayToStringList(clavaCommand));	
+	var jsonStrings = ClavaWeaverLauncher.executeParallel(safeArgsLists, threads, JavaInterop.arrayToStringList(clavaCommand), Io.getWorkingFolder().getAbsolutePath());	
+
+	// Read each json file into its own object
+	var results = [];
 	
+	for(var jsonString of jsonStrings) {
+		results.push(JSON.parse(jsonString));
+	}
+	
+	return results;
 }
 
 /**
