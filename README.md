@@ -5,7 +5,9 @@ If you have used Clava, please consider filling the [Clava User Experience Feedb
 
 # Quickstart
 
-Tutorial on how to use Clava: [Clava Tutorial - 2018 PACT](https://github.com/specs-feup/specs-lara/tree/master/2018-PACT).
+Introduction to Clava and the LARA Framework: [Slides](https://drive.google.com/drive/u/1/folders/1IAqv7SpP8S-t5g3fpNO06cJ7J2j2aD7K)
+
+Tutorial on how to use Clava (recommended parts 1-3): [Clava Tutorial - 2018 PACT](https://github.com/specs-feup/specs-lara/tree/master/2018-PACT).
 
 Start using LARA with examples: [LARA Reference Guide](http://specs.fe.up.pt/tools/lara/doku.php?id=lara:docs:sheet).
 
