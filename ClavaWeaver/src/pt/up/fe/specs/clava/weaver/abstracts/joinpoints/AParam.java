@@ -356,14 +356,6 @@ public abstract class AParam extends AVardecl {
      * 
      */
     @Override
-    public String toString() {
-        return this.aVardecl.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends AVardecl> getSuper() {
         return Optional.of(this.aVardecl);
     }

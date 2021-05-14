@@ -455,14 +455,6 @@ public abstract class AVariableArrayType extends AArrayType {
      * 
      */
     @Override
-    public String toString() {
-        return this.aArrayType.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends AArrayType> getSuper() {
         return Optional.of(this.aArrayType);
     }

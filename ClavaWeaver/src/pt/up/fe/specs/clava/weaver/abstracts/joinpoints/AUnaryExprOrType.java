@@ -414,14 +414,6 @@ public abstract class AUnaryExprOrType extends AExpression {
      * 
      */
     @Override
-    public String toString() {
-        return this.aExpression.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends AExpression> getSuper() {
         return Optional.of(this.aExpression);
     }

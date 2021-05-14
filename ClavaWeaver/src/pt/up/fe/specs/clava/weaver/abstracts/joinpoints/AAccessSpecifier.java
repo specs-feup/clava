@@ -224,14 +224,6 @@ public abstract class AAccessSpecifier extends ADecl {
      * 
      */
     @Override
-    public String toString() {
-        return this.aDecl.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends ADecl> getSuper() {
         return Optional.of(this.aDecl);
     }

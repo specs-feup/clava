@@ -257,14 +257,6 @@ public abstract class AField extends ADeclarator {
      * 
      */
     @Override
-    public String toString() {
-        return this.aDeclarator.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends ADeclarator> getSuper() {
         return Optional.of(this.aDeclarator);
     }

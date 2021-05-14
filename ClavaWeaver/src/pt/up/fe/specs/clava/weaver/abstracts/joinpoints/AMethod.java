@@ -663,14 +663,6 @@ public abstract class AMethod extends AFunction {
      * 
      */
     @Override
-    public String toString() {
-        return this.aFunction.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends AFunction> getSuper() {
         return Optional.of(this.aFunction);
     }

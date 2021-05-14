@@ -748,14 +748,6 @@ public abstract class ACilkFor extends ALoop {
      * 
      */
     @Override
-    public String toString() {
-        return this.aLoop.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends ALoop> getSuper() {
         return Optional.of(this.aLoop);
     }

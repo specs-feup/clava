@@ -457,14 +457,6 @@ public abstract class AAdjustedType extends AType {
      * 
      */
     @Override
-    public String toString() {
-        return this.aType.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends AType> getSuper() {
         return Optional.of(this.aType);
     }

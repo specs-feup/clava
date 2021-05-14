@@ -284,14 +284,6 @@ public abstract class AEnumeratorDecl extends ANamedDecl {
      * 
      */
     @Override
-    public String toString() {
-        return this.aNamedDecl.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends ANamedDecl> getSuper() {
         return Optional.of(this.aNamedDecl);
     }

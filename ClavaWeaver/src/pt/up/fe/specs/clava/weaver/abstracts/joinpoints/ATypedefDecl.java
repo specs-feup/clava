@@ -257,14 +257,6 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      * 
      */
     @Override
-    public String toString() {
-        return this.aTypedefNameDecl.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends ATypedefNameDecl> getSuper() {
         return Optional.of(this.aTypedefNameDecl);
     }

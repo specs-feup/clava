@@ -430,14 +430,6 @@ public abstract class AEnumType extends ATagType {
      * 
      */
     @Override
-    public String toString() {
-        return this.aTagType.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends ATagType> getSuper() {
         return Optional.of(this.aTagType);
     }

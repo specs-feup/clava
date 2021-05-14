@@ -312,14 +312,6 @@ public abstract class AMarker extends APragma {
      * 
      */
     @Override
-    public String toString() {
-        return this.aPragma.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends APragma> getSuper() {
         return Optional.of(this.aPragma);
     }

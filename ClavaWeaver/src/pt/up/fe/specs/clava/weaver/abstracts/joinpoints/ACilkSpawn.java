@@ -470,14 +470,6 @@ public abstract class ACilkSpawn extends ACall {
      * 
      */
     @Override
-    public String toString() {
-        return this.aCall.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends ACall> getSuper() {
         return Optional.of(this.aCall);
     }

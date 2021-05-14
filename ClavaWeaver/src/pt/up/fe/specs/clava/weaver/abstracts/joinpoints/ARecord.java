@@ -417,14 +417,6 @@ public abstract class ARecord extends ANamedDecl {
      * 
      */
     @Override
-    public String toString() {
-        return this.aNamedDecl.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends ANamedDecl> getSuper() {
         return Optional.of(this.aNamedDecl);
     }

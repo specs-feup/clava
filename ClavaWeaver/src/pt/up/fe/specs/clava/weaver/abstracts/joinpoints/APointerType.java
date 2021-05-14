@@ -516,14 +516,6 @@ public abstract class APointerType extends AType {
      * 
      */
     @Override
-    public String toString() {
-        return this.aType.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends AType> getSuper() {
         return Optional.of(this.aType);
     }

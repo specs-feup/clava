@@ -630,14 +630,6 @@ public abstract class ABody extends AScope {
      * 
      */
     @Override
-    public String toString() {
-        return this.aScope.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends AScope> getSuper() {
         return Optional.of(this.aScope);
     }

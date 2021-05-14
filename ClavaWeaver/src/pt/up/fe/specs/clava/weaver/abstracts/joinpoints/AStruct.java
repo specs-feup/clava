@@ -302,14 +302,6 @@ public abstract class AStruct extends ARecord {
      * 
      */
     @Override
-    public String toString() {
-        return this.aRecord.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends ARecord> getSuper() {
         return Optional.of(this.aRecord);
     }

@@ -442,14 +442,6 @@ public abstract class ABinaryOp extends AOp {
      * 
      */
     @Override
-    public String toString() {
-        return this.aOp.toString();
-    }
-
-    /**
-     * 
-     */
-    @Override
     public Optional<? extends AOp> getSuper() {
         return Optional.of(this.aOp);
     }
