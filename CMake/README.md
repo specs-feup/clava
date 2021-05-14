@@ -1,6 +1,6 @@
-# CMake Plugin
+# Clava CMake Package
 
-Plugin to call Clava from CMake files.
+CMake Package to call Clava from CMake files.
 
 ## Installing
 
