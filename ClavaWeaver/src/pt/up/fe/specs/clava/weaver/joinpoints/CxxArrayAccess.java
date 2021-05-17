@@ -55,7 +55,7 @@ public class CxxArrayAccess extends AArrayAccess {
     public AVardecl getVardeclImpl() {
         AExpression arrayVar = getArrayVarImpl();
 
-        if ((arrayVar instanceof AVarref)) {
+        if (!(arrayVar instanceof AVarref)) {
             return null;
         }
 
