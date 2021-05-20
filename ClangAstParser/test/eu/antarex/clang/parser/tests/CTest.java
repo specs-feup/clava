@@ -142,4 +142,9 @@ public class CTest {
         new CTester("c99.c").addFlags("-std=c99").test();
     }
 
+    @Test
+    public void testNakedLoops() {
+        new CTester("naked_loops.c").test();
+    }
+
 }
