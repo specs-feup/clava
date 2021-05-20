@@ -117,16 +117,46 @@ public class IfStmt extends Stmt implements StmtWithCondition {
 
         String conditionCode = getDeclCondition().map(VarDecl::getCode).orElse(getCondition().getCode());
 
-        String thenCode = getThen().map(CompoundStmt::getCode).orElse(";\n");
+        String thenCode = getThen().map(this::getThenCode).orElse(";\n");
 
         // If then does not end with newline, add one
         thenCode = thenCode.endsWith(ln()) ? thenCode : thenCode + ln();
 
         code.append("if(").append(conditionCode).append(")").append(thenCode);
+        // System.out.println("THEN: '" + thenCode + "'");
         // CompoundStmt takes care of prefixing a space before the statement code
-        getElse().ifPresent(elseStmt -> code.append("else" + elseStmt.getCode()));
+        getElse().ifPresent(elseStmt -> code.append(getElseCode(elseStmt)));
 
         return code.toString();
+    }
+
+    private String getThenCode(CompoundStmt thenStmt) {
+        boolean isNaked = thenStmt.isNaked();
+        var code = thenStmt.getCode(isNaked);
+
+        if (isNaked) {
+            code = " " + code.stripLeading();
+        }
+
+        return code;
+    }
+
+    private String getElseCode(CompoundStmt elseStmt) {
+        var elseCode = elseStmt.getCode();
+
+        // If else stmt is a naked block with a single if, remove whitespace in the beginning?
+
+        // if (elseStmt.isNaked() && elseStmt.getStatements().size() == 1
+        // && elseStmt.getStatements().get(0) instanceof IfStmt) {
+        if (elseStmt.isNaked()) {
+            elseCode = " " + elseCode.stripLeading();
+        }
+
+        // System.out.println("ELSE CODE:'" + elseStmt.getCode(elseS) + "'");
+
+        // String prefixNewline = elseStmt.isNaked() ? "\n" : "";
+        // boolean inline = elseStmt.isNaked();
+        return "else" + elseCode;
     }
 
     /*

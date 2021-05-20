@@ -93,8 +93,15 @@ public class CompoundStmt extends Stmt {
             if (inline && !commentsCode.isEmpty()) {
                 commentsCode += ln();
             }
+            // System.out.println("STMT: " + statement);
+            // System.out.println("STATEMENT: " + statement.getCode() + commentsCode);
+            // System.out.println("PROCESSED:\n" + StringLines.getLines(statement.getCode() + commentsCode).stream()
+            // .collect(Collectors.joining(newLine, tab, newLine)));
 
-            return " " + statement.getCode() + commentsCode;
+            return StringLines.getLines(statement.getCode() + commentsCode).stream()
+                    .collect(Collectors.joining(newLine + tab, newLine + tab, newLine));
+
+            // return newLine + tab + statement.getCode() + commentsCode;
         }
 
         StringBuilder builder = new StringBuilder();
