@@ -3,7 +3,8 @@
  Associated definition = FIRST_DUPLICATION::FIRST_DUPLICATION(int n) {
    this->sz = n;
    this->elem = new double[n];
-   for(int i = 0; i < n; ++i) this->elem[i] = 0;
+   for(int i = 0; i < n; ++i) 
+   	this->elem[i] = 0;
 }
 
  The class of the record field is = FIRST_DUPLICATION
@@ -41,7 +42,8 @@
  Declaration of the method = void affichesomme(); of the class FIRST_DUPLICATION
  Associated definition = void FIRST_DUPLICATION::affichesomme() {
    int res = 0;
-   for(int i = 0; i < this->sz; i++) res += this->elem[i];
+   for(int i = 0; i < this->sz; i++) 
+   	res += this->elem[i];
    // cout<<" sum = "<< res << "\n";
 }
 
@@ -51,7 +53,8 @@
  Associated definition = SECOND_DUPLICATION::SECOND_DUPLICATION(int n) {
    this->sz = n;
    this->elem = new double[n];
-   for(int i = 0; i < n; ++i) this->elem[i] = 0;
+   for(int i = 0; i < n; ++i) 
+   	this->elem[i] = 0;
 }
 
  The class of the record field is = SECOND_DUPLICATION
@@ -89,7 +92,8 @@
  Declaration of the method = void affichesomme(); of the class SECOND_DUPLICATION
  Associated definition = void SECOND_DUPLICATION::affichesomme() {
    int res = 0;
-   for(int i = 0; i < this->sz; i++) res += this->elem[i];
+   for(int i = 0; i < this->sz; i++) 
+   	res += this->elem[i];
    // cout<<" sum = "<< res << "\n";
 }
 
@@ -98,13 +102,15 @@
  Declaration of the method = Vector(int n) {
    this->sz = n;
    this->elem = new double[n];
-   for(int i = 0; i < n; ++i) this->elem[i] = 0;
+   for(int i = 0; i < n; ++i) 
+   	this->elem[i] = 0;
 }
  of the class Vector
  Associated definition = Vector(int n) {
    this->sz = n;
    this->elem = new double[n];
-   for(int i = 0; i < n; ++i) this->elem[i] = 0;
+   for(int i = 0; i < n; ++i) 
+   	this->elem[i] = 0;
 }
 
  The class of the record field is = Vector
@@ -155,13 +161,15 @@
  ==================================
  Declaration of the method = void affichesomme() {
    int res = 0;
-   for(int i = 0; i < this->sz; i++) res += this->elem[i];
+   for(int i = 0; i < this->sz; i++) 
+   	res += this->elem[i];
    // cout<<" sum = "<< res << "\n";
 }
  of the class Vector
  Associated definition = void affichesomme() {
    int res = 0;
-   for(int i = 0; i < this->sz; i++) res += this->elem[i];
+   for(int i = 0; i < this->sz; i++)
+   	 res += this->elem[i];
    // cout<<" sum = "<< res << "\n";
 }
 

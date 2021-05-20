@@ -2,7 +2,8 @@
  Declaration of the method = FIRST_DUPLICATION(int n); of the class FIRST_DUPLICATION
  Associated definition = FIRST_DUPLICATION::FIRST_DUPLICATION(int n) : sz(n), elem(new double[n]) {
    // sz = n; elem = new double[n];
-   for(int i = 0; i < n; ++i) this->elem[i] = 0;
+   for(int i = 0; i < n; ++i)
+   	 this->elem[i] = 0;
 }
 
  The class of the record field is = FIRST_DUPLICATION
@@ -40,7 +41,8 @@
  Declaration of the method = void affichesomme(); of the class FIRST_DUPLICATION
  Associated definition = void FIRST_DUPLICATION::affichesomme() {
    int res = 0;
-   for(int i = 0; i < this->sz; i++) res += this->elem[i];
+   for(int i = 0; i < this->sz; i++)
+   	 res += this->elem[i];
    // cout<<" sum = "<< res << "\n";
 }
 
@@ -49,7 +51,8 @@
  Declaration of the method = SECOND_DUPLICATION(int n); of the class SECOND_DUPLICATION
  Associated definition = SECOND_DUPLICATION::SECOND_DUPLICATION(int n) : sz(n), elem(new double[n]) {
    // sz = n; elem = new double[n];
-   for(int i = 0; i < n; ++i) this->elem[i] = 0;
+   for(int i = 0; i < n; ++i)
+   	 this->elem[i] = 0;
 }
 
  The class of the record field is = SECOND_DUPLICATION
@@ -87,7 +90,8 @@
  Declaration of the method = void affichesomme(); of the class SECOND_DUPLICATION
  Associated definition = void SECOND_DUPLICATION::affichesomme() {
    int res = 0;
-   for(int i = 0; i < this->sz; i++) res += this->elem[i];
+   for(int i = 0; i < this->sz; i++)
+   	 res += this->elem[i];
    // cout<<" sum = "<< res << "\n";
 }
 

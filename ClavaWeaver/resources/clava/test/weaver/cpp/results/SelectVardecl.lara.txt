@@ -1,35 +1,35 @@
 #4	expr -> i = j + m
-	In exractExprVardecl  expr : Joinpoint 'expression'
+	In exractExprVardecl  expr : Joinpoint 'binaryOp'
 	In exractExprVardecl  expr.joinPointType : binaryOp
 	In exractExprVardecl  expr.selects : left,right,vardecl
 	In exractExprVardecl  expr.vardecl : undefined
 
 #4	expr -> i
-	In exractExprVardecl  expr : Joinpoint 'expression'
+	In exractExprVardecl  expr : Joinpoint 'varref'
 	In exractExprVardecl  expr.joinPointType : varref
 	In exractExprVardecl  expr.selects : vardecl
-	In exractExprVardecl  expr.vardecl : Joinpoint 'decl'
+	In exractExprVardecl  expr.vardecl : Joinpoint 'vardecl'
 	>>>> vardecl#4	int i
 
 #4	expr -> j + m
-	In exractExprVardecl  expr : Joinpoint 'expression'
+	In exractExprVardecl  expr : Joinpoint 'binaryOp'
 	In exractExprVardecl  expr.joinPointType : binaryOp
 	In exractExprVardecl  expr.selects : left,right,vardecl
 	In exractExprVardecl  expr.vardecl : undefined
 
 #4	expr -> j
-	In exractExprVardecl  expr : Joinpoint 'expression'
+	In exractExprVardecl  expr : Joinpoint 'varref'
 	In exractExprVardecl  expr.joinPointType : varref
 	In exractExprVardecl  expr.selects : vardecl
-	In exractExprVardecl  expr.vardecl : Joinpoint 'decl'
+	In exractExprVardecl  expr.vardecl : Joinpoint 'vardecl'
 	>>>> vardecl#4	int j
 
 
 #4	expr -> m
-	In exractExprVardecl  expr : Joinpoint 'expression'
+	In exractExprVardecl  expr : Joinpoint 'varref'
 	In exractExprVardecl  expr.joinPointType : varref
 	In exractExprVardecl  expr.selects : vardecl
-	In exractExprVardecl  expr.vardecl : Joinpoint 'decl'
+	In exractExprVardecl  expr.vardecl : Joinpoint 'vardecl'
 	>>>> vardecl#4	int m
 
 

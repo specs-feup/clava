@@ -37,7 +37,7 @@ NEW METHOD: int newClass2::new_foo2(int n) {
 }
 
 METHOD DECL BEFORE ADDING CLASS: undefined
-METHOD DECL AFTER ADDING CLASS: Joinpoint 'decl'
+METHOD DECL AFTER ADDING CLASS: Joinpoint 'method'
 
 Typedef: typedef int intType
 
