@@ -5,7 +5,10 @@ using namespace std;
 typedef double FLOAT;
 
 static void NaiveMatrixMultiply(FLOAT *A, FLOAT *B, FLOAT *C, int const n) {
-   for(int i = 0; i < n; i++) for(int j = 0; j < n; j++) for(int k = 0; k < n; k++) C[i * n + j] += A[i * n + k] * B[k * n + j];
+   for(int i = 0; i < n; i++)
+    for(int j = 0; j < n; j++)
+     for(int k = 0; k < n; k++)
+      C[i * n + j] += A[i * n + k] * B[k * n + j];
 }
 
 
@@ -15,19 +18,29 @@ static void BlockedMatrixMultiply(FLOAT *A, FLOAT *B, FLOAT *C, int const n) {
    int const blk_i = 64;
    int const blk_j = 64;
    int const blk_k = 64;
-   for(int i = 0; i < n; i += blk_i) for(int j = 0; j < n; j += blk_j) for(int k = 0; k < n; k += blk_k) for(int ii = i; ii < (((i + blk_i) < (n)) ? (i + blk_i) : (n)); ii++) for(int jj = j; jj < (((j + blk_j) < (n)) ? (j + blk_j) : (n)); jj++) for(int kk = k; kk < (((k + blk_k) < (n)) ? (k + blk_k) : (n)); kk++) C[ii * n + jj] = C[ii * n + jj] + A[ii * n + kk] * B[kk * n + jj];
+   for(int i = 0; i < n; i += blk_i)
+    for(int j = 0; j < n; j += blk_j)
+     for(int k = 0; k < n; k += blk_k)
+      for(int ii = i; ii < (((i + blk_i) < (n)) ? (i + blk_i) : (n)); ii++)
+       for(int jj = j; jj < (((j + blk_j) < (n)) ? (j + blk_j) : (n)); jj++)
+        for(int kk = k; kk < (((k + blk_k) < (n)) ? (k + blk_k) : (n)); kk++)
+         C[ii * n + jj] = C[ii * n + jj] + A[ii * n + kk] * B[kk * n + jj];
    #pragma isat marker M1_end
 }
 
 
 static void Initialize(FLOAT *X, int const n, FLOAT const v) {
-   for(int i = 0; i < n; i++) for(int j = 0; j < n; j++) X[i * n + j] = v;
+   for(int i = 0; i < n; i++)
+    for(int j = 0; j < n; j++)
+     X[i * n + j] = v;
 }
 
 
 static FLOAT Sum(FLOAT *X, int const n) {
    FLOAT s = 0;
-   for(int i = 0; i < n; i++) for(int j = 0; j < n; j++) s += X[i * n + j];
+   for(int i = 0; i < n; i++)
+    for(int j = 0; j < n; j++)
+     s += X[i * n + j];
    
    return s;
 }

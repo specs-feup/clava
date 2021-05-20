@@ -5,7 +5,8 @@ void foo() {
 
 int main() {
    int x, a, i;
-   while(x) a++;
+   while(x) 
+   	a++;
    while(x) {
       a++;
    }
@@ -20,7 +21,8 @@ int main() {
    if(x);
    if(x) {
    }
-   for(;;) i++;
+   for(;;) 
+   	i++;
    for(;;);
    for(;;) {
       i++;
@@ -28,7 +30,9 @@ int main() {
    for(;;) {
    }
    ;
-   do  x++;while (x);
+   do  
+   	x++;
+   while (x);
    do  {
       x++;
    }

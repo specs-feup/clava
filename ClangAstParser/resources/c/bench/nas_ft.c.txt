@@ -189,8 +189,7 @@ verify(128, 128, 32, niter, sums, verified);
 if(timers_enabled) timer_stop(14);
 timer_stop(1);
 *total_time = timer_read(1);
-if(!timers_enabled)
-return;
+if(!timers_enabled) return;
 printf(" FT subroutine timers \n");
 printf(" %26s =%9.4f\n", "FT total                  ", timer_read(1));
 printf(" %26s =%9.4f\n", "WarmUp time               ", timer_read(2));
@@ -231,8 +230,7 @@ ln = 2 * ln;
 }
 int ilog2(int n) {
 int nn, lg;
-if(n == 1)
-return 0;
+if(n == 1) return 0;
 lg = 1;
 nn = 2;
 while(nn < n) {
@@ -253,8 +251,7 @@ int n, n2;
 //   a^n = a*a^(n-1)       if n odd
 //---------------------------------------------------------------------
 result = 1;
-if(exponent == 0)
-return result;
+if(exponent == 0) return result;
 q = a;
 r = 1;
 n = exponent;

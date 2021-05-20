@@ -1,9 +1,6 @@
 #include <string>
-
 void foo() { // Inline, after compound // Inline comment, before compound (unsupported)
 }
-
-
 int main() { // Inline in function main, after compound
    int test = 0;
    test = 0 + 1; // Inline after statement that ends in a different line that started
@@ -44,19 +41,18 @@ int main() { // Inline in function main, after compound
       // Inline inside compound stmt
    }
    else if(1) {
-   }
-   else {
-   }
+      }
+      else {
+      }
    int currentDay = -1;
    std::string currentDayString = "Monday";
    if(currentDayString == "Monday") currentDay = 0; // Monday
    else if(currentDayString == "Tuesday") currentDay = 1; // Tuesday
-   else if(currentDayString == "Wednesday") currentDay = 2; // Wednesday
-   else if(currentDayString == "Thursday") currentDay = 3;
-   else if(currentDayString == "Friday") currentDay = 4;
-   else if(currentDayString == "Saturday") currentDay = 5;
-   else if(currentDayString == "Sunday") currentDay = 6;
-   
+      else if(currentDayString == "Wednesday") currentDay = 2; // Wednesday
+         else if(currentDayString == "Thursday") currentDay = 3;
+            else if(currentDayString == "Friday") currentDay = 4;
+               else if(currentDayString == "Saturday") currentDay = 5;
+                  else if(currentDayString == "Sunday") currentDay = 6;
    int conditional = 0 ? 1 : 10;
    
    return 0;
