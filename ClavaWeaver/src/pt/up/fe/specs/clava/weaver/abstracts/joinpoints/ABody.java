@@ -594,16 +594,16 @@ public abstract class ABody extends AScope {
      * CFG tester
      */
     @Override
-    public void cfgImpl() {
-        this.aScope.cfgImpl();
+    public String cfgImpl() {
+        return this.aScope.cfgImpl();
     }
 
     /**
      * DFG tester
      */
     @Override
-    public void dfgImpl() {
-        this.aScope.dfgImpl();
+    public String dfgImpl() {
+        return this.aScope.dfgImpl();
     }
 
     /**

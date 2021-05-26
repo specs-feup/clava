@@ -541,22 +541,23 @@ public abstract class AScope extends AStatement {
     /**
      * CFG tester
      */
-    public void cfgImpl() {
+    public String cfgImpl() {
         throw new UnsupportedOperationException(get_class()+": Action cfg not implemented ");
     }
 
     /**
      * CFG tester
      */
-    public final void cfg() {
+    public final String cfg() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "cfg", this, Optional.empty());
         	}
-        	this.cfgImpl();
+        	String result = this.cfgImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "cfg", this, Optional.empty());
+        		eventTrigger().triggerAction(Stage.END, "cfg", this, Optional.ofNullable(result));
         	}
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "cfg", e);
         }
@@ -565,22 +566,23 @@ public abstract class AScope extends AStatement {
     /**
      * DFG tester
      */
-    public void dfgImpl() {
+    public String dfgImpl() {
         throw new UnsupportedOperationException(get_class()+": Action dfg not implemented ");
     }
 
     /**
      * DFG tester
      */
-    public final void dfg() {
+    public final String dfg() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "dfg", this, Optional.empty());
         	}
-        	this.dfgImpl();
+        	String result = this.dfgImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "dfg", this, Optional.empty());
+        		eventTrigger().triggerAction(Stage.END, "dfg", this, Optional.ofNullable(result));
         	}
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "dfg", e);
         }
@@ -1104,8 +1106,8 @@ public abstract class AScope extends AStatement {
         actions.add("joinpoint addLocal(String, joinpoint)");
         actions.add("void setNaked(Boolean)");
         actions.add("void clear()");
-        actions.add("void cfg()");
-        actions.add("void dfg()");
+        actions.add("string cfg()");
+        actions.add("string dfg()");
     }
 
     /**

@@ -1165,7 +1165,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 return getWeaverEngine().getScriptEngine().eval("var _data = {" + splitter.toString() + "}; _data;");
                 // getWeaverEngine().getScriptEngine().eval("{" + splitter.toString() + "};");
             } catch (Exception e) {
-                SpecsLogs.msgWarn(
+                SpecsLogs.warn(
                         "Could not decode #pragma clava " + dataKeyword + " for contents '" + splitter.toString()
                                 + "', returning empty object",
                         e);

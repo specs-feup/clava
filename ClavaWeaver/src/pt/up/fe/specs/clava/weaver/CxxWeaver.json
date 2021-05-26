@@ -7024,7 +7024,7 @@
                   "tooltip": "CFG tester",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "String",
                               "name": "cfg"
                            }]
                },
@@ -7042,7 +7042,7 @@
                   "tooltip": "DFG tester",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "String",
                               "name": "dfg"
                            }]
                },
@@ -54843,7 +54843,7 @@
                   "tooltip": "CFG tester",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "String",
                               "name": "cfg"
                            }]
                },
@@ -54861,7 +54861,7 @@
                   "tooltip": "DFG tester",
                   "children": [
                            {
-                              "type": "void",
+                              "type": "String",
                               "name": "dfg"
                            }]
                },

@@ -304,9 +304,9 @@
 
 	<action name="clear" class="scope"	tooltip="Clears the contents of this scope (untested)" />
 	
-	<action name="cfg" class="scope"	tooltip="CFG tester" />
+	<action name="cfg" class="scope" return="string" tooltip="CFG tester" />
 	
-	<action name="dfg" class="scope"	tooltip="DFG tester" />
+	<action name="dfg" class="scope" return="string" tooltip="DFG tester" />
 
 	<!-- FUNCTION -->
 	<action name="clone" class="function" return="function" tooltip="Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class">
