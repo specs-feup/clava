@@ -510,6 +510,22 @@
 		<attribute name="isPointerDeref" type="Boolean" />
 	</artifact>
 
+
+	<!-- TERNARY OPERATOR -->
+	<artifact class="ternaryOp">
+		<attribute name="cond" type="expression">
+			<def/>
+		</attribute>		
+		<attribute name="trueExpr" type="expression">
+			<def/>
+		</attribute>
+		<attribute name="falseExpr" type="expression">
+			<def/>
+		</attribute>
+	</artifact>
+
+
+
 	<!-- CAST -->
 	<artifact class="cast">
 		<attribute name="isImplicitCast" type="Boolean" tooltip="[DEPRECATED] Use expr.implicitCast instead"/> 

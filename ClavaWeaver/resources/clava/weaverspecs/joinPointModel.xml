@@ -239,9 +239,17 @@
 		<select alias="left"			class="expression"/>
 		<select alias="right"			class="expression"/>
 	</joinpoint>
-	
+
+	<!-- UNARY OPERATOR -->		
 	<joinpoint class="unaryOp" 	extends="op">
 		<select alias="operand"			class="expression"/>
+	</joinpoint>	
+
+	<!-- TERNARY OPERATOR -->		
+	<joinpoint class="ternaryOp" 	extends="op">
+		<select alias="cond"			class="expression"/>
+		<select alias="trueExpr"			class="expression"/>
+		<select alias="falseExpr"			class="expression"/>	
 	</joinpoint>	
 	
 	<!-- NEW EXPR -->	

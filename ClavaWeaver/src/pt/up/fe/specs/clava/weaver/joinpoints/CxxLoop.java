@@ -797,4 +797,5 @@ public class CxxLoop extends ALoop {
     public void setBodyImpl(AScope body) {
         defBodyImpl(body);
     }
+
 }
