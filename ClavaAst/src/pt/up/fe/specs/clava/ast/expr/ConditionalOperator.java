@@ -37,6 +37,18 @@ public class ConditionalOperator extends AbstractConditionalOperator {
         return getChild(Expr.class, 2);
     }
 
+    public Expr setCondition(Expr newCondition) {
+        return (Expr) setChild(0, newCondition);
+    }
+
+    public Expr setTrueExpr(Expr newTrueExpr) {
+        return (Expr) setChild(1, newTrueExpr);
+    }
+
+    public Expr setFalseExpr(Expr newFalseExpr) {
+        return (Expr) setChild(2, newFalseExpr);
+    }
+
     @Override
     public String getCode() {
         StringBuilder code = new StringBuilder();
