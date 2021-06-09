@@ -18,19 +18,11 @@ import java.util.Collection;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 
-public abstract class AbstractConditionalOperator extends Expr {
+public abstract class AbstractConditionalOperator extends Operator {
 
     public AbstractConditionalOperator(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-    }
-
-    public AbstractConditionalOperator(ExprData exprData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-
-        super(exprData, info, children);
     }
 
 }

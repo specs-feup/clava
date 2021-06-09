@@ -25,18 +25,6 @@ public class ConditionalOperator extends AbstractConditionalOperator {
         super(data, children);
     }
 
-    // public ConditionalOperator(ExprData exprData, ClavaNodeInfo info,
-    // Expr condition, Expr trueExpr, Expr falseExpr) {
-    //
-    // this(exprData, info, Arrays.asList(condition, trueExpr, falseExpr));
-    // }
-    //
-    // private ConditionalOperator(ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // super(exprData, info, children);
-    // }
-
     public Expr getCondition() {
         return getChild(Expr.class, 0);
     }
@@ -49,11 +37,6 @@ public class ConditionalOperator extends AbstractConditionalOperator {
         return getChild(Expr.class, 2);
     }
 
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new ConditionalOperator(getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public String getCode() {
         StringBuilder code = new StringBuilder();
@@ -65,5 +48,20 @@ public class ConditionalOperator extends AbstractConditionalOperator {
                 .append(getFalseExpr().getCode());
 
         return code.toString();
+    }
+
+    @Override
+    public boolean isBitwise() {
+        return false;
+    }
+
+    @Override
+    public String getKindName() {
+        return "ternary";
+    }
+
+    @Override
+    public String getOperatorCode() {
+        return "?";
     }
 }
