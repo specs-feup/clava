@@ -198,4 +198,9 @@ public class CTest {
     public void testAddArg() {
         newTester().test("AddArgTest.lara", "add_arg.c");
     }
+
+    @Test
+    public void testCfg() {
+        newTester().test("Cfg.lara", "cfg.c");
+    }
 }

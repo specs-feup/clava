@@ -1,0 +1,33 @@
+init_matrix -> rand
+cfg.c:44:1 -> 50:1 -> cfg.c:47:35 -> 47:40
+stdlib.h:464:3 -> 464:24
+print_matrix_result -> printf
+cfg.c:52:1 -> 60:1 -> cfg.c:59:4 -> 59:34
+stdio.h:375:1 -> 384:1
+test_matrix_mul -> malloc
+cfg.c:62:1 -> 75:1 -> cfg.c:66:28 -> 66:57
+stdlib.h:531:3 -> 531:36
+test_matrix_mul -> malloc
+cfg.c:62:1 -> 75:1 -> cfg.c:67:28 -> 67:57
+stdlib.h:531:3 -> 531:36
+test_matrix_mul -> malloc
+cfg.c:62:1 -> 75:1 -> cfg.c:68:28 -> 68:57
+stdlib.h:531:3 -> 531:36
+test_matrix_mul -> init_matrix
+cfg.c:62:1 -> 75:1 -> cfg.c:70:4 -> 70:23
+cfg.c:44:1 -> 50:1
+test_matrix_mul -> init_matrix
+cfg.c:62:1 -> 75:1 -> cfg.c:71:4 -> 71:23
+cfg.c:44:1 -> 50:1
+test_matrix_mul -> matrix_mult
+cfg.c:62:1 -> 75:1 -> cfg.c:73:4 -> 73:32
+cfg.c:15:1 -> 39:1
+test_matrix_mul -> print_matrix_result
+cfg.c:62:1 -> 75:1 -> cfg.c:74:4 -> 74:31
+cfg.c:52:1 -> 60:1
+main -> srand
+cfg.c:77:1 -> 81:1 -> cfg.c:79:4 -> 79:11
+stdlib.h:466:3 -> 466:40
+main -> test_matrix_mul
+cfg.c:77:1 -> 81:1 -> cfg.c:80:4 -> 80:20
+cfg.c:62:1 -> 75:1

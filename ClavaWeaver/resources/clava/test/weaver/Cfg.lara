@@ -1,0 +1,25 @@
+import weaver.Query;
+
+aspectdef Test
+
+	for(var chain of Query.search("function").search("call").chain()) {
+		var $function = chain["function"];
+		var $call = chain["call"];
+		
+		println($function.name + " -> " + $call.name);
+		println($function.location + " -> " + $call.location);		
+		println($call.decl.location);
+/*
+    for(var $function of Query.search("function")) {
+
+
+        try {
+			println($function.body.cfg);
+        } catch(e) {
+            println("Could not generate cfg for scope in location " + $scope.location);
+            println(e);
+        }
+*/
+    }
+
+end
