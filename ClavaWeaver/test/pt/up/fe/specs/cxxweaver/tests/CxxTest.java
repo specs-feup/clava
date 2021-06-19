@@ -309,4 +309,9 @@ public class CxxTest {
     public void testReverseIterator() {
         newTester().test("ReverseIterator.lara", "reverse_iterator.cpp");
     }
+
+    @Test
+    public void testPragmaDataV2() {
+        newTester().test("PragmaDataV2.lara", "pragma_data_v2.cpp");
+    }
 }
