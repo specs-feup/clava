@@ -264,6 +264,22 @@ public class CxxTest {
         new CxxTester("operator.cpp").test();
     }
 
+    // -Xclang-ast-dump-nostdinc-nocudalib-nocudainc--cuda-gpu-arch=sm_30
+    // "--cuda-device-only"
+
+    @Test
+    public void testCudaAtomicAdd() {
+        new CxxTester("cuda/atomicAdd.cu")
+                .addFlags("-Xclang", "--nocudalib", "--cuda-gpu-arch=sm_30",
+                        "--cuda-device-only",
+                        "--cuda-path=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.3")
+                // .addFlags("-x", "cuda", "--cuda-path=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.3",
+                // "-nocudalib", "-nocudainc",
+                // "--cuda-device-only")
+                .onePass()
+                .showCode().test();
+    }
+
     // @Test
     // public void testListInitialization() {
     // new CxxTester("list_initialization.cpp").onePass().showCode().test();
