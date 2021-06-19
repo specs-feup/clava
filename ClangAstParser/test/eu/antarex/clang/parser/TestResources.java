@@ -40,7 +40,4 @@ public class TestResources {
                 .collect(Collectors.toList());
     }
 
-    // public static ResourceProvider newResourceProvider(String resource) {
-    // return () -> resource;
-    // }
 }
