@@ -13,6 +13,8 @@
 #include "clang/AST/Decl.h"
 #include "clang/AST/Stmt.h"
 #include "clang/AST/Type.h"
+#include "clang/AST/Attr.h"
+
 
 /*
 #include "clang/AST/TypeVisitor.h"

@@ -69,7 +69,7 @@ bool ClangAstDumper::dumpStmt(const Stmt* stmtAddr) {
 
 #ifdef OLD_OUTPUT
     // Dump location
-    dumpSourceRange(extendedId.str(), stmtAddr->getLocStart(), stmtAddr->getLocEnd());
+    dumpSourceRange(extendedId.str(), stmtAddr->getBeginLoc(), stmtAddr->getEndLoc());
 #endif
 
     //dumpIdToClassMap(stmtAddr, clava::getClassName(stmtAddr));

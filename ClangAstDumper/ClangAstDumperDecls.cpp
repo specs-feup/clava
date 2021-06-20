@@ -107,7 +107,7 @@ bool ClangAstDumper::dumpDecl(const Decl* declAddr) {
 
     // Dump location
 #ifdef OLD_OUTPUT
-    dumpSourceRange(extendedId.str(), declAddr->getLocStart(), declAddr->getLocEnd());
+    dumpSourceRange(extendedId.str(), declAddr->getBeginLoc(), declAddr->getEndLoc());
 #endif
 /*
     // If NamedDecl, check if it has name

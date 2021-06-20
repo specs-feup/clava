@@ -7,8 +7,10 @@
 #include "ClangNodes.h"
 #include "ClangEnums.h"
 
-#include "clang/AST/AST.h"
+//#include "clang/AST/AST.h"
 #include "clang/Lex/Lexer.h"
+
+#include "clang/Basic/SourceManager.h"
 
 
 #include <iostream>

@@ -122,7 +122,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
             DumpResources::omp << "NUM_CLAUSES" << "->" << D->getNumClauses() << "\n";
             for(unsigned i=0; i<D->getNumClauses(); i++) {
                 OMPClause* clause = D->getClause(i);
-                DumpResources::omp << clause->getClauseKind() << "->" << loc2str(clause->getLocStart(), clause->getLocEnd(), Context) << "\n";
+                DumpResources::omp << clause->getClauseKind() << "->" << loc2str(clause->getBeginLoc(), clause->getEndLoc(), Context) << "\n";
             }
         }
 

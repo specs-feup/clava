@@ -6,6 +6,9 @@
 #include "ClangEnums.h"
 
 #include "clang/Lex/Lexer.h"
+#include "clang/AST/Attr.h"
+#include "clang/Basic/SourceManager.h"
+
 
 #include <bitset>
 

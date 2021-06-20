@@ -221,7 +221,7 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
 void clava::ClavaDataDumper::DumpStmtData(const Stmt *S) {
 
     // Original source range
-    clava::dumpSourceInfo(Context, S->getLocStart(), S->getLocEnd());
+    clava::dumpSourceInfo(Context, S->getBeginLoc(), S->getEndLoc());
 
 }
 
@@ -423,9 +423,9 @@ void clava::ClavaDataDumper::DumpFloatingLiteralData(const FloatingLiteral *E) {
     clava::dump(E->getValueAsApproximateDouble());
     /*
     llvm::errs() << "Source range:" << clava::getSource(Context, E->getSourceRange()) << "\n";
-    llvm::errs() << "Source loc start/end:" << clava::getSource(Context, SourceRange(E->getLocStart(), E->getLocEnd())) << "\n";
-    llvm::errs() << "Source expr:" << clava::getSource(Context, SourceRange(E->getLocStart(), E->getExprLoc())) << "\n";
-    llvm::errs() << "Source location:" << clava::getSource(Context, SourceRange(E->getLocStart(), E->getLocation())) << "\n";
+    llvm::errs() << "Source loc start/end:" << clava::getSource(Context, SourceRange(E->getBeginLoc(), E->getEndLoc())) << "\n";
+    llvm::errs() << "Source expr:" << clava::getSource(Context, SourceRange(E->getBeginLoc(), E->getExprLoc())) << "\n";
+    llvm::errs() << "Source location:" << clava::getSource(Context, SourceRange(E->getBeginLoc(), E->getLocation())) << "\n";
 */
 }
 
