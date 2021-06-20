@@ -1,6 +1,16 @@
 CLANG
 =======
 
+(llvm12)
+
+Was able to build Clang+LLVM using the instructions on GitHub, with the following commands:
+
+cmake -S llvm -B build -G "MinGW Makefiles" -DLLVM_ENABLE_PROJECTS='clang' -DCMAKE_BUILD_TYPE=Release  -DLLVM_ENABLE_ASSERTIONS=On
+
+cmake --build build
+
+(llvm7)
+
 Windows
 -------
 
@@ -21,6 +31,25 @@ Windows
 
 Artifact
 --------
+
+(llvm12)
+- build (files from the build)
+    |- include
+	   |- clang (llvm-project/build/tools/clang/include)
+	   |- llvm (llvm-project/build/include)
+	|- lib (almost all .a after build)
+- src (files from the source)
+   |- include
+      |- clang (clang-12.0.0.src.tar.xz, include)
+	  |- clang-c (clang-12.0.0.src.tar.xz, include)
+	  |- llvm (llvm-12.0.0.src.tar.xz, include)
+	  |- llvm-c (llvm-12.0.0.src.tar.xz, include)
+
+
+
+
+
+(llvm7)
 
 Folder structure:
 
