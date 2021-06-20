@@ -25,7 +25,6 @@ import pt.up.fe.specs.clava.ast.attr.OpenCLKernelAttr;
 import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
-import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -85,7 +84,6 @@ public class DataStoreToLegacy {
 
     public static DeclData getDecl(DataStore data) {
         return new DeclData(
-                data.get(NamedDecl.IS_HIDDEN),
                 data.get(Decl.IS_IMPLICIT),
                 data.get(Decl.IS_USED),
                 data.get(Decl.IS_REFERENCED),

@@ -26,7 +26,6 @@ import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.legacy.AttrData;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
-import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.clava.ast.decl.data.FunctionDeclData;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -205,7 +204,6 @@ public class LegacyToDataStore {
         nodeData.add(Decl.IS_REFERENCED, data.isReferenced());
         nodeData.add(Decl.IS_INVALID_DECL, data.isInvalid());
 
-        nodeData.add(NamedDecl.IS_HIDDEN, data.isHidden());
         nodeData.add(FunctionDecl.IS_CONSTEXPR, data.isConstexpr());
 
         return this;

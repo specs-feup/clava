@@ -115,7 +115,6 @@ public class DeclDataParser {
 
         data.add(NamedDecl.NAME_KIND, NameKind.getHelper().fromValue(LineStreamParsers.integer(lines)));
 
-        data.add(NamedDecl.IS_HIDDEN, LineStreamParsers.oneOrZero(lines));
         data.add(NamedDecl.IS_CXX_CLASS_MEMBER, LineStreamParsers.oneOrZero(lines));
         data.add(NamedDecl.IS_CXX_INSTANCE_MEMBER, LineStreamParsers.oneOrZero(lines));
 

@@ -176,7 +176,7 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl *D) {
 
 
 void clava::ClavaDataDumper::DumpDeclData(const Decl *D) {
-    clava::dumpSourceInfo(Context, D->getLocStart(), D->getLocEnd());
+    clava::dumpSourceInfo(Context, D->getBeginLoc(), D->getEndLoc());
     //clava::dumpSourceInfo(Context, D->getSourceRange().getBegin(), D->getSourceRange().getEnd());
 
     //clava::dumpSourceRange(Context,     D->getSourceRange().getBegin(),     D->getSourceRange().getEnd());
@@ -238,7 +238,7 @@ void clava::ClavaDataDumper::DumpNamedDeclData(const NamedDecl *D) {
     clava::dump(clava::getQualifiedPrefix(D));
     clava::dump(D->getDeclName().getAsString());
     clava::dump(D->getDeclName().getNameKind());
-    clava::dump(D->isHidden());
+    //clava::dump(D->isHidden()); // LLVM 7
     //llvm::errs() << D->getQualifiedNameAsString() << "\n";
     //llvm::errs() << D->getDeclName().getNameKind() << "\n";
     //llvm::errs() << D->isHidden() << "\n";

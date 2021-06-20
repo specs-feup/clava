@@ -56,11 +56,6 @@ public abstract class NamedDecl extends Decl {
             .setDefault(() -> NameKind.IDENTIFIER);
 
     /**
-     * True if this declaration is hidden from name lookup.
-     */
-    public final static DataKey<Boolean> IS_HIDDEN = KeyFactory.bool("isHidden");
-
-    /**
      * True if this declaration is a C++ class member.
      */
     public final static DataKey<Boolean> IS_CXX_CLASS_MEMBER = KeyFactory.bool("isCXXClassMember");
