@@ -22,7 +22,6 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 
@@ -43,8 +42,8 @@ public abstract class Pragma extends ClavaNode {
      *
      * @return the node targeted by this pragma
      */
-    public Optional<Stmt> getTarget() {
-        return ClavaNodes.nextStatement(this);
+    public Optional<ClavaNode> getTarget() {
+        return ClavaNodes.nextNode(this);
     }
 
     /**

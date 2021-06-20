@@ -34,6 +34,6 @@ public abstract class SwitchCase extends Stmt {
     }
 
     public Optional<Stmt> getSubStmt() {
-        return ClavaNodes.nextStatement(this);
+        return ClavaNodes.nextNode(this).map(node -> (Stmt) node);
     }
 }

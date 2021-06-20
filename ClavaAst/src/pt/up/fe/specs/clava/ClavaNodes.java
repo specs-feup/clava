@@ -472,7 +472,7 @@ public class ClavaNodes {
      *
      * @return the node targeted by this pragma
      */
-    public static Optional<Stmt> nextStatement(ClavaNode node) {
+    public static Optional<ClavaNode> nextNode(ClavaNode node) {
         if (!node.hasParent()) {
             SpecsLogs.msgLib(
                     "[Clava] Tried to access target of pragma without parent. Pragma: '" + node.getCode() + "'");
