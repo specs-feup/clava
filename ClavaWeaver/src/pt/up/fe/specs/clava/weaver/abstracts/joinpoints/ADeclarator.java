@@ -149,7 +149,7 @@ public abstract class ADeclarator extends ANamedDecl {
      * @param type 
      */
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void setTypeImpl(AType type) {
         this.aNamedDecl.setTypeImpl(type);
     }
 

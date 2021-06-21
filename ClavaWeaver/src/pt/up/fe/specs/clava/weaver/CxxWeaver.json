@@ -842,7 +842,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -1749,7 +1749,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -2904,7 +2904,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -3880,7 +3880,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -5034,7 +5034,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -6065,7 +6065,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -7319,7 +7319,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -8509,7 +8509,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -9688,7 +9688,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -10677,7 +10677,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -11656,7 +11656,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -13049,7 +13049,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -14228,7 +14228,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -15217,7 +15217,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -16268,7 +16268,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -17191,7 +17191,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -18110,7 +18110,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -19009,7 +19009,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -19982,7 +19982,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -20928,7 +20928,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -22102,7 +22102,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -23001,7 +23001,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -23987,7 +23987,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -25158,7 +25158,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -26130,7 +26130,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -27076,7 +27076,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -28049,7 +28049,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -29382,7 +29382,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -30287,6 +30287,39 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Adds a new parameter to the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addParam"
+                           },
+                           {
+                              "type": "param",
+                              "name": "param",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds a new parameter to the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addParam"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "type",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class",
                   "children": [
                            {
@@ -30731,7 +30764,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -31926,7 +31959,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -33014,7 +33047,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -33940,7 +33973,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -34886,7 +34919,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -36279,7 +36312,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -37255,7 +37288,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -38234,7 +38267,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -39429,7 +39462,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -40351,6 +40384,39 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Adds a new parameter to the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addParam"
+                           },
+                           {
+                              "type": "param",
+                              "name": "param",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds a new parameter to the function",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addParam"
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "type",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class",
                   "children": [
                            {
@@ -40795,7 +40861,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -41768,7 +41834,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -42714,7 +42780,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -44117,7 +44183,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -45088,7 +45154,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -46164,7 +46230,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -47310,7 +47376,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -48487,7 +48553,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -49441,7 +49507,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -50703,7 +50769,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -51865,7 +51931,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -52881,7 +52947,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -53883,7 +53949,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -55138,7 +55204,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -56127,7 +56193,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -57143,7 +57209,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -58132,7 +58198,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -59095,7 +59161,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -60258,7 +60324,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -61436,7 +61502,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -62446,7 +62512,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -63392,7 +63458,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -64538,7 +64604,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -65511,7 +65577,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -66484,7 +66550,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -67649,7 +67715,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -68648,7 +68714,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -69640,7 +69706,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -70786,7 +70852,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -71863,7 +71929,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -73039,7 +73105,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -74041,7 +74107,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]
@@ -75046,7 +75112,7 @@
                               "name": "setType"
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "type",
                               "defaultValue": ""
                            }]

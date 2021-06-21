@@ -186,7 +186,7 @@ public abstract class AMarker extends APragma {
      * @param type 
      */
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void setTypeImpl(AType type) {
         this.aPragma.setTypeImpl(type);
     }
 

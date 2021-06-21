@@ -426,7 +426,7 @@ public abstract class AMethod extends AFunction {
      * @param type 
      */
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void setTypeImpl(AType type) {
         this.aFunction.setTypeImpl(type);
     }
 
@@ -637,6 +637,25 @@ public abstract class AMethod extends AFunction {
     @Override
     public void addParamImpl(String param) {
         this.aFunction.addParamImpl(param);
+    }
+
+    /**
+     * Adds a new parameter to the function
+     * @param param 
+     */
+    @Override
+    public void addParamImpl(AParam param) {
+        this.aFunction.addParamImpl(param);
+    }
+
+    /**
+     * Adds a new parameter to the function
+     * @param name 
+     * @param type 
+     */
+    @Override
+    public void addParamImpl(String name, AType type) {
+        this.aFunction.addParamImpl(name, type);
     }
 
     /**

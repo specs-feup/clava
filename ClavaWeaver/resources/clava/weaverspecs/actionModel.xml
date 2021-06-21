@@ -40,7 +40,7 @@
 
 	<!-- Sets the type of a node, if it has a type -->
 	<action name="setType" tooltip="Sets the type of a node, if it has a type">
-		<parameter name="type" type="joinpoint" />
+		<parameter name="type" type="type" />
 	</action>
 
 	<!-- Performs a copy of the node and its children, but not of the nodes in its fields -->
@@ -373,6 +373,17 @@
 	<action name="addParam" class="function" tooltip="Adds a new parameter to the function">
 		<parameter name="param" type="String" />
 	</action>
+	
+	<action name="addParam" class="function" tooltip="Adds a new parameter to the function">
+		<parameter name="param" type="param" />
+	</action>
+
+	<action name="addParam" class="function" tooltip="Adds a new parameter to the function">
+		<parameter name="name" type="String" />
+		<parameter name="type" type="type" />		
+	</action>
+
+
 
 	<!-- METHOD -->
 	<!-- 

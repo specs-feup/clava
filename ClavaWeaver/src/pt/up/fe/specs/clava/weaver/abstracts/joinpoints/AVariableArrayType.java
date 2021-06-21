@@ -347,7 +347,7 @@ public abstract class AVariableArrayType extends AArrayType {
      * @param type 
      */
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void setTypeImpl(AType type) {
         this.aArrayType.setTypeImpl(type);
     }
 

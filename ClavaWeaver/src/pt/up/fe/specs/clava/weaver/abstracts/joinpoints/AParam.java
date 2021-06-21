@@ -222,7 +222,7 @@ public abstract class AParam extends AVardecl {
      * @param type 
      */
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void setTypeImpl(AType type) {
         this.aVardecl.setTypeImpl(type);
     }
 

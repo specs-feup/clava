@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +22,7 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
@@ -446,21 +446,22 @@ public class CxxFunction extends AFunction {
      * Setting the type of a Function join point sets the return type
      */
     @Override
-    public void setTypeImpl(AJoinPoint type) {
-        // Get new type to set
-        Type newType = (Type) type.getNode();
-
-        FunctionType functionType = function.getFunctionType();
-
-        // Create a copy of the function type, to avoid setting the type on all functions with the same signature
-        FunctionType functionTypeCopy = (FunctionType) functionType.copy();
-
-        // Replace the return type of the function type copy
-        functionTypeCopy.set(FunctionType.RETURN_TYPE, newType);
-        // CxxActions.replace(functionTypeCopy.getReturnType(), newType, getWeaverEngine());
-
-        // Set the function type copy as the type of the function
-        function.setType(functionTypeCopy);
+    public void setTypeImpl(AType type) {
+        setReturnTypeImpl(type);
+        // // Get new type to set
+        // Type newType = (Type) type.getNode();
+        //
+        // FunctionType functionType = function.getFunctionType();
+        //
+        // // Create a copy of the function type, to avoid setting the type on all functions with the same signature
+        // FunctionType functionTypeCopy = (FunctionType) functionType.copy();
+        //
+        // // Replace the return type of the function type copy
+        // functionTypeCopy.set(FunctionType.RETURN_TYPE, newType);
+        // // CxxActions.replace(functionTypeCopy.getReturnType(), newType, getWeaverEngine());
+        //
+        // // Set the function type copy as the type of the function
+        // function.setType(functionTypeCopy);
     }
 
     // @Override
@@ -550,16 +551,17 @@ public class CxxFunction extends AFunction {
         for (int i = 0; i < value.length; i++) {
             String typeVarname = value[i];
 
-            typeVarname = typeVarname.trim();
-            int indexOfSpace = typeVarname.lastIndexOf(' ');
-            if (indexOfSpace == -1) {
-                throw new RuntimeException("Expected parameter to be a type - varName pair, separated by a space");
-            }
-
-            String type = typeVarname.substring(0, indexOfSpace).trim();
-            String varName = typeVarname.substring(indexOfSpace + 1).trim();
-
-            ParmVarDecl parmVarDecl = getFactory().parmVarDecl(varName, getFactory().literalType(type));
+            var parmVarDecl = ClavaNodes.toParam(typeVarname, function);
+            // typeVarname = typeVarname.trim();
+            // int indexOfSpace = typeVarname.lastIndexOf(' ');
+            // if (indexOfSpace == -1) {
+            // throw new RuntimeException("Expected parameter to be a type - varName pair, separated by a space");
+            // }
+            //
+            // String type = typeVarname.substring(0, indexOfSpace).trim();
+            // String varName = typeVarname.substring(indexOfSpace + 1).trim();
+            //
+            // ParmVarDecl parmVarDecl = getFactory().parmVarDecl(varName, getFactory().literalType(type));
 
             params[i] = CxxJoinpoints.create(parmVarDecl, AParam.class);
         }
@@ -623,11 +625,30 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
+    public void addParamImpl(AParam param) {
+        var originalParams = getParamsArrayImpl();
+        var newParams = Arrays.copyOf(originalParams, originalParams.length + 1);
+
+        newParams[newParams.length - 1] = param;
+
+        defParamsImpl(newParams);
+    }
+
+    @Override
     public void addParamImpl(String param) {
+        var paramNode = ClavaNodes.toParam(param, function);
+        addParamImpl(CxxJoinpoints.create(paramNode, AParam.class));
 
-        var l = new ArrayList<>(Arrays.asList(getParamNamesArrayImpl()));
-        l.add(param);
+        // var l = new ArrayList<>(Arrays.asList(getParamNamesArrayImpl()));
+        // l.add(param);
 
-        defParamsImpl(l.toArray(new String[0]));
+        // defParamsImpl(l.toArray(new String[0]));
+
+    }
+
+    @Override
+    public void addParamImpl(String name, AType type) {
+        var paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());
+        addParamImpl(CxxJoinpoints.create(paramNode, AParam.class));
     }
 }

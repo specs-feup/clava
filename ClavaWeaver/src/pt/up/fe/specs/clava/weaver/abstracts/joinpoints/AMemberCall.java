@@ -358,7 +358,7 @@ public abstract class AMemberCall extends ACall {
      * @param type 
      */
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void setTypeImpl(AType type) {
         this.aCall.setTypeImpl(type);
     }
 
