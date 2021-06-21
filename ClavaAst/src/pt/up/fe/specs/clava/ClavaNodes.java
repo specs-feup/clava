@@ -29,6 +29,7 @@ import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
+import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CXXOperatorCallExpr;
@@ -661,5 +662,20 @@ public class ClavaNodes {
         }
 
         return null;
+    }
+
+    public static ParmVarDecl toParam(String typeVarname, ClavaNode hint) {
+        typeVarname = typeVarname.trim();
+        int indexOfSpace = typeVarname.lastIndexOf(' ');
+        if (indexOfSpace == -1) {
+            throw new RuntimeException("Expected parameter to be a type - varName pair, separated by a space");
+        }
+
+        String type = typeVarname.substring(0, indexOfSpace).trim();
+        String varName = typeVarname.substring(indexOfSpace + 1).trim();
+
+        var factory = hint.getFactoryWithNode();
+        return factory.parmVarDecl(varName, factory.literalType(type));
+
     }
 }
