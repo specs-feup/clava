@@ -454,3 +454,12 @@ ClavaJoinPoints.forStmt = function($init, $condition, $inc, $body) {
 		
 	return AstFactory.forStmt($init, $condition, $inc, $body);
 }
+
+
+/**
+ * @param {string} name
+ * @param {$type} $type
+ * */
+ClavaJoinPoints.param = function(name, $type) {
+	return AstFactory.param(name, $type);
+}
