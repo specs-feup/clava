@@ -1,5 +1,6 @@
 import clava.Clava;
 import clava.ClavaType;
+import weaver.JoinPoints;
 import lara.Check;
 
 
@@ -13,11 +14,13 @@ var ClavaJoinPoints = {};
 
 /**
  * @param {J#ClavaNode} node - A node of the AST.
+ * @deprecated use JoinPoints.getInstance().toJoinPoint(node)
  */
 ClavaJoinPoints.create = function(node) {
+	JoinPoints.getInstance().toJoinPoint(node);
 	// Check instance
-	checkTrue(Java.type("pt.up.fe.specs.clava.ClavaNode").class.isInstance(node), "ClavaJoinPoints.create::node: Expected input to be a ClavaNode");
-	return Java.type("pt.up.fe.specs.clava.weaver.CxxJoinpoints").create(node);
+	//checkTrue(Java.type("pt.up.fe.specs.clava.ClavaNode").class.isInstance(node), "ClavaJoinPoints.create::node: Expected input to be a ClavaNode");
+	//return Java.type("pt.up.fe.specs.clava.weaver.CxxJoinpoints").create(node);
 }
 
 /**
@@ -291,8 +294,10 @@ ClavaJoinPoints.assign = function($leftHand, $rightHand) {
 ClavaJoinPoints.ifStmt = function($condition, $then, $else) {
 	$condition = ClavaType.asExpression($condition);
 
-	Check.isJoinPoint($then, 'statement', true);
-	Check.isJoinPoint($else, 'statement', true);
+	var $then = ClavaType.asScope($then);
+	var $else = ClavaType.asScope($else);
+	//Check.isJoinPoint($then, 'statement', true);
+	//Check.isJoinPoint($else, 'statement', true);
 	
 	
 	return AstFactory.ifStmt($condition, $then, $else);
