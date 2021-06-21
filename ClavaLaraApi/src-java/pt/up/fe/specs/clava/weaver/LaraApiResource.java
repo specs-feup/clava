@@ -111,6 +111,7 @@ public enum LaraApiResource implements LaraResourceProvider {
 
     // Static objects
 
+    _CLAVA_JAVA_TYPES("_ClavaJavaTypes.lara"),
     CLAVA("Clava.lara"),
     CLAVA_ASPECTS("ClavaAspects.lara"),
     CLAVA_CODE("ClavaCode.lara"),
