@@ -510,7 +510,7 @@ public class ClavaNodes {
                 }
             }
 
-            return Optional.of((Stmt) sibling);
+            return Optional.of(sibling);
 
             // if (!(sibling instanceof Comment) && !(sibling instanceof Pragma)) {
             // return Optional.of(sibling);
