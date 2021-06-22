@@ -5,7 +5,7 @@ aspectdef OCL_Experiments
 	var $d = Query.search("function").first();
 	var $fn = $d.clone($d.name+"_");
 	$d.setReturnType(ClavaJoinPoints.typeLiteral("void"));
-	$fn.type = ClavaJoinPoints.typeLiteral("void");	
+	//$fn.type = ClavaJoinPoints.typeLiteral("void");	
 	$d.body.replaceWith(ClavaJoinPoints.scope());
 
 
