@@ -122,7 +122,7 @@ namespace clava {
     //void dump(const TemplateName& templateName);
     void dump(std::function<void(llvm::raw_string_ostream&)> dumper);
     void dump(const clang::DesignatedInitExpr::Designator* designator);
-
+    void dump(const ExplicitSpecifier& specifier);
 
 
     bool isSystemHeader(const Stmt* S, ASTContext* context);

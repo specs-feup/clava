@@ -41,7 +41,7 @@ static constexpr const char* const PREFIX = "COUNTER";
 /* DumpAstVisitor implementation */
 
 bool DumpAstVisitor::TraverseDecl(Decl *D) {
-    FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+    FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc();
     if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
 #ifdef OLD_OUTPUT
         (*D).dump(llvm::outs());
@@ -95,7 +95,7 @@ PrintNodesTypesRelationsVisitor::PrintNodesTypesRelationsVisitor(ASTContext *Con
 //PrintNodesTypesRelationsVisitor::PrintNodesTypesRelationsVisitor(ASTContext *Context, int id, ClangAstDumper *dumper) : Context(Context), id(id), dumper(dumper)  {};
 
 static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::LangOptions lopt) {
-    clang::SourceLocation b(d->getLocStart()), _e(d->getLocEnd());
+    clang::SourceLocation b(d->getBeginLoc()), _e(d->getEndLoc());
     clang::SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, *sm, lopt));
     return std::string(sm->getCharacterData(b),
                        sm->getCharacterData(e)-sm->getCharacterData(b));
@@ -114,7 +114,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
     bool PrintNodesTypesRelationsVisitor::VisitOMPExecutableDirective(OMPExecutableDirective * D) {
 
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+        FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
 
         if (!fullLocation.isInSystemHeader()) {
             // Get OMP Directive
@@ -156,7 +156,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
     bool PrintNodesTypesRelationsVisitor::VisitCXXConstructExpr(CXXConstructExpr * D) {
 
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+        FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
         if (!fullLocation.isInSystemHeader()) {
 
             // Check if temporary object
@@ -173,7 +173,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     // Dump types for Expr, TypeDecl and ValueDecl, as well as the connection between them
     bool PrintNodesTypesRelationsVisitor::VisitExpr(Expr *D) {
 #ifdef OLD_OUTPUT
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+        FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
         if (!fullLocation.isInSystemHeader()) {
             //if(D->getType().isNull()) {
             //    llvm::errs() << "VisitExpr null type\n";
@@ -188,7 +188,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     bool PrintNodesTypesRelationsVisitor::VisitTypeDecl(TypeDecl *D) {
 
 #ifdef OLD_OUTPUT
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+        FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
         if (!fullLocation.isInSystemHeader()) {
             //llvm::errs() << "Visiting Type Decl: " << D << "\n";
             dumpNodeToType(DumpResources::nodetypes, D, D->getTypeForDecl());
@@ -204,7 +204,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
      */
     bool PrintNodesTypesRelationsVisitor::VisitTypedefNameDecl(TypedefNameDecl *D) {
 #ifdef OLD_OUTPUT
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+        FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
         if (!fullLocation.isInSystemHeader()) {
             //if(D->getUnderlyingType().isNull()) {
             //    llvm::errs() << "VisitNameDecl null type\n";
@@ -218,7 +218,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
 
     bool PrintNodesTypesRelationsVisitor::VisitEnumDecl(EnumDecl *D) {
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+        FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
         if (!fullLocation.isInSystemHeader()) {
             //if(D->getIntegerType().isNull()) {
             //    llvm::errs() << "VisitEnum null type\n";
@@ -250,7 +250,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
     // Visit only nodes from the source code, ignore system headers
     bool PrintNodesTypesRelationsVisitor::VisitDecl(Decl *D) {
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+        FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
 
         if (!fullLocation.isInSystemHeader()) {
             dumper.VisitDeclTop(D);
@@ -262,7 +262,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     }
 
     bool PrintNodesTypesRelationsVisitor::VisitStmt(Stmt *D) {
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+        FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
 
         if (!fullLocation.isInSystemHeader()) {
             dumper.VisitStmtTop(D);
@@ -276,7 +276,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     bool PrintNodesTypesRelationsVisitor::VisitLambdaExpr(LambdaExpr *D) {
 
         #ifdef OLD_OUTPUT
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+        FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
         if (!fullLocation.isInSystemHeader()) {
             // Dump self
             dumpNodeToType(DumpResources::nodetypes,D, D->getType());

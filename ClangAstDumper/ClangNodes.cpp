@@ -529,13 +529,13 @@ void clava::dump(llvm::raw_string_ostream llvmStringStream) {
 */
 
 bool clava::isSystemHeader(const Stmt* S, ASTContext* Context) {
-    FullSourceLoc fullLocation = Context->getFullLoc(S->getLocStart());
+    FullSourceLoc fullLocation = Context->getFullLoc(S->getBeginLoc());
     return fullLocation.isValid() && fullLocation.isInSystemHeader();
 }
 
 
 bool clava::isSystemHeader(const Decl* D, ASTContext* Context) {
-    FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
+    FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
     return fullLocation.isValid() && fullLocation.isInSystemHeader();
 }
 
@@ -615,6 +615,15 @@ void clava::dump(const clang::DesignatedInitExpr::Designator* designator) {
 
         throw  std::invalid_argument("ClangNodes::dump(const clang::DesignatedInitExpr::Designator*): Case not implemented");
     }
+}
+
+void clava::dump(const ExplicitSpecifier& specifier) {
+    // TODO
+    specifier.getKind();
+    specifier.getExpr();
+    specifier.isSpecified();
+    specifier.isExplicit();
+    specifier.isInvalid();
 }
 
 

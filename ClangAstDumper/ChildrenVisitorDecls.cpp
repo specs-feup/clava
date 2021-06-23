@@ -398,6 +398,9 @@ void ClangAstDumper::VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D
         throw std::invalid_argument(
                 "ClangDataDumper::VisitCXXConstructorDeclChildren():: CXXCtorInitializer case not implemented");
     }
+
+    // Visit ExplicitSpecifier Expression
+    VisitExpr(D->getExplicitSpecifier().getExpr());
 }
 
 void ClangAstDumper::VisitCXXConversionDeclChildren(const CXXConversionDecl *D, std::vector<std::string> &children) {
