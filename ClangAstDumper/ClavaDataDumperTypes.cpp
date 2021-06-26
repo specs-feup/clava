@@ -301,7 +301,7 @@ void clava::ClavaDataDumper::DumpBuiltinTypeData(const BuiltinType *T) {
     DumpTypeData(T);
 
     clava::dump(clava::BUILTIN_KIND[T->getKind()]);
-    clava::dump((const std::string&) T->getName(Context->getPrintingPolicy()));
+    clava::dump(T->getName(Context->getPrintingPolicy()));
 
 }
 

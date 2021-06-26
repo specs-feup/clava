@@ -11,6 +11,7 @@
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/AST/RecursiveASTVisitor.h"
+#include "clang/Basic/TargetInfo.h"
 #include "clang/Frontend/ASTConsumers.h"
 #include "clang/Frontend/FrontendActions.h"
 #include "clang/Frontend/CompilerInstance.h"
@@ -41,7 +42,7 @@ static constexpr const char* const PREFIX = "COUNTER";
 /* DumpAstVisitor implementation */
 
 bool DumpAstVisitor::TraverseDecl(Decl *D) {
-    FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc();
+    FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
     if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
 #ifdef OLD_OUTPUT
         (*D).dump(llvm::outs());
@@ -111,7 +112,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     }
 
 
-
+/*
     bool PrintNodesTypesRelationsVisitor::VisitOMPExecutableDirective(OMPExecutableDirective * D) {
 
         FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
@@ -128,7 +129,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
         return true;
     }
-
+*/
 
 /*
     bool PrintNodesTypesRelationsVisitor::VisitDeclRefExpr(DeclRefExpr * D) {
@@ -447,7 +448,7 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
 
         ClangAstDumper dumper(Context, counter, DumpResources::systemHeaderThreshold);
 
-        return llvm::make_unique<MyASTConsumer>(Context, counter, dumper);
+        return std::make_unique<MyASTConsumer>(Context, counter, dumper);
         //return llvm::make_unique<MyASTConsumer>(Context, counter, &dumper);
     }
 

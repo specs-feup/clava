@@ -538,7 +538,7 @@ void ClangAstDumper::VisitCXXNewExprChildren(const CXXNewExpr *E, std::vector<st
     VisitExprChildren(E, children);
 
     VisitStmtTop(E->getInitializer());
-    VisitStmtTop(E->getArraySize());
+    VisitStmtTop(E->getArraySize().getValueOr(nullptr));
     VisitDeclTop(E->getOperatorNew());
 
 }

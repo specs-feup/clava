@@ -4,7 +4,7 @@
 
 #include "ClavaDataDumper.h"
 #include "ClangNodes.h"
-#include "ClavaConstants.h"
+//#include "ClavaConstants.h"
 #include "ClangEnums.h"
 
 #include <map>

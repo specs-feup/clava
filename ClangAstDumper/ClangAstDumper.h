@@ -54,6 +54,7 @@ public:
     void VisitTypeTop(const Type *T);
     void VisitTypeTop(const QualType& T);
     void VisitStmtTop(const Stmt *Node);
+    //void VisitStmtTop(Optional<const Stmt *> Node);
     void VisitDeclTop(const Decl *Node);
     void VisitAttrTop(const Attr *Node);
 

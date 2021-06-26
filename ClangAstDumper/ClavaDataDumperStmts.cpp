@@ -832,7 +832,7 @@ void clava::ClavaDataDumper::DumpLambdaExprData(const LambdaExpr *E) {
  void clava::ClavaDataDumper::DumpPredefinedExprData(const PredefinedExpr *E) {
     DumpExprData(E);
 
-    clava::dump(clava::PREDEFINED_ID_TYPE[E->getIdentType()]);
+    clava::dump(clava::PREDEFINED_ID_TYPE[E->getIdentKind()]);
  }
 
  void clava::ClavaDataDumper::DumpSizeOfPackExprData(const SizeOfPackExpr *E) {

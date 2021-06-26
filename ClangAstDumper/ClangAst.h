@@ -130,7 +130,7 @@ public:
     explicit PrintNodesTypesRelationsVisitor(ASTContext *Context, int id, ClangAstDumper dumper);
     //bool TraverseDecl(Decl *D);
 
-    bool VisitOMPExecutableDirective(OMPExecutableDirective * D);
+    //bool VisitOMPExecutableDirective(OMPExecutableDirective * D);
     //bool VisitDeclRefExpr(DeclRefExpr * D);
     bool VisitCXXConstructExpr(CXXConstructExpr * D);
     bool VisitExpr(Expr *D);

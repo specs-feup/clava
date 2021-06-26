@@ -714,6 +714,13 @@ extern const std::string clava::VISIBILITY_ATTR_TYPE[] {
 };
 
 
+extern const std::string clava::EXPLICIT_SPEC_KIND[] {
+    "ResolvedFalse",
+    "ResolvedTrue",
+    "Unresolved"
+};
+
+
 
 
 //const std::string BUILTIN_KIND[] {};

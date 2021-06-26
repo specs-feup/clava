@@ -18,6 +18,8 @@
 #include <sstream>
 #include <vector>
 #include <functional>
+#include <type_traits>
+
 
 using namespace clang;
 
@@ -80,6 +82,7 @@ namespace clava {
     //const std::string getId(Decl* addr, int id);
     const std::string getId(const Stmt* addr, int id);
     const std::string getId(const Expr* addr, int id);
+    const std::string getId(Optional<const Expr*> addr, int id);
     const std::string getId(const Type* addr, int id);
     const std::string getId(const QualType &addr, int id);
     const std::string getId(const Attr* addr, int id);
@@ -110,6 +113,7 @@ namespace clava {
     void dump(unsigned int integer);
     void dumpSize(size_t integer);
     void dump(const std::string& string);
+    void dump(const llvm::StringRef string);
     void dump(const char string[]);
     void dump(const std::vector<std::string> &strings);
     void dump(const std::vector<Attr*> &attributes, const int id);
@@ -124,6 +128,10 @@ namespace clava {
     void dump(const clang::DesignatedInitExpr::Designator* designator);
     void dump(const ExplicitSpecifier& specifier);
 
+    template <typename E>
+    const std::string& dump(const std::string* enumValues, E e) {
+        return enumValues[static_cast<std::underlying_type_t<E>>(e)];
+    }
 
     bool isSystemHeader(const Stmt* S, ASTContext* context);
     bool isSystemHeader(const Decl* S, ASTContext* context);

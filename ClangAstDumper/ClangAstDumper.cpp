@@ -172,6 +172,12 @@ void ClangAstDumper::VisitTypeTop(const Type *T) {
 #endif
 }
 
+/*
+void ClangAstDumper::VisitStmtTop(Optional<const Stmt *> Node) {
+    VisitStmtTop(Node.getValueOr(nullptr));
+}
+*/
+
 void ClangAstDumper::VisitStmtTop(const Stmt *Node) {
     //VisitStmt(Node);
 

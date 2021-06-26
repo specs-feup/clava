@@ -195,6 +195,16 @@ const std::string clava::getId(const Expr* addr, int id) {
     return getId((void*) addr, id);
 }
 
+const std::string clava::getId(Optional<const Expr*> addr, int id) {
+    if(!addr.hasValue()) {
+        return "nullptr_expr";
+    }
+
+    return getId(addr.getValue(), id);
+}
+
+
+
 const std::string clava::getId(const Type* addr, int id) {
     if(addr == nullptr) {
         return "nullptr_type";
@@ -241,6 +251,13 @@ void clava::dumpSize(size_t integer) {
 }
 
 void clava::dump(const std::string& string) {
+    llvm::errs() << string << "\n";
+}
+
+
+
+
+void clava::dump(const llvm::StringRef string) {
     llvm::errs() << string << "\n";
 }
 
@@ -385,9 +402,9 @@ const std::string clava::getSource(ASTContext *Context, SourceRange sourceRange)
 
 
 
-    std::string text = Lexer::getSourceText(CharSourceRange::getTokenRange(begin, end), sm, LangOptions(), 0);
+    std::string text = Lexer::getSourceText(CharSourceRange::getTokenRange(begin, end), sm, LangOptions(), 0).str();
     if (text.size() > 0 && (text.at(text.size()-1) == ',')) { //the text can be ""
-        std::string otherText = Lexer::getSourceText(CharSourceRange::getCharRange(begin, end), sm, LangOptions(), 0);
+        std::string otherText = Lexer::getSourceText(CharSourceRange::getCharRange(begin, end), sm, LangOptions(), 0).str();
         return  otherText + "\n%CLAVA_SOURCE_END%";
     }
 
@@ -618,12 +635,11 @@ void clava::dump(const clang::DesignatedInitExpr::Designator* designator) {
 }
 
 void clava::dump(const ExplicitSpecifier& specifier) {
-    // TODO
-    specifier.getKind();
-    specifier.getExpr();
-    specifier.isSpecified();
-    specifier.isExplicit();
-    specifier.isInvalid();
+
+    clava::dump(clava::EXPLICIT_SPEC_KIND, specifier.getKind());
+    clava::dump(specifier.getExpr());
+    clava::dump(specifier.isSpecified());
+
 }
 
 
