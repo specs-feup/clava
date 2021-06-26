@@ -129,8 +129,8 @@ namespace clava {
     void dump(const ExplicitSpecifier& specifier);
 
     template <typename E>
-    const std::string& dump(const std::string* enumValues, E e) {
-        return enumValues[static_cast<std::underlying_type_t<E>>(e)];
+    void dump(const std::string* enumValues, E e) {
+        dump(enumValues[static_cast<std::underlying_type_t<E>>(e)]);
     }
 
     bool isSystemHeader(const Stmt* S, ASTContext* context);

@@ -158,7 +158,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     bool PrintNodesTypesRelationsVisitor::VisitCXXConstructExpr(CXXConstructExpr * D) {
 
         FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
-        if (!fullLocation.isInSystemHeader()) {
+        if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
 
             // Check if temporary object
             if(D->isTemporaryObject(D->getConstructor()->getASTContext(), D->getConstructor()->getParent())) {
@@ -175,7 +175,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     bool PrintNodesTypesRelationsVisitor::VisitExpr(Expr *D) {
 #ifdef OLD_OUTPUT
         FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
-        if (!fullLocation.isInSystemHeader()) {
+        if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
             //if(D->getType().isNull()) {
             //    llvm::errs() << "VisitExpr null type\n";
             //}
@@ -190,7 +190,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
 #ifdef OLD_OUTPUT
         FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
-        if (!fullLocation.isInSystemHeader()) {
+        if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
             //llvm::errs() << "Visiting Type Decl: " << D << "\n";
             dumpNodeToType(DumpResources::nodetypes, D, D->getTypeForDecl());
         }
@@ -206,7 +206,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     bool PrintNodesTypesRelationsVisitor::VisitTypedefNameDecl(TypedefNameDecl *D) {
 #ifdef OLD_OUTPUT
         FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
-        if (!fullLocation.isInSystemHeader()) {
+        if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
             //if(D->getUnderlyingType().isNull()) {
             //    llvm::errs() << "VisitNameDecl null type\n";
             //}
@@ -220,7 +220,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
     bool PrintNodesTypesRelationsVisitor::VisitEnumDecl(EnumDecl *D) {
         FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
-        if (!fullLocation.isInSystemHeader()) {
+        if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
             //if(D->getIntegerType().isNull()) {
             //    llvm::errs() << "VisitEnum null type\n";
             //}
@@ -236,7 +236,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     bool PrintNodesTypesRelationsVisitor::VisitValueDecl(ValueDecl *D) {
 #ifdef OLD_OUTPUT
         FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
-        if (!fullLocation.isInSystemHeader()) {
+        if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
             //llvm::errs() << "Visiting Value Decl: " << D << "\n";
             //if(D->getType().isNull()) {
             //    llvm::errs() << "VisitValueDecl null type\n";
@@ -253,7 +253,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     bool PrintNodesTypesRelationsVisitor::VisitDecl(Decl *D) {
         FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
 
-        if (!fullLocation.isInSystemHeader()) {
+        if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
             dumper.VisitDeclTop(D);
             //dumper->VisitDeclTop(D);
             return true;
@@ -265,7 +265,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     bool PrintNodesTypesRelationsVisitor::VisitStmt(Stmt *D) {
         FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
 
-        if (!fullLocation.isInSystemHeader()) {
+        if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
             dumper.VisitStmtTop(D);
             //dumper->VisitStmtTop(D);
             return true;
@@ -278,7 +278,7 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
         #ifdef OLD_OUTPUT
         FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
-        if (!fullLocation.isInSystemHeader()) {
+        if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
             // Dump self
             dumpNodeToType(DumpResources::nodetypes,D, D->getType());
 
