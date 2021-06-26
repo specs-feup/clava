@@ -89,7 +89,7 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("insertAfter(AJoinPoint node)");
         actions.add("insertAfter(String code)");
         actions.add("detach()");
-        actions.add("setType(AJoinPoint type)");
+        actions.add("setType(AType type)");
         actions.add("copy()");
         actions.add("deepCopy()");
         actions.add("setUserField(String fieldName, Object value)");
@@ -291,7 +291,7 @@ public abstract class AJoinPoint extends JoinPoint {
      * Sets the type of a node, if it has a type
      * @param type 
      */
-    public void setTypeImpl(AJoinPoint type) {
+    public void setTypeImpl(AType type) {
         throw new UnsupportedOperationException(get_class()+": Action setType not implemented ");
     }
 
@@ -299,7 +299,7 @@ public abstract class AJoinPoint extends JoinPoint {
      * Sets the type of a node, if it has a type
      * @param type 
      */
-    public final void setType(AJoinPoint type) {
+    public final void setType(AType type) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setType", this, Optional.empty(), type);

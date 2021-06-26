@@ -1,7 +1,14 @@
 import weaver.JoinPointsBase;
 import lara.Check;
 import clava.Clava;
+import clava._ClavaJavaTypes;
 
+
+
+JoinPoints.prototype.toJoinPoint = function(node) {
+	var cxxJps = _ClavaJavaTypes.getCxxJoinPoints();
+	return cxxJps.createFromLara(node);
+}
 
 
 /**

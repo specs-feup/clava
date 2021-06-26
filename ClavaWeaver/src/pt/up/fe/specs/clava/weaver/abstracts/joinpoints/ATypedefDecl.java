@@ -149,7 +149,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      * @param type 
      */
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void setTypeImpl(AType type) {
         this.aTypedefNameDecl.setTypeImpl(type);
     }
 

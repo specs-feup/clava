@@ -185,7 +185,7 @@ public abstract class AStruct extends ARecord {
      * @param type 
      */
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void setTypeImpl(AType type) {
         this.aRecord.setTypeImpl(type);
     }
 

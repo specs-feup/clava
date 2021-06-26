@@ -234,7 +234,7 @@ public abstract class AUnaryOp extends AOp {
      * @param type 
      */
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void setTypeImpl(AType type) {
         this.aOp.setTypeImpl(type);
     }
 

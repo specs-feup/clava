@@ -432,7 +432,7 @@ public abstract class ABody extends AScope {
      * @param type 
      */
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void setTypeImpl(AType type) {
         this.aScope.setTypeImpl(type);
     }
 

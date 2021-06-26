@@ -85,6 +85,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANamedDecl;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStruct;
@@ -760,5 +761,17 @@ public class AstFactory {
         var forStmt = CxxWeaver.getFactory().forStmt(initStmt, condStmt, incStmt, compoundStmt);
 
         return CxxJoinpoints.create(forStmt, ALoop.class);
+    }
+
+    /**
+     * Creates a join point representing a function parameter.
+     *
+     * @param name
+     * @param type
+     * @return
+     */
+    public static AParam param(String name, AType type) {
+        var param = CxxWeaver.getFactory().parmVarDecl(name, (Type) type.getNode());
+        return CxxJoinpoints.create(param, AParam.class);
     }
 }

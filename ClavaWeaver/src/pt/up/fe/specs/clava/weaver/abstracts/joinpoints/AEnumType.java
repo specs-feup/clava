@@ -322,7 +322,7 @@ public abstract class AEnumType extends ATagType {
      * @param type 
      */
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void setTypeImpl(AType type) {
         this.aTagType.setTypeImpl(type);
     }
 

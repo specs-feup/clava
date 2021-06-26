@@ -1,3 +1,5 @@
+import clava._ClavaJavaTypes;
+import weaver.JoinPoints;
 
 /**
  * Utility methods related with the type join points.
@@ -89,28 +91,33 @@ ClavaType.asExpression = function($expression, isOptional) {
 /**
  *  Makes sure the given parameter is a statement join point.
  *
- * @param {String|$expr} $statement - If a string, returns a literal statement with the code of the string. Otherwise, returns $statement
- * @param {boolean} [isOptional=false] - If false and $statement is undefined, throws an exception. Otherwise, returns undefined if $statement is undefined. 
+ * @param {String|$jp} code - If a string, returns a literal statement with the code of the string. Otherwise, tries to transform the given node to a $statement
+ * @param {boolean} [isOptional=false] - If false and code is undefined, throws an exception. Otherwise, returns undefined if code is undefined. 
  */
-ClavaType.asStatement = function($statement, isOptional) {
+ClavaType.asStatement = function(code, isOptional) {
 	if(isOptional === undefined) {
 		isOptional = false;
 	}
 	
-	if($statement === undefined) {
+	if(code === undefined) {
 		if(isOptional) {
 			return undefined;
 		} else {
-			throw "ClavaType.asStatement: $statement is undefined. If this is allowed, set 'isOptional' to true.";
+			throw "ClavaType.asStatement: code is undefined. If this is allowed, set 'isOptional' to true.";
 		}
 	}
 
-	if(isString($statement)) {
-		return ClavaJoinPoints.stmtLiteral($statement);
+	if(isString(code)) {
+		return ClavaJoinPoints.stmtLiteral(code);
 	}
 
-	Check.isJoinPoint($statement, 'statement');
-	return $statement;
+	// Check that code is a join point
+	Check.isJoinPoint(code);
+
+
+	var newStmtNode = _ClavaJavaTypes.getClavaNodes().toStmt(code.node);
+
+	return JoinPoints.getInstance().toJoinPoint(newStmtNode);
 }
 
 /**
@@ -127,4 +134,27 @@ ClavaType.asType = function($type) {
 	Check.isJoinPoint($type, 'type');
 	return $type;
 }
+
+/**
+ *  Makes sure the given parameter is a scope join point.
+ *
+ * @param {String|$jp} code - If a string, returns a literal statement with the code of the string. Otherwise, returns $statement
+ * @return {$scope}
+ */
+ 
+ClavaType.asScope = function(code) {
+	if(code === undefined) {
+		return undefined;
+	}
+
+	// Covert code to a statement
+	var $newStmt = ClavaType.asStatement(code);
+	
+	var newScopeNode = _ClavaJavaTypes.getClavaNodes().toCompoundStmt($newStmt.node);
+
+	return JoinPoints.getInstance().toJoinPoint(newScopeNode);	
+
+}
+
+
 

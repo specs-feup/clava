@@ -320,6 +320,15 @@ public class CxxJoinpoints {
         return new GenericJoinpoint(node);
     }
 
+    public static ACxxWeaverJoinPoint createFromLara(Object node) {
+        if (!(node instanceof ClavaNode)) {
+            throw new RuntimeException(
+                    "Expected input to be a ClavaNode, is " + node.getClass().getSimpleName() + ": " + node);
+        }
+
+        return create((ClavaNode) node);
+    }
+
     public static ACxxWeaverJoinPoint create(ClavaNode node) {
         return JOINPOINT_FACTORY.apply(node);
     }

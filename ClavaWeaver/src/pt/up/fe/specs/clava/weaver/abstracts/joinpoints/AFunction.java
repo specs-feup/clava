@@ -786,6 +786,92 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Sets the parameter of the function at the given position
+     * @param index 
+     * @param param 
+     */
+    public void setParamImpl(Integer index, AParam param) {
+        throw new UnsupportedOperationException(get_class()+": Action setParam not implemented ");
+    }
+
+    /**
+     * Sets the parameter of the function at the given position
+     * @param index 
+     * @param param 
+     */
+    public final void setParam(Integer index, AParam param) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParam", this, Optional.empty(), index, param);
+        	}
+        	this.setParamImpl(index, param);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setParam", this, Optional.empty(), index, param);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setParam", e);
+        }
+    }
+
+    /**
+     * Sets the parameter of the function at the given position (overload that accepts a String)
+     * @param index 
+     * @param param 
+     */
+    public void setParamImpl(Integer index, String param) {
+        throw new UnsupportedOperationException(get_class()+": Action setParam not implemented ");
+    }
+
+    /**
+     * Sets the parameter of the function at the given position (overload that accepts a String)
+     * @param index 
+     * @param param 
+     */
+    public final void setParam(Integer index, String param) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParam", this, Optional.empty(), index, param);
+        	}
+        	this.setParamImpl(index, param);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setParam", this, Optional.empty(), index, param);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setParam", e);
+        }
+    }
+
+    /**
+     * Sets the parameter of the function at the given position (overload that accepts a String and a Type)
+     * @param index 
+     * @param name 
+     * @param type 
+     */
+    public void setParamImpl(Integer index, String name, AType type) {
+        throw new UnsupportedOperationException(get_class()+": Action setParam not implemented ");
+    }
+
+    /**
+     * Sets the parameter of the function at the given position (overload that accepts a String and a Type)
+     * @param index 
+     * @param name 
+     * @param type 
+     */
+    public final void setParam(Integer index, String name, AType type) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParam", this, Optional.empty(), index, name, type);
+        	}
+        	this.setParamImpl(index, name, type);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setParam", this, Optional.empty(), index, name, type);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setParam", e);
+        }
+    }
+
+    /**
      * Sets the body of the function
      * @param body 
      */
@@ -945,6 +1031,60 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Adds a new parameter to the function
+     * @param param 
+     */
+    public void addParamImpl(AParam param) {
+        throw new UnsupportedOperationException(get_class()+": Action addParam not implemented ");
+    }
+
+    /**
+     * Adds a new parameter to the function
+     * @param param 
+     */
+    public final void addParam(AParam param) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addParam", this, Optional.empty(), param);
+        	}
+        	this.addParamImpl(param);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addParam", this, Optional.empty(), param);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addParam", e);
+        }
+    }
+
+    /**
+     * Adds a new parameter to the function
+     * @param name 
+     * @param type 
+     */
+    public void addParamImpl(String name, AType type) {
+        throw new UnsupportedOperationException(get_class()+": Action addParam not implemented ");
+    }
+
+    /**
+     * Adds a new parameter to the function
+     * @param name 
+     * @param type 
+     */
+    public final void addParam(String name, AType type) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addParam", this, Optional.empty(), name, type);
+        	}
+        	this.addParamImpl(name, type);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addParam", this, Optional.empty(), name, type);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addParam", e);
+        }
+    }
+
+    /**
      * Get value on attribute name
      * @return the attribute's value
      */
@@ -1068,7 +1208,7 @@ public abstract class AFunction extends ADeclarator {
      * @param type 
      */
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void setTypeImpl(AType type) {
         this.aDeclarator.setTypeImpl(type);
     }
 
@@ -1338,12 +1478,17 @@ public abstract class AFunction extends ADeclarator {
         actions.add("joinpoint insertReturn(String)");
         actions.add("void setParams(param[])");
         actions.add("void setParamsFromStrings(String[])");
+        actions.add("void setParam(Integer, param)");
+        actions.add("void setParam(Integer, String)");
+        actions.add("void setParam(Integer, String, type)");
         actions.add("void setBody(scope)");
         actions.add("call newCall(joinpoint[])");
         actions.add("void setFunctionType(functionType)");
         actions.add("void setReturnType(type)");
         actions.add("void setParamType(Integer, type)");
         actions.add("void addParam(String)");
+        actions.add("void addParam(param)");
+        actions.add("void addParam(String, type)");
     }
 
     /**

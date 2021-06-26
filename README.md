@@ -11,7 +11,7 @@ Tutorial on how to use Clava (recommended parts 1-3): [Clava Tutorial - 2018 PAC
 
 Start using LARA with examples: [LARA Reference Guide](http://specs.fe.up.pt/tools/lara/doku.php?id=lara:docs:sheet).
 
-For a sample of Clava examples, please click [here](https://github.com/specs-feup/clava-examples/).
+For a sample of Clava examples, please check the [Unit Tests](https://github.com/specs-feup/clava/tree/master/ClavaWeaver/resources/clava/test).
 
 
 # Resources

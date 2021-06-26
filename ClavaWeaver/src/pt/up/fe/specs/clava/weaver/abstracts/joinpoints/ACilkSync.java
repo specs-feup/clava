@@ -244,7 +244,7 @@ public abstract class ACilkSync extends AStatement {
      * @param type 
      */
     @Override
-    public void setTypeImpl(AJoinPoint type) {
+    public void setTypeImpl(AType type) {
         this.aStatement.setTypeImpl(type);
     }
 

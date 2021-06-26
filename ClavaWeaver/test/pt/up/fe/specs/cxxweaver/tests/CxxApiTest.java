@@ -144,4 +144,9 @@ public class CxxApiTest {
         newTester().test("LaraCommonLanguageTest.lara", "lara_common_language.cpp");
     }
 
+    @Test
+    public void testClavaType() {
+        newTester().test("ClavaTypeTest.lara");
+    }
+
 }
