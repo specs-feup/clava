@@ -54,6 +54,7 @@ import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxFunctionType;
 import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
@@ -651,4 +652,32 @@ public class CxxFunction extends AFunction {
         var paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());
         addParamImpl(CxxJoinpoints.create(paramNode, AParam.class));
     }
+
+    @Override
+    public void setParamImpl(Integer index, AParam param) {
+        var params = getParamsArrayImpl();
+
+        if (index >= params.length) {
+            SpecsLogs.info("Tried to set parameter '" + param.getCodeImpl() + "' at index '" + index
+                    + "' but function '" + function.getSignature() + "' only has " + params.length + " parameters");
+            return;
+        }
+
+        params[index] = param;
+
+        setParamsImpl(params);
+    }
+
+    @Override
+    public void setParamImpl(Integer index, String name, AType type) {
+        var paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());
+        setParamImpl(index, CxxJoinpoints.create(paramNode, AParam.class));
+    }
+
+    @Override
+    public void setParamImpl(Integer index, String param) {
+        var paramNode = ClavaNodes.toParam(param, function);
+        setParamImpl(index, CxxJoinpoints.create(paramNode, AParam.class));
+    }
+
 }

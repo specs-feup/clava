@@ -585,6 +585,37 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Sets the parameter of the function at the given position
+     * @param index 
+     * @param param 
+     */
+    @Override
+    public void setParamImpl(Integer index, AParam param) {
+        this.aFunction.setParamImpl(index, param);
+    }
+
+    /**
+     * Sets the parameter of the function at the given position (overload that accepts a String)
+     * @param index 
+     * @param param 
+     */
+    @Override
+    public void setParamImpl(Integer index, String param) {
+        this.aFunction.setParamImpl(index, param);
+    }
+
+    /**
+     * Sets the parameter of the function at the given position (overload that accepts a String and a Type)
+     * @param index 
+     * @param name 
+     * @param type 
+     */
+    @Override
+    public void setParamImpl(Integer index, String name, AType type) {
+        this.aFunction.setParamImpl(index, name, type);
+    }
+
+    /**
      * Sets the body of the function
      * @param body 
      */

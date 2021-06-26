@@ -30456,6 +30456,68 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the parameter of the function at the given position",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setParam"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "param",
+                              "name": "param",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the parameter of the function at the given position (overload that accepts a String)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setParam"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "param",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the parameter of the function at the given position (overload that accepts a String and a Type)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setParam"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "type",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Sets the type of a parameter of the function",
                   "children": [
                            {
@@ -40548,6 +40610,68 @@
                            {
                               "type": "functionType",
                               "name": "functionType",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the parameter of the function at the given position",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setParam"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "param",
+                              "name": "param",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the parameter of the function at the given position (overload that accepts a String)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setParam"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "param",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the parameter of the function at the given position (overload that accepts a String and a Type)",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setParam"
+                           },
+                           {
+                              "type": "Integer",
+                              "name": "index",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "name",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "type",
+                              "name": "type",
                               "defaultValue": ""
                            }]
                },

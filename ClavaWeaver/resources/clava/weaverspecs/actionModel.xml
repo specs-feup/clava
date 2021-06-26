@@ -349,6 +349,23 @@
 		<parameter name="params" type="String[]" />
 	</action>	
 
+	<action name="setParam" class="function" tooltip="Sets the parameter of the function at the given position">
+		<parameter name="index" type="Integer" />
+		<parameter name="param" type="param" />
+	</action>	
+	
+	<action name="setParam" class="function" tooltip="Sets the parameter of the function at the given position (overload that accepts a String)">
+		<parameter name="index" type="Integer" />
+		<parameter name="param" type="String" />
+	</action>		
+	
+	<action name="setParam" class="function" tooltip="Sets the parameter of the function at the given position (overload that accepts a String and a Type)">
+		<parameter name="index" type="Integer" />
+		<parameter name="name" type="String" />
+		<parameter name="type" type="type" />	
+	</action>			
+
+
 	<action name="setBody" class="function" tooltip="Sets the body of the function">
 		<parameter name="body" type="scope" />
 	</action>	
