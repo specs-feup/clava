@@ -24,6 +24,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.data.ExplicitSpecifier;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -57,9 +58,10 @@ public class CXXConstructorDecl extends CXXMethodDecl {
     public final static DataKey<Boolean> IS_EXPLICIT = KeyFactory.bool("isExplicit");
 
     /**
-     * True if this constructor declaration has 'explicit' keyword.
+     * DataClass with information about the 'explicit' keyword.
      */
-    public final static DataKey<Boolean> IS_EXPLICIT_SPECIFIED = KeyFactory.bool("isExplicitSpecified");
+    public final static DataKey<ExplicitSpecifier> EXPLICIT_SPECIFIER = KeyFactory.object("explicitSpecifier",
+            ExplicitSpecifier.class);
 
     /// DATAKEYS END
 

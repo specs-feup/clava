@@ -25,6 +25,7 @@ import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.data.CXXBaseSpecifier;
+import pt.up.fe.specs.clava.ast.decl.data.ExplicitSpecifier;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.AnyMemberInit;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.BaseInit;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;
@@ -39,6 +40,7 @@ import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentType;
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.QualifiedTemplate;
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.SubstTemplateTemplateParm;
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.Template;
+import pt.up.fe.specs.clava.ast.decl.enums.ExplicitSpecKind;
 import pt.up.fe.specs.clava.ast.expr.data.designator.ArrayDesignator;
 import pt.up.fe.specs.clava.ast.expr.data.designator.ArrayRangeDesignator;
 import pt.up.fe.specs.clava.ast.expr.data.designator.Designator;
@@ -438,5 +440,16 @@ public class ClavaDataParsers {
 
     }
 
+    public static ExplicitSpecifier explicitSpecifier(LineStream lines, ClangParserData parserData) {
+        var explicitSpecifier = new ExplicitSpecifier();
+
+        explicitSpecifier.set(ExplicitSpecifier.KIND, LineStreamParsers.enumFromName(ExplicitSpecKind.class, lines));
+        parserData.getClavaNodes().queueSetOptionalNode(explicitSpecifier, ExplicitSpecifier.EXPR, lines.nextLine());
+        explicitSpecifier.set(ExplicitSpecifier.IS_SPECIFIED, LineStreamParsers.oneOrZero(lines));
+
+        return explicitSpecifier;
+    }
+
     // OffsetOfExpr
+
 }

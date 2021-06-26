@@ -301,8 +301,9 @@ public class DeclDataParser {
 
         data.add(CXXConstructorDecl.IS_DEFAULT_CONSTRUCTOR, LineStreamParsers.oneOrZero(lines));
         data.add(CXXConstructorDecl.IS_EXPLICIT, LineStreamParsers.oneOrZero(lines));
-        data.add(CXXConstructorDecl.IS_EXPLICIT_SPECIFIED, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXConstructorDecl.EXPLICIT_SPECIFIER, ClavaDataParsers.explicitSpecifier(lines, dataStore));
 
+        // System.out.println("SPECIFIER: " + data.get(CXXConstructorDecl.EXPLICIT_SPECIFIER));
         // List<CXXCtor>
         // dataStore.getClavaNodes().queueSetNode(data, CXXConstructorDecl.INI, data.get(CXXMethodDecl.RECORD_ID));
 
