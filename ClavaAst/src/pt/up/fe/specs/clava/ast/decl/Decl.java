@@ -23,7 +23,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
@@ -103,15 +102,6 @@ public abstract class Decl extends ClavaNode {
     @Deprecated
     public Decl(DeclData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
         this(new LegacyToDataStore().setDecl(data).setNodeInfo(info).getData(), children);
-    }
-
-    /**
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-    public DeclData getDeclData() {
-        return DataStoreToLegacy.getDecl(getData());
     }
 
     public boolean hasAttribute(AttributeKind kind) {
