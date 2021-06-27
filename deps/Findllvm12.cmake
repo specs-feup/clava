@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.2)
 # Download library
 deps_resolve("llvm12" LIB_DIR)
 
+# Expose LLVM library
+set("llvm12_DIR" ${LIB_DIR})
+
 # LLVM requires C++11
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
