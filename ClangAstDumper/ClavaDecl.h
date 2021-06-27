@@ -51,6 +51,7 @@ namespace clava {
         STATIC_ASSERT_DECL,
         TEMPLATE_TEMPLATE_PARM_DECL,
         NON_TYPE_TEMPLATE_PARM_DECL,
+        VAR_TEMPLATE_SPECIALIZATION_DECL,
     };
 
     const std::string getName(const DeclNode D);
