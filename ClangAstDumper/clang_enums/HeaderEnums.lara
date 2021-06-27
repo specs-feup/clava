@@ -24,13 +24,18 @@ HeaderEnums.prototype.process = function($enum) {
 	if(!this.currentEnumSet.has($enum.name)) {
 		return;
 	}
-	/*
-	// Found valid enum, remove from current set
-	this.currentEnumSet.remove($enum.name);
-	*/
+
+	println("Adding enum '"+$enum.name+"'");
+
 	// Set enums
 	var enumValues = $enum.enumerators.map($enumValue => $enumValue.name);	
 	this.enumMap[$enum.name].setEnumValues(enumValues);
+	
+	// Save enums, for referece
+	var filename = this.headerFilename.replace(".", "_") + "_" + $enum.name +  ".txt";
+	var file = Io.getPath(filename);
+	println("Saving enum values to file '"+file.getAbsolutePath()+"'");
+	Io.writeFile(filename, enumValues.join("\n"));
 }
 	
 HeaderEnums.prototype.generateCode = function(outputFolder) {

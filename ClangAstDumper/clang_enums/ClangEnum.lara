@@ -41,7 +41,7 @@ ClangEnum.prototype.getCode = function() {
 
 	var code = "";
 
-	code += "const std::string clava::"+this.cppVarName+"[] = {\n";
+	code += "extern const std::string clava::"+this.cppVarName+"[] = {\n";
 
 	for(var enumValue of this.enumValues) {
 		if(this.excludeSet.has(enumValue)) {

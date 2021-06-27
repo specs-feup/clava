@@ -33,4 +33,4 @@ target_include_directories(Type_H
 )
 
 # Add enums helper
-clava_weave(Type_H "ClangEnumsGenerator.lara"  ARGS "header:'Type.h', outputFolder:'${CMAKE_CURRENT_LIST_DIR}'" JAVA_FLAGS -Xmx8000m)
+clava_weave(Type_H "ClangEnumsGenerator.lara"  ARGS "header:'Type.h', outputFolder:'${CMAKE_CURRENT_LIST_DIR}/..'" JAVA_FLAGS -Xmx8000m)

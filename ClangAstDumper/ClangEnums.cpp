@@ -15,7 +15,7 @@ extern const std::string clava::CXX_CTOR_INIT_KIND[] {
 */
 
 /* Clang Enums */
-
+/*
 const std::string clava::BUILTIN_KIND[] = {
         "OCLImage1dRO",
         "OCLImage1dArrayRO",
@@ -189,7 +189,7 @@ const std::string clava::BUILTIN_KIND[] = {
         "OMPArrayShaping",
         "OMPIterator"
 };
-
+*/
 
 const std::string clava::CAST_KIND[]{
         "Dependent",
@@ -512,13 +512,13 @@ const std::string clava::CALLING_CONVENTION[]{
         "PreserveMost",
         "PreserveAll"
 };
-
+/*
 const std::string clava::REFERENCE_QUALIFIER[]{
         "None",
         "LValue",
         "RValue"
 };
-
+*/
 
 extern const std::string clava::EXCEPTION_SPECIFICATION_TYPE[]{
 
@@ -554,12 +554,13 @@ extern const std::string clava::VISIBILITY[]{
         "Default"
 };
 
+/*
 extern const std::string clava::ARRAY_SIZE_MODIFIER[] {
         "Normal",
         "Static",
         "Star"
 };
-
+*/
 
 extern const std::string clava::TEMPLATE_ARG_KIND[] {
         "Null",
@@ -573,6 +574,7 @@ extern const std::string clava::TEMPLATE_ARG_KIND[] {
         "Pack"
 };
 
+/*
 extern const std::string clava::TAG_KIND[] {
         "STRUCT",
         "INTERFACE",
@@ -580,6 +582,7 @@ extern const std::string clava::TAG_KIND[] {
         "CLASS",
         "ENUM"
 };
+*/
 
 extern const std::string clava::ACCESS_SPECIFIER[] {
         "PUBLIC",
@@ -616,7 +619,7 @@ extern const std::string clava::TLS_KIND[] {
         "STATIC",
         "DYNAMIC"
 };
-
+/*
 extern const std::string clava::ELABORATED_TYPE_KEYWORD[] {
         "STRUCT",
         "INTERFACE",
@@ -626,7 +629,7 @@ extern const std::string clava::ELABORATED_TYPE_KEYWORD[] {
         "TYPENAME",
         "NONE"
 };
-
+*/
 extern const std::string clava::CONSTRUCTION_KIND[]{
         "Complete",
         "NonVirtualBase",
@@ -669,11 +672,11 @@ extern const std::string clava::BINARY_OPERATOR_KIND[]{
         "OrAssign",
         "Comma"
 };
-
+/*
 extern const std::string clava::UTT_KIND[]{
     "EnumUnderlyingType"
 };
-
+*/
 
 extern const std::string clava::UNARY_OPERATOR_KIND[]{
         "PostInc",

@@ -61,8 +61,22 @@ set(SOURCE_FILES
 		TypeMarker.cpp
         ClavaDataDumper.cpp
         ClavaDataDumperDecls.cpp
-    ChildrenVisitorDecls.cpp 
-    ClangNodes.cpp ClavaDataDumperStmts.cpp ClavaDataDumperTypes.cpp ClangAstDumperExprs.cpp ChildrenVisitorStmts.cpp ClavaConstants.cpp ChildrenVisitorTypes.cpp ClangEnums.cpp ClangastDumperAttr.cpp ChildrenVisitorAttrs.cpp ClavaDataDumperAttrs.cpp ChildrenVisitorExtras.cpp ClavaDecl.cpp ClavaDecl.h)
+    	ChildrenVisitorDecls.cpp
+    	ClangNodes.cpp
+		ClavaDataDumperStmts.cpp
+		ClavaDataDumperTypes.cpp
+		ClangAstDumperExprs.cpp
+		ChildrenVisitorStmts.cpp
+		ClavaConstants.cpp
+		ChildrenVisitorTypes.cpp
+		ClangEnums.cpp
+		ClangastDumperAttr.cpp
+		ChildrenVisitorAttrs.cpp
+		ClavaDataDumperAttrs.cpp
+		ChildrenVisitorExtras.cpp
+		ClavaDecl.cpp
+		enums_Type_h.cpp
+		)
 
 add_executable(ClangAstDumper ${SOURCE_FILES})
 

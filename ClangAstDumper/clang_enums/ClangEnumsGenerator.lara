@@ -21,23 +21,10 @@ aspectdef ClangEnumsGenerator
 		
 	for(var $enum of Query.search("enumDecl")) {
 			headerEnums.process($enum);
-	/*
-		if(typeEnums.has($enum.name)) {
-			println("Saving Enum: " + $enum.name);
-			// Save enum values
-			var enumFile = Io.getPath($enum.name + "_type.h.txt");
-			var enumValues = $enum.enumerators.map($enumValue => $enumValue.name).join("\n");
-			Io.writeFile(enumFile, enumValues);			
-		}
-*/
 	}
 
 	println("Finished searching, generating code");
 	
 	headerEnums.generateCode(outputFolder);
 	
-//	println($app.ast);
-	
-
-//	println("hello");	
 end

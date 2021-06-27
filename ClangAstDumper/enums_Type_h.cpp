@@ -1,6 +1,6 @@
 #include "ClangEnums.h"
 
-const std::string clava::BUILTIN_KIND[] = {
+extern const std::string clava::BUILTIN_KIND[] = {
         "OCLImage1dRO",
         "OCLImage1dArrayRO",
         "OCLImage1dBufferRO",
@@ -172,5 +172,39 @@ const std::string clava::BUILTIN_KIND[] = {
         "OMPArraySection",
         "OMPArrayShaping",
         "OMPIterator",
+};
+
+extern const std::string clava::REFERENCE_QUALIFIER[] = {
+        "None",
+        "LValue",
+        "RValue",
+};
+
+extern const std::string clava::ARRAY_SIZE_MODIFIER[] = {
+        "Normal",
+        "Static",
+        "Star",
+};
+
+extern const std::string clava::UTT_KIND[] = {
+        "EnumUnderlyingType",
+};
+
+extern const std::string clava::ELABORATED_TYPE_KEYWORD[] = {
+        "STRUCT",
+        "INTERFACE",
+        "UNION",
+        "CLASS",
+        "ENUM",
+        "TYPENAME",
+        "NONE",
+};
+
+extern const std::string clava::TAG_KIND[] = {
+        "STRUCT",
+        "INTERFACE",
+        "UNION",
+        "CLASS",
+        "ENUM",
 };
 

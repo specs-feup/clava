@@ -7,8 +7,14 @@ import ClangEnum;
 var ClangEnums = {};
 
 
-
-ClangEnums._TYPE_H = new HeaderEnums('Type.h', [new ClangEnum('Kind', 'BUILTIN_KIND', undefined, ["LastKind"])]);
+ClangEnums._TYPE_H = new HeaderEnums('Type.h', [
+	new ClangEnum('Kind', 'BUILTIN_KIND', undefined, ["LastKind"]),
+	new ClangEnum('RefQualifierKind', 'REFERENCE_QUALIFIER', value => ClangEnums._refQualMapper(value), undefined),
+	new ClangEnum('ArraySizeModifier', 'ARRAY_SIZE_MODIFIER', undefined, undefined),
+	new ClangEnum('UTTKind', 'UTT_KIND', undefined, undefined),
+	new ClangEnum('ElaboratedTypeKeyword', 'ELABORATED_TYPE_KEYWORD', value => ClangEnums._elaboratedTypeKeyworkMapper(value), undefined),
+	new ClangEnum('TagTypeKind', 'TAG_KIND', value => ClangEnums._tagKindMapperMapper(value), undefined)
+]);
 
 
 ClangEnums._HEADERS = [ClangEnums._TYPE_H];
@@ -29,4 +35,39 @@ ClangEnums.buildHeaderMap = function() {
 	}
 	
 	return map;
+}
+
+/**
+ * Mappers
+ */
+ClangEnums._refQualMapper = function(enumValue) {
+//println("MAPPER FOR " + enumValue);
+	if(enumValue.startsWith("RQ_")) {
+//	println("Starts with RQ_");
+		enumValue = enumValue.substring(3);
+	}
+//	println("RETURNING: " + enumValue);
+	return enumValue;
+}
+
+ClangEnums._elaboratedTypeKeyworkMapper = function(enumValue) {
+
+	if(enumValue.startsWith("ETK_")) {
+		enumValue = enumValue.substring(4);
+	}
+	
+	enumValue = enumValue.toUpperCase();
+
+	return enumValue;
+}
+
+ClangEnums._tagKindMapperMapper = function(enumValue) {
+
+	if(enumValue.startsWith("TTK_")) {
+		enumValue = enumValue.substring(4);
+	}
+	
+	enumValue = enumValue.toUpperCase();
+
+	return enumValue;
 }
