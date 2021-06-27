@@ -614,4 +614,18 @@ void clava::dump(const clang::DesignatedInitExpr::Designator* designator) {
     }
 }
 
+void clava::throwNotImplemented(const std::string& source, const std::string& caseNotImplemented, ASTContext* Context, SourceLocation startLoc, SourceLocation endLoc) {
+    llvm::errs() << "Dumping source range of code that caused exception:\n";
+    clava::dumpSourceRange(Context, startLoc, endLoc);
+
+    throw std::invalid_argument(source + ": Case not implemented, '" + caseNotImplemented + "', source range has been dumped");
+}
+
+void clava::throwNotImplemented(const std::string& source, const std::string& caseNotImplemented, ASTContext* Context, SourceRange range) {
+    throw std::invalid_argument(source + ": Case not implemented, '" + caseNotImplemented + "', source code that triggered the problem:\n" + clava::getSource(Context, range));
+}
+
+
+
+
 

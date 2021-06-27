@@ -123,6 +123,8 @@ namespace clava {
     void dump(std::function<void(llvm::raw_string_ostream&)> dumper);
     void dump(const clang::DesignatedInitExpr::Designator* designator);
 
+    void throwNotImplemented(const std::string& source, const std::string& caseNotImplemented, ASTContext* Context, SourceLocation startLoc, SourceLocation endLoc);
+    void throwNotImplemented(const std::string& source, const std::string& caseNotImplemented, ASTContext* Context, SourceRange range);
 
 
     bool isSystemHeader(const Stmt* S, ASTContext* context);
