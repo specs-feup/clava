@@ -1,0 +1,31 @@
+import HeaderEnums;
+
+/**
+ * @class
+ */
+var ClangEnums = {};
+
+
+
+ClangEnums._TYPE_H = new HeaderEnums('Type.h', [new ClangEnum('Kind', 'BUILTIN_KIND', undefined, ["LastKind"])]);
+
+
+ClangEnums._HEADERS = [_TYPE_H];
+
+ClangEnums.getHeader = function(headerFilename) {
+	if(ClangEnums._HEADER_MAP === undefined) {
+		ClangEnums._HEADER_MAP = ClangEnums.buildHeaderMap();
+	}
+
+	return ClangEnums._HEADER_MAP[headerFilename];
+}
+
+ClangEnums.buildHeaderMap = function() {
+	var map = {};
+	
+	for(var header of ClangEnums._HEADERS) {
+		map[header.getName()] = header;
+	}
+	
+	return map;
+}

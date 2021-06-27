@@ -1,0 +1,60 @@
+/**
+ * @class
+ */
+var ClangEnum = function(name, cppVarName, mapper, excludeArray) {
+	this.name = name;
+	this.cppVarName = cppVarName;
+
+	if(mapper === undefined) {
+		mapper = element => element;
+	}
+	this.mapper = mapper;
+
+	if(excludeArray === undefined) {
+		excludeArray = []; 
+	}
+	this.excludeSet = new StringSet(excludeArray);
+
+	this.enumValues = undefined;
+};
+
+ClangEnum.prototype.getEnumName = function() {
+	return this.name;
+}
+
+
+ClangEnum.prototype.setEnumValues = function(enumValues) {
+	if(this.enumValues !== undefined) {
+		println("Setting enum values again for enum " + this.name);
+	}
+	
+	this.enumValues = enumValues;
+}
+
+
+ClangEnum.prototype.getCode = function() {
+	if(this.enumValues === undefined) {
+		println("No enum values set for enum '"+this.name+"'");
+		return undefined;
+	}
+
+
+	var code = "";
+
+	code += "const std::string clava::"+this.cppVarName+"[] = {\n";
+
+	for(var enumValue of this.enumValues) {
+		if(this.excludeSet.has(enumValue)) {
+			continue;
+		}
+
+		// Map enum value
+		enumValue = this.mapper(enumValue);
+	
+		code += '        "' + enumValue + '",\n';
+	}
+
+	code += "};\n";
+
+	return code;
+}
