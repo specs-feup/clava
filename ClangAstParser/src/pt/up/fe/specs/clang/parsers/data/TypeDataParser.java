@@ -363,7 +363,6 @@ public class TypeDataParser {
     }
 
     public static DataStore parseUnaryTransformTypeData(LineStream lines, ClangParserData parserData) {
-
         DataStore data = parseTypeData(lines, parserData);
 
         data.add(UnaryTransformType.KIND, LineStreamParsers.enumFromName(UnaryTransformTypeKind.class, lines));
