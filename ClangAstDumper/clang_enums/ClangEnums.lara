@@ -1,4 +1,5 @@
 import HeaderEnums;
+import ClangEnum;
 
 /**
  * @class
@@ -10,7 +11,7 @@ var ClangEnums = {};
 ClangEnums._TYPE_H = new HeaderEnums('Type.h', [new ClangEnum('Kind', 'BUILTIN_KIND', undefined, ["LastKind"])]);
 
 
-ClangEnums._HEADERS = [_TYPE_H];
+ClangEnums._HEADERS = [ClangEnums._TYPE_H];
 
 ClangEnums.getHeader = function(headerFilename) {
 	if(ClangEnums._HEADER_MAP === undefined) {

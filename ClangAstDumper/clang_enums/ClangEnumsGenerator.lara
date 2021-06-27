@@ -4,7 +4,7 @@ import lara.Io;
 
 
 aspectdef ClangEnumsGenerator
-	input header, outputFolder end
+	input header="Type.h", outputFolder="./" end
 
 	println("Calling generator for header '"+header+"', generating files in folder " + Io.getPath(outputFolder).getAbsolutePath());
 

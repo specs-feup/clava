@@ -30,7 +30,7 @@ HeaderEnums.prototype.process = function($enum) {
 	*/
 	// Set enums
 	var enumValues = $enum.enumerators.map($enumValue => $enumValue.name);	
-	this.enumMap[$enum.name].setValues(enumValues);
+	this.enumMap[$enum.name].setEnumValues(enumValues);
 }
 	
 HeaderEnums.prototype.generateCode = function(outputFolder) {
@@ -40,8 +40,8 @@ HeaderEnums.prototype.generateCode = function(outputFolder) {
 	var code = '#include "ClangEnums.h"\n\n';
 
 	// Generate code for each of the enums
-	for(var enumName in enumMap) {
-		var enumCode = enumMap[enumName].getCode();
+	for(var enumName in this.enumMap) {
+		var enumCode = this.enumMap[enumName].getCode();
 		
 		if(enumCode === undefined) {
 			println("Skipped code generation for " + this.headerFilename + "::" + enumName);
@@ -51,5 +51,5 @@ HeaderEnums.prototype.generateCode = function(outputFolder) {
 		code += enumCode + "\n";
 	}
 	
-	Io.write(Io.getPath(outputFolder, filename), code);
+	Io.writeFile(Io.getPath(outputFolder, filename), code);
 }	
