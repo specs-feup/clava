@@ -791,16 +791,21 @@ void clava::ClavaDataDumper::DumpOffsetOfExprData(const OffsetOfExpr *E) {
         // Dump each component
         OffsetOfNode node = E->getComponent(i);
         clava::dump(clava::OFFSET_OF_NODE_KIND[node.getKind()]);
+
         switch (node.getKind()) {
             case OffsetOfNode::Kind::Array:
                 clava::dump(clava::getId(E->getIndexExpr(node.getArrayExprIndex()), id));
                 break;
             case OffsetOfNode::Kind::Field:
+            case OffsetOfNode::Kind::Identifier:
                 clava::dump(node.getFieldName()->getName().str());
                 break;
             default:
-                throw std::invalid_argument("ClangDataDumper::DumpOffsetOfExprData(): Case not implemented, '" +
-                                                    clava::OFFSET_OF_NODE_KIND[node.getKind()] + "'");
+                clava::throwNotImplemented("ClangDataDumper::DumpOffsetOfExprData()", clava::OFFSET_OF_NODE_KIND[node.getKind()], Context, E->getSourceRange());
+//                llvm::errs() << "Dumping source range of code that caused exception:\n";
+//                clava::dumpSourceRange(Context, E->getBeginLoc(), E->getEndLoc());
+//                throw std::invalid_argument("ClangDataDumper::DumpOffsetOfExprData(): Case not implemented, '" +
+//                                                    clava::OFFSET_OF_NODE_KIND[node.getKind()] + "', source range has been dumped");
         }
     }
  }

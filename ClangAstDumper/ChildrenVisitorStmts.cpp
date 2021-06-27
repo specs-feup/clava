@@ -432,12 +432,14 @@ void ClangAstDumper::VisitOffsetOfExprChildren(const OffsetOfExpr *E, std::vecto
             case OffsetOfNode::Kind::Array:
                 VisitStmtTop(E->getIndexExpr(node.getArrayExprIndex()));
                 break;
+            case OffsetOfNode::Kind::Identifier:
             case OffsetOfNode::Kind::Field:
                 // Nothing to visit
                 break;
             default:
-                throw std::invalid_argument("ClangDataDumper::DumpOffsetOfExprData(): Case not implemented, '" +
-                                            clava::OFFSET_OF_NODE_KIND[node.getKind()] + "'");
+                clava::throwNotImplemented("ClangDataDumper::VisitOffsetOfExprChildren()", clava::OFFSET_OF_NODE_KIND[node.getKind()], Context, E->getSourceRange());
+//                throw std::invalid_argument("ClangDataDumper::DumpOffsetOfExprData(): Case not implemented, '" +
+//                                            clava::OFFSET_OF_NODE_KIND[node.getKind()] + "'");
         }
     }
 }
