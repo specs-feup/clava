@@ -15,5 +15,6 @@
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher"/>
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="ClavaWeaver"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ClavaWeaver"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx8000m"/>
     <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_loc:ClavaWeaver}/run/weaver"/>
 </launchConfiguration>

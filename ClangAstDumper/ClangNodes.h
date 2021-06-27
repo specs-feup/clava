@@ -128,9 +128,11 @@ namespace clava {
     void dump(const clang::DesignatedInitExpr::Designator* designator);
     void dump(const ExplicitSpecifier& specifier);
 
+    void throwNotImplemented(const std::string& source, const std::string& caseNotImplemented, ASTContext* Context, SourceLocation startLoc, SourceLocation endLoc);
+    void throwNotImplemented(const std::string& source, const std::string& caseNotImplemented, ASTContext* Context, SourceRange range);
+
     template <typename E>
-    void dump(const std::string* enumValues, E e) {
-        dump(enumValues[static_cast<std::underlying_type_t<E>>(e)]);
+    void dump(const std::string* enumValues, E e) {        dump(enumValues[static_cast<std::underlying_type_t<E>>(e)]);
     }
 
     bool isSystemHeader(const Stmt* S, ASTContext* context);

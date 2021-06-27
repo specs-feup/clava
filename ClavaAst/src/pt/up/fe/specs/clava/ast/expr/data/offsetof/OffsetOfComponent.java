@@ -39,6 +39,8 @@ public abstract class OffsetOfComponent extends ADataClass<OffsetOfComponent> {
             return new OffsetOfArray();
         case FIELD:
             return new OffsetOfField();
+        case IDENTIFIER:
+            return new OffsetOfIdentifier();
         default:
             throw new NotImplementedException(kind);
         }

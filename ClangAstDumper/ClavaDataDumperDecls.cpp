@@ -49,6 +49,8 @@ const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
         {"LabelDecl",                              clava::DeclNode::NAMED_DECL},
         {"StaticAssertDecl",                       clava::DeclNode::STATIC_ASSERT_DECL},
         {"TemplateTemplateParmDecl",               clava::DeclNode::TEMPLATE_TEMPLATE_PARM_DECL},
+        // TODO: Check if needs more data to dump
+        {"VarTemplateSpecializationDecl", clava::DeclNode::VAR_DECL},
 
 };
 

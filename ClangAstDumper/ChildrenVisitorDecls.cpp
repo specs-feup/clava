@@ -41,7 +41,8 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"LinkageSpecDecl", clava::DeclNode::LINKAGE_SPEC_DECL},
         {"StaticAssertDecl", clava::DeclNode::STATIC_ASSERT_DECL},
         {"NonTypeTemplateParmDecl", clava::DeclNode::NON_TYPE_TEMPLATE_PARM_DECL},
-
+        // TODO: Check if needs more data to dump
+        {"VarTemplateSpecializationDecl", clava::DeclNode::VAR_DECL},
 
 
 };

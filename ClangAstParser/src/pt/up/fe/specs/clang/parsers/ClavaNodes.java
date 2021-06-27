@@ -31,9 +31,11 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.utils.NullNodeAdapter;
 import pt.up.fe.specs.clang.utils.NullNodeAdapter.NullNodeType;
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.SpecsCheck;
+import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
@@ -88,11 +90,38 @@ public class ClavaNodes {
         // }
 
         Preconditions.checkNotNull(clavaNode, "Could not find ClavaNode with id '" + nodeId
-                + "'. Check if node is being visited.");
+                + "'. Check if node is being visited. If parsing of includes is enabled, check that the parsing level is sufficient.");
 
         return clavaNode;
 
     }
+
+    public <T extends ClavaNode> ClavaNode get(String nodeId, Class<T> valueClass) {
+        ClavaNode clavaNode = clavaNodes.get(nodeId);
+
+        if (clavaNode == null) {
+            ClavaLog.warning("Could not find ClavaNode with id '" + nodeId
+                    + "', returning an empty instance. Check if node is being visited. If parsing of includes is enabled, check that the parsing level is sufficient.");
+
+            clavaNode = SpecsSystem.newInstance(valueClass);
+        }
+
+        return clavaNode;
+    }
+
+    public <T extends ClavaNode> Optional<ClavaNode> getOptional(String nodeId) {
+        ClavaNode clavaNode = clavaNodes.get(nodeId);
+
+        if (clavaNode == null) {
+            ClavaLog.warning("Could not find ClavaNode with id '" + nodeId
+                    + "', returning an empty optional. Check if node is being visited. If parsing of includes is enabled, check that the parsing level is sufficient.");
+
+            return Optional.empty();
+        }
+
+        return Optional.of(clavaNode);
+    }
+
     //
     // public Type getType(String parsedTypeId) {
     // if (NULLPRT_TYPE.equals(parsedTypeId)) {
@@ -368,7 +397,7 @@ public class ClavaNodes {
             // }
             Optional<T> value = isNullId(nodeId) ? Optional.empty()
                     // Optional<T> value = isNullId(nodeId) ? Optional.empty()
-                    : key.getValueClass().cast(Optional.of(get(nodeId)));
+                    : key.getValueClass().cast(getOptional(nodeId));
 
             // System.out.println("VALUE: " + value);
 

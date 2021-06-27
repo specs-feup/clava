@@ -49,9 +49,9 @@ bool DumpAstVisitor::TraverseDecl(Decl *D) {
 #endif
         // Top-level Node
         llvm::errs() << TOP_LEVEL_NODES << "\n";
-        //llvm::errs() << id << "\n";
         llvm::errs() << D << "_" << id << "\n";
 
+        // If it is not being visited, if this is called it can give an error
         // Visit Top Node
         // Experiment: can this visitor replace all other visitors?
         //dumper.VisitDeclTop(D);

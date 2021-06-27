@@ -49,6 +49,7 @@ import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfArray;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponent;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfComponentKind;
 import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfField;
+import pt.up.fe.specs.clava.ast.expr.data.offsetof.OffsetOfIdentifier;
 import pt.up.fe.specs.clava.ast.expr.enums.DesignatorKind;
 import pt.up.fe.specs.clava.ast.type.data.exception.ComputedNoexcept;
 import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
@@ -412,6 +413,9 @@ public class ClavaDataParsers {
             break;
         case FIELD:
             component.set(OffsetOfField.FIELD_NAME, lines.nextLine());
+            break;
+        case IDENTIFIER:
+            component.set(OffsetOfIdentifier.FIELD_NAME, lines.nextLine());
             break;
         default:
             throw new NotImplementedException(kind);
