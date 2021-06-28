@@ -687,6 +687,8 @@ public class ClavaNodes {
         // Check if newNode is a text element (Comment or Pragma, wrapped or not)
         // If so, there is no problem
 
+        // System.out.println("BASE CODE: " + base.getCode());
+
         var newTextNode = toTextElement(newNode);
         if (newTextNode.isPresent()) {
             return base;
@@ -696,19 +698,19 @@ public class ClavaNodes {
         var reversedLeftSiblings = new ArrayList<>(base.getLeftSiblings());
         Collections.reverse(reversedLeftSiblings);
         var currentBase = base;
-        System.out.println("CURRENT Base: " + currentBase);
+        // System.out.println("CURRENT Base: " + currentBase.getCode());
         for (var sibling : reversedLeftSiblings) {
             var baseTextNode = toTextElement(sibling);
 
             // If sibling is not a text element, return current base
             if (baseTextNode.isEmpty()) {
-                System.out.println("Not a text element: " + sibling);
+                // System.out.println("Not a text element: " + sibling.getCode());
                 return currentBase;
             }
 
             // If sibling is a text node, promote it to base node
             currentBase = sibling;
-            System.out.println("New Base: " + currentBase);
+            // System.out.println("New Base: " + currentBase.getCode());
         }
 
         // Finished loop without returning, first not is a text element
