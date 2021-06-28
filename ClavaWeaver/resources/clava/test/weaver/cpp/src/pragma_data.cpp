@@ -22,6 +22,21 @@ void noData() {
 	}
 }
 
+void insertPreservesPragma() {
+
+	#pragma clava data a:30
+	for(int i=0; i<0; i++) {
+	}
+}
+
+#pragma another pragma
+#pragma clava data a:40
+// Hello
+#pragma yet other pragma
+void insertPreservesPragma2() {
+	
+}
+
 int main() {
     
     foo();
