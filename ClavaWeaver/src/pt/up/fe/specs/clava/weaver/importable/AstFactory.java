@@ -516,6 +516,14 @@ public class AstFactory {
         return jp;
     }
 
+    public static ACxxWeaverJoinPoint pointerType(AType pointeeType) {
+        PointerType pointerType = CxxWeaver.getFactory().pointerType((Type) pointeeType.getNode());
+
+        ACxxWeaverJoinPoint jp = CxxJoinpoints.create(pointerType);
+
+        return jp;
+    }
+
     public static AExpression doubleLiteral(String floating) {
         return doubleLiteral(Double.parseDouble(floating));
     }
