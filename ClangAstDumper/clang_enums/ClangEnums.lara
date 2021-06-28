@@ -6,6 +6,36 @@ import ClangEnum;
  */
 var ClangEnums = {};
 
+/**
+ 
+- clang/AST/OperationKinds.h
+CastKind, CAST_KIND
+
+- clang/Basic/AttrKinds.h
+attr::Kind, ATTRIBUTES 
+ 
+- clang/Basic/Specifiers.h 
+CallingConv, CALLING_CONVENTION 
+AccessSpecifier, ACCESS_SPECIFIER
+
+- clang/AST/Type.h
+ExceptionSpecificationType, EXCEPTION_SPECIFICATION_TYPE
+
+- clang/Basic/Linkage.h
+Linkage, LINKAGE
+
+- clang/Basic/Visibility.h
+Visibility, VISIBILITY
+
+- clang/AST/TemplateBase.h
+ArgKind, TEMPLATE_ARG_KIND
+
+
+INIT_STYLE
+
+ */
+
+
 
 ClangEnums._TYPE_H = new HeaderEnums('Type.h', [
 	new ClangEnum('Kind', 'BUILTIN_KIND', undefined, ["LastKind"]),
