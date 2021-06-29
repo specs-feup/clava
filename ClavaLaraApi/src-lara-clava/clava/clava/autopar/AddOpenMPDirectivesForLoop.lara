@@ -76,7 +76,9 @@ aspectdef AddOpenMPDirectivesForLoop
 	
 	select $ForStmt.body end
 	apply
-
+		if(!$body.hasChildren) {
+			continue;
+		}
 
 		if ($body.child(0).code.indexOf('//loopindex') !== -1)
 		{
