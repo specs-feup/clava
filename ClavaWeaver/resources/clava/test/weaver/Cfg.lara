@@ -8,7 +8,11 @@ aspectdef Test
 		
 		println($function.name + " -> " + $call.name);
 		println($function.location + " -> " + $call.location);		
-		println($call.decl.location);
+		var location = $call.decl.location;
+		if(!location.includes(".h")) {
+			println(location);
+		}
+
 /*
     for(var $function of Query.search("function")) {
 
