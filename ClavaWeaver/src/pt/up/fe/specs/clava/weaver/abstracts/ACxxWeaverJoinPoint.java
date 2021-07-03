@@ -566,7 +566,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             return null;
         }
 
-        // return new CxxType(((Typable) node).getType(), this);
         return CxxJoinpoints.create(((Typable) node).getType());
     }
 
