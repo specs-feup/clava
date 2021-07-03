@@ -153,13 +153,14 @@ public class DFGUtils {
         while (!loop.isTopLevel()) {
             DataFlowNode previousLoop = loop;
             loop = getLoopOfLoop(loop);
-            count *= loop.getIterations();
-            count = count > Integer.MAX_VALUE ? Integer.MAX_VALUE : count;
 
-            // Fix? Without this it can enter infinite loops
+            // To avoid an infinite loop
             if (previousLoop == loop) {
                 break;
             }
+
+            count *= loop.getIterations();
+            count = count > Integer.MAX_VALUE ? Integer.MAX_VALUE : count;
         }
         return count == 0 ? 1 : count;
     }
