@@ -500,8 +500,20 @@ public class TranslationUnit extends ClavaNode {
             int index = IntStream.range(0, lines.size())
                     .filter(i -> !lines.get(i).trim().isEmpty())
                     .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Expected to find non-empty code: " + decl.getCode()));
-            lines.set(index, lines.get(index) + commentCode);
+                    .orElse(-1);
+            // .orElseThrow(() -> new RuntimeException(
+            // "Expected to find non-empty code: " + decl.getCode() + "\n" + decl));
+
+            if (index != -1) {
+                lines.set(index, lines.get(index) + commentCode);
+            }
+            // Could not find code where to insert inline comment, just add to the beginning
+            else {
+                lines.add(0, commentCode);
+            }
+
+            // lines.set(index, lines.get(index) + commentCode);
+
             code = lines.stream().collect(Collectors.joining(ln()));
         }
 
