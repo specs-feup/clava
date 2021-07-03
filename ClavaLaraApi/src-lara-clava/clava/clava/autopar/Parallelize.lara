@@ -32,7 +32,7 @@ Parallelize.forLoops = function($loops) {
 	var autoparResult = Parallelize.getForLoopsPragmas($loops, true);
 	var parallelLoops = autoparResult["parallelLoops"];
 	var unparallelizableLoops = autoparResult["unparallelizableLoops"];
-	
+
 	// Add pragmas to loops
 	/*
 	for(var $loop of $loops) {
@@ -153,7 +153,8 @@ Parallelize.getForLoopsPragmas = function($loops, insertPragma, useLoopId) {
 	
 		$loop.insertBefore("#pragma parallelize_id " + $originalLoop.astId);
 	}
-	
+
+
 	// Transformations to help analysis    
 	call RemoveNakedloops;
 	call AddPragmaLoopIndex;
@@ -182,6 +183,7 @@ Parallelize.getForLoopsPragmas = function($loops, insertPragma, useLoopId) {
 	end
 	*/
 	
+	
 	// Write stats before attempting parallelization
 	AutoParStats.save();
 	
@@ -199,7 +201,7 @@ Parallelize.getForLoopsPragmas = function($loops, insertPragma, useLoopId) {
 		}
 
 		var parallelization = call ParallelizeLoop($pragma.target);
-		
+
 		/*
 		if(parallelization.ompPragma === undefined)
 		{
@@ -211,7 +213,7 @@ Parallelize.getForLoopsPragmas = function($loops, insertPragma, useLoopId) {
 		}
 		*/
 	}
-   
+
 	// Revert AST changes
 	Clava.popAst();
 	
