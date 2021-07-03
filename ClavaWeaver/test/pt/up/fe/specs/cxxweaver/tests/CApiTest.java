@@ -118,4 +118,9 @@ public class CApiTest {
     public void testSerializeNode() {
         newTester().test("SerializeNode.lara", "serialize_node.c");
     }
+
+    @Test
+    public void testHls() {
+        newTester().test("HlsTest.lara", "hls.c");
+    }
 }
