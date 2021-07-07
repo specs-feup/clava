@@ -232,7 +232,14 @@ public class AstFactory {
     }
 
     public static ACall callFromFunction(AFunction function, AJoinPoint... args) {
-        return call(function.getNameImpl(), function.getFunctionTypeImpl(), args);
+        var functionDecl = (FunctionDecl) function.getNode();
+        List<Expr> exprArgs = Arrays.stream(args)
+                .map(arg -> (Expr) arg.getNode())
+                .collect(Collectors.toList());
+
+        var call = CxxWeaver.getFactory().callExpr(functionDecl, exprArgs);
+
+        return CxxJoinpoints.create(call, ACall.class);
     }
 
     public static ACall call(String functionName, AType typeJp, AJoinPoint... args) {
