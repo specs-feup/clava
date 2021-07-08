@@ -118,14 +118,34 @@ public class CXXMemberCallExpr extends CallExpr {
     private void getCallMemberNames(Expr currentNode, List<String> memberNames) {
         // If node is a DeclRefExpr, add its refName to the head of the list and return
         if (currentNode instanceof DeclRefExpr) {
+            // System.out.println("ADDING DECLREF: " + ((DeclRefExpr) currentNode).getRefName());
             memberNames.add(((DeclRefExpr) currentNode).getRefName());
             return;
         }
 
         // If node is a MemberExpr, add its member name to the list after adding its base
         if (currentNode instanceof MemberExpr) {
+            // System.out.println("CALLING MEMBER EXPR BASE");
             getCallMemberNames(((MemberExpr) currentNode).getBase(), memberNames);
+            // System.out.println("ADDING MEMBER EXPR: " + ((MemberExpr) currentNode).getMemberName());
             memberNames.add(((MemberExpr) currentNode).getMemberName());
+            return;
+        }
+
+        // If node is a CXXMemberCallExpr, add its member name to the list after adding its base
+        if (currentNode instanceof CXXMemberCallExpr) {
+            memberNames.addAll(((CXXMemberCallExpr) currentNode).getCallMemberNames());
+            // System.out.println("CALLING CXXMemberCallExpr BASE");
+            // getCallMemberNames(((CXXMemberCallExpr) currentNode).getBase(), memberNames);
+
+            // System.out.println(
+            // "CALLING CXXMemberCallExpr CALLEE: " + ((CXXMemberCallExpr) currentNode).getCallMemberNames());
+            // getCallMemberNames(((CXXMemberCallExpr) currentNode).getCallee(), memberNames);
+            return;
+        }
+
+        if (currentNode instanceof CallExpr) {
+            memberNames.add(((CallExpr) currentNode).getCalleeName());
             return;
         }
 
@@ -328,10 +348,15 @@ public class CXXMemberCallExpr extends CallExpr {
     public String getCode() {
 
         var methodDecl = get(METHOD_DECL);
+        // System.out.println("MEMBER NAMES: " + getCallMemberNames());
+        // System.out.println("CALLEE CODE: " + getCalleeCode());
+        // System.out.println("ARGS CODE: " + getArgsCode());
+        // System.out.println("BASE: " + getBase().getCode());
 
-        // Special case: simplifies generated code, only needs first member name
+        // Special case: simplifies generated code, only generates base code
         if (methodDecl instanceof CXXConversionDecl) {
-            return getCallMemberNames().get(0);
+            return getBase().getCode();
+            // return getCallMemberNames().get(0);
         }
 
         return super.getCode();
