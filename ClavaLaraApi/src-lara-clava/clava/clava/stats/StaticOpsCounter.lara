@@ -207,15 +207,15 @@ StaticOpsCounter.prototype._countOpStatic = function (
             return;
         }
 
-        this._countOpStatic($stmt.init, opsBlock, includeOpKind);
-        this._countOpStatic($stmt.cond, opsBlock, includeOpKind);
-        this._countOpStatic($stmt.step, opsBlock, includeOpKind);
-
         var rank = $stmt.rank;
         var nestedId = opsBlock.id + " => " + rank[rank.length - 1];
 
         // Create block for loop
         var nestedOpsBlock = new OpsBlock(nestedId);
+
+        this._countOpStatic($stmt.init, opsBlock, includeOpKind);
+        this._countOpStatic($stmt.cond, nestedOpsBlock, includeOpKind);
+        this._countOpStatic($stmt.step, nestedOpsBlock, includeOpKind);
 
         // Extract iterations
         var iter = $stmt.iterationsExpr;
