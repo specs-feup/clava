@@ -174,7 +174,8 @@ StaticOpsCounter.prototype.count = function (
 
     println("StaticOpsCounter.count: Estimating ops of function " + functionId);
 
-    var opsBlock = new OpsBlock(functionId);
+    // var opsBlock = new OpsBlock(functionId);
+    opsBlock = opsBlock !== undefined ? opsBlock : new OpsBlock(functionId);
 
     // Go statement-by-statement
     var stmts = $function.body.children;
@@ -277,7 +278,7 @@ StaticOpsCounter.prototype._countOpStatic = function (
             continue;
         }
         // println("FUNC DEF: " + $funcDef.joinPointType);
-        this.count($funcDef, opsBlock);
+        this.count($funcDef, opsBlock, includeOpKind);
     }
 };
 
