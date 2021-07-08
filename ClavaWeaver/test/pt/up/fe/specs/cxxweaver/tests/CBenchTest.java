@@ -53,4 +53,8 @@ public class CBenchTest {
         newTester().test("DspMatmul.lara", "dsp_matmul.c");
     }
 
+    @Test
+    public void testLSIssue1() {
+        newTester().test("LSIssue1.lara", "ls_issue1.c");
+    }
 }
