@@ -264,6 +264,11 @@ public class CxxTest {
         new CxxTester("operator.cpp").test();
     }
 
+    @Test
+    public void testMemberCalls() {
+        new CxxTester("member_calls.cpp").test();
+    }
+
     // @Test
     // public void testListInitialization() {
     // new CxxTester("list_initialization.cpp").onePass().showCode().test();
