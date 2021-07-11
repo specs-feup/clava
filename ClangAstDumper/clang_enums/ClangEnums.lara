@@ -9,8 +9,6 @@ var ClangEnums = {};
 /**
 
 
-- clang/Basic/AttrKinds.h
-attr::Kind, ATTRIBUTES 
 
  
 - clang/Basic/Specifiers.h 
@@ -69,6 +67,8 @@ NameKind, TEMPLATE_NAME_KIND
 VisibilityType, VISIBILITY_ATTR_TYPE
 
 
+- clang/Basic/AttrKinds.h
+attr::Kind, ATTRIBUTES 
 
  */
 
@@ -87,6 +87,10 @@ ClangEnums._OPERATIONS_KINDS_H = new HeaderEnums('OperationKinds.h', [
 	new ClangEnum('CastKind', 'CAST_KIND', value => ClangEnums._removePrefix(value, "CK_"), undefined),
 	new ClangEnum('BinaryOperatorKind', 'BINARY_OPERATOR_KIND', value => ClangEnums._removePrefix(value, "BO_"), undefined),
 	new ClangEnum('UnaryOperatorKind', 'UNARY_OPERATOR_KIND', value => ClangEnums._removePrefix(value, "UO_"), undefined)
+]);
+
+ClangEnums._OPERATIONS_KINDS_H = new HeaderEnums('AttrKinds.h', [
+	new ClangEnum('Kind', 'ATTRIBUTES', undefined, undefined)
 ]);
 
 ClangEnums._HEADERS = [ClangEnums._TYPE_H, ClangEnums._OPERATIONS_KINDS_H];

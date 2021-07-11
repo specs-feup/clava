@@ -252,7 +252,7 @@ const std::string clava::CAST_KIND[]{
         "IntToOCLSampler"
 };
 */
-
+/*
 const std::string clava::ATTRIBUTES[] = {
         "FallThrough",
         "Suppress",
@@ -491,7 +491,7 @@ const std::string clava::ATTRIBUTES[] = {
         "RenderScriptKernel",
         "Thread"
 };
-
+*/
 
 const std::string clava::CALLING_CONVENTION[]{
         "C",

@@ -77,6 +77,7 @@ set(SOURCE_FILES
 		ClavaDecl.cpp
 		enums_Type_h.cpp
 		enums_OperationKinds_h.cpp
+		enums_AttrKinds_h.cpp
 		)
 
 add_executable(ClangAstDumper ${SOURCE_FILES})
