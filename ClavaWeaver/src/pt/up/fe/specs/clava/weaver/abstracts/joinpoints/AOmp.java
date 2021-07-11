@@ -1332,8 +1332,8 @@ public abstract class AOmp extends APragma {
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
         case "type": {
-        	if(value instanceof AJoinPoint){
-        		this.defTypeImpl((AJoinPoint)value);
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

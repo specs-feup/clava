@@ -17,8 +17,8 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
 public class CxxMethod extends AMethod {
 
@@ -50,8 +50,8 @@ public class CxxMethod extends AMethod {
      * this is not required
      */
     @Override
-    public AJoinPoint getTypeImpl() {
-        return CxxJoinpoints.create(method.getReturnType());
+    public AType getTypeImpl() {
+        return CxxJoinpoints.create(method.getReturnType(), AType.class);
     }
 
     /*

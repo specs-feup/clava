@@ -56,7 +56,7 @@
 		<attribute name="ast" type="String" />
 		<attribute name="code" type="String" />
 		<attribute name="joinpointType" type="String" tooltip="[DEPRECATED: please use joinPointType instead (uppercase P)]"/>
-		<attribute name="type" type="joinpoint">
+		<attribute name="type" type="type">
 			<def/>
 		</attribute>
 		<attribute name="astName" type="String" />

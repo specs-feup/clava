@@ -92,8 +92,8 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AJoinPoint getTypeImpl() {
-        return CxxJoinpoints.create(function.getReturnType());
+    public AType getTypeImpl() {
+        return CxxJoinpoints.create(function.getReturnType(), AType.class);
     }
 
     @Override

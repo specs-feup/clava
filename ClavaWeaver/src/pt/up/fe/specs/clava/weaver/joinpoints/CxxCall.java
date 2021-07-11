@@ -132,9 +132,9 @@ public class CxxCall extends ACall {
     }
 
     @Override
-    public AJoinPoint getTypeImpl() {
+    public AType getTypeImpl() {
         if (call instanceof CXXMemberCallExpr) {
-            return CxxJoinpoints.create(((CXXMemberCallExpr) call).getType());
+            return CxxJoinpoints.create(((CXXMemberCallExpr) call).getType(), AType.class);
         }
 
         // Return the type of the function (return type)
@@ -147,7 +147,7 @@ public class CxxCall extends ACall {
         // }
         // System.out.println("CALLEE TYPE:" + calleeType);
         if (calleeType instanceof FunctionType) {
-            return CxxJoinpoints.create(((FunctionType) calleeType).getReturnType());
+            return CxxJoinpoints.create(((FunctionType) calleeType).getReturnType(), AType.class);
         }
 
         /*
@@ -157,7 +157,7 @@ public class CxxCall extends ACall {
         }
         */
 
-        return CxxJoinpoints.create(calleeType);
+        return CxxJoinpoints.create(calleeType, AType.class);
     }
 
     @Override
