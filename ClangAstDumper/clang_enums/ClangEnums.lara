@@ -7,16 +7,18 @@ import ClangEnum;
 var ClangEnums = {};
 
 /**
- 
-- clang/AST/OperationKinds.h
-CastKind, CAST_KIND
+
 
 - clang/Basic/AttrKinds.h
 attr::Kind, ATTRIBUTES 
+
  
 - clang/Basic/Specifiers.h 
 CallingConv, CALLING_CONVENTION 
 AccessSpecifier, ACCESS_SPECIFIER
+StorageClass, STORAGE_CLASS
+ExplicitSpecKind, EXPLICIT_SPEC_KIND
+
 
 - clang/AST/Type.h
 ExceptionSpecificationType, EXCEPTION_SPECIFICATION_TYPE
@@ -31,8 +33,46 @@ Visibility, VISIBILITY
 ArgKind, TEMPLATE_ARG_KIND
 
 
-INIT_STYLE
+- clang/AST/Decl.h
+InitializationStyle, INIT_STYLE
+TLSKind, TLS_KIND
 
+- clang/AST/ExprCXX.h
+InitializationStyle, NEW_INIT_STYLE
+ConstructionKind, CONSTRUCTION_KIND
+
+- clang/Basic/TypeTraits.h
+UnaryExprOrTypeTrait, UETT_KIND
+
+- clang/Ast/NestedNameSpecifier.h
+SpecifierKind, NESTED_NAMED_SPECIFIER
+
+- clang/Ast/Expr.h
+Kind, OFFSET_OF_NODE_KIND (class OffsetOfNode)
+IdentKind, PREDEFINED_ID_TYPE
+StringKind, STRING_KIND
+Kind, DESIGNATOR_KIND (class Designator)
+
+
+- clang/AST/DeclCxx.h
+LanguageIDs, LINKAGE_LANGUAGE
+
+- clang/Basic/Lambda.h
+LambdaCaptureDefault, LAMBDA_CAPTURE_DEFAULT
+LambdaCaptureKind, LAMBDA_CAPTURE_KIND
+
+
+- clang/AST/TemplateName.h
+NameKind, TEMPLATE_NAME_KIND
+
+- clang/AST/Attr.h
+VisibilityType, VISIBILITY_ATTR_TYPE
+
+
+- clang/AST/OperationKinds.h
+CastKind, CAST_KIND
+BinaryOperatorKind, BINARY_OPERATOR_KIND
+UnaryOperatorKind, UNARY_OPERATOR_KIND
  */
 
 
@@ -46,8 +86,13 @@ ClangEnums._TYPE_H = new HeaderEnums('Type.h', [
 	new ClangEnum('TagTypeKind', 'TAG_KIND', value => ClangEnums._tagKindMapperMapper(value), undefined)
 ]);
 
+ClangEnums._OPERATIONS_KINDS_H = new HeaderEnums('OperationKinds.h', [
+	new ClangEnum('CastKind', 'CAST_KIND', undefined, undefined),
+	new ClangEnum('BinaryOperatorKind', 'BINARY_OPERATOR_KIND', undefined, undefined),
+	new ClangEnum('UnaryOperatorKind', 'UNARY_OPERATOR_KIND', undefined, undefined)
+]);
 
-ClangEnums._HEADERS = [ClangEnums._TYPE_H];
+ClangEnums._HEADERS = [ClangEnums._TYPE_H, ClangEnums._OPERATIONS_KINDS_H];
 
 ClangEnums.getHeader = function(headerFilename) {
 	if(ClangEnums._HEADER_MAP === undefined) {
