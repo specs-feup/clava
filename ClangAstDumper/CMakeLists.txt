@@ -76,6 +76,7 @@ set(SOURCE_FILES
 		ChildrenVisitorExtras.cpp
 		ClavaDecl.cpp
 		enums_Type_h.cpp
+		enums_OperationKinds_h.cpp
 		)
 
 add_executable(ClangAstDumper ${SOURCE_FILES})

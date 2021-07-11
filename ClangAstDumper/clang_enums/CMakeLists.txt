@@ -22,9 +22,9 @@ message(STATUS "LLVM DIR: ${LLVM_DIR}")
 # Make enum extractor available
 include(${CMAKE_CURRENT_LIST_DIR}/ExtractEnums.cmake)
 
-#extract_enums("${LLVM_DIR}/src/include/clang/AST/" "Type.h")
-extract_enums("${LLVM_DIR}/src/include/clang/AST/" "OperationKinds.h")
-
+#extract_enums("${LLVM_DIR}/src/include/clang/AST" "Type.h")
+extract_enums("${LLVM_DIR}/src/include/clang/AST" "OperationKinds.h")
+ 
 # Create target for clang/AST/Type.h
 #add_library(Type_H "${LLVM_DIR}/src/include/clang/AST/Type.h")
 

@@ -10,7 +10,8 @@ function(extract_enums BASE_FOLDER HEADER_FILENAME)
 # Create target for clang/AST/Type.h
 set(TARGET_NAME "enums_${HEADER_FILENAME}")
 
-add_library(${TARGET_NAME} "${LLVM_DIR}/src/include/clang/AST/Type.h")
+#add_library(${TARGET_NAME} "${LLVM_DIR}/src/include/clang/AST/Type.h")
+add_library(${TARGET_NAME} "${BASE_FOLDER}/${HEADER_FILENAME}")
 
 set_property(TARGET ${TARGET_NAME} PROPERTY CXX_STANDARD 14)
 

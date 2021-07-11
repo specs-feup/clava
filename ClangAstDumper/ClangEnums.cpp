@@ -190,7 +190,7 @@ const std::string clava::BUILTIN_KIND[] = {
         "OMPIterator"
 };
 */
-
+/*
 const std::string clava::CAST_KIND[]{
         "Dependent",
         "BitCast",
@@ -251,7 +251,7 @@ const std::string clava::CAST_KIND[]{
         "AddressSpaceConversion",
         "IntToOCLSampler"
 };
-
+*/
 
 const std::string clava::ATTRIBUTES[] = {
         "FallThrough",
@@ -636,7 +636,7 @@ extern const std::string clava::CONSTRUCTION_KIND[]{
         "VirtualBase",
         "Delegating"
 };
-
+/*
 extern const std::string clava::BINARY_OPERATOR_KIND[]{
         "PtrMemD",
         "PtrMemI",
@@ -672,12 +672,13 @@ extern const std::string clava::BINARY_OPERATOR_KIND[]{
         "OrAssign",
         "Comma"
 };
+ */
 /*
 extern const std::string clava::UTT_KIND[]{
     "EnumUnderlyingType"
 };
 */
-
+/*
 extern const std::string clava::UNARY_OPERATOR_KIND[]{
         "PostInc",
         "PostDec",
@@ -694,7 +695,7 @@ extern const std::string clava::UNARY_OPERATOR_KIND[]{
         "Extension",
         "Coawait"
 };
-
+*/
 extern const std::string clava::UETT_KIND[]{
         "SIZE_OF",
         "ALIGN_OF",

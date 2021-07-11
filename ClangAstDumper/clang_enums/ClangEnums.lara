@@ -69,10 +69,7 @@ NameKind, TEMPLATE_NAME_KIND
 VisibilityType, VISIBILITY_ATTR_TYPE
 
 
-- clang/AST/OperationKinds.h
-CastKind, CAST_KIND
-BinaryOperatorKind, BINARY_OPERATOR_KIND
-UnaryOperatorKind, UNARY_OPERATOR_KIND
+
  */
 
 
@@ -87,9 +84,9 @@ ClangEnums._TYPE_H = new HeaderEnums('Type.h', [
 ]);
 
 ClangEnums._OPERATIONS_KINDS_H = new HeaderEnums('OperationKinds.h', [
-	new ClangEnum('CastKind', 'CAST_KIND', undefined, undefined),
-	new ClangEnum('BinaryOperatorKind', 'BINARY_OPERATOR_KIND', undefined, undefined),
-	new ClangEnum('UnaryOperatorKind', 'UNARY_OPERATOR_KIND', undefined, undefined)
+	new ClangEnum('CastKind', 'CAST_KIND', value => ClangEnums._removePrefix(value, "CK_"), undefined),
+	new ClangEnum('BinaryOperatorKind', 'BINARY_OPERATOR_KIND', value => ClangEnums._removePrefix(value, "BO_"), undefined),
+	new ClangEnum('UnaryOperatorKind', 'UNARY_OPERATOR_KIND', value => ClangEnums._removePrefix(value, "UO_"), undefined)
 ]);
 
 ClangEnums._HEADERS = [ClangEnums._TYPE_H, ClangEnums._OPERATIONS_KINDS_H];
@@ -108,13 +105,23 @@ ClangEnums.buildHeaderMap = function() {
 	for(var header of ClangEnums._HEADERS) {
 		map[header.getName()] = header;
 	}
-	
+	//println("Header map");
+	//printlnObject(map);
 	return map;
 }
 
 /**
  * Mappers
  */
+ ClangEnums._removePrefix = function(enumValue, prefix) {
+
+	if(enumValue.startsWith(prefix)) {
+		enumValue = enumValue.substring(prefix.length);
+	}
+
+	return enumValue;
+}
+ 
 ClangEnums._refQualMapper = function(enumValue) {
 //println("MAPPER FOR " + enumValue);
 	if(enumValue.startsWith("RQ_")) {
