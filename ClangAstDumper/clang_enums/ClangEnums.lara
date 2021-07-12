@@ -6,38 +6,6 @@ import ClangEnum;
  */
 var ClangEnums = {};
 
-/**
-
-
-- clang/Ast/NestedNameSpecifier.h
-SpecifierKind, NESTED_NAMED_SPECIFIER
-
-
-
-
-- clang/AST/DeclCxx.h
-LanguageIDs, LINKAGE_LANGUAGE
-
-- clang/Basic/Lambda.h
-LambdaCaptureDefault, LAMBDA_CAPTURE_DEFAULT
-LambdaCaptureKind, LAMBDA_CAPTURE_KIND
-
-
-- clang/AST/TemplateName.h
-NameKind, TEMPLATE_NAME_KIND
-
-- clang/AST/Attr.h
-VisibilityType, VISIBILITY_ATTR_TYPE
-
-
-- clang/Ast/Expr.h
-Kind, OFFSET_OF_NODE_KIND (class OffsetOfNode)
-IdentKind, PREDEFINED_ID_TYPE
-StringKind, STRING_KIND
-Kind, DESIGNATOR_KIND (class Designator)
- 
-
- */
 
 
 
@@ -73,15 +41,15 @@ ClangEnums._SPECIFIERS_H = new HeaderEnums('Specifiers.h', [
 
 
 ClangEnums._EXCEPTION_SPECIFICATION_TYPE_H = new HeaderEnums('ExceptionSpecificationType.h', [
-	new ClangEnum('ExceptionSpecificationType', 'EXCEPTION_SPECIFICATION_TYPE', value => ClangEnums._removePrefix(value, "EST_"), undefined)
+	new ClangEnum('ExceptionSpecificationType', 'EXCEPTION_SPECIFICATION_TYPE', (value => ClangEnums._removePrefix(value, "EST_")), undefined)
 ]);
 
 ClangEnums._LINKAGE_H = new HeaderEnums('Linkage.h', [
-	new ClangEnum('Linkage', 'LINKAGE', value => ClangEnums._removePrefix(value, "EST_"), undefined)
+	new ClangEnum('Linkage', 'LINKAGE', (value => ClangEnums._removePrefix(value, "EST_")), undefined)
 ]);
 
 ClangEnums._VISIBILITY_H = new HeaderEnums('Visibility.h', [
-	new ClangEnum('Visibility', 'VISIBILITY', value => ClangEnums._removeSuffix(value, "Visibility"), undefined)
+	new ClangEnum('Visibility', 'VISIBILITY', (value => ClangEnums._removeSuffix(value, "Visibility")), undefined)
 ]);
 
 ClangEnums._TEMPLATE_BASE_H = new HeaderEnums('TemplateBase.h', [
@@ -89,8 +57,8 @@ ClangEnums._TEMPLATE_BASE_H = new HeaderEnums('TemplateBase.h', [
 ]);
 
 ClangEnums._DECL_H = new HeaderEnums('Decl.h', [
-	new ClangEnum('InitializationStyle', 'INIT_STYLE', value => ClangEnums._INIT_STYLE_ENUMS[value], undefined),
-	new ClangEnum('TLSKind', 'TLS_KIND', value => ClangEnums._removePrefix(value, "TLS_").toUpperCase(), undefined)	
+	new ClangEnum('InitializationStyle', 'INIT_STYLE', (value => ClangEnums._INIT_STYLE_ENUMS[value]), undefined),
+	new ClangEnum('TLSKind', 'TLS_KIND', (value => ClangEnums._removePrefix(value, "TLS_").toUpperCase()), undefined)	
 ]);
 
 ClangEnums._INIT_STYLE_ENUMS = {
@@ -101,8 +69,8 @@ ClangEnums._INIT_STYLE_ENUMS = {
 
 
 ClangEnums._EXPR_CXX_H = new HeaderEnums('ExprCXX.h', [
-	new ClangEnum('InitializationStyle', 'NEW_INIT_STYLE', value => ClangEnums._NEW_INIT_STYLE_ENUMS[value], undefined),
-	new ClangEnum('ConstructionKind', 'CONSTRUCTION_KIND', value => ClangEnums._removePrefix(value, "CK_"), undefined)	
+	new ClangEnum('InitializationStyle', 'NEW_INIT_STYLE', (value => ClangEnums._NEW_INIT_STYLE_ENUMS[value]), undefined),
+	new ClangEnum('ConstructionKind', 'CONSTRUCTION_KIND', (value => ClangEnums._removePrefix(value, "CK_")), undefined)	
 ]);
 
 
@@ -114,9 +82,56 @@ ClangEnums._NEW_INIT_STYLE_ENUMS = {
 
 
 ClangEnums._TYPE_TRAITS_H = new HeaderEnums('TypeTraits.h', [
-	new ClangEnum('UnaryExprOrTypeTrait', 'UETT_KIND', undefined, undefined)
+	new ClangEnum('UnaryExprOrTypeTrait', 'UETT_KIND', (value => ClangEnums._removePrefix(value, "UETT_")), ["UETT_Last"])
 ]);
 
+
+ClangEnums._NESTED_NAME_SPECIFIER_H = new HeaderEnums('NestedNameSpecifier.h', [
+	new ClangEnum('SpecifierKind', 'NESTED_NAMED_SPECIFIER', undefined, undefined)
+]);
+
+
+ClangEnums._DECL_CXX_H = new HeaderEnums('DeclCxx.h', [
+	new ClangEnum('LanguageIDs', 'LINKAGE_LANGUAGE', (value => ClangEnums._removePrefix(value, "lang_").toUpperCase()), undefined)
+]);
+
+
+ClangEnums._LAMBDA_H = new HeaderEnums('Lambda.h', [
+	new ClangEnum('LambdaCaptureDefault', 'LAMBDA_CAPTURE_DEFAULT', (value => ClangEnums._removePrefix(value, "LCD_")), undefined),
+	new ClangEnum('LambdaCaptureKind', 'LAMBDA_CAPTURE_KIND', (value => ClangEnums._removePrefix(value, "LCK_")), undefined)	
+]);
+
+
+ClangEnums._TEMPLATE_NAME_H = new HeaderEnums('TemplateName.h', [
+	new ClangEnum('NameKind', 'TEMPLATE_NAME_KIND', undefined, undefined)
+]);
+
+
+ClangEnums._ATTR_H = new HeaderEnums('Attr.h', [
+	new ClangEnum('VisibilityType', 'VISIBILITY_ATTR_TYPE', undefined, undefined)
+]);
+
+
+ClangEnums._EXPR_H = new HeaderEnums('Expr.h', [
+	new ClangEnum('Kind', 'OFFSET_OF_NODE_KIND', undefined, undefined, 'OffsetOfNode'),
+	new ClangEnum('IdentKind', 'PREDEFINED_ID_TYPE', undefined, undefined),
+	new ClangEnum('StringKind', 'STRING_KIND', undefined, undefined),
+	new ClangEnum('Kind', 'DESIGNATOR_KIND', undefined, undefined, 'Designator')		
+]);
+
+/**
+
+
+
+
+- clang/Ast/Expr.h
+Kind, OFFSET_OF_NODE_KIND (class OffsetOfNode)
+IdentKind, PREDEFINED_ID_TYPE
+StringKind, STRING_KIND
+Kind, DESIGNATOR_KIND (class Designator)
+ 
+
+ */
 
 
 
@@ -129,7 +144,14 @@ ClangEnums._HEADERS = [ClangEnums._TYPE_H,
 	ClangEnums._VISIBILITY_H,
 	ClangEnums._TEMPLATE_BASE_H,
 	ClangEnums._DECL_H,
-	ClangEnums._EXPR_CXX_H
+	ClangEnums._EXPR_CXX_H,
+	ClangEnums._TYPE_TRAITS_H,
+	ClangEnums._NESTED_NAME_SPECIFIER_H,
+	ClangEnums._DECL_CXX_H,
+	ClangEnums._LAMBDA_H,
+	ClangEnums._TEMPLATE_NAME_H,
+	ClangEnums._ATTR_H,
+	ClangEnums._EXPR_H
 ];
 
 ClangEnums.getHeader = function(headerFilename) {

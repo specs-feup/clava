@@ -21,7 +21,7 @@ message(STATUS "LLVM DIR: ${LLVM_DIR}")
 
 # Make enum extractor available
 include(${CMAKE_CURRENT_LIST_DIR}/ExtractEnums.cmake)
-
+     
 #extract_enums("${LLVM_DIR}/src/include/clang/AST" "Type.h")
 #extract_enums("${LLVM_DIR}/src/include/clang/AST" "OperationKinds.h")
 #extract_enums("${LLVM_DIR}/src/include/clang/Basic" "AttrKinds.h")
@@ -32,7 +32,13 @@ include(${CMAKE_CURRENT_LIST_DIR}/ExtractEnums.cmake)
 #extract_enums("${LLVM_DIR}/src/include/clang/AST" "TemplateBase.h")
 #extract_enums("${LLVM_DIR}/src/include/clang/AST" "Decl.h")
 #extract_enums("${LLVM_DIR}/src/include/clang/AST" "ExprCXX.h")
-extract_enums("${LLVM_DIR}/src/include/clang/Basic" "TypeTraits.h")
+#extract_enums("${LLVM_DIR}/src/include/clang/Basic" "TypeTraits.h")
+#extract_enums("${LLVM_DIR}/src/include/clang/AST" "NestedNameSpecifier.h")
+#extract_enums("${LLVM_DIR}/src/include/clang/AST" "DeclCxx.h")
+#extract_enums("${LLVM_DIR}/src/include/clang/Basic" "Lambda.h")
+#extract_enums("${LLVM_DIR}/src/include/clang/AST" "TemplateName.h")
+#extract_enums("${LLVM_DIR}/src/include/clang/AST" "Attr.h")
+extract_enums("${LLVM_DIR}/src/include/clang/AST" "Expr.h")
 
  
 # Create target for clang/AST/Type.h

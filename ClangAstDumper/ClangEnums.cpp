@@ -17,15 +17,15 @@ extern const std::string clava::CXX_CTOR_INIT_KIND[] {
 /* Clang Enums */
 
 
-
+/*
 extern const std::string clava::UETT_KIND[]{
         "SIZE_OF",
         "ALIGN_OF",
         "VEC_STEP",
         "OPEN_MP_REQUIRED_SIMD_ALIGN"
 };
-
-
+*/
+/*
 extern const std::string clava::NESTED_NAMED_SPECIFIER[]{
         "IDENTIFIER",
         "NAMESPACE",
@@ -35,7 +35,7 @@ extern const std::string clava::NESTED_NAMED_SPECIFIER[]{
         "GLOBAL",
         "SUPER"
 };
-
+*/
 
 extern const std::string clava::OFFSET_OF_NODE_KIND[]{
         "ARRAY",
@@ -44,19 +44,20 @@ extern const std::string clava::OFFSET_OF_NODE_KIND[]{
         "BASE"
 };
 
-
+/*
 extern const std::string clava::LINKAGE_LANGUAGE[]{
     "C",
     "CXX"
 };
-
-
+*/
+/*
 extern const std::string clava::LAMBDA_CAPTURE_DEFAULT[]{
         "NONE",
         "BY_COPY",
         "BY_REF"
 };
-
+*/
+/*
 extern const std::string clava::LAMBDA_CAPTURE_KIND[] {
         "This",
         "StarThis",
@@ -64,7 +65,7 @@ extern const std::string clava::LAMBDA_CAPTURE_KIND[] {
         "ByRef",
         "VLAType"
 };
-
+*/
 extern const std::string clava::PREDEFINED_ID_TYPE[]{
         "Func",
         "Function",
@@ -84,7 +85,7 @@ extern const std::string clava::STRING_KIND[]{
         "UTF32"
 };
 
-
+/*
 extern const std::string clava::TEMPLATE_NAME_KIND[]{
         "Template",
         "OverloadedTemplate",
@@ -93,6 +94,7 @@ extern const std::string clava::TEMPLATE_NAME_KIND[]{
         "SubstTemplateTemplateParm",
         "SubstTemplateTemplateParmPack"
 };
+*/
 
 extern const std::string clava::DESIGNATOR_KIND[] {
     "Field",
@@ -100,12 +102,13 @@ extern const std::string clava::DESIGNATOR_KIND[] {
     "ArrayRange"
 };
 
+/*
 extern const std::string clava::VISIBILITY_ATTR_TYPE[] {
     "Default",
     "Hidden",
     "Protected"
 };
-
+*/
 /*
 extern const std::string clava::EXPLICIT_SPEC_KIND[] {
     "ResolvedFalse",

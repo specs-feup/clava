@@ -85,6 +85,12 @@ set(SOURCE_FILES
 		enums_TemplateBase_h.cpp
 		enums_Decl_h.cpp
 		enums_ExprCXX_h.cpp
+		enums_TypeTraits_h.cpp
+		enums_NestedNameSpecifier_h.cpp
+		enums_DeclCxx_h.cpp
+		enums_Lambda_h.cpp
+		enums_TemplateName_h.cpp
+		enums_Attr_h.cpp
 		)
 
 add_executable(ClangAstDumper ${SOURCE_FILES})

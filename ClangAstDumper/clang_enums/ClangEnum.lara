@@ -1,7 +1,9 @@
+import weaver.Query;
+
 /**
  * @class
  */
-var ClangEnum = function(name, cppVarName, mapper, excludeArray) {
+var ClangEnum = function(name, cppVarName, mapper, excludeArray, className) {
 	this.name = name;
 	this.cppVarName = cppVarName;
 
@@ -10,11 +12,15 @@ var ClangEnum = function(name, cppVarName, mapper, excludeArray) {
 	}
 	this.mapper = mapper;
 
+
 	if(excludeArray === undefined) {
 		excludeArray = []; 
 	}
 	this.excludeSet = new StringSet(excludeArray);
-
+	//println("Exclude set: " + this.excludeSet.values());
+	
+	this.className = className;
+	
 	this.enumValues = undefined;
 };
 
@@ -22,6 +28,20 @@ ClangEnum.prototype.getEnumName = function() {
 	return this.name;
 }
 
+
+ClangEnum.prototype.getStartingNode = function() {
+	if(this.className === undefined) {
+		return Query.root();
+	}
+	
+	var startingClass = Query.search("class", this.className).first();
+	
+	if(startingClass === undefined) {
+		throw new Error("Clang enum specifies class '"+this.className+"', but it could not be found");
+	}
+	
+	return startingClass;
+}
 
 ClangEnum.prototype.setEnumValues = function(enumValues) {
 	if(this.enumValues !== undefined) {
@@ -44,7 +64,9 @@ ClangEnum.prototype.getCode = function() {
 	code += "extern const std::string clava::"+this.cppVarName+"[] = {\n";
 
 	for(var enumValue of this.enumValues) {
-		if(this.excludeSet.has(enumValue)) {
+		//println("Enum: " + enumValue);
+		if(this.excludeSet.has(enumValue.toString())) {
+			println("Excluded enum '"+enumValue+"'");
 			continue;
 		}
 
