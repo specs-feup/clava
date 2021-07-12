@@ -9,16 +9,6 @@ var ClangEnums = {};
 /**
 
 
-
-
-
-- clang/AST/ExprCXX.h
-InitializationStyle, NEW_INIT_STYLE
-ConstructionKind, CONSTRUCTION_KIND
-
-- clang/Basic/TypeTraits.h
-UnaryExprOrTypeTrait, UETT_KIND
-
 - clang/Ast/NestedNameSpecifier.h
 SpecifierKind, NESTED_NAMED_SPECIFIER
 
@@ -99,9 +89,34 @@ ClangEnums._TEMPLATE_BASE_H = new HeaderEnums('TemplateBase.h', [
 ]);
 
 ClangEnums._DECL_H = new HeaderEnums('Decl.h', [
-	new ClangEnum('InitializationStyle', 'INIT_STYLE', undefined, undefined),
-	new ClangEnum('TLSKind', 'TLS_KIND', undefined, undefined)	
+	new ClangEnum('InitializationStyle', 'INIT_STYLE', value => ClangEnums._INIT_STYLE_ENUMS[value], undefined),
+	new ClangEnum('TLSKind', 'TLS_KIND', value => ClangEnums._removePrefix(value, "TLS_").toUpperCase(), undefined)	
 ]);
+
+ClangEnums._INIT_STYLE_ENUMS = {
+	CInit: "CINIT",
+    CallInit: "CALL_INIT",
+    ListInit: "LIST_INIT"
+};
+
+
+ClangEnums._EXPR_CXX_H = new HeaderEnums('ExprCXX.h', [
+	new ClangEnum('InitializationStyle', 'NEW_INIT_STYLE', value => ClangEnums._NEW_INIT_STYLE_ENUMS[value], undefined),
+	new ClangEnum('ConstructionKind', 'CONSTRUCTION_KIND', value => ClangEnums._removePrefix(value, "CK_"), undefined)	
+]);
+
+
+ClangEnums._NEW_INIT_STYLE_ENUMS = {
+	NoInit: "NO_INIT",
+    CallInit: "CALL_INIT",
+    ListInit: "LIST_INIT"
+};
+
+
+ClangEnums._TYPE_TRAITS_H = new HeaderEnums('TypeTraits.h', [
+	new ClangEnum('UnaryExprOrTypeTrait', 'UETT_KIND', undefined, undefined)
+]);
+
 
 
 
@@ -113,7 +128,8 @@ ClangEnums._HEADERS = [ClangEnums._TYPE_H,
 	ClangEnums._LINKAGE_H,
 	ClangEnums._VISIBILITY_H,
 	ClangEnums._TEMPLATE_BASE_H,
-	ClangEnums._DECL_H
+	ClangEnums._DECL_H,
+	ClangEnums._EXPR_CXX_H
 ];
 
 ClangEnums.getHeader = function(headerFilename) {

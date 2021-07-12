@@ -83,6 +83,8 @@ set(SOURCE_FILES
 		enums_Linkage_h.cpp
 		enums_Visibility_h.cpp
 		enums_TemplateBase_h.cpp
+		enums_Decl_h.cpp
+		enums_ExprCXX_h.cpp
 		)
 
 add_executable(ClangAstDumper ${SOURCE_FILES})

@@ -30,8 +30,9 @@ include(${CMAKE_CURRENT_LIST_DIR}/ExtractEnums.cmake)
 #extract_enums("${LLVM_DIR}/src/include/clang/Basic" "Linkage.h")
 #extract_enums("${LLVM_DIR}/src/include/clang/Basic" "Visibility.h")
 #extract_enums("${LLVM_DIR}/src/include/clang/AST" "TemplateBase.h")
-extract_enums("${LLVM_DIR}/src/include/clang/AST" "Decl.h")
-
+#extract_enums("${LLVM_DIR}/src/include/clang/AST" "Decl.h")
+#extract_enums("${LLVM_DIR}/src/include/clang/AST" "ExprCXX.h")
+extract_enums("${LLVM_DIR}/src/include/clang/Basic" "TypeTraits.h")
 
  
 # Create target for clang/AST/Type.h
