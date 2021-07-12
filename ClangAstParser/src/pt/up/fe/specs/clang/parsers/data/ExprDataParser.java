@@ -292,7 +292,7 @@ public class ExprDataParser {
     public static DataStore parseCXXMemberCallExprData(LineStream lines, ClangParserData dataStore) {
         DataStore data = parseCallExprData(lines, dataStore);
 
-        dataStore.getClavaNodes().queueSetNode(data, CXXMemberCallExpr.METHOD_DECL, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, CXXMemberCallExpr.METHOD_DECL, lines.nextLine());
 
         return data;
     }

@@ -50,7 +50,7 @@ public class CXXMemberCallExpr extends CallExpr {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<CXXMethodDecl> METHOD_DECL = KeyFactory.object("methodDecl", CXXMethodDecl.class);
+    public final static DataKey<Optional<CXXMethodDecl>> METHOD_DECL = KeyFactory.optional("methodDecl");
 
     /// DATAKEYS END
 
@@ -183,7 +183,7 @@ public class CXXMemberCallExpr extends CallExpr {
 
     @Override
     public Optional<FunctionDecl> getFunctionDecl() {
-        return Optional.of(get(METHOD_DECL));
+        return get(METHOD_DECL).map(method -> (FunctionDecl) method);
     }
 
     // @Override
@@ -354,7 +354,7 @@ public class CXXMemberCallExpr extends CallExpr {
         // System.out.println("BASE: " + getBase().getCode());
 
         // Special case: simplifies generated code, only generates base code
-        if (methodDecl instanceof CXXConversionDecl) {
+        if (methodDecl.isPresent() && methodDecl.get() instanceof CXXConversionDecl) {
             return getBase().getCode();
             // return getCallMemberNames().get(0);
         }
