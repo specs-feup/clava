@@ -493,6 +493,7 @@ const std::string clava::ATTRIBUTES[] = {
 };
 */
 
+/*
 const std::string clava::CALLING_CONVENTION[]{
         "C",
         "X86StdCall",
@@ -512,6 +513,7 @@ const std::string clava::CALLING_CONVENTION[]{
         "PreserveMost",
         "PreserveAll"
 };
+ */
 /*
 const std::string clava::REFERENCE_QUALIFIER[]{
         "None",
@@ -519,7 +521,7 @@ const std::string clava::REFERENCE_QUALIFIER[]{
         "RValue"
 };
 */
-
+/*
 extern const std::string clava::EXCEPTION_SPECIFICATION_TYPE[]{
 
         "None",             ///< no exception specification
@@ -535,8 +537,9 @@ extern const std::string clava::EXCEPTION_SPECIFICATION_TYPE[]{
         "Unparsed"          ///< not parsed yet
 
 };
+*/
 
-
+/*
 extern const std::string clava::LINKAGE[]{
         "NoLinkage",
         "InternalLinkage",
@@ -546,14 +549,14 @@ extern const std::string clava::LINKAGE[]{
         "ModuleLinkage",
         "ExternalLinkage"
 };
-
-
+*/
+/*
 extern const std::string clava::VISIBILITY[]{
         "Hidden",
         "Protected",
         "Default"
 };
-
+*/
 /*
 extern const std::string clava::ARRAY_SIZE_MODIFIER[] {
         "Normal",
@@ -561,7 +564,7 @@ extern const std::string clava::ARRAY_SIZE_MODIFIER[] {
         "Star"
 };
 */
-
+/*
 extern const std::string clava::TEMPLATE_ARG_KIND[] {
         "Null",
         "Type",
@@ -573,7 +576,7 @@ extern const std::string clava::TEMPLATE_ARG_KIND[] {
         "Expression",
         "Pack"
 };
-
+*/
 /*
 extern const std::string clava::TAG_KIND[] {
         "STRUCT",
@@ -584,12 +587,14 @@ extern const std::string clava::TAG_KIND[] {
 };
 */
 
+/*
 extern const std::string clava::ACCESS_SPECIFIER[] {
         "PUBLIC",
         "PROTECTED",
         "PRIVATE",
         "NONE"
 };
+*/
 
 extern const std::string clava::INIT_STYLE[] {
         "CINIT",
@@ -604,7 +609,7 @@ extern const std::string clava::NEW_INIT_STYLE[]{
         "LIST_INIT"
 };
 
-
+/*
 extern const std::string clava::STORAGE_CLASS[] {
         "NONE",
         "EXTERN",
@@ -613,6 +618,7 @@ extern const std::string clava::STORAGE_CLASS[] {
         "AUTO",
         "REGISTER"
 };
+*/
 
 extern const std::string clava::TLS_KIND[] {
         "NONE",
@@ -784,13 +790,13 @@ extern const std::string clava::VISIBILITY_ATTR_TYPE[] {
     "Protected"
 };
 
-
+/*
 extern const std::string clava::EXPLICIT_SPEC_KIND[] {
     "ResolvedFalse",
     "ResolvedTrue",
     "Unresolved"
 };
-
+*/
 
 
 

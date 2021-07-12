@@ -10,30 +10,7 @@ var ClangEnums = {};
 
 
 
- 
-- clang/Basic/Specifiers.h 
-CallingConv, CALLING_CONVENTION 
-AccessSpecifier, ACCESS_SPECIFIER
-StorageClass, STORAGE_CLASS
-ExplicitSpecKind, EXPLICIT_SPEC_KIND
 
-
-- clang/AST/Type.h
-ExceptionSpecificationType, EXCEPTION_SPECIFICATION_TYPE
-
-- clang/Basic/Linkage.h
-Linkage, LINKAGE
-
-- clang/Basic/Visibility.h
-Visibility, VISIBILITY
-
-- clang/AST/TemplateBase.h
-ArgKind, TEMPLATE_ARG_KIND
-
-
-- clang/AST/Decl.h
-InitializationStyle, INIT_STYLE
-TLSKind, TLS_KIND
 
 - clang/AST/ExprCXX.h
 InitializationStyle, NEW_INIT_STYLE
@@ -45,11 +22,7 @@ UnaryExprOrTypeTrait, UETT_KIND
 - clang/Ast/NestedNameSpecifier.h
 SpecifierKind, NESTED_NAMED_SPECIFIER
 
-- clang/Ast/Expr.h
-Kind, OFFSET_OF_NODE_KIND (class OffsetOfNode)
-IdentKind, PREDEFINED_ID_TYPE
-StringKind, STRING_KIND
-Kind, DESIGNATOR_KIND (class Designator)
+
 
 
 - clang/AST/DeclCxx.h
@@ -67,8 +40,12 @@ NameKind, TEMPLATE_NAME_KIND
 VisibilityType, VISIBILITY_ATTR_TYPE
 
 
-- clang/Basic/AttrKinds.h
-attr::Kind, ATTRIBUTES 
+- clang/Ast/Expr.h
+Kind, OFFSET_OF_NODE_KIND (class OffsetOfNode)
+IdentKind, PREDEFINED_ID_TYPE
+StringKind, STRING_KIND
+Kind, DESIGNATOR_KIND (class Designator)
+ 
 
  */
 
@@ -76,12 +53,13 @@ attr::Kind, ATTRIBUTES
 
 ClangEnums._TYPE_H = new HeaderEnums('Type.h', [
 	new ClangEnum('Kind', 'BUILTIN_KIND', undefined, ["LastKind"]),
-	new ClangEnum('RefQualifierKind', 'REFERENCE_QUALIFIER', value => ClangEnums._refQualMapper(value), undefined),
+	new ClangEnum('RefQualifierKind', 'REFERENCE_QUALIFIER', value => ClangEnums._removePrefix(value, "RQ_"), undefined),
 	new ClangEnum('ArraySizeModifier', 'ARRAY_SIZE_MODIFIER', undefined, undefined),
 	new ClangEnum('UTTKind', 'UTT_KIND', undefined, undefined),
-	new ClangEnum('ElaboratedTypeKeyword', 'ELABORATED_TYPE_KEYWORD', value => ClangEnums._elaboratedTypeKeyworkMapper(value), undefined),
-	new ClangEnum('TagTypeKind', 'TAG_KIND', value => ClangEnums._tagKindMapperMapper(value), undefined)
+	new ClangEnum('ElaboratedTypeKeyword', 'ELABORATED_TYPE_KEYWORD', value => ClangEnums._removePrefix(value, "ETK_"), undefined),
+	new ClangEnum('TagTypeKind', 'TAG_KIND', value => ClangEnums._removePrefix(value, "TTK_"), undefined)
 ]);
+
 
 ClangEnums._OPERATIONS_KINDS_H = new HeaderEnums('OperationKinds.h', [
 	new ClangEnum('CastKind', 'CAST_KIND', value => ClangEnums._removePrefix(value, "CK_"), undefined),
@@ -89,11 +67,54 @@ ClangEnums._OPERATIONS_KINDS_H = new HeaderEnums('OperationKinds.h', [
 	new ClangEnum('UnaryOperatorKind', 'UNARY_OPERATOR_KIND', value => ClangEnums._removePrefix(value, "UO_"), undefined)
 ]);
 
-ClangEnums._OPERATIONS_KINDS_H = new HeaderEnums('AttrKinds.h', [
+
+ClangEnums._ATTR_KINDS_H = new HeaderEnums('AttrKinds.h', [
 	new ClangEnum('Kind', 'ATTRIBUTES', undefined, undefined)
 ]);
 
-ClangEnums._HEADERS = [ClangEnums._TYPE_H, ClangEnums._OPERATIONS_KINDS_H];
+
+ClangEnums._SPECIFIERS_H = new HeaderEnums('Specifiers.h', [
+	new ClangEnum('CallingConv', 'CALLING_CONVENTION', value => ClangEnums._removePrefix(value, "CC_"), undefined),
+	new ClangEnum('AccessSpecifier', 'ACCESS_SPECIFIER', value => ClangEnums._removePrefix(value, "AS_"), undefined),
+	new ClangEnum('StorageClass', 'STORAGE_CLASS', value => ClangEnums._removePrefix(value, "SC_"), undefined),
+	new ClangEnum('ExplicitSpecKind', 'EXPLICIT_SPEC_KIND', undefined, undefined)	
+]);
+
+
+
+ClangEnums._EXCEPTION_SPECIFICATION_TYPE_H = new HeaderEnums('ExceptionSpecificationType.h', [
+	new ClangEnum('ExceptionSpecificationType', 'EXCEPTION_SPECIFICATION_TYPE', value => ClangEnums._removePrefix(value, "EST_"), undefined)
+]);
+
+ClangEnums._LINKAGE_H = new HeaderEnums('Linkage.h', [
+	new ClangEnum('Linkage', 'LINKAGE', value => ClangEnums._removePrefix(value, "EST_"), undefined)
+]);
+
+ClangEnums._VISIBILITY_H = new HeaderEnums('Visibility.h', [
+	new ClangEnum('Visibility', 'VISIBILITY', value => ClangEnums._removeSuffix(value, "Visibility"), undefined)
+]);
+
+ClangEnums._TEMPLATE_BASE_H = new HeaderEnums('TemplateBase.h', [
+	new ClangEnum('ArgKind', 'TEMPLATE_ARG_KIND', undefined, undefined)
+]);
+
+ClangEnums._DECL_H = new HeaderEnums('Decl.h', [
+	new ClangEnum('InitializationStyle', 'INIT_STYLE', undefined, undefined),
+	new ClangEnum('TLSKind', 'TLS_KIND', undefined, undefined)	
+]);
+
+
+
+ClangEnums._HEADERS = [ClangEnums._TYPE_H, 
+	ClangEnums._OPERATIONS_KINDS_H, 
+	ClangEnums._ATTR_KINDS_H,
+	ClangEnums._SPECIFIERS_H,
+	ClangEnums._EXCEPTION_SPECIFICATION_TYPE_H,
+	ClangEnums._LINKAGE_H,
+	ClangEnums._VISIBILITY_H,
+	ClangEnums._TEMPLATE_BASE_H,
+	ClangEnums._DECL_H
+];
 
 ClangEnums.getHeader = function(headerFilename) {
 	if(ClangEnums._HEADER_MAP === undefined) {
@@ -117,7 +138,7 @@ ClangEnums.buildHeaderMap = function() {
 /**
  * Mappers
  */
- ClangEnums._removePrefix = function(enumValue, prefix) {
+ClangEnums._removePrefix = function(enumValue, prefix) {
 
 	if(enumValue.startsWith(prefix)) {
 		enumValue = enumValue.substring(prefix.length);
@@ -125,7 +146,18 @@ ClangEnums.buildHeaderMap = function() {
 
 	return enumValue;
 }
+
+
+ClangEnums._removeSuffix = function(enumValue, suffix) {
+
+	if(enumValue.endsWith(suffix)) {
+		enumValue = enumValue.substring(0, enumValue.length - suffix.length);
+	}
+
+	return enumValue;
+}
  
+/*
 ClangEnums._refQualMapper = function(enumValue) {
 //println("MAPPER FOR " + enumValue);
 	if(enumValue.startsWith("RQ_")) {
@@ -135,7 +167,8 @@ ClangEnums._refQualMapper = function(enumValue) {
 //	println("RETURNING: " + enumValue);
 	return enumValue;
 }
-
+*/
+/*
 ClangEnums._elaboratedTypeKeyworkMapper = function(enumValue) {
 
 	if(enumValue.startsWith("ETK_")) {
@@ -146,7 +179,8 @@ ClangEnums._elaboratedTypeKeyworkMapper = function(enumValue) {
 
 	return enumValue;
 }
-
+*/
+/*
 ClangEnums._tagKindMapperMapper = function(enumValue) {
 
 	if(enumValue.startsWith("TTK_")) {
@@ -157,3 +191,4 @@ ClangEnums._tagKindMapperMapper = function(enumValue) {
 
 	return enumValue;
 }
+*/

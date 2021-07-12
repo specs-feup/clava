@@ -78,6 +78,11 @@ set(SOURCE_FILES
 		enums_Type_h.cpp
 		enums_OperationKinds_h.cpp
 		enums_AttrKinds_h.cpp
+		enums_Specifiers_h.cpp
+		enums_ExceptionSpecificationType_h.cpp
+		enums_Linkage_h.cpp
+		enums_Visibility_h.cpp
+		enums_TemplateBase_h.cpp
 		)
 
 add_executable(ClangAstDumper ${SOURCE_FILES})

@@ -12,7 +12,7 @@ aspectdef ClangEnumsGenerator
 	var headerEnums = ClangEnums.getHeader(header);
 	
 	if(headerEnums === undefined) {
-		println("Could not find enums for header '"+header+"'");
+		println("Could not find ClangEnum for header file '"+header+"'");
 		return;
 	}
 	
