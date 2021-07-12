@@ -18,13 +18,13 @@ import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum NestedNamedSpecifier implements StringProvider {
-    IDENTIFIER("Identifier"),
-    NAMESPACE("Namespace"),
-    NAMESPACE_ALIAS("NamespaceAlias"),
-    TYPE_SPEC("TypeSpec"),
-    TYPE_SPEC_WITH_TEMPLATE("TypeSpecWithTemplate"),
-    GLOBAL("Global"),
-    SUPER("Super");
+    Identifier,
+    Namespace,
+    NamespaceAlias,
+    TypeSpec,
+    TypeSpecWithTemplate,
+    Global,
+    Super;
     // NONE("");
 
     private static final Lazy<EnumHelperWithValue<NestedNamedSpecifier>> ENUM_HELPER = EnumHelperWithValue
@@ -34,14 +34,15 @@ public enum NestedNamedSpecifier implements StringProvider {
         return ENUM_HELPER.get();
     }
 
-    private final String description;
-
-    private NestedNamedSpecifier(String description) {
-        this.description = description;
-    }
+    // private final String description;
+    //
+    // private NestedNamedSpecifier(String description) {
+    // this.description = description;
+    // }
 
     @Override
     public String getString() {
-        return description;
+        return name();
+        // return description;
     }
 }

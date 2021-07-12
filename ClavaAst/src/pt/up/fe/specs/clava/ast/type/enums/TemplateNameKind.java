@@ -21,6 +21,9 @@ public enum TemplateNameKind {
     // A set of overloaded template declarations.
     OverloadedTemplate,
 
+    // An unqualified-id that has been assumed to name a function template that will be found by ADL.
+    AssumedTemplate,
+
     // A qualified template name, where the qualification is kept to describe the source code as written.
     QualifiedTemplate,
 

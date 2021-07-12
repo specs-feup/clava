@@ -21,9 +21,9 @@ import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum LambdaCaptureDefault implements StringProvider {
 
-    NONE(null),
-    BY_COPY("="),
-    BY_REF("&");
+    None(null),
+    ByCopy("="),
+    ByRef("&");
 
     private final String code;
 
