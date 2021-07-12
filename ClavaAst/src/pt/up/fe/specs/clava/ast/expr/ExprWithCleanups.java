@@ -31,7 +31,7 @@ import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
  * @author JoaoBispo
  *
  */
-public class ExprWithCleanups extends Expr {
+public class ExprWithCleanups extends FullExpr {
 
     public ExprWithCleanups(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

@@ -114,6 +114,7 @@ public class StreamParser {
 
     private final LineStreamParser<ClangParserData> lineStreamParser;
 
+    private String lastProcessedId;
     // public StreamParser(DataStore clavaData) {
     // this(clavaData, null, ClangStreamParserV2.newInstance());
     // }
@@ -134,6 +135,7 @@ public class StreamParser {
         // linestreamParsersMap = buildLineStreamParsers(linestreamParsers);
 
         this.lineStreamParser = lineStreamParser;
+        lastProcessedId = null;
     }
 
     /*
@@ -364,6 +366,7 @@ public class StreamParser {
             // If parser null, check linestream parsers
             if (lineStreamParser.getIds().contains(currentLine)) {
                 try {
+                    lastProcessedId = currentLine;
                     lineStreamParser.parse(currentLine, lines);
                 } catch (Exception e) {
                     SpecsLogs.msgWarn("Problems while parsing '" + currentLine + "'", e);
@@ -388,7 +391,9 @@ public class StreamParser {
                 throw new RuntimeException("Unexpected output: '" + currentLine + "'");
             }
 
+            // Unprocessed line
             warnings.append(currentLine).append("\n");
+            SpecsLogs.info("Unprocessed line (last processed block '" + lastProcessedId + "'):");
             SpecsLogs.msgInfo(currentLine);
         }
 

@@ -26,6 +26,7 @@ public enum ExceptionSpecificationType {
     DynamicNone, /// < throw()
     Dynamic, /// < throw(T1, T2)
     MSAny, /// < Microsoft throw(...) extension
+    NoThrow,
     BasicNoexcept, /// < noexcept
     // ComputedNoexcept, /// < noexcept(expression)
     DependentNoexcept, /// < noexcept(expression), value-dependent

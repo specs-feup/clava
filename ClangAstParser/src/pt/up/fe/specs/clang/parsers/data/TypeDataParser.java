@@ -139,7 +139,6 @@ public class TypeDataParser {
     }
 
     public static DataStore parseFunctionProtoTypeData(LineStream lines, ClangParserData parserData) {
-
         DataStore data = parseFunctionTypeData(lines, parserData);
 
         data.add(FunctionProtoType.NUM_PARAMETERS, LineStreamParsers.integer(lines));
@@ -155,6 +154,7 @@ public class TypeDataParser {
 
         data.add(FunctionProtoType.REFERENCE_QUALIFIER,
                 LineStreamParsers.enumFromName(ReferenceQualifier.class, lines));
+
         data.add(FunctionProtoType.EXCEPTION_SPECIFICATION, ClavaDataParsers.exceptionSpecification(lines, parserData));
 
         /*

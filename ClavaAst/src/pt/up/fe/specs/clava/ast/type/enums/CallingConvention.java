@@ -35,7 +35,8 @@ public enum CallingConvention implements StringProvider {
     OpenCLKernel,
     Swift,
     PreserveMost,
-    PreserveAll;
+    PreserveAll,
+    AArch64VectorCall;
 
     private static final Lazy<EnumHelperWithValue<CallingConvention>> HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(CallingConvention.class);
