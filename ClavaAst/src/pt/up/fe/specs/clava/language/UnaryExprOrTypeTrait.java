@@ -19,10 +19,11 @@ import pt.up.fe.specs.util.providers.StringProvider;
 
 public enum UnaryExprOrTypeTrait implements StringProvider {
 
-    SIZE_OF("sizeof"),
-    ALIGN_OF("alignof"),
-    VEC_STEP("vec_step"),
-    OPEN_MP_REQUIRED_SIMD_ALIGN("__builtin_omp_required_simd_align");
+    SizeOf("sizeof"),
+    AlignOf("alignof"),
+    PreferredAlignOf("__alignof"),
+    VecStep("vec_step"),
+    OpenMPRequiredSimdAlign("__builtin_omp_required_simd_align");
 
     private static final Lazy<EnumHelperWithValue<UnaryExprOrTypeTrait>> HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(UnaryExprOrTypeTrait.class);

@@ -131,7 +131,7 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
     @Override
     public String getCode() {
         switch (getUettKind()) {
-        case SIZE_OF:
+        case SizeOf:
             return "sizeof(" + getExpressionCode() + ")";
         default:
             ClavaLog.debug(() -> "UnaryExprOrTypeTraitExpr.getCode(): Not implemented yet for kind '" + getUettKind()
