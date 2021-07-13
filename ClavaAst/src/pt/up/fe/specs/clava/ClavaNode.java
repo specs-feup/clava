@@ -197,7 +197,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     public String getCode() {
         ClavaLog.info("getCode() not implemented for this node: " + this);
-        throw new NotImplementedException(getClass());
+        return "<.getCode() not implemented to node " + this.getClass() + ">";
+        // throw new NotImplementedException(getClass());
         // stringreturn toUnimplementedCode();
     }
 
