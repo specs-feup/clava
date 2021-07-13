@@ -8,10 +8,16 @@ var HeaderEnums = function(headerFilename, clangEnums) {
 	this.headerFilename = headerFilename;
 	this.enumMap = {};
 	this.currentEnumSet = new StringSet();
+	this.enumsInsideClass = new StringSet();
 	
 	for(var clangEnum of clangEnums) {
-		this.enumMap[clangEnum.getEnumName()] = clangEnum;
-		this.currentEnumSet.add(clangEnum.getEnumName());
+		this.enumMap[clangEnum.getCompleteEnumName()] = clangEnum;
+		this.currentEnumSet.add(clangEnum.getCompleteEnumName());
+		
+		var className = clangEnum.getClassName();
+		if(className !== undefined) {
+			this.enumsInsideClass.add(clangEnum.getEnumName());
+		}
 	}
 };
 
@@ -19,20 +25,40 @@ HeaderEnums.prototype.getName = function() {
 	return this.headerFilename;
 }
 
+HeaderEnums.prototype._getEnumName = function($enum) {
+	// Check if enum needs to be prefixed by class
+	if(!this.enumsInsideClass.has($enum.name)) {
+		return $enum.name;
+	}
+
+	// Get class
+	var $class = $enum.ancestor("class");
+
+	return $class.name + "_" + $enum.name;
+}
+
 HeaderEnums.prototype.process = function($enum) {
+	
+	// Get enum name
+	var enumName = this._getEnumName($enum);
+
 	// Check if valid enum
-	if(!this.currentEnumSet.has($enum.name)) {
+	//if(!this.currentEnumSet.has($enum.name)) {	
+	if(!this.currentEnumSet.has(enumName)) {
 		return;
 	}
 
-	println("Adding enum '"+$enum.name+"'");
+	//println("Adding enum '"+$enum.name+"'");
+	println("Adding enum '"+enumName+"'");	
 
 	// Set enums
 	var enumValues = $enum.enumerators.map($enumValue => $enumValue.name);	
-	this.enumMap[$enum.name].setEnumValues(enumValues);
+	//this.enumMap[$enum.name].setEnumValues(enumValues);
+	this.enumMap[enumName].setEnumValues(enumValues);	
 	
 	// Save enums, for referece
-	var filename = this.headerFilename.replace(".", "_") + "_" + $enum.name +  ".txt";
+	//var filename = this.headerFilename.replace(".", "_") + "_" + $enum.name +  ".txt";
+	var filename = this.headerFilename.replace(".", "_") + "_" + enumName +  ".txt";
 	var file = Io.getPath(filename);
 	println("Saving enum values to file '"+file.getAbsolutePath()+"'");
 	Io.writeFile(filename, enumValues.join("\n"));

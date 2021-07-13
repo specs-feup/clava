@@ -28,7 +28,19 @@ ClangEnum.prototype.getEnumName = function() {
 	return this.name;
 }
 
+ClangEnum.prototype.getCompleteEnumName = function() {
+	if(this.className === undefined) {
+		return this.name;
+	}
+	
+	return this.className + "_" + this.name;
+}
 
+ClangEnum.prototype.getClassName = function() {
+	return this.className;
+}
+
+/*
 ClangEnum.prototype.getStartingNode = function() {
 	if(this.className === undefined) {
 		return Query.root();
@@ -42,6 +54,7 @@ ClangEnum.prototype.getStartingNode = function() {
 	
 	return startingClass;
 }
+*/
 
 ClangEnum.prototype.setEnumValues = function(enumValues) {
 	if(this.enumValues !== undefined) {

@@ -113,10 +113,10 @@ ClangEnums._ATTR_H = new HeaderEnums('Attr.h', [
 
 
 ClangEnums._EXPR_H = new HeaderEnums('Expr.h', [
-	new ClangEnum('Kind', 'OFFSET_OF_NODE_KIND', undefined, undefined, 'OffsetOfNode'),
-	new ClangEnum('IdentKind', 'PREDEFINED_ID_TYPE', undefined, undefined),
-	new ClangEnum('StringKind', 'STRING_KIND', undefined, undefined),
-	new ClangEnum('Kind', 'DESIGNATOR_KIND', undefined, undefined, 'Designator')		
+	new ClangEnum('Kind', 'OFFSET_OF_NODE_KIND', (value => value.toUpperCase()), undefined, 'OffsetOfNode'),
+	new ClangEnum('IdentKind', 'PREDEFINED_ID_TYPE', undefined, undefined, 'PredefinedExpr'),
+	new ClangEnum('StringKind', 'STRING_KIND', (value => value.toUpperCase()), undefined)
+	//new ClangEnum('Kind', 'DESIGNATOR_KIND', undefined, undefined, 'Designator')		
 ]);
 
 /**

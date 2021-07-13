@@ -9,20 +9,18 @@ aspectdef ClangEnumsGenerator
 	println("Calling generator for header '"+header+"', generating files in folder " + Io.getPath(outputFolder).getAbsolutePath());
 
 	// Get corresponding ClangEnum
-	var clangEnum = ClangEnums.getHeader(header);
+	var headerEnums = ClangEnums.getHeader(header);
 	
-	if(clangEnum === undefined) {
+	if(headerEnums === undefined) {
 		println("Could not find ClangEnum for header file '"+header+"'");
 		return;
 	}
 	
 
 	println("Searching for enums in header '"+header+"'...");
-		
-	var startingNode = clangEnum.getStartingNode();	
-		
-	for(var $enum of Query.searchFrom(startingNode, "enumDecl")) {
-			clangEnum.process($enum);
+				
+	for(var $enum of Query.search("enumDecl")) {
+			headerEnums.process($enum);
 	/*
 		if(typeEnums.has($enum.name)) {
 			println("Saving Enum: " + $enum.name);
@@ -36,7 +34,7 @@ aspectdef ClangEnumsGenerator
 
 	println("Finished searching, generating code");
 	
-	clangEnum.generateCode(outputFolder);
+	headerEnums.generateCode(outputFolder);
 	
 //	println($app.ast);
 	

@@ -91,6 +91,7 @@ set(SOURCE_FILES
 		enums_Lambda_h.cpp
 		enums_TemplateName_h.cpp
 		enums_Attr_h.cpp
+		enums_Expr_h.cpp
 		)
 
 add_executable(ClangAstDumper ${SOURCE_FILES})

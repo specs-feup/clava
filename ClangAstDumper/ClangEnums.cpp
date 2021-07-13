@@ -36,14 +36,14 @@ extern const std::string clava::NESTED_NAMED_SPECIFIER[]{
         "SUPER"
 };
 */
-
+/*
 extern const std::string clava::OFFSET_OF_NODE_KIND[]{
         "ARRAY",
         "FIELD",
         "IDENTIFIER",
         "BASE"
 };
-
+*/
 /*
 extern const std::string clava::LINKAGE_LANGUAGE[]{
     "C",
@@ -66,6 +66,7 @@ extern const std::string clava::LAMBDA_CAPTURE_KIND[] {
         "VLAType"
 };
 */
+/*
 extern const std::string clava::PREDEFINED_ID_TYPE[]{
         "Func",
         "Function",
@@ -76,7 +77,8 @@ extern const std::string clava::PREDEFINED_ID_TYPE[]{
         "PrettyFunction",
         "PrettyFunctionNoVirtual"
 };
-
+*/
+/*
 extern const std::string clava::STRING_KIND[]{
         "ASCII",
         "WIDE",
@@ -84,7 +86,7 @@ extern const std::string clava::STRING_KIND[]{
         "UTF16",
         "UTF32"
 };
-
+*/
 /*
 extern const std::string clava::TEMPLATE_NAME_KIND[]{
         "Template",
