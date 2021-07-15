@@ -17,7 +17,7 @@ Timer.prototype.addedDefines = new StringSet();
  * @param $start [Mandatory] Starting point of the time measure
  * @param prefix Message that will appear before the time measure. If undefined, empty string will be used.
  * @param $end Ending point of the time measure. If undefined, measure is done around starting point.
- * @param {String|$expr} $condition - The condition of the if statement. If a string, it is converted to a literal expression.
+ * @param {String|$expr} $condition - If defined, adds an if statement wrapping the time measuring code. If a string, it is converted to a literal expression.
  */
 Timer.prototype.time = function($start, prefix, $end, $condition) {
 
@@ -35,9 +35,6 @@ Timer.prototype.time = function($start, prefix, $end, $condition) {
     } else {
         return this._time_c($start, prefix, $end, $condition);
     }
-
-    //return this;
-    //PrintOnce.message("Timer.time: not implemented yet for C");
 }
 
 
