@@ -64,7 +64,7 @@ public class CxxTest {
 
     @Test
     public void testEnum() {
-        new CxxTester("enum.cpp", "enum.hpp").test();
+        new CxxTester("enum.cpp", "enum.hpp").onePass().showCode().test();
     }
 
     @Test

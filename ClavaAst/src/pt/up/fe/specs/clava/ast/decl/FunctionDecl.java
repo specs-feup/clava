@@ -78,7 +78,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
      */
     public final static DataKey<StorageClass> STORAGE_CLASS = KeyFactory
             .enumeration("storageClass", StorageClass.class)
-            .setDefault(() -> StorageClass.NONE);
+            .setDefault(() -> StorageClass.None);
 
     /**
      * True if the "inline" keyword was specified for this function.
@@ -428,7 +428,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
             codeElements.add("constexpr");
         }
 
-        if (get(STORAGE_CLASS) != StorageClass.NONE) {
+        if (get(STORAGE_CLASS) != StorageClass.None) {
             codeElements.add(get(STORAGE_CLASS).getString());
         }
 

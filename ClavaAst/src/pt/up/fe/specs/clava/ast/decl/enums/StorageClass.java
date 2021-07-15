@@ -25,17 +25,17 @@ import pt.up.fe.specs.util.providers.StringProvider;
  */
 public enum StorageClass implements StringProvider {
     // Valid on both functions and variables
-    NONE,
-    EXTERN,
-    STATIC,
-    PRIVATE_EXTERN("__private_extern__"),
+    None,
+    Extern,
+    Static,
+    PrivateExtern("__private_extern__"),
 
     // Valid only on variables
-    AUTO,
-    REGISTER;
+    Auto,
+    Register;
 
     private static final Lazy<EnumHelperWithValue<StorageClass>> HELPER_DEPRECATED = EnumHelperWithValue
-            .newLazyHelperWithValue(StorageClass.class, NONE);
+            .newLazyHelperWithValue(StorageClass.class, None);
 
     /**
      * @deprecated

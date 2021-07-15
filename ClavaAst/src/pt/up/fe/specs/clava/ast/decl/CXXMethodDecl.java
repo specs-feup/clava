@@ -165,7 +165,7 @@ public class CXXMethodDecl extends FunctionDecl {
         StringBuilder code = new StringBuilder();
 
         // if (getFunctionDeclData().getStorageClass() == StorageClass.STATIC) {
-        if (get(STORAGE_CLASS) != StorageClass.NONE) {
+        if (get(STORAGE_CLASS) != StorageClass.None) {
             code.append(get(STORAGE_CLASS).getString()).append(" ");
         }
 

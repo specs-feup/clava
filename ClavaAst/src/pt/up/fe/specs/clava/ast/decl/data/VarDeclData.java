@@ -55,7 +55,7 @@ public class VarDeclData {
     private final DataStore varDeclData2;
 
     public VarDeclData() {
-        this(StorageClass.NONE, TLSKind.NONE, false, false, InitializationStyle.NO_INIT, false);
+        this(StorageClass.None, TLSKind.NONE, false, false, InitializationStyle.NO_INIT, false);
     }
 
     public VarDeclData(StorageClass storageClass, TLSKind tlsKind, boolean isModulePrivate, boolean isNrvo,

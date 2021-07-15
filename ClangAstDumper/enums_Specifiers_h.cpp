@@ -22,10 +22,10 @@ extern const std::string clava::CALLING_CONVENTION[] = {
 };
 
 extern const std::string clava::ACCESS_SPECIFIER[] = {
-        "public",
-        "protected",
-        "private",
-        "none",
+        "PUBLIC",
+        "PROTECTED",
+        "PRIVATE",
+        "NONE",
 };
 
 extern const std::string clava::STORAGE_CLASS[] = {

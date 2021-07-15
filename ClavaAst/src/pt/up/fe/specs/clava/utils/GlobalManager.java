@@ -53,7 +53,7 @@ public class GlobalManager {
         if (initExpr != null) {
             varDecl.setInit(initExpr);
         } else {
-            varDecl.set(VarDecl.STORAGE_CLASS, StorageClass.EXTERN);
+            varDecl.set(VarDecl.STORAGE_CLASS, StorageClass.Extern);
         }
         // varDecl.set(VarDecl.INIT_STYLE, initStyle);
 

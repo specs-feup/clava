@@ -25,4 +25,8 @@ public class ConstantExpr extends FullExpr {
         super(data, children);
     }
 
+    @Override
+    public String getCode() {
+        return "<CONST_EXPR>";
+    }
 }

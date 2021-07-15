@@ -49,7 +49,7 @@ public class FunctionDeclData {
     private final TemplateKind templateKind;
 
     public FunctionDeclData() {
-        this(StorageClass.NONE, false, false, false, false, false, ExceptionType.NONE, -1, Collections.emptyList(),
+        this(StorageClass.None, false, false, false, false, false, ExceptionType.NONE, -1, Collections.emptyList(),
                 null, TemplateKind.NON_TEMPLATE);
     }
 
@@ -103,7 +103,7 @@ public class FunctionDeclData {
     }
 
     public boolean isStatic() {
-        return getStorageClass() == StorageClass.STATIC;
+        return getStorageClass() == StorageClass.Static;
     }
 
     public boolean hasOpenCLKernelAttr() {

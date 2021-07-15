@@ -46,7 +46,7 @@ public class VarDecl extends DeclaratorDecl {
      */
     public final static DataKey<StorageClass> STORAGE_CLASS = KeyFactory
             .enumeration("storageClass", StorageClass.class)
-            .setDefault(() -> StorageClass.NONE);
+            .setDefault(() -> StorageClass.None);
 
     public final static DataKey<TLSKind> TLS_KIND = KeyFactory
             .enumeration("tlsKind", TLSKind.class)
@@ -148,7 +148,7 @@ public class VarDecl extends DeclaratorDecl {
         StringBuilder code = new StringBuilder();
 
         StorageClass storageClass = get(STORAGE_CLASS);
-        if (storageClass != StorageClass.NONE) {
+        if (storageClass != StorageClass.None) {
             code.append(get(STORAGE_CLASS).getString()).append(" ");
         }
 
@@ -398,9 +398,9 @@ public class VarDecl extends DeclaratorDecl {
 
         switch (get(VarDecl.STORAGE_CLASS)) {
         // Is global and storageClass is 'none', this is the global declaration
-        case NONE:
+        case None:
             return this;
-        case EXTERN:
+        case Extern:
             return getApp().getGlobalVarDefinition(this).orElse(null);
         default:
             SpecsLogs.warn("Case not contemplated yet: " + get(VarDecl.STORAGE_CLASS));
@@ -414,7 +414,7 @@ public class VarDecl extends DeclaratorDecl {
                 .filter(node -> node instanceof VarDecl)
                 .map(node -> (VarDecl) node)
                 .filter(vardecl -> vardecl.get(DECL_NAME).equals(varDecl.get(DECL_NAME)))
-                .filter(vardecl -> vardecl.get(STORAGE_CLASS) == StorageClass.NONE)
+                .filter(vardecl -> vardecl.get(STORAGE_CLASS) == StorageClass.None)
                 .findFirst()
                 .orElse(null);
     }
