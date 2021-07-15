@@ -17,8 +17,9 @@ Timer.prototype.addedDefines = new StringSet();
  * @param $start [Mandatory] Starting point of the time measure
  * @param prefix Message that will appear before the time measure. If undefined, empty string will be used.
  * @param $end Ending point of the time measure. If undefined, measure is done around starting point.
+ * @param {String|$expr} $condition - The condition of the if statement. If a string, it is converted to a literal expression.
  */
-Timer.prototype.time = function($start, prefix, $end) {
+Timer.prototype.time = function($start, prefix, $end, $condition) {
 
     if (!this._timeValidate($start, $end, 'function')) {
         return;
@@ -30,9 +31,9 @@ Timer.prototype.time = function($start, prefix, $end) {
 		println("Could not find the corresponding file of the given joinpoint: " + $jp);
 		return;
 	}else if ($file.isCxx) {
-        return this._time_cpp($start, prefix, $end);
+        return this._time_cpp($start, prefix, $end, $condition);
     } else {
-        return this._time_c($start, prefix, $end);
+        return this._time_c($start, prefix, $end, $condition);
     }
 
     //return this;
@@ -40,7 +41,7 @@ Timer.prototype.time = function($start, prefix, $end) {
 }
 
 
-Timer.prototype._time_cpp = function($start, prefix, $end) {
+Timer.prototype._time_cpp = function($start, prefix, $end, $condition) {
     if (this.timeUnits.unit == this.timeUnits._timerUnit.DAYS){
         throw "Timer Exception: Timer metrics not implemented for DAYS in C++";
     }
@@ -65,10 +66,18 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
     var startVar = IdGenerator.next("clava_timing_start_");
     var endVar = IdGenerator.next("clava_timing_end_");
 
-    var codeTic = _timer_cpp_now(startVar);
-    var codeToc = _timer_cpp_now(endVar);
+    var $codeTic = ClavaJoinPoints.stmtLiteral(_timer_cpp_now(startVar));
+    var $codeToc = ClavaJoinPoints.stmtLiteral(_timer_cpp_now(endVar));
+	var $insertionTic = $codeTic;
+	var $insertionToc = $codeToc;
 
-    var cppUnit = this.timeUnits.getCppTimeUnit();
+
+	if ($condition !== undefined) {
+		$insertionTic = ClavaJoinPoints.ifStmt($condition, $codeTic);
+		$insertionToc = ClavaJoinPoints.ifStmt($condition, $codeToc);
+	}
+
+	var cppUnit = this.timeUnits.getCppTimeUnit();
 
     // Create literal node with calculation of time interval
     $timingResult = ClavaJoinPoints.exprLiteral(_timer_cpp_calc_interval(startVar, endVar, cppUnit));
@@ -84,51 +93,24 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
     }
     logger.ln();
 
-	
 	// Check if $start is a scope
 	if($start.instanceOf("scope")) {
 		// Insert code
-		$start.insertBegin(codeTic);
+		$start.insertBegin($insertionTic);
 	} else {
 		// Insert code
-		$start.insertBefore(codeTic);
+		$start.insertBefore($insertionTic);
 	}
 	
 	var afterJp = undefined;
 	
 	// Check if $end is a scope
 	if($end.instanceOf("scope")) {
-		// 'insertEnd' insertions must be done in sequential order		
-		$end.insertEnd(codeToc);
-		afterJp = $end.insertEnd($timingResultDecl);
+		$end.insertEnd($insertionToc);
 	} else {
-		// 'insertAfter' insertions must be done in reverse order		
-		afterJp = $end.insertAfter($timingResultDecl);
-		$end.insertAfter(codeToc);
+		$end.insertAfter($insertionToc);
 	}
-	/*
-	// If $start/$end parent do not have a statement ancestor, use insertBegin/End instead
-	if($start.ancestor("statement") === undefined || $end.ancestor("statement") === undefined) {
-
-		// Insert code
-		$start.insertBegin(codeTic);
-
-		// 'end' insertions must be done in sequential order		
-		$end.insertEnd(codeToc);
-		$end.insertEnd($timingResultDecl);
-
-
-	} else {
-		// Insert code
-		$start.insertBefore(codeTic);
-
-		// 'after' insertions must be done in reverse order		
-		$end.insertAfter($timingResultDecl);
-		$end.insertAfter(codeToc);
-	}
-	*/
-
-
+	afterJp = $codeToc.insertAfter($timingResultDecl);
 
     // Log time information
 	if(this.print) {
@@ -141,7 +123,7 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
 	return timeIntervalVar;
 }
 
-Timer.prototype._time_c = function($start, prefix, $end) {
+Timer.prototype._time_c = function($start, prefix, $end, $condition) {
 
     var logger = new Logger(false, this.filename);
 
@@ -157,7 +139,7 @@ Timer.prototype._time_c = function($start, prefix, $end) {
     $file = $start.ancestor("file");
 
     
-    var codeBefore, codeAfter, timeIntervalVar;
+    var $varDecl, $codeBefore, $codeAfter, timeIntervalVar;
 
     // Declare variable for time interval, which uses calculation as initialization
     var timeIntervalVar = IdGenerator.next("clava_timing_duration_");
@@ -173,8 +155,10 @@ Timer.prototype._time_c = function($start, prefix, $end) {
         var endVar = IdGenerator.next("clava_timing_end_");
         var frequencyVar = IdGenerator.next("clava_timing_frequency_");
 
-        codeBefore = _timer_c_windows_declare_vars_now(startVar, endVar, frequencyVar);
-        codeAfter = _timer_c_windows_get_final_time(endVar);
+		$varDecl = ClavaJoinPoints.stmtLiteral(_timer_c_windows_declare_vars(startVar, endVar, frequencyVar));
+        $codeBefore = ClavaJoinPoints.stmtLiteral(_timer_c_windows_get_time(startVar));
+        $codeAfter = ClavaJoinPoints.stmtLiteral(_timer_c_windows_get_time(endVar));
+        
 
         // Create literal node with calculation of time interval
         $timingResult = ClavaJoinPoints.exprLiteral(_timer_c_windows_calc_interval(startVar, endVar, frequencyVar, this.timeUnits.getMagnitudeFactorFromSeconds()), ClavaJoinPoints.builtinType("double"));
@@ -198,8 +182,9 @@ Timer.prototype._time_c = function($start, prefix, $end) {
         var startVar = IdGenerator.next("clava_timing_start_");
         var endVar = IdGenerator.next("clava_timing_end_");
 
-        codeBefore = _timer_c_linux_declare_vars_now(startVar, endVar);
-        codeAfter = _timer_c_linux_get_final_time(endVar);
+        $varDecl = ClavaJoinPoints.stmtLiteral(_timer_c_linux_declare_vars(startVar, endVar));
+        $codeBefore = ClavaJoinPoints.stmtLiteral(_timer_c_linux_get_time(startVar));
+        $codeAfter = ClavaJoinPoints.stmtLiteral(_timer_c_linux_get_time(endVar));
 
         // Create literal node with calculation of time interval
         $timingResult = ClavaJoinPoints.exprLiteral(_timer_c_linux_calc_interval(startVar, endVar, this.timeUnits.getMagnitudeFactorFromSeconds()), ClavaJoinPoints.builtinType("double"));
@@ -216,48 +201,34 @@ Timer.prototype._time_c = function($start, prefix, $end) {
     }
     logger.ln();
 
+	var $insertionTic = $codeBefore;
+	var $insertionToc = $codeAfter;
+
+	if ($condition !== undefined) {
+		$insertionTic = ClavaJoinPoints.ifStmt($condition, $codeBefore);
+		$insertionToc = ClavaJoinPoints.ifStmt($condition, $codeAfter);
+	}
+
 	// Check if $start is a scope
 	if($start.instanceOf("scope")) {
 		// Insert code
-		$start.insertBegin(codeBefore);
+		$start.insertBegin($insertionTic);
 	} else {
 		// Insert code
-		$start.insertBefore(codeBefore);
+		$start.insertBefore($insertionTic);
 	}
+	$insertionTic.insertBefore($varDecl);
 	
 	
 	var afterJp = undefined;
 	
 	// Check if $end is a scope
 	if($end.instanceOf("scope")) {
-		// 'insertEnd' insertions must be done in sequential order		
-		$end.insertEnd(codeAfter);
-		afterJp = $end.insertEnd($timingResultDecl);
+		$end.insertEnd($insertionToc);
 	} else {
-		// 'insertAfter' insertions must be done in reverse order		
-		afterJp = $end.insertAfter($timingResultDecl);
-		$end.insertAfter(codeAfter);
+		$end.insertAfter($insertionToc);
 	}
-/*	
-	// If $start/$end parent do not have a statement ancestor, use insertBegin/End instead
-	if($start.ancestor("statement") === undefined || $end.ancestor("statement") === undefined) {
-
-		// Insert code
-		$start.insertBegin(codeBefore);
-
-		// 'end' insertions must be done in sequential order		
-		$end.insertEnd(codeAfter);
-		$end.insertEnd($timingResultDecl);
-		
-	} else {
-	    // Insert code
-		$start.insertBefore(codeBefore);
-
-		// 'after' insertions must be done in reverse order		
-		$end.insertAfter($timingResultDecl);
-		$end.insertAfter(codeAfter);
-	}
-*/
+	afterJp = $codeAfter.insertAfter($timingResultDecl);
 
 
     // Log time information
@@ -274,14 +245,13 @@ Timer.prototype._time_c = function($start, prefix, $end) {
 
 //C codedefs 
 // Windows
-codedef _timer_c_windows_declare_vars_now(timeStartVar, timeEndVar, timeFrequencyVar)%{
+codedef _timer_c_windows_declare_vars(timeStartVar, timeEndVar, timeFrequencyVar)%{
 LARGE_INTEGER [[timeStartVar]], [[timeEndVar]], [[timeFrequencyVar]];
 QueryPerformanceFrequency(&[[timeFrequencyVar]]);
-QueryPerformanceCounter(&[[timeStartVar]]);
 }%end
 
-codedef _timer_c_windows_get_final_time(timeEndVar)%{
-QueryPerformanceCounter(&[[timeEndVar]]);
+codedef _timer_c_windows_get_time(timeVar)%{
+QueryPerformanceCounter(&[[timeVar]]);
 }%end
 
 codedef _timer_c_windows_calc_interval(timeStartVar, timeEndVar, timeFrequencyVar, factorConversion)%{
@@ -289,14 +259,14 @@ codedef _timer_c_windows_calc_interval(timeStartVar, timeEndVar, timeFrequencyVa
 }%end
 
 //Linux
-codedef _timer_c_linux_declare_vars_now(timeStartVar, timeEndVar)%{
+codedef _timer_c_linux_declare_vars(timeStartVar, timeEndVar)%{
 struct timespec [[timeStartVar]], [[timeEndVar]];
-clock_gettime(CLOCK_MONOTONIC, &[[timeStartVar]]);
 }%end
 
-codedef _timer_c_linux_get_final_time(timeEndVar)%{
-clock_gettime(CLOCK_MONOTONIC, &[[timeEndVar]]);
+codedef _timer_c_linux_get_time(timeVar)%{
+clock_gettime(CLOCK_MONOTONIC, &[[timeVar]]);
 }%end
+
 
 codedef _timer_c_linux_calc_interval(timeStartVar, timeEndVar, factorConversion)%{
 (([[timeEndVar]].tv_sec + ((double) [[timeEndVar]].tv_nsec / 1000000000)) - ([[timeStartVar]].tv_sec + ((double) [[timeStartVar]].tv_nsec / 1000000000))) * ([[factorConversion]])
