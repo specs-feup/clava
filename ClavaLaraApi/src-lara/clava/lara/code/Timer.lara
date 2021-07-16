@@ -140,19 +140,19 @@ Timer.prototype._time_c = function ($start, prefix, $end, $condition) {
     if (prefix === undefined) {
         prefix = "";
     }
-
+    
     if ($end === undefined) {
         $end = $start;
     }
-
+    
     $file = $start.ancestor("file");
-
-
-    var $varDecl, $codeBefore, $codeAfter, timeIntervalVar;
-
+    
+    
+    var $varDecl, $codeBefore, $codeAfter, $timingResult;
+    
     // Declare variable for time interval, which uses calculation as initialization
     var timeIntervalVar = IdGenerator.next("clava_timing_duration_");
-    var $timingResultDecl;
+    var $timingResultDecl = ClavaJoinPoints.varDeclNoInit(timeIntervalVar, ClavaJoinPoints.builtinType("double"));
 
     if (Platforms.isWindows()) { //use QueryPerformanceCounter
         // Add includes
@@ -170,9 +170,7 @@ Timer.prototype._time_c = function ($start, prefix, $end, $condition) {
 
 
         // Create literal node with calculation of time interval
-        $timingResult = ClavaJoinPoints.exprLiteral(_timer_c_windows_calc_interval(startVar, endVar, frequencyVar, this.timeUnits.getMagnitudeFactorFromSeconds()), ClavaJoinPoints.builtinType("double"));
-
-        $timingResultDecl = ClavaJoinPoints.varDecl(timeIntervalVar, $timingResult);
+        $timingResult = ClavaJoinPoints.exprLiteral(_timer_c_windows_calc_interval(startVar, endVar, timeIntervalVar, frequencyVar, this.timeUnits.getMagnitudeFactorFromSeconds()), $timingResultDecl.type);
 
     } else if (Platforms.isLinux()) {
         // Add includes
@@ -196,28 +194,27 @@ Timer.prototype._time_c = function ($start, prefix, $end, $condition) {
         $codeAfter = ClavaJoinPoints.stmtLiteral(_timer_c_linux_get_time(endVar));
 
         // Create literal node with calculation of time interval
-        $timingResult = ClavaJoinPoints.exprLiteral(_timer_c_linux_calc_interval(startVar, endVar, this.timeUnits.getMagnitudeFactorFromSeconds()), ClavaJoinPoints.builtinType("double"));
+        $timingResult = ClavaJoinPoints.exprLiteral(_timer_c_linux_calc_interval(startVar, endVar, timeIntervalVar, this.timeUnits.getMagnitudeFactorFromSeconds()), $timingResultDecl.type);
 
-        $timingResultDecl = ClavaJoinPoints.varDecl(timeIntervalVar, $timingResult);
     } else {
         throw "Timer Exception: Platform not supported (Windows and Linux only)";
     }
-
+    
     // Build message
     logger.append(prefix).appendDouble(timeIntervalVar);
     if (this.printUnit) {
         logger.append(this.timeUnits.getUnitsString());
     }
     logger.ln();
-
+    
     var $insertionTic = $codeBefore;
     var $insertionToc = $codeAfter;
-
+    
     if ($condition !== undefined) {
         $insertionTic = ClavaJoinPoints.ifStmt($condition, $codeBefore);
         $insertionToc = ClavaJoinPoints.ifStmt($condition, $codeAfter);
     }
-
+    
     // Check if $start is a scope
     if ($start.instanceOf("scope")) {
         // Insert code
@@ -227,6 +224,7 @@ Timer.prototype._time_c = function ($start, prefix, $end, $condition) {
         $start.insertBefore($insertionTic);
     }
     $insertionTic.insertBefore($varDecl);
+    $insertionTic.insertBefore($timingResultDecl);
 
 
     var afterJp = undefined;
@@ -237,12 +235,17 @@ Timer.prototype._time_c = function ($start, prefix, $end, $condition) {
     } else {
         $end.insertAfter($insertionToc);
     }
-    afterJp = $codeAfter.insertAfter($timingResultDecl);
+    afterJp = $codeAfter.insertAfter($timingResult);
 
+    if ($condition !== undefined) {
+        afterJp = $insertionToc;
+    } else {
+        afterJp = $timingResult;
+    }
 
     // Log time information
     if (this.print) {
-        logger.log($timingResultDecl);
+        logger.log(afterJp);
         afterJp = logger.getAfterJp();
     }
 
@@ -263,8 +266,8 @@ codedef _timer_c_windows_get_time(timeVar)%{
 QueryPerformanceCounter(&[[timeVar]]);
 }%end
 
-codedef _timer_c_windows_calc_interval(timeStartVar, timeEndVar, timeFrequencyVar, factorConversion)%{
-(([[timeEndVar]].QuadPart - [[timeStartVar]].QuadPart) / (double)[[timeFrequencyVar]].QuadPart) * ([[factorConversion]])
+codedef _timer_c_windows_calc_interval(timeStartVar, timeEndVar, timeDiffenceVar, timeFrequencyVar, factorConversion)%{
+[[timeDiffenceVar]] = (([[timeEndVar]].QuadPart - [[timeStartVar]].QuadPart) / (double)[[timeFrequencyVar]].QuadPart) * ([[factorConversion]])
 }%end
 
 //Linux
@@ -277,8 +280,8 @@ clock_gettime(CLOCK_MONOTONIC, &[[timeVar]]);
 }%end
 
 
-codedef _timer_c_linux_calc_interval(timeStartVar, timeEndVar, factorConversion)%{
-(([[timeEndVar]].tv_sec + ((double)[[timeEndVar]].tv_nsec / 1000000000)) - ([[timeStartVar]].tv_sec + ((double)[[timeStartVar]].tv_nsec / 1000000000))) * ([[factorConversion]])
+codedef _timer_c_linux_calc_interval(timeStartVar, timeEndVar, timeDiffenceVar, factorConversion)%{
+[[timeDiffenceVar]] = (([[timeEndVar]].tv_sec + ((double)[[timeEndVar]].tv_nsec / 1000000000)) - ([[timeStartVar]].tv_sec + ((double)[[timeStartVar]].tv_nsec / 1000000000))) * ([[factorConversion]])
 }%end
 
 //Cpp codedefs
