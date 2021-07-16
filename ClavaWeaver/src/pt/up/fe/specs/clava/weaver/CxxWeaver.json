@@ -29476,6 +29476,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the first prototype of this function that could be found, or undefined if there is none",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -29484,6 +29485,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the implementation of this function if there is one, or undefined otherwise",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -29501,6 +29503,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "[DEPRECATED] Use .isImplementation instead. True if this particular function join point has a body, false otherwise",
                   "children": [
                            {
                               "type": "Boolean",
@@ -29525,6 +29528,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this particular function join point is an implementation (i.e. has a body), false otherwise",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isImplementation"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -29537,6 +29549,15 @@
                            {
                               "type": "Boolean",
                               "name": "isModulePrivate"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this particular function join point is a prototype (i.e. does not have a body), false otherwise",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isPrototype"
                            }]
                },
                {
@@ -39626,6 +39647,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the first prototype of this function that could be found, or undefined if there is none",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -39634,6 +39656,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the implementation of this function if there is one, or undefined otherwise",
                   "children": [
                            {
                               "type": "joinpoint",
@@ -39651,6 +39674,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "[DEPRECATED] Use .isImplementation instead. True if this particular function join point has a body, false otherwise",
                   "children": [
                            {
                               "type": "Boolean",
@@ -39675,6 +39699,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this particular function join point is an implementation (i.e. has a body), false otherwise",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isImplementation"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "Boolean",
@@ -39687,6 +39720,15 @@
                            {
                               "type": "Boolean",
                               "name": "isModulePrivate"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "true if this particular function join point is a prototype (i.e. does not have a body), false otherwise",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isPrototype"
                            }]
                },
                {

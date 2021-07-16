@@ -109,7 +109,18 @@ public class CxxFunction extends AFunction {
 
     @Override
     public Boolean getHasDefinitionImpl() {
+        return getIsImplementationImpl();
+        // return function.hasBody();
+    }
+
+    @Override
+    public Boolean getIsImplementationImpl() {
         return function.hasBody();
+    }
+
+    @Override
+    public Boolean getIsPrototypeImpl() {
+        return !function.hasBody();
     }
 
     private AJoinPoint processNodeToInsert(AJoinPoint node) {
