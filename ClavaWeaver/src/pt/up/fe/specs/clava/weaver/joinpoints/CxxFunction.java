@@ -26,8 +26,9 @@ import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
-import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -111,6 +112,18 @@ public class CxxFunction extends AFunction {
         return function.hasBody();
     }
 
+    private AJoinPoint processNodeToInsert(AJoinPoint node) {
+        // If node is an expression or VarDecl, convert to Stmt first
+        var clavaNode = node.getNode();
+
+        if (clavaNode instanceof VarDecl || clavaNode instanceof Expr) {
+            return CxxJoinpoints.create(ClavaNodes.toStmt(clavaNode));
+        }
+
+        // Otherwise, do nothing
+        return node;
+    }
+
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
         // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
@@ -120,12 +133,16 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
+        var processNode = processNodeToInsert(node);
+        return CxxActions.insertJp(this, processNode, "after", getWeaverEngine());
+        /*
         // If node is a FunctionDecl, insert it as it is
         if (node.getNode() instanceof FunctionDecl) {
             return CxxActions.insertJp(this, node, "after", getWeaverEngine());
         }
-
+        
         return CxxActions.insertJpAsStatement(this, node, "after", getWeaverEngine());
+        */
     }
 
     @Override
@@ -135,12 +152,15 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        // If node is a FunctionDecl, insert it as it is
-        if (node.getNode() instanceof FunctionDecl) {
-            return CxxActions.insertJp(this, node, "before", getWeaverEngine());
-        }
+        var processNode = processNodeToInsert(node);
+        return CxxActions.insertJp(this, processNode, "before", getWeaverEngine());
 
-        return CxxActions.insertJpAsStatement(this, node, "before", getWeaverEngine());
+        // // If node is a FunctionDecl, insert it as it is
+        // if (node.getNode() instanceof FunctionDecl) {
+        // return CxxActions.insertJp(this, node, "before", getWeaverEngine());
+        // }
+        //
+        // return CxxActions.insertJpAsStatement(this, node, "before", getWeaverEngine());
     }
 
     @Override
@@ -150,11 +170,14 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        if (node.getNode() instanceof LinkageSpecDecl) {
-            return CxxActions.insertJp(this, node, "replace", getWeaverEngine());
-        }
+        var processNode = processNodeToInsert(node);
+        return CxxActions.insertJp(this, processNode, "replace", getWeaverEngine());
 
-        return CxxActions.insertJpAsStatement(this, node, "replace", getWeaverEngine());
+        // if (node.getNode() instanceof LinkageSpecDecl) {
+        // return CxxActions.insertJp(this, node, "replace", getWeaverEngine());
+        // }
+        //
+        // // return CxxActions.insertJpAsStatement(this, node, "replace", getWeaverEngine());
     }
 
     private AJoinPoint[] insertStmt(Stmt newNode, String position) {
