@@ -485,4 +485,12 @@ public class ExprDataParser {
         return data;
     }
 
+    // public static DataStore parseFullExprData(LineStream lines, ClangParserData dataStore) {
+    // DataStore data = parseExprData(lines, dataStore);
+    //
+    // dataStore.getClavaNodes().queueSetNode(data, FullExpr.SUB_EXPR, lines.nextLine());
+    //
+    // return data;
+    // }
+
 }

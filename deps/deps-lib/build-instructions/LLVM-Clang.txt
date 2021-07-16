@@ -47,6 +47,9 @@ Artifact
 
 
 
+- Most likely, built-in includes will have to be updated:
+ -> 0-builtin_includes: llvm-project\build\lib\clang\12.0.0
+ -> 1-libcxx (build libcxx? Maybe build on Linux, it can be troublesome to build on Windows)
 
 
 (llvm7)

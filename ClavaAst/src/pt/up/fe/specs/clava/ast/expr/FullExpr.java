@@ -18,11 +18,32 @@ import java.util.Collection;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
 
 public abstract class FullExpr extends Expr {
+
+    // public final static DataKey<Expr> SUB_EXPR = KeyFactory.object("subExpr", Expr.class);
 
     public FullExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
+    // @Override
+    // public String getCode() {
+    // return get(SUB_EXPR).getCode();
+    // }
+
+    @Override
+    public String getCode() {
+        return getSubExpr().getCode();
+    }
+
+    public Expr getSubExpr() {
+        return getChild(Expr.class, 0);
+    }
+
+    @Override
+    public ValueKind getValueKind() {
+        return getSubExpr().getValueKind();
+    }
 }

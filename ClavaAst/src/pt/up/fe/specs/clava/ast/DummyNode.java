@@ -149,36 +149,42 @@ public interface DummyNode {
             dummyData = dummyData.copy();
         }
 
-        dummyData.add(DummyNode.DUMMY_CONTENT, classname);
+        ClavaNode dummyNode = null;
 
         if (Type.class.isAssignableFrom(clavaNodeClass)) {
             // DummyTypeData dummyData = new DummyTypeData(classname, data);
-            return new DummyType(dummyData, children);
+            dummyNode = new DummyType(dummyData, children);
         }
 
         if (Decl.class.isAssignableFrom(clavaNodeClass)) {
             // DummyDeclData dummyData = new DummyDeclData(classname, data);
-            return new DummyDecl(dummyData, children);
+            dummyNode = new DummyDecl(dummyData, children);
         }
 
         if (Expr.class.isAssignableFrom(clavaNodeClass)) {
             // DummyExprData dummyData = new DummyExprData(classname, data);
-            return new DummyExpr(dummyData, children);
+            dummyNode = new DummyExpr(dummyData, children);
         }
 
         if (Stmt.class.isAssignableFrom(clavaNodeClass)) {
             // DummyStmtData dummyData = new DummyStmtData(classname, data);
-            return new DummyStmt(dummyData, children);
+            dummyNode = new DummyStmt(dummyData, children);
         }
 
         if (Attribute.class.isAssignableFrom(clavaNodeClass)) {
             // DummyAttributeData dummyData = new DummyAttributeData(classname, (AttributeData) data);
             // DataStore dummyAttrData = data.copy().add(DummyNode.DUMMY_CONTENT, classname);
 
-            return new DummyAttr(data, children);
+            dummyNode = new DummyAttr(data, children);
         }
 
-        throw new RuntimeException("ClavaNode class not supported:" + clavaNodeClass);
+        if (dummyNode == null) {
+            throw new RuntimeException("ClavaNode class not supported:" + clavaNodeClass);
+        }
+
+        dummyNode.set(DummyNode.DUMMY_CONTENT, classname);
+
+        return dummyNode;
     }
 
     default String toStringHelper() {

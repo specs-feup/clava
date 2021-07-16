@@ -19,9 +19,9 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class ConstantExpr extends FullExpr {
+public class MSPropertyRefExpr extends Expr {
 
-    public ConstantExpr(DataStore data, Collection<? extends ClavaNode> children) {
+    public MSPropertyRefExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 

@@ -19,11 +19,14 @@ import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
+import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.weaver.CxxAttributes;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 
 public class CxxExpression extends AExpression {
@@ -132,4 +135,13 @@ public class CxxExpression extends AExpression {
                 .orElse(null);
     }
 
+    @Override
+    public AJoinPoint replaceWithImpl(AJoinPoint node) {
+        // If node to replace is statement, check if this expression is inside an ExprStmt
+        if (node instanceof AStatement && node.getNode().getParent() instanceof ExprStmt) {
+            return node.getParentImpl().replaceWith(node);
+        }
+
+        return super.replaceWithImpl(node);
+    }
 }

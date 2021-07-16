@@ -51,7 +51,8 @@ public enum Standard implements StringProvider {
     OPENCL10("cl1.0"),
     OPENCL12("cl1.2"),
     OPENCL20("cl2.0"),
-    OPENCLCXX("c++", true);
+    OPENCLCXX("c++", true),
+    CUDA("cuda", true);
     // CL20;
 
     private static final Set<String> C_EXTENSIONS = new HashSet<>(Arrays.asList("c"));
