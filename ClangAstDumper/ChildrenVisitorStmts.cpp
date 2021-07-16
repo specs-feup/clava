@@ -55,7 +55,8 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::EXPR_CHILDRE
         {"CXXTemporaryObjectExpr", clava::StmtNode::CXX_TEMPORARY_OBJECT_EXPR},
         {"CXXDependentScopeMemberExpr", clava::StmtNode::CXX_DEPENDENT_SCOPE_MEMBER_EXPR},
         {"CXXPseudoDestructorExpr", clava::StmtNode::CXX_PSEUDO_DESTRUCTOR_EXPR},
-
+        //{"ConstantExpr", clava::StmtNode::FULL_EXPR},
+        //{"ExprWithCleanups", clava::StmtNode::FULL_EXPR},
         //{"CXXNoexceptExpr", clava::StmtNode::CXX_NOEXCEPT_EXPR},
 
         //{"SubstNonTypeTemplateParmExpr", clava::StmtNode::SUBST_NON_TYPE_TEMPLATE_PARM_EXPR},
@@ -172,6 +173,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitCXXDependentScopeMemberExprChildren(static_cast<const CXXDependentScopeMemberExpr *>(S), visitedChildren); break;
         case clava::StmtNode::CXX_PSEUDO_DESTRUCTOR_EXPR:
             VisitCXXPseudoDestructorExprChildren(static_cast<const CXXPseudoDestructorExpr *>(S), visitedChildren); break;
+        //case clava::StmtNode::FULL_EXPR:
+        //    VisitFullExprChildren(static_cast<const FullExpr *>(S), visitedChildren); break;
 //        case clava::StmtNode::CXX_NOEXCEPT_EXPR:
 //            VisitCXXNoexceptExprChildren(static_cast<const CXXNoexceptExpr *>(S), visitedChildren); break;
 
@@ -614,6 +617,14 @@ void ClangAstDumper::VisitCXXPseudoDestructorExprChildren(const CXXPseudoDestruc
     VisitTypeTop(E->getDestroyedType());
 }
 
+/*
+void ClangAstDumper::VisitFullExprChildren(const FullExpr *E, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitExprChildren(E, children);
+
+    VisitExpr(E->getSubExpr());
+}
+ */
 
 
 /*

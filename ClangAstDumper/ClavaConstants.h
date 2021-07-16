@@ -89,6 +89,9 @@ namespace clava {
         CXX_NOEXCEPT_EXPR,
         CXX_PSEUDO_DESTRUCTOR_EXPR,
         CXX_OPERATOR_CALL_EXPR,
+        FULL_EXPR,
+        CONSTANT_EXPR,
+        EXPR_WITH_CLEANUPS,
     };
 
     /**

@@ -290,6 +290,7 @@ private:
     void VisitCXXTemporaryObjectExprChildren(const CXXTemporaryObjectExpr *E, std::vector<std::string> &children);
     void VisitCXXDependentScopeMemberExprChildren(const CXXDependentScopeMemberExpr *E, std::vector<std::string> &children);
     void VisitCXXPseudoDestructorExprChildren(const CXXPseudoDestructorExpr *E, std::vector<std::string> &children);
+    //void VisitFullExprChildren(const FullExpr *E, std::vector<std::string> &children);
 
     //void VisitCXXNoexceptExprChildren(const CXXNoexceptExpr *E, std::vector<std::string> &children);
 

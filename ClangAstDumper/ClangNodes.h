@@ -126,7 +126,7 @@ namespace clava {
     //void dump(const TemplateName& templateName);
     void dump(std::function<void(llvm::raw_string_ostream&)> dumper);
     void dump(const clang::DesignatedInitExpr::Designator* designator);
-    void dump(const ExplicitSpecifier& specifier);
+    void dump(const ExplicitSpecifier& specifier, int id);
 
     void throwNotImplemented(const std::string& source, const std::string& caseNotImplemented, ASTContext* Context, SourceLocation startLoc, SourceLocation endLoc);
     void throwNotImplemented(const std::string& source, const std::string& caseNotImplemented, ASTContext* Context, SourceRange range);

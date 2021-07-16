@@ -491,7 +491,7 @@ void clava::ClavaDataDumper::DumpCXXConstructorDeclData(const CXXConstructorDecl
 
     clava::dump(D->isDefaultConstructor());
     clava::dump(D->isExplicit());
-    clava::dump(D->getExplicitSpecifier());
+    clava::dump(D->getExplicitSpecifier(), id);
 
 }
 

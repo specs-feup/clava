@@ -69,7 +69,9 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"DesignatedInitExpr", clava::StmtNode::DESIGNATED_INIT_EXPR},
         {"CXXNoexceptExpr", clava::StmtNode::CXX_NOEXCEPT_EXPR},
         {"CXXPseudoDestructorExpr", clava::StmtNode::CXX_PSEUDO_DESTRUCTOR_EXPR},
-
+        //{"FullExpr", clava::StmtNode::FULL_EXPR},
+        //{"ConstantExpr", clava::StmtNode::FULL_EXPR},
+        //{"ExprWithCleanups", clava::StmtNode::FULL_EXPR},
 };
 
 
@@ -206,6 +208,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpCXXNoexceptExprData(static_cast<const CXXNoexceptExpr *>(S)); break;
         case clava::StmtNode ::CXX_PSEUDO_DESTRUCTOR_EXPR:
             DumpCXXPseudoDestructorExprData(static_cast<const CXXPseudoDestructorExpr *>(S)); break;
+        //case clava::StmtNode ::FULL_EXPR:
+        //    DumpFullExprData(static_cast<const FullExpr *>(S)); break;
 
             //        case clava::StmtNode ::COMPOUND_ASSIGN_OPERATOR:
 //            DumpCompoundAssignOperatorData(static_cast<const CompoundAssignOperator *>(S)); break;
@@ -898,4 +902,12 @@ void clava::ClavaDataDumper::DumpCXXPseudoDestructorExprData(const CXXPseudoDest
     clava::dump(E->isArrow());
     clava::dump(clava::getId(E->getDestroyedType(), id));
 }
+
+/*
+void clava::ClavaDataDumper::DumpFullExprData(const FullExpr *E) {
+    DumpExprData(E);
+
+    clava::dump(clava::getId(E->getSubExpr(), id));
+}
+*/
 

@@ -635,10 +635,11 @@ void clava::dump(const clang::DesignatedInitExpr::Designator* designator) {
 }
 
 
-void clava::dump(const ExplicitSpecifier& specifier) {
+void clava::dump(const ExplicitSpecifier& specifier, int id) {
 
     clava::dump(clava::EXPLICIT_SPEC_KIND, specifier.getKind());
-    clava::dump(specifier.getExpr());
+    //clava::dump(specifier.getExpr());
+    clava::dump(clava::getId(specifier.getExpr(), id));
     clava::dump(specifier.isSpecified());
 }
 
