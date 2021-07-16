@@ -75,25 +75,33 @@ public class ClavaNodes {
     }
 
     public static Stmt toStmt(ClavaNode node) {
+        return toStmtTry(node).orElseThrow(
+                () -> new RuntimeException("Case not defined for class '" + node.getClass().getSimpleName() + "'"));
+        // throw new RuntimeException("Case not defined for class '" + node.getClass().getSimpleName() + "'");
+    }
+
+    public static Optional<Stmt> toStmtTry(ClavaNode node) {
         if (node instanceof Stmt) {
-            return (Stmt) node;
+            return Optional.of((Stmt) node);
         }
 
         if (node instanceof Expr) {
-            return node.getFactory().exprStmt((Expr) node);
+            return Optional.of(node.getFactory().exprStmt((Expr) node));
             // return ClavaNodesLegacy.exprStmt((Expr) node);
         }
 
         if (node instanceof VarDecl) {
-            return node.getFactoryWithNode().declStmt((VarDecl) node);
+            return Optional.of(node.getFactoryWithNode().declStmt((VarDecl) node));
             // return ClavaNodeFactory.declStmt(node.getInfo(), Arrays.asList((VarDecl) node));
         }
 
         if (node instanceof Comment || node instanceof Pragma) {
-            return node.getFactoryWithNode().wrapperStmt(node);
+            return Optional.of(node.getFactoryWithNode().wrapperStmt(node));
         }
 
-        throw new RuntimeException("Case not defined for class '" + node.getClass().getSimpleName() + "'");
+        return Optional.empty();
+
+        // throw new RuntimeException("Case not defined for class '" + node.getClass().getSimpleName() + "'");
     }
 
     /**
