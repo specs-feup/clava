@@ -105,7 +105,7 @@ public enum BinaryOperatorKind implements StringProvider {
         case Shr:
             return ">>";
         case Cmp:
-            return "<==>";
+            return "<=>";
         case LT:
             return "<";
         case GT:

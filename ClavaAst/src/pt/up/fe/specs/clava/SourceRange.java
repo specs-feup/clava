@@ -103,6 +103,10 @@ public class SourceRange {
                 return end.getFilepath();
             }
 
+            if (startType == SourceType.OUT_OF_SOURCE || endType == SourceType.OUT_OF_SOURCE) {
+                return null;
+            }
+
             throw new RuntimeException("Case not implemented:" + startType + " and " + endType);
         }
 

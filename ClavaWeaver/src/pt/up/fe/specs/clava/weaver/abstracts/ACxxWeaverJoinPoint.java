@@ -407,15 +407,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public void defTypeImpl(AJoinPoint type) {
-        // Check if joinpoint is a type
-        if (!(type instanceof AType)) {
-            SpecsLogs.msgInfo(
-                    "[setType] Passed a joinpoint that is not a Type ('" + type.getJoinPointType() + "'), ignoring");
-            return;
-        }
-
-        AType cxxType = (AType) type;
+    public void defTypeImpl(AType type) {
 
         // Check if node has a type
         ClavaNode node = getNode();
@@ -426,60 +418,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             return;
         }
 
-        /*
-        FunctionDecl decl = node.getApp().getDescendantsAndSelfStream()
-                .filter(FunctionDecl.class::isInstance)
-                .map(FunctionDecl.class::cast)
-                .filter(fdecl -> fdecl.getDeclName().equals("test_matrix_mul"))
-                .findFirst()
-                .get();
-        
-        CStyleCastExpr cStyleCast = decl.getFirstDescendantsAndSelf(CStyleCastExpr.class).get();
-        System.out.println("BEFORE:" + cStyleCast.getExprType().getCode());
-        */
-        /*
-        FunctionDecl decl = null;
-        if (node instanceof CStyleCastExpr) {
-            // Get original
-            decl = node.getApp().getDescendantsAndSelfStream()
-                    .filter(FunctionDecl.class::isInstance)
-                    .map(FunctionDecl.class::cast)
-                    .filter(fdecl -> fdecl.getDeclName().equals("test_matrix_mul"))
-                    .findFirst()
-                    .get();
-        
-            System.out.println("ORIGINAL FUNCTION BEFORE:\n" + decl.getCode());
-            System.out.println("NODE BEFORE:\n" + node.getCode());
-        
-        }
-        */
-
-        /*
-        FunctionDecl decl = node.getAncestor(FunctionDecl.class);
-        if (decl.getDeclName().equals("test_matrix_mul_cloned")) {
-            System.out.println("CLONED");
-        }
-        if (decl.getDeclName().equals("test_matrix_mul")) {
-            System.out.println("ORIGINAL");
-        }
-        */
-        // String cTypeCode = cStyleCast.getExprType().getCode();
-        // System.out.println("BEFORE:" + cStyleCast.getExprType().getCode());
-        ((Typable) node).setType((Type) cxxType.getNode());
-
-        // System.out.println("AFTER:" + cStyleCast.getExprType().getCode());
-        // if (!cStyleCast.getExprType().getCode().equals(cTypeCode)) {
-        // System.out.println("TYPE CHANGED!");
-        // System.out.println("NODE:" + node);
-        // }
-
-        /*
-        if (node instanceof CStyleCastExpr) {
-            System.out.println("ORIGINAL FUNCTION AFTER:\n" + decl.getCode());
-            System.out.println("NODE AFTER:\n" + node.getCode());
-        
-        }
-        */
+        ((Typable) node).setType((Type) type.getNode());
 
     }
 
@@ -557,7 +496,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint getTypeImpl() {
+    public AType getTypeImpl() {
         ClavaNode node = getNode();
 
         if (!(node instanceof Typable)) {
@@ -566,8 +505,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             return null;
         }
 
-        // return new CxxType(((Typable) node).getType(), this);
-        return CxxJoinpoints.create(((Typable) node).getType());
+        return CxxJoinpoints.create(((Typable) node).getType(), AType.class);
     }
 
     // @Override

@@ -8,3 +8,7 @@ Data:
 Empty Object:
 {
 }
+Data before insert: 30
+Data after insert: 30
+Data before insert: 40
+Data after insert: 40

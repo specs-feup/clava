@@ -56,4 +56,8 @@ public class CxxBenchTest {
         newTester().test("LoicEx3.lara", "loic_ex3.cpp");
     }
 
+    @Test
+    public void testLSIssue2() {
+        newTester().test("LSIssue2.lara", "ls_issue2.cpp");
+    }
 }

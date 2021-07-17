@@ -439,6 +439,16 @@ public class ClavaFactory {
         return new CallExpr(data, SpecsCollections.concat(function, args));
     }
 
+    public CallExpr callExpr(FunctionDecl function, List<? extends Expr> args) {
+        DeclRefExpr declRef = declRefExpr(function.getDeclName(), function.getReturnType());
+        var callExpr = callExpr(declRef, function.getType(), args);
+
+        // Set callee
+        callExpr.set(CallExpr.DIRECT_CALLEE, Optional.of(function));
+
+        return callExpr;
+    }
+
     public CXXFunctionalCastExpr cxxFunctionalCastExpr(CastExpr expr, Expr subExpr) {
         DataStore data = expr.getFactoryWithNode().newDataStore(CXXFunctionalCastExpr.class);
 

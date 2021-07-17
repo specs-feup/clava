@@ -53,8 +53,8 @@ public abstract class AJoinPoint extends JoinPoint {
     public void defImpl(String attribute, Object value) {
         switch(attribute){
         case "type": {
-        	if(value instanceof AJoinPoint){
-        		this.defTypeImpl((AJoinPoint)value);
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1247,13 +1247,13 @@ public abstract class AJoinPoint extends JoinPoint {
      * Get value on attribute type
      * @return the attribute's value
      */
-    public abstract AJoinPoint getTypeImpl();
+    public abstract AType getTypeImpl();
 
     /**
      * 
      */
-    public void defTypeImpl(AJoinPoint value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def type with type AJoinPoint not implemented ");
+    public void defTypeImpl(AType value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def type with type AType not implemented ");
     }
 
     /**
@@ -1265,7 +1265,7 @@ public abstract class AJoinPoint extends JoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "type", Optional.empty());
         	}
-        	AJoinPoint result = this.getTypeImpl();
+        	AType result = this.getTypeImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "type", Optional.ofNullable(result));
         	}

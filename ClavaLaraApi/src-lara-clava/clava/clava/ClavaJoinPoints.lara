@@ -36,7 +36,13 @@ ClavaJoinPoints.builtinType = function(code) {
 }
 
 ClavaJoinPoints.pointerFromBuiltin = function(code) {
+	Check.isString(code);	
 	return AstFactory.pointerTypeFromBuiltin(code);
+}
+
+ClavaJoinPoints.pointer = function($type) {
+	Check.isJoinPoint($type, 'type');
+	return AstFactory.pointerType($type);
 }
 
 /**

@@ -18,6 +18,7 @@ import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMethod;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 
 public class CxxMethod extends AMethod {
 
@@ -42,6 +43,15 @@ public class CxxMethod extends AMethod {
     @Override
     public void removeRecordImpl() {
         method.removeRecord();
+    }
+
+    /**
+     * TODO: CxxFunction already overrides this method, this sould not be necessary. Change the WeaverGenerator so that
+     * this is not required
+     */
+    @Override
+    public AType getTypeImpl() {
+        return CxxJoinpoints.create(method.getReturnType(), AType.class);
     }
 
     /*

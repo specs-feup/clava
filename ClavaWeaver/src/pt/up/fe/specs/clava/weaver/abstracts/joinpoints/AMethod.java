@@ -88,6 +88,24 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute isImplementation
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsImplementationImpl() {
+        return this.aFunction.getIsImplementationImpl();
+    }
+
+    /**
+     * Get value on attribute isPrototype
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsPrototypeImpl() {
+        return this.aFunction.getIsPrototypeImpl();
+    }
+
+    /**
      * Get value on attribute functionType
      * @return the attribute's value
      */
@@ -747,8 +765,8 @@ public abstract class AMethod extends AFunction {
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
         case "type": {
-        	if(value instanceof AJoinPoint){
-        		this.defTypeImpl((AJoinPoint)value);
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -877,6 +895,8 @@ public abstract class AMethod extends AFunction {
     protected enum MethodAttributes {
         RECORD("record"),
         HASDEFINITION("hasDefinition"),
+        ISIMPLEMENTATION("isImplementation"),
+        ISPROTOTYPE("isPrototype"),
         FUNCTIONTYPE("functionType"),
         DECLARATIONJP("declarationJp"),
         DEFINITIONJP("definitionJp"),

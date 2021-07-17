@@ -13,10 +13,13 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -93,8 +96,43 @@ public class BinaryOperator extends Operator {
         return opMap;
     }
 
+    public static Map<String, BinaryOperatorKind> getOpMap() {
+        return OP_MAP.get();
+    }
+
     public static Optional<BinaryOperatorKind> getOpTry(String opName) {
         return Optional.ofNullable(OP_MAP.get().get(opName));
+    }
+
+    public static BinaryOperatorKind getOpByNameOrSymbol(String op) {
+        // First, try by name
+        BinaryOperatorKind opKind = BinaryOperator.getOpTry(op).orElse(null);
+
+        if (opKind != null) {
+            return opKind;
+        }
+
+        // If null, try by symbol
+        opKind = BinaryOperatorKind.getHelper().fromValueTry(op).orElse(null);
+
+        if (opKind != null) {
+            return opKind;
+        }
+
+        // If still null, throw exception
+
+        var operators = new ArrayList<>(BinaryOperator.getOpMap().keySet());
+        Collections.sort(operators);
+
+        var opBySymbol = BinaryOperatorKind.getHelper().getValuesTranslationMap().keySet().stream()
+                .filter(opSym -> !opSym.equals("<UNDEFINED>"))
+                .collect(Collectors.toList());
+        Collections.sort(opBySymbol);
+
+        throw new RuntimeException("binaryOp: operator '" + op + "' is not valid. Available operators by name ("
+                + operators + ") and by symbol ("
+                + opBySymbol + ")");
+
     }
 
     public BinaryOperator(DataStore data, Collection<? extends ClavaNode> children) {

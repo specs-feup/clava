@@ -232,7 +232,14 @@ public class AstFactory {
     }
 
     public static ACall callFromFunction(AFunction function, AJoinPoint... args) {
-        return call(function.getNameImpl(), function.getFunctionTypeImpl(), args);
+        var functionDecl = (FunctionDecl) function.getNode();
+        List<Expr> exprArgs = Arrays.stream(args)
+                .map(arg -> (Expr) arg.getNode())
+                .collect(Collectors.toList());
+
+        var call = CxxWeaver.getFactory().callExpr(functionDecl, exprArgs);
+
+        return CxxJoinpoints.create(call, ACall.class);
     }
 
     public static ACall call(String functionName, AType typeJp, AJoinPoint... args) {
@@ -516,6 +523,14 @@ public class AstFactory {
         return jp;
     }
 
+    public static ACxxWeaverJoinPoint pointerType(AType pointeeType) {
+        PointerType pointerType = CxxWeaver.getFactory().pointerType((Type) pointeeType.getNode());
+
+        ACxxWeaverJoinPoint jp = CxxJoinpoints.create(pointerType);
+
+        return jp;
+    }
+
     public static AExpression doubleLiteral(String floating) {
         return doubleLiteral(Double.parseDouble(floating));
     }
@@ -656,11 +671,7 @@ public class AstFactory {
 
     public static ABinaryOp binaryOp(String op, AExpression left, AExpression right, AType type) {
 
-        BinaryOperatorKind opKind = BinaryOperator.getOpTry(op).orElse(null);
-        if (opKind == null) {
-            ClavaLog.info("binaryOp: operator '" + op + "' is not valid");
-            return null;
-        }
+        BinaryOperatorKind opKind = BinaryOperator.getOpByNameOrSymbol(op);
 
         BinaryOperator opNode = CxxWeaver.getFactory().binaryOperator(opKind, (Type) type.getNode(),
                 (Expr) left.getNode(), (Expr) right.getNode());

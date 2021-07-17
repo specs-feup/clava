@@ -32,6 +32,8 @@ import pt.up.fe.specs.util.treenode.NodeInsertUtils;
  *
  * TODO: Move methods that require the weaver to a new class that receives the weaver during construction and is
  * available in the weaver.
+ * 
+ * TODO: There are many inserts here, check if they can be reduced.
  *
  * @author JoaoBispo
  *
@@ -228,6 +230,12 @@ public class CxxActions {
 
         ClavaNode adaptedNew = isInsideScope ? ClavaNodes.toStmt(newJp.getNode()) : newJp.getNode();
 
+        // If adaptedNew is not a comment or a pragma, and we are inserting before, adaptedBase should be the first
+        // comment or pragma associated with current base
+        if (position == Insert.BEFORE) {
+            adaptedBase = ClavaNodes.getFirstNodeOfTargetRegion(adaptedBase, adaptedNew);
+        }
+
         insertFunction.accept(adaptedBase, adaptedNew);
 
         // If base is part of App, clear caches
@@ -287,7 +295,8 @@ public class CxxActions {
 
         switch (position) {
         case "before":
-            NodeInsertUtils.insertBefore(baseJp.getNode(), newJp.getNode());
+            var newBase = ClavaNodes.getFirstNodeOfTargetRegion(baseJp.getNode(), newJp.getNode());
+            NodeInsertUtils.insertBefore(newBase, newJp.getNode());
             break;
 
         case "after":

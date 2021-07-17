@@ -31,14 +31,12 @@ public abstract class AFunction extends ADeclarator {
         this.aDeclarator = aDeclarator;
     }
     /**
-     * Get value on attribute hasDefinition
-     * @return the attribute's value
+     * [DEPRECATED] Use .isImplementation instead. True if this particular function join point has a body, false otherwise
      */
     public abstract Boolean getHasDefinitionImpl();
 
     /**
-     * Get value on attribute hasDefinition
-     * @return the attribute's value
+     * [DEPRECATED] Use .isImplementation instead. True if this particular function join point has a body, false otherwise
      */
     public final Object getHasDefinition() {
         try {
@@ -52,6 +50,52 @@ public abstract class AFunction extends ADeclarator {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasDefinition", e);
+        }
+    }
+
+    /**
+     * true if this particular function join point is an implementation (i.e. has a body), false otherwise
+     */
+    public abstract Boolean getIsImplementationImpl();
+
+    /**
+     * true if this particular function join point is an implementation (i.e. has a body), false otherwise
+     */
+    public final Object getIsImplementation() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isImplementation", Optional.empty());
+        	}
+        	Boolean result = this.getIsImplementationImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isImplementation", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isImplementation", e);
+        }
+    }
+
+    /**
+     * true if this particular function join point is a prototype (i.e. does not have a body), false otherwise
+     */
+    public abstract Boolean getIsPrototypeImpl();
+
+    /**
+     * true if this particular function join point is a prototype (i.e. does not have a body), false otherwise
+     */
+    public final Object getIsPrototype() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPrototype", Optional.empty());
+        	}
+        	Boolean result = this.getIsPrototypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isPrototype", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isPrototype", e);
         }
     }
 
@@ -86,14 +130,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute declarationJp
-     * @return the attribute's value
+     * Returns the first prototype of this function that could be found, or undefined if there is none
      */
     public abstract AJoinPoint getDeclarationJpImpl();
 
     /**
-     * Get value on attribute declarationJp
-     * @return the attribute's value
+     * Returns the first prototype of this function that could be found, or undefined if there is none
      */
     public final Object getDeclarationJp() {
         try {
@@ -111,14 +153,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute definitionJp
-     * @return the attribute's value
+     * Returns the implementation of this function if there is one, or undefined otherwise
      */
     public abstract AJoinPoint getDefinitionJpImpl();
 
     /**
-     * Get value on attribute definitionJp
-     * @return the attribute's value
+     * Returns the implementation of this function if there is one, or undefined otherwise
      */
     public final Object getDefinitionJp() {
         try {
@@ -1350,8 +1390,8 @@ public abstract class AFunction extends ADeclarator {
     public void defImpl(String attribute, Object value) {
         switch(attribute){
         case "type": {
-        	if(value instanceof AJoinPoint){
-        		this.defTypeImpl((AJoinPoint)value);
+        	if(value instanceof AType){
+        		this.defTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1434,6 +1474,8 @@ public abstract class AFunction extends ADeclarator {
     protected void fillWithAttributes(List<String> attributes) {
         this.aDeclarator.fillWithAttributes(attributes);
         attributes.add("hasDefinition");
+        attributes.add("isImplementation");
+        attributes.add("isPrototype");
         attributes.add("functionType");
         attributes.add("declarationJp");
         attributes.add("definitionJp");
@@ -1517,6 +1559,8 @@ public abstract class AFunction extends ADeclarator {
      */
     protected enum FunctionAttributes {
         HASDEFINITION("hasDefinition"),
+        ISIMPLEMENTATION("isImplementation"),
+        ISPROTOTYPE("isPrototype"),
         FUNCTIONTYPE("functionType"),
         DECLARATIONJP("declarationJp"),
         DEFINITIONJP("definitionJp"),

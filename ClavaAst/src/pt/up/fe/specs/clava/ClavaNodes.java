@@ -75,25 +75,33 @@ public class ClavaNodes {
     }
 
     public static Stmt toStmt(ClavaNode node) {
+        return toStmtTry(node).orElseThrow(
+                () -> new RuntimeException("Case not defined for class '" + node.getClass().getSimpleName() + "'"));
+        // throw new RuntimeException("Case not defined for class '" + node.getClass().getSimpleName() + "'");
+    }
+
+    public static Optional<Stmt> toStmtTry(ClavaNode node) {
         if (node instanceof Stmt) {
-            return (Stmt) node;
+            return Optional.of((Stmt) node);
         }
 
         if (node instanceof Expr) {
-            return node.getFactory().exprStmt((Expr) node);
+            return Optional.of(node.getFactory().exprStmt((Expr) node));
             // return ClavaNodesLegacy.exprStmt((Expr) node);
         }
 
         if (node instanceof VarDecl) {
-            return node.getFactoryWithNode().declStmt((VarDecl) node);
+            return Optional.of(node.getFactoryWithNode().declStmt((VarDecl) node));
             // return ClavaNodeFactory.declStmt(node.getInfo(), Arrays.asList((VarDecl) node));
         }
 
         if (node instanceof Comment || node instanceof Pragma) {
-            return node.getFactoryWithNode().wrapperStmt(node);
+            return Optional.of(node.getFactoryWithNode().wrapperStmt(node));
         }
 
-        throw new RuntimeException("Case not defined for class '" + node.getClass().getSimpleName() + "'");
+        return Optional.empty();
+
+        // throw new RuntimeException("Case not defined for class '" + node.getClass().getSimpleName() + "'");
     }
 
     /**
@@ -186,6 +194,7 @@ public class ClavaNodes {
         // Go backwards, from the self index in the list of siblings, and collect all pragmas
         // while the nodes are TextElements
         List<ClavaNode> siblings = node.getParent().getChildren();
+
         List<Pragma> pragmas = new ArrayList<>();
         for (int i = selfIndex - 1; i >= 0; i--) {
             ClavaNode sibling = siblings.get(i);
@@ -571,6 +580,9 @@ public class ClavaNodes {
             if (realTarget == null) {
                 return null;
             }
+
+            realTarget = getFirstNodeOfTargetRegion(realTarget, beforeNode);
+
             NodeInsertUtils.insertBefore(realTarget, beforeNode);
             return beforeNode;
 
@@ -677,5 +689,39 @@ public class ClavaNodes {
         var factory = hint.getFactoryWithNode();
         return factory.parmVarDecl(varName, factory.literalType(type));
 
+    }
+
+    public static ClavaNode getFirstNodeOfTargetRegion(ClavaNode base, ClavaNode newNode) {
+        // Check if newNode is a text element (Comment or Pragma, wrapped or not)
+        // If so, there is no problem
+
+        // System.out.println("BASE CODE: " + base.getCode());
+
+        var newTextNode = toTextElement(newNode);
+        if (newTextNode.isPresent()) {
+            return base;
+        }
+
+        // Check nodes before base
+        var reversedLeftSiblings = new ArrayList<>(base.getLeftSiblings());
+        Collections.reverse(reversedLeftSiblings);
+        var currentBase = base;
+        // System.out.println("CURRENT Base: " + currentBase.getCode());
+        for (var sibling : reversedLeftSiblings) {
+            var baseTextNode = toTextElement(sibling);
+
+            // If sibling is not a text element, return current base
+            if (baseTextNode.isEmpty()) {
+                // System.out.println("Not a text element: " + sibling.getCode());
+                return currentBase;
+            }
+
+            // If sibling is a text node, promote it to base node
+            currentBase = sibling;
+            // System.out.println("New Base: " + currentBase.getCode());
+        }
+
+        // Finished loop without returning, first not is a text element
+        return currentBase;
     }
 }

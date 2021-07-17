@@ -1,0 +1,14 @@
+function --> test4_Kernel
+/**** File 'hls.c' ****/
+
+int * test4_KernelCode(char g[], int h) {
+   
+   return 0;
+}
+
+void test4_Kernel(char g[], int h, int **kernelReturn) {
+   #pragma HLS array_partition variable=g complete
+   *kernelReturn = test4_KernelCode(g, h);
+}
+
+/**** End File ****/

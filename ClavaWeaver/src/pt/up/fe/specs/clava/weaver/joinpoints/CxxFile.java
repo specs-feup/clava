@@ -17,8 +17,6 @@ import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Preconditions;
-
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.comment.Comment;
@@ -356,9 +354,6 @@ public class CxxFile extends AFile {
 
     @Override
     public void insertBeginImpl(AJoinPoint node) {
-        Preconditions.checkArgument(node.getNode() instanceof Decl,
-                "Expected input of action scope.insertEntry to be a Stmt joinpoint");
-
         if (!tunit.hasChildren()) {
             tunit.addChild(node.getNode());
             return;

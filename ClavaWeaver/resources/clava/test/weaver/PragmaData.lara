@@ -1,3 +1,5 @@
+import weaver.Query;
+
 aspectdef PragmaData
 
 	select function{"foo"}.loop end
@@ -10,7 +12,19 @@ aspectdef PragmaData
 	select function{"noData"}.loop end
 	apply
 		println("Empty Object:");
-		printObject($loop.data);
+		printlnObject($loop.data);
 	end
 	
+	// Insert preserves pragma
+	var $loopWithPragma = Query.search("function", "insertPreservesPragma").search("loop").first();
+	println("Data before insert: " + $loopWithPragma.data.a);
+	$loopWithPragma.insertBefore("int a;");
+	println("Data after insert: " + $loopWithPragma.data.a);	
+	
+	// ...also before functions
+	var $loopWithPragma2 = Query.search("function", "insertPreservesPragma2").first();
+	println("Data before insert: " + $loopWithPragma2.data.a);
+	$loopWithPragma2.insertBefore("int global_a;");
+	println("Data after insert: " + $loopWithPragma2.data.a);	
+
 end

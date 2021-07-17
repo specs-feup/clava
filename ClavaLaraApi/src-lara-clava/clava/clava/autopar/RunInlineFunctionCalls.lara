@@ -214,19 +214,15 @@ aspectdef callInline
 				if(o.$newStmts.length > 0)
 				{
 					var replacedCallStr = '// ClavaInlineFunction : ' + exprStmt.code + '  countCallInlinedFunction : ' + countCallInlinedFunction;
-					//println("REPLACED CALL STR:\n" + replacedCallStr);
-					exprStmt.insert before replacedCallStr;
-
-					//var insertedCode = "";
+	
+					// Insert after to preserve order of comments
+					var currentStmt = exprStmt.insertAfter(replacedCallStr);				
 					for(var $newStmt of o.$newStmts)
 					{
-						//insertedCode += $newStmt.code + "\n";
-						exprStmt.insertBefore($newStmt);	
+						currentStmt = currentStmt.insertAfter($newStmt);
 					}
-					//println("INSERTED CODE:\n" + insertedCode);
 
 					exprStmt.detach();
-					
 				}
 			}
 
