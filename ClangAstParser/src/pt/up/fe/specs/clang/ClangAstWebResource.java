@@ -27,14 +27,16 @@ public interface ClangAstWebResource {
 
     WebResourceProvider BUILTIN_INCLUDES = create("clang_builtin_includes_v7.0.1.zip", "v1.0");
     // WebResourceProvider LIBC_CXX = create("libcxx_7.0.1.zip", "v1.0");
-    WebResourceProvider LIBC_CXX = create("libc_cxx.zip", "v2.5");
+    WebResourceProvider LIBC_CXX = create("libc_cxx.zip", "v2.6");
 
-    WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx_windows.zip", "v1.0");
+    // WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx_windows.zip", "v1.0");
+    WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx.zip", "v2.6");
+
     // WebResourceProvider LIBC_CXX_MAC_OS = create("libc_cxx_mac_os.zip", "v1.0");
     // WebResourceProvider LIBC_CXX_LINUX = create("libc_cxx_linux.zip", "v1.0");
     // WebResourceProvider LIBC_CXX_CENTOS6 = create("libc_cxx_centos6.zip", "v1.0");
 
-    WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v4.2.19");
+    WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v12.0");
     WebResourceProvider WIN_DLL1 = create("windows/libwinpthread-1.dll");
     WebResourceProvider WIN_DLL2 = create("windows/zlib1.dll");
 
