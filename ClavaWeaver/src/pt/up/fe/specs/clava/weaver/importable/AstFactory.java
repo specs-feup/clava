@@ -671,11 +671,7 @@ public class AstFactory {
 
     public static ABinaryOp binaryOp(String op, AExpression left, AExpression right, AType type) {
 
-        BinaryOperatorKind opKind = BinaryOperator.getOpTry(op).orElse(null);
-        if (opKind == null) {
-            ClavaLog.info("binaryOp: operator '" + op + "' is not valid");
-            return null;
-        }
+        BinaryOperatorKind opKind = BinaryOperator.getOpByNameOrSymbol(op);
 
         BinaryOperator opNode = CxxWeaver.getFactory().binaryOperator(opKind, (Type) type.getNode(),
                 (Expr) left.getNode(), (Expr) right.getNode());
