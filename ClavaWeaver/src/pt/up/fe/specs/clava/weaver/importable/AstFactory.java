@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaOptions;
+import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -681,12 +682,19 @@ public class AstFactory {
 
         return CxxJoinpoints.create(opNode, ABinaryOp.class);
     }
-    
+
     public static AUnaryOp unaryOp(String op, AExpression expr, AType type) {
+
+        System.out.println("TYPE: " + type);
 
         UnaryOperatorKind opKind = UnaryOperator.getOpByNameOrSymbol(op);
 
-        UnaryOperator opNode = CxxWeaver.getFactory().unaryOperator(opKind, (Type) type.getNode(),
+        // If type is null, try to infer type from operator
+        var typeNode = type != null ? (Type) type.getNode()
+                : Types.inferUnaryType(opKind, (Type) expr.getTypeImpl().getNode(), CxxWeaver.getFactory());
+
+        // UnaryOperator opNode = CxxWeaver.getFactory().unaryOperator(opKind, (Type) type.getNode(),
+        UnaryOperator opNode = CxxWeaver.getFactory().unaryOperator(opKind, typeNode,
                 (Expr) expr.getNode());
 
         return CxxJoinpoints.create(opNode, AUnaryOp.class);
