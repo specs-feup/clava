@@ -26,7 +26,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
 import pt.up.fe.specs.util.lazy.Lazy;
@@ -68,7 +67,7 @@ public class UnaryOperator extends Operator {
         KIND_NAMES.put(UnaryOperatorKind.Extension, "extension");
         KIND_NAMES.put(UnaryOperatorKind.Coawait, "cowait");
     }
-    
+
     private static final Lazy<Map<String, UnaryOperatorKind>> OP_MAP = Lazy.newInstance(UnaryOperator::buildOpMap);
 
     private static Map<String, UnaryOperatorKind> buildOpMap() {
@@ -79,15 +78,15 @@ public class UnaryOperator extends Operator {
 
         return opMap;
     }
-    
+
     public static Map<String, UnaryOperatorKind> getOpMap() {
         return OP_MAP.get();
     }
-    
+
     public static Optional<UnaryOperatorKind> getOpTry(String opName) {
         return Optional.ofNullable(OP_MAP.get().get(opName));
     }
-    
+
     public static UnaryOperatorKind getOpByNameOrSymbol(String op) {
         // First, try by name
         UnaryOperatorKind opKind = UnaryOperator.getOpTry(op).orElse(null);
@@ -109,7 +108,7 @@ public class UnaryOperator extends Operator {
         Collections.sort(operators);
 
         var opBySymbol = UnaryOperatorKind.getEnumHelper().getValuesTranslationMap().keySet().stream()
-                .filter(opSym -> !opSym.equals("<UNDEFINED>"))
+                .filter(opSym -> !opSym.equals("<UNDEFINED_UNARY_OP>"))
                 .collect(Collectors.toList());
         Collections.sort(opBySymbol);
 
