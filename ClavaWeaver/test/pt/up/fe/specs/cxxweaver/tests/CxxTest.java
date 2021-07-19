@@ -314,4 +314,5 @@ public class CxxTest {
     public void testFunction2() {
         newTester().test("Function2.lara", "function2.cpp");
     }
+
 }

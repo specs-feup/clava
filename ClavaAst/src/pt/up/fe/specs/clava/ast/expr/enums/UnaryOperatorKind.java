@@ -16,8 +16,8 @@ package pt.up.fe.specs.clava.ast.expr.enums;
 import java.util.EnumSet;
 import java.util.Set;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
-import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
@@ -86,7 +86,10 @@ public enum UnaryOperatorKind implements StringProvider {
         case Coawait:
             return "co_await";
         default:
-            throw new NotImplementedException(this);
+            // Using debug level to not show messages every time the op map is built
+            ClavaLog.debug("Code not implemented for unary operator '" + this + "'");
+            return "<UNDEFINED_UNARY_OP>";
+        // throw new NotImplementedException(this);
         }
         // return op;
     }

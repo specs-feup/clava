@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava;
 
 import java.util.Optional;
 
+import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.AttributedType;
@@ -29,8 +30,12 @@ import pt.up.fe.specs.clava.ast.type.PointerType;
 import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
+import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
+import pt.up.fe.specs.clava.context.ClavaFactory;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.classmap.FunctionClassMap;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 public class Types {
 
@@ -268,5 +273,36 @@ public class Types {
         }
 
         return type;
+    }
+
+    /**
+     * Tries to infer the return type for a given unary operator.
+     * 
+     * @param op
+     * @param exprType
+     * @return
+     */
+    public static Type inferUnaryType(UnaryOperatorKind op, Type exprType, ClavaFactory factory) {
+        switch (op) {
+        case PostInc:
+        case PostDec:
+        case PreInc:
+        case PreDec:
+        case Not:
+        case Plus:
+        case Minus:
+            return exprType;
+        case LNot:
+            return factory.builtinType(BuiltinKind.Bool);
+        case AddrOf:
+            return factory.pointerType(exprType);
+        case Deref:
+            var desugared = exprType.desugarAll();
+            SpecsCheck.checkArgument(desugared instanceof PointerType,
+                    () -> "Expected type to be a pointer: " + desugared);
+            return ((PointerType) exprType).getPointeeType();
+        default:
+            throw new NotImplementedException("Unary op return type inference not implemented for '" + op + "'");
+        }
     }
 }
