@@ -98,7 +98,10 @@ Timer.prototype._time_cpp = function ($start, prefix, $end, $condition) {
 
     $startVarDecl = ClavaJoinPoints.stmtLiteral(_timer_cpp_define_time_var(startVar));
     $endVarDecl = ClavaJoinPoints.stmtLiteral(_timer_cpp_define_time_var(endVar));
-    $timingResultDecl = ClavaJoinPoints.stmtLiteral(_timer_cpp_define_differential_var(cppUnit, timeIntervalVar));
+    $timingResultDecl = ClavaJoinPoints.varDeclNoInit(
+	    timeIntervalVar,
+	    ClavaJoinPoints.typeLiteral("std::chrono::"+cppUnit)
+	);
     $insertionTic.insertBefore($startVarDecl);
     $insertionTic.insertBefore($endVarDecl);
     $insertionTic.insertBefore($timingResultDecl);
