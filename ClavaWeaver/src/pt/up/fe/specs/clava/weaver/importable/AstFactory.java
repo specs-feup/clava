@@ -44,8 +44,10 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
+import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
+import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
 import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
@@ -91,6 +93,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStruct;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUnaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
@@ -677,6 +680,16 @@ public class AstFactory {
                 (Expr) left.getNode(), (Expr) right.getNode());
 
         return CxxJoinpoints.create(opNode, ABinaryOp.class);
+    }
+    
+    public static AUnaryOp unaryOp(String op, AExpression expr, AType type) {
+
+        UnaryOperatorKind opKind = UnaryOperator.getOpByNameOrSymbol(op);
+
+        UnaryOperator opNode = CxxWeaver.getFactory().unaryOperator(opKind, (Type) type.getNode(),
+                (Expr) expr.getNode());
+
+        return CxxJoinpoints.create(opNode, AUnaryOp.class);
     }
 
     public static AExpression parenthesis(AExpression expression) {

@@ -13,17 +13,23 @@
 
 package pt.up.fe.specs.clava.ast.expr;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
+import pt.up.fe.specs.util.lazy.Lazy;
 
 /**
  * Represents a unary expression.
@@ -61,6 +67,56 @@ public class UnaryOperator extends Operator {
         KIND_NAMES.put(UnaryOperatorKind.Imag, "imag");
         KIND_NAMES.put(UnaryOperatorKind.Extension, "extension");
         KIND_NAMES.put(UnaryOperatorKind.Coawait, "cowait");
+    }
+    
+    private static final Lazy<Map<String, UnaryOperatorKind>> OP_MAP = Lazy.newInstance(UnaryOperator::buildOpMap);
+
+    private static Map<String, UnaryOperatorKind> buildOpMap() {
+        Map<String, UnaryOperatorKind> opMap = new HashMap<>();
+        for (var entry : KIND_NAMES.entrySet()) {
+            opMap.put(entry.getValue(), entry.getKey());
+        }
+
+        return opMap;
+    }
+    
+    public static Map<String, UnaryOperatorKind> getOpMap() {
+        return OP_MAP.get();
+    }
+    
+    public static Optional<UnaryOperatorKind> getOpTry(String opName) {
+        return Optional.ofNullable(OP_MAP.get().get(opName));
+    }
+    
+    public static UnaryOperatorKind getOpByNameOrSymbol(String op) {
+        // First, try by name
+        UnaryOperatorKind opKind = UnaryOperator.getOpTry(op).orElse(null);
+
+        if (opKind != null) {
+            return opKind;
+        }
+
+        // If null, try by symbol
+        opKind = UnaryOperatorKind.getEnumHelper().fromValueTry(op).orElse(null);
+
+        if (opKind != null) {
+            return opKind;
+        }
+
+        // If still null, throw exception
+
+        var operators = new ArrayList<>(UnaryOperator.getOpMap().keySet());
+        Collections.sort(operators);
+
+        var opBySymbol = UnaryOperatorKind.getEnumHelper().getValuesTranslationMap().keySet().stream()
+                .filter(opSym -> !opSym.equals("<UNDEFINED>"))
+                .collect(Collectors.toList());
+        Collections.sort(opBySymbol);
+
+        throw new RuntimeException("unaryOp: operator '" + op + "' is not valid. Available operators by name ("
+                + operators + ") and by symbol ("
+                + opBySymbol + ")");
+
     }
 
     public UnaryOperator(DataStore data, Collection<? extends ClavaNode> children) {
