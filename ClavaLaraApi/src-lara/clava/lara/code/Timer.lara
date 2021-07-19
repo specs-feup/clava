@@ -83,7 +83,7 @@ Timer.prototype._time_cpp = function ($start, prefix, $end, $condition) {
 
 
     // Build message
-    logger.append(prefix).appendDouble(timeIntervalVar);
+    logger.append(prefix).appendLong(_timer_cpp_print_interval(cppUnit, timeIntervalVar));
     if (this.printUnit) {
         logger.append(this.timeUnits.getUnitsString());
     }
@@ -100,7 +100,7 @@ Timer.prototype._time_cpp = function ($start, prefix, $end, $condition) {
     $endVarDecl = ClavaJoinPoints.stmtLiteral(_timer_cpp_define_time_var(endVar));
     $timingResultDecl = ClavaJoinPoints.varDeclNoInit(
 	    timeIntervalVar,
-	    ClavaJoinPoints.typeLiteral("std::chrono::"+cppUnit)
+	    ClavaJoinPoints.typeLiteral("std::chrono::high_resolution_clock::duration")
 	);
     $insertionTic.insertBefore($startVarDecl);
     $insertionTic.insertBefore($endVarDecl);
@@ -126,8 +126,10 @@ Timer.prototype._time_cpp = function ($start, prefix, $end, $condition) {
 
     // Log time information
     if (this.print) {
-        logger.log(afterJp);
-        afterJp = logger.getAfterJp();
+        logger.log($timingResult);
+        if ($condition === undefined) {
+            afterJp = logger.getAfterJp();
+        }
     }
 
     this._setAfterJp(afterJp);
@@ -292,14 +294,14 @@ codedef _timer_cpp_define_time_var(timeVar)%{
 std::chrono::high_resolution_clock::time_point [[timeVar]];
 }%end
 
-codedef _timer_cpp_define_differential_var(unit, varName)%{
-std::chrono::[[unit]] [[varName]];
-}%end
-
 codedef _timer_cpp_now(timeVar)%{
 [[timeVar]] = std::chrono::high_resolution_clock::now();
 }%end
 
 codedef _timer_cpp_calc_interval(startVar, endVar, unit, differentialVar)%{
-[[differentialVar]] = std::chrono::duration_cast<std::chrono::[[unit]]> ([[endVar]] - [[startVar]]).count()
+[[differentialVar]] = [[endVar]] - [[startVar]]
+}%end
+
+codedef _timer_cpp_print_interval(unit, differentialVar)%{
+std::chrono::duration_cast<std::chrono::[[unit]]> ([[differentialVar]]).count()
 }%end
