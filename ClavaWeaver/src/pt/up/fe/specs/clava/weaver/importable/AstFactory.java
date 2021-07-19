@@ -684,9 +684,6 @@ public class AstFactory {
     }
 
     public static AUnaryOp unaryOp(String op, AExpression expr, AType type) {
-
-        System.out.println("TYPE: " + type);
-
         UnaryOperatorKind opKind = UnaryOperator.getOpByNameOrSymbol(op);
 
         // If type is null, try to infer type from operator
