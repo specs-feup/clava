@@ -5,6 +5,8 @@ aspectdef ClavaJoinPointsTest
 	var intType = ClavaJoinPoints.builtinType("int");
 	var doubleType = ClavaJoinPoints.builtinType("double");
 	var intExpr = ClavaJoinPoints.exprLiteral("a", intType);
+	var intPointerType = ClavaJoinPoints.pointer(intType);
+	var intPointerExpr = ClavaJoinPoints.exprLiteral("aPointer", intPointerType);
 
 	// Type Literal of user defined type
 	println("User literal type: " + ClavaJoinPoints.typeLiteral("xpto").code);
@@ -30,4 +32,13 @@ aspectdef ClavaJoinPointsTest
 	// For Stmt
 	println("Empty for:\n" + ClavaJoinPoints.forStmt().code);
 	println("Complete for:\n" + ClavaJoinPoints.forStmt("int i=0;", "i<10;", "i++;", "i = i+1;\ni = i - 1;").code);	
+	
+	// Unary Operator
+	var addressOfOp = ClavaJoinPoints.unaryOp("&", intExpr);
+	println("AddressOf code: " + addressOfOp.code);
+	println("AddressOf code type: " + addressOfOp.type.code);
+	
+	var derefOp = ClavaJoinPoints.unaryOp("*", intPointerExpr);
+	println("Deref code: " + derefOp.code);
+	println("Deref code type: " + derefOp.type.code);
 end
