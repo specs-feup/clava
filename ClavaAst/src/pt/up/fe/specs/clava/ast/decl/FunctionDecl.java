@@ -240,13 +240,32 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
         // Replace the return type of the function type copy
         functionTypeCopy.set(FunctionType.RETURN_TYPE, returnType);
-        // CxxActions.replace(functionTypeCopy.getReturnType(), newType, getWeaverEngine());
 
-        // Set the function type copy as the type of the function
-        setType(functionTypeCopy);
+        // Set the function type copy as the type of the function in all declarations
+        for (var function : getDecls()) {
+            function.setType(functionTypeCopy);
+        }
 
-        // getFunctionType().setReturnType(returnType);
+        // getDecls().stream()
+        // .forEach(function -> function.setReturnTypeSingle(returnType));
     }
+
+    // private void setReturnTypeSingle(Type returnType) {
+    //
+    // FunctionType functionType = getFunctionType();
+    //
+    // // Create a copy of the function type, to avoid setting the type on all functions with the same signature
+    // FunctionType functionTypeCopy = (FunctionType) functionType.copy();
+    //
+    // // Replace the return type of the function type copy
+    // functionTypeCopy.set(FunctionType.RETURN_TYPE, returnType);
+    // // CxxActions.replace(functionTypeCopy.getReturnType(), newType, getWeaverEngine());
+    //
+    // // Set the function type copy as the type of the function
+    // setType(functionTypeCopy);
+    //
+    // // getFunctionType().setReturnType(returnType);
+    // }
 
     // @Deprecated
     // protected FunctionDeclData getFunctionDeclData() {
