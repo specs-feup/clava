@@ -1,2 +1,13 @@
 g,h
 g,h,ret
+/**** File 'function2.cpp' ****/
+void test4(char g[], int *h);
+int * test4_(char g[], int *h, int * ret);
+void test4(char g[], int *h) {
+}
+int * test4_(char g[], int *h, int * ret) {
+return 0;
+}
+void test4(char g[], int *h);
+int * test4_(char g[], int *h, int * ret);
+/**** End File ****/

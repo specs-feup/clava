@@ -312,7 +312,7 @@ public class CxxTest {
 
     @Test
     public void testFunction2() {
-        newTester().test("Function2.lara", "function2.cpp");
+        newTester().set(CxxWeaverOption.CHECK_SYNTAX, false).test("Function2.lara", "function2.cpp");
     }
 
 }
