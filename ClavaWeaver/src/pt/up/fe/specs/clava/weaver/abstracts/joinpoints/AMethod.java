@@ -124,6 +124,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute declarationJpsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDeclarationJpsArrayImpl() {
+        return this.aFunction.getDeclarationJpsArrayImpl();
+    }
+
+    /**
      * Get value on attribute definitionJp
      * @return the attribute's value
      */
@@ -899,6 +908,7 @@ public abstract class AMethod extends AFunction {
         ISPROTOTYPE("isPrototype"),
         FUNCTIONTYPE("functionType"),
         DECLARATIONJP("declarationJp"),
+        DECLARATIONJPS("declarationJps"),
         DEFINITIONJP("definitionJp"),
         DECLARATION("declaration"),
         BODY("body"),

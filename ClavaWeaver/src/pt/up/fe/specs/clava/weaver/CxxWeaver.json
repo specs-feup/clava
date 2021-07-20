@@ -8604,10 +8604,10 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found",
+                  "tooltip": "a 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "function",
                               "name": "declaration"
                            }]
                },
@@ -8616,7 +8616,7 @@
                   "tooltip": "a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "function",
                               "name": "definition"
                            }]
                },
@@ -13144,10 +13144,10 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found",
+                  "tooltip": "a 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "function",
                               "name": "declaration"
                            }]
                },
@@ -13156,7 +13156,7 @@
                   "tooltip": "a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "function",
                               "name": "definition"
                            }]
                },
@@ -29485,6 +29485,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the prototypes of this function that are present in the code. If there are none, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "declarationJps"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "Returns the implementation of this function if there is one, or undefined otherwise",
                   "children": [
                            {
@@ -38461,10 +38470,10 @@
                },
                {
                   "type": "attribute",
-                  "tooltip": "a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found",
+                  "tooltip": "a 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "function",
                               "name": "declaration"
                            }]
                },
@@ -38473,7 +38482,7 @@
                   "tooltip": "a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "function",
                               "name": "definition"
                            }]
                },
@@ -39652,6 +39661,15 @@
                            {
                               "type": "joinpoint",
                               "name": "declarationJp"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns the prototypes of this function that are present in the code. If there are none, returns an empty array",
+                  "children": [
+                           {
+                              "type": "joinpoint[]",
+                              "name": "declarationJps"
                            }]
                },
                {

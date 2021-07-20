@@ -464,15 +464,35 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AJoinPoint getDeclarationJpImpl() {
-        return function.getDeclaration()
+    public AJoinPoint[] getDeclarationJpsArrayImpl() {
+        return function.getPrototypes().stream()
                 .map(node -> CxxJoinpoints.create(node))
-                .orElse(null);
+                .toArray(size -> new AJoinPoint[size]);
+    }
+
+    @Override
+    public AJoinPoint getDeclarationJpImpl() {
+        var prototypes = getDeclarationJpsArrayImpl();
+
+        if (prototypes.length == 0) {
+            return null;
+        }
+
+        if (prototypes.length != 1) {
+            ClavaLog.debug(
+                    "$function.declarationJp: found more than one prototype, returning the first prototype that was found");
+        }
+
+        return prototypes[0];
+
+        // return function.getDeclaration()
+        // .map(node -> CxxJoinpoints.create(node))
+        // .orElse(null);
     }
 
     @Override
     public AJoinPoint getDefinitionJpImpl() {
-        return function.getDefinition()
+        return function.getImplementation()
                 .map(node -> CxxJoinpoints.create(node))
                 .orElse(null);
     }
@@ -509,18 +529,25 @@ public class CxxFunction extends AFunction {
         // Set both the names of corresponding definition and declaration
         // Needs to first fetch both definition and declaration.
         // If one is renamed before fetching the other, the other will not be found
-        Optional<FunctionDecl> def = function.getDefinition();
-        Optional<FunctionDecl> decl = function.getDeclaration();
-        // System.out.println("DEF:" + def);
-        // System.out.println("DECL:" + decl);
-        def.ifPresent(node -> node.setName(value));
-        decl.ifPresent(node -> node.setName(value));
+
+        var impl = function.getImplementation();
+        var proto = function.getPrototypes();
+
+        impl.ifPresent(node -> node.setName(value));
+        proto.stream().forEach(node -> node.setName(value));
+
+        // Optional<FunctionDecl> def = function.getDefinition();
+        // Optional<FunctionDecl> decl = function.getDeclaration();
+        // // System.out.println("DEF:" + def);
+        // // System.out.println("DECL:" + decl);
+        // def.ifPresent(node -> node.setName(value));
+        // decl.ifPresent(node -> node.setName(value));
+
     }
 
     @Override
     public void setNameImpl(String name) {
         defNameImpl(name);
-
     }
 
     @Override

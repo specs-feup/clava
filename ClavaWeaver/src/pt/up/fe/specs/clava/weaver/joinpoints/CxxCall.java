@@ -180,12 +180,26 @@ public class CxxCall extends ACall {
         call.setCallName(value);
     }
 
+    /*
+    @Override
+    public AFunction[] getDeclarationsArrayImpl() {
+        return call.getPrototypes().stream()
+                .map(decl -> CxxJoinpoints.create(decl, AFunction.class))
+                .toArray(size -> new AFunction[size]);
+    }
+    */
+
     @Override
     public AFunction getDeclarationImpl() {
-        return call.getDeclaration().map(decl -> (AFunction) CxxJoinpoints.create(decl)).orElse(null);
-        // Optional<DeclaratorDecl> varDecl = call.getCalleeDeclRef().getVariableDeclaration();
-        //
-        // return varDecl.map(decl -> CxxJoinpoints.create(decl, this)).orElse(null);
+        return call.getPrototypes().stream()
+                .map(decl -> CxxJoinpoints.create(decl, AFunction.class))
+                .findFirst()
+                .orElse(null);
+        // return call.getFunctionDecl().map(FunctionDecl::getPrototypes)
+        // .map(decl -> CxxJoinpoints.create(decl, AFunction.class)).orElse(null);
+        // var declarations = getDeclarationsArrayImpl();
+        // return declarations.length != 0 ? declarations[0] : null;
+        // return call.getDeclaration().map(decl -> (AFunction) CxxJoinpoints.create(decl)).orElse(null);
     }
 
     @Override

@@ -153,6 +153,39 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Get value on attribute declarationJps
+     * @return the attribute's value
+     */
+    public abstract AJoinPoint[] getDeclarationJpsArrayImpl();
+
+    /**
+     * Returns the prototypes of this function that are present in the code. If there are none, returns an empty array
+     */
+    public Object getDeclarationJpsImpl() {
+        AJoinPoint[] aJoinPointArrayImpl0 = getDeclarationJpsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Returns the prototypes of this function that are present in the code. If there are none, returns an empty array
+     */
+    public final Object getDeclarationJps() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declarationJps", Optional.empty());
+        	}
+        	Object result = this.getDeclarationJpsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "declarationJps", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "declarationJps", e);
+        }
+    }
+
+    /**
      * Returns the implementation of this function if there is one, or undefined otherwise
      */
     public abstract AJoinPoint getDefinitionJpImpl();
@@ -1478,6 +1511,7 @@ public abstract class AFunction extends ADeclarator {
         attributes.add("isPrototype");
         attributes.add("functionType");
         attributes.add("declarationJp");
+        attributes.add("declarationJps");
         attributes.add("definitionJp");
         attributes.add("declaration");
         attributes.add("body");
@@ -1563,6 +1597,7 @@ public abstract class AFunction extends ADeclarator {
         ISPROTOTYPE("isPrototype"),
         FUNCTIONTYPE("functionType"),
         DECLARATIONJP("declarationJp"),
+        DECLARATIONJPS("declarationJps"),
         DEFINITIONJP("definitionJp"),
         DECLARATION("declaration"),
         BODY("body"),

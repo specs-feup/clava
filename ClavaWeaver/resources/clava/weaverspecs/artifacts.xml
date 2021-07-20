@@ -339,9 +339,10 @@
 		<attribute name="memberNames" type="String[]" />
 <!-- 		<attribute name="decl" type="function"
 			tooltip="a 'function' join point that represents the function declaration or definition of the call, whatever appears first; 'undefined' if nothing was found"/>  -->
-		<attribute name="declaration" type="joinpoint"
-			tooltip="a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found"/>
-		<attribute name="definition" type="joinpoint" 
+		<!-- <attribute name="declarations" type="function[]" tooltip="an array of 'function' join point that represents the prototypes of the call; empty array if no prototype was found"/>  -->
+		<attribute name="declaration" type="function" 
+			tooltip="a 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found"/>
+		<attribute name="definition" type="function" 
 			tooltip="a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found"/>
 		<attribute name="argList" type="expression[]" tooltip="an alias for 'args'"/>
 		<attribute name="args" type="expression[]" tooltip="an array with the arguments of the call"/>
@@ -404,8 +405,7 @@
 			<def/>			
 		</attribute>	
 		<attribute name="declarationJp" type="joinpoint" tooltip="Returns the first prototype of this function that could be found, or undefined if there is none"/>
-		<!-- TODO: change declaration cache to support lists -->
-		<!-- <attribute name="declarationJps" type="joinpoint[]" tooltip="Returns the prototypes of this function that are present in the code. If there are none, returns an empty array"/>  -->
+		<attribute name="declarationJps" type="joinpoint[]" tooltip="Returns the prototypes of this function that are present in the code. If there are none, returns an empty array"/>
 		<attribute name="definitionJp" type="joinpoint" tooltip="Returns the implementation of this function if there is one, or undefined otherwise"/>		
 		<attribute name="declaration" type="String">
 			<parameter name="withReturnType" type="Boolean" />
