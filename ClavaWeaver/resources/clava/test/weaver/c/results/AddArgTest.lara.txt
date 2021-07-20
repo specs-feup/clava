@@ -1,8 +1,12 @@
 /**** File 'add_arg.c' ****/
+int foo(char* str);
 int foo(char* str) {
 	return 0;
 }
 
+int foo(char* str);
+
+int bar(char *str, int num);
 int bar(char *str, int num) {
 	return 0;
 }
