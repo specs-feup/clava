@@ -812,6 +812,10 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     public void setParameters(List<ParmVarDecl> params) {
+        getDecls().forEach(fdecl -> fdecl.setParametersSingle(params));
+    }
+
+    private void setParametersSingle(List<ParmVarDecl> params) {
         // Remove current parameters
         removeChildren(ParmVarDecl.class);
 
