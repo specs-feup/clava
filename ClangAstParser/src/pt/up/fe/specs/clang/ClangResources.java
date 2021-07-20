@@ -83,7 +83,9 @@ public class ClangResources {
     private Optional<ClangFiles> loadLocalClangFiles(File clangFolder, String version) {
         // Get versioned filename of dumper
         SupportedPlatform platform = SupportedPlatform.getCurrentPlatform();
-        FileResourceProvider executableResource = getVersionedExecutableResource(version, platform);
+        FileResourceProvider executableResource = getVersionedResource(getExecutableResource(platform), version);
+
+        // FileResourceProvider executableResource = getVersionedExecutableResource(version, platform);
 
         var clangDumperExe = new File(clangFolder, executableResource.getFilename());
         if (!clangDumperExe.isFile()) {
@@ -126,7 +128,8 @@ public class ClangResources {
         File resourceFolder = getClangResourceFolder();
 
         SupportedPlatform platform = SupportedPlatform.getCurrentPlatform();
-        FileResourceProvider executableResource = getVersionedExecutableResource(version, platform);
+        FileResourceProvider executableResource = getVersionedResource(getExecutableResource(platform), version);
+        // FileResourceProvider executableResource = getVersionedExecutableResource(version, platform);
 
         // Copy executable
         ResourceWriteData executable = executableResource.writeVersioned(resourceFolder, ClangAstParser.class);
@@ -151,17 +154,35 @@ public class ClangResources {
         return executable.getFile();
     }
 
+    /*
     private FileResourceProvider getVersionedExecutableResource(String version, SupportedPlatform platform) {
         FileResourceProvider executableResource = getExecutableResource(platform);
-
+    
         // If version not defined, use the latest version of the resource
         if (version.isEmpty()) {
             version = executableResource.getVersion();
         }
-
+    
         // ClangAst executable versions are separated by an underscore
         executableResource = executableResource.createResourceVersion("_" + version);
         return executableResource;
+    }
+    */
+
+    private FileResourceProvider getVersionedResource(FileResourceProvider resource) {
+        return getVersionedResource(resource, "");
+    }
+
+    private FileResourceProvider getVersionedResource(FileResourceProvider resource, String version) {
+
+        // If version not defined, use the latest version of the resource
+        if (version.isEmpty()) {
+            version = resource.getVersion();
+        }
+
+        // ClangAst executable versions are separated by an underscore
+        resource = resource.createResourceVersion("_" + version);
+        return resource;
     }
 
     public File getClangResourceFolder() {
@@ -215,7 +236,9 @@ public class ClangResources {
 
         // Check if built-in libc/c++ needs to be included
         if (useBuiltinLibc(clangExecutable, usePlatformIncludes)) {
-            includesZips.add(getLibCResource(SupportedPlatform.getCurrentPlatform()));
+            var libcResource = getVersionedResource(getLibCResource(SupportedPlatform.getCurrentPlatform()));
+            includesZips.add(libcResource);
+            // includesZips.add(getLibCResource(SupportedPlatform.getCurrentPlatform()));
         }
 
         // Download includes zips, check if any of them is new

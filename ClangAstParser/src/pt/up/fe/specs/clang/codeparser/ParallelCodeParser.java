@@ -124,7 +124,7 @@ public class ParallelCodeParser extends CodeParser {
 
         // Get version for the executable
         String version = options.get(ClangAstKeys.CLANGAST_VERSION);
-
+        // System.out.println("PARALLEL OPTIONS: " + options);
         // Prepare resources before execution
         ClangResources clangResources = new ClangResources(get(SHOW_CLANG_DUMP));
         var clangFiles = clangResources.getClangFiles(version, get(ClangAstKeys.USE_PLATFORM_INCLUDES));

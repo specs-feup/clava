@@ -157,6 +157,7 @@ public class ClangAstParser {
         // boolean usePlatformIncludes = config.get(ClangAstKeys.USE_PLATFORM_INCLUDES);
         // boolean usePlatformIncludes = false;
 
+        // System.out.println("CLANG AST OPTIONS: " + config);
         // Prepare resources before execution
         ClangResources clangResources = new ClangResources(config.get(CodeParser.SHOW_CLANG_DUMP));
         var clangFiles = clangResources.getClangFiles(version, config.get(ClangAstKeys.USE_PLATFORM_INCLUDES));
