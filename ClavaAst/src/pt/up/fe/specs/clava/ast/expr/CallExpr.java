@@ -164,40 +164,50 @@ public class CallExpr extends Expr {
 
     /**
      * 
-     * @return the declaration of this function call, if present
+     * @return the prototypes of this function call
      */
-    public Optional<FunctionDecl> getDeclaration() {
-
-        // Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
-        //
-        // if (!varDecl.isPresent()) {
-        // return Optional.empty();
-        // }
-        //
-        // DeclaratorDecl declarator = varDecl.get();
-        // if (!(declarator instanceof FunctionDecl)) {
-        // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
-        // return Optional.empty();
-        // }
-        // Optional<FunctionDecl> functionDecl = getFunctionDecl();
-        // System.out.println("CALL EXPR getDeclaration: " + getFunctionDecl());
-        // System.out.println("CALL EXPR getDeclaration.getDeclaration: " + getFunctionDecl().get().getDeclaration());
-
-        return getFunctionDecl().flatMap(FunctionDecl::getDeclaration);
-        // if (!functionDecl.isPresent()) {
-        // return Optional.empty();
-        // }
-        //
-        // // If no body, return immediately
-        // if (!functionDecl.get().hasBody()) {
-        // // return Optional.of(functionDecl);
-        // return functionDecl;
-        // }
-        //
-        // // Search for the declaration
-        // return getAppTry().flatMap(app -> app.getFunctionDeclaration(functionDecl.get().getDeclName(),
-        // functionDecl.get().getFunctionType()));
+    public List<FunctionDecl> getPrototypes() {
+        return getFunctionDecl().map(FunctionDecl::getPrototypes).orElse(Collections.emptyList());
     }
+
+    // /**
+    // * @deprecated use getPrototypes() or getFunctionDecl() instead
+    // * @return the declaration of this function call, if present
+    // */
+    // @Deprecated
+    // public Optional<FunctionDecl> getDeclaration() {
+    // return getPrototypes().stream().findFirst();
+    // // Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
+    // //
+    // // if (!varDecl.isPresent()) {
+    // // return Optional.empty();
+    // // }
+    // //
+    // // DeclaratorDecl declarator = varDecl.get();
+    // // if (!(declarator instanceof FunctionDecl)) {
+    // // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
+    // // return Optional.empty();
+    // // }
+    // // Optional<FunctionDecl> functionDecl = getFunctionDecl();
+    // // System.out.println("CALL EXPR getDeclaration: " + getFunctionDecl());
+    // // System.out.println("CALL EXPR getDeclaration.getDeclaration: " + getFunctionDecl().get().getDeclaration());
+    //
+    // // return getFunctionDecl().map(FunctionDecl::getPrototypes).flatMap(list -> !list.isEmpty() ?
+    // // Optional.of(list.get(0) : Optional.empty());
+    // // if (!functionDecl.isPresent()) {
+    // // return Optional.empty();
+    // // }
+    // //
+    // // // If no body, return immediately
+    // // if (!functionDecl.get().hasBody()) {
+    // // // return Optional.of(functionDecl);
+    // // return functionDecl;
+    // // }
+    // //
+    // // // Search for the declaration
+    // // return getAppTry().flatMap(app -> app.getFunctionDeclaration(functionDecl.get().getDeclName(),
+    // // functionDecl.get().getFunctionType()));
+    // }
 
     /**
      * The FunctionDecl as given by Clang. Usually it is the first that appears in the code.
@@ -280,22 +290,7 @@ public class CallExpr extends Expr {
      * @return the definition of this function call, if present
      */
     public Optional<FunctionDecl> getDefinition() {
-        // Optional<FunctionDecl> functionDecl = getFunctionDecl();
-
-        return getFunctionDecl().flatMap(FunctionDecl::getDefinition);
-        // if (!functionDecl.isPresent()) {
-        // return Optional.empty();
-        // }
-        //
-        // // If has body, return immediately
-        // if (functionDecl.get().hasBody()) {
-        // // return Optional.of(functionDecl);
-        // return functionDecl;
-        // }
-        //
-        // // Search for the definition
-        // return getApp().getFunctionDefinition(functionDecl.get().getDeclName(),
-        // functionDecl.get().getFunctionType());
+        return getFunctionDecl().flatMap(FunctionDecl::getImplementation);
     }
 
     /**
@@ -362,21 +357,29 @@ public class CallExpr extends Expr {
 
     public Optional<FunctionType> getFunctionType() {
 
-        // First check declaration
-        FunctionType typeFromDecl = getDeclaration().map(FunctionDecl::getFunctionType).orElse(null);
-        if (typeFromDecl != null) {
-            return Optional.of(typeFromDecl);
-        }
+        var decls = getFunctionDecl().map(decl -> decl.getDecls()).orElse(Collections.emptyList());
 
-        // Check definition
-        FunctionType typeFromDef = getDefinition().map(FunctionDecl::getFunctionType).orElse(null);
-        if (typeFromDef != null) {
-            return Optional.of(typeFromDef);
-        }
+        return decls.stream().map(FunctionDecl::getFunctionType).findFirst();
 
-        // Could not find the function type for call
-        return Optional.empty();
-        // throw new RuntimeException("Could not find the function type for call at " + getLocation());
+        // // First check declarations
+        // FunctionType typeFromDecl = getPrototypes().stream()
+        // .map(FunctionDecl::getFunctionType)
+        // .findFirst()
+        // .orElse(null);
+        //
+        // if (typeFromDecl != null) {
+        // return Optional.of(typeFromDecl);
+        // }
+        //
+        // // Check definition
+        // FunctionType typeFromDef = getDefinition().map(FunctionDecl::getFunctionType).orElse(null);
+        // if (typeFromDef != null) {
+        // return Optional.of(typeFromDef);
+        // }
+        //
+        // // Could not find the function type for call
+        // return Optional.empty();
+        // // throw new RuntimeException("Could not find the function type for call at " + getLocation());
     }
 
     /**

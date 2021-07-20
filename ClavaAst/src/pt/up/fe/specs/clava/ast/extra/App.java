@@ -30,6 +30,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -85,8 +86,10 @@ public class App extends ClavaNode {
 
     private GlobalManager globalManager;
     private final Map<String, ClavaNode> nodesCache;
-    private final Map<String, FunctionDecl> functionDeclarationCache;
-    private final Map<String, FunctionDecl> functionDefinitionCache;
+    // private final Map<String, FunctionDecl> functionDeclarationCache;
+    // private final Map<String, FunctionDecl> functionDefinitionCache;
+    private final Map<String, List<FunctionDecl>> functionPrototypesCache;
+    private final Map<String, List<FunctionDecl>> functionImplementationsCache;
     private final Map<String, VarDecl> globalVarDefinitionCache;
 
     private final IdNormalizer idNormalizer;
@@ -147,8 +150,10 @@ public class App extends ClavaNode {
         sourceFiles = new HashMap<>();
         globalManager = new GlobalManager();
         nodesCache = new HashMap<>();
-        functionDeclarationCache = new HashMap<>();
-        functionDefinitionCache = new HashMap<>();
+        // functionDeclarationCache = new HashMap<>();
+        // functionDefinitionCache = new HashMap<>();
+        functionPrototypesCache = new HashMap<>();
+        functionImplementationsCache = new HashMap<>();
         globalVarDefinitionCache = new HashMap<>();
         // appData = DataStore.newInstance("Clava App Data");
 
@@ -172,8 +177,10 @@ public class App extends ClavaNode {
      */
     public void clearCache() {
         nodesCache.clear();
-        functionDeclarationCache.clear();
-        functionDefinitionCache.clear();
+        // functionDeclarationCache.clear();
+        // functionDefinitionCache.clear();
+        functionImplementationsCache.clear();
+        functionPrototypesCache.clear();
         globalVarDefinitionCache.clear();
     }
 
@@ -567,25 +574,71 @@ public class App extends ClavaNode {
     // return unaliasedId != null ? unaliasedId : id;
     // }
 
-    public Optional<FunctionDecl> getFunctionDeclaration(FunctionDecl function) {
-        // return getFunctionDeclaration(declName, functionType, functionDeclarationCache, false);
-        return getFunctionDeclaration(function, functionDeclarationCache, false);
+    // public Optional<FunctionDecl> getFunctionDeclaration(FunctionDecl function) {
+    // // return getFunctionDeclaration(declName, functionType, functionDeclarationCache, false);
+    // return getFunctionDeclaration(function, functionDeclarationCache, false);
+    // }
+
+    // public Optional<FunctionDecl> getFunctionDefinition(FunctionDecl function) {
+    // // return getFunctionDeclaration(declName, functionType, functionDefinitionCache, true);
+    // return getFunctionDeclaration(function, functionDefinitionCache, true);
+    // }
+
+    public List<FunctionDecl> getFunctionPrototypes(FunctionDecl function) {
+        return getFunctions(function, functionPrototypesCache, false);
     }
 
-    public Optional<FunctionDecl> getFunctionDefinition(FunctionDecl function) {
-        // return getFunctionDeclaration(declName, functionType, functionDefinitionCache, true);
-        return getFunctionDeclaration(function, functionDefinitionCache, true);
+    public Optional<FunctionDecl> getFunctionImplementation(FunctionDecl function) {
+        var functionImplementations = getFunctions(function, functionImplementationsCache, true);
+
+        if (functionImplementations.isEmpty()) {
+            return Optional.empty();
+        }
+
+        if (functionImplementations.size() != 1) {
+            ClavaLog.info("Found more than one implementation for function '" + function.getSignature()
+                    + "', returning first occurrence");
+        }
+
+        return Optional.of(functionImplementations.get(0));
     }
 
-    // private Optional<FunctionDecl> getFunctionDeclaration(String declName, FunctionType functionType,
-    // Map<String, FunctionDecl> cache, boolean hasBody) {
+    private List<FunctionDecl> getFunctions(FunctionDecl function, Map<String, List<FunctionDecl>> cache,
+            boolean hasBody) {
+
+        // Check if node was already asked
+        var functionId = function.getSignature();
+
+        var cachedFunctions = cache.get(functionId);
+        if (cachedFunctions != null) {
+            return cachedFunctions;
+        }
+
+        var functions = getDescendantsStream()
+                .filter(FunctionDecl.class::isInstance)
+                .map(FunctionDecl.class::cast)
+                // Check hasBody flag
+                .filter(fdecl -> fdecl.hasBody() == hasBody)
+                // .filter(fdecl -> {
+                // System.out.println("ID: " + fdecl.getSignature());
+                // return true;
+                // })
+                // Filter by id
+                .filter(fdecl -> fdecl.getSignature().equals(functionId))
+                // Normalize FunctionDecl before returning
+                .map(fdecl -> (FunctionDecl) ClavaNodes.normalizeDecl(fdecl))
+                .collect(Collectors.toList());
+
+        // Store return in cache
+        cache.put(functionId, functions);
+
+        return functions;
+    }
+
     private Optional<FunctionDecl> getFunctionDeclaration(FunctionDecl function, Map<String, FunctionDecl> cache,
             boolean hasBody) {
 
-        // ClavaLog.debug("Looking for function declaration for " + declName);
-
         // Check if node was already asked
-        // FunctionDecl cachedNode = cache.get(getFunctionId(declName, functionType));
         var functionId = function.getSignature();
 
         FunctionDecl cachedNode = cache.get(functionId);
@@ -605,25 +658,16 @@ public class App extends ClavaNode {
                 .filter(fdecl -> fdecl.hasBody() == hasBody)
                 // Filter by id
                 .filter(fdecl -> fdecl.getSignature().equals(functionId))
-                // Filter by name
-                // .filter(fdecl -> fdecl.getDeclName().equals(declName))
-                // Filter by type
-                // .filter(fdecl -> fdecl.getFunctionType().getCode().equals(functionType.getCode()))
-                // .filter(fdecl -> fdecl.getFunctionType().equals(functionType))
-                // Filter by const
-                // .filter(fdecl -> fdecl.getFunctionType().isConst() == functionType.isConst())
                 .findFirst()
                 // Normalize FunctionDecl before returning
                 .map(fdecl -> (FunctionDecl) ClavaNodes.normalizeDecl(fdecl));
 
         // Store return in cache
-        // cache.put(getFunctionId(declName, functionType), functionDeclaration.orElse(getNoFunctionFound()));
         cache.put(functionId, functionDeclaration.orElse(getNoFunctionFound()));
 
         return functionDeclaration;
     }
-    
-    
+
     public Optional<CXXRecordDecl> getCxxRecordDeclaration(CXXRecordDecl record) {
         return getCxxRecordDeclaration(record, false);
     }
@@ -633,7 +677,7 @@ public class App extends ClavaNode {
     }
 
     private Optional<CXXRecordDecl> getCxxRecordDeclaration(CXXRecordDecl record, boolean isCompleteDefinition) {
-    	
+
         // Iterate over translation units, NamespaceDecl and CXXRecordDecl without namespace are directly under TUs
         Stream<ClavaNode> cxxRecordCandidates = getTranslationUnits().stream()
                 .flatMap(tu -> tu.getChildrenStream());
@@ -651,11 +695,10 @@ public class App extends ClavaNode {
         return cxxRecordCandidates.filter(child -> child instanceof CXXRecordDecl)
                 .map(child -> (CXXRecordDecl) child)
                 .filter(recordDecl -> recordDecl.getDeclName().equals(record.getDeclName()))
-                .filter(recordDecl -> recordDecl.isCompleteDefinition()==isCompleteDefinition)
+                .filter(recordDecl -> recordDecl.isCompleteDefinition() == isCompleteDefinition)
                 .findFirst();
-    	
-    }
 
+    }
 
     public Optional<VarDecl> getGlobalVarDefinition(VarDecl varDecl) {
         /*

@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -332,28 +333,89 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         return code.toString();
     }
 
+    // /**
+    // * @deprecated use getPrototypes() instead
+    // * @return the node representing the declaration of this function, if it exists
+    // */
+    // @Deprecated
+    // public Optional<FunctionDecl> getDeclaration() {
+    // return getPrototypes().stream().findFirst();
+    // // // If no body, return immediately
+    // // if (!hasBody()) {
+    // // return Optional.of(this);
+    // // }
+    // //
+    // // // Search for the declaration
+    // // return getAppTry().flatMap(app -> app.getFunctionDeclaration(this));
+    // }
+
+    // /**
+    // * @deprecated use getImplementation() instead.
+    // * @return
+    // */
+    // @Deprecated
+    // public Optional<FunctionDecl> getDefinition() {
+    // return getImplementation();
+    // // // If has body, return immediately
+    // // if (hasBody()) {
+    // // return Optional.of(this);
+    // // }
+    // //
+    // // // Search for the definition
+    // // return getAppTry().flatMap(app -> app.getFunctionDefinition(this));
+    // }
+
     /**
      *
      * @return the node representing the declaration of this function, if it exists
      */
-    public Optional<FunctionDecl> getDeclaration() {
+    public List<FunctionDecl> getPrototypes() {
 
         // If no body, return immediately
+        // There are a number of situations where this should be done
+        // e.g. node is still not inserted (no App), method is still not in class
         if (!hasBody()) {
-            return Optional.of(this);
+            return Arrays.asList(this);
         }
 
         // Search for the declaration
+        return getAppTry().map(app -> app.getFunctionPrototypes(this)).orElse(Collections.emptyList());
+    }
 
-        return getAppTry().flatMap(app -> app.getFunctionDeclaration(this));
+    /**
+     * 
+     * @return the node representing the implementation of this function.
+     */
+    public Optional<FunctionDecl> getImplementation() {
 
-        // // If no body, this node already is the declaration
-        // if (!hasBody()) {
-        // return Optional.of(this);
-        // }
-        //
-        // // Get 'cached' value
-        // return Optional.ofNullable(declaration.get());
+        // If has body, return immediately
+        // There are a number of situations where this should be done
+        // e.g. node is still not inserted (no App), method is still not in class
+        if (hasBody()) {
+            return Optional.of(this);
+        }
+        // System.out.println("App: " + getAppTry());
+        // System.out.println("CLEARING CACHE");
+        // getAppTry().get().clearCache();
+        // Search for the definition
+        return getAppTry().flatMap(app -> app.getFunctionImplementation(this));
+    }
+
+    /**
+     * 
+     * @return all the FunctionDecl related to this function (e.g., prototypes, implementation)
+     */
+    public List<FunctionDecl> getDecls() {
+        List<FunctionDecl> decls = new ArrayList<>();
+
+        // First get declarations
+        getPrototypes().stream()
+                .forEach(decls::add);
+
+        // Check definition
+        getImplementation().ifPresent(decls::add);
+
+        return decls;
     }
 
     /**
@@ -362,28 +424,10 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
      * @deprecated use .getDefinition() instead
      * @return
      */
-    @Deprecated
-    public Optional<FunctionDecl> getDefinitionDeclaration() {
-        return getDefinition();
-        // // If has body, this node is already the definition
-        // if (hasBody()) {
-        // return Optional.of(this);
-        // }
-        //
-        // // Get 'cached' value
-        // return Optional.ofNullable(definition.get());
-    }
-
-    public Optional<FunctionDecl> getDefinition() {
-
-        // If has body, return immediately
-        if (hasBody()) {
-            return Optional.of(this);
-        }
-
-        // Search for the definition
-        return getAppTry().flatMap(app -> app.getFunctionDefinition(this));
-    }
+    // @Deprecated
+    // public Optional<FunctionDecl> getDefinitionDeclaration() {
+    // return getDefinition();
+    // }
 
     // private FunctionDecl findDeclaration() {
     //
@@ -412,6 +456,11 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     // return !decls.isEmpty() ? decls.get(0) : null;
     // }
 
+    /**
+     * 
+     * @param useReturnType
+     * @return
+     */
     public String getDeclarationId(boolean useReturnType) {
         List<String> codeElements = new ArrayList<>();
 
@@ -642,19 +691,22 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
     private boolean isCorrespondingCall(CallExpr call) {
         // If declaration exists, declaration of call must exist too, if call refers to this function
+        var callDecl = call.getFunctionDecl();
 
-        Optional<Boolean> result = getDeclaration().map(decl -> match(decl, call.getDeclaration()));
+        Optional<Boolean> result = getImplementation().map(decl -> match(decl, callDecl));
+        // Optional<Boolean> result = getImplementation().map(decl -> match(decl, call.getDeclaration()));
         if (result.isPresent()) {
             return result.get();
         }
 
-        result = getDefinitionDeclaration().map(def -> match(def, call.getDefinition()));
+        result = getPrototypes().stream().map(def -> match(def, callDecl)).findFirst();
+        // result = getPrototypes().stream().map(def -> match(def, call.getDefinition())).findFirst();
         if (result.isPresent()) {
             return result.get();
         }
 
-        System.out.println("DECL:" + getDeclaration());
-        System.out.println("DEF:" + getDefinitionDeclaration());
+        // System.out.println("DECL:" + getImplementation());
+        // System.out.println("DEF:" + getImplementation());
 
         throw new RuntimeException("Should not arrive here, either function declaration or definition must be defined");
         /*
@@ -837,41 +889,44 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
     private FunctionDecl cloneAndInsert(String newName, TranslationUnit destinationUnit, boolean insert) {
         // Get both declaration and definition (if present)
-        Optional<FunctionDecl> definition = getDefinition();
-        Optional<FunctionDecl> declaration = getDeclaration();
+        var definition = getImplementation();
+        var declaration = getPrototypes();
 
         // Optional<FunctionDecl> newDefinition = definition.map(def -> ((FunctionDecl) def.copy()).setName(newName));
         // Optional<FunctionDecl> newDeclaration = declaration.map(decl -> ((FunctionDecl)
         // decl.copy()).setName(newName));
-
         Optional<FunctionDecl> newDefinition = definition.map(def -> def.copyFunction(newName));
-        Optional<FunctionDecl> newDeclaration = declaration.map(decl -> decl.copyFunction(newName));
 
         if (insert) {
             if (destinationUnit == null) {
                 definition.ifPresent(def -> NodeInsertUtils.insertAfter(def, newDefinition.get()));
-                declaration.ifPresent(decl -> NodeInsertUtils.insertAfter(decl, newDeclaration.get()));
             } else {
                 definition.ifPresent(def -> destinationUnit.addChild(newDefinition.get()));
-
-                // Declarationn should still be inserted next to their original declarations
-                declaration.ifPresent(decl -> NodeInsertUtils.insertAfter(decl, newDeclaration.get()));
-                /*
-                if (this instanceof CXXMethodDecl) {
-                declaration.ifPresent(decl -> NodeInsertUtils.insertAfter(decl, newDeclaration.get()));
-                } else {
-                declaration.ifPresent(decl -> destinationUnit.addChild(newDeclaration.get()));
-                }
-                */
-
             }
+        }
+
+        List<FunctionDecl> newPrototypes = new ArrayList<>();
+        for (var decl : declaration) {
+            var newPrototype = decl.copyFunction(newName);
+            newPrototypes.add(newPrototype);
+
+            if (insert) {
+                if (destinationUnit == null) {
+                    NodeInsertUtils.insertAfter(decl, newPrototype);
+                } else {
+                    // Declarationn should still be inserted next to their original declarations
+                    NodeInsertUtils.insertAfter(decl, newPrototype);
+                }
+            }
+
         }
 
         // Return corresponding clone
         if (hasBody()) {
             return newDefinition.get();
         } else {
-            return newDeclaration.get();
+            return newPrototypes.get(0);
+            // return newDeclaration.get();
         }
         // definition2.ifPresent(node -> System.out.println("DEF:\n" + node.getCode()));
         // declaration.ifPresent(node -> System.out.println("DECL:\n" + node.getCode()));
@@ -890,8 +945,10 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
      * @param type
      */
     public void setFunctionType(FunctionType type) {
-        getDeclaration().ifPresent(decl -> decl.setType(type));
-        getDefinition().ifPresent(decl -> decl.setType(type));
+        getPrototypes().stream().forEach(decl -> decl.setType(type));
+        getImplementation().ifPresent(decl -> decl.setType(type));
+        // getDeclaration().ifPresent(decl -> decl.setType(type));
+        // getDefinition().ifPresent(decl -> decl.setType(type));
     }
 
     @Override
