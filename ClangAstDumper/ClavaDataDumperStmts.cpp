@@ -69,6 +69,7 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"DesignatedInitExpr", clava::StmtNode::DESIGNATED_INIT_EXPR},
         {"CXXNoexceptExpr", clava::StmtNode::CXX_NOEXCEPT_EXPR},
         {"CXXPseudoDestructorExpr", clava::StmtNode::CXX_PSEUDO_DESTRUCTOR_EXPR},
+        {"PseudoObjectExpr", clava::StmtNode::PSEUDO_OBJECT_EXPR},
         //{"FullExpr", clava::StmtNode::FULL_EXPR},
         //{"ConstantExpr", clava::StmtNode::FULL_EXPR},
         //{"ExprWithCleanups", clava::StmtNode::FULL_EXPR},
@@ -80,8 +81,7 @@ void clava::ClavaDataDumper::dump(const Stmt* S) {
     // Get classname
     const std::string classname = clava::getClassName(S);
 
-
-    // Get corresponding DeclNode
+    // Get corresponding StmtNode
     StmtNode stmtNode = STMT_DATA_MAP.count(classname) == 1 ? STMT_DATA_MAP.find(classname)->second : StmtNode::STMT;
 
     dump(stmtNode, S);
@@ -91,8 +91,8 @@ void clava::ClavaDataDumper::dump(const Expr* E) {
 
     // Get classname
     const std::string classname = clava::getClassName(E);
-
-    // Get corresponding DeclNode
+    
+    // Get corresponding ExprNode
     StmtNode exprNode = EXPR_DATA_MAP.count(classname) == 1 ? EXPR_DATA_MAP.find(classname)->second : StmtNode::EXPR;
 
     dump(exprNode, E);
@@ -208,6 +208,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpCXXNoexceptExprData(static_cast<const CXXNoexceptExpr *>(S)); break;
         case clava::StmtNode ::CXX_PSEUDO_DESTRUCTOR_EXPR:
             DumpCXXPseudoDestructorExprData(static_cast<const CXXPseudoDestructorExpr *>(S)); break;
+        case clava::StmtNode ::PSEUDO_OBJECT_EXPR:
+            DumpPseudoObjectExprData(static_cast<const PseudoObjectExpr *>(S)); break;
         //case clava::StmtNode ::FULL_EXPR:
         //    DumpFullExprData(static_cast<const FullExpr *>(S)); break;
 
@@ -902,6 +904,21 @@ void clava::ClavaDataDumper::DumpCXXPseudoDestructorExprData(const CXXPseudoDest
     clava::dump(E->isArrow());
     clava::dump(clava::getId(E->getDestroyedType(), id));
 }
+
+
+void clava::ClavaDataDumper::DumpPseudoObjectExprData(const PseudoObjectExpr *E) {
+    DumpExprData(E);
+
+    auto resultExprIndex = E->getResultExprIndex();
+    if(resultExprIndex == PseudoObjectExpr::NoResult) {
+        clava::dump(-1);
+    } else {
+        clava::dump(E->getResultExprIndex());
+    }
+
+}
+
+
 
 /*
 void clava::ClavaDataDumper::DumpFullExprData(const FullExpr *E) {

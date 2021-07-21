@@ -81,7 +81,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::FULL_EXPR: return "FullExpr";
         case clava::StmtNode::CONSTANT_EXPR: return "ConstantExpr";
         case clava::StmtNode::EXPR_WITH_CLEANUPS: return "ExprWithCleanups";
-
+        case clava::StmtNode::PSEUDO_OBJECT_EXPR: return "PseudoObjectExpr";
 
 
 

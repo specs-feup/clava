@@ -92,6 +92,7 @@ namespace clava {
         FULL_EXPR,
         CONSTANT_EXPR,
         EXPR_WITH_CLEANUPS,
+        PSEUDO_OBJECT_EXPR,
     };
 
     /**
