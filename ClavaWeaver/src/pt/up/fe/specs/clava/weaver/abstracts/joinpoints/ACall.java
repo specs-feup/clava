@@ -121,19 +121,19 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found
+     * a 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found
      */
-    public abstract AJoinPoint getDeclarationImpl();
+    public abstract AFunction getDeclarationImpl();
 
     /**
-     * a 'function' join point that represents the function declaration of the call; 'undefined' if no declaration was found
+     * a 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found
      */
     public final Object getDeclaration() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declaration", Optional.empty());
         	}
-        	AJoinPoint result = this.getDeclarationImpl();
+        	AFunction result = this.getDeclarationImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "declaration", Optional.ofNullable(result));
         	}
@@ -146,7 +146,7 @@ public abstract class ACall extends AExpression {
     /**
      * a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found
      */
-    public abstract AJoinPoint getDefinitionImpl();
+    public abstract AFunction getDefinitionImpl();
 
     /**
      * a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found
@@ -156,7 +156,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "definition", Optional.empty());
         	}
-        	AJoinPoint result = this.getDefinitionImpl();
+        	AFunction result = this.getDefinitionImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "definition", Optional.ofNullable(result));
         	}

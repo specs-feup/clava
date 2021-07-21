@@ -125,7 +125,7 @@ public class BinaryOperator extends Operator {
         Collections.sort(operators);
 
         var opBySymbol = BinaryOperatorKind.getHelper().getValuesTranslationMap().keySet().stream()
-                .filter(opSym -> !opSym.equals("<UNDEFINED>"))
+                .filter(opSym -> !opSym.equals("<UNDEFINED_BINARY_OP>"))
                 .collect(Collectors.toList());
         Collections.sort(opBySymbol);
 

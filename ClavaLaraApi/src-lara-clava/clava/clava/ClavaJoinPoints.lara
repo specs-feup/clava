@@ -326,6 +326,20 @@ ClavaJoinPoints.binaryOp = function(op, $left, $right, $type) {
 }
 
 /**
+ * Creates a new join point 'unaryOp'. 
+ *
+ * @param {String} op - The unary operator kind.
+ * @param {String|$expr} $expr - The sub-expression of the unary operator. If a string, it is converted to a literal expression.
+ * @param {String|$expr} [$type] - The return type of the operator. If a string, it is converted to a literal type. If undefined, tries to infer the correct type based on the type of the $expr (inference might not be implemented for all operators).
+ */
+ClavaJoinPoints.unaryOp = function(op, $expr, $type) {
+	$expr = ClavaType.asExpression($expr);
+	$type = $type !== undefined ? ClavaType.asType($type) : $type;
+	
+	return AstFactory.unaryOp(op, $expr, $type);
+}
+
+/**
  * Creates a new join point 'expr' representing a parenthesis expression. 
  *
  * @param {String|$expr} $expr - The expression inside the parenthesis. If a string, it is converted to a literal expression.

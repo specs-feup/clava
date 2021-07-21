@@ -29,6 +29,7 @@ import pt.up.fe.specs.util.utilities.StringList;
 public interface ClangAstKeys {
 
     DataKey<String> CLANGAST_VERSION = KeyFactory.string("clangast_version", "");
+    // DataKey<String> LIBC_VERSION = KeyFactory.string("libc_version", "");
 
     /**
      * If true, tries to use the platform system includes (if available), instead of the built-in system includes.

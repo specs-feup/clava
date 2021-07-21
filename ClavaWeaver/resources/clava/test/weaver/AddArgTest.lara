@@ -1,14 +1,24 @@
 import clava.ClavaJoinPoints;
+import weaver.Query;
 
 aspectdef AddArgTest
 
+
 	select function{'foo'} end
 	apply
+		if(!$function.isImplementation) {
+			continue;
+		}
+		
 		exec addParam("char* str");
 	end
 
 	select function{'bar'} end
 	apply
+		if($function.isImplementation) {
+			continue;
+		}
+		
 		exec addParam("int num");
 	end
 	

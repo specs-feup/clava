@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaOptions;
+import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
@@ -44,8 +45,10 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
+import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
+import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.omp.OmpDirectiveKind;
 import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
@@ -91,6 +94,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStruct;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUnaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
@@ -677,6 +681,20 @@ public class AstFactory {
                 (Expr) left.getNode(), (Expr) right.getNode());
 
         return CxxJoinpoints.create(opNode, ABinaryOp.class);
+    }
+
+    public static AUnaryOp unaryOp(String op, AExpression expr, AType type) {
+        UnaryOperatorKind opKind = UnaryOperator.getOpByNameOrSymbol(op);
+
+        // If type is null, try to infer type from operator
+        var typeNode = type != null ? (Type) type.getNode()
+                : Types.inferUnaryType(opKind, (Type) expr.getTypeImpl().getNode(), CxxWeaver.getFactory());
+
+        // UnaryOperator opNode = CxxWeaver.getFactory().unaryOperator(opKind, (Type) type.getNode(),
+        UnaryOperator opNode = CxxWeaver.getFactory().unaryOperator(opKind, typeNode,
+                (Expr) expr.getNode());
+
+        return CxxJoinpoints.create(opNode, AUnaryOp.class);
     }
 
     public static AExpression parenthesis(AExpression expression) {

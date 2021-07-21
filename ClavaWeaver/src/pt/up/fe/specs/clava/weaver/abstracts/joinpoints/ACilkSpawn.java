@@ -57,7 +57,7 @@ public abstract class ACilkSpawn extends ACall {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getDeclarationImpl() {
+    public AFunction getDeclarationImpl() {
         return this.aCall.getDeclarationImpl();
     }
 
@@ -66,7 +66,7 @@ public abstract class ACilkSpawn extends ACall {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getDefinitionImpl() {
+    public AFunction getDefinitionImpl() {
         return this.aCall.getDefinitionImpl();
     }
 

@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.ast.expr.enums;
 import java.util.EnumSet;
 import java.util.Set;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -153,7 +154,9 @@ public enum BinaryOperatorKind implements StringProvider {
         case Comma:
             return ",";
         default:
-            return "<UNDEFINED>";
+            // Using debug level to not show messages every time the op map is built
+            ClavaLog.debug("Code not defined for binary operator '" + this + "'");
+            return "<UNDEFINED_BINARY_OP>";
         }
         // return opString;
     }
