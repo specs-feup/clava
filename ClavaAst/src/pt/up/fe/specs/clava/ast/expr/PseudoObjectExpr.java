@@ -14,15 +14,50 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.Collection;
+import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
 public class PseudoObjectExpr extends Expr {
 
+	public static final DataKey<Integer> RESULT_EXPR_INDEX = KeyFactory.integer("resultExprIndex");
+	
     public PseudoObjectExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
+    }
+
+    public Expr getSyntaticForm() {
+    	return getChild(Expr.class, 0);
+    }
+    
+    public Optional<Expr> getResultExpr() {
+    	var exprIndex = get(RESULT_EXPR_INDEX);
+    	
+    	if(exprIndex == -1) {
+    		return Optional.empty();
+    	}
+    	
+    	return Optional.of(getChild(Expr.class, exprIndex+1));
+    	
+    }
+    
+    @Override
+    public String getCode() {
+    	return getSyntaticForm().getCode();
+//    	System.out.println("Syntactic form: " + getSyntaticForm().getCode());
+//    	System.out.println("Result expr: " + getResultExpr().map(n -> n.getCode()).orElse("<nothing>"));    	
+//    	System.out.println("JAVA PSEUDO: " + getId());
+//    	for(int i=0; i<getNumChildren(); i++) {
+//        	System.out.println("CHILD "+i+": " + getChild(i).getCode());
+//    	}
+//    	
+//    	System.out.println("INDEX: " + get(RESULT_EXPR_INDEX));
+//
+//    	return super.getCode();
     }
 
 }

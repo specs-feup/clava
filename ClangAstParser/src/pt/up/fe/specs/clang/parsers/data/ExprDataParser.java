@@ -50,6 +50,7 @@ import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
 import pt.up.fe.specs.clava.ast.expr.OverloadExpr;
 import pt.up.fe.specs.clava.ast.expr.PredefinedExpr;
+import pt.up.fe.specs.clava.ast.expr.PseudoObjectExpr;
 import pt.up.fe.specs.clava.ast.expr.SizeOfPackExpr;
 import pt.up.fe.specs.clava.ast.expr.StringLiteral;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
@@ -481,6 +482,14 @@ public class ExprDataParser {
         data.add(CXXPseudoDestructorExpr.QUALIFIER, LineStreamParsers.optionalString(lines));
         data.add(CXXPseudoDestructorExpr.IS_ARROW, LineStreamParsers.oneOrZero(lines));
         dataStore.getClavaNodes().queueSetNode(data, CXXPseudoDestructorExpr.DESTROYED_TYPE, lines.nextLine());
+
+        return data;
+    }
+    
+    public static DataStore parsePseudoObjectExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        data.add(PseudoObjectExpr.RESULT_EXPR_INDEX, LineStreamParsers.integer(lines));
 
         return data;
     }
