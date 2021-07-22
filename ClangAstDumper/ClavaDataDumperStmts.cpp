@@ -70,6 +70,8 @@ const std::map<const std::string, clava::StmtNode > clava::EXPR_DATA_MAP = {
         {"CXXNoexceptExpr", clava::StmtNode::CXX_NOEXCEPT_EXPR},
         {"CXXPseudoDestructorExpr", clava::StmtNode::CXX_PSEUDO_DESTRUCTOR_EXPR},
         {"PseudoObjectExpr", clava::StmtNode::PSEUDO_OBJECT_EXPR},
+        {"MSPropertyRefExpr", clava::StmtNode::MS_PROPERTY_REF_EXPR},
+
         //{"FullExpr", clava::StmtNode::FULL_EXPR},
         //{"ConstantExpr", clava::StmtNode::FULL_EXPR},
         //{"ExprWithCleanups", clava::StmtNode::FULL_EXPR},
@@ -210,6 +212,8 @@ void clava::ClavaDataDumper::dump(clava::StmtNode stmtNode, const Stmt* S) {
             DumpCXXPseudoDestructorExprData(static_cast<const CXXPseudoDestructorExpr *>(S)); break;
         case clava::StmtNode ::PSEUDO_OBJECT_EXPR:
             DumpPseudoObjectExprData(static_cast<const PseudoObjectExpr *>(S)); break;
+        case clava::StmtNode ::MS_PROPERTY_REF_EXPR:
+            DumpMSPropertyRefExprData(static_cast<const MSPropertyRefExpr *>(S)); break;
         //case clava::StmtNode ::FULL_EXPR:
         //    DumpFullExprData(static_cast<const FullExpr *>(S)); break;
 
@@ -918,6 +922,15 @@ void clava::ClavaDataDumper::DumpPseudoObjectExprData(const PseudoObjectExpr *E)
 
 }
 
+void clava::ClavaDataDumper::DumpMSPropertyRefExprData(const MSPropertyRefExpr *E) {
+    DumpExprData(E);
+
+    clava::dump(clava::getId(E->getBaseExpr(), id));
+    clava::dump(clava::getId(E->getPropertyDecl(), id));
+    clava::dump(E->isImplicitAccess());
+    clava::dump(E->isArrow());
+
+}
 
 
 /*

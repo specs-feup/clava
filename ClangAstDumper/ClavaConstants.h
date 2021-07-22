@@ -93,6 +93,7 @@ namespace clava {
         CONSTANT_EXPR,
         EXPR_WITH_CLEANUPS,
         PSEUDO_OBJECT_EXPR,
+        MS_PROPERTY_REF_EXPR,
     };
 
     /**

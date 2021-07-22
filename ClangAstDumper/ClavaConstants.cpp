@@ -82,7 +82,7 @@ const std::string clava::getName(const StmtNode stmtNode) {
         case clava::StmtNode::CONSTANT_EXPR: return "ConstantExpr";
         case clava::StmtNode::EXPR_WITH_CLEANUPS: return "ExprWithCleanups";
         case clava::StmtNode::PSEUDO_OBJECT_EXPR: return "PseudoObjectExpr";
-
+        case clava::StmtNode::MS_PROPERTY_REF_EXPR: return "MSPropertyRefExpr";
 
 
 
