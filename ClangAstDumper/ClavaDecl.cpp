@@ -46,6 +46,8 @@ const std::string clava::getName(const DeclNode declNode) {
         case clava::DeclNode::TEMPLATE_TEMPLATE_PARM_DECL: return "TemplateTemplateParmDecl";
         case clava::DeclNode::NON_TYPE_TEMPLATE_PARM_DECL: return "NonTypeTemplateParmDecl";
         case clava::DeclNode::VAR_TEMPLATE_SPECIALIZATION_DECL: return "VarTemplateSpecializationDecl";
+        case clava::DeclNode::MS_PROPERTY_DECL: return "MSPropertyDecl";
+
 
 
         default: {

@@ -49,6 +49,7 @@ const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
         {"LabelDecl",                              clava::DeclNode::NAMED_DECL},
         {"StaticAssertDecl",                       clava::DeclNode::STATIC_ASSERT_DECL},
         {"TemplateTemplateParmDecl",               clava::DeclNode::TEMPLATE_TEMPLATE_PARM_DECL},
+        {"MSPropertyDecl",               clava::DeclNode::MS_PROPERTY_DECL},
         // TODO: Check if needs more data to dump
         {"VarTemplateSpecializationDecl", clava::DeclNode::VAR_DECL},
 
@@ -160,8 +161,10 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl *D) {
             DumpTemplateDeclData(static_cast<const TemplateDecl *>(D));
             break;
         case clava::DeclNode::TEMPLATE_TEMPLATE_PARM_DECL:
-            DumpTemplateTemplateParmDeclData(static_cast<const TemplateTemplateParmDecl *>(D));
-            break;
+            DumpTemplateTemplateParmDeclData(static_cast<const TemplateTemplateParmDecl *>(D)); break;
+        case clava::DeclNode::MS_PROPERTY_DECL:
+            DumpMSPropertyDeclData(static_cast<const MSPropertyDecl *>(D)); break;
+
 //        case clava::DeclNode::REDECLARABLE_TEMPLATE_DECL:
 //            DumpRedeclarableTemplateDeclData(static_cast<const RedeclarableTemplateDecl *>(D));
 //            break;
@@ -750,3 +753,21 @@ void clava::ClavaDataDumper::DumpTemplateDeclData(const TemplateDecl *D) {
 }
 
 
+void clava::ClavaDataDumper::DumpMSPropertyDeclData(const MSPropertyDecl *D) {
+
+    // Hierarchy
+    DumpDeclaratorDeclData(D);
+
+    if(D->hasGetter()) {
+        clava::dump(D->getGetterId()->getName());
+    } else {
+        clava::dump(NO_VALUE_STRING);
+    }
+
+    if(D->hasSetter()) {
+        clava::dump(D->getSetterId()->getName());
+    } else {
+        clava::dump(NO_VALUE_STRING);
+    }
+
+}

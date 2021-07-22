@@ -129,6 +129,7 @@ namespace clava {
         void DumpTemplateTemplateParmDeclData(const TemplateTemplateParmDecl *D);
         void DumpNonTypeTemplateParmDeclData(const NonTypeTemplateParmDecl *D);
         void DumpTemplateDeclData(const TemplateDecl *D);
+        void DumpMSPropertyDeclData(const MSPropertyDecl *D);
 
 
         // STMTS

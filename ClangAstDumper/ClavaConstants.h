@@ -18,7 +18,7 @@ static const std::string PARM_VAR_DECL_DATA = "<ParmVarDecl Data>";
 */
 namespace clava {
 
-
+    const std::string NO_VALUE_STRING = "<NO_VALUE>";
 
     /**
      * Represents stmt and expr node classes
