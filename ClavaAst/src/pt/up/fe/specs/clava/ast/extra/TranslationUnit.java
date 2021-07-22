@@ -588,6 +588,12 @@ public class TranslationUnit extends ClavaNode {
         return extension.toLowerCase().equals("cl");
     }
 
+    public boolean isCUDAFile() {
+        String extension = SpecsIo.getExtension(getFilename());
+
+        return extension.toLowerCase().equals("cu");
+    }
+    
     public boolean isCXXUnit() {
         return isCxxUnit.get();
     }

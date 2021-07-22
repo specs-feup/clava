@@ -15,6 +15,7 @@ package pt.up.fe.specs.clang.parsers.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
@@ -454,6 +455,13 @@ public class ClavaDataParsers {
         return explicitSpecifier;
     }
 
+    public static Optional<String> optionalString(LineStream lines) {
+    	var string = lines.nextLine();
+    	
+    	return string.equals("<NO_VALUE") ? Optional.empty() : Optional.of(string);
+    }
+
+    
     // OffsetOfExpr
 
 }

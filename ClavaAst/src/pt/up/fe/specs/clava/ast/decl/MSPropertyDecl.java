@@ -14,7 +14,10 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
+import java.util.Optional;
 
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -27,6 +30,9 @@ import pt.up.fe.specs.clava.ClavaNode;
  */
 public class MSPropertyDecl extends DeclaratorDecl {
 
+	public static final DataKey<Optional<String>> GETTER_NAME = KeyFactory.optional("getterName");
+	public static final DataKey<Optional<String>> SETTER_NAME = KeyFactory.optional("setterName");
+	
     public MSPropertyDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }

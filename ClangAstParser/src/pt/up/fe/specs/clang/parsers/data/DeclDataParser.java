@@ -34,6 +34,7 @@ import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
+import pt.up.fe.specs.clava.ast.decl.MSPropertyDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceAliasDecl;
 import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
@@ -515,5 +516,25 @@ public class DeclDataParser {
 
         return data;
     }
+    
+    public static DataStore parseDeclaratorDeclData(LineStream lines, ClangParserData dataStore) {
+    	// Hierarchy
+        DataStore data = parseValueDeclData(lines, dataStore); 	
+        
+        return data;
+    }
+    
+    
+    public static DataStore parseMSPropertyDeclData(LineStream lines, ClangParserData dataStore) {
+        // Hierarchy
+        DataStore data = parseDeclaratorDeclData(lines, dataStore); 	
+        
+
+        data.add(MSPropertyDecl.GETTER_NAME, ClavaDataParsers.optionalString(lines)); 
+        data.add(MSPropertyDecl.SETTER_NAME, ClavaDataParsers.optionalString(lines)); 
+        
+        return data;
+    }
+
 
 }
