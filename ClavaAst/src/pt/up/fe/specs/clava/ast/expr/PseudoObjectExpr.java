@@ -22,6 +22,12 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
+/**
+ * An expression which accesses a pseudo-object l-value. 
+ * 
+ * @author JoaoBispo
+ *
+ */
 public class PseudoObjectExpr extends Expr {
 
 	public static final DataKey<Integer> RESULT_EXPR_INDEX = KeyFactory.integer("resultExprIndex");

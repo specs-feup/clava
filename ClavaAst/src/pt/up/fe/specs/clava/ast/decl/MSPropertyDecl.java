@@ -19,6 +19,12 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
+/**
+ * An instance of this class represents the declaration of a property member. 
+ * 
+ * @author JoaoBispo
+ *
+ */
 public class MSPropertyDecl extends DeclaratorDecl {
 
     public MSPropertyDecl(DataStore data, Collection<? extends ClavaNode> children) {

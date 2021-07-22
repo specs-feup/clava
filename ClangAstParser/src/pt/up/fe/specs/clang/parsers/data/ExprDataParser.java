@@ -45,6 +45,7 @@ import pt.up.fe.specs.clava.ast.expr.InitListExpr;
 import pt.up.fe.specs.clava.ast.expr.IntegerLiteral;
 import pt.up.fe.specs.clava.ast.expr.LambdaExpr;
 import pt.up.fe.specs.clava.ast.expr.Literal;
+import pt.up.fe.specs.clava.ast.expr.MSPropertyRefExpr;
 import pt.up.fe.specs.clava.ast.expr.MaterializeTemporaryExpr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.OffsetOfExpr;
@@ -494,6 +495,17 @@ public class ExprDataParser {
         return data;
     }
 
+    public static DataStore parseMSPropertyRefExprData(LineStream lines, ClangParserData dataStore) {
+        DataStore data = parseExprData(lines, dataStore);
+
+        dataStore.getClavaNodes().queueSetNode(data, MSPropertyRefExpr.BASE_EXPR, lines.nextLine());
+        dataStore.getClavaNodes().queueSetNode(data, MSPropertyRefExpr.PROPERTY_DECL, lines.nextLine());
+        data.add(MSPropertyRefExpr.IS_IMPLICIT_ACCESS, LineStreamParsers.oneOrZero(lines));
+        data.add(MSPropertyRefExpr.IS_ARROW, LineStreamParsers.oneOrZero(lines));
+
+        return data;
+    }
+    
     // public static DataStore parseFullExprData(LineStream lines, ClangParserData dataStore) {
     // DataStore data = parseExprData(lines, dataStore);
     //
