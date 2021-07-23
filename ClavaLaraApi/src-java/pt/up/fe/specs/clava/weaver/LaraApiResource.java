@@ -1,11 +1,11 @@
 /**
  * Copyright 2013 SuikaSoft.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License. under the License.
@@ -49,6 +49,29 @@ public enum LaraApiResource implements LaraResourceProvider {
     AUTOPAR_14("autopar/SetMemberAccessOpenMPscoping.lara"),
     AUTOPAR_15("autopar/SetVariableAccess.lara"),
     AUTOPAR_16("autopar/SetVarrefOpenMPscoping.lara"),
+
+    // Analysis
+    ANALYSIS_ANALYSERS_BOUNDS_ANALYSER("analysis/analysers/BoundsAnalyser.lara");
+    ANALYSIS_ANALYSERS_BOUNDS_RESULT("analysis/analysers/BoundsResult.lara");
+    ANALYSIS_ANALYSERS_DOUBLE_FREE_ANALYSER("analysis/analysers/DoubleFreeAnalyser.lara");
+    ANALYSIS_ANALYSERS_DOUBLE_FREE_RESULT("analysis/analysers/DoubleFreeResult.lara");
+    ANALYSIS_CHECKERS_CHGRP_CHECKER("analysis/checkers/ChgrpChecker.lara");
+    ANALYSIS_CHECKERS_CHMOD_CHECKER("analysis/checkers/ChmodChecker.lara");
+    ANALYSIS_CHECKERS_CHOWN_CHECKER("analysis/checkers/ChownChecker.lara");
+    ANALYSIS_CHECKERS_CIN_CHECKER("analysis/checkers/CinChecker.lara");
+    ANALYSIS_CHECKERS_EXEC_CHECKER("analysis/checkers/ExecChecker.lara");
+    ANALYSIS_CHECKERS_FPRINTF_CHECKER("analysis/checkers/FprintfChecker.lara");
+    ANALYSIS_CHECKERS_FSCANF_CHECKER("analysis/checkers/FscanfChecker.lara");
+    ANALYSIS_CHECKERS_GETS_CHECKER("analysis/checkers/GetsChecker.lara");
+    ANALYSIS_CHECKERS_LAMBDA_CHECKER("analysis/checkers/LambdaChecker.lara");
+    ANALYSIS_CHECKERS_MEMCPY_CHECKER("analysis/checkers/MemcpyChecker.lara");
+    ANALYSIS_CHECKERS_PRINTF_CHECKER("analysis/checkers/PrintfChecker.lara");
+    ANALYSIS_CHECKERS_SCANF_CHECKER("analysis/checkers/ScanfChecker.lara");
+    ANALYSIS_CHECKERS_SPRINTF_CHECKER("analysis/checkers/SprintfChecker.lara");
+    ANALYSIS_CHECKERS_STRCAT_CHECKER("analysis/checkers/StrcatChecker.lara");
+    ANALYSIS_CHECKERS_STRCPY_CHECKER("analysis/checkers/StrcpyChecker.lara");
+    ANALYSIS_CHECKERS_SYSLOG_CHECKER("analysis/checkers/SyslogChecker.lara");
+    ANALYSIS_CHECKERS_SYSTEM_CHECKER("analysis/checkers/SystemChecker.lara");
 
     // Code
     GLOBAL_VARIABLE("code/GlobalVariable.lara"),
@@ -132,7 +155,7 @@ public enum LaraApiResource implements LaraResourceProvider {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.suikasoft.SharedLibrary.Interfaces.ResourceProvider#getResource()
      */
     @Override
