@@ -380,7 +380,8 @@ public enum AttributeKind implements StringProvider {
         return ENUM_HELPER.get();
     }
 
-    private static final Set<AttributeKind> IS_INLINE = new HashSet<>(Arrays.asList(OpenCLKernel));
+    private static final Set<AttributeKind> IS_INLINE = new HashSet<>(
+            Arrays.asList(OpenCLKernel, CUDAGlobal, CUDAConstant, CUDAShared));
     private static final Set<AttributeKind> IS_LOWERCASE = new HashSet<>(Arrays.asList(NonNull));
 
     private static final CachedItems<AttributeKind, String> ATTRIBUTE_NAMES = new CachedItems<>(
