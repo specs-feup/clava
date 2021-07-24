@@ -28,7 +28,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
@@ -315,16 +314,17 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     public String getCode() {
         StringBuilder code = new StringBuilder();
 
-        for (Attribute attr : get(ATTRIBUTES)) {
-            code.append(attr.getCode());
-
-            if (attr.getKind().isInline()) {
-                code.append(" ");
-            } else {
-                code.append("\n");
-            }
-
-        }
+        code.append(getAttributesCode());
+        // for (Attribute attr : get(ATTRIBUTES)) {
+        // code.append(attr.getCode());
+        //
+        // if (attr.getKind().isInline()) {
+        // code.append(" ");
+        // } else {
+        // code.append("\n");
+        // }
+        //
+        // }
 
         code.append(getDeclarationId(true));
         // if (code.toString().contains("%Dummy")) {

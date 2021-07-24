@@ -133,24 +133,17 @@ public class VarDecl extends DeclaratorDecl {
 
     @Override
     public String getCode() {
-        // System.out.println("VARDECL TYPE:" + getType().toTree());
-        // return getCode(null);
-        // }
-
-        /**
-         * Overload which accepts an external decl name.
-         * 
-         * @param declName
-         * @return
-         */
-        // public String getCode(String externalDeclName) {
 
         StringBuilder code = new StringBuilder();
 
+        // Add storage class
         StorageClass storageClass = get(STORAGE_CLASS);
         if (storageClass != StorageClass.None) {
             code.append(get(STORAGE_CLASS).getString()).append(" ");
         }
+
+        // Add attributes
+        code.append(getAttributesCode());
 
         String declName = getDeclNameCode();
         // String declName = externalDeclName != null ? externalDeclName : getDeclNameCode();

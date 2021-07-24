@@ -21,6 +21,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
@@ -109,6 +110,31 @@ public abstract class Decl extends ClavaNode {
                 .filter(attr -> attr.get(Attribute.KIND) == kind)
                 .findFirst()
                 .isPresent();
+    }
+
+    public String getAttributesCode() {
+        var code = new StringBuilder();
+
+        for (Attribute attr : get(ATTRIBUTES)) {
+
+            // If generic class, do not generated code for it
+            if (attr.getClass().equals(Attribute.class)) {
+                ClavaLog.info(
+                        "Attribute '" + attr.getKind() + "' not implemented and is needed for code generation");
+                continue;
+            }
+
+            code.append(attr.getCode());
+
+            if (attr.getKind().isInline()) {
+                code.append(" ");
+            } else {
+                code.append("\n");
+            }
+
+        }
+
+        return code.toString();
     }
 
     @Override
