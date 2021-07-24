@@ -65,12 +65,12 @@ public class CxxCudaTest {
 
     @Test
     public void testMultMatrix() {
-        new CxxCudaTester("mult_matrix.cu").showCode().test();
+        new CxxCudaTester("mult_matrix.cu").test();
     }
 
     @Test
     public void testStreamAdd() {
-        new CxxCudaTester("streamAdd.cu").showCode().test();
+        new CxxCudaTester("streamAdd.cu").test();
     }
 
     @Test
