@@ -16,6 +16,7 @@ package pt.up.fe.specs.clang.codeparser.clangparser;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -249,6 +250,7 @@ public class AstDumpParser implements ClangParser {
         else if (isCuda) {
             if (SpecsPlatforms.isWindows()) {
                 ClavaLog.info("CUDA parsing is not supported in Windows, run at your own risk");
+                arguments.addAll(Arrays.asList("-fms-compatibility", "-D_MSC_VER", "-D_LIBCPP_MSVCRT"));
             }
 
             arguments.add("--cuda-gpu-arch=" + config.get(ClavaOptions.CUDA_GPU_ARCH));
