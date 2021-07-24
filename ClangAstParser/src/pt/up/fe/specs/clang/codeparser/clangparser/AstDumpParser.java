@@ -38,6 +38,7 @@ import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.utils.SourceType;
+import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -204,13 +205,20 @@ public class AstDumpParser implements ClangParser {
 
         arguments.add("--");
 
-        boolean isOpenCL = SpecsIo.getExtension(sourceFile).equals("cl");
+        var extension = SpecsIo.getExtension(sourceFile);
+        boolean isOpenCL = extension.equals("cl");
+        boolean isCuda = extension.equals("cu");
 
         // Compilation of header files always need a standard, but OpenCL compilation fails if there is a standard
         // specified that is not an OpenCL standard.
         if (isOpenCL && !standard.isOpenCL()) {
             // Using OpenCL 2.0 as default
             arguments.add("-std=cl2.0");
+        }
+        // Set standard to CUDA
+        else if (isCuda && !standard.isCuda()) {
+
+            arguments.add("-std=cuda");
         } else {
             arguments.add(standard.getFlag());
         }
@@ -236,6 +244,18 @@ public class AstDumpParser implements ClangParser {
             arguments.add("-Dcl_khr_fp16");
             arguments.add("-Dcl_khr_fp64");
 
+        }
+        // If CUDA, add corresponding flags
+        else if (isCuda) {
+            if (SpecsPlatforms.isWindows()) {
+                ClavaLog.info("CUDA parsing is not supported in Windows, run at your own risk");
+            }
+
+            arguments.add("--cuda-gpu-arch=" + config.get(ClavaOptions.CUDA_GPU_ARCH));
+
+            if (config.hasValue(ClavaOptions.CUDA_PATH)) {
+                arguments.add("--cuda-path=" + config.get(ClavaOptions.CUDA_PATH).getAbsolutePath());
+            }
         }
         // If header file, add the language flag (-x) that corresponds to the standard
         else if (SourceType.isHeader(sourceFile)) {

@@ -123,6 +123,10 @@ public enum Standard implements StringProvider {
         return OPENCL_STANDARDS.contains(this);
     }
 
+    public boolean isCuda() {
+        return this == CUDA;
+    }
+
     /**
      * Extracts a C/C++ standard from the given list of arguments.
      * 

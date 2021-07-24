@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava;
 
+import java.io.File;
 import java.util.List;
 
 import org.suikasoft.GsonPlus.JsonStringList;
@@ -39,12 +40,20 @@ public interface ClavaOptions extends StoreDefinitionProvider {
     DataKey<Boolean> DISABLE_REMOTE_DEPENDENCIES = KeyFactory.bool("Disable Remote Dependencies")
             .setLabel("Disable remote dependencies (e.g., git repositories)");
 
+    DataKey<String> CUDA_GPU_ARCH = KeyFactory.string("cudaGpuArch")
+            .setLabel("CUDA GPU Arch (default: sm_30)")
+            .setDefaultString("sm_30");
+
+    DataKey<File> CUDA_PATH = KeyFactory.existingFolder("cudaPath")
+            .setLabel("CUDA Path (leave empty if in path)");
+
     // DataKey<Boolean> DISABLE_CLAVA_DATA_NODES = KeyFactory.bool("Disable Clava Data nodes")
     // .setLabel("Disables new method for parsing nodes (only uses 'legacy' nodes)");
 
     StoreDefinition STORE_DEFINITION = new StoreDefinitionBuilder("Clava")
             // .addKeys(STANDARD, FLAGS, CUSTOM_RESOURCES, DISABLE_REMOTE_DEPENDENCIES, DISABLE_CLAVA_DATA_NODES)
-            .addKeys(STANDARD, FLAGS, FLAGS_LIST, CUSTOM_RESOURCES, DISABLE_REMOTE_DEPENDENCIES)
+            .addKeys(STANDARD, FLAGS, FLAGS_LIST, CUDA_GPU_ARCH, CUDA_PATH, CUSTOM_RESOURCES,
+                    DISABLE_REMOTE_DEPENDENCIES)
             .build();
 
     @Override
