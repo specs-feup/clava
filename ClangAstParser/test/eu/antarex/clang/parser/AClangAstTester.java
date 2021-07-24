@@ -29,6 +29,7 @@ import org.junit.Test;
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -49,6 +50,7 @@ public abstract class AClangAstTester {
     private boolean showClangDump = false;
     private boolean showCode = false;
     private boolean onePass = false;
+    private boolean run = true;
 
     public <T extends Enum<T> & ResourceProvider> AClangAstTester(Class<T> resource) {
         this(resource, Collections.emptyList());
@@ -115,6 +117,11 @@ public abstract class AClangAstTester {
         return this;
     }
 
+    public AClangAstTester doNotRun() {
+        this.run = false;
+        return this;
+    }
+
     /*
     public AClangAstTester keepFiles() {
         this.keepFiles = true;
@@ -132,6 +139,11 @@ public abstract class AClangAstTester {
     }
 
     public void test() {
+        if (!run) {
+            ClavaLog.info("Ignoring test, 'run' flag is not set");
+            return;
+        }
+
         try {
             setUp();
             testProper();
