@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava;
 
-import java.io.File;
 import java.util.List;
 
 import org.suikasoft.GsonPlus.JsonStringList;
@@ -44,8 +43,9 @@ public interface ClavaOptions extends StoreDefinitionProvider {
             .setLabel("CUDA GPU Arch (default: sm_30)")
             .setDefaultString("sm_30");
 
-    DataKey<File> CUDA_PATH = KeyFactory.existingFolder("cudaPath")
-            .setLabel("CUDA Path (leave empty if in path)");
+    DataKey<String> CUDA_PATH = KeyFactory.string("cudaPath")
+            .setLabel("CUDA Path (leave empty if in path)")
+            .setDefaultString("");
 
     // DataKey<Boolean> DISABLE_CLAVA_DATA_NODES = KeyFactory.bool("Disable Clava Data nodes")
     // .setLabel("Disables new method for parsing nodes (only uses 'legacy' nodes)");
