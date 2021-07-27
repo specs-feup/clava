@@ -215,7 +215,6 @@ public class CallExpr extends Expr {
      * @return
      */
     public Optional<FunctionDecl> getFunctionDecl() {
-
         // TODO: Replace with get(DIRECT_CALLEE) when refactoring to new format is complete
         return get(DIRECT_CALLEE)
                 // If FunctionDecl has a primary template decl (e.g., is a template specialization), return original

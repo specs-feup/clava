@@ -257,6 +257,7 @@ public class CXXMethodDecl extends FunctionDecl {
         // String namespace = getNamespace(getRecordName()).map(str -> str + "::").orElse("");
 
         var recordName = getRecordDecl().map(record -> record.getDeclName() + "::").orElse("");
+
         namespace = namespace + recordName;
         // namespace = namespace + getRecordDecl().getDeclName() + "::";
 
