@@ -38,6 +38,7 @@ import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;
 import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.FlattenSubStmtNodes;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
+import pt.up.fe.specs.clang.transforms.ProcessCudaNodes;
 import pt.up.fe.specs.clang.transforms.RemoveClangOmpNodes;
 import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
 import pt.up.fe.specs.clang.transforms.RemovePoison;
@@ -86,7 +87,8 @@ public class ClangStreamParser {
             new CreateDeclStmts(),
             new MoveImplicitCasts(),
             // new RemovePoison(),
-            new FlattenSubStmtNodes()
+            new FlattenSubStmtNodes(),
+            new ProcessCudaNodes()
     // new CilkAstAdapter()
 
     // new AdaptBoolTypes(),
