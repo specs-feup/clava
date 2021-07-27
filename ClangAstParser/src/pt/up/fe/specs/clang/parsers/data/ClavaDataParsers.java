@@ -456,12 +456,11 @@ public class ClavaDataParsers {
     }
 
     public static Optional<String> optionalString(LineStream lines) {
-    	var string = lines.nextLine();
-    	
-    	return string.equals("<NO_VALUE") ? Optional.empty() : Optional.of(string);
+        var string = lines.nextLine();
+
+        return string.equals("<NO_VALUE>") ? Optional.empty() : Optional.of(string);
     }
 
-    
     // OffsetOfExpr
 
 }
