@@ -152,6 +152,16 @@ public class CallExpr extends Expr {
         return (Expr) setChild(argIndex, arg);
     }
 
+    public void setArguments(List<Expr> args) {
+        // Remove current args
+        if (getNumArgs() > 0) {
+            removeChildren(1, getNumChildren());
+        }
+
+        // Set new args
+        addChildren(args);
+    }
+
     public DeclRefExpr getCalleeDeclRef() {
         return getCalleeDeclRefTry().orElseThrow(
                 () -> new RuntimeException(
