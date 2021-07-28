@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.weaver;
 
+import java.util.List;
 import java.util.Optional;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -38,6 +39,7 @@ import pt.up.fe.specs.clava.ast.decl.TypedefNameDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
+import pt.up.fe.specs.clava.ast.expr.CUDAKernelCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXDeleteExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXMemberCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXNewExpr;
@@ -86,6 +88,7 @@ import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.joinpoints.CXXCudaKernelCall;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxAccessSpecifier;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxArrayAccess;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxBinaryOp;
@@ -153,6 +156,7 @@ import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxTypedefType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxUndefinedType;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxVariableArrayType;
 import pt.up.fe.specs.util.SpecsCheck;
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.classmap.FunctionClassMap;
 
@@ -168,6 +172,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(UnaryOperator.class, CxxUnaryOp::new);
         JOINPOINT_FACTORY.put(ConditionalOperator.class, CxxTernaryOp::new);
         JOINPOINT_FACTORY.put(CXXMemberCallExpr.class, CxxMemberCall::new);
+        JOINPOINT_FACTORY.put(CUDAKernelCallExpr.class, CXXCudaKernelCall::new);
         JOINPOINT_FACTORY.put(CallExpr.class, CxxCall::new);
         JOINPOINT_FACTORY.put(DeclRefExpr.class, CxxVarref::new);
         JOINPOINT_FACTORY.put(ArraySubscriptExpr.class, CxxArrayAccess::new);
@@ -339,6 +344,12 @@ public class CxxJoinpoints {
         }
 
         return targetClass.cast(create(node));
+    }
+
+    public static <T extends AJoinPoint> T[] create(List<? extends ClavaNode> nodes, Class<T> targetClass) {
+        return nodes.stream()
+                .map(node -> create(node, targetClass))
+                .toArray(size -> SpecsCollections.newArray(targetClass, size));
     }
 
     public static CxxProgram getProgram(AJoinPoint joinpoint) {

@@ -229,6 +229,10 @@
 	<!-- MEMBER CALL -->	
 	<joinpoint class="memberCall" 	extends="call">
 	</joinpoint>
+		
+	<!-- CUDA KERNEL CALL -->	
+	<joinpoint class="cudaKernelCall" 	extends="call">
+	</joinpoint>
 
 	<!-- OPERATOR -->	
 	<joinpoint class="op" 	extends="expression">
