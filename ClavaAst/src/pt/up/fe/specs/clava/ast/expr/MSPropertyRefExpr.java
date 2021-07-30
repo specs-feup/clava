@@ -22,7 +22,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.MSPropertyDecl;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
-import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 
 /**
  * A member reference to an MSPropertyDecl.
@@ -105,10 +104,26 @@ public class MSPropertyRefExpr extends Expr {
         */
     }
 
-    @Override
-    public String getCode() {
-
+    public String getProperty() {
         var property = get(PROPERTY_DECL);
+
+        if (property == null) {
+            throw new RuntimeException("MSPropertyRefExpr does not have a MSPropertyDecl associated with it");
+        }
+
+        // If only one of them is set, use that one
+        var setterName = property.get(MSPropertyDecl.SETTER_NAME);
+        var getterName = property.get(MSPropertyDecl.GETTER_NAME);
+
+        if (getterName.isPresent() && setterName.isEmpty()) {
+            // return processProperty(getterName.get());
+            return getterName.get();
+        }
+
+        if (setterName.isPresent() && getterName.isEmpty()) {
+            // return processProperty(setterName.get());
+            return setterName.get();
+        }
 
         // If there is an assignment and is on the left side of the assignment, is a setter. Otherwise, getter
         var isOnLeftSide = isOnLeftSideOfAssign();
@@ -122,7 +137,16 @@ public class MSPropertyRefExpr extends Expr {
             throw new RuntimeException("Expected to find a " + expected + " but it seems it is actually a " + actual);
         }
 
-        var processedProperty = processProperty(propertyString.get());
+        return propertyString.get();
+        // return processProperty(propertyString.get());
+    }
+
+    @Override
+    public String getCode() {
+
+        var processedProperty = getProperty();
+
+        // var processedProperty = processProperty(propertyString.get());
 
         // System.out.println("PROP: " + propertyString);
         // System.out.println("PARENT: " + getParent());
@@ -146,17 +170,17 @@ public class MSPropertyRefExpr extends Expr {
         // return super.getCode();
     }
 
-    private String processProperty(String prop) {
-        var isCudaFile = getAncestor(TranslationUnit.class).isCUDAFile();
-
-        if (isCudaFile) {
-            // Process built-ins
-            if (prop.startsWith("__fetch_builtin_")) {
-                prop = prop.substring("__fetch_builtin_".length());
-            }
-        }
-
-        return prop;
-    }
+    // private String processProperty(String prop) {
+    // var isCudaFile = getAncestor(TranslationUnit.class).isCUDAFile();
+    //
+    // if (isCudaFile) {
+    // // Process built-ins
+    // if (prop.startsWith("__fetch_builtin_")) {
+    // prop = prop.substring("__fetch_builtin_".length());
+    // }
+    // }
+    //
+    // return prop;
+    // }
 
 }

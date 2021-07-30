@@ -148,6 +148,10 @@ public abstract class NamedDecl extends Decl {
     }
     */
     public String getDeclName() {
+        // if (get(DECL_NAME).equals("__cuda_builtin_threadIdx_t")) {
+        // System.out.println("DECL: " + this.getClass());
+        // }
+        // System.out.println("DECL NAME: " + get(DECL_NAME));
         return get(DECL_NAME);
         // Preconditions.checkNotNull(declName);
 

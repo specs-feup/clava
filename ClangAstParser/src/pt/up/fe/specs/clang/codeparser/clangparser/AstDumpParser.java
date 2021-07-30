@@ -255,9 +255,12 @@ public class AstDumpParser implements ClangParser {
 
             arguments.add("--cuda-gpu-arch=" + config.get(ClavaOptions.CUDA_GPU_ARCH));
 
-            if (config.hasValue(ClavaOptions.CUDA_PATH)) {
-                arguments.add("--cuda-path=" + config.get(ClavaOptions.CUDA_PATH).getAbsolutePath());
+            var cudaPath = config.get(ClavaOptions.CUDA_PATH);
+            if (!cudaPath.isBlank()) {
+                var cudaFolder = SpecsIo.existingFolder(cudaPath);
+                arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
             }
+
         }
         // If header file, add the language flag (-x) that corresponds to the standard
         else if (SourceType.isHeader(sourceFile)) {

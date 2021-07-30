@@ -364,6 +364,13 @@
 		<attribute name="rootBase" type="expression" />
 	</artifact>	
 
+	<artifact class="cudaKernelCall" default="name">
+		<attribute name="config" type="expression[]">
+			<def type="expression[]"/>
+		</attribute>
+	</artifact>	
+
+
 
 	<!-- VARDECL -->
 	<artifact class="vardecl" default="name">

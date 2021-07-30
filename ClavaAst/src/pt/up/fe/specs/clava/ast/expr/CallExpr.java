@@ -152,6 +152,16 @@ public class CallExpr extends Expr {
         return (Expr) setChild(argIndex, arg);
     }
 
+    public void setArguments(List<Expr> args) {
+        // Remove current args
+        if (getNumArgs() > 0) {
+            removeChildren(1, getNumChildren());
+        }
+
+        // Set new args
+        addChildren(args);
+    }
+
     public DeclRefExpr getCalleeDeclRef() {
         return getCalleeDeclRefTry().orElseThrow(
                 () -> new RuntimeException(
@@ -215,7 +225,6 @@ public class CallExpr extends Expr {
      * @return
      */
     public Optional<FunctionDecl> getFunctionDecl() {
-
         // TODO: Replace with get(DIRECT_CALLEE) when refactoring to new format is complete
         return get(DIRECT_CALLEE)
                 // If FunctionDecl has a primary template decl (e.g., is a template specialization), return original

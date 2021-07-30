@@ -45,6 +45,12 @@ public class CxxWeaverOptions {
         addOneArgOption(ClavaOptions.FLAGS_LIST, "fsl", "flags-list", "flags string list",
                 "String list with C/C++ compiler flags");
 
+        addOneArgOption(ClavaOptions.CUDA_GPU_ARCH, "cga", "cudaGpuArch", "GPU arch",
+                ClavaOptions.CUDA_GPU_ARCH.getLabel());
+
+        addOneArgOption(ClavaOptions.CUDA_PATH, "cup", "cudaPath", "CUDA folder",
+                ClavaOptions.CUDA_PATH.getLabel());
+
         addBooleanOption(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES, "drd", "disable-remote",
                 "Disables remote dependencies (e.g., git repos)");
 

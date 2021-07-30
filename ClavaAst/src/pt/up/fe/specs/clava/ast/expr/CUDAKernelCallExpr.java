@@ -17,13 +17,20 @@ public class CUDAKernelCallExpr extends CallExpr {
     }
 
     public List<Expr> getConfiguration() {
-        // Second child should be a CallExpr
-        var call = getChild(CallExpr.class, 1);
 
-        return call.getArgs().stream()
+        return getInternalCall().getArgs().stream()
                 // Remove default arguments
                 .filter(arg -> !(arg instanceof CXXDefaultArgExpr))
                 .collect(Collectors.toList());
+    }
+
+    private CallExpr getInternalCall() {
+        // Second child should be a CallExpr
+        return getChild(CallExpr.class, 1);
+    }
+
+    public void setConfiguration(List<Expr> config) {
+        getInternalCall().setArguments(config);
     }
 
     public List<Expr> getArgs() {

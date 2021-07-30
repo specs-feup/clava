@@ -34,27 +34,26 @@ public class CxxCudaTest {
 
     @Test
     public void testAtomicAdd() {
+        // .addFlags(
+        // // "-std=cuda",
+        // // "-fms-compatibility", "-D_MSC_VER", "-D_LIBCPP_MSVCRT",
+        // // "--cuda-gpu-arch=sm_30",
+        // // "--cuda-device-only",
+        // // "-ferror-limit=10000",
+        // "-ferror-limit=10000")
+        // "--cuda-path=/usr/local/cuda-11.4")
+        // "/tmp/clang_ast_exe_osboxes/cuda")
 
-        new CxxCudaTester("atomicAdd.cu")
-                // .addFlags(
-                // // "-std=cuda",
-                // // "-fms-compatibility", "-D_MSC_VER", "-D_LIBCPP_MSVCRT",
-                // // "--cuda-gpu-arch=sm_30",
-                // // "--cuda-device-only",
-                // // "-ferror-limit=10000",
-                // "-ferror-limit=10000")
-                // "--cuda-path=/usr/local/cuda-11.4")
-                // "/tmp/clang_ast_exe_osboxes/cuda")
+        // "--cuda-path=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.3")
+        //
+        // .addFlags("-x", "cuda", "--cuda-path=C:\\Program Files\\NVIDIA GPU Computing
+        // Toolkit\\CUDA\\v11.3",
+        // "-nocudalib", "-nocudainc",
+        // "--cuda-device-only")
+        // .onePass()
+        // .showClavaAst()
 
-                // "--cuda-path=C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.3")
-                //
-                // .addFlags("-x", "cuda", "--cuda-path=C:\\Program Files\\NVIDIA GPU Computing
-                // Toolkit\\CUDA\\v11.3",
-                // "-nocudalib", "-nocudainc",
-                // "--cuda-device-only")
-                // .onePass()
-                // .showClavaAst()
-                .test();
+        new CxxCudaTester("atomicAdd.cu").test();
 
     }
 
