@@ -30,7 +30,7 @@ public interface ClangAstWebResource {
     WebResourceProvider LIBC_CXX = create("libc_cxx.zip", "v12.0");
 
     // WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx_windows.zip", "v1.0");
-    WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx.zip", "v2.6");
+    WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx_windows.zip", "v12.0");
 
     // WebResourceProvider LIBC_CXX_MAC_OS = create("libc_cxx_mac_os.zip", "v1.0");
     // WebResourceProvider LIBC_CXX_LINUX = create("libc_cxx_linux.zip", "v1.0");
@@ -44,7 +44,7 @@ public interface ClangAstWebResource {
 
     WebResourceProvider LINUX_ARMV7_EXE = create("linux_ubuntu_14_armv7/clang_ast", "v4.2.19");
 
-    WebResourceProvider CENTOS_EXE = create("centos7/clang_ast", "v4.2.19");
+    WebResourceProvider CENTOS_EXE = create("centos8/clang_ast", "v12.0");
 
     WebResourceProvider MAC_OS_EXE = create("macos/clang_ast", "v4.2.19");
 
