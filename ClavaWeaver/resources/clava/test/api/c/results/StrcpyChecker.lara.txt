@@ -1,0 +1,2 @@
+strcpy.c/l.10
+strcpy.c/l.11
