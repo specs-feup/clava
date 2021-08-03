@@ -2,6 +2,7 @@ import weaver.Query;
 
 aspectdef Cuda
 
+	// Test CUDA kernel call
 	for(var $call of Query.search("function", "main").search("cudaKernelCall")) {
 		println("kernel call before: " + $call.code);
 		//println("Original: " + $call.config.map(node => node.code));
@@ -9,5 +10,10 @@ aspectdef Cuda
 		//println("Modified: " + $call.config.map(node => node.code));		
 		println("kernel call after: " + $call.code);
 	}
+	
+	// Find CUDA kernel
+	var $cudaKernel = Query.search("function", {isCudaKernel: true}).first();
+	println("CUDA kernel: " + $cudaKernel.name);
+	
 
 end

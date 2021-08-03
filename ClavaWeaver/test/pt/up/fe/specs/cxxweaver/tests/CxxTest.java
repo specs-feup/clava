@@ -20,7 +20,6 @@ import org.junit.Test;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
-import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.util.SpecsSystem;
 
 public class CxxTest {
@@ -316,11 +315,4 @@ public class CxxTest {
         newTester().test("Function2.lara", "function2.cpp");
     }
 
-    @Test
-    public void testCuda() {
-        if (SpecsPlatforms.isLinux()) {
-            newTester().test("Cuda.lara", "atomicAdd.cu");
-        }
-
-    }
 }

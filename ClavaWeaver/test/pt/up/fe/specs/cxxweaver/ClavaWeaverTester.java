@@ -30,6 +30,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import larai.LaraI;
 import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
@@ -54,6 +55,7 @@ public class ClavaWeaverTester {
     private String srcPackage;
     private String resultPackage;
     private String resultsFile;
+    private boolean run;
     private final DataStore additionalSettings;
     // private boolean debug;
 
@@ -66,6 +68,7 @@ public class ClavaWeaverTester {
         srcPackage = null;
         resultPackage = null;
         resultsFile = null;
+        run = true;
         additionalSettings = DataStore.newInstance("Additional Settings");
         // debug = false;
     }
@@ -94,6 +97,11 @@ public class ClavaWeaverTester {
     public ClavaWeaverTester setSrcPackage(String srcPackage) {
         this.srcPackage = sanitizePackage(srcPackage);
 
+        return this;
+    }
+
+    public ClavaWeaverTester doNotRun() {
+        run = false;
         return this;
     }
 
@@ -147,6 +155,12 @@ public class ClavaWeaverTester {
 
     public void test(String laraResource, List<String> codeResources) {
         SpecsLogs.msgInfo("\n---- Testing '" + laraResource + "' ----\n");
+
+        if (!run) {
+            ClavaLog.info("Ignoring test, 'run' flag is not set");
+            return;
+        }
+
         List<ResourceProvider> codes = SpecsCollections.map(codeResources, this::buildCodeResource);
 
         File log = runCxxWeaver(() -> basePackage + laraResource, codes);
