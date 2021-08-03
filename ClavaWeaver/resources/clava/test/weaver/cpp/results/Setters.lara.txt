@@ -1,4 +1,4 @@
-Original qualified name: std::chrono::_V2::system_clock::now
+Original qualified name: std::chrono::system_clock::now
 Changed qualified name 1: now
 Changed qualified name 2: std::now
 Changed qualified name 3: std::chrono::_V2::system_clock::now
