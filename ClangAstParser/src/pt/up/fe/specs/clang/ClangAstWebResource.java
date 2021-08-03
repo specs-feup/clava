@@ -42,10 +42,11 @@ public interface ClangAstWebResource {
 
     WebResourceProvider LINUX_EXE = create("linux_ubuntu_18/clang_ast", "v12.0");
 
+    // Disabled while we do not have an updated Odroid
     WebResourceProvider LINUX_ARMV7_EXE = create("linux_ubuntu_14_armv7/clang_ast", "v4.2.19");
 
     WebResourceProvider CENTOS_EXE = create("centos8/clang_ast", "v12.0");
 
-    WebResourceProvider MAC_OS_EXE = create("macos/clang_ast", "v4.2.19");
+    WebResourceProvider MAC_OS_EXE = create("macos/clang_ast", "v12.0");
 
 }
