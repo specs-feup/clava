@@ -1,6 +1,5 @@
 #include <stdio.h>
-__global__
-void add(int *a) {
+__global__ void add(int *a) {
    int id = blockDim.x * blockIdx.x + threadIdx.x;
    int idx = id % 10;
    //a[idx] += 10;
