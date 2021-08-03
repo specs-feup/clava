@@ -1,0 +1,13 @@
+import weaver.Query;
+
+aspectdef Cuda
+
+	for(var $call of Query.search("function", "main").search("cudaKernelCall")) {
+		println("kernel call before: " + $call.code);
+		//println("Original: " + $call.config.map(node => node.code));
+		$call.setConfigFromStrings(["20", "2048"]);
+		//println("Modified: " + $call.config.map(node => node.code));		
+		println("kernel call after: " + $call.code);
+	}
+
+end
