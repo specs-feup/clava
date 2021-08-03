@@ -19,7 +19,6 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
-import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.MSPropertyDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
@@ -27,9 +26,12 @@ import pt.up.fe.specs.clava.ast.expr.CUDAKernelCallExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.MSPropertyRefExpr;
+import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.transform.SimplePostClavaRule;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
+import pt.up.fe.specs.util.treenode.transform.TransformResult;
+import pt.up.fe.specs.util.treenode.transform.impl.DefaultTransformResult;
 
 /**
  * Some CUDA properties can have different names that in the source (e.g. __fetch_builtin_x, instead of x), this pass
@@ -41,24 +43,42 @@ import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 public class ProcessCudaNodes implements SimplePostClavaRule {
 
     @Override
-    public void applySimple(ClavaNode node, TransformQueue<ClavaNode> queue) {
-        // TODO: Use Rule that stops if finds a TranslationUnit that is not a CUDA file
-        var isCudaFile = node.getAncestorTry(TranslationUnit.class)
-                .map(tu -> tu.isCUDAFile())
-                .orElse(false);
+    public TransformResult apply(ClavaNode node, TransformQueue<ClavaNode> queue) {
 
-        if (!isCudaFile) {
-            return;
-        }
-        // if (get(DECL_NAME).equals("__cuda_builtin_threadIdx_t")) {
-        // System.out.println("DECL: " + this.getClass());
-        // }
-        if (node instanceof CXXRecordDecl) {
-            if (node.get(CXXRecordDecl.DECL_NAME).equals("__cuda_builtin_threadIdx_t")) {
-                System.out.println("ASDADASDASDASD");
+        if (node instanceof TranslationUnit) {
+            var tu = (TranslationUnit) node;
+
+            // If not CUDA file, do not visit other nodes
+            if (!tu.isCUDAFile()) {
+                return new DefaultTransformResult(false);
             }
         }
 
+        // public void applySimple(ClavaNode node, TransformQueue<ClavaNode> queue) {
+        // TODO: Use Rule that stops if finds a TranslationUnit that is not a CUDA file
+        // var isCudaFile = node.getAncestorTry(TranslationUnit.class)
+        // .map(tu -> tu.isCUDAFile())
+        // .orElse(false);
+        //
+        // if (!isCudaFile) {
+        // return;
+        // }
+        // if (get(DECL_NAME).equals("__cuda_builtin_threadIdx_t")) {
+        // System.out.println("DECL: " + this.getClass());
+        // }
+        // if (node instanceof CXXRecordDecl) {
+        // if (node.get(CXXRecordDecl.DECL_NAME).equals("__cuda_builtin_threadIdx_t")) {
+        // System.out.println("ASDADASDASDASD");
+        // }
+        // }
+
+        applySimple(node, queue);
+
+        return TransformResult.empty();
+    }
+
+    @Override
+    public void applySimple(ClavaNode node, TransformQueue<ClavaNode> queue) {
         apply(node);
     }
 
@@ -118,6 +138,17 @@ public class ProcessCudaNodes implements SimplePostClavaRule {
                 // .flatMap(declRef -> declRef.getDecl().map(fdecl -> (FunctionDecl) fdecl));
                 // System.out.println("DECK; " + decl);
 
+            }
+
+            return;
+        }
+
+        if (node instanceof MemberExpr) {
+            var memberName = node.get(MemberExpr.MEMBER_NAME);
+            var processedMemberName = processName(memberName);
+
+            if (!memberName.equals(processedMemberName)) {
+                node.set(MemberExpr.MEMBER_NAME, processedMemberName);
             }
 
             return;
