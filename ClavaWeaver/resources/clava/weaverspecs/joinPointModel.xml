@@ -136,10 +136,15 @@
 	</joinpoint>
 		
 	<!-- METHOD -->
-	<joinpoint class="method" extends="function" tooltip=" Represents a C++ class method declaration or definition">
+	<joinpoint class="method" extends="function" tooltip="Represents a C++ class method declaration or definition">
 	</joinpoint>			
 
-		
+	<!-- CUDA KERNEL -->
+	<!-- 
+	<joinpoint class="cudaKernel" extends="function" tooltip="Represents a CUDA kernel function">
+	</joinpoint>			
+	 -->
+	 	
 		
 	<!-- SCOPE-->
 	<joinpoint class="scope" extends="statement" tooltip="Represents a group of statements">

@@ -617,6 +617,31 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Get value on attribute isCudaKernel
+     * @return the attribute's value
+     */
+    public abstract Boolean getIsCudaKernelImpl();
+
+    /**
+     * Get value on attribute isCudaKernel
+     * @return the attribute's value
+     */
+    public final Object getIsCudaKernel() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCudaKernel", Optional.empty());
+        	}
+        	Boolean result = this.getIsCudaKernelImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isCudaKernel", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isCudaKernel", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select bodys
      * @return 
      */
@@ -1527,6 +1552,7 @@ public abstract class AFunction extends ADeclarator {
         attributes.add("calls");
         attributes.add("signature");
         attributes.add("returnType");
+        attributes.add("isCudaKernel");
     }
 
     /**
@@ -1613,6 +1639,7 @@ public abstract class AFunction extends ADeclarator {
         CALLS("calls"),
         SIGNATURE("signature"),
         RETURNTYPE("returnType"),
+        ISCUDAKERNEL("isCudaKernel"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),

@@ -15,7 +15,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AMethod
  * This class is overwritten by the Weaver Generator.
  * 
- *  Represents a C++ class method declaration or definition
+ * Represents a C++ class method declaration or definition
  * @author Lara Weaver Generator
  */
 public abstract class AMethod extends AFunction {
@@ -265,6 +265,15 @@ public abstract class AMethod extends AFunction {
     @Override
     public AType getReturnTypeImpl() {
         return this.aFunction.getReturnTypeImpl();
+    }
+
+    /**
+     * Get value on attribute isCudaKernel
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsCudaKernelImpl() {
+        return this.aFunction.getIsCudaKernelImpl();
     }
 
     /**
@@ -924,6 +933,7 @@ public abstract class AMethod extends AFunction {
         CALLS("calls"),
         SIGNATURE("signature"),
         RETURNTYPE("returnType"),
+        ISCUDAKERNEL("isCudaKernel"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),

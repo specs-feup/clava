@@ -30745,6 +30745,14 @@
                   "children": [
                            {
                               "type": "Boolean",
+                              "name": "isCudaKernel"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
                               "name": "isDelete"
                            }]
                },
@@ -40829,7 +40837,7 @@
          "type": "joinpoint",
          "name": "method",
          "extends": "function"      ,
-         "tooltip": " Represents a C++ class method declaration or definition",
+         "tooltip": "Represents a C++ class method declaration or definition",
          "children": [
                {
                   "type": "attribute",
@@ -40918,6 +40926,14 @@
                            {
                               "type": "String",
                               "name": "id"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "isCudaKernel"
                            }]
                },
                {

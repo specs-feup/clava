@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ast.attr.CUDAGlobalAttr;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
@@ -739,6 +740,14 @@ public class CxxFunction extends AFunction {
     public void setParamImpl(Integer index, String param) {
         var paramNode = ClavaNodes.toParam(param, function);
         setParamImpl(index, CxxJoinpoints.create(paramNode, AParam.class));
+    }
+
+    @Override
+    public Boolean getIsCudaKernelImpl() {
+        return function.get(FunctionDecl.ATTRIBUTES).stream()
+                .filter(attr -> attr instanceof CUDAGlobalAttr)
+                .findFirst()
+                .isPresent();
     }
 
 }
