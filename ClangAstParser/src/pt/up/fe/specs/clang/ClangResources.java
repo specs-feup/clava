@@ -199,7 +199,8 @@ public class ClangResources {
         case LINUX:
             return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_EXE);
         case LINUX_ARMV7:
-            return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_ARMV7_EXE);
+            throw new RuntimeException("Platform Linux-ARMV7 not currently supported");
+        // return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_ARMV7_EXE);
         case MAC_OS:
             return CLANG_AST_RESOURCES.get(ClangAstFileResource.MAC_OS_EXE);
         default:
