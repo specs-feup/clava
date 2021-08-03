@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.exception.ActionException;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -67,6 +68,58 @@ public abstract class ACudaKernelCall extends ACall {
      */
     public void defConfigImpl(AExpression[] value) {
         throw new UnsupportedOperationException("Join point "+get_class()+": Action def config with type AExpression not implemented ");
+    }
+
+    /**
+     * 
+     * @param args 
+     */
+    public void setConfigImpl(AExpression[] args) {
+        throw new UnsupportedOperationException(get_class()+": Action setConfig not implemented ");
+    }
+
+    /**
+     * 
+     * @param args 
+     */
+    public final void setConfig(AExpression[] args) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setConfig", this, Optional.empty(), args);
+        	}
+        	this.setConfigImpl(args);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setConfig", this, Optional.empty(), args);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setConfig", e);
+        }
+    }
+
+    /**
+     * 
+     * @param args 
+     */
+    public void setConfigFromStringsImpl(String[] args) {
+        throw new UnsupportedOperationException(get_class()+": Action setConfigFromStrings not implemented ");
+    }
+
+    /**
+     * 
+     * @param args 
+     */
+    public final void setConfigFromStrings(String[] args) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setConfigFromStrings", this, Optional.empty(), args);
+        	}
+        	this.setConfigFromStringsImpl(args);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setConfigFromStrings", this, Optional.empty(), args);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setConfigFromStrings", e);
+        }
     }
 
     /**
@@ -609,6 +662,8 @@ public abstract class ACudaKernelCall extends ACall {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aCall.fillWithActions(actions);
+        actions.add("void setConfig(expression[])");
+        actions.add("void setConfigFromStrings(String[])");
     }
 
     /**

@@ -1,11 +1,14 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
+import java.util.Arrays;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.CUDAKernelCallExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACudaKernelCall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
+import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.util.SpecsCollections;
 
 public class CXXCudaKernelCall extends ACudaKernelCall {
@@ -29,8 +32,22 @@ public class CXXCudaKernelCall extends ACudaKernelCall {
     }
 
     @Override
-    public void defConfigImpl(AExpression[] config) {
-        kernelCall.setConfiguration(SpecsCollections.toList(config, jp -> (Expr) jp.getNode()));
+    public void defConfigImpl(AExpression[] args) {
+        kernelCall.setConfiguration(SpecsCollections.toList(args, jp -> (Expr) jp.getNode()));
+    }
+
+    @Override
+    public void setConfigImpl(AExpression[] args) {
+        defConfigImpl(args);
+    }
+
+    @Override
+    public void setConfigFromStringsImpl(String[] args) {
+        var exprArray = Arrays.stream(args)
+                .map(AstFactory::exprLiteral)
+                .toArray(size -> new AExpression[size]);
+
+        setConfigImpl(exprArray);
     }
 
 }

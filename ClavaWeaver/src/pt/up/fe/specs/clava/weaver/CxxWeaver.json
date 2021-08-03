@@ -19004,6 +19004,32 @@
                   "children": [
                            {
                               "type": "void",
+                              "name": "setConfig"
+                           },
+                           {
+                              "type": "expression[]",
+                              "name": "args",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setConfigFromStrings"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "args",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "children": [
+                           {
+                              "type": "void",
                               "name": "addArg"
                            },
                            {

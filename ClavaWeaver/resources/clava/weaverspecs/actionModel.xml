@@ -263,6 +263,16 @@
 		<parameter name="arg" type="String" />
 		<parameter name="type" type="joinpoint" />
 	</action>
+	
+	<!-- CUDA KERNEL CALL -->
+	<action name="setConfig" class="cudaKernelCall">
+		<parameter name="args" type="expression[]" />
+	</action>	
+ 
+	<action name="setConfigFromStrings" class="cudaKernelCall">
+		<parameter name="args" type="String[]" />
+	</action>		
+	
 
 	<!-- SCOPE -->
 
