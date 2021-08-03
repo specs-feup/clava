@@ -1,0 +1,20 @@
+import lara.analysis.Checker;
+import lara.analysis.CheckResult;
+import lara.analysis.Fix;
+
+/*Check for the presence of scanf functions*/
+
+var ScanfChecker = function() {
+      // Parent constructor
+    Checker.call(this, "scanf");
+    this.advice = " If there is no limit specification in the format specifier an attacker can cause buffer overflows. Use a size limitation in format specification (CWE-120, CWE-20).\n\n";
+};
+
+ScanfChecker.prototype = Object.create(Checker.prototype);
+
+ScanfChecker.prototype.check = function($node) {
+	if ((!$node.instanceOf("call")) || ($node.name !== 'scanf') || ($node.args[0].code.match(/\s*".*%[0-9]+[a-zA-Z]+.*"\s*/))) {
+      	return;
+    }
+	return new CheckResult(this.name, $node, this.advice);
+}

@@ -1,0 +1,35 @@
+import lara.analysis.Checker;
+import lara.analysis.CheckResult;
+import lara.analysis.Fix;
+
+/*Check for the presence of sprintf functions*/
+
+var SprintfChecker = function() {
+      // Parent constructor
+    Checker.call(this, "sprintf");
+    this.advice = " Unsafe function sprintf() can be replaced by safer snprintf()(Possible Fix). sprintf() doesn\'t check the length of the buffer: risk of buffer overflow (CWE-120).\n\n";
+};
+
+SprintfChecker.prototype = Object.create(Checker.prototype);
+
+SprintfChecker.fixAction = function($node) {
+	var newFunction = "snprintf(" + $node.args[0].code + ", sizeof(" + $node.args[0].code + "), " + $node.args[1].code;
+	if ($node.args.length > 2) {
+		var i;
+		for (i = 2; i < $node.args.length; i ++) {
+			newFunction += "," + $node.args[i].code;
+		}
+	}
+    newFunction += ")";
+	$node.replaceWith(newFunction);
+}
+
+SprintfChecker.prototype.check = function($node) {
+	if ((!$node.instanceOf("call")) || ($node.name !== "sprintf")) {
+      	return;
+	}
+	if (!$node.args[1].code.match(/\s*".*"\s*/)) {
+		this.advice += " Variable used as format string can be modified by an attacker. Use a constant format specification instead (CWE-134).\n\n";
+	}
+	return new CheckResult(this.name, $node, this.advice, new Fix($node, SprintfChecker.fixAction));
+}

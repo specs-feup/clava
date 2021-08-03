@@ -123,4 +123,9 @@ public class CApiTest {
     public void testHls() {
         newTester().test("HlsTest.lara", "hls.c");
     }
+
+    @Test
+    public void testStrcpyChecker() {
+        newTester().test("StrcpyChecker.lara", "strcpy.c");
+    }
 }

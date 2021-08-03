@@ -1,0 +1,79 @@
+import lara.analysis.Analyser;
+import lara.analysis.Checker;
+import lara.analysis.CheckResult;
+import lara.analysis.ResultFormatManager;
+import clava.analysis.analysers.DoubleFreeResult;
+import weaver.Query;
+
+// Analyser that scan scopes to check double-freed or unfreed memory
+
+var DoubleFreeAnalyser = function() {
+    Analyser.call(this);
+    this.resultFormatManager = new ResultFormatManager();
+};
+
+DoubleFreeAnalyser.prototype = Object.create(Analyser.prototype);
+
+DoubleFreeAnalyser.isDynamicAlloc = function($node) {
+	if ($node.code.match(/.*malloc|calloc|realloc.*/)) {
+		return 1;
+	}
+	return 0;
+}
+/**
+* Check file for pointers not being freed or being freed two times in the same scope
+* @param {JoinPoint} $startNode
+* @return fileResult
+*/
+DoubleFreeAnalyser.prototype.analyse = function($startNode) {
+    var doubleFreeResultList = [];
+    if ($startNode === undefined) {
+        $startNode = Query.root();
+    }
+    for (var $node of Query.searchFrom($startNode)) {
+        if (!$node.instanceOf("function")) {
+	        continue;
+	   	}
+
+        for (var $child of $node.descendants) {
+            //Check for dynamic pointer declaration
+	        if ((($child.instanceOf("vardecl")) || ($child.instanceOf( "binaryOp"))) && DoubleFreeAnalyser.isDynamicAlloc($child)){
+				var ptrName = ($child.instanceOf("vardecl")) ? $child.name : $child.left.code;
+	            for (var $grandChild of $child.descendants ){
+	                if (($grandChild.instanceOf("call")) && DoubleFreeAnalyser.isDynamicAlloc($grandChild)){
+                      	var message = " Unfreed pointer in this scope. This can lead to a memory leak and a potential vunerability (CWE-401)."
+                      			+ " Make sure it is freed somewhere in your program.\n\n";
+        	          	doubleFreeResultList.push(new DoubleFreeResult("Unfreed array", $child, message, ptrName, $node.name));
+	                }
+	            }
+	        }
+			if (($child.instanceOf("call")) && ($child.name === "free")){
+	            for (var result of doubleFreeResultList) {
+			      	if (($child.args[0].code === result.ptrName) && ($node.name === result.scopeName)) {
+		            	if (result.freedFlag === 0){
+							result.freedFlag = 1;
+							result.message = undefined;
+						} else if (result.freedFlag === 1) {
+							result.freedFlag = -1;
+							result.name = "Double-freed array";
+							result.message = " Double-freed pointer in this scope. This could lead to a security vulnerability (CWE-415). Remove one of the calls to free().\n\n";
+						}
+	                }
+                }
+	        }
+        }
+    }
+    // We have now a list of checker's name each leading to a list of CheckResult 
+    for (var res of doubleFreeResultList) {
+		if (res.freedFlag === 1) {
+			delete res.name;
+		}
+    }
+
+    this.resultFormatManager.setAnalyserResultList(doubleFreeResultList);
+    var fileResult = this.resultFormatManager.formatResultList($startNode);
+    if (fileResult === undefined) {
+		return;
+    }
+    return fileResult;
+}

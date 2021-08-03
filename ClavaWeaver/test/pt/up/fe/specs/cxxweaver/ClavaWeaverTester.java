@@ -237,6 +237,7 @@ public class ClavaWeaverTester {
         data.set(ClavaOptions.FLAGS, compilerFlags);
         data.set(CxxWeaverOption.CHECK_SYNTAX, checkWovenCodeSyntax);
         data.set(CxxWeaverOption.DISABLE_CLAVA_INFO, false);
+        data.set(CxxWeaverOption.DISABLE_CODE_GENERATION);
 
         // Enable parallel parsing
         data.set(ParallelCodeParser.PARALLEL_PARSING);

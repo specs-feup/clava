@@ -11,8 +11,9 @@ This should create the file ClavaWeaver.jar.
 
 ## Downloading Clava
 
-Clava can be downloaded from this [link](http://specs.fe.up.pt/tools/clava.jar).
+A zip file with a precompiled Clava JAR can be downloaded from this [link](http://specs.fe.up.pt/tools/clava.zip).
 
+If you are using Linux there is an [instalation script](https://specs.fe.up.pt/tools/clava/clava-update). Running the script will install Clava in the folder where the script is, e.g. running the script from /usr/local/bin should make the command `clava` available system-wide. If you run the script with `sudo`, it will install the Clava package for CMake.
 
 ## Clava Online Demo Version
 
