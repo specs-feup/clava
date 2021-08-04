@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clang;
 
 import pt.up.fe.specs.lang.SpecsPlatforms;
+import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -37,6 +38,11 @@ public enum SupportedPlatform implements StringProvider {
 
     private static final Lazy<EnumHelperWithValue<SupportedPlatform>> HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(SupportedPlatform.class);
+
+    /**
+     * Currently two major linux versions are supported, 4 (CENTOS) and 5 and above (LINUX)
+     */
+    private static final int OLDER_LINUX_VERSION = 4;
 
     public static EnumHelperWithValue<SupportedPlatform> getHelper() {
         return HELPER.get();
@@ -64,6 +70,18 @@ public enum SupportedPlatform implements StringProvider {
         if (SpecsPlatforms.isLinux()) {
             if (SpecsPlatforms.isLinuxArm()) {
                 return LINUX_ARMV7;
+            }
+
+            // If version 4 or below, use "older" compiled version, the same as CentOS
+            var linuxVersion = System.getProperty("os.version");
+            var dotIndex = linuxVersion.indexOf('.');
+            if (dotIndex != -1) {
+                var majorVersionString = linuxVersion.substring(0, dotIndex);
+                var majorVersion = SpecsStrings.parseInteger(majorVersionString);
+
+                if (majorVersion != null && majorVersion <= OLDER_LINUX_VERSION) {
+                    return CENTOS;
+                }
             }
 
             return LINUX;
