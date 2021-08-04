@@ -40,7 +40,7 @@ public class CudaTest {
         var cudaTester = new ClavaWeaverTester("clava/test/weaver/", Standard.CUDA)
                 .setResultPackage("cuda/results")
                 .setSrcPackage("cuda/src")
-                .set(CodeParser.CUDA_PATH, "<builtin>");
+                .set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
 
         // Windows currently not supported
         if (SpecsPlatforms.isWindows()) {

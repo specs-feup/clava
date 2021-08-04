@@ -63,7 +63,6 @@ public class AstDumpParser implements ClangParser {
 
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
-    private final static String BUILT_IN_CUDALIB = "<BUILTIN>";
 
     // private final static String HEADER_WARNING_PREFIX = "error: invalid argument '";
     // private final static String HEADER_WARNING_SUFFIX = "' not allowed with 'C/ObjC'";
@@ -276,7 +275,8 @@ public class AstDumpParser implements ClangParser {
             if (!cudaPath.isBlank()) {
 
                 // Check if should use built-in CUDA lib
-                File cudaFolder = cudaPath.toUpperCase().equals(BUILT_IN_CUDALIB) ? ClangResources.getBuiltinCudaLib()
+                File cudaFolder = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption())
+                        ? ClangResources.getBuiltinCudaLib()
                         : SpecsIo.existingFolder(cudaPath);
 
                 arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());

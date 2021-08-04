@@ -25,7 +25,7 @@ public class CxxCudaTester extends AClangAstTester {
     }
 
     public CxxCudaTester(List<String> files) {
-        super("cxx/cuda", files, Arrays.asList("-std=c++11"));
+        super("cxx/cuda", files, Arrays.asList("-std=cuda"));
 
         // Windows currently not supported
         if (SpecsPlatforms.isWindows()) {
@@ -33,7 +33,6 @@ public class CxxCudaTester extends AClangAstTester {
         }
 
         enableBuiltinCuda();
-        // addFlags("--cudaPath", "<builtin>");
     }
 
 }

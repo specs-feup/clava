@@ -62,6 +62,12 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
 
     // BEGIN DATAKEY
 
+    private final static String BUILT_IN_CUDALIB = "<BUILTIN>";
+
+    public static String getBuiltinOption() {
+        return BUILT_IN_CUDALIB;
+    }
+
     public abstract App parse(List<File> sources, List<String> compilerOptions, ClavaContext context);
 
     public App parse(List<File> sources, List<String> compilerOptions) {

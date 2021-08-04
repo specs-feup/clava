@@ -204,7 +204,7 @@ public abstract class AClangAstTester {
                 .set(CodeParser.SHOW_CODE, showCode);
 
         if (builtinCuda) {
-            codeParser.set(CodeParser.CUDA_PATH, "<builtin>");
+            codeParser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
         }
         // .setShowClangAst(showClangAst)
         // .setShowClangDump(showClangDump)
