@@ -194,9 +194,9 @@ public class ClangResources {
         switch (platform) {
         case WINDOWS:
             return CLANG_AST_RESOURCES.get(ClangAstFileResource.WIN_EXE);
-        case CENTOS:
+        case LINUX_4:
             return CLANG_AST_RESOURCES.get(ClangAstFileResource.CENTOS_EXE);
-        case LINUX:
+        case LINUX_5:
             return CLANG_AST_RESOURCES.get(ClangAstFileResource.LINUX_EXE);
         case LINUX_ARMV7:
             throw new RuntimeException("Platform Linux-ARMV7 not currently supported");
