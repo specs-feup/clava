@@ -402,6 +402,15 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     /**
+     * Legacy method, please use getPrototypes() instead.
+     * 
+     * @return
+     */
+    public Optional<FunctionDecl> getDeclaration() {
+        return getPrototypes().stream().findFirst();
+    }
+
+    /**
      * 
      * @return the node representing the implementation of this function.
      */
@@ -418,6 +427,15 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         // getAppTry().get().clearCache();
         // Search for the definition
         return getAppTry().flatMap(app -> app.getFunctionImplementation(this));
+    }
+
+    /**
+     * Legacy method, please use getImplementation() instead.
+     * 
+     * @return
+     */
+    public Optional<FunctionDecl> getDefinition() {
+        return getImplementation();
     }
 
     /**
