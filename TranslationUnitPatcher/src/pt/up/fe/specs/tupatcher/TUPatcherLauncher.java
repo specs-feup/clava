@@ -96,8 +96,10 @@ public class TUPatcherLauncher {
         switch (platform) {
         case WINDOWS:
             return TUPatcherWebResource.WIN_EXE;
-        case LINUX:
-            return TUPatcherWebResource.LINUX_EXE;
+        case LINUX_4:
+            return TUPatcherWebResource.LINUX_4_EXE;
+        case LINUX_5:
+            return TUPatcherWebResource.LINUX_5_EXE;
         // case CENTOS:
         // return CLANG_AST_RESOURCES.get(ClangAstFileResource.CENTOS_EXE);
         // case LINUX_ARMV7:
