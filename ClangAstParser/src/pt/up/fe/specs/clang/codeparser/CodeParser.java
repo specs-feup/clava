@@ -41,6 +41,12 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     public static final DataKey<Boolean> SHOW_CODE = KeyFactory.bool("showCode");
     public static final DataKey<Boolean> USE_CUSTOM_RESOURCES = KeyFactory.bool("useCustomResources");
     public static final DataKey<Boolean> CLEAN = KeyFactory.bool("clean").setDefault(() -> true);
+    public static final DataKey<String> CUDA_GPU_ARCH = KeyFactory.string("cudaGpuArch")
+            .setLabel("CUDA GPU Arch (default: sm_30)")
+            .setDefaultString("sm_30");
+    public static final DataKey<String> CUDA_PATH = KeyFactory.string("cudaPath")
+            .setLabel("CUDA Path (leave empty if in path)")
+            .setDefaultString("");
 
     /**
      * Execution information, such as execution time and memory used.

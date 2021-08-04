@@ -807,6 +807,8 @@ public class CxxWeaver extends ACxxWeaver {
 
         CodeParser codeParser = CodeParser.newInstance();
         codeParser.set(CodeParser.USE_CUSTOM_RESOURCES, useCustomResources);
+        codeParser.set(CodeParser.CUDA_GPU_ARCH, getConfig().get(CodeParser.CUDA_GPU_ARCH));
+        codeParser.set(CodeParser.CUDA_PATH, getConfig().get(CodeParser.CUDA_PATH));
         codeParser.set(ParallelCodeParser.PARALLEL_PARSING, getConfig().get(ParallelCodeParser.PARALLEL_PARSING));
         codeParser.set(ParallelCodeParser.PARSING_NUM_THREADS, getConfig().get(ParallelCodeParser.PARSING_NUM_THREADS));
         codeParser.set(ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD,

@@ -17,6 +17,7 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
 import pt.up.fe.specs.lang.SpecsPlatforms;
@@ -38,7 +39,8 @@ public class CudaTest {
     private static ClavaWeaverTester newTester() {
         var cudaTester = new ClavaWeaverTester("clava/test/weaver/", Standard.CUDA)
                 .setResultPackage("cuda/results")
-                .setSrcPackage("cuda/src");
+                .setSrcPackage("cuda/src")
+                .set(CodeParser.CUDA_PATH, "<builtin>");
 
         // Windows currently not supported
         if (SpecsPlatforms.isWindows()) {

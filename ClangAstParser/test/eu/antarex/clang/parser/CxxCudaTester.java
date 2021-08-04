@@ -32,6 +32,8 @@ public class CxxCudaTester extends AClangAstTester {
             doNotRun();
         }
 
+        enableBuiltinCuda();
+        // addFlags("--cudaPath", "<builtin>");
     }
 
 }

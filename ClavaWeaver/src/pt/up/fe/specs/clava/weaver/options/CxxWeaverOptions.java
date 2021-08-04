@@ -22,6 +22,7 @@ import org.lara.interpreter.weaver.options.WeaverOptionBuilder;
 import org.suikasoft.jOptions.Datakey.DataKey;
 
 import pt.up.fe.specs.clang.ClangAstKeys;
+import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -45,11 +46,11 @@ public class CxxWeaverOptions {
         addOneArgOption(ClavaOptions.FLAGS_LIST, "fsl", "flags-list", "flags string list",
                 "String list with C/C++ compiler flags");
 
-        addOneArgOption(ClavaOptions.CUDA_GPU_ARCH, "cga", "cudaGpuArch", "GPU arch",
-                ClavaOptions.CUDA_GPU_ARCH.getLabel());
+        addOneArgOption(CodeParser.CUDA_GPU_ARCH, "cga", "cudaGpuArch", "GPU arch",
+                CodeParser.CUDA_GPU_ARCH.getLabel());
 
-        addOneArgOption(ClavaOptions.CUDA_PATH, "cup", "cudaPath", "CUDA folder",
-                ClavaOptions.CUDA_PATH.getLabel());
+        addOneArgOption(CodeParser.CUDA_PATH, "cup", "cudaPath", "CUDA folder",
+                CodeParser.CUDA_PATH.getLabel());
 
         addBooleanOption(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES, "drd", "disable-remote",
                 "Disables remote dependencies (e.g., git repos)");

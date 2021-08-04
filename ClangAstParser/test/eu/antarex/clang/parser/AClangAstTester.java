@@ -51,6 +51,7 @@ public abstract class AClangAstTester {
     private boolean showCode = false;
     private boolean onePass = false;
     private boolean run = true;
+    private boolean builtinCuda = false;
 
     public <T extends Enum<T> & ResourceProvider> AClangAstTester(Class<T> resource) {
         this(resource, Collections.emptyList());
@@ -122,6 +123,10 @@ public abstract class AClangAstTester {
         return this;
     }
 
+    public AClangAstTester enableBuiltinCuda() {
+        this.builtinCuda = true;
+        return this;
+    }
     /*
     public AClangAstTester keepFiles() {
         this.keepFiles = true;
@@ -197,6 +202,10 @@ public abstract class AClangAstTester {
                 .set(CodeParser.SHOW_CLANG_DUMP, showClangDump)
                 .set(CodeParser.SHOW_CLAVA_AST, showClavaAst)
                 .set(CodeParser.SHOW_CODE, showCode);
+
+        if (builtinCuda) {
+            codeParser.set(CodeParser.CUDA_PATH, "<builtin>");
+        }
         // .setShowClangAst(showClangAst)
         // .setShowClangDump(showClangDump)
         // .setShowClavaAst(showClavaAst)

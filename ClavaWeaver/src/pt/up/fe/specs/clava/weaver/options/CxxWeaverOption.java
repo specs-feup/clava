@@ -21,6 +21,7 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
 
 import pt.up.fe.specs.clang.ClangAstKeys;
+import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
@@ -100,6 +101,8 @@ public interface CxxWeaverOption {
             .addKey(ClangAstKeys.USE_PLATFORM_INCLUDES)
             .addKey(ClangAstKeys.IGNORE_HEADER_INCLUDES)
             .startSection("Parsing Options")
+            .addKey(CodeParser.CUDA_GPU_ARCH)
+            .addKey(CodeParser.CUDA_PATH)
             .addKey(ParallelCodeParser.PARALLEL_PARSING)
             .addKey(ParallelCodeParser.PARSING_NUM_THREADS)
             .addKey(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS)

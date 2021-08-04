@@ -54,6 +54,8 @@ public interface ClangAstKeys {
      * @return
      */
     static DataStore toDataStore(List<String> flags) {
+        // ClavaLog.debug(() -> "ClangAstKeys flags: " + flags);
+
         DataStore config = DataStore.newInstance(ClavaOptions.STORE_DEFINITION, false);
         final String stdPrefix = "-std=";
         final String clangAstDumperPrefix = "-clang-dumper=";

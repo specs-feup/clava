@@ -87,6 +87,8 @@ public class ParallelCodeParser extends CodeParser {
 
     @Override
     public App parse(List<File> inputSources, List<String> compilerOptions, ClavaContext context) {
+        // System.out.println("CLAVA CONTEXT: " + context);
+
         // ClavaLog.debug(() -> "[ParallelCodeParser] Input sources: " + inputSources);
 
         // All files, header and implementation
@@ -377,6 +379,7 @@ public class ParallelCodeParser extends CodeParser {
     private ClangParserData parseSource(File sourceFile, String id, Standard standard, DataStore options,
             ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder,
             File clangExecutable, List<String> builtinIncludes) {
+
         // ConcurrentLinkedQueue<String> clangDump, ConcurrentLinkedQueue<File> workingFolders) {
 
         // Adapt compiler options according to the file
@@ -387,7 +390,7 @@ public class ParallelCodeParser extends CodeParser {
         boolean streamConsoleOutput = !get(PARALLEL_PARSING);
 
         ClangParser clangParser = new AstDumpParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES),
-                streamConsoleOutput, clangExecutable, builtinIncludes)
+                streamConsoleOutput, clangExecutable, builtinIncludes, this)
                         .setBaseFolder(parsingFolder)
                         .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
 

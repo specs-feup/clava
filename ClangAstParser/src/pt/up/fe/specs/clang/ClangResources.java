@@ -185,7 +185,7 @@ public class ClangResources {
         return resource;
     }
 
-    public File getClangResourceFolder() {
+    public static File getClangResourceFolder() {
         return SpecsIo.getTempFolder(CLANG_FOLDERNAME);
     }
 
@@ -420,4 +420,25 @@ public class ClangResources {
         // return clangAstResources.get(ClangAstFileResource.LIBC_CXX);
     }
 
+    public static File getBuiltinCudaLib() {
+        var fileResource = CLANG_AST_RESOURCES.get(ClangAstFileResource.CUDA_LIB);
+        var resourceFolder = getClangResourceFolder();
+        var cudalibFolder = SpecsIo.mkdir(new File(resourceFolder, "cudalib"));
+
+        // Download includes zips, check if any of them is new
+        ResourceWriteData zipFile = fileResource.writeVersioned(resourceFolder, ClangAstParser.class);
+
+        // If a new file has been written, delete includes folder, and extract all zips again
+        // Extracting all because zips might have several folders and we are not determining which should be updated
+        if (zipFile.isNewFile()) {
+            // Clean folder
+            SpecsIo.deleteFolderContents(cudalibFolder);
+
+            // Extract zip
+            SpecsIo.extractZip(zipFile.getFile(), cudalibFolder);
+        }
+
+        // Returnb cuda lib folder
+        return cudalibFolder;
+    }
 }

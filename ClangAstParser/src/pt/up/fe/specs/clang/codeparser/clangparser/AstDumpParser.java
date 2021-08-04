@@ -26,7 +26,9 @@ import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangAstParser;
+import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.cilk.CilkParser;
+import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
@@ -61,6 +63,7 @@ public class AstDumpParser implements ClangParser {
 
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
+    private final static String BUILT_IN_CUDALIB = "<BUILTIN>";
 
     // private final static String HEADER_WARNING_PREFIX = "error: invalid argument '";
     // private final static String HEADER_WARNING_SUFFIX = "' not allowed with 'C/ObjC'";
@@ -86,12 +89,24 @@ public class AstDumpParser implements ClangParser {
     private List<String> builtinIncludes;
     private int systemIncludesThreshold;
 
+    private final CodeParser parserConfig;
+
     // public AstDumpParser() {
     // this(false, false, true);
     // }
 
+    /**
+     * TODO: Replace some of the arguments with reads to CodeParser?
+     * 
+     * @param dumpStdOut
+     * @param useCustomResources
+     * @param streamConsoleOutput
+     * @param clangExecutable
+     * @param builtinIncludes
+     * @param parserConfig
+     */
     public AstDumpParser(boolean dumpStdOut, boolean useCustomResources, boolean streamConsoleOutput,
-            File clangExecutable, List<String> builtinIncludes) {
+            File clangExecutable, List<String> builtinIncludes, CodeParser parserConfig) {
         // this.currentId = 0;
         this.dumpStdOut = dumpStdOut;
         this.useCustomResources = useCustomResources;
@@ -104,6 +119,7 @@ public class AstDumpParser implements ClangParser {
         this.lastWorkingFolder = null;
         this.baseFolder = null;
         this.systemIncludesThreshold = ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD.getDefault().get();
+        this.parserConfig = parserConfig;
         // this.usePlatformLibc = false;
         // context = new ClavaContext();
     }
@@ -178,6 +194,7 @@ public class AstDumpParser implements ClangParser {
 
     private ClangParserData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
 
+        ClavaLog.debug(() -> "Data store config for Clang AST Dumper: " + config);
         // Create instance of ClangAstParser
         // ClangAstParser clangAstParser = new ClangAstParser(dumpStdOut, useCustomResources);
 
@@ -253,11 +270,15 @@ public class AstDumpParser implements ClangParser {
                 arguments.addAll(Arrays.asList("-fms-compatibility", "-D_MSC_VER", "-D_LIBCPP_MSVCRT"));
             }
 
-            arguments.add("--cuda-gpu-arch=" + config.get(ClavaOptions.CUDA_GPU_ARCH));
+            arguments.add("--cuda-gpu-arch=" + parserConfig.get(CodeParser.CUDA_GPU_ARCH));
 
-            var cudaPath = config.get(ClavaOptions.CUDA_PATH);
+            var cudaPath = parserConfig.get(CodeParser.CUDA_PATH);
             if (!cudaPath.isBlank()) {
-                var cudaFolder = SpecsIo.existingFolder(cudaPath);
+
+                // Check if should use built-in CUDA lib
+                File cudaFolder = cudaPath.toUpperCase().equals(BUILT_IN_CUDALIB) ? ClangResources.getBuiltinCudaLib()
+                        : SpecsIo.existingFolder(cudaPath);
+
                 arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
             }
 
