@@ -37,10 +37,8 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
-import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -227,17 +225,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return "->";
     }
 
-    /**
-     * TODO: Make method protected when all accesses are "fixed"
-     * 
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-    public ClavaNodeInfo getInfo() {
-        return DataStoreToLegacy.getNodeInfo(getData());
-    }
-
     @Override
     public ClavaNodeIterator getChildrenIterator() {
         return new ClavaNodeIterator(this);
@@ -300,16 +287,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     public Optional<SourceRange> getLocationTry() {
         return Optional.of(get(LOCATION));
-    }
-
-    /**
-     * @deprecated
-     * @param expr
-     * @return
-     */
-    @Deprecated
-    protected static Expr nullable(Expr expr) {
-        return expr == null ? LegacyToDataStore.getFactory().nullExpr() : expr;
     }
 
     protected void throwNoCodeGeneration() {
