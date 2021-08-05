@@ -25,7 +25,7 @@ public interface ClangAstWebResource {
         return WebResourceProvider.newInstance("http://specs.fe.up.pt/resources/clangast/", resourceUrl);
     }
 
-    WebResourceProvider BUILTIN_INCLUDES = create("clang_builtin_includes_v12.0.zip", "v12.0");
+    WebResourceProvider BUILTIN_INCLUDES = create("clang_builtin_includes_v12.0.1.zip", "v12.0.1");
     // WebResourceProvider LIBC_CXX = create("libcxx_7.0.1.zip", "v1.0");
     WebResourceProvider LIBC_CXX = create("libc_cxx.zip", "v12.0.1");
 
