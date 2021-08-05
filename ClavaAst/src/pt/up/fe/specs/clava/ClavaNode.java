@@ -1485,7 +1485,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public SpecsList<DataKey<?>> getSignatureKeys() {
-        return SpecsList.convert(new ArrayList<DataKey<?>>()).andAdd(LOCATION);
+        return SpecsList.convert(new ArrayList<DataKey<?>>()).andAdd(LOCATION).andAdd(PREVIOUS_ID);
         // List<DataKey<?>> signatureKeys = new ArrayList<>();
         // signatureKeys.add(LOCATION);
         // return signatureKeys;
