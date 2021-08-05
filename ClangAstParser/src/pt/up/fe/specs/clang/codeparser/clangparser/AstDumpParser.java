@@ -279,7 +279,7 @@ public class AstDumpParser implements ClangParser {
                         ? ClangResources.getBuiltinCudaLib()
                         : SpecsIo.existingFolder(cudaPath);
 
-                ClavaLog.info("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
+                ClavaLog.debug("Setting --cuda-path to folder '" + cudaFolder.getAbsolutePath() + "'");
                 arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
             }
 
@@ -312,7 +312,7 @@ public class AstDumpParser implements ClangParser {
         arguments.addAll(ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS)));
         arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
 
-        ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
+        ClavaLog.info(() -> "Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
 
         ClangParserData parsedData = null;
         ProcessOutput<String, ClangParserData> output = null;

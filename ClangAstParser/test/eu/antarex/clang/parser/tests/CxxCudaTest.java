@@ -27,7 +27,7 @@ import eu.antarex.clang.parser.CxxCudaTester;
  * @author JBispo
  *
  */
-public class CxxCudaTestLocal {
+public class CxxCudaTest {
 
     @BeforeClass
     public static void setup() throws Exception {
