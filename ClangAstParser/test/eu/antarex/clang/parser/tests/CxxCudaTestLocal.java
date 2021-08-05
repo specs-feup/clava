@@ -20,7 +20,14 @@ import org.junit.Test;
 import eu.antarex.clang.parser.AClangAstTester;
 import eu.antarex.clang.parser.CxxCudaTester;
 
-public class CxxCudaTest {
+/**
+ * Disabled tests, they are failing in the CI server. Even when passing the --cuda-path built-in library, the parser
+ * fails to find the CUDA library.
+ * 
+ * @author JBispo
+ *
+ */
+public class CxxCudaTestLocal {
 
     @BeforeClass
     public static void setup() throws Exception {
