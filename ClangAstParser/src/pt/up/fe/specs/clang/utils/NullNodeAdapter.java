@@ -13,28 +13,13 @@
 
 package pt.up.fe.specs.clang.utils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.extra.NullNodeOld;
-import pt.up.fe.specs.clava.context.ClavaFactory;
-import pt.up.fe.specs.util.exceptions.NotImplementedException;
+import pt.up.fe.specs.clava.ast.NullNodeType;
 
 public class NullNodeAdapter {
-
-    public static enum NullNodeType {
-        ATTR,
-        DECL,
-        EXPR,
-        STMT,
-        TYPE;
-    }
-
-    private final List<NullNodeType> childrenToAdapt;
-    private final NullNodeType singleType;
 
     public static NullNodeAdapter newEmpty() {
         return new NullNodeAdapter(Collections.emptyList(), null);
@@ -49,70 +34,56 @@ public class NullNodeAdapter {
     }
 
     private NullNodeAdapter(List<NullNodeType> childrenToAdapt, NullNodeType singleClass) {
-        this.childrenToAdapt = childrenToAdapt;
-        this.singleType = singleClass;
+        // this.childrenToAdapt = childrenToAdapt;
+        // this.singleType = singleClass;
     }
 
-    public List<ClavaNode> adapt(ClavaFactory factory, ClavaNode parentNode, List<ClavaNode> children) {
+    // public List<ClavaNode> adapt(ClavaFactory factory, ClavaNode parentNode, List<ClavaNode> children) {
+    //
+    // boolean needsAdaptation = children.stream().filter(child -> child instanceof NullNodeOld).findFirst()
+    // .isPresent();
+    //
+    // if (!needsAdaptation) {
+    // return children;
+    // }
+    //
+    // // Adapt all null nodes
+    // List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
+    //
+    // if (singleType != null) {
+    // for (ClavaNode child : children) {
+    // if (child instanceof NullNodeOld) {
+    // child = getNullNode(singleType, factory);
+    // }
+    //
+    // adaptedChildren.add(child);
+    // }
+    //
+    // return adaptedChildren;
+    // }
+    //
+    // for (int i = 0; i < children.size(); i++) {
+    // ClavaNode child = children.get(i);
+    // if (child instanceof NullNodeOld) {
+    // if (i >= childrenToAdapt.size()) {
+    // throw new RuntimeException("Found NullNodeOld that is not being adapted for parent node of class "
+    // + parentNode.getClass());
+    // }
+    //
+    // NullNodeType nullNodeType = childrenToAdapt.get(i);
+    // if (nullNodeType == null) {
+    // throw new RuntimeException(
+    // "NullNodeType node defined for node of class " + parentNode.getClass() + ", index " + i);
+    // }
+    //
+    // child = getNullNode(nullNodeType, factory);
+    // }
+    //
+    // adaptedChildren.add(child);
+    // }
+    //
+    // return adaptedChildren;
+    // }
 
-        boolean needsAdaptation = children.stream().filter(child -> child instanceof NullNodeOld).findFirst()
-                .isPresent();
-
-        if (!needsAdaptation) {
-            return children;
-        }
-
-        // Adapt all null nodes
-        List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
-
-        if (singleType != null) {
-            for (ClavaNode child : children) {
-                if (child instanceof NullNodeOld) {
-                    child = getNullNode(singleType, factory);
-                }
-
-                adaptedChildren.add(child);
-            }
-
-            return adaptedChildren;
-        }
-
-        for (int i = 0; i < children.size(); i++) {
-            ClavaNode child = children.get(i);
-            if (child instanceof NullNodeOld) {
-                if (i >= childrenToAdapt.size()) {
-                    throw new RuntimeException("Found NullNodeOld that is not being adapted for parent node of class "
-                            + parentNode.getClass());
-                }
-
-                NullNodeType nullNodeType = childrenToAdapt.get(i);
-                if (nullNodeType == null) {
-                    throw new RuntimeException(
-                            "NullNodeType node defined for node of class " + parentNode.getClass() + ", index " + i);
-                }
-
-                child = getNullNode(nullNodeType, factory);
-            }
-
-            adaptedChildren.add(child);
-        }
-
-        return adaptedChildren;
-    }
-
-    public static ClavaNode getNullNode(NullNodeType nullType, ClavaFactory factory) {
-        switch (nullType) {
-        case DECL:
-            return factory.nullDecl();
-        case EXPR:
-            return factory.nullExpr();
-        case STMT:
-            return factory.nullStmt();
-        case TYPE:
-            return factory.nullType();
-        default:
-            throw new NotImplementedException(nullType);
-        }
-    }
 
 }

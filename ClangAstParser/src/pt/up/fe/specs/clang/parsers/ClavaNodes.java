@@ -29,10 +29,9 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clang.utils.NullNodeAdapter;
-import pt.up.fe.specs.clang.utils.NullNodeAdapter.NullNodeType;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.NullNodeType;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -448,8 +447,7 @@ public class ClavaNodes {
 
         Runnable nodeToAdd = () -> {
 
-            ClavaNode value = isNullId(nodeId) ? NullNodeAdapter.getNullNode(getNullNodeType(nodeId), factory)
-                    : get(nodeId);
+            ClavaNode value = isNullId(nodeId) ? getNullNodeType(nodeId).newNullNode(factory) : get(nodeId);
 
             data.set(key, key.getValueClass().cast(value));
         };
