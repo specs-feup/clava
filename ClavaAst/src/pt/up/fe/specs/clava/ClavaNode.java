@@ -206,17 +206,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return get(LOCATION);
     }
 
-    /**
-     * TODO: Make method private when all accesses are "fixed"
-     * 
-     * @deprecated use .getExtendedId() instead
-     * @return
-     */
-    @Deprecated
-    public Optional<ClavaId> getClavaId() {
-        return getInfo().getId();
-    }
-
     public Optional<String> getExtendedId() {
         return Optional.of(getId());
     }

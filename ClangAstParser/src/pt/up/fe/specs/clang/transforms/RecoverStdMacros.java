@@ -20,7 +20,6 @@ import java.util.regex.Pattern;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.ClavaNodeFactory;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.transform.SimplePreClavaRule;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -64,7 +63,7 @@ public class RecoverStdMacros implements SimplePreClavaRule {
         Preconditions.checkNotNull(macroStd, "Case not defined, " + stdMacroNumber);
 
         // Replace expression
-        queue.replace(parenExpr, ClavaNodeFactory.literalExpr(macroStd, parenExpr.getExprType()));
+        queue.replace(parenExpr, node.getFactory().literalExpr(macroStd, parenExpr.getExprType()));
     }
 
 }
