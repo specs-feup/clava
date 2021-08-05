@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -56,12 +57,11 @@ public class ClangResources {
     private final boolean dumpStdout;
     private final FileResourceManager clangAstResources;
 
-    private static final ThreadLocal<Boolean> HAS_LIBC = new ThreadLocal<>();
+    private static final AtomicInteger HAS_LIBC = new AtomicInteger(-1);
 
     public ClangResources(boolean dumpStdout) {
         this.dumpStdout = dumpStdout;
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
-        HAS_LIBC.set(null);
     }
 
     public ClangFiles getClangFiles(String version, boolean usePlatformIncludes) {
@@ -301,15 +301,35 @@ public class ClangResources {
     }
 
     private boolean hasLibC(File clangExecutable) {
-        var hasLibC = HAS_LIBC.get();
+        var value = HAS_LIBC.get();
 
-        if (hasLibC != null) {
-            return hasLibC;
+        // Check if initiallized
+        if (value == -1) {
+            var hasLibC = detectLibC(clangExecutable);
+            value = hasLibC ? 1 : 0;
+            HAS_LIBC.set(value);
         }
 
-        hasLibC = detectLibC(clangExecutable);
-        HAS_LIBC.set(hasLibC);
-        return hasLibC;
+        if (value == 0) {
+            return false;
+        }
+
+        if (value == 1) {
+            return true;
+        }
+
+        throw new RuntimeException("Unexpected value: '" + value + "'");
+
+        // Boolean.parseBoolean(CLANG_INCLUDES_FOLDERNAME)
+        // var hasLibC = HAS_LIBC.get();
+        //
+        // if (hasLibC != null) {
+        // return hasLibC;
+        // }
+        //
+        // hasLibC = detectLibC(clangExecutable);
+        // HAS_LIBC.set(hasLibC);
+        // return hasLibC;
     }
 
     /**
@@ -368,9 +388,9 @@ public class ClangResources {
         }
 
         if (needsLib) {
-            ClavaLog.debug("Could not find system libc/licxx");
+            ClavaLog.debug("Could not find system libc/libcxx");
         } else {
-            ClavaLog.debug("Detected system's libc and licxx");
+            ClavaLog.debug("Detected system's libc and libcxx");
         }
 
         return !needsLib;
