@@ -51,7 +51,6 @@ import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.context.ClavaContext;
-import pt.up.fe.specs.clava.omp.OMPDirective;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -347,10 +346,6 @@ public class ClangAstParser {
         // Get nodes that are temporary
         Set<String> isTemporary = parseIsTemporary(SpecsIo.read("is_temporary.txt"));
 
-        // Get OpenMP directives
-        // Map<String, OMPDirective> ompDirectives = parseOmpDirectives(IoUtils.read("omp.txt"));
-        Map<String, OMPDirective> ompDirectives = new HashMap<>();
-
         // Get enum integer types
         Map<String, String> enumToIntegerType = parseEnumIntegerTypes(SpecsIo.read("enum_integer_type.txt"));
 
@@ -361,7 +356,7 @@ public class ClangAstParser {
         ClavaNodes newNodes = parsedData.get(ClangParserData.CLAVA_NODES);
 
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
-                isTemporary, ompDirectives, enumToIntegerType, stderr,
+                isTemporary, enumToIntegerType, stderr,
                 newNodes, clangDump);
 
         return new ClangRootNode(clangRootData, clangDump);
