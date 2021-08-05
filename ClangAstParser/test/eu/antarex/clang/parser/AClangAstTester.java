@@ -226,6 +226,10 @@ public abstract class AClangAstTester {
         }
 
         CodeParser testCodeParser = CodeParser.newInstance();
+        testCodeParser.set(ParallelCodeParser.PARALLEL_PARSING);
+        if (builtinCuda) {
+            testCodeParser.set(CodeParser.CUDA_PATH, CodeParser.getBuiltinOption());
+        }
 
         // Parse output again, check if files are the same
 
