@@ -11,14 +11,15 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.type.data.exception;
+package pt.up.fe.specs.clava.ast.type.data;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 
-public class UninstantiatedExceptionSpecification extends ExceptionSpecification {
+public class UnevaluatedExceptionSpecification extends ExceptionSpecification {
 
     /// DATAKEYS BEGIN
 
@@ -37,11 +38,31 @@ public class UninstantiatedExceptionSpecification extends ExceptionSpecification
      */
     public final static DataKey<Decl> SOURCE_DECL = KeyFactory.object("sourceDecl", Decl.class);
 
-    /**
-     * The function template corresponding to the instantiation of this exception specification.
-     */
-    public final static DataKey<Decl> SOURCE_TEMPLATE = KeyFactory.object("sourceTemplate", Decl.class);
-
     /// DATAKEYS END
 
+    @Override
+    public String getCode(FunctionProtoType type) {
+
+        // Decl sourceDecl = getSourceDecl(type);
+        // System.out.println("SOURCE DECL:" + sourceDecl);
+        // FunctionType sourceDeclType = sourceDecl.getFunctionType();
+        //
+        // System.out.println("EXCEPTION TYPE:" + type.getId());
+        // System.out.println("SOURCE DECL TYPE:" + sourceDeclType.getId());
+
+        return "noexcept";
+        // type.getApp().getNode(id)
+        // System.out.println("UNEVAL SOURCE DECL:" + get(SOURCE_DECL_ID));
+        // return super.getCode();
+    }
+
+    public Decl getSourceDecl(FunctionProtoType type) {
+        return get(SOURCE_DECL);
+        // ClavaNode clavaNode = type.getContext().get(ClavaContext.APP).getNode(get(SOURCE_DECL_ID));
+        //
+        // SpecsCheck.checkArgument(clavaNode instanceof FunctionDecl,
+        // () -> "Expected SourceDecl to be a FunctionDecl, is '" + clavaNode.getClass() + "'");
+        //
+        // return (FunctionDecl) clavaNode;
+    }
 }

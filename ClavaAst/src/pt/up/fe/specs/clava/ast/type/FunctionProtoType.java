@@ -25,7 +25,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
+import pt.up.fe.specs.clava.ast.type.data.ExceptionSpecification;
 import pt.up.fe.specs.clava.ast.type.enums.ExceptionSpecificationType;
 import pt.up.fe.specs.clava.language.ReferenceQualifier;
 import pt.up.fe.specs.util.SpecsLogs;
