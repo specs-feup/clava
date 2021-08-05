@@ -23,11 +23,8 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
 import pt.up.fe.specs.clava.ast.attr.enums.AttributeKind;
-import pt.up.fe.specs.clava.ast.decl.data.DeclData;
 import pt.up.fe.specs.util.collections.SpecsList;
 
 /**
@@ -73,36 +70,10 @@ public abstract class Decl extends ClavaNode {
             .generic("attributes", (List<Attribute>) new ArrayList<Attribute>())
             .setDefault(() -> new ArrayList<>());
 
-    // public final static DataKey<Optional<Decl>> DECL_CONTEXT = KeyFactory.optional("declContext");
-
-    // public final static DataKey<List<Decl>> DECL_CONTEXT = KeyFactory
-    // .generic("declContext", (List<Decl>) new ArrayList<Decl>())
-    // .setDefault(() -> new ArrayList<>());
-
-    /**
-     * A list of Decl ids, associated with this Decl.
-     */
-    // public final static DataKey<List<String>> DECL_CONTEXT_IDS = KeyFactory
-    // .generic("declContext", (List<String>) new ArrayList<String>())
-    // .setDefault(() -> new ArrayList<>());
-
     /// DATAKEYS END
 
     public Decl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-    }
-
-    /**
-     * Legacy support.
-     * 
-     * @deprecated
-     * @param data
-     * @param info
-     * @param children
-     */
-    @Deprecated
-    public Decl(DeclData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        this(new LegacyToDataStore().setDecl(data).setNodeInfo(info).getData(), children);
     }
 
     public boolean hasAttribute(AttributeKind kind) {

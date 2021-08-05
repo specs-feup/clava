@@ -37,7 +37,6 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
@@ -128,10 +127,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     private final DataStore dataI;
     private final DataClass<ClavaNode> dataClass;
     private boolean disableModification;
-
-    public ClavaNode(ClavaNodeInfo nodeInfo, Collection<? extends ClavaNode> children) {
-        this(new LegacyToDataStore().setNodeInfo(nodeInfo).getData(), children);
-    }
 
     public ClavaNode(DataStore dataI, Collection<? extends ClavaNode> children) {
         super(children);
@@ -712,19 +707,19 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     // return dataI.copy();
     // }
 
-    /**
-     * Legacy support.
-     * 
-     * When all types have DataStore, we can use node.getFactoryWithNode()
-     * 
-     * @deprecated getFactoryWithNode()
-     * @param node
-     */
-    @Deprecated
-    public void setNodeData(ClavaNode node) {
-        node.setId(getExtendedId().get());
-        node.setLocation(getLocation());
-    }
+    // /**
+    // * Legacy support.
+    // *
+    // * When all types have DataStore, we can use node.getFactoryWithNode()
+    // *
+    // * @deprecated getFactoryWithNode()
+    // * @param node
+    // */
+    // @Deprecated
+    // public void setNodeData(ClavaNode node) {
+    // node.setId(getExtendedId().get());
+    // node.setLocation(getLocation());
+    // }
 
     // public ClavaNode setIsLegacyNode(boolean isLegacyNode) {
     // getData().set(IS_LEGACY_NODE, isLegacyNode);

@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clang.transforms;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.NullType;
@@ -70,17 +69,17 @@ public class AdaptBoolTypes implements SimplePostClavaRule {
     }
 
     private BuiltinType newBoolBuiltin(ClavaNode node) {
-        BuiltinType boolType = LegacyToDataStore.getFactory()
+        return node.getFactoryWithNode()
                 .builtinType(BuiltinKind.Bool);
 
-        boolType.setNodeData(node);
+        // boolType.setNodeData(node);
         // Legacy support
         // If all types had DataStore, we could have used node.getFactoryWithNode()
         // In any case, this transformation is deprecated for the new parser
         // boolType.setId(node.getExtendedId().get());
         // boolType.setLocation(node.getLocation());
 
-        return boolType;
+        // return boolType;
 
         /*
         if (node.hasDataI()) {

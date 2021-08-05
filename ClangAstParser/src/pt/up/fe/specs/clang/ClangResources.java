@@ -33,8 +33,6 @@ import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clang.streamparser.StreamParser;
 import pt.up.fe.specs.clava.ClavaLog;
-import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
@@ -445,9 +443,6 @@ public class ClangResources {
             LineStreamParser<ClangParserData> lineStreamParser, File stderrDumpFilename) {
 
         File dumpfile = SpecsSystem.isDebug() ? stderrDumpFilename : null;
-
-        // TODO: Temporary, needs to be set again, since this will run in a separate thread
-        LegacyToDataStore.CLAVA_CONTEXT.set(lineStreamParser.getData().get(ClavaNode.CONTEXT));
 
         // Parse StdErr from ClangAst
         return new StreamParser(clavaData, dumpfile, lineStreamParser).parse(inputStream);

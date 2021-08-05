@@ -49,7 +49,6 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.omp.OMPDirective;
@@ -391,9 +390,6 @@ public class ClangAstParser {
             LineStreamParser<ClangParserData> lineStreamParser, File stderrDumpFilename) {
 
         File dumpfile = isDebug() ? stderrDumpFilename : null;
-
-        // TODO: Temporary, needs to be set again, since this will run in a separate thread
-        LegacyToDataStore.CLAVA_CONTEXT.set(lineStreamParser.getData().get(ClavaNode.CONTEXT));
 
         // Parse StdErr from ClangAst
         return new StreamParser(clavaData, dumpfile, lineStreamParser).parse(inputStream);

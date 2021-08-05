@@ -24,7 +24,6 @@ import org.suikasoft.jOptions.DataStore.ADataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -91,10 +90,6 @@ public class ClavaContext extends ADataClass<ClavaContext> {
 
         // Initialize factory
         set(FACTORY, new ClavaFactory(this));
-
-        // Set ClavaNodeFactory
-        // TODO: Temporary transition measure
-        LegacyToDataStore.CLAVA_CONTEXT.set(this);
 
         set(METRICS, new ClavaMetrics());
 

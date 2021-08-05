@@ -21,11 +21,8 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodeInfo;
 import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.expr.data.ExprData;
 import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
@@ -61,24 +58,6 @@ public abstract class Expr extends ClavaNode implements Typable {
 
     public Expr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-    }
-
-    // Type is required
-    // UPDATE: Removed check to enable to possibility to set the Type after the node is created (e.g., delayed node
-    // setting)
-    // Preconditions.checkArgument(data.hasValue(TYPE), "Expected data of Expr node to have a defined TYPE");
-
-    /**
-     * For legacy.
-     * 
-     * @deprecated
-     * @param exprData
-     * @param info
-     * @param children
-     */
-    @Deprecated
-    public Expr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-        this(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
     }
 
     @Override

@@ -22,7 +22,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
@@ -70,7 +69,7 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
 
     @Override
     protected Type processType(Type type) {
-        return type == null ? LegacyToDataStore.getFactory().nullType() : type.copy();
+        return type == null ? getFactory().nullType() : type.copy();
     }
 
     @Override

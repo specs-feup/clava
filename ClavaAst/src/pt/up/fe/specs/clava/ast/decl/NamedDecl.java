@@ -25,7 +25,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
 import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
@@ -128,7 +127,7 @@ public abstract class NamedDecl extends Decl {
     }
 
     protected Type processType(Type type) {
-        return type == null ? LegacyToDataStore.getFactory().nullType() : type.copy();
+        return type == null ? getFactory().nullType() : type.copy();
     }
 
     /*
