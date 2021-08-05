@@ -282,6 +282,11 @@ public class ClangResources {
     }
 
     private boolean useBuiltinLibc(File clangExecutable, boolean usePlatformIncludes) {
+        // If usePlatformIncludes is enabled, never use built-in includes
+        if (usePlatformIncludes) {
+            return false;
+        }
+
         return !hasLibC(clangExecutable);
         // return !usePlatformIncludes;
         /*
