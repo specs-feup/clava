@@ -88,9 +88,11 @@ public class ChildrenAdapter {
             return children;
         }
 
+        List<ClavaNode> adaptedChildren = children;
+
         // Replace NullNodeOld instances with NullNode
-        List<ClavaNode> adaptedChildren = NULL_NODE_MAPPER.get(node.getClass()).adapt(context.get(ClavaContext.FACTORY),
-                node, children);
+        // adaptedChildren = NULL_NODE_MAPPER.get(node.getClass()).adapt(context.get(ClavaContext.FACTORY),
+        // node, children);
 
         // Apply normalization steps to children
         adaptedChildren = CHILDREN_ADAPTERS.get(node.getClass()).apply(adaptedChildren, context);
