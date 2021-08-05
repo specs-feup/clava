@@ -29,11 +29,13 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.astlineparser.AstParser;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
+import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clang.streamparser.StreamParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.context.ClavaContext;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.providers.FileResourceManager;
@@ -54,9 +56,12 @@ public class ClangResources {
     private final boolean dumpStdout;
     private final FileResourceManager clangAstResources;
 
+    private static final ThreadLocal<Boolean> HAS_LIBC = new ThreadLocal<>();
+
     public ClangResources(boolean dumpStdout) {
         this.dumpStdout = dumpStdout;
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
+        HAS_LIBC.set(null);
     }
 
     public ClangFiles getClangFiles(String version, boolean usePlatformIncludes) {
@@ -277,7 +282,8 @@ public class ClangResources {
     }
 
     private boolean useBuiltinLibc(File clangExecutable, boolean usePlatformIncludes) {
-        return !usePlatformIncludes;
+        return !hasLibC(clangExecutable);
+        // return !usePlatformIncludes;
         /*
         // If platform includes is disabled, always use built-in headers
         if (!usePlatformIncludes) {
@@ -289,36 +295,48 @@ public class ClangResources {
         */
     }
 
+    private boolean hasLibC(File clangExecutable) {
+        var hasLibC = HAS_LIBC.get();
+
+        if (hasLibC != null) {
+            return hasLibC;
+        }
+
+        hasLibC = detectLibC(clangExecutable);
+        HAS_LIBC.set(hasLibC);
+        return hasLibC;
+    }
+
     /**
      * Detects if the system has libc/licxx installed.
      *
      * @param clangExecutable
      * @return
      */
-    /*
-    private boolean hasLibC(File clangExecutable) {
+    private boolean detectLibC(File clangExecutable) {
+
         // return false;
-    
+
         // If Windows, return false and always use bundled LIBC++
         // if (SupportedPlatform.getCurrentPlatform().isWindows()) {
         // return false;
         // }
-    
+
         File clangTest = SpecsIo.mkdir(SpecsIo.getTempFolder(), "clang_ast_test");
-    
+
         // Write test files
         List<File> testFiles = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
                 .stream()
                 .map(resource -> resource.write(clangTest))
                 .collect(Collectors.toList());
-    
+
         // If on linux, make folders and files accessible to all users
         if (SupportedPlatform.getCurrentPlatform().isLinux()) {
             SpecsSystem.runProcess(Arrays.asList("chmod", "-R", "777", clangTest.getAbsolutePath()), false, true);
         }
-    
+
         // boolean needsLib = Arrays.asList(ClangAstResource.TEST_INCLUDES_C, ClangAstResource.TEST_INCLUDES_CPP)
-    
+
         boolean needsLib = false;
         for (File testFile : testFiles) {
             ProcessOutput<List<ClangNode>, DataStore> output = testFile(clangExecutable, clangTest, testFile);
@@ -326,34 +344,34 @@ public class ClangResources {
             // System.out.println("RETURN VALUE:" + output.getReturnValue());
             // System.out.println("STD OUT:" + output.getStdOut());
             // System.out.println("STD ERR:" + output.getStdErr().get(StreamKeys.WARNINGS));
-    
+
             // boolean foundInclude = !output.getStdOut().isEmpty();
             boolean foundInclude = output.getReturnValue() == 0;
-    
+
             if (foundInclude) {
                 SpecsCheck.checkArgument(output.getStdOut().isEmpty(),
                         () -> "Expected std output to be empty: " + output.getStdOut());
                 SpecsCheck.checkArgument(output.getStdErr().get(StreamKeys.WARNINGS).isEmpty(),
                         () -> "Expected err output to be empty: " + output.getStdErr().get(StreamKeys.WARNINGS));
             }
-    
+
             if (!foundInclude) {
                 needsLib = true;
                 break;
             }
             // return foundInclude;
         }
-    
+
         if (needsLib) {
             ClavaLog.debug("Could not find system libc/licxx");
         } else {
             ClavaLog.debug("Detected system's libc and licxx");
         }
-    
+
         return !needsLib;
-    
+
     }
-    */
+
     // private boolean testFile(File clangExecutable, File testFolder, ResourceProvider testResource) {
     private ProcessOutput<List<ClangNode>, DataStore> testFile(File clangExecutable, File testFolder,
             File testFile) {

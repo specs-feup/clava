@@ -278,7 +278,7 @@ public class AstDumpParser implements ClangParser {
                 File cudaFolder = cudaPath.toUpperCase().equals(CodeParser.getBuiltinOption())
                         ? ClangResources.getBuiltinCudaLib()
                         : SpecsIo.existingFolder(cudaPath);
-
+                // System.out.println("CUDA FOLDER: " + cudaFolder.getAbsolutePath());
                 arguments.add("--cuda-path=" + cudaFolder.getAbsolutePath());
             }
 
