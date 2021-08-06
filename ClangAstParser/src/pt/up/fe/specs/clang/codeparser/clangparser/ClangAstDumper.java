@@ -50,13 +50,13 @@ import pt.up.fe.specs.util.system.ProcessOutput;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 /**
- * Parses the output of the ClangAstDumper executable. Clava AST can be built based on this output.
+ * Calls the ClangAstDumper executable and returns the dumped information. Clava AST can be built based on this output.
  * 
  * 
  * @author JoaoBispo
  *
  */
-public class ClangAstDumpParser {
+public class ClangAstDumper {
 
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
@@ -100,7 +100,7 @@ public class ClangAstDumpParser {
      * @param builtinIncludes
      * @param parserConfig
      */
-    public ClangAstDumpParser(boolean streamConsoleOutput,
+    public ClangAstDumper(boolean streamConsoleOutput,
             File clangExecutable, List<String> builtinIncludes, CodeParser parserConfig) {
 
         this.streamConsoleOutput = streamConsoleOutput;
@@ -119,12 +119,12 @@ public class ClangAstDumpParser {
         return lastWorkingFolder;
     }
 
-    public ClangAstDumpParser setBaseFolder(File baseFolder) {
+    public ClangAstDumper setBaseFolder(File baseFolder) {
         this.baseFolder = baseFolder;
         return this;
     }
 
-    public ClangAstDumpParser setSystemIncludesThreshold(int systemIncludesThreshold) {
+    public ClangAstDumper setSystemIncludesThreshold(int systemIncludesThreshold) {
         this.systemIncludesThreshold = systemIncludesThreshold;
         return this;
     }

@@ -29,7 +29,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import larai.LaraI;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
-import pt.up.fe.specs.clang.codeparser.clangparser.ClangAstDumpParser;
+import pt.up.fe.specs.clang.codeparser.clangparser.ClangAstDumper;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
@@ -299,7 +299,7 @@ public class ClavaWeaverTester {
         SpecsIo.deleteFolder(workFolder);
 
         // Delete weaver files
-        ClangAstDumpParser.getTempFiles().stream()
+        ClangAstDumper.getTempFiles().stream()
                 .forEach(filename -> new File(filename).delete());
     }
 

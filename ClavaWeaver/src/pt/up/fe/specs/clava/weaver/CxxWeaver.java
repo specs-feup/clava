@@ -34,7 +34,7 @@ import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.SupportedPlatform;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
-import pt.up.fe.specs.clang.codeparser.clangparser.ClangAstDumpParser;
+import pt.up.fe.specs.clang.codeparser.clangparser.ClangAstDumper;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -1116,7 +1116,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Delete intermediary files
         if (args.get(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES)) {
-            for (String tempFile : ClangAstDumpParser.getTempFiles()) {
+            for (String tempFile : ClangAstDumper.getTempFiles()) {
                 new File(tempFile).delete();
             }
         }
