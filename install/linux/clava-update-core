@@ -1,10 +1,43 @@
 #!/usr/bin/env bash
 
+# Function for downloading
+# $1: url
+# $2: filename
+# $3: timestamp
+download_file () {
+   # Call timestamp version
+   if [ "$3" = true ]; then
+	wget -N $1$2   
+   # Overwrite file
+   else
+	wget -O $2 $1$2      
+   fi
+}
+
 
 # Absolute path to this script, e.g. /home/user/bin/foo.sh
 SCRIPT=$(readlink -f "$0")
 # Absolute path this script is in, thus /home/user/bin
 SCRIPTPATH=$(dirname "$SCRIPT")
+
+# Options
+TIME_STAMP=true
+
+#echo "Current timestamp: $TIME_STAMP"
+
+# Check arguments
+
+while test $# != 0
+do
+    case "$1" in
+    # Disable time-stamping of wget
+    -f) TIME_STAMP=false;;
+    -h) ;&
+    --help) printf "Clava Updater and Installer v12.0.1\n\nAvailable options:\n-f: force download\n-h or --help: this help\n"; exit 0;;
+    esac
+    shift
+done
+
 
 #Check if Java exists
 command -v java >/dev/null 2>&1 || { echo >&2 "I require 'java' but it's not installed.  Aborting."; exit 1; }
@@ -14,35 +47,42 @@ command -v wget >/dev/null 2>&1 || { echo >&2 "I require 'wget' but it's not ins
 
 # Should be running on the folder where Clava.jar will by
 # get the zip, unzip and save it inside a Clava directory
-wget -N specs.fe.up.pt/tools/clava.zip
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava.zip
+download_file "specs.fe.up.pt/tools/" "clava.zip" $TIME_STAMP
 
 #Check if unzip exists
 command -v unzip >/dev/null 2>&1 || { echo >&2 "I require 'unzip' but it's not installed.  Aborting."; exit 1; }
 
 unzip -o clava.zip
 # get the clang_ast.resources file
-wget -N specs.fe.up.pt/tools/clang_ast.resources
+#wget $TIME_STAMP specs.fe.up.pt/tools/clang_ast.resources
+download_file "specs.fe.up.pt/tools/" "clang_ast.resources" $TIME_STAMP
 # icon
-wget -N specs.fe.up.pt/tools/clava/icon.png
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/icon.png
+download_file "specs.fe.up.pt/tools/clava/" "icon.png" $TIME_STAMP
 
 # Go to the previous folder
 cd ..
 
 
 # get the clava script
-wget -N specs.fe.up.pt/tools/clava/clava
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/clava
+download_file "specs.fe.up.pt/tools/clava/" "clava" $TIME_STAMP
 chmod +x clava
 
 # get the clava-unit script
-wget -N specs.fe.up.pt/tools/clava/clava-unit
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/clava-unit
+download_file "specs.fe.up.pt/tools/clava/" "clava-unit" $TIME_STAMP
 chmod +x clava-unit
 
 # get the clava-doc script
-wget -N specs.fe.up.pt/tools/clava/clava-doc
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/clava-doc
+download_file "specs.fe.up.pt/tools/clava/" "clava-doc" $TIME_STAMP
 chmod +x clava-doc
 
 # get the clava-desktop script
-wget -N specs.fe.up.pt/tools/clava/clava-desktop
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/clava-desktop
+download_file "specs.fe.up.pt/tools/clava/" "clava-desktop" $TIME_STAMP
 chmod +x clava-desktop
 
 # get CMake modules
@@ -54,27 +94,45 @@ cd /usr/local/lib/clava
 #wget https://raw.githubusercontent.com/specs-feup/clava/master/CMake/ClavaConfig.cmake -O ClavaConfig.cmake
 #wget https://raw.githubusercontent.com/specs-feup/clava/master/CMake/ApplyLARA.cmake -O ApplyLARA.cmake
 #rm ClavaConfig.cmake
-#wget -N https://rawgithub.com/specs-feup/clava/master/CMake/ClavaConfig.cmake
+#wget $TIME_STAMP https://rawgithub.com/specs-feup/clava/master/CMake/ClavaConfig.cmake
 #rm ApplyLARA.cmake
-#wget -N https://rawgithub.com/specs-feup/clava/master/CMake/ApplyLARA.cmake
+#wget $TIME_STAMP https://rawgithub.com/specs-feup/clava/master/CMake/ApplyLARA.cmake
 
-wget -N specs.fe.up.pt/tools/clava/ClavaConfig.cmake
-wget -N specs.fe.up.pt/tools/clava/ApplyLARA.cmake
-wget -N specs.fe.up.pt/tools/clava/ClavaUtils.cmake
-#wget -N specs.fe.up.pt/tools/clava/ClavaUtilConfig.cmake
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/ClavaConfig.cmake
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/ApplyLARA.cmake
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/ClavaUtils.cmake
+
+download_file "specs.fe.up.pt/tools/clava/" "ClavaConfig.cmake" $TIME_STAMP
+download_file "specs.fe.up.pt/tools/clava/" "ApplyLARA.cmake" $TIME_STAMP
+download_file "specs.fe.up.pt/tools/clava/" "ClavaUtils.cmake" $TIME_STAMP
+
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/ClavaUtilConfig.cmake
 echo -n "$SCRIPTPATH/Clava.jar" > clava-installation-jar.txt
 
 mkdir clava
 cd clava
-wget -N specs.fe.up.pt/tools/clava/ClavaGenerate.cmake
-wget -N specs.fe.up.pt/tools/clava/ClavaWeave.cmake
-wget -N specs.fe.up.pt/tools/clava/ClavaWeave.CMakeLists.txt
+
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/ClavaGenerate.cmake
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/ClavaWeave.cmake
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/ClavaWeave.CMakeLists.txt
+
+download_file "specs.fe.up.pt/tools/clava/" "ClavaGenerate.cmake" $TIME_STAMP
+download_file "specs.fe.up.pt/tools/clava/" "ClavaWeave.cmake" $TIME_STAMP
+download_file "specs.fe.up.pt/tools/clava/" "ClavaWeave.CMakeLists.txt" $TIME_STAMP
+
 cd ..
 
 mkdir util
 cd util
-wget -N specs.fe.up.pt/tools/clava/ApplyHdf5.lara
-wget -N specs.fe.up.pt/tools/clava/ClavaHdf5.cmake
-wget -N specs.fe.up.pt/tools/clava/ApplyAutopar.lara
-wget -N specs.fe.up.pt/tools/clava/ClavaAutopar.cmake
+
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/ApplyHdf5.lara
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/ClavaHdf5.cmake
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/ApplyAutopar.lara
+#wget $TIME_STAMP specs.fe.up.pt/tools/clava/ClavaAutopar.cmake
+
+download_file "specs.fe.up.pt/tools/clava/" "ApplyHdf5.lara" $TIME_STAMP
+download_file "specs.fe.up.pt/tools/clava/" "ClavaHdf5.cmake" $TIME_STAMP
+download_file "specs.fe.up.pt/tools/clava/" "ApplyAutopar.lara" $TIME_STAMP
+download_file "specs.fe.up.pt/tools/clava/" "ClavaAutopar.cmake" $TIME_STAMP
+
 cd ..

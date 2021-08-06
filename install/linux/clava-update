@@ -13,5 +13,5 @@ wget -N specs.fe.up.pt/tools/clava/clava-update-core
 chmod +x clava-update-core
 
 # Run clava-update-core
-./clava-update-core
+./clava-update-core $@
 
