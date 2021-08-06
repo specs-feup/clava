@@ -1115,9 +1115,7 @@ public class CxxWeaver extends ACxxWeaver {
         // }
 
         // Delete intermediary files
-        if (args.get(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES))
-
-        {
+        if (args.get(CxxWeaverOption.CLEAN_INTERMEDIATE_FILES)) {
             for (String tempFile : ClangAstParser.getTempFiles()) {
                 new File(tempFile).delete();
             }

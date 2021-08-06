@@ -26,6 +26,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clava.ClavaLog;
@@ -180,6 +181,9 @@ public abstract class AClangAstTester {
             File outputFolder = SpecsIo.mkdir(AClangAstTester.OUTPUT_FOLDERNAME);
             SpecsIo.deleteFolderContents(outputFolder);
             outputFolder.delete();
+
+            ClangAstParser.getTempFiles().stream()
+                    .forEach(filename -> new File(filename).delete());
         }
 
     }

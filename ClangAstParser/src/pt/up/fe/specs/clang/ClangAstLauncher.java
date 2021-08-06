@@ -34,9 +34,11 @@ import pt.up.fe.specs.util.utilities.StringLines;
 /**
  * TODO: Should this class be deprecated? It is a simple launcher, ClavaViewer has overlapping functionality.
  * 
+ * @deprecated
  * @author JBispo
  *
  */
+@Deprecated
 public class ClangAstLauncher {
 
     private static final HashSet<String> C_EXTENSIONS = new HashSet<>(Arrays.asList(
