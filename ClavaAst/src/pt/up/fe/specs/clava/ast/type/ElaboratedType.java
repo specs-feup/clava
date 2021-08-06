@@ -44,28 +44,9 @@ public class ElaboratedType extends TypeWithKeyword {
 
     /// DATAKEYS END
 
-    // private static final ClassSet<Type> BARE_TYPE_CLASSES = ClassSet.newInstance(RecordType.class);
-
     public ElaboratedType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    /*
-    public ElaboratedType(ElaboratedTypeKeyword keyword, TypeData typeData, ClavaNodeInfo info,
-            Type namedType) {
-        this(keyword, typeData, info, Arrays.asList(namedType));
-    }
-    
-    private ElaboratedType(ElaboratedTypeKeyword keyword, TypeData typeData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(keyword, typeData, info, children);
-    }
-    
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new ElaboratedType(getKeyword(), getTypeData(), getInfo(), Collections.emptyList());
-    }
-    */
 
     @Override
     public Type desugar() {
@@ -74,21 +55,11 @@ public class ElaboratedType extends TypeWithKeyword {
 
     public Type getNamedType() {
         return get(NAMED_TYPE);
-        // return getChild(Type.class, 0);
     }
 
     public void setNamedType(Type namedType) {
         set(NAMED_TYPE, namedType);
-        // setChild(0, namedType);
     }
-
-    /*
-    @Override
-    public boolean isAnonymous() {
-    // return getNamedType() instanceof NullType;
-    return getNamedType().isAnonymous();
-    }
-    */
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
@@ -101,51 +72,7 @@ public class ElaboratedType extends TypeWithKeyword {
         String qualifier = getQualifier();
         code += qualifier + getNamedType().getCode(sourceNode, name);
 
-        // code += getNamedType().getCode(sourceNode, name);
-
-        // if (getNamedType().getCode(sourceNode, name).startsWith("%Dummy")) {
-        // System.out.println("NAMED TYPE:" + getNamedType().toTree());
-        // }
-        // System.out.println("NAMED TYPE:" + getNamedType().getClass());
-        // System.out.println("NAMED TYPE CODE:" + getNamedType().getCode(sourceNode, name));
-        // System.out.println("ELABORATED CODE:" + code);
-        // System.out.println("QUALIFIER:" + get(QUALIFIER));
-        // System.out.println("TEMPLATE ARGS:" + getTemplateArgumentStrings(this));
         return code;
-
-        /*     
-        String bareType = getBareType();
-        
-             
-        // If named type has template arguments, update them
-        Type namedType = getNamedType();
-        
-             
-        if (namedType.hasUpdatedTemplateArgTypes()) {
-        
-            int startIndex = bareType.indexOf('<');
-            int endIndex = bareType.lastIndexOf('>');
-            boolean hasTemplateArgs = startIndex != -1 && endIndex != -1;
-        
-            // Preconditions.checkArgument(startIndex != -1 && endIndex != -1,
-            // "Named type has template arguments, expected bare type to have them too: " + bareType);
-        
-            if (hasTemplateArgs) {
-                String templateArgs = namedType.getTemplateArgumentTypes().stream()
-                        .map(type -> type.getCode(sourceNode))
-                        .collect(Collectors.joining(", "));
-                bareType = bareType.substring(0, startIndex + 1) + templateArgs + bareType.substring(endIndex);
-            }
-        
-        }
-        
-             
-        if (name == null) {
-            return bareType;
-        }
-        
-        return bareType + " " + name;
-        */
     }
 
     /**
@@ -161,9 +88,6 @@ public class ElaboratedType extends TypeWithKeyword {
 
         if (!qualifier.contains("<") && !qualifier.contains(">")) {
             return qualifier;
-            // String templateStrings = getTemplateArgumentStrings(this).stream().collect(Collectors.joining(","));
-            // throw new RuntimeException("Expected to find a '<' in qualifier '" + qualifier
-            // + "', implement case when this is not present. Template types: " + templateStrings);
         }
 
         // Not sure if this is the best way to detect the template parameters
@@ -178,16 +102,6 @@ public class ElaboratedType extends TypeWithKeyword {
         return newQualifier;
     }
 
-    // @Override
-    // protected Type desugarImpl() {
-    // return getNamedType();
-    // }
-    //
-    // @Override
-    // protected void setDesugarImpl(Type desugaredType) {
-    // setNamedType(desugaredType);
-    // }
-
     /**
      * 
      * @param typeAsString
@@ -195,15 +109,8 @@ public class ElaboratedType extends TypeWithKeyword {
      */
     public ElaboratedType setTypeAsString(String typeAsString) {
         set(ElaboratedType.TYPE_AS_STRING, typeAsString);
-        /*
-        if (hasDataI()) {
-            getDataI().set(ElaboratedType.TYPE_AS_STRING, typeAsString);
-        } else {
-            getTypeData().setBareType(typeAsString);
-        }
-        */
-        return this;
 
+        return this;
     }
 
 }

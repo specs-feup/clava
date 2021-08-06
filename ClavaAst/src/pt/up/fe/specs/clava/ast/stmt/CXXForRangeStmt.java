@@ -22,26 +22,18 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 
+/**
+ * This represents C++0x [stmt.ranged]'s ranged for statement, represented as 'for (range-declarator :
+ * range-expression)' or 'for (init-statement range-declarator : range-expression)'.
+ * 
+ * @author JBispo
+ *
+ */
 public class CXXForRangeStmt extends LoopStmt {
 
     public CXXForRangeStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    // public CXXForRangeStmt(ClavaNodeInfo info, DeclStmt range, Stmt beginEnd, Expr cond, Expr inc, DeclStmt loopVar,
-    // Stmt body) {
-    //
-    // this(info, Arrays.asList(range, ClavaNodes.getNodeOrNullStmt(beginEnd), cond, inc, loopVar, body));
-    // }
-    //
-    // private CXXForRangeStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXForRangeStmt(getInfo(), Collections.emptyList());
-    // }
 
     public DeclStmt getRange() {
         return getChild(DeclStmt.class, 0);
@@ -82,7 +74,6 @@ public class CXXForRangeStmt extends LoopStmt {
 
         VarDecl loopVar = (VarDecl) getLoopVar().getDecls().get(0);
 
-        // String loopVarType = loopVar.getTypeCode().trim();
         String loopVarType = loopVar.getTypeCode().trim();
         if (loopVarType.endsWith(" &")) {
             loopVarType = loopVarType.substring(0, loopVarType.length() - 1) + "auto&";
@@ -95,7 +86,6 @@ public class CXXForRangeStmt extends LoopStmt {
         String expr = initVar.getInit().get().getCode();
 
         code.append(expr).append(")");
-        // code.append(getBody().map(body -> body.getCode()).orElse(";"));
         code.append(getBody().getCode());
 
         return code.toString();

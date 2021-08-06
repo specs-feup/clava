@@ -125,28 +125,14 @@ public class AstFactory {
 
         Expr initExpr = (Expr) expr;
 
-        // boolean isUsed = true;
-        // boolean isImplicit = false;
-        // boolean isNrvo = false;
         Type initType = (Type) init.getTypeImpl().getNode();
 
-        // System.out.println("INIT JP:" + init.getClass());
-        // System.out.println("INIT expr:" + initExpr);
-        // System.out.println("INIT expr TYPE:" + initExpr.getType());
-        // System.out.println("INIT TYPE:" + initType);
         DataStore config = CxxWeaver.getCxxWeaver().getConfig();
 
         // Check if C or C++
         Standard standard = config.get(ClavaOptions.STANDARD);
 
         Type type = getVarDeclType(standard, initType);
-
-        // VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo,
-        // InitializationStyle.CINIT, false);
-        // DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
-        // VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, varName, type, declData,
-        // ClavaNodeInfo.undefinedInfo(),
-        // initExpr);
 
         VarDecl varDecl = CxxWeaver.getFactory().varDecl(varName, type);
         varDecl.setInit(initExpr);
@@ -162,13 +148,12 @@ public class AstFactory {
      * @return
      */
     public static AJoinPoint varDeclNoInit(String varName, AType type) {
-
-        // VarDecl varDecl = ClavaNodeFactory.varDecl(varName, (Type) type.getNode());
         VarDecl varDecl = CxxWeaver.getFactory().varDecl(varName, (Type) type.getNode());
         return CxxJoinpoints.create(varDecl, AVardecl.class);
     }
 
     private static Type getVarDeclType(Standard standard, Type returnType) {
+
         // Special case, NullType
         if (returnType instanceof NullType) {
             if (!standard.isCxx()) {
@@ -195,13 +180,6 @@ public class AstFactory {
 
         BuiltinType voidType = CxxWeaver.getFactory().builtinType(BuiltinKind.Void);
         FunctionProtoType functionType = CxxWeaver.getFactory().functionProtoType(voidType);
-        // FunctionProtoType functionType = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(),
-        // new FunctionTypeData(), new TypeData("void(void)"), ClavaNodeInfo.undefinedInfo(), voidType,
-        // Collections.emptyList());
-        // FunctionDecl functionDecl = ClavaNodeFactory.functionDecl(name, Arrays.asList(), functionType,
-        // new FunctionDeclData(), new DeclData(),
-        // ClavaNodeInfo.undefinedInfo(),
-        // CxxWeaver.getFactory().compoundStmt());
 
         FunctionDecl functionDecl = CxxWeaver.getFactory().functionDecl(name, functionType);
         functionDecl.setBody(CxxWeaver.getFactory().compoundStmt());
@@ -230,8 +208,6 @@ public class AstFactory {
         Type astType = type instanceof AType ? (Type) type.getNode()
                 : CxxWeaver.getFactory().nullType();
 
-        // Type astType = type == null ? ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo()) : type.getNode();
-
         return CxxJoinpoints.create(CxxWeaver.getFactory().literalExpr(code, astType), AExpression.class);
     }
 
@@ -250,16 +226,11 @@ public class AstFactory {
 
         Type returnType = (Type) typeJp.getNode();
 
-        // DeclRefExpr declRef = ClavaNodeFactory.declRefExpr(functionName, returnType);
         DeclRefExpr declRef = CxxWeaver.getFactory().declRefExpr(functionName, returnType);
 
         List<Type> argTypes = Arrays.stream(args)
                 .map(arg -> ((Typable) arg.getNode()).getType())
                 .collect(Collectors.toList());
-
-        // FunctionTypeData fData = new FunctionTypeData(Types.isVoid(returnType), false, false, null, CallingConv.C);
-        // FunctionProtoType type = ClavaNodeFactory.functionProtoType(new FunctionProtoTypeData(), fData,
-        // new TypeData(""), ClavaNodeInfo.undefinedInfo(), returnType, argTypes);
 
         FunctionProtoType type = CxxWeaver.getFactory().functionProtoType(returnType, argTypes);
 
@@ -268,9 +239,6 @@ public class AstFactory {
                 .collect(Collectors.toList());
 
         CallExpr call = CxxWeaver.getFactory().callExpr(declRef, type, exprArgs);
-        // CallExpr call = ClavaNodeFactory.callExpr(new ExprData(type, ValueKind.R_VALUE),
-        // ClavaNodeInfo.undefinedInfo(),
-        // declRef, exprArgs);
 
         return CxxJoinpoints.create(call, ACall.class);
     }
@@ -283,6 +251,7 @@ public class AstFactory {
      * @return
      */
     public static AFile file(File file, String relativePath) {
+
         // Test if path is absolute
         if (relativePath != null && new File(relativePath).isAbsolute()) {
             ClavaLog.warning(
@@ -290,7 +259,6 @@ public class AstFactory {
             relativePath = null;
         }
 
-        // TranslationUnit tUnit = ClavaNodeFactory.translationUnit(filename, path, Collections.emptyList());
         // New files do not have a path
         TranslationUnit tUnit = CxxWeaver.getFactory().translationUnit(file, Collections.emptyList());
 
@@ -337,6 +305,7 @@ public class AstFactory {
     }
 
     public static AJoinPoint externC(AJoinPoint jpDecl) {
+
         // Allowed classes for now: CxxFunction
         // TODO: This might be expanded in the future
         boolean isFunction = jpDecl instanceof CxxFunction;
@@ -345,14 +314,6 @@ public class AstFactory {
                     "Constructor 'externC' does not support joinpoint of type '" + jpDecl.getJoinPointType() + "'");
             return null;
         }
-
-        /*
-        if (isFunction) {
-            if (((CxxFunction) jpDecl).getNode().getFunctionDeclData().getStorageClass() == StorageClass.EXTERN) {
-                return null;
-            }
-        }
-        */
 
         // Check that node does not already has a parent LinkageSpecDecl
         ClavaNode decl = jpDecl.getNode();
@@ -363,22 +324,14 @@ public class AstFactory {
         }
 
         LinkageSpecDecl linkage = CxxWeaver.getFactory().linkageSpecDecl(LanguageId.C, (Decl) decl);
-        // LinkageSpecDecl linkage = ClavaNodeFactory.linkageSpecialDecl(LanguageId.C, DeclData.empty(),
-        // ClavaNodeInfo.undefinedInfo(), Arrays.asList(decl));
 
         return CxxJoinpoints.create(linkage);
     }
 
-    // public static AJoinPoint whileLoop() {
-    // ClavaNodeFactory.whileStmt(info, condition, thenStmt)
-    // }
-
-    // public static ACxxWeaverJoinPoint constArrayType(String typeCode, Standard standard, List<Integer> dims) {
     public static ACxxWeaverJoinPoint constArrayType(String typeCode, String standard, List<Integer> dims) {
         return constArrayType(CxxWeaver.getFactory().literalType(typeCode), standard, dims);
     }
 
-    // public static ACxxWeaverJoinPoint constArrayType(Type outType, Standard standard, List<Integer> dims) {
     /**
      * TODO: Standard string not required
      *
@@ -388,7 +341,6 @@ public class AstFactory {
      * @return
      */
     public static ACxxWeaverJoinPoint constArrayType(Type outType, String standardString, List<Integer> dims) {
-        // Standard standard = Standard.getEnumHelper().fromValue(standardString);
 
         Preconditions.checkNotNull(dims);
         Preconditions.checkArgument(dims.size() > 0);
@@ -397,13 +349,7 @@ public class AstFactory {
 
         ListIterator<Integer> li = dims.listIterator(dims.size());
         while (li.hasPrevious()) {
-
-            // ArrayTypeData arrayTypeData = new ArrayTypeData(ArraySizeType.NORMAL, Collections.emptyList(), standard);
-            // TypeData typeData = new TypeData(outType.getCode());
-            // ClavaNodeInfo info = ClavaNodeInfo.undefinedInfo();
-
             inType = outType;
-            // outType = ClavaNodeFactory.constantArrayType(li.previous(), arrayTypeData, typeData, info, inType);
             outType = CxxWeaver.getFactory().constantArrayType(inType, li.previous());
         }
 
@@ -413,18 +359,15 @@ public class AstFactory {
     public static AType variableArrayType(AType elementType, AExpression sizeExpr) {
         Type variableArrayType = CxxWeaver.getFactory().variableArrayType((Type) elementType.getNode(),
                 (Expr) sizeExpr.getNode());
-        // Type variableArrayType = ClavaNodeFactory.variableArrayType((Type) elementType.getNode(),
-        // (Expr) sizeExpr.getNode());
 
         return CxxJoinpoints.create(variableArrayType, AType.class);
     }
 
     public static AJoinPoint omp(String directiveName) {
+
         // Get directive
         OmpDirectiveKind kind = OmpDirectiveKind.getHelper().fromValue(directiveName);
         return CxxJoinpoints.create(OmpParser.newOmpPragma(kind, CxxWeaver.getContex()));
-
-        // ClavaNodeFactory.wrapperStmt(ClavaNodeInfo.undefinedInfo(),
     }
 
     public static AStatement caseStmt(AExpression value, AStatement subStmt) {
@@ -442,15 +385,13 @@ public class AstFactory {
      * @return a list with a case statement and a break statement
      */
     public static List<AStatement> caseFromExpr(AExpression value, AExpression expr) {
+
         // Create compound stmt
         ExprStmt exprStmt = CxxWeaver.getFactory().exprStmt((Expr) expr.getNode());
         BreakStmt breakStmt = CxxWeaver.getFactory().breakStmt();
 
         CompoundStmt compoundStmt = CxxWeaver.getFactory().compoundStmt(exprStmt);
         compoundStmt.setNaked(true);
-        // InlineComment comment = ClavaNodeFactory.inlineComment("Case " + value.getCode(), false,
-        // ClavaNodeInfo.undefinedInfo());
-        // Stmt commentStmt = ClavaNodeFactory.wrapperStmt(ClavaNodeInfo.undefinedInfo(), comment);
 
         AStatement caseStmt = caseStmt(value, CxxJoinpoints.create(compoundStmt, AStatement.class));
 
@@ -471,16 +412,6 @@ public class AstFactory {
             return null;
         }
 
-        // boolean invalidInput = Arrays.stream(cases)
-        // .filter(aCase -> !(aCase instanceof AExpression))
-        // .findFirst()
-        // .isPresent();
-
-        // if (invalidInput) {
-        // ClavaLog.info("Expected all inputs to be 'expression' join points");
-        // return null;
-        // }
-
         List<Stmt> statements = new ArrayList<>();
 
         for (int i = 0; i < cases.length; i += 2) {
@@ -488,17 +419,6 @@ public class AstFactory {
             statements.addAll(caseFromExpr(cases[i], cases[i + 1]).stream()
                     .map(aStmt -> (Stmt) aStmt.getNode())
                     .collect(Collectors.toList()));
-            /*
-            if (cases[i] instanceof AExpression) {
-                ClavaLog.info("Expected argument " + (i + 2) + " to be an expression join point");
-                return null;
-            }
-            
-            if (cases[i + 1] instanceof AStatement) {
-                ClavaLog.info("Expected argument " + (i + 3) + " to be a statement join point");
-                return null;
-            }
-            */
         }
 
         CompoundStmt body = CxxWeaver.getFactory().compoundStmt(statements);
@@ -510,8 +430,6 @@ public class AstFactory {
     ////// Methods that only use ClavaFactory
 
     public static ACxxWeaverJoinPoint builtinType(String typeCode) {
-        // BuiltinKind kind = BuiltinKind.getHelper().fromValue(typeCode);
-
         BuiltinType type = CxxWeaver.getFactory().builtinType(typeCode);
 
         return CxxJoinpoints.create(type);
@@ -542,9 +460,6 @@ public class AstFactory {
     public static AExpression doubleLiteral(double floating) {
         FloatingLiteral floatingLiteral = CxxWeaver.getFactory()
                 .floatingLiteral(FloatKind.DOUBLE, floating);
-        // Type type = CxxWeaver.getFactory().builtinType(BuiltinKind.DOUBLE);
-        // FloatingLiteral intLiteral = ClavaNodeFactory.floatingLiteral(FloatKind.DOUBLE, Double.toString(floating),
-        // new ExprData(type), ClavaNodeInfo.undefinedInfo());
 
         return CxxJoinpoints.create(floatingLiteral, AExpression.class);
     }
@@ -560,9 +475,6 @@ public class AstFactory {
 
     public static AExpression integerLiteral(int integer) {
         IntegerLiteral intLiteral = CxxWeaver.getFactory().integerLiteral(integer);
-        // Type intType = ClavaNodeFactory.builtinType(BuiltinKind.INT);
-        // IntegerLiteral intLiteral = ClavaNodeFactory.integerLiteral(Integer.toString(integer), new ExprData(intType),
-        // ClavaNodeInfo.undefinedInfo());
 
         return CxxJoinpoints.create(intLiteral, AExpression.class);
     }
@@ -667,8 +579,7 @@ public class AstFactory {
     public static AIf ifStmt(AExpression condition, AStatement thenBody, AStatement elseBody) {
         var thenNode = thenBody != null ? ClavaNodes.toCompoundStmt((Stmt) thenBody.getNode()) : null;
         var elseNode = elseBody != null ? ClavaNodes.toCompoundStmt((Stmt) elseBody.getNode()) : null;
-        // CompoundStmt emptyBody = CxxWeaver.getFactory().compoundStmt();
-        // IfStmt ifStmt = CxxWeaver.getFactory().ifStmt((Expr) condition.getNode(), emptyBody);
+
         IfStmt ifStmt = CxxWeaver.getFactory().ifStmt((Expr) condition.getNode(), thenNode, elseNode);
         return CxxJoinpoints.create(ifStmt, AIf.class);
     }
@@ -690,7 +601,6 @@ public class AstFactory {
         var typeNode = type != null ? (Type) type.getNode()
                 : Types.inferUnaryType(opKind, (Type) expr.getTypeImpl().getNode(), CxxWeaver.getFactory());
 
-        // UnaryOperator opNode = CxxWeaver.getFactory().unaryOperator(opKind, (Type) type.getNode(),
         UnaryOperator opNode = CxxWeaver.getFactory().unaryOperator(opKind, typeNode,
                 (Expr) expr.getNode());
 
@@ -777,6 +687,7 @@ public class AstFactory {
     }
 
     public static ALoop forStmt(AStatement init, AStatement condition, AStatement inc, AStatement body) {
+
         // If null, create NullStmt
         var initStmt = init != null ? (Stmt) init.getNode() : CxxWeaver.getFactory().nullStmt();
         var condStmt = condition != null ? (Stmt) condition.getNode() : CxxWeaver.getFactory().nullStmt();

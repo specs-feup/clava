@@ -29,39 +29,15 @@ public class WhileStmt extends LoopStmt {
         super(data, children);
     }
 
-    // public WhileStmt(ClavaNodeInfo info, ClavaNode condition, CompoundStmt thenStmt) {
-    // this(info, Arrays.asList(condition, thenStmt));
-    // }
-    //
-    // private WhileStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new WhileStmt(getInfo(), Collections.emptyList());
-    // }
-
     public Optional<VarDecl> getDeclCondition() {
         return getOptionalChild(VarDecl.class, 0);
     }
 
-    // public Stmt getCondition() {
-    // return getChild(Stmt.class, 1);
-    // // return ClavaNodes.getChild(this, 1);
-    // }
     public Expr getCondition() {
         return getChild(Expr.class, 1);
-        // return ClavaNodes.getChild(this, 1);
     }
 
-    // public ClavaNode getWhileCondition() {
-    // // return getChild(0);
-    // return ClavaNodes.getChild(this, 1);
-    // }
-
     public CompoundStmt getThen() {
-        // return getChild(Stmt.class, 1);
         return (CompoundStmt) ClavaNodes.getChild(this, 2);
     }
 
@@ -69,7 +45,6 @@ public class WhileStmt extends LoopStmt {
     public String getCode() {
         StringBuilder code = new StringBuilder();
 
-        // String conditionCode = getWhileCondition().getCode();
         String conditionCode = getStmtCondition().map(ClavaNode::getCode).orElse("");
 
         code.append("while(").append(conditionCode).append(")").append(getThen().getCode());
@@ -87,7 +62,6 @@ public class WhileStmt extends LoopStmt {
         return Optional.of(getDeclCondition()
                 .map(ClavaNode.class::cast)
                 .orElse(getCondition()));
-        // return Optional.of(getWhileCondition());
     }
 
 }

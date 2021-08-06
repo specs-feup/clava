@@ -34,34 +34,10 @@ public class EnumConstantDecl extends ValueDecl {
         super(data, children);
     }
 
-    // private final String value;
-
-    // public EnumConstantDecl(String value, Type type, DeclData declData, ClavaNodeInfo info) {
-    // this(value, type, declData, info, Collections.emptyList());
-    // }
-    //
-    // public EnumConstantDecl(String value, Type type, DeclData declData, ClavaNodeInfo info, Expr init) {
-    // this(value, type, declData, info, Arrays.asList(init));
-    // }
-    //
-    // private EnumConstantDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // super(declName, type, declData, info, children);
-    //
-    // this.value = declName;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new EnumConstantDecl(value, getType(), getDeclData(), getInfo());
-    // }
-
     @Override
     public String getCode() {
         StringBuilder builder = new StringBuilder();
 
-        // builder.append(value);
         builder.append(get(DECL_NAME));
 
         getInitExpr().ifPresent(subExpr -> builder.append(" = ").append(subExpr.getCode()));
@@ -77,12 +53,6 @@ public class EnumConstantDecl extends ValueDecl {
         }
 
         return Optional.ofNullable(initExpr);
-
-        // if (getNumChildren() == 0) {
-        // return Optional.empty();
-        // }
-        //
-        // return Optional.of(getChild(Expr.class, 0));
     }
 
 }

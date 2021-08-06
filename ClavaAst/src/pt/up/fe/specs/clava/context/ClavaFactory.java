@@ -177,13 +177,11 @@ public class ClavaFactory {
         this.classesService = new ClassesService();
     }
 
-    // public DataStore newDataStore(String idPrefix) {
     public DataStore newDataStore(Class<? extends ClavaNode> nodeClass) {
 
         // Get the correct prefix for the given class
         String idPrefix = PREFIX_MAP.get(nodeClass);
 
-        // DataStore data = DataStore.newInstance("ClavaFactory Node");
         DataStore data = DataStore.newInstance(StoreDefinitions.fromInterface(nodeClass), true);
 
         // Add base node, if present
@@ -193,44 +191,12 @@ public class ClavaFactory {
 
         // Set context
         data.set(ClavaNode.CONTEXT, context);
+
         // Set id
         data.set(ClavaNode.ID, context.get(ClavaContext.ID_GENERATOR).next(idPrefix));
 
         return data;
     }
-
-    // protected DataStore newTypeDataStore() {
-    // return newDataStore(TYPE_ID_PREFIX);
-    // }
-    //
-    // protected DataStore newExprDataStore() {
-    // return newDataStore(EXPR_ID_PREFIX);
-    // }
-    //
-    // protected DataStore newExtraDataStore() {
-    // return newDataStore(EXTRA_ID_PREFIX);
-    // }
-    //
-    // protected DataStore newDeclDataStore() {
-    // return newDataStore(DECL_ID_PREFIX)
-    // .set(Decl.ATTRIBUTES, new ArrayList<>());
-    // }
-    //
-    // protected DataStore newStmtDataStore() {
-    // return newDataStore(STMT_ID_PREFIX);
-    // }
-    //
-    // protected DataStore newAttrDataStore() {
-    // return newDataStore(ATTR_ID_PREFIX);
-    // }
-    //
-    // protected DataStore newPragmaDataStore() {
-    // return newDataStore(PRAGMA_ID_PREFIX);
-    // }
-    //
-    // protected DataStore newCommentDataStore() {
-    // return newDataStore(COMMENT_ID_PREFIX);
-    // }
 
     /// EXTRA
 
@@ -270,7 +236,6 @@ public class ClavaFactory {
                 .put(FunctionProtoType.PARAMETERS_TYPES, new ArrayList<>(argTypes));
 
         return new FunctionProtoType(data, SpecsCollections.concat(returnType, Collections.emptyList()));
-        // return new FunctionProtoType(data, SpecsCollections.concat(returnType, argTypes));
     }
 
     public NullType nullType() {
@@ -313,9 +278,7 @@ public class ClavaFactory {
         DataStore data = newDataStore(ConstantArrayType.class)
                 .put(ConstantArrayType.ARRAY_SIZE, size)
                 .put(ConstantArrayType.ELEMENT_TYPE, elementType);
-        // .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
 
-        // return new ConstantArrayType(data, Arrays.asList(elementType));
         return new ConstantArrayType(data, Collections.emptyList());
     }
 
@@ -323,18 +286,14 @@ public class ClavaFactory {
         DataStore data = newDataStore(VariableArrayType.class)
                 .put(VariableArrayType.ELEMENT_TYPE, elementType)
                 .put(VariableArrayType.SIZE_EXPR, sizeExpr);
-        // .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
 
-        // return new VariableArrayType(data, Arrays.asList(elementType, sizeExpr));
         return new VariableArrayType(data, Collections.emptyList());
     }
 
     public PointerType pointerType(Type pointeeType) {
         DataStore data = newDataStore(PointerType.class)
                 .put(PointerType.POINTEE_TYPE, pointeeType);
-        // .put(ArrayType.INDEX_TYPE_QUALIFIERS, new ArrayList<>());
 
-        // return new PointerType(data, Arrays.asList(pointeeType));
         return new PointerType(data, Collections.emptyList());
     }
 
@@ -414,23 +373,12 @@ public class ClavaFactory {
     public DeclRefExpr declRefExpr(String declName, Type type) {
         DataStore data = newDataStore(DeclRefExpr.class)
                 .put(Expr.TYPE, Optional.of(type));
-        // .put(DeclRefExpr.DECL_NAME, declName);
 
         DeclRefExpr declRefExpr = new DeclRefExpr(data, Collections.emptyList());
         declRefExpr.setName(declName);
 
         return declRefExpr;
-        // return new DeclRefExpr(data, Arrays.asList(dummyNamedDecl(declName)));
     }
-    // public static DeclRefExpr declRefExpr(String refName, ValueKind valueKind, Type type, ClavaNodeInfo info) {
-    // ExprData exprData = new ExprData(type, valueKind);
-    //
-    // String qualifier = "";
-    //
-    // BareDeclData declData = BareDeclData.newInstance(refName);
-    //
-    // return declRefExpr(qualifier, Collections.emptyList(), declData, null, exprData, info);
-    // }
 
     public CallExpr callExpr(Expr function, Type type, List<? extends Expr> args) {
         DataStore data = newDataStore(CallExpr.class)
@@ -522,8 +470,6 @@ public class ClavaFactory {
                 .put(ValueDecl.TYPE, type);
 
         return new DummyValueDecl(data, Collections.emptyList());
-        // return (DummyDecl) dummyDecl(node.getClass().getSimpleName())
-        // .setLocation(node.getLocation());
     }
 
     public FunctionDecl functionDecl(String declName, Type type) {
@@ -532,8 +478,6 @@ public class ClavaFactory {
                 .put(ValueDecl.TYPE, type);
 
         return new FunctionDecl(data, Collections.emptyList());
-        // return (DummyDecl) dummyDecl(node.getClass().getSimpleName())
-        // .setLocation(node.getLocation());
     }
 
     public VarDecl varDecl(String declName, Type type) {
@@ -716,10 +660,6 @@ public class ClavaFactory {
         return new CompoundStmt(newDataStore(CompoundStmt.class), children);
     }
 
-    // public CompoundStmt compoundStmt(boolean isNaked, Collection<? extends ClavaNode> children) {
-    // return new CompoundStmt(newStmtDataStore().put(CompoundStmt.IS_NAKED, isNaked), children);
-    // }
-
     /**
      * Creates an ExprStmt with semicolon.
      *
@@ -735,16 +675,13 @@ public class ClavaFactory {
     }
 
     public ExprStmt exprStmtAssignment(Expr lhs, Expr rhs) {
+
         // Create assignment
         BinaryOperator assign = binaryOperator(BinaryOperatorKind.Assign, rhs.getExprType(), lhs,
                 rhs);
 
         return exprStmt(assign);
     }
-
-    // public IfStmt ifStmt(Expr condition, CompoundStmt thenBody) {
-    // return ifStmt(condition, thenBody, null);
-    // }
 
     /**
      * 
@@ -756,13 +693,12 @@ public class ClavaFactory {
      * @return
      */
     public IfStmt ifStmt(Expr condition, CompoundStmt thenBody, CompoundStmt elseBody) {
-        // return ifStmt(condition, thenBody, (ClavaNode) elseBody);
-        //
 
         SpecsCheck.checkNotNull(condition, () -> "Condition of IfStmt must exist");
 
         // If null, create empty CompoundStmt
         ClavaNode thenStmt = thenBody != null ? thenBody : compoundStmt();
+
         // If null, create NullStmt
         ClavaNode elseStmt = elseBody != null ? elseBody : nullStmt();
 
@@ -771,12 +707,6 @@ public class ClavaFactory {
         return new IfStmt(ifStmtData, Arrays.asList(nullDecl(), condition, thenStmt, elseStmt));
 
     }
-
-    // private IfStmt ifStmt(Expr condition, CompoundStmt thenBody, ClavaNode elseBody) {
-    // DataStore ifStmtData = newDataStore(IfStmt.class);
-    //
-    // return new IfStmt(ifStmtData, Arrays.asList(nullDecl(), condition, thenBody, elseBody));
-    // }
 
     public ForStmt forStmt(Stmt init, Stmt cond, Stmt inc, CompoundStmt body) {
         DataStore forStmtData = newDataStore(ForStmt.class);

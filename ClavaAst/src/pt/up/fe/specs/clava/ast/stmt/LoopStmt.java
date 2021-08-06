@@ -34,9 +34,13 @@ import pt.up.fe.specs.clava.utils.StmtWithCondition;
 import pt.up.fe.specs.symja.SymjaPlusUtils;
 import pt.up.fe.specs.util.SpecsLogs;
 
+/**
+ * Represents a loop statement (e.g. for, while, do while).
+ * 
+ * @author JBispo
+ *
+ */
 public abstract class LoopStmt extends Stmt implements StmtWithCondition, NodeWithScope {
-
-    // private static final Integer DEFAULT_ITERATIONS = null;
 
     public LoopStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -46,21 +50,9 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition, NodeWi
         rank = null;
     }
 
-    // public static int getDefaultIterations() {
-    // return DEFAULT_ITERATIONS;
-    // }
-
     private boolean isParallel;
     private Integer iterations;
     private List<Integer> rank;
-
-    // public LoopStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    //
-    // isParallel = false;
-    // iterations = DEFAULT_ITERATIONS;
-    // rank = null;
-    // }
 
     public abstract CompoundStmt getBody();
 
@@ -89,6 +81,7 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition, NodeWi
     }
 
     public Integer getIterations() {
+
         // If a custom number of iterations was set, it has priority
         if (iterations != null) {
             return iterations;
@@ -126,6 +119,7 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition, NodeWi
     }
 
     public List<Integer> getRank() {
+
         // Calculate rank if it has not been initialized yet
         if (rank == null) {
             rank = calculateRank();
@@ -165,25 +159,6 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition, NodeWi
 
         // Loop ranks start at 1
         return indexOfLoop + 1;
-        /*
-        // Calculate own rank
-        ClavaNode parentNode = getParent();
-        int currentRank = 1;
-        for (ClavaNode sibling : parentNode.getChildren()) {
-        
-            // If found itself, return
-            if (sibling == this) {
-                return currentRank;
-            }
-        
-            // If found loop that is not itself, increase rank
-            if (sibling instanceof LoopStmt) {
-                currentRank++;
-            }
-        }
-        
-        throw new RuntimeException("Could not find itself inside of parent's children");
-        */
     }
 
     private List<LoopStmt> buildRankSiblings(ClavaNode ancestorRankNode) {
@@ -197,6 +172,7 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition, NodeWi
     }
 
     private void buildRankSiblingsPrivate(ClavaNode node, List<LoopStmt> rankSiblings) {
+
         // If not a statement, stop looking
         if (!(node instanceof Stmt)) {
             return;
@@ -210,19 +186,10 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition, NodeWi
 
         // Continue looking in the children of the stmt
         node.getChildrenStream().forEach(child -> buildRankSiblingsPrivate(child, rankSiblings));
-        /*
-        // If an aggregate statement, continue looking in its children
-        if (node instanceof Stmt && ((Stmt) node).isAggregateStmt()) {
-            node.getChildrenStream().forEach(child -> buildRankSiblingsPrivate(child, rankSiblings));
-            return;
-        }
-        
-        // For all other kinds of nodes, stop looking
-        return;
-        */
     }
 
     private ClavaNode getAncestorRankNode() {
+
         // Get first ancestor that is a LoopStmt.
         ClavaNode loopAncestor = getAncestorTry(LoopStmt.class).orElse(null);
         if (loopAncestor != null) {
@@ -240,14 +207,6 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition, NodeWi
      * Currently uses the loop file, function and rank to identify the loop
      */
     public String getLoopId() {
-        // String fileId = "file$"
-        // + getAncestorTry(TranslationUnit.class)
-        // .map(tunit -> tunit.getRelativeFilepath())
-        // .orElse("<no_file>");
-        //
-        // String functionId = "function$" + getAncestorTry(FunctionDecl.class)
-        // .map(functionDecl -> functionDecl.getDeclarationId(false))
-        // .orElse("<no_function>");
 
         // Get function id
         String functionId = getAncestorTry(FunctionDecl.class)
@@ -259,19 +218,11 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition, NodeWi
                 .collect(Collectors.joining("."));
 
         return functionId + getNodeIdSeparator() + rankId;
-        // return fileId + "->" + functionId + "->" + rankId;
     }
 
     @Override
     public String getStableId() {
         return getLoopId();
     }
-
-    /*
-    @Override
-    public List<Stmt> toStatements() {
-        return getBody().toStatements();
-    }
-    */
 
 }

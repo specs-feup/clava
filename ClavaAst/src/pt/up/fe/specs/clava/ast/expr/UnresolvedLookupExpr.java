@@ -42,25 +42,4 @@ public class UnresolvedLookupExpr extends OverloadExpr {
         super(data, children);
     }
 
-    // private final boolean requiresAdl;
-    // private String name;
-    // private final List<String> decls;
-    //
-    // public UnresolvedLookupExpr(boolean requiresAdl, String name, List<String> decls, String qualifier,
-    // ExprData exprData,
-    // ClavaNodeInfo info) {
-    //
-    // super(qualifier, exprData, info, Collections.emptyList());
-    //
-    // this.requiresAdl = requiresAdl;
-    // this.name = name;
-    // this.decls = decls;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new UnresolvedLookupExpr(requiresAdl, name, decls, getQualifier().orElse(null), getExprData(),
-    // getInfo());
-    // }
-
 }

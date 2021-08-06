@@ -49,7 +49,7 @@ public class CxxWeaverOptions {
         addOneArgOption(CodeParser.CUDA_GPU_ARCH, "cga", "cudaGpuArch", "GPU arch",
                 CodeParser.CUDA_GPU_ARCH.getLabel());
 
-        addOneArgOption(CodeParser.CUDA_PATH, "cup", "cudaPath", "CUDA folder",
+        addOneArgOption(CodeParser.CUDA_PATH, "cup", "cuda-path", "CUDA folder",
                 CodeParser.CUDA_PATH.getLabel());
 
         addBooleanOption(ClavaOptions.DISABLE_REMOTE_DEPENDENCIES, "drd", "disable-remote",

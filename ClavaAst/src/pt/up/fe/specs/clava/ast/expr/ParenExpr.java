@@ -31,21 +31,6 @@ public class ParenExpr extends Expr {
         super(data, children);
     }
 
-    // public ParenExpr(ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
-    // this(exprData, info, Arrays.asList(subExpr));
-    // }
-    //
-    // private ParenExpr(ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // super(exprData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new ParenExpr(getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     public Expr getSubExpr() {
         return getChild(Expr.class, 0);
     }

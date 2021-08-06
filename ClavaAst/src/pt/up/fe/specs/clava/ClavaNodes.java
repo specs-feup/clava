@@ -77,7 +77,6 @@ public class ClavaNodes {
     public static Stmt toStmt(ClavaNode node) {
         return toStmtTry(node).orElseThrow(
                 () -> new RuntimeException("Case not defined for class '" + node.getClass().getSimpleName() + "'"));
-        // throw new RuntimeException("Case not defined for class '" + node.getClass().getSimpleName() + "'");
     }
 
     public static Optional<Stmt> toStmtTry(ClavaNode node) {
@@ -87,12 +86,10 @@ public class ClavaNodes {
 
         if (node instanceof Expr) {
             return Optional.of(node.getFactory().exprStmt((Expr) node));
-            // return ClavaNodesLegacy.exprStmt((Expr) node);
         }
 
         if (node instanceof VarDecl) {
             return Optional.of(node.getFactoryWithNode().declStmt((VarDecl) node));
-            // return ClavaNodeFactory.declStmt(node.getInfo(), Arrays.asList((VarDecl) node));
         }
 
         if (node instanceof Comment || node instanceof Pragma) {
@@ -100,8 +97,6 @@ public class ClavaNodes {
         }
 
         return Optional.empty();
-
-        // throw new RuntimeException("Case not defined for class '" + node.getClass().getSimpleName() + "'");
     }
 
     /**
@@ -117,7 +112,6 @@ public class ClavaNodes {
     public static ClavaNode toLiteral(String code, Type type, ClavaNode hint) {
         if (hint instanceof Expr) {
             return hint.getFactory().literalExpr(code, type);
-            // return ClavaNodeFactory.literalExpr(code, type);
         }
 
         if (hint instanceof Decl) {
@@ -126,7 +120,6 @@ public class ClavaNodes {
 
         if (hint instanceof Stmt) {
             hint.getFactory().literalStmt(code);
-            // return ClavaNodeFactory.literalStmt(code);
         }
 
         // Default to statement when unknown
@@ -290,7 +283,7 @@ public class ClavaNodes {
 
         boolean isAssign = op.getOp() == BinaryOperatorKind.Assign;
         boolean isCompoundAssign = op instanceof CompoundAssignOperator;
-        // if (!op.getOp().isAssign()) {
+
         if (!(isAssign || isCompoundAssign)) {
             return ExprUse.READ;
         }
@@ -362,7 +355,6 @@ public class ClavaNodes {
         // Location is important, for insertion of text (e.g., TextParser)
         CompoundStmt newStmt = stmt.getFactory()
                 .compoundStmt(stmt);
-        // .setNaked(true);
 
         // Only make a naked CompoundStmt if node is not a LiteralStmt, we don't know how many statement it represents
         // in that case.
@@ -373,7 +365,6 @@ public class ClavaNodes {
         newStmt.setLocation(stmt.get(ClavaNode.LOCATION));
 
         return newStmt;
-        // return CompoundStmt.newNakedInstance(ClavaNodeInfo.undefinedInfo(stmt.getLocation()), Arrays.asList(stmt));
 
     }
 
@@ -412,7 +403,6 @@ public class ClavaNodes {
      * @return
      */
     public static String toUnimplementedCode(ClavaNode node) {
-        // return ClavaNodeUtils.toCode("// " + node.getClass().getSimpleName() + " - should not generate code", node);
         return toCode("NOT IMPLEMENTED: " + node.getClass().getSimpleName(), node);
     }
 
@@ -453,19 +443,6 @@ public class ClavaNodes {
 
         return type + " ";
     }
-    //
-    // public static BinaryOperator newAssignment(Expr leftHand, Expr rightHand) {
-    // return ClavaNodeFactory.binaryOperator(BinaryOperatorKind.ASSIGN, new ExprData(leftHand.getType()),
-    // ClavaNodeInfo.undefinedInfo(), leftHand, rightHand);
-    // }
-
-    // public static Stmt getNodeOrNullStmt(Stmt node) {
-    // if (node == null) {
-    // return ClavaNodeFactory.nullStmt(ClavaNodeInfo.undefinedInfo());
-    // }
-    //
-    // return node;
-    // }
 
     public static Decl normalizeDecl(Decl decl) {
         // Replace Template Specializations with Templace declarations
@@ -521,16 +498,13 @@ public class ClavaNodes {
             }
 
             return Optional.of(sibling);
-
-            // if (!(sibling instanceof Comment) && !(sibling instanceof Pragma)) {
-            // return Optional.of(sibling);
-            // }
         }
 
         return Optional.empty();
     }
 
     private static boolean isCommentOrPragma(String code) {
+
         // Trim
         String currentCode = code.trim();
 
@@ -607,6 +581,7 @@ public class ClavaNodes {
     }
 
     private static boolean isTargetValid(ClavaNode target, NodePosition position) {
+
         // If before or after, check if invalid child of a For/ForRange/Do
         if (position == NodePosition.AFTER || position == NodePosition.BEFORE) {
             int indexOfTarget = target.indexOfSelf();
@@ -692,10 +667,9 @@ public class ClavaNodes {
     }
 
     public static ClavaNode getFirstNodeOfTargetRegion(ClavaNode base, ClavaNode newNode) {
+
         // Check if newNode is a text element (Comment or Pragma, wrapped or not)
         // If so, there is no problem
-
-        // System.out.println("BASE CODE: " + base.getCode());
 
         var newTextNode = toTextElement(newNode);
         if (newTextNode.isPresent()) {
@@ -706,7 +680,7 @@ public class ClavaNodes {
         var reversedLeftSiblings = new ArrayList<>(base.getLeftSiblings());
         Collections.reverse(reversedLeftSiblings);
         var currentBase = base;
-        // System.out.println("CURRENT Base: " + currentBase.getCode());
+
         for (var sibling : reversedLeftSiblings) {
             var baseTextNode = toTextElement(sibling);
 
@@ -718,7 +692,6 @@ public class ClavaNodes {
 
             // If sibling is a text node, promote it to base node
             currentBase = sibling;
-            // System.out.println("New Base: " + currentBase.getCode());
         }
 
         // Finished loop without returning, first not is a text element

@@ -33,97 +33,16 @@ public abstract class TagType extends Type {
 
     /// DATAKEYS END
 
-    // private final DeclRef declInfo;
-    // private final TagKind tagKind;
-
-    // HACK
-    // private final boolean tempNode;
-
     public TagType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    /*
-    public TagType(DataStore data, Collection<? extends ClavaNode> children) {
-        super(data, children);
-    
-        // TODO: TEMPORARY, ADD DATA
-        this.declInfo = new DeclRef("place_holder_1", "place_holder_2", "place_holder_3");
-        this.tagKind = TagKind.NO_KIND;
-    
-        tempNode = true;
-    }
-    */
-    /*
-    public TagType(DeclRef declInfo, TagKind tagKind, TypeData typeData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-        super(typeData, info, children);
-    
-        this.declInfo = declInfo;
-        this.tagKind = tagKind;
-    
-        tempNode = false;
-    }
-    */
-
-    // public DeclRef getDeclInfo() {
-    // return declInfo;
-    // }
 
     public TagDecl getDecl() {
-        // System.out.println("DECL ID:" + get(DECL).get(ClavaNode.ID));
         return (TagDecl) get(DECL);
     }
 
     public TagKind getTagKind() {
         return getDecl().get(TagDecl.TAG_KIND);
-        // return tagKind;
     }
-
-    // @Override
-    // public String toContentString() {
-    // return "tagKind: " + getTagKind();
-    // }
-
-    /*
-    @Override
-    public String getCode(ClavaNode sourceNode, String name) {
-        // if (tempNode) {
-        // if (name == null) {
-        // return get(TYPE_AS_STRING);
-        // }
-        // return get(TYPE_AS_STRING) + " " + get(TYPE_AS_STRING);
-        // }
-    
-        // System.out.println("TAGTYPE:" + getTagKind());
-        // System.out.println("DECL INFO:" + getDeclInfo());
-        // System.out.println("TAG KIND:" + getTagKind());
-        // System.out.println("TYPE DATA:" + getTypeData());
-        // String baseType = getDeclInfo().getDeclType();
-        // System.out.println("BARE TYPE:" + getBareType());
-        // System.out.println("DECL NAME:" + getDecl().get(TagDecl.DECL_NAME));
-        // System.out.println("DECL cODE:" + getDecl().getCode());
-    
-        Type baseTypeNode = getDecl().get(TagDecl.TYPE_FOR_DECL);
-        if (baseTypeNode == this) {
-            throw new RuntimeException("Both types are the same, should this happen?");
-        }
-    
-        // String baseType = getDecl().get(TagDecl.DECL_NAME);
-        // String baseType = getDecl().get(TagDecl.TYPE_FOR_DECL).getCode();
-        String baseType = baseTypeNode.getCode();
-        if (baseType.isEmpty()) {
-            baseType = getBareType();
-        }
-    
-        String enumType = getTagKind().getCode() + " " + baseType;
-    
-        if (name == null) {
-            return enumType;
-        }
-    
-        return enumType + " " + name;
-    }
-    */
 
 }

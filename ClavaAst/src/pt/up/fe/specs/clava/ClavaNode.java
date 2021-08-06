@@ -37,10 +37,7 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clava.ast.DataStoreToLegacy;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
-import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -131,10 +128,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     private final DataClass<ClavaNode> dataClass;
     private boolean disableModification;
 
-    public ClavaNode(ClavaNodeInfo nodeInfo, Collection<? extends ClavaNode> children) {
-        this(new LegacyToDataStore().setNodeInfo(nodeInfo).getData(), children);
-    }
-
     public ClavaNode(DataStore dataI, Collection<? extends ClavaNode> children) {
         super(children);
 
@@ -206,17 +199,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return get(LOCATION);
     }
 
-    /**
-     * TODO: Make method private when all accesses are "fixed"
-     * 
-     * @deprecated use .getExtendedId() instead
-     * @return
-     */
-    @Deprecated
-    public Optional<ClavaId> getClavaId() {
-        return getInfo().getId();
-    }
-
     public Optional<String> getExtendedId() {
         return Optional.of(getId());
     }
@@ -236,17 +218,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     public String getNodeIdSeparator() {
         return "->";
-    }
-
-    /**
-     * TODO: Make method protected when all accesses are "fixed"
-     * 
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-    public ClavaNodeInfo getInfo() {
-        return DataStoreToLegacy.getNodeInfo(getData());
     }
 
     @Override
@@ -280,97 +251,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
-     * Helper method which generates template code for nodes that have not implemented yet getCode().
-     *
-     * @param node
-     * @return
-     */
-    // private String toUnimplementedCode() {
-    // return ClavaNodes.toCode("NOT IMPLEMENTED: " + getClass().getSimpleName(), this);
-    // }
-
-    // protected static List<ClavaNode> sanitize(ClavaNodeInfo info, ClavaNode... nodes) {
-    // return sanitize(info, Arrays.asList(nodes));
-    // }
-
-    /**
-     * Replaces null elements with NullNodes with the given info.
-     *
-     * @param info
-     * @param nodes
-     * @return
-     */
-    // protected static List<ClavaNode> sanitize(ClavaNodeInfo info, Collection<? extends ClavaNode> nodes) {
-    // return nodes.stream()
-    // .map(node -> node == null ? ClavaNodeFactory.nullNode(info) : node)
-    // .collect(Collectors.toList());
-    // }
-
-    /**
-     * Helper method that returns a child that can be a NullNode. Ignores WrapperStmt, Pragma and Comment nodes.
-     *
-     * @param index
-     * @param castTo
-     * @return
-     */
-    // protected <T extends ClavaNode> Optional<T> getNullable(int index, Class<T> castTo) {
-    // // Get child
-    // ClavaNode child = ClavaNodes.getChild(this, index);
-    //
-    // // If NullNode return empty Optional, otherwise cast and return optional
-    // return child instanceof pt.up.fe.specs.clava.ast.extra.NullNodeOld ? Optional.empty()
-    // : Optional.of(castTo.cast(child));
-    // }
-
-    // @Override
-    // public int hashCode() {
-    // return super.hashCode();
-    // }
-    //
-    // @Override
-    // public boolean equals(Object obj) {
-    // return this == obj;
-    // }
-
-    /*
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-    
-        boolean isValid = get(LOCATION).isValid();
-    
-        result = prime * result + (!isValid ? 0 : get(LOCATION).hashCode());
-        return result;
-    }
-    */
-    /*
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        ClavaNode other = (ClavaNode) obj;
-    
-        // Use the location, if valid
-        SourceRange location = get(LOCATION);
-        if (!location.isValid()) {
-            return false;
-        }
-    
-        SourceRange objLocation = other.get(LOCATION);
-        if (!objLocation.isValid()) {
-            return false;
-        }
-    
-        // return location.toString().equals(objLocation.toString());
-        return location.equals(objLocation);
-    }
-    */
-    /**
      *
      * @return true if the node is a 'wrapper' node. Examples of wrapper nodes: WrapperStmt
      */
@@ -402,16 +282,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     public Optional<SourceRange> getLocationTry() {
         return Optional.of(get(LOCATION));
-    }
-
-    /**
-     * @deprecated
-     * @param expr
-     * @return
-     */
-    @Deprecated
-    protected static Expr nullable(Expr expr) {
-        return expr == null ? LegacyToDataStore.getFactory().nullExpr() : expr;
     }
 
     protected void throwNoCodeGeneration() {
@@ -837,19 +707,19 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     // return dataI.copy();
     // }
 
-    /**
-     * Legacy support.
-     * 
-     * When all types have DataStore, we can use node.getFactoryWithNode()
-     * 
-     * @deprecated getFactoryWithNode()
-     * @param node
-     */
-    @Deprecated
-    public void setNodeData(ClavaNode node) {
-        node.setId(getExtendedId().get());
-        node.setLocation(getLocation());
-    }
+    // /**
+    // * Legacy support.
+    // *
+    // * When all types have DataStore, we can use node.getFactoryWithNode()
+    // *
+    // * @deprecated getFactoryWithNode()
+    // * @param node
+    // */
+    // @Deprecated
+    // public void setNodeData(ClavaNode node) {
+    // node.setId(getExtendedId().get());
+    // node.setLocation(getLocation());
+    // }
 
     // public ClavaNode setIsLegacyNode(boolean isLegacyNode) {
     // getData().set(IS_LEGACY_NODE, isLegacyNode);
@@ -1485,7 +1355,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     public SpecsList<DataKey<?>> getSignatureKeys() {
-        return SpecsList.convert(new ArrayList<DataKey<?>>()).andAdd(LOCATION);
+        return SpecsList.convert(new ArrayList<DataKey<?>>()).andAdd(LOCATION).andAdd(PREVIOUS_ID);
         // List<DataKey<?>> signatureKeys = new ArrayList<>();
         // signatureKeys.add(LOCATION);
         // return signatureKeys;

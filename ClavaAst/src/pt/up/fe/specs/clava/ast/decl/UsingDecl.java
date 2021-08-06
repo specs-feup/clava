@@ -41,26 +41,8 @@ public class UsingDecl extends NamedDecl {
         super(data, children);
     }
 
-    // private final NestedNamedSpecifier qualifier;
-    //
-    // public UsingDecl(NestedNamedSpecifier qualifier, String declName, DeclData declData, ClavaNodeInfo info) {
-    // super(declName, null, declData, info, Collections.emptyList());
-    //
-    // this.qualifier = qualifier;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new UsingDecl(qualifier, getDeclName(), getDeclData(), getInfo());
-    // }
-
     @Override
     public String getCode() {
-        // if (qualifier != NestedNamedSpecifier.NONE) {
-        // SpecsLogs.msgWarn(
-        // "Qualifier is not NONE, check if anything changes in generated code. Loc:" + getLocation());
-        // }
-
         return "using " + getDeclName() + ";";
     }
 

@@ -23,9 +23,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.comment.InlineComment;
-import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.util.utilities.StringLines;
 
 /**
@@ -39,34 +37,7 @@ public class CompoundStmt extends Stmt {
     public final static DataKey<Boolean> IS_NAKED = KeyFactory.bool("isNaked");
 
     public CompoundStmt(DataStore data, Collection<? extends ClavaNode> children) {
-        // super(data, parseChildren(children));
         super(data, children);
-
-        // If naked, can have only only child, or be empty
-        // if (get(IS_NAKED)) {
-        // Preconditions.checkArgument(children.size() < 2, "Expected at most 1 child:" + children);
-        // }
-
-    }
-
-    private static List<Stmt> parseChildren(Collection<? extends ClavaNode> children) {
-
-        List<Stmt> statements = children.stream()
-                // Remove NullNodes
-                // .filter(child -> !(child instanceof NullNode))
-                // Transform Undefined nodes into DummyStmt nodes
-                // TODO: to remove after Undefined is no longer used
-                // .map(child -> child instanceof Undefined ? ClavaNodeFactory.dummyStmt(child) : child)
-                // Transform Expr nodes into ExprStmt nodes
-                // .map(child -> child instanceof Expr ? ClavaNodesLegacy.exprStmt((Expr) child) : child)
-                .map(child -> child instanceof Expr ? LegacyToDataStore.getFactory().exprStmt((Expr) child)
-                        : child)
-                // Map all nodes to Stmt
-                .map(stmt -> (Stmt) stmt)
-                .collect(Collectors.toList());
-
-        return statements;
-
     }
 
     @Override

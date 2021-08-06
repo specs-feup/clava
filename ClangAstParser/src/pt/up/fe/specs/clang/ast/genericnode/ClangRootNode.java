@@ -29,7 +29,6 @@ import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.streamparser.StreamKeys;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.omp.OMPDirective;
 import pt.up.fe.specs.util.collections.MultiMap;
 
 public class ClangRootNode extends ClangNode {
@@ -53,8 +52,7 @@ public class ClangRootNode extends ClangNode {
         // private final Set<String> hasTemplateArguments;
         // Indicates which nodes are temporary
         private final Set<String> isTemporary;
-        // OpenMP directives
-        private final Map<String, OMPDirective> ompDirectives;
+
         // Enum integer types
         private final Map<String, String> enumToIntegerType;
 
@@ -73,7 +71,7 @@ public class ClangRootNode extends ClangNode {
         public ClangRootData(DataStore config, ClangIncludes includes, List<ClangNode> clangTypes,
                 Map<String, String> nodeToTypes,
                 // Set<String> hasTemplateArguments,
-                Set<String> isTemporary, Map<String, OMPDirective> ompDirectives,
+                Set<String> isTemporary,
                 Map<String, String> enumToIntegerType, DataStore stdErr, ClavaNodes newParsedNodes,
                 List<ClangNode> topLevelNodes) {
 
@@ -83,7 +81,6 @@ public class ClangRootNode extends ClangNode {
             this.nodeToTypes = nodeToTypes;
             // this.hasTemplateArguments = hasTemplateArguments;
             this.isTemporary = isTemporary;
-            this.ompDirectives = ompDirectives;
             this.enumToIntegerType = enumToIntegerType;
             this.stdErr = stdErr;
             this.newParsedNodes = newParsedNodes;
@@ -160,10 +157,6 @@ public class ClangRootNode extends ClangNode {
 
         public boolean isTemporary(String id) {
             return isTemporary.contains(id);
-        }
-
-        public Map<String, OMPDirective> getOmpDirectives() {
-            return ompDirectives;
         }
 
         public Map<String, String> getEnumToIntegerType() {

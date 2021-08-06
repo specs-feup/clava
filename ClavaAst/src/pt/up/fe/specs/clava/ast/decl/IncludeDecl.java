@@ -40,23 +40,6 @@ public class IncludeDecl extends Decl {
         super(data, children);
     }
 
-    // private final Include include;
-    //
-    // public IncludeDecl(String include, boolean isAngled) {
-    // this(new Include(include, isAngled), ClavaNodeInfo.undefinedInfo());
-    // }
-    //
-    // public IncludeDecl(Include include, ClavaNodeInfo info) {
-    // super(DeclData.empty(), info, Collections.emptyList());
-    //
-    // this.include = include;
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new IncludeDecl(include, getInfo());
-    // }
-
     @Override
     public String getCode() {
         StringBuilder builder = new StringBuilder();
@@ -83,10 +66,5 @@ public class IncludeDecl extends Decl {
     public Include getInclude() {
         return get(INCLUDE);
     }
-
-    // @Override
-    // public String toContentString() {
-    // return super.toContentString() + getFormattedInclude() + " ";
-    // }
 
 }

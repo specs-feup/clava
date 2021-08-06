@@ -40,19 +40,6 @@ public class DummyComment extends Comment {
         super(data, children);
     }
 
-    // private final String content;
-    //
-    // public DummyComment(String content, ClavaNodeInfo info, Collection<? extends Comment> children) {
-    // super(info, children);
-    //
-    // this.content = content;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new DummyComment(content, getInfo(), Collections.emptyList());
-    // }
-
     public String getNodeCode() {
         return "// Dummy comment '" + get(CONTENT) + "'";
     }

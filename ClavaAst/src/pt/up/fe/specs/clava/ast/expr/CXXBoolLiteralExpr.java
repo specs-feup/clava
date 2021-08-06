@@ -30,39 +30,9 @@ public class CXXBoolLiteralExpr extends Literal {
 
     /// DATAKEYS END
 
-    // private final boolean value;
-
     public CXXBoolLiteralExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    /**
-     * Legacy support.
-     * 
-     * @param value
-     * @param exprData
-     * @param info
-     */
-    /*
-    public CXXBoolLiteralExpr(boolean value, ExprData exprData, ClavaNodeInfo info) {
-        this(new LegacyToDataStore().setNodeInfo(info).setExpr(exprData).getData(), Collections.emptyList());
-        // this(value, exprData, info, Collections.emptyList());
-    
-        getDataI().add(VALUE, value);
-    }
-    */
-
-    // private CXXBoolLiteralExpr(boolean value, ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    //
-    // this.value = value;
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXBoolLiteralExpr(value, getExprData(), getInfo(), Collections.emptyList());
-    // }
 
     @Override
     public String getCode() {

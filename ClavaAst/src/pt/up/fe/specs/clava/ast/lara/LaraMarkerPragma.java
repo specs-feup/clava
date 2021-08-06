@@ -42,35 +42,6 @@ public class LaraMarkerPragma extends Pragma {
         super(data, children);
     }
 
-    // private String markerId;
-
-    /**
-     * @param markerId
-     * @param info
-     */
-    // @Deprecated
-    // public LaraMarkerPragma(String markerId, ClavaNodeInfo info) {
-    // this(markerId, info, Collections.emptyList());
-    // }
-
-    /**
-     * 
-     * @param markerId
-     * @param info
-     * @param children
-     */
-    // @Deprecated
-    // private LaraMarkerPragma(String markerId, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    //
-    // this.markerId = markerId;
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new LaraMarkerPragma(markerId, getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public String getFullContent() {
         return LARA_MARKER_PREFIX + get(MARKER_ID);
@@ -85,12 +56,10 @@ public class LaraMarkerPragma extends Pragma {
         }
 
         set(MARKER_ID, newContent);
-        // this.markerId = newContent;
     }
 
     public String getMarkerId() {
         return get(MARKER_ID);
-        // return markerId;
     }
 
     @Override

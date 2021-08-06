@@ -28,59 +28,20 @@ import pt.up.fe.specs.clava.ClavaNode;
  * @author JoaoBispo
  *
  */
-// public class CXXUnresolvedConstructExpr extends Expr implements Nameable {
 public class CXXUnresolvedConstructExpr extends Expr {
 
     public CXXUnresolvedConstructExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
-    // private final Type typeAsWritten;
-    //
-    // public CXXUnresolvedConstructExpr(Type typeAsWritten, ExprData exprData, ClavaNodeInfo info, List<Expr>
-    // arguments) {
-    // this(typeAsWritten, exprData, info, (Collection<? extends ClavaNode>) arguments);
-    // }
-    //
-    // private CXXUnresolvedConstructExpr(Type typeAsWritten, ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    //
-    // this.typeAsWritten = typeAsWritten;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXUnresolvedConstructExpr((Type) typeAsWritten.copy(), getExprData(), getInfo(),
-    // Collections.emptyList());
-    // }
-
     public List<Expr> getArguments() {
         return getChildren(Expr.class);
     }
 
-    // public Type getTypeAsWritten() {
-    // return typeAsWritten;
-    // }
-
     @Override
     public String getCode() {
-        // return getTypeAsWritten().getCode(this) + "("
         return get(TYPE).get().getCode(this) + "("
                 + getArguments().stream().map(ClavaNode::getCode).collect(Collectors.joining(", ")) + ")";
     }
-
-    /*
-    @Override
-    public String getName() {
-        System.out.println("CXXUNRESOLVED:" + typeAsWritten.getCode());
-        return typeAsWritten.getCode();
-    }
-    
-    @Override
-    public void setName(String name) {
-        SpecsLogs.msgInfo("setName() not supported for node '" + getClass().getSimpleName() + "'");
-    }
-    */
 
 }

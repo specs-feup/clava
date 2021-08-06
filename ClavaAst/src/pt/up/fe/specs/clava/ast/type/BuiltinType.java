@@ -32,7 +32,6 @@ public class BuiltinType extends Type {
 
     /// DATAKEYS BEGIN
 
-    // public final static DataKey<Integer> KIND_ORDINAL = KeyFactory.integer("kindOrdinal", -1);
     /**
      * The kind of the built-in.
      */
@@ -50,32 +49,11 @@ public class BuiltinType extends Type {
         super(data, children);
     }
 
-    /**
-     * @param data
-     * @param info
-     * @param children
-     */
-    // @Deprecated
-    // protected BuiltinType(TypeData data, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // this(new LegacyToDataStore().setType(data).setNodeInfo(info).getData(), children);
-    //
-    // // put(KIND, BuiltinKind.getHelper().fromValue(data.getBareType()));
-    // // Type.put() creates a copy
-    // getData().put(KIND_LITERAL, data.getBareType());
-    // }
-
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
 
         // First, try kind code, then literal
         String type = get(KIND).getCodeTry(sourceNode).orElse(get(KIND_LITERAL));
-
-        // Give priority to kind literal
-        // String type = getData().hasValue(KIND_LITERAL) ? get(KIND_LITERAL) : get(KIND).getCode(getContext());
-
-        // boolean isCxx = getApp().getAppData().get(ClavaOptions.STANDARD).isCxx();
-        // boolean isCxx = getData().getStandard().isCxx();
-        // String type = getKind().getCode();
 
         String varName = name == null ? "" : " " + name;
         return type + varName;
@@ -90,45 +68,13 @@ public class BuiltinType extends Type {
     protected List<DataKey<Type>> getUnderlyingTypeKeys() {
         return Collections.emptyList();
     }
-    // @Override
-    // protected Type setUnderlyingTypeProtected(Type oldType, Type newType) {
-    // // No underlying type to set
-    // return this;
-    // }
-
-    // public BuiltinKind getKind() {
-    // public BuiltinKindV2 getKind() {
-    // return get(KIND);
-    // }
-
-    /**
-     * TODO: Remove this method, move to IntegerLiteral (only use), used BuiltinKind
-     */
-    /*
-    @Override
-    public String getConstantCode(String constant) {
-        boolean isUnsigned = getKind().isUnsigned();
-    
-        if (isUnsigned) {
-            // if (getBareType().startsWith("unsigned")) {
-            return constant + "u";
-        }
-    
-        return constant;
-    
-    }
-    */
-
-    // public boolean isVoid() {
-    // return getKind() == BuiltinKind.VOID;
-    // }
 
     @Override
     public int getBitwidth(ClavaNode node) {
 
         BuiltinKind builtinKind = get(BuiltinType.KIND);
 
-        // get the language information
+        // Get the language information
         var tUnit = node.getAncestorTry(TranslationUnit.class).orElse(null);
         if (tUnit == null) {
             ClavaLog.info("BuiltinType.getBitwidth: Given node is not part of a TranslationUnit");

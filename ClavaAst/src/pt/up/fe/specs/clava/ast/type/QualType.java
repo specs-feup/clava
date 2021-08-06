@@ -52,48 +52,14 @@ public class QualType extends Type {
 
     /// DATAKEYS END
 
-    // private final QualTypeData qualTypeData;
-    // private final List<Qualifier> qualifiers;
-
     public QualType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        // this.qualTypeData = null;
     }
-
-    // public QualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info, Type qualifiedType) {
-    // this(qualTypeData, typeData, info, Arrays.asList(qualifiedType));
-    // }
-    //
-    // private QualType(QualTypeData qualTypeData, TypeData typeData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(new LegacyToDataStore().setQualType(qualTypeData).setType(typeData).setNodeInfo(info).getData(),
-    // children);
-    //
-    // this.qualTypeData = qualTypeData;
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new QualType(qualTypeData.copy(), getTypeData(), getInfo(), Collections.emptyList());
-    // }
-
-    // public List<C99Qualifier> getQualifiers() {
-    // return get(C99_QUALIFIERS);
-    // // return qualTypeData.getQualifiers();
-    // }
-
-    // public void setQualifiers(List<C99Qualifier> qualifiers) {
-    // set(C99_QUALIFIERS, qualifiers);
-    // // qualTypeData.setQualifiers(qualifiers);
-    // }
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
         String type = getUnqualifiedType().getCode(sourceNode, name);
 
-        // System.out.println("TYPE: " + type);
-        // System.out.println("QUAL:" + getExtendedId());
         // If not a top-level qualifier, has to be put after the type, but before the name
         if (hasParent()) {
 
@@ -104,57 +70,25 @@ public class QualType extends Type {
             ClavaNode parent = getParent();
 
             boolean allowedTypes = parent instanceof PointerType || parent instanceof ReferenceType;
-            // boolean allowedTypes = parent instanceof PointerType || parent instanceof ArrayType;
 
             if (hasQualTypeAncestor && !allowedTypes) {
-                // System.out.println("QUAL: " + getExtendedId());
-                // System.out.println("NOT ALLOWED:" + parent.getNodeName());
                 return type;
             }
-
-            // System.out.println("QUALTYPE");
-            // System.out.println("PARENT:" + getParent().getNodeName());
-            // System.out.println("QUALIFIED:" + getQualifiedType().getNodeName());
-
-            // return getCode(type, name);
-            /*
-            if (name != null) {
-                int index = type.indexOf(name);
-                Preconditions.checkArgument(index != -1);
-                return type.substring(0, index) + qualifier + " " + type.substring(index);
-            }
-            System.out.println("NOT TOP:" + type + " " + qualifier);
-            return type + " " + qualifier;
-            */
         }
 
         return getCode(type, name, sourceNode);
-        // Types in C++ should be read right-to-left. However, top-level qualifiers can be written on the left-side
-        // http://stackoverflow.com/questions/19415674/what-does-const-mean-in-c
-        // System.out.println("TOP:" + qualifier + " " + type);
-        // return qualifier + " " + type;
-
-        // String nameString = name == null ? "" : " " + name;
-        //
-        // // return getQualifiedType().getCode() + " " + qualifier + nameString;
-        //
-        // return qualifier + " " + getQualifiedType().getCode(nameString);
     }
 
     private String getCode(String type, String name, ClavaNode sourceNode) {
         String addressQualifier = get(ADDRESS_SPACE_QUALIFIER).getCode(get(ADDRESS_SPACE));
-        // String addressQualifier = qualTypeData.getAddressSpaceQualifier().getCode();
+
         if (!addressQualifier.isEmpty()) {
             addressQualifier += " ";
         }
 
-        // String qualifiersCode = ClavaCode.getQualifiersCode(getQualifiers());
         String qualifiersCode = get(C99_QUALIFIERS).stream()
                 .map(C99Qualifier::getCode)
                 .collect(Collectors.joining(" "));
-
-        // String qualifiersCode = qualTypeData.getQualifiersCode();
-        // Type child = getQualifiedType();
 
         // If constexpr, replace const with constexpr
         boolean isConstexpr = sourceNode != null
@@ -170,91 +104,23 @@ public class QualType extends Type {
         }
 
         if (name != null) {
-            // if (hasParent()) {
-            // SpecsLogs.msgWarn("Qualtype has parent, check if this case is ok");
-            // }
-            //
-            // return qualifiersCode + " " + type;
             int index = type.lastIndexOf(name);
             Preconditions.checkArgument(index != -1);
-            // System.out.println("ADDR QUAL: " + addressQualifier);
-            // System.out.println("TYPE: " + type);
-            // System.out.println("TYPE Sub: " + type.substring(0, index));
-            // System.out.println("QUALIFIERS CODE:" + qualifiersCode);
-            // System.out.println("CODE:'" + addressQualifier + type.substring(0, index) + qualifiersCode + " "
-            // + type.substring(index) + "'");
 
             String prefix = addressQualifier + type.substring(0, index).trim() + qualifiersCode;
             if (!prefix.isEmpty()) {
                 prefix = prefix + " ";
             }
 
-            // System.out.println("CODE:" + prefix + type.substring(index));
-
             return prefix + type.substring(index);
         }
-        // System.out.println("QUALIFIERS:'" + qualifiersCode + "'");
-        // System.out.println("CODE: " + addressQualifier + type + " " + qualifiersCode);
-        // return addressQualifier + type + " " + qualifiersCode;
+
         return addressQualifier + type + qualifiersCode;
 
     }
 
-    /*
-    @Override
-    public String getCode(String name) {
-    
-        // If not a top-level qualifier, has to be put after the type, but before the name
-        if (hasParent()) {
-    
-            // But only if there are no other QualType ancestors, or if there is,
-            // the parent must be a Pointer or a Reference, to avoid invalid double 'const' qualifiers
-            boolean hasQualTypeAncestor = getAncestorTry(QualType.class).isPresent();
-    
-            ClavaNode parent = getParent();
-    
-            boolean allowedTypes = parent instanceof PointerType || parent instanceof ReferenceType;
-    
-            if (hasQualTypeAncestor && !allowedTypes) {
-                return getQualifiedType().getCode(name);
-            }
-        }
-    
-        // Types in C++ should be read right-to-left. However, top-level qualifiers can be written on the left-side
-        // http://stackoverflow.com/questions/19415674/what-does-const-mean-in-c
-        return getCodePrivate(name);
-    
-        // System.out.println("TOP:" + qualifier + " " + type);
-        // return qualifier + " " + type;
-    
-        // String nameString = name == null ? "" : " " + name;
-        //
-        // // return getQualifiedType().getCode() + " " + qualifier + nameString;
-        //
-        // return qualifier + " " + getQualifiedType().getCode(nameString);
-    }
-    */
-    /*
-    private String getCodePrivate(String name) {
-        String type = getQualifiedType().getCode(name);
-        String qualifiersCode = ClavaCode.getQualifiersCode(qualifiers);
-    
-        // Case where qualifier has to come after the type but before the name taken care previously (we think)
-        if (name != null) {
-            if (hasParent()) {
-                SpecsLogs.msgWarn("Qualtype has parent, check if this case is ok");
-            }
-    
-            return qualifiersCode + " " + type;
-        }
-    
-        return type + " " + qualifiersCode;
-    
-    }
-    */
     public Type getUnqualifiedType() {
         return get(UNQUALIFIED_TYPE);
-        // return getChild(Type.class, 0);
     }
 
     @Override
@@ -262,9 +128,6 @@ public class QualType extends Type {
         if (get(C99_QUALIFIERS).contains(C99Qualifier.CONST)) {
             return true;
         }
-        // if (getQualifiers().contains(Qualifier.CONST) || getQualifiers().contains(Qualifier.CONSTEXPR)) {
-        // return true;
-        // }
 
         return getUnqualifiedType().isConst();
     }
@@ -274,6 +137,7 @@ public class QualType extends Type {
         var qualifiers = get(QualType.C99_QUALIFIERS);
 
         if (qualifiers.contains(C99Qualifier.CONST)) {
+
             // Make copy of qualifiers
             var qualCopy = new ArrayList<>(qualifiers);
             set(QualType.C99_QUALIFIERS, qualCopy);
@@ -284,14 +148,6 @@ public class QualType extends Type {
 
     public List<String> getQualifierStrings() {
         return getQualifiersPrivate();
-
-        /*
-        if (hasDataI()) {
-            return getQualifiersPrivate();
-        }
-        
-        return qualTypeData.getQualifiers().stream().map(Qualifier::name).collect(Collectors.toList());
-        */
     }
 
     private List<String> getQualifiersPrivate() {

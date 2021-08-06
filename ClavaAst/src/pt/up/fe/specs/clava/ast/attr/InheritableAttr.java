@@ -25,9 +25,4 @@ public class InheritableAttr extends Attribute {
         super(data, children);
     }
 
-    // public InheritableAttr(AttributeKind kind, AttrData attrData, ClavaNodeInfo nodeInfo,
-    // Collection<? extends ClavaNode> children) {
-    // super(kind, attrData, nodeInfo, children);
-    // }
-
 }

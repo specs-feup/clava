@@ -63,7 +63,7 @@ public class SystemHeadersClangNodes implements LineStreamWorker<ClangParserData
 
         ClangNode clangNode = clangDump.get(0);
         clangNode.getInfo().setId(nodeId);
-
+        System.out.println("SYSTEM HEADERS: " + clangNode);
         data.get(ClangParserData.SYSTEM_HEADERS_CLANG_NODES).put(nodeId, clangNode);
 
     }

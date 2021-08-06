@@ -122,37 +122,6 @@ public class UnaryOperator extends Operator {
         super(data, children);
     }
 
-    // private final UnaryOperatorKind opcode;
-    // private final UnaryOperatorPosition position;
-    //
-    // /**
-    // * @param opcode
-    // * @param isPrefix
-    // * @param valueKind
-    // * @param type
-    // * @param info
-    // * @param subExpr
-    // */
-    // public UnaryOperator(UnaryOperatorKind opcode, UnaryOperatorPosition position, ExprData exprData,
-    // ClavaNodeInfo info, Expr subExpr) {
-    // this(opcode, position, exprData, info, Arrays.asList(subExpr));
-    // }
-    //
-    // private UnaryOperator(UnaryOperatorKind opcode, UnaryOperatorPosition position, ExprData expr, ClavaNodeInfo
-    // info,
-    // List<? extends Expr> children) {
-    // super(expr, info, children);
-    //
-    // this.opcode = opcode;
-    // this.position = position;
-    //
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new UnaryOperator(opcode, position, getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public String getCode() {
 
@@ -206,11 +175,6 @@ public class UnaryOperator extends Operator {
 
         return kindName;
     }
-
-    // @Override
-    // public String toContentString() {
-    // return super.toContentString() + ", op:" + opcode;
-    // }
 
     @Override
     public String getOperatorCode() {

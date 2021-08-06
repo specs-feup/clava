@@ -38,36 +38,6 @@ public class GenericPragma extends Pragma {
         super(data, children);
     }
 
-    // private List<String> content;
-
-    // /**
-    // * @deprecated
-    // * @param content
-    // * @param info
-    // */
-    // @Deprecated
-    // public GenericPragma(List<String> content, ClavaNodeInfo info) {
-    // this(content, info, Collections.emptyList());
-    // }
-    //
-    // /**
-    // * @deprecated
-    // * @param content
-    // * @param info
-    // * @param children
-    // */
-    // @Deprecated
-    // private GenericPragma(List<String> content, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    //
-    // this.content = content;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new GenericPragma(new ArrayList<>(content), getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public String getCode() {
         return get(CONTENT).stream().collect(Collectors.joining("\\" + ln(), "#pragma ", ""));
@@ -81,7 +51,6 @@ public class GenericPragma extends Pragma {
     @Override
     public void setFullContent(String fullContent) {
         set(CONTENT, Arrays.asList(fullContent));
-        // this.content = Arrays.asList(fullContent);
     }
 
 }

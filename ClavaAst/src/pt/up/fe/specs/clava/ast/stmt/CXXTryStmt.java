@@ -23,24 +23,17 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.utils.NodeWithScope;
 import pt.up.fe.specs.util.SpecsCollections;
 
+/**
+ * A C++ try block, including all handlers.
+ * 
+ * @author JBispo
+ *
+ */
 public class CXXTryStmt extends Stmt implements NodeWithScope {
 
     public CXXTryStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    // public CXXTryStmt(ClavaNodeInfo info, CompoundStmt tryBody, List<CXXCatchStmt> handlers) {
-    // this(info, SpecsCollections.concat(tryBody, handlers));
-    // }
-    //
-    // private CXXTryStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXTryStmt(getInfo(), Collections.emptyList());
-    // }
 
     public CompoundStmt getBody() {
         return getChild(CompoundStmt.class, 0);
@@ -53,7 +46,6 @@ public class CXXTryStmt extends Stmt implements NodeWithScope {
 
     public List<CXXCatchStmt> getHandlers() {
         return getChildrenOf(CXXCatchStmt.class);
-        // return SpecsCollections.cast(SpecsCollections.subList(getChildren(), 1), CXXCatchStmt.class);
     }
 
     @Override
@@ -65,8 +57,7 @@ public class CXXTryStmt extends Stmt implements NodeWithScope {
         StringBuilder code = new StringBuilder();
 
         code.append("try").append(initList).append(getBody().getCode());
-        // It can have comments (WrapperStmt) has children, use children instead of getHandlers when generating code
-        // for (CXXCatchStmt handler : getHandlers()) {
+
         for (ClavaNode child : SpecsCollections.subList(getChildren(), 1)) {
             code.append(child.getCode());
         }

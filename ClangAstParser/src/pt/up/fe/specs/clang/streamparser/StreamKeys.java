@@ -29,8 +29,6 @@ import pt.up.fe.specs.clang.streamparser.data.FieldDeclInfo;
 import pt.up.fe.specs.clang.streamparser.data.InitListExprInfo;
 import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
-import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.collections.MultiMap;
 
@@ -118,11 +116,11 @@ public interface StreamKeys {
     DataKey<Map<String, String>> TYPE_AS_WRITTEN = KeyFactory.generic("stderr_type_as_written",
             new HashMap<String, String>());
 
-    DataKey<Map<String, LambdaExprData>> LAMBDA_EXPR_DATA = KeyFactory.generic("stderr_lambda_expr_data",
-            new HashMap<String, LambdaExprData>());
+    // DataKey<Map<String, LambdaExprData>> LAMBDA_EXPR_DATA = KeyFactory.generic("stderr_lambda_expr_data",
+    // new HashMap<String, LambdaExprData>());
 
-    DataKey<Map<String, TypeidData>> TYPEID_DATA = KeyFactory.generic("stderr_typeid_data",
-            new HashMap<String, TypeidData>());
+    // DataKey<Map<String, TypeidData>> TYPEID_DATA = KeyFactory.generic("stderr_typeid_data",
+    // new HashMap<String, TypeidData>());
 
     // DataKey<Set<String>> IS_CONST_EXPR = KeyFactory.generic("stderr_is_const_expr",
     // SpecsCollections.<String> newHashSet())
@@ -202,8 +200,8 @@ public interface StreamKeys {
             .addKey(TYPEDEF_DECL_SOURCE)
             .addKey(CXX_MEMBER_EXPR_INFO)
             .addKey(TYPE_AS_WRITTEN)
-            .addKey(LAMBDA_EXPR_DATA)
-            .addKey(TYPEID_DATA)
+            // .addKey(LAMBDA_EXPR_DATA)
+            // .addKey(TYPEID_DATA)
             // .addKey(IS_CONST_EXPR)
             // .addKey(VARDECL_QUALIFIED_NAME)
             // .addKey(VARDECL_DUMPER_INFO)

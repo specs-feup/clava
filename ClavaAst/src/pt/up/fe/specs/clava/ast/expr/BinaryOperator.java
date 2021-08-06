@@ -139,27 +139,6 @@ public class BinaryOperator extends Operator {
         super(data, children);
     }
 
-    // private final BinaryOperatorKind op;
-
-    // public BinaryOperator(BinaryOperatorKind op, ExprData exprData, ClavaNodeInfo info,
-    // Expr lhs, Expr rhs) {
-    //
-    // this(op, exprData, info, Arrays.asList(lhs, rhs));
-    // }
-
-    // protected BinaryOperator(BinaryOperatorKind op, ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // super(exprData, info, children);
-    //
-    // this.op = op;
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new BinaryOperator(op, getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     public Expr getLhs() {
         return getChild(Expr.class, 0);
     }
@@ -178,13 +157,7 @@ public class BinaryOperator extends Operator {
 
     public BinaryOperatorKind getOp() {
         return get(OP);
-        // return op;
     }
-
-    // @Override
-    // public String toContentString() {
-    // return super.toContentString() + ", op:" + op;
-    // }
 
     @Override
     public String getCode() {

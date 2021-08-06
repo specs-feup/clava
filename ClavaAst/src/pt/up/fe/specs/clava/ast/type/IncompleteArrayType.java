@@ -25,34 +25,6 @@ public class IncompleteArrayType extends ArrayType {
         super(data, children);
     }
 
-    // public IncompleteArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info, Type elementType)
-    // {
-    // this(arrayTypeData, typeData, info, Arrays.asList(elementType));
-    // }
-
-    // private IncompleteArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(arrayTypeData, typeData, info, children);
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new IncompleteArrayType(getArrayTypeData(), getTypeData(), getInfo(), Collections.emptyList());
-    // }
-
-    // @Override
-    // public Type getElementType() {
-    // return getChild(Type.class, 0);
-    // }
-
-    /*
-    @Override
-    public String getCode(String name) {
-        String nameCode = name == null ? "" : name;
-        return getElementType().getCode() + " " + nameCode + "[]";
-    }
-    */
-
     @Override
     protected String getArrayCode() {
         return "";

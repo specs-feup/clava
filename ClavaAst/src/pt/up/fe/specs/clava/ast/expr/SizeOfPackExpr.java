@@ -48,57 +48,20 @@ public class SizeOfPackExpr extends Expr {
         super(data, children);
     }
 
-    // private final String packId;
-    // private final String packName;
-    //
-    // private NamedDecl pack;
-    //
-    // public SizeOfPackExpr(String packId, String packName, ExprData exprData, ClavaNodeInfo info,
-    // List<TemplateArgument> partialArguments) {
-    //
-    // this(packId, packName, exprData, info, (Collection<? extends ClavaNode>) partialArguments);
-    // }
-    //
-    // private SizeOfPackExpr(String packId, String packName, ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // super(exprData, info, children);
-    //
-    // this.packId = packId;
-    // this.packName = packName;
-    //
-    // pack = null;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new SizeOfPackExpr(packId, packName, getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     public NamedDecl getPack() {
         return get(PACK);
-        // if (pack == null) {
-        // // Retrive pack
-        // pack = (NamedDecl) getApp().getNode(packId);
-        // }
-        //
-        // return pack;
     }
 
     public boolean isPartiallySubstituted() {
         return get(IS_PARTIALLY_SUBSTITUTED);
-        // Is it possible to be partially substituted and not have template arguments?
-        // return hasChildren();
     }
 
     public List<TemplateArgument> getPartialArguments() {
         return get(PARTIAL_ARGUMENTS);
-        // return getChildren(TemplateArgument.class);
     }
 
     @Override
     public String getCode() {
-        // return "sizeof...(" + packName + ")";
         return "sizeof...(" + get(PACK).get(NamedDecl.DECL_NAME) + ")";
     }
 }

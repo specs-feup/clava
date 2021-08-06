@@ -37,27 +37,12 @@ public class AutoType extends Type {
         super(data, children);
     }
 
-    // public AutoType(TypeData typeData, ClavaNodeInfo info, Type deducedType) {
-    // this(typeData, info, Arrays.asList(deducedType));
-    // }
-    //
-    // private AutoType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(typeData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new AutoType(getTypeData(), getInfo(), Collections.emptyList());
-    // }
-
     public Optional<Type> getDeducedType() {
         return get(DEDUCED_TYPE);
-        // return getChild(Type.class, 0);
     }
 
     public void setDeducedType(Type deducedType) {
         set(DEDUCED_TYPE, Optional.ofNullable(deducedType));
-        // setChild(0, deducedType);
     }
 
     @Override
@@ -69,25 +54,4 @@ public class AutoType extends Type {
         return "auto" + " " + name;
     }
 
-    // @Override
-    // protected Type desugarImpl() {
-    // return getDeducedType();
-    // }
-
-    // @Override
-    // protected void setDesugarImpl(Type desugaredType) {
-    // setDeducedType(desugaredType);
-    // }
-
-    /*
-    @Override
-    public int hashCode() {
-        return getDeducedType().hashCode();
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        return getDeducedType().equals(obj);
-    }
-    */
 }

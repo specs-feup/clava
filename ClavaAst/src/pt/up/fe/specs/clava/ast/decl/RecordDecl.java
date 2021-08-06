@@ -46,72 +46,9 @@ public class RecordDecl extends TagDecl {
 
     /// DATAKEYS END
 
-    // private final RecordDeclData recordDeclData;
-
     public RecordDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        // recordDeclData = null;
     }
-
-    /*
-    public RecordDecl(Type type, DeclData declData, ClavaNodeInfo info,
-            List<? extends Decl> decls) {
-    
-        this(type, declData, info, SpecsCollections.cast(decls, ClavaNode.class));
-    }
-    
-    protected RecordDecl(Type type, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-    
-        super(recordDeclData.getRecordKind(), recordDeclData.getRecordName(), type, declData, info, children);
-    
-        // this.recordDeclData = rsecordDeclData;
-    }
-    
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new RecordDecl(getType(),
-                getDeclData(), getInfo(), Collections.emptyList());
-    }
-    */
-
-    // public RecordDeclData getRecordDeclData() {
-    // return recordDeclData;
-    // }
-    /*
-    @Override
-    public String getDeclName() {
-        return recordDeclData.getRecordName();
-    }
-    */
-    /*
-    @Override
-    public boolean hasDeclName() {
-        return true;
-    }
-    */
-    /*
-    @Override
-    public TagKind getTagKind() {
-        return recordDeclData.getRecordKind();
-    }
-    */
-    /*
-    public void addVarDecl(VarDecl var) {
-    if (getTagKind() != TagKind.STRUCT && getTagKind() != TagKind.UNION) {
-        LoggingUtils
-    	    .msgWarn("Method not supported for " + getTagKind() + " only supported for structs and unions");
-        return;
-    }
-    
-    // Add child
-    addChild(var);
-    
-    // Increment counter
-    numVarDecl++;
-    }
-    */
 
     public List<FieldDecl> getFields() {
         return getChildrenOf(FieldDecl.class);
@@ -119,28 +56,7 @@ public class RecordDecl extends TagDecl {
 
     public List<Decl> getRecordFields() {
         return getChildrenOf(Decl.class);
-        /*
-        	int endIndex = numChildren() - numVarDecl;
-        
-        	return CollectionUtils.cast(Decl.class, getChildren().subList(0, endIndex));
-        	*/
     }
-
-    /**
-     * Unions and structs can declare variables.
-     * 
-     * @return
-     */
-    // public List<VarDecl> getVarDecls() {
-    //
-    // if (numVarDecl == 0) {
-    // return Collections.emptyList();
-    // }
-    //
-    // int startIndex = numChildren() - numVarDecl;
-    //
-    // return CollectionUtils.cast(VarDecl.class, CollectionUtils.subList(getChildren(), startIndex));
-    // }
 
     @Override
     public String getCode() {
@@ -286,22 +202,6 @@ public class RecordDecl extends TagDecl {
 
         return super.getDeclName();
     }
-
-    /*
-    public void addFunction(FunctionDecl node) {
-        // Check if kind supports function
-        var kind = getTagKind();
-        if (kind != TagKind.CLASS && kind != TagKind.STRUCT) {
-            throw new RuntimeException("Record of kind '" + kind + "' does not support functions");
-        }
-    
-        // Add function
-        addChild(node);
-    
-        // Set record of function
-    
-    }
-    */
 
     public void addField(FieldDecl field) {
         addChild(field);

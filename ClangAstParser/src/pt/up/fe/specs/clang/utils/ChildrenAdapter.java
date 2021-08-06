@@ -20,7 +20,6 @@ import java.util.function.BiFunction;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clang.utils.NullNodeAdapter.NullNodeType;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.CXXCatchStmt;
@@ -71,16 +70,16 @@ public class ChildrenAdapter {
         // CHILDREN_ADAPTERS.put(GotoStmt.class, ChildrenAdapter.adapt(AdaptationType.STMT));
     }
 
-    private final static ClassMap<ClavaNode, NullNodeAdapter> NULL_NODE_MAPPER;
-    static {
-        NULL_NODE_MAPPER = new ClassMap<>(NullNodeAdapter.newEmpty());
-        NULL_NODE_MAPPER.put(IfStmt.class,
-                NullNodeAdapter.newInstance(NullNodeType.DECL, null, NullNodeType.STMT, NullNodeType.STMT));
-        NULL_NODE_MAPPER.put(WhileStmt.class,
-                NullNodeAdapter.newInstance(NullNodeType.DECL, NullNodeType.STMT, NullNodeType.STMT));
-        NULL_NODE_MAPPER.put(CXXCatchStmt.class,
-                NullNodeAdapter.newInstance(NullNodeType.DECL, NullNodeType.STMT));
-    }
+    // private final static ClassMap<ClavaNode, NullNodeAdapter> NULL_NODE_MAPPER;
+    // static {
+    // NULL_NODE_MAPPER = new ClassMap<>(NullNodeAdapter.newEmpty());
+    // NULL_NODE_MAPPER.put(IfStmt.class,
+    // NullNodeAdapter.newInstance(NullNodeType.DECL, null, NullNodeType.STMT, NullNodeType.STMT));
+    // NULL_NODE_MAPPER.put(WhileStmt.class,
+    // NullNodeAdapter.newInstance(NullNodeType.DECL, NullNodeType.STMT, NullNodeType.STMT));
+    // NULL_NODE_MAPPER.put(CXXCatchStmt.class,
+    // NullNodeAdapter.newInstance(NullNodeType.DECL, NullNodeType.STMT));
+    // }
 
     public List<ClavaNode> adaptChildren(ClavaNode node, List<ClavaNode> children) {
         // If no children, just return list
@@ -88,9 +87,11 @@ public class ChildrenAdapter {
             return children;
         }
 
+        List<ClavaNode> adaptedChildren = children;
+
         // Replace NullNodeOld instances with NullNode
-        List<ClavaNode> adaptedChildren = NULL_NODE_MAPPER.get(node.getClass()).adapt(context.get(ClavaContext.FACTORY),
-                node, children);
+        // adaptedChildren = NULL_NODE_MAPPER.get(node.getClass()).adapt(context.get(ClavaContext.FACTORY),
+        // node, children);
 
         // Apply normalization steps to children
         adaptedChildren = CHILDREN_ADAPTERS.get(node.getClass()).apply(adaptedChildren, context);

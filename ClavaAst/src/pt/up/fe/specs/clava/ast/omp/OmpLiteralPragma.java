@@ -33,29 +33,14 @@ public class OmpLiteralPragma extends OmpPragma {
         super(data, children);
     }
 
-    // private String customContent;
-
-    // public OmpLiteralPragma(OmpDirectiveKind directiveKind, String content, ClavaNodeInfo info) {
-    // super(directiveKind, info);
-    //
-    // this.customContent = content;
-    // }
-
     @Override
     public String getFullContent() {
-        // return customContent;
         return get(CUSTOM_CONTENT);
     }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new OmpLiteralPragma(getDirectiveKind(), customContent, getInfo());
-    // }
 
     @Override
     public void setFullContent(String fullContent) {
         set(CUSTOM_CONTENT, fullContent);
-        // this.customContent = fullContent;
     }
 
 }

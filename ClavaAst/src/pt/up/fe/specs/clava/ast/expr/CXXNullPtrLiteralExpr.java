@@ -25,15 +25,6 @@ public class CXXNullPtrLiteralExpr extends Expr {
         super(data, children);
     }
 
-    // public CXXNullPtrLiteralExpr(ExprData exprData, ClavaNodeInfo info) {
-    // super(exprData, info, Collections.emptyList());
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXNullPtrLiteralExpr(getExprData(), getInfo());
-    // }
-
     @Override
     public String getCode() {
         return "nullptr";

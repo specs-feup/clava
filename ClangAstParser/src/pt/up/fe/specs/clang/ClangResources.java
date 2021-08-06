@@ -14,57 +14,45 @@
 package pt.up.fe.specs.clang;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import org.suikasoft.jOptions.Interfaces.DataStore;
-import org.suikasoft.jOptions.streamparser.LineStreamParser;
-
-import pt.up.fe.specs.clang.ast.ClangNode;
-import pt.up.fe.specs.clang.astlineparser.AstParser;
-import pt.up.fe.specs.clang.parsers.ClangParserData;
-import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
-import pt.up.fe.specs.clang.streamparser.StreamKeys;
-import pt.up.fe.specs.clang.streamparser.StreamParser;
+import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 import pt.up.fe.specs.clava.ClavaLog;
-import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
-import pt.up.fe.specs.clava.context.ClavaContext;
-import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.providers.FileResourceManager;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
 import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
-import pt.up.fe.specs.util.system.ProcessOutput;
+import pt.up.fe.specs.util.system.ProcessOutputAsString;
 
 public class ClangResources {
 
     private static final FileResourceManager CLANG_AST_RESOURCES = FileResourceManager
             .fromEnum(ClangAstFileResource.class);
 
-    private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
-    private final static String STDERR_DUMP_FILENAME = "stderr.txt";
+    // private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
+    // private final static String STDERR_DUMP_FILENAME = "stderr.txt";
     private final static String CLANG_FOLDERNAME = "clang_ast_exe";
     private final static String CLANG_INCLUDES_FOLDERNAME = "clang_includes";
 
-    private final boolean dumpStdout;
+    // private final boolean dumpStdout;
     private final FileResourceManager clangAstResources;
 
-    private static final ThreadLocal<Boolean> HAS_LIBC = new ThreadLocal<>();
+    private static final AtomicInteger HAS_LIBC = new AtomicInteger(-1);
 
-    public ClangResources(boolean dumpStdout) {
-        this.dumpStdout = dumpStdout;
+    public ClangResources() {
+        // this.dumpStdout = dumpStdout;
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
-        HAS_LIBC.set(null);
     }
 
     public ClangFiles getClangFiles(String version, boolean usePlatformIncludes) {
+
         // Check if there is a local version of the Clang files
         ClangFiles localClangFiles = SpecsIo.getJarPath(ClangResources.class)
                 .map(jarFolder -> new File(jarFolder, CLANG_FOLDERNAME))
@@ -86,6 +74,7 @@ public class ClangResources {
     }
 
     private Optional<ClangFiles> loadLocalClangFiles(File clangFolder, String version) {
+
         // Get versioned filename of dumper
         SupportedPlatform platform = SupportedPlatform.getCurrentPlatform();
         FileResourceProvider executableResource = getVersionedResource(getExecutableResource(platform), version);
@@ -137,12 +126,12 @@ public class ClangResources {
         // FileResourceProvider executableResource = getVersionedExecutableResource(version, platform);
 
         // Copy executable
-        ResourceWriteData executable = executableResource.writeVersioned(resourceFolder, ClangAstParser.class);
+        ResourceWriteData executable = executableResource.writeVersioned(resourceFolder, ClangResources.class);
 
         // If Windows, copy additional dependencies
         if (platform == SupportedPlatform.WINDOWS) {
             for (FileResourceProvider resource : getWindowsResources()) {
-                resource.writeVersioned(resourceFolder, ClangAstParser.class);
+                resource.writeVersioned(resourceFolder, ClangResources.class);
             }
         }
 
@@ -249,7 +238,7 @@ public class ClangResources {
 
         // Download includes zips, check if any of them is new
         List<ResourceWriteData> zipFiles = includesZips.stream()
-                .map(resource -> resource.writeVersioned(resourceFolder, ClangAstParser.class))
+                .map(resource -> resource.writeVersioned(resourceFolder, ClangResources.class))
                 .collect(Collectors.toList());
         // .filter(resourceOutput -> resourceOutput.isNewFile())
         // .findAny()
@@ -301,15 +290,35 @@ public class ClangResources {
     }
 
     private boolean hasLibC(File clangExecutable) {
-        var hasLibC = HAS_LIBC.get();
+        var value = HAS_LIBC.get();
 
-        if (hasLibC != null) {
-            return hasLibC;
+        // Check if initiallized
+        if (value == -1) {
+            var hasLibC = detectLibC(clangExecutable);
+            value = hasLibC ? 1 : 0;
+            HAS_LIBC.set(value);
         }
 
-        hasLibC = detectLibC(clangExecutable);
-        HAS_LIBC.set(hasLibC);
-        return hasLibC;
+        if (value == 0) {
+            return false;
+        }
+
+        if (value == 1) {
+            return true;
+        }
+
+        throw new RuntimeException("Unexpected value: '" + value + "'");
+
+        // Boolean.parseBoolean(CLANG_INCLUDES_FOLDERNAME)
+        // var hasLibC = HAS_LIBC.get();
+        //
+        // if (hasLibC != null) {
+        // return hasLibC;
+        // }
+        //
+        // hasLibC = detectLibC(clangExecutable);
+        // HAS_LIBC.set(hasLibC);
+        // return hasLibC;
     }
 
     /**
@@ -344,94 +353,107 @@ public class ClangResources {
 
         boolean needsLib = false;
         for (File testFile : testFiles) {
+
+            // Invoke dumper
+            var output = runClangAstDumper(clangExecutable, testFile);
+
+            // First check if there where no problems running the dumper
+            if (output.getReturnValue() != 0) {
+                ClavaLog.info("Problems while running dumper to test in libc/libcxx is needed");
+                needsLib = true;
+                break;
+            }
+
+            // Test files where built in such a way so that if a system include is present, it will generate code with a
+            // top level nodes, otherwise it generates an empty file
+            var topLevelNodesHeader = TopLevelNodesParser.getTopLevelNodesHeader();
+
+            var foundInclude = output.getOutput().contains(topLevelNodesHeader);
+            /*
             ProcessOutput<List<ClangNode>, DataStore> output = testFile(clangExecutable, clangTest, testFile);
-            // ClavaLog.debug(message);
-            // System.out.println("RETURN VALUE:" + output.getReturnValue());
-            // System.out.println("STD OUT:" + output.getStdOut());
-            // System.out.println("STD ERR:" + output.getStdErr().get(StreamKeys.WARNINGS));
-
-            // boolean foundInclude = !output.getStdOut().isEmpty();
+            
             boolean foundInclude = output.getReturnValue() == 0;
-
+            
             if (foundInclude) {
                 SpecsCheck.checkArgument(output.getStdOut().isEmpty(),
                         () -> "Expected std output to be empty: " + output.getStdOut());
                 SpecsCheck.checkArgument(output.getStdErr().get(StreamKeys.WARNINGS).isEmpty(),
                         () -> "Expected err output to be empty: " + output.getStdErr().get(StreamKeys.WARNINGS));
             }
-
+            */
             if (!foundInclude) {
                 needsLib = true;
                 break;
             }
-            // return foundInclude;
+
         }
 
         if (needsLib) {
-            ClavaLog.debug("Could not find system libc/licxx");
+            ClavaLog.debug("Could not find system libc/libcxx");
         } else {
-            ClavaLog.debug("Detected system's libc and licxx");
+            ClavaLog.debug("Detected system's libc and libcxx");
         }
 
         return !needsLib;
 
     }
 
-    // private boolean testFile(File clangExecutable, File testFolder, ResourceProvider testResource) {
-    private ProcessOutput<List<ClangNode>, DataStore> testFile(File clangExecutable, File testFolder,
-            File testFile) {
-        // File testFile = testResource.write(testFolder);
-
+    private ProcessOutputAsString runClangAstDumper(File clangExecutable, File testFile) {
         List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
-        ClavaContext context = new ClavaContext();
-
-        try (LineStreamParser<ClangParserData> clangStreamParser = ClangStreamParserV2.newInstance(context)) {
-
-            ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments,
-                    this::processOutput,
-                    inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,
-                            clangStreamParser));
-
-            return output;
-            // boolean foundInclude = !output.getStdOut().isEmpty();
-            //
-            // return foundInclude;
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error while testing include", e);
-        }
+        return SpecsSystem.runProcess(arguments, true, false);
     }
 
-    public List<ClangNode> processOutput(InputStream inputStream) {
-        return processOutput(inputStream, new File(CLANG_DUMP_FILENAME));
-    }
+    // private ProcessOutput<List<ClangNode>, DataStore> testFile(File clangExecutable, File testFolder,
+    // File testFile) {
+    //
+    // List<String> arguments = Arrays.asList(clangExecutable.getAbsolutePath(), testFile.getAbsolutePath(), "--");
+    // ClavaContext context = new ClavaContext();
+    // // System.out.println("ARGUMENTS: " + arguments);
+    // // System.out.println("CODE:\n" + SpecsIo.read(testFile.getAbsolutePath()));
+    // try (LineStreamParser<ClangParserData> clangStreamParser = ClangStreamParserV2.newInstance(context)) {
+    //
+    // var output2 = SpecsSystem.runProcess(arguments, true, false);
+    // // System.out.println("OUTPUT: " + output2);
+    //
+    // ProcessOutput<List<ClangNode>, DataStore> output = SpecsSystem.runProcess(arguments,
+    // this::processOutput,
+    // inputStream -> processStdErr(DataStore.newInstance("testFile DataStore"), inputStream,
+    // clangStreamParser));
+    // // System.out.println("OUTPUT:\n" + output);
+    // return output;
+    //
+    // } catch (Exception e) {
+    // throw new RuntimeException("Error while testing include", e);
+    // }
+    // }
 
-    public List<ClangNode> processOutput(InputStream inputStream, File clangDumpFilename) {
-        File dumpfile = dumpStdout | SpecsSystem.isDebug() ? clangDumpFilename : null;
+    // public List<ClangNode> processOutput(InputStream inputStream) {
+    // return processOutput(inputStream, new File(CLANG_DUMP_FILENAME));
+    // }
 
-        // Parse Clang output
-        List<ClangNode> clangDump = new AstParser(dumpfile).parse(inputStream);
+    // public List<ClangNode> processOutput(InputStream inputStream, File clangDumpFilename) {
+    // File dumpfile = dumpStdout | SpecsSystem.isDebug() ? clangDumpFilename : null;
+    //
+    // // Parse Clang output
+    // List<ClangNode> clangDump = new AstParser(dumpfile).parse(inputStream);
+    //
+    // return clangDump;
+    // }
 
-        return clangDump;
-    }
+    // public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
+    // LineStreamParser<ClangParserData> lineStreamParser) {
+    //
+    // return processStdErr(clavaData, inputStream, lineStreamParser, new File(STDERR_DUMP_FILENAME));
+    // }
 
-    public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
-            LineStreamParser<ClangParserData> lineStreamParser) {
-
-        return processStdErr(clavaData, inputStream, lineStreamParser, new File(STDERR_DUMP_FILENAME));
-    }
-
-    public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
-            LineStreamParser<ClangParserData> lineStreamParser, File stderrDumpFilename) {
-
-        File dumpfile = SpecsSystem.isDebug() ? stderrDumpFilename : null;
-
-        // TODO: Temporary, needs to be set again, since this will run in a separate thread
-        LegacyToDataStore.CLAVA_CONTEXT.set(lineStreamParser.getData().get(ClavaNode.CONTEXT));
-
-        // Parse StdErr from ClangAst
-        return new StreamParser(clavaData, dumpfile, lineStreamParser).parse(inputStream);
-    }
+    // public DataStore processStdErr(DataStore clavaData, InputStream inputStream,
+    // LineStreamParser<ClangParserData> lineStreamParser, File stderrDumpFilename) {
+    //
+    // File dumpfile = SpecsSystem.isDebug() ? stderrDumpFilename : null;
+    //
+    // // Parse StdErr from ClangAst
+    // return new StreamParser(clavaData, dumpfile, lineStreamParser).parse(inputStream);
+    // }
 
     private FileResourceProvider getLibCResource(SupportedPlatform platform) {
         switch (platform) {
@@ -449,7 +471,7 @@ public class ClangResources {
         var cudalibFolder = SpecsIo.mkdir(new File(resourceFolder, "cudalib"));
 
         // Download includes zips, check if any of them is new
-        ResourceWriteData zipFile = fileResource.writeVersioned(resourceFolder, ClangAstParser.class);
+        ResourceWriteData zipFile = fileResource.writeVersioned(resourceFolder, ClangResources.class);
 
         // If a new file has been written, delete includes folder, and extract all zips again
         // Extracting all because zips might have several folders and we are not determining which should be updated

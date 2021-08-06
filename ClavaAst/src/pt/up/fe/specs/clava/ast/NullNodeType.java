@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 SPeCS.
+ * Copyright 2021 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,32 +11,32 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.comment;
-
-import java.util.Collection;
-
-import org.suikasoft.jOptions.Interfaces.DataStore;
+package pt.up.fe.specs.clava.ast;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
-/**
- * Generic class for comments.
- * 
- * @author JoaoBispo
- *
- */
-public abstract class Comment extends ClavaNode {
+public enum NullNodeType {
+    ATTR,
+    DECL,
+    EXPR,
+    STMT,
+    TYPE;
 
-    public Comment(DataStore data, Collection<? extends ClavaNode> children) {
-        super(data, children);
+    public ClavaNode newNullNode(ClavaFactory factory) {
+        switch (this) {
+        case DECL:
+            return factory.nullDecl();
+        case EXPR:
+            return factory.nullExpr();
+        case STMT:
+            return factory.nullStmt();
+        case TYPE:
+            return factory.nullType();
+        default:
+            throw new NotImplementedException(this);
+        }
     }
 
-    public String getText() {
-        throw new NotImplementedException(getClass());
-    }
-
-    public void setText(String text) {
-        throw new NotImplementedException(getClass());
-    }
 }

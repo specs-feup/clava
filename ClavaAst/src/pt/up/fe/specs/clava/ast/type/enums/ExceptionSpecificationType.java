@@ -15,10 +15,10 @@ package pt.up.fe.specs.clava.ast.type.enums;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.type.data.exception.ComputedNoexcept;
-import pt.up.fe.specs.clava.ast.type.data.exception.ExceptionSpecification;
-import pt.up.fe.specs.clava.ast.type.data.exception.UnevaluatedExceptionSpecification;
-import pt.up.fe.specs.clava.ast.type.data.exception.UninstantiatedExceptionSpecification;
+import pt.up.fe.specs.clava.ast.type.data.ComputedNoexcept;
+import pt.up.fe.specs.clava.ast.type.data.ExceptionSpecification;
+import pt.up.fe.specs.clava.ast.type.data.UnevaluatedExceptionSpecification;
+import pt.up.fe.specs.clava.ast.type.data.UninstantiatedExceptionSpecification;
 
 public enum ExceptionSpecificationType {
 

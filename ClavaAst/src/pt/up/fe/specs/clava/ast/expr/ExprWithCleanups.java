@@ -36,33 +36,4 @@ public class ExprWithCleanups extends FullExpr {
         super(data, children);
     }
 
-    // public ExprWithCleanups(ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
-    // this(exprData, info, Arrays.asList(subExpr));
-    // }
-    //
-    // private ExprWithCleanups(ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    //
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new ExprWithCleanups(getExprData(), getInfo(), Collections.emptyList());
-    // }
-
-    // @Override
-    // public String getCode() {
-    // return getSubExpr().getCode();
-    // }
-    //
-    // public Expr getSubExpr() {
-    // return getChild(Expr.class, 0);
-    // }
-    //
-    // @Override
-    // public ValueKind getValueKind() {
-    // return getSubExpr().getValueKind();
-    // }
-
 }

@@ -55,7 +55,8 @@ void verify_result(int *array, int *mask, int *result, int n) {
       for(int j = 0; j < 7; j++) {
          temp += array[i + j] * mask[j];
       }
-      (static_cast<bool>(temp == result[i]) ? void(0) : __assert_fail("temp == result[i]", "/home/osboxes/Desktop/repos/clava/ClangAstParser/temp-clang-ast/convolution_cache.cu", 62, __extension__ __PRETTY_FUNCTION__));
+      // Commenting assert, macro expands to machine dependent string
+      //assert(temp == result[i]);
    }
 }
 

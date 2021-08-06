@@ -29,19 +29,6 @@ public class CXXCatchStmt extends Stmt implements NodeWithScope {
         super(data, children);
     }
 
-    // public CXXCatchStmt(ClavaNodeInfo info, Decl exceptionDecl, CompoundStmt catchBody) {
-    // this(info, Arrays.asList(exceptionDecl, catchBody));
-    // }
-    //
-    // private CXXCatchStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXCatchStmt(getInfo(), Collections.emptyList());
-    // }
-
     public Decl getExceptionDecl() {
         return getChild(Decl.class, 0);
     }
@@ -61,20 +48,6 @@ public class CXXCatchStmt extends Stmt implements NodeWithScope {
         StringBuilder code = new StringBuilder();
 
         String declCode = getExceptionDecl() instanceof NullDecl ? "..." : getExceptionDecl().getCode();
-
-        // if (declCode.startsWith("std::std::")) {
-        // Decl exptDecl = getExceptionDecl();
-        // LValueReferenceType type = (LValueReferenceType) ((Typable) exptDecl).getType();
-        //
-        // System.out.println("LVALUE TYPE:" + type.toTree());
-        // System.out.println("LVALUE TYPE CODE:" + type.getCode(this));
-        // System.out.println("REFERENCEE CODE:" + type.getReferencee().getCode(this));
-        // // if (exptDecl instanceof Typable) {
-        // // System.out.println("EXPT DECL TYPE:" + .toTree());
-        // //
-        // // }
-        // throw new RuntimeException("STOP");
-        // }
 
         code.append("catch (").append(declCode).append(")").append(getBody().getCode());
 

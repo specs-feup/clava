@@ -24,33 +24,10 @@ public class CXXBindTemporaryExpr extends Expr {
     public CXXBindTemporaryExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-    // private final String temporaryAddress;
-    //
-    // public CXXBindTemporaryExpr(String temporaryAddress, ExprData exprData, ClavaNodeInfo info,
-    // Expr subExpr) {
-    // this(temporaryAddress, exprData, info, Arrays.asList(subExpr));
-    // }
-    //
-    // private CXXBindTemporaryExpr(String temporaryAddress, ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    //
-    // this.temporaryAddress = temporaryAddress;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXBindTemporaryExpr(temporaryAddress, getExprData(), getInfo(),
-    // Collections.emptyList());
-    // }
 
     public Expr getSubExpr() {
         return getChild(Expr.class, 0);
     }
-    //
-    // public String getTemporaryAddress() {
-    // return temporaryAddress;
-    // }
 
     @Override
     public String getCode() {

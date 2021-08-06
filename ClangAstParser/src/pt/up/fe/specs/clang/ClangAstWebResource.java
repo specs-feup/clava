@@ -25,14 +25,14 @@ public interface ClangAstWebResource {
         return WebResourceProvider.newInstance("http://specs.fe.up.pt/resources/clangast/", resourceUrl);
     }
 
-    WebResourceProvider BUILTIN_INCLUDES = create("clang_builtin_includes_v12.0.zip", "v12.0");
+    WebResourceProvider BUILTIN_INCLUDES = create("clang_builtin_includes_v12.0.1.zip", "v12.0.1");
     // WebResourceProvider LIBC_CXX = create("libcxx_7.0.1.zip", "v1.0");
     WebResourceProvider LIBC_CXX = create("libc_cxx.zip", "v12.0.1");
 
     // WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx_windows.zip", "v1.0");
     WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx_windows.zip", "v12.0.1");
 
-    WebResourceProvider CUDA_LIB = create("cudalib.zip", "v1.0");
+    WebResourceProvider CUDA_LIB = create("cudalib.zip", "v11.3.0");
 
     // WebResourceProvider LIBC_CXX_MAC_OS = create("libc_cxx_mac_os.zip", "v1.0");
     // WebResourceProvider LIBC_CXX_LINUX = create("libc_cxx_linux.zip", "v1.0");

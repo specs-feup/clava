@@ -31,25 +31,9 @@ public class DummyType extends Type implements DummyNode {
 
     public DummyType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        // SpecsLogs.msgWarn("DUMMY TYPE DATASTORE");
     }
 
-    /**
-     * Legacy support.
-     * 
-     * @param typeData
-     * @param info
-     * @param children
-     */
-    // public DummyType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(typeData, info, children);
-    //
-    // // SpecsLogs.msgWarn("DUMMY TYPE TYPEDATA");
-    // }
-
     public String getNodeCode() {
-        // return "// Dummy type '" + getContent() + "'";
         return "%Dummy type '" + getContent() + "'%";
     }
 

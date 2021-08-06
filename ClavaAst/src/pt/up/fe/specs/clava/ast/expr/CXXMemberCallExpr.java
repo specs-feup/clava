@@ -58,26 +58,6 @@ public class CXXMemberCallExpr extends CallExpr {
         super(data, children);
     }
 
-    // public CXXMemberCallExpr(ExprData exprData, ClavaNodeInfo info, MemberExpr function, List<? extends Expr> args) {
-    // super(exprData, info, function, args);
-    // }
-
-    /**
-     * Private constructor for copy.
-     * 
-     * @param valueKind
-     * @param type
-     * @param info
-     */
-    // private CXXMemberCallExpr(ExprData exprData, ClavaNodeInfo info) {
-    // super(exprData, info, Collections.emptyList());
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXMemberCallExpr(getExprData(), getInfo());
-    // }
-
     @Override
     public MemberExpr getCallee() {
         return (MemberExpr) super.getCallee();
@@ -116,18 +96,16 @@ public class CXXMemberCallExpr extends CallExpr {
     }
 
     private void getCallMemberNames(Expr currentNode, List<String> memberNames) {
+
         // If node is a DeclRefExpr, add its refName to the head of the list and return
         if (currentNode instanceof DeclRefExpr) {
-            // System.out.println("ADDING DECLREF: " + ((DeclRefExpr) currentNode).getRefName());
             memberNames.add(((DeclRefExpr) currentNode).getRefName());
             return;
         }
 
         // If node is a MemberExpr, add its member name to the list after adding its base
         if (currentNode instanceof MemberExpr) {
-            // System.out.println("CALLING MEMBER EXPR BASE");
             getCallMemberNames(((MemberExpr) currentNode).getBase(), memberNames);
-            // System.out.println("ADDING MEMBER EXPR: " + ((MemberExpr) currentNode).getMemberName());
             memberNames.add(((MemberExpr) currentNode).getMemberName());
             return;
         }
@@ -135,12 +113,7 @@ public class CXXMemberCallExpr extends CallExpr {
         // If node is a CXXMemberCallExpr, add its member name to the list after adding its base
         if (currentNode instanceof CXXMemberCallExpr) {
             memberNames.addAll(((CXXMemberCallExpr) currentNode).getCallMemberNames());
-            // System.out.println("CALLING CXXMemberCallExpr BASE");
-            // getCallMemberNames(((CXXMemberCallExpr) currentNode).getBase(), memberNames);
 
-            // System.out.println(
-            // "CALLING CXXMemberCallExpr CALLEE: " + ((CXXMemberCallExpr) currentNode).getCallMemberNames());
-            // getCallMemberNames(((CXXMemberCallExpr) currentNode).getCallee(), memberNames);
             return;
         }
 
@@ -158,27 +131,7 @@ public class CXXMemberCallExpr extends CallExpr {
 
     public Expr getRootBase() {
         return getCallee().getExprChain().get(0);
-        /*
-        Expr currentExpr = this;
-        while (currentExpr != null) {
-            if (currentExpr instanceof DeclRefExpr) {
-                return currentExpr;
-            }
-        
-            if (!(currentExpr.getParent() instanceof Expr)) {
-                throw new RuntimeException("Expected to find a DeclRefExpr:" + this);
-            }
-        
-            currentExpr = (Expr) currentExpr.getParent();
-        }
-        
-        throw new RuntimeException("Expected to find a DeclRefExpr:" + this)
-        */
-        // while (currentExpr instanceof CXXMemberCallExpr) {
-        // currentExpr = ((CXXMemberCallExpr) currentExpr).getBase();
-        // }
 
-        // return currentExpr;
     }
 
     @Override
@@ -186,105 +139,12 @@ public class CXXMemberCallExpr extends CallExpr {
         return get(METHOD_DECL).map(method -> (FunctionDecl) method);
     }
 
-    // @Override
-    // public Optional<FunctionDecl> getFunctionDecl() {
-    // // TODO: Replace with Clang method getMethodDecl () const, when refactoring to new format is complete
-    //
-    // // Get base
-    // Expr base = getBase();
-    //
-    // if (base instanceof MemberExpr) {
-    // Type baseType = base.getType();
-    //
-    // Optional<RecordType> recordType = baseType.toTry(RecordType.class);
-    //
-    // if (!recordType.isPresent()) {
-    // SpecsLogs.msgInfo("Expected type of member access to have a record type: " + baseType.toTree());
-    // return Optional.empty();
-    // }
-    //
-    // return getFunctionDeclFromRecord(recordType.get());
-    // }
-    //
-    // /*
-    // // Get root base
-    // Expr rootBase = getRootBase();
-    //
-    // if (rootBase != getBase()) {
-    // // Base should be a MemberExpr
-    // System.out.println("ROOT BASE:" + rootBase);
-    // System.out.println("BASE:" + getBase());
-    // System.out.println("BASE TYPE:" + getBase().getType());
-    // ClavaLog.warning("Not yet implemented for consecutive chains");
-    // return Optional.empty();
-    // }
-    // */
-    //
-    // DeclRefExpr rootDeclRef = base.getFirstDescendantsAndSelf(DeclRefExpr.class).orElse(null);
-    // if (rootDeclRef == null) {
-    // ClavaLog.warning("Expected a DeclRefExpr, got:\n" + base);
-    // return Optional.empty();
-    // }
-    //
-    // // Get recordType of declaration
-    //
-    // // rootDeclRef.getVariableDeclaration().
-    //
-    // // Type initExprType = initExpr.getType();
-    // // RecordType recordType = initExprType instanceof RecordType ? (RecordType) initExprType
-    // // : initExprType.desugarTo(RecordType.class);
-    // //
-    //
-    // Type rootDeclRefType = rootDeclRef.getType();
-    // if (!(rootDeclRefType instanceof RecordType)) {
-    // rootDeclRefType = rootDeclRefType.desugar();
-    // }
-    //
-    // if (!(rootDeclRefType instanceof RecordType)) {
-    // ClavaLog.warning("Expected a RecordType, got:\n" + rootDeclRef.getType().toTree());
-    // return Optional.empty();
-    // }
-    //
-    // RecordType recordType = (RecordType) rootDeclRefType;
-    //
-    // // System.out.println("BASE RECORD:" + recordType);
-    //
-    // return getFunctionDeclFromRecord(recordType);
-    // /*
-    // Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
-    //
-    // System.out.println("VARDECL:" + varDecl);
-    //
-    // if (!varDecl.isPresent()) {
-    // return Optional.empty();
-    // }
-    //
-    // DeclaratorDecl declarator = varDecl.get();
-    // if (declarator instanceof FunctionDecl) {
-    // return Optional.of((FunctionDecl) declarator);
-    // }
-    //
-    // SpecsLogs.msgLib("Could not extract function from member call callee decl, check if ok:\n" + declarator);
-    // return Optional.empty();
-    //
-    // // if (!(declarator instanceof FunctionDecl)) {
-    // // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
-    // // return Optional.empty();
-    // // }
-    // //
-    // // return Optional.of((FunctionDecl) declarator);
-    // */
-    // }
-
     private Optional<FunctionDecl> getFunctionDeclFromRecord(RecordType recordType) {
-        // RecordType recordType = initExpr.getType().desugarTo(RecordType.class);
         CXXRecordDecl recordDecl = getApp().getCXXRecordDeclTry(recordType).orElse(null);
 
         if (recordDecl == null) {
             return Optional.empty();
         }
-        // getApp().getFunctionDeclaration(declName, functionType)
-        // System.out.println("RECORD DECL:" + recordDecl);
 
         // Get methods with same name
 
@@ -298,9 +158,6 @@ public class CXXMemberCallExpr extends CallExpr {
         for (CXXMethodDecl methodDecl : methods) {
             FunctionProtoType functionType = methodDecl.getFunctionType();
 
-            // Same constness
-            // if(functionType.isConst() != getFunctionType().is)
-
             List<Type> paramTypes = functionType.getParamTypes();
 
             // Check number of arguments
@@ -311,9 +168,9 @@ public class CXXMemberCallExpr extends CallExpr {
             // Compare each type
             boolean paramsAreEqual = true;
             for (int i = 0; i < paramTypes.size(); i++) {
-                // System.out.println("COMPARING\n" + paramTypes.get(i) + "\nWITH\n" + argTypes.get(i));
+
                 boolean areEqual = paramTypes.get(i).equals(argTypes.get(i));
-                // System.out.println("ARE EQUAL? " + areEqual);
+
                 if (!areEqual) {
                     paramsAreEqual = false;
                     break;
@@ -324,17 +181,6 @@ public class CXXMemberCallExpr extends CallExpr {
                 return Optional.of(methodDecl);
             }
         }
-
-        // System.out.println("ROOT:" + rootDeclRef);
-        // System.out.println("TYPE:" + rootDeclRef.getType());
-        // System.out.println("MEMBER CALL:" + this);
-        // System.out.println("DECLARATION:" + rootDeclRef.getDeclaration());
-        // System.out.println(getArgs());
-        // Follow the chain
-
-        // System.out.println("MEMBER CALL TYPE:" + getCallee().getType());
-        // DeclRefExpr declRefExpr = getCalleeDeclRef();
-        // System.out.println("Decl ref expr:" + declRefExpr);
 
         return Optional.empty();
     }
@@ -348,15 +194,10 @@ public class CXXMemberCallExpr extends CallExpr {
     public String getCode() {
 
         var methodDecl = get(METHOD_DECL);
-        // System.out.println("MEMBER NAMES: " + getCallMemberNames());
-        // System.out.println("CALLEE CODE: " + getCalleeCode());
-        // System.out.println("ARGS CODE: " + getArgsCode());
-        // System.out.println("BASE: " + getBase().getCode());
 
         // Special case: simplifies generated code, only generates base code
         if (methodDecl.isPresent() && methodDecl.get() instanceof CXXConversionDecl) {
             return getBase().getCode();
-            // return getCallMemberNames().get(0);
         }
 
         return super.getCode();

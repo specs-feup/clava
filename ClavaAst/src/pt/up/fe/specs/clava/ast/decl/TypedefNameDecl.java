@@ -29,6 +29,7 @@ import pt.up.fe.specs.clava.ast.type.Type;
  *
  */
 public abstract class TypedefNameDecl extends TypeDecl {
+
     /// DATAKEYS BEGIN
 
     public final static DataKey<Type> UNDERLYING_TYPE = KeyFactory.object("underlyingType", Type.class);
@@ -46,19 +47,8 @@ public abstract class TypedefNameDecl extends TypeDecl {
         set(UNDERLYING_TYPE, type);
     }
 
-    // private final Type underlyingType;
-    //
-    // public TypedefNameDecl(Type underlyingType, String declName, Type type, DeclData declData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // super(declName, type, declData, info, children);
-    //
-    // this.underlyingType = underlyingType;
-    // }
-
     public Type getUnderlyingType() {
         return get(UNDERLYING_TYPE);
-        // return underlyingType;
     }
 
 }

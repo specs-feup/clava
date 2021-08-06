@@ -50,70 +50,13 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
         super(data, children);
     }
 
-    // private final UnaryExprOrTypeTrait uettKind;
-    // private Type argType;
-    // private final String literalCode;
-    // private boolean useLiteralCode;
-
-    // private final String exprName;
-    // private final String argType;
-
-    // public UnaryExprOrTypeTraitExpr(String exprName, String argType, Type type,
-    // ClavaNodeInfo info) {
-    // this(exprName, argType, type, info, Collections.emptyList());
-    // }
-
-    // public UnaryExprOrTypeTraitExpr(UnaryExprOrTypeTrait uettKind, Type argType, String literalCode, ExprData
-    // exprData,
-    // ClavaNodeInfo info,
-    // Expr argumentExpression) {
-    //
-    // this(uettKind, argType, literalCode, exprData, info, SpecsCollections.ofNullable(argumentExpression));
-    // }
-    //
-    // private UnaryExprOrTypeTraitExpr(UnaryExprOrTypeTrait uettKind, Type argType, String literalCode, ExprData
-    // exprData,
-    // ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    //
-    // this.uettKind = uettKind;
-    // this.argType = argType;
-    // this.literalCode = literalCode;
-    // // this.useLiteralCode = false;
-    //
-    // if (argType == null) {
-    // // This can happen when copying nodes
-    // // Preconditions.checkArgument(!children.isEmpty(), "Not sure if this should hold");
-    // } else {
-    // // useLiteralCode = true;
-    // // Preconditions.checkArgument(children.isEmpty(), "Not sure if this should hold");
-    // }
-    //
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new UnaryExprOrTypeTraitExpr(uettKind, argType, literalCode, getExprData(), getInfo(),
-    // Collections.emptyList());
-    // }
-
     public UnaryExprOrTypeTrait getUettKind() {
         return get(KIND);
-        // return uettKind;
     }
 
     public Optional<Type> getArgumentType() {
         return get(ARG_TYPE);
-        // return Optional.ofNullable(argType);
     }
-
-    // public String getExprName() {
-    // return exprName;
-    // }
-    //
-    // public String getArgType() {
-    // return argType;
-    // }
 
     public Expr getArgumentExpression() {
         return getChild(Expr.class, 0);
@@ -125,11 +68,11 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
 
     public boolean hasTypeExpression() {
         return get(IS_ARGUMENT_TYPE);
-        // return argType != null;
     }
 
     @Override
     public String getCode() {
+
         switch (getUettKind()) {
         case SizeOf:
             return "sizeof(" + getExpressionCode() + ")";
@@ -139,26 +82,6 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
             return get(SOURCE_LITERAL);
         }
 
-        // return literalCode;
-        /*
-        if (useLiteralCode) {
-            return literalCode;
-        }
-        
-        boolean useParenthesis = true;
-        if (uettKind == UnaryExprOrTypeTrait.SIZE_OF && hasArgumentExpression()) {
-            useParenthesis = false;
-        }
-        
-        String argumentCode = hasArgumentExpression() ? getArgumentExpression().getCode()
-                : getArgumentType().get().getCode(this);
-        
-        if (useParenthesis) {
-            return uettKind.getString() + "(" + argumentCode + ")";
-        }
-        
-        return uettKind.getString() + " " + argumentCode;
-        */
     }
 
     private String getExpressionCode() {
@@ -182,49 +105,4 @@ public class UnaryExprOrTypeTraitExpr extends Expr {
         set(ARG_TYPE, Optional.ofNullable(node));
     }
 
-    // @Override
-    // public String toContentString() {
-    // String argTypeString = argType == null ? null : argType.getBareType();
-    // return toContentString(super.toContentString(),
-    // "uett kind: " + uettKind + ", arg type: " + argTypeString);
-    // }
-
-    // public void setArgType(Type argType) {
-    // if (this.argType == null) {
-    // SpecsLogs.msgInfo("Cannot set type when kind is '" + uettKind + "'");
-    // return;
-    // }
-    //
-    // this.argType = argType;
-    //
-    // }
-
-    /**
-     * Special case: if sizeof, returns argument type.
-     */
-    /*
-    @Override
-    public Type getType() {
-        if (uettKind == UnaryExprOrTypeTrait.SIZE_OF) {
-            return argType;
-        }
-    
-        return super.getType();
-    }
-    */
-
-    /**
-     * Special case: if sizeof, sets argument type.
-     */
-    /*
-    @Override
-    public void setType(Type type) {
-        if (uettKind == UnaryExprOrTypeTrait.SIZE_OF) {
-            this.argType = type;
-            return;
-        }
-    
-        super.setType(type);
-    }
-    */
 }

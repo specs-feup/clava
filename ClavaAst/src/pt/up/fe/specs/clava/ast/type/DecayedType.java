@@ -35,20 +35,6 @@ public class DecayedType extends AdjustedType {
         super(data, children);
     }
 
-    // public DecayedType(TypeData typeData, ClavaNodeInfo info, Type originalType, Type adjustedType) {
-    // super(typeData, info, originalType, adjustedType);
-    // }
-    //
-    // private DecayedType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(typeData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new DecayedType(getTypeData(), getInfo(), Collections.emptyList());
-    //
-    // }
-
     // Return the code of the original type
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
@@ -59,16 +45,6 @@ public class DecayedType extends AdjustedType {
     public boolean isArray() {
         return getOriginalType().isArray();
     }
-
-    // @Override
-    // protected Type desugarImpl() {
-    // return getOriginalType();
-    // }
-    //
-    // @Override
-    // protected void setDesugarImpl(Type desugaredType) {
-    // setOriginalType(desugaredType);
-    // }
 
     @Override
     public Type normalize() {

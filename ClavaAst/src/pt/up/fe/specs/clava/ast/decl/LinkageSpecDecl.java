@@ -46,20 +46,6 @@ public class LinkageSpecDecl extends Decl {
         super(data, children);
     }
 
-    // private final LanguageId linkageType;
-    //
-    // public LinkageSpecDecl(LanguageId linkageType, DeclData declData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(declData, info, children);
-    //
-    // this.linkageType = linkageType;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new LinkageSpecDecl(linkageType, getDeclData(), getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public String getCode() {
         StringBuilder builder = new StringBuilder();

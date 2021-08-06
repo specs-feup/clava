@@ -35,21 +35,6 @@ public class InlineComment extends Comment {
         super(data, children);
     }
 
-    // private final String text;
-    // private final boolean isStmtComment;
-    //
-    // public InlineComment(String text, boolean isStmtComment, ClavaNodeInfo nodeInfo) {
-    // super(nodeInfo, Collections.emptyList());
-    //
-    // this.text = text;
-    // this.isStmtComment = isStmtComment;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new InlineComment(text, isStmtComment, getInfo());
-    // }
-
     @Override
     public String getCode() {
         return "//" + get(TEXT);

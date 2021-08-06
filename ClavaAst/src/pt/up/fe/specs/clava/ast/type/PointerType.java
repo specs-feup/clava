@@ -23,6 +23,12 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
+/**
+ * C99 6.7.5.1 - Pointer Declarators.
+ * 
+ * @author JBispo
+ *
+ */
 public class PointerType extends Type {
 
     /// DATAKEYS BEGIN
@@ -35,67 +41,17 @@ public class PointerType extends Type {
         super(data, children);
     }
 
-    // public PointerType(TypeData typeData, ClavaNodeInfo info, Type pointeeType) {
-    // this(typeData, info, Arrays.asList(pointeeType));
-    // }
-
-    // private PointerType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(typeData, info, children);
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new PointerType(getTypeData(), getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
 
-        // To maintain compatibility with current tests output formatting
-        // String pointeeSuffix = "";
-        // if (name != null && name.startsWith("*") && !PointerType.isPointerToParenType(this)) {
-        // pointeeSuffix = " ";
-        // }
-
-        // String nameWithPointer = name == null ? "*" : "*" + pointeeSuffix + name;
         String nameWithPointer = name == null ? "*" : "*" + name;
 
         return getPointeeType().getCode(sourceNode, nameWithPointer);
-        /*
-        
-        Type pointeeType = getPointeeType();
-        // System.out.println("NAME: " + name);
-        // System.out.println("POINTEE TYPE:" + pointeeType.toFieldTree());
-        // // System.out.println("POINTEE TYPE:" + pointeeType);
-        // Special case for pointers to arrays
-        // http://eli.thegreenplace.net/2010/01/11/pointers-to-arrays-in-c
-        if (PointerType.isPointerToParenType(this)) {
-            String parsedName = name != null ? name : "";
-            return ((ParenType) pointeeType).getInnerType().getCode(sourceNode, "(*" + parsedName + ")");
-        }
-        
-        String nameString = name == null ? "" : " " + name;
-        
-        String pointeeCode = pointeeType.getCode(sourceNode);
-        // String pointeeCode2 = pointeeType.getCode(sourceNode, name2);
-        String pointeeSuffix = pointeeCode.endsWith("*") ? "" : " ";
-        // System.out.println("COMPLETE CODE: " + pointeeCode + pointeeSuffix + "*" + nameString);
-        // System.out.println("COMPLETE CODE2: " + pointeeCode2);
-        
-        return pointeeCode + pointeeSuffix + "*" + nameString;
-        // return pointeeCode2;
-        
-        // return getPointeeType().getCode(name) + "*";
-        // If pointee type is not a pointer, add a space
-        // String space = getPointeeType() instanceof PointerType ? "" : " ";
-        // return getPointeeType().getCode() + space + "*";
-        */
     }
 
     @Override
     public Type getPointeeType() {
         return get(POINTEE_TYPE);
-        // return getChild(Type.class, 0);
     }
 
     public static boolean isPointerToParenType(Type type) {
@@ -125,23 +81,6 @@ public class PointerType extends Type {
     protected List<DataKey<Type>> getUnderlyingTypeKeys() {
         return Arrays.asList(POINTEE_TYPE);
     }
-    // @Override
-    // protected Type setUnderlyingTypeProtected(Type oldType, Type newType) {
-    // // Set pointee type
-    // Type currentPointeeType = get(POINTEE_TYPE);
-    // Type newPointeeType = get(POINTEE_TYPE).setUnderlyingType(oldType, newType);
-    //
-    // // If pointee type is the same, no changes were made
-    // if (currentPointeeType == newPointeeType) {
-    // return this;
-    // }
-    //
-    // // Create a copy, and set the pointee type
-    // Type pointerTypeCopy = copy();
-    // pointerTypeCopy.set(POINTEE_TYPE, newPointeeType);
-    //
-    // return pointerTypeCopy;
-    // }
 
     @Override
     public boolean isPointer() {

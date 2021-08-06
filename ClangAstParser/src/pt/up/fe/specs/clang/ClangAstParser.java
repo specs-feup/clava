@@ -36,7 +36,6 @@ import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
 import pt.up.fe.specs.clang.ast.genericnode.GenericClangNode;
 import pt.up.fe.specs.clang.astlineparser.AstParser;
-import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
@@ -49,10 +48,8 @@ import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.context.ClavaContext;
-import pt.up.fe.specs.clava.omp.OMPDirective;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -64,10 +61,13 @@ import pt.up.fe.specs.util.utilities.StringLines;
 
 /**
  * Calls Clang and parsers a set of C/C++ files, returning a ClangAst.
+ * 
+ * @deprecated use CodeParser, or ParallelCodeParser
  *
  * @author JoaoBispo
  *
  */
+@Deprecated
 public class ClangAstParser {
 
     private static boolean STRICT_MODE = false;
@@ -80,12 +80,6 @@ public class ClangAstParser {
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
 
-    private static final List<String> CLANGAST_TEMP_FILES = Arrays.asList("includes.txt", CLANG_DUMP_FILENAME,
-            // "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt", "template_args.txt",
-            "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt",
-            "omp.txt", "invalid_source.txt", "enum_integer_type.txt", "consumer_order.txt",
-            "types_with_templates.txt");
-
     private static final String CLANGAST_RESOURCES_FILENAME = "clang_ast.resources";
 
     private static final String TRANSLATION_UNIT_SET_PREFIX = "COUNTER";
@@ -94,13 +88,9 @@ public class ClangAstParser {
         return TRANSLATION_UNIT_SET_PREFIX;
     }
 
-    public static List<String> getTempFiles() {
-        return CLANGAST_TEMP_FILES;
-    }
-
-    public static String getClangDumpFilename() {
-        return CLANG_DUMP_FILENAME;
-    }
+    // public static String getClangDumpFilename() {
+    // return CLANG_DUMP_FILENAME;
+    // }
 
     public static boolean isStrictMode() {
         return STRICT_MODE;
@@ -159,7 +149,8 @@ public class ClangAstParser {
 
         // System.out.println("CLANG AST OPTIONS: " + config);
         // Prepare resources before execution
-        ClangResources clangResources = new ClangResources(config.get(CodeParser.SHOW_CLANG_DUMP));
+        // ClangResources clangResources = new ClangResources(config.get(CodeParser.SHOW_CLANG_DUMP));
+        ClangResources clangResources = new ClangResources();
         var clangFiles = clangResources.getClangFiles(version, config.get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         // Copy executable
@@ -348,10 +339,6 @@ public class ClangAstParser {
         // Get nodes that are temporary
         Set<String> isTemporary = parseIsTemporary(SpecsIo.read("is_temporary.txt"));
 
-        // Get OpenMP directives
-        // Map<String, OMPDirective> ompDirectives = parseOmpDirectives(IoUtils.read("omp.txt"));
-        Map<String, OMPDirective> ompDirectives = new HashMap<>();
-
         // Get enum integer types
         Map<String, String> enumToIntegerType = parseEnumIntegerTypes(SpecsIo.read("enum_integer_type.txt"));
 
@@ -362,7 +349,7 @@ public class ClangAstParser {
         ClavaNodes newNodes = parsedData.get(ClangParserData.CLAVA_NODES);
 
         ClangRootData clangRootData = new ClangRootData(config, includes, clangTypes, nodeToTypes,
-                isTemporary, ompDirectives, enumToIntegerType, stderr,
+                isTemporary, enumToIntegerType, stderr,
                 newNodes, clangDump);
 
         return new ClangRootNode(clangRootData, clangDump);
@@ -391,9 +378,6 @@ public class ClangAstParser {
             LineStreamParser<ClangParserData> lineStreamParser, File stderrDumpFilename) {
 
         File dumpfile = isDebug() ? stderrDumpFilename : null;
-
-        // TODO: Temporary, needs to be set again, since this will run in a separate thread
-        LegacyToDataStore.CLAVA_CONTEXT.set(lineStreamParser.getData().get(ClavaNode.CONTEXT));
 
         // Parse StdErr from ClangAst
         return new StreamParser(clavaData, dumpfile, lineStreamParser).parse(inputStream);

@@ -15,6 +15,8 @@ package eu.antarex.clang.parser;
 
 import java.util.List;
 
+import org.junit.Test;
+
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.astlineparser.AstParser;
 
@@ -69,7 +71,7 @@ public class TestParser {
             "    `-ImplicitCastExpr 0x1410dc8 <col:9> 'int' <LValueToRValue>\n" +
             "      `-DeclRefExpr 0x1410da0 <col:9> 'int' lvalue Var 0x1397390 'b' 'int'";
 
-    // @Test
+    @Test
     public void test() {
         List<ClangNode> nodes = new AstParser().parse(TestParser.EXAMPLE2);
         System.out.println("NODES:" + nodes);

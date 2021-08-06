@@ -50,22 +50,4 @@ public abstract class ExplicitCastExpr extends CastExpr {
         set(TYPE_AS_WRITTEN, type);
     }
 
-    // public ExplicitCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
-    // Expr subExpr) {
-    //
-    // super(castKind, exprData, info, subExpr);
-    // }
-
-    /**
-     * Constructor without children, for node copy.
-     * 
-     * @param castKind
-     * @param location
-     */
-    // protected ExplicitCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
-    // List<? extends ClavaNode> children) {
-    //
-    // super(castKind, exprData, info, children);
-    // }
-
 }

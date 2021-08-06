@@ -35,32 +35,6 @@ public class NamespaceDecl extends NamedDecl {
         super(data, children);
     }
 
-    // private final String namespace;
-    // private final boolean isInline;
-    // private final BareDeclData originalNamespace;
-    //
-    // public NamespaceDecl(boolean isInline, BareDeclData originalNamespace, String namespace, DeclData declData,
-    // ClavaNodeInfo info, List<? extends ClavaNode> namespaceDecls) {
-    //
-    // this(isInline, originalNamespace, namespace, declData, info, namespaceDecls);
-    // }
-
-    // public NamespaceDecl(boolean isInline, BareDeclData originalNamespace, String namespace,
-    // DeclData declData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    //
-    // super(namespace, null, declData, info, children);
-    //
-    // // this.namespace = namespace;
-    // this.isInline = isInline;
-    // this.originalNamespace = originalNamespace;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new NamespaceDecl(isInline, originalNamespace, getDeclName(), getDeclData(), getInfo(),
-    // Collections.emptyList());
-    // }
-
     public String getCompleteNamespace() {
         // If it has no namespace ancestor, found top-level namespace
         Optional<NamespaceDecl> ancestorNamespace = getAncestorTry(NamespaceDecl.class);
@@ -71,16 +45,6 @@ public class NamespaceDecl extends NamedDecl {
         // Return complete namespace of ancestor suffixed with current namespace
         return ancestorNamespace.get().getCompleteNamespace() + "::" + getDeclName();
     }
-
-    // private String getCompleteNamespace(StringBuilder builder) {
-    // // Add self
-    // if(builder.)
-    // }
-
-    // @Override
-    // public String getDeclName() {
-    // return namespace;
-    // }
 
     @Override
     public String getCode() {

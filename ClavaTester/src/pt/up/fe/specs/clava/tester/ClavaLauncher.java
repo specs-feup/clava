@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 
-import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.lazy.ThreadSafeLazy;
@@ -47,7 +46,7 @@ public class ClavaLauncher {
                 "clava_jar");
 
         // Prepare resource
-        ResourceWriteData clavaJar = ClavaTesterWebResource.CLAVA_JAR.writeVersioned(clavaFolder, ClangAstParser.class);
+        ResourceWriteData clavaJar = ClavaTesterWebResource.CLAVA_JAR.writeVersioned(clavaFolder, ClavaLauncher.class);
 
         loadLibrary(clavaJar.getFile());
 

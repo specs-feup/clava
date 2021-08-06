@@ -25,21 +25,4 @@ public class CXXConstCastExpr extends CXXNamedCastExpr {
         super(data, children);
     }
 
-    // public CXXConstCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData, ClavaNodeInfo info,
-    // Expr subExpr) {
-    //
-    // this(cxxNamedCastExprdata, exprData, info, Arrays.asList(subExpr));
-    // }
-    //
-    // private CXXConstCastExpr(CXXNamedCastExprData cxxNamedCastExprdata, ExprData exprData, ClavaNodeInfo info,
-    // List<? extends ClavaNode> children) {
-    //
-    // super(cxxNamedCastExprdata, exprData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXConstCastExpr(getCxxNamedCastExprdata(), getExprData(), getInfo(), Collections.emptyList());
-    // }
-
 }

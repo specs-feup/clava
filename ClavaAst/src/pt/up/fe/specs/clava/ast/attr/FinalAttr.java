@@ -25,15 +25,6 @@ public class FinalAttr extends InheritableAttr {
         super(data, children);
     }
 
-    // public FinalAttr(AttrData attrData, ClavaNodeInfo nodeInfo) {
-    // super(AttributeKind.Final, attrData, nodeInfo, Collections.emptyList());
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new FinalAttr(getAttrData(), getInfo());
-    // }
-
     @Override
     public String getCode() {
         return "final";

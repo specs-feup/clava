@@ -27,19 +27,6 @@ public class ParenListExpr extends Expr {
         super(data, children);
     }
 
-    // public ParenListExpr(ExprData exprData, ClavaNodeInfo info, List<Expr> expressions) {
-    // this(exprData, info, (Collection<? extends ClavaNode>) expressions);
-    // }
-    //
-    // private ParenListExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new ParenListExpr(getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     public List<Expr> getExpressions() {
         return getChildren(Expr.class);
     }
@@ -49,7 +36,6 @@ public class ParenListExpr extends Expr {
         return getExpressions().stream()
                 .map(ClavaNode::getCode)
                 .collect(Collectors.joining(", ", "(", ")"));
-        // .collect(Collectors.joining(", "));
     }
 
 }

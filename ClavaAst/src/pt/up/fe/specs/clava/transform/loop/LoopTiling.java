@@ -33,28 +33,23 @@ import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 public class LoopTiling {
 
-    // private final ClavaContext context;
     private final ClavaFactory factory;
 
     private Stmt lastReferenceStmt;
 
     public LoopTiling(ClavaContext context) {
-        // this.context = context;
         this.factory = context.get(ClavaContext.FACTORY);
         lastReferenceStmt = null;
     }
 
     public boolean apply(LoopStmt targetLoop, String blockSize) {
-
         return apply(targetLoop, targetLoop, blockSize);
     }
 
     public boolean apply(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize) {
-
         return apply(targetLoop, referenceLoop, blockSize, true);
     }
 
-    // public boolean apply(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize, boolean useTernary) {
     public boolean apply(LoopStmt targetLoop, Stmt referenceStmt, String blockSize, boolean useTernary) {
 
         if (!test(targetLoop, referenceStmt)) {
@@ -71,11 +66,9 @@ public class LoopTiling {
         return lastReferenceStmt;
     }
 
-    // private void tile(LoopStmt targetLoop, LoopStmt referenceLoop, String blockSize, boolean useTernary) {
     private Stmt tile(LoopStmt targetLoop, Stmt referenceStmt, String blockSize, boolean useTernary) {
 
         ForStmt targetFor = (ForStmt) targetLoop;
-        // ForStmt referenceFor = (ForStmt) referenceStmt;
 
         String controlVarName = LoopAnalysisUtils.getControlVarNames(targetFor).get(0);
         String blockVarName = controlVarName + "_block"; // TODO: check for variable name collisions
@@ -85,8 +78,6 @@ public class LoopTiling {
 
         // test guarantees there is an upper bound
         Expr oldUpperBound = LoopAnalysisUtils.getUpperBound(targetFor).get();
-
-        // addBlockLoop(targetFor, referenceFor, blockSize, blockVarName, oldLowerBound, oldUpperBound);
 
         // In reverse order, because of insert before
         addBlockLoop(targetFor, referenceStmt, blockSize, blockVarName, oldLowerBound, oldUpperBound);
@@ -111,22 +102,16 @@ public class LoopTiling {
      * @param blockVarName
      * @param oldUpperBound
      */
-    // private void addBlockLoop(ForStmt targetFor, ForStmt referenceFor, String blockSize, String blockVarName,
     private void addBlockLoop(ForStmt targetFor, Stmt referenceStmt, String blockSize, String blockVarName,
             Expr oldLowerBound, Expr oldUpperBound) {
 
         // make header parts
-        // Stmt init = ClavaNodeFactory.literalStmt("size_t " + blockVarName + " = " + oldLowerBound.getCode() + ";");
-        // Stmt init = ClavaNodeFactory.literalStmt("int " + blockVarName + " = " + oldLowerBound.getCode() + ";");
-        // Stmt cond = ClavaNodeFactory.literalStmt(blockVarName + " < " + oldUpperBound.getCode() + ";");
-        // Stmt inc = ClavaNodeFactory.literalStmt(blockVarName + " += " + blockSize);
         Stmt init = factory.literalStmt("int " + blockVarName + " = " + oldLowerBound.getCode() + ";");
         Stmt cond = factory.literalStmt(blockVarName + " < " + oldUpperBound.getCode() + ";");
         Stmt inc = factory.literalStmt(blockVarName + " += " + blockSize);
 
         // make for loop
         CompoundStmt emptyBody = factory.compoundStmt();
-        // ForStmt newFor = ClavaNodeFactory.forStmt(ClavaNodeInfo.undefinedInfo(), init, cond, inc, emptyBody);
 
         ForStmt newFor = factory.forStmt(init, cond, inc, emptyBody);
 
@@ -186,7 +171,7 @@ public class LoopTiling {
 
         String limitDeclCode = limitVarDecl + limitCheck;
         Stmt limitDecl = factory.literalStmt(limitDeclCode);
-        // NodeInsertUtils.insertBefore(targetFor, limitDecl);
+
         CompoundStmt newScope = factory.compoundStmt(limitDecl);
         NodeInsertUtils.replace(targetFor, newScope);
         newScope.addChild(targetFor);
@@ -201,10 +186,6 @@ public class LoopTiling {
     private void changeInit(ForStmt targetFor, String blockVarName) {
 
         Stmt init = targetFor.getInit().get();
-
-        // LiteralExpr newRHS = ClavaNodeFactory.literalExpr(blockVarName, ClavaNodeFactory.builtinType("int"));
-        // LiteralExpr newRHS = ClavaNodeFactory.literalExpr(blockVarName,
-        // ClavaNodeFactory.builtinType(BuiltinKind.INT));
 
         LiteralExpr newRHS = factory.literalExpr(blockVarName, factory.builtinType(BuiltinKind.Int));
 

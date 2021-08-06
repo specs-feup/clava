@@ -43,27 +43,16 @@ public abstract class AdjustedType extends Type {
         super(data, children);
     }
 
-    // protected AdjustedType(TypeData typeData, ClavaNodeInfo info, Type originalType, Type adjustedType) {
-    // this(typeData, info, Arrays.asList(originalType, adjustedType));
-    // }
-    //
-    // protected AdjustedType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(typeData, info, children);
-    // }
-
     public Type getOriginalType() {
         return get(ORIGINAL_TYPE);
-        // return getChild(Type.class, 0);
     }
 
     public void setOriginalType(Type originalType) {
         set(ORIGINAL_TYPE, originalType);
-        // setChild(0, originalType);
     }
 
     public Type getAdjustedType() {
         return get(ADJUSTED_TYPE);
-        // return getChild(Type.class, 1);
     }
 
     @Override

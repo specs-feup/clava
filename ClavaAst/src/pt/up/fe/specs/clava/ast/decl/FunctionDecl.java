@@ -122,10 +122,6 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
     /// DATAKEYS END
 
-    // private final FunctionDeclData functionDeclData;
-
-    // private Lazy<FunctionDecl> declaration;
-    // private Lazy<FunctionDecl> definition;
     // CHECK: Directly enconding information relative to the tree structure (e.g., how many parameter nodes)
     // prevents direct transformations in the tree (e.g., if we remove a parameter, the value needs to be updated)
     // Solutions:
@@ -140,66 +136,9 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     // private final int numParameters;
     // private final boolean hasDefinition;
 
-    // Just for testing
-    // public FunctionDecl(FunctionDeclDataV2 data, List<ClavaNode> children) {
-    // super(null, null, null, null, Collections.emptyList());
-    // functionDeclData = null;
-    // }
-
     public FunctionDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-        // this.functionDeclData = null;
-        // this.declaration = Lazy.newInstance(() -> this.findDeclOrDef(true));
-        // this.definition = Lazy.newInstance(() -> this.findDeclOrDef(false));
-
-        // SpecsLogs.debug("FUNCTION DECL CHILDREN:" + children);
-        // System.out.println("CREATING FUNCTION DECL WITH ID " + get(ID) + ", hash " + hashCode());
     }
-
-    /**
-     * Constructor for a function definition.
-     */
-    /*
-    public FunctionDecl(String declName, List<ParmVarDecl> inputs, Type functionType, FunctionDeclData functionDeclData,
-            DeclData declData, ClavaNodeInfo info, Stmt definition) {
-    
-        this(declName, functionType, functionDeclData, declData, info, inputs, definition);
-    }
-    */
-
-    /**
-     *
-     *
-     * @param declName
-     * @param inputs
-     * @param returnType
-     * @param attributes
-     * @param info
-     * @param definition
-     */
-    // protected FunctionDecl(String declName, Type functionType, FunctionDeclData functionDeclData, DeclData declData,
-    // ClavaNodeInfo info, List<ParmVarDecl> inputs, Stmt definition) {
-    //
-    // this(declName, functionType, functionDeclData, declData, info, SpecsCollections.concat(inputs, definition));
-    //
-    // checkDefinition(definition);
-    // }
-
-    // protected FunctionDecl(String declName, Type functionType, FunctionDeclData functionDeclData, DeclData declData,
-    // ClavaNodeInfo info, List<? extends ClavaNode> children) {
-    //
-    // super(new LegacyToDataStore().setFunctionDecl(functionDeclData).setDecl(declData).setNodeInfo(info).getData(),
-    // children);
-    // // super(declName, functionType, declData, info, children);
-    //
-    // set(NamedDecl.DECL_NAME, processDeclName(declName));
-    // set(ValueDecl.TYPE, processType(functionType));
-    //
-    // // this.functionDeclData = functionDeclData;
-    // this.declaration = Lazy.newInstance(() -> this.findDeclOrDef(true));
-    // this.definition = Lazy.newInstance(() -> this.findDeclOrDef(false));
-    //
-    // }
 
     protected void checkDefinition(Stmt definition) {
 
@@ -215,12 +154,6 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
         throw new RuntimeException("Stmt now allowed as a definition of FunctionDecl: " + definition.getClass());
     }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new FunctionDecl(getDeclName(), getFunctionType(), getFunctionDeclData(), getDeclData(), getInfo(),
-    // Collections.emptyList());
-    // }
 
     public FunctionType getFunctionType() {
         return Types.getFunctionType(getType());
@@ -245,37 +178,10 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
             function.setType(functionTypeCopy);
         }
 
-        // getDecls().stream()
-        // .forEach(function -> function.setReturnTypeSingle(returnType));
     }
-
-    // private void setReturnTypeSingle(Type returnType) {
-    //
-    // FunctionType functionType = getFunctionType();
-    //
-    // // Create a copy of the function type, to avoid setting the type on all functions with the same signature
-    // FunctionType functionTypeCopy = (FunctionType) functionType.copy();
-    //
-    // // Replace the return type of the function type copy
-    // functionTypeCopy.set(FunctionType.RETURN_TYPE, returnType);
-    // // CxxActions.replace(functionTypeCopy.getReturnType(), newType, getWeaverEngine());
-    //
-    // // Set the function type copy as the type of the function
-    // setType(functionTypeCopy);
-    //
-    // // getFunctionType().setReturnType(returnType);
-    // }
-
-    // @Deprecated
-    // protected FunctionDeclData getFunctionDeclData() {
-    // return DataStoreToLegacy.getFunctionDecl(getData());
-    //
-    // // return functionDeclData;
-    // }
 
     public boolean isInline() {
         return get(IS_INLINE);
-        // return functionDeclData.isInline();
     }
 
     /**
@@ -287,7 +193,6 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         return SpecsCollections.lastTry(getChildren()).map(child -> child instanceof Stmt).orElse(false);
     }
 
-    // public Optional<Stmt> setBody(CompoundStmt body) {
     /**
      *
      * @param body
@@ -315,74 +220,13 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         StringBuilder code = new StringBuilder();
 
         code.append(getAttributesCode());
-        // for (Attribute attr : get(ATTRIBUTES)) {
-        // code.append(attr.getCode());
-        //
-        // if (attr.getKind().isInline()) {
-        // code.append(" ");
-        // } else {
-        // code.append("\n");
-        // }
-        //
-        // }
 
         code.append(getDeclarationId(true));
-        // if (code.toString().contains("%Dummy")) {
-        // System.out.println("F DECLARATION:" + code);
-        // System.out.println("F TYPE:" + getType());
-        // System.out.println("F TYPE TREE:" + getType().toTree());
-        // }
-
-        /*
-        if (getFunctionDeclData().isInline()) {
-            code.append("inline ");
-        }
-        
-        if (getFunctionDeclData().getStorageClass() != StorageClass.NONE) {
-            code.append(getFunctionDeclData().getStorageClass().getString()).append(" ");
-        }
-        
-        String returnType = getFunctionType().getReturnType().getCode();
-        
-        code.append(returnType).append(" ").append(getTypelessCode()).append(getCodeBody());
-        */
 
         code.append(getCodeBody());
 
         return code.toString();
     }
-
-    // /**
-    // * @deprecated use getPrototypes() instead
-    // * @return the node representing the declaration of this function, if it exists
-    // */
-    // @Deprecated
-    // public Optional<FunctionDecl> getDeclaration() {
-    // return getPrototypes().stream().findFirst();
-    // // // If no body, return immediately
-    // // if (!hasBody()) {
-    // // return Optional.of(this);
-    // // }
-    // //
-    // // // Search for the declaration
-    // // return getAppTry().flatMap(app -> app.getFunctionDeclaration(this));
-    // }
-
-    // /**
-    // * @deprecated use getImplementation() instead.
-    // * @return
-    // */
-    // @Deprecated
-    // public Optional<FunctionDecl> getDefinition() {
-    // return getImplementation();
-    // // // If has body, return immediately
-    // // if (hasBody()) {
-    // // return Optional.of(this);
-    // // }
-    // //
-    // // // Search for the definition
-    // // return getAppTry().flatMap(app -> app.getFunctionDefinition(this));
-    // }
 
     /**
      *
@@ -456,44 +300,6 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     /**
-     * The function declaration corresponding to the definition of the function represented by this node.
-     *
-     * @deprecated use .getDefinition() instead
-     * @return
-     */
-    // @Deprecated
-    // public Optional<FunctionDecl> getDefinitionDeclaration() {
-    // return getDefinition();
-    // }
-
-    // private FunctionDecl findDeclaration() {
-    //
-    // }
-
-    // private FunctionDecl findDeclOrDef(boolean findDecl) {
-    // App app = getAppTry().orElse(null);
-    //
-    // if (app == null) {
-    // return null;
-    // }
-    //
-    // // Find function declarations with the same name and the same signature
-    // List<FunctionDecl> decls = getApp().getDescendantsStream()
-    // .filter(FunctionDecl.class::isInstance)
-    // .map(FunctionDecl.class::cast)
-    // .filter(fdecl -> findDecl ? !fdecl.hasBody() : fdecl.hasBody())
-    // .filter(fdecl -> fdecl.getDeclName().equals(getDeclName()))
-    // .filter(fdecl -> fdecl.getDeclarationId(false).equals(getDeclarationId(false)))
-    // .collect(Collectors.toList());
-    //
-    // if (decls.size() > 1) {
-    // SpecsLogs.msgInfo("getDeclaration(): Found more than one declaration for function at " + getLocation());
-    // }
-    //
-    // return !decls.isEmpty() ? decls.get(0) : null;
-    // }
-
-    /**
      * 
      * @param useReturnType
      * @return
@@ -546,7 +352,6 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
     public boolean isDefinition() {
         return hasBody();
-        // return getDefinition().map(def -> def == this).orElse(false);
     }
 
     private String getCodeAfterParams() {
@@ -635,199 +440,31 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     public FunctionDecl setName(String name) {
-        // System.out.println("SETTING NAME:" + get(ID));
-        // System.out.println("SETTING NAME OF FUNCTIONDECL " + get(ID));
-        // System.out.println("PREVIOUS NAME:" + get(DECL_NAME));
-        // String previousName = get(DECL_NAME);
 
         set(DECL_NAME, name);
 
-        /*
-        // Adapt QualifiedName
-        String qualifiedName = get(QUALIFIED_NAME);
-        SpecsCheck.checkArgument(qualifiedName.endsWith(previousName),
-                () -> "Expected qualified name to end with '" + previousName + "': " + qualifiedName);
-        
-        boolean hasColons = qualifiedName.contains("::");
-        
-        String qualifiedPrefix = hasColons ? qualifiedName.substring(0, qualifiedName.lastIndexOf("::")) + "::" : "";
-        
-        String newQualifiedName = qualifiedPrefix + name;
-        set(QUALIFIED_NAME, newQualifiedName);
-        */
-
-        // System.out.println("OLD QUALIFIED NAME: " + qualifiedName);
-        // System.out.println("NEW QUALIFIED NAME: " + newQualifiedName);
-
-        // System.out.println("NEW NAME:" + get(DECL_NAME));
-        // System.out.println("THIS HASH: " + hashCode());
-
         return this;
     }
-    //
-    // public String getName() {
-    // return get(DECL_NAME);
-    // }
-
-    // TODO: Replace with set(DECL_NAME) when refactoring to new format is finished
-    // public void setName(String name) {
-    // // String functionName = getDeclName();
-    //
-    // // Determine scope of change. If static, only change calls inside the file
-    // boolean isStatic = get(STORAGE_CLASS) == StorageClass.STATIC;
-    // ClavaNode root = isStatic ? getAncestorTry(TranslationUnit.class).orElse(null) : getAppTry().orElse(null);
-    //
-    // Optional<FunctionDecl> decl = getDeclaration();
-    // Optional<FunctionDecl> def = getDefinitionDeclaration();
-    //
-    // // Find all calls of this function
-    // // System.out.println("FUNCTION DECL " + get(ID) + ", setting name to " + name);
-    // if (root != null) {
-    // for (CallExpr callExpr : root.getDescendants(CallExpr.class)) {
-    // testAndSetCallName(callExpr, name);
-    // }
-    //
-    // }
-    //
-    // // Change name of itself, both definition and declaration
-    // decl.ifPresent(node -> node.setDeclName(name));
-    // def.ifPresent(node -> node.setDeclName(name));
-    //
-    // // setDeclName(name);
-    // // if (name.equals("declAndDefNew")) {
-    // // System.out.println("BEFORE");
-    // // System.out.println("DECL:" + getDeclaration());
-    // // System.out.println("DEF:" + getFunctionDefinition());
-    // // }
-    //
-    // // if (name.equals("declAndDefNew")) {
-    // // System.out.println("AFTER");
-    // // System.out.println("DECL:" + getDeclaration());
-    // // System.out.println("DEF:" + getFunctionDefinition());
-    // // }
-    // // Change name of declaration
-    // // getDeclaration()
-    // // .filter(functionDecl -> functionDecl != this)
-    // // .ifPresent(functionDecl -> functionDecl.setDeclName(name));
-    //
-    // }
-
-    /**
-     * Sets the name of call if the corresponding definition, declaration or both refer to the function represented by
-     * this node.
-     *
-     * @param name
-     * @param original
-     * @param tentative
-     */
-    // private void testAndSetCallName(CallExpr call, String newName) {
-    // if (isCorrespondingCall(call)) {
-    // call.setCallName(newName);
-    // }
-    // }
 
     private boolean isCorrespondingCall(CallExpr call) {
         // If declaration exists, declaration of call must exist too, if call refers to this function
         var callDecl = call.getFunctionDecl();
 
         Optional<Boolean> result = getImplementation().map(decl -> match(decl, callDecl));
-        // Optional<Boolean> result = getImplementation().map(decl -> match(decl, call.getDeclaration()));
         if (result.isPresent()) {
             return result.get();
         }
 
         result = getPrototypes().stream().map(def -> match(def, callDecl)).findFirst();
-        // result = getPrototypes().stream().map(def -> match(def, call.getDefinition())).findFirst();
         if (result.isPresent()) {
             return result.get();
         }
 
-        // System.out.println("DECL:" + getImplementation());
-        // System.out.println("DEF:" + getImplementation());
-
         throw new RuntimeException("Should not arrive here, either function declaration or definition must be defined");
-        /*
-        return getDeclaration().map(decl -> match(decl, call.getDeclaration()))
-                // If no declaration, try definition
-                .orElse(getFunctionDefinition().map(def -> match(def, call.getDefinition()))
-                        .orElseThrow(() -> new RuntimeException(
-                                "Should not arrive here, either function declaration or definition must be defined")));
-        */
-        // Optional<FunctionDecl> functionDecl = getDeclaration();
-        // Optional<FunctionDecl> callDecl = call.getDeclaration();
-
-        /*
-        Optional<Boolean> declMatch = match(getDeclaration(), call.getDeclaration());
-        if (declMatch.isPresent()) {
-            return declMatch.get();
-        }
-        
-        Optional<Boolean> defMatch = match(getFunctionDefinition(), call.getDefinition());
-        if (defMatch.isPresent()) {
-            return defMatch.get();
-        }
-        
-        throw new RuntimeException("Should not arrive here, either function declaration or definition must be defined");
-        */
-        /*
-        if (functionDecl.isPresent()) {
-            FunctionDecl decl = functionDecl.get();
-        
-            if (!callDecl.isPresent()) {
-                return;
-            }
-        
-            boolean isFunction = decl == callDecl.get();
-        
-            if (isFunction) {
-                call.setCallName(newName);
-            }
-        
-            return;
-        }
-        */
-        /*
-        boolean isDeclOfCall;
-        // If declaration exists, check if declaration of call is the
-        getDeclaration();
-        call.getDeclaration()
-        */
     }
-
-    /**
-     * True if both objects match, false if they don't match, or empty if the first argument (functionDecl) is not
-     * present.
-     *
-     * @param function
-     * @param call
-     * @return
-     */
-    /*
-    private static Optional<Boolean> match(Optional<FunctionDecl> functionDecl, Optional<FunctionDecl> callDecl) {
-        if (!functionDecl.isPresent()) {
-            return Optional.empty();
-        }
-    
-        FunctionDecl decl = functionDecl.get();
-    
-        if (!callDecl.isPresent()) {
-            return Optional.of(false);
-        }
-    
-        return Optional.of(decl == callDecl.get());
-    }
-    */
 
     private static boolean match(FunctionDecl decl, Optional<FunctionDecl> callDecl) {
-        // return callDecl.map(cDecl -> decl == cDecl).orElse(false);
         return callDecl.map(cDecl -> decl.equals(cDecl)).orElse(false);
-        /*
-        if (!callDecl.isPresent()) {
-            return false;
-        }
-        
-        return decl == callDecl.get();
-        */
     }
 
     /**
@@ -906,11 +543,6 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         return builder.toString();
     }
 
-    // @Override
-    // public SpecsList<String> getSignatureCustomStrings() {
-    // return super.getSignatureCustomStrings().andAdd(getSignature());
-    // }
-
     /**
      * Clones this function (both declaration and definition, if present), and inserts the cloned functions after the
      * corresponding original functions.
@@ -933,9 +565,6 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         var definition = getImplementation();
         var declaration = getPrototypes();
 
-        // Optional<FunctionDecl> newDefinition = definition.map(def -> ((FunctionDecl) def.copy()).setName(newName));
-        // Optional<FunctionDecl> newDeclaration = declaration.map(decl -> ((FunctionDecl)
-        // decl.copy()).setName(newName));
         Optional<FunctionDecl> newDefinition = definition.map(def -> def.copyFunction(newName));
 
         if (insert) {
@@ -967,10 +596,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
             return newDefinition.get();
         } else {
             return newPrototypes.get(0);
-            // return newDeclaration.get();
         }
-        // definition2.ifPresent(node -> System.out.println("DEF:\n" + node.getCode()));
-        // declaration.ifPresent(node -> System.out.println("DECL:\n" + node.getCode()));
     }
 
     protected FunctionDecl copyFunction(String newName) {
@@ -988,8 +614,6 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     public void setFunctionType(FunctionType type) {
         getPrototypes().stream().forEach(decl -> decl.setType(type));
         getImplementation().ifPresent(decl -> decl.setType(type));
-        // getDeclaration().ifPresent(decl -> decl.setType(type));
-        // getDefinition().ifPresent(decl -> decl.setType(type));
     }
 
     @Override

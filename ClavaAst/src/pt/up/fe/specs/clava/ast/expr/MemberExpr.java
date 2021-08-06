@@ -58,42 +58,16 @@ public class MemberExpr extends Expr {
         super(data, children);
     }
 
-    // private String memberName;
-    // private final boolean isArrow;
-
-    // public MemberExpr(String memberName, boolean isArrow, ExprData exprData, ClavaNodeInfo info, Expr base) {
-    //
-    // this(memberName, isArrow, exprData, info, Arrays.asList(base));
-    // }
-
-    // private MemberExpr(String memberName, boolean isArrow, ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // super(exprData, info, children);
-    //
-    // this.memberName = memberName;
-    // this.isArrow = isArrow;
-    //
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new MemberExpr(memberName, isArrow, getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     public String getMemberName() {
         return get(MEMBER_NAME);
-        // return memberName;
     }
 
     public void setMemberName(String memberName) {
         set(MEMBER_NAME, memberName);
-        // this.memberName = memberName;
     }
 
     public boolean isArrow() {
         return get(IS_ARROW);
-        // return isArrow;
     }
 
     public Expr getBase() {
@@ -103,11 +77,6 @@ public class MemberExpr extends Expr {
     public ValueDecl getMemberDecl() {
         return get(MEMBER_DECL);
     }
-
-    // @Override
-    // public String toContentString() {
-    // return super.toContentString() + " " + memberName;
-    // }
 
     @Override
     public String getCode() {
@@ -144,46 +113,12 @@ public class MemberExpr extends Expr {
         }
 
         if (expr instanceof MemberExpr) {
-            // return ((MemberExpr) expr).memberName;
             return ((MemberExpr) expr).getMemberName();
         }
 
         throw new RuntimeException("Case not implemented for class " + expr.getClass());
     }
 
-    /*
-    private List<String> getChain(Expr expr) {
-        // TODO: Concatenating the list is inefficient, if chain is big, although this is not expected?
-    
-        // DeclRefExpr is the end of the chain
-        if (expr instanceof DeclRefExpr) {
-            return Arrays.asList(((DeclRefExpr) expr).getRefName());
-        }
-    
-        if (expr instanceof MemberExpr) {
-            MemberExpr memberExpr = (MemberExpr) expr;
-            // Get base that interest us
-            Expr chainBase = toChainBase(memberExpr.getBase());
-            // Could not treat this case, abort
-            if (chainBase == null) {
-                return Collections.emptyList();
-            }
-    
-            List<String> baseString = getChain(chainBase);
-    
-            // If empty, something happened
-            if (baseString.isEmpty()) {
-                return Collections.emptyList();
-            }
-    
-            return SpecsCollections.concat(baseString, memberExpr.memberName);
-            // return baseString == null ? null : baseString + "." + memberExpr.memberName;
-        }
-    
-        SpecsLogs.msgWarn("Expr should be a DeclRefExpr or a MemberExpr, is:" + expr);
-        return Collections.emptyList();
-    }
-    */
     public List<Expr> getExprChain() {
         return getExprChain(this);
     }
@@ -215,7 +150,7 @@ public class MemberExpr extends Expr {
             return SpecsCollections.concat(baseString, memberExpr);
         }
 
-        SpecsLogs.msgWarn("Expr should be a DeclRefExpr or a MemberExpr, is:" + expr);
+        SpecsLogs.warn("Expr should be a DeclRefExpr or a MemberExpr, is:" + expr);
         return Collections.emptyList();
     }
 
@@ -235,23 +170,6 @@ public class MemberExpr extends Expr {
         SpecsLogs.msgLib("MemberExpr.toChainBase: case not defined, " + candidateBase);
         return null;
     }
-
-    /**
-     * Visit first childs until a declRef is found.
-     * 
-     * @return
-     */
-    /*
-    public DeclRefExpr getDeclRef() {
-        ClavaNode currentNode = getChild(0);
-        while (!(currentNode instanceof DeclRefExpr)) {
-            Preconditions.checkArgument(currentNode.hasChildren(), "Expected to find DeclRefExpr:" + this);
-            currentNode = currentNode.getChild(0);
-        }
-    
-        return (DeclRefExpr) currentNode;
-    }
-    */
 
     @Override
     public SpecsList<DataKey<?>> getSignatureKeys() {

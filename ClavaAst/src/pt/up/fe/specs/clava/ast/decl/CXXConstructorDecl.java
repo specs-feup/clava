@@ -69,59 +69,8 @@ public class CXXConstructorDecl extends CXXMethodDecl {
         super(data, children);
     }
 
-    // public CXXConstructorDecl(CXXMethodDeclData methodData, List<CXXCtorInitializer> defaultInits, String declName,
-    // List<ParmVarDecl> inputs, Type functionType, FunctionDeclData functionDeclData, DeclData declData,
-    // ClavaNodeInfo info) {
-    //
-    // this(methodData, declName, functionType, functionDeclData, declData, info, inputs, defaultInits,
-    // Collections.emptyList());
-    // }
-
-    /*
-    public CXXConstructorDecl(List<CXXCtorInitializer> defaultInits, String declName,
-            List<ParmVarDecl> inputs, Type functionType, FunctionDeclData functionDeclData, DeclData declData,
-            ClavaNodeInfo info, Stmt definition) {
-    
-        this(declName, functionType, functionDeclData, declData, info, inputs, defaultInits, definition);
-    }
-    
-    public CXXConstructorDecl(String declName,
-            Type functionType, FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
-            List<ParmVarDecl> inputs, List<CXXCtorInitializer> defaultInits, Stmt definition) {
-    
-        this(declName, functionType, functionDeclData, declData, info,
-                SpecsCollections.concat(SpecsCollections.concat(inputs, defaultInits), definition));
-    
-        checkDefinition(definition);
-    
-    }
-    
-    // private CXXConstructorDecl(CXXMethodDeclData methodData, String declName,
-    private CXXConstructorDecl(String declName,
-            Type functionType, FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
-            List<? extends ClavaNode> children) {
-    
-        super(declName, functionType, functionDeclData, declData, info, children);
-    }
-    
-    @Override
-    protected ClavaNode copyPrivate() {
-    
-        return new CXXConstructorDecl(getDeclName(), getFunctionType(), getFunctionDeclData(),
-                getDeclData(), getInfo(), Collections.emptyList());
-    }
-    */
-
     public List<CXXCtorInitializer> getInitializers() {
         return get(CONSTRUCTOR_INITS);
-        // // Default inits appear after parameters and definition
-        // int startIndex = getNumParameters();
-        //
-        // List<ClavaNode> initAtHead = SpecsCollections.subList(getChildren(), startIndex);
-        //
-        // List<CXXCtorInitializer> inits = SpecsCollections.peek(initAtHead, CXXCtorInitializer.class);
-        //
-        // return inits;
     }
 
     @Override
@@ -129,9 +78,6 @@ public class CXXConstructorDecl extends CXXMethodDecl {
         if (get(IS_IMPLICIT)) {
             return "";
         }
-        // if (getDeclData().isImplicit()) {
-        // return "";
-        // }
 
         // Special case: try
         Optional<Stmt> body = getFunctionDefinition();

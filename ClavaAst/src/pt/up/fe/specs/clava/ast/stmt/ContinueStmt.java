@@ -31,19 +31,6 @@ public class ContinueStmt extends Stmt {
         super(data, children);
     }
 
-    // public ContinueStmt(ClavaNodeInfo info) {
-    // this(info, Collections.emptyList());
-    // }
-    //
-    // private ContinueStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new ContinueStmt(getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public String getCode() {
         return "continue;";

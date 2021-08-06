@@ -25,20 +25,6 @@ public class CXXStdInitializerListExpr extends Expr {
         super(data, children);
     }
 
-    // public CXXStdInitializerListExpr(ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
-    // this(exprData, info, Arrays.asList(subExpr));
-    // }
-    //
-    // private CXXStdInitializerListExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode>
-    // children) {
-    // super(exprData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXStdInitializerListExpr(getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     public Expr getSubExpr() {
         return getChild(Expr.class, 0);
     }

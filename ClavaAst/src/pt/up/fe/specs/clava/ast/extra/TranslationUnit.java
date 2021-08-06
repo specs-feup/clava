@@ -93,53 +93,22 @@ public class TranslationUnit extends ClavaNode {
 
     /// DATAKEYS END
 
-    // private static final Set<String> HEADER_EXTENSIONS = new HashSet<>(Arrays.asList("h", "hpp"));
-    // private static final Set<String> CXX_EXTENSIONS = new HashSet<>(Arrays.asList("cpp", "hpp"));
-
-    // public static Set<String> getHeaderExtensions() {
-    // return HEADER_EXTENSIONS;
-    // }
-
-    // private final String filename;
-    // private final String path;
-
     // Bookkeeping for the includes, will be initialize the first time it is accessed with getIncludes()
     private IncludeManager includes;
 
     private final Lazy<Boolean> isCxxUnit;
 
-    // private String relativePath;
-
     public TranslationUnit(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
 
-        // List<IncludeDecl> includesList = children.stream()
-        // // All children must be Decls
-        // .map(Decl.class::cast)
-        // .filter(decl -> decl instanceof IncludeDecl)
-        // .map(include -> (IncludeDecl) include)
-        // .collect(Collectors.toList());
-        //
-        // includes = new IncludeManager(includesList, this);
-
         isCxxUnit = Lazy.newInstanceSerializable(this::testIsCXXUnit);
     }
-
-    // @Override
-    // public ClavaNode copy(boolean keepId) {
-    // TranslationUnit newTunit = (TranslationUnit) super.copy(keepId);
-    // newTunit.includes = includes.copy(newTunit);
-    //
-    // return newTunit;
-    // }
 
     @Override
     public ClavaNode addChild(ClavaNode child) {
         // If IncludeDecl, treat it differently
         if (child instanceof IncludeDecl) {
             return addIncludePrivate((IncludeDecl) child);
-            // return;
-
         }
 
         // Add child normally
@@ -148,12 +117,12 @@ public class TranslationUnit extends ClavaNode {
 
     @Override
     public ClavaNode addChild(int index, ClavaNode child) {
+
         // If IncludeDecl, treat it differently
         if (child instanceof IncludeDecl) {
             ClavaLog.warning(
                     "Using .addChild(int index, ClavaNode chilld) with an IncludeDecl node, the index value will be ignored");
             return addIncludePrivate((IncludeDecl) child);
-            // return;
         }
 
         // Add child normally
@@ -162,21 +131,12 @@ public class TranslationUnit extends ClavaNode {
 
     @Override
     public ClavaNode removeChild(int index) {
-        // if (getChild(index) instanceof IncludeDecl) {
-        // System.out.println("REMOVING: " + getChild(index).getCode());
-        // System.out.println("REMOVE BEFORE: " + getIncludes().getCurrentIncludes());
-        // System.out.println("LAST BEFORE: " + getIncludes().getLastInclude());
-        // }
 
         // If child is an IncludeDecl, update IncludesManager
         if (getChild(index) instanceof IncludeDecl) {
             getIncludes().remove((IncludeDecl) getChild(index));
         }
 
-        // if (getChild(index) instanceof IncludeDecl) {
-        // System.out.println("REMOVE AFTER: " + getIncludes().getCurrentIncludes());
-        // System.out.println("LAST AFTER: " + getIncludes().getLastInclude());
-        // }
         return super.removeChild(index);
     }
 
@@ -195,102 +155,6 @@ public class TranslationUnit extends ClavaNode {
         return (IncludeDecl) super.addChild(insertIndex, include);
     }
 
-    /*
-    private TranslationUnit(String filename, String folderPath, Collection<Decl> declarations) {
-        super(createInfo(new ArrayList<>(declarations), new File(folderPath, filename).getPath()), declarations);
-    
-        this.filename = filename;
-        path = processFilePath(folderPath);
-    
-        List<IncludeDecl> includesList = declarations.stream()
-                .filter(decl -> decl instanceof IncludeDecl)
-                .map(include -> (IncludeDecl) include)
-                .collect(Collectors.toList());
-    
-        includes = new IncludeManager(includesList, this);
-    
-        isCxxUnit = Lazy.newInstance(this::testIsCXXUnit);
-    
-        // relativePath = null;
-    }
-    */
-
-    // public TranslationUnit(File sourceFile, Collection<Decl> declarations) {
-    // this(new LegacyToDataStore()
-    // .setNodeInfo(createInfo(new ArrayList<>(declarations), sourceFile.getPath()))
-    // .set(SOURCE_FILE, sourceFile).getData(), declarations);
-    // }
-
-    /*
-    private String processFilePath(String filePath) {
-        if (filePath == null) {
-            return null;
-        }
-    
-        if (filePath.isEmpty()) {
-            return null;
-        }
-    
-        // Should convert to absolute?
-    
-        return SpecsIo.getCanonicalPath(new File(filePath));
-    }
-    */
-
-    /*
-    public static ClavaNodeInfo createInfo(List<Decl> declarations, String filepath) {
-        if (declarations.isEmpty()) {
-            return ClavaNodeInfo.undefinedInfo(new SourceRange(filepath, 1, 1, 1, 1));
-        }
-    
-        // TODO: Only consider locations which have the same source file?
-        System.out.println("FILEPATH:" + filepath);
-        Decl firstDecl = declarations.get(0);
-        int startLine = firstDecl.getLocation().getStartLine();
-        int startCol = firstDecl.getLocation().getStartCol();
-        int endLine = firstDecl.getLocation().getEndLine();
-        int endCol = firstDecl.getLocation().getEndCol();
-        System.out.println("FIRST DECL START FILEPATH:" + firstDecl.getLocation().getStartFilepath());
-        System.out.println("FIRST DECL END FILEPATH:" + firstDecl.getLocation().getEndFilepath());
-        // if (!firstDecl.getLocation().getFilepath().equals(filepath)) {
-        // throw new RuntimeException("First decl filepath '" + firstDecl.getLocation().getFilepath()
-        // + "' diff than given filepath '" + filepath + "'");
-        // }
-        for (int i = 1; i < declarations.size(); i++) {
-            Decl decl = declarations.get(i);
-            System.out.println("DECL START FILEPATH:" + decl.getLocation().getStartFilepath());
-            System.out.println("DECL END FILEPATH:" + decl.getLocation().getEndFilepath());
-            // if (!decl.getLocation().getFilepath().equals(filepath)) {
-            // throw new RuntimeException(" decl filepath '" + decl.getLocation().getFilepath()
-            // + "' diff than given filepath '" + filepath + "'");
-            // }
-    
-            // If line came first, replace
-            if (decl.getLocation().getStartLine() < startLine) {
-                startLine = decl.getLocation().getStartLine();
-                startCol = decl.getLocation().getStartCol();
-            }
-            // If the same line, use smaller start column
-            else if (decl.getLocation().getStartLine() == startLine) {
-                startCol = Math.min(decl.getLocation().getStartCol(), startCol);
-            }
-    
-            // If last line came last, use it
-            if (decl.getLocation().getEndLine() > endLine) {
-                endLine = decl.getLocation().getEndLine();
-                endCol = decl.getLocation().getEndCol();
-            }
-    
-            else if (decl.getLocation().getEndLine() == endLine) {
-                endCol = Math.max(decl.getLocation().getEndCol(), endCol);
-            }
-    
-        }
-    
-        return ClavaNodeInfo.undefinedInfo(new SourceRange(filepath, startLine, startCol, endLine, endCol));
-    }
-    */
-
     public static void setDataStore(File sourceFile, DataStore data) {
         data.set(TranslationUnit.SOURCE_FILE, sourceFile);
 
@@ -299,10 +163,8 @@ public class TranslationUnit extends ClavaNode {
 
         // If source file does not exist, return default values
 
-        // if (declarations.isEmpty()) {
         if (!sourceFile.isFile()) {
             data.set(ClavaNode.LOCATION, new SourceRange(filepath, 1, 1, 1, 1));
-            // return ClavaNodeInfo.undefinedInfo(new SourceRange(filepath, 1, 1, 1, 1));
             return;
         }
 
@@ -341,48 +203,19 @@ public class TranslationUnit extends ClavaNode {
         }
 
         // If source path does not exist yet, or no base source folder specified, just return filename
-        // if (!filepath.exists() || baseSourceFolder == null) {
         if (baseSourceFolder == null) {
-            // System.out.println("FILEPATH:" + filepath);
+
             // Only return complete resource path if it is not absolute
             String relativePath = filepath.isAbsolute() ? filepath.getName() : filepath.getPath();
-            // System.out.println("BASESOURCE FOLDER:" + baseSourceFolder);
-            // System.out.println("FILEPATH:" + filepath);
-            // System.out.println("IS ABSOLUTE:" + filepath.isAbsolute());
-            // System.out.println("FILEPATH GETNAME:" + filepath.getName());
-            // System.out.println("RELATIVE PATH BEFORE:" + relativePath);
 
-            // if (baseSourceFolder != null) {
-            // relativePath = new File(baseSourceFolder, relativePath).getPath();
-            // }
-            // System.out.println("RELATIVE PATH AFTER:" + relativePath);
-            // return sourcePath.getPath();
-            // System.out.println("getRelativePath:" + relativePath);
-
-            // return filepath.getName();
             return relativePath;
         }
-
-        // No base input folder specified, just return source path
-        // if (baseSourceFolder == null) {
-        // return sourcePath.getPath();
-        // }
 
         // Calculate relative path
         String relativePath = SpecsIo.getRelativePath(filepath, baseSourceFolder);
 
-        // Avoid writing outside of the destination folder, if relative path has '../', remove them
-        // while (relativePath.startsWith("../")) {
-        // relativePath = relativePath.substring("../".length());
-        // }
-
         return relativePath;
     }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new TranslationUnit(filename, path, Collections.emptyList());
-    // }
 
     @Override
     public String getCode() {
@@ -393,8 +226,6 @@ public class TranslationUnit extends ClavaNode {
         }
 
         String body = getChildrenStream()
-                // String body = getDecls().stream()
-                // .map(child -> child.getCode())
                 .map(this::getChildCode)
                 .collect(Collectors.joining(ln()));
 
@@ -407,43 +238,16 @@ public class TranslationUnit extends ClavaNode {
     }
 
     /**
-     * 'Source path' refers to the path that was given as the base for the source file of this Translation Unit. It
-     * corresponds to an ancestor folder of the file, which was given as a folder where to look for sources.
-     *
-     * @return if set, returns the original source path of this translation unit
-     */
-    /**
-     * Relative path refers to the last portion of the path of this file that should be considered as not part of the
-     * original source folder.
-     * <p>
-     * For instance, if the path of the file is /folder1/folder2/file.h, but the source folder should be considered to
-     * be /folder1, this method returns folder2.
-     *
-     * @return
-     */
-    /*
-    public Optional<String> getRelativePath() {
-        return Optional.ofNullable(relativePath);
-    }
-    */
-
-    /**
      *
      * @param relativePath
      */
     public void setRelativePath(String relativePath) {
-        // System.out.println("SET 2 BEFORE: " + get(RELATIVE_PATH));
 
         if (relativePath == null || relativePath.isEmpty()) {
             set(RELATIVE_PATH, null);
-            // System.out.println("SET 2 AFTER 1: " + get(RELATIVE_PATH));
 
             return;
         }
-        // if (relativePath == null) {
-        // this.relativePath = null;
-        // return;
-        // }
 
         // Verify relative path
         if (!isRelativePathValid(relativePath)) {
@@ -453,25 +257,11 @@ public class TranslationUnit extends ClavaNode {
         }
 
         set(RELATIVE_PATH, relativePath);
-        // System.out.println("SET 2 AFTER 2: " + get(RELATIVE_PATH));
-
-        // this.relativePath = relativePath.isEmpty() ? null : relativePath;
     }
-
-    // public void setSourceFoldername(String sourceFoldername) {
-    // if (sourceFoldername == null) {
-    // set(SOURCE_FOLDERNAME, Optional.empty());
-    // return;
-    // }
-    //
-    // set(SOURCE_FOLDERNAME, Optional.of(sourceFoldername));
-    // // this.relativePath = relativePath.isEmpty() ? null : relativePath;
-    // }
 
     public boolean isRelativePathValid(String relativePath) {
         File path = get(SOURCE_FILE).getParentFile();
         if (path != null) {
-            // File currentPath = new File(path);
             File currentPath = path;
             File currentRelativePath = new File(relativePath);
             while (currentRelativePath != null) {
@@ -501,8 +291,6 @@ public class TranslationUnit extends ClavaNode {
                     .filter(i -> !lines.get(i).trim().isEmpty())
                     .findFirst()
                     .orElse(-1);
-            // .orElseThrow(() -> new RuntimeException(
-            // "Expected to find non-empty code: " + decl.getCode() + "\n" + decl));
 
             if (index != -1) {
                 lines.set(index, lines.get(index) + commentCode);
@@ -511,8 +299,6 @@ public class TranslationUnit extends ClavaNode {
             else {
                 lines.add(0, commentCode);
             }
-
-            // lines.set(index, lines.get(index) + commentCode);
 
             code = lines.stream().collect(Collectors.joining(ln()));
         }
@@ -530,7 +316,6 @@ public class TranslationUnit extends ClavaNode {
         filenameId = filenameId.replace("-", "_");
 
         // Prepend a few characters to guarantee uniqueness
-        // filenameId = filenameId + UUID.randomUUID().toString().substring(0, 3);
         filenameId = filenameId.toUpperCase();
 
         builder.append("#ifndef ").append(filenameId).append(ln());
@@ -543,7 +328,6 @@ public class TranslationUnit extends ClavaNode {
 
     public String getFilename() {
         return get(SOURCE_FILE).getName();
-        // return filename;
     }
 
     /**
@@ -552,14 +336,7 @@ public class TranslationUnit extends ClavaNode {
      */
     public Optional<String> getFolderpath() {
         return Optional.ofNullable(get(SOURCE_FILE).getParent());
-        // return Optional.ofNullable(path);
     }
-
-    /*
-    public String getFilepath() {
-        return getLocation().getFilepath();
-    }
-    */
 
     public void setFile(File sourceFile) {
         set(SOURCE_FILE, sourceFile);
@@ -567,19 +344,10 @@ public class TranslationUnit extends ClavaNode {
 
     public File getFile() {
         return get(SOURCE_FILE);
-        // if (path == null) {
-        // return new File(filename);
-        // }
-        //
-        // return new File(path, filename);
     }
 
     public boolean isHeaderFile() {
         return SourceType.isHeader(getFile());
-        // String extension = SpecsIo.getExtension(getFilename());
-        // return SourceType.HEADER.hasExtension(extension);
-        //
-        // // return HEADER_EXTENSIONS.contains(extension.toLowerCase());
     }
 
     public boolean isOpenCLFile() {
@@ -593,7 +361,7 @@ public class TranslationUnit extends ClavaNode {
 
         return extension.toLowerCase().equals("cu");
     }
-    
+
     public boolean isCXXUnit() {
         return isCxxUnit.get();
     }
@@ -601,23 +369,16 @@ public class TranslationUnit extends ClavaNode {
     private boolean testIsCXXUnit() {
         // 1) Check if file has CXX extension.
         // Cannot test for C extensions because you can have C++ code inside .c files, for instance.
-        // if (CXX_EXTENSIONS.contains(SpecsIo.getExtension(filename))) {
         if (SourceType.isCxxExtension(SpecsIo.getExtension(getFilename()))) {
             return true;
         }
 
         // 2) Check if file has CXX-exclusive nodes
         return getDescendantsStream()
-                // .filter(node -> node.getNodeName().startsWith("CXX"))
                 .filter(ClavaNode::isCxxNode)
                 .findFirst()
                 .isPresent();
     }
-
-    // @Override
-    // public String toContentString() {
-    // return super.toContentString() + filename + " ";
-    // }
 
     public IncludeManager getIncludes() {
         if (includes == null) {
@@ -642,27 +403,13 @@ public class TranslationUnit extends ClavaNode {
      * @param translationUnit
      */
     private void addInclude(TranslationUnit translationUnit, boolean isAngled) {
-        // private void addInclude(TranslationUnit translationUnit, boolean isAngled, File baseSourceFolder) {
-        String relativePath = translationUnit.getRelativeFilepath();
-        // If file does not exist yet, relative path is the path of the file itself
-        // Otherwise, calculate
-        // File tuFile = translationUnit.getFile();
-
-        // String relativePath = tuFile.exists() ? SpecsIo.getRelativePath(tuFile, getFile()) : tuFile.getPath();
-
         // Get relative path to include the file in this file
-        // String relativePath = SpecsIo.getRelativePath(translationUnit.getFile(), getFile());
-        // System.out.println("RELATIVE PATH:" + relativePath);
+        String relativePath = translationUnit.getRelativeFilepath();
+
         addInclude(relativePath, isAngled);
     }
 
     public void addInclude(String includeName, boolean isAngled) {
-        // if (includeName.startsWith("..")) {
-        // throw new RuntimeException("STOP");
-        // }
-        // System.out.println("INCLUDE NAME:" + includeName);
-
-        // getIncludes().addInclude(getFactory().includeDecl(includeName, isAngled));
         addIncludePrivate(getFactory().includeDecl(includeName, isAngled));
     }
 
@@ -675,13 +422,13 @@ public class TranslationUnit extends ClavaNode {
     }
 
     public void addDeclaration(NamedDecl namedDecl) {
+
         // Find insertion point. Insert before first function declaration
         Optional<ClavaNode> firstFunction = getChildrenStream()
                 .filter(child -> child instanceof FunctionDecl)
                 .findFirst();
 
         DeclStmt stmt = getFactory().declStmt(namedDecl);
-        // DeclStmt stmt = ClavaNodeFactory.declStmt(ClavaNodeInfo.undefinedInfo(), Arrays.asList(varDecl));
 
         if (firstFunction.isPresent()) {
             NodeInsertUtils.insertBefore(firstFunction.get(), stmt);
@@ -693,43 +440,18 @@ public class TranslationUnit extends ClavaNode {
 
     }
 
-    // public void write(File destinationFolder, File baseInputFolder) {
     public File write(File destinationFolder) {
-        // String relativePath = getRelativeFolderpath();
+
         File actualDestinationFolder = getRelativeFolderpath()
                 .map(relativePath -> SpecsIo.mkdir(new File(destinationFolder, relativePath)))
                 .orElse(destinationFolder);
-        // File actualDestinationFolder = SpecsIo.mkdir(new File(destinationFolder, relativePath));
+
         File destinationFile = new File(actualDestinationFolder, getFilename());
 
         SpecsIo.write(destinationFile, getCode());
 
         return destinationFile;
     }
-
-    /**
-     * @deprecated
-     * @param baseSourceFolder
-     * @return
-     */
-    /*
-    @Deprecated
-    public String getRelativeFolderpath(File baseSourceFolder) {
-        return getRelativePath(new File(path), baseSourceFolder);
-        // // If file does not exist yet, or base source folder is null, return its path
-        // if (!getFile().isFile() || baseSourceFolder == null) {
-        // return getFolderpath();
-        // }
-        //
-        // return getAppTry()
-        // .map(app -> app.getRelativeFolderPath(baseSourceFolder, this))
-        // .orElse(getFolderpath());
-    
-    }
-    */
-
-    // * <p>
-    // * Relative path example: if this file is included using "folder/header.h", returns "folder".
 
     /**
      * The folder of this file, relative to the include folders of the project.
@@ -748,36 +470,7 @@ public class TranslationUnit extends ClavaNode {
      */
     public Optional<String> getRelativeFolderpath() {
         return getTry(RELATIVE_PATH);
-
-        // return Optional.ofNullable(relativePath);
     }
-
-    // public void setRelativeFolderpath(String path) {
-    // // System.out.println("SET 1 BEFORE: " + get(RELATIVE_PATH));
-    // set(RELATIVE_PATH, path);
-    // // System.out.println("SET 1 AFTER: " + get(RELATIVE_PATH));
-    // // return Optional.ofNullable(relativePath);
-    // }
-
-    /**
-     * @deprecated
-     * @param baseSourceFolder
-     * @return
-     */
-    /*
-    @Deprecated
-    public String getRelativeFilepath(File baseSourceFolder) {
-        return getRelativePath(getFile(), baseSourceFolder);
-        // // If file does not exist yet, or base source folder is null, return its path
-        // if (!getFile().isFile() || baseSourceFolder == null) {
-        // return getFile().getPath();
-        // }
-        //
-        // return getAppTry()
-        // .map(app -> app.getRelativePath(baseSourceFolder, this))
-        // .orElse(getFile().getPath());
-    }
-    */
 
     /**
      * The path of this file, relative to the include folders of the project.
@@ -788,8 +481,6 @@ public class TranslationUnit extends ClavaNode {
         return getRelativeFolderpath()
                 .map(relativePath -> relativePath + "/" + getFilename())
                 .orElse(getFilename());
-
-        // return getRelativePath(getFile(), sourcePath);
     }
 
     /**
@@ -804,7 +495,7 @@ public class TranslationUnit extends ClavaNode {
         if (flattenFolder) {
             return baseFolder;
         }
-        // System.out.println("RELATIVE FOLDER PATH: " + getRelativeFolderpath());
+
         // Check if there is a relative path defined
         Optional<String> relativeFolderpathTry = getRelativeFolderpath();
         if (!relativeFolderpathTry.isPresent()) {
@@ -814,21 +505,6 @@ public class TranslationUnit extends ClavaNode {
         String relativeFolderpath = relativeFolderpathTry.get();
 
         return new File(baseFolder, relativeFolderpath);
-
-        // // Check if there is a path defined
-        // Optional<String> folderpathTry = getFolderpath();
-        // // System.out.println("FOLDERPATH:" + folderpath);
-        // if (!folderpathTry.isPresent()) {
-        // return baseFolder;
-        // }
-        //
-        // String folderpath = folderpathTry.get();
-        // File folder = new File(folderpath);
-        //
-        // // If folderpath is absolute, return only last name; otherwise, use it fully
-        // String path = folder.isAbsolute() ? folder.getName() : folderpath;
-        // return new File(baseFolder, path);
-
     }
 
     public File getDestinationFile(File destinationFolder) {

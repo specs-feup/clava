@@ -39,32 +39,9 @@ public class LiteralDecl extends Decl {
         super(data, children);
     }
 
-    // private final String literalCode;
-
-    /**
-     * 
-     * 
-     * @param literalCode
-     */
-    // public LiteralDecl(String literalCode) {
-    // this(literalCode, ClavaNodeInfo.undefinedInfo());
-    // }
-    //
-    // private LiteralDecl(String literalCode, ClavaNodeInfo info) {
-    // super(DeclData.empty(), info, Collections.emptyList());
-    //
-    // this.literalCode = literalCode;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new LiteralDecl(literalCode, getInfo());
-    // }
-
     @Override
     public String getCode() {
         return get(LITERAL_CODE);
-        // return literalCode;
     }
 
 }

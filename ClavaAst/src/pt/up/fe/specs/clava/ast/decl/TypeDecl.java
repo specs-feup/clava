@@ -22,7 +22,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
@@ -42,7 +41,6 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
     /**
      * The type associated with this TypeDecl.
      */
-    // public final static DataKey<Type> TYPE_FOR_DECL = KeyFactory.object("type_for_decl", Type.class);
     public final static DataKey<Optional<Type>> TYPE_FOR_DECL = KeyFactory.optional("type_for_decl");
 
     /// DATAKEYS END
@@ -51,37 +49,18 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
         super(data, children);
     }
 
-    /**
-     * @param declName
-     * @param type
-     * @param declData
-     * @param info
-     * @param children
-     */
-    // @Deprecated
-    // public TypeDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(new LegacyToDataStore().setDecl(declData).setNodeInfo(info).getData(), children);
-    //
-    // set(NamedDecl.DECL_NAME, declName);
-    // set(TYPE_FOR_DECL, processType(type));
-    // // super(declName, type, declData, info, children);
-    // }
-
     @Override
     protected Type processType(Type type) {
-        return type == null ? LegacyToDataStore.getFactory().nullType() : type.copy();
+        return type == null ? getFactory().nullType() : type.copy();
     }
 
     @Override
     public Type getType() {
         return get(TYPE_FOR_DECL).orElse(getFactory().nullType());
-        // return get(TYPE_FOR_DECL);
     }
 
     @Override
     public void setType(Type type) {
-        // set(TYPE_FOR_DECL, type);
         set(TYPE_FOR_DECL, Optional.of(type));
     }
 

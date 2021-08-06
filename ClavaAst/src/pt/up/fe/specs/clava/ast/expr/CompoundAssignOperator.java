@@ -25,45 +25,8 @@ public class CompoundAssignOperator extends BinaryOperator {
         super(data, children);
     }
 
-    // private final Type lhsType;
-    // private final Type resultType;
-    //
-    // public CompoundAssignOperator(Type lhsType, Type resultType, BinaryOperatorKind op, ExprData exprData,
-    // ClavaNodeInfo info, Expr lhs, Expr rhs) {
-    //
-    // super(op, exprData, info, lhs, rhs);
-    //
-    // this.lhsType = lhsType;
-    // this.resultType = resultType;
-    // }
-
-    /**
-     * Constructor for copy function.
-     * 
-     * @param lhsType
-     * @param resultType
-     * @param op
-     * @param valueKind
-     * @param type
-     * @param info
-     */
-    // private CompoundAssignOperator(Type lhsType, Type resultType, BinaryOperatorKind op,
-    // ExprData exprData, ClavaNodeInfo info) {
-    //
-    // super(op, exprData, info, Collections.emptyList());
-    //
-    // this.lhsType = lhsType;
-    // this.resultType = resultType;
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CompoundAssignOperator(lhsType, resultType, getOp(), getExprData(), getInfo());
-    // }
-
     @Override
     public String getCode() {
-        // return getLhs().getCode() + " " + getOp().getOpString() + "= " + getRhs().getCode();
         return getLhs().getCode() + " " + getOp().getOpString() + " " + getRhs().getCode();
     }
 

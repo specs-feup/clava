@@ -25,15 +25,6 @@ public class CXXThisExpr extends Expr {
         super(data, children);
     }
 
-    // public CXXThisExpr(ExprData exprData, ClavaNodeInfo info) {
-    // super(exprData, info, Collections.emptyList());
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXThisExpr(getExprData(), getInfo());
-    // }
-
     @Override
     public String getCode() {
         return "this";

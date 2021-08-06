@@ -26,6 +26,12 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
 
+/**
+ * Represents a typeof (or typeof) expression (a GCC extension).
+ * 
+ * @author JBispo
+ *
+ */
 public class TypeOfExprType extends Type {
 
     /// DATAKEYS BEGIN
@@ -49,36 +55,9 @@ public class TypeOfExprType extends Type {
         return this;
     }
 
-    // private final Standard standard;
-    //
-    // public TypeOfExprType(Standard standard, TypeData data, ClavaNodeInfo info, Expr underlyingExpr,
-    // Type underlyingType) {
-    // super(data, info, Arrays.asList(underlyingExpr, underlyingType));
-    //
-    // this.standard = standard;
-    // }
-    //
-    // private TypeOfExprType(Standard standard, TypeData data, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(data, info, children);
-    //
-    // this.standard = standard;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new TypeOfExprType(standard, getTypeData(), getInfo(), Collections.emptyList());
-    // }
-
     public Expr getUnderlyingExpr() {
         return get(UNDERLYING_EXPR);
-        // return getChild(Expr.class, 0);
     }
-
-    // @Override
-    // protected Type desugarImpl() {
-    // return getChild(Type.class, 1);
-    // }
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
@@ -93,10 +72,6 @@ public class TypeOfExprType extends Type {
                 return super.getCode(sourceNode, name);
             }
         }
-
-        // if (standard.isGnu()) {
-        // return super.getCode(sourceNode, name);
-        // }
 
         // Not GNU, change to __typeof__
         String typeCode = super.getCode(sourceNode, name);

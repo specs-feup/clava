@@ -45,7 +45,7 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
             .setLabel("CUDA GPU Arch (default: sm_30)")
             .setDefaultString("sm_30");
     public static final DataKey<String> CUDA_PATH = KeyFactory.string("cudaPath")
-            .setLabel("CUDA Path (leave empty if in path)")
+            .setLabel("CUDA Path (empty: uses system installed; <builtin>: uses builtin version)")
             .setDefaultString("");
 
     /**
@@ -70,6 +70,13 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
 
     public abstract App parse(List<File> sources, List<String> compilerOptions, ClavaContext context);
 
+    /**
+     * 
+     * @param sources
+     * @param compilerOptions
+     *            flags compatible with C/C++ compilers such as Clang or GCC
+     * @return
+     */
     public App parse(List<File> sources, List<String> compilerOptions) {
         return parse(sources, compilerOptions, new ClavaContext());
     }

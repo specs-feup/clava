@@ -25,7 +25,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.LegacyToDataStore;
 import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
 import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
@@ -45,8 +44,6 @@ import pt.up.fe.specs.util.collections.SpecsList;
 public abstract class NamedDecl extends Decl {
 
     /// DATAKEYS BEGIN
-
-    // public final static DataKey<String> QUALIFIED_NAME = KeyFactory.string("qualifiedName");
 
     public final static DataKey<String> QUALIFIED_PREFIX = KeyFactory.string("qualifiedPrefix");
 
@@ -77,50 +74,11 @@ public abstract class NamedDecl extends Decl {
      */
     public final static DataKey<Visibility> VISIBILITY = KeyFactory.enumeration("visibility", Visibility.class);
 
-    /**
-     * Looks through UsingDecls and ObjCCompatibleAliasDecls for the underlying named decl.
-     */
-    // public final static DataKey<Decl> UNDERLYING_DECL = KeyFactory.object("underlyingDecl", Decl.class);
-
     /// DATAKEYS END
-
-    // private String declName;
-    // private Type type;
 
     public NamedDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    // /**
-    // * @deprecated
-    // * @param declName
-    // * @param type
-    // * @param declData
-    // * @param info
-    // * @param children
-    // */
-    // @Deprecated
-    // public NamedDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // this(new LegacyToDataStore().setDecl(declData).setNodeInfo(info).getData(), children);
-    //
-    // set(DECL_NAME, processDeclName(declName));
-    // set(ValueDecl.TYPE, processType(type));
-    //
-    // // super(declData, info, children);
-    //
-    // // if (declName != null) {
-    // // declName = declName.isEmpty() ? null : declName;
-    // // // Preconditions.checkArgument(!declName.isEmpty(),
-    // // // "Empty declNames not supported, use null instead (" + getLocation() + ")");
-    // // }
-    // // this.declName = declName == null ? "" : declName;
-    // // this.declName = declName != null && declName.isEmpty() ? null : declName;
-    // // this.declName = declName;
-    // // Types should be unique
-    // // this.type = type == null ? ClavaNodeFactory.nullType(getInfo()) : type.copy();
-    // // this.type.setApp(type.getApp());
-    // }
 
     protected String processDeclName(String declName) {
         // return declName == null ? "" : declName;
@@ -128,75 +86,26 @@ public abstract class NamedDecl extends Decl {
     }
 
     protected Type processType(Type type) {
-        return type == null ? LegacyToDataStore.getFactory().nullType() : type.copy();
+        return type == null ? getFactory().nullType() : type.copy();
     }
 
-    /*
-    public NamedDecl(Type type, DeclData declData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-    
-        super(declData, info, children);
-    
-        this.declName = null;
-        this.type = type == null ? ClavaNodeFactory.nullType(getInfo()) : type;
-        this.types = type == null ? Collections.emptyList() : Arrays.asList(type);
-    }
-    */
-    /*
-    protected String getDeclNameInternal() {
-        return declName;
-    }
-    */
     public String getDeclName() {
-        // if (get(DECL_NAME).equals("__cuda_builtin_threadIdx_t")) {
-        // System.out.println("DECL: " + this.getClass());
-        // }
-        // System.out.println("DECL NAME: " + get(DECL_NAME));
         return get(DECL_NAME);
-        // Preconditions.checkNotNull(declName);
-
-        // if (declName == null) {
-        // return "";
-        // }
-
-        // return declName;
-        // if (declName == null) {
-        // // throw new RuntimeException("The class '" + getClass() + "' must override getDeclName()!");
-        // throw new RuntimeException("DeclName is not defined");
-        // }
-        //
-        // return declName;
     }
 
     public void setDeclName(String declName) {
         set(DECL_NAME, declName);
-        // this.declName = declName;
     }
 
     public boolean hasDeclName() {
 
         String declName = getDeclName();
 
-        // if (declName == null) {
-        // return false;
-        // }
-
         if (declName.isEmpty()) {
             return false;
         }
 
         return true;
-        // return declName != null;
-        // return !getDeclName().isEmpty();
-        // if (declName == null || declName.isEmpty()) {
-        // return false;
-        // }
-        //
-        // return true;
-        // if (declName == null) {
-        // throw new RuntimeException("The class '" + getClass() + "' must override hasDeclName()!");
-        // }
-        // return !getDeclName().isEmpty();
     }
 
     /**
@@ -206,31 +115,7 @@ public abstract class NamedDecl extends Decl {
      */
     public String getTypelessCode() {
         return getDeclName();
-        // throw new RuntimeException("Not implemented for class '" + getClass().getSimpleName() + "'");
     }
-
-    /*
-    @Override
-    public Type getType() {
-        throw new RuntimeException("Not implemented for NamedDecl");
-        // if (type == null) {
-        // // return ClavaNodeFactory.literalType("<no type>", getInfo());
-        // return ClavaNodeFactory.nullType(getInfo());
-        // }
-        // return type;
-    }
-    */
-    /*
-    @Override
-    public void setType(Type type) {
-        throw new RuntimeException("Not implemented for NamedDecl");
-        // this.type = type;
-    }
-    */
-    // @Override
-    // public String toContentString() {
-    // return super.toContentString() + "declName:" + declName + ", type:" + getTypeCode();
-    // }
 
     public Optional<String> getCurrentNamespace() {
         return getCurrentNamespace("");
@@ -286,7 +171,6 @@ public abstract class NamedDecl extends Decl {
     }
 
     public Optional<String> getNamespace() {
-        // public Optional<String> getNamespace(String recordName) {
 
         // Qualified name has full name
         String qualifiedName = get(QUALIFIED_PREFIX);
@@ -300,7 +184,6 @@ public abstract class NamedDecl extends Decl {
         // Remove template parameters
         int templateParamStart = currentString.indexOf('<');
         if (templateParamStart != -1) {
-            // int templateParamEnd = currentString.lastIndexOf('>');
             currentString = currentString.substring(0, templateParamStart);
         }
 
@@ -336,7 +219,6 @@ public abstract class NamedDecl extends Decl {
 
     @Override
     public SpecsList<DataKey<?>> getSignatureKeys() {
-        // return super.getSignatureKeys().andAdd(DECL_NAME).andAdd(QUALIFIED_NAME);
         return super.getSignatureKeys().andAdd(DECL_NAME).andAdd(QUALIFIED_PREFIX);
     }
 

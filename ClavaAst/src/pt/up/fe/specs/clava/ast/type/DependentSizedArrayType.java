@@ -35,38 +35,8 @@ public class DependentSizedArrayType extends ArrayType {
         super(data, children);
     }
 
-    // public DependentSizedArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
-    // Type elementType, Expr sizeExpr) {
-    //
-    // this(arrayTypeData, typeData, info, Arrays.asList(elementType, sizeExpr));
-    // }
-    //
-    // private DependentSizedArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // this(new LegacyToDataStore().setArrayType(arrayTypeData).setType(typeData).setNodeInfo(info).getData(),
-    // children);
-    // // super(arrayTypeData, typeData, info, children);
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new DependentSizedArrayType(getArrayTypeData(), getTypeData(), getInfo(), Collections.emptyList());
-    // }
-
-    // @Override
-    // public Type getElementType() {
-    // return getChild(Type.class, 0);
-    // }
-
     public Optional<Expr> getSizeExpr() {
         return get(SIZE_EXPR);
-
-        // if (getNumChildren() < 2) {
-        // return Optional.empty();
-        // }
-        //
-        // Expr sizeExpr = getChild(Expr.class, 1);
-        // return sizeExpr instanceof NullExpr ? Optional.empty() : Optional.of(sizeExpr);
     }
 
     @Override

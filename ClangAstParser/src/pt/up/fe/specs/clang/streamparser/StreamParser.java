@@ -15,10 +15,8 @@ package pt.up.fe.specs.clang.streamparser;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -46,14 +44,16 @@ import pt.up.fe.specs.clang.streamparser.data.OffsetOfInfo;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.Types;
-import pt.up.fe.specs.clava.ast.expr.data.LambdaExprData;
-import pt.up.fe.specs.clava.ast.expr.data.TypeidData;
-import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureDefault;
-import pt.up.fe.specs.clava.ast.expr.enums.LambdaCaptureKind;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.utilities.LineStream;
 
+/**
+ * Old stream parser for Clang dumper.
+ * 
+ * @author JBispo
+ *
+ */
 public class StreamParser {
 
     private static final boolean STOP_ON_UNEXPECTED_OUTPUT = false;
@@ -72,15 +72,6 @@ public class StreamParser {
         }
     }
 
-    // public static DataStore parse(File stdErr) {
-    // try (LineStream lines = LineStream.newInstance(stdErr)) {
-    // StdErrParser parser = new StdErrParser();
-    // return parser.parsePrivate(lines);
-    // }
-    // // StdErrParser parser = new StdErrParser();
-    // // return parser.parsePrivate(stdErr);
-    // }
-
     /**
      * Input stream is closed after parsing.
      * 
@@ -97,33 +88,19 @@ public class StreamParser {
     private final StringBuilder warnings;
     private boolean hasParsed;
 
-    //
-    // private final SnippetParser<StringBuilder> counter;
-    // private final SnippetParser<StringBuilder> types;
-    // private final SnippetParser<MultiMap<String, String>> templateNames;
-    //
-
     private final Map<DataKey<?>, SnippetParser<?, ?>> keysToSnippetsMap;
     private final Map<String, SnippetParser<?, ?>> parsers;
 
-    // private final Collection<LineStreamParser> linestreamParsers;
-    // private final Map<String, LineStreamParser> linestreamParsersMap;
-
-    // private final BufferedStringBuilder dumpFile;
     private final File dumpFile;
 
     private final LineStreamParser<ClangParserData> lineStreamParser;
 
     private String lastProcessedId;
-    // public StreamParser(DataStore clavaData) {
-    // this(clavaData, null, ClangStreamParserV2.newInstance());
-    // }
 
     /**
      * We need a new instance every time we want to parse a String.
      */
     public StreamParser(DataStore clavaData, File dumpFile, LineStreamParser<ClangParserData> lineStreamParser) {
-        // this.dumpFile = dumpFile == null ? null : new BufferedStringBuilder(dumpFile);
         this.dumpFile = dumpFile;
         hasParsed = false;
         keysToSnippetsMap = buildDatakeysToSnippetsMap();
@@ -131,45 +108,12 @@ public class StreamParser {
                 .collect(Collectors.toMap(parser -> parser.getId(), parser -> parser));
         warnings = new StringBuilder();
 
-        // linestreamParsers = buildLineStreamParsers(clavaData);
-        // linestreamParsersMap = buildLineStreamParsers(linestreamParsers);
-
         this.lineStreamParser = lineStreamParser;
         lastProcessedId = null;
     }
 
-    /*
-    private Collection<LineStreamParser> buildLineStreamParsers(DataStore clavaData) {
-        return Arrays.asList(ClavaDataParser.newInstance(clavaData), VisitedChildrenParser.newInstance(),
-                IdToClassnameParser.newInstance(), TopLevelNodesParser.newInstance(),
-                TopLevelTypesParser.newInstance(), TopLevelAttributesParser.newInstance(), IncludesParser.newInstance(),
-                IdToFilenameParser.newInstance());
-    }
-    */
-    /*
-    private Map<String, LineStreamParser> buildLineStreamParsers(Collection<LineStreamParser> parsers) {
-    
-        Map<String, LineStreamParser> lineStreamParsers = new HashMap<>();
-    
-        for (LineStreamParser parser : parsers) {
-            parser.getIds().stream().forEach(id -> lineStreamParsers.put(id, parser));
-        }
-    
-        // ClavaDataParser clavaDataParser = ClavaDataParser.newInstance();
-        // clavaDataParser.getIds().stream().forEach(id -> lineStreamParsers.put(id, clavaDataParser));
-    
-        return lineStreamParsers;
-    }
-    */
-
     private static Map<DataKey<?>, SnippetParser<?, ?>> buildDatakeysToSnippetsMap() {
         Map<DataKey<?>, SnippetParser<?, ?>> snippetsMap = new HashMap<>();
-
-        // Single map for all the node data dumps
-        // Map<String, ClavaData> nodeData = new HashMap<>();
-
-        // Add snippet parsers for Clang Node parsing
-        // snippetsMap.putAll(ClangNodeParsing.buildSnippetParsers(nodeData));
 
         // This builder will be shared between Counter and Types
         StringBuilder typesBuilder = new StringBuilder();
@@ -270,13 +214,13 @@ public class StreamParser {
                 SnippetParser.newInstance("<Type As Written>", new HashMap<String, String>(),
                         StreamParser::collectString));
 
-        snippetsMap.put(StreamKeys.LAMBDA_EXPR_DATA,
-                SnippetParser.newInstance("<Lambda Expr Data>", new HashMap<String, LambdaExprData>(),
-                        StreamParser::parseLambdaExprData));
+        // snippetsMap.put(StreamKeys.LAMBDA_EXPR_DATA,
+        // SnippetParser.newInstance("<Lambda Expr Data>", new HashMap<String, LambdaExprData>(),
+        // StreamParser::parseLambdaExprData));
 
-        snippetsMap.put(StreamKeys.TYPEID_DATA,
-                SnippetParser.newInstance("<Typeid Data>", new HashMap<String, TypeidData>(),
-                        StreamParser::parseTypeidData));
+        // snippetsMap.put(StreamKeys.TYPEID_DATA,
+        // SnippetParser.newInstance("<Typeid Data>", new HashMap<String, TypeidData>(),
+        // StreamParser::parseTypeidData));
 
         // snippetsMap.put(StreamKeys.VARDECL_DUMPER_INFO,
         // SnippetParser.newInstance("<VarDecl Info>", new HashMap<String, VarDeclDumperInfo>(),
@@ -769,9 +713,10 @@ public class StreamParser {
         throw new RuntimeException("Unexpected value: " + aBoolean);
     }
 
+    /*
     public static void parseLambdaExprData(LineStream lines, Map<String, LambdaExprData> map) {
         String key = lines.nextLine();
-
+    
         // Format:
         // isGenericLambda (boolean)
         // isMutable (boolean)
@@ -779,13 +724,13 @@ public class StreamParser {
         // hasExplicitResultType (boolean)
         // captureDefault (LambdaCaptureDefault)
         // captureKinds (List<LambdaCaptureKind)
-
+    
         // boolean isArrow = Boolean.parseBoolean(lines.nextLine());
         boolean isGenericLambda = LineStreamParsers.oneOrZero(lines.nextLine());
         boolean isMutable = LineStreamParsers.oneOrZero(lines.nextLine());
         boolean hasExplicitParameters = LineStreamParsers.oneOrZero(lines.nextLine());
         boolean hasExplicitResultType = LineStreamParsers.oneOrZero(lines.nextLine());
-
+    
         LambdaCaptureDefault captureDefault = LambdaCaptureDefault.getHelper()
                 .fromValue(LineStreamParsers.integer(lines));
         int numCaptures = LineStreamParsers.integer(lines);
@@ -793,10 +738,11 @@ public class StreamParser {
         for (int i = 0; i < numCaptures; i++) {
             captureKinds.add(LambdaCaptureKind.getHelper().fromValue(LineStreamParsers.integer(lines)));
         }
-
+    
         map.put(key, new LambdaExprData(isGenericLambda, isMutable, hasExplicitParameters, hasExplicitResultType,
                 captureDefault, captureKinds));
     }
+    */
 
     /*
     public static void parseVarDeclDumperInfo(LineStream lines, Map<String, VarDeclDumperInfo> map) {
@@ -819,21 +765,22 @@ public class StreamParser {
                 new VarDeclDumperInfo(qualifiedName, isConstexpr, isStaticDataMember, isOutOfLine, hasGlobalStorage));
     }
     */
-    public static void parseTypeidData(LineStream lines, Map<String, TypeidData> map) {
-        String key = lines.nextLine();
 
-        // Format:
-
-        // Format:
-        // isTypeOperator (boolean)
-        // operatorId (String)
-
-        boolean isTypeOperator = LineStreamParsers.oneOrZero(lines.nextLine());
-        String operatorId = lines.nextLine();
-
-        map.put(key, new TypeidData(isTypeOperator, operatorId));
-
-    }
+    // public static void parseTypeidData(LineStream lines, Map<String, TypeidData> map) {
+    // String key = lines.nextLine();
+    //
+    // // Format:
+    //
+    // // Format:
+    // // isTypeOperator (boolean)
+    // // operatorId (String)
+    //
+    // boolean isTypeOperator = LineStreamParsers.oneOrZero(lines.nextLine());
+    // String operatorId = lines.nextLine();
+    //
+    // map.put(key, new TypeidData(isTypeOperator, operatorId));
+    //
+    // }
 
     // public static void parseFunctionDeclInfo(LineStream lines, Map<String, FunctionDeclInfo> map) {
     // String key = lines.nextLine();

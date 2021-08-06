@@ -79,15 +79,6 @@ public class CxxFile extends AFile {
         return getFunctions().stream()
                 .map(function -> CxxJoinpoints.create(function, AFunction.class))
                 .collect(Collectors.toList());
-
-        /*
-        // TODO: This can be optimzed if there are no FunctionDecl inside FunctionDecl?
-        return tunit.getDescendantsStream()
-        	// FunctionDecl represents C function, C++ methods, constructors and destructors
-        	.filter(node -> node instanceof FunctionDecl)
-        	.map(function -> new CxxFunction((FunctionDecl) function, this))
-        	.collect(Collectors.toList());
-        */
     }
 
     @Override
@@ -132,7 +123,6 @@ public class CxxFile extends AFile {
     @Override
     public void addIncludeImpl(String name, boolean isAngled) {
         tunit.addInclude(name, isAngled);
-        // tunit.getIncludes().addInclude(ClavaNodeFactory.include(name, isAngled));
     }
 
     @Override
@@ -155,13 +145,13 @@ public class CxxFile extends AFile {
         var tentativeNode = CxxWeaver.getSnippetParser().parseStmt(code);
         ClavaNode nodeToInsert = tentativeNode instanceof WrapperStmt ? tentativeNode.getChild(0)
                 : CxxWeaver.getFactory().literalDecl(code);
-        // Decl literalDecl = CxxWeaver.getFactory().literalDecl(code);
-        // return CxxActions.insertAsChild(position, getNode(), literalDecl, getWeaverEngine());
+
         return CxxActions.insertAsChild(position, getNode(), nodeToInsert, getWeaverEngine());
     }
 
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
+
         // Check node is a decl
         if (!(node.getNode() instanceof Decl)) {
             SpecsLogs.msgInfo(
@@ -176,6 +166,7 @@ public class CxxFile extends AFile {
 
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+
         // Check node is a decl
         if (node.getNode() instanceof Decl) {
             SpecsLogs.msgInfo(
@@ -221,29 +212,14 @@ public class CxxFile extends AFile {
                 node -> node instanceof CXXRecordDecl && ((CXXRecordDecl) node).getTagKind() == TagKind.CLASS);
     }
 
-    /*
-    @Override
-    public String getFilenameImpl() {
-        return tunit.getFilename();
-    }
-    */
-
     @Override
     public String getPathImpl() {
         return tunit.getFolderpath().orElse(null);
-        /*
-        String filename = tunit.getFilename();
-        String path = tunit.getFilepath();
-        if (path.endsWith(filename)) {
-            return path.substring(0, path.length() - filename.length());
-        }
-        
-        return path;
-        */
     }
 
     @Override
     public void addIncludeJpImpl(AJoinPoint jp) {
+
         // If jp is a function, include declaration if available
         if (jp.instanceOf("function")) {
             AFunction functionJp = (AFunction) jp;
@@ -267,16 +243,9 @@ public class CxxFile extends AFile {
             return;
         }
 
-        // String includePath = CxxWeaver.getRelativeFilepath(includeFile.getNode());
         String includePath = includeFile.getNode().getRelativeFilepath();
 
         tunit.addInclude(includePath, false);
-        // tunit.addInclude(includeFile.getNode(), getWeaverEngine().getBaseSourceFolder());
-
-        // Get relative path to include the file in this file
-        // String relativePath = SpecsIo.getRelativePath(includeFile.getTu().getFile(), tunit.getFile());
-        // addIncludeImpl(relativePath);
-
     }
 
     @Override
@@ -287,12 +256,10 @@ public class CxxFile extends AFile {
     @Override
     public String getRelativeFolderpathImpl() {
         return tunit.getRelativeFolderpath().orElse(null);
-        // return CxxWeaver.getRelativeFolderpath(tunit);
     }
 
     @Override
     public void defRelativeFolderpathImpl(String value) {
-        // tunit.setRelativeFolderpath(value);
         tunit.setRelativePath(value);
     }
 
@@ -304,7 +271,6 @@ public class CxxFile extends AFile {
     @Override
     public String getRelativeFilepathImpl() {
         return tunit.getRelativeFilepath();
-        // return CxxWeaver.getRelativeFilepath(tunit);
     }
 
     @Override
@@ -331,8 +297,6 @@ public class CxxFile extends AFile {
 
         Type typeNode = (Type) type.getNode();
         LiteralExpr literalExpr = CxxWeaver.getFactory().literalExpr(initValue, typeNode);
-        // LiteralExpr literalExpr = ClavaNodeFactory.literalExpr(initValue,
-        // ClavaNodeFactory.nullType(ClavaNodeInfo.undefinedInfo()));
 
         VarDecl global = tunit.getApp().getGlobalManager().addGlobal(tunit, name, typeNode, literalExpr);
 
@@ -405,9 +369,6 @@ public class CxxFile extends AFile {
             return null;
         }
 
-        // File baseSourceFolder = getWeaverEngine().getBaseSourceFolder();
-        // tunit.write(destinationFolder, baseSourceFolder);
-
         File writtenFile = tunit.write(destinationFolder);
         getWeaverEngine().getWeaverData().addManualWrittenFile(writtenFile);
 
@@ -426,7 +387,7 @@ public class CxxFile extends AFile {
 
     @Override
     public String getBaseSourcePathImpl() {
-        SpecsLogs.msgWarn(
+        SpecsLogs.warn(
                 "Attribute $file.baseSourcePath is deprecated, please use attribute $file.relativeFolderpath, which returns the same.");
         return tunit.getRelativeFolderpath().orElse(null);
     }

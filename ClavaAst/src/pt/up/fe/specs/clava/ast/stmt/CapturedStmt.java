@@ -28,15 +28,6 @@ public class CapturedStmt extends Stmt {
         super(data, children);
     }
 
-    // public CapturedStmt(ClavaNodeInfo info, Collection<? extends Stmt> children) {
-    // super(info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CapturedStmt(getInfo(), Collections.emptyList());
-    // }
-
     public Stmt getCapturedStatement() {
         SpecsCheck.checkArgument(getNumChildren() == 1, () -> "Expected one child, found " + getNumChildren());
         return getChild(Stmt.class, 0);
@@ -49,26 +40,7 @@ public class CapturedStmt extends Stmt {
 
     @Override
     public String getCode() {
-
         return getCapturedStatement().getCode();
-        /*        
-        StringBuilder code = new StringBuilder();
-        
-        code.append("{" + ln());
-        
-        for (Stmt stmt : getStatements()) {
-        
-            String stmtCode = StringLines.getLines(stmt.getCode()).stream()
-                    // Add tab
-                    .map(line -> getTab() + line)
-                    .collect(Collectors.joining(ln(), "", ln()));
-            code.append(stmtCode);
-        }
-        
-        code.append("}" + ln());
-        
-        return code.toString();
-        */
     }
 
     @Override

@@ -37,19 +37,6 @@ public class FriendDecl extends Decl {
         super(data, children);
     }
 
-    // public FriendDecl(DeclData declData, ClavaNodeInfo info, ClavaNode friendNode) {
-    // this(declData, info, Arrays.asList(friendNode));
-    // }
-    //
-    // private FriendDecl(DeclData declData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(declData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new FriendDecl(getDeclData(), getInfo(), Collections.emptyList());
-    // }
-
     public ClavaNode getFriendNode() {
         return getChild(0);
     }

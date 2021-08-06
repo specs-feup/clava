@@ -13,12 +13,10 @@
 
 package pt.up.fe.specs.clava.viewer;
 
-import pt.up.fe.specs.clava.viewer.codeprinters.ClangAstViewer;
 import pt.up.fe.specs.clava.viewer.codeprinters.ClavaAstViewer;
 
 public enum DemoMode {
-    CLANG("Clang AST", new ClangAstViewer()),
-    // CLAVA("Clava AST", new ClavaAstViewer(false, false)),
+
     CLAVA_AST("Clava AST", new ClavaAstViewer(false)),
     CLAVA_CPP("C/C++", new ClavaAstViewer(true));
 

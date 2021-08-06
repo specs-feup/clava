@@ -25,7 +25,8 @@ public class CxxCudaTester extends AClangAstTester {
     }
 
     public CxxCudaTester(List<String> files) {
-        super("cxx/cuda", files, Arrays.asList("-std=cuda"));
+        // super("cxx/cuda", files, Arrays.asList("-std=cuda"));
+        super("cxx/cuda", files);
 
         // Windows currently not supported
         if (SpecsPlatforms.isWindows()) {

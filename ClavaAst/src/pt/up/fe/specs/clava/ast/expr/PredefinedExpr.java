@@ -36,33 +36,11 @@ public class PredefinedExpr extends Expr {
     public final static DataKey<PredefinedIdType> PREDEFINED_TYPE = KeyFactory.enumeration("PREDEFINED_TYPE",
             PredefinedIdType.class);
 
-    // public final static DataKey<String> FUNCTION_NAME = KeyFactory.string("functionName");
-
     /// DATAKEYS END
 
     public PredefinedExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    // private final PredefinedIdType id;
-    //
-    // public PredefinedExpr(PredefinedIdType id, ExprData exprData, ClavaNodeInfo info,
-    // Expr subExpr) {
-    // this(id, exprData, info, Arrays.asList(subExpr));
-    // }
-    //
-    // protected PredefinedExpr(PredefinedIdType id, ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // super(exprData, info, children);
-    //
-    // this.id = id;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new PredefinedExpr(id, getExprData(), getInfo(), Collections.emptyList());
-    // }
 
     public PredefinedIdType getIdentifier() {
         return get(PREDEFINED_TYPE);
@@ -75,8 +53,6 @@ public class PredefinedExpr extends Expr {
     @Override
     public String getCode() {
         return getIdentifier().getString();
-        // return get(FUNCTION_NAME);
-        // return getSubExpr().map(Expr::getCode).orElse(get(FUNCTION_NAME));
     }
 
 }
