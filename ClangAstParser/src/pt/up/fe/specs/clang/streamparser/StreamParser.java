@@ -48,6 +48,12 @@ import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.utilities.LineStream;
 
+/**
+ * Old stream parser for Clang dumper.
+ * 
+ * @author JBispo
+ *
+ */
 public class StreamParser {
 
     private static final boolean STOP_ON_UNEXPECTED_OUTPUT = false;
@@ -66,15 +72,6 @@ public class StreamParser {
         }
     }
 
-    // public static DataStore parse(File stdErr) {
-    // try (LineStream lines = LineStream.newInstance(stdErr)) {
-    // StdErrParser parser = new StdErrParser();
-    // return parser.parsePrivate(lines);
-    // }
-    // // StdErrParser parser = new StdErrParser();
-    // // return parser.parsePrivate(stdErr);
-    // }
-
     /**
      * Input stream is closed after parsing.
      * 
@@ -91,33 +88,19 @@ public class StreamParser {
     private final StringBuilder warnings;
     private boolean hasParsed;
 
-    //
-    // private final SnippetParser<StringBuilder> counter;
-    // private final SnippetParser<StringBuilder> types;
-    // private final SnippetParser<MultiMap<String, String>> templateNames;
-    //
-
     private final Map<DataKey<?>, SnippetParser<?, ?>> keysToSnippetsMap;
     private final Map<String, SnippetParser<?, ?>> parsers;
 
-    // private final Collection<LineStreamParser> linestreamParsers;
-    // private final Map<String, LineStreamParser> linestreamParsersMap;
-
-    // private final BufferedStringBuilder dumpFile;
     private final File dumpFile;
 
     private final LineStreamParser<ClangParserData> lineStreamParser;
 
     private String lastProcessedId;
-    // public StreamParser(DataStore clavaData) {
-    // this(clavaData, null, ClangStreamParserV2.newInstance());
-    // }
 
     /**
      * We need a new instance every time we want to parse a String.
      */
     public StreamParser(DataStore clavaData, File dumpFile, LineStreamParser<ClangParserData> lineStreamParser) {
-        // this.dumpFile = dumpFile == null ? null : new BufferedStringBuilder(dumpFile);
         this.dumpFile = dumpFile;
         hasParsed = false;
         keysToSnippetsMap = buildDatakeysToSnippetsMap();
@@ -125,45 +108,12 @@ public class StreamParser {
                 .collect(Collectors.toMap(parser -> parser.getId(), parser -> parser));
         warnings = new StringBuilder();
 
-        // linestreamParsers = buildLineStreamParsers(clavaData);
-        // linestreamParsersMap = buildLineStreamParsers(linestreamParsers);
-
         this.lineStreamParser = lineStreamParser;
         lastProcessedId = null;
     }
 
-    /*
-    private Collection<LineStreamParser> buildLineStreamParsers(DataStore clavaData) {
-        return Arrays.asList(ClavaDataParser.newInstance(clavaData), VisitedChildrenParser.newInstance(),
-                IdToClassnameParser.newInstance(), TopLevelNodesParser.newInstance(),
-                TopLevelTypesParser.newInstance(), TopLevelAttributesParser.newInstance(), IncludesParser.newInstance(),
-                IdToFilenameParser.newInstance());
-    }
-    */
-    /*
-    private Map<String, LineStreamParser> buildLineStreamParsers(Collection<LineStreamParser> parsers) {
-    
-        Map<String, LineStreamParser> lineStreamParsers = new HashMap<>();
-    
-        for (LineStreamParser parser : parsers) {
-            parser.getIds().stream().forEach(id -> lineStreamParsers.put(id, parser));
-        }
-    
-        // ClavaDataParser clavaDataParser = ClavaDataParser.newInstance();
-        // clavaDataParser.getIds().stream().forEach(id -> lineStreamParsers.put(id, clavaDataParser));
-    
-        return lineStreamParsers;
-    }
-    */
-
     private static Map<DataKey<?>, SnippetParser<?, ?>> buildDatakeysToSnippetsMap() {
         Map<DataKey<?>, SnippetParser<?, ?>> snippetsMap = new HashMap<>();
-
-        // Single map for all the node data dumps
-        // Map<String, ClavaData> nodeData = new HashMap<>();
-
-        // Add snippet parsers for Clang Node parsing
-        // snippetsMap.putAll(ClangNodeParsing.buildSnippetParsers(nodeData));
 
         // This builder will be shared between Counter and Types
         StringBuilder typesBuilder = new StringBuilder();

@@ -43,6 +43,10 @@ public class TopLevelNodesParser {
         return workers;
     }
 
+    public static String getTopLevelNodesHeader() {
+        return PARSER_ID_DECLS;
+    }
+
     private static LineStreamWorker<ClangParserData> newWorker(String id, DataKey<Set<String>> key) {
         return newWorker(id, key, true);
     }

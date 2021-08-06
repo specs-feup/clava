@@ -36,7 +36,6 @@ import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode;
 import pt.up.fe.specs.clang.ast.genericnode.ClangRootNode.ClangRootData;
 import pt.up.fe.specs.clang.ast.genericnode.GenericClangNode;
 import pt.up.fe.specs.clang.astlineparser.AstParser;
-import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
 import pt.up.fe.specs.clang.includes.ClangIncludes;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
@@ -150,7 +149,8 @@ public class ClangAstParser {
 
         // System.out.println("CLANG AST OPTIONS: " + config);
         // Prepare resources before execution
-        ClangResources clangResources = new ClangResources(config.get(CodeParser.SHOW_CLANG_DUMP));
+        // ClangResources clangResources = new ClangResources(config.get(CodeParser.SHOW_CLANG_DUMP));
+        ClangResources clangResources = new ClangResources();
         var clangFiles = clangResources.getClangFiles(version, config.get(ClangAstKeys.USE_PLATFORM_INCLUDES));
 
         // Copy executable
