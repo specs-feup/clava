@@ -473,7 +473,7 @@ public class ParallelCodeParser extends CodeParser {
                 continue;
             }
 
-            SpecsLogs.msgWarn("Could not process source '" + source + "'");
+            SpecsLogs.warn("Could not process source '" + source + "'");
         }
 
         // Add folders of includes

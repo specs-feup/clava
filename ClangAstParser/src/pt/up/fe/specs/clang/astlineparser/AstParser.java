@@ -34,9 +34,12 @@ import pt.up.fe.specs.util.utilities.LineStream;
 /**
  * Helper class which converts MATLAB code into a MATLAB-IR tree, a file at a time.
  * 
+ * @deprecated
+ * 
  * @author Joao Bispo
  * 
  */
+@Deprecated
 public class AstParser {
 
     private static final Set<Character> ALLOWED_TREE_CHARS = new HashSet<>(Arrays.asList('|', ' ', '`'));

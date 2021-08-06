@@ -25,7 +25,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
 import pt.up.fe.specs.clang.ClangAstKeys;
-import pt.up.fe.specs.clang.ClangAstParser;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.cilk.CilkParser;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
@@ -54,7 +53,10 @@ import pt.up.fe.specs.util.utilities.LineStream;
  * Implementation of ClangParser that builds a TranslationUnit based on the AST dump of Clang.
  * 
  * <p>
- * This parsed will be deprecated once refactoring of ClavaNodes to DataStore format is done.
+ * TODO: This parsed will be deprecated once refactoring of ClavaNodes to DataStore format is done.
+ * 
+ * <p>
+ * TODO: Should this be a new CodeParser? (e.g. SingleFileParser)
  * 
  * @author JoaoBispo
  *
@@ -193,11 +195,9 @@ public class AstDumpParser implements ClangParser {
 
     private ClangParserData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
 
-        ClavaLog.debug(() -> "Data store config for Clang AST Dumper: " + config);
-        // Create instance of ClangAstParser
-        // ClangAstParser clangAstParser = new ClangAstParser(dumpStdOut, useCustomResources);
+        ClavaLog.debug(() -> "Data store config for single file parser: " + config);
 
-        DataStore localData = JOptionsUtils.loadDataStore(ClangAstParser.getLocalOptionsFile(), getClass(),
+        DataStore localData = JOptionsUtils.loadDataStore(LocalOptionsKeys.getLocalOptionsFilename(), getClass(),
                 LocalOptionsKeys.getProvider().getStoreDefinition());
 
         // Apply local options

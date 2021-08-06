@@ -135,12 +135,12 @@ public class ClangResources {
         // FileResourceProvider executableResource = getVersionedExecutableResource(version, platform);
 
         // Copy executable
-        ResourceWriteData executable = executableResource.writeVersioned(resourceFolder, ClangAstParser.class);
+        ResourceWriteData executable = executableResource.writeVersioned(resourceFolder, ClangResources.class);
 
         // If Windows, copy additional dependencies
         if (platform == SupportedPlatform.WINDOWS) {
             for (FileResourceProvider resource : getWindowsResources()) {
-                resource.writeVersioned(resourceFolder, ClangAstParser.class);
+                resource.writeVersioned(resourceFolder, ClangResources.class);
             }
         }
 
@@ -247,7 +247,7 @@ public class ClangResources {
 
         // Download includes zips, check if any of them is new
         List<ResourceWriteData> zipFiles = includesZips.stream()
-                .map(resource -> resource.writeVersioned(resourceFolder, ClangAstParser.class))
+                .map(resource -> resource.writeVersioned(resourceFolder, ClangResources.class))
                 .collect(Collectors.toList());
         // .filter(resourceOutput -> resourceOutput.isNewFile())
         // .findAny()
@@ -464,7 +464,7 @@ public class ClangResources {
         var cudalibFolder = SpecsIo.mkdir(new File(resourceFolder, "cudalib"));
 
         // Download includes zips, check if any of them is new
-        ResourceWriteData zipFile = fileResource.writeVersioned(resourceFolder, ClangAstParser.class);
+        ResourceWriteData zipFile = fileResource.writeVersioned(resourceFolder, ClangResources.class);
 
         // If a new file has been written, delete includes folder, and extract all zips again
         // Extracting all because zips might have several folders and we are not determining which should be updated

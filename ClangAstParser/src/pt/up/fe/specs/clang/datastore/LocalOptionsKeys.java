@@ -33,9 +33,13 @@ public interface LocalOptionsKeys extends StoreDefinitionProvider {
     DataKey<StringList> SYSTEM_INCLUDES = KeyFactory.stringList("string_includes", Collections.emptyList());
     // DataKey<String> SYSTEM_LOOK_AND_FEEL = KeyFactory.string("systemLookandFeel");
 
+    static String getLocalOptionsFilename() {
+        return "local_options.xml";
+    }
+
     @Override
     default StoreDefinition getStoreDefinition() {
-        return StoreDefinition.newInstance("ClangAst Local Options", SYSTEM_INCLUDES);
+        return StoreDefinition.newInstance("ClangAstParser Local Options", SYSTEM_INCLUDES);
     }
 
     static LocalOptionsKeys getProvider() {

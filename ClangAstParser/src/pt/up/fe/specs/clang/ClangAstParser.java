@@ -62,10 +62,13 @@ import pt.up.fe.specs.util.utilities.StringLines;
 
 /**
  * Calls Clang and parsers a set of C/C++ files, returning a ClangAst.
+ * 
+ * @deprecated use CodeParser, or ParallelCodeParser
  *
  * @author JoaoBispo
  *
  */
+@Deprecated
 public class ClangAstParser {
 
     private static boolean STRICT_MODE = false;

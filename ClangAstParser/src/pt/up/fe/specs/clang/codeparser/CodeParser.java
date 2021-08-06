@@ -70,6 +70,13 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
 
     public abstract App parse(List<File> sources, List<String> compilerOptions, ClavaContext context);
 
+    /**
+     * 
+     * @param sources
+     * @param compilerOptions
+     *            flags compatible with C/C++ compilers such as Clang or GCC
+     * @return
+     */
     public App parse(List<File> sources, List<String> compilerOptions) {
         return parse(sources, compilerOptions, new ClavaContext());
     }
