@@ -61,12 +61,6 @@ public class ClangAstDumpParser {
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
 
-    // private final static String HEADER_WARNING_PREFIX = "error: invalid argument '";
-    // private final static String HEADER_WARNING_SUFFIX = "' not allowed with 'C/ObjC'";
-
-    // private int currentId;
-    private final boolean dumpStdOut;
-    private final boolean useCustomResources;
     /**
      * TODO: Not implemented yet
      * <p>
@@ -80,16 +74,11 @@ public class ClangAstDumpParser {
     private final List<File> workingFolders;
     private File lastWorkingFolder;
     private File baseFolder;
-    // private boolean usePlatformLibc;
     private File clangExecutable;
     private List<String> builtinIncludes;
     private int systemIncludesThreshold;
 
     private final CodeParser parserConfig;
-
-    // public AstDumpParser() {
-    // this(false, false, true);
-    // }
 
     /**
      * TODO: Replace some of the arguments with reads to CodeParser?
@@ -101,11 +90,9 @@ public class ClangAstDumpParser {
      * @param builtinIncludes
      * @param parserConfig
      */
-    public ClangAstDumpParser(boolean dumpStdOut, boolean useCustomResources, boolean streamConsoleOutput,
+    public ClangAstDumpParser(boolean streamConsoleOutput,
             File clangExecutable, List<String> builtinIncludes, CodeParser parserConfig) {
-        // this.currentId = 0;
-        this.dumpStdOut = dumpStdOut;
-        this.useCustomResources = useCustomResources;
+
         this.streamConsoleOutput = streamConsoleOutput;
 
         this.clangExecutable = clangExecutable;
@@ -116,8 +103,6 @@ public class ClangAstDumpParser {
         this.baseFolder = null;
         this.systemIncludesThreshold = ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD.getDefault().get();
         this.parserConfig = parserConfig;
-        // this.usePlatformLibc = false;
-        // context = new ClavaContext();
     }
 
     public File getLastWorkingFolder() {
@@ -134,55 +119,16 @@ public class ClangAstDumpParser {
         return this;
     }
 
-    // private int nextId() {
-    // // Increment and return
-    // currentId++;
-    //
-    // return currentId;
-    // }
-
-    //
-    // @Override
-    // public TranslationUnit parse(File file, DataStore config) {
-    //
-    // ClangRootNode clangRootNode = parseSource(file, config);
-    //
-    // // Parse dump information
-    // try (ClavaParser clavaParser = new ClavaParser(clangRootNode)) {
-    // return clavaParser.parseTranslationUnit(file);
-    // } catch (Exception e) {
-    // throw new RuntimeException("Could not parse file '" + file + "'", e);
-    // }
-    //
-    // // if (get(SHOW_CLANG_DUMP)) {
-    // // SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));
-    // // }
-    // //
-    // // if (get(SHOW_CLANG_AST)) {
-    // // SpecsLogs.msgInfo("Clang AST:\n" + ast);
-    // // }
-    // }
-
     public ClangParserData parse(File sourceFile, String id, Standard standard, DataStore config) {
+
         // Pre-processing before the parsing
         if (config.get(ClangAstKeys.USES_CILK)) {
+
             // Prepare source file
             sourceFile = new CilkParser().prepareCilkFile(sourceFile);
         }
 
         return parsePrivate(sourceFile, id, standard, config);
-
-        // try {
-        // return parsePrivate(sourceFile, id, standard, config);
-        // } catch (Exception e) {
-        // throw e;
-        // } finally {
-        // if (config.get(ClangAstKeys.USES_CILK)) {
-        // // Restore source file
-        // new CilkParser(sourceFile).restoreCilkFile();
-        // }
-        //
-        // }
     }
 
     private ClangParserData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
@@ -192,22 +138,11 @@ public class ClangAstDumpParser {
         DataStore localData = JOptionsUtils.loadDataStore(LocalOptionsKeys.getLocalOptionsFilename(), getClass(),
                 LocalOptionsKeys.getProvider().getStoreDefinition());
 
-        // Apply local options
-        // applyLocalOptions(localData);
-
-        // Get version for the executable
-        // String version = config.get(ClangAstKeys.CLANGAST_VERSION);
-        // boolean usePlatformIncludes = config.get(ClangAstKeys.USE_PLATFORM_INCLUDES);
-
-        // Copy resources
-        // File clangExecutable = clangAstParser.prepareResources(version);
-
         List<String> arguments = new ArrayList<>();
         arguments.add(clangExecutable.getAbsolutePath());
 
         arguments.add(sourceFile.getAbsolutePath());
 
-        // int id = nextId();
         arguments.add("-id=" + id);
 
         arguments.add("-system-header-threshold=" + systemIncludesThreshold);
@@ -221,12 +156,12 @@ public class ClangAstDumpParser {
         // Compilation of header files always need a standard, but OpenCL compilation fails if there is a standard
         // specified that is not an OpenCL standard.
         if (isOpenCL && !standard.isOpenCL()) {
+
             // Using OpenCL 2.0 as default
             arguments.add("-std=cl2.0");
         }
         // Set standard to CUDA
         else if (isCuda && !standard.isCuda()) {
-
             arguments.add("-std=cuda");
         } else {
             arguments.add(standard.getFlag());
@@ -327,19 +262,9 @@ public class ClangAstDumpParser {
             workingFolders.add(lastWorkingFolder);
 
             output = SpecsSystem.runProcess(arguments, lastWorkingFolder,
-                    // inputStream -> clangAstParser.processOutput(inputStream,
-                    // new File(lastWorkingFolder, CLANG_DUMP_FILENAME)),
                     inputStream -> this.processOutput(sourceFile, inputStream),
-                    // inputStream -> clangAstParser.processStdErr(config, inputStream, lineStreamParser,
-                    // new File(lastWorkingFolder, STDERR_DUMP_FILENAME)));
                     inputStream -> this.processStdErr(inputStream, config.get(ClavaNode.CONTEXT)));
 
-            // parsedData = lineStreamParser.getData();
-            // parsedData = output.getStdErr() == null ? new ClangParserData() : output.getStdErr();
-            // ClavaLog.debug("Process finished");
-            // ClavaLog.debug("Stdout: '" + output.getStdOut() + "'");
-            // ClavaLog.debug("Stderr: '" + output.getStdErr() + "'");
-            // ClavaLog.debug("Return value: '" + output.getReturnValue() + "'");
             if (output.isError()) {
                 ClavaLog.debug("Dumper returned an error value: '" + output.getReturnValue() + "'");
             }
@@ -372,10 +297,6 @@ public class ClangAstDumpParser {
         parsedData.set(ClangParserData.TRANSLATION_UNIT, tUnit);
 
         return parsedData;
-        // App newApp = clangStreamParser.parse();
-        //
-        // return newApp.getTranslationUnits().get(0);
-
     }
 
     private String processOutput(File sourceFile, InputStream inputStream) {
@@ -384,6 +305,7 @@ public class ClangAstDumpParser {
 
             while (lines.hasNextLine()) {
                 String nextLine = lines.nextLine();
+
                 // Ignore line about 'invalid argument', it will happen when input source is a header file
                 if (streamConsoleOutput) {
                     ClavaLog.info(nextLine);

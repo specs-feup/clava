@@ -388,8 +388,8 @@ public class ParallelCodeParser extends CodeParser {
         // Only show output of console after parsing is done, when using parallel parsing
         boolean streamConsoleOutput = !get(PARALLEL_PARSING);
 
-        ClangAstDumpParser clangParser = new ClangAstDumpParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES),
-                streamConsoleOutput, clangExecutable, builtinIncludes, this)
+        ClangAstDumpParser clangParser = new ClangAstDumpParser(streamConsoleOutput, clangExecutable, builtinIncludes,
+                this)
                         .setBaseFolder(parsingFolder)
                         .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
 
