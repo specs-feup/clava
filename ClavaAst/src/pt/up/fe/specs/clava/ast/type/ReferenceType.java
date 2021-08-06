@@ -21,6 +21,12 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
+/**
+ * Base type for LValueReferenceType and RValueReferenceType.
+ * 
+ * @author JBispo
+ *
+ */
 public abstract class ReferenceType extends Type {
 
     /// DATAKEYS BEGIN
@@ -33,13 +39,6 @@ public abstract class ReferenceType extends Type {
         super(data, children);
     }
 
-    // /**
-    // */
-    // protected ReferenceType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(typeData, info, children);
-    // }
-
-    // public abstract Type getReferencee();
     public Type getReferencee() {
         return get(POINTEE_TYPE_AS_WRITTEN);
     }

@@ -52,40 +52,6 @@ public class TemplateTypeParmDecl extends TypeDecl implements TemplateParameter 
         super(data, children);
     }
 
-    // private final TemplateTypeParmKind kind;
-    // private final boolean isParameterPack;
-
-    // public TemplateTypeParmDecl(TemplateTypeParmKind kind, boolean isParameterPack, String name, DeclData declData,
-    // ClavaNodeInfo info, TemplateArgument defaultArgument) {
-    //
-    // this(kind, isParameterPack, name, declData, info, SpecsCollections.ofNullable(defaultArgument));
-    // }
-    //
-    // private TemplateTypeParmDecl(TemplateTypeParmKind kind, boolean isParameterPack, String name, DeclData declData,
-    // ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    //
-    // super(name, null, declData, info, children);
-    //
-    // this.kind = kind;
-    // this.isParameterPack = isParameterPack;
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new TemplateTypeParmDecl(kind, isParameterPack, getDeclName(), getDeclData(), getInfo(),
-    // Collections.emptyList());
-    // }
-
-    /*
-    public Optional<TemplateArgument> getDefaultArgument() {
-        if (!hasChildren()) {
-            return Optional.empty();
-        }
-    
-        return Optional.of(getChild(TemplateArgument.class, 0));
-    }
-    */
-
     @Override
     public String getCode() {
         StringBuilder code = new StringBuilder();
@@ -94,7 +60,6 @@ public class TemplateTypeParmDecl extends TypeDecl implements TemplateParameter 
 
         if (get(IS_PARAMETER_PACK)) {
             code.append("...");
-            // Preconditions.checkArgument(!getDefaultArgument().isPresent());
             Preconditions.checkArgument(!get(DEFAULT_ARGUMENT).isPresent());
         }
 

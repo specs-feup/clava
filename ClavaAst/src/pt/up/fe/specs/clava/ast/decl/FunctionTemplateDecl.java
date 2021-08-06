@@ -31,48 +31,4 @@ public class FunctionTemplateDecl extends RedeclarableTemplateDecl {
         super(data, children);
     }
 
-    // public FunctionTemplateDecl(RedeclarableTemplateDecl redeclarableTemplateDecl) {
-    // this(redeclarableTemplateDecl.getDeclName(), redeclarableTemplateDecl.getSpecializations(),
-    // redeclarableTemplateDecl.getDeclData(), redeclarableTemplateDecl.getInfo(),
-    // redeclarableTemplateDecl.getChildren());
-    // // super(declName, specializations, declData, info, SpecsCollections.concat(templateParameters, templateDecl));
-    // }
-    // public FunctionTemplateDecl(String declName, List<Decl> specializations, DeclData declData, ClavaNodeInfo info,
-    // List<TemplateTypeParmDecl> templateParameters, Decl templateDecl) {
-    //
-    // this(declName, specializations, declData, info, SpecsCollections.concat(templateParameters, templateDecl));
-    // // super(declName, specializations, declData, info, SpecsCollections.concat(templateParameters, templateDecl));
-    // }
-
-    // protected FunctionTemplateDecl(String declName, List<Decl> specializations, DeclData declData, ClavaNodeInfo
-    // info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // super(declName, specializations, declData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new FunctionTemplateDecl(getDeclName(), getSpecializations(), getDeclData(), getInfo(),
-    // Collections.emptyList());
-    // }
-
-    /*
-    @Override
-    public String getCode() {
-        StringBuilder code = new StringBuilder();
-    
-        code.append("template <");
-    
-        String parameterList = getTemplateParameters().stream()
-                .map(param -> param.getCode())
-                .collect(Collectors.joining(", "));
-    
-        code.append(parameterList).append(">");
-        code.append(getTemplateDecl().getCode());
-    
-        return code.toString();
-    
-    }
-    */
 }

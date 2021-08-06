@@ -40,37 +40,13 @@ public class AccessSpecDecl extends Decl {
         super(data, children);
     }
 
-    // private final AccessSpecifier accessSpecifier;
-    //
-    // public AccessSpecDecl(AccessSpecifier accessSpecifier, DeclData declData, ClavaNodeInfo info) {
-    // this(accessSpecifier, declData, info, Collections.emptyList());
-    // }
-    //
-    // private AccessSpecDecl(AccessSpecifier accessSpecifier, DeclData declData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(declData, info, children);
-    //
-    // this.accessSpecifier = accessSpecifier;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new AccessSpecDecl(accessSpecifier, getDeclData(), getInfo(), Collections.emptyList());
-    // }
-
     public AccessSpecifier getAccessSpecifier() {
         return get(ACCESS_SPECIFIER);
-        // return accessSpecifier;
     }
 
     @Override
     public String getCode() {
         return ln() + ln() + getAccessSpecifier().getString() + ":";
     }
-
-    // @Override
-    // public String toContentString() {
-    // return super.toContentString() + "visibility:" + getAccessSpecifier();
-    // }
 
 }

@@ -45,48 +45,15 @@ public class EnumDecl extends TagDecl {
     public final static DataKey<EnumScopeType> ENUM_SCOPE_KIND = KeyFactory.enumeration("enumScopeKind",
             EnumScopeType.class);
 
-    // public final static DataKey<Type> INTEGER_TYPE = KeyFactory.object("integerType", Type.class);
     public final static DataKey<Optional<Type>> INTEGER_TYPE = KeyFactory.optional("integerType");
 
     /// DATAKEYS END
 
     private final static Set<String> DEFAULT_TYPES = new HashSet<>(Arrays.asList("int", "unsigned int"));
 
-    // private final EnumScopeType enumScopeType;
-    // private final boolean isModulePrivate;
-    // private final Type integerType;
-    //
-    /*
-    public EnumDecl(DataStore data, Collection<? extends EnumConstantDecl> children) {
-        super(data, children);
-    
-        // TODO: THIS IS TEMPORARY!!!!
-        this.enumScopeType = EnumScopeType.CLASS;
-        this.isModulePrivate = false;
-        this.integerType = getFactory().builtinType("int");
-    }
-    */
-
     public EnumDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    // public EnumDecl(EnumScopeType enumScopeType, String tagName, boolean isModulePrivate, Type integerType,
-    // EnumType type, DeclData declData,
-    // ClavaNodeInfo info, Collection<? extends EnumConstantDecl> children) {
-    //
-    // super(TagKind.ENUM, tagName, type, declData, info, children);
-    //
-    // this.enumScopeType = enumScopeType;
-    // this.isModulePrivate = isModulePrivate;
-    // this.integerType = integerType;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new EnumDecl(enumScopeType, getDeclName(), isModulePrivate, getIntegerType(), getEnumType(),
-    // getDeclData(), getInfo(), Collections.emptyList());
-    // }
 
     public EnumType getEnumType() {
         return (EnumType) getType();
@@ -104,9 +71,7 @@ public class EnumDecl extends TagDecl {
 
     @Override
     public String getCode() {
-        // if (isModulePrivate) {
-        // SpecsLogs.msgWarn("Code generation not implemented when enum is module private: " + getLocation());
-        // }
+
         StringBuilder builder = new StringBuilder();
 
         builder.append(ln() + "enum ");
@@ -121,9 +86,7 @@ public class EnumDecl extends TagDecl {
         case NO_SCOPE:
             // Do nothing
         }
-        // if (isClass) {
-        // builder.append("class ");
-        // }
+
         // System.out.println("QUAL NAME:" + get(QUALIFIED_NAME));
         // System.out.println("DECL NAME:" + getDeclName());
         // System.out.println("TYPE:" + getType().toTree());
@@ -131,20 +94,11 @@ public class EnumDecl extends TagDecl {
         // builder.append(getDeclName());
         // System.out.println("GET TYPE: " + getType());
         String enumTypeCode = getType().getCode(this);
-        // System.out.println("ENUM TYPE CODE: " + enumTypeCode);
-        // Check if anonymous
-        // if (enumTypeCode.startsWith("enum (anonymous")) {
-        // enumTypeCode = "";
-        // System.out.println("ENUM TYPE: " + getType());
-        // }
-
-        // enumType.get(EnumType.)
 
         builder.append(enumTypeCode);
 
         // Add integer type
         addType(getIntegerType(), builder);
-        // getEnumType().getUnderlyingType().ifPresent(type -> addType(type, builder));
 
         builder.append(" {" + ln());
 

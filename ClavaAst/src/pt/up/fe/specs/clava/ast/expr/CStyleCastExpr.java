@@ -31,26 +31,6 @@ public class CStyleCastExpr extends ExplicitCastExpr {
         super(data, children);
     }
 
-    // public CStyleCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info, Expr subExpr) {
-    // this(castKind, exprData, info, Arrays.asList(subExpr));
-    // }
-
-    /**
-     * Constructor without children, for node copy.
-     * 
-     * @param castKind
-     * @param location
-     */
-    // private CStyleCastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
-    // List<? extends ClavaNode> children) {
-    // super(castKind, exprData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CStyleCastExpr(getCastKind(), getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public String getCode() {
         return "(" + getExprType().getCode(this) + ") " + getSubExpr().getCode();

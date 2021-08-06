@@ -47,26 +47,6 @@ public class MaterializeTemporaryExpr extends Expr {
         super(data, children);
     }
 
-    // private final BareDeclData extendingDecl;
-    //
-    // public MaterializeTemporaryExpr(ExprData exprData, BareDeclData extendingDecl, ClavaNodeInfo info,
-    // Expr temporaryExpr) {
-    // this(exprData, extendingDecl, info, Arrays.asList(temporaryExpr));
-    // }
-    //
-    // private MaterializeTemporaryExpr(ExprData exprData, BareDeclData extendingDecl, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // super(exprData, info, children);
-    //
-    // this.extendingDecl = extendingDecl;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new MaterializeTemporaryExpr(getExprData(), extendingDecl, getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public String getCode() {
         return getTemporaryExpr().getCode();

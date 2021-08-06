@@ -19,39 +19,25 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
+/**
+ * Sugar for parentheses used when specifying types.
+ * 
+ * @author JBispo
+ *
+ */
 public class ParenType extends Type {
 
     public ParenType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
-    // public ParenType(TypeData typeData, ClavaNodeInfo info, Type innerType) {
-    // this(typeData, info, Arrays.asList(innerType));
-    // }
-    //
-    // private ParenType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(typeData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new ParenType(getTypeData(), getInfo(), Collections.emptyList());
-    // }
-
     public Type getInnerType() {
         return get(UNQUALIFIED_DESUGARED_TYPE).get();
-        // return getChild(Type.class, 0);
     }
-    //
-    // public boolean isSugared() {
-    // return true;
-    // }
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
-        // System.out.println("PAREN TYPE INNER:" + getInnerType());
 
-        // return "(" + getInnerType().getCode(sourceNode, name) + ")";
         if (name == null) {
             return "(" + getInnerType().getCode(sourceNode) + ")";
         }

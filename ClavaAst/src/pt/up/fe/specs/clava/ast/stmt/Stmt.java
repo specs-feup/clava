@@ -33,16 +33,6 @@ public abstract class Stmt extends ClavaNode {
         super(data, children);
     }
 
-    // /**
-    // * @deprecated
-    // * @param info
-    // * @param children
-    // */
-    // @Deprecated
-    // public Stmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-
     @Override
     public Stmt copy() {
         return (Stmt) super.copy();
@@ -70,27 +60,5 @@ public abstract class Stmt extends ClavaNode {
     public boolean isAggregateStmt() {
         return false;
     }
-
-    /**
-     * 
-     * @return the statements that are inside the current statement. If the statement does not have statements inside,
-     *         returns an empty list.
-     */
-    /*
-    public List<Stmt> getStmtsRecursive() {
-        List<Stmt> stmts = toStatements();
-        System.out.println("STMTS:" + stmts);
-        // Remove from the list the self
-        List<Stmt> childrenStmts = stmts.stream()
-                .filter(stmt -> stmt != this)
-                .collect(Collectors.toList());
-    
-        List<Stmt> descendantsStmts = childrenStmts.stream()
-                .flatMap(stmt -> stmt.getStmtsRecursive().stream())
-                .collect(Collectors.toList());
-    
-        return SpecsCollections.concat(childrenStmts, descendantsStmts);
-    }
-    */
 
 }

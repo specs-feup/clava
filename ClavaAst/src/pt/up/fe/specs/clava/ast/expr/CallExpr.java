@@ -51,28 +51,8 @@ public class CallExpr extends Expr {
         super(data, children);
     }
 
-    // public CallExpr(ExprData exprData, ClavaNodeInfo info, Expr function, List<? extends Expr> args) {
-    // this(exprData, info, SpecsCollections.concat(function, SpecsCollections.cast(args, ClavaNode.class)));
-    // }
-    //
-    // protected CallExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    //
-    // super(exprData, info, children);
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CallExpr(getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public String getCode() {
-
-        // System.out.println("CALLEXPR");
-        // System.out.println("THIS: " + this);
-        // System.out.println("CALLEE CODE:" + getCalleeCode());
-        // System.out.println("CALLEE: " + getCallee());
-        // System.out.println("ARGS CODE:" + getArgsCode());
         return getCalleeCode() + getArgsCode();
     }
 
@@ -87,8 +67,6 @@ public class CallExpr extends Expr {
     }
 
     protected String getCalleeCode() {
-        // System.out.println("CALLEE: " + getCallee());
-        // System.out.println("DIRECT_CALL: " + get(DIRECT_CALLEE));
         return getCallee().getCode();
     }
 
@@ -110,18 +88,6 @@ public class CallExpr extends Expr {
 
         setChild(0, callee);
     }
-
-    /*
-    private DeclRefExpr getCalleeInternal() {
-        Expr callee = getCallee();
-    
-        if (!(callee instanceof DeclRefExpr)) {
-            throw new UnexpectedChildExpection(CallExpr.class, callee);
-        }
-    
-        return (DeclRefExpr) callee;
-    }
-    */
 
     public List<Expr> getArgs() {
         if (getNumChildren() == 1) {
@@ -180,118 +146,17 @@ public class CallExpr extends Expr {
         return getFunctionDecl().map(FunctionDecl::getPrototypes).orElse(Collections.emptyList());
     }
 
-    // /**
-    // * @deprecated use getPrototypes() or getFunctionDecl() instead
-    // * @return the declaration of this function call, if present
-    // */
-    // @Deprecated
-    // public Optional<FunctionDecl> getDeclaration() {
-    // return getPrototypes().stream().findFirst();
-    // // Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
-    // //
-    // // if (!varDecl.isPresent()) {
-    // // return Optional.empty();
-    // // }
-    // //
-    // // DeclaratorDecl declarator = varDecl.get();
-    // // if (!(declarator instanceof FunctionDecl)) {
-    // // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
-    // // return Optional.empty();
-    // // }
-    // // Optional<FunctionDecl> functionDecl = getFunctionDecl();
-    // // System.out.println("CALL EXPR getDeclaration: " + getFunctionDecl());
-    // // System.out.println("CALL EXPR getDeclaration.getDeclaration: " + getFunctionDecl().get().getDeclaration());
-    //
-    // // return getFunctionDecl().map(FunctionDecl::getPrototypes).flatMap(list -> !list.isEmpty() ?
-    // // Optional.of(list.get(0) : Optional.empty());
-    // // if (!functionDecl.isPresent()) {
-    // // return Optional.empty();
-    // // }
-    // //
-    // // // If no body, return immediately
-    // // if (!functionDecl.get().hasBody()) {
-    // // // return Optional.of(functionDecl);
-    // // return functionDecl;
-    // // }
-    // //
-    // // // Search for the declaration
-    // // return getAppTry().flatMap(app -> app.getFunctionDeclaration(functionDecl.get().getDeclName(),
-    // // functionDecl.get().getFunctionType()));
-    // }
-
     /**
      * The FunctionDecl as given by Clang. Usually it is the first that appears in the code.
      * 
      * @return
      */
     public Optional<FunctionDecl> getFunctionDecl() {
-        // TODO: Replace with get(DIRECT_CALLEE) when refactoring to new format is complete
         return get(DIRECT_CALLEE)
                 // If FunctionDecl has a primary template decl (e.g., is a template specialization), return original
                 // template instead
                 .map(ClavaNodes::normalizeDecl)
                 .map(FunctionDecl.class::cast);
-        // .flatMap(fDecl -> fDecl.hasValue(FunctionDecl.PRIMARY_TEMPLATE_DECL)
-        // ? fDecl.get(FunctionDecl.PRIMARY_TEMPLATE_DECL)
-        // : Optional.of(fDecl));
-
-        // Decl calleeDecl = get(DIRECT_CALLEE);
-        // return calleeDecl instanceof FunctionDecl ? Optional.of((FunctionDecl) calleeDecl) : Optional.empty();
-        // return (FunctionDecl) get(CALLEE_DECL);
-
-        // DeclRefExpr declRef = getCalleeDeclRefTry().orElse(null);
-        //
-        // if (declRef == null) {
-        // return Optional.empty();
-        // }
-        //
-        // Optional<DeclaratorDecl> varDecl = declRef.getVariableDeclaration();
-        // // Optional<DeclaratorDecl> varDecl = getCalleeDeclRef().getVariableDeclaration();
-        //
-        // if (!varDecl.isPresent()) {
-        // return Optional.empty();
-        // }
-        //
-        // DeclaratorDecl declarator = varDecl.get();
-        // if (declarator instanceof FunctionDecl) {
-        // return Optional.of((FunctionDecl) declarator);
-        // }
-        //
-        // // E.g., constructors
-        // /*
-        // if (declarator instanceof VarDecl) {
-        // System.out.println("VarDecl Type:" + declarator.getType());
-        // Expr initExpr = ((VarDecl) declarator).getInit().orElse(null);
-        // if (initExpr == null) {
-        // SpecsLogs.msgWarn("Could not extract function from call from VarDecl, check if ok:\n" + declarator);
-        // return Optional.empty();
-        // }
-        //
-        // if (initExpr instanceof CXXConstructExpr) {
-        // Type initExprType = initExpr.getType();
-        // RecordType recordType = initExprType instanceof RecordType ? (RecordType) initExprType
-        // : initExprType.desugarTo(RecordType.class);
-        //
-        // // RecordType recordType = initExpr.getType().desugarTo(RecordType.class);
-        // CXXRecordDecl recordDecl = getApp().getCXXRecordDeclTry(recordType).orElse(null);
-        // if (recordDecl == null) {
-        // return Optional.empty();
-        // }
-        // System.out.println("RECORD DECL:" + recordDecl);
-        // // recordType.getDeclInfo().;
-        // System.out.println("Constructor type:" + initExpr.getType());
-        // }
-        // }
-        // */
-        // SpecsLogs.msgLib("Could not extract function from call callee decl, check if ok:\n" + declarator);
-        // return Optional.empty();
-
-        // if (!(declarator instanceof FunctionDecl)) {
-        // SpecsLogs.msgWarn("Call callee decl is not a function decl, check if ok:\n" + declarator);
-        // return Optional.empty();
-        // }
-        //
-        // return Optional.of((FunctionDecl) declarator);
     }
 
     /**
@@ -322,25 +187,7 @@ public class CallExpr extends Expr {
             return nameable.map(Nameable::getName);
         }
 
-        // throw new RuntimeException("Could not find a node that implements the interface 'Nameable':" + getCallee());
-
-        // SpecsLogs.debug(() -> "Could not find callee name for node:" + getCallee());
         return Optional.empty();
-
-        /*
-        // Try DeclRef
-        Optional<DeclRefExpr> declRefExpr = getCalleeDeclRefTry();
-        if (declRefExpr.isPresent()) {
-            return declRefExpr.get().getRefName();
-        }
-        
-        // Special case: UnresolvedLookupExpr
-        Optional<UnresolvedLookupExpr> unresolvedLookup = getCallee()
-                .getFirstDescendantsAndSelf(UnresolvedLookupExpr.class);
-        if (unresolvedLookup.isPresent()) {
-            return unresolvedLookup.get().getName();
-        }
-        */
     }
 
     /**
@@ -358,10 +205,7 @@ public class CallExpr extends Expr {
      * @param name
      */
     public void setCallName(String name) {
-        // System.out.println("CHANGING " + getCalleeName() + " to " + name);
-        // System.out.println("FUNCTION BEFORE:\n" + getFunctionDecl().get().getCode());
         getCalleeDeclRef().setRefName(name);
-        // System.out.println("FUNCTION AFTER:\n" + getFunctionDecl().get().getCode());
     }
 
     public Optional<FunctionType> getFunctionType() {
@@ -369,26 +213,6 @@ public class CallExpr extends Expr {
         var decls = getFunctionDecl().map(decl -> decl.getDecls()).orElse(Collections.emptyList());
 
         return decls.stream().map(FunctionDecl::getFunctionType).findFirst();
-
-        // // First check declarations
-        // FunctionType typeFromDecl = getPrototypes().stream()
-        // .map(FunctionDecl::getFunctionType)
-        // .findFirst()
-        // .orElse(null);
-        //
-        // if (typeFromDecl != null) {
-        // return Optional.of(typeFromDecl);
-        // }
-        //
-        // // Check definition
-        // FunctionType typeFromDef = getDefinition().map(FunctionDecl::getFunctionType).orElse(null);
-        // if (typeFromDef != null) {
-        // return Optional.of(typeFromDef);
-        // }
-        //
-        // // Could not find the function type for call
-        // return Optional.empty();
-        // // throw new RuntimeException("Could not find the function type for call at " + getLocation());
     }
 
     /**
@@ -402,46 +226,5 @@ public class CallExpr extends Expr {
 
         return getParent() instanceof Stmt;
     }
-
-    /**
-     * Tries to return the signature of the corresponding function declaration. If not found, returns the signature of
-     * the corresponding function definition. If not found, returns the name of the call.
-     * 
-     * <p>
-     * As last resort returns simply the name of the call, because the arguments might not correspond to its signature
-     * (e.g., printf).
-     * 
-     * @return
-     */
-    /*
-    public String getSignature() {
-        return getDeclaration().map(FunctionDecl::getSignature)
-                .orElse(getDefinition().map(FunctionDecl::getSignature)
-                        .orElse(getCalleeName()));
-    }
-    */
-
-    /**
-     * Returns the function declaration associated with this call.
-     * 
-     * <p>
-     * No guarantees are made regarding if it is the declaration or definition of the function. First tries to return
-     * the function definition, and if not found, the function declaration.
-     * 
-     * @return the function associated with this call
-     */
-    // public Optional<FunctionDecl> getFunction() {
-    // Optional<FunctionDecl> definition = getDefinition();
-    // if (definition.isPresent()) {
-    // return definition;
-    // }
-    //
-    // Optional<FunctionDecl> declaration = getDeclaration();
-    // if (declaration.isPresent()) {
-    // return declaration;
-    // }
-    //
-    // return Optional.empty();
-    // }
 
 }

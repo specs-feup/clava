@@ -33,16 +33,6 @@ public class DummyStmt extends Stmt implements DummyNode {
         super(data, children);
     }
 
-    /**
-     * Legacy support.
-     * 
-     * @param info
-     * @param children
-     */
-    // public DummyStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-
     public String getNodeCode() {
         return "/* Dummy statement '" + getContent() + "'*/";
     }

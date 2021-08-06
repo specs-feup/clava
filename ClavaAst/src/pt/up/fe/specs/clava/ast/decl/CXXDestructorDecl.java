@@ -25,31 +25,6 @@ public class CXXDestructorDecl extends CXXMethodDecl {
         super(data, children);
     }
 
-    /*
-    public CXXDestructorDecl(String declName, Type functionType,
-            FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info, List<ParmVarDecl> inputs,
-            Stmt definition) {
-    
-        super(declName, functionType, functionDeclData, declData, info, inputs, definition);
-    }
-    
-    // protected CXXDestructorDecl(CXXMethodDeclData methodData, String declName, Type functionType,
-    protected CXXDestructorDecl(String declName, Type functionType,
-            FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
-            List<? extends ClavaNode> children) {
-    
-        // super(methodData, declName, functionType, functionDeclData, declData, info, children);
-        super(declName, functionType, functionDeclData, declData, info, children);
-    }
-    
-    @Override
-    protected ClavaNode copyPrivate() {
-    
-        return new CXXDestructorDecl(getDeclName(), getFunctionType(), getFunctionDeclData(),
-                getDeclData(), getInfo(), Collections.emptyList());
-    }
-    */
-
     @Override
     public String getCode() {
         return getCode(false);

@@ -45,75 +45,12 @@ public class UnaryTransformType extends Type {
         super(data, children);
     }
 
-    // private final UnaryTransformTypeKind kind;
-    // private final boolean hasBaseType;
-    // private final boolean hasUnderlyingType;
-    //
-    // public UnaryTransformType(UnaryTransformTypeKind kind, TypeData data, ClavaNodeInfo info, Type baseType,
-    // Type underlyingType) {
-    //
-    // this(kind, data, info, baseType != null, underlyingType != null,
-    // SpecsCollections.asListT(Type.class, baseType, underlyingType));
-    // }
-    //
-    // private UnaryTransformType(UnaryTransformTypeKind kind, TypeData data, ClavaNodeInfo info, boolean hasBaseType,
-    // boolean hasUnderlyingType, Collection<? extends ClavaNode> children) {
-    //
-    // super(data, info, children);
-    //
-    // this.kind = kind;
-    // this.hasBaseType = hasBaseType;
-    // this.hasUnderlyingType = hasUnderlyingType;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new UnaryTransformType(kind, getTypeData(), getInfo(), hasBaseType, hasUnderlyingType,
-    // Collections.emptyList());
-    // }
-
-    // public Optional<Type> getBaseType() {
     public Type getBaseType() {
         return get(BASE_TYPE);
-        // if (!hasBaseType) {
-        // return Optional.empty();
-        // }
-        //
-        // return Optional.of(getChild(Type.class, 0));
     }
 
-    // public Optional<Type> getUnderlyingType() {
     public Type getUnderlyingType() {
         return get(UNDERLYING_TYPE);
-        // if (!hasUnderlyingType) {
-        // return Optional.empty();
-        // }
-        //
-        // int index = 0;
-        // if (hasBaseType) {
-        // index++;
-        // }
-        //
-        // return Optional.of(getChild(Type.class, index));
     }
 
-    // @Override
-    // protected Type desugarImpl() {
-    // // System.out.println("CURRENT TYPE:" + getCode());
-    // // System.out.println("HAS BASE?:" + hasBaseType);
-    // // if (hasBaseType) {
-    // // System.out.println("BASE:" + getBaseType().get().getCode());
-    // // }
-    // // System.out.println("HAS UNDERLYING:" + hasUnderlyingType);
-    // // if (hasUnderlyingType) {
-    // // System.out.println("UNDERLYING:" + getUnderlyingType().get().getCode());
-    // // }
-    //
-    // return getBaseType().get();
-    // }
-    //
-    // @Override
-    // public boolean hasSugar() {
-    // return hasBaseType;
-    // }
 }

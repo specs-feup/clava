@@ -29,36 +29,10 @@ public class CXXDeleteExpr extends Expr {
     public final static DataKey<Boolean> IS_GLOBAL = KeyFactory.bool("isGlobal");
     public final static DataKey<Boolean> IS_ARRAY = KeyFactory.bool("isArray");
     public final static DataKey<Boolean> IS_ARRAY_AS_WRITTEN = KeyFactory.bool("isArrayAsWritten");
-    // public final static DataKey<Expr> ARGUMENT_EXPR = KeyFactory.object("argumentExpr", Expr.class);
 
     public CXXDeleteExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    // private final boolean isGlobal;
-    // private final boolean isArray;
-    // private final BareDeclData operatorDelete;
-    //
-    // public CXXDeleteExpr(boolean isGlobal, boolean isArray, BareDeclData operatorDelete, ExprData exprData,
-    // ClavaNodeInfo info, Expr argument) {
-    //
-    // this(isGlobal, isArray, operatorDelete, exprData, info, Arrays.asList(argument));
-    // }
-    //
-    // private CXXDeleteExpr(boolean isGlobal, boolean isArray, BareDeclData bareDecl, ExprData exprData,
-    // ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    //
-    // this.isGlobal = isGlobal;
-    // this.isArray = isArray;
-    // this.operatorDelete = bareDecl;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXDeleteExpr(isGlobal, isArray, operatorDelete, getExprData(), getInfo(),
-    // Collections.emptyList());
-    // }
 
     public Expr getArgument() {
         return getChild(Expr.class, 0);
@@ -69,7 +43,7 @@ public class CXXDeleteExpr extends Expr {
         StringBuilder code = new StringBuilder();
 
         if (get(IS_GLOBAL)) {
-            SpecsLogs.msgWarn("Code generation not implemented yet when global is true");
+            SpecsLogs.warn("Code generation not implemented yet when global is true");
         }
 
         code.append("delete");

@@ -42,7 +42,6 @@ public class PackExpansionType extends Type {
 
     public final static DataKey<Integer> NUM_EXPANSIONS = KeyFactory.integer("numExpansions");
 
-    // public final static DataKey<Optional<Type>> PATTERN = KeyFactory.optional("pattern");
     public final static DataKey<Type> PATTERN = KeyFactory.object("pattern", Type.class);
 
     /// DATAKEYS END
@@ -51,40 +50,16 @@ public class PackExpansionType extends Type {
         super(data, children);
     }
 
-    // private final int numExpansions;
-
-    // public PackExpansionType(int numExpansions, TypeData data, ClavaNodeInfo info,
-    // Type pattern) {
-    //
-    // this(numExpansions, data, info, SpecsCollections.ofNullable(pattern));
-    // }
-    //
-    // private PackExpansionType(int numExpansions, TypeData data, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(data, info, children);
-    //
-    // this.numExpansions = numExpansions;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new PackExpansionType(numExpansions, getTypeData(), getInfo(), Collections.emptyList());
-    // }
-
     public Optional<Type> getPattern() {
         return Optional.of(get(PATTERN));
-        // if (!hasChildren()) {
-        // return Optional.empty();
-        // }
-        //
-        // return Optional.of(getChild(Type.class, 0));
     }
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
+
         // According to Clang parser, '...' must immediately precede declared identifier
         String packName = name == null ? "..." : "... " + name;
-        // return getPattern().map(type -> type.getCode(name)).orElse("") + "...";
+
         return getPattern().map(type -> type.getCode(sourceNode, packName)).orElse("");
     }
 }

@@ -31,19 +31,6 @@ public class WrapperStmt extends Stmt {
         super(data, children);
     }
 
-    // public WrapperStmt(ClavaNodeInfo info, ClavaNode wrappedNode) {
-    // this(info, Arrays.asList(wrappedNode));
-    // }
-    //
-    // private WrapperStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new WrapperStmt(getInfo(), Collections.emptyList());
-    // }
-
     public ClavaNode getWrappedNode() {
         return getChild(0);
     }

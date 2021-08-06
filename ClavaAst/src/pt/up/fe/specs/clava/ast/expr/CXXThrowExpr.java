@@ -26,19 +26,6 @@ public class CXXThrowExpr extends Expr {
         super(data, children);
     }
 
-    // public CXXThrowExpr(ExprData exprData, ClavaNodeInfo info, Expr throwExpr) {
-    // this(exprData, info, SpecsCollections.ofNullable(throwExpr));
-    // }
-    //
-    // private CXXThrowExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXThrowExpr(getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     public Optional<Expr> getThrowExpr() {
         if (!hasChildren()) {
             return Optional.empty();

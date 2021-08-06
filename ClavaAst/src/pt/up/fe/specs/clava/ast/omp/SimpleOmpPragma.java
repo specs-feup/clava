@@ -39,27 +39,13 @@ public class SimpleOmpPragma extends OmpPragma {
         super(data, children);
     }
 
-    // private String customContent;
-
-    // public SimpleOmpPragma(OmpDirectiveKind directiveKind, ClavaNodeInfo info) {
-    // this(null, directiveKind, info);
-    // }
-
-    // private SimpleOmpPragma(String customContent, OmpDirectiveKind directiveKind, ClavaNodeInfo info) {
-    // super(directiveKind, info);
-    //
-    // this.customContent = null;
-    // }
-
     @Override
     public String getFullContent() {
+
         // Give priority to custom content
         if (hasValue(CUSTOM_CONTENT)) {
             return get(CUSTOM_CONTENT);
         }
-        // if (customContent != null) {
-        // return customContent;
-        // }
 
         StringBuilder fullContent = new StringBuilder();
 
@@ -69,15 +55,9 @@ public class SimpleOmpPragma extends OmpPragma {
         return fullContent.toString();
     }
 
-    // @Override
-    // protected SimpleOmpPragma copyPrivate() {
-    // return new SimpleOmpPragma(customContent, getDirectiveKind(), getInfo());
-    // }
-
     @Override
     public void setFullContent(String fullContent) {
         set(CUSTOM_CONTENT, fullContent);
-        // this.customContent = fullContent;
     }
 
 }

@@ -31,19 +31,6 @@ public class BreakStmt extends Stmt {
         super(data, children);
     }
 
-    // public BreakStmt(ClavaNodeInfo info) {
-    // this(info, Collections.emptyList());
-    // }
-    //
-    // private BreakStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new BreakStmt(getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public String getCode() {
         return "break;";

@@ -45,27 +45,11 @@ public class AttributedType extends Type {
         super(data, children);
     }
 
-    //
-    // public AttributedType(TypeData typeData, ClavaNodeInfo info, Type modifiedType, Type equivalentType) {
-    // this(typeData, info, Arrays.asList(modifiedType, equivalentType));
-    // }
-    //
-    // private AttributedType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(typeData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new AttributedType(getTypeData(), getInfo(), Collections.emptyList());
-    // }
-
     public Type getModifiedType() {
         return get(MODIFIED_TYPE);
-        // return getChild(Type.class, 0);
     }
 
     public Type getEquivalentType() {
         return get(EQUIVALENT_TYPE);
-        // return getChild(Type.class, 1);
     }
 }

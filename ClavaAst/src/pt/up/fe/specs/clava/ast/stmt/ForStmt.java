@@ -41,56 +41,21 @@ public class ForStmt extends LoopStmt {
         super(data, children);
     }
 
-    /**
-     * Constructor of a 'for' statement.
-     *
-     * <p>
-     * Init, cond and inc are optional and can be null.
-     *
-     * @param info
-     * @param init
-     * @param cond
-     * @param inc
-     * @param body
-     */
-    // public ForStmt(ClavaNodeInfo info, Stmt init, Stmt cond, Stmt inc, CompoundStmt body) {
-    // this(info, sanitize(info, init, cond, inc, body));
-    // }
-    //
-    // private ForStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new ForStmt(getInfo(), Collections.emptyList());
-    // }
-
     public Optional<Stmt> getInit() {
         return getOptionalChild(Stmt.class, 0);
-        // return getNullable(0, Stmt.class);
     }
 
     public Optional<Stmt> getCond() {
         return getOptionalChild(Stmt.class, 1);
-        // return getNullable(1, Stmt.class);
     }
 
     public Optional<Stmt> getInc() {
         return getOptionalChild(Stmt.class, 2);
-        // return getNullable(2, Stmt.class);
     }
 
     @Override
     public CompoundStmt getBody() {
         return getChild(CompoundStmt.class, 3);
-
-        // ClavaNode body = getChild(3);
-        // if (body instanceof CompoundStmt) {
-        // return (CompoundStmt) body;
-        // }
-        //
-        // throw new RuntimeException("ForStmt: Not being normalized as a CompoundStmt\n" + toTree());
     }
 
     @Override
@@ -101,28 +66,21 @@ public class ForStmt extends LoopStmt {
     protected String getCode(String forKeyword) {
         StringBuilder code = new StringBuilder();
 
-        // If the first parent that is not a CompountStmt is not a ForStmt
-
         code.append(forKeyword).append("(");
 
-        // ifPresent(init -> code.append(init.getCode()));
-        // code.append(getInit().orElse(ClavaNodeFactory.literalStmt(";", getInfo())).getCode());
         // Append 'init'
         code.append(getInit().map(init -> init.getCode()).orElse(";"));
-        // code.append(";");
 
         // Append 'cond'
         code.append(getCond().map(init -> " " + init.getCode()).orElse(";"));
 
-        // getCond().ifPresent(cond -> code.append(cond.getCode()));
-        // code.append(";");
         // Get 'inc' code
         String incCode = getInc().map(init -> " " + init.getCode()).orElse("");
         if (incCode.endsWith(";")) {
             incCode = incCode.substring(0, incCode.length() - 1);
         }
         code.append(incCode);
-        // getInc().ifPresent(inc -> code.append(inc.getCode()));
+
         code.append(")");
         code.append(getBody().getCode());
 
@@ -197,10 +155,6 @@ public class ForStmt extends LoopStmt {
                 .map(varDecls -> varDecls.get(0));
     }
 
-    // public Optional<String> getIterationVarName() {
-    //
-    // }
-
     /**
      * A ClavaNode that implements Nameable, that represents the iteration variable.
      * 
@@ -258,15 +212,6 @@ public class ForStmt extends LoopStmt {
         ClavaLog.debug(() -> "ForStmt.getIterationVarName(): statement not supported, " + initStmt);
 
         return Optional.empty();
-        // return getInit()
-        // // Only for DeclStmt
-        // .filter(stmt -> stmt instanceof DeclStmt)
-        // // Get VarDecls
-        // .map(declStmt -> ((DeclStmt) declStmt).getVarDecls())
-        // // Only one variable
-        // .filter(varDecls -> varDecls.size() == 1)
-        // // Return VarDecl
-        // .map(varDecls -> varDecls.get(0));
     }
 
     private Optional<Expr> getInitValueExpr(ClavaNode initExpr) {
@@ -352,70 +297,4 @@ public class ForStmt extends LoopStmt {
     public Optional<Expr> getIterationsExpr() {
         return ForIterationsExpression.newInstance(this).flatMap(iter -> iter.getIterationsExpr());
     }
-
-    /**
-     * @return an expression that represents the number of iterations of the loop
-     */
-    /*
-    public Optional<Expr> getIterationsExprV1() {
-        // Calculate diff between begin and end
-        Expr beginEndDiff = getBeginEndDiff().orElse(null);
-        if (beginEndDiff == null) {
-            return Optional.empty();
-        }
-    
-        Expr stepValue = getStepValueExpr().orElse(null);
-        if (stepValue == null) {
-            return Optional.empty();
-        }
-    
-        Integer stepValueInteger = SpecsStrings.parseInteger(stepValue.getCode());
-        // Special case: step value 1
-        if (stepValueInteger != null && stepValueInteger.intValue() == 1) {
-            return Optional.of(beginEndDiff);
-        }
-    
-        return Optional
-                .of(getFactory().binaryOperator(BinaryOperatorKind.Div, beginEndDiff.get(Expr.TYPE).get(), beginEndDiff,
-                        stepValue));
-    
-        // return Optional.of(ClavaNodeFactory.binaryOperator(BinaryOperatorKind.DIV, beginEndDiff, stepValue));
-    }
-    */
-    /*
-    private Optional<Expr> getBeginEndDiff() {
-        Expr endExpr = getConditionValueExpr().orElse(null);
-        if (endExpr == null) {
-            return Optional.empty();
-        }
-    
-        BinaryOperator binOp = getCondOperator().orElse(null);
-        if (binOp == null) {
-            return Optional.empty();
-        }
-    
-        Expr initExpr = getInitValueExpr().orElse(null);
-        if (initExpr == null) {
-            return Optional.empty();
-        }
-    
-        Integer initExprInteger = SpecsStrings.parseInteger(initExpr.getCode());
-    
-        // Special case: relation < and begin 0
-        if (binOp.getOp() == BinaryOperatorKind.LT && initExprInteger != null && initExprInteger.intValue() == 0) {
-            return Optional.of(endExpr);
-        }
-    
-        // Special case: relation <= and begin 1
-        if (binOp.getOp() == BinaryOperatorKind.LE && initExprInteger != null && initExprInteger.intValue() == 1) {
-            return Optional.of(endExpr);
-        }
-    
-        return Optional
-                .of(getFactory().binaryOperator(BinaryOperatorKind.Sub, initExpr.get(Expr.TYPE).get(), endExpr,
-                        initExpr));
-    
-        // return Optional.of(ClavaNodeFactory.binaryOperator(BinaryOperatorKind.SUB, endExpr, initExpr));
-    }
-    */
 }

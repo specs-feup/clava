@@ -25,19 +25,9 @@ public class GNUNullExpr extends Expr {
         super(data, children);
     }
 
-    // public GNUNullExpr(ExprData exprData, ClavaNodeInfo info) {
-    // super(exprData, info, Collections.emptyList());
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new GNUNullExpr(getExprData(), getInfo());
-    // }
-
     @Override
     public String getCode() {
-        // Using 0 instead of NULL so that the same code is generated, wheter we use Clang of Gcc
+        // Using 0 instead of NULL so that the same code is generated, whether we use Clang or GCC
         return "0";
-        // return "NULL";
     }
 }

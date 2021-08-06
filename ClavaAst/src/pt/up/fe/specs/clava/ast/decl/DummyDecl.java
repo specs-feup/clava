@@ -33,16 +33,6 @@ public class DummyDecl extends Decl implements DummyNode {
         super(clavaData, children);
     }
 
-    // /**
-    // * For legacy support.
-    // *
-    // * @param info
-    // * @param children
-    // */
-    // protected DummyDecl(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(DeclData.empty(), info, children);
-    // }
-
     @Override
     public String getNodeName() {
         return super.getNodeName() + " (" + getContent() + ")";
@@ -57,16 +47,4 @@ public class DummyDecl extends Decl implements DummyNode {
         return ClavaNodes.toCode(getNodeCode(), this);
     }
 
-    /*
-    @Override
-    public String toContentString() {
-        return "CONTENT STRING";
-        // return toStringHelper();
-    }
-    
-    @Override
-    public String toString() {
-        return "TO STRING";
-    }
-    */
 }

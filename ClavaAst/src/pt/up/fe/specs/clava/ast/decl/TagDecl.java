@@ -44,54 +44,14 @@ public abstract class TagDecl extends TypeDecl {
 
     /// DATAKEYS END
 
-    // private final TagKind tagKind;
     public TagDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        // TODO: TEMPORARY, ADD DATA
-        // this.tagKind = null;
     }
-
-    /**
-     * @deprecated
-     * @param tagKind
-     * @param declName
-     * @param type
-     * @param info
-     * @param children
-     */
-    // @Deprecated
-    // public TagDecl(TagKind tagKind, String declName, Type type, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(declName, type, info, children);
-    //
-    // }
-
-    /**
-     * 
-     * @param tagKind
-     * @param declName
-     * @param type
-     * @param declData
-     * @param info
-     * @param children
-     */
-    // public TagDecl(TagKind tagKind, String declName, Type type, DeclData declData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // this(new LegacyToDataStore().setDecl(declData).setNodeInfo(info).getData(), children);
-    // set(DECL_NAME, declName);
-    // set(TYPE_FOR_DECL, processType(type));
-    // set(TAG_KIND, tagKind);
-    // // super(declName, type, declData, info, children);
-    //
-    // // this.tagKind = tagKind;
-    // }
 
     public TagKind getTagKind() {
         return get(TAG_KIND);
-        // return tagKind;
     }
-    
+
     public Boolean isCompleteDefinition() {
         return get(IS_COMPLETE_DEFINITION);
     }

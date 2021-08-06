@@ -34,6 +34,12 @@ import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.SpecsStrings;
 
+/**
+ * A statement that represents a declaration.
+ * 
+ * @author JBispo
+ *
+ */
 public class DeclStmt extends Stmt {
 
     /// DATAKEYS BEGIN
@@ -46,38 +52,15 @@ public class DeclStmt extends Stmt {
 
     /// DATAKEYS END
 
-    // private final DeclStmtType type;
-    // private final boolean hasSemicolon;
-
     public DeclStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-        /*
-        // Filter out nodes that are not Decl
-        super(data, children.stream()
-                .filter(child -> child instanceof Decl)
-                .collect(Collectors.toList()));
-        
-        // Filter out nodes that are not Decl
-        List<ClavaNode> declChildren = getChildren();
-        // List<ClavaNode> declChildren = children.stream()
-        // .filter(child -> child instanceof Decl)
-        // .collect(Collectors.toList());
-        */
-        /*
-        List<ClavaNode> nonDeclChildren = children.stream()
-                .filter(child -> !(child instanceof Decl))
-                .collect(Collectors.toList());
-        
-        System.out.println("NON DECL CHILDREN:" + ClavaNode.toTree(nonDeclChildren));
-        */
+
         // Determine Decl type
         boolean isRecordDecl = children.stream()
                 .findFirst()
                 .filter(child -> child instanceof RecordDecl)
                 .isPresent();
 
-        // System.out.println("DECLSTMT CHILDREN:" + children);
-        // System.out.println("IS RECORD DECL:" + isRecordDecl);
         // TODO: If RecordDecl, verify if remaining children are VarDecl nodes?
 
         DeclStmtType declStmtType = isRecordDecl ? DeclStmtType.RECORD_DECL : DeclStmtType.DECL_LIST;
@@ -86,7 +69,6 @@ public class DeclStmt extends Stmt {
 
         // Check if children after the first are VarDecl
         if (isRecordDecl) {
-            // put(HAS_SEMICOLON, true);
 
             boolean childrenNotVarDecl = children.stream()
                     .skip(1)
@@ -100,95 +82,16 @@ public class DeclStmt extends Stmt {
             }
         }
 
-        // No-semicolon support only when only one child is present (and when is not RecordDecl type)
-        // if (!get(HAS_SEMICOLON) && children.size() > 1) {
-        // put(HAS_SEMICOLON, true);
-        // }
-
-        // Check number of children and semicolon
-        // if (!get(HAS_SEMICOLON)) {
-        // Preconditions.checkArgument(children.size() == 1,
-        // "No-semicolon support only when only one child is present, has '" + children.size() + "':\n"
-        // + children);
-        // }
-
         // If any of the children have associated comments, "move" them up to this statement
         children.stream()
                 .flatMap(child -> child.removeInlineComments().stream())
                 .forEach(this::associateComment);
 
     }
-    /*
-    public DeclStmt(ClavaNodeInfo info, RecordDecl recordDecl, List<VarDecl> varDecls) {
-        this(new LegacyToDataStore().setNodeInfo(info).getData(), SpecsCollections.concat(recordDecl, varDecls));
-        // this(DeclStmtType.RECORD_DECL, true, info, SpecsCollections.concat(recordDecl, varDecls));
-    }
-    */
-
-    /*
-    public DeclStmt(boolean hasSemicolon, ClavaNodeInfo info, NamedDecl decl) {
-        this(new LegacyToDataStore()
-                .setNodeInfo(info)
-                .set(HAS_SEMICOLON, hasSemicolon)
-                .getData(),
-                Arrays.asList(decl));
-    
-        // this(DeclStmtType.DECL_LIST, hasSemicolon, info, Arrays.asList(decl));
-    }
-    */
-    /*
-    public DeclStmt(ClavaNodeInfo info, List<NamedDecl> decls) {
-        // Not sure if all children must be VarDecl, up until now they have been
-        // Answer: No, they are not always VarDecl, they can also be a RecordDecl as the first child
-    
-        // Check if the children greater than one are always VarDecl
-        this(new LegacyToDataStore().setNodeInfo(info).set(HAS_SEMICOLON, true).getData(), decls);
-        // this(DeclStmtType.DECL_LIST, true, info, decls);
-    }
-    */
-    /*
-    private DeclStmt(DeclStmtType type, boolean hasSemicolon, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-    
-        super(info, children);
-    
-        // Check RECORD_DECL and semicolon
-        if (type == DeclStmtType.RECORD_DECL) {
-            Preconditions.checkArgument(hasSemicolon,
-                    "DeclStmtType '" + DeclStmtType.RECORD_DECL + "' requires semicolon");
-        }
-    
-        // Check number of children and semicolon
-        if (!hasSemicolon) {
-            Preconditions.checkArgument(children.size() == 1,
-                    "No-semicolon support only when only one child is present");
-        }
-    
-        this.type = type;
-        this.hasSemicolon = hasSemicolon;
-    
-        // If any of the children have associated comments, "move" them up to this statement
-        children.stream()
-                .flatMap(child -> child.removeInlineComments().stream())
-                .forEach(this::associateComment);
-    }
-    */
-    /*
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new DeclStmt(getInfo(), Collections.emptyList());
-    }
-    */
 
     public List<Decl> getDecls() {
         return getChildren(Decl.class);
     }
-
-    /*
-    public DeclStmtType getType() {
-        return type;
-    }
-    */
 
     public List<VarDecl> getVarDecls() {
         Preconditions.checkArgument(get(DECL_STMT_TYPE) == DeclStmtType.DECL_LIST,
@@ -201,9 +104,7 @@ public class DeclStmt extends Stmt {
     public String getCode() {
         switch (get(DECL_STMT_TYPE)) {
         case DECL_LIST:
-            String code = getCodeDeclList();
-            // System.out.println("FINAL CODE:\n" + code);
-            return code;
+            return getCodeDeclList();
         case RECORD_DECL:
             return getCodeRecordDecl();
         default:
@@ -233,50 +134,20 @@ public class DeclStmt extends Stmt {
     }
 
     public String getCodeDeclList() {
+
         // If no semicolon, can only have one decl
         if (!get(HAS_SEMICOLON)) {
-            // System.out.println("NO SEMI");
-            // return getChildren(NamedDecl.class).get(0).getCode();
             return getChildren(Decl.class).get(0).getCode();
         }
 
         // All elements are Decls with types
-        // List<NamedDecl> decls = getChildren(NamedDecl.class);
         List<Decl> decls = getChildren(Decl.class);
-
-        // boolean allTypable = decls.size() == decls.stream()
-        // .filter(decl -> (decl instanceof Typable))
-        // .count();
-        //
-        // // Check if all types of decls are the same
-        //
-        // Type firstType = allTypable ? ((Typable) decls.get(0)).getType() : null;
-        // boolean typesAreDiff = allTypable ? decls.stream()
-        // .map(decl -> ((Typable) decl).getType())
-        // .filter(type -> !type.equals(firstType))
-        // .findFirst()
-        // .isPresent()
-        // : true;
 
         boolean singleLineDecl = isSingleLineDecl(decls);
 
-        // Write code of first type, add code of next types without variable declaration
-        // System.out.println("DECLS:");
-        // for (Decl decl : decls) {
-        // System.out.println("asdasd");
-        // System.out.println("DECL CLASS:" + decl.getClass());
-        // System.out.println(decl.getCode());
-        // }
-
-        // StringBuilder code = new StringBuilder();
         String code = decls.get(0).getCode();
 
-        // String firstDecl = decls.get(0).getCode();
-        // code.append(firstDecl);
-        // if(!firstDecl.endsWith(";")) {
-        // code.append(";");
-        // }
-
+        // Write code of first type, add code of next types without variable declaration
         if (singleLineDecl) {
             for (int i = 1; i < decls.size(); i++) {
                 NamedDecl decl = (NamedDecl) decls.get(i);
@@ -284,7 +155,9 @@ public class DeclStmt extends Stmt {
                 code += getPointerPrefix(decl);
                 code += decl.getTypelessCode();
             }
-        } else {
+        }
+        // Otherwise, write a single statement per declaration
+        else {
             for (int i = 1; i < decls.size(); i++) {
                 if (!code.trim().endsWith(";")) {
                     code += ";";
@@ -294,19 +167,10 @@ public class DeclStmt extends Stmt {
             }
         }
 
-        // String code = decls.stream()
-        // .map(decl -> decl.getCode())
-        // // .filter(code -> !code.isEmpty())
-        // // .collect(Collectors.joining(";" + ln(), "", ";"));
-        // .collect(Collectors.joining(";" + ln()));
-
-        // System.out.println("CODE TRIM:" + code.trim());
         if (!code.trim().endsWith(";")) {
-            // System.out.println("ADDING ;");
             code += ";";
         }
 
-        // System.out.println("FINAL CODE:" + code);
         return code;
     }
 
@@ -324,6 +188,7 @@ public class DeclStmt extends Stmt {
     }
 
     private boolean isSingleLineDecl(List<Decl> decls) {
+
         // If not all decls have a type, return false
         List<Typable> typables = decls.stream()
                 .filter(decl -> decl instanceof Typable)
@@ -347,24 +212,6 @@ public class DeclStmt extends Stmt {
                 .isPresent();
 
         return !isMultiLine;
-        // boolean allTypable = decls.size() == decls.stream()
-        // .filter(decl -> (decl instanceof Typable))
-        // .count();
-        //
-        // if (!allTypable) {
-        // return false;
-        // }
-        //
-        // // Check if all types of decls are the same
-        // Type firstType = ((Typable) decls.get(0)).getType();
-        // boolean typesAreDiff = decls.stream()
-        // .map(decl -> ((Typable) decl).getType())
-        // .filter(type -> !type.equals(firstType))
-        // .findFirst()
-        // .isPresent();
-        //
-        // // TODO Auto-generated method stub
-        // return false;
     }
 
     public DeclStmt setHasSemicolon(boolean hasSemicolon) {

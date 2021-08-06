@@ -42,8 +42,7 @@ public abstract class OmpPragma extends Pragma {
             OmpDirectiveKind.class);
 
     /// DATAKEYS END
-    // private final OmpDirectiveKind directiveKind;
-    // private Lazy<OmpClauses> clauses;
+
     private OmpClauses clauses;
 
     protected OmpPragma(DataStore data, Collection<? extends ClavaNode> children) {
@@ -51,20 +50,6 @@ public abstract class OmpPragma extends Pragma {
 
         clauses = null;
     }
-
-    // /**
-    // * @deprecated
-    // * @param directiveKind
-    // * @param info
-    // */
-    // @Deprecated
-    // protected OmpPragma(OmpDirectiveKind directiveKind, ClavaNodeInfo info) {
-    //
-    // super(info, Collections.emptyList());
-    //
-    // this.directiveKind = directiveKind;
-    // this.clauses = Lazy.newInstance(() -> new OmpClauses(this));
-    // }
 
     public OmpClauses clauses() {
         if (clauses == null) {
@@ -76,7 +61,6 @@ public abstract class OmpPragma extends Pragma {
 
     public OmpDirectiveKind getDirectiveKind() {
         return get(DIRECTIVE_KIND);
-        // return directiveKind;
     }
 
     public List<OmpClause> getClause(OmpClauseKind clauseKind) {
@@ -86,11 +70,6 @@ public abstract class OmpPragma extends Pragma {
     public List<OmpClauseKind> getClauseKinds() {
         return Collections.emptyList();
     }
-
-    //
-    // public List<OmpClause> getClauseOrCreate(OmpClauseKind clauseKind, Supplier<OmpClause> supplier) {
-    // throw new RuntimeException("Not implemented yet");
-    // }
 
     public Boolean hasClause(OmpClauseKind clauseKind) {
         return false;
@@ -108,21 +87,18 @@ public abstract class OmpPragma extends Pragma {
 
     @Override
     public void setFullContent(String fullContent) {
-        SpecsLogs.msgWarn("Pragma.setFullContent is not supported for OmpPragma, please use the setters");
+        SpecsLogs.warn("Pragma.setFullContent is not supported for OmpPragma, please use the setters");
     }
 
     public void setClause(OmpClause ompClause) {
         // Does nothing
-        // SpecsLogs.msgInfo("Class " + getClass() + " does not support setClause(OmpClause)");
     }
 
     public void setClause(List<OmpClause> clauseList) {
         // Does nothing
-        // SpecsLogs.msgInfo("Class " + getClass() + " does not support setClause(List<OmpClause>)");
     }
 
     public void removeClause(OmpClauseKind clauseKind) {
         // Does nothing
-        // SpecsLogs.msgInfo("Class " + getClass() + " does not support removeClause()");
     }
 }

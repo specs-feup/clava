@@ -25,21 +25,4 @@ public class VarTemplateDecl extends RedeclarableTemplateDecl {
         super(data, children);
     }
 
-    // public VarTemplateDecl(RedeclarableTemplateDecl redeclarableTemplateDecl) {
-    // this(redeclarableTemplateDecl.getDeclName(), redeclarableTemplateDecl.getSpecializations(),
-    // redeclarableTemplateDecl.getDeclData(), redeclarableTemplateDecl.getInfo(),
-    // redeclarableTemplateDecl.getChildren());
-    // }
-    //
-    // protected VarTemplateDecl(String declName, List<Decl> specializations, DeclData declData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // super(declName, specializations, declData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new VarTemplateDecl(getDeclName(), getSpecializations(), getDeclData(), getInfo(),
-    // Collections.emptyList());
-    // }
 }

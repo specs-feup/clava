@@ -26,19 +26,6 @@ public class StmtExpr extends Expr {
         super(data, children);
     }
 
-    // public StmtExpr(ExprData exprData, ClavaNodeInfo info, CompoundStmt compoundStmt) {
-    // super(exprData, info, Arrays.asList(compoundStmt));
-    // }
-    //
-    // protected StmtExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new StmtExpr(getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     public CompoundStmt getCompoundStmt() {
         return getChild(CompoundStmt.class, 0);
     }

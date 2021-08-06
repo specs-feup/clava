@@ -28,28 +28,9 @@ import pt.up.fe.specs.clava.ast.expr.Expr;
  */
 public class SwitchStmt extends Stmt {
 
-    /// DATAKEYS BEGIN
-
-    // public final static DataKey<Optional<VarDecl>> CONDITION_VARIABLE = KeyFactory.optional("conditionVariable");
-
-    /// DATAKEYS END
-
     public SwitchStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    // public SwitchStmt(ClavaNodeInfo info, Expr cond, Stmt body) {
-    // this(info, Arrays.asList(cond, body));
-    // }
-    //
-    // private SwitchStmt(ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new SwitchStmt(getInfo(), Collections.emptyList());
-    // }
 
     @Override
     public String getCode() {
@@ -58,7 +39,6 @@ public class SwitchStmt extends Stmt {
         builder.append("switch (").append(getCond().getCode()).append(")").append(getBody().getCode());
 
         return builder.toString();
-        // return ClavaNodeUtils.toUnimplementedCode(this);
     }
 
     public Expr getCond() {

@@ -45,26 +45,10 @@ public abstract class ArrayType extends Type {
 
     public ArrayType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        // arrayTypeData = null;
     }
 
-    // private ArrayTypeData arrayTypeData;
-    // TODO: For compatibility, remove afterwards
-    // private Standard standard;
-
-    // protected ArrayType(ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // this(new LegacyToDataStore().setArrayType(arrayTypeData).setType(typeData).setNodeInfo(info).getData(),
-    // children);
-    //
-    // standard = arrayTypeData.getStandard();
-    // }
-
-    // abstract public Type getElementType();
     public Type getElementType() {
         return get(ELEMENT_TYPE);
-        // return getChild(Type.class, 0);
     }
 
     /**
@@ -73,23 +57,16 @@ public abstract class ArrayType extends Type {
      */
     abstract protected String getArrayCode();
 
-    // public ArrayTypeData getArrayTypeData() {
-    // return DataStoreToLegacy.getArrayType(getData(), standard);
-    // // return arrayTypeData;
-    // }
-
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
         String nameCode = name == null ? "" : name;
 
         Type elementType = getElementType();
 
-        // String qualifierString = ClavaCode.getQualifiersCode(arrayTypeData.getQualifiers(), isCxx);
-        // String qualifierString = arrayTypeData.getQualifiersCode();
         String qualifierString = get(INDEX_TYPE_QUALIFIERS).stream()
                 .map(C99Qualifier::getCode)
                 .collect(Collectors.joining(" "));
-        // String arraySizeType = arrayTypeData.getArraySizeType().getCode();
+
         String arraySizeType = get(ARRAY_SIZE_MODIFIER).getCode();
 
         StringBuilder arrayContentCode = new StringBuilder(qualifierString);
@@ -102,33 +79,19 @@ public abstract class ArrayType extends Type {
         }
 
         arrayContentCode.append(getArrayCode());
-        // String Arrays.asList(qualifierString,
-        // arraySizeType).stream().filter(String::isEmpty).collect(Collectors.joining(" "));
 
         // If element type is itself an ArrayType, put this array code in front of the name
         if (elementType instanceof ArrayType) {
             return elementType.getCode(sourceNode, nameCode + "[" + arrayContentCode + "]");
         }
 
-        // if (!nameCode.isEmpty()) {
-        // nameCode = " " + nameCode;
-        // }
-        // System.out.println(
-        // "ARRAY CODE: " + getElementType().getCode(sourceNode) + nameCode + "[" + arrayContentCode + "]");
-        // System.out.println("ELEMENT TYPE:" + getElementType());
-        // System.out.println("ELEMENT TYPE CODE:" + getElementType().getCode(sourceNode));
-        // System.out.println("ELEMENT TYPE CODE WITH NAME:" + getElementType().getCode(sourceNode, nameCode));
-
         String constantArray = "[" + arrayContentCode + "]";
 
-        // String nameAndArray = nameCode + "[" + arrayContentCode + "]";
-        // System.out.println("NAME CODE: '" + nameCode + "'");
         if (nameCode.isEmpty()) {
             return getElementType().getCode(sourceNode) + constantArray;
         }
 
         return getElementType().getCode(sourceNode, nameCode + constantArray);
-        // return getElementType().getCode(sourceNode) + nameCode + "[" + arrayContentCode + "]";
     }
 
     @Override

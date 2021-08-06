@@ -25,15 +25,6 @@ public class CXXDefaultArgExpr extends Expr {
         super(data, children);
     }
 
-    // public CXXDefaultArgExpr(ExprData exprData, ClavaNodeInfo info) {
-    // super(exprData, info, Collections.emptyList());
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXDefaultArgExpr(getExprData(), getInfo());
-    // }
-
     @Override
     public String getCode() {
         throw new RuntimeException("Should not generate code");

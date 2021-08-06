@@ -36,19 +36,6 @@ public class DecltypeType extends Type {
         super(data, children);
     }
 
-    // public DecltypeType(TypeData typeData, ClavaNodeInfo info, Expr expr, Type underlyingType) {
-    // this(typeData, info, Arrays.asList(expr, underlyingType));
-    // }
-
-    // private DecltypeType(TypeData typeData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(typeData, info, children);
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new DecltypeType(getTypeData(), getInfo(), Collections.emptyList());
-    // }
-
     public Expr getExpr() {
         return getChild(Expr.class, 0);
     }
@@ -62,13 +49,4 @@ public class DecltypeType extends Type {
         return this;
     }
 
-    // @Override
-    // public String getCode() {
-    // System.out.println("DECLTYPE CODE:" + super.getCode());
-    // return super.getCode();
-    // }
-
-    // public Type getUnderlyingType() {
-    // return getChild(Type.class, 1);
-    // }
 }

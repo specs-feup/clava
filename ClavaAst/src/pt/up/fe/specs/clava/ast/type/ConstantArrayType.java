@@ -50,28 +50,10 @@ public class ConstantArrayType extends ArrayType {
 
     public ConstantArrayType(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        // constant = get(ARRAY_SIZE).intValue();
     }
-
-    // private final int constant;
-
-    // public ConstantArrayType(int constant, ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
-    // Type elementType) {
-    // this(constant, arrayTypeData, typeData, info, Arrays.asList(elementType));
-    // }
-
-    // private ConstantArrayType(int constant, ArrayTypeData arrayTypeData, TypeData typeData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(arrayTypeData, typeData, info, children);
-    //
-    // setInPlace(ARRAY_SIZE, BigInteger.valueOf(constant));
-    // // this.constant = constant;
-    // }
 
     public int getConstant() {
         return get(ARRAY_SIZE).intValue();
-        // return constant;
     }
 
     public int getArraySize() {
@@ -97,20 +79,9 @@ public class ConstantArrayType extends ArrayType {
         ((ConstantArrayType) elementType).getArrayDims(dims);
     }
 
-    // public BigInteger getConstant() {
-    // return get(ARRAY_SIZE);
-    // // return constant;
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new ConstantArrayType(constant, getArrayTypeData(), getTypeData(), getInfo(), Collections.emptyList());
-    // }
-
     @Override
     protected String getArrayCode() {
         return get(ARRAY_SIZE).toString();
-        // return Integer.toString(constant);
     }
 
 }

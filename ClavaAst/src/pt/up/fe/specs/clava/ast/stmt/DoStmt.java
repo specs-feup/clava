@@ -26,19 +26,6 @@ public class DoStmt extends LoopStmt {
         super(data, children);
     }
 
-    // public DoStmt(ClavaNodeInfo info, CompoundStmt body, Expr condition) {
-    // this(info, Arrays.asList(body, condition));
-    // }
-    //
-    // private DoStmt(ClavaNodeInfo info, List<? extends ClavaNode> children) {
-    // super(info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new DoStmt(getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public Optional<ClavaNode> getStmtCondition() {
         return Optional.of(getCondition());

@@ -52,89 +52,16 @@ public class CXXNewExpr extends Expr {
         super(data, children);
     }
 
-    // private final BareDeclData newOperator;
-    //
-    // private final boolean isGlobal;
-    // private final boolean isArray;
-    // private final boolean hasConstructor;
-    // private final boolean hasNothrow;
-
-    /*
-    private final Long newFunctionId;
-    private final String typeSourceInfo;
-    private final Type ftype;
-    */
-    /**
-     * Constructor for new arrays.
-     * 
-     * @param valueKind
-     * @param type
-     * @param info
-     * @param children
-     */
-    // public CXXNewExpr(boolean isGlobal, boolean isArray, BareDeclData newOperator, ExprData exprData,
-    // ClavaNodeInfo info, Expr arraySize, Expr constructorExpr, DeclRefExpr nothrow) {
-    //
-    // this(isGlobal, isArray, constructorExpr != null, nothrow != null, newOperator, exprData, info,
-    // SpecsCollections.asListT(ClavaNode.class, arraySize, constructorExpr, nothrow));
-    // }
-    //
-    // private CXXNewExpr(boolean isGlobal, boolean isArray, boolean hasConstructor, boolean hasNothrow,
-    // BareDeclData newOperator, ExprData exprData,
-    // ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    //
-    // super(exprData, info, children);
-    //
-    // this.isGlobal = isGlobal;
-    // this.isArray = isArray;
-    // this.hasConstructor = hasConstructor;
-    // this.hasNothrow = hasNothrow;
-    //
-    // this.newOperator = newOperator;
-    // /*
-    // this.isArray = isArray;
-    // this.hasNothrow = hasNothrow;
-    // this.hasConstructor = hasConstructor;
-    //
-    // this.newFunctionId = newFunctionId;
-    // this.typeSourceInfo = typeSourceInfo;
-    // this.ftype = ftype;
-    // */
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXNewExpr(isGlobal, isArray, hasConstructor, hasNothrow, newOperator, getExprData(), getInfo(),
-    // Collections.emptyList());
-    // }
-
     public Optional<CXXConstructExpr> getConstructorExpr() {
         return get(CONSTRUCT_EXPR);
-        // if (!hasConstructor) {
-        // return Optional.empty();
-        // }
-        //
-        // // If hasArray, is the second child. Otherwise, is the first child
-        // int constructorIndex = isArray ? 1 : 0;
-        //
-        // return Optional.of(getChild(Expr.class, constructorIndex));
     }
 
     public Optional<Expr> getArrayExpr() {
         return get(ARRAY_SIZE);
-        // if (!isArray) {
-        // return Optional.empty();
-        // }
-        //
-        // // Array expr is always the first child
-        // return Optional.of(getChild(Expr.class, 0));
     }
 
     @Override
     public String getCode() {
-        // System.out.println("Operator new:" + get(OPERATOR_NEW).map(ClavaNode::getCode).orElse("null"));
-        // System.out.println("ARRAY:" + get(ARRAY_SIZE).map(ClavaNode::getCode).orElse("null"));
-        // System.out.println("Construct:" + get(CONSTRUCT_EXPR).map(ClavaNode::getCode).orElse("null"));
         StringBuilder code = new StringBuilder();
 
         code.append("new ");
@@ -150,14 +77,13 @@ public class CXXNewExpr extends Expr {
         Optional<CXXConstructExpr> constructorExpr = getConstructorExpr();
 
         if (constructorExpr.isPresent()) {
+
             // Special case: literal
             Expr expr = constructorExpr.get();
             if (expr instanceof Literal) {
                 Type exprType = getExprType();
-                // if (Types.isPointer(exprType)) {
+
                 if (exprType.isPointer()) {
-                    // if (exprType instanceof PointerType) {
-                    // exprType = Types.getPointeeType(exprType);
                     exprType = exprType.getPointeeType();
                 }
 
@@ -168,11 +94,11 @@ public class CXXNewExpr extends Expr {
 
         } else {
             Type exprType = getExprType();
-            // if (Types.isPointer(exprType)) {
+
             if (exprType.isPointer()) {
-                // exprType = Types.getPointeeType(exprType);
                 exprType = exprType.getPointeeType();
             }
+
             code.append(exprType.getCode(this));
 
             switch (get(INIT_STYLE)) {
@@ -187,10 +113,6 @@ public class CXXNewExpr extends Expr {
                 code.append(get(INITIALIZER).get().getCode());
                 break;
             default:
-                // System.out.println("LOCATION: " + get(LOCATION));
-                // System.out.println("DATA: " + this);
-                // System.out.println("CURRENT CODE: " + code);
-                // System.out.println("CALL_INIT CODE: (" + get(INITIALIZER).get().getCode() + ")");
                 throw new NotImplementedException(get(INIT_STYLE));
             }
 
@@ -198,46 +120,6 @@ public class CXXNewExpr extends Expr {
 
         }
 
-        // getArrayExpr().ifPresent(arrayExpr -> code.append("[").append(arrayExpr.getCode()).append("]"));
-        /*
-        if (code.toString().equals("new *graph")) {
-            System.out.println("CONST:" + getConstructorExpr());
-            System.out.println("CONST CODE:" + constructorExpr.get().getCode());
-        }
-        */
-
         return code.toString();
-        /*
-        if (isArray) {
-            // new char[1024];
-            StringBuilder code = new StringBuilder();
-        
-            code.append("new ");
-        
-         
-            Type exprType = getExprType();
-            if (Types.isPointer(exprType)) {
-                exprType = Types.getPointeeType(exprType);
-            }
-        
-            code.append(exprType.getCode());
-            code.append("[").append(getChild(0).getCode()).append("]");
-        
-            
-            // CHECK: Since it is an array, the type must be a pointer
-        //            if (!(exprType instanceof PointerTypeOld)) {
-        //                throw new RuntimeException("Should be PointerTypeOld?");
-        //            }
-        //
-        //            Type baseType = ((PointerTypeOld) exprType).getPointeeType();
-        //
-        //            code.append(baseType.getCode());
-        //            code.append("[").append(getChild(0).getCode()).append("]");
-            
-            return code.toString();
-        }
-        
-        throw new RuntimeException("Not implemented yet");
-        */
     }
 }

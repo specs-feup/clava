@@ -42,38 +42,8 @@ public class LaraTagPragma extends Pragma {
         super(data, children);
     }
 
-    // private String tagId;
-
-    /**
-     * @param tagId
-     * @param info
-     */
-    // @Deprecated
-    // public LaraTagPragma(String tagId, ClavaNodeInfo info) {
-    // this(tagId, info, Collections.emptyList());
-    // }
-
-    /**
-     * 
-     * @param tagId
-     * @param info
-     * @param children
-     */
-    // @Deprecated
-    // private LaraTagPragma(String tagId, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(info, children);
-    //
-    // this.tagId = tagId;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new LaraTagPragma(tagId, getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public String getFullContent() {
-        // return LARA_TAG_PREFIX + tagId;
         return LARA_TAG_PREFIX + get(TAG_ID);
     }
 
@@ -86,12 +56,10 @@ public class LaraTagPragma extends Pragma {
         }
 
         set(TAG_ID, newContent);
-        // tagId = newContent;
     }
 
     public String getTagId() {
         return get(TAG_ID);
-        // return tagId;
     }
 
     @Override

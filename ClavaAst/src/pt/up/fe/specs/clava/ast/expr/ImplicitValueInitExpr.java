@@ -31,38 +31,4 @@ public class ImplicitValueInitExpr extends Expr {
         super(data, children);
     }
 
-    // @Override
-    // public String getCode() {
-    // // Return a default value initialization, based on the type
-    // System.out.println("TYPE: " + getType());
-    // return "/*implicit*/";
-    // // return super.getCode();
-    // }
-    // public ImplicitValueInitExpr(ExprData exprData, ClavaNodeInfo info) {
-    // this(exprData, info, Collections.emptyList());
-    // }
-
-    /**
-     * Constructor for node copy.
-     * 
-     * @param castKind
-     * @param destinationTypes
-     * @param location
-     */
-    // private ImplicitValueInitExpr(ExprData exprData, ClavaNodeInfo info,
-    // List<? extends ClavaNode> children) {
-    //
-    // super(exprData, info, children);
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new ImplicitValueInitExpr(getExprData(), getInfo(), Collections.emptyList());
-    // }
-
-    // @Override
-    // public String toContentString() {
-    // return super.toContentString() + " (type:" + getExprType().getCode(this) + ")";
-    // }
-
 }

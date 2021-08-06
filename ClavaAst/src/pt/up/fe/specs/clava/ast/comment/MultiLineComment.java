@@ -36,19 +36,6 @@ public class MultiLineComment extends Comment {
         super(data, children);
     }
 
-    // private final List<String> lines;
-    //
-    // public MultiLineComment(List<String> lines, ClavaNodeInfo nodeInfo) {
-    // super(nodeInfo, Collections.emptyList());
-    //
-    // this.lines = lines;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new MultiLineComment(lines, getInfo());
-    // }
-
     @Override
     public String getText() {
         return get(LINES).stream().collect(Collectors.joining(ln()));

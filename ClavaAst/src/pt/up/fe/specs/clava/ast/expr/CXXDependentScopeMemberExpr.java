@@ -59,47 +59,15 @@ public class CXXDependentScopeMemberExpr extends Expr {
         super(data, children);
     }
 
-    // private final boolean isArrow;
-    // private final String memberName;
-    //
-    // public CXXDependentScopeMemberExpr(boolean isArrow, String memberName, ExprData exprData, ClavaNodeInfo info,
-    // Expr memberExpr) {
-    // this(isArrow, memberName, exprData, info, Arrays.asList(memberExpr));
-    // }
-    //
-    // protected CXXDependentScopeMemberExpr(boolean isArrow, String memberName, ExprData exprData,
-    // ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    //
-    // this.isArrow = isArrow;
-    // this.memberName = memberName;
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXDependentScopeMemberExpr(isArrow, memberName, getExprData(), getInfo(), Collections.emptyList());
-    // }
-
-    // TODO: Rename to getBase(), make it optional, dependent on isImplicit
     public Optional<Expr> getBase() {
         return Optional.ofNullable(get(IS_IMPLICIT_ACCESS) ? null : getChild(Expr.class, 0));
-        // if (!get(IS_IMPLICIT_ACCESS)) {
-        // return Optional.of(getChild(Expr.class, 0));
-        // }
-        //
-        // return Optional.empty();
     }
 
     @Override
     public String getCode() {
-        // String separator = isArrow ? "->" : ".";
         String separator = get(IS_ARROW) ? "->" : ".";
 
-        // return getMemberExpr().getCode() + separator + memberName;
         var code = getBase().map(base -> base.getCode() + separator).orElse(get(QUALIFIER)) + get(MEMBER_NAME);
-
-        // System.out.println("LOCATION: " + get(LOCATION));
-        // System.out.println("code: " + code);
 
         return code;
     }

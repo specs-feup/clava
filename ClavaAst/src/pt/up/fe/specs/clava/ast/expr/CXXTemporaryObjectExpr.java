@@ -32,12 +32,6 @@ public class CXXTemporaryObjectExpr extends CXXConstructExpr {
         super(data, children);
     }
 
-    // public CXXTemporaryObjectExpr(CXXConstructExprData constructorData, ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends Expr> args) {
-    //
-    // super(constructorData, exprData, info, args);
-    // }
-
     @Override
     protected boolean isTemporary() {
         return true;

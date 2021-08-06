@@ -31,18 +31,4 @@ public abstract class DeclaratorDecl extends ValueDecl {
         super(data, children);
     }
 
-    /**
-     * @deprecated
-     * @param declName
-     * @param type
-     * @param declData
-     * @param info
-     * @param children
-     */
-    // @Deprecated
-    // public DeclaratorDecl(String declName, Type type, DeclData declData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(declName, type, declData, info, children);
-    // }
-
 }

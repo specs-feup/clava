@@ -47,69 +47,10 @@ public class CXXMethodDecl extends FunctionDecl {
 
     /// DATAKEYS END
 
-    // private static final long NULL_EXCEPT_ADDRESS = 0;
-    //
-    // public static long getNullExceptAddress() {
-    // return NULL_EXCEPT_ADDRESS;
-    // }
-
-    // private final CXXMethodDeclData methodData;
-
     public CXXMethodDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
-    /**
-     * 
-     * 
-     * @param declName
-     * @param returnType
-     * @param attributes
-     * @param hasDefinition
-     * @param info
-     * @param children
-     */
-    /*
-    public CXXMethodDecl(String declName, Type functionType,
-            FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info, List<ParmVarDecl> inputs,
-            Stmt definition) {
-    
-        this(declName, functionType, functionDeclData, declData, info, SpecsCollections.concat(inputs, definition));
-    
-        // this.methodData = methodData;
-    }
-    */
-
-    /**
-     * Constructor for copy() function and derived classes.
-     * 
-     * @param methodData
-     * @param declName
-     * @param functionType
-     * @param functionDeclData
-     * @param declData
-     * @param info
-     * @param children
-     */
-    /*
-    protected CXXMethodDecl(String declName, Type functionType,
-            FunctionDeclData functionDeclData, DeclData declData, ClavaNodeInfo info,
-            List<? extends ClavaNode> children) {
-    
-        super(declName, functionType, functionDeclData, declData, info, children);
-    
-        // this.methodData = methodData;
-    }
-    */
-    /*
-    @Override
-    protected ClavaNode copyPrivate() {
-    
-        // return new CXXMethodDecl(methodData, getDeclName(), getFunctionType(), getFunctionDeclData(), getDeclData(),
-        return new CXXMethodDecl(getDeclName(), getFunctionType(), getFunctionDeclData(), getDeclData(),
-                getInfo(), Collections.emptyList());
-    }
-    */
     protected boolean isInsideRecordDecl() {
         return getAncestorTry(CXXRecordDecl.class).isPresent();
     }
@@ -128,10 +69,6 @@ public class CXXMethodDecl extends FunctionDecl {
         return true;
 
     }
-
-    // public CXXMethodDeclData getMethodData() {
-    // return methodData;
-    // }
 
     @Override
     public String getCode() {
@@ -222,13 +159,6 @@ public class CXXMethodDecl extends FunctionDecl {
         }
 
         return Optional.of((CXXRecordDecl) record);
-        // return (CXXRecordDecl) getApp().getNode(get(RECORD_ID));
-        // // Check if this node is inside the record
-        // Optional<CXXRecordDecl> ancestor = getAncestorTry(CXXRecordDecl.class);
-        //
-        // return ancestor.orElse(
-        // // getApp().getCXXRecordDecl(getMethodData().getNamespace(), getMethodData().getRecord()));
-        // getApp().getCXXRecordDecl(getNamespace().orElse(null), getRecordName()));
 
     }
 
@@ -243,11 +173,6 @@ public class CXXMethodDecl extends FunctionDecl {
     public Optional<FunctionProtoType> getFunctionTypeTry() {
         return Optional.ofNullable((FunctionProtoType) super.getFunctionType());
     }
-
-    // @Override
-    // public String toContentString() {
-    // return super.toContentString() + "implicit:" + getDeclData().isImplicit();
-    // }
 
     @Override
     public String getSignature() {
@@ -275,77 +200,9 @@ public class CXXMethodDecl extends FunctionDecl {
         return signature;
     }
 
-    // public CXXRecordDecl getRecord() {
-    // return (CXXRecordDecl) get(RECORD);
-    // }
-    /*
-    public Optional<String> getNamespace() {
-        // Qualified name has full name
-        String qualifiedName = get(QUALIFIED_NAME);
-    
-        if (qualifiedName.isEmpty()) {
-            return Optional.empty();
-        }
-    
-        // Remove decl name
-        String declName = "::" + get(DECL_NAME);
-        SpecsCheck.checkArgument(qualifiedName.endsWith(declName),
-                () -> "Expected qualified name '" + qualifiedName + "' to end with '" + declName + "'");
-    
-        String currentString = qualifiedName.substring(0, qualifiedName.length() - declName.length());
-    
-        // TODO: Replace with RECORD, after CXXRecordDecl is implemented
-        // CXXRecordDecl record = getRecordDecl();
-        // String recordName = record.getDeclName();
-        String recordName = getRecordName();
-        SpecsCheck.checkArgument(currentString.endsWith(recordName),
-                () -> "Expected current string '" + currentString + "' to end with '" + recordName + "'");
-    
-        // Remove record name
-        String namespace = currentString.substring(0, currentString.length() - recordName.length());
-    
-        // Remove ::, if present
-        if (namespace.endsWith("::")) {
-            namespace = namespace.substring(0, namespace.length() - "::".length());
-        }
-    
-        return !namespace.isEmpty() ? Optional.of(namespace) : Optional.empty();
-    
-    }
-    */
     public String getRecordName() {
         return getRecordDecl().map(record -> record.getDeclName()).orElse(null);
     }
-
-    /*
-    @Override
-    public String getFunctionId() {
-        // return getDeclarationId(false);
-        StringBuilder id = new StringBuilder();
-    
-        var ftype = getFunctionType();
-        // Check if function is const
-        if (ftype.isConst()) {
-            id.append("const ");
-        }
-    
-        if (addNamespace()) {
-            String namespace = getNamespace(getRecordName()).map(str -> str + "::").orElse("");
-            id.append(namespace);
-        }
-    
-        // Add record if not inside record decl
-    
-        if (!isInsideRecordDecl()) {
-            // code.append(getMethodData().getRecord()).append("::");
-            id.append(getRecordName()).append("::");
-        }
-    
-        id.append(getFunctionType().getCode(getDeclName()));
-    
-        return id.toString();
-    }
-    */
 
     @Override
     protected FunctionDecl copyFunction(String newName) {
@@ -402,29 +259,8 @@ public class CXXMethodDecl extends FunctionDecl {
 
     public void setRecord(CXXRecordDecl cxxRecordDecl) {
 
-        // var currentQualifiedPrefix = get(QUALIFIED_PREFIX);
-
-        // var currentRecordDecl = get(RECORD);
-        // System.out.println("CURRENT RECORD: " + currentRecordDecl.getClass());
-        // System.out.println("CURRENT QUALIFIED PREFIX: " + currentQualifiedPrefix);
-        // var currentRecordName = currentRecordDecl instanceof NullDecl
-        // // ? SpecsArray.last(currentQualifiedPrefix.split("::"))
-        // ? ""
-        // : ((NamedDecl) currentRecordDecl).getDeclName();
-        //
-        // SpecsCheck.checkArgument(currentQualifiedPrefix.endsWith(currentRecordName),
-        // () -> "Expected current qualified prefix (" + currentQualifiedPrefix
-        // + ") to end with the name of the current record (" + currentRecordName + ")");
-        //
-        // var endIndex = currentQualifiedPrefix.length() - currentRecordName.length();
-        // var newQualifiedPrefix = currentQualifiedPrefix.substring(0, endIndex) + cxxRecordDecl.getDeclName();
-
         // Update qualified prefix
         var newQualifiedPrefix = getQualifiedPrefixWithoutRecord() + cxxRecordDecl.getDeclName();
-
-        // if (newQualifiedPrefix.endsWith("::")) {
-        // newQualifiedPrefix = newQualifiedPrefix.substring(0, newQualifiedPrefix.length() - 2);
-        // }
 
         // System.out.println("CURRENT RECORD DECL: " + currentRecordDecl.getDeclName());
         // System.out.println("NEW RECORD DECL: " + cxxRecordDecl.getDeclName());

@@ -29,21 +29,6 @@ public class UserDefinedLiteral extends CallExpr {
         super(data, children);
     }
 
-    // public UserDefinedLiteral(ExprData exprData, ClavaNodeInfo info, Expr callee, Expr cookedLiteral) {
-    // this(exprData, info, Arrays.asList(callee, cookedLiteral));
-    //
-    // Preconditions.checkArgument(cookedLiteral instanceof Literal);
-    // }
-    //
-    // private UserDefinedLiteral(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new UserDefinedLiteral(getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     @Override
     public List<Expr> getArgs() {
         return Collections.emptyList();
@@ -60,23 +45,6 @@ public class UserDefinedLiteral extends CallExpr {
     @Override
     public String getCode() {
         return getLiteral();
-        /*
-        if (getCookedLiteralExpr().hasDataI()) {
-            return getLiteral();
-        }
-        
-        StringBuilder code = new StringBuilder();
-        
-        code.append(getLiteral());
-        
-        String calleeName = getCalleeName();
-        Preconditions.checkArgument(calleeName.startsWith(OPERATOR_PREFIX),
-                "Expected calleeName to start with '" + OPERATOR_PREFIX + "', instead is '" + calleeName + "'");
-        
-        code.append(calleeName.substring(OPERATOR_PREFIX.length()));
-        
-        return code.toString();
-        */
     }
 
 }

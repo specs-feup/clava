@@ -37,28 +37,12 @@ public abstract class TypeWithKeyword extends Type {
 
     /// DATAKEYS END
 
-    // private final ElaboratedTypeKeyword keyword;
-
     public TypeWithKeyword(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        // keyword = null;
     }
-
-    /*
-    protected TypeWithKeyword(ElaboratedTypeKeyword keyword, TypeData typeData, ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-    
-        super(typeData, info, children);
-    
-        this.keyword = keyword;
-    }
-    */
-    // public abstract Type getNamedType();
 
     public ElaboratedTypeKeyword getKeyword() {
         return get(ELABORATED_TYPE_KEYWORD);
-        // return keyword;
     }
 
 }

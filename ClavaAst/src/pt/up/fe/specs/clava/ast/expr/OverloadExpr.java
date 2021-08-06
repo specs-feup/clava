@@ -58,41 +58,16 @@ public abstract class OverloadExpr extends Expr implements Nameable {
             .generic("templateArguments", (List<TemplateArgument>) new ArrayList<TemplateArgument>())
             .setDefault(() -> new ArrayList<>());
 
-    // public final static DataKey<List<String>> TEMPLATE_ARGUMENTS = KeyFactory
-    // .generic("templateArguments", (List<String>) new ArrayList<String>())
-    // .setDefault(() -> new ArrayList<>());
-
     /// DATAKEYS END
-
-    // private final String qualifier;
 
     public OverloadExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        // this.qualifier = null;
     }
-
-    // public OverloadExpr(String qualifier, ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
-    //
-    // if (qualifier != null && !qualifier.isEmpty()) {
-    // set(QUALIFIER, qualifier);
-    // }
-    //
-    // // super(exprData, info, children);
-    //
-    // // this.qualifier = qualifier;
-    // }
 
     public Optional<String> getQualifier() {
         String qualifier = get(QUALIFIER);
 
         return qualifier.isEmpty() ? Optional.empty() : Optional.of(qualifier);
-
-        // return hasValue(QUALIFIER) ? Optional.of(get(QUALIFIER)) : Optional.empty();
-
-        // return Optional.ofNullable(qualifier);
     }
 
     @Override
@@ -116,18 +91,11 @@ public abstract class OverloadExpr extends Expr implements Nameable {
         Optional<CXXOperator> operator = CXXOperator.parseTry(get(NAME));
         if (operator.isPresent()) {
             code.append(operator.get().getString());
-            // return code.toString();
         } else {
             code.append(get(NAME));
         }
 
-        // code.append(get(NAME));
-
         code.append(TemplateArgument.getCode(get(TEMPLATE_ARGUMENTS), this));
-        // List<String> templateArgs = get(TEMPLATE_ARGUMENTS);
-        // if (!templateArgs.isEmpty()) {
-        // code.append(templateArgs.stream().collect(Collectors.joining(", ", "<", ">")));
-        // }
 
         return code.toString();
     }

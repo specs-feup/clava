@@ -44,61 +44,13 @@ public class CXXRecordDecl extends RecordDecl {
 
     public final static DataKey<Boolean> HAS_DEFINITION = KeyFactory.bool("hasDefinition");
     public final static DataKey<Optional<CXXRecordDecl>> RECORD_DEFINITION = KeyFactory.optional("recordDefinition");
-    // public final static DataKey<String> RECORD_DEFINITION_ID = KeyFactory.string("recordDefinitionId");
 
     /// DATAKEYS END
 
     public CXXRecordDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        // System.out.println("CXXRECORD '" + get(ID) + " CHILDREN:"
-        // + children.stream().map(child -> child.get(ClavaNode.ID)).collect(Collectors.joining(", ")));
-        // SpecsLogs.debug("CXXRECORD '" + get(DECL_NAME) + "' CHILDREN:" + children);
-        // recordBases = null;
     }
 
-    // private final List<RecordBase> recordBases;
-
-    /*
-    public CXXRecordDecl(List<RecordBase> recordBases, RecordDeclData recordDeclData, Type type, DeclData declData,
-            ClavaNodeInfo info,
-            List<? extends Decl> children) {
-    
-        this(recordBases, recordDeclData, type, declData, info, SpecsCollections.cast(children, ClavaNode.class));
-    }
-    
-    protected CXXRecordDecl(List<RecordBase> recordBases, RecordDeclData recordDeclData, Type type, DeclData declData,
-            ClavaNodeInfo info,
-            Collection<? extends ClavaNode> children) {
-    
-        super(recordDeclData, type, declData, info, children);
-    
-        this.recordBases = recordBases;
-    }
-    
-    
-    @Override
-    protected ClavaNode copyPrivate() {
-        return new CXXRecordDecl(new ArrayList<>(recordBases), getRecordDeclData().copy(), getType(), getDeclData(),
-                getInfo(), Collections.emptyList());
-    }
-    */
-
-    // public List<RecordBase> getRecordBases() {
-    // return recordBases;
-    // }
-    /*
-    @Override
-    public String toContentString() {
-        String bases = getRecordBases().stream()
-                .map(base -> base.getTypeCode())
-                .collect(Collectors.joining(","));
-    
-        bases = bases.isEmpty() ? "" : ", bases{" + bases + "}";
-    
-        return super.toContentString() + bases;
-    }
-    */
     @Override
     public String getCode() {
         // String bases = getRecordBases().stream()

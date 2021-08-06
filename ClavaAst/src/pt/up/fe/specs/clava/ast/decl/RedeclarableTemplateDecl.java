@@ -33,25 +33,6 @@ public class RedeclarableTemplateDecl extends TemplateDecl implements TemplatePa
         super(data, children);
     }
 
-    // public RedeclarableTemplateDecl(String declName, List<Decl> specializations, DeclData declData, ClavaNodeInfo
-    // info,
-    // List<NamedDecl> templateParameters, Decl templateDecl) {
-    //
-    // this(declName, specializations, declData, info, SpecsCollections.concat(templateParameters, templateDecl));
-    // }
-    //
-    // protected RedeclarableTemplateDecl(String declName, List<Decl> specializations, DeclData declData,
-    // ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    //
-    // super(declName, specializations, declData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new RedeclarableTemplateDecl(getDeclName(), getSpecializations(), getDeclData(), getInfo(),
-    // Collections.emptyList());
-    // }
-
     @Override
     public String getCode() {
         return getCode("");

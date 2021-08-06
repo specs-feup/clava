@@ -25,13 +25,4 @@ public class CXXDefaultInitExpr extends Expr {
         super(data, children);
     }
 
-    // public CXXDefaultInitExpr(ExprData exprData, ClavaNodeInfo info) {
-    // super(exprData, info, Collections.emptyList());
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXDefaultInitExpr(getExprData(), getInfo());
-    // }
-
 }

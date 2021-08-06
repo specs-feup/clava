@@ -49,22 +49,6 @@ public class OmpClausePragma extends OmpPragma {
         super(data, children);
     }
 
-    // private final Map<OmpClauseKind, List<OmpClause>> clauses;
-    // private String customContent;
-    //
-    // public OmpClausePragma(OmpDirectiveKind directiveKind, Map<OmpClauseKind, List<OmpClause>> clauses,
-    // ClavaNodeInfo info) {
-    // this(directiveKind, null, clauses, info);
-    // }
-    //
-    // private OmpClausePragma(OmpDirectiveKind directiveKind, String customContent,
-    // Map<OmpClauseKind, List<OmpClause>> clauses, ClavaNodeInfo info) {
-    // super(directiveKind, info);
-    //
-    // this.clauses = clauses;
-    // this.customContent = customContent;
-    // }
-
     public Optional<String> getCustomContent() {
         return getTry(CUSTOM_CONTENT);
     }
@@ -73,17 +57,14 @@ public class OmpClausePragma extends OmpPragma {
     public String getFullContent() {
 
         // Give priority to custom content
-        // if (customContent != null) {
         if (hasValue(CUSTOM_CONTENT)) {
             return get(CUSTOM_CONTENT);
-            // return customContent;
         }
 
         StringBuilder fullContent = new StringBuilder();
 
         fullContent.append("omp ");
         fullContent.append(getDirectiveKind().getString());
-        // fullContent.append(clauses.values().stream()
         fullContent.append(get(CLAUSES).values().stream()
                 .map(clauseList -> clauseList.stream().map(clause -> clause.getCode())
                         .collect(Collectors.joining(" ")))
@@ -91,13 +72,6 @@ public class OmpClausePragma extends OmpPragma {
 
         return fullContent.toString();
     }
-
-    // @Override
-    // protected OmpClausePragma copyPrivate() {
-    // // We should check if we should have immutable clauses (e.g., replace the clause object, easier in a map)
-    // // Or mutable clauses (need to copy the clauses here)
-    // return new OmpClausePragma(getDirectiveKind(), customContent, new HashMap<>(clauses), getInfo());
-    // }
 
     @Override
     public List<OmpClause> getClause(OmpClauseKind clauseKind) {
@@ -108,29 +82,10 @@ public class OmpClausePragma extends OmpPragma {
             return Collections.emptyList();
         }
 
-        // List<OmpClause> clausesList = clauses.get(clauseKind);
         List<OmpClause> clausesList = get(CLAUSES).get(clauseKind);
 
         return clausesList != null ? clausesList : Collections.emptyList();
     }
-
-    /*
-    @Override
-    public List<OmpClause> getClauseOrCreate(OmpClauseKind clauseKind, Supplier<OmpClause> supplier) {
-        Optional<List<OmpClause>> clausesList = getClause(clauseKind);
-        if (clausesList.isPresent()) {
-            return clausesList.get();
-        }
-    
-        OmpClause newClause = supplier.get();
-    
-        Preconditions.checkArgument(clauseKind == newClause.getKind(), "Expected a clause of kind '" + clauseKind
-                + "', but supplier returned a clause of kind '" + newClause.getKind() + "'");
-        addClause(clauseKind, newClause);
-    
-        return getClause(clauseKind).get();
-    }
-    */
 
     @Override
     public void addClause(OmpClauseKind kind, OmpClause clause) {
@@ -141,7 +96,6 @@ public class OmpClausePragma extends OmpPragma {
         }
 
         clausesList.add(clause);
-        // clauses.put(kind, clause);
     }
 
     @Override
@@ -171,6 +125,7 @@ public class OmpClausePragma extends OmpPragma {
 
     @Override
     public void setClause(List<OmpClause> ompClauseList) {
+
         // Check all clauses have the same kind
         OmpClauseKind firstKind = null;
         for (OmpClause clause : ompClauseList) {
@@ -194,7 +149,7 @@ public class OmpClausePragma extends OmpPragma {
 
     @Override
     public Boolean hasClause(OmpClauseKind clauseKind) {
-        // if (customContent != null) {
+
         if (getCustomContent().isPresent()) {
             SpecsLogs.msgInfo("OpenMP pragma " + getDirectiveKind()
                     + " has custom content set, no clause processing will be done");
@@ -207,7 +162,6 @@ public class OmpClausePragma extends OmpPragma {
     @Override
     public void setFullContent(String fullContent) {
         set(CUSTOM_CONTENT, fullContent);
-        // this.customContent = fullContent;
     }
 
     @Override

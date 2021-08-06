@@ -40,45 +40,10 @@ public class OffsetOfExpr extends Expr {
         super(data, children);
     }
 
-    // private final OffsetOfData offsetOfData;
-    //
-    // public OffsetOfExpr(OffsetOfData offsetOfData, ExprData exprData, ClavaNodeInfo info) {
-    // this(offsetOfData, exprData, info, Collections.emptyList());
-    // }
-    //
-    // private OffsetOfExpr(OffsetOfData offsetOfData, ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    //
-    // this.offsetOfData = offsetOfData;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new OffsetOfExpr(offsetOfData, getExprData(), getInfo(), Collections.emptyList());
-    // }
-
-    // public Expr getSubExpr() {
-    // return getChild(Expr.class, 0);
-    // }
-
     @Override
     public String getCode() {
-
         String componentsCode = getComponentsCode();
         return "offsetof(" + get(SOURCE_TYPE).getCode(this) + ", " + componentsCode + ")";
-        // return getSubExpr().getCode();
-        /*
-        if (!hasChildren()) {
-            return "";
-        }
-        
-        if (numChildren() == 1) {
-            return getChild(0).getCode();
-        }
-        
-        throw new RuntimeException("What to do when OffsetOfExpr has more than one child?");
-        */
     }
 
     private String getComponentsCode() {

@@ -36,31 +36,8 @@ public class NamespaceAliasDecl extends NamedDecl {
         super(data, children);
     }
 
-    // private final String nestedPrefix;
-    // private final DeclRef declInfo;
-    //
-    // public NamespaceAliasDecl(String nestedPrefix, DeclRef declInfo, String declName, DeclData declData,
-    // ClavaNodeInfo info) {
-    // super(declName, null, declData, info, Collections.emptyList());
-    //
-    // this.declInfo = declInfo;
-    // this.nestedPrefix = nestedPrefix;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new NamespaceAliasDecl(nestedPrefix, declInfo, getDeclName(), getDeclData(), getInfo());
-    // }
-
-    // public DeclRef getAliasedNamespaceRef() {
-    // return get(ALIASED_NAMESPACE);
-    // // return declInfo;
-    // }
-
     public NamespaceDecl getAliasedNamespace() {
         return get(ALIASED_NAMESPACE);
-        // return getApp().getNodeTry(declInfo.getDeclId())
-        // .map(node -> (NamespaceDecl) node);
     }
 
     @Override
@@ -71,6 +48,5 @@ public class NamespaceAliasDecl extends NamedDecl {
         // System.out.println("ID:" + get(PREVIOUS_ID));
         // System.out.println("NESTED PREFIX:" + get(NESTED_PREFIX));
         return "namespace " + get(DECL_NAME) + " = " + get(NESTED_PREFIX) + get(ALIASED_NAMESPACE).get(DECL_NAME);
-        // return "namespace " + getDeclName() + " = " + nestedPrefix + declInfo.getDeclType();
     }
 }

@@ -43,31 +43,6 @@ public class FieldDecl extends DeclaratorDecl {
         super(data, children);
     }
 
-    // private final boolean isMutable;
-    // private final boolean isModulePrivate;
-
-    // public FieldDecl(boolean isMutable, boolean isModulePrivate, String declName, Type type, DeclData declData,
-    // ClavaNodeInfo info, Expr bitwidth, Expr inClassInitializer) {
-    //
-    // this(isMutable, isModulePrivate, declName, type, declData, info,
-    // Arrays.asList(nullable(bitwidth), nullable(inClassInitializer)));
-    // }
-    //
-    // private FieldDecl(boolean isMutable, boolean isModulePrivate, String declName, Type type, DeclData declData,
-    // ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    //
-    // super(declName, type, declData, info, children);
-    //
-    // this.isMutable = isMutable;
-    // this.isModulePrivate = isModulePrivate;
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new FieldDecl(isMutable, isModulePrivate, getDeclName(), getType(), getDeclData(), getInfo(),
-    // Collections.emptyList());
-    // }
-
     public Optional<Expr> getBitwidth() {
         if (!hasChildren()) {
             return Optional.empty();
@@ -87,32 +62,16 @@ public class FieldDecl extends DeclaratorDecl {
 
     }
 
-    /*
-    public Optional<Expr> getInitExpr() {
-        if (!hasChildren()) {
-            return Optional.empty();
-        }
-    
-        return Optional.of(getChild(Expr.class, 0));
-    }
-    */
-
     @Override
     public String getCode() {
-        // System.out.println("FIELD:" + this);
         StringBuilder code = new StringBuilder();
 
         if (get(IS_MUTABLE)) {
             code.append("mutable ");
         }
 
-        // code.append(getTypeCode()).append(getDeclName());
         String name = getDeclName();
 
-        // if (init.isPresent() && init.get() instanceof CXXConstructExpr) {
-        // CXXConstructExpr cxxConstructor = (CXXConstructExpr) init.get();
-        // code.append(cxxConstructor.getCode(name));
-        // } else {
         code.append(getType().getCode(this, name));
 
         getBitwidth().ifPresent(expr -> code.append(": ").append(expr.getCode()));
@@ -133,7 +92,6 @@ public class FieldDecl extends DeclaratorDecl {
         // System.out.println("INIT:" + getInitialization().map(expr -> expr.getCode()));
         // System.out.println("INIT CLASS:" + getInitialization().map(expr -> expr.getClass()));
         return code.toString();
-        // TODO: Should add ';'?
     }
 
 }

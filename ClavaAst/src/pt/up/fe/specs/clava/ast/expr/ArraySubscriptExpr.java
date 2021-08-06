@@ -41,21 +41,6 @@ public class ArraySubscriptExpr extends Expr {
         super(data, children);
     }
 
-    // public ArraySubscriptExpr(ExprData exprData, ClavaNodeInfo info, Expr lhs, Expr rhs) {
-    // this(exprData, info, Arrays.asList(lhs, rhs));
-    // }
-    //
-    // private ArraySubscriptExpr(ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // super(exprData, info, children);
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new ArraySubscriptExpr(getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     public Expr getLhs() {
         return getChild(Expr.class, 0);
     }
@@ -69,23 +54,6 @@ public class ArraySubscriptExpr extends Expr {
         return getLhs().getCode() + "[" + getRhs().getCode() + "]";
     }
 
-    /**
-     * Visit first childs until a declRef is found.
-     * 
-     * @return
-     */
-    /*
-    public DeclRefExpr getDeclRef() {
-        ClavaNode currentNode = getChild(0);
-        while (!(currentNode instanceof DeclRefExpr)) {
-            Preconditions.checkArgument(currentNode.hasChildren(), "Expected to find DeclRefExpr:" + this);
-            currentNode = currentNode.getChild(0);
-        }
-    
-        return (DeclRefExpr) currentNode;
-    }
-    */
-
     public Expr getArrayExpr() {
         ClavaNode currentNode = getChild(0);
 
@@ -95,11 +63,6 @@ public class ArraySubscriptExpr extends Expr {
         }
 
         return (Expr) currentNode;
-
-        // System.out.println("ARRAY EXPR:" + currentNode);
-        // Expr expr = (Expr) ClavaNodes.normalize(currentNode);
-
-        // return expr;
     }
 
     public List<Expr> getSubscripts() {

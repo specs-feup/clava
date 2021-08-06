@@ -47,37 +47,8 @@ public class CXXTypeidExpr extends Expr {
         super(data, children);
     }
 
-    // private final TypeidData typeidData;
-    //
-    // public CXXTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info, Expr operandExpr) {
-    // this(typeidData, exprData, info, Arrays.asList(operandExpr));
-    // }
-    //
-    // public CXXTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info) {
-    // this(typeidData, exprData, info, Collections.emptyList());
-    // }
-    //
-    // private CXXTypeidExpr(TypeidData typeidData, ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    //
-    // this.typeidData = typeidData;
-    //
-    // if (typeidData.isTypeOperand()) {
-    // Preconditions.checkArgument(children.isEmpty());
-    // } else {
-    // Preconditions.checkArgument(children.size() == 1);
-    // }
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new CXXTypeidExpr(typeidData, getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     public Optional<Expr> getOperandExpr() {
         return get(IS_TYPE_OPERAND) ? Optional.empty() : Optional.of((Expr) get(OPERAND));
-        // return typeidData.isTypeOperand() ? Optional.empty() : Optional.of(getChild(Expr.class, 0));
     }
 
     public Optional<Type> getOperandType() {

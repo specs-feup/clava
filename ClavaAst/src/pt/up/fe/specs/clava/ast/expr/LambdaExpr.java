@@ -64,31 +64,8 @@ public class LambdaExpr extends Expr {
         super(data, children);
     }
 
-    // private final LambdaExprData lambdaData;
-    //
-    // public LambdaExpr(LambdaExprData lambdaData, ExprData exprData, ClavaNodeInfo info,
-    // CXXRecordDecl lambdaClass, List<Expr> captureArguments, CompoundStmt body) {
-    //
-    // this(lambdaData, exprData, info, SpecsList.newInstance(ClavaNode.class)
-    // .concat(lambdaClass).concat(captureArguments).concat(body));
-    // }
-    //
-    // private LambdaExpr(LambdaExprData lambdaData, ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // super(exprData, info, children);
-    //
-    // this.lambdaData = lambdaData;
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new LambdaExpr(lambdaData, getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     public CXXRecordDecl getLambdaClass() {
         return get(LAMBDA_CLASS);
-        // return getChild(CXXRecordDecl.class, 0);
     }
 
     public CompoundStmt getBody() {
@@ -96,22 +73,14 @@ public class LambdaExpr extends Expr {
     }
 
     public List<Expr> getCaptureArguments() {
-        // int startIndex = 1;
         int startIndex = 0;
         int endIndex = getNumChildren() - 1;
 
         return SpecsCollections.cast(getChildren().subList(startIndex, endIndex), Expr.class);
     }
 
-    // public LambdaExprData getLambdaData() {
-    // return lambdaData;
-    // }
-
     @Override
     public String getCode() {
-
-        // System.out.println("LAMBDA CLASS:\n" + getLambdaClass());
-        // System.out.println("LAMBDA DATA:" + lambdaData);
 
         String captureCode = getCaptureCode();
 
@@ -120,10 +89,7 @@ public class LambdaExpr extends Expr {
         Preconditions.checkArgument(operatorsPar.size() == 1, "Expected size to be 1, is " + operatorsPar.size());
         CXXMethodDecl operatorPar = operatorsPar.get(0);
         String params = operatorPar.getParameters().stream().map(ClavaNode::getCode).collect(Collectors.joining(", "));
-        // System.out.println("LAMBDA METHOD TYPE:" + operatorPar.getFunctionType());
-        // System.out.println("LAMBDA METHOD TYPE DATA:" + operatorPar.getFunctionDeclData());
-        // System.out.println("EXPE: " + operatorPar.getFunctionType().getFunctionProtoTypeData().getSpecifier());
-        // System.out.println("LAMBDA CLASS:" + lambdaClass);
+
         StringBuilder code = new StringBuilder();
 
         // Add capture
@@ -165,21 +131,6 @@ public class LambdaExpr extends Expr {
             LambdaCaptureKind kind = captureKinds.get(i);
             captureElements.add(kind.getCode(captureArgs.get(i).getCode()));
         }
-
-        // // Check capture default
-        // switch (lambdaData.getCaptureDefault()) {
-        // case BY_COPY:
-        // captureElements.add("=");
-        // break;
-        // case BY_REF:
-        //
-        //
-        // }
-        // if(lambdaData.getCaptureDefault() == LambdaCaptureDefault.BY_COPY) {
-        // captureElements.add("=")
-        // } else if() {
-
-        // }
 
         capture.append("[").append(captureElements.stream().collect(Collectors.joining(", "))).append("]");
 

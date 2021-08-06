@@ -26,24 +26,7 @@ public class TypeAliasDecl extends TypedefNameDecl {
         super(data, children);
     }
 
-    // public TypeAliasDecl(Type underlyingType, String declName, Type type, DeclData declData, ClavaNodeInfo info) {
-    // this(underlyingType, declName, type, declData, info, Collections.emptyList());
-    // }
-    //
-    // private TypeAliasDecl(Type underlyingType, String declName, Type type, DeclData declData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    // super(underlyingType, declName, type, declData, info, children);
-    //
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new TypeAliasDecl(getUnderlyingType(), getDeclName(), getType(), getDeclData(), getInfo(),
-    // Collections.emptyList());
-    // }
-
     public Type getAliasedType() {
-        // return getChild(Type.class, 0);
         return getUnderlyingType();
     }
 

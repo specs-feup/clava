@@ -44,30 +44,8 @@ public class UsingDirectiveDecl extends NamedDecl {
         super(data, children);
     }
 
-    // public UsingDirectiveDecl(String declName, DeclData declData, ClavaNodeInfo info) {
-    // super(declName, ClavaNodeFactory.nullType(info), declData, info, Collections.emptyList());
-    //
-    // }
-    //
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new UsingDirectiveDecl(getDeclName(), getDeclData(), getInfo());
-    // }
-
     @Override
     public String getCode() {
-
-        // System.out.println("USING DIRECTIVE:" + this);
-        // System.out.println("USING NAME: " + get(NAMESPACE_AS_WRITTEN).get(NamedDecl.DECL_NAME));
-        // System.out.println("USING QUALIFIED: " + get(NAMESPACE_AS_WRITTEN).get(NamedDecl.QUALIFIED_NAME));
-        // System.out.println("AS WRITTEN CODE: " + get(NAMESPACE_AS_WRITTEN).getCode());
-        // System.out.println("NAMESPACE CODE: " + get(NAMESPACE).getCode());
-        // System.out.println("NAMESPACE:" + get(NAMESPACE));
-        // System.out.println("NAMESPACE AS WRITTEN:" + get(NAMESPACE_AS_WRITTEN));
-
-        // System.out.println("UQALIFIER:" + get(QUALIFIER));
-        // return "using namespace " + getDeclName();
-        // return "using namespace " + getDeclName();
         return get(QUALIFIER);
     }
 }

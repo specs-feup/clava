@@ -31,19 +31,6 @@ public class PackExpansionExpr extends Expr {
         super(data, children);
     }
 
-    // public PackExpansionExpr(ExprData exprData, ClavaNodeInfo info, Expr pattern) {
-    // this(exprData, info, Arrays.asList(pattern));
-    // }
-    //
-    // private PackExpansionExpr(ExprData exprData, ClavaNodeInfo info, Collection<? extends ClavaNode> children) {
-    // super(exprData, info, children);
-    // }
-
-    // @Override
-    // protected ClavaNode copyPrivate() {
-    // return new PackExpansionExpr(getExprData(), getInfo(), Collections.emptyList());
-    // }
-
     public Expr getPattern() {
         return getChild(Expr.class, 0);
     }

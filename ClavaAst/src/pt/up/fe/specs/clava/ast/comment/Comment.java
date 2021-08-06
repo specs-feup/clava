@@ -26,23 +26,11 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
  * @author JoaoBispo
  *
  */
-// public abstract class Comment extends Stmt {
 public abstract class Comment extends ClavaNode {
 
     public Comment(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
-
-    // public Comment(ClavaNodeInfo nodeInfo, Collection<? extends Comment> children) {
-    // // Dummy values for ValueKind and Type
-    // // super(ValueKind.R_VALUE, Collections.emptyList(), nodeInfo, children);
-    // super(nodeInfo, children);
-    // }
-    //
-    // @Override
-    // public String toContentString() {
-    // return super.toContentString() + getText();
-    // }
 
     public String getText() {
         throw new NotImplementedException(getClass());

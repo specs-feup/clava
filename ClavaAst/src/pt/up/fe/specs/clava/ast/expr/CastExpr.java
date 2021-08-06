@@ -38,58 +38,9 @@ public abstract class CastExpr extends Expr {
 
     /// DATAKEY END
 
-    // private final CastKind castKind;
-
     public CastExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-
-        // this.castKind = null;
     }
-
-    /**
-     * Legacy support.
-     * 
-     * @param castKind
-     * @param exprData
-     * @param info
-     * @param subExpr
-     */
-    // public CastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
-    // Expr subExpr) {
-    // this(castKind, exprData, info, Arrays.asList(subExpr));
-    // }
-
-    // protected CastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
-    // Expr subExpr, Collection<? extends ClavaNode> children) {
-    //
-    // this(castKind, exprData, info, CollectionUtils.concat(subExpr, children));
-    // }
-
-    /**
-     * Constructor without children, for node copy.
-     * 
-     * @param castKind
-     * @param location
-     */
-    // protected CastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info) {
-    // this(castKind, exprData, info, Collections.emptyList());
-    // }
-
-    /**
-     * @param castKind
-     * @param exprData
-     * @param info
-     * @param children
-     */
-    // @Deprecated
-    // protected CastExpr(CastKind castKind, ExprData exprData, ClavaNodeInfo info,
-    // Collection<? extends ClavaNode> children) {
-    //
-    // this(new LegacyToDataStore().setExpr(exprData).setNodeInfo(info).getData(), children);
-    //
-    // set(CAST_KIND, castKind);
-    // // this.castKind = castKind;
-    // }
 
     @Override
     public ValueKind getValueKind() {
@@ -98,11 +49,6 @@ public abstract class CastExpr extends Expr {
 
     public CastKind getCastKind() {
         return get(CAST_KIND);
-        // if (hasDataI()) {
-        // return getDataI().get(CAST_KIND);
-        // }
-        //
-        // return castKind;
     }
 
     public Expr getSubExpr() {
