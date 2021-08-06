@@ -61,23 +61,8 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class TextParser {
 
-    /**
-     * Stores the ids of nodes whose corresponding inline comments have already been associated with.
-     * 
-     * <p>
-     * This is required in case the TextParse is applied over the same nodes twice or more. This can happen while there
-     * are two parsings performed separately.
-     */
-    // private final static DataKey<Set<String>> IDS_WITH_COMMENTS_ASSOCIATED = KeyFactory.generic(
-    // "idsWithCommentsAssociated", (Set<String>) new HashSet<String>())
-    // .setDefault(() -> new HashSet<String>());
-    // private final static DataKey<Set<String>> IDS_WITH_COMMENTS_ASSOCIATED = KeyFactory.generic(
-    // "idsWithCommentsAssociated", (Set<String>) new HashSet<String>())
-    // .setDefault(() -> new HashSet<String>());
-
     private static final List<TextParserRule> RULES = Arrays.asList(
             new InlineCommentRule(), new MultiLineCommentRule());
-    // , new PragmaRule(), new PragmaMacroRule());
 
     private final ClavaContext context;
 
@@ -106,6 +91,7 @@ public class TextParser {
     }
 
     public void addElements(TranslationUnit tu) {
+
         // Collect elements from the tree
         TextElements textElements = parseElements(tu.getFile());
 
@@ -128,25 +114,17 @@ public class TextParser {
         Iterator<ClavaNode> iterator = getIterator(tu);
 
         // First node
-        // ClavaNode currentNode = iterator.next();
-        // Preconditions.checkNotNull(currentNode, "After adding guards, this should not be possible");
-
-        // File tuFilepath = tu.getFile();
         Optional<ClavaNode> currentNodeTry = next(iterator);
 
         Preconditions.checkArgument(currentNodeTry.isPresent(), "After adding guards, this should not be possible");
         ClavaNode currentNode = currentNodeTry.get();
-        // System.out.println("NODE:" + currentNode.getClass());
-        // System.out.println("Current node (1) start line:" + currentNode.getLocation().getStartLine(tuFilepath));
-        // System.out.println("Current node start line:" + currentNode.getLocation().getStartLine());
-        // System.out.println("Current node end line:" + currentNode.getLocation().getEndLine());
 
         boolean hasNodes = true;
 
         // Insert all text elements
         for (ClavaNode textElement : textElements.getStandaloneElements()) {
             int textStartLine = textElement.getLocation().getStartLine();
-            // System.out.println("TEXT START LINE:" + textStartLine);
+
             // Get node that has a line number greater than the text element
             while (hasNodes && textStartLine >= currentNode.getLocation().getStartLine(tuFilepath)) {
 
@@ -159,17 +137,7 @@ public class TextParser {
                 }
 
                 currentNode = nextNodeTry.get();
-                // System.out.println("NODE:" + currentNode.getClass());
-                // System.out.println("Current node (2) start line:" +
-                // currentNode.getLocation().getStartLine(tuFilepath));
-                // System.out.println("Current node (2) start path:" + currentNode.getLocation().getStartFilepath());
-                // System.out.println("Current node (2) end path:" + currentNode.getLocation().getEndFilepath());
-                // System.out.println("Current node (2) start line:" + currentNode.getLocation().getStartLine());
-                // System.out.println("Current node (2) end line:" + currentNode.getLocation().getEndLine());
             }
-
-            // System.out.println("Current node start line:" + currentNode.getLocation().getStartLine());
-            // System.out.println("Current node end line:" + currentNode.getLocation().getEndLine());
 
             // Check if should insert text element as Stmt
             Optional<Stmt> statement = ClavaNodes.getStatement(currentNode);
@@ -177,29 +145,7 @@ public class TextParser {
                 textElement = ClavaNodes.toStmt(textElement);
             }
 
-            /*
-            if (textStartLine == 35) {
-                System.out.println("INSERTING " + textElement.getCode());
-                System.out.println("CURRENT NODE LINE:" + currentNode.getLocation().getStartLine());
-                System.out.println("CURRENT NODE CODE:" + currentNode.getCode());
-                if (statement.isPresent()) {
-                    System.out.println("CURRENT STMT LINE:" + statement.get().getLocation().getStartLine());
-                    System.out.println("CURRENT STMT CODE:" + statement.get().getCode());
-                }
-            }
-            */
             ClavaNode insertionPoint = statement.isPresent() ? statement.get() : currentNode;
-
-            // If insertion point is the child of a CaseStmt or DefaultStmt, replace insertion point with text element,
-            // and move insertion point to after the CaseStmt
-            // if (insertionPoint.getParent() instanceof CaseStmt || insertionPoint.getParent() instanceof DefaultStmt)
-            // {
-            // System.out.println("CASE PARENT: " + insertionPoint.getLocation());
-            // ClavaNode stmt = insertionPoint.getParent();
-            // queue.replace(insertionPoint, textElement);
-            // queue.moveAfter(stmt, insertionPoint);
-            // continue;
-            // }
 
             // If node is inside a StmtWithCondition, insert TextElement before StmtWithCondition
             Stmt parentConditionStmt = insertionPoint.getStmtWithConditionAncestor().orElse(null);
@@ -221,24 +167,13 @@ public class TextParser {
             }
 
             SpecsLogs.info("Could not insert comment: " + textElement.getCode());
-            /*
-            // If current node has start line smaller than text element, insert after
-            if (textStartLine > insertionPoint.getLocation().getStartLine(tuFilepath)) {
-                System.out.println("Insert after: " + textElement);
-                queue.moveAfter(insertionPoint, textElement);
-                continue;
-            }
-            */
         }
 
         // Remove guard nodes
         guardNodes.stream().forEach(guardNode -> queue.delete(guardNode));
 
         // Apply transformations
-        // System.out.println("BEFORE:\n" + tu);
         queue.apply();
-
-        // System.out.println("AFTER:\n" + tu);
     }
 
     private static Iterator<ClavaNode> getIterator(TranslationUnit tu) {
@@ -252,32 +187,8 @@ public class TextParser {
         return iterator;
     }
 
-    /*
-    private static boolean iteratorFilter(ClavaNode node, String tuFilepath) {
-        String nodeFilepath = node.getLocation().getFilepath();
-    
-        // If no filepath, consider node
-        if (nodeFilepath == null) {
-            return true;
-        }
-    
-        if (!tuFilepath.equals(nodeFilepath)) {
-            System.out.println("DIFF:");
-            System.out.println("TU:" + tuFilepath);
-            System.out.println("NODE:" + nodeFilepath);
-            System.out.println("NODE AST:" + node);
-        }
-    
-        return tuFilepath.equals(nodeFilepath);
-    
-    }
-    */
-    // private static boolean temp(ClavaNode node) {
-    // System.out.println("Node filepath: " + node.getLocation());
-    // return true;
-    // }
-
     private void addAssociatedInlineComments(TranslationUnit tu, List<InlineComment> associatedInlineComments) {
+
         // If empty, do nothing
         if (associatedInlineComments.isEmpty()) {
             return;
@@ -304,8 +215,6 @@ public class TextParser {
             int endLine = currentNode.getLocation().getEndLine();
 
             if (startLine == -1 || endLine == -1) {
-                // System.out.println("INVALID LOC:" + currentNode.getLocation());
-                // System.out.println("NODE TYPE:" + currentNode.getNodeName());
                 continue;
             }
 
@@ -333,100 +242,28 @@ public class TextParser {
             SpecsLogs.msgInfo("Could not associate the following comments:" + missingComments);
         }
 
-        // Set<String> idsWithInlinedComments = context.get(IDS_WITH_COMMENTS_ASSOCIATED);
-        // Set<ClavaNode> associatedComments = context.get(ClavaContext.ASSOCIATED_COMMENTS);
         for (InlineComment comment : associatedNodes.keySet()) {
-            // System.out.println("COMMENT:" + comment.hashCode());
-            // System.out.println("NODE:" + associatedNodes.get(comment).hashCode());
             associatedNodes.get(comment).associateComment(comment);
-
-            /*
-            ClavaNode node = associatedNodes.get(comment);
-            
-            if (associatedComments.contains(node)) {
-                continue;
-            }
-            
-            associatedComments.add(node);
-            node.associateComment(comment);
-            */
-            /*
-            ClavaNode node = associatedNodes.get(comment);
-            
-            // If legacy parser and node is not legacy, skip it, was already processed
-            if (isLegacyParser && !node.get(ClavaNode.IS_LEGACY_NODE)) {
-                continue;
-            }
-            
-            associatedNodes.get(comment).associateComment(comment);
-            */
-            /*
-            // TODO: Doing this because TextParser currently is being called two times over the same nodes
-            // Remove the test after legacy parsing is no longer used
-            
-            
-            if (node.get(ClavaNode.INLINE_COMMENTS).isEmpty()) {
-               node.associateComment(comment);
-            }
-            // associatedNodes.get(comment).associateComment(comment);
-            */
-            /*
-            ClavaNode node = associatedNodes.get(comment);
-            System.out.println("NODE:" + node.get(ClavaNode.ID));
-            System.out.println("ASSOCIATED NODES:" + idsWithInlinedComments);
-            // Check if node already has inline comments
-            if (idsWithInlinedComments.contains(node.get(ClavaNode.ID))) {
-                continue;
-            }
-            
-            idsWithInlinedComments.add(node.get(ClavaNode.ID));
-            node.associateComment(comment);
-            */
-            // System.out.println("COMMENT:" + comment.getCode());
-            // System.out.println("CORRESPONDING STMT:" + associatedNodes.get(comment).getCode());
-            // System.out.println("CORRESPONDING STMT TYPE:" + associatedNodes.get(comment).getNodeName());
         }
     }
 
     private List<ClavaNode> insertGuardNodes(TranslationUnit tu) {
+
         // Guard nodes for the translation unit
         SourceRange dummyStartLoc = new SourceRange(tu.getLocation().getFilepath(), 0, 0, 0, 0);
-        // ClavaNodeInfo dummyStartInfo = new ClavaNodeInfo(null, dummyStartLoc);
-        //
-        // DummyDecl startGuard = ClavaNodeFactory.dummyDecl("Textparser_StartGuard", dummyStartInfo,
-        // Collections.emptyList());
-
-        // DummyDeclData startData = new DummyDeclData("Textparser_StartGuard",
-        // DeclDataV2.empty(ClavaData.newInstance(dummyStartLoc)));
 
         DummyDecl startGuard = context.get(FACTORY).dummyDecl("Textparser_StartGuard");
         startGuard.setLocation(dummyStartLoc);
-        // DummyDeclData startData = DummyDeclData.empty();
-        // startData.setClassname("Textparser_StartGuard")
-        // .setLocation(dummyStartLoc);
-        // DummyDecl startGuard = new DummyDecl(startData, Collections.emptyList());
-
-        // ClavaNodeFactory.dummyDecl("Textparser_StartGuard", dummyStartInfo,Collections.emptyList());
 
         // Get last end line
-        // int endLine = SpecsCollections.lastTry(tu.getChildren()).map(lastNode -> lastNode.getLocation().getEndLine())
-        // .orElse(0);
         int lastLine = tu.getLocation().getEndLine();
         SpecsCheck.checkArgument(lastLine >= 0, () -> "Expected line to be greater or equal than 0: " + lastLine);
         int endLine = lastLine + 1;
-        // System.out.println("End line original: " + endLine);
-        // System.out.println("End line new: " + tu.getLocation().getEndLine());
+
         SourceRange dummyEndLoc = new SourceRange(tu.getLocation().getFilepath(), endLine + 1, 0, endLine + 1, 0);
-        // ClavaNodeInfo dummyEndInfo = new ClavaNodeInfo(null, dummyEndLoc);
-        // DummyDecl endGuard = ClavaNodeFactory.dummyDecl("Textparser_EndGuard", dummyEndInfo,
-        // Collections.emptyList());
+
         DummyDecl endGuard = context.get(FACTORY).dummyDecl("Textparser_EndGuard");
         endGuard.setLocation(dummyEndLoc);
-
-        // DummyDeclData endData = DummyDeclData.empty();
-        // endData.setClassname("Textparser_EndGuard")
-        // .setLocation(dummyEndLoc);
-        // DummyDecl endGuard = new DummyDecl(endData, Collections.emptyList());
 
         tu.addChild(0, startGuard);
         tu.addChild(tu.getNumChildren(), endGuard);
@@ -442,13 +279,6 @@ public class TextParser {
             SourceRange compoundStartLoc = new SourceRange(compoundStmt.getLocation().getStart());
             SourceRange compoundEndLoc = new SourceRange(compoundStmt.getLocation().getEnd());
 
-            // ClavaNodeInfo compoundStartInfo = new ClavaNodeInfo(null, compoundStartLoc);
-            // ClavaNodeInfo compoundEndInfo = new ClavaNodeInfo(null, compoundEndLoc);
-
-            // DummyStmt compoundStartGuard = ClavaNodeFactory.dummyStmt("Compound_StartGuard", compoundStartInfo,
-            // Collections.emptyList());
-            // DummyStmt compoundEndGuard = ClavaNodeFactory.dummyStmt("Compound_EndGuard", compoundEndInfo,
-            // Collections.emptyList());
             DummyStmt compoundStartGuard = getFactory().dummyStmt("Compound_StartGuard");
             compoundStartGuard.set(ClavaNode.LOCATION, compoundStartLoc);
             DummyStmt compoundEndGuard = getFactory().dummyStmt("Compound_EndGuard");
@@ -511,6 +341,7 @@ public class TextParser {
     }
 
     public TextElements parseElements(File sourceFile) {
+
         // Separate inline comments associated to a node from the rest
         List<ClavaNode> standaloneElements = new ArrayList<>();
         List<InlineComment> associatedComments = new ArrayList<>();
@@ -523,6 +354,7 @@ public class TextParser {
 
             // Parse each line, looking for text elements
             while (iterator.hasNext()) {
+
                 // Get line, update line number
                 String currentLine = iterator.next();
                 currentLineNumber++;

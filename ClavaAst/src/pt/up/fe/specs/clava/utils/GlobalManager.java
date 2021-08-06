@@ -38,15 +38,7 @@ public class GlobalManager {
             definedVars.add(name);
         }
 
-        // InitializationStyle initStyle = isDefined ? InitializationStyle.NO_INIT : InitializationStyle.CINIT;
         Expr initExpr = isDefined ? null : initValue;
-
-        // boolean isUsed = true;
-        // boolean isImplicit = false;
-        // boolean isNrvo = false;
-
-        // VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE, false, isNrvo, initStyle, false);
-        // DeclData declData = new DeclData(false, isImplicit, isUsed, false, false, false);
 
         VarDecl varDecl = tunit.getFactory().varDecl(name, type);
         varDecl.set(VarDecl.IS_USED, true);
@@ -55,10 +47,6 @@ public class GlobalManager {
         } else {
             varDecl.set(VarDecl.STORAGE_CLASS, StorageClass.Extern);
         }
-        // varDecl.set(VarDecl.INIT_STYLE, initStyle);
-
-        // VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, name, type, declData, ClavaNodeInfo.undefinedInfo(),
-        // initExpr);
 
         tunit.addDeclaration(varDecl);
 

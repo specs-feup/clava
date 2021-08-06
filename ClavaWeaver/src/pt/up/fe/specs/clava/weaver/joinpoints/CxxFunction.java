@@ -80,12 +80,6 @@ public class CxxFunction extends AFunction {
         var body = getBodyImpl();
 
         return body == null ? Collections.emptyList() : Arrays.asList(body);
-
-        // if (!function.hasBody()) {
-        // return Collections.emptyList();
-        // }
-        //
-        // return Arrays.asList(new CxxScope(function.getBody().get(), this));
     }
 
     @Override
@@ -111,7 +105,6 @@ public class CxxFunction extends AFunction {
     @Override
     public Boolean getHasDefinitionImpl() {
         return getIsImplementationImpl();
-        // return function.hasBody();
     }
 
     @Override
@@ -125,6 +118,7 @@ public class CxxFunction extends AFunction {
     }
 
     private AJoinPoint processNodeToInsert(AJoinPoint node) {
+
         // If node is an expression or VarDecl, convert to Stmt first
         var clavaNode = node.getNode();
 
@@ -147,14 +141,6 @@ public class CxxFunction extends AFunction {
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
         var processNode = processNodeToInsert(node);
         return CxxActions.insertJp(this, processNode, "after", getWeaverEngine());
-        /*
-        // If node is a FunctionDecl, insert it as it is
-        if (node.getNode() instanceof FunctionDecl) {
-            return CxxActions.insertJp(this, node, "after", getWeaverEngine());
-        }
-        
-        return CxxActions.insertJpAsStatement(this, node, "after", getWeaverEngine());
-        */
     }
 
     @Override
@@ -166,13 +152,6 @@ public class CxxFunction extends AFunction {
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
         var processNode = processNodeToInsert(node);
         return CxxActions.insertJp(this, processNode, "before", getWeaverEngine());
-
-        // // If node is a FunctionDecl, insert it as it is
-        // if (node.getNode() instanceof FunctionDecl) {
-        // return CxxActions.insertJp(this, node, "before", getWeaverEngine());
-        // }
-        //
-        // return CxxActions.insertJpAsStatement(this, node, "before", getWeaverEngine());
     }
 
     @Override
@@ -184,12 +163,6 @@ public class CxxFunction extends AFunction {
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
         var processNode = processNodeToInsert(node);
         return CxxActions.insertJp(this, processNode, "replace", getWeaverEngine());
-
-        // if (node.getNode() instanceof LinkageSpecDecl) {
-        // return CxxActions.insertJp(this, node, "replace", getWeaverEngine());
-        // }
-        //
-        // // return CxxActions.insertJpAsStatement(this, node, "replace", getWeaverEngine());
     }
 
     private AJoinPoint[] insertStmt(Stmt newNode, String position) {
@@ -246,89 +219,18 @@ public class CxxFunction extends AFunction {
 
     private AFunction makeCloneAndInsert(String newName, ClavaNode reference, boolean insert) {
 
-        // if (function instanceof CXXMethodDecl) {
-        //
-        // SpecsLogs.msgInfo(
-        // "function " + function.getDeclName() + " is a class method, which is not supported yet for clone");
-        // return null;
-        // }
-
-        // FunctionDecl newFunc = makeNewFuncDecl(newName);
-
         FunctionDecl newFunc = null;
         if (reference instanceof FunctionDecl) {
-
-            // NodeInsertUtils.insertAfter(function, newFunc);
             newFunc = function.cloneAndInsert(newName, insert);
         } else if (reference instanceof TranslationUnit) {
             newFunc = function.cloneAndInsertOnFile(newName, (TranslationUnit) reference, insert);
-            // ((TranslationUnit) reference).addChild(newFunc);
-
         } else {
             throw new IllegalArgumentException(
                     "The node (" + reference + ") needs to be either a FuncDecl or a TranslationUnit.");
         }
 
-        // change the ids of stuff
-        // newFunc.getDescendantsStream().forEach(n -> n.setInfo(ClavaNodeInfo.undefinedInfo()));
-
         return CxxJoinpoints.create(newFunc, AFunction.class);
     }
-
-    /**
-     * Make a new {@link FunctionDecl} based on the node of this join point and the provided name.
-     *
-     * @param newName
-     * @return
-     */
-    /*
-    private FunctionDecl makeNewFuncDecl(String newName) {
-    
-        // // Get both declaration and definition (if present)
-        // Optional<FunctionDecl> definition2 = function.getDefinition()
-        // .map(def -> ((FunctionDecl) def.copy()).setName(newName));
-        //
-        // Optional<FunctionDecl> declaration = function.getDeclaration()
-        // .map(decl -> ((FunctionDecl) decl.copy()).setName(newName));
-        //
-        // definition2.ifPresent(node -> System.out.println("DEF:\n" + node.getCode()));
-        // declaration.ifPresent(node -> System.out.println("DECL:\n" + node.getCode()));
-    
-        // make sure to see if we can just copy
-        // function.getDefinition().ifPresent(def -> newFunc.addChild(def.copy()));
-        Stmt definition = function.getFunctionDefinition().map(stmt -> (Stmt) stmt.copy()).orElse(null);
-    
-        // List<ClavaNode> originalCasts = function.getFunctionDefinition().get()
-        // .getDescendants();
-        //
-        // List<ClavaNode> copiedCasts = definition.getDescendants();
-    // for (int i = 0; i < originalCasts.size(); i++) {
-    // if (originalCasts.get(i) == copiedCasts.get(i)) {
-    // System.out.println("FOUND SAME");
-    // }
-    // // System.out.println("ARE SAME? " + (originalCasts.get(i) == copiedCasts.get(i)));
-    // }
-    // System.out.println("FINISH");
-    
-    // make a new function declaration with the new name
-    
-    // FunctionDecl newFunc = ClavaNodeFactory.functionDecl(newName,
-    // function.getParameters(),
-    // (FunctionType) function.getFunctionType().copy(),
-    // function.getFunctionDeclData(), // check
-    // function.getDeclData(), // check
-    // ClavaNodeInfo.undefinedInfo(), // check
-    // definition);
-    
-    FunctionDecl newFunc = getFactory().functionDecl(newName, function.getFunctionType());
-    
-    newFunc.setParameters(function.getParameters());if(definition!=null)
-    {
-            newFunc.setBody(definition);
-        }
-    
-    return newFunc;
-    }*/
 
     @Override
     public String cloneOnFileImpl(String newName) {
@@ -356,7 +258,6 @@ public class CxxFunction extends AFunction {
 
             if (!file.isPresent()) {
 
-                // String path = getRootImpl().getBaseFolderImpl();
                 TranslationUnit tu = getFactory().translationUnit(new File(fileName), Collections.emptyList());
 
                 app.addFile(tu);
@@ -427,7 +328,6 @@ public class CxxFunction extends AFunction {
         Stmt lastStmt = SpecsCollections.reverseStream(bodyStmts)
                 .filter(stmt -> !(stmt instanceof WrapperStmt))
                 .findFirst().orElse(null);
-        // Stmt lastStmt = SpecsCollections.lastTry(bodyStmts).orElse(null);
 
         ReturnStmt lastReturnStmt = lastStmt instanceof ReturnStmt ? (ReturnStmt) lastStmt : null;
 
@@ -485,10 +385,6 @@ public class CxxFunction extends AFunction {
         }
 
         return prototypes[0];
-
-        // return function.getDeclaration()
-        // .map(node -> CxxJoinpoints.create(node))
-        // .orElse(null);
     }
 
     @Override
@@ -504,26 +400,7 @@ public class CxxFunction extends AFunction {
     @Override
     public void setTypeImpl(AType type) {
         setReturnTypeImpl(type);
-        // // Get new type to set
-        // Type newType = (Type) type.getNode();
-        //
-        // FunctionType functionType = function.getFunctionType();
-        //
-        // // Create a copy of the function type, to avoid setting the type on all functions with the same signature
-        // FunctionType functionTypeCopy = (FunctionType) functionType.copy();
-        //
-        // // Replace the return type of the function type copy
-        // functionTypeCopy.set(FunctionType.RETURN_TYPE, newType);
-        // // CxxActions.replace(functionTypeCopy.getReturnType(), newType, getWeaverEngine());
-        //
-        // // Set the function type copy as the type of the function
-        // function.setType(functionTypeCopy);
     }
-
-    // @Override
-    // public void defNameImpl(String value) {
-    // function.setName(value);
-    // }
 
     @Override
     public void defNameImpl(String value) {
@@ -536,14 +413,6 @@ public class CxxFunction extends AFunction {
 
         impl.ifPresent(node -> node.setName(value));
         proto.stream().forEach(node -> node.setName(value));
-
-        // Optional<FunctionDecl> def = function.getDefinition();
-        // Optional<FunctionDecl> decl = function.getDeclaration();
-        // // System.out.println("DEF:" + def);
-        // // System.out.println("DECL:" + decl);
-        // def.ifPresent(node -> node.setName(value));
-        // decl.ifPresent(node -> node.setName(value));
-
     }
 
     @Override
@@ -584,10 +453,6 @@ public class CxxFunction extends AFunction {
     @Override
     public List<? extends ADecl> selectDecl() {
         return CxxSelects.select(ADecl.class, function.getChildren(), true, Decl.class);
-
-        // return function.getDescendants(Decl.class).stream()
-        // .map(decl -> CxxJoinpoints.create(decl, this, ADecl.class))
-        // .collect(Collectors.toList());
     }
 
     @Override
@@ -615,16 +480,6 @@ public class CxxFunction extends AFunction {
             String typeVarname = value[i];
 
             var parmVarDecl = ClavaNodes.toParam(typeVarname, function);
-            // typeVarname = typeVarname.trim();
-            // int indexOfSpace = typeVarname.lastIndexOf(' ');
-            // if (indexOfSpace == -1) {
-            // throw new RuntimeException("Expected parameter to be a type - varName pair, separated by a space");
-            // }
-            //
-            // String type = typeVarname.substring(0, indexOfSpace).trim();
-            // String varName = typeVarname.substring(indexOfSpace + 1).trim();
-            //
-            // ParmVarDecl parmVarDecl = getFactory().parmVarDecl(varName, getFactory().literalType(type));
 
             params[i] = CxxJoinpoints.create(parmVarDecl, AParam.class);
         }
@@ -701,12 +556,6 @@ public class CxxFunction extends AFunction {
     public void addParamImpl(String param) {
         var paramNode = ClavaNodes.toParam(param, function);
         addParamImpl(CxxJoinpoints.create(paramNode, AParam.class));
-
-        // var l = new ArrayList<>(Arrays.asList(getParamNamesArrayImpl()));
-        // l.add(param);
-
-        // defParamsImpl(l.toArray(new String[0]));
-
     }
 
     @Override

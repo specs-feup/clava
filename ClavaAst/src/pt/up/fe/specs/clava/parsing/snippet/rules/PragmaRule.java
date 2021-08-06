@@ -55,6 +55,7 @@ public class PragmaRule implements TextParserRule {
         List<String> pragmaContents = new ArrayList<String>();
 
         while (trimmedLine.endsWith("\\")) {
+
             // Add line, without the ending '\'
             pragmaContents.add(trimmedLine.substring(0, trimmedLine.length() - 1));
 
@@ -71,16 +72,11 @@ public class PragmaRule implements TextParserRule {
         // Add last non-broken line
         pragmaContents.add(trimmedLine);
 
-        // If no endIndex found, comment is malformed
-        // Preconditions.checkArgument(endIndex != -1,
-        // "Could not find end of multi-line comment start at '" + filepath + "':" + lineNumber);
-
         int startCol = line.indexOf('#') + 1;
         int endCol = lastLine.length();
         int endLine = lineNumber + pragmaContents.size() - 1;
 
         SourceRange loc = new SourceRange(filepath, lineNumber, startCol, endLine, endCol);
-        // ClavaNodeInfo info = new ClavaNodeInfo(null, loc);
 
         // Try to parse pragma. If pragma not parsable, create generic pragma
         ClavaNode pragmaNode = PragmaParsers.parse(pragmaContents, context)

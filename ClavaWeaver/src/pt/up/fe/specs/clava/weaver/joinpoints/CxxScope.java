@@ -75,9 +75,9 @@ public class CxxScope extends AScope {
 
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
+
         // 'body' behaviour
         if (!scope.isNestedScope()) {
-            // Stmt literalStmt = ClavaNodeFactory.literalStmt(code);
             Stmt literalStmt = CxxWeaver.getSnippetParser().parseStmt(code);
             CxxActions.insertStmt(position, scope, literalStmt, getWeaverEngine());
             return new AJoinPoint[] { CxxJoinpoints.create(literalStmt) };
@@ -89,6 +89,7 @@ public class CxxScope extends AScope {
 
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
+
         // 'body' behaviour
         if (!scope.isNestedScope()) {
             ClavaLog.warning("Avoid using action 'insert before' over 'body' joinpoint, use 'insertBegin' instead.");
@@ -100,6 +101,7 @@ public class CxxScope extends AScope {
 
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
+
         // 'body' behaviour
         if (!scope.isNestedScope()) {
             ClavaLog.warning("Avoid using action 'insert after' over 'body' joinpoint, use 'insertEnd' instead.");
@@ -111,8 +113,10 @@ public class CxxScope extends AScope {
 
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
+
         // 'body' behaviour
         if (!scope.isNestedScope() && !(node instanceof AScope)) {
+
             // Transform, if needed, the given node into a stmt
             Stmt stmt = ClavaNodes.toStmt(node.getNode());
             return insertBodyImplJp("replace", stmt);
@@ -123,8 +127,7 @@ public class CxxScope extends AScope {
     }
 
     private AJoinPoint insertBodyImplJp(String position, ClavaNode newNode) {
-        // Stmt newStmt = CxxActions.getValidStatement(newNode,
-        // Insert.valueOf(position.toUpperCase()));
+
         Stmt newStmt = ClavaNodes.getValidStatement(newNode, Insert.valueOf(position.toUpperCase()).toPosition());
         if (newStmt == null) {
             return null;
@@ -145,13 +148,8 @@ public class CxxScope extends AScope {
     public AJoinPoint insertBeginImpl(AJoinPoint node) {
         Stmt newStmt = ClavaNodes.toStmt(node.getNode());
 
-        // Preconditions.checkArgument(node.getNode() instanceof Stmt,
-        // "Expected input of action scope.insertEntry to be a Stmt joinpoint");
-
         CxxActions.insertStmt("before", scope, newStmt, getWeaverEngine());
 
-        // return node;
-        // TODO: Consider returning newStmt instead
         return CxxJoinpoints.create(newStmt);
     }
 
@@ -164,35 +162,13 @@ public class CxxScope extends AScope {
     public AJoinPoint insertEndImpl(AJoinPoint node) {
         Stmt newStmt = ClavaNodes.toStmt(node.getNode());
 
-        // Preconditions.checkArgument(newStmt instanceof Stmt,
-        // "Expected input of action scope.insertEnd to be a Stmt joinpoint, is a " +
-        // node.getJoinPointType());
         CxxActions.insertStmt("after", scope, newStmt, getWeaverEngine());
-        // return node;
-        // TODO: Consider returning newStmt instead
+
         return CxxJoinpoints.create(newStmt);
-        /*
-         * List<? extends AStatement> statements = selectStatements(); if
-         * (statements.isEmpty()) { throw new
-         * RuntimeException("Not yet implemented when scope is empty"); }
-         * 
-         * Stmt newStmt =
-         * CxxActions.getValidStatement(CollectionUtils.last(statements).getNode());
-         * 
-         * insertImpl(position, newStmt);
-         * 
-         * // Body becomes the parent of this statement return new CxxStatement(newStmt,
-         * this);
-         */
     }
 
     @Override
     public Long getNumStatementsImpl() {
-        // if (stmt instanceof WrapperStmt) {
-        // return false;
-        // }
-
-        // return getStatements().size();
         return numStatementsImpl(false);
     }
 
@@ -234,32 +210,16 @@ public class CxxScope extends AScope {
     @Override
     public List<? extends AIf> selectIf() {
         return CxxSelects.select(AIf.class, getStatements(), true, IfStmt.class);
-        // return getStatements().stream()
-        // .filter(stmt -> stmt instanceof IfStmt)
-        // .map(stmt -> CxxJoinpoints.create((IfStmt) stmt, this, AIf.class))
-        // .collect(Collectors.toList());
-
     }
 
     @Override
     public List<? extends ALoop> selectLoop() {
         return CxxSelects.select(ALoop.class, getStatements(), true, LoopStmt.class);
-        // return getStatements().stream()
-        // .flatMap(stmt -> stmt.getDescendantsAndSelfStream())
-        // .filter(node -> node instanceof LoopStmt)
-        // .map(loop -> CxxJoinpoints.create((LoopStmt) loop, this, ALoop.class))
-        // .collect(Collectors.toList());
     }
 
     @Override
     public List<? extends APragma> selectPragma() {
         return CxxSelects.select(APragma.class, getStatements(), true, Pragma.class);
-        /*
-         * return getStatements().stream() .flatMap(stmt ->
-         * stmt.getDescendantsAndSelfStream()) .filter(node -> node instanceof Pragma)
-         * .map(pragma -> new CxxPragma((Pragma) pragma, this))
-         * .collect(Collectors.toList());
-         */
     }
 
     @Override
@@ -321,28 +281,10 @@ public class CxxScope extends AScope {
 
         // defaults as no init
         Expr initExpr = null;
-        // InitializationStyle initStyle = InitializationStyle.NO_INIT;
 
         if (initValue != null) {
-
             initExpr = getFactory().literalExpr(initValue, getFactory().nullType());
-
-            // initStyle = InitializationStyle.CINIT;
         }
-
-        // boolean isUsed = true;
-        // boolean isImplicit = false;
-        // boolean isNrvo = false;
-
-        // VarDeclData varDeclData = new VarDeclData(StorageClass.NONE, TLSKind.NONE,
-        // false, isNrvo, initStyle, false);
-        // DeclData declData = new DeclData(false, isImplicit, isUsed, false, false,
-        // false);
-
-        // VarDecl varDecl = ClavaNodeFactory.varDecl(varDeclData, name, typeNode,
-        // declData,
-        // ClavaNodeInfo.undefinedInfo(),
-        // initExpr);
 
         VarDecl varDecl = getFactory().varDecl(name, typeNode);
         if (initExpr != null) {

@@ -78,6 +78,7 @@ public class CallWrap {
     }
 
     public void addWrapper(String name) {
+
         // Ensure there is a set for the key
         if (!app.getAppData().hasValue(WRAPPER_CALLS)) {
             // app.getAppData().add(WRAPPER_CALLS, new HashMap<>());
@@ -98,10 +99,6 @@ public class CallWrap {
                 createUserIncludeWrapper(name);
                 break;
             case NO_INCLUDE:
-                // SpecsLogs.msgInfo(
-                // "action 'wrap' is not supported yet when the call refers to a function that has no declaration in a
-                // header file: "
-                // + cxxCall.getNode().getLocation());
                 addWrapperFunctionInPlace(name, false);
                 cxxCall.setName(name); // need to call this here before returning
                 return;
@@ -111,24 +108,13 @@ public class CallWrap {
                 cxxCall.setName(name);
                 return;
             }
-            // System.out.println("INCLUDES:" + getWrapperIncludes(cxxCall));
-            //
-            // // If could not create a wrapper using separate files method, declare in the same file as a fallback
-            // if (!createWrapperFunction(cxxCall, name)) {
-            // SpecsLogs.msgInfo(
-            // "addWrapper: Could not create wrapper function, wrapper functions in the same file as the call not
-            // supported yet");
-            // return;
-            // }
+
         }
 
         // Add include
-        // String includePath = CxxWeaver.getRelativeFilepath(getHeaderFile());
         String includePath = getHeaderFile().getRelativeFilepath();
 
         cxxCall.getNode().getAncestor(TranslationUnit.class).addInclude(includePath, false);
-        // cxxCall.getNode().getAncestor(TranslationUnit.class).addInclude(getHeaderFile(),
-        // CxxWeaver.getCxxWeaver().getBaseSourceFolder());
 
         // Set call name
         cxxCall.setName(name);
@@ -141,11 +127,6 @@ public class CallWrap {
      * @param cxxCall
      */
     private void createUserIncludeWrapper(String name) {
-        // Get declaration of function call
-        // FunctionDecl functionDecl = (FunctionDecl) cxxCall.getDeclImpl().getNode();
-
-        // Get include file of declaration
-        // FunctionDecl declaration = functionDecl.getDeclaration().get();
 
         // Get declaration of function call
         FunctionDecl declaration = (FunctionDecl) cxxCall.getDeclarationImpl().getNode();
@@ -156,11 +137,9 @@ public class CallWrap {
         // Get wrapper implementation file
         TranslationUnit implTu = getImplementationFile();
 
-        // String includePath = CxxWeaver.getRelativeFilepath(includeFile);
         String includePath = includeFile.getRelativeFilepath();
 
         implTu.addInclude(includePath, false);
-        // implTu.addInclude(includeFile, CxxWeaver.getCxxWeaver().getBaseSourceFolder());
 
         addWrapperFunction(name, declaration);
     }
@@ -266,26 +245,13 @@ public class CallWrap {
         List<Type> paramTypes = functionType.getParamTypes();
         int numParameters = paramTypes.size();
 
-        // Adjust number of parameters if last type is VariadicType,
-        // boolean isVariadicType = SpecsCollections.last(paramTypes) instanceof VariadicType;
-        // if (isVariadicType) {
-        // numParameters--;
-        // }
-
         List<String> paramNames = IntStream.rangeClosed(1, numParameters)
                 .mapToObj(SpecsStrings::toExcelColumn)
                 .collect(Collectors.toList());
 
         List<ParmVarDecl> inputs = IntStream.range(0, numParameters)
-                // .mapToObj(i -> ClavaNodeFactory.parmVarDecl(paramNames.get(i), paramTypes.get(i)))
                 .mapToObj(i -> factory.parmVarDecl(paramNames.get(i), paramTypes.get(i)))
                 .collect(Collectors.toList());
-
-        // FunctionDeclData functionDeclData = new FunctionDeclData();
-        // DeclData declData = new DeclData();
-        // FunctionDecl declaration = ClavaNodeFactory.functionDecl(name, inputs, functionType, functionDeclData,
-        // declData,
-        // ClavaNodeInfo.undefinedInfo(), null);
 
         FunctionDecl declaration = factory.functionDecl(name, functionType);
         declaration.setParameters(inputs);
@@ -295,6 +261,7 @@ public class CallWrap {
     }
 
     private CallWrapType getWrapType() {
+
         // Get declaration of function call
         AFunction functionDeclJp = cxxCall.getDeclarationImpl();
         AFunction functionDefJp = cxxCall.getDefinitionImpl();
@@ -306,6 +273,7 @@ public class CallWrap {
         // the wrappers implementation file.
 
         if (functionDeclJp == null) {
+
             // If no declaration nor definition, this most likely indicates a system header function
             if (functionDefJp == null) {
                 return CallWrapType.SYSTEM_INCLUDE;
@@ -328,18 +296,6 @@ public class CallWrap {
         }
 
         FunctionDecl functionDecl = (FunctionDecl) functionDeclJp.getNode();
-        // Optional<FunctionDecl> declarationTry = functionDecl.getDeclaration();
-
-        // if (!declarationTry.isPresent()) {
-
-        // If no declaration but definition is present, this most likely indicates that the function is defined in the
-        // file of the function call
-        // if(functionDeclJp==null&&functionDefJp!=null)
-        // {
-        // SpecsLogs.msgLib("Could not find declaration of function '" + functionDecl.getDeclName() + "' at "
-        // + functionDecl.getLocation());
-        // return CallWrapType.NO_INCLUDE;
-        // }
 
         // Get include file of declaration
         // FunctionDecl declaration = declarationTry.get();
@@ -370,22 +326,21 @@ public class CallWrap {
      * Ensures all required resources are available, and creates them if they are not.
      */
     private void initClavaWrappers() {
+
         // If wrapper files do not exist, create them
         String implementationFilename = getImplFilename();
         Optional<TranslationUnit> wrapperImpl = app.getNode().getFile(implementationFilename);
 
         if (!wrapperImpl.isPresent()) {
+
             // Ensure the header file does not exit yet
             Preconditions.checkArgument(!app.getNode().getFile(WRAPPER_H_FILENAME).isPresent(),
                     "Expected header file to not exist yet");
 
             // Create implementation and header file
-            // AFile implFile = AstFactory.file(implementationFilename, app.getBaseFolderImpl());
-            // AFile headerFile = AstFactory.file(WRAPPER_H_FILENAME, app.getBaseFolderImpl());
             AFile implFile = AstFactory.file(implementationFilename, WRAPPERS_FOLDERNAME);
             AFile headerFile = AstFactory.file(WRAPPER_H_FILENAME, WRAPPERS_FOLDERNAME);
-            // System.out.println("INCLUDE PATH:" + includePath);
-            // System.out.println("HEADER RELATIVE:" + headerFile.getRelativeFolderpath());
+
             app.addFileImpl(headerFile);
             app.addFileImpl(implFile);
         }
@@ -410,9 +365,6 @@ public class CallWrap {
     }
 
     private FunctionType getFunctionType() {
-        // System.out.println(
-        // "FUNCTION TYPE:"
-        // + cxxCall.getNode().getCalleeDeclRef().getType().toTry(FunctionType.class).get().getCode());
         return cxxCall.getNode().getCalleeDeclRef().getType().toTry(FunctionType.class).get();
     }
 
@@ -431,10 +383,8 @@ public class CallWrap {
         String varName = "result";
         if (!isVoid) {
             VarDecl varDecl = factory.varDecl(varName, ftype.getReturnType());
-            // VarDecl varDecl = ClavaNodeFactory.varDecl(varName, ftype.getReturnType());
 
             wrapperStmts.add(factory.declStmt(varDecl));
-            // wrapperStmts.add(ClavaNodeFactory.declStmt(null, Arrays.asList(varDecl)));
         }
 
         Expr function = call.getCallee();
@@ -444,23 +394,18 @@ public class CallWrap {
                 .collect(Collectors.toList());
 
         CallExpr callExpr = CxxWeaver.getFactory().callExpr(function, returnType, args);
-        // CallExpr callExpr = ClavaNodeFactory.callExpr(function, returnType, args);
 
         if (isVoid) {
             wrapperStmts.add(CxxWeaver.getFactory().exprStmt(callExpr));
         } else {
-            // DeclRefExpr varAssigned = ClavaNodeFactory.declRefExpr(varName, returnType);
             DeclRefExpr varAssigned = factory.declRefExpr(varName, returnType);
             BinaryOperator op = factory.binaryOperator(BinaryOperatorKind.Assign, returnType, varAssigned, callExpr);
             ExprStmt assignment = factory.exprStmt(op);
-            // ExprStmt assignment = ClavaNodeFactory.exprStmtAssign(varAssigned, callExpr, returnType);
             wrapperStmts.add(assignment);
         }
 
         if (!isVoid) {
             wrapperStmts.add(factory.returnStmt(factory.literalExpr(varName, ftype.getReturnType())));
-            // wrapperStmts.add(
-            // ClavaNodeFactory.returnStmt(null, ClavaNodeFactory.literalExpr(varName, ftype.getReturnType())));
         }
 
         code.append(call.getCalleeName()).append("(");
@@ -475,7 +420,6 @@ public class CallWrap {
             return false;
         }
 
-        // return ((BuiltinType) returnType).isVoid();
         return ((BuiltinType) returnType).get(BuiltinType.KIND) == BuiltinKind.Void;
     }
 

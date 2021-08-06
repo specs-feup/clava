@@ -42,14 +42,6 @@ public class MultiLineCommentRule implements TextParserRule {
         if (isInsideString(line, startIndex)) {
             return Optional.empty();
         }
-        // int currentIndex = startIndex - 1;
-        // while (currentIndex >= 0) {
-        // if (line.charAt(currentIndex) == '"') {
-        // return Optional.empty();
-        // }
-        //
-        // currentIndex--;
-        // }
 
         // Found start of a multi-line comment. Try to find the end
         List<String> lines = new ArrayList<>();
@@ -63,6 +55,7 @@ public class MultiLineCommentRule implements TextParserRule {
             endIndex = currentLine.indexOf("*/");
 
             if (endIndex != -1) {
+
                 // Found end of multi-line comment, add line
                 lines.add(currentLine.substring(0, endIndex).trim());
                 break;
@@ -77,29 +70,20 @@ public class MultiLineCommentRule implements TextParserRule {
                 break;
             }
 
-            // Preconditions.checkArgument(iterator.hasNext(),
-            // "Could not find end of multi-line comment start at '" + filepath + "':" + lineNumber);
-
             // Did not find end of comment, add current string to list
             lines.add(currentLine.trim());
             currentLine = iterator.next();
         }
-
-        // If no endIndex found, comment is malformed
-        // Preconditions.checkArgument(endIndex != -1,
-        // "Could not find end of multi-line comment start at '" + filepath + "':" + lineNumber);
 
         int startCol = startIndex;
         int endCol = endIndex;
         int endLine = lineNumber + lines.size() - 1;
 
         SourceRange loc = new SourceRange(filepath, lineNumber, startCol, endLine, endCol);
-        // ClavaNodeInfo info = new ClavaNodeInfo(null, loc);
-        // MultiLineComment comment = ClavaNodeFactory.multiLineComment(lines, info);
+
         MultiLineComment comment = context.getFactory().multiLineComment(lines);
         comment.set(ClavaNode.LOCATION, loc);
-        // System.out.println("MULTILINE:" + comment.getCode());
-        // System.out.println("LOC:" + info.getLocation());
+
         return Optional.of(comment);
     }
 

@@ -57,28 +57,23 @@ public class SnippetParser {
         // Check if single line
         if (codeLines.size() != 1) {
             context.getFactory().literalStmt(code);
-            // return ClavaNodeFactory.literalStmt(code);
         }
 
         String currentCode = code.trim();
         String lowerCurrentCode = code.toLowerCase();
-        // ClavaNodeInfo undefinedInfo = ClavaNodeInfo.undefinedInfo();
 
         // Inline Comment
         if (lowerCurrentCode.startsWith("//")) {
             return ClavaNodes
                     .toStmt(context.getFactory().inlineComment(currentCode.substring("//".length()), true));
-            // .toStmt(ClavaNodeFactory.inlineComment(currentCode.substring("//".length()), true, undefinedInfo));
         }
 
         // Multiline comment
         if (lowerCurrentCode.startsWith("/*") && lowerCurrentCode.endsWith("*/")) {
             String comment = currentCode.substring("/*".length(), currentCode.length() - "*/".length());
-            // return ClavaNodes.toStmt(ClavaNodeFactory.multiLineComment(Arrays.asList(comment), undefinedInfo));
             return ClavaNodes.toStmt(context.getFactory().multiLineComment(Arrays.asList(comment)));
         }
 
-        // String pragmaPrefix = extractPragmaPrefix(currentCode);
         if (lowerCurrentCode.startsWith("#")) {
             String pragmaContent = currentCode.substring("#".length());
             pragmaContent = pragmaContent.stripLeading();
@@ -92,19 +87,6 @@ public class SnippetParser {
                 Pragma parsedPragma = PragmaParsers.parse(pragmaLines, context)
                         .orElse(context.getFactory().genericPragma(pragmaLines));
                 return ClavaNodes.toStmt(parsedPragma);
-                /*
-                // Get pragma kind
-                StringParser parser = new StringParser(pragmaContent);
-                String pragmaKind = parser.apply(StringParsers::parseWord);
-                
-                // Check if OpenMP pragma
-                if (pragmaKind.equals("omp")) {
-                return ClavaNodes.toStmt(new OmpParser().parse(parser, context));
-                }
-                
-                GenericPragma pragma = context.getFactory().genericPragma(Arrays.asList(pragmaContent));
-                return ClavaNodes.toStmt(pragma);
-                */
             }
         }
 
@@ -123,11 +105,6 @@ public class SnippetParser {
         // Case not supported
         return context.getFactory().literalStmt(code);
     }
-
-    // private static String extractPragmaPrefix(String currentCode) {
-    // // TODO Auto-generated method stub
-    // return null;
-    // }
 
     private static String removeTrailingBackslash(String line) {
         if (!line.stripTrailing().endsWith("\\")) {

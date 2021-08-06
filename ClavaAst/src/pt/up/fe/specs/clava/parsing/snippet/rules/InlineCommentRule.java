@@ -42,11 +42,10 @@ public class InlineCommentRule implements TextParserRule {
         int endCol = line.length();
 
         SourceRange loc = new SourceRange(filepath, lineNumber, startCol, lineNumber, endCol);
-        // ClavaNodeInfo info = new ClavaNodeInfo(null, loc);
+
         InlineComment comment = context.getFactory().inlineComment(commentText, isStmtComment);
         comment.set(ClavaNode.LOCATION, loc);
 
-        // System.out.println("INLINE:" + comment.getCode());
         return Optional.of(comment);
     }
 

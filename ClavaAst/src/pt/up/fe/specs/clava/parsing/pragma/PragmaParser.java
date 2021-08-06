@@ -20,12 +20,6 @@ import pt.up.fe.specs.util.stringparser.StringParser;
 @FunctionalInterface
 public interface PragmaParser {
 
-    // default Pragma parse(String contents, ClavaNodeInfo info) {
-    // return parse(new StringParser(contents), info);
-    // }
-    //
-    // Pragma parse(StringParser contents, ClavaNodeInfo info);
-
     default Pragma parse(String contents, ClavaContext context) {
         return parse(new StringParser(contents), context);
     }
