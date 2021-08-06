@@ -61,6 +61,16 @@ public class ClangAstDumpParser {
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
 
+    private static final List<String> CLANG_AST_DUMPER_TEMP_FILES = Arrays.asList("includes.txt", CLANG_DUMP_FILENAME,
+            // "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt", "template_args.txt",
+            "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt",
+            "omp.txt", "invalid_source.txt", "enum_integer_type.txt", "consumer_order.txt",
+            "types_with_templates.txt");
+
+    public static List<String> getTempFiles() {
+        return CLANG_AST_DUMPER_TEMP_FILES;
+    }
+
     /**
      * TODO: Not implemented yet
      * <p>

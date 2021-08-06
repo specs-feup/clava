@@ -81,12 +81,6 @@ public class ClangAstParser {
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
 
-    private static final List<String> CLANGAST_TEMP_FILES = Arrays.asList("includes.txt", CLANG_DUMP_FILENAME,
-            // "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt", "template_args.txt",
-            "clavaDump.txt", "nodetypes.txt", "types.txt", "is_temporary.txt",
-            "omp.txt", "invalid_source.txt", "enum_integer_type.txt", "consumer_order.txt",
-            "types_with_templates.txt");
-
     private static final String CLANGAST_RESOURCES_FILENAME = "clang_ast.resources";
 
     private static final String TRANSLATION_UNIT_SET_PREFIX = "COUNTER";
@@ -95,13 +89,9 @@ public class ClangAstParser {
         return TRANSLATION_UNIT_SET_PREFIX;
     }
 
-    public static List<String> getTempFiles() {
-        return CLANGAST_TEMP_FILES;
-    }
-
-    public static String getClangDumpFilename() {
-        return CLANG_DUMP_FILENAME;
-    }
+    // public static String getClangDumpFilename() {
+    // return CLANG_DUMP_FILENAME;
+    // }
 
     public static boolean isStrictMode() {
         return STRICT_MODE;
