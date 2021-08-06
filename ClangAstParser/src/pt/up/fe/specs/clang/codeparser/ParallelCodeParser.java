@@ -34,7 +34,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
-import pt.up.fe.specs.clang.codeparser.clangparser.AstDumpParser;
+import pt.up.fe.specs.clang.codeparser.clangparser.ClangAstDumpParser;
 import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
@@ -388,7 +388,7 @@ public class ParallelCodeParser extends CodeParser {
         // Only show output of console after parsing is done, when using parallel parsing
         boolean streamConsoleOutput = !get(PARALLEL_PARSING);
 
-        AstDumpParser clangParser = new AstDumpParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES),
+        ClangAstDumpParser clangParser = new ClangAstDumpParser(get(SHOW_CLANG_DUMP), get(USE_CUSTOM_RESOURCES),
                 streamConsoleOutput, clangExecutable, builtinIncludes, this)
                         .setBaseFolder(parsingFolder)
                         .setSystemIncludesThreshold(get(SYSTEM_INCLUDES_THRESHOLD));
