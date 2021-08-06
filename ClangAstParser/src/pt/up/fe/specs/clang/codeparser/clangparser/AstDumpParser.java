@@ -61,7 +61,7 @@ import pt.up.fe.specs.util.utilities.LineStream;
  * @author JoaoBispo
  *
  */
-public class AstDumpParser implements ClangParser {
+public class AstDumpParser {
 
     private final static String CLANG_DUMP_FILENAME = "clangDump.txt";
     private final static String STDERR_DUMP_FILENAME = "stderr.txt";
@@ -125,12 +125,10 @@ public class AstDumpParser implements ClangParser {
         // context = new ClavaContext();
     }
 
-    @Override
     public File getLastWorkingFolder() {
         return lastWorkingFolder;
     }
 
-    @Override
     public AstDumpParser setBaseFolder(File baseFolder) {
         this.baseFolder = baseFolder;
         return this;
@@ -170,7 +168,6 @@ public class AstDumpParser implements ClangParser {
     // // }
     // }
 
-    @Override
     public ClangParserData parse(File sourceFile, String id, Standard standard, DataStore config) {
         // Pre-processing before the parsing
         if (config.get(ClangAstKeys.USES_CILK)) {
@@ -707,7 +704,6 @@ public class AstDumpParser implements ClangParser {
     /**
      * TODO: Current implementation only shows the last file, show all files
      */
-    @Override
     public String getClangDump() {
         if (workingFolders.isEmpty()) {
             SpecsLogs.msgInfo("No working folders found, returning empty clang dump");
