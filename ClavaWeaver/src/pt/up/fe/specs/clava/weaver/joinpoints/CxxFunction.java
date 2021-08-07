@@ -320,7 +320,7 @@ public class CxxFunction extends AFunction {
             var includesCopy = TreeNodeUtils.copy(originalFile.getIncludes().getIncludes());
             // List<IncludeDecl> allIncludes = getIncludesCopyFromFile(originalFile);
 
-            var baseIncludePath = new File("");
+            File baseIncludePath = null;
 
             // Add as many ../ as folders in the relative folder
             var relativeFolderDepth = tu.getRelativeFolderpath().map(folder -> SpecsIo.getDepth(new File(folder)))
