@@ -315,4 +315,13 @@ public class CxxTest {
         newTester().test("Function2.lara", "function2.cpp");
     }
 
+    @Test
+    public void testCloneOnFile() {
+        newTester()
+                // Generates a file in another folder, needs to generate the header file otherwise it will not parse
+                // correctly the second time
+                .set(CxxWeaverOption.PARSE_INCLUDES)
+                .test("CloneOnFile.lara", "clone_on_file.cpp",
+                        "clone_on_file.h");
+    }
 }

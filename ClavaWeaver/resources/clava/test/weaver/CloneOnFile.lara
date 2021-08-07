@@ -1,0 +1,12 @@
+import clava.Clava;
+import weaver.Query;
+
+aspectdef CloneOnFile
+
+	var $foo = Query.search("function", "foo").first();
+	
+	var $foo2 = $foo.cloneOnFile("foo2", "bar/newFile.cpp");
+
+	println($foo2.ancestor("file").includes.map(inc => inc.code));
+
+end
