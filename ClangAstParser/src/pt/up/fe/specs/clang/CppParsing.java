@@ -28,6 +28,12 @@ import pt.up.fe.specs.util.stringparser.ParserWorker;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 
+/**
+ * @deprecated
+ * @author JBispo
+ *
+ */
+@Deprecated
 public class CppParsing {
 
     public static String extractFloat(String floatString) {

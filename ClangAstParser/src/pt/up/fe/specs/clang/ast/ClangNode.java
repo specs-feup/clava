@@ -34,9 +34,11 @@ import pt.up.fe.specs.util.utilities.BuilderWithIndentation;
 /**
  * Base node for all the nodes in the Clang AST.
  * 
+ * @deprecated
  * @author Joao Bispo
  * 
  */
+@Deprecated
 public abstract class ClangNode extends ATreeNode<ClangNode> {
 
     // public static Map<Class<?>, Integer> classes = new HashMap<>();

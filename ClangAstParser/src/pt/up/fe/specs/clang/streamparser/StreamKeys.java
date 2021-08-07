@@ -32,6 +32,12 @@ import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.collections.MultiMap;
 
+/**
+ * @deprecated
+ * @author JBispo
+ *
+ */
+@Deprecated
 public interface StreamKeys {
 
     // This is an auxiliary key
