@@ -377,6 +377,39 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Get value on attribute includes
+     * @return the attribute's value
+     */
+    public abstract AInclude[] getIncludesArrayImpl();
+
+    /**
+     * the includes of this file
+     */
+    public Object getIncludesImpl() {
+        AInclude[] aIncludeArrayImpl0 = getIncludesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aIncludeArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * the includes of this file
+     */
+    public final Object getIncludes() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "includes", Optional.empty());
+        	}
+        	Object result = this.getIncludesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "includes", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "includes", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select stmts
      * @return 
      */
@@ -1013,6 +1046,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         attributes.add("sourceFoldername");
         attributes.add("hasParsingErrors");
         attributes.add("errorOutput");
+        attributes.add("includes");
     }
 
     /**
@@ -1087,6 +1121,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         SOURCEFOLDERNAME("sourceFoldername"),
         HASPARSINGERRORS("hasParsingErrors"),
         ERROROUTPUT("errorOutput"),
+        INCLUDES("includes"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
