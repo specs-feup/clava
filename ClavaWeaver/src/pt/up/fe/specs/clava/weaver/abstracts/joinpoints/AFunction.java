@@ -725,7 +725,7 @@ public abstract class AFunction extends ADeclarator {
      * Generates a clone of the provided function on a new file (with a weaver-generated name).
      * @param newName 
      */
-    public String cloneOnFileImpl(String newName) {
+    public AFunction cloneOnFileImpl(String newName) {
         throw new UnsupportedOperationException(get_class()+": Action cloneOnFile not implemented ");
     }
 
@@ -733,12 +733,12 @@ public abstract class AFunction extends ADeclarator {
      * Generates a clone of the provided function on a new file (with a weaver-generated name).
      * @param newName 
      */
-    public final String cloneOnFile(String newName) {
+    public final AFunction cloneOnFile(String newName) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "cloneOnFile", this, Optional.empty(), newName);
         	}
-        	String result = this.cloneOnFileImpl(newName);
+        	AFunction result = this.cloneOnFileImpl(newName);
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "cloneOnFile", this, Optional.ofNullable(result), newName);
         	}
@@ -753,7 +753,7 @@ public abstract class AFunction extends ADeclarator {
      * @param newName 
      * @param fileName 
      */
-    public String cloneOnFileImpl(String newName, String fileName) {
+    public AFunction cloneOnFileImpl(String newName, String fileName) {
         throw new UnsupportedOperationException(get_class()+": Action cloneOnFile not implemented ");
     }
 
@@ -762,12 +762,41 @@ public abstract class AFunction extends ADeclarator {
      * @param newName 
      * @param fileName 
      */
-    public final String cloneOnFile(String newName, String fileName) {
+    public final AFunction cloneOnFile(String newName, String fileName) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "cloneOnFile", this, Optional.empty(), newName, fileName);
         	}
-        	String result = this.cloneOnFileImpl(newName, fileName);
+        	AFunction result = this.cloneOnFileImpl(newName, fileName);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "cloneOnFile", this, Optional.ofNullable(result), newName, fileName);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "cloneOnFile", e);
+        }
+    }
+
+    /**
+     * Generates a clone of the provided function on a new file (with the provided join point).
+     * @param newName 
+     * @param fileName 
+     */
+    public AFunction cloneOnFileImpl(String newName, AFile fileName) {
+        throw new UnsupportedOperationException(get_class()+": Action cloneOnFile not implemented ");
+    }
+
+    /**
+     * Generates a clone of the provided function on a new file (with the provided join point).
+     * @param newName 
+     * @param fileName 
+     */
+    public final AFunction cloneOnFile(String newName, AFile fileName) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "cloneOnFile", this, Optional.empty(), newName, fileName);
+        	}
+        	AFunction result = this.cloneOnFileImpl(newName, fileName);
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "cloneOnFile", this, Optional.ofNullable(result), newName, fileName);
         	}
@@ -1574,8 +1603,9 @@ public abstract class AFunction extends ADeclarator {
         this.aDeclarator.fillWithActions(actions);
         actions.add("function clone(String, Boolean)");
         actions.add("function clone(String)");
-        actions.add("String cloneOnFile(String)");
-        actions.add("String cloneOnFile(String, String)");
+        actions.add("function cloneOnFile(String)");
+        actions.add("function cloneOnFile(String, String)");
+        actions.add("function cloneOnFile(String, file)");
         actions.add("joinpoint insertReturn(joinpoint)");
         actions.add("joinpoint insertReturn(String)");
         actions.add("void setParams(param[])");

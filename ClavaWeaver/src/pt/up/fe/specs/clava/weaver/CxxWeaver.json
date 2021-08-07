@@ -29395,6 +29395,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "the includes of this file",
+                  "children": [
+                           {
+                              "type": "include[]",
+                              "name": "includes"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this file is considered a C++ file",
                   "children": [
                            {
@@ -31607,7 +31616,7 @@
                   "tooltip": "Generates a clone of the provided function on a new file (with a weaver-generated name).",
                   "children": [
                            {
-                              "type": "String",
+                              "type": "function",
                               "name": "cloneOnFile"
                            },
                            {
@@ -31621,7 +31630,7 @@
                   "tooltip": "Generates a clone of the provided function on a new file (with the provided name).",
                   "children": [
                            {
-                              "type": "String",
+                              "type": "function",
                               "name": "cloneOnFile"
                            },
                            {
@@ -31631,6 +31640,25 @@
                            },
                            {
                               "type": "String",
+                              "name": "fileName",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Generates a clone of the provided function on a new file (with the provided join point).",
+                  "children": [
+                           {
+                              "type": "function",
+                              "name": "cloneOnFile"
+                           },
+                           {
+                              "type": "String",
+                              "name": "newName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "file",
                               "name": "fileName",
                               "defaultValue": ""
                            }]
@@ -41804,7 +41832,7 @@
                   "tooltip": "Generates a clone of the provided function on a new file (with a weaver-generated name).",
                   "children": [
                            {
-                              "type": "String",
+                              "type": "function",
                               "name": "cloneOnFile"
                            },
                            {
@@ -41818,7 +41846,7 @@
                   "tooltip": "Generates a clone of the provided function on a new file (with the provided name).",
                   "children": [
                            {
-                              "type": "String",
+                              "type": "function",
                               "name": "cloneOnFile"
                            },
                            {
@@ -41828,6 +41856,25 @@
                            },
                            {
                               "type": "String",
+                              "name": "fileName",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Generates a clone of the provided function on a new file (with the provided join point).",
+                  "children": [
+                           {
+                              "type": "function",
+                              "name": "cloneOnFile"
+                           },
+                           {
+                              "type": "String",
+                              "name": "newName",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "file",
                               "name": "fileName",
                               "defaultValue": ""
                            }]

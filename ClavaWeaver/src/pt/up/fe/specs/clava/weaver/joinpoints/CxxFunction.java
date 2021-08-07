@@ -17,7 +17,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaLog;
@@ -46,6 +45,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABody;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
@@ -56,6 +56,7 @@ import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxFunctionType;
 import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
@@ -233,63 +234,140 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public String cloneOnFileImpl(String newName) {
+    public AFunction cloneOnFileImpl(String newName) {
 
         boolean isCxx = function.getAncestor(TranslationUnit.class).isCXXUnit();
-        String extension = isCxx ? ".cpp" : ".c";
+        String extension = getIsPrototypeImpl() ? ".h" : isCxx ? ".cpp" : ".c";
 
         String prefix = newName;
 
         String fileName = prefix + extension;
 
+        // var newFile = AstFactory.file(fileName, null);
+
         return cloneOnFileImpl(newName, fileName);
+        // return cloneOnFileImpl(newName, fileName);
+
+    }
+
+    @Override
+    public AFunction cloneOnFileImpl(String newName, String fileName) {
+        // First, check if the given filename is the same as a file in the AST
+        App app = getRootImpl().getNode();
+        var currentFile = new File(fileName);
+
+        var existingFile = app.getTranslationUnits().stream()
+                .filter(tu -> tu.getFile().equals(currentFile))
+                .findFirst();
+
+        if (existingFile.isPresent()) {
+            return cloneOnFileImpl(newName, new CxxFile(existingFile.get()));
+        }
+
+        // Extract relative path
+        var relativePath = currentFile.getParentFile() != null ? currentFile.getParent() : null;
+
+        // Create a new file
+        var newFile = AstFactory.file(fileName, relativePath);
+
+        // Set same source foldername
+        var originalFile = function.getAncestorTry(TranslationUnit.class).orElse(null);
+        if (originalFile != null) {
+            // newFile.getNode().set(TranslationUnit.SOURCE_FOLDERNAME,
+            // originalFile.get(TranslationUnit.SOURCE_FOLDERNAME));
+            newFile.getNode().copyValue(TranslationUnit.SOURCE_FOLDERNAME, originalFile);
+            // originalFile.get(TranslationUnit.SOURCE_FOLDERNAME).
+        }
+        // System.out.println("NEW FILE:" + newFile.getNode());
+        // System.out.println("CURRRENT FILE:" + function.getAncestor(TranslationUnit.class));
+
+        app.addFile((TranslationUnit) newFile.getNode());
+
+        return cloneOnFileImpl(newName, newFile);
     }
 
     @Override
     // TODO: copy header file inclusion
-    public String cloneOnFileImpl(String newName, String fileName) {
+    public AFunction cloneOnFileImpl(String newName, AFile file) {
 
-        if (function.hasBody()) {
-            /* if this is a definition, add the clone to the correct file */
+        // if (!function.hasBody()) {
+        // /*add the clone to the original place in order to be included where needed */
+        // return makeCloneAndInsert(newName, function, true);
+        // }
 
-            App app = getRootImpl().getNode();
+        /* if this is a definition, add the clone to the correct file */
 
-            Optional<TranslationUnit> file = app.getFile(fileName);
+        // App app = getRootImpl().getNode();
+        //
+        // Optional<TranslationUnit> file = app.getFile(fileName);
+        //
+        // if (!file.isPresent()) {
+        //
+        // TranslationUnit tu = getFactory().translationUnit(new File(fileName), Collections.emptyList());
+        //
+        // app.addFile(tu);
+        //
+        // file = Optional.of(tu);
+        // }
 
-            if (!file.isPresent()) {
+        var tu = (TranslationUnit) file.getNode();
 
-                TranslationUnit tu = getFactory().translationUnit(new File(fileName), Collections.emptyList());
+        var cloneFunction = makeCloneAndInsert(newName, tu, true);
 
-                app.addFile(tu);
+        /* copy headers from the current file to the file with the clone */
+        TranslationUnit originalFile = function.getAncestorTry(TranslationUnit.class).orElse(null);
+        if (originalFile != null) {
+            var includesCopy = TreeNodeUtils.copy(originalFile.getIncludes().getIncludes());
+            // List<IncludeDecl> allIncludes = getIncludesCopyFromFile(originalFile);
 
-                file = Optional.of(tu);
+            var baseIncludePath = new File("");
+
+            // Add as many ../ as folders in the relative folder
+            var relativeFolderDepth = tu.getRelativeFolderpath().map(folder -> SpecsIo.getDepth(new File(folder)))
+                    .orElse(0);
+            for (int i = 0; i < relativeFolderDepth; i++) {
+                baseIncludePath = new File(baseIncludePath, "../");
             }
 
-            makeCloneAndInsert(newName, file.get(), true);
+            // Add relative folder of original file
+            var relativeDepth = baseIncludePath;
+            baseIncludePath = originalFile.getRelativeFolderpath()
+                    .map(relativeFolder -> new File(relativeDepth, relativeFolder))
+                    .orElse(baseIncludePath);
 
-            /* copy headers from the current file to the file with the clone */
-            List<IncludeDecl> allIncludes = getWrapperIncludesFromFile(file.get());
-            allIncludes.stream().forEach(file.get()::addInclude);
+            // System.out.println("BASE: " + baseIncludePath);
+            // System.out.println("DEPTH: " + relativeFolderDepth);
 
-        } else {
-            /*otherwise, add the clone to the original place in order to be included where needed */
+            // Adapt includes
+            for (var includeDecl : includesCopy) {
+                var include = includeDecl.getInclude();
 
-            makeCloneAndInsert(newName, function, true);
+                // If angled, ignore
+                if (include.isAngled()) {
+                    continue;
+                }
+                // System.out.println("INCLUDE BEFORE: " + includeDecl.getCode());
+                var newInclude = include.setInclude(new File(baseIncludePath, include.getInclude()).toString());
+                includeDecl.set(IncludeDecl.INCLUDE, newInclude);
+                // System.out.println("INCLUDE AFTER: " + includeDecl.getCode());
+            }
+
+            // Add includes
+            includesCopy.stream().forEach(tu::addInclude);
+
         }
 
-        return fileName;
+        return cloneFunction;
     }
 
-    /**
-     * XXX: copied from CallWrap
-     */
-    private List<IncludeDecl> getWrapperIncludesFromFile(TranslationUnit newTu) {
-
-        TranslationUnit callFile = function.getAncestor(TranslationUnit.class);
-
-        return TreeNodeUtils.copy(callFile.getIncludes().getIncludes());
-
-    }
+    // /**
+    // * XXX: copied from CallWrap
+    // */
+    // private List<IncludeDecl> getIncludesCopyFromFile(TranslationUnit tu) {
+    //
+    // return TreeNodeUtils.copy(tu.getIncludes().getIncludes());
+    //
+    // }
 
     @Override
     public String[] getParamNamesArrayImpl() {

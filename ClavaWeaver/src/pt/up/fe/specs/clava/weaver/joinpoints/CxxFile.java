@@ -386,6 +386,11 @@ public class CxxFile extends AFile {
     }
 
     @Override
+    public AInclude[] getIncludesArrayImpl() {
+        return selectInclude().toArray(size -> new AInclude[size]);
+    }
+
+    @Override
     public String getBaseSourcePathImpl() {
         SpecsLogs.warn(
                 "Attribute $file.baseSourcePath is deprecated, please use attribute $file.relativeFolderpath, which returns the same.");
@@ -453,4 +458,5 @@ public class CxxFile extends AFile {
     public String getErrorOutputImpl() {
         return tunit.get(TranslationUnit.ERROR_OUTPUT);
     }
+
 }

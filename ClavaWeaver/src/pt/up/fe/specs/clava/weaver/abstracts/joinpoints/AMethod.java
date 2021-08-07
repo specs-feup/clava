@@ -570,7 +570,7 @@ public abstract class AMethod extends AFunction {
      * @param newName 
      */
     @Override
-    public String cloneOnFileImpl(String newName) {
+    public AFunction cloneOnFileImpl(String newName) {
         return this.aFunction.cloneOnFileImpl(newName);
     }
 
@@ -580,7 +580,17 @@ public abstract class AMethod extends AFunction {
      * @param fileName 
      */
     @Override
-    public String cloneOnFileImpl(String newName, String fileName) {
+    public AFunction cloneOnFileImpl(String newName, String fileName) {
+        return this.aFunction.cloneOnFileImpl(newName, fileName);
+    }
+
+    /**
+     * Generates a clone of the provided function on a new file (with the provided join point).
+     * @param newName 
+     * @param fileName 
+     */
+    @Override
+    public AFunction cloneOnFileImpl(String newName, AFile fileName) {
         return this.aFunction.cloneOnFileImpl(newName, fileName);
     }
 
