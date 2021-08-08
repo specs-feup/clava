@@ -487,6 +487,8 @@ ClavaJoinPoints.param = function(name, $type) {
 
 /**
  * @param {string} text
+ *
+ * @return {$comment}
  * */
 ClavaJoinPoints.comment = function(text) {
     
