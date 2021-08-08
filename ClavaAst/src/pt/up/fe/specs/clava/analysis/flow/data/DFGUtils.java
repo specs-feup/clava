@@ -352,13 +352,15 @@ public class DFGUtils {
         return vars;
     }
 
+    /*
     @Deprecated
     public static ArrayList<DataFlowNode> getAllReferences(DataFlowGraph dfg, String label) {
         ArrayList<DataFlowNode> refs = new ArrayList<>();
         for (FlowNode n : dfg.getNodes()) {
-            DataFlowNode node = (DataFlowNode) n;
+    //            DataFlowNode node = (DataFlowNode) n;
             // if (node.)
         }
         return refs;
     }
+    */
 }

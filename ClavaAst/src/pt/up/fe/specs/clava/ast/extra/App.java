@@ -78,7 +78,7 @@ public class App extends ClavaNode {
     /// DATAKEYS END
 
     private Map<File, File> sourceFiles;
-    private Map<File, String> sourceFoldernames;
+    // private Map<File, String> sourceFoldernames;
 
     private GlobalManager globalManager;
     private final Map<String, ClavaNode> nodesCache;
@@ -90,7 +90,7 @@ public class App extends ClavaNode {
     private final IdNormalizer idNormalizer;
     private final CallInliner callInliner;
 
-    private FunctionDecl noFunctionFound = null;
+    // private FunctionDecl noFunctionFound = null;
     private VarDecl noVarDeclFound = null;
 
     /**
@@ -592,7 +592,7 @@ public class App extends ClavaNode {
     public void setSourceFoldernames(Map<File, String> sourceFoldernames) {
 
         // Set sourceFiles
-        this.sourceFoldernames = sourceFoldernames;
+        // this.sourceFoldernames = sourceFoldernames;
 
         for (TranslationUnit tu : getTranslationUnits()) {
             // Find the corresponding source

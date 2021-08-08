@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -26,11 +25,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
-import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
-import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
-import pt.up.fe.specs.clava.ast.type.RecordType;
-import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.exceptions.UnexpectedChildExpection;
 import pt.up.fe.specs.util.collections.SpecsList;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
@@ -139,51 +134,53 @@ public class CXXMemberCallExpr extends CallExpr {
         return get(METHOD_DECL).map(method -> (FunctionDecl) method);
     }
 
+    /*
     private Optional<FunctionDecl> getFunctionDeclFromRecord(RecordType recordType) {
         CXXRecordDecl recordDecl = getApp().getCXXRecordDeclTry(recordType).orElse(null);
-
+    
         if (recordDecl == null) {
             return Optional.empty();
         }
-
+    
         // Get methods with same name
-
+    
         List<CXXMethodDecl> methods = recordDecl.getMethod(getCalleeName());
-
+    
         List<Type> argTypes = getArgs().stream()
                 .map(Expr::getType)
                 .collect(Collectors.toList());
-
+    
         // Choose the method with same argument types
         for (CXXMethodDecl methodDecl : methods) {
             FunctionProtoType functionType = methodDecl.getFunctionType();
-
+    
             List<Type> paramTypes = functionType.getParamTypes();
-
+    
             // Check number of arguments
             if (paramTypes.size() != argTypes.size()) {
                 continue;
             }
-
+    
             // Compare each type
             boolean paramsAreEqual = true;
             for (int i = 0; i < paramTypes.size(); i++) {
-
+    
                 boolean areEqual = paramTypes.get(i).equals(argTypes.get(i));
-
+    
                 if (!areEqual) {
                     paramsAreEqual = false;
                     break;
                 }
             }
-
+    
             if (paramsAreEqual) {
                 return Optional.of(methodDecl);
             }
         }
-
+    
         return Optional.empty();
     }
+    */
 
     @Override
     public SpecsList<String> getSignatureCustomStrings() {

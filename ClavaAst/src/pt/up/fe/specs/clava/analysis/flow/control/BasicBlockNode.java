@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.analysis.flow.control;
 import java.util.ArrayList;
 import java.util.List;
 
+import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.analysis.flow.FlowNode;
 import pt.up.fe.specs.clava.ast.stmt.DoStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
@@ -30,151 +31,151 @@ public class BasicBlockNode extends FlowNode {
     private BasicBlockNodeType type;
 
     public BasicBlockNode(Stmt leader) {
-	super("");
-	this.leader = leader;
-	stmts = new ArrayList<Stmt>();
-	stmts.add(leader);
-	type = BasicBlockNodeType.UNDEFINED;
+        super("");
+        this.leader = leader;
+        stmts = new ArrayList<Stmt>();
+        stmts.add(leader);
+        type = BasicBlockNodeType.UNDEFINED;
     }
 
     public Stmt first() {
-	return leader;
+        return leader;
     }
 
     public Stmt last() {
-	return stmts.get(stmts.size() - 1);
+        return stmts.get(stmts.size() - 1);
     }
 
     public void addStmt(Stmt stmt) {
-	stmts.add(stmt);
+        stmts.add(stmt);
     }
 
     public void setType(BasicBlockNodeType type) {
-	this.type = type;
+        this.type = type;
     }
 
     @Override
     public String toString() {
 
-	StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-	builder.append(name);
-	builder.append(" (");
-	builder.append(type);
-	builder.append(") ");
-	// builder.append(outEdges.stream().map(BasicBlockNode::getId).collect(Collectors.toList()));
-	builder.append("\n");
+        builder.append(name);
+        builder.append(" (");
+        builder.append(type);
+        builder.append(") ");
+        // builder.append(outEdges.stream().map(BasicBlockNode::getId).collect(Collectors.toList()));
+        builder.append("\n");
 
-	for (Stmt stmt : stmts) {
+        for (Stmt stmt : stmts) {
 
-	    builder.append(stmt.get(stmt.LOCATION).getStartLine()).append(": ");
+            builder.append(stmt.get(ClavaNode.LOCATION).getStartLine()).append(": ");
 
-	    builder.append(getBbCode(stmt));
+            builder.append(getBbCode(stmt));
 
-	    builder.append("\n");
-	}
+            builder.append("\n");
+        }
 
-	return builder.toString();
+        return builder.toString();
     }
 
     @Override
     public String toDot() {
 
-	String NL = "\n";
-	String LEFT = "\\l";
-	String QUOTE = "\"";
-	String SELF = "\\N";
-	String ARROW = "->";
+        String NL = "\n";
+        String LEFT = "\\l";
+        String QUOTE = "\"";
+        String SELF = "\\N";
+        // String ARROW = "->";
 
-	StringBuilder builder = new StringBuilder();
-	/*
-	 * for (BasicBlock bb : outEdges) { builder.append(id); builder.append(ARROW);
-	 * builder.append(bb.id); builder.append(NL); }
-	 */
-	builder.append(name).append(" ");
-	builder.append("[label=");
-	builder.append(QUOTE);
-	builder.append(SELF);
-	builder.append(":");
-	builder.append(LEFT);
-	for (Stmt stmt : stmts) {
+        StringBuilder builder = new StringBuilder();
+        /*
+         * for (BasicBlock bb : outEdges) { builder.append(id); builder.append(ARROW);
+         * builder.append(bb.id); builder.append(NL); }
+         */
+        builder.append(name).append(" ");
+        builder.append("[label=");
+        builder.append(QUOTE);
+        builder.append(SELF);
+        builder.append(":");
+        builder.append(LEFT);
+        for (Stmt stmt : stmts) {
 
-	    builder.append(getBbCode(stmt));
-	    builder.append(LEFT);
-	}
-	builder.append(QUOTE);
-	builder.append("];");
-	builder.append(NL);
+            builder.append(getBbCode(stmt));
+            builder.append(LEFT);
+        }
+        builder.append(QUOTE);
+        builder.append("];");
+        builder.append(NL);
 
-	return builder.toString();
+        return builder.toString();
     }
 
     private String getBbCode(Stmt stmt) {
 
-	StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-	if (stmt instanceof IfStmt) {
+        if (stmt instanceof IfStmt) {
 
-	    String cond = ((IfStmt) stmt).getCondition().getCode();
-	    builder.append("if(").append(cond).append(")");
+            String cond = ((IfStmt) stmt).getCondition().getCode();
+            builder.append("if(").append(cond).append(")");
 
-	    return builder.toString();
-	}
+            return builder.toString();
+        }
 
-	if (stmt instanceof ForStmt) {
+        if (stmt instanceof ForStmt) {
 
-	    ForStmt f = (ForStmt) stmt;
+            ForStmt f = (ForStmt) stmt;
 
-	    builder.append("for").append("(");
+            builder.append("for").append("(");
 
-	    builder.append(f.getInit().map(init -> init.getCode()).orElse(";"));
-	    builder.append(f.getCond().map(init -> " " + init.getCode()).orElse(";"));
-	    String incCode = f.getInc().map(init -> " " + init.getCode()).orElse("");
-	    if (incCode.endsWith(";")) {
-		incCode = incCode.substring(0, incCode.length() - 1);
-	    }
-	    builder.append(incCode);
-	    builder.append(")");
+            builder.append(f.getInit().map(init -> init.getCode()).orElse(";"));
+            builder.append(f.getCond().map(init -> " " + init.getCode()).orElse(";"));
+            String incCode = f.getInc().map(init -> " " + init.getCode()).orElse("");
+            if (incCode.endsWith(";")) {
+                incCode = incCode.substring(0, incCode.length() - 1);
+            }
+            builder.append(incCode);
+            builder.append(")");
 
-	    return builder.toString();
-	}
+            return builder.toString();
+        }
 
-	if (stmt instanceof WhileStmt) {
+        if (stmt instanceof WhileStmt) {
 
-	    String cond = ((WhileStmt) stmt).getCondition().getCode();
-	    builder.append("while").append("(").append(cond).append(")");
+            String cond = ((WhileStmt) stmt).getCondition().getCode();
+            builder.append("while").append("(").append(cond).append(")");
 
-	    return builder.toString();
-	}
+            return builder.toString();
+        }
 
-	if (stmt instanceof DoStmt) {
+        if (stmt instanceof DoStmt) {
 
-	    String cond = ((DoStmt) stmt).getCondition().getCode();
-	    builder.append("while").append("(").append(cond).append(")");
+            String cond = ((DoStmt) stmt).getCondition().getCode();
+            builder.append("while").append("(").append(cond).append(")");
 
-	    return builder.toString();
-	}
+            return builder.toString();
+        }
 
-	return stmt.getCode().trim();
+        return stmt.getCode().trim();
     }
 
     public BasicBlockNodeType getType() {
-	return type;
+        return type;
     }
 
     public boolean hasOutEdges() {
-	return !getOutEdges().isEmpty();
+        return !getOutEdges().isEmpty();
     }
 
     public boolean hasInEdges() {
-	return !getInEdges().isEmpty();
+        return !getInEdges().isEmpty();
     }
 
     public Stmt getLeader() {
-	return leader;
+        return leader;
     }
 
     public List<Stmt> getStmts() {
-	return stmts;
+        return stmts;
     }
 }
