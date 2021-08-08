@@ -34,8 +34,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
-import pt.up.fe.specs.clang.codeparser.clangparser.ClangAstDumper;
-import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaLog;

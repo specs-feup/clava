@@ -18,6 +18,7 @@ import java.io.File;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
+import pt.up.fe.specs.clang.codeparser.ClangParserData;
 import pt.up.fe.specs.clang.parsers.util.PragmasLocations;
 import pt.up.fe.specs.util.utilities.LineStream;
 

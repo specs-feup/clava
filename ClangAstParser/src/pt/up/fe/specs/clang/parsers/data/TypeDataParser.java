@@ -18,7 +18,7 @@ import java.math.BigInteger;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
-import pt.up.fe.specs.clang.parsers.ClangParserData;
+import pt.up.fe.specs.clang.codeparser.ClangParserData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.ArrayType;

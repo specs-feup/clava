@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
+import pt.up.fe.specs.clang.codeparser.ClangParserData;
 import pt.up.fe.specs.clang.version.Clang_3_8;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsCheck;

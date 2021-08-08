@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.parsers;
+package pt.up.fe.specs.clang.codeparser;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,6 +26,8 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
+import pt.up.fe.specs.clang.parsers.ClavaNodes;
+import pt.up.fe.specs.clang.parsers.VisitingChildrenCheck;
 import pt.up.fe.specs.clang.parsers.util.PragmasLocations;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;

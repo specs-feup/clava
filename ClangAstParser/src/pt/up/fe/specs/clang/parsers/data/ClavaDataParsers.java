@@ -21,7 +21,7 @@ import java.util.function.BiFunction;
 
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
-import pt.up.fe.specs.clang.parsers.ClangParserData;
+import pt.up.fe.specs.clang.codeparser.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;

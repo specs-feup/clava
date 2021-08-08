@@ -20,6 +20,7 @@ import java.util.List;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
+import pt.up.fe.specs.clang.codeparser.ClangParserData;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.util.utilities.LineStream;
 

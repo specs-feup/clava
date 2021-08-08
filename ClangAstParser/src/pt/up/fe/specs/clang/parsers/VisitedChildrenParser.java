@@ -22,6 +22,7 @@ import java.util.Map;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
+import pt.up.fe.specs.clang.codeparser.ClangParserData;
 import pt.up.fe.specs.util.utilities.LineStream;
 
 public class VisitedChildrenParser implements LineStreamWorker<ClangParserData> {

@@ -31,7 +31,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.cilk.CilkAstAdapter;
-import pt.up.fe.specs.clang.parsers.ClangParserData;
+import pt.up.fe.specs.clang.codeparser.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
 import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;

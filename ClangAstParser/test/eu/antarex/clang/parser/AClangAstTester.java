@@ -26,9 +26,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import pt.up.fe.specs.clang.codeparser.ClangAstDumper;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
-import pt.up.fe.specs.clang.codeparser.clangparser.ClangAstDumper;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.util.SpecsIo;

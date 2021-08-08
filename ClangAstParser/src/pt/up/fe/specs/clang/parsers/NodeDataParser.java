@@ -31,6 +31,7 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
+import pt.up.fe.specs.clang.codeparser.ClangParserData;
 import pt.up.fe.specs.clang.parsers.data.AttrDataParser;
 import pt.up.fe.specs.clang.parsers.data.ClavaDataParsers;
 import pt.up.fe.specs.clang.parsers.data.DeclDataParser;

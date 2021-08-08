@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 
-import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;

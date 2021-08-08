@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.codeparser.clangparser;
+package pt.up.fe.specs.clang.codeparser;
 
 import java.io.File;
 import java.io.InputStream;
@@ -27,10 +27,6 @@ import org.suikasoft.jOptions.streamparser.LineStreamParser;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.cilk.CilkParser;
-import pt.up.fe.specs.clang.codeparser.CodeParser;
-import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
-import pt.up.fe.specs.clang.datastore.LocalOptionsKeys;
-import pt.up.fe.specs.clang.parsers.ClangParserData;
 import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
 import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
 import pt.up.fe.specs.clava.ClavaLog;
