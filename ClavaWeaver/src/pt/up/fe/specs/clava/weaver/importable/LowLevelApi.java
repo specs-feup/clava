@@ -31,7 +31,7 @@ public class LowLevelApi {
                 fieldNames.add(field.getName());
             }
         } catch (IllegalArgumentException e) {
-            SpecsLogs.msgWarn("Error message:\n", e);
+            SpecsLogs.warn("Error message:\n", e);
         }
 
         return fieldNames;
@@ -45,7 +45,7 @@ public class LowLevelApi {
             return value;
         } catch (
                 IllegalArgumentException | NoSuchFieldException | SecurityException | IllegalAccessException e) {
-            SpecsLogs.msgWarn("Error message:\n", e);
+            SpecsLogs.warn("Error message:\n", e);
         }
 
         return null;
@@ -58,7 +58,7 @@ public class LowLevelApi {
             return field.getType();
         } catch (
                 IllegalArgumentException | NoSuchFieldException | SecurityException e) {
-            SpecsLogs.msgWarn("Error message:\n", e);
+            SpecsLogs.warn("Error message:\n", e);
         }
 
         return null;

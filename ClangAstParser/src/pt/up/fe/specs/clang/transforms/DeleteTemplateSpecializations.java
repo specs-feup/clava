@@ -45,7 +45,7 @@ public class DeleteTemplateSpecializations implements SimplePostClavaRule {
         if (functionDecl.get(FunctionDecl.TEMPLATE_KIND) != TemplateKind.FUNCTION_TEMPLATE_SPECIALIZATION) {
             // SpecsLogs.untested("Removing template specialization of kind '"
             // + functionDecl.get(FunctionDecl.TEMPLATE_KIND) + "'");
-            // SpecsLogs.msgWarn(
+            // SpecsLogs.warn(
             // "Removing template specialization of kind '" + functionDecl.getFunctionDeclData().getTemplateKind()
             // + "', this has not yet been tested. Please contact the developers.");
         }

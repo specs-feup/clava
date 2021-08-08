@@ -196,7 +196,7 @@ public abstract class FunctionType extends Type {
 
         // A name (*) means that it has been called from PointerType with null name
         // if (name != null && !name.isEmpty() && !name.equals("(*)")) {
-        // SpecsLogs.msgWarn(
+        // SpecsLogs.warn(
         // ".getCode() for FunctionType using name, check if ok since we do not have information about parameters
         // names");
         // }

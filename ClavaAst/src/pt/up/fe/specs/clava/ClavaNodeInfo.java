@@ -152,7 +152,7 @@ public class ClavaNodeInfo {
 
         int startIndex = id.lastIndexOf('_');
         if (startIndex == -1) {
-            SpecsLogs.msgWarn("Could not find '_' in the id: " + id);
+            SpecsLogs.warn("Could not find '_' in the id: " + id);
             return Optional.empty();
         }
 

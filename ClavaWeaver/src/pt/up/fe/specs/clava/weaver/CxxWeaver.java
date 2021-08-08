@@ -650,7 +650,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     public Set<String> getIncludeFlags() {
         if (getSources() == null) {
-            SpecsLogs.msgWarn("Source folders are not set");
+            SpecsLogs.warn("Source folders are not set");
             return Collections.emptySet();
         }
 
@@ -667,7 +667,7 @@ public class CxxWeaver extends ACxxWeaver {
 
     public Set<String> getIncludeFolders() {
         if (getSources() == null) {
-            SpecsLogs.msgWarn("Source folders are not set");
+            SpecsLogs.warn("Source folders are not set");
             return Collections.emptySet();
         }
 

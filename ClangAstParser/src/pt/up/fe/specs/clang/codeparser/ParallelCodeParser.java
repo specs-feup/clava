@@ -177,7 +177,7 @@ public class ParallelCodeParser extends CodeParser {
                 var parserData = SpecsSystem.get(future);
                 clangParserResults.add(parserData);
             } catch (Exception e) {
-                SpecsLogs.msgWarn("Could not parse file '" + sources.get(i) + "', will be ignored", e);
+                SpecsLogs.warn("Could not parse file '" + sources.get(i) + "', will be ignored", e);
                 continue;
             }
 

@@ -142,7 +142,7 @@ public class CxxProgram extends AProgram {
         // ClavaLog.deprecated("attribute baseFolder should not be used, instead use file.sourcePath");
         List<File> sources = getWeaver().getSources();
         if (sources.isEmpty()) {
-            SpecsLogs.msgWarn("Expected at least program to have one source folder, found none");
+            SpecsLogs.warn("Expected at least program to have one source folder, found none");
             return null;
         }
         File path = sources.get(0);

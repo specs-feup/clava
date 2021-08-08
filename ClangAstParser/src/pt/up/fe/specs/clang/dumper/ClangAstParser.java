@@ -228,7 +228,7 @@ public class ClangAstParser {
             // Normalize node source path
             String filepath = clavaNode.getLocation().getFilepath();
             if (filepath == null) {
-                SpecsLogs.msgWarn("Filepath null, check if ok. Skipping node:\n" + clavaNode);
+                SpecsLogs.warn("Filepath null, check if ok. Skipping node:\n" + clavaNode);
                 continue;
             }
 
@@ -460,7 +460,7 @@ public class ClangAstParser {
             // Normalize node source path
             String filepath = clavaNode.getLocation().getFilepath();
             if (filepath == null) {
-                SpecsLogs.msgWarn("Filepath null, check if ok. Skipping node:\n" + clavaNode);
+                SpecsLogs.warn("Filepath null, check if ok. Skipping node:\n" + clavaNode);
                 continue;
             }
 

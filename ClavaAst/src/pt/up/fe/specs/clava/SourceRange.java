@@ -114,7 +114,7 @@ public class SourceRange {
         // SpecsLogs.msgInfo("Two different paths in the location from the same source type, check this case.\nStart:"
         // + start.getFilepath() + "\nEnd:" + end.getFilepath());
         // System.out.println("GET LOCATION:" + this);
-        // SpecsLogs.msgWarn("WARNIMNG");
+        // SpecsLogs.warn("WARNIMNG");
         // return start.getFilepath();
         // System.out.println("START FILEPATH:" + start.getFilepath());
         // System.out.println("END FILEPATH:" + end.getFilepath());
@@ -322,7 +322,7 @@ public class SourceRange {
         if (partialLocation.startsWith("<command line")) {
             if (!SourceRange.COMMAND_APPEARED) {
                 SourceRange.COMMAND_APPEARED = true;
-                SpecsLogs.msgWarn("Command-line locations not yet supported");
+                SpecsLogs.warn("Command-line locations not yet supported");
             }
     
             return SourceLocation.invalidLocation();

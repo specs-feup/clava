@@ -500,7 +500,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
         int startIndex = id.lastIndexOf('_');
         if (startIndex == -1) {
-            SpecsLogs.msgWarn("Could not find '_' in the id: " + id);
+            SpecsLogs.warn("Could not find '_' in the id: " + id);
             return Optional.empty();
         }
 
@@ -581,7 +581,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     @Override
     public <T, E extends T> ClavaNode set(DataKey<T> key, E value) {
         if (disableModification) {
-            SpecsLogs.msgWarn("Could not perform set: this node is a view, modifications are disabled");
+            SpecsLogs.warn("Could not perform set: this node is a view, modifications are disabled");
             return this;
         }
 

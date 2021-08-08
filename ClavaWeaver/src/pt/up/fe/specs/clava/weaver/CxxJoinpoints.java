@@ -321,7 +321,7 @@ public class CxxJoinpoints {
     }
 
     private static ACxxWeaverJoinPoint defaultFactory(ClavaNode node) {
-        SpecsLogs.msgWarn("Factory not defined for nodes of class '" + node.getClass().getSimpleName() + "'");
+        SpecsLogs.warn("Factory not defined for nodes of class '" + node.getClass().getSimpleName() + "'");
         return new GenericJoinpoint(node);
     }
 
