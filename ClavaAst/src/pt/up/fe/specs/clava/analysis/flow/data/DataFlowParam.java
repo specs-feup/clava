@@ -1,18 +1,14 @@
 /**
- *  Copyright 2020 SPeCS.
+ * Copyright 2020 SPeCS.
  * 
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
  * 
- *       http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  * 
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *  under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License. under the License.
  */
 
 package pt.up.fe.specs.clava.analysis.flow.data;
@@ -32,39 +28,40 @@ import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
  *
  */
 public class DataFlowParam {
+    private static final String[] COMMON_TYPES = { "char", "short", "int", "long", "float", "double" };
+
+    private static final HashMap<String, Integer> TYPE_SIZES;
+    static {
+        TYPE_SIZES = new HashMap<>();
+        TYPE_SIZES.put("char", 1);
+        TYPE_SIZES.put("short", 2);
+        TYPE_SIZES.put("int", 4);
+        TYPE_SIZES.put("long", 8);
+        TYPE_SIZES.put("float", 4);
+        TYPE_SIZES.put("double", 8);
+    }
+
     private String name;
     private String type;
     private boolean isArray = false;
     private ArrayList<Integer> dim = new ArrayList<>();
     private boolean isStream = false;
     private int dataTypeSize;
-    public String[] commonTypes = { "char", "short", "int", "long", "float", "double" };
-    public HashMap<String, Integer> typeSizes = new HashMap<>() {
-	{
-	    put("char", 1);
-	    put("short", 2);
-	    put("int", 4);
-	    put("long", 8);
-	    put("float", 4);
-	    put("double", 8);
-	}
-    };
 
     /**
-     * Checks whether the parameter type is a type supported by the DFG. Filters
-     * things like "unsigned short" into being just "short", since the
-     * signed/unsigned information does not matter
+     * Checks whether the parameter type is a type supported by the DFG. Filters things like "unsigned short" into being
+     * just "short", since the signed/unsigned information does not matter
      * 
      * @param type
      * @return the simplified name of the type if it is supported, or null otherwise
      */
     private String filterType(String type) {
-	String[] tokens = type.split(" ");
-	for (String s : tokens) {
-	    if (Arrays.asList(commonTypes).contains(s))
-		return s;
-	}
-	return null;
+        String[] tokens = type.split(" ");
+        for (String s : tokens) {
+            if (Arrays.asList(COMMON_TYPES).contains(s))
+                return s;
+        }
+        return null;
     }
 
     /**
@@ -73,22 +70,22 @@ public class DataFlowParam {
      * @param paramNode
      */
     public DataFlowParam(ParmVarDecl paramNode) {
-	name = paramNode.getDeclName();
-	isArray = paramNode.getTypeCode().contains("[");
-	if (isArray) {
-	    type = paramNode.getTypeCode().substring(0, paramNode.getTypeCode().indexOf('['));
-	    Pattern p = Pattern.compile("-?\\d+");
-	    Matcher m = p.matcher(paramNode.getTypeCode());
-	    while (m.find()) {
-		String n = m.group();
-		int num = Integer.parseUnsignedInt(n);
-		dim.add(num);
-	    }
-	} else
-	    type = paramNode.getTypeCode();
+        name = paramNode.getDeclName();
+        isArray = paramNode.getTypeCode().contains("[");
+        if (isArray) {
+            type = paramNode.getTypeCode().substring(0, paramNode.getTypeCode().indexOf('['));
+            Pattern p = Pattern.compile("-?\\d+");
+            Matcher m = p.matcher(paramNode.getTypeCode());
+            while (m.find()) {
+                String n = m.group();
+                int num = Integer.parseUnsignedInt(n);
+                dim.add(num);
+            }
+        } else
+            type = paramNode.getTypeCode();
 
-	this.type = filterType(this.type).strip();
-	this.dataTypeSize = (typeSizes.get(this.type) != null) ? typeSizes.get(this.type) : 4;
+        this.type = filterType(this.type).strip();
+        this.dataTypeSize = (TYPE_SIZES.get(this.type) != null) ? TYPE_SIZES.get(this.type) : 4;
     }
 
     /**
@@ -97,7 +94,7 @@ public class DataFlowParam {
      * @return
      */
     public String getName() {
-	return name;
+        return name;
     }
 
     /**
@@ -106,7 +103,7 @@ public class DataFlowParam {
      * @return
      */
     public String getType() {
-	return type;
+        return type;
     }
 
     /**
@@ -115,18 +112,18 @@ public class DataFlowParam {
      * @return true if it is an array, false otherwise
      */
     public boolean isArray() {
-	return isArray;
+        return isArray;
     }
 
     @Override
     public String toString() {
-	StringBuilder sb = new StringBuilder();
-	sb.append(this.name);
-	for (Integer i : this.dim) {
-	    sb.append("[").append(i).append("]");
-	}
-	sb.append(": ").append(this.type).append(" (").append(this.dataTypeSize * 8).append("-bit)");
-	return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.name);
+        for (Integer i : this.dim) {
+            sb.append("[").append(i).append("]");
+        }
+        sb.append(": ").append(this.type).append(" (").append(this.dataTypeSize * 8).append("-bit)");
+        return sb.toString();
     }
 
     /**
@@ -135,17 +132,16 @@ public class DataFlowParam {
      * @return The dimension if it is an array, 0 if it is a variable
      */
     public ArrayList<Integer> getDim() {
-	return dim;
+        return dim;
     }
 
     /**
-     * Checks whether the parameter can be considered a stream. Relevant only for
-     * HLS
+     * Checks whether the parameter can be considered a stream. Relevant only for HLS
      * 
      * @return true if it can be a stream, false otherwise
      */
     public boolean isStream() {
-	return isStream;
+        return isStream;
     }
 
     /**
@@ -154,7 +150,7 @@ public class DataFlowParam {
      * @param isStream
      */
     public void setStream(boolean isStream) {
-	this.isStream = isStream;
+        this.isStream = isStream;
     }
 
     /**
@@ -163,6 +159,6 @@ public class DataFlowParam {
      * @return the size of the data type in bytes
      */
     public int getDataTypeSize() {
-	return dataTypeSize;
+        return dataTypeSize;
     }
 }
