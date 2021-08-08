@@ -898,6 +898,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -1803,6 +1845,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -2960,6 +3044,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -3934,6 +4060,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -5090,6 +5258,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -6119,6 +6329,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -7375,6 +7627,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -8565,6 +8859,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -9744,6 +10080,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -10733,6 +11111,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -11710,6 +12130,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -13105,6 +13567,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -14284,6 +14788,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -15271,6 +15817,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -16324,6 +16912,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -17247,6 +17877,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -18164,6 +18836,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -19379,6 +20093,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -20276,6 +21032,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -21251,6 +22049,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -22195,6 +23035,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -23371,6 +24253,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -24268,6 +25192,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -25254,6 +26220,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -26427,6 +27435,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -27399,6 +28449,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -28343,6 +29435,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -29316,6 +30450,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -30658,6 +31834,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -32161,6 +33379,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -33356,6 +34616,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -34444,6 +35746,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -35368,6 +36712,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -36314,6 +37700,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -37709,6 +39137,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -38683,6 +40153,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -39662,6 +41174,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -40857,6 +42411,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -42377,6 +43973,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -43350,6 +44988,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -44294,6 +45974,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -45699,6 +47421,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -46668,6 +48432,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -47744,6 +49550,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -48890,6 +50738,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -50069,6 +51959,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -51021,6 +52953,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -52285,6 +54259,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -53447,6 +55463,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -54463,6 +56521,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -55463,6 +57563,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -56720,6 +58862,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -57707,6 +59891,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -58725,6 +60951,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -59714,6 +61982,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -60675,6 +62985,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -61838,6 +64190,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -63018,6 +65412,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -64028,6 +66464,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -64972,6 +67450,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -66120,6 +68640,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -67093,6 +69655,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -68064,6 +70668,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -69231,6 +71877,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -70230,6 +72918,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -71220,6 +73950,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -72368,6 +75140,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -73443,6 +76257,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -74621,6 +77477,48 @@
                               "name": "value",
                               "defaultValue": ""
                            }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
+                              "defaultValue": ""
+                           }]
                }]
       },
       {
@@ -75621,6 +78519,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]
@@ -76626,6 +79566,48 @@
                            {
                               "type": "Object",
                               "name": "value",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Replaces this join point with a comment with the same contents as .code",
+                  "children": [
+                           {
+                              "type": "joinpoint",
+                              "name": "toComment"
+                           },
+                           {
+                              "type": "String",
+                              "name": "prefix",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "String",
+                              "name": "suffix",
                               "defaultValue": ""
                            }]
                }]

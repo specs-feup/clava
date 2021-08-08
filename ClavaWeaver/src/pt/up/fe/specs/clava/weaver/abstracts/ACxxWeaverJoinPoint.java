@@ -41,6 +41,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
+import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -1329,4 +1330,21 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         return getNode().getStableId();
     }
 
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return toCommentImpl(null);
+    }
+
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return toCommentImpl(prefix, null);
+    }
+
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        var prefixClean = prefix == null ? "" : prefix;
+        var suffixClean = suffix == null ? "" : suffix;
+
+        return replaceWithImpl(AstFactory.comment(prefixClean + getCodeImpl() + suffixClean));
+    }
 }

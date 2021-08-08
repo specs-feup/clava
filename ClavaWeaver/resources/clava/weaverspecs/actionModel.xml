@@ -77,6 +77,16 @@
 	<action name="setLastChild" tooltip="Replaces the last child, or inserts the join point if no child is present">	
 		<parameter name="node" type="Joinpoint" />
 	</action>
+	
+	<action name="toComment" return="joinpoint" tooltip="Replaces this join point with a comment with the same contents as .code"/>	
+	<action name="toComment" return="joinpoint" tooltip="Replaces this join point with a comment with the same contents as .code">
+		<parameter name="prefix" type="String" />
+	</action>	
+	<action name="toComment" return="joinpoint" tooltip="Replaces this join point with a comment with the same contents as .code">	
+		<parameter name="prefix" type="String" />
+		<parameter name="suffix" type="String" />
+	</action>	
+	
 	<!-- PROGRAM -->
 
 	<!-- Internally generates the code for the current program and rebuilds 
@@ -141,6 +151,7 @@
 	<action name="atexit" class="program" tooltip="Registers a function to be executed when the program exits">
 		<parameter name="function" type="function" />
 	</action>
+	
 
 	<!-- FILE -->
 
