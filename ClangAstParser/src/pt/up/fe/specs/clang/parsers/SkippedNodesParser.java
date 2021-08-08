@@ -19,10 +19,10 @@ import java.util.Map;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import pt.up.fe.specs.clang.codeparser.ClangParserData;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class SkippedNodesParser implements LineStreamWorker<ClangParserData> {
+public class SkippedNodesParser implements LineStreamWorker<ClangAstData> {
 
     private static final String PARSER_ID = "<Skipped Nodes Map>";
 
@@ -32,13 +32,13 @@ public class SkippedNodesParser implements LineStreamWorker<ClangParserData> {
     }
 
     @Override
-    public void init(ClangParserData data) {
-        data.set(ClangParserData.SKIPPED_NODES_MAP, new HashMap<>());
+    public void init(ClangAstData data) {
+        data.set(ClangAstData.SKIPPED_NODES_MAP, new HashMap<>());
     }
 
     @Override
-    public void apply(LineStream lineStream, ClangParserData data) {
-        Map<String, String> map = data.get(ClangParserData.SKIPPED_NODES_MAP);
+    public void apply(LineStream lineStream, ClangAstData data) {
+        Map<String, String> map = data.get(ClangAstData.SKIPPED_NODES_MAP);
         LineStreamParsers.stringMap(PARSER_ID, lineStream, map);
     }
 

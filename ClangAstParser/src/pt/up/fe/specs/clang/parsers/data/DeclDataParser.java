@@ -20,7 +20,7 @@ import java.util.Optional;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
-import pt.up.fe.specs.clang.codeparser.ClangParserData;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
@@ -77,7 +77,7 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class DeclDataParser {
 
-    public static DataStore parseDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseDeclData(LineStream lines, ClangAstData dataStore) {
 
         DataStore data = NodeDataParser.parseNodeData(lines, dataStore);
 
@@ -105,7 +105,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseNamedDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseNamedDeclData(LineStream lines, ClangAstData dataStore) {
 
         // Parse Decl data
         DataStore data = parseDeclData(lines, dataStore);
@@ -127,7 +127,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseTypeDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseTypeDeclData(LineStream lines, ClangAstData dataStore) {
         // Parse NamedDecl data
         DataStore data = parseNamedDeclData(lines, dataStore);
 
@@ -141,7 +141,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseUnresolvedUsingTypenameDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseUnresolvedUsingTypenameDeclData(LineStream lines, ClangAstData dataStore) {
         // Parse TypeDecl data
         DataStore data = parseTypeDeclData(lines, dataStore);
 
@@ -151,7 +151,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseTagDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseTagDeclData(LineStream lines, ClangAstData dataStore) {
         // Parse TypeDecl data
         DataStore data = parseTypeDeclData(lines, dataStore);
 
@@ -167,7 +167,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseEnumDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseEnumDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         DataStore data = parseTagDeclData(lines, dataStore);
 
@@ -177,7 +177,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseRecordDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseRecordDeclData(LineStream lines, ClangAstData dataStore) {
         // Parse TagDecl data
         DataStore data = parseTagDeclData(lines, dataStore);
 
@@ -207,7 +207,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseCXXRecordDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseCXXRecordDeclData(LineStream lines, ClangAstData dataStore) {
         // Parse RecordDecl data
         DataStore data = parseRecordDeclData(lines, dataStore);
 
@@ -225,7 +225,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseValueDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseValueDeclData(LineStream lines, ClangAstData dataStore) {
         // Parse NamedDecl data
         DataStore data = parseNamedDeclData(lines, dataStore);
 
@@ -236,7 +236,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseFieldDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseFieldDeclData(LineStream lines, ClangAstData dataStore) {
         // Should DeclaratorDecl
         DataStore data = parseValueDeclData(lines, dataStore);
 
@@ -245,7 +245,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseFunctionDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseFunctionDeclData(LineStream lines, ClangAstData dataStore) {
 
         // Parse NamedDecl data
         DataStore data = parseValueDeclData(lines, dataStore);
@@ -274,7 +274,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseCXXMethodDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseCXXMethodDeclData(LineStream lines, ClangAstData dataStore) {
 
         // Parse FunctionDecl data
         DataStore data = parseFunctionDeclData(lines, dataStore);
@@ -285,7 +285,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseCXXConstructorDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseCXXConstructorDeclData(LineStream lines, ClangAstData dataStore) {
 
         // Parse CXXMethodDecl data
         DataStore data = parseCXXMethodDeclData(lines, dataStore);
@@ -314,7 +314,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseCXXConversionDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseCXXConversionDeclData(LineStream lines, ClangAstData dataStore) {
 
         // Parse CXXMethodDecl data
         DataStore data = parseCXXMethodDeclData(lines, dataStore);
@@ -343,7 +343,7 @@ public class DeclDataParser {
     }
     */
 
-    public static DataStore parseVarDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseVarDeclData(LineStream lines, ClangAstData dataStore) {
 
         // Parse NamedDecl data
         DataStore data = parseValueDeclData(lines, dataStore);
@@ -362,7 +362,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseParmVarDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseParmVarDeclData(LineStream lines, ClangAstData dataStore) {
         // Parse VarDecl data
         DataStore data = parseVarDeclData(lines, dataStore);
 
@@ -371,7 +371,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseTemplateTypeParmDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseTemplateTypeParmDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         DataStore data = parseTypeDeclData(lines, dataStore);
 
@@ -382,7 +382,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseTypedefNameDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseTypedefNameDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         DataStore data = parseTypeDeclData(lines, dataStore);
         // ClavaLog.debug("TYPEDEF NAME DECL ID:" + data.get(ClavaNode.ID));
@@ -392,7 +392,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseAccessSpecDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseAccessSpecDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         DataStore data = parseDeclData(lines, dataStore);
 
@@ -401,7 +401,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseUsingDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseUsingDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         DataStore data = parseNamedDeclData(lines, dataStore);
 
@@ -410,7 +410,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseUsingDirectiveDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseUsingDirectiveDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         DataStore data = parseNamedDeclData(lines, dataStore);
 
@@ -422,7 +422,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseNamespaceDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseNamespaceDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         DataStore data = parseNamedDeclData(lines, dataStore);
 
@@ -431,7 +431,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseNamespaceAliasDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseNamespaceAliasDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         DataStore data = parseNamedDeclData(lines, dataStore);
 
@@ -448,7 +448,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseLinkageSpecDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseLinkageSpecDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         DataStore data = parseDeclData(lines, dataStore);
 
@@ -457,7 +457,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseStaticAssertDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseStaticAssertDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         DataStore data = parseDeclData(lines, dataStore);
 
@@ -468,7 +468,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseTemplateTemplateParmDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseTemplateTemplateParmDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         // DataStore data = parseNamedDeclData(lines, dataStore);
         DataStore data = parseTemplateDeclData(lines, dataStore);
@@ -489,7 +489,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseNonTypeTemplateParmDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseNonTypeTemplateParmDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         DataStore data = parseValueDeclData(lines, dataStore);
 
@@ -506,7 +506,7 @@ public class DeclDataParser {
         return data;
     }
 
-    public static DataStore parseTemplateDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseTemplateDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         DataStore data = parseNamedDeclData(lines, dataStore);
 
@@ -517,7 +517,7 @@ public class DeclDataParser {
         return data;
     }
     
-    public static DataStore parseDeclaratorDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseDeclaratorDeclData(LineStream lines, ClangAstData dataStore) {
     	// Hierarchy
         DataStore data = parseValueDeclData(lines, dataStore); 	
         
@@ -525,7 +525,7 @@ public class DeclDataParser {
     }
     
     
-    public static DataStore parseMSPropertyDeclData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseMSPropertyDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
         DataStore data = parseDeclaratorDeclData(lines, dataStore); 	
         

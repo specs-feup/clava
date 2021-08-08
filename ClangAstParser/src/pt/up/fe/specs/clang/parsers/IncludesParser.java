@@ -20,11 +20,11 @@ import java.util.List;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import pt.up.fe.specs.clang.codeparser.ClangParserData;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class IncludesParser implements LineStreamWorker<ClangParserData> {
+public class IncludesParser implements LineStreamWorker<ClangAstData> {
 
     private static final String PARSER_ID = "<Includes>";
 
@@ -44,13 +44,13 @@ public class IncludesParser implements LineStreamWorker<ClangParserData> {
     }
 
     @Override
-    public void init(ClangParserData data) {
-        data.set(ClangParserData.INCLUDES, new ArrayList<>());
+    public void init(ClangAstData data) {
+        data.set(ClangAstData.INCLUDES, new ArrayList<>());
     }
 
     @Override
-    public void apply(LineStream lineStream, ClangParserData data) {
-        List<Include> includes = data.get(ClangParserData.INCLUDES);
+    public void apply(LineStream lineStream, ClangAstData data) {
+        List<Include> includes = data.get(ClangAstData.INCLUDES);
         parseInclude(lineStream, includes);
     }
 }

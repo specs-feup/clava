@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.codeparser;
+package pt.up.fe.specs.clang.dumper;
 
 import java.io.File;
 import java.io.InputStream;
@@ -27,8 +27,9 @@ import org.suikasoft.jOptions.streamparser.LineStreamParser;
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.cilk.CilkParser;
+import pt.up.fe.specs.clang.codeparser.CodeParser;
+import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clang.parsers.ClangStreamParserV2;
-import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaOptions;
@@ -125,7 +126,7 @@ public class ClangAstDumper {
         return this;
     }
 
-    public ClangParserData parse(File sourceFile, String id, Standard standard, DataStore config) {
+    public ClangAstData parse(File sourceFile, String id, Standard standard, DataStore config) {
 
         // Pre-processing before the parsing
         if (config.get(ClangAstKeys.USES_CILK)) {
@@ -137,7 +138,7 @@ public class ClangAstDumper {
         return parsePrivate(sourceFile, id, standard, config);
     }
 
-    private ClangParserData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
+    private ClangAstData parsePrivate(File sourceFile, String id, Standard standard, DataStore config) {
 
         ClavaLog.debug(() -> "Data store config for single file parser: " + config);
 
@@ -247,15 +248,15 @@ public class ClangAstDumper {
 
         ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
 
-        ClangParserData parsedData = null;
-        ProcessOutput<String, ClangParserData> output = null;
+        ClangAstData parsedData = null;
+        ProcessOutput<String, ClangAstData> output = null;
 
         // ProcessOutputAsString output = SpecsSystem.runProcess(arguments, true, false);
-        try (LineStreamParser<ClangParserData> lineStreamParser = ClangStreamParserV2
+        try (LineStreamParser<ClangAstData> lineStreamParser = ClangStreamParserV2
                 .newInstance(config.get(ClavaNode.CONTEXT))) {
 
             if (SpecsSystem.isDebug()) {
-                lineStreamParser.getData().set(ClangParserData.DEBUG, true);
+                lineStreamParser.getData().set(ClangAstData.DEBUG, true);
             }
 
             // Create temporary working folder, in order to support running several dumps in parallel
@@ -282,7 +283,7 @@ public class ClangAstDumper {
 
             parsedData = output.getStdErr();
             SpecsCheck.checkNotNull(parsedData, () -> "Did not expect error output to be null");
-            parsedData.set(ClangParserData.HAS_ERRORS, output.isError());
+            parsedData.set(ClangAstData.HAS_ERRORS, output.isError());
 
             // If console output streaming is disabled, show output only at the end
             if (!streamConsoleOutput) {
@@ -296,11 +297,11 @@ public class ClangAstDumper {
             throw new RuntimeException("Error while running Clang AST dumper", e);
         }
 
-        ClangStreamParser clangStreamParser = new ClangStreamParser(parsedData, SpecsSystem.isDebug(), config);
+        ClangAstParser clangStreamParser = new ClangAstParser(parsedData, SpecsSystem.isDebug(), config);
 
         TranslationUnit tUnit = clangStreamParser.parseTu(sourceFile);
 
-        parsedData.set(ClangParserData.TRANSLATION_UNIT, tUnit);
+        parsedData.set(ClangAstData.TRANSLATION_UNIT, tUnit);
 
         return parsedData;
     }
@@ -324,13 +325,13 @@ public class ClangAstDumper {
         return output.toString();
     }
 
-    private ClangParserData processStdErr(InputStream inputStream, ClavaContext context) {
+    private ClangAstData processStdErr(InputStream inputStream, ClavaContext context) {
         // Create LineStreamParser
-        try (LineStreamParser<ClangParserData> lineStreamParser = ClangStreamParserV2.newInstance(context)) {
+        try (LineStreamParser<ClangAstData> lineStreamParser = ClangStreamParserV2.newInstance(context)) {
 
             // Set debug
             if (SpecsSystem.isDebug()) {
-                lineStreamParser.getData().set(ClangParserData.DEBUG, true);
+                lineStreamParser.getData().set(ClangAstData.DEBUG, true);
             }
 
             // Dump file
@@ -340,8 +341,8 @@ public class ClangAstDumper {
             String linesNotParsed = lineStreamParser.parse(inputStream, dumpfile);
 
             // Add lines not parsed to DataStore
-            ClangParserData data = lineStreamParser.getData();
-            data.set(ClangParserData.LINES_NOT_PARSED, linesNotParsed);
+            ClangAstData data = lineStreamParser.getData();
+            data.set(ClangAstData.LINES_NOT_PARSED, linesNotParsed);
 
             // Return data
             return data;

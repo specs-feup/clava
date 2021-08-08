@@ -16,7 +16,7 @@ package pt.up.fe.specs.clang.parsers.data;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
-import pt.up.fe.specs.clang.codeparser.ClangParserData;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.attr.AlignedAttr;
 import pt.up.fe.specs.clava.ast.attr.AlignedExprAttr;
@@ -34,7 +34,7 @@ import pt.up.fe.specs.util.utilities.LineStream;
 
 public class AttrDataParser {
 
-    public static DataStore parseAttributeData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseAttributeData(LineStream lines, ClangAstData dataStore) {
 
         DataStore clavaData = NodeDataParser.parseNodeData(lines, dataStore);
 
@@ -47,7 +47,7 @@ public class AttrDataParser {
         return clavaData;
     }
 
-    public static DataStore parseAlignedAttrData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseAlignedAttrData(LineStream lines, ClangAstData dataStore) {
         DataStore data = parseAttributeData(lines, dataStore);
 
         data.add(AlignedAttr.SPELLING, lines.nextLine());
@@ -88,7 +88,7 @@ public class AttrDataParser {
         // return new AlignedAttrData(spelling, isExpr, expr, type, data);
     }
 
-    public static DataStore parseOpenCLUnrollHintAttrData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseOpenCLUnrollHintAttrData(LineStream lines, ClangAstData dataStore) {
         DataStore data = parseAttributeData(lines, dataStore);
 
         data.add(OpenCLUnrollHintAttr.UNROLL_HINT, LineStreamParsers.integer(lines));
@@ -96,7 +96,7 @@ public class AttrDataParser {
         return data;
     }
 
-    public static DataStore parseFormatAttrData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseFormatAttrData(LineStream lines, ClangAstData dataStore) {
         DataStore data = parseAttributeData(lines, dataStore);
 
         data.add(FormatAttr.TYPE, LineStreamParsers.enumFromName(FormatAttrKind.class, lines));
@@ -106,7 +106,7 @@ public class AttrDataParser {
         return data;
     }
 
-    public static DataStore parseNonNullAttrData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseNonNullAttrData(LineStream lines, ClangAstData dataStore) {
         DataStore data = parseAttributeData(lines, dataStore);
 
         data.add(NonNullAttr.ARGUMENTS, LineStreamParsers.list(lines, l -> Integer.valueOf(l.nextLine())));
@@ -114,7 +114,7 @@ public class AttrDataParser {
         return data;
     }
 
-    public static DataStore parseVisibilityAttrData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseVisibilityAttrData(LineStream lines, ClangAstData dataStore) {
         DataStore data = parseAttributeData(lines, dataStore);
 
         data.add(VisibilityAttr.VISIBILITY_TYPE, LineStreamParsers.enumFromName(VisibilityType.class, lines));

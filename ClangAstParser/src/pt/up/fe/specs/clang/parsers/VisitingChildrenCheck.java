@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import pt.up.fe.specs.clang.codeparser.ClangParserData;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
@@ -128,34 +128,34 @@ public class VisitingChildrenCheck {
         visitChain.remove(visitChain.size() - 1);
     }
 
-    private static void init(ClangParserData parserData) {
-        if (parserData.hasValue(ClangParserData.VISITING_CHILDREN)) {
+    private static void init(ClangAstData parserData) {
+        if (parserData.hasValue(ClangAstData.VISITING_CHILDREN)) {
             return;
         }
 
-        parserData.set(ClangParserData.VISITING_CHILDREN, new VisitingChildrenCheck());
+        parserData.set(ClangAstData.VISITING_CHILDREN, new VisitingChildrenCheck());
     }
 
-    public static Collection<LineStreamWorker<ClangParserData>> getWorkers() {
-        List<LineStreamWorker<ClangParserData>> workers = new ArrayList<>();
+    public static Collection<LineStreamWorker<ClangAstData>> getWorkers() {
+        List<LineStreamWorker<ClangAstData>> workers = new ArrayList<>();
 
-        LineStreamWorker<ClangParserData> topNodeStart = LineStreamWorker.newInstance("<Top Visit Start>",
+        LineStreamWorker<ClangAstData> topNodeStart = LineStreamWorker.newInstance("<Top Visit Start>",
                 VisitingChildrenCheck::init,
-                (lines, data) -> data.get(ClangParserData.VISITING_CHILDREN).topNodeVisitStart(lines.nextLine()));
+                (lines, data) -> data.get(ClangAstData.VISITING_CHILDREN).topNodeVisitStart(lines.nextLine()));
 
-        LineStreamWorker<ClangParserData> topNodeEnd = LineStreamWorker.newInstance("<Top Visit End>",
+        LineStreamWorker<ClangAstData> topNodeEnd = LineStreamWorker.newInstance("<Top Visit End>",
                 VisitingChildrenCheck::init,
                 // parserData -> SpecsCheck.checkArgument(parserData.hasValue(ClangParserData.VISITING_CHILDREN),
                 // () -> "Expected value to exist"),
-                (lines, data) -> data.get(ClangParserData.VISITING_CHILDREN).topNodeVisitEnd(lines.nextLine()));
+                (lines, data) -> data.get(ClangAstData.VISITING_CHILDREN).topNodeVisitEnd(lines.nextLine()));
 
-        LineStreamWorker<ClangParserData> visitNodeStart = LineStreamWorker.newInstance("<Visit Start>",
+        LineStreamWorker<ClangAstData> visitNodeStart = LineStreamWorker.newInstance("<Visit Start>",
                 VisitingChildrenCheck::init,
-                (lines, data) -> data.get(ClangParserData.VISITING_CHILDREN).childNodeVisitStart(lines.nextLine()));
+                (lines, data) -> data.get(ClangAstData.VISITING_CHILDREN).childNodeVisitStart(lines.nextLine()));
 
-        LineStreamWorker<ClangParserData> visitNodeEnd = LineStreamWorker.newInstance("<Visit End>",
+        LineStreamWorker<ClangAstData> visitNodeEnd = LineStreamWorker.newInstance("<Visit End>",
                 VisitingChildrenCheck::init,
-                (lines, data) -> data.get(ClangParserData.VISITING_CHILDREN).childNodeVisitEnd(lines.nextLine()));
+                (lines, data) -> data.get(ClangAstData.VISITING_CHILDREN).childNodeVisitEnd(lines.nextLine()));
 
         workers.add(topNodeStart);
         workers.add(topNodeEnd);

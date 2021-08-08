@@ -22,10 +22,10 @@ import java.util.Map;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import pt.up.fe.specs.clang.codeparser.ClangParserData;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class VisitedChildrenParser implements LineStreamWorker<ClangParserData> {
+public class VisitedChildrenParser implements LineStreamWorker<ClangAstData> {
 
     private static final String PARSER_ID = "<Visited Children>";
 
@@ -35,13 +35,13 @@ public class VisitedChildrenParser implements LineStreamWorker<ClangParserData> 
     }
 
     @Override
-    public void init(ClangParserData data) {
-        data.set(ClangParserData.VISITED_CHILDREN, new HashMap<>());
+    public void init(ClangAstData data) {
+        data.set(ClangAstData.VISITED_CHILDREN, new HashMap<>());
     }
 
     @Override
-    public void apply(LineStream lineStream, ClangParserData data) {
-        Map<String, List<String>> children = data.get(ClangParserData.VISITED_CHILDREN);
+    public void apply(LineStream lineStream, ClangAstData data) {
+        Map<String, List<String>> children = data.get(ClangAstData.VISITED_CHILDREN);
 
         String key = lineStream.nextLine();
 

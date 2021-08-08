@@ -20,12 +20,12 @@ import java.util.Map;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import pt.up.fe.specs.clang.codeparser.ClangParserData;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.ast.extra.data.OpenCLVersion;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class LanguageParser implements LineStreamWorker<ClangParserData> {
+public class LanguageParser implements LineStreamWorker<ClangAstData> {
 
     private static final String PARSER_ID = "<Compiler Instance Data>";
 
@@ -35,13 +35,13 @@ public class LanguageParser implements LineStreamWorker<ClangParserData> {
     }
 
     @Override
-    public void init(ClangParserData data) {
-        data.set(ClangParserData.FILE_LANGUAGE_DATA, new HashMap<>());
+    public void init(ClangAstData data) {
+        data.set(ClangAstData.FILE_LANGUAGE_DATA, new HashMap<>());
     }
 
     @Override
-    public void apply(LineStream lineStream, ClangParserData data) {
-        Map<File, Language> map = data.get(ClangParserData.FILE_LANGUAGE_DATA);
+    public void apply(LineStream lineStream, ClangAstData data) {
+        Map<File, Language> map = data.get(ClangAstData.FILE_LANGUAGE_DATA);
 
         File file = new File(lineStream.nextLine());
         Language language = new Language()

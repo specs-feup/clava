@@ -19,7 +19,7 @@ import java.util.List;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
-import pt.up.fe.specs.clang.codeparser.ClangParserData;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.stmt.AsmStmt;
 import pt.up.fe.specs.clava.ast.stmt.AttributedStmt;
@@ -40,11 +40,11 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class StmtDataParser {
 
-    public static DataStore parseStmtData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseStmtData(LineStream lines, ClangAstData dataStore) {
         return NodeDataParser.parseNodeData(lines, dataStore);
     }
 
-    public static DataStore parseLabelStmtData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseLabelStmtData(LineStream lines, ClangAstData dataStore) {
         DataStore data = parseStmtData(lines, dataStore);
 
         data.add(LabelStmt.LABEL, lines.nextLine());
@@ -52,7 +52,7 @@ public class StmtDataParser {
         return data;
     }
 
-    public static DataStore parseGotoStmtData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseGotoStmtData(LineStream lines, ClangAstData dataStore) {
         DataStore data = parseStmtData(lines, dataStore);
 
         dataStore.getClavaNodes().queueSetNode(data, GotoStmt.LABEL, lines.nextLine());
@@ -60,7 +60,7 @@ public class StmtDataParser {
         return data;
     }
 
-    public static DataStore parseAttributedStmtData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseAttributedStmtData(LineStream lines, ClangAstData dataStore) {
         DataStore data = parseStmtData(lines, dataStore);
 
         dataStore.getClavaNodes().queueSetNodeList(data, AttributedStmt.STMT_ATTRIBUTES,
@@ -69,7 +69,7 @@ public class StmtDataParser {
         return data;
     }
 
-    public static DataStore parseAsmStmtData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseAsmStmtData(LineStream lines, ClangAstData dataStore) {
         DataStore data = parseStmtData(lines, dataStore);
 
         data.add(AsmStmt.IS_SIMPLE, LineStreamParsers.oneOrZero(lines));
@@ -108,7 +108,7 @@ public class StmtDataParser {
         return data;
     }
 
-    public static DataStore parseGCCAsmStmtData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseGCCAsmStmtData(LineStream lines, ClangAstData dataStore) {
         DataStore data = parseAsmStmtData(lines, dataStore);
 
         data.add(GCCAsmStmt.ASM_STRING, lines.nextLine());
@@ -116,7 +116,7 @@ public class StmtDataParser {
         return data;
     }
 
-    public static DataStore parseMSAsmStmtData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseMSAsmStmtData(LineStream lines, ClangAstData dataStore) {
         DataStore data = parseAsmStmtData(lines, dataStore);
 
         data.add(MSAsmStmt.ASM_STRING, lines.nextLine());

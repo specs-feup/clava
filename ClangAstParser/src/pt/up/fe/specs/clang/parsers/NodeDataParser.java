@@ -31,7 +31,7 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinitions;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import pt.up.fe.specs.clang.codeparser.ClangParserData;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.parsers.data.AttrDataParser;
 import pt.up.fe.specs.clang.parsers.data.ClavaDataParsers;
 import pt.up.fe.specs.clang.parsers.data.DeclDataParser;
@@ -53,7 +53,7 @@ public class NodeDataParser {
 
     // public final static AtomicInteger INVALID_COUNTER = new AtomicInteger(0);
 
-    private static final Map<String, BiFunction<LineStream, ClangParserData, DataStore>> STATIC_DATA_PARSERS;
+    private static final Map<String, BiFunction<LineStream, ClangAstData, DataStore>> STATIC_DATA_PARSERS;
     static {
         STATIC_DATA_PARSERS = new HashMap<>();
 
@@ -130,14 +130,14 @@ public class NodeDataParser {
         */
     }
 
-    public static Collection<LineStreamWorker<ClangParserData>> getWorkers() {
-        List<LineStreamWorker<ClangParserData>> workers = new ArrayList<>(STATIC_DATA_PARSERS.size());
+    public static Collection<LineStreamWorker<ClangAstData>> getWorkers() {
+        List<LineStreamWorker<ClangAstData>> workers = new ArrayList<>(STATIC_DATA_PARSERS.size());
 
-        for (Entry<String, BiFunction<LineStream, ClangParserData, DataStore>> entry : STATIC_DATA_PARSERS.entrySet()) {
-            BiConsumer<LineStream, ClangParserData> apply = (lines, data) -> parseNodeDataTop(entry.getValue(), lines,
+        for (Entry<String, BiFunction<LineStream, ClangAstData, DataStore>> entry : STATIC_DATA_PARSERS.entrySet()) {
+            BiConsumer<LineStream, ClangAstData> apply = (lines, data) -> parseNodeDataTop(entry.getValue(), lines,
                     data);
 
-            LineStreamWorker<ClangParserData> worker = LineStreamWorker.newInstance(entry.getKey(),
+            LineStreamWorker<ClangAstData> worker = LineStreamWorker.newInstance(entry.getKey(),
                     NodeDataParser::nodeDataInit,
                     apply);
 
@@ -148,7 +148,7 @@ public class NodeDataParser {
     }
 
     private static void addDataParserClass(
-            Map<String, BiFunction<LineStream, ClangParserData, DataStore>> dataParsers,
+            Map<String, BiFunction<LineStream, ClangAstData, DataStore>> dataParsers,
             Class<?> classWithParsers) {
 
         for (Method method : classWithParsers.getMethods()) {
@@ -171,7 +171,7 @@ public class NodeDataParser {
 
             // Second parameter should be ClangParserData
             Class<?> param2Class = method.getParameterTypes()[1];
-            if (!ClangParserData.class.isAssignableFrom(param2Class)) {
+            if (!ClangAstData.class.isAssignableFrom(param2Class)) {
                 continue;
             }
 
@@ -190,7 +190,7 @@ public class NodeDataParser {
 
             String key = "<" + dataParserName + ">";
 
-            BiFunction<LineStream, ClangParserData, DataStore> parser = (lines, clangParser) -> {
+            BiFunction<LineStream, ClangAstData, DataStore> parser = (lines, clangParser) -> {
                 try {
                     return (DataStore) method.invoke(null, lines, clangParser);
                 } catch (Exception e) {
@@ -214,27 +214,27 @@ public class NodeDataParser {
 
     public static Optional<DataStore> getNodeData(DataStore dataStore, String nodeId) {
 
-        if (!dataStore.hasValue(ClangParserData.NODE_DATA)) {
+        if (!dataStore.hasValue(ClangAstData.NODE_DATA)) {
             return Optional.empty();
         }
 
-        DataStore nodeData = dataStore.get(ClangParserData.NODE_DATA).get(nodeId);
+        DataStore nodeData = dataStore.get(ClangAstData.NODE_DATA).get(nodeId);
 
         return Optional.ofNullable(nodeData);
 
     }
 
-    private static void nodeDataInit(ClangParserData data) {
+    private static void nodeDataInit(ClangAstData data) {
         // If already initialized, return
-        if (data.hasValue(ClangParserData.NODE_DATA)) {
+        if (data.hasValue(ClangAstData.NODE_DATA)) {
             return;
         }
 
-        data.set(ClangParserData.NODE_DATA, new HashMap<>());
+        data.set(ClangAstData.NODE_DATA, new HashMap<>());
     }
 
-    private static void parseNodeDataTop(BiFunction<LineStream, ClangParserData, DataStore> dataParser,
-            LineStream lines, ClangParserData data) {
+    private static void parseNodeDataTop(BiFunction<LineStream, ClangAstData, DataStore> dataParser,
+            LineStream lines, ClangAstData data) {
 
         // if (lines.getLastLineIndex() == 4153) {
         // System.out.println("HELLOOOOOOOOASOD:");
@@ -245,7 +245,7 @@ public class NodeDataParser {
         // SpecsCheck.checkArgument(clavaData instanceof ListDataStore,
         // () -> "Expected a ListDataStore, foud " + clavaData.getClass() + ". DataParser: " + dataParser);
 
-        DataStore previousValue = data.get(ClangParserData.NODE_DATA).put(clavaData.get(ClavaNode.ID), clavaData);
+        DataStore previousValue = data.get(ClangAstData.NODE_DATA).put(clavaData.get(ClavaNode.ID), clavaData);
 
         if (previousValue != null) {
             throw new RuntimeException(
@@ -255,11 +255,11 @@ public class NodeDataParser {
 
     }
 
-    public static DataStore parseNodeData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseNodeData(LineStream lines, ClangAstData dataStore) {
         return parseNodeData(lines, true, dataStore);
     }
 
-    public static DataStore parseNodeData(LineStream lines, boolean hasLocation, ClangParserData dataStore) {
+    public static DataStore parseNodeData(LineStream lines, boolean hasLocation, ClangAstData dataStore) {
 
         String id = lines.nextLine();
         String className = lines.nextLine();

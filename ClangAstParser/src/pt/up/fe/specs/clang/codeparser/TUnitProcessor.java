@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.InitListExpr;
@@ -35,7 +36,7 @@ public class TUnitProcessor {
     // private final static Set<Class<? extends ClavaNode>> IGNORE_CLASSES = new HashSet<>(
     // Arrays.asList(ImplicitCastExpr.class));
 
-    private final List<ClangParserData> parsingData;
+    private final List<ClangAstData> parsingData;
     private final boolean normalize;
 
     private final Map<String, ClavaNode> signatureToNodeMap;
@@ -47,7 +48,7 @@ public class TUnitProcessor {
     private Set<Class<? extends ClavaNode>> ignoredNodesClasses;
     private StringBuilder collisionReport;
 
-    public TUnitProcessor(List<ClangParserData> parsingData, boolean normalize) {
+    public TUnitProcessor(List<ClangAstData> parsingData, boolean normalize) {
         this.parsingData = parsingData;
         this.normalize = normalize;
 
@@ -68,7 +69,7 @@ public class TUnitProcessor {
 
         // Create list of Translation Units
         List<TranslationUnit> tUnits = parsingData.stream()
-                .map(data -> data.get(ClangParserData.TRANSLATION_UNIT))
+                .map(data -> data.get(ClangAstData.TRANSLATION_UNIT))
                 .collect(Collectors.toList());
 
         // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
@@ -114,7 +115,7 @@ public class TUnitProcessor {
         // .forEach(node -> System.out.println("NODE: " + node.getClass()));
 
         parsingData.stream()
-                .flatMap(data -> data.get(ClangParserData.CLAVA_NODES).getNodes().values().stream())
+                .flatMap(data -> data.get(ClangAstData.CLAVA_NODES).getNodes().values().stream())
                 .forEach(node -> replaceFields(node));
 
         ClavaLog.debug(() -> "During AST normalization processed " + processedFields + " fields in " + processedNodes

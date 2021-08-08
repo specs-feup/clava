@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import pt.up.fe.specs.clang.codeparser.ClangParserData;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.version.Clang_3_8;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.util.SpecsCheck;
@@ -30,7 +30,7 @@ public class ClangStreamParserV2 {
     private final static String HEADER_WARNING_PREFIX = "error: invalid argument '";
     private final static String HEADER_WARNING_SUFFIX = "' not allowed with 'C'";
 
-    private static final Map<String, LineStreamWorker<ClangParserData>> WORKERS;
+    private static final Map<String, LineStreamWorker<ClangAstData>> WORKERS;
     static {
         WORKERS = new HashMap<>();
         addWorker(() -> new ClavaNodeParser(Clang_3_8.getClassesService()));
@@ -48,20 +48,20 @@ public class ClangStreamParserV2 {
         VisitingChildrenCheck.getWorkers().forEach(ClangStreamParserV2::addWorker);
     }
 
-    private static void addWorker(Supplier<LineStreamWorker<ClangParserData>> workerSupplier) {
+    private static void addWorker(Supplier<LineStreamWorker<ClangAstData>> workerSupplier) {
         addWorker(workerSupplier.get());
     }
 
-    private static void addWorker(LineStreamWorker<ClangParserData> worker) {
+    private static void addWorker(LineStreamWorker<ClangAstData> worker) {
         // Add worker
         WORKERS.put(worker.getId(), worker);
     }
 
     // public static LineStreamParserV2 newInstance(List<String> arguments) {
-    public static LineStreamParser<ClangParserData> newInstance(ClavaContext context) {
-        ClangParserData clangParserData = new ClangParserData();
-        clangParserData.set(ClangParserData.CONTEXT, context);
-        LineStreamParser<ClangParserData> streamParser = LineStreamParser.newInstance(clangParserData, WORKERS);
+    public static LineStreamParser<ClangAstData> newInstance(ClavaContext context) {
+        ClangAstData clangParserData = new ClangAstData();
+        clangParserData.set(ClangAstData.CONTEXT, context);
+        LineStreamParser<ClangAstData> streamParser = LineStreamParser.newInstance(clangParserData, WORKERS);
         streamParser.setLineIgnore(ClangStreamParserV2::ignoreLine);
         // Create ClavaContext
         // streamParser.getData().add(ClavaNode.CONTEXT, new ClavaContext(arguments));

@@ -34,7 +34,9 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.ClangResources;
-import pt.up.fe.specs.clang.streamparserv2.ClangStreamParser;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
+import pt.up.fe.specs.clang.dumper.ClangAstDumper;
+import pt.up.fe.specs.clang.dumper.ClangAstParser;
 import pt.up.fe.specs.clang.transforms.TreeTransformer;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
@@ -150,12 +152,12 @@ public class ParallelCodeParser extends CodeParser {
 
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
 
-        List<Future<ClangParserData>> futureTUnits = new ArrayList<>();
+        List<Future<ClangAstData>> futureTUnits = new ArrayList<>();
         for (int i = 0; i < sources.size(); i++) {
             String id = Integer.toString(i + 1);
             File source = sources.get(i);
 
-            Future<ClangParserData> tUnit = executor
+            Future<ClangAstData> tUnit = executor
                     .submit(() -> parseSource(source, id, standard, options, clangDump,
                             counter, parsingFolder, clangFiles.getClangExecutable(), clangFiles.getBuiltinIncludes()));
 
@@ -167,7 +169,7 @@ public class ParallelCodeParser extends CodeParser {
         executor.shutdown();
 
         // Collect parsing results
-        List<ClangParserData> clangParserResults = new ArrayList<>();
+        List<ClangAstData> clangParserResults = new ArrayList<>();
         for (int i = 0; i < sources.size(); i++) {
             var future = futureTUnits.get(i);
             try {
@@ -223,14 +225,14 @@ public class ParallelCodeParser extends CodeParser {
         }
 
         boolean hasParsingErrors = clangParserResults.stream()
-                .filter(data -> data.get(ClangParserData.HAS_ERRORS))
+                .filter(data -> data.get(ClangAstData.HAS_ERRORS))
                 .findAny()
                 .isPresent();
 
         if (hasParsingErrors && !get(CONTINUE_ON_PARSING_ERRORS)) {
             List<String> errors = clangParserResults.stream()
-                    .filter(data -> data.get(ClangParserData.HAS_ERRORS))
-                    .map(data -> data.get(ClangParserData.LINES_NOT_PARSED))
+                    .filter(data -> data.get(ClangAstData.HAS_ERRORS))
+                    .map(data -> data.get(ClangAstData.LINES_NOT_PARSED))
                     .collect(Collectors.toList());
 
             throw new ClavaParserException(errors);
@@ -242,13 +244,13 @@ public class ParallelCodeParser extends CodeParser {
 
         // If errors, set error messages in corresponding TUnit
         for (var parserData : clangParserResults) {
-            if (!parserData.get(ClangParserData.HAS_ERRORS)) {
+            if (!parserData.get(ClangAstData.HAS_ERRORS)) {
                 continue;
             }
 
-            var errorOutput = parserData.get(ClangParserData.LINES_NOT_PARSED);
-            parserData.get(ClangParserData.TRANSLATION_UNIT).set(TranslationUnit.HAS_PARSING_ERRORS);
-            parserData.get(ClangParserData.TRANSLATION_UNIT).set(TranslationUnit.ERROR_OUTPUT, errorOutput);
+            var errorOutput = parserData.get(ClangAstData.LINES_NOT_PARSED);
+            parserData.get(ClangAstData.TRANSLATION_UNIT).set(TranslationUnit.HAS_PARSING_ERRORS);
+            parserData.get(ClangAstData.TRANSLATION_UNIT).set(TranslationUnit.ERROR_OUTPUT, errorOutput);
         }
 
         App app = context.get(ClavaContext.FACTORY).app(tUnits);
@@ -263,13 +265,13 @@ public class ParallelCodeParser extends CodeParser {
         // Applies several passes to make the tree resemble more the original code, e.g., remove implicit nodes from
         // original clang tree
         // new TreeTransformer(ClavaParser.getPostParsingRules()).transform(app);
-        new TreeTransformer(ClangStreamParser.getPostParsingRules()).transform(app);
+        new TreeTransformer(ClangAstParser.getPostParsingRules()).transform(app);
 
         // Add text elements (comments, pragmas) to the tree
         new TextParser(app.getContext()).addElements(app);
 
         // Applies passes related with text elements
-        new TreeTransformer(ClangStreamParser.getTextParsingRules()).transform(app);
+        new TreeTransformer(ClangAstParser.getTextParsingRules()).transform(app);
 
         if (get(SHOW_EXEC_INFO)) {
             ClavaLog.metrics(SpecsStrings.takeTime("AST Processing", tic));
@@ -374,7 +376,7 @@ public class ParallelCodeParser extends CodeParser {
         // return null;
     }
 
-    private ClangParserData parseSource(File sourceFile, String id, Standard standard, DataStore options,
+    private ClangAstData parseSource(File sourceFile, String id, Standard standard, DataStore options,
             ConcurrentLinkedQueue<String> clangDump, ParallelProgressCounter counter, File parsingFolder,
             File clangExecutable, List<String> builtinIncludes) {
 
@@ -396,7 +398,7 @@ public class ParallelCodeParser extends CodeParser {
 
         counter.print(sourceFile);
         // ClavaLog.info("Parsing '" + sourceFile.getAbsolutePath() + "'");
-        ClangParserData clangParserData = clangParser.parse(sourceFile, id, standard, options);
+        ClangAstData clangParserData = clangParser.parse(sourceFile, id, standard, options);
 
         if (get(SHOW_CLANG_DUMP)) {
             // SpecsLogs.msgInfo("Clang Dump:\n" + SpecsIo.read(new File(ClangAstParser.getClangDumpFilename())));

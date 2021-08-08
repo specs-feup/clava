@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.codeparser;
+package pt.up.fe.specs.clang.dumper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ import pt.up.fe.specs.clava.context.ClavaFactory;
  * @author JBispo
  *
  */
-public class ClangParserData extends ADataClass<ClangParserData> {
+public class ClangAstData extends ADataClass<ClangAstData> {
 
     /// DATAKEYS BEGIN
 

@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clang.codeparser;
+package pt.up.fe.specs.clang.dumper;
 
 import java.util.Collections;
 

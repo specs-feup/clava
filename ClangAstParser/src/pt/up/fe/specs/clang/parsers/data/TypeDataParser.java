@@ -18,7 +18,7 @@ import java.math.BigInteger;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
-import pt.up.fe.specs.clang.codeparser.ClangParserData;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
 import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.ArrayType;
@@ -67,7 +67,7 @@ import pt.up.fe.specs.util.utilities.LineStream;
  */
 public class TypeDataParser {
 
-    public static DataStore parseTypeData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseTypeData(LineStream lines, ClangAstData dataStore) {
 
         // Types do not have location
         DataStore clavaData = NodeDataParser.parseNodeData(lines, false, dataStore);
@@ -84,7 +84,7 @@ public class TypeDataParser {
         return clavaData;
     }
 
-    public static DataStore parseBuiltinTypeData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseBuiltinTypeData(LineStream lines, ClangAstData dataStore) {
 
         DataStore data = parseTypeData(lines, dataStore);
 
@@ -96,7 +96,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parsePointerTypeData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parsePointerTypeData(LineStream lines, ClangAstData dataStore) {
 
         DataStore data = parseTypeData(lines, dataStore);
 
@@ -105,7 +105,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseQualTypeData(LineStream lines, ClangParserData dataStore) {
+    public static DataStore parseQualTypeData(LineStream lines, ClangAstData dataStore) {
 
         DataStore data = parseTypeData(lines, dataStore);
 
@@ -120,7 +120,7 @@ public class TypeDataParser {
 
     }
 
-    public static DataStore parseFunctionTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseFunctionTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -138,7 +138,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseFunctionProtoTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseFunctionProtoTypeData(LineStream lines, ClangAstData parserData) {
         DataStore data = parseFunctionTypeData(lines, parserData);
 
         data.add(FunctionProtoType.NUM_PARAMETERS, LineStreamParsers.integer(lines));
@@ -167,7 +167,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseArrayTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseArrayTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -179,7 +179,7 @@ public class TypeDataParser {
 
     }
 
-    public static DataStore parseConstantArrayTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseConstantArrayTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseArrayTypeData(lines, parserData);
 
@@ -189,7 +189,7 @@ public class TypeDataParser {
 
     }
 
-    public static DataStore parseVariableArrayTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseVariableArrayTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseArrayTypeData(lines, parserData);
 
@@ -199,7 +199,7 @@ public class TypeDataParser {
 
     }
 
-    public static DataStore parseDependentSizedArrayTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseDependentSizedArrayTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseArrayTypeData(lines, parserData);
 
@@ -209,7 +209,7 @@ public class TypeDataParser {
 
     }
 
-    public static DataStore parseTagTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseTagTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -227,7 +227,7 @@ public class TypeDataParser {
     // return data;
     // }
 
-    public static DataStore parseTypeWithKeywordData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseTypeWithKeywordData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -237,7 +237,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseElaboratedTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseElaboratedTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeWithKeywordData(lines, parserData);
 
@@ -247,7 +247,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseTemplateTypeParmTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseTemplateTypeParmTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -259,7 +259,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseTemplateSpecializationTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseTemplateSpecializationTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -274,7 +274,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseTypedefTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseTypedefTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -283,7 +283,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseAdjustedTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseAdjustedTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -293,7 +293,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseDecayedTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseDecayedTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseAdjustedTypeData(lines, parserData);
 
@@ -303,7 +303,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseDecltypeTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseDecltypeTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -313,7 +313,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseAutoTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseAutoTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -322,7 +322,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseReferenceTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseReferenceTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -331,7 +331,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parsePackExpansionTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parsePackExpansionTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -342,7 +342,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseTypeOfExprTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseTypeOfExprTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -352,7 +352,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseAttributedTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseAttributedTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -362,7 +362,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseUnaryTransformTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseUnaryTransformTypeData(LineStream lines, ClangAstData parserData) {
         DataStore data = parseTypeData(lines, parserData);
 
         data.add(UnaryTransformType.KIND, LineStreamParsers.enumFromName(UnaryTransformTypeKind.class, lines));
@@ -372,7 +372,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseSubstTemplateTypeParmTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseSubstTemplateTypeParmTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -382,7 +382,7 @@ public class TypeDataParser {
         return data;
     }
 
-    public static DataStore parseComplexTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseComplexTypeData(LineStream lines, ClangAstData parserData) {
 
         DataStore data = parseTypeData(lines, parserData);
 
@@ -392,7 +392,7 @@ public class TypeDataParser {
 
     }
 
-    public static DataStore parseUnresolvedUsingTypeData(LineStream lines, ClangParserData parserData) {
+    public static DataStore parseUnresolvedUsingTypeData(LineStream lines, ClangAstData parserData) {
         DataStore data = parseTypeData(lines, parserData);
 
         System.out.println("UNRESOLVED: " + data);

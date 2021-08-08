@@ -21,7 +21,7 @@ import java.util.function.BiFunction;
 
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
-import pt.up.fe.specs.clang.codeparser.ClangParserData;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clava.SourceLocation;
 import pt.up.fe.specs.clava.SourceRange;
@@ -83,7 +83,7 @@ public class ClavaDataParsers {
      * @param dataStore
      * @return
      */
-    public static SourceRange parseLocation(LineStream lines, ClangParserData dataStore) {
+    public static SourceRange parseLocation(LineStream lines, ClangAstData dataStore) {
         // Next line will tell if is an invalid location or if to continue parsing
         String firstPart = lines.nextLine();
 
@@ -92,7 +92,7 @@ public class ClavaDataParsers {
         }
 
         // Filepaths will be shared between most nodes, cache them
-        String startFilepath = dataStore.get(ClangParserData.CONTEXT).get(ClavaContext.CACHED_FILEPATHS).get(firstPart);
+        String startFilepath = dataStore.get(ClangAstData.CONTEXT).get(ClavaContext.CACHED_FILEPATHS).get(firstPart);
 
         // String startFilepath = firstPart.intern();
         // String startFilepath = firstPart;
@@ -116,7 +116,7 @@ public class ClavaDataParsers {
         }
 
         // Parser end location
-        String endFilepath = dataStore.get(ClangParserData.CONTEXT).get(ClavaContext.CACHED_FILEPATHS).get(secondPart);
+        String endFilepath = dataStore.get(ClangAstData.CONTEXT).get(ClavaContext.CACHED_FILEPATHS).get(secondPart);
         // String endFilepath = secondPart.intern();
         // String endFilepath = secondPart;
 
@@ -157,7 +157,7 @@ public class ClavaDataParsers {
         return builder.toString();
     }
 
-    public static ExceptionSpecification exceptionSpecification(LineStream lines, ClangParserData parserData) {
+    public static ExceptionSpecification exceptionSpecification(LineStream lines, ClangAstData parserData) {
 
         ExceptionSpecificationType exceptionSpecificationType = LineStreamParsers
                 .enumFromName(ExceptionSpecificationType.class, lines);
@@ -233,7 +233,7 @@ public class ClavaDataParsers {
 
     }
 
-    public static List<TemplateArgument> templateArguments(LineStream lines, ClangParserData parserData) {
+    public static List<TemplateArgument> templateArguments(LineStream lines, ClangAstData parserData) {
         // Number of template arguments
         int size = LineStreamParsers.integer(lines);
 
@@ -245,7 +245,7 @@ public class ClavaDataParsers {
         return templateArgs;
     }
 
-    public static TemplateArgument templateArgument(LineStream lines, ClangParserData parserData) {
+    public static TemplateArgument templateArgument(LineStream lines, ClangAstData parserData) {
         // Kind of template argument
         TemplateArgumentKind kind = LineStreamParsers.enumFromName(TemplateArgumentKind.class, lines);
 
@@ -305,7 +305,7 @@ public class ClavaDataParsers {
 
     }
 
-    public static TemplateArgumentTemplate templateArgumentTemplate(LineStream lines, ClangParserData parserData) {
+    public static TemplateArgumentTemplate templateArgumentTemplate(LineStream lines, ClangAstData parserData) {
         TemplateNameKind nameKind = LineStreamParsers.enumFromName(TemplateNameKind.class, lines);
         var template = TemplateArgumentTemplate.newInstance(nameKind);
         template.set(TemplateArgumentTemplate.TEMPLATE_NAME_KIND, nameKind);
@@ -331,8 +331,8 @@ public class ClavaDataParsers {
         return template;
     }
 
-    public static <T> List<T> list(LineStream lines, ClangParserData parserData,
-            BiFunction<LineStream, ClangParserData, T> parser) {
+    public static <T> List<T> list(LineStream lines, ClangAstData parserData,
+            BiFunction<LineStream, ClangAstData, T> parser) {
 
         // First line is number of objects
         int size = LineStreamParsers.integer(lines);
@@ -345,7 +345,7 @@ public class ClavaDataParsers {
         return parsedObjects;
     }
 
-    public static CXXBaseSpecifier baseSpecifier(LineStream lines, ClangParserData parserData) {
+    public static CXXBaseSpecifier baseSpecifier(LineStream lines, ClangAstData parserData) {
         CXXBaseSpecifier base = new CXXBaseSpecifier();
 
         base.set(CXXBaseSpecifier.IS_VIRTUAL, LineStreamParsers.oneOrZero(lines));
@@ -376,7 +376,7 @@ public class ClavaDataParsers {
         return "anon_" + sanitizedFilename + "_" + location.getStartLine();
     }
 
-    public static CXXCtorInitializer cxxCtorInitializer(LineStream lines, ClangParserData parserData) {
+    public static CXXCtorInitializer cxxCtorInitializer(LineStream lines, ClangAstData parserData) {
 
         CXXCtorInitializerKind initKind = LineStreamParsers.enumFromName(CXXCtorInitializerKind.class, lines);
 
@@ -404,7 +404,7 @@ public class ClavaDataParsers {
         return ctorInit;
     }
 
-    public static OffsetOfComponent offsetOfComponent(LineStream lines, ClangParserData parserData) {
+    public static OffsetOfComponent offsetOfComponent(LineStream lines, ClangAstData parserData) {
         // Kind
         OffsetOfComponentKind kind = LineStreamParsers.enumFromName(OffsetOfComponentKind.class, lines);
         OffsetOfComponent component = OffsetOfComponent.newInstance(kind);
@@ -445,7 +445,7 @@ public class ClavaDataParsers {
 
     }
 
-    public static ExplicitSpecifier explicitSpecifier(LineStream lines, ClangParserData parserData) {
+    public static ExplicitSpecifier explicitSpecifier(LineStream lines, ClangAstData parserData) {
         var explicitSpecifier = new ExplicitSpecifier();
 
         explicitSpecifier.set(ExplicitSpecifier.KIND, LineStreamParsers.enumFromName(ExplicitSpecKind.class, lines));

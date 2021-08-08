@@ -18,11 +18,11 @@ import java.io.File;
 import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import pt.up.fe.specs.clang.codeparser.ClangParserData;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.parsers.util.PragmasLocations;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class PragmasLocationsParser implements LineStreamWorker<ClangParserData> {
+public class PragmasLocationsParser implements LineStreamWorker<ClangAstData> {
 
     private static final String PARSER_ID = "<Pragma>";
 
@@ -44,13 +44,13 @@ public class PragmasLocationsParser implements LineStreamWorker<ClangParserData>
     }
 
     @Override
-    public void init(ClangParserData data) {
-        data.set(ClangParserData.PRAGMAS_LOCATIONS, new PragmasLocations());
+    public void init(ClangAstData data) {
+        data.set(ClangAstData.PRAGMAS_LOCATIONS, new PragmasLocations());
     }
 
     @Override
-    public void apply(LineStream lineStream, ClangParserData data) {
-        PragmasLocations locations = data.get(ClangParserData.PRAGMAS_LOCATIONS);
+    public void apply(LineStream lineStream, ClangAstData data) {
+        PragmasLocations locations = data.get(ClangAstData.PRAGMAS_LOCATIONS);
         parsePragmasLocations(lineStream, locations);
     }
 }

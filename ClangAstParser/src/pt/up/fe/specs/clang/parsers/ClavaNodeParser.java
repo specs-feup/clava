@@ -24,7 +24,7 @@ import java.util.function.BiFunction;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 import org.suikasoft.jOptions.streamparser.LineStreamWorker;
 
-import pt.up.fe.specs.clang.codeparser.ClangParserData;
+import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.utils.ChildrenAdapter;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.DummyNode;
@@ -37,7 +37,7 @@ import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.LineStream;
 
-public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
+public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
 
     /// DATAKEYS BEGIN
 
@@ -65,9 +65,9 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
     }
 
     @Override
-    public void init(ClangParserData data) {
+    public void init(ClangAstData data) {
 
-        if (!data.hasValue(ClangParserData.CONTEXT)) {
+        if (!data.hasValue(ClangAstData.CONTEXT)) {
             throw new RuntimeException("ClavaNodeParser requires ClavaContext");
         }
 
@@ -75,15 +75,15 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
 
         // ClavaNodes clavaNodes = new ClavaNodes(data.get(ClangParserData.CONTEXT).get(ClavaContext.FACTORY),
         // data.get(ClangParserData.SKIPPED_NODES_MAP));
-        ClavaNodes clavaNodes = new ClavaNodes(data.get(ClangParserData.CONTEXT).get(ClavaContext.FACTORY));
-        data.set(ClangParserData.CLAVA_NODES, clavaNodes);
+        ClavaNodes clavaNodes = new ClavaNodes(data.get(ClangAstData.CONTEXT).get(ClavaContext.FACTORY));
+        data.set(ClangAstData.CLAVA_NODES, clavaNodes);
         // data.add(NODES_CURRENTLY_BEING_PARSED, new HashSet<>());
 
-        childrenAdapter = new ChildrenAdapter(data.get(ClangParserData.CONTEXT));
+        childrenAdapter = new ChildrenAdapter(data.get(ClangAstData.CONTEXT));
     }
 
     @Override
-    public void apply(LineStream lineStream, ClangParserData data) {
+    public void apply(LineStream lineStream, ClangAstData data) {
         // Get nodeId and classname
         String nodeId = lineStream.nextLine();
 
@@ -99,7 +99,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
 
         String classname = lineStream.nextLine();
         // System.out.println("CLASS NAMES:" + classname);
-        Map<String, ClavaNode> parsedNodes = data.get(ClangParserData.CLAVA_NODES).getNodes();
+        Map<String, ClavaNode> parsedNodes = data.get(ClangAstData.CLAVA_NODES).getNodes();
 
         // Check if node was already parsed
         if (parsedNodes.containsKey(nodeId)) {
@@ -155,8 +155,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
         throw new RuntimeException("ClavaData class not supported:" + data.getClass());
     }
     */
-    private ClavaNode parseNode(String nodeId, String classname, ClangParserData data, LineStream lineStream) {
-        boolean debug = data.get(ClangParserData.DEBUG);
+    private ClavaNode parseNode(String nodeId, String classname, ClangAstData data, LineStream lineStream) {
+        boolean debug = data.get(ClangAstData.DEBUG);
 
         if (classname == null) {
             throw new RuntimeException("No classname for node '" + nodeId + "");
@@ -166,7 +166,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
         }
 
         // DataStore mapped to the node id
-        DataStore nodeData = data.get(ClangParserData.NODE_DATA).get(nodeId);
+        DataStore nodeData = data.get(ClangAstData.NODE_DATA).get(nodeId);
 
         if (nodeData == null) {
             throw new RuntimeException("No ClavaData/DataStore for node '" + nodeId + "' (classname: " + classname
@@ -184,7 +184,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
         // Get children ids
         List<String> childrenIds = getChildrenIds(nodeId, classname, data);
 
-        Map<String, ClavaNode> parsedNodes = data.get(ClangParserData.CLAVA_NODES).getNodes();
+        Map<String, ClavaNode> parsedNodes = data.get(ClangAstData.CLAVA_NODES).getNodes();
 
         List<ClavaNode> children = Collections.emptyList();
         /*
@@ -225,7 +225,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
 
                 // Check if nullptr
                 if (child == null && ClavaNodes.isNullId(childId)) {
-                    child = data.get(ClangParserData.CLAVA_NODES).nullNode(childId);
+                    child = data.get(ClangAstData.CLAVA_NODES).nullNode(childId);
                 }
 
                 // Check if skipped node
@@ -287,7 +287,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
 
     }
 
-    private ClavaNode processChild(ClavaNode child, Class<? extends ClavaNode> clavaNodeClass, ClangParserData data) {
+    private ClavaNode processChild(ClavaNode child, Class<? extends ClavaNode> clavaNodeClass, ClangAstData data) {
         if (clavaNodeClass.equals(CompoundStmt.class)) {
             // If child is an expression, wrap a Stmt around
             if (child instanceof Expr) {
@@ -298,8 +298,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
         return child;
     }
 
-    private List<String> getChildrenIds(String nodeId, String classname, ClangParserData data) {
-        List<String> childrenIds = data.get(ClangParserData.VISITED_CHILDREN).get(nodeId);
+    private List<String> getChildrenIds(String nodeId, String classname, ClangAstData data) {
+        List<String> childrenIds = data.get(ClangAstData.VISITED_CHILDREN).get(nodeId);
 
         if (childrenIds == null) {
             SpecsLogs.msgInfo("No children for node '" + nodeId + "' (" + classname + ")");
@@ -343,8 +343,8 @@ public class ClavaNodeParser implements LineStreamWorker<ClangParserData> {
     }
 
     @Override
-    public void close(ClangParserData data) {
-        data.get(ClangParserData.CLAVA_NODES).getQueuedActions().stream()
+    public void close(ClangAstData data) {
+        data.get(ClangAstData.CLAVA_NODES).getQueuedActions().stream()
                 .forEach(Runnable::run);
 
         // for (var action : data.get(ClangParserData.CLAVA_NODES).getQueuedActions()) {
