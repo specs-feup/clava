@@ -20,40 +20,46 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clava.SourceRange;
 
+/**
+ * @deprecated
+ * @author JBispo
+ *
+ */
+@Deprecated
 public class LiteralNode extends ClangNode {
 
     private final String content;
 
     public LiteralNode(String content) {
-	super("LiteralNode");
+        super("LiteralNode");
 
-	Preconditions.checkNotNull(content);
-	this.content = content;
+        Preconditions.checkNotNull(content);
+        this.content = content;
     }
 
     @Override
     protected ClangNode copyPrivate() {
-	return new LiteralNode(content);
+        return new LiteralNode(content);
     }
 
     @Override
     public Optional<String> getContentTry() {
-	return Optional.of(content);
+        return Optional.of(content);
     }
 
     @Override
     public Optional<String> getIdRawTry() {
-	return Optional.empty();
+        return Optional.empty();
     }
 
     @Override
     public Optional<String> getLocationString() {
-	return Optional.empty();
+        return Optional.empty();
     }
 
     @Override
     public SourceRange getLocation() {
-	return getParent().getLocation();
+        return getParent().getLocation();
     }
 
 }

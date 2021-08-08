@@ -33,6 +33,12 @@ import pt.up.fe.specs.clava.ast.extra.data.Language;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 
+/**
+ * Aggregates the data output by the ClangAstDumper binary.
+ * 
+ * @author JBispo
+ *
+ */
 public class ClangParserData extends ADataClass<ClangParserData> {
 
     /// DATAKEYS BEGIN

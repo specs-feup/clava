@@ -22,6 +22,12 @@ import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 
+/**
+ * @deprecated
+ * @author JBispo
+ *
+ */
+@Deprecated
 public class ClavaParserFactory extends ClavaFactory {
 
     public ClavaParserFactory(ClavaContext context) {
@@ -30,6 +36,7 @@ public class ClavaParserFactory extends ClavaFactory {
 
     /// PRAGMAS
 
+    @Override
     public LaraMarkerPragma laraMarkerPragma(String markedId) {
         DataStore data = newDataStore(LaraMarkerPragma.class)
                 .set(LaraMarkerPragma.MARKER_ID, markedId);
@@ -37,6 +44,7 @@ public class ClavaParserFactory extends ClavaFactory {
         return new LaraMarkerPragma(data, Collections.emptyList());
     }
 
+    @Override
     public LaraTagPragma laraTagPragma(String tagId) {
         DataStore data = newDataStore(LaraTagPragma.class)
                 .set(LaraTagPragma.TAG_ID, tagId);

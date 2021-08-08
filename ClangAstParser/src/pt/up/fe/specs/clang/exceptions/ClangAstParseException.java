@@ -13,6 +13,12 @@
 
 package pt.up.fe.specs.clang.exceptions;
 
+/**
+ * @deprecated
+ * @author JBispo
+ *
+ */
+@Deprecated
 public class ClangAstParseException extends RuntimeException {
 
     /**
@@ -21,7 +27,7 @@ public class ClangAstParseException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public ClangAstParseException(String message, String line) {
-	super(message + "(line: '" + line + "'");
+        super(message + "(line: '" + line + "'");
     }
 
 }

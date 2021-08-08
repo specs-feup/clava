@@ -17,6 +17,12 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.util.classmap.FunctionClassMap;
 import pt.up.fe.specs.util.treenode.utils.JsonWriter;
 
+/**
+ * @deprecated
+ * @author JBispo
+ *
+ */
+@Deprecated
 public class JsonUtils {
 
     private static final FunctionClassMap<ClangNode, String> CLANG_JSON_TRANSLATORS;

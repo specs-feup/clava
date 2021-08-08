@@ -21,43 +21,45 @@ import pt.up.fe.specs.clava.SourceRange;
 /**
  * Represents a variadic parameter (e.g., ...)
  * 
+ * @deprecated
  * @author JoaoBispo
  *
  */
+@Deprecated
 public class VariadicType extends ClangNode {
 
     public VariadicType() {
-	super("VariadicType");
+        super("VariadicType");
     }
 
     @Override
     protected ClangNode copyPrivate() {
-	return new VariadicType();
+        return new VariadicType();
     }
 
     @Override
     public Optional<String> getContentTry() {
-	return Optional.empty();
+        return Optional.empty();
     }
 
     @Override
     public Optional<String> getIdRawTry() {
-	return Optional.empty();
+        return Optional.empty();
     }
 
     @Override
     public Optional<String> getLocationString() {
-	return Optional.empty();
+        return Optional.empty();
     }
 
     @Override
     public SourceRange getLocation() {
-	return new SourceRange(null, -1, -1, -1, -1);
+        return new SourceRange(null, -1, -1, -1, -1);
     }
 
     @Override
     public String getCode() {
-	return "...";
+        return "...";
     }
 
 }

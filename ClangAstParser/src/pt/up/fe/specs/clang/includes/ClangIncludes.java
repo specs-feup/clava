@@ -25,6 +25,12 @@ import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.collections.MultiMap;
 import pt.up.fe.specs.util.utilities.LineStream;
 
+/**
+ * @deprecated
+ * @author JBispo
+ *
+ */
+@Deprecated
 public class ClangIncludes {
 
     // Maps the includes of each file

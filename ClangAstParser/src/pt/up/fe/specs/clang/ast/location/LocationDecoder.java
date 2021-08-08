@@ -22,80 +22,86 @@ import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.utilities.StringLines;
 
+/**
+ * @deprecated
+ * @author JBispo
+ *
+ */
+@Deprecated
 public class LocationDecoder {
 
     private final Map<String, List<String>> loadedFiles;
     private final boolean onlyOneLiners;
 
     public LocationDecoder(boolean onlyOneLiners) {
-	loadedFiles = new HashMap<>();
-	this.onlyOneLiners = onlyOneLiners;
+        loadedFiles = new HashMap<>();
+        this.onlyOneLiners = onlyOneLiners;
     }
 
     public String decode(SourceRange location) {
 
-	if (location.isEmpty()) {
-	    // LoggingUtils.msgWarn("[FIX] Empty location, check clang dump");
-	    return "";
-	}
+        if (location.isEmpty()) {
+            // LoggingUtils.msgWarn("[FIX] Empty location, check clang dump");
+            return "";
+        }
 
-	// Get lines
-	List<String> lines = getLines(location.getFilepath());
+        // Get lines
+        List<String> lines = getLines(location.getFilepath());
 
-	int startLine = location.getStartLine() - 1;
-	int startCol = location.getStartCol() - 1;
+        int startLine = location.getStartLine() - 1;
+        int startCol = location.getStartCol() - 1;
 
-	if (location.getStartLine() == location.getEndLine()) {
-	    String line = lines.get(startLine);
+        if (location.getStartLine() == location.getEndLine()) {
+            String line = lines.get(startLine);
 
-	    if (location.getEndCol() > line.length()) {
-		SpecsLogs.msgWarn("Could not decode location:" + location + "\nLine:" + line);
-		return "";
-		// throw new RuntimeException("Location:" + line);
-	    }
+            if (location.getEndCol() > line.length()) {
+                SpecsLogs.msgWarn("Could not decode location:" + location + "\nLine:" + line);
+                return "";
+                // throw new RuntimeException("Location:" + line);
+            }
 
-	    if (location.getEndCol() - startCol < 0) {
-		SpecsLogs.msgWarn("Invalid location: " + location);
-		return "";
-	    }
+            if (location.getEndCol() - startCol < 0) {
+                SpecsLogs.msgWarn("Invalid location: " + location);
+                return "";
+            }
 
-	    return line.substring(startCol, location.getEndCol());
-	}
+            return line.substring(startCol, location.getEndCol());
+        }
 
-	// Return location string representation if only using one-liners
-	if (onlyOneLiners) {
-	    return location.toString();
-	}
+        // Return location string representation if only using one-liners
+        if (onlyOneLiners) {
+            return location.toString();
+        }
 
-	StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-	// First line
+        // First line
 
-	builder.append(lines.get(startLine).substring(startCol));
+        builder.append(lines.get(startLine).substring(startCol));
 
-	// Intermediate lines
-	for (int i = location.getStartLine(); i < location.getEndLine() - 1; i++) {
-	    builder.append("\n").append(lines.get(i));
-	}
+        // Intermediate lines
+        for (int i = location.getStartLine(); i < location.getEndLine() - 1; i++) {
+            builder.append("\n").append(lines.get(i));
+        }
 
-	// End line
-	builder.append("\n").append(lines.get(location.getEndLine() - 1).substring(0, location.getEndCol()));
+        // End line
+        builder.append("\n").append(lines.get(location.getEndLine() - 1).substring(0, location.getEndCol()));
 
-	return builder.toString();
+        return builder.toString();
     }
 
     private List<String> getLines(String path) {
-	// Check if path is null
-	// if (path == null) {
-	// return Collections.emptyList();
-	// }
+        // Check if path is null
+        // if (path == null) {
+        // return Collections.emptyList();
+        // }
 
-	List<String> lines = loadedFiles.get(path);
-	if (lines == null) {
-	    lines = StringLines.getLines(new File(path));
-	    loadedFiles.put(path, lines);
-	}
+        List<String> lines = loadedFiles.get(path);
+        if (lines == null) {
+            lines = StringLines.getLines(new File(path));
+            loadedFiles.put(path, lines);
+        }
 
-	return lines;
+        return lines;
     }
 }

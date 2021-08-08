@@ -20,6 +20,12 @@ import pt.up.fe.specs.clang.ast.ClangNode;
 import pt.up.fe.specs.clang.ast.location.LocationDecoder;
 import pt.up.fe.specs.clava.SourceRange;
 
+/**
+ * @deprecated
+ * @author JBispo
+ *
+ */
+@Deprecated
 public class GenericClangNode extends ClangNode {
 
     private static final LocationDecoder DECODER = new LocationDecoder(true);
@@ -61,6 +67,7 @@ public class GenericClangNode extends ClangNode {
         return new GenericClangNode(getName());
     }
 
+    @Override
     public boolean isManuallyCreated() {
         return manuallyCreated;
     }

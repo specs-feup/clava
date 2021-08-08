@@ -23,6 +23,12 @@ import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
+/**
+ * @deprecated
+ * @author JBispo
+ *
+ */
+@Deprecated
 class ClangIncludesParser {
 
     private static final Map<String, BiFunction<String, Include, Include>> PARTS_PARSER;

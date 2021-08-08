@@ -21,43 +21,45 @@ import pt.up.fe.specs.clava.SourceRange;
 /**
  * Represents an "empty" node.
  * 
+ * @deprecated
  * @author JoaoBispo
  *
  */
+@Deprecated
 public class NullNode extends ClangNode {
 
     public NullNode() {
-	super("NULL");
+        super("NULL");
     }
 
     @Override
     protected ClangNode copyPrivate() {
-	return new NullNode();
+        return new NullNode();
     }
 
     @Override
     public Optional<String> getContentTry() {
-	return Optional.empty();
+        return Optional.empty();
     }
 
     @Override
     public Optional<String> getIdRawTry() {
-	return Optional.empty();
+        return Optional.empty();
     }
 
     @Override
     public Optional<String> getLocationString() {
-	return Optional.empty();
+        return Optional.empty();
     }
 
     @Override
     public SourceRange getLocation() {
-	return new SourceRange(null, -1, -1, -1, -1);
+        return new SourceRange(null, -1, -1, -1, -1);
     }
 
     @Override
     public String getCode() {
-	return "<<<NULL>>>";
+        return "<<<NULL>>>";
     }
 
 }

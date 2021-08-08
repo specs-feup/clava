@@ -15,10 +15,16 @@ package pt.up.fe.specs.clang.ast;
 
 import pt.up.fe.specs.util.treenode.ChildrenIterator;
 
+/**
+ * @deprecated
+ * @author JBispo
+ *
+ */
+@Deprecated
 public class ClangNodeIterator extends ChildrenIterator<ClangNode> {
 
     ClangNodeIterator(ClangNode parent) {
-	super(parent);
+        super(parent);
     }
 
 }

@@ -18,6 +18,12 @@ import java.io.File;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
 
+/**
+ * @deprecated
+ * @author JBispo
+ *
+ */
+@Deprecated
 public class ZipResourceManager {
 
     private final File outputFolder;
