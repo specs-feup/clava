@@ -483,3 +483,22 @@ ClavaJoinPoints.forStmt = function($init, $condition, $inc, $body) {
 ClavaJoinPoints.param = function(name, $type) {
 	return AstFactory.param(name, $type);
 }
+
+
+/**
+ * @param {string} text
+ * */
+ClavaJoinPoints.comment = function(text) {
+    
+}
+
+/**
+ * @param {$joinpoint} $jp
+ *
+ * @return {$joinpoint}
+ * */
+ClavaJoinPoints.makeComment = function($jp) {
+    return $jp.replaceWith(
+        ClavaJoinPoints.comment($jp.code)
+    );
+}
