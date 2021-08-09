@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.weaver.options;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import org.lara.interpreter.weaver.options.WeaverOptionBuilder;
 import org.suikasoft.jOptions.Datakey.DataKey;
 
 import pt.up.fe.specs.clang.ClangAstKeys;
+import pt.up.fe.specs.clang.LibcMode;
 import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clava.ClavaLog;
@@ -118,9 +120,13 @@ public class CxxWeaverOptions {
         addOneArgOption(ParallelCodeParser.PARSING_NUM_THREADS, "thd", "parsing-threads",
                 "#threads", "Sets the number of threads for parallel parsing");
 
-        addBooleanOption(ClangAstKeys.USE_PLATFORM_INCLUDES, "psi", "platform-includes",
+        // addBooleanOption(ClangAstKeys.USE_PLATFORM_INCLUDES, "psi", "platform-includes",
+        // // "Uses the platform system includes headers (if available)");
+        // "Disable built-in lib C/C++ includes");
+
+        addOneArgOption(ClangAstKeys.LIBC_CXX_MODE, "lib", "libc-cxx-mode", "mode",
                 // "Uses the platform system includes headers (if available)");
-                "Disable built-in lib C/C++ includes");
+                "Libc/Libcxx mode (one of: " + Arrays.toString(LibcMode.values()) + ")");
 
         addBooleanOption(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS, "ipe", "ignore-parsing-errors",
                 "Ignores parsing errors in C/C++ source code");

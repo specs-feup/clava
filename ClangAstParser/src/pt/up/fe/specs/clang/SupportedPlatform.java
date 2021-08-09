@@ -52,7 +52,7 @@ public enum SupportedPlatform implements StringProvider {
 
     private static final Lazy<SupportedPlatform> CURRENT_PLATFORM = Lazy.newInstance(() -> {
         var platform = calculateCurrentPlatform();
-        ClavaLog.info("Detected Clava platform: " + platform);
+        ClavaLog.debug(() -> "Detected Clava platform: " + platform);
         return platform;
     });
 
