@@ -11,7 +11,7 @@ aspectdef DataStoreTest
 	dataStore.put("javascript", false);
 	println("GET AFTER PUT:" + dataStore.get("javascript"));
 	dataStore.put("javascript", true);
-	println("Keys:" + dataStore.getKeys());
+	//println("Keys:" + dataStore.getKeys());
 	println("Disable info:" + dataStore.get("disable_info"));
 	println("System includes:" + dataStore.getSystemIncludes());
 	dataStore.setSystemIncludes("extra_system_include");
