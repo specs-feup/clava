@@ -310,7 +310,7 @@ public class ClavaTesterLauncher {
 
         // Clean arg found
         if (cleanIndex != null) {
-            argsList.remove(cleanIndex);
+            argsList.remove(cleanIndex.intValue());
             return true;
         }
 
