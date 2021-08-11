@@ -875,11 +875,11 @@ public abstract class AFunction extends ADeclarator {
     public final void setParams(AParam[] params) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParams", this, Optional.empty(), params);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParams", this, Optional.empty(), new Object[] { params});
         	}
         	this.setParamsImpl(params);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParams", this, Optional.empty(), params);
+        		eventTrigger().triggerAction(Stage.END, "setParams", this, Optional.empty(), new Object[] { params});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setParams", e);
@@ -901,11 +901,11 @@ public abstract class AFunction extends ADeclarator {
     public final void setParamsFromStrings(String[] params) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParamsFromStrings", this, Optional.empty(), params);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
         	}
         	this.setParamsFromStringsImpl(params);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParamsFromStrings", this, Optional.empty(), params);
+        		eventTrigger().triggerAction(Stage.END, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setParamsFromStrings", e);
@@ -1039,11 +1039,11 @@ public abstract class AFunction extends ADeclarator {
     public final ACall newCall(AJoinPoint[] args) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "newCall", this, Optional.empty(), args);
+        		eventTrigger().triggerAction(Stage.BEGIN, "newCall", this, Optional.empty(), new Object[] { args});
         	}
         	ACall result = this.newCallImpl(args);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "newCall", this, Optional.ofNullable(result), args);
+        		eventTrigger().triggerAction(Stage.END, "newCall", this, Optional.ofNullable(result), new Object[] { args});
         	}
         	return result;
         } catch(Exception e) {

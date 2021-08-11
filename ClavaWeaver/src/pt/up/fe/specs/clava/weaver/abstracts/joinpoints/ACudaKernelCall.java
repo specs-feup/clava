@@ -85,11 +85,11 @@ public abstract class ACudaKernelCall extends ACall {
     public final void setConfig(AExpression[] args) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setConfig", this, Optional.empty(), args);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setConfig", this, Optional.empty(), new Object[] { args});
         	}
         	this.setConfigImpl(args);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setConfig", this, Optional.empty(), args);
+        		eventTrigger().triggerAction(Stage.END, "setConfig", this, Optional.empty(), new Object[] { args});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setConfig", e);
@@ -111,11 +111,11 @@ public abstract class ACudaKernelCall extends ACall {
     public final void setConfigFromStrings(String[] args) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setConfigFromStrings", this, Optional.empty(), args);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setConfigFromStrings", this, Optional.empty(), new Object[] { args});
         	}
         	this.setConfigFromStringsImpl(args);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setConfigFromStrings", this, Optional.empty(), args);
+        		eventTrigger().triggerAction(Stage.END, "setConfigFromStrings", this, Optional.empty(), new Object[] { args});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setConfigFromStrings", e);
