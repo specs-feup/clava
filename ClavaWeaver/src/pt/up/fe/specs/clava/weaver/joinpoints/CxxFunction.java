@@ -443,14 +443,14 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AJoinPoint[] getDeclarationJpsArrayImpl() {
+    public AFunction[] getDeclarationJpsArrayImpl() {
         return function.getPrototypes().stream()
-                .map(node -> CxxJoinpoints.create(node))
-                .toArray(size -> new AJoinPoint[size]);
+                .map(node -> CxxJoinpoints.create(node, AFunction.class))
+                .toArray(size -> new AFunction[size]);
     }
 
     @Override
-    public AJoinPoint getDeclarationJpImpl() {
+    public AFunction getDeclarationJpImpl() {
         var prototypes = getDeclarationJpsArrayImpl();
 
         if (prototypes.length == 0) {
@@ -466,9 +466,9 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AJoinPoint getDefinitionJpImpl() {
+    public AFunction getDefinitionJpImpl() {
         return function.getImplementation()
-                .map(node -> CxxJoinpoints.create(node))
+                .map(node -> CxxJoinpoints.create(node, AFunction.class))
                 .orElse(null);
     }
 

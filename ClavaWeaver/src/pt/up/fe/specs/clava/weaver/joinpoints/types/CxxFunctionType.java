@@ -35,8 +35,8 @@ public class CxxFunctionType extends AFunctionType {
     }
 
     @Override
-    public AJoinPoint getReturnTypeImpl() {
-        return CxxJoinpoints.create(type.getReturnType());
+    public AType getReturnTypeImpl() {
+        return CxxJoinpoints.create(type.getReturnType(), AType.class);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class CxxFunctionType extends AFunctionType {
     }
 
     @Override
-    public void defReturnTypeImpl(AJoinPoint value) {
+    public void defReturnTypeImpl(AType value) {
         Type newClavaType = (Type) value.getNode();
         type.set(FunctionType.RETURN_TYPE, newClavaType);
     }

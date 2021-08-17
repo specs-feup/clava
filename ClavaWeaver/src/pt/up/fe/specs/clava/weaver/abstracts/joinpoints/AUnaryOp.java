@@ -32,7 +32,7 @@ public abstract class AUnaryOp extends AOp {
      * Get value on attribute operand
      * @return the attribute's value
      */
-    public abstract AJoinPoint getOperandImpl();
+    public abstract AExpression getOperandImpl();
 
     /**
      * Get value on attribute operand
@@ -43,7 +43,7 @@ public abstract class AUnaryOp extends AOp {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "operand", Optional.empty());
         	}
-        	AJoinPoint result = this.getOperandImpl();
+        	AExpression result = this.getOperandImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "operand", Optional.ofNullable(result));
         	}

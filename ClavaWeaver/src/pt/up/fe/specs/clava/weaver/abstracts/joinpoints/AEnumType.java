@@ -31,7 +31,7 @@ public abstract class AEnumType extends ATagType {
      * Get value on attribute integerType
      * @return the attribute's value
      */
-    public abstract AJoinPoint getIntegerTypeImpl();
+    public abstract AType getIntegerTypeImpl();
 
     /**
      * Get value on attribute integerType
@@ -42,7 +42,7 @@ public abstract class AEnumType extends ATagType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "integerType", Optional.empty());
         	}
-        	AJoinPoint result = this.getIntegerTypeImpl();
+        	AType result = this.getIntegerTypeImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "integerType", Optional.ofNullable(result));
         	}

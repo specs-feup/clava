@@ -40,7 +40,7 @@ public abstract class AParam extends AVardecl {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getInitImpl() {
+    public AExpression getInitImpl() {
         return this.aVardecl.getInitImpl();
     }
 

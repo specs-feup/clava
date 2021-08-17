@@ -119,7 +119,7 @@ public abstract class AMethod extends AFunction {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getDeclarationJpImpl() {
+    public AFunction getDeclarationJpImpl() {
         return this.aFunction.getDeclarationJpImpl();
     }
 
@@ -128,7 +128,7 @@ public abstract class AMethod extends AFunction {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getDeclarationJpsArrayImpl() {
+    public AFunction[] getDeclarationJpsArrayImpl() {
         return this.aFunction.getDeclarationJpsArrayImpl();
     }
 
@@ -137,7 +137,7 @@ public abstract class AMethod extends AFunction {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getDefinitionJpImpl() {
+    public AFunction getDefinitionJpImpl() {
         return this.aFunction.getDefinitionJpImpl();
     }
 

@@ -17,7 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.type.EnumType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEnumType;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.util.SpecsLogs;
 
 public class CxxEnumType extends AEnumType {
@@ -35,13 +35,13 @@ public class CxxEnumType extends AEnumType {
     }
 
     @Override
-    public AJoinPoint getIntegerTypeImpl() {
+    public AType getIntegerTypeImpl() {
         if (getRoot() == null) {
             SpecsLogs.msgInfo("Root not defined, is this a detached join point? -> " + this);
             return null;
         }
 
-        return CxxJoinpoints.create(enumType.getEnumDecl(getRootImpl().getNode()).getIntegerType());
+        return CxxJoinpoints.create(enumType.getEnumDecl(getRootImpl().getNode()).getIntegerType(), AType.class);
     }
 
 }

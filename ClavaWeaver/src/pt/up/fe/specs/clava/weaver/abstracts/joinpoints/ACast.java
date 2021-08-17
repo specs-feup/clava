@@ -53,7 +53,7 @@ public abstract class ACast extends AExpression {
      * Get value on attribute fromType
      * @return the attribute's value
      */
-    public abstract AJoinPoint getFromTypeImpl();
+    public abstract AType getFromTypeImpl();
 
     /**
      * Get value on attribute fromType
@@ -64,7 +64,7 @@ public abstract class ACast extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "fromType", Optional.empty());
         	}
-        	AJoinPoint result = this.getFromTypeImpl();
+        	AType result = this.getFromTypeImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "fromType", Optional.ofNullable(result));
         	}
@@ -78,7 +78,7 @@ public abstract class ACast extends AExpression {
      * Get value on attribute toType
      * @return the attribute's value
      */
-    public abstract AJoinPoint getToTypeImpl();
+    public abstract AType getToTypeImpl();
 
     /**
      * Get value on attribute toType
@@ -89,7 +89,7 @@ public abstract class ACast extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "toType", Optional.empty());
         	}
-        	AJoinPoint result = this.getToTypeImpl();
+        	AType result = this.getToTypeImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "toType", Optional.ofNullable(result));
         	}

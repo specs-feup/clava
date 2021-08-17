@@ -404,7 +404,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     /**
      * a function join point with the main function of the program, if one is available
      */
-    public abstract AJoinPoint getMainImpl();
+    public abstract AFunction getMainImpl();
 
     /**
      * a function join point with the main function of the program, if one is available
@@ -414,7 +414,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "main", Optional.empty());
         	}
-        	AJoinPoint result = this.getMainImpl();
+        	AFunction result = this.getMainImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "main", Optional.ofNullable(result));
         	}

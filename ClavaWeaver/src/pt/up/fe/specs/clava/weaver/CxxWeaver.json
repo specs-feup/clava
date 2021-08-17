@@ -11164,7 +11164,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "fromType"
                            }]
                },
@@ -11189,7 +11189,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "toType"
                            }]
                },
@@ -26275,7 +26275,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "integerType"
                            }]
                },
@@ -31919,7 +31919,7 @@
                   "tooltip": "Returns the first prototype of this function that could be found, or undefined if there is none",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "function",
                               "name": "declarationJp"
                            }]
                },
@@ -31928,7 +31928,7 @@
                   "tooltip": "Returns the prototypes of this function that are present in the code. If there are none, returns an empty array",
                   "children": [
                            {
-                              "type": "joinpoint[]",
+                              "type": "function[]",
                               "name": "declarationJps"
                            }]
                },
@@ -31937,7 +31937,7 @@
                   "tooltip": "Returns the implementation of this function if there is one, or undefined otherwise",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "function",
                               "name": "definitionJp"
                            }]
                },
@@ -33440,7 +33440,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "type",
                               "name": "returnType"
                            }]
                },
@@ -34677,7 +34677,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "vardecl",
                               "name": "condDecl"
                            }]
                },
@@ -42504,7 +42504,7 @@
                   "tooltip": "Returns the first prototype of this function that could be found, or undefined if there is none",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "function",
                               "name": "declarationJp"
                            }]
                },
@@ -42513,7 +42513,7 @@
                   "tooltip": "Returns the prototypes of this function that are present in the code. If there are none, returns an empty array",
                   "children": [
                            {
-                              "type": "joinpoint[]",
+                              "type": "function[]",
                               "name": "declarationJps"
                            }]
                },
@@ -42522,7 +42522,7 @@
                   "tooltip": "Returns the implementation of this function if there is one, or undefined otherwise",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "function",
                               "name": "definitionJp"
                            }]
                },
@@ -48506,7 +48506,7 @@
                   "tooltip": "If vardecl has an initialization value, returns an expression with that value",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "expression",
                               "name": "init"
                            }]
                },
@@ -53088,7 +53088,7 @@
                   "tooltip": "a function join point with the main function of the program, if one is available",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "function",
                               "name": "main"
                            }]
                },
@@ -72979,7 +72979,7 @@
                   "type": "attribute",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "expression",
                               "name": "operand"
                            }]
                },
@@ -75213,7 +75213,7 @@
                   "tooltip": "If vardecl has an initialization value, returns an expression with that value",
                   "children": [
                            {
-                              "type": "joinpoint",
+                              "type": "expression",
                               "name": "init"
                            }]
                },

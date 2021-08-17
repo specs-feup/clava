@@ -132,7 +132,7 @@ public abstract class AFunction extends ADeclarator {
     /**
      * Returns the first prototype of this function that could be found, or undefined if there is none
      */
-    public abstract AJoinPoint getDeclarationJpImpl();
+    public abstract AFunction getDeclarationJpImpl();
 
     /**
      * Returns the first prototype of this function that could be found, or undefined if there is none
@@ -142,7 +142,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declarationJp", Optional.empty());
         	}
-        	AJoinPoint result = this.getDeclarationJpImpl();
+        	AFunction result = this.getDeclarationJpImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "declarationJp", Optional.ofNullable(result));
         	}
@@ -156,14 +156,14 @@ public abstract class AFunction extends ADeclarator {
      * Get value on attribute declarationJps
      * @return the attribute's value
      */
-    public abstract AJoinPoint[] getDeclarationJpsArrayImpl();
+    public abstract AFunction[] getDeclarationJpsArrayImpl();
 
     /**
      * Returns the prototypes of this function that are present in the code. If there are none, returns an empty array
      */
     public Object getDeclarationJpsImpl() {
-        AJoinPoint[] aJoinPointArrayImpl0 = getDeclarationJpsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        AFunction[] aFunctionArrayImpl0 = getDeclarationJpsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aFunctionArrayImpl0);
         return nativeArray0;
     }
 
@@ -188,7 +188,7 @@ public abstract class AFunction extends ADeclarator {
     /**
      * Returns the implementation of this function if there is one, or undefined otherwise
      */
-    public abstract AJoinPoint getDefinitionJpImpl();
+    public abstract AFunction getDefinitionJpImpl();
 
     /**
      * Returns the implementation of this function if there is one, or undefined otherwise
@@ -198,7 +198,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "definitionJp", Optional.empty());
         	}
-        	AJoinPoint result = this.getDefinitionJpImpl();
+        	AFunction result = this.getDefinitionJpImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "definitionJp", Optional.ofNullable(result));
         	}

@@ -56,7 +56,7 @@ public abstract class AVardecl extends ADeclarator {
     /**
      * If vardecl has an initialization value, returns an expression with that value
      */
-    public abstract AJoinPoint getInitImpl();
+    public abstract AExpression getInitImpl();
 
     /**
      * If vardecl has an initialization value, returns an expression with that value
@@ -66,7 +66,7 @@ public abstract class AVardecl extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "init", Optional.empty());
         	}
-        	AJoinPoint result = this.getInitImpl();
+        	AExpression result = this.getInitImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "init", Optional.ofNullable(result));
         	}

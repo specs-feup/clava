@@ -64,7 +64,7 @@ public abstract class AIf extends AStatement {
      * Get value on attribute condDecl
      * @return the attribute's value
      */
-    public abstract AJoinPoint getCondDeclImpl();
+    public abstract AVardecl getCondDeclImpl();
 
     /**
      * Get value on attribute condDecl
@@ -75,7 +75,7 @@ public abstract class AIf extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "condDecl", Optional.empty());
         	}
-        	AJoinPoint result = this.getCondDeclImpl();
+        	AVardecl result = this.getCondDeclImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "condDecl", Optional.ofNullable(result));
         	}

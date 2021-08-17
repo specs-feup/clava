@@ -22,7 +22,7 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 
 public class CxxCast extends ACast {
@@ -46,15 +46,15 @@ public class CxxCast extends ACast {
     }
 
     @Override
-    public AJoinPoint getFromTypeImpl() {
+    public AType getFromTypeImpl() {
         Type fromType = cast.getSubExpr().getType();
 
-        return CxxJoinpoints.create(fromType);
+        return CxxJoinpoints.create(fromType, AType.class);
     }
 
     @Override
-    public AJoinPoint getToTypeImpl() {
-        return CxxJoinpoints.create(cast.getCastType());
+    public AType getToTypeImpl() {
+        return CxxJoinpoints.create(cast.getCastType(), AType.class);
     }
 
     @Override
