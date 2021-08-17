@@ -3,3 +3,9 @@ kernel call after: add<<<20, 2048>>>(a)
 CUDA kernel: add
 After adding param: add(int *a, bool inst0)
 Call after adding arg: add<<<20, 2048>>>(a, false)
+Varref: blockDim
+Cuda index: x
+Varref: blockIdx
+Cuda index: x
+Varref: threadIdx
+Cuda index: x
