@@ -401,6 +401,8 @@
 		<attribute name="isFunctionCall" type="Boolean" 
 			tooltip="true if this varref represents a function call" />
 		<attribute name="declaration" type="declarator" />
+		<attribute name="property" type="String" tooltip="if this variable reference has a MS-style property, returns the property name. Returns undefined otherwise" />
+		<attribute name="hasProperty" type="Boolean" tooltip="true if this variable reference has a MS-style property, false otherwise"/>				
 	</artifact>
 
 	<!-- FUNCTION -->

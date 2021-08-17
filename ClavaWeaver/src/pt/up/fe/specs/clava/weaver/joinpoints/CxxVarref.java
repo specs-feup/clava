@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
+import pt.up.fe.specs.clava.ast.expr.MSPropertyRefExpr;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeclarator;
@@ -106,4 +107,30 @@ public class CxxVarref extends AVarref {
     public ADecl getDeclImpl() {
         return getVardeclImpl();
     }
+
+    @Override
+    public String getPropertyImpl() {
+        var parent = refExpr.getParent();
+
+        if (parent == null) {
+            return null;
+        }
+
+        if (!(parent instanceof MSPropertyRefExpr)) {
+            return null;
+        }
+
+        return ((MSPropertyRefExpr) parent).getProperty();
+    }
+
+    @Override
+    public Boolean getHasPropertyImpl() {
+        if (!refExpr.hasParent()) {
+            return false;
+        }
+
+        // If parent is a MSPropertyRefExpr, this this varref has a MS-style property
+        return refExpr.getParent() instanceof MSPropertyRefExpr;
+    }
+
 }

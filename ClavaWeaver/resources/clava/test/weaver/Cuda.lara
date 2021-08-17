@@ -26,4 +26,10 @@ aspectdef Cuda
 	$cudaKernelCall.addArg("false", ClavaJoinPoints.typeLiteral("bool"));
 	println("Call after adding arg: " + $cudaKernelCall.code);
 	
+	// Get indexes
+	for(var $varref of Query.searchFrom($cudaKernel, "varref", {hasCudaIndex: true})) {
+		println("Varref: " + $varref.name);
+		println("Cuda index: " + $varref.cudaIndex);		
+	}
+
 end

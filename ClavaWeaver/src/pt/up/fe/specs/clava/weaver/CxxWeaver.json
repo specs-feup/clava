@@ -77537,6 +77537,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "true if this variable reference has a MS-style property, false otherwise",
+                  "children": [
+                           {
+                              "type": "Boolean",
+                              "name": "hasProperty"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this varref represents a function call",
                   "children": [
                            {
@@ -77558,6 +77567,15 @@
                            {
                               "type": "String",
                               "name": "name"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "if this variable reference has a MS-style property, returns the property name. Returns undefined otherwise",
+                  "children": [
+                           {
+                              "type": "String",
+                              "name": "property"
                            }]
                },
                {
