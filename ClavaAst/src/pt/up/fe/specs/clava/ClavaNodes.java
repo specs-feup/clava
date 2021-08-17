@@ -661,9 +661,10 @@ public class ClavaNodes {
         String type = typeVarname.substring(0, indexOfSpace).trim();
         String varName = typeVarname.substring(indexOfSpace + 1).trim();
 
-        var factory = hint.getFactoryWithNode();
-        return factory.parmVarDecl(varName, factory.literalType(type));
+        // If hint is also a VarDecl, use the same attributes
+        var factory = hint instanceof VarDecl ? hint.getFactoryWithNode() : hint.getFactory();
 
+        return factory.parmVarDecl(varName, factory.literalType(type));
     }
 
     public static ClavaNode getFirstNodeOfTargetRegion(ClavaNode base, ClavaNode newNode) {
