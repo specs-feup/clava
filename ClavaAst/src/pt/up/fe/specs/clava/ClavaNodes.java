@@ -658,8 +658,14 @@ public class ClavaNodes {
             throw new RuntimeException("Expected parameter to be a type - varName pair, separated by a space");
         }
 
-        String type = typeVarname.substring(0, indexOfSpace).trim();
-        String varName = typeVarname.substring(indexOfSpace + 1).trim();
+        // Check if there are * or &
+        int indexOfStar = typeVarname.lastIndexOf('*');
+        int indexOfAmpersand = typeVarname.lastIndexOf('&');
+
+        var cutIndex = Math.max(indexOfSpace, Math.max(indexOfStar, indexOfAmpersand));
+
+        String type = typeVarname.substring(0, cutIndex + 1).trim();
+        String varName = typeVarname.substring(cutIndex + 1).trim();
 
         // If hint is also a VarDecl, use the same attributes
         var factory = hint instanceof VarDecl ? hint.getFactoryWithNode() : hint.getFactory();
