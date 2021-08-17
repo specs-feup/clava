@@ -1,4 +1,6 @@
+import clava.ClavaJoinPoints;
 import weaver.Query;
+
 
 aspectdef Cuda
 
@@ -15,5 +17,13 @@ aspectdef Cuda
 	var $cudaKernel = Query.search("function", {isCudaKernel: true}).first();
 	println("CUDA kernel: " + $cudaKernel.name);
 	
+	// Add parameter to CUDA kernel
+	$cudaKernel.addParam("bool inst0");
+	println("After adding param: " + $cudaKernel.declaration(false));
 
+	// Add argumento to call
+	var $cudaKernelCall = Query.search("function", "main").search("cudaKernelCall").first();
+	$cudaKernelCall.addArg("false", ClavaJoinPoints.typeLiteral("bool"));
+	println("Call after adding arg: " + $cudaKernelCall.code);
+	
 end
