@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -651,7 +652,18 @@ public class ClavaNodes {
         return null;
     }
 
-    public static ParmVarDecl toParam(String typeVarname, ClavaNode hint) {
+    /**
+     * Splits the given string into two strings, one with the type and another with the name.
+     * 
+     * <p>
+     * E.g.: <br>
+     * "int a" returns ["int", "a"] <br>
+     * "int *a" returns ["int *", "a"]
+     * 
+     * @param typeVarName
+     * @return
+     */
+    public static List<String> splitTypeName(String typeVarname) {
         typeVarname = typeVarname.trim();
         int indexOfSpace = typeVarname.lastIndexOf(' ');
         if (indexOfSpace == -1) {
@@ -667,10 +679,32 @@ public class ClavaNodes {
         String type = typeVarname.substring(0, cutIndex + 1).trim();
         String varName = typeVarname.substring(cutIndex + 1).trim();
 
+        return Arrays.asList(type, varName);
+    }
+
+    public static ParmVarDecl toParam(String typeVarname, ClavaNode hint) {
+        /*
+        typeVarname = typeVarname.trim();
+        int indexOfSpace = typeVarname.lastIndexOf(' ');
+        if (indexOfSpace == -1) {
+            throw new RuntimeException("Expected parameter to be a type - varName pair, separated by a space");
+        }
+        
+        // Check if there are * or &
+        int indexOfStar = typeVarname.lastIndexOf('*');
+        int indexOfAmpersand = typeVarname.lastIndexOf('&');
+        
+        var cutIndex = Math.max(indexOfSpace, Math.max(indexOfStar, indexOfAmpersand));
+        
+        String type = typeVarname.substring(0, cutIndex + 1).trim();
+        String varName = typeVarname.substring(cutIndex + 1).trim();
+        */
+
+        var typeName = splitTypeName(typeVarname);
         // If hint is also a VarDecl, use the same attributes
         var factory = hint instanceof VarDecl ? hint.getFactoryWithNode() : hint.getFactory();
 
-        return factory.parmVarDecl(varName, factory.literalType(type));
+        return factory.parmVarDecl(typeName.get(1), factory.literalType(typeName.get(0)));
     }
 
     public static ClavaNode getFirstNodeOfTargetRegion(ClavaNode base, ClavaNode newNode) {

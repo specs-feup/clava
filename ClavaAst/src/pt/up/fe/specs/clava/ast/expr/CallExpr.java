@@ -30,6 +30,7 @@ import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.type.FunctionType;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Nameable;
 import pt.up.fe.specs.util.SpecsCollections;
 
@@ -225,6 +226,26 @@ public class CallExpr extends Expr {
         }
 
         return getParent() instanceof Stmt;
+    }
+
+    /**
+     * Adds an argument to the end of the call.
+     * <p>
+     * TODO: "relink" the call to the appropriate method, and warn if it was not possible.
+     * 
+     * @param argument
+     */
+    public void addArgument(Expr argument) {
+        // Add argument
+        addChild(argument);
+
+        // TODO: Update DIRECT_CALLEE, right now just unsetting it
+        set(DIRECT_CALLEE, Optional.empty());
+    }
+
+    public void addArgument(String argCode, Type argType) {
+        var literalExpr = getFactory().literalExpr(argCode, argType);
+        addArgument(literalExpr);
     }
 
 }

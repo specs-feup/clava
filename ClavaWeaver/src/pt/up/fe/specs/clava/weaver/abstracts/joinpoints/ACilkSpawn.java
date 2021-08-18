@@ -464,13 +464,32 @@ public abstract class ACilkSpawn extends ACall {
     }
 
     /**
-     * 
+     * Adds an argument at the end of the call, creating an expression using the given code and type
+     * @param argCode 
+     * @param type 
+     */
+    @Override
+    public void addArgImpl(String argCode, AType type) {
+        this.aCall.addArgImpl(argCode, type);
+    }
+
+    /**
+     * Adds an argument at the end of the call, creating a literal 'type' from the type string
      * @param arg 
      * @param type 
      */
     @Override
-    public void addArgImpl(String arg, AJoinPoint type) {
+    public void addArgImpl(String arg, String type) {
         this.aCall.addArgImpl(arg, type);
+    }
+
+    /**
+     * Adds an argument at the end of the call, creating an expression using a dummy type
+     * @param argCode 
+     */
+    @Override
+    public void addArgImpl(String argCode) {
+        this.aCall.addArgImpl(argCode);
     }
 
     /**

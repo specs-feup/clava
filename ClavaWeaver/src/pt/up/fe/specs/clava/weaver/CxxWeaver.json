@@ -9728,6 +9728,26 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Adds an argument at the end of the call, creating an expression using the given code and type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addArg"
+                           },
+                           {
+                              "type": "String",
+                              "name": "argCode",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "type",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds an argument at the end of the call, creating a literal 'type' from the type string",
                   "children": [
                            {
                               "type": "void",
@@ -9739,8 +9759,22 @@
                               "defaultValue": ""
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "String",
                               "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds an argument at the end of the call, creating an expression using a dummy type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addArg"
+                           },
+                           {
+                              "type": "String",
+                              "name": "argCode",
                               "defaultValue": ""
                            }]
                },
@@ -14436,6 +14470,26 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Adds an argument at the end of the call, creating an expression using the given code and type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addArg"
+                           },
+                           {
+                              "type": "String",
+                              "name": "argCode",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "type",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds an argument at the end of the call, creating a literal 'type' from the type string",
                   "children": [
                            {
                               "type": "void",
@@ -14447,8 +14501,22 @@
                               "defaultValue": ""
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "String",
                               "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds an argument at the end of the call, creating an expression using a dummy type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addArg"
+                           },
+                           {
+                              "type": "String",
+                              "name": "argCode",
                               "defaultValue": ""
                            }]
                },
@@ -19741,6 +19809,26 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Adds an argument at the end of the call, creating an expression using the given code and type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addArg"
+                           },
+                           {
+                              "type": "String",
+                              "name": "argCode",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "type",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds an argument at the end of the call, creating a literal 'type' from the type string",
                   "children": [
                            {
                               "type": "void",
@@ -19752,8 +19840,22 @@
                               "defaultValue": ""
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "String",
                               "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds an argument at the end of the call, creating an expression using a dummy type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addArg"
+                           },
+                           {
+                              "type": "String",
+                              "name": "argCode",
                               "defaultValue": ""
                            }]
                },
@@ -42061,6 +42163,26 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Adds an argument at the end of the call, creating an expression using the given code and type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addArg"
+                           },
+                           {
+                              "type": "String",
+                              "name": "argCode",
+                              "defaultValue": ""
+                           },
+                           {
+                              "type": "type",
+                              "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds an argument at the end of the call, creating a literal 'type' from the type string",
                   "children": [
                            {
                               "type": "void",
@@ -42072,8 +42194,22 @@
                               "defaultValue": ""
                            },
                            {
-                              "type": "joinpoint",
+                              "type": "String",
                               "name": "type",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Adds an argument at the end of the call, creating an expression using a dummy type",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "addArg"
+                           },
+                           {
+                              "type": "String",
+                              "name": "argCode",
                               "defaultValue": ""
                            }]
                },

@@ -270,9 +270,18 @@
 		<parameter name="expr" type="expression" />
 	</action>
 	
-	<action name="addArg" class="call">
+	<action name="addArg" class="call" tooltip="Adds an argument at the end of the call, creating an expression using the given code and type">
+		<parameter name="argCode" type="String" />
+		<parameter name="type" type="type" />
+	</action>
+	
+	<action name="addArg" class="call"  tooltip="Adds an argument at the end of the call, creating a literal 'type' from the type string">
 		<parameter name="arg" type="String" />
-		<parameter name="type" type="joinpoint" />
+		<parameter name="type" type="String" />
+	</action>
+	
+	<action name="addArg" class="call" tooltip="Adds an argument at the end of the call, creating an expression using a dummy type">
+		<parameter name="argCode" type="String" />
 	</action>
 	
 	<!-- CUDA KERNEL CALL -->
