@@ -29,12 +29,21 @@ TIME_STAMP=true
 
 while test $# != 0
 do
-    case "$1" in
+
+    # Using ifs for increased compatibility (e.g. MacOS)
+
     # Disable time-stamping of wget
-    -f) TIME_STAMP=false;;
-    -h) ;&
-    --help) printf "Clava Updater and Installer v12.0.1\n\nAvailable options:\n-f: force download\n-h or --help: this help\n"; exit 0;;
-    esac
+    if [ "$1" = "-f" ]; then TIME_STAMP=false; fi
+    # Print help and exit
+    if [ "$1" = "-h" ]; then printf "Clava Updater and Installer v12.0.1\n\nAvailable options:\n-f: force download\n-h or --help: this help\n"; exit 0; fi 
+    if [ "$1" = "--help" ] ; then printf "Clava Updater and Installer v12.0.1\n\nAvailable options:\n-f: force download\n-h or --help: this help\n"; exit 0; fi
+
+#    case "$1" in
+#    # Disable time-stamping of wget
+#    -f) TIME_STAMP=false;;
+#    -h) ;&
+#    --help) printf "Clava Updater and Installer v12.0.1\n\nAvailable options:\n-f: force download\n-h or --help: this help\n"; exit 0;;
+#    esac
     shift
 done
 
