@@ -17,6 +17,11 @@ aspectdef Cuda
 	var $cudaKernel = Query.search("function", {isCudaKernel: true}).first();
 	println("CUDA kernel: " + $cudaKernel.name);
 	
+	// Print attributes
+	for(var $attr of $cudaKernel.attrs) {
+        println("Attr kind: " + $attr.kind);
+    }
+	
 	// Add parameter to CUDA kernel
 	$cudaKernel.addParam("bool inst0");
 	println("After adding param: " + $cudaKernel.declaration(false));

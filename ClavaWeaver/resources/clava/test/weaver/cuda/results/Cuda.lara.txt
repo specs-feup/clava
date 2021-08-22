@@ -1,6 +1,7 @@
 kernel call before: add<<<10, 1024>>>(a)
 kernel call after: add<<<20, 2048>>>(a)
 CUDA kernel: add
+Attr kind: CUDAGlobal
 After adding param: add(int *a, bool inst0)
 Call after adding arg: add<<<20, 2048>>>(a, false)
 Varref: blockDim
