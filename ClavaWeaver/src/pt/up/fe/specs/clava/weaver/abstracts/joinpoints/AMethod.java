@@ -340,6 +340,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute attrsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AAttribute[] getAttrsArrayImpl() {
+        return this.aFunction.getAttrsArrayImpl();
+    }
+
+    /**
      * 
      */
     public void defNameImpl(String value) {
@@ -975,6 +984,7 @@ public abstract class AMethod extends AFunction {
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),
         QUALIFIEDNAME("qualifiedName"),
+        ATTRS("attrs"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

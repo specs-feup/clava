@@ -227,6 +227,15 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
+     * Get value on attribute attrsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AAttribute[] getAttrsArrayImpl() {
+        return this.aDecl.getAttrsArrayImpl();
+    }
+
+    /**
      * Replaces this join point with the given join
      * @param node 
      */
@@ -558,6 +567,7 @@ public abstract class ANamedDecl extends ADecl {
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),
         QUALIFIEDNAME("qualifiedName"),
+        ATTRS("attrs"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

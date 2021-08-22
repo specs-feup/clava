@@ -316,6 +316,9 @@
 	<joinpoint class="cilkSpawn" extends="call"/>		
 
 
+	<!-- ATTRIBUTE -->
+	<joinpoint class="attribute"/>		
+
 	<!-- TYPE -->
 	<joinpoint class="type">
 	</joinpoint>

@@ -10,44 +10,36 @@ import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point ADecl
+ * Auto-Generated class for join point AAttribute
  * This class is overwritten by the Weaver Generator.
  * 
- * Represents one declaration (e.g., int foo(){return 0;}) or definition (e.g., int foo();) in the code
+ * 
  * @author Lara Weaver Generator
  */
-public abstract class ADecl extends ACxxWeaverJoinPoint {
+public abstract class AAttribute extends ACxxWeaverJoinPoint {
 
     /**
-     * Get value on attribute attrs
+     * Get value on attribute kind
      * @return the attribute's value
      */
-    public abstract AAttribute[] getAttrsArrayImpl();
+    public abstract String getKindImpl();
 
     /**
-     * The attributes (e.g. Pure, CUDAGlobal) associated to this decl
+     * Get value on attribute kind
+     * @return the attribute's value
      */
-    public Object getAttrsImpl() {
-        AAttribute[] aAttributeArrayImpl0 = getAttrsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aAttributeArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * The attributes (e.g. Pure, CUDAGlobal) associated to this decl
-     */
-    public final Object getAttrs() {
+    public final Object getKind() {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "attrs", Optional.empty());
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "kind", Optional.empty());
         	}
-        	Object result = this.getAttrsImpl();
+        	String result = this.getKindImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "attrs", Optional.ofNullable(result));
+        		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "attrs", e);
+        	throw new AttributeException(get_class(), "kind", e);
         }
     }
 
@@ -55,7 +47,7 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
      * 
      */
     @Override
-    public List<? extends JoinPoint> select(String selectName) {
+    public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	default:
@@ -69,7 +61,7 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
      * 
      */
     @Override
-    public void defImpl(String attribute, Object value) {
+    public final void defImpl(String attribute, Object value) {
         switch(attribute){
         case "type": {
         	if(value instanceof AType){
@@ -100,16 +92,16 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
      * 
      */
     @Override
-    protected void fillWithAttributes(List<String> attributes) {
+    protected final void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
-        attributes.add("attrs");
+        attributes.add("kind");
     }
 
     /**
      * 
      */
     @Override
-    protected void fillWithSelects(List<String> selects) {
+    protected final void fillWithSelects(List<String> selects) {
         super.fillWithSelects(selects);
     }
 
@@ -117,7 +109,7 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
      * 
      */
     @Override
-    protected void fillWithActions(List<String> actions) {
+    protected final void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
     }
 
@@ -126,14 +118,14 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
      * @return The join point type
      */
     @Override
-    public String get_class() {
-        return "decl";
+    public final String get_class() {
+        return "attribute";
     }
     /**
      * 
      */
-    protected enum DeclAttributes {
-        ATTRS("attrs"),
+    protected enum AttributeAttributes {
+        KIND("kind"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
@@ -197,13 +189,13 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
         /**
          * 
          */
-        private DeclAttributes(String name){
+        private AttributeAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<DeclAttributes> fromString(String name) {
+        public static Optional<AttributeAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -211,7 +203,7 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(DeclAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(AttributeAttributes::name).collect(Collectors.toList());
         }
 
         /**

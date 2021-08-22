@@ -234,6 +234,7 @@
 
 	<!-- DECLARATION -->
 	<artifact class="decl">
+		<attribute name="attrs" type="attribute[]" tooltip="The attributes (e.g. Pure, CUDAGlobal) associated to this decl"/>
 	</artifact>
 
 	<!-- NAMED DECLARATION -->
@@ -585,6 +586,12 @@
 			<def/>
 		</attribute>
 	</artifact>
+
+	<!-- ATTRIBUTE -->
+	<artifact class="attribute">
+		<attribute name="kind" type="String"/>
+	</artifact>
+
 
 	<!-- TYPES -->
 

@@ -96,6 +96,15 @@ public abstract class AInclude extends ADecl {
     }
 
     /**
+     * Get value on attribute attrsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AAttribute[] getAttrsArrayImpl() {
+        return this.aDecl.getAttrsArrayImpl();
+    }
+
+    /**
      * Replaces this join point with the given join
      * @param node 
      */
@@ -401,6 +410,7 @@ public abstract class AInclude extends ADecl {
         NAME("name"),
         ISANGLED("isAngled"),
         RELATIVEFOLDERPATH("relativeFolderpath"),
+        ATTRS("attrs"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
