@@ -1,0 +1,2 @@
+Attr kind: CUDAShared
+Attr code: __shared__
