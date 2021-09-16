@@ -41,4 +41,29 @@ aspectdef ClavaJoinPointsTest
 	var derefOp = ClavaJoinPoints.unaryOp("*", intPointerExpr);
 	println("Deref code: " + derefOp.code);
 	println("Deref code type: " + derefOp.type.code);
+	
+	
+	var type;
+	type = ClavaJoinPoints.type("int");
+	println("Builtin type: " + type.joinPointType);
+	type = ClavaJoinPoints.type("uint64_t");
+	println("Literal type: " + type.node.getClass());
+	var type2 = ClavaJoinPoints.type(type);
+	println("Same type: " + (type === type2)); // They should be the same join point
+	type2 = ClavaJoinPoints.type(ClavaJoinPoints.varDeclNoInit("dummyVar", type));
+	println("Same type again: " + (type.code === type2.code)); // No longer the same join point, but the same node
+	// Invalid input, only strings or jps
+	try {
+		ClavaJoinPoints.type([0 , 1]);
+		println("fail 1");
+	} catch(e) {
+		println("Rejected invalid input type");
+	}
+	// Invalid input, jp must have type
+	try {
+		ClavaJoinPoints.type(ClavaJoinPoints.file("dummyFile"));
+		println("fail 2");
+	} catch(e) {
+		println("Rejected jp without type");
+	}
 end
