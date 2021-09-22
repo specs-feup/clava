@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,8 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.attr.Attribute;
+import pt.up.fe.specs.clava.ast.decl.data.CXXBaseSpecifier;
+import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 
 /**
  * Common class of struct, union and class.
@@ -60,10 +63,14 @@ public class RecordDecl extends TagDecl {
 
     @Override
     public String getCode() {
-        return getCode("");
+        return getCode(Collections.emptyList());
     }
 
-    protected String getCode(String bases) {
+    protected String getCode(List<CXXBaseSpecifier> bases) {
+        return getCode(bases, Collections.emptyList());
+    }
+
+    protected String getCode(List<CXXBaseSpecifier> bases, List<TemplateArgument> templateArgs) {
         boolean addNewlines = addNewLines();
 
         StringBuilder code = new StringBuilder();
@@ -92,8 +99,20 @@ public class RecordDecl extends TagDecl {
             code.append(" ").append(getDeclName());
         }
 
+        if (!templateArgs.isEmpty()) {
+            var templateArgsCode = TemplateArgument.getCode(templateArgs, this);
+            code.append(templateArgsCode);
+        }
+
         // Append bases
-        code.append(bases);
+        if (!bases.isEmpty()) {
+            String basesCode = bases.stream()
+                    .map(recordBase -> recordBase.getCode(this))
+                    .collect(Collectors.joining(", "));
+
+            basesCode = basesCode.isEmpty() ? basesCode : " : " + basesCode;
+            code.append(basesCode);
+        }
 
         // if (recordDeclData.isCompleteDefinition()) {
         if (get(IS_COMPLETE_DEFINITION)) {
