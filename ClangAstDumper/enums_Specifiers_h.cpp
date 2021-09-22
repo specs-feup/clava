@@ -43,3 +43,11 @@ extern const std::string clava::EXPLICIT_SPEC_KIND[] = {
         "Unresolved",
 };
 
+extern const std::string clava::TEMPLATE_SPECIALIZATION_KIND[] = {
+        "Undeclared",
+        "ImplicitInstantiation",
+        "ExplicitSpecialization",
+        "ExplicitInstantiationDeclaration",
+        "ExplicitInstantiationDefinition",
+};
+
