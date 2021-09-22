@@ -317,6 +317,10 @@
 	</artifact>
 
 
+	<artifact class="exprStmt">
+		<attribute name="expr" type="expression" tooltip="The expression join point associated to this exprStmt"/>		
+	</artifact>
+
 	<!-- EXPRESSION -->
 	<artifact class="expression">
 		<!-- If this expression represents a declared variable, returns the name 
