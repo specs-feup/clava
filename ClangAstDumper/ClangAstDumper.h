@@ -224,6 +224,7 @@ private:
     void VisitEnumDeclChildren(const EnumDecl *D, std::vector<std::string> &children);
     void VisitRecordDeclChildren(const RecordDecl *D, std::vector<std::string> &children);
     void VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vector<std::string> &children);
+    void VisitClassTemplateSpecializationDeclChildren(const ClassTemplateSpecializationDecl *D, std::vector<std::string> &children);
     void VisitValueDeclChildren(const ValueDecl *D, std::vector<std::string> &children);
     void VisitFieldDeclChildren(const FieldDecl *D, std::vector<std::string> &children);
     void VisitFunctionDeclChildren(const FunctionDecl *D, std::vector<std::string> &children);

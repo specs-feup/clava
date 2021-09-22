@@ -108,6 +108,8 @@ namespace clava {
         void DumpEnumDeclData(const EnumDecl *D);
         void DumpRecordDeclData(const RecordDecl *D);
         void DumpCXXRecordDeclData(const CXXRecordDecl *D);
+        void DumpClassTemplateSpecializationDeclData(const ClassTemplateSpecializationDecl *D);
+        void DumpClassTemplatePartialSpecializationDeclData(const ClassTemplatePartialSpecializationDecl *D);
         void DumpValueDeclData(const ValueDecl *D);
         void DumpDeclaratorDeclData(const DeclaratorDecl *D);
         void DumpFieldDeclData(const FieldDecl *D);
