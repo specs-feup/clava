@@ -20,57 +20,6 @@ If you are using Linux there is an [instalation script](https://specs.fe.up.pt/t
 There is a demo online version of Clava available [here](http://specs.fe.up.pt/tools/clava).
 
 
-# Running Clava
-
-
-Clava can be run from CMake, using a GUI, or as a command-line tool.
-
-
-## CMake
-
-Instructions for the Clava CMake plugin can be found [here](https://github.com/specs-feup/clava/tree/master/CMake).
-
-
-
-## GUI
-
-
-Run the JAR with passing parameters, e.g.:
-
-	java -jar Clava.jar
-
-
-A video demonstrating the GUI can be found [here](https://www.youtube.com/watch?v=IFvNWYCivFA).
-
-## Command Line
-
-
-There are two main modes in command line, either passing all arguments (LARA file, parameters, etc...), or passing a configuration file that was built with the graphical user interface.
-
-
-
-### Using parameters:
-
-	java -jar Clava.jar <aspect.lara> -p <source_folder>
-
-where <aspect.lara> is the LARA aspect you want to execute, and <source_folder> is the folder where the source code is.
-
-
-There are more command-line options available, which can be consulted by running:
-
-	java -jar Clava.jar --help
-
-
-		
-### Configuration file:
-
-To pass a configuration file, use the flag -c:
-
-	java -jar Clava.jar -c <config.clava>
-
-where <config.clava> is the configuration file created with the GUI.
-
-
 # configuring eclipse
 
 Please check the README file in repository [specs-java-libs](https://github.com/specs-feup/specs-java-libs).
