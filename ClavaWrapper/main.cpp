@@ -20,7 +20,44 @@ std::string escape_json(const std::string &s) {
 
 int main(int argc, char** argv) {
 
-    // Try to connect to clava server
+    gearman_client_st *client= gearman_client_create(NULL);
+
+    gearman_return_t ret= gearman_client_add_server(client, "localhost", 4830);
+    if (gearman_failed(ret))
+    {
+        return 1;
+    }
+
+    gearman_argument_t value= gearman_argument_make(0, 0, full_path, strlen(full_path));
+
+    gearman_task_st *task= gearman_execute(client,
+                                           "mb", strlen("mb"),  // function
+                                           NULL, 0,  // no un
+                                           NULL,
+                                           &value, 0);
+
+    if (task == NULL) // If gearman_execute() can return NULL on error
+    {
+        std::cerr << "Error: " << gearman_client_error(client) << std::endl;
+        gearman_client_free(client);
+        return 1;
+    }
+
+    // Make sure the task was run successfully
+    if (gearman_success(gearman_task_return(task)))
+    {
+        // Make use of value
+        gearman_result_st *result= gearman_task_result(task);
+        std::cout << "cycles: " << gearman_result_value(result) << std::endl;
+    }
+
+    gearman_client_free(client);
+
+    free(full_path);
+    //std::cout <<  "Hello, World!" << std::endl;
+    return 0;
+
+    // Try to connect to Clava server
     
     // If failed, try launching it
     
