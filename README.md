@@ -5,11 +5,15 @@ If you have used Clava, please consider filling the [Clava User Experience Feedb
 
 # Quickstart
 
-Introduction to Clava and the LARA Framework: [Slides](https://drive.google.com/drive/u/1/folders/1IAqv7SpP8S-t5g3fpNO06cJ7J2j2aD7K)
+[Clava Tutorial - 2018 PACT](https://github.com/specs-feup/specs-lara/tree/master/2018-PACT) - Tutorial on how to use Clava (recommended parts 1-3).
 
-Tutorial on how to use Clava (recommended parts 1-3): [Clava Tutorial - 2018 PACT](https://github.com/specs-feup/specs-lara/tree/master/2018-PACT).
+[LARA Reference Guide](http://specs.fe.up.pt/tools/lara/doku.php?id=lara:docs:sheet) - Start using LARA with examples.
 
-Start using LARA with examples: [LARA Reference Guide](http://specs.fe.up.pt/tools/lara/doku.php?id=lara:docs:sheet).
+[Language Specification](https://specs.fe.up.pt/tools/clava/language_specification.html) - List of all join points, attributes and actions available in Clava.
+
+[API Documentation](https://specs.fe.up.pt/tools/clava/doc/) - List of LARA APIs available in Clava.
+
+[API Slides](https://drive.google.com/drive/u/1/folders/1IAqv7SpP8S-t5g3fpNO06cJ7J2j2aD7K) - Introduction to Clava and the LARA Framework APIs.
 
 For a sample of Clava examples, please check the [Unit Tests](https://github.com/specs-feup/clava/tree/master/ClavaWeaver/resources/clava/test).
 
@@ -25,6 +29,57 @@ For an online demo version of Clava, please click [here](http://specs.fe.up.pt/t
 To call Clava from within CMake, please click [here](https://github.com/specs-feup/clava/tree/master/CMake).
 
 To build Clava, please check the [ClavaWeaver](https://github.com/specs-feup/clava/tree/master/ClavaWeaver) project folder.
+
+
+# Running Clava
+
+
+Clava can be run from CMake, using a GUI, or as a command-line tool.
+
+
+## CMake
+
+Instructions for the Clava CMake plugin can be found [here](https://github.com/specs-feup/clava/tree/master/CMake).
+
+
+
+## GUI
+
+
+Run the JAR with passing parameters, e.g.:
+
+	java -jar Clava.jar
+
+
+A video demonstrating the GUI can be found [here](https://www.youtube.com/watch?v=IFvNWYCivFA).
+
+## Command Line
+
+
+There are two main modes in command line, either passing all arguments (LARA file, parameters, etc...), or passing a configuration file that was built with the graphical user interface.
+
+
+
+### Using parameters:
+
+	java -jar Clava.jar <aspect.lara> -p <source_folder>
+
+where <aspect.lara> is the LARA aspect you want to execute, and <source_folder> is the folder where the source code is.
+
+
+There are more command-line options available, which can be consulted by running:
+
+	java -jar Clava.jar --help
+
+
+		
+### Configuration file:
+
+To pass a configuration file, use the flag -c:
+
+	java -jar Clava.jar -c <config.clava>
+
+where <config.clava> is the configuration file created with the GUI.
 
 
 # Troubleshooting
