@@ -490,6 +490,14 @@ void ClangAstDumper::VisitClassTemplateSpecializationDeclChildren(const ClassTem
     VisitCXXRecordDeclChildren(D, children);
 
     VisitDeclTop(D->getSpecializedTemplate());
+
+    // Visit template arguments
+    auto& templateArgs = D->getTemplateArgs();
+    clava::dump(templateArgs.size());
+    for (auto& templateArg : templateArgs.asArray()) {
+        VisitTemplateArgument(templateArg);
+    }
+
 }
 
 
