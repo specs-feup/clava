@@ -45,16 +45,9 @@ std::string json_to_string(const std::string &s) {
     	    }
     	} else {
     	     o << *c;
-    	}
-/*    
-        if (*c == '"' || *c == '\\' || ('\x00' <= *c && *c <= '\x1f')) {
-            o << "\\u"
-              << std::hex << std::setw(4) << std::setfill('0') << (int)*c;
-        } else {
-            o << *c;
-        }
-*/        
+    	}     
     }
+    
     return o.str();
 }
 
@@ -91,24 +84,11 @@ int main(int argc, char** argv) {
     gearman_return_t ret = gearman_client_add_server(client, "localhost", 4733);
     if (gearman_failed(ret))
     {
-    /*
-    	std::cout << "Launching server" << std::endl;
-        // Could not connect, try lauching server
-        launchServer();
-        
-        // Try connecting again´
-    	ret= gearman_client_add_server(client, "localhost", 4733);
-    	if (gearman_failed(ret))
-    	{        
-    	    	std::cout << "Could not connect to server" << std::endl;
-        	return 1;
- 	}
-*/
         return -1;
     }
 
 
-    //std::cout << "Connected to server" << std::endl;    
+
 
     // Create json with arguments
     std::string jsonArgs("[");
@@ -153,20 +133,6 @@ int main(int argc, char** argv) {
 
     gearman_client_free(client);
 
-    //free(full_path);
-    //std::cout <<  "Hello, World!" << std::endl;
-    return 0;
 
-    // Try to connect to Clava server
-    
-    // If failed, try launching it
-    
-    // If failed again, quit
-
-
-
-    
-
-    std::cout << "Hello, World!" << std::endl;
     return 0;
 }
