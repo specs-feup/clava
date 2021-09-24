@@ -47,8 +47,8 @@ public class ClavaWeaverLauncher {
 
         boolean success = execute(args);
 
-        // Only exit if GUI is not running
-        if (!LaraI.isRunningGui()) {
+        // Only exit if GUI is not running, or if not in server mode
+        if (!LaraI.isRunningGui() && !LaraI.isServerMode()) {
             int exitValue = success ? 0 : 1;
             ClavaLog.debug("Calling System.exit() on ClavaWeaverLauncher, no running GUI detected");
             System.exit(exitValue);
