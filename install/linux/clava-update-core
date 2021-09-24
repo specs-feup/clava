@@ -94,6 +94,11 @@ chmod +x clava-doc
 download_file "specs.fe.up.pt/tools/clava/" "clava-desktop" $TIME_STAMP
 chmod +x clava-desktop
 
+
+# get the clavaw program
+download_file "specs.fe.up.pt/tools/clava/" "clavaw" $TIME_STAMP
+chmod +x clavaw
+
 # get CMake modules
 mkdir /usr/local/lib/clava
 cd /usr/local/lib/clava
