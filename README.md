@@ -82,6 +82,26 @@ To pass a configuration file, use the flag -c:
 where <config.clava> is the configuration file created with the GUI.
 
 
+## Server Mode
+
+For short executions, most of the execution time is related to starting a JVM.
+
+There is an experimental feature where you can call Clava in server mode. In this mode, Clava can run in the background and will wait for requests. Then you can use a compiled program that performs requests to the server.
+
+To start Clava in server mode, use the flag -server:
+
+	java -jar Clava.jar -server
+
+The Linux instalation script provides the `clavaw` program, which sends a request to a Clava server:
+
+        clavaw <Clava flags>
+
+### Limitations
+
+- Only absolute paths are supported in this mode, since the server will use its own folder as the working folder. However, files defined in config files should be handled automatically, they are converted to absolute paths, using the folder of the config file as the base folder. Additionally, if inside a Lara script you need to use files, you can use `Clava.getData().getContextFolder()` (`import clava.Clava;`) to return the folder of the config file.
+- The output of the program will appear on the terminal of the server, not where `clavaw` runs-
+
+
 # Troubleshooting
 
 ## Error 'Invalid or corrupt jarfile'
