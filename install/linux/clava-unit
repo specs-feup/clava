@@ -5,6 +5,15 @@
 SCRIPT=$(readlink -f "$0")
 # Absolute path this script is in, thus /home/user/bin
 SCRIPTPATH=$(dirname "$SCRIPT")
-java -illegal-access=permit -jar $SCRIPTPATH/Clava/Clava.jar -ut "$@"
+JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1)
+echo $JAVA_VER
+
+ILLEGAL_ACCESS_OPTION="-illegal-access=permit"
+
+if [ "$JAVA_VER" -lt "16" ]; then
+    ILLEGAL_ACCESS_OPTION=""
+fi
+
+java $ILLEGAL_ACCESS_OPTION -jar $SCRIPTPATH/Clava/Clava.jar -ut "$@"
 
 #java -cp SCRIPTPATH/Lara/lara-unit.jar:$SCRIPTPATH/Clava/clava.jar pt.up.fe.specs.lara.unit.LaraUnitLauncher lara-unit-weaver=pt.up.fe.specs.clava.weaver.CxxWeaver "$@"
