@@ -100,7 +100,7 @@ public class CxxStatement extends AStatement {
             return Collections.emptyList();
         }
 
-        return Arrays.asList((ACall) CxxJoinpoints.create((CallExpr) expr));
+        return Arrays.asList((ACall) CxxJoinpoints.create(expr));
     }
 
     @Override
@@ -141,23 +141,24 @@ public class CxxStatement extends AStatement {
         return stmt.getDescendantsStream()
                 .filter(ArraySubscriptExpr.class::isInstance)
                 .map(ArraySubscriptExpr.class::cast)
-                .filter(CxxStatement::isTopLevelArraySubscript)
+                .filter(ArraySubscriptExpr::isTopLevel)
+                // .filter(CxxStatement::isTopLevelArraySubscript)
                 .map(arraySub -> (AArrayAccess) CxxJoinpoints.create(arraySub))
                 .collect(Collectors.toList());
 
     }
 
-    private static boolean isTopLevelArraySubscript(ArraySubscriptExpr expr) {
-        ClavaNode parent = ClavaNodes.getParentNormalized(expr);
-        if (!(parent instanceof ArraySubscriptExpr)) {
-            return true;
-        }
-
-        // Parent can be an ArraySubscriptExpr, if expr is not the first child
-        ClavaNode normalizedFirstChild = ClavaNodes.normalize(parent.getChild(0));
-
-        return normalizedFirstChild != expr;
-    }
+    // private static boolean isTopLevelArraySubscript(ArraySubscriptExpr expr) {
+    // ClavaNode parent = ClavaNodes.getParentNormalized(expr);
+    // if (!(parent instanceof ArraySubscriptExpr)) {
+    // return true;
+    // }
+    //
+    // // Parent can be an ArraySubscriptExpr, if expr is not the first child
+    // ClavaNode normalizedFirstChild = ClavaNodes.normalize(parent.getChild(0));
+    //
+    // return normalizedFirstChild != expr;
+    // }
 
     @Override
     public List<? extends AVardecl> selectVardecl() {
