@@ -43,7 +43,7 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"NonTypeTemplateParmDecl", clava::DeclNode::NON_TYPE_TEMPLATE_PARM_DECL},
         // TODO: Check if needs more data to dump
         {"VarTemplateSpecializationDecl", clava::DeclNode::VAR_DECL},
-
+        {"UsingDecl", clava::DeclNode::USING_DECL},
 
 };
 
@@ -119,7 +119,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitStaticAssertDeclChildren(static_cast<const StaticAssertDecl *>(D), visitedChildren); break;
         case clava::DeclNode::NON_TYPE_TEMPLATE_PARM_DECL:
             VisitNonTypeTemplateParmDeclChildren(static_cast<const NonTypeTemplateParmDecl *>(D), visitedChildren); break;
-
+        case clava::DeclNode::USING_DECL:
+            VisitUsingDeclChildren(static_cast<const UsingDecl *>(D), visitedChildren); break;
 
 
             //        case clava::DeclNode::PARM_VAR_DECL:
@@ -670,4 +671,11 @@ void ClangAstDumper::VisitNonTypeTemplateParmDeclChildren(const NonTypeTemplateP
         }
     }
 
+}
+
+void ClangAstDumper::VisitUsingDeclChildren(const UsingDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitNamedDeclChildren(D, children);
+
+    ClangAstDumper::VisitNestedNameSpecifierChildren(D->getQualifier());
 }

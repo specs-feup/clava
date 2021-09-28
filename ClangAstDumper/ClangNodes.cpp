@@ -426,6 +426,38 @@ void clava::dump(NestedNameSpecifier* qualifier, ASTContext* Context) {
     }
 }
 
+void clava::dump(NestedNameSpecifier* qualifier, int id) {
+    auto qualifierKind = qualifier->getKind();
+
+    // Dump name
+    clava::dump(clava::NESTED_NAMED_SPECIFIER[qualifier->getKind()]);
+    switch(qualifierKind) {
+//        case clang::NestedNameSpecifier::Identifier:
+//            break;
+        case clang::NestedNameSpecifier::Namespace:
+            clava::dump(getId(qualifier->getAsNamespace(), id));
+            break;
+        case clang::NestedNameSpecifier::NamespaceAlias:
+            clava::dump(getId(qualifier->getAsNamespaceAlias(), id));
+            break;
+        case clang::NestedNameSpecifier::TypeSpec:
+            clava::dump(getId(qualifier->getAsType(), id));
+            break;
+        case clang::NestedNameSpecifier::TypeSpecWithTemplate:
+            clava::dump(getId(qualifier->getAsType(), id));
+            break;
+        case clang::NestedNameSpecifier::Global:
+            break;
+        case clang::NestedNameSpecifier::Super:
+            clava::dump(getId(qualifier->getAsRecordDecl(), id));
+            break;
+        default:
+            throw std::invalid_argument(
+                    "ClangNodes::dump(NestedNameSpecifier):: Case not implemented, '" + clava::NESTED_NAMED_SPECIFIER[qualifier->getKind()] + "'");
+    }
+}
+
+
 void clava::dump(const TemplateArgument &templateArg, int id, ASTContext* Context) {
     clava::dump(clava::TEMPLATE_ARG_KIND[templateArg.getKind()]);
     switch (templateArg.getKind()) {

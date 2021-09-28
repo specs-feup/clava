@@ -654,8 +654,9 @@ void clava::ClavaDataDumper::DumpUsingDeclData(const UsingDecl *D) {
     // Hierarchy
     DumpNamedDeclData(D);
 
-    clava::dump(clava::NESTED_NAMED_SPECIFIER[D->getQualifier()->getKind()]);
+    //clava::dump(clava::NESTED_NAMED_SPECIFIER[D->getQualifier()->getKind()]);
 
+    clava::dump(D->getQualifier(), id);
     //llvm::errs() << "Name info: " << D->getNameInfo().getName() << "\n";
     //D->getQualifier()->dump();
 }

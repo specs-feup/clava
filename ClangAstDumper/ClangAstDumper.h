@@ -247,6 +247,7 @@ private:
     void VisitLinkageSpecDeclChildren(const LinkageSpecDecl *D, std::vector<std::string> &children);
     void VisitStaticAssertDeclChildren(const StaticAssertDecl *D, std::vector<std::string> &children);
     void VisitNonTypeTemplateParmDeclChildren(const NonTypeTemplateParmDecl *D, std::vector<std::string> &children);
+    void VisitUsingDeclChildren(const UsingDecl *D, std::vector<std::string> &children);
 
 
     // Children visitors for Stmts
@@ -349,6 +350,8 @@ private:
     // Children visitors for other types of classes
     void VisitTemplateArgChildren(const TemplateArgument& arg);
     void VisitTemplateNameChildren(const TemplateName& templateName);
+    void VisitNestedNameSpecifierChildren(NestedNameSpecifier* qualifier);
+
 
     /* Utility methods for DECLS */
     void dumpNumberTemplateParameters(const Decl *D, const TemplateParameterList *TPL);
