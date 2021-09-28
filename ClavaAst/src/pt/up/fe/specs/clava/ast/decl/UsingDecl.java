@@ -20,7 +20,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
+import pt.up.fe.specs.clava.ast.decl.data.nestedname.NestedNameSpecifier;
 
 /**
  * A C++ using-declaration.
@@ -32,8 +32,8 @@ public class UsingDecl extends NamedDecl {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<NestedNamedSpecifier> QUALIFIER = KeyFactory.enumeration("qualifier",
-            NestedNamedSpecifier.class);
+    public final static DataKey<NestedNameSpecifier> NESTED_NAME_SPECIFIER = KeyFactory.object("nestedNameSpecifier",
+            NestedNameSpecifier.class);
 
     /// DATAKEYS END
 
@@ -43,7 +43,7 @@ public class UsingDecl extends NamedDecl {
 
     @Override
     public String getCode() {
-        return "using " + getDeclName() + ";";
+        return "using " + get(NESTED_NAME_SPECIFIER).getQualifier() + getDeclName() + ";";
     }
 
 }

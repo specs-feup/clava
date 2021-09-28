@@ -17,7 +17,7 @@ import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
 
-public enum NestedNamedSpecifier implements StringProvider {
+public enum NestedNameSpecifierKind implements StringProvider {
     Identifier,
     Namespace,
     NamespaceAlias,
@@ -27,10 +27,10 @@ public enum NestedNamedSpecifier implements StringProvider {
     Super;
     // NONE("");
 
-    private static final Lazy<EnumHelperWithValue<NestedNamedSpecifier>> ENUM_HELPER = EnumHelperWithValue
-            .newLazyHelperWithValue(NestedNamedSpecifier.class);
+    private static final Lazy<EnumHelperWithValue<NestedNameSpecifierKind>> ENUM_HELPER = EnumHelperWithValue
+            .newLazyHelperWithValue(NestedNameSpecifierKind.class);
 
-    public static EnumHelperWithValue<NestedNamedSpecifier> getEnumHelper() {
+    public static EnumHelperWithValue<NestedNameSpecifierKind> getEnumHelper() {
         return ENUM_HELPER.get();
     }
 
