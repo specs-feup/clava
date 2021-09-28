@@ -31,6 +31,12 @@ import pt.up.fe.specs.clava.ast.decl.data.ctorinit.AnyMemberInit;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.BaseInit;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.CXXCtorInitializer;
 import pt.up.fe.specs.clava.ast.decl.data.ctorinit.DelegatingInit;
+import pt.up.fe.specs.clava.ast.decl.data.nestedname.NamespaceAliasSpecifier;
+import pt.up.fe.specs.clava.ast.decl.data.nestedname.NamespaceSpecifier;
+import pt.up.fe.specs.clava.ast.decl.data.nestedname.NestedNameSpecifier;
+import pt.up.fe.specs.clava.ast.decl.data.nestedname.SuperSpecifier;
+import pt.up.fe.specs.clava.ast.decl.data.nestedname.TypeSpecSpecifier;
+import pt.up.fe.specs.clava.ast.decl.data.nestedname.TypeSpecWithTemplateSpecifier;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentExpr;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgumentIntegral;
@@ -42,6 +48,7 @@ import pt.up.fe.specs.clava.ast.decl.data.templates.template.QualifiedTemplate;
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.SubstTemplateTemplateParm;
 import pt.up.fe.specs.clava.ast.decl.data.templates.template.Template;
 import pt.up.fe.specs.clava.ast.decl.enums.ExplicitSpecKind;
+import pt.up.fe.specs.clava.ast.decl.enums.NestedNameSpecifierKind;
 import pt.up.fe.specs.clava.ast.expr.data.designator.ArrayDesignator;
 import pt.up.fe.specs.clava.ast.expr.data.designator.ArrayRangeDesignator;
 import pt.up.fe.specs.clava.ast.expr.data.designator.Designator;
@@ -462,5 +469,44 @@ public class ClavaDataParsers {
     }
 
     // OffsetOfExpr
+
+    public static NestedNameSpecifier nestedNameSpecifier(LineStream lines, ClangAstData parserData) {
+        var specifierKind = LineStreamParsers.enumFromName(NestedNameSpecifierKind.class, lines);
+
+        var nestedNameSpecifier = NestedNameSpecifier.newInstance(specifierKind);
+
+        switch (specifierKind) {
+        case Namespace:
+            parserData.getClavaNodes().queueSetNode(nestedNameSpecifier, NamespaceSpecifier.NAMESPACE,
+                    lines.nextLine());
+            break;
+        case NamespaceAlias:
+            parserData.getClavaNodes().queueSetNode(nestedNameSpecifier, NamespaceAliasSpecifier.NAMESPACE_ALIAS,
+                    lines.nextLine());
+            break;
+        case TypeSpec:
+            parserData.getClavaNodes().queueSetNode(nestedNameSpecifier, TypeSpecSpecifier.TYPE,
+                    lines.nextLine());
+            break;
+        case TypeSpecWithTemplate:
+            parserData.getClavaNodes().queueSetNode(nestedNameSpecifier, TypeSpecWithTemplateSpecifier.TYPE,
+                    lines.nextLine());
+            break;
+        case Global:
+            // Nothing to add
+            break;
+        case Super:
+            parserData.getClavaNodes().queueSetNode(nestedNameSpecifier, SuperSpecifier.SUPER,
+                    lines.nextLine());
+            break;
+        default:
+            throw new NotImplementedException(specifierKind);
+        }
+
+        return nestedNameSpecifier;
+
+        //
+        // data.add(NestedNameSpecifier., LineStreamParsers.enumFromName(Linkage.class, lines));
+    }
 
 }

@@ -60,7 +60,6 @@ import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.decl.enums.Linkage;
 import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
-import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateSpecializationKind;
@@ -449,7 +448,7 @@ public class DeclDataParser {
         // Hierarchy
         DataStore data = parseNamedDeclData(lines, dataStore);
 
-        data.add(UsingDecl.QUALIFIER, LineStreamParsers.enumFromName(NestedNamedSpecifier.class, lines));
+        data.add(UsingDecl.NESTED_NAME_SPECIFIER, ClavaDataParsers.nestedNameSpecifier(lines, dataStore));
 
         return data;
     }
