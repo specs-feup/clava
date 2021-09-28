@@ -177,7 +177,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(CUDAKernelCallExpr.class, CXXCudaKernelCall::new);
         JOINPOINT_FACTORY.put(CallExpr.class, CxxCall::new);
         JOINPOINT_FACTORY.put(DeclRefExpr.class, CxxVarref::new);
-        JOINPOINT_FACTORY.put(ArraySubscriptExpr.class, CxxArrayAccess::new);
+        JOINPOINT_FACTORY.put(ArraySubscriptExpr.class, CxxJoinpoints::arrayAccessFactory);
         JOINPOINT_FACTORY.put(MemberExpr.class, CxxMemberAccess::new);
         JOINPOINT_FACTORY.put(CXXNewExpr.class, CxxNewExpr::new);
         JOINPOINT_FACTORY.put(CXXDeleteExpr.class, CxxDeleteExpr::new);
@@ -321,6 +321,15 @@ public class CxxJoinpoints {
         }
 
         return new CxxRecord(record);
+    }
+
+    private static ACxxWeaverJoinPoint arrayAccessFactory(ArraySubscriptExpr expr) {
+
+        if (!expr.isTopLevel()) {
+            return CxxJoinpoints.nullNode(expr.getFactory().nullExpr());
+        }
+
+        return new CxxArrayAccess(expr);
     }
 
     private static ACxxWeaverJoinPoint defaultFactory(ClavaNode node) {
