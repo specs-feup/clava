@@ -49,7 +49,8 @@ const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
         {"LabelDecl",                              clava::DeclNode::NAMED_DECL},
         {"StaticAssertDecl",                       clava::DeclNode::STATIC_ASSERT_DECL},
         {"TemplateTemplateParmDecl",               clava::DeclNode::TEMPLATE_TEMPLATE_PARM_DECL},
-        {"MSPropertyDecl",               clava::DeclNode::MS_PROPERTY_DECL},
+        {"MSPropertyDecl",                         clava::DeclNode::MS_PROPERTY_DECL},
+        {"UsingDecl",                              clava::DeclNode::USING_DECL},
         // TODO: Check if needs more data to dump
         {"VarTemplateSpecializationDecl", clava::DeclNode::VAR_DECL},
 
@@ -654,6 +655,9 @@ void clava::ClavaDataDumper::DumpUsingDeclData(const UsingDecl *D) {
     DumpNamedDeclData(D);
 
     clava::dump(clava::NESTED_NAMED_SPECIFIER[D->getQualifier()->getKind()]);
+
+    //llvm::errs() << "Name info: " << D->getNameInfo().getName() << "\n";
+    //D->getQualifier()->dump();
 }
 
 void clava::ClavaDataDumper::DumpUsingDirectiveDeclData(const UsingDirectiveDecl *D) {
