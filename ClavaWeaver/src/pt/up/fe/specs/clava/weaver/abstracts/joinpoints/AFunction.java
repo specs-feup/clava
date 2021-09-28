@@ -132,7 +132,7 @@ public abstract class AFunction extends ADeclarator {
     /**
      * Returns the first prototype of this function that could be found, or undefined if there is none
      */
-    public abstract AJoinPoint getDeclarationJpImpl();
+    public abstract AFunction getDeclarationJpImpl();
 
     /**
      * Returns the first prototype of this function that could be found, or undefined if there is none
@@ -142,7 +142,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declarationJp", Optional.empty());
         	}
-        	AJoinPoint result = this.getDeclarationJpImpl();
+        	AFunction result = this.getDeclarationJpImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "declarationJp", Optional.ofNullable(result));
         	}
@@ -156,14 +156,14 @@ public abstract class AFunction extends ADeclarator {
      * Get value on attribute declarationJps
      * @return the attribute's value
      */
-    public abstract AJoinPoint[] getDeclarationJpsArrayImpl();
+    public abstract AFunction[] getDeclarationJpsArrayImpl();
 
     /**
      * Returns the prototypes of this function that are present in the code. If there are none, returns an empty array
      */
     public Object getDeclarationJpsImpl() {
-        AJoinPoint[] aJoinPointArrayImpl0 = getDeclarationJpsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        AFunction[] aFunctionArrayImpl0 = getDeclarationJpsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aFunctionArrayImpl0);
         return nativeArray0;
     }
 
@@ -188,7 +188,7 @@ public abstract class AFunction extends ADeclarator {
     /**
      * Returns the implementation of this function if there is one, or undefined otherwise
      */
-    public abstract AJoinPoint getDefinitionJpImpl();
+    public abstract AFunction getDefinitionJpImpl();
 
     /**
      * Returns the implementation of this function if there is one, or undefined otherwise
@@ -198,7 +198,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "definitionJp", Optional.empty());
         	}
-        	AJoinPoint result = this.getDefinitionJpImpl();
+        	AFunction result = this.getDefinitionJpImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "definitionJp", Optional.ofNullable(result));
         	}
@@ -875,11 +875,11 @@ public abstract class AFunction extends ADeclarator {
     public final void setParams(AParam[] params) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParams", this, Optional.empty(), params);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParams", this, Optional.empty(), new Object[] { params});
         	}
         	this.setParamsImpl(params);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParams", this, Optional.empty(), params);
+        		eventTrigger().triggerAction(Stage.END, "setParams", this, Optional.empty(), new Object[] { params});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setParams", e);
@@ -901,11 +901,11 @@ public abstract class AFunction extends ADeclarator {
     public final void setParamsFromStrings(String[] params) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setParamsFromStrings", this, Optional.empty(), params);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
         	}
         	this.setParamsFromStringsImpl(params);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setParamsFromStrings", this, Optional.empty(), params);
+        		eventTrigger().triggerAction(Stage.END, "setParamsFromStrings", this, Optional.empty(), new Object[] { params});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setParamsFromStrings", e);
@@ -1039,11 +1039,11 @@ public abstract class AFunction extends ADeclarator {
     public final ACall newCall(AJoinPoint[] args) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "newCall", this, Optional.empty(), args);
+        		eventTrigger().triggerAction(Stage.BEGIN, "newCall", this, Optional.empty(), new Object[] { args});
         	}
         	ACall result = this.newCallImpl(args);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "newCall", this, Optional.ofNullable(result), args);
+        		eventTrigger().triggerAction(Stage.END, "newCall", this, Optional.ofNullable(result), new Object[] { args});
         	}
         	return result;
         } catch(Exception e) {
@@ -1248,6 +1248,15 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Get value on attribute attrsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AAttribute[] getAttrsArrayImpl() {
+        return this.aDeclarator.getAttrsArrayImpl();
+    }
+
+    /**
      * 
      */
     public void defNameImpl(String value) {
@@ -1417,6 +1426,33 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public void setLastChildImpl(AJoinPoint node) {
         this.aDeclarator.setLastChildImpl(node);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     */
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return this.aDeclarator.toCommentImpl();
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return this.aDeclarator.toCommentImpl(prefix);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aDeclarator.toCommentImpl(prefix, suffix);
     }
 
     /**
@@ -1674,6 +1710,7 @@ public abstract class AFunction extends ADeclarator {
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),
         QUALIFIEDNAME("qualifiedName"),
+        ATTRS("attrs"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

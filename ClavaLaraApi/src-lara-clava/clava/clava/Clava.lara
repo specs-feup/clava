@@ -60,7 +60,7 @@ Clava.getWeavingFolder = function() {
 }; 
 
 /**
- * @param {$file} file The file to add to the AST.
+ * @param {$file} $file The file to add to the AST.
  */
 Clava.addFile = function($file) {
 
@@ -70,6 +70,23 @@ Clava.addFile = function($file) {
 	}
 	call ClavaAddFile($file);
 }; 
+
+
+/**
+ * @param {J#java.io.File|string} path Path to an existing source file that will be added to the AST. If the file does not exists, throws an exception.
+ */
+Clava.addExistingFile = function(path) {
+
+	var file = Io.getPath(path);
+	
+	if(!file.isFile()) {
+		throw new Error('Clava.addExistingFile(): path ' + path + ' does not represent an existing file');
+	}
+
+	var $file = AstFactory.file(file.getAbsolutePath(), '');
+	Clava.addFile($file);
+}; 
+
 
 Clava.cLinkageBegin = %{
 #ifdef __cplusplus

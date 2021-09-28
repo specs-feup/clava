@@ -32,7 +32,7 @@ public abstract class AUnaryOp extends AOp {
      * Get value on attribute operand
      * @return the attribute's value
      */
-    public abstract AJoinPoint getOperandImpl();
+    public abstract AExpression getOperandImpl();
 
     /**
      * Get value on attribute operand
@@ -43,7 +43,7 @@ public abstract class AUnaryOp extends AOp {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "operand", Optional.empty());
         	}
-        	AJoinPoint result = this.getOperandImpl();
+        	AExpression result = this.getOperandImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "operand", Optional.ofNullable(result));
         	}
@@ -316,6 +316,33 @@ public abstract class AUnaryOp extends AOp {
     @Override
     public void setLastChildImpl(AJoinPoint node) {
         this.aOp.setLastChildImpl(node);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     */
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return this.aOp.toCommentImpl();
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return this.aOp.toCommentImpl(prefix);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aOp.toCommentImpl(prefix, suffix);
     }
 
     /**

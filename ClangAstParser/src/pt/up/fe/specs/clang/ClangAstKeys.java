@@ -34,9 +34,16 @@ public interface ClangAstKeys {
     /**
      * If true, tries to use the platform system includes (if available), instead of the built-in system includes.
      */
-    DataKey<Boolean> USE_PLATFORM_INCLUDES = KeyFactory.bool("platformIncludes")
-            // .setLabel("Uses the platform system includes headers (if available)");
-            .setLabel("Disable built-in lib C/C++ includes");
+    // DataKey<Boolean> USE_PLATFORM_INCLUDES = KeyFactory.bool("platformIncludes")
+    // // .setLabel("Uses the platform system includes headers (if available)");
+    // .setLabel("Disable built-in lib C/C++ includes");
+
+    /**
+     * What libc/libcxx should be used.
+     */
+    DataKey<LibcMode> LIBC_CXX_MODE = KeyFactory.enumeration("libcCxxMode", LibcMode.class)
+            .setLabel("Libc/Libcxx mode")
+            .setDefault(() -> LibcMode.AUTO);
 
     DataKey<Boolean> USES_CILK = KeyFactory.bool("usesCilk");
 

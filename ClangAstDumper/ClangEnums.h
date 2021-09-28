@@ -50,6 +50,7 @@ namespace clava {
     extern const std::string DESIGNATOR_KIND[];
     extern const std::string VISIBILITY_ATTR_TYPE[];
     extern const std::string EXPLICIT_SPEC_KIND[];
+    extern const std::string TEMPLATE_SPECIALIZATION_KIND[];
 
 }
 #endif //CLANGASTDUMPER_CLANGENUMS_H

@@ -19,7 +19,6 @@ _ClavaJavaTypes.getCxxJoinPoints = function() {
 	return _JavaTypes.getType("pt.up.fe.specs.clava.weaver.CxxJoinpoints");
 }
 
-
-
-
-
+_ClavaJavaTypes.getBuiltinKind = function() {
+	return _JavaTypes.getType("pt.up.fe.specs.clava.ast.type.enums.BuiltinKind");
+}

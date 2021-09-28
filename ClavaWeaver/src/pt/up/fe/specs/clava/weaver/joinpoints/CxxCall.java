@@ -36,7 +36,6 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AMemberAccess;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.actions.CallWrap;
@@ -255,19 +254,30 @@ public class CxxCall extends ACall {
     }
 
     @Override
-    public void addArgImpl(String arg, AJoinPoint type) {
+    public void addArgImpl(String arg, AType type) {
 
-        // Check if joinpoint is a CxxType
-        if (!(type instanceof AType)) {
-            SpecsLogs.msgInfo("addArgImpl: the provided join point (" + type.getJoinPointType() + ") is not a type");
-            return;
-        }
+        // // Check if joinpoint is a CxxType
+        // if (!(type instanceof AType)) {
+        // SpecsLogs.msgInfo("addArgImpl: the provided join point (" + type.getJoinPointType() + ") is not a type");
+        // return;
+        // }
 
-        Type typeNode = (Type) type.getNode();
+        // Type typeNode = (Type) type.getNode();
 
-        Expr literalExpr = CxxWeaver.getFactory().literalExpr(arg, typeNode);
+        // Expr literalExpr = CxxWeaver.getFactory().literalExpr(arg, typeNode);
+        //
+        // call.addArgument(literalExpr);
+        call.addArgument(arg, (Type) type.getNode());
+    }
 
-        call.addChild(literalExpr);
+    @Override
+    public void addArgImpl(String arg, String type) {
+        call.addArgument(arg, CxxWeaver.getFactory().literalType(type));
+    }
+
+    @Override
+    public void addArgImpl(String argCode) {
+        call.addArgument(argCode, CxxWeaver.getFactory().dummyType("from $call.addArg()"));
     }
 
     @Override

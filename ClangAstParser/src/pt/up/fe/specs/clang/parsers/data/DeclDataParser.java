@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
+import pt.up.fe.specs.clava.ast.decl.ClassTemplateSpecializationDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumDecl.EnumScopeType;
@@ -62,6 +63,7 @@ import pt.up.fe.specs.clava.ast.decl.enums.NameKind;
 import pt.up.fe.specs.clava.ast.decl.enums.NestedNamedSpecifier;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.decl.enums.TemplateKind;
+import pt.up.fe.specs.clava.ast.decl.enums.TemplateSpecializationKind;
 import pt.up.fe.specs.clava.ast.decl.enums.Visibility;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.TLSKind;
@@ -221,6 +223,48 @@ public class DeclDataParser {
         // if (!data.get(ClavaNode.ID).equals(definitionId)) {
         // dataStore.getClavaNodes().queueSetOptionalNode(data, CXXRecordDecl.RECORD_DEFINITION, definitionId);
         // }
+
+        return data;
+    }
+
+    public static DataStore parseClassTemplateSpecializationDeclData(LineStream lines, ClangAstData dataStore) {
+        // Parse CXXRecordDecl data
+        DataStore data = parseCXXRecordDeclData(lines, dataStore);
+
+        dataStore.getClavaNodes().queueSetNode(data, ClassTemplateSpecializationDecl.SPECIALIZED_TEMPLATE,
+                lines.nextLine());
+
+        data.add(ClassTemplateSpecializationDecl.SPECIALIZATION_KIND,
+                LineStreamParsers.enumFromName(TemplateSpecializationKind.class, lines));
+
+        data.add(ClassTemplateSpecializationDecl.TEMPLATE_ARGUMENTS,
+                ClavaDataParsers.templateArguments(lines, dataStore));
+
+        // /**
+        // * The template that this specialization specializes.
+        // */
+        // public static final DataKey<ClassTemplateDecl> SPECIALIZED_TEMPLATE =
+        // KeyFactory.object("specializedTemplate",
+        // ClassTemplateDecl.class);
+        //
+        // /**
+        // * The kind of specialization that this declaration represents.
+        // */
+        // public static final DataKey<TemplateSpecializationKind> SPECIALIZATION_KIND = KeyFactory.enumeration(
+        // "specializationKind", TemplateSpecializationKind.class);
+        //
+        // /**
+        // * The template arguments of the class template specialization.
+        // */
+        // public static final DataKey<List<TemplateArgument>> TEMPLATE_ARGS = KeyFactory.list("templateArgs",
+        // TemplateArgument.class);
+
+        return data;
+    }
+
+    public static DataStore parseClassTemplatePartialSpecializationDeclData(LineStream lines, ClangAstData dataStore) {
+        // Parse ClassTemplateSpecializationDecl data
+        DataStore data = parseClassTemplateSpecializationDeclData(lines, dataStore);
 
         return data;
     }
@@ -516,25 +560,22 @@ public class DeclDataParser {
 
         return data;
     }
-    
+
     public static DataStore parseDeclaratorDeclData(LineStream lines, ClangAstData dataStore) {
-    	// Hierarchy
-        DataStore data = parseValueDeclData(lines, dataStore); 	
-        
+        // Hierarchy
+        DataStore data = parseValueDeclData(lines, dataStore);
+
         return data;
     }
-    
-    
+
     public static DataStore parseMSPropertyDeclData(LineStream lines, ClangAstData dataStore) {
         // Hierarchy
-        DataStore data = parseDeclaratorDeclData(lines, dataStore); 	
-        
+        DataStore data = parseDeclaratorDeclData(lines, dataStore);
 
-        data.add(MSPropertyDecl.GETTER_NAME, ClavaDataParsers.optionalString(lines)); 
-        data.add(MSPropertyDecl.SETTER_NAME, ClavaDataParsers.optionalString(lines)); 
-        
+        data.add(MSPropertyDecl.GETTER_NAME, ClavaDataParsers.optionalString(lines));
+        data.add(MSPropertyDecl.SETTER_NAME, ClavaDataParsers.optionalString(lines));
+
         return data;
     }
-
 
 }

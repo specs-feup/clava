@@ -122,7 +122,6 @@ public class VarDecl extends DeclaratorDecl {
 
         // Add attributes
         code.append(getAttributesCode());
-
         String declName = getDeclNameCode();
 
         // Type.getCode() accepts null if no name

@@ -33,8 +33,8 @@ const std::map<const std::string, clava::DeclNode> clava::DECL_DATA_MAP = {
         {"EnumDecl",                               clava::DeclNode::ENUM_DECL},
         {"RecordDecl",                             clava::DeclNode::RECORD_DECL},
         {"CXXRecordDecl",                          clava::DeclNode::CXX_RECORD_DECL},
-        {"ClassTemplateSpecializationDecl",        clava::DeclNode::CXX_RECORD_DECL},
-        {"ClassTemplatePartialSpecializationDecl", clava::DeclNode::CXX_RECORD_DECL},
+        {"ClassTemplateSpecializationDecl",        clava::DeclNode::CLASS_TEMPLATE_SPECIALIZATION_DECL},
+        {"ClassTemplatePartialSpecializationDecl", clava::DeclNode::CLASS_TEMPLATE_PARTIAL_SPECIALIZATION_DECL},
         {"VarDecl",                                clava::DeclNode::VAR_DECL},
         {"EnumConstantDecl",                       clava::DeclNode::VALUE_DECL},
         {"NonTypeTemplateParmDecl",                clava::DeclNode::NON_TYPE_TEMPLATE_PARM_DECL},
@@ -99,6 +99,12 @@ void clava::ClavaDataDumper::dump(clava::DeclNode declNode, const Decl *D) {
             break;
         case clava::DeclNode::CXX_RECORD_DECL:
             DumpCXXRecordDeclData(static_cast<const CXXRecordDecl *>(D));
+            break;
+        case clava::DeclNode::CLASS_TEMPLATE_SPECIALIZATION_DECL:
+            DumpClassTemplateSpecializationDeclData(static_cast<const ClassTemplateSpecializationDecl *>(D));
+            break;
+        case clava::DeclNode::CLASS_TEMPLATE_PARTIAL_SPECIALIZATION_DECL:
+            DumpClassTemplatePartialSpecializationDeclData(static_cast<const ClassTemplatePartialSpecializationDecl *>(D));
             break;
         case clava::DeclNode::VALUE_DECL:
             DumpValueDeclData(static_cast<const ValueDecl *>(D));
@@ -344,6 +350,42 @@ void clava::ClavaDataDumper::DumpCXXRecordDeclData(const CXXRecordDecl *D) {
   */
 
 }
+
+void clava::ClavaDataDumper::DumpClassTemplateSpecializationDeclData(const ClassTemplateSpecializationDecl *D) {
+    // Hierarchy
+    DumpCXXRecordDeclData(D);
+
+    clava::dump(clava::getId(D->getSpecializedTemplate(), id));
+    clava::dump(clava::TEMPLATE_SPECIALIZATION_KIND[D->getSpecializationKind()]);
+
+    // Template specialization args
+    auto& templateArgs = D->getTemplateArgs();
+    clava::dump(templateArgs.size());
+    for (auto& templateArg : templateArgs.asArray()) {
+        clava::dump(templateArg, id, Context);
+    }
+
+/** POSSIBLE ATTRIBUTES TO DUMP
+bool 	isExplicitSpecialization () const
+bool 	isClassScopeExplicitSpecialization () const
+bool 	isExplicitInstantiationOrSpecialization () const
+const TemplateArgumentList & 	getTemplateInstantiationArgs () const
+ */
+}
+
+void clava::ClavaDataDumper::DumpClassTemplatePartialSpecializationDeclData(const ClassTemplatePartialSpecializationDecl *D) {
+    // Hierarchy
+    DumpClassTemplateSpecializationDeclData(D);
+
+/** POSSIBLE ATTRIBUTES TO DUMP
+TemplateParameterList * 	getTemplateParameters () const
+bool 	hasAssociatedConstraints () const
+const ASTTemplateArgumentListInfo * 	getTemplateArgsAsWritten () const
+bool 	isMemberSpecialization ()
+QualType 	getInjectedSpecializationType () const
+*/
+}
+
 
 
 void clava::ClavaDataDumper::DumpValueDeclData(const ValueDecl *D) {

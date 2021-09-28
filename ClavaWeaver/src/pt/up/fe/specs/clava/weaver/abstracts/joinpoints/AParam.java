@@ -40,7 +40,7 @@ public abstract class AParam extends AVardecl {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getInitImpl() {
+    public AExpression getInitImpl() {
         return this.aVardecl.getInitImpl();
     }
 
@@ -132,6 +132,15 @@ public abstract class AParam extends AVardecl {
     @Override
     public String getQualifiedNameImpl() {
         return this.aVardecl.getQualifiedNameImpl();
+    }
+
+    /**
+     * Get value on attribute attrsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AAttribute[] getAttrsArrayImpl() {
+        return this.aVardecl.getAttrsArrayImpl();
     }
 
     /**
@@ -304,6 +313,33 @@ public abstract class AParam extends AVardecl {
     @Override
     public void setLastChildImpl(AJoinPoint node) {
         this.aVardecl.setLastChildImpl(node);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     */
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return this.aVardecl.toCommentImpl();
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return this.aVardecl.toCommentImpl(prefix);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aVardecl.toCommentImpl(prefix, suffix);
     }
 
     /**
@@ -489,6 +525,7 @@ public abstract class AParam extends AVardecl {
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),
         QUALIFIEDNAME("qualifiedName"),
+        ATTRS("attrs"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

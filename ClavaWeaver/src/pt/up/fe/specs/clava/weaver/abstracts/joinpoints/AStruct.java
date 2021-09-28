@@ -98,6 +98,15 @@ public abstract class AStruct extends ARecord {
     }
 
     /**
+     * Get value on attribute attrsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AAttribute[] getAttrsArrayImpl() {
+        return this.aRecord.getAttrsArrayImpl();
+    }
+
+    /**
      * 
      */
     public void defNameImpl(String value) {
@@ -270,6 +279,33 @@ public abstract class AStruct extends ARecord {
     }
 
     /**
+     * Replaces this join point with a comment with the same contents as .code
+     */
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return this.aRecord.toCommentImpl();
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return this.aRecord.toCommentImpl(prefix);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aRecord.toCommentImpl(prefix, suffix);
+    }
+
+    /**
      * Adds a field to a record (struct, class).
      * @param field 
      */
@@ -431,6 +467,7 @@ public abstract class AStruct extends ARecord {
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),
         QUALIFIEDNAME("qualifiedName"),
+        ATTRS("attrs"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

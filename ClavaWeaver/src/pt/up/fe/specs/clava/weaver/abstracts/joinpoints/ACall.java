@@ -575,20 +575,48 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * 
-     * @param arg 
+     * Adds an argument at the end of the call, creating an expression using the given code and type
+     * @param argCode 
      * @param type 
      */
-    public void addArgImpl(String arg, AJoinPoint type) {
+    public void addArgImpl(String argCode, AType type) {
         throw new UnsupportedOperationException(get_class()+": Action addArg not implemented ");
     }
 
     /**
-     * 
+     * Adds an argument at the end of the call, creating an expression using the given code and type
+     * @param argCode 
+     * @param type 
+     */
+    public final void addArg(String argCode, AType type) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addArg", this, Optional.empty(), argCode, type);
+        	}
+        	this.addArgImpl(argCode, type);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addArg", this, Optional.empty(), argCode, type);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addArg", e);
+        }
+    }
+
+    /**
+     * Adds an argument at the end of the call, creating a literal 'type' from the type string
      * @param arg 
      * @param type 
      */
-    public final void addArg(String arg, AJoinPoint type) {
+    public void addArgImpl(String arg, String type) {
+        throw new UnsupportedOperationException(get_class()+": Action addArg not implemented ");
+    }
+
+    /**
+     * Adds an argument at the end of the call, creating a literal 'type' from the type string
+     * @param arg 
+     * @param type 
+     */
+    public final void addArg(String arg, String type) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "addArg", this, Optional.empty(), arg, type);
@@ -596,6 +624,32 @@ public abstract class ACall extends AExpression {
         	this.addArgImpl(arg, type);
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "addArg", this, Optional.empty(), arg, type);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "addArg", e);
+        }
+    }
+
+    /**
+     * Adds an argument at the end of the call, creating an expression using a dummy type
+     * @param argCode 
+     */
+    public void addArgImpl(String argCode) {
+        throw new UnsupportedOperationException(get_class()+": Action addArg not implemented ");
+    }
+
+    /**
+     * Adds an argument at the end of the call, creating an expression using a dummy type
+     * @param argCode 
+     */
+    public final void addArg(String argCode) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "addArg", this, Optional.empty(), argCode);
+        	}
+        	this.addArgImpl(argCode);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "addArg", this, Optional.empty(), argCode);
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addArg", e);
@@ -808,6 +862,33 @@ public abstract class ACall extends AExpression {
     }
 
     /**
+     * Replaces this join point with a comment with the same contents as .code
+     */
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return this.aExpression.toCommentImpl();
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return this.aExpression.toCommentImpl(prefix);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aExpression.toCommentImpl(prefix, suffix);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -940,7 +1021,9 @@ public abstract class ACall extends AExpression {
         actions.add("void inline()");
         actions.add("void setArgFromString(int, string)");
         actions.add("void setArg(Integer, expression)");
-        actions.add("void addArg(String, joinpoint)");
+        actions.add("void addArg(String, type)");
+        actions.add("void addArg(String, String)");
+        actions.add("void addArg(String)");
     }
 
     /**

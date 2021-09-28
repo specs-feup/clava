@@ -156,6 +156,52 @@ public abstract class AVarref extends AExpression {
     }
 
     /**
+     * if this variable reference has a MS-style property, returns the property name. Returns undefined otherwise
+     */
+    public abstract String getPropertyImpl();
+
+    /**
+     * if this variable reference has a MS-style property, returns the property name. Returns undefined otherwise
+     */
+    public final Object getProperty() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "property", Optional.empty());
+        	}
+        	String result = this.getPropertyImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "property", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "property", e);
+        }
+    }
+
+    /**
+     * true if this variable reference has a MS-style property, false otherwise
+     */
+    public abstract Boolean getHasPropertyImpl();
+
+    /**
+     * true if this variable reference has a MS-style property, false otherwise
+     */
+    public final Object getHasProperty() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasProperty", Optional.empty());
+        	}
+        	Boolean result = this.getHasPropertyImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasProperty", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasProperty", e);
+        }
+    }
+
+    /**
      * 
      * @param name 
      */
@@ -387,6 +433,33 @@ public abstract class AVarref extends AExpression {
     }
 
     /**
+     * Replaces this join point with a comment with the same contents as .code
+     */
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return this.aExpression.toCommentImpl();
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return this.aExpression.toCommentImpl(prefix);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aExpression.toCommentImpl(prefix, suffix);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -480,6 +553,8 @@ public abstract class AVarref extends AExpression {
         attributes.add("useExpr");
         attributes.add("isFunctionCall");
         attributes.add("declaration");
+        attributes.add("property");
+        attributes.add("hasProperty");
     }
 
     /**
@@ -529,6 +604,8 @@ public abstract class AVarref extends AExpression {
         USEEXPR("useExpr"),
         ISFUNCTIONCALL("isFunctionCall"),
         DECLARATION("declaration"),
+        PROPERTY("property"),
+        HASPROPERTY("hasProperty"),
         DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),

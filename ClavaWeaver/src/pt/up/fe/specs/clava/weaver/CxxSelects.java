@@ -138,6 +138,8 @@ public class CxxSelects {
                 })
                 // Null nodes should have been filtered by previous filter
                 // .filter(jp -> jp != null)
+                // Filter null nodes
+                .filter(jp -> jp != null)
                 .collect(Collectors.toList())
                 // .toArray(new AJoinPoint[0]);
                 .toArray(AJoinPoint[]::new);

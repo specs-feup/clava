@@ -114,9 +114,11 @@ public class CxxIssuesTest {
 
     @Test
     public void testClavaIssue29() {
-        new CxxTester("issues/clava_issue29.cpp")
-                // .onePass()
-                .showCode()
-                .showClavaAst().test();
+        new CxxTester("issues/clava_issue29.cpp").test();
+    }
+
+    @Test
+    public void testClavaIssue39() {
+        new CxxTester("issues/clava_issue39.cpp").test();
     }
 }

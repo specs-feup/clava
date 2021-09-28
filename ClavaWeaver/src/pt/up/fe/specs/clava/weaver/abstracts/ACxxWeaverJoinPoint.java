@@ -1,5 +1,6 @@
 package pt.up.fe.specs.clava.weaver.abstracts;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -24,6 +25,7 @@ import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.cilk.CilkNode;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaFactory;
@@ -41,6 +43,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
+import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -1099,9 +1102,18 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 continue;
             }
 
+            var node = getNode();
+            var tu = node instanceof TranslationUnit ? (TranslationUnit) node
+                    : node.getAncestorTry(TranslationUnit.class).orElse(null);
+
+            var baseFolder = tu == null ? null
+                    : tu.getFolderpath().map(folderpath -> new File(folderpath)).orElse(null);
+
+            var jsonString = SpecsStrings.normalizeJsonObject(splitter.toString().trim(), baseFolder);
+
             try {
-                return getWeaverEngine().getScriptEngine().eval("var _data = {" + splitter.toString() + "}; _data;");
-                // getWeaverEngine().getScriptEngine().eval("{" + splitter.toString() + "};");
+                return getWeaverEngine().getScriptEngine().eval("var _data = " + jsonString + "; _data;");
+                // return getWeaverEngine().getScriptEngine().eval("var _data = {" + splitter.toString() + "}; _data;");
             } catch (Exception e) {
                 SpecsLogs.warn(
                         "Could not decode #pragma clava " + dataKeyword + " for contents '" + splitter.toString()
@@ -1329,4 +1341,21 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         return getNode().getStableId();
     }
 
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return toCommentImpl(null);
+    }
+
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return toCommentImpl(prefix, null);
+    }
+
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        var prefixClean = prefix == null ? "" : prefix;
+        var suffixClean = suffix == null ? "" : suffix;
+
+        return replaceWithImpl(AstFactory.comment(prefixClean + getCodeImpl() + suffixClean));
+    }
 }

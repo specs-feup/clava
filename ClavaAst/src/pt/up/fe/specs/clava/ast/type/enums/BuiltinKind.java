@@ -342,6 +342,10 @@ public enum BuiltinKind {
         return "_Bool";
     }
 
+    public static boolean isBuiltinKind(String literalKind) {
+        return LITERAL_KINDS.containsKey(literalKind);
+    }
+
     public static BuiltinKind newInstance(String literalKind) {
         BuiltinKind builtinKind = LITERAL_KINDS.get(literalKind);
         if (builtinKind == null) {

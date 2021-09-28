@@ -230,25 +230,25 @@ public class DirectMappedTable implements java.io.Serializable {
                         + "%)");
     }
 
-    private void printTable(HashMap<String, MergedMemoiEntry> table) {
-
-        table.forEach((k, v) -> {
-
-            StringBuilder b = new StringBuilder();
-
-            for (String key : v.getKey().split("#")) {
-
-                b.append("0x");
-                b.append(key);
-                b.append(", ");
-            }
-
-            b.append("0x");
-            b.append(v.getOutput());
-
-            System.out.println(b);
-        });
-    }
+    // private void printTable(HashMap<String, MergedMemoiEntry> table) {
+    //
+    // table.forEach((k, v) -> {
+    //
+    // StringBuilder b = new StringBuilder();
+    //
+    // for (String key : v.getKey().split("#")) {
+    //
+    // b.append("0x");
+    // b.append(key);
+    // b.append(", ");
+    // }
+    //
+    // b.append("0x");
+    // b.append(v.getOutput());
+    //
+    // System.out.println(b);
+    // });
+    // }
 
     private String hash(String key64bits) {
 

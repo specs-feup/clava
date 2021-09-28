@@ -25,7 +25,6 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
@@ -89,7 +88,7 @@ public class CxxIf extends AIf {
     }
 
     @Override
-    public AJoinPoint getCondDeclImpl() {
+    public AVardecl getCondDeclImpl() {
         return SpecsCollections.orElseNull(selectCondDecl());
     }
 

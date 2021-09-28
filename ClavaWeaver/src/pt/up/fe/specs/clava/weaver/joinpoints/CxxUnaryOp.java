@@ -22,7 +22,6 @@ import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
-import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUnaryOp;
 
 public class CxxUnaryOp extends AUnaryOp {
@@ -40,8 +39,8 @@ public class CxxUnaryOp extends AUnaryOp {
     }
 
     @Override
-    public AJoinPoint getOperandImpl() {
-        return CxxJoinpoints.create(ClavaNodes.normalize(unaryOp.getSubExpr()));
+    public AExpression getOperandImpl() {
+        return CxxJoinpoints.create(ClavaNodes.normalize(unaryOp.getSubExpr()), AExpression.class);
     }
 
     @Override

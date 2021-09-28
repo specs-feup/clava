@@ -2,7 +2,7 @@ import clava.Clava;
 import clava.ClavaType;
 import weaver.JoinPoints;
 import lara.Check;
-
+import clava._ClavaJavaTypes;
 
 
 /**
@@ -491,16 +491,44 @@ ClavaJoinPoints.param = function(name, $type) {
  * @return {$comment}
  * */
 ClavaJoinPoints.comment = function(text) {
-    
+	return AstFactory.comment(text);    
 }
 
-/**
- * @param {$joinpoint} $jp
+* Tries to convert the given source into a join point, or throws an exception if it is not possible.
  *
- * @return {$joinpoint}
- * */
-ClavaJoinPoints.makeComment = function($jp) {
-    return $jp.replaceWith(
-        ClavaJoinPoints.comment($jp.code)
-    );
+ * If source is a string:
+ *  - If it can be converted to a builtinType, returns a builtinType;
+ *  - Otherwise, returns a typeLiteral;
+ *
+ * If source is a join point:
+ *  - If is a $type, returns itself;
+ *  - If the property .type is not undefined, returns .type;
+ *  - Otherwise, throws an exception;
+ *
+ * @param {string|$jp} source
+ * @return {$type} 
+ */
+ClavaJoinPoints.type = function(source) {
+	if(isString(source)) {
+		// Check if BuiltinType
+		if(_ClavaJavaTypes.getBuiltinKind().isBuiltinKind(source)) {
+			return ClavaJoinPoints.builtinType(source);
+		}
+		
+		return ClavaJoinPoints.typeLiteral(source);
+	}
+	
+	if(isJoinPoint(source)) {
+		if(source.instanceOf("type")) {
+			return source;
+		}
+		
+		if(source.type !== undefined) {
+			return source.type;
+		}
+		
+		throw new Error('ClavaJoinPoints.type: source is join point but is not a type, nor has a .type property: ' + source); 		
+	}
+	
+	throw new Error('ClavaJoinPoints.type: source must be a string or a join point: ' + source); 
 }

@@ -98,7 +98,8 @@ public interface CxxWeaverOption {
                     // FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE,
                     COPY_FILES_IN_SOURCES, FLAT_OUTPUT_FOLDER)
             // GENERATE_MODIFIED_CODE_ONLY, FLATTEN_WOVEN_CODE_FOLDER_STRUCTURE, UNIT_TESTING_MODE)
-            .addKey(ClangAstKeys.USE_PLATFORM_INCLUDES)
+            // .addKey(ClangAstKeys.USE_PLATFORM_INCLUDES)
+            .addKey(ClangAstKeys.LIBC_CXX_MODE)
             .addKey(ClangAstKeys.IGNORE_HEADER_INCLUDES)
             .startSection("Parsing Options")
             .addKey(CodeParser.CUDA_GPU_ARCH)

@@ -815,7 +815,8 @@ public class CxxWeaver extends ACxxWeaver {
                 getConfig().get(ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD));
         codeParser.set(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS,
                 getConfig().get(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS));
-        codeParser.set(ClangAstKeys.USE_PLATFORM_INCLUDES, getConfig().get(ClangAstKeys.USE_PLATFORM_INCLUDES));
+        // codeParser.set(ClangAstKeys.USE_PLATFORM_INCLUDES, getConfig().get(ClangAstKeys.USE_PLATFORM_INCLUDES));
+        codeParser.set(ClangAstKeys.LIBC_CXX_MODE, getConfig().get(ClangAstKeys.LIBC_CXX_MODE));
 
         List<String> allParserOptions = new ArrayList<>(parserOptions.size() + adaptedExtraOptions.size());
         allParserOptions.addAll(parserOptions);

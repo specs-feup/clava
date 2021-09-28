@@ -53,15 +53,20 @@ public class CXXRecordDecl extends RecordDecl {
 
     @Override
     public String getCode() {
-        // String bases = getRecordBases().stream()
-        String bases = get(RECORD_BASES).stream()
-                .map(recordBase -> recordBase.getCode(this))
-                .collect(Collectors.joining(", "));
+        // String bases = getBasesCode();
 
-        bases = bases.isEmpty() ? bases : " : " + bases;
-
-        return super.getCode(bases);
+        return super.getCode(get(RECORD_BASES));
     }
+
+    // private String getBasesCode() {
+    // // String bases = getRecordBases().stream()
+    // String bases = get(RECORD_BASES).stream()
+    // .map(recordBase -> recordBase.getCode(this))
+    // .collect(Collectors.joining(", "));
+    //
+    // bases = bases.isEmpty() ? bases : " : " + bases;
+    // return bases;
+    // }
 
     public List<CXXMethodDecl> getMethods() {
         return getChildrenOf(CXXMethodDecl.class);

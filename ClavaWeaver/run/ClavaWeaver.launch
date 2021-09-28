@@ -6,11 +6,12 @@
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
         <listEntry value="1"/>
     </listAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher"/>
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="ClavaWeaver"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-ut"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-server"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ClavaWeaver"/>
-    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="C:\Users\JBispo\Work\Repos\Lab\specs-lara\Lara-Common-Language\Basic"/>
+    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="C:\Temp\2021-09-09 Lara Import JS\"/>
 </launchConfiguration>

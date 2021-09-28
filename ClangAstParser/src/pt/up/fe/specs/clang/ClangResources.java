@@ -26,6 +26,7 @@ import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsSystem;
+import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.providers.FileResourceManager;
 import pt.up.fe.specs.util.providers.FileResourceProvider;
 import pt.up.fe.specs.util.providers.FileResourceProvider.ResourceWriteData;
@@ -51,7 +52,7 @@ public class ClangResources {
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
     }
 
-    public ClangFiles getClangFiles(String version, boolean usePlatformIncludes) {
+    public ClangFiles getClangFiles(String version, LibcMode libcMode) {
 
         // Check if there is a local version of the Clang files
         ClangFiles localClangFiles = SpecsIo.getJarPath(ClangResources.class)
@@ -68,7 +69,7 @@ public class ClangResources {
         }
 
         File clangExecutable = prepareResources(version);
-        List<String> builtinIncludes = prepareIncludes(clangExecutable, usePlatformIncludes);
+        List<String> builtinIncludes = prepareIncludes(clangExecutable, libcMode);
 
         return new ClangFiles(clangExecutable, builtinIncludes);
     }
@@ -214,11 +215,16 @@ public class ClangResources {
         // return Arrays.asList(WIN_DLL1, WIN_DLL2, WIN_DLL3);
     }
 
-    private List<String> prepareIncludes(File clangExecutable, boolean usePlatformIncludes) {
+    private List<String> prepareIncludes(File clangExecutable, LibcMode libcMode) {
 
-        if (usePlatformIncludes) {
+        // Use no built-ins
+        if (libcMode == LibcMode.SYSTEM) {
             return Collections.emptyList();
         }
+        // Should not use basic includes if mode is System?
+        // if (usePlatformIncludes) {
+        // return Collections.emptyList();
+        // }
 
         File resourceFolder = getClangResourceFolder();
 
@@ -230,7 +236,7 @@ public class ClangResources {
         includesZips.add(CLANG_AST_RESOURCES.get(ClangAstFileResource.BUILTIN_INCLUDES));
 
         // Check if built-in libc/c++ needs to be included
-        if (useBuiltinLibc(clangExecutable, usePlatformIncludes)) {
+        if (useBuiltinLibc(clangExecutable, libcMode)) {
             var libcResource = getVersionedResource(getLibCResource(SupportedPlatform.getCurrentPlatform()));
             includesZips.add(libcResource);
             // includesZips.add(getLibCResource(SupportedPlatform.getCurrentPlatform()));
@@ -270,13 +276,25 @@ public class ClangResources {
         return includes;
     }
 
-    private boolean useBuiltinLibc(File clangExecutable, boolean usePlatformIncludes) {
-        // If usePlatformIncludes is enabled, never use built-in includes
-        if (usePlatformIncludes) {
+    private boolean useBuiltinLibc(File clangExecutable, LibcMode libcMode) {
+
+        switch (libcMode) {
+        case AUTO:
+            return !hasLibC(clangExecutable);
+        case BUILTIN_AND_LIBC:
+            return true;
+        case BASE_BUILTIN_ONLY:
             return false;
+        default:
+            throw new CaseNotDefinedException(libcMode);
         }
 
-        return !hasLibC(clangExecutable);
+        // // If usePlatformIncludes is enabled, never use built-in includes
+        // if (usePlatformIncludes) {
+        // return false;
+        // }
+        //
+        // return !hasLibC(clangExecutable);
         // return !usePlatformIncludes;
         /*
         // If platform includes is disabled, always use built-in headers

@@ -1,9 +1,11 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
+import org.lara.interpreter.weaver.interf.events.Stage;
+import java.util.Optional;
+import org.lara.interpreter.exception.AttributeException;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -15,6 +17,39 @@ import java.util.Arrays;
  * @author Lara Weaver Generator
  */
 public abstract class ADecl extends ACxxWeaverJoinPoint {
+
+    /**
+     * Get value on attribute attrs
+     * @return the attribute's value
+     */
+    public abstract AAttribute[] getAttrsArrayImpl();
+
+    /**
+     * The attributes (e.g. Pure, CUDAGlobal) associated to this decl
+     */
+    public Object getAttrsImpl() {
+        AAttribute[] aAttributeArrayImpl0 = getAttrsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aAttributeArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * The attributes (e.g. Pure, CUDAGlobal) associated to this decl
+     */
+    public final Object getAttrs() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "attrs", Optional.empty());
+        	}
+        	Object result = this.getAttrsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "attrs", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "attrs", e);
+        }
+    }
 
     /**
      * 
@@ -67,6 +102,7 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         super.fillWithAttributes(attributes);
+        attributes.add("attrs");
     }
 
     /**
@@ -97,6 +133,7 @@ public abstract class ADecl extends ACxxWeaverJoinPoint {
      * 
      */
     protected enum DeclAttributes {
+        ATTRS("attrs"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

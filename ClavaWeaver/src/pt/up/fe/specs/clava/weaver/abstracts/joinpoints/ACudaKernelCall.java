@@ -85,11 +85,11 @@ public abstract class ACudaKernelCall extends ACall {
     public final void setConfig(AExpression[] args) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setConfig", this, Optional.empty(), args);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setConfig", this, Optional.empty(), new Object[] { args});
         	}
         	this.setConfigImpl(args);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setConfig", this, Optional.empty(), args);
+        		eventTrigger().triggerAction(Stage.END, "setConfig", this, Optional.empty(), new Object[] { args});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setConfig", e);
@@ -111,11 +111,11 @@ public abstract class ACudaKernelCall extends ACall {
     public final void setConfigFromStrings(String[] args) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setConfigFromStrings", this, Optional.empty(), args);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setConfigFromStrings", this, Optional.empty(), new Object[] { args});
         	}
         	this.setConfigFromStringsImpl(args);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setConfigFromStrings", this, Optional.empty(), args);
+        		eventTrigger().triggerAction(Stage.END, "setConfigFromStrings", this, Optional.empty(), new Object[] { args});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setConfigFromStrings", e);
@@ -488,6 +488,33 @@ public abstract class ACudaKernelCall extends ACall {
     }
 
     /**
+     * Replaces this join point with a comment with the same contents as .code
+     */
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return this.aCall.toCommentImpl();
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return this.aCall.toCommentImpl(prefix);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aCall.toCommentImpl(prefix, suffix);
+    }
+
+    /**
      * Changes the name of the call
      * @param name 
      */
@@ -534,13 +561,32 @@ public abstract class ACudaKernelCall extends ACall {
     }
 
     /**
-     * 
+     * Adds an argument at the end of the call, creating an expression using the given code and type
+     * @param argCode 
+     * @param type 
+     */
+    @Override
+    public void addArgImpl(String argCode, AType type) {
+        this.aCall.addArgImpl(argCode, type);
+    }
+
+    /**
+     * Adds an argument at the end of the call, creating a literal 'type' from the type string
      * @param arg 
      * @param type 
      */
     @Override
-    public void addArgImpl(String arg, AJoinPoint type) {
+    public void addArgImpl(String arg, String type) {
         this.aCall.addArgImpl(arg, type);
+    }
+
+    /**
+     * Adds an argument at the end of the call, creating an expression using a dummy type
+     * @param argCode 
+     */
+    @Override
+    public void addArgImpl(String argCode) {
+        this.aCall.addArgImpl(argCode);
     }
 
     /**

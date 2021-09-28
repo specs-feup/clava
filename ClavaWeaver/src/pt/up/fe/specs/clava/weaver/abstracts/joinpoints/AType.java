@@ -544,11 +544,11 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     public final void setTemplateArgsTypes(AType[] templateArgTypes) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgsTypes", this, Optional.empty(), templateArgTypes);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgsTypes", this, Optional.empty(), new Object[] { templateArgTypes});
         	}
         	this.setTemplateArgsTypesImpl(templateArgTypes);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setTemplateArgsTypes", this, Optional.empty(), templateArgTypes);
+        		eventTrigger().triggerAction(Stage.END, "setTemplateArgsTypes", this, Optional.empty(), new Object[] { templateArgTypes});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setTemplateArgsTypes", e);

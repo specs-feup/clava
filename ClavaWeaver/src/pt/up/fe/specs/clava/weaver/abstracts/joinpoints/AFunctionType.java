@@ -31,7 +31,7 @@ public abstract class AFunctionType extends AType {
      * Get value on attribute returnType
      * @return the attribute's value
      */
-    public abstract AJoinPoint getReturnTypeImpl();
+    public abstract AType getReturnTypeImpl();
 
     /**
      * Get value on attribute returnType
@@ -42,7 +42,7 @@ public abstract class AFunctionType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "returnType", Optional.empty());
         	}
-        	AJoinPoint result = this.getReturnTypeImpl();
+        	AType result = this.getReturnTypeImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "returnType", Optional.ofNullable(result));
         	}
@@ -55,8 +55,8 @@ public abstract class AFunctionType extends AType {
     /**
      * 
      */
-    public void defReturnTypeImpl(AJoinPoint value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def returnType with type AJoinPoint not implemented ");
+    public void defReturnTypeImpl(AType value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def returnType with type AType not implemented ");
     }
 
     /**
@@ -485,6 +485,33 @@ public abstract class AFunctionType extends AType {
     }
 
     /**
+     * Replaces this join point with a comment with the same contents as .code
+     */
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return this.aType.toCommentImpl();
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return this.aType.toCommentImpl(prefix);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aType.toCommentImpl(prefix, suffix);
+    }
+
+    /**
      * Sets the template argument types of a template type
      * @param templateArgTypes 
      */
@@ -602,8 +629,8 @@ public abstract class AFunctionType extends AType {
         	this.unsupportedTypeForDef(attribute, value);
         }
         case "returnType": {
-        	if(value instanceof AJoinPoint){
-        		this.defReturnTypeImpl((AJoinPoint)value);
+        	if(value instanceof AType){
+        		this.defReturnTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

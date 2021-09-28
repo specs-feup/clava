@@ -61,6 +61,7 @@ import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ast.omp.OmpPragma;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
@@ -102,6 +103,7 @@ import pt.up.fe.specs.clava.weaver.joinpoints.CxxDecl;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxDeleteExpr;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxEnumDecl;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxEnumeratorDecl;
+import pt.up.fe.specs.clava.weaver.joinpoints.CxxExprStmt;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxExpression;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxField;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFile;
@@ -175,7 +177,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(CUDAKernelCallExpr.class, CXXCudaKernelCall::new);
         JOINPOINT_FACTORY.put(CallExpr.class, CxxCall::new);
         JOINPOINT_FACTORY.put(DeclRefExpr.class, CxxVarref::new);
-        JOINPOINT_FACTORY.put(ArraySubscriptExpr.class, CxxArrayAccess::new);
+        JOINPOINT_FACTORY.put(ArraySubscriptExpr.class, CxxJoinpoints::arrayAccessFactory);
         JOINPOINT_FACTORY.put(MemberExpr.class, CxxMemberAccess::new);
         JOINPOINT_FACTORY.put(CXXNewExpr.class, CxxNewExpr::new);
         JOINPOINT_FACTORY.put(CXXDeleteExpr.class, CxxDeleteExpr::new);
@@ -193,6 +195,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(ReturnStmt.class, CxxReturnStmt::new);
         JOINPOINT_FACTORY.put(SwitchStmt.class, CxxSwitch::new);
         JOINPOINT_FACTORY.put(SwitchCase.class, CxxCase::new);
+        JOINPOINT_FACTORY.put(ExprStmt.class, CxxExprStmt::new);
         JOINPOINT_FACTORY.put(Stmt.class, CxxStatement::new);
         JOINPOINT_FACTORY.put(CXXMethodDecl.class, CxxMethod::new);
         JOINPOINT_FACTORY.put(FunctionDecl.class, CxxFunction::new);
@@ -318,6 +321,15 @@ public class CxxJoinpoints {
         }
 
         return new CxxRecord(record);
+    }
+
+    private static ACxxWeaverJoinPoint arrayAccessFactory(ArraySubscriptExpr expr) {
+
+        if (!expr.isTopLevel()) {
+            return CxxJoinpoints.nullNode(expr.getFactory().nullExpr());
+        }
+
+        return new CxxArrayAccess(expr);
     }
 
     private static ACxxWeaverJoinPoint defaultFactory(ClavaNode node) {

@@ -163,7 +163,7 @@
 		<attribute name="extraIncludes" type="String[]" tooltip="paths to includes that the current program depends on"/>
 		<attribute name="extraProjects" type="String[]" tooltip="paths to folders of projects that the current program depends on"/>
 		<attribute name="extraLibs" type="String[]" tooltip="link libraries of external projects the current program depends on"/>		
-		<attribute name="main" type="joinpoint" tooltip="a function join point with the main function of the program, if one is available"/>		
+		<attribute name="main" type="function" tooltip="a function join point with the main function of the program, if one is available"/>		
 		<attribute name="files" type="file[]" tooltip="the source files in this program"/>		
 	</artifact>
 
@@ -234,6 +234,7 @@
 
 	<!-- DECLARATION -->
 	<artifact class="decl">
+		<attribute name="attrs" type="attribute[]" tooltip="The attributes (e.g. Pure, CUDAGlobal) associated to this decl"/>
 	</artifact>
 
 	<!-- NAMED DECLARATION -->
@@ -316,6 +317,10 @@
 	</artifact>
 
 
+	<artifact class="exprStmt">
+		<attribute name="expr" type="expression" tooltip="The expression join point associated to this exprStmt"/>		
+	</artifact>
+
 	<!-- EXPRESSION -->
 	<artifact class="expression">
 		<!-- If this expression represents a declared variable, returns the name 
@@ -376,7 +381,7 @@
 	<!-- VARDECL -->
 	<artifact class="vardecl" default="name">
 		<attribute name="hasInit" type="Boolean" tooltip="true, if vardecl has an initialization value" />
-		<attribute name="init" type="joinpoint" tooltip="If vardecl has an initialization value, returns an expression with that value"/>
+		<attribute name="init" type="expression" tooltip="If vardecl has an initialization value, returns an expression with that value"/>
 		<attribute name="initStyle" type="InitializationStyle" tooltip="The initialization style of this vardecl"/>
 		<attribute name="isParam" type="Boolean" tooltip="true, if vardecl is a function parameter" />
 		<attribute name="storageClass" type="String"/>
@@ -401,6 +406,8 @@
 		<attribute name="isFunctionCall" type="Boolean" 
 			tooltip="true if this varref represents a function call" />
 		<attribute name="declaration" type="declarator" />
+		<attribute name="property" type="String" tooltip="if this variable reference has a MS-style property, returns the property name. Returns undefined otherwise" />
+		<attribute name="hasProperty" type="Boolean" tooltip="true if this variable reference has a MS-style property, false otherwise"/>				
 	</artifact>
 
 	<!-- FUNCTION -->
@@ -412,9 +419,9 @@
 		<attribute name="functionType" type="functionType" tooltip="the type of the call, which includes the return type and the types of the parameters">
 			<def/>			
 		</attribute>	
-		<attribute name="declarationJp" type="joinpoint" tooltip="Returns the first prototype of this function that could be found, or undefined if there is none"/>
-		<attribute name="declarationJps" type="joinpoint[]" tooltip="Returns the prototypes of this function that are present in the code. If there are none, returns an empty array"/>
-		<attribute name="definitionJp" type="joinpoint" tooltip="Returns the implementation of this function if there is one, or undefined otherwise"/>		
+		<attribute name="declarationJp" type="function" tooltip="Returns the first prototype of this function that could be found, or undefined if there is none"/>
+		<attribute name="declarationJps" type="function[]" tooltip="Returns the prototypes of this function that are present in the code. If there are none, returns an empty array"/>
+		<attribute name="definitionJp" type="function" tooltip="Returns the implementation of this function if there is one, or undefined otherwise"/>		
 		<attribute name="declaration" type="String">
 			<parameter name="withReturnType" type="Boolean" />
 		</attribute>
@@ -447,7 +454,7 @@
 		<attribute name="cond" type="expression">
 			<def/>
 		</attribute>
-		<attribute name="condDecl" type="joinpoint" />
+		<attribute name="condDecl" type="vardecl" />
 		<attribute name="then" type="scope">
 			<def type="statement"/>
 		</attribute>		
@@ -519,7 +526,7 @@
 
 	<!-- UNARY OPERATOR -->
 	<artifact class="unaryOp">
-		<attribute name="operand" type="joinpoint" />
+		<attribute name="operand" type="expression" />
 		<attribute name="isPointerDeref" type="Boolean" />
 	</artifact>
 
@@ -542,8 +549,8 @@
 	<!-- CAST -->
 	<artifact class="cast">
 		<attribute name="isImplicitCast" type="Boolean" tooltip="[DEPRECATED] Use expr.implicitCast instead"/> 
-		<attribute name="fromType" type="joinpoint" />
-		<attribute name="toType" type="joinpoint" />
+		<attribute name="fromType" type="type" />
+		<attribute name="toType" type="type" />
 		<attribute name="subExpr" type="expression" />
 	</artifact>
 
@@ -583,6 +590,12 @@
 			<def/>
 		</attribute>
 	</artifact>
+
+	<!-- ATTRIBUTE -->
+	<artifact class="attribute">
+		<attribute name="kind" type="String"/>
+	</artifact>
+
 
 	<!-- TYPES -->
 
@@ -648,7 +661,7 @@
 
 	<!-- ENUM TYPE -->
 	<artifact class="enumType">
-		<attribute name="integerType" type="joinpoint" />
+		<attribute name="integerType" type="type" />
 	</artifact>
 
 
@@ -662,7 +675,7 @@
 
 	<!-- FUNCTION TYPE -->
 	<artifact class="functionType">
-		<attribute name="returnType" type="joinpoint">
+		<attribute name="returnType" type="type">
 			<def/>
 		</attribute>
 		<attribute name="paramTypes" type="joinpoint[]" />

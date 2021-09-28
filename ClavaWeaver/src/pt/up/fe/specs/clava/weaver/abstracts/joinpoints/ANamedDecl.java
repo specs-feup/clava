@@ -227,6 +227,15 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
+     * Get value on attribute attrsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AAttribute[] getAttrsArrayImpl() {
+        return this.aDecl.getAttrsArrayImpl();
+    }
+
+    /**
      * Replaces this join point with the given join
      * @param node 
      */
@@ -375,6 +384,33 @@ public abstract class ANamedDecl extends ADecl {
     @Override
     public void setLastChildImpl(AJoinPoint node) {
         this.aDecl.setLastChildImpl(node);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     */
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return this.aDecl.toCommentImpl();
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return this.aDecl.toCommentImpl(prefix);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aDecl.toCommentImpl(prefix, suffix);
     }
 
     /**
@@ -531,6 +567,7 @@ public abstract class ANamedDecl extends ADecl {
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),
         QUALIFIEDNAME("qualifiedName"),
+        ATTRS("attrs"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

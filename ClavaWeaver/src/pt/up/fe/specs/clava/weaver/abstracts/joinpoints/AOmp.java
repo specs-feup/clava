@@ -700,11 +700,11 @@ public abstract class AOmp extends APragma {
     public final void setPrivate(String[] newVariables) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setPrivate", this, Optional.empty(), newVariables);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setPrivate", this, Optional.empty(), new Object[] { newVariables});
         	}
         	this.setPrivateImpl(newVariables);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setPrivate", this, Optional.empty(), newVariables);
+        		eventTrigger().triggerAction(Stage.END, "setPrivate", this, Optional.empty(), new Object[] { newVariables});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setPrivate", e);
@@ -780,11 +780,11 @@ public abstract class AOmp extends APragma {
     public final void setFirstprivate(String[] newVariables) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setFirstprivate", this, Optional.empty(), newVariables);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setFirstprivate", this, Optional.empty(), new Object[] { newVariables});
         	}
         	this.setFirstprivateImpl(newVariables);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setFirstprivate", this, Optional.empty(), newVariables);
+        		eventTrigger().triggerAction(Stage.END, "setFirstprivate", this, Optional.empty(), new Object[] { newVariables});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setFirstprivate", e);
@@ -806,11 +806,11 @@ public abstract class AOmp extends APragma {
     public final void setLastprivate(String[] newVariables) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setLastprivate", this, Optional.empty(), newVariables);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setLastprivate", this, Optional.empty(), new Object[] { newVariables});
         	}
         	this.setLastprivateImpl(newVariables);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setLastprivate", this, Optional.empty(), newVariables);
+        		eventTrigger().triggerAction(Stage.END, "setLastprivate", this, Optional.empty(), new Object[] { newVariables});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setLastprivate", e);
@@ -832,11 +832,11 @@ public abstract class AOmp extends APragma {
     public final void setShared(String[] newVariables) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setShared", this, Optional.empty(), newVariables);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setShared", this, Optional.empty(), new Object[] { newVariables});
         	}
         	this.setSharedImpl(newVariables);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setShared", this, Optional.empty(), newVariables);
+        		eventTrigger().triggerAction(Stage.END, "setShared", this, Optional.empty(), new Object[] { newVariables});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setShared", e);
@@ -858,11 +858,11 @@ public abstract class AOmp extends APragma {
     public final void setCopyin(String[] newVariables) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setCopyin", this, Optional.empty(), newVariables);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setCopyin", this, Optional.empty(), new Object[] { newVariables});
         	}
         	this.setCopyinImpl(newVariables);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setCopyin", this, Optional.empty(), newVariables);
+        		eventTrigger().triggerAction(Stage.END, "setCopyin", this, Optional.empty(), new Object[] { newVariables});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setCopyin", e);
@@ -962,11 +962,11 @@ public abstract class AOmp extends APragma {
     public final void setScheduleModifiers(String[] modifiers) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleModifiers", this, Optional.empty(), modifiers);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleModifiers", this, Optional.empty(), new Object[] { modifiers});
         	}
         	this.setScheduleModifiersImpl(modifiers);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setScheduleModifiers", this, Optional.empty(), modifiers);
+        		eventTrigger().triggerAction(Stage.END, "setScheduleModifiers", this, Optional.empty(), new Object[] { modifiers});
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setScheduleModifiers", e);
@@ -1260,6 +1260,33 @@ public abstract class AOmp extends APragma {
     @Override
     public void setLastChildImpl(AJoinPoint node) {
         this.aPragma.setLastChildImpl(node);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     */
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return this.aPragma.toCommentImpl();
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return this.aPragma.toCommentImpl(prefix);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aPragma.toCommentImpl(prefix, suffix);
     }
 
     /**

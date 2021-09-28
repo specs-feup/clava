@@ -55,4 +55,8 @@ public class CudaTest {
         newTester().test("Cuda.lara", "atomicAdd.cu");
     }
 
+    @Test
+    public void testCudaMatrixMul() {
+        newTester().test("CudaMatrixMul.lara", "mult_matrix.cu");
+    }
 }

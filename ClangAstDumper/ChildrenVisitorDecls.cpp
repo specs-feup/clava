@@ -18,8 +18,8 @@ const std::map<const std::string, clava::DeclNode > ClangAstDumper::DECL_CHILDRE
         {"EnumDecl", clava::DeclNode::ENUM_DECL},
         {"RecordDecl", clava::DeclNode::RECORD_DECL},
         {"CXXRecordDecl", clava::DeclNode::CXX_RECORD_DECL},
-        {"ClassTemplateSpecializationDecl", clava::DeclNode::CXX_RECORD_DECL},
-        {"ClassTemplatePartialSpecializationDecl", clava::DeclNode::CXX_RECORD_DECL},
+        {"ClassTemplateSpecializationDecl", clava::DeclNode::CLASS_TEMPLATE_SPECIALIZATION_DECL},
+        {"ClassTemplatePartialSpecializationDecl", clava::DeclNode::CLASS_TEMPLATE_SPECIALIZATION_DECL},
         {"FunctionDecl", clava::DeclNode::FUNCTION_DECL},
         {"VarDecl", clava::DeclNode::VAR_DECL},
         {"ParmVarDecl", clava::DeclNode::VAR_DECL},
@@ -91,6 +91,8 @@ void ClangAstDumper::visitChildren(clava::DeclNode declNode, const Decl* D) {
             VisitCXXConversionDeclChildren(static_cast<const CXXConversionDecl *>(D), visitedChildren); break;
         case clava::DeclNode::CXX_RECORD_DECL:
             VisitCXXRecordDeclChildren(static_cast<const CXXRecordDecl *>(D), visitedChildren); break;
+        case clava::DeclNode::CLASS_TEMPLATE_SPECIALIZATION_DECL:
+            VisitClassTemplateSpecializationDeclChildren(static_cast<const ClassTemplateSpecializationDecl *>(D), visitedChildren); break;
         case clava::DeclNode::VAR_DECL:
             VisitVarDeclChildren(static_cast<const VarDecl *>(D), visitedChildren); break;
         case clava::DeclNode::TEMPLATE_DECL:
@@ -483,6 +485,22 @@ void ClangAstDumper::VisitCXXRecordDeclChildren(const CXXRecordDecl *D, std::vec
 
 
 }
+void ClangAstDumper::VisitClassTemplateSpecializationDeclChildren(const ClassTemplateSpecializationDecl *D, std::vector<std::string> &children) {
+    // Hierarchy
+    VisitCXXRecordDeclChildren(D, children);
+
+    VisitDeclTop(D->getSpecializedTemplate());
+
+    // Visit template arguments
+    auto& templateArgs = D->getTemplateArgs();
+    clava::dump(templateArgs.size());
+    for (auto& templateArg : templateArgs.asArray()) {
+        VisitTemplateArgument(templateArg);
+    }
+
+}
+
+
 
 
 /*

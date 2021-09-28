@@ -443,6 +443,33 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
+     * Replaces this join point with a comment with the same contents as .code
+     */
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return this.aCall.toCommentImpl();
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return this.aCall.toCommentImpl(prefix);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aCall.toCommentImpl(prefix, suffix);
+    }
+
+    /**
      * Changes the name of the call
      * @param name 
      */
@@ -489,13 +516,32 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * 
+     * Adds an argument at the end of the call, creating an expression using the given code and type
+     * @param argCode 
+     * @param type 
+     */
+    @Override
+    public void addArgImpl(String argCode, AType type) {
+        this.aCall.addArgImpl(argCode, type);
+    }
+
+    /**
+     * Adds an argument at the end of the call, creating a literal 'type' from the type string
      * @param arg 
      * @param type 
      */
     @Override
-    public void addArgImpl(String arg, AJoinPoint type) {
+    public void addArgImpl(String arg, String type) {
         this.aCall.addArgImpl(arg, type);
+    }
+
+    /**
+     * Adds an argument at the end of the call, creating an expression using a dummy type
+     * @param argCode 
+     */
+    @Override
+    public void addArgImpl(String argCode) {
+        this.aCall.addArgImpl(argCode);
     }
 
     /**

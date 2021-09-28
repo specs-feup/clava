@@ -93,11 +93,6 @@ public abstract class AClangAstTester {
         // ClangAstParser.strictMode(true);
     }
 
-    public AClangAstTester showClangAst() {
-        showClangAst = true;
-        return this;
-    }
-
     public AClangAstTester showClavaAst() {
         showClavaAst = true;
         return this;

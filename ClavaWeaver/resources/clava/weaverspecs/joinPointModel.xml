@@ -224,6 +224,8 @@
 	<!-- CASE -->
 	<joinpoint class="case" extends="statement"/>	
 
+	<!-- EXPR STMT -->
+	<joinpoint class="exprStmt" extends="statement"/>
 
 	<!-- CALL -->	
 	<joinpoint class="call" 	extends="expression">
@@ -315,6 +317,9 @@
 	<!-- CILK_SPAWN -->
 	<joinpoint class="cilkSpawn" extends="call"/>		
 
+
+	<!-- ATTRIBUTE -->
+	<joinpoint class="attribute"/>		
 
 	<!-- TYPE -->
 	<joinpoint class="type">

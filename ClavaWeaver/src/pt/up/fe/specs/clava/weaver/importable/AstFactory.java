@@ -77,6 +77,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABinaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACall;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AElaboratedType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
@@ -103,6 +104,7 @@ import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsEnums;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
+import pt.up.fe.specs.util.utilities.StringLines;
 
 public class AstFactory {
 
@@ -713,5 +715,22 @@ public class AstFactory {
     public static AParam param(String name, AType type) {
         var param = CxxWeaver.getFactory().parmVarDecl(name, (Type) type.getNode());
         return CxxJoinpoints.create(param, AParam.class);
+    }
+
+    public static AComment comment(String text) {
+        // Strip white space
+        // text = text.strip();
+
+        // TODO: Is this the expected behaviour? Should return an empty comment instead?
+        // if(code.isEmpty()) {
+        // return null;
+        // }
+
+        var lines = StringLines.getLines(text);
+
+        var comment = lines.size() < 2 ? CxxWeaver.getFactory().inlineComment(text, false)
+                : CxxWeaver.getFactory().multiLineComment(lines);
+
+        return CxxJoinpoints.create(comment, AComment.class);
     }
 }

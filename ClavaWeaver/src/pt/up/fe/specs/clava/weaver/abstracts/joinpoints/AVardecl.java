@@ -56,7 +56,7 @@ public abstract class AVardecl extends ADeclarator {
     /**
      * If vardecl has an initialization value, returns an expression with that value
      */
-    public abstract AJoinPoint getInitImpl();
+    public abstract AExpression getInitImpl();
 
     /**
      * If vardecl has an initialization value, returns an expression with that value
@@ -66,7 +66,7 @@ public abstract class AVardecl extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "init", Optional.empty());
         	}
-        	AJoinPoint result = this.getInitImpl();
+        	AExpression result = this.getInitImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "init", Optional.ofNullable(result));
         	}
@@ -314,6 +314,15 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
+     * Get value on attribute attrsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AAttribute[] getAttrsArrayImpl() {
+        return this.aDeclarator.getAttrsArrayImpl();
+    }
+
+    /**
      * 
      */
     public void defNameImpl(String value) {
@@ -486,6 +495,33 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
+     * Replaces this join point with a comment with the same contents as .code
+     */
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return this.aDeclarator.toCommentImpl();
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return this.aDeclarator.toCommentImpl(prefix);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aDeclarator.toCommentImpl(prefix, suffix);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -653,6 +689,7 @@ public abstract class AVardecl extends ADeclarator {
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),
         QUALIFIEDNAME("qualifiedName"),
+        ATTRS("attrs"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

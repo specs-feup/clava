@@ -31,7 +31,7 @@ public abstract class AEnumType extends ATagType {
      * Get value on attribute integerType
      * @return the attribute's value
      */
-    public abstract AJoinPoint getIntegerTypeImpl();
+    public abstract AType getIntegerTypeImpl();
 
     /**
      * Get value on attribute integerType
@@ -42,7 +42,7 @@ public abstract class AEnumType extends ATagType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "integerType", Optional.empty());
         	}
-        	AJoinPoint result = this.getIntegerTypeImpl();
+        	AType result = this.getIntegerTypeImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "integerType", Optional.ofNullable(result));
         	}
@@ -404,6 +404,33 @@ public abstract class AEnumType extends ATagType {
     @Override
     public void setLastChildImpl(AJoinPoint node) {
         this.aTagType.setLastChildImpl(node);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     */
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return this.aTagType.toCommentImpl();
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return this.aTagType.toCommentImpl(prefix);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aTagType.toCommentImpl(prefix, suffix);
     }
 
     /**

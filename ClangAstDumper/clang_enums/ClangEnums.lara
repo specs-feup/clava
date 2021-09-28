@@ -35,7 +35,8 @@ ClangEnums._SPECIFIERS_H = new HeaderEnums('Specifiers.h', [
 	new ClangEnum('CallingConv', 'CALLING_CONVENTION', value => ClangEnums._removePrefix(value, "CC_"), undefined),
 	new ClangEnum('AccessSpecifier', 'ACCESS_SPECIFIER', (value => ClangEnums._removePrefix(value, "AS_").toUpperCase()), undefined),
 	new ClangEnum('StorageClass', 'STORAGE_CLASS', value => ClangEnums._removePrefix(value, "SC_"), undefined),
-	new ClangEnum('ExplicitSpecKind', 'EXPLICIT_SPEC_KIND', undefined, undefined)	
+	new ClangEnum('ExplicitSpecKind', 'EXPLICIT_SPEC_KIND', undefined, undefined),
+	new ClangEnum('TemplateSpecializationKind', 'TEMPLATE_SPECIALIZATION_KIND', value => ClangEnums._removePrefix(value, "TSK_"), undefined),
 ]);
 
 
@@ -118,6 +119,8 @@ ClangEnums._EXPR_H = new HeaderEnums('Expr.h', [
 	new ClangEnum('StringKind', 'STRING_KIND', (value => value.toUpperCase()), undefined)
 	//new ClangEnum('Kind', 'DESIGNATOR_KIND', undefined, undefined, 'Designator')		
 ]);
+
+
 
 /**
 

@@ -195,6 +195,15 @@ public abstract class ARecord extends ANamedDecl {
     }
 
     /**
+     * Get value on attribute attrsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AAttribute[] getAttrsArrayImpl() {
+        return this.aNamedDecl.getAttrsArrayImpl();
+    }
+
+    /**
      * 
      */
     public void defNameImpl(String value) {
@@ -364,6 +373,33 @@ public abstract class ARecord extends ANamedDecl {
     @Override
     public void setLastChildImpl(AJoinPoint node) {
         this.aNamedDecl.setLastChildImpl(node);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     */
+    @Override
+    public AJoinPoint toCommentImpl() {
+        return this.aNamedDecl.toCommentImpl();
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix) {
+        return this.aNamedDecl.toCommentImpl(prefix);
+    }
+
+    /**
+     * Replaces this join point with a comment with the same contents as .code
+     * @param prefix 
+     * @param suffix 
+     */
+    @Override
+    public AJoinPoint toCommentImpl(String prefix, String suffix) {
+        return this.aNamedDecl.toCommentImpl(prefix, suffix);
     }
 
     /**
@@ -551,6 +587,7 @@ public abstract class ARecord extends ANamedDecl {
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),
         QUALIFIEDNAME("qualifiedName"),
+        ATTRS("attrs"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),
