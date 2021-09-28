@@ -121,4 +121,11 @@ public class CxxIssuesTest {
     public void testClavaIssue39() {
         new CxxTester("issues/clava_issue39.cpp").test();
     }
+
+    @Test
+    public void testClavaIssue40() {
+        new CxxTester("issues/clava_issue40.cpp")
+                .showCode()
+                .test();
+    }
 }
