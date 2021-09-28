@@ -88,4 +88,20 @@ public class ArraySubscriptExpr extends Expr {
         return subscripts;
     }
 
+    /**
+     * 
+     * @return true if this is a top-level array subscript
+     */
+    public boolean isTopLevel() {
+        ClavaNode parent = ClavaNodes.getParentNormalized(this);
+        if (!(parent instanceof ArraySubscriptExpr)) {
+            return true;
+        }
+
+        // Parent can be an ArraySubscriptExpr, if expr is not the first child
+        ClavaNode normalizedFirstChild = ClavaNodes.normalize(parent.getChild(0));
+
+        return normalizedFirstChild != this;
+    }
+
 }
