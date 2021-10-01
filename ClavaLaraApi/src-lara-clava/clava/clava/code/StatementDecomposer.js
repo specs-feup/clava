@@ -13,7 +13,7 @@ class StatementDecomposer {
 	}
 	
 	#newTempVarname() {
-		var varName = this.tempPrefix + this.startIndex;
+		let varName = this.tempPrefix + this.startIndex;
 		this.startIndex++;
 		return varName;
 	}
@@ -24,7 +24,7 @@ class StatementDecomposer {
 	* @param {$statement} $stmt - A statement that will be decomposed.
 	*/
 	decomposeAndReplace($stmt) {
-		var stmts = this.decompose($stmt);
+		let stmts = this.decompose($stmt);
 		
 		// No statements to replace
 		if(stmts.length === 0) {
@@ -32,7 +32,7 @@ class StatementDecomposer {
 		}
 				
 		// Insert all statements in order, before original statement
-		for(var $newStmt of stmts) {
+		for(let $newStmt of stmts) {
 			$stmt.insertBefore($newStmt);
 		}
 		
@@ -90,10 +90,10 @@ class StatementDecomposer {
 			return [];
 		}
 		
-		var decomposeResult = this.decomposeExpr($expr);
+		let decomposeResult = this.decomposeExpr($expr);
 
 		let newStmts = decomposeResult.stmts;
-		var $newReturnStmt = ClavaJoinPoints.returnStmt(decomposeResult.$resultExpr);
+		let $newReturnStmt = ClavaJoinPoints.returnStmt(decomposeResult.$resultExpr);
 		
 		newStmts.push($newReturnStmt);
 		
@@ -109,7 +109,8 @@ class StatementDecomposer {
 			return this.decomposeBinaryOp($expr);
 		}
 		
-		if($expr.instanceOf("varref") || $expr.instanceOf("literal")) {
+		if($expr.numChildren === 0) {
+		//if($expr.instanceOf("varref") || $expr.instanceOf("literal")) {
 			let stmts = [];
 			let dec = new DecomposeResult(stmts, $expr);
 
@@ -131,7 +132,7 @@ class StatementDecomposer {
 			stmts = stmts.concat(rightResult.stmts);
 
 			// Add assignment
-			var $newAssign = ClavaJoinPoints.assign($binaryOp.left, rightResult.$resultExpr);
+			let $newAssign = ClavaJoinPoints.assign($binaryOp.left, rightResult.$resultExpr);
 			stmts.push(ClavaJoinPoints.exprStmt($newAssign));
 			
 			return new DecomposeResult(stmts, $binaryOp.left);			
