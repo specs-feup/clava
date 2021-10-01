@@ -26,4 +26,9 @@ public class SuperSpecifier extends NestedNameSpecifier {
     public SuperSpecifier() {
         super(NestedNameSpecifierKind.Super);
     }
+
+    @Override
+    public String getQualifier() {
+        return "__super::";
+    }
 }

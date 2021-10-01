@@ -26,4 +26,9 @@ public class NamespaceSpecifier extends NestedNameSpecifier {
     public NamespaceSpecifier() {
         super(NestedNameSpecifierKind.Namespace);
     }
+
+    @Override
+    public String getQualifier() {
+        return get(NAMESPACE).getFullyQualifiedName() + "::";
+    }
 }
