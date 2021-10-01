@@ -1,0 +1,9 @@
+int foo() {
+   int a, b, c;
+   int decomp_0 = b * 2;
+   int decomp_1 = a + decomp_0;
+   c = decomp_1;
+   int decomp_2 = a + c;
+   
+   return decomp_2;
+}
