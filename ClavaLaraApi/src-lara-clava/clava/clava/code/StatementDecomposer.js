@@ -30,12 +30,9 @@ class StatementDecomposer {
 		if(stmts.length === 0) {
 			return;
 		}
-		
-		println("Old stmt: " + $stmt.code);
-		
+				
 		// Insert all statements in order, before original statement
 		for(var $newStmt of stmts) {
-			println("New stmt: " + $newStmt.code);
 			$stmt.insertBefore($newStmt);
 		}
 		
@@ -52,17 +49,16 @@ class StatementDecomposer {
 			return this.decomposeStmt($stmt);
 		} catch(e) {
 			println("StatementDecomposer: " + e);
-			//println(e + "\n" + e.stack);
 			return [];
 		}
-//		println("StatementDecomposer: not implemented for statement of type '"+$stmt.joinPointType+"', returning undefined");
-//		return undefined;
-		
-		//println($stmt);
-    	//return new StatementDecomposer($stmt).decompose();
   	}
 
 	decomposeStmt($stmt) {
+		// Unsupported
+		if($stmt.instanceOf("scope") || $stmt.joinPointType === 'statement') {
+			return [];
+		}
+		
 		if($stmt.instanceOf("exprStmt")) {
 			return this.decomposeExprStmt($stmt);
 		}
@@ -74,20 +70,9 @@ class StatementDecomposer {
 	
 		debug("StatementDecomposer: not implemented for statement of type " + $stmt.joinPointType);
 		return [];
-		//this.throwNotImplemented("statement", $stmt.joinPointType);	
 	}
 	
 
-/*
-	decompose() {
-		if(this.$stmt.instanceOf("exprStmt")) {
-			return this.decomposeExprStmt().stmts;
-		}
-	
-		println("StatementDecomposer: not implemented for statement of type '"+this.$stmt.joinPointType+"', returning undefined");
-		return undefined;
-	}
-*/	
 	decomposeExprStmt($stmt) {
 		
 		// Statement represents an expression
@@ -119,29 +104,23 @@ class StatementDecomposer {
 	 * @return {DecomposeResult}
 	 */
 	decomposeExpr($expr) {
-		//println("Decompose expr " + $expr.code);
 		
 		if($expr.instanceOf("binaryOp")) {
 			return this.decomposeBinaryOp($expr);
 		}
 		
 		if($expr.instanceOf("varref") || $expr.instanceOf("literal")) {
-		//if(!$expr.hasChildren) {
 			let stmts = [];
 			let dec = new DecomposeResult(stmts, $expr);
-			println("DEC: " + dec);
+
 			return new DecomposeResult(stmts, $expr);
 		}
 
 		this.#throwNotImplemented("expressions", $expr.joinPointType);	
-		
-//		println("StatementDecomposer: not implemented for expressions of type '"+$expr.joinPointType+"', returning undefined");
-//		return undefined;
 	}
 	
 	decomposeBinaryOp($binaryOp) {
-		//println("Decompose bop " + $binaryOp.code);
-	
+		
 		let kind = $binaryOp.kind;
 		
 		if(kind === "assign") {
@@ -150,18 +129,18 @@ class StatementDecomposer {
 			// Get statements of right hand-side
 			let rightResult = this.decomposeExpr($binaryOp.right);
 			stmts = stmts.concat(rightResult.stmts);
-			println("RIGHT STMTS: " + rightResult.stmts.map(stmt => stmt.code).join(" "));
+
 			// Add assignment
 			var $newAssign = ClavaJoinPoints.assign($binaryOp.left, rightResult.$resultExpr);
 			stmts.push(ClavaJoinPoints.exprStmt($newAssign));
 			
 			return new DecomposeResult(stmts, $binaryOp.left);			
-		} else {
+		} 
+		else {
 			// Apply decompose to both sides
 			let leftResult = this.decomposeExpr($binaryOp.left);
-			//println("LEFT RESULT: " + leftResult);
+
 			let rightResult = this.decomposeExpr($binaryOp.right);
-			//println("RIGHT RESULT: " + rightResult);
 			
 			let stmts = [];
 			stmts = stmts.concat(leftResult.stmts);
@@ -169,22 +148,16 @@ class StatementDecomposer {
 			
 			// Create operation with result of decomposition
 			let $newExpr = ClavaJoinPoints.binaryOp($binaryOp.kind, leftResult.$resultExpr, rightResult.$resultExpr, $binaryOp.type);
-			println("NEW EXPR: " + $newExpr.code);
 			
 			// Create declaration statement with result to new temporary variable
 			let tempVarname = this.#newTempVarname();
 			let tempVarDecl = ClavaJoinPoints.varDecl(tempVarname, $newExpr);
 			stmts.push(tempVarDecl.stmt);
 
-			return new DecomposeResult(stmts, ClavaJoinPoints.varRefFromDecl(tempVarDecl));			
-			//	var newTempVar = ClavaJoinPoints.varDecl(this
-		
+			return new DecomposeResult(stmts, ClavaJoinPoints.varRefFromDecl(tempVarDecl));					
 		}
 
 		this.#throwNotImplemented("binary operators", kind);	
-	
-		//println("StatementDecomposer: not implemented for binary operators of kind '"+kind+"', returning undefined");
-		//return undefined;	
 	}
 	
 	
