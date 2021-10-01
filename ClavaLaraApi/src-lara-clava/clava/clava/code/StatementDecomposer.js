@@ -137,6 +137,7 @@ class StatementDecomposer {
 			
 			return new DecomposeResult(stmts, $binaryOp.left);			
 		} 
+		// TODO: Not taking into account += and other cases
 		else {
 			// Apply decompose to both sides
 			let leftResult = this.decomposeExpr($binaryOp.left);
