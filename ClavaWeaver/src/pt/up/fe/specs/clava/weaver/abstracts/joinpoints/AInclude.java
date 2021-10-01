@@ -468,6 +468,7 @@ public abstract class AInclude extends ADecl {
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         PRAGMAS("pragmas"),
+        STMT("stmt"),
         HASPARENT("hasParent");
         private String name;
 

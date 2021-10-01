@@ -474,6 +474,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         PRAGMAS("pragmas"),
+        STMT("stmt"),
         HASPARENT("hasParent");
         private String name;
 

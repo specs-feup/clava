@@ -608,6 +608,7 @@ public abstract class AExprStmt extends AStatement {
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         PRAGMAS("pragmas"),
+        STMT("stmt"),
         HASPARENT("hasParent");
         private String name;
 

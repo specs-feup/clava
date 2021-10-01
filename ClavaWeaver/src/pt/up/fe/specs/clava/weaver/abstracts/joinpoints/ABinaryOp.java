@@ -665,6 +665,7 @@ public abstract class ABinaryOp extends AOp {
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         PRAGMAS("pragmas"),
+        STMT("stmt"),
         HASPARENT("hasParent");
         private String name;
 

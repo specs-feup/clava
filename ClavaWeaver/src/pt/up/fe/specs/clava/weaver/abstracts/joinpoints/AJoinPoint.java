@@ -699,6 +699,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("depth");
         attributes.add("jpId");
         attributes.add("scopeNodes");
+        attributes.add("stmt");
     }
 
     /**
@@ -2292,6 +2293,29 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "scopeNodes", e);
+        }
+    }
+
+    /**
+     * Converts this join point to a statement, or returns undefined if it was not possible
+     */
+    public abstract AStatement getStmtImpl();
+
+    /**
+     * Converts this join point to a statement, or returns undefined if it was not possible
+     */
+    public final Object getStmt() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "stmt", Optional.empty());
+        	}
+        	AStatement result = this.getStmtImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "stmt", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "stmt", e);
         }
     }
 

@@ -815,6 +815,7 @@ public abstract class ACudaKernelCall extends ACall {
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         PRAGMAS("pragmas"),
+        STMT("stmt"),
         HASPARENT("hasParent");
         private String name;
 

@@ -80,6 +80,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AElaboratedType;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExprStmt;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AField;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
@@ -733,4 +734,10 @@ public class AstFactory {
 
         return CxxJoinpoints.create(comment, AComment.class);
     }
+
+    public static AExprStmt exprStmt(AExpression expr) {
+        var exprStmt = CxxWeaver.getFactory().exprStmt((Expr) expr.getNode());
+        return CxxJoinpoints.create(exprStmt, AExprStmt.class);
+    }
+
 }

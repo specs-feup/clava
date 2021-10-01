@@ -594,6 +594,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -1548,6 +1557,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -2664,6 +2682,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -3746,6 +3773,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -4878,6 +4914,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -5911,6 +5956,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -6939,6 +6993,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -8000,6 +8063,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -9427,6 +9499,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -10627,6 +10708,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -11723,6 +11813,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -12810,6 +12909,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -13944,6 +14052,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -15369,6 +15486,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -16461,6 +16587,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -17562,6 +17697,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -18607,6 +18751,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -19551,6 +19704,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -20691,6 +20853,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -21807,6 +21978,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -22785,6 +22965,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -23810,6 +23999,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -24950,6 +25148,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -25976,6 +26183,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -26962,6 +27178,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -28141,6 +28366,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -29207,6 +29441,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -30210,6 +30453,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -31272,6 +31524,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -32255,6 +32516,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -33386,6 +33656,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -34851,6 +35130,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -36356,6 +36644,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -37458,6 +37755,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -38581,6 +38887,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -39560,6 +39875,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -40694,6 +41018,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -41986,6 +42319,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -43034,6 +43376,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -44170,6 +44521,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -45488,6 +45848,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -46865,6 +47234,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -47886,6 +48264,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -49039,6 +49426,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -50348,6 +50744,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -51392,6 +51797,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -52579,6 +52993,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -53788,6 +54211,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -54848,6 +55280,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -55949,6 +56390,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -57306,6 +57756,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -58397,6 +58856,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -59418,6 +59886,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -60519,6 +60996,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -61755,6 +62241,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -62836,6 +63331,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -63849,6 +64353,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -64898,6 +65411,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -66049,6 +66571,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -67273,6 +67804,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -68390,6 +68930,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -69389,6 +69938,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -70501,6 +71059,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -71568,6 +72135,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -72588,6 +73164,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -73756,6 +74341,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -74864,6 +75458,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -75902,6 +76505,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -77015,6 +77627,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -78144,6 +78765,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {
@@ -79351,6 +79981,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -80494,6 +81133,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "type",
@@ -81480,6 +82128,15 @@
                            {
                               "type": "joinpoint[]",
                               "name": "siblingsRight"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Converts this join point to a statement, or returns undefined if it was not possible",
+                  "children": [
+                           {
+                              "type": "statement",
+                              "name": "stmt"
                            }]
                },
                {

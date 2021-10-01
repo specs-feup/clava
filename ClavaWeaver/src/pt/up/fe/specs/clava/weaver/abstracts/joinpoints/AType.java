@@ -862,6 +862,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         PRAGMAS("pragmas"),
+        STMT("stmt"),
         HASPARENT("hasParent");
         private String name;
 

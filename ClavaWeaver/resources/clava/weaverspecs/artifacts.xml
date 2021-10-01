@@ -136,6 +136,7 @@
 		</attribute>	
 		<attribute name="scopeNodes" type="joinpoint[]" tooltip="the nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array">
 		</attribute>			
+		<attribute name="stmt" type="statement" tooltip="Converts this join point to a statement, or returns undefined if it was not possible"/>
 		
 	</global>
 

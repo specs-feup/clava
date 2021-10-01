@@ -625,6 +625,7 @@ public abstract class ANamedDecl extends ADecl {
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         PRAGMAS("pragmas"),
+        STMT("stmt"),
         HASPARENT("hasParent");
         private String name;
 

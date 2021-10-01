@@ -501,6 +501,7 @@ public abstract class ADeclarator extends ANamedDecl {
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         PRAGMAS("pragmas"),
+        STMT("stmt"),
         HASPARENT("hasParent");
         private String name;
 

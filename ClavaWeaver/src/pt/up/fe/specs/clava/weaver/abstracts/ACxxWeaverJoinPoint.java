@@ -1358,4 +1358,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         return replaceWithImpl(AstFactory.comment(prefixClean + getCodeImpl() + suffixClean));
     }
+
+    @Override
+    public AStatement getStmtImpl() {
+        return ClavaNodes.toStmtTry(getNode())
+                .map(stmt -> CxxJoinpoints.create(stmt, AStatement.class))
+                .orElse(null);
+    }
 }
