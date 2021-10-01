@@ -494,7 +494,7 @@ void ClangAstDumper::VisitClassTemplateSpecializationDeclChildren(const ClassTem
 
     // Visit template arguments
     auto& templateArgs = D->getTemplateArgs();
-    clava::dump(templateArgs.size());
+    //clava::dump(templateArgs.size());
     for (auto& templateArg : templateArgs.asArray()) {
         VisitTemplateArgument(templateArg);
     }
