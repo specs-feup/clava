@@ -524,3 +524,12 @@ ClavaJoinPoints.type = function(source) {
 	
 	throw new Error('ClavaJoinPoints.type: source must be a string or a join point: ' + source); 
 }
+
+/**
+ * @param {$expr} $expr
+ * @return {@exprStmt}
+ * 
+ */
+ClavaJoinPoints.exprStmt = function($expr) {
+	return AstFactory.exprStmt($expr);
+}
