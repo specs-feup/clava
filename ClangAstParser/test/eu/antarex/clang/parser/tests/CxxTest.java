@@ -269,6 +269,13 @@ public class CxxTest {
         new CxxTester("member_calls.cpp").test();
     }
 
+    @Test
+    public void testUsing() {
+        new CxxTester("using.cpp")
+                .addFlags("-fms-extensions")
+                .test();
+    }
+
     // -Xclang-ast-dump-nostdinc-nocudalib-nocudainc--cuda-gpu-arch=sm_30
     // "--cuda-device-only"
 
