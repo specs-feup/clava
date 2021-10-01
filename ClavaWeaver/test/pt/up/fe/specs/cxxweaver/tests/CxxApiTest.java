@@ -149,4 +149,8 @@ public class CxxApiTest {
         newTester().test("ClavaTypeTest.lara");
     }
 
+    @Test
+    public void testStatementDecomposer() {
+        newTester().test("StatementDecomposerTest.lara", "stmt_decomposer.cpp");
+    }
 }
