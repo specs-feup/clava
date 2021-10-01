@@ -73,9 +73,11 @@ public enum LaraApiResource implements LaraResourceProvider {
     ANALYSIS_CHECKERS_SYSLOG_CHECKER("analysis/checkers/SyslogChecker.lara"),
     ANALYSIS_CHECKERS_SYSTEM_CHECKER("analysis/checkers/SystemChecker.lara"),
 
-
     // Code
     GLOBAL_VARIABLE("code/GlobalVariable.lara"),
+    STATEMENT_DECOMPOSER("code/StatementDecomposer.lara"),
+    STATEMENT_DECOMPOSER_JS("code/StatementDecomposer.js"),
+    DECOMPOSE_RESULT_JS("code/DecomposeResult.js"),
 
     // Gprofer
     GPROFER("gprofer/Gprofer.lara"),
