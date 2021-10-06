@@ -7402,6 +7402,15 @@
          "children": [
                {
                   "type": "attribute",
+                  "tooltip": "Returns the descendant statements of this scope, excluding other scopes, loops, ifs and wrapper statements",
+                  "children": [
+                           {
+                              "type": "statement[]",
+                              "name": "allStmts"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "statement",
@@ -7458,6 +7467,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the direct (children) statements of this scope",
                   "children": [
                            {
                               "type": "statement[]",
@@ -60335,6 +60345,15 @@
          "children": [
                {
                   "type": "attribute",
+                  "tooltip": "Returns the descendant statements of this scope, excluding other scopes, loops, ifs and wrapper statements",
+                  "children": [
+                           {
+                              "type": "statement[]",
+                              "name": "allStmts"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "statement",
@@ -60391,6 +60410,7 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns the direct (children) statements of this scope",
                   "children": [
                            {
                               "type": "statement[]",

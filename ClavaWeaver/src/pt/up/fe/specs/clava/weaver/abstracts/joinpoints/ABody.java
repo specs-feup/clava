@@ -62,6 +62,15 @@ public abstract class ABody extends AScope {
     }
 
     /**
+     * Get value on attribute allStmtsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AStatement[] getAllStmtsArrayImpl() {
+        return this.aScope.getAllStmtsArrayImpl();
+    }
+
+    /**
      * Get value on attribute firstStmt
      * @return the attribute's value
      */
@@ -849,6 +858,7 @@ public abstract class ABody extends AScope {
         NUMSTATEMENTS("numStatements"),
         NAKED("naked"),
         STMTS("stmts"),
+        ALLSTMTS("allStmts"),
         FIRSTSTMT("firstStmt"),
         LASTSTMT("lastStmt"),
         OWNER("owner"),

@@ -311,7 +311,8 @@
 		<attribute name="naked" type="Boolean" tooltip="true if the scope does not have curly braces">
 			<def/>
 		</attribute>
-		<attribute name="stmts" type="statement[]" />
+		<attribute name="stmts" type="statement[]" tooltip="Returns the direct (children) statements of this scope"/>
+		<attribute name="allStmts" type="statement[]" tooltip="Returns the descendant statements of this scope, excluding other scopes, loops, ifs and wrapper statements"/>
 		<attribute name="firstStmt" type="statement" />
 		<attribute name="lastStmt" type="statement" />
 		<attribute name="owner" type="joinpoint" tooltip="The statement that owns the scope (e.g., function, loop...)"/>

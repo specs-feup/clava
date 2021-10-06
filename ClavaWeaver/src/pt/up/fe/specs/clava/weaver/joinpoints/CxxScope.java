@@ -190,7 +190,6 @@ public class CxxScope extends AScope {
     @Override
     public List<? extends AStatement> selectStmt() {
         return CxxSelects.select(AStatement.class, getStatements(), true, CxxSelects::stmtFilter);
-
     }
 
     @Override
@@ -301,6 +300,11 @@ public class CxxScope extends AScope {
 
     @Override
     public AStatement[] getStmtsArrayImpl() {
+        return CxxJoinpoints.create(getNode().getChildren(Stmt.class), AStatement.class);
+    }
+
+    @Override
+    public AStatement[] getAllStmtsArrayImpl() {
         return selectStmt().toArray(new AStatement[0]);
     }
 

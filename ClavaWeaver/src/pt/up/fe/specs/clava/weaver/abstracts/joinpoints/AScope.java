@@ -115,8 +115,7 @@ public abstract class AScope extends AStatement {
     public abstract AStatement[] getStmtsArrayImpl();
 
     /**
-     * Get value on attribute stmts
-     * @return the attribute's value
+     * Returns the direct (children) statements of this scope
      */
     public Object getStmtsImpl() {
         AStatement[] aStatementArrayImpl0 = getStmtsArrayImpl();
@@ -125,8 +124,7 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Get value on attribute stmts
-     * @return the attribute's value
+     * Returns the direct (children) statements of this scope
      */
     public final Object getStmts() {
         try {
@@ -140,6 +138,39 @@ public abstract class AScope extends AStatement {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "stmts", e);
+        }
+    }
+
+    /**
+     * Get value on attribute allStmts
+     * @return the attribute's value
+     */
+    public abstract AStatement[] getAllStmtsArrayImpl();
+
+    /**
+     * Returns the descendant statements of this scope, excluding other scopes, loops, ifs and wrapper statements
+     */
+    public Object getAllStmtsImpl() {
+        AStatement[] aStatementArrayImpl0 = getAllStmtsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * Returns the descendant statements of this scope, excluding other scopes, loops, ifs and wrapper statements
+     */
+    public final Object getAllStmts() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "allStmts", Optional.empty());
+        	}
+        	Object result = this.getAllStmtsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "allStmts", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "allStmts", e);
         }
     }
 
@@ -1093,6 +1124,7 @@ public abstract class AScope extends AStatement {
         attributes.add("numStatements");
         attributes.add("naked");
         attributes.add("stmts");
+        attributes.add("allStmts");
         attributes.add("firstStmt");
         attributes.add("lastStmt");
         attributes.add("owner");
@@ -1165,6 +1197,7 @@ public abstract class AScope extends AStatement {
         NUMSTATEMENTS("numStatements"),
         NAKED("naked"),
         STMTS("stmts"),
+        ALLSTMTS("allStmts"),
         FIRSTSTMT("firstStmt"),
         LASTSTMT("lastStmt"),
         OWNER("owner"),
