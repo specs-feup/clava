@@ -446,7 +446,8 @@ aspectdef inlinePreparation
 //		else	
 //			throw "Not implemented for kind " + exprStmt.children[0].kind;
 
-		retJPs = funcJP.body.stmts.filter(function(obj){if (obj.astName === 'ReturnStmt') {return obj;}});
+		//retJPs = funcJP.body.stmts.filter(function(obj){if (obj.astName === 'ReturnStmt') {return obj;}});
+		retJPs = funcJP.body.allStmts.filter(function(obj){if (obj.astName === 'ReturnStmt') {return obj;}});		
 		
 		for(retJP of retJPs)
 		{
