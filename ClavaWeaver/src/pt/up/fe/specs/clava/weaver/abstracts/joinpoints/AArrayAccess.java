@@ -332,6 +332,24 @@ public abstract class AArrayAccess extends AExpression {
     }
 
     /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String[] comments) {
+        this.aExpression.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String comments) {
+        this.aExpression.setInlineCommentsImpl(comments);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -398,6 +416,17 @@ public abstract class AArrayAccess extends AExpression {
         case "firstChild": {
         	if(value instanceof AJoinPoint){
         		this.defFirstChildImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "inlineComments": {
+        	if(value instanceof String[]){
+        		this.defInlineCommentsImpl((String[])value);
+        		return;
+        	}
+        	if(value instanceof String){
+        		this.defInlineCommentsImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -489,6 +518,7 @@ public abstract class AArrayAccess extends AExpression {
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
         ANCESTOR("ancestor"),
+        INLINECOMMENTS("inlineComments"),
         ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),

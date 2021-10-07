@@ -343,6 +343,24 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String[] comments) {
+        this.aVardecl.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String comments) {
+        this.aVardecl.setInlineCommentsImpl(comments);
+    }
+
+    /**
      * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
      * @param init 
      */
@@ -429,6 +447,17 @@ public abstract class AParam extends AVardecl {
         case "firstChild": {
         	if(value instanceof AJoinPoint){
         		this.defFirstChildImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "inlineComments": {
+        	if(value instanceof String[]){
+        		this.defInlineCommentsImpl((String[])value);
+        		return;
+        	}
+        	if(value instanceof String){
+        		this.defInlineCommentsImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -542,6 +571,7 @@ public abstract class AParam extends AVardecl {
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
         ANCESTOR("ancestor"),
+        INLINECOMMENTS("inlineComments"),
         ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),

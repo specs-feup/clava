@@ -583,6 +583,24 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String[] comments) {
+        this.aFunction.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String comments) {
+        this.aFunction.setInlineCommentsImpl(comments);
+    }
+
+    /**
      * Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class
      * @param newName 
      * @param insert 
@@ -842,6 +860,17 @@ public abstract class AMethod extends AFunction {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "inlineComments": {
+        	if(value instanceof String[]){
+        		this.defInlineCommentsImpl((String[])value);
+        		return;
+        	}
+        	if(value instanceof String){
+        		this.defInlineCommentsImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "lastChild": {
         	if(value instanceof AJoinPoint){
         		this.defLastChildImpl((AJoinPoint)value);
@@ -1001,6 +1030,7 @@ public abstract class AMethod extends AFunction {
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
         ANCESTOR("ancestor"),
+        INLINECOMMENTS("inlineComments"),
         ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),

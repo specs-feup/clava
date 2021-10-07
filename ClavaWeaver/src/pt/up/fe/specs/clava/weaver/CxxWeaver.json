@@ -398,6 +398,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -834,6 +843,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -1374,6 +1411,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -1810,6 +1856,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -2504,6 +2578,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -3025,6 +3108,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -3608,6 +3719,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -4061,6 +4181,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -4754,6 +4902,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -5275,6 +5432,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -5805,6 +5990,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -6241,6 +6435,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -6855,6 +7077,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -7332,6 +7563,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -7940,6 +8199,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
                            }]
                },
                {
@@ -8656,6 +8924,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -9385,6 +9681,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -9906,6 +10211,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -10603,6 +10936,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -11184,6 +11526,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces the last child, or inserts the join point if no child is present",
                   "children": [
                            {
@@ -11717,6 +12087,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -12228,6 +12607,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -12826,6 +13233,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -13267,6 +13683,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -13974,6 +14418,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
                            }]
                },
                {
@@ -14725,6 +15178,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces the last child, or inserts the join point if no child is present",
                   "children": [
                            {
@@ -15417,6 +15898,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -15998,6 +16488,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces the last child, or inserts the join point if no child is present",
                   "children": [
                            {
@@ -16531,6 +17049,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -17042,6 +17569,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -17646,6 +18201,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -18162,6 +18726,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -18709,6 +19301,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -19145,6 +19746,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -19675,6 +20304,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -20124,6 +20762,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -20829,6 +21495,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -21436,6 +22111,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces the last child, or inserts the join point if no child is present",
                   "children": [
                            {
@@ -21963,6 +22666,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -22399,6 +23111,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -22963,6 +23703,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -23441,6 +24190,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -24006,6 +24783,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -24447,6 +25233,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -25160,6 +25974,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -25686,6 +26509,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces the last child, or inserts the join point if no child is present",
                   "children": [
                            {
@@ -26204,6 +27055,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -26640,6 +27500,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -27212,6 +28100,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -27695,6 +28592,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -28405,6 +29330,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -28926,6 +29860,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -29489,6 +30451,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -29967,6 +30938,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -30514,6 +31513,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -31025,6 +32033,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -31590,6 +32626,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -32031,6 +33076,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -32595,6 +33668,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -33073,6 +34155,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -33740,6 +34850,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
                            }]
                },
                {
@@ -34475,6 +35594,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -35223,6 +36370,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
                            }]
                },
                {
@@ -36050,6 +37206,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces the last child, or inserts the join point if no child is present",
                   "children": [
                            {
@@ -36746,6 +37930,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -37300,6 +38493,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -37866,6 +39087,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
                            }]
                },
                {
@@ -38453,6 +39683,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces the last child, or inserts the join point if no child is present",
                   "children": [
                            {
@@ -39007,6 +40265,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -39443,6 +40710,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -40008,6 +41303,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -40449,6 +41753,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -41156,6 +42488,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
                            }]
                },
                {
@@ -41907,6 +43248,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces the last child, or inserts the join point if no child is present",
                   "children": [
                            {
@@ -42466,6 +43835,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -42938,6 +44316,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -43536,6 +44942,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -43977,6 +45392,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -44690,6 +46133,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -45266,6 +46718,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -46022,6 +47502,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
                            }]
                },
                {
@@ -46858,6 +48347,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces the last child, or inserts the join point if no child is present",
                   "children": [
                            {
@@ -47417,6 +48934,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -47895,6 +49421,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -48460,6 +50014,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -48901,6 +50464,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -49627,6 +51218,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
                            }]
                },
                {
@@ -50369,6 +51969,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces the last child, or inserts the join point if no child is present",
                   "children": [
                            {
@@ -50954,6 +52582,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -51395,6 +53032,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -52020,6 +53685,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -52540,6 +54214,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -53225,6 +54927,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -53746,6 +55457,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -54448,6 +56187,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -54983,6 +56731,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -55530,6 +57306,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -55997,6 +57782,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -56645,6 +58458,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
                            }]
                },
                {
@@ -57319,6 +59141,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -58020,6 +59870,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -58541,6 +60400,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -59129,6 +61016,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -59626,6 +61522,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -60172,6 +62096,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -60688,6 +62621,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -61297,6 +63258,15 @@
                            {
                               "type": "boolean",
                               "name": "hasParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
                            }]
                },
                {
@@ -62018,6 +63988,34 @@
                },
                {
                   "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
                   "tooltip": "Replaces the last child, or inserts the join point if no child is present",
                   "children": [
                            {
@@ -62551,6 +64549,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -63062,6 +65069,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -63650,6 +65685,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -64147,6 +66191,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -64685,6 +66757,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -65196,6 +67277,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -65752,6 +67861,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -66219,6 +68337,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -66921,6 +69067,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -67442,6 +69597,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -68159,6 +70342,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -68680,6 +70872,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -69294,6 +71514,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -69750,6 +71979,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -70315,6 +72572,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -70756,6 +73022,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -71441,6 +73735,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -71962,6 +74265,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -72526,6 +74857,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -73004,6 +75344,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -73568,6 +75936,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -74046,6 +76423,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -74750,6 +77155,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -75271,6 +77685,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -75876,6 +78318,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -76330,6 +78781,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -76936,6 +79415,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -77382,6 +79870,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -78067,6 +80583,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -78588,6 +81113,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -79214,6 +81767,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -79734,6 +82296,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -80435,6 +83025,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -80970,6 +83569,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -81596,6 +84223,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -82050,6 +84686,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },
@@ -82604,6 +85268,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
+                  "children": [
+                           {
+                              "type": "comment[]",
+                              "name": "inlineComments"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "tooltip": "true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)",
                   "children": [
                            {
@@ -83115,6 +85788,34 @@
                            {
                               "type": "joinpoint",
                               "name": "node",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String[]",
+                              "name": "comments",
+                              "defaultValue": ""
+                           }]
+               },
+               {
+                  "type": "action",
+                  "tooltip": "Sets the commented that are embedded in a node",
+                  "children": [
+                           {
+                              "type": "void",
+                              "name": "setInlineComments"
+                           },
+                           {
+                              "type": "String",
+                              "name": "comments",
                               "defaultValue": ""
                            }]
                },

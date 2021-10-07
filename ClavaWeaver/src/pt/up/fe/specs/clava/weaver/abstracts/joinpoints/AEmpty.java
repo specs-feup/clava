@@ -50,6 +50,17 @@ public abstract class AEmpty extends ACxxWeaverJoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "inlineComments": {
+        	if(value instanceof String[]){
+        		this.defInlineCommentsImpl((String[])value);
+        		return;
+        	}
+        	if(value instanceof String){
+        		this.defInlineCommentsImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "lastChild": {
         	if(value instanceof AJoinPoint){
         		this.defLastChildImpl((AJoinPoint)value);
@@ -113,6 +124,7 @@ public abstract class AEmpty extends ACxxWeaverJoinPoint {
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
         ANCESTOR("ancestor"),
+        INLINECOMMENTS("inlineComments"),
         ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),

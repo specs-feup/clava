@@ -73,6 +73,17 @@ public abstract class AJoinPoint extends JoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "inlineComments": {
+        	if(value instanceof String[]){
+        		this.defInlineCommentsImpl((String[])value);
+        		return;
+        	}
+        	if(value instanceof String){
+        		this.defInlineCommentsImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -102,6 +113,8 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("toComment()");
         actions.add("toComment(String prefix)");
         actions.add("toComment(String prefix, String suffix)");
+        actions.add("setInlineComments(String[] comments)");
+        actions.add("setInlineComments(String comments)");
     }
 
     /**
@@ -635,6 +648,58 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    public void setInlineCommentsImpl(String[] comments) {
+        throw new UnsupportedOperationException(get_class()+": Action setInlineComments not implemented ");
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    public final void setInlineComments(String[] comments) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setInlineComments", this, Optional.empty(), new Object[] { comments});
+        	}
+        	this.setInlineCommentsImpl(comments);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setInlineComments", this, Optional.empty(), new Object[] { comments});
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setInlineComments", e);
+        }
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    public void setInlineCommentsImpl(String comments) {
+        throw new UnsupportedOperationException(get_class()+": Action setInlineComments not implemented ");
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    public final void setInlineComments(String comments) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setInlineComments", this, Optional.empty(), comments);
+        	}
+        	this.setInlineCommentsImpl(comments);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setInlineComments", this, Optional.empty(), comments);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setInlineComments", e);
+        }
+    }
+
+    /**
      * 
      */
     @Override
@@ -701,6 +766,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("jpId");
         attributes.add("scopeNodes");
         attributes.add("stmt");
+        attributes.add("inlineComments");
     }
 
     /**
@@ -2340,6 +2406,53 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "stmt", e);
+        }
+    }
+
+    /**
+     * Get value on attribute inlineComments
+     * @return the attribute's value
+     */
+    public abstract AComment[] getInlineCommentsArrayImpl();
+
+    /**
+     * Returns comments that are not explicitly in the AST, but embedded in other nodes
+     */
+    public Object getInlineCommentsImpl() {
+        AComment[] aCommentArrayImpl0 = getInlineCommentsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aCommentArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * 
+     */
+    public void defInlineCommentsImpl(String[] value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def inlineComments with type String not implemented ");
+    }
+
+    /**
+     * 
+     */
+    public void defInlineCommentsImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def inlineComments with type String not implemented ");
+    }
+
+    /**
+     * Returns comments that are not explicitly in the AST, but embedded in other nodes
+     */
+    public final Object getInlineComments() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "inlineComments", Optional.empty());
+        	}
+        	Object result = this.getInlineCommentsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "inlineComments", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "inlineComments", e);
         }
     }
 

@@ -438,6 +438,24 @@ public abstract class ATagType extends AType {
     }
 
     /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String[] comments) {
+        this.aType.setInlineCommentsImpl(comments);
+    }
+
+    /**
+     * Sets the commented that are embedded in a node
+     * @param comments 
+     */
+    @Override
+    public void setInlineCommentsImpl(String comments) {
+        this.aType.setInlineCommentsImpl(comments);
+    }
+
+    /**
      * Sets the template argument types of a template type
      * @param templateArgTypes 
      */
@@ -543,6 +561,17 @@ public abstract class ATagType extends AType {
         case "firstChild": {
         	if(value instanceof AJoinPoint){
         		this.defFirstChildImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "inlineComments": {
+        	if(value instanceof String[]){
+        		this.defInlineCommentsImpl((String[])value);
+        		return;
+        	}
+        	if(value instanceof String){
+        		this.defInlineCommentsImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -660,6 +689,7 @@ public abstract class ATagType extends AType {
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
         ANCESTOR("ancestor"),
+        INLINECOMMENTS("inlineComments"),
         ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),

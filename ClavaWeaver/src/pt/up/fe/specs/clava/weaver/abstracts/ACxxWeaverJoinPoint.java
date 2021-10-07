@@ -2,6 +2,7 @@ package pt.up.fe.specs.clava.weaver.abstracts;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -39,6 +40,7 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.Insert;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
@@ -1376,4 +1378,69 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         return type.bitWidthImpl(this);
     }
+
+    @Override
+    public AComment[] getInlineCommentsArrayImpl() {
+        return CxxJoinpoints.create(getNode().get(ClavaNode.INLINE_COMMENTS), AComment.class);
+    }
+
+    // @Override
+    // public void setInlineCommentsImpl(AComment[] comments) {
+    // defInlineCommentsImpl(comments);
+    // }
+
+    // @Override
+    // public void defInlineCommentsImpl(AComment[] value) {
+    // if (value == null || value.length == 0) {
+    // getNode().removeInlineComments();
+    // return;
+    // }
+    //
+    // // sArrays.stream(value).map(comment -> (Com))
+    //
+    // var comments = Arrays.stream(value)
+    // .map(jp -> (Comment) jp.getNode())
+    // .collect(Collectors.toList());
+    //
+    // getNode().set(ClavaNode.INLINE_COMMENTS, comments);
+    // }
+
+    @Override
+    public void defInlineCommentsImpl(String[] value) {
+
+        if (value == null || value.length == 0) {
+            getNode().removeInlineComments();
+            return;
+        }
+
+        // sArrays.stream(value).map(comment -> (Com))
+
+        var comments = Arrays.stream(value)
+                .map(comment -> getFactory().inlineComment(comment, false))
+                .collect(Collectors.toList());
+
+        getNode().set(ClavaNode.INLINE_COMMENTS, comments);
+    }
+
+    @Override
+    public void setInlineCommentsImpl(String[] comments) {
+        defInlineCommentsImpl(comments);
+    }
+
+    @Override
+    public void defInlineCommentsImpl(String value) {
+
+        if (value == null || value.isBlank()) {
+            defInlineCommentsImpl(new String[0]);
+            return;
+        }
+
+        defInlineCommentsImpl(new String[] { value });
+    }
+
+    @Override
+    public void setInlineCommentsImpl(String comment) {
+        defInlineCommentsImpl(comment);
+    }
+
 }
