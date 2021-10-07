@@ -469,6 +469,7 @@ public abstract class ATypedefNameDecl extends ANamedDecl {
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
+        BITWIDTH("bitWidth"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
         CHILD("child"),

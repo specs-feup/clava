@@ -593,6 +593,7 @@ public abstract class ANamedDecl extends ADecl {
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
+        BITWIDTH("bitWidth"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
         CHILD("child"),

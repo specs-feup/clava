@@ -844,6 +844,7 @@ public abstract class AIf extends AStatement {
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
+        BITWIDTH("bitWidth"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
         CHILD("child"),

@@ -411,6 +411,7 @@ public abstract class ADeleteExpr extends AExpression {
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ASTPARENT("astParent"),
+        BITWIDTH("bitWidth"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
         CHILD("child"),

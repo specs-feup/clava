@@ -135,6 +135,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -1098,6 +1107,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -2223,6 +2241,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -3314,6 +3341,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -4455,6 +4491,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -5497,6 +5542,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -6534,6 +6588,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -7614,6 +7677,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -9050,6 +9122,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -10259,6 +10340,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -11364,6 +11454,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -12460,6 +12559,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -13603,6 +13711,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -15037,6 +15154,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -16138,6 +16264,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -17248,6 +17383,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -18302,6 +18446,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -19255,6 +19408,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -20404,6 +20566,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -21529,6 +21700,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -22516,6 +22696,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -23550,6 +23739,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -24699,6 +24897,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -25734,6 +25941,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -26729,6 +26945,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -27917,6 +28142,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -28992,6 +29226,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -30004,6 +30247,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -31075,6 +31327,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -32067,6 +32328,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -33207,6 +33477,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -34681,6 +34960,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -36195,6 +36483,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -37306,6 +37603,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -38438,6 +38744,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -39426,6 +39741,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -40569,6 +40893,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -41870,6 +42203,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -42927,6 +43269,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -44072,6 +44423,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -45399,6 +45759,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -46785,6 +47154,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -47815,6 +48193,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -48977,6 +49364,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -50295,6 +50691,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -51348,6 +51753,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -52544,6 +52958,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -53762,6 +54185,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -54831,6 +55263,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -55941,6 +56382,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -57307,6 +57757,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -58407,6 +58866,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -59437,6 +59905,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -60557,6 +61034,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -61802,6 +62288,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -62892,6 +63387,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -63914,6 +64418,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -64972,6 +65485,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -66132,6 +66654,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -67365,6 +67896,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -68491,6 +69031,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -69499,6 +70048,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -70620,6 +71178,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -71696,6 +72263,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -72725,6 +73301,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -73902,6 +74487,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -75019,6 +75613,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -76066,6 +76669,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -77188,6 +77800,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -78326,6 +78947,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {
@@ -79542,6 +80172,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -80694,6 +81333,15 @@
                },
                {
                   "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
+                           }]
+               },
+               {
+                  "type": "attribute",
                   "children": [
                            {
                               "type": "String[]",
@@ -81689,6 +82337,15 @@
                            {
                               "type": "joinpoint",
                               "name": "astParent"
+                           }]
+               },
+               {
+                  "type": "attribute",
+                  "tooltip": "The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit",
+                  "children": [
+                           {
+                              "type": "Integer",
+                              "name": "bitWidth"
                            }]
                },
                {

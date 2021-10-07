@@ -59,6 +59,8 @@
 		<attribute name="type" type="type">
 			<def/>
 		</attribute>
+		<attribute name="bitWidth" type="Integer" tooltip="The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit"/>
+		
 		<attribute name="astName" type="String" />
 		<attribute name="astNumChildren" type="Integer" tooltip="Returns the number of children of the node, considering null nodes"/>
 		<attribute name="astChildren" type="joinpoint[]" tooltip="Returns an array with the children of the node, considering null nodes" />

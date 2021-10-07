@@ -1365,4 +1365,15 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .map(stmt -> CxxJoinpoints.create(stmt, AStatement.class))
                 .orElse(null);
     }
+
+    @Override
+    public Integer getBitWidthImpl() {
+        var type = getTypeImpl();
+
+        if (type == null) {
+            return null;
+        }
+
+        return type.bitWidthImpl(this);
+    }
 }

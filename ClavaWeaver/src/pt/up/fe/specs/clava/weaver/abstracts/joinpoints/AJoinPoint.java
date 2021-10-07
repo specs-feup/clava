@@ -665,6 +665,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("code");
         attributes.add("joinpointType");
         attributes.add("type");
+        attributes.add("bitWidth");
         attributes.add("astName");
         attributes.add("astNumChildren");
         attributes.add("astChildren");
@@ -1357,6 +1358,29 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "type", e);
+        }
+    }
+
+    /**
+     * The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit
+     */
+    public abstract Integer getBitWidthImpl();
+
+    /**
+     * The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit
+     */
+    public final Object getBitWidth() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "bitWidth", Optional.empty());
+        	}
+        	Integer result = this.getBitWidthImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "bitWidth", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "bitWidth", e);
         }
     }
 
