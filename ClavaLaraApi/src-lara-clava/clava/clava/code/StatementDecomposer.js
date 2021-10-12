@@ -8,11 +8,11 @@ class StatementDecomposer {
 		Check.isNumber(this.startIndex);		
 	}
 
-	#throwNotImplemented(generalType, specificType) {
+	_throwNotImplemented(generalType, specificType) {
 		throw new Error("StatementDecomposer not implemented for "+generalType+" of type '"+specificType+"'");
 	}
 	
-	#newTempVarname() {
+	_newTempVarname() {
 		let varName = this.tempPrefix + this.startIndex;
 		this.startIndex++;
 		return varName;
@@ -117,7 +117,7 @@ class StatementDecomposer {
 			return new DecomposeResult(stmts, $expr);
 		}
 
-		this.#throwNotImplemented("expressions", $expr.joinPointType);	
+		this._throwNotImplemented("expressions", $expr.joinPointType);	
 	}
 	
 	decomposeBinaryOp($binaryOp) {
@@ -152,14 +152,14 @@ class StatementDecomposer {
 			let $newExpr = ClavaJoinPoints.binaryOp($binaryOp.kind, leftResult.$resultExpr, rightResult.$resultExpr, $binaryOp.type);
 			
 			// Create declaration statement with result to new temporary variable
-			let tempVarname = this.#newTempVarname();
+			let tempVarname = this._newTempVarname();
 			let tempVarDecl = ClavaJoinPoints.varDecl(tempVarname, $newExpr);
 			stmts.push(tempVarDecl.stmt);
 
 			return new DecomposeResult(stmts, ClavaJoinPoints.varRefFromDecl(tempVarDecl));					
 		}
 
-		this.#throwNotImplemented("binary operators", kind);	
+		this._throwNotImplemented("binary operators", kind);	
 	}
 	
 	
