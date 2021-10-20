@@ -1087,6 +1087,12 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public Object getDataImpl() {
         final String dataKeyword = "data";
 
+        var jsEngine = getWeaverEngine().getScriptEngine();
+
+        // TODO: Refactor, so that decoding of pragma is done separately
+
+        // TODO: life-cycle management of data objects according to node id
+
         for (APragma pragmaJp : getPragmasArrayImpl()) {
             Pragma pragma = (Pragma) pragmaJp.getNode();
 
@@ -1114,22 +1120,41 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             var jsonString = SpecsStrings.normalizeJsonObject(splitter.toString().trim(), baseFolder);
 
             try {
-                return getWeaverEngine().getScriptEngine().eval("var _data = " + jsonString + "; _data;");
+                // Create object
+                var newDataObject = jsEngine.eval("var _data = " + jsonString + "; _data;");
+
+                // Create proxy function
+                var proxyBuilder = jsEngine.eval("var _data = _buildClavaProxy; _data;");
+
+                // Create proxy object
+                return jsEngine.call(proxyBuilder, newDataObject, getNode());
+
+                // return getWeaverEngine().getScriptEngine().eval("var _data = " + jsonString + "; _data;");
                 // return getWeaverEngine().getScriptEngine().eval("var _data = {" + splitter.toString() + "}; _data;");
             } catch (Exception e) {
                 SpecsLogs.warn(
                         "Could not decode #pragma clava " + dataKeyword + " for contents '" + splitter.toString()
                                 + "', returning empty object",
                         e);
-                return getWeaverEngine().getScriptEngine().eval("var _data = {}; _data;");
+                break;
+                // return getWeaverEngine().getScriptEngine().eval("var _data = {}; _data;");
             }
 
             // System.out.println("NAME:" + pragma.getName());
             // System.out.println("CONTENT:" + pragma.getContent());
         }
 
+        // Create object
+        var newDataObject = jsEngine.eval("var _data = {}; _data;");
+
+        // Create proxy function
+        var proxyBuilder = jsEngine.eval("var _data = _buildClavaProxy; _data;");
+
+        // Create proxy object
+        return jsEngine.call(proxyBuilder, newDataObject, getNode());
+
         // Return empty object
-        return getWeaverEngine().getScriptEngine().eval("var _data = {}; _data;");
+        // return getWeaverEngine().getScriptEngine().eval("var _data = {}; _data;");
         // return getWeaverEngine().getScriptEngine().eval("var _data = {a:30, b:40}; _data;");
 
         // return getWeaverEngine().getScriptEngine().eval("var _data = {a:10, b:20}; _data;");
