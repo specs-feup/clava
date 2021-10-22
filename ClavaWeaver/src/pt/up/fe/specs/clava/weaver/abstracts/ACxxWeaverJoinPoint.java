@@ -27,6 +27,7 @@ import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.cilk.CilkNode;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.pragma.ClavaData;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaFactory;
@@ -1089,6 +1090,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         var jsEngine = getWeaverEngine().getScriptEngine();
 
+        var dataPragma = ClavaData.getClavaData(getNode());
+        var jsDataPragma = dataPragma != null ? dataPragma : jsEngine.getUndefined();
+
         // TODO: Refactor, so that decoding of pragma is done separately
 
         // TODO: life-cycle management of data objects according to node id
@@ -1127,7 +1131,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 var proxyBuilder = jsEngine.eval("var _data = _buildClavaProxy; _data;");
 
                 // Create proxy object
-                return jsEngine.call(proxyBuilder, newDataObject, getNode());
+                return jsEngine.call(proxyBuilder, newDataObject, getNode(), jsDataPragma);
 
                 // return getWeaverEngine().getScriptEngine().eval("var _data = " + jsonString + "; _data;");
                 // return getWeaverEngine().getScriptEngine().eval("var _data = {" + splitter.toString() + "}; _data;");
@@ -1151,7 +1155,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         var proxyBuilder = jsEngine.eval("var _data = _buildClavaProxy; _data;");
 
         // Create proxy object
-        return jsEngine.call(proxyBuilder, newDataObject, getNode());
+        return jsEngine.call(proxyBuilder, newDataObject, getNode(), jsDataPragma);
 
         // Return empty object
         // return getWeaverEngine().getScriptEngine().eval("var _data = {}; _data;");
