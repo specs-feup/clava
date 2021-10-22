@@ -50,7 +50,7 @@ public class GenericPragma extends Pragma {
 
     @Override
     public void setFullContent(String fullContent) {
-        set(CONTENT, Arrays.asList(fullContent));
+        set(CONTENT, new ArrayList<>(Arrays.asList(fullContent)));
     }
 
 }
