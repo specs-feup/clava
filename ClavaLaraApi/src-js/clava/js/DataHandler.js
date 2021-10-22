@@ -102,16 +102,23 @@ const _CLAVA_DATA_HANDLER = {
 let _CLAVA_DATA_CACHE = {}; 
 
 
-function _getClavaData(astNode) {
+function _getClavaData(astNode, obj, pragma) {
 	const id = astNode.getId();
 	let data = _CLAVA_DATA_CACHE[id];
 	
 	if(data === undefined) {
-		data = _buildClavaProxy({}, astNode, undefined);
+		obj = obj !== undefined ? obj : {};
+		data = _buildClavaProxy(obj, astNode, pragma);
 		_CLAVA_DATA_CACHE[id] = data;
 	}
 	
 	return data;
+}
+
+function _hasClavaData(astNode) {
+	const id = astNode.getId();
+	
+	return _CLAVA_DATA_CACHE.hasOwnProperty(id);
 }
 
 function _clearClavaDataCache() {
