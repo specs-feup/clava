@@ -202,7 +202,7 @@ public class CxxTest {
 
     @Test
     public void testPragmaData() {
-        newTester().test("PragmaData.lara", "pragma_data.cpp");
+        newTester().test("PragmaData.lara", "pragma_data.cpp", "pragma_data_2.cpp");
     }
 
     @Test

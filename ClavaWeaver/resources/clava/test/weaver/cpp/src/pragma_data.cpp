@@ -51,6 +51,17 @@ void updatePragma() {
 	}
 }
 
+void rebuild() {
+	for(int i=0; i<0; i++) {
+	
+	}
+}
+
+void dataInExpressions() {
+	int a, b, c;
+
+	a = b;
+}
 
 int main() {
     

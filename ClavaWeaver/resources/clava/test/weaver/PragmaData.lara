@@ -1,4 +1,5 @@
 import weaver.Query;
+import clava.Clava;
 
 aspectdef PragmaData
 
@@ -37,6 +38,50 @@ aspectdef PragmaData
 	var $loopWithUpdatedPragma = Query.search("function", "updatePragma").first();
 	$loopWithUpdatedPragma.data.a = 200;
 	println("Loop with updated pragma: " + $loopWithUpdatedPragma.pragmas.map(p => p.code));
+
+	// Information persists after rebuilds
+	var $loopBeforeRebuild = Query.search("function", "rebuild").first();
+	println("Is parallel before set and rebuild: " + $loopBeforeRebuild.data.isParallel);
+	$loopBeforeRebuild.data.isParallel = true;
+
+/*
+	var $op = Query.search("function", "dataInExpressions").search("binaryOp").first();
+	$op.data.a = 1000;
+	$op.data.b = 2000;	
+	println("Cache before:");
+	printlnObject(_CLAVA_DATA_CACHE);
+	Clava.rebuild();
+	println("Cache after:");
+	printlnObject(_CLAVA_DATA_CACHE);	
+*/
+
+	var $loopAfterRebuild = Query.search("function", "rebuild").first();	
+	println("Is parallel after rebuild: " + $loopAfterRebuild.data.isParallel);
+
+	// Data on expression nodes
+	var $op = Query.search("function", "dataInExpressions").search("binaryOp").first();
+	$op.data.a = 1000;
+	$op.data.b = 2000;	
+	println("ExprData before push");
+	printlnObject($op.data);
+	Clava.pushAst();
+	var $opAfterPush = Query.search("function", "dataInExpressions").search("binaryOp").first();
+	$opAfterPush.data.c = 3000;
+	Clava.popAst();
+	var $opAfterPop = Query.search("function", "dataInExpressions").search("binaryOp").first();
+	println("ExprData after pop");
+	printlnObject($op.data);
+	
+	var $fileRebuildOp = Query.search("function", "fileRebuild").search("binaryOp").first();
+	$fileRebuildOp.data.opRebuild = true;
+	
+	var $fileRebuildLoop = Query.search("function", "fileRebuild2").search("loop").first();
+	$fileRebuildLoop.data.loopRebuild = true;
+	
+	var dataCacheSizeBefore = Object.keys(_CLAVA_DATA_CACHE).length;
+	Query.search("file", "pragma_data_2.cpp").first().rebuild();
+	var dataCacheSizeAfter = Object.keys(_CLAVA_DATA_CACHE).length;	
+	println("Number of cached data objects deleted after file rebuild: " + (dataCacheSizeBefore-dataCacheSizeAfter));
 	
 //from nothing adds pragma; changes reflected in pragma; push/pop preserve; rebuild preserves for ones with pragma
 end
