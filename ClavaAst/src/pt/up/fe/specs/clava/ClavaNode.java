@@ -550,7 +550,8 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
             return value;
         } catch (Exception e) {
-            throw new RuntimeException("Problem while accessing attribute '" + key + "' in ClavaNode: " + this, e);
+            throw new RuntimeException(
+                    "Problem while accessing attribute '" + key + "' in ClavaNode: " + this.getNodeName(), e);
         }
 
     }
