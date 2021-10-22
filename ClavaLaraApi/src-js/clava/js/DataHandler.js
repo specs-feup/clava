@@ -121,7 +121,19 @@ function _hasClavaData(astNode) {
 	return _CLAVA_DATA_CACHE.hasOwnProperty(id);
 }
 
-function _clearClavaDataCache() {
-	_CLAVA_DATA_CACHE = {};
+function _clearClavaDataCache(ids) {
+	// No ids defined, clear all
+	if(ids === undefined) {
+		_CLAVA_DATA_CACHE = {};
+		return;
+	}
+
+	for(let id of ids) {
+		if(_CLAVA_DATA_CACHE.hasOwnProperty(id)) {
+			delete _CLAVA_DATA_CACHE[id];		
+		}
+	}
+
 }
+
 
