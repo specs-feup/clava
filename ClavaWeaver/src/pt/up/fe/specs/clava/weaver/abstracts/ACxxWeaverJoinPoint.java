@@ -28,7 +28,6 @@ import pt.up.fe.specs.clava.ast.cilk.CilkNode;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.pragma.ClavaData;
-import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.utils.ClassesService;
@@ -49,6 +48,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
@@ -1093,26 +1093,40 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         var dataPragma = ClavaData.getClavaData(getNode());
         var jsDataPragma = dataPragma != null ? dataPragma : jsEngine.getUndefined();
 
+        // Check if data object already exists
+        var hasClavaDataJs = jsEngine.eval("var _data = _hasClavaData; _data;");
+        var hasClavaData = jsEngine.asBoolean(jsEngine.call(hasClavaDataJs, getNode()));
+
+        if (hasClavaData) {
+            // Return data object from managed cache
+            var dataCache = jsEngine.eval("var _data = _getClavaData; _data;");
+
+            // Create proxy object
+            return jsEngine.call(dataCache, getNode());
+        }
+
         // TODO: Refactor, so that decoding of pragma is done separately
 
         // TODO: life-cycle management of data objects according to node id
 
-        for (APragma pragmaJp : getPragmasArrayImpl()) {
-            Pragma pragma = (Pragma) pragmaJp.getNode();
+        // Pragma exists and data has not been created yet
+        if (dataPragma != null) {
+            // for (APragma pragmaJp : getPragmasArrayImpl()) {
+            // Pragma pragma = (Pragma) pragmaJp.getNode();
 
-            if (!pragma.getName().toLowerCase().equals("clava")) {
-                continue;
-            }
+            // if (!pragma.getName().toLowerCase().equals("clava")) {
+            // continue;
+            // }
 
             // Parse content
-            StringSplitter splitter = new StringSplitter(pragma.getContent());
-            boolean isDataDirective = splitter.parseTry(StringSplitterRules::string)
-                    .filter(string -> string.toLowerCase().equals(dataKeyword))
-                    .isPresent();
-
-            if (!isDataDirective) {
-                continue;
-            }
+            // StringSplitter splitter = new StringSplitter(pragma.getContent());
+            // boolean isDataDirective = splitter.parseTry(StringSplitterRules::string)
+            // .filter(string -> string.toLowerCase().equals(dataKeyword))
+            // .isPresent();
+            //
+            // if (!isDataDirective) {
+            // continue;
+            // }
 
             var node = getNode();
             var tu = node instanceof TranslationUnit ? (TranslationUnit) node
@@ -1121,6 +1135,13 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             var baseFolder = tu == null ? null
                     : tu.getFolderpath().map(folderpath -> new File(folderpath)).orElse(null);
 
+            StringSplitter splitter = new StringSplitter(dataPragma.getContent());
+            boolean isDataDirective = splitter.parseTry(StringSplitterRules::string)
+                    .filter(string -> string.toLowerCase().equals(dataKeyword))
+                    .isPresent();
+
+            SpecsCheck.checkArgument(isDataDirective, () -> "Expected pragma to be a clava data pragma: " + dataPragma);
+
             var jsonString = SpecsStrings.normalizeJsonObject(splitter.toString().trim(), baseFolder);
 
             try {
@@ -1128,10 +1149,12 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 var newDataObject = jsEngine.eval("var _data = " + jsonString + "; _data;");
 
                 // Create proxy function
-                var proxyBuilder = jsEngine.eval("var _data = _buildClavaProxy; _data;");
+                // var proxyBuilder = jsEngine.eval("var _data = _buildClavaProxy; _data;");
+                var proxyBuilder = jsEngine.eval("var _data = _getClavaData; _data;");
 
                 // Create proxy object
-                return jsEngine.call(proxyBuilder, newDataObject, getNode(), jsDataPragma);
+                // return jsEngine.call(proxyBuilder, newDataObject, getNode(), jsDataPragma);
+                return jsEngine.call(proxyBuilder, getNode(), newDataObject, jsDataPragma);
 
                 // return getWeaverEngine().getScriptEngine().eval("var _data = " + jsonString + "; _data;");
                 // return getWeaverEngine().getScriptEngine().eval("var _data = {" + splitter.toString() + "}; _data;");
@@ -1140,7 +1163,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                         "Could not decode #pragma clava " + dataKeyword + " for contents '" + splitter.toString()
                                 + "', returning empty object",
                         e);
-                break;
                 // return getWeaverEngine().getScriptEngine().eval("var _data = {}; _data;");
             }
 
@@ -1149,19 +1171,19 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         }
 
         // Create object
-        var newDataObject = jsEngine.eval("var _data = {}; _data;");
+        // var newDataObject = jsEngine.eval("var _data = {}; _data;");
 
         // Create proxy function
-        var proxyBuilder = jsEngine.eval("var _data = _buildClavaProxy; _data;");
+        // var proxyBuilder = jsEngine.eval("var _data = _buildClavaProxy; _data;");
 
         // Create proxy object
-        return jsEngine.call(proxyBuilder, newDataObject, getNode(), jsDataPragma);
+        // return jsEngine.call(proxyBuilder, newDataObject, getNode(), jsDataPragma);
 
-        // Return empty object
-        // return getWeaverEngine().getScriptEngine().eval("var _data = {}; _data;");
-        // return getWeaverEngine().getScriptEngine().eval("var _data = {a:30, b:40}; _data;");
+        // Return data object from managed cache
+        var dataCache = jsEngine.eval("var _data = _getClavaData; _data;");
 
-        // return getWeaverEngine().getScriptEngine().eval("var _data = {a:10, b:20}; _data;");
+        // Create proxy object
+        return jsEngine.call(dataCache, getNode());
     }
 
     @Override
