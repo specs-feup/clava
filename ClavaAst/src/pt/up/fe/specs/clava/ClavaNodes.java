@@ -42,6 +42,7 @@ import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
+import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
@@ -737,5 +738,25 @@ public class ClavaNodes {
 
         // Finished loop without returning, first not is a text element
         return currentBase;
+    }
+
+    /**
+     * A node accepts pragmas if its parent can have pragmas (e.g. CompoundStmt, TranslationUnit)
+     * 
+     * @param node
+     * @return true if the node accepts pragmas, false otherwise
+     */
+    public static boolean acceptsPragmas(ClavaNode node) {
+        var parent = node.getParent();
+
+        if (parent instanceof CompoundStmt) {
+            return true;
+        }
+
+        if (parent instanceof TranslationUnit) {
+            return true;
+        }
+
+        return false;
     }
 }
