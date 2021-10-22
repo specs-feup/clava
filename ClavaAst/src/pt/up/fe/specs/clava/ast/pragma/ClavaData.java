@@ -74,7 +74,7 @@ public class ClavaData {
 
         var pragma = node.getFactory().genericPragma(Arrays.asList("clava data"));
 
-        NodeInsertUtils.insertBefore(node, pragma);
+        NodeInsertUtils.insertBefore(node, ClavaNodes.toStmt(pragma));
 
         return pragma;
     }
