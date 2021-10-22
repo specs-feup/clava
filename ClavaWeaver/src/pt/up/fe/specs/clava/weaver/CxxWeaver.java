@@ -21,6 +21,7 @@ import org.lara.interpreter.profile.WeavingReport;
 import org.lara.interpreter.weaver.ast.AstMethods;
 import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.JoinPoint;
+import org.lara.interpreter.weaver.interf.WeaverEngine;
 import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.language.specification.LanguageSpecification;
 import org.lara.language.specification.dsl.LanguageSpecificationV2;
@@ -1369,6 +1370,11 @@ public class CxxWeaver extends ACxxWeaver {
 
     public TranslationUnit rebuildFile(TranslationUnit tUnit) {
 
+        // Clear data object for the ids of this file
+        var ids = tUnit.getDescendantsAndSelfStream().map(node -> node.getId())
+                .collect(Collectors.joining("', '", "'", "'"));
+        WeaverEngine.getThreadLocalWeaver().getScriptEngine().eval("_clearClavaDataCache([" + ids + "]);");
+
         // Write current tree to a temporary folder
         File tempFolder = REBUILD_WEAVING_FOLDERS.get().next();
 
@@ -1607,6 +1613,9 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Creating an app automatically pushes the App in the Context
         context.popApp();
+
+        // Clear data
+        WeaverEngine.getThreadLocalWeaver().getScriptEngine().eval("_clearClavaDataCache();");
 
         // if (update) {
         // // Top app is the one we want, pop the app before that one
