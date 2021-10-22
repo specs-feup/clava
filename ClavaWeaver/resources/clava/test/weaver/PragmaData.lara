@@ -27,4 +27,16 @@ aspectdef PragmaData
 	$loopWithPragma2.insertBefore("int global_a;");
 	println("Data after insert: " + $loopWithPragma2.data.a);	
 
+	// Setting data without pragma creates a pragma
+	var $loopWithoutPragma = Query.search("function", "insertWithoutPragma").first();
+	$loopWithoutPragma.data.a = 42;
+	$loopWithoutPragma.data.b = 43;	
+	println("Loop without pragma after setting data: " + $loopWithoutPragma.pragmas.map(p => p.code));
+
+	// Setting already existing data updates pragma
+	var $loopWithUpdatedPragma = Query.search("function", "updatePragma").first();
+	$loopWithUpdatedPragma.data.a = 200;
+	println("Loop with updated pragma: " + $loopWithUpdatedPragma.pragmas.map(p => p.code));
+	
+//from nothing adds pragma; changes reflected in pragma; push/pop preserve; rebuild preserves for ones with pragma
 end

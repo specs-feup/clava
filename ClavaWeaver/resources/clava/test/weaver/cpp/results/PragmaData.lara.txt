@@ -12,3 +12,5 @@ Data before insert: 30
 Data after insert: 30
 Data before insert: 40
 Data after insert: 40
+Loop without pragma after setting data: #pragma clava data {"a":42,"b":43}
+Loop with updated pragma: #pragma clava data {"a":200}

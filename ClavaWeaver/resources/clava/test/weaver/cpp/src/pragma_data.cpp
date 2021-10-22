@@ -37,6 +37,21 @@ void insertPreservesPragma2() {
 	
 }
 
+void insertWithoutPragma() {
+	for(int i=0; i<0; i++) {
+	
+	}
+}
+
+void updatePragma() {
+
+	#pragma clava data a:100
+	for(int i=0; i<0; i++) {
+	
+	}
+}
+
+
 int main() {
     
     foo();
