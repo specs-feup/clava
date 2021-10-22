@@ -99,3 +99,22 @@ const _CLAVA_DATA_HANDLER = {
 };
 
 
+let _CLAVA_DATA_CACHE = {}; 
+
+
+function _getClavaData(astNode) {
+	const id = astNode.getId();
+	let data = _CLAVA_DATA_CACHE[id];
+	
+	if(data === undefined) {
+		data = _buildClavaProxy({}, astNode, undefined);
+		_CLAVA_DATA_CACHE[id] = data;
+	}
+	
+	return data;
+}
+
+function _clearClavaDataCache() {
+	_CLAVA_DATA_CACHE = {};
+}
+
