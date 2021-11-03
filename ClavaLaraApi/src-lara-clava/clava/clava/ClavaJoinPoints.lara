@@ -215,20 +215,35 @@ ClavaJoinPoints.scope = function($stmts) {
 }
 
 /**
- * @param {String} declName - The name of the varref.
- * @param {$type} $type - The type of the varref.
+ * @param {String|$vardecl} decl - The name of the varref.
+ * @param {$type} $type - The type of the varref (only used of decl is a string).
  */
-ClavaJoinPoints.varRef = function(declName, $type) {
-	Check.isString(declName);
-	Check.isJoinPoint($type);
+ClavaJoinPoints.varRef = function(decl, $type) {
+	if(isString(decl)) {
+		//Check.isString(decl);
+		Check.isJoinPoint($type);
 	
-	return AstFactory.varref(declName, $type);
+		return AstFactory.varref(decl, $type);
+	}
+
+	if(isJoinPoint(decl)) {	
+		return AstFactory.varref(decl);	
+	}
+	
+	throw new Error("Input 'decl' is of an unsupported type: " + (typeof decl));
 }
 
+/**
+ * @param {$vardecl} declName - The name of the varref.
+ * @deprecated use ClavaJoinPoints.varRef() instead
+ */
 ClavaJoinPoints.varRefFromDecl = function($namedDecl) {
+	return ClavaJoinPoints.varRef($namedDecl);
+	/*
 	Check.isJoinPoint($namedDecl);
 	
 	return AstFactory.varref($namedDecl);
+*/	
 }
 
 /**
