@@ -11,6 +11,9 @@ aspectdef VardeclV2Test
 	
 	var globalRef = Query.search("function", "externalVar").search("varref").first();
 	println(globalRef.decl.definition.location);
+	
+	var $vardeclToVarref = Query.search("function", "varref").search("vardecl").first();
+	println("Is varref: " + $vardeclToVarref.varref().instanceOf("varref"));
 /*
 	for(var $vardecl of Query.search("vardecl", "GRAD_FILTER")) {
 		println($vardecl.getNode());

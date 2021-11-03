@@ -8,3 +8,8 @@ void removeInit() {
 void externalVar() {
 	GRAD_FILTER[0] = 0.0;
 }
+
+void varref() {
+	int a = 0;
+	
+}

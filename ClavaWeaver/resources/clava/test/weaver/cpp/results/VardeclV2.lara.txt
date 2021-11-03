@@ -5,3 +5,4 @@ void removeInit() {
 }
 
 vardeclv2_2.cpp:1:1 -> 1:83
+Is varref: true
