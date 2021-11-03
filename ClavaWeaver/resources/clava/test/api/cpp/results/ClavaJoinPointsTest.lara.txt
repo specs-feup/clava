@@ -36,3 +36,7 @@ Same type: true
 Same type again: true
 Rejected invalid input type
 Rejected jp without type
+Varref code: varref_test
+Varref type: uint64_t
+Varref2 code: varref_test_2
+Varref2 type: uint64_t

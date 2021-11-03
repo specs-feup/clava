@@ -66,4 +66,14 @@ aspectdef ClavaJoinPointsTest
 	} catch(e) {
 		println("Rejected jp without type");
 	}
+	
+	// Varref
+	var $varref = ClavaJoinPoints.varRef("varref_test", type);
+	println("Varref code: " + $varref.code);
+	println("Varref type: " + $varref.type.code);	
+	var $varref2 = ClavaJoinPoints.varRef(ClavaJoinPoints.varDeclNoInit("varref_test_2", type));
+	println("Varref2 code: " + $varref2.code);
+	println("Varref2 type: " + $varref2.type.code);	
+	
+	
 end
