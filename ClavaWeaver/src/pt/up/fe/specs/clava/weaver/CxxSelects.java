@@ -127,6 +127,8 @@ public class CxxSelects {
                 // Ignore null nodes
                 .filter(sibling -> !(sibling instanceof NullNode))
                 .map(CxxJoinpoints::create)
+                // Filter null nodes
+                .filter(jp -> jp != null)
                 .filter(jp -> {
 
                     boolean accepted = filter.test(jp);
@@ -139,7 +141,7 @@ public class CxxSelects {
                 // Null nodes should have been filtered by previous filter
                 // .filter(jp -> jp != null)
                 // Filter null nodes
-                .filter(jp -> jp != null)
+                // .filter(jp -> jp != null)
                 .collect(Collectors.toList())
                 // .toArray(new AJoinPoint[0]);
                 .toArray(AJoinPoint[]::new);
