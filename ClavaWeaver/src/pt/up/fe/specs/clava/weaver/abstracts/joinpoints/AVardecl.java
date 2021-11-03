@@ -278,6 +278,31 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
+     * Creates a new varref based on this vardecl
+     */
+    public AVarref varrefImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action varref not implemented ");
+    }
+
+    /**
+     * Creates a new varref based on this vardecl
+     */
+    public final AVarref varref() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "varref", this, Optional.empty());
+        	}
+        	AVarref result = this.varrefImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "varref", this, Optional.ofNullable(result));
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "varref", e);
+        }
+    }
+
+    /**
      * Get value on attribute name
      * @return the attribute's value
      */
@@ -680,6 +705,7 @@ public abstract class AVardecl extends ADeclarator {
         actions.add("void setInit(expression)");
         actions.add("void setInit(String)");
         actions.add("void removeInit()");
+        actions.add("varref varref()");
     }
 
     /**

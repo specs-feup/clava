@@ -22,7 +22,9 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
 import pt.up.fe.specs.clava.weaver.enums.InitializationStyle;
+import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.util.SpecsCollections;
 
 public class CxxVardecl extends AVardecl {
@@ -110,4 +112,15 @@ public class CxxVardecl extends AVardecl {
     public AVardecl getDefinitionImpl() {
         return CxxJoinpoints.create(varDecl.getDefinition(), AVardecl.class);
     }
+
+    // @Override
+    // public void varrefImpl() {
+    // return CxxJoinpoints.create(AstFactory.varref(CxxJoinpoints.create(varDecl, AVardecl.class), AVarref.class));
+    // }
+
+    @Override
+    public AVarref varrefImpl() {
+        return AstFactory.varref(CxxJoinpoints.create(varDecl, AVardecl.class));
+    }
+
 }

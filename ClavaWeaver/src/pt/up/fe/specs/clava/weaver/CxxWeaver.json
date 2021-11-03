@@ -53993,6 +53993,15 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Creates a new varref based on this vardecl",
+						"children": [
+									{
+										"type": "varref",
+										"name": "varref"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Sets the name of this namedDecl",
 						"children": [
 									{
@@ -82071,6 +82080,15 @@
 										"type": "String",
 										"name": "init",
 										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Creates a new varref based on this vardecl",
+						"children": [
+									{
+										"type": "varref",
+										"name": "varref"
 									}]
 					},
 					{

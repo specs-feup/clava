@@ -387,6 +387,14 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
+     * Creates a new varref based on this vardecl
+     */
+    @Override
+    public AVarref varrefImpl() {
+        return this.aVardecl.varrefImpl();
+    }
+
+    /**
      * 
      * @param position 
      * @param code 

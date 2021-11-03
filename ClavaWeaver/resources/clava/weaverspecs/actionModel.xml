@@ -639,6 +639,9 @@
 
 	<action name="removeInit" class="vardecl" tooltip="If vardecl already has an initialization, removes it. Otherwise does nothing">
 	</action>	
+
+	<action name="varref" class="vardecl" return="varref" tooltip="Creates a new varref based on this vardecl">
+	</action>
 	
 	<!-- VARREF -->
 	<action name="setName" class="varref">
