@@ -1,5 +1,5 @@
 # Clava
-Clava is a C/C++ source-to-source compiler. It applies analysis and transformations written in LARA scripts (which is based on JavaScript), and can be installed in under a minute.
+Clava is a C/C++/CUDA/OpenCL source-to-source compiler. It applies analysis and transformations written in LARA scripts (which is based on JavaScript), and can be installed in under a minute.
 
 If you have used Clava, please consider filling the [Clava User Experience Feedback form](https://forms.gle/SioZSAv1KL7XpQ5j6) (it's short, really!)
 
