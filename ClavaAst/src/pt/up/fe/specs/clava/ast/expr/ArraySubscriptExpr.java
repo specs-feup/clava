@@ -94,6 +94,12 @@ public class ArraySubscriptExpr extends Expr {
      */
     public boolean isTopLevel() {
         ClavaNode parent = ClavaNodes.getParentNormalized(this);
+
+        // If no parent, consider a top-level subscript
+        if (parent == null) {
+            return true;
+        }
+
         if (!(parent instanceof ArraySubscriptExpr)) {
             return true;
         }

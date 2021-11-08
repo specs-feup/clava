@@ -231,6 +231,10 @@ public class ClavaNodes {
     public static ClavaNode getParentNormalized(ClavaNode node) {
         ClavaNode currentNode = node.getParent();
 
+        if (currentNode == null) {
+            return null;
+        }
+
         while (IGNORE_NODES.contains(currentNode.getClass())) {
             currentNode = currentNode.getParent();
         }
