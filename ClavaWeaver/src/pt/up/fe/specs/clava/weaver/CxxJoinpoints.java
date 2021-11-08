@@ -324,11 +324,11 @@ public class CxxJoinpoints {
     }
 
     private static ACxxWeaverJoinPoint arrayAccessFactory(ArraySubscriptExpr expr) {
-
+        /*
         if (!expr.isTopLevel()) {
             return CxxJoinpoints.nullNode(expr.getFactory().nullExpr());
         }
-
+        */
         return new CxxArrayAccess(expr);
     }
 

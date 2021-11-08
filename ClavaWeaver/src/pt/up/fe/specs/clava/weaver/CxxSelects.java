@@ -23,6 +23,7 @@ import org.lara.interpreter.profile.ReportField;
 import org.lara.interpreter.weaver.interf.WeaverEngine;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
@@ -30,6 +31,7 @@ import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.joinpoints.CxxArrayAccess;
 import pt.up.fe.specs.util.utilities.Incrementer;
 
 public class CxxSelects {
@@ -129,6 +131,8 @@ public class CxxSelects {
                 .map(CxxJoinpoints::create)
                 // Filter null nodes
                 .filter(jp -> jp != null)
+                // Default filter
+                .filter(CxxSelects::defaultSelectFilter)
                 .filter(jp -> {
 
                     boolean accepted = filter.test(jp);
@@ -155,6 +159,17 @@ public class CxxSelects {
         report.inc(ReportField.SELECTS);
 
         return selectedJps;
+    }
+
+    private static boolean defaultSelectFilter(AJoinPoint jp) {
+        // TODO: If more cases, use a ClassMap instead
+
+        // If ArraySubscript, return only if top-level
+        if (jp instanceof CxxArrayAccess) {
+            return ((ArraySubscriptExpr) jp.getNode()).isTopLevel();
+        }
+
+        return true;
     }
 
     /*
