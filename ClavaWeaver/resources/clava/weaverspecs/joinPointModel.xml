@@ -223,6 +223,9 @@
 	
 	<!-- CASE -->
 	<joinpoint class="case" extends="statement"/>	
+	
+	<!-- DECL STMT-->
+	<joinpoint class="declStmt" extends="statement"/>		
 
 	<!-- EXPR STMT -->
 	<joinpoint class="exprStmt" extends="statement"/>

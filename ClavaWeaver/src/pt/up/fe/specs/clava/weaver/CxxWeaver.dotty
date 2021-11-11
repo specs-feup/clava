@@ -22,6 +22,7 @@ edge [fontsize=10]
 "comment"->"joinpoint"
 "cudaKernelCall"->"call"
 "decl"->"joinpoint"
+"declStmt"->"statement"
 "declarator"->"namedDecl"
 "deleteExpr"->"expression"
 "elaboratedType"->"type"

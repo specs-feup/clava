@@ -324,10 +324,17 @@
 		<attribute name="owner" type="joinpoint" tooltip="The statement that owns the scope (e.g., function, loop...)"/>
 	</artifact>
 
-
+	<!-- EXPR STMT -->
 	<artifact class="exprStmt">
 		<attribute name="expr" type="expression" tooltip="The expression join point associated to this exprStmt"/>		
 	</artifact>
+	
+	<!-- DECL STMT -->
+	<artifact class="declStmt">
+		<attribute name="decls" type="decl[]" tooltip="The declarations in this statement"/>		
+	</artifact>
+
+
 
 	<!-- EXPRESSION -->
 	<artifact class="expression">
