@@ -592,7 +592,8 @@ public class CxxWeaver extends ACxxWeaver {
                 .collect(Collectors.toList());
 
         // Add JSON argument flags
-        flags.addAll(args.get(ClavaOptions.FLAGS_LIST));
+        // flags.addAll(args.get(ClavaOptions.FLAGS_LIST));
+        flags.addAll(args.get(ClavaOptions.FLAGS_LIST).getStringList());
 
         return flags;
     }
@@ -728,6 +729,17 @@ public class CxxWeaver extends ACxxWeaver {
         
         return "\"" + folderAbsPath + "\"";
         */
+    }
+
+    /**
+     * Builds the -I argument
+     * 
+     * @param include
+     * @return
+     */
+    private static String buildIncludeArg(String includePath) {
+
+        return "-I" + includePath;
     }
 
     public App createApp(List<File> sources, List<String> parserOptions) {
@@ -1398,13 +1410,13 @@ public class CxxWeaver extends ACxxWeaver {
         // Add include folders
         for (File includeFolder : includeFolders) {
             // rebuildOptions.add(0, "\"-I" + includeFolder.getAbsolutePath() + "\"");
-            rebuildOptions.add(0, "-I" + includeFolder.getAbsolutePath());
+            rebuildOptions.add(0, CxxWeaver.buildIncludeArg(includeFolder.getAbsolutePath()));
         }
 
         // Add extra includes
         for (File extraInclude : getExternalIncludeFolders()) {
             // rebuildOptions.add(0, "\"-I" + extraInclude.getAbsolutePath() + "\"");
-            rebuildOptions.add(0, "-I" + extraInclude.getAbsolutePath());
+            rebuildOptions.add(0, CxxWeaver.buildIncludeArg(extraInclude.getAbsolutePath()));
         }
 
         // Write the other translation units and add folder as includes, in case they are needed
@@ -1414,7 +1426,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Add include
         // rebuildOptions.add(0, "\"-I" + currentCodeFolder.getAbsolutePath() + "\"");
-        rebuildOptions.add(0, "-I" + currentCodeFolder.getAbsolutePath());
+        rebuildOptions.add(0, CxxWeaver.buildIncludeArg(currentCodeFolder.getAbsolutePath()));
 
         for (TranslationUnit otherTUnit : tUnit.getApp().getTranslationUnits()) {
 
@@ -1564,7 +1576,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Add original includes as extra options, in case it needs any header file that is excluded from parsing (e.g.,
         // .incl)
         List<File> originalHeaderIncludes = args.get(CxxWeaverOption.HEADER_INCLUDES).getFiles();
-        originalHeaderIncludes.stream().map(folder -> "-I" + folder.getAbsolutePath())
+        originalHeaderIncludes.stream().map(folder -> CxxWeaver.buildIncludeArg(folder.getAbsolutePath()))
                 .forEach(extraOptions::add);
         // includeFolders.addAll(originalHeaderIncludes);
 
@@ -1582,14 +1594,14 @@ public class CxxWeaver extends ACxxWeaver {
         // Add include folders
         for (File includeFolder : includeFolders) {
             // rebuildOptions.add(0, "\"-I" + includeFolder.getAbsolutePath() + "\"");
-            rebuildOptions.add(0, "-I" + includeFolder.getAbsolutePath());
+            rebuildOptions.add(0, CxxWeaver.buildIncludeArg(includeFolder.getAbsolutePath()));
         }
 
         // Add extra includes
         // for (File extraInclude : getApp().getExternalDependencies().getExtraIncludes()) {
         for (File extraInclude : getExternalIncludeFolders()) {
             // rebuildOptions.add(0, "\"-I" + extraInclude.getAbsolutePath() + "\"");
-            rebuildOptions.add(0, "-I" + extraInclude.getAbsolutePath());
+            rebuildOptions.add(0, CxxWeaver.buildIncludeArg(extraInclude.getAbsolutePath()));
         }
 
         // App rebuiltApp = createApp(srcFolders, rebuildOptions);

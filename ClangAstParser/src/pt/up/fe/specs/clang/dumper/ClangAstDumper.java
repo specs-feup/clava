@@ -18,7 +18,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.JOptionsUtils;
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -244,9 +243,11 @@ public class ClangAstDumper {
         }
 
         arguments.addAll(ArgumentsParser.newCommandLine().parse(config.get(ClavaOptions.FLAGS)));
-        arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
+        // arguments.addAll(config.get(ClavaOptions.FLAGS_LIST));
+        arguments.addAll(config.get(ClavaOptions.FLAGS_LIST).getStringList());
 
-        ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
+        // ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments.stream().collect(Collectors.joining(" ")));
+        ClavaLog.debug(() -> "Calling Clang AST Dumper: " + arguments);
 
         ClangAstData parsedData = null;
         ProcessOutput<String, ClangAstData> output = null;

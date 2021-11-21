@@ -13,9 +13,6 @@
 
 package pt.up.fe.specs.clava;
 
-import java.util.List;
-
-import org.suikasoft.GsonPlus.JsonStringList;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
@@ -23,6 +20,7 @@ import org.suikasoft.jOptions.storedefinition.StoreDefinitionBuilder;
 import org.suikasoft.jOptions.storedefinition.StoreDefinitionProvider;
 
 import pt.up.fe.specs.clava.language.Standard;
+import pt.up.fe.specs.util.utilities.StringList;
 
 public interface ClavaOptions extends StoreDefinitionProvider {
 
@@ -31,7 +29,10 @@ public interface ClavaOptions extends StoreDefinitionProvider {
 
     DataKey<String> FLAGS = KeyFactory.string("Compiler Flags", "");
 
-    DataKey<List<String>> FLAGS_LIST = JsonStringList.newKey("Compiler Flags in list format");
+    // DataKey<List<String>> FLAGS_LIST = JsonStringList.newKey("Compiler Flags in list format");
+    // DataKey<JsonStringList> FLAGS_LIST = JsonStringList.newKey("Compiler Flags in list format");
+    DataKey<StringList> FLAGS_LIST = KeyFactory.stringList("Compiler Flags in list format")
+            .setLabel("Compiler Flags in list format");
 
     DataKey<Boolean> CUSTOM_RESOURCES = KeyFactory.bool("Clava Custom Resources")
             .setLabel("Enable custom resource files");

@@ -117,7 +117,8 @@ public interface ClangAstKeys {
         }
 
         // config.add(ClavaOptions.FLAGS, parsedFlags.stream().collect(Collectors.joining(" ")));
-        config.add(ClavaOptions.FLAGS_LIST, parsedFlags);
+        // config.add(ClavaOptions.FLAGS_LIST, new JsonStringList(parsedFlags));
+        config.add(ClavaOptions.FLAGS_LIST, new StringList(parsedFlags));
 
         return config;
     }
