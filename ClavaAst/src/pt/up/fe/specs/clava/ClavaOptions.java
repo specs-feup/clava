@@ -29,8 +29,6 @@ public interface ClavaOptions extends StoreDefinitionProvider {
 
     DataKey<String> FLAGS = KeyFactory.string("Compiler Flags", "");
 
-    // DataKey<List<String>> FLAGS_LIST = JsonStringList.newKey("Compiler Flags in list format");
-    // DataKey<JsonStringList> FLAGS_LIST = JsonStringList.newKey("Compiler Flags in list format");
     DataKey<StringList> FLAGS_LIST = KeyFactory.stringList("Compiler Flags in list format")
             .setLabel("Compiler Flags in list format");
 

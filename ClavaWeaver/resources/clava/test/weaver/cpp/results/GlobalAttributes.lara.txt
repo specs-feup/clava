@@ -9,7 +9,7 @@ literal -> 0
 binaryOp -> a < 0
 varref -> a
 literal -> 0
-statement -> int i = 0;
+declStmt -> int i = 0;
 vardecl -> int i = 0
 literal -> 0
 exprStmt -> i < 10;
@@ -19,7 +19,7 @@ literal -> 10
 exprStmt -> i++
 unaryOp -> i++
 varref -> i
-statement -> int j = 0;
+declStmt -> int j = 0;
 vardecl -> int j = 0
 literal -> 0
 exprStmt -> j < 10;
