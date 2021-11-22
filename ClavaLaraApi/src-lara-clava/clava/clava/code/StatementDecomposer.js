@@ -55,7 +55,7 @@ class StatementDecomposer {
 
 	decomposeStmt($stmt) {
 		// Unsupported
-		if($stmt.instanceOf("scope") || $stmt.joinPointType === 'statement') {
+		if($stmt.instanceOf("declStmt") || $stmt.instanceOf("scope") || $stmt.joinPointType === 'statement') {
 			return [];
 		}
 		
