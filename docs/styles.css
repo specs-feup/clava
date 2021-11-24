@@ -1,0 +1,176 @@
+body {
+	font-family: "Open Sans", arial, x-locale-body, sans-serif;
+}
+
+/* unvisited link */
+a:link {
+	color: #004444;
+	text-decoration: none;
+}
+
+/* visited link */
+a:visited {
+	color: #004444;
+	text-decoration: none;
+}
+
+/* mouse over link */
+a:hover {
+	color: #004444;
+	text-decoration: underline;
+}
+
+/* selected link */
+a:active {
+	color: #004444;
+	text-decoration: underline;
+}
+
+#row1 {
+	display: flex;
+	flex-direction: row;
+	/* justify-content: space-around; */
+}
+
+/** unfixed version **/
+/*
+#column1{
+    display:flex;
+    flex-direction:column;
+	padding-right: 30px;
+	padding-left: 1em;
+}
+
+
+#column2{
+    display:flex;
+    flex-direction:column;
+}
+*/
+
+/** fixed version **/
+#column1 {
+	position: fixed;
+	overflow-y: auto;
+	left: 0px;
+	width: 30%;
+	height: 100%;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	word-wrap: break-word;
+}
+
+#column2 {
+	width: 66%;
+	overflow: hidden;
+	left: 32%;
+	position: absolute;
+	padding-left: 1.5em;
+}
+
+ul {
+	padding-left: 1em;
+}
+
+/**
+ * Taken from here: https://www.tipsandtricks-hq.com/simple-table-of-contents-toc-using-pure-html-and-css-code-9217
+ */
+#toc_container {
+	background: #f9f9f9 none repeat scroll 0 0;
+	border: 1px solid #aaa;
+	display: table;
+	font-size: 95%;
+	margin-bottom: 1em;
+	padding: 20px;
+	width: auto;
+}
+
+.toc_title {
+	font-weight: 700;
+	text-align: center;
+}
+
+#toc_container li, #toc_container ul, #toc_container ul li {
+	list-style: outside none none !important;
+}
+
+.toc_class {
+	margin-bottom: 0.5em;
+}
+
+.toc_top_element {
+	/* padding-top: 0.5em; */
+	
+}
+
+.toc_sublist {
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+.toc_sublist_title {
+	padding-bottom: 0.1em;
+}
+
+.function_block {
+	/* padding-top: 1em; */
+	/* 	padding-bottom: 1em; */
+	
+}
+
+.function_content {
+	padding-left: 2em;
+}
+
+code {
+	/* 	padding-left: 10px; */
+	font-family: monospace;
+}
+
+.parameters {
+	padding-left: 30px;
+}
+
+.parameter {
+	unicode-bidi: embed;
+	font-family: monospace;
+	white-space: pre;
+}
+
+.augments {
+	padding-bottom: 0.5em;
+}
+
+h3 {
+	margin-bottom: 20px;
+}
+
+h4 {
+	margin-bottom: 5px;
+}
+
+hr {
+	margin-top: 15px;
+	margin-bottom: 25px;
+}
+
+#topButton {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed/sticky position */
+    bottom: 20px; /* Place the button at the bottom of the page */
+    right: 30px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: #333; /* Set a background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+	height: 50px;
+	width:50px;
+    border-radius: 10px; /* Rounded corners */
+    font-size: 30px; /* Increase font size */
+}
+
+#topButton:hover {
+    background-color: #777; /* Add a dark-grey background on hover */
+} 
