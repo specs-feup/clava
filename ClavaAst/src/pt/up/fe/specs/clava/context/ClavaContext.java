@@ -28,6 +28,7 @@ import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.utilities.CachedItems;
+import pt.up.fe.specs.util.utilities.IdGenerator;
 
 public class ClavaContext extends ADataClass<ClavaContext> {
 
@@ -43,10 +44,10 @@ public class ClavaContext extends ADataClass<ClavaContext> {
     /**
      * IDs generator
      */
-    public final static DataKey<ClavaIdGenerator> ID_GENERATOR = KeyFactory
-            .object("idGenerator", ClavaIdGenerator.class)
-            .setDefault(() -> new ClavaIdGenerator())
-            .setCopyFunction(id -> new ClavaIdGenerator(id));
+    public final static DataKey<IdGenerator> ID_GENERATOR = KeyFactory
+            .object("idGenerator", IdGenerator.class)
+            .setDefault(() -> new IdGenerator())
+            .setCopyFunction(id -> new IdGenerator(id));
 
     public final static DataKey<ClavaFactory> FACTORY = KeyFactory
             .object("factory", ClavaFactory.class);
