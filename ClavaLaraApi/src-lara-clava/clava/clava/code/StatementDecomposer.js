@@ -200,14 +200,3 @@ class StatementDecomposer {
 	
 	
 }
-
-
-
-			
-// Tried to remove redundant decompositions, but it seems to be a very specific case
-//			
-// Special case: if both sides have no children, do nothing
-//if($expr.left.numChildren === 0 && $expr.right.numChildren === 0) {
-//	let stmts = [];
-//	return new DecomposeResult(stmts, $expr);			
-//}
