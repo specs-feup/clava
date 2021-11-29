@@ -24,6 +24,7 @@ import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import org.lara.interpreter.joptions.config.interpreter.VerboseLevel;
 import org.lara.interpreter.joptions.keys.FileList;
 import org.lara.interpreter.joptions.keys.OptionalFile;
+import org.lara.interpreter.weaver.interf.WeaverEngine;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -263,7 +264,7 @@ public class ClavaWeaverTester {
             if (weaver.getAppTry().isPresent()) {
                 weaver.setWeaver();
                 SpecsLogs.msgInfo("Current code:\n" + weaver.getApp().getCode());
-                weaver.removeWeaver();
+                WeaverEngine.removeWeaver();
             } else {
                 SpecsLogs.msgInfo("App not created");
             }
