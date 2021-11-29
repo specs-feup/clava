@@ -427,6 +427,29 @@ public abstract class ACall extends AExpression {
     }
 
     /**
+     * a function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)
+     */
+    public abstract AFunction getDirectCalleeImpl();
+
+    /**
+     * a function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)
+     */
+    public final Object getDirectCallee() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "directCallee", Optional.empty());
+        	}
+        	AFunction result = this.getDirectCalleeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "directCallee", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "directCallee", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select callees
      * @return 
      */
@@ -1027,6 +1050,7 @@ public abstract class ACall extends AExpression {
         attributes.add("isStmtCall");
         attributes.add("function");
         attributes.add("signature");
+        attributes.add("directCallee");
     }
 
     /**
@@ -1095,6 +1119,7 @@ public abstract class ACall extends AExpression {
         ISSTMTCALL("isStmtCall"),
         FUNCTION("function"),
         SIGNATURE("signature"),
+        DIRECTCALLEE("directCallee"),
         DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),

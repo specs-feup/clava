@@ -161,6 +161,15 @@ public abstract class ACilkSpawn extends ACall {
     }
 
     /**
+     * Get value on attribute directCallee
+     * @return the attribute's value
+     */
+    @Override
+    public AFunction getDirectCalleeImpl() {
+        return this.aCall.getDirectCalleeImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select callees
      * @return 
      */
@@ -674,6 +683,7 @@ public abstract class ACilkSpawn extends ACall {
         ISSTMTCALL("isStmtCall"),
         FUNCTION("function"),
         SIGNATURE("signature"),
+        DIRECTCALLEE("directCallee"),
         DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),

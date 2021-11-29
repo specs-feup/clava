@@ -377,6 +377,7 @@
 		<attribute name="isStmtCall" type="boolean"/>
 		<attribute name="function" type="function" tooltip="a function join point associated with this call. No guarantees are made regarding if it is the declaration or definition of the function."/>		
 		<attribute name="signature" type="String" tooltip="similar to $function.signature, but if no function decl could be found (e.g., function from system include), returns a signature based on just the name of the function"/>
+		<attribute name="directCallee" type="function" tooltip="a function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)"/>		
 	</artifact>
 	
 	<!-- MEMBER CALL -->	

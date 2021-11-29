@@ -365,6 +365,13 @@ public class CxxCall extends ACall {
                 .orElse(null);
     }
 
+    @Override
+    public AFunction getDirectCalleeImpl() {
+        return call.get(CallExpr.DIRECT_CALLEE)
+                .map(callee -> CxxJoinpoints.create(callee, AFunction.class))
+                .orElse(null);
+    }
+
     // @Override
     // public String getSignatureImpl() {
     // return call.getSignature();

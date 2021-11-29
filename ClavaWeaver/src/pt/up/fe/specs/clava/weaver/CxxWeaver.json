@@ -10420,6 +10420,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "a function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)",
+						"children": [
+									{
+										"type": "function",
+										"name": "directCallee"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "a function join point associated with this call. No guarantees are made regarding if it is the declaration or definition of the function.",
 						"children": [
 									{
@@ -15378,6 +15387,15 @@
 									{
 										"type": "function",
 										"name": "definition"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "a function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)",
+						"children": [
+									{
+										"type": "function",
+										"name": "directCallee"
 									}]
 					},
 					{
@@ -20975,6 +20993,15 @@
 									{
 										"type": "function",
 										"name": "definition"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "a function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)",
+						"children": [
+									{
+										"type": "function",
+										"name": "directCallee"
 									}]
 					},
 					{
@@ -46708,6 +46735,15 @@
 									{
 										"type": "function",
 										"name": "definition"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "a function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)",
+						"children": [
+									{
+										"type": "function",
+										"name": "directCallee"
 									}]
 					},
 					{
