@@ -548,3 +548,21 @@ ClavaJoinPoints.type = function(source) {
 ClavaJoinPoints.exprStmt = function($expr) {
 	return AstFactory.exprStmt($expr);
 }
+
+
+/**
+ * Creates an empty class with the given name and fields.
+ *
+ * @param {...$decl} [decls = []] 
+ *
+ * @return {class}
+ */
+ClavaJoinPoints.declStmt = function() {
+	
+	var decls = arrayFromArgs(arguments, 0);
+	for(var $decl of decls) {
+		Check.isJoinPoint($decl, "decl");	
+	}
+			
+	return AstFactory.declStmt(decls);
+}

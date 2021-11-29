@@ -79,6 +79,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeclStmt;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AElaboratedType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExprStmt;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
@@ -740,4 +741,19 @@ public class AstFactory {
         return CxxJoinpoints.create(exprStmt, AExprStmt.class);
     }
 
+    /**
+     * Creates a join point representing a declStmt.
+     *
+     * @param varName
+     * @param joinpoint
+     * @return
+     */
+    public static ADeclStmt declStmt(ADecl... decls) {
+        var declNodes = Arrays.stream(decls).map(decl -> (Decl) decl.getNode())
+                .collect(Collectors.toList());
+
+        var declStmt = CxxWeaver.getFactory().declStmt(declNodes);
+
+        return CxxJoinpoints.create(declStmt, ADeclStmt.class);
+    }
 }
