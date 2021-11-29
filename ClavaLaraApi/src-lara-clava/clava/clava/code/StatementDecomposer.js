@@ -140,13 +140,14 @@ class StatementDecomposer {
 	decomposeExpr($expr) {
 		
 		if($expr.instanceOf("binaryOp")) {
+						
 			return this.decomposeBinaryOp($expr);
 		}
 		
 		if($expr.numChildren === 0) {
 		//if($expr.instanceOf("varref") || $expr.instanceOf("literal")) {
 			let stmts = [];
-			let dec = new DecomposeResult(stmts, $expr);
+			//let dec = new DecomposeResult(stmts, $expr);
 
 			return new DecomposeResult(stmts, $expr);
 		}
@@ -159,6 +160,7 @@ class StatementDecomposer {
 		let kind = $binaryOp.kind;
 		
 		if(kind === "assign") {
+		
 			let stmts = [];
 			
 			// Get statements of right hand-side
@@ -172,29 +174,40 @@ class StatementDecomposer {
 			return new DecomposeResult(stmts, $binaryOp.left);			
 		} 
 		// TODO: Not taking into account += and other cases
-		else {
-			// Apply decompose to both sides
-			let leftResult = this.decomposeExpr($binaryOp.left);
 
-			let rightResult = this.decomposeExpr($binaryOp.right);
-			
-			let stmts = [];
-			stmts = stmts.concat(leftResult.stmts);
-			stmts = stmts.concat(rightResult.stmts);
-			
-			// Create operation with result of decomposition
-			let $newExpr = ClavaJoinPoints.binaryOp($binaryOp.kind, leftResult.$resultExpr, rightResult.$resultExpr, $binaryOp.type);
-			
-			// Create declaration statement with result to new temporary variable
-			let tempVarname = this._newTempVarname();
-			let tempVarDecl = ClavaJoinPoints.varDecl(tempVarname, $newExpr);
-			stmts.push(tempVarDecl.stmt);
+		// Apply decompose to both sides
+		let leftResult = this.decomposeExpr($binaryOp.left);
 
-			return new DecomposeResult(stmts, ClavaJoinPoints.varRefFromDecl(tempVarDecl));					
-		}
+		let rightResult = this.decomposeExpr($binaryOp.right);
+		
+		let stmts = [];
+		stmts = stmts.concat(leftResult.stmts);
+		stmts = stmts.concat(rightResult.stmts);
+		
+		// Create operation with result of decomposition
+		let $newExpr = ClavaJoinPoints.binaryOp($binaryOp.kind, leftResult.$resultExpr, rightResult.$resultExpr, $binaryOp.type);
+		
+		// Create declaration statement with result to new temporary variable
+		let tempVarname = this._newTempVarname();
+		let tempVarDecl = ClavaJoinPoints.varDecl(tempVarname, $newExpr);
+		stmts.push(tempVarDecl.stmt);
 
-		this._throwNotImplemented("binary operators", kind);	
+		return new DecomposeResult(stmts, ClavaJoinPoints.varRefFromDecl(tempVarDecl));					
+
+
+		//this._throwNotImplemented("binary operators", kind);	
 	}
 	
 	
 }
+
+
+
+			
+// Tried to remove redundant decompositions, but it seems to be a very specific case
+//			
+// Special case: if both sides have no children, do nothing
+//if($expr.left.numChildren === 0 && $expr.right.numChildren === 0) {
+//	let stmts = [];
+//	return new DecomposeResult(stmts, $expr);			
+//}
