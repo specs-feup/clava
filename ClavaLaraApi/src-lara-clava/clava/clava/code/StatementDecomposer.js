@@ -55,7 +55,7 @@ class StatementDecomposer {
 
 	decomposeStmt($stmt) {
 		// Unsupported
-		if($stmt.instanceOf("declStmt") || $stmt.instanceOf("scope") || $stmt.joinPointType === 'statement') {
+		if($stmt.instanceOf("scope") || $stmt.joinPointType === 'statement') {
 			return [];
 		}
 		
@@ -65,6 +65,10 @@ class StatementDecomposer {
 
 		if($stmt.instanceOf("returnStmt")) {
 			return this.decomposeReturnStmt($stmt);
+		}
+		
+		if($stmt.instanceOf("declStmt")) {
+			return this.decomposeDeclStmt($stmt);
 		}
 	
 	
@@ -96,6 +100,36 @@ class StatementDecomposer {
 		let $newReturnStmt = ClavaJoinPoints.returnStmt(decomposeResult.$resultExpr);
 		
 		newStmts.push($newReturnStmt);
+		
+		return newStmts;
+	}
+
+	decomposeDeclStmt($stmt) {
+		
+		// declStmt can have one or more declarations
+		let $decls = $stmt.decls;
+		
+		let newStmts = [];
+		
+		// Create a separate stmt for each declaration
+		for(let $decl of $decls) {
+			
+			if(!$decl.instanceOf("vardecl")) {
+				debug("StatementDecomposer.decomposeDeclStmt: not implemented for decl of type " + $decl.joinPointType);
+				newStmts.push(ClavaJoinPoints.declStmt($decl));
+				continue;
+			}
+			
+			// If vardecl has init, decompose expression
+			if($decl.hasInit) {
+				let decomposeResult = this.decomposeExpr($decl.init);				
+				newStmts = newStmts.concat(decomposeResult.stmts);
+				$decl.init = decomposeResult.$resultExpr;
+			}
+
+			newStmts.push(ClavaJoinPoints.declStmt($decl));
+		}
+		
 		
 		return newStmts;
 	}
