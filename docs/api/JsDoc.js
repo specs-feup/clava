@@ -1,3 +1,10 @@
+// Update scroll position of sidebar
+const sidebarScrollTop = localStorage.getItem("sidebarScrollTop");
+if(sidebarScrollTop !== undefined) {
+	//console.log("Updating: " + sidebarScrollTop);
+	$("#column1").scrollTop(sidebarScrollTop);
+}
+
 function update_doc(doc_link) {
 	//document.getElementById("doc_frame").src=doc_link; 
 	//document.getElementById("doc_content").innerHTML='<object type="text/html" data="' + doc_link +  '" ></object>';
@@ -25,4 +32,11 @@ function scrollFunction() {
 function goToTop() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+}
+
+function saveScroll() {
+	const sidebarScrollTop = $("#column1").scrollTop();
+	// Storing the data:
+	localStorage.setItem("sidebarScrollTop",sidebarScrollTop);
+	//console.log("Saved " + sidebarScrollTop);
 }
