@@ -60,4 +60,9 @@ public class CxxBenchTest {
     public void testLSIssue2() {
         newTester().test("LSIssue2.lara", "ls_issue2.cpp");
     }
+
+    @Test
+    public void testCbMultios() {
+        newTester().test("CbMultios.lara", "cb_multios.cpp");
+    }
 }
