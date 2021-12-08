@@ -1,5 +1,12 @@
+/**
+ * Decomposes complex statements into several simpler ones.
+ */
 class StatementDecomposer {
 
+	/**
+	 * @param {string} [tempPrefix="decomp_"]
+	 * @param {number} [startIndex=0]
+	 */
 	constructor(tempPrefix, startIndex) {	
 		this.tempPrefix = tempPrefix !== undefined ? tempPrefix : "decomp_";
 		this.startIndex = startIndex !== undefined ? startIndex : 0;
