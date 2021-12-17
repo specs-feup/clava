@@ -52,6 +52,7 @@ public abstract class AClangAstTester {
     private boolean onePass = false;
     private boolean run = true;
     private boolean builtinCuda = false;
+    private boolean idempotenceTest = false;
 
     public <T extends Enum<T> & ResourceProvider> AClangAstTester(Class<T> resource) {
         this(resource, Collections.emptyList());
@@ -268,6 +269,26 @@ public abstract class AClangAstTester {
             String generatedFileContents = SpecsStrings.normalizeFileContents(SpecsIo.read(generatedFile), true);
 
             Assert.assertEquals(txtContents, generatedFileContents);
+        }
+
+        // Idempotence test
+        if (idempotenceTest) {
+            testIdempotence(outputFiles1, outputFiles2);
+        }
+    }
+
+    private void testIdempotence(Map<String, File> outputFiles1, Map<String, File> outputFiles2) {
+        for (String name : outputFiles1.keySet()) {
+            // Get corresponding file in output 1
+            var outputFile1 = outputFiles1.get(name);
+
+            // Get corresponding file in output 2
+            var outputFile2 = outputFiles2.get(name);
+
+            var normalizedFile1 = SpecsStrings.normalizeFileContents(SpecsIo.read(outputFile1), true);
+            var normalizedFile2 = SpecsStrings.normalizeFileContents(SpecsIo.read(outputFile2), true);
+
+            Assert.assertEquals(normalizedFile1, normalizedFile2);
         }
     }
 
