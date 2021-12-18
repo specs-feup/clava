@@ -44,7 +44,7 @@ public class TUPatcherConfig extends ADataClass<TUPatcherConfig> {
     }
 
     public static StoreDefinition getDefinition() {
-        return new TUPatcherConfig().getStoreDefinition().get();
+        return new TUPatcherConfig().getStoreDefinitionTry().get();
     }
 
 }

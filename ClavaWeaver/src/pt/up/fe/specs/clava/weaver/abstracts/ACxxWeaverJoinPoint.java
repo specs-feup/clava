@@ -1188,7 +1188,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public String[] getKeysArrayImpl() {
-        List<String> keys = new ArrayList<>(getNode().getKeys()
+        List<String> keys = new ArrayList<>(getNode().getStoreDefinition()
                 .getKeyMap()
                 .keySet());
 
@@ -1200,7 +1200,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public Object getValueImpl(String key) {
-        var keys = getNode().getKeys();
+        var keys = getNode().getStoreDefinition();
         if (!keys.hasKey(key)) {
             ClavaLog.info("getValue(): key '" + key + "' not supported for join point '" + getJoinPointType() + "'");
             return null;
@@ -1217,7 +1217,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
         // Get key
-        DataKey<Object> datakey = getNode().getKeys().getKeyRaw(key);
+        DataKey<Object> datakey = getNode().getStoreDefinition().getKeyRaw(key);
 
         // If string, use decoder
         if (value instanceof String) {
@@ -1241,7 +1241,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public Object keyTypeImpl(String key) {
-        StoreDefinition def = getNode().getKeys();
+        StoreDefinition def = getNode().getStoreDefinition();
 
         if (!def.hasKey(key)) {
             ClavaLog.info("$jp.keyType(): key '" + key + "' does not exist");

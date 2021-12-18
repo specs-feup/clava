@@ -166,13 +166,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return getData().toInlinedString();
     }
 
-    public StoreDefinition getKeys() {
-        return this.dataI.getStoreDefinition().orElseThrow(() -> new RuntimeException(""));
-    }
-
     @Override
-    public Optional<StoreDefinition> getStoreDefinition() {
-        return this.dataI.getStoreDefinition();
+    public Optional<StoreDefinition> getStoreDefinitionTry() {
+        return this.dataI.getStoreDefinitionTry();
     }
 
     protected static String toContentString(String previousContentString, String suffix) {
@@ -830,7 +826,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         List<DataKey<?>> keysWithNodes = new ArrayList<>();
 
         // Get all the keys that map to a ClavaNode
-        for (DataKey<?> key : node.getKeys().getKeys()) {
+        for (DataKey<?> key : node.getStoreDefinition().getKeys()) {
 
             // ClavaNode keys
             if (ClavaNode.class.isAssignableFrom(key.getValueClass())) {
