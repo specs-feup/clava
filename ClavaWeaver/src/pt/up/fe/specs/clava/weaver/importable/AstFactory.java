@@ -720,13 +720,8 @@ public class AstFactory {
     }
 
     public static AComment comment(String text) {
-        // Strip white space
-        // text = text.strip();
 
-        // TODO: Is this the expected behaviour? Should return an empty comment instead?
-        // if(code.isEmpty()) {
-        // return null;
-        // }
+        // TODO: Detect C standard, to detect if inline comments are supported?
 
         var lines = StringLines.getLines(text);
 

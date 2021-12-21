@@ -83,9 +83,10 @@ public class CxxActions {
     }
 
     private static void checkInsertAfterReturn(ClavaNode base, ClavaNode newNode) {
+
         // Special case: inserting code after return
         if (base instanceof ReturnStmt && !(newNode instanceof WrapperStmt)) {
-            SpecsLogs.info("Warning: inserting code after return, check if this is intended.\nCode: "
+            SpecsLogs.info("Warning: inserting code after return, check if this is intended.\nCode:\n"
                     + newNode.getCode() + "\nReturn: " + base.getCode());
         }
     }
@@ -101,7 +102,10 @@ public class CxxActions {
             return null;
 
         case "after":
-            checkInsertAfterReturn(base, node);
+            if (base.hasChildren()) {
+                checkInsertAfterReturn(base.getChild(base.getNumChildren() - 1), node);
+            }
+
             base.addChild(node);
             return null;
 
@@ -143,7 +147,6 @@ public class CxxActions {
     }
 
     public static AJoinPoint insertAfter(AJoinPoint baseJp, AJoinPoint newJp) {
-
         checkInsertAfterReturn(baseJp.getNode(), newJp.getNode());
 
         return insert(baseJp, newJp, Insert.AFTER, (base, node) -> NodeInsertUtils.insertAfter(base, node));
@@ -275,6 +278,11 @@ public class CxxActions {
             break;
 
         case "after":
+
+            if (body.hasChildren()) {
+                checkInsertAfterReturn(body.getChild(body.getNumChildren() - 1), stmt);
+            }
+
             body.addChild(stmt);
             break;
 
