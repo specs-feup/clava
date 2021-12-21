@@ -32,6 +32,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.util.SpecsCollections;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 /**
@@ -81,79 +82,13 @@ public class CxxActions {
         return CxxJoinpoints.create(node);
     }
 
-    /*
-    public static AJoinPoint insertAsStmtOld(ClavaNode target, String code, Insert insert, CxxWeaver weaver) {
-    
-        // Check: if inserting before or after, check if target is valid
-        if (!isTargetValid(target, insert)) {
-            ClavaLog.info("Could not insert code " + insert.getString() + " location " + target.getLocation());
-            return null;
-        }
-    
-        SnippetParser snippetParser = CxxWeaver.getSnippetParser();
-        ClavaNode realTarget = null;
-        switch (insert) {
-        case BEFORE:
-            // System.out.println("INSERT BEFORE");
-            // NodeInsertUtils.insertBefore(getValidStatement(target), ClavaNodeFactory.literalStmt(code));
-            Stmt beforeNode = snippetParser.parseStmt(code);
-            // System.out.println("CODE: " + code);
-            // System.out.println("INSERTING: " + beforeNode);
-            realTarget = getValidStatement(target, insert);
-            if (realTarget == null) {
-                return null;
-            }
-            NodeInsertUtils.insertBefore(realTarget, beforeNode);
-            return CxxJoinpoints.create(beforeNode);
-    
-        case AFTER:
-            // NodeInsertUtils.insertAfter(getValidStatement(target), ClavaNodeFactory.literalStmt(code));
-            Stmt afterNode = snippetParser.parseStmt(code);
-            realTarget = getValidStatement(target, insert);
-            if (realTarget == null) {
-                return null;
-            }
-            NodeInsertUtils.insertAfter(realTarget, afterNode);
-            return CxxJoinpoints.create(afterNode);
-    
-        case AROUND:
-        case REPLACE:
-            // Has to replace with a node of the same "kind" (e.g., Expr, Stmt...)
-            ClavaNode replaceNode = ClavaNodes.toLiteral(code, CxxWeaver.getFactory().nullType(), target);
-            weaver.clearUserField(target);
-            NodeInsertUtils.replace(target, replaceNode);
-            return CxxJoinpoints.create(replaceNode);
-        default:
-            throw new RuntimeException("Case not defined:" + insert);
+    private static void checkInsertAfterReturn(ClavaNode base, ClavaNode newNode) {
+        // Special case: inserting code after return
+        if (base instanceof ReturnStmt && !(newNode instanceof WrapperStmt)) {
+            SpecsLogs.info("Warning: inserting code after return, check if this is intended.\nCode: "
+                    + newNode.getCode() + "\nReturn: " + base.getCode());
         }
     }
-    */
-
-    // private static boolean isTargetValid(ClavaNode target, Insert insert) {
-    // // If before or after, check if invalid child of a For/ForRange/Do
-    // if (insert == Insert.AFTER || insert == Insert.BEFORE) {
-    // int indexOfTarget = target.indexOfSelf();
-    // ClavaNode targetParent = target.getParent();
-    // // System.out.println("INDEX OF TARGET: " + indexOfTarget);
-    // // System.out.println("CLASS: " + targetParent.getClass());
-    // // For
-    // if (targetParent instanceof ForStmt) {
-    // return indexOfTarget > 2 ? true : false;
-    // }
-    //
-    // // ForRange
-    // if (targetParent instanceof CXXForRangeStmt) {
-    // return indexOfTarget > 4 ? true : false;
-    // }
-    //
-    // // ForRange
-    // if (targetParent instanceof DoStmt) {
-    // return indexOfTarget == 0 ? true : false;
-    // }
-    // }
-    //
-    // return true;
-    // }
 
     public static AJoinPoint[] insertAsChild(String position, ClavaNode base, ClavaNode node, CxxWeaver weaver) {
         // If base is part of App, clear caches
@@ -166,6 +101,7 @@ public class CxxActions {
             return null;
 
         case "after":
+            checkInsertAfterReturn(base, node);
             base.addChild(node);
             return null;
 
@@ -207,6 +143,9 @@ public class CxxActions {
     }
 
     public static AJoinPoint insertAfter(AJoinPoint baseJp, AJoinPoint newJp) {
+
+        checkInsertAfterReturn(baseJp.getNode(), newJp.getNode());
+
         return insert(baseJp, newJp, Insert.AFTER, (base, node) -> NodeInsertUtils.insertAfter(base, node));
         // // If inside a scope, treat nodes at the statement level
         // // if
