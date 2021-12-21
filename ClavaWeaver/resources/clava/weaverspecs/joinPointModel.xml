@@ -19,7 +19,7 @@
 	<joinpoint class="clavaException" tooltip="Utility joinpoint, to represent certain problems when generating join points"/>
 	
 	<!-- PROGRAM -->
-	<joinpoint class="program" tooltip="Represents the complete program and is the topmost joinpoint in the hierarchy">
+	<joinpoint class="program" tooltip="Represents the complete program and is the top-most joinpoint in the hierarchy">
 		<select class="file"/>
 	</joinpoint>
 	
@@ -60,7 +60,7 @@
 	</joinpoint>
 
 
-	<!--  CLASS -->
+	<!-- CLASS -->
 	<joinpoint class="class" extends="record" tooltip="Represents a C++ class">
 		<select class="method"/>
 	</joinpoint>	
@@ -385,5 +385,23 @@
 	<!-- TYPEDEF TYPE -->
 	<joinpoint class="typedefType" extends="type" tooltip="Represents the type of a typedef.">
 	</joinpoint>	
+	
+	
+	<!-- TEMPLATE ARGUMENT -->
+	<!--  <joinpoint class="templateArgument" tooltip="Represents a template argument."/>  -->
+	
+	<!-- TEMPLATE ARGUMENT EXPR -->
+	<!-- <joinpoint class="templateArgumentExpr" extends="templateArgument" tooltip="A template argument based on an expression that has not been resolved to one of the other forms yet, either because it's dependent or because it's representing a non-canonical template argument."/> -->
+
+	<!-- TEMPLATE ARGUMENT INTEGRAL -->
+	<!-- <joinpoint class="templateArgumentIntegral" extends="templateArgument" tooltip="A template argument based on an integral value that was provided for an integral non-type template parameter."/> -->
+
+	<!-- TEMPLATE ARGUMENT PACK -->
+	<!-- <joinpoint class="templateArgumentPack" extends="templateArgument" tooltip="A template argument based on a parameter pack."/> -->
+
+	<!-- TEMPLATE ARGUMENT TYPE -->
+	<!-- <joinpoint class="templateArgumentType" extends="templateArgument" tooltip="A template argument based on a type."/> -->
+
+
 		 	
 </joinpoints>

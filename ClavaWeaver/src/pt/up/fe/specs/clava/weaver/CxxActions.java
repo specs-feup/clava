@@ -13,7 +13,9 @@
 
 package pt.up.fe.specs.clava.weaver;
 
+import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
@@ -21,10 +23,15 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
 import pt.up.fe.specs.clava.ast.stmt.Stmt;
+import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.utils.NodePosition;
+import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
 /**
@@ -355,5 +362,44 @@ public class CxxActions {
 
         // Remove all children
         node.removeChildren(0, node.getNumChildren());
+    }
+
+    public static AJoinPoint insertReturn(AScope scope, AJoinPoint code) {
+        // Does not take into account situations where functions returns in all paths of an if/else.
+        // This means it can lead to dead-code, although for C/C++ that does not seem to be problematic.
+
+        List<Stmt> bodyStmts = ((CompoundStmt) scope.getNode()).toStatements();
+
+        // Check if it has return statement, ignoring wrapper statements
+        Stmt lastStmt = SpecsCollections.reverseStream(bodyStmts)
+                .filter(stmt -> !(stmt instanceof WrapperStmt))
+                .findFirst().orElse(null);
+
+        ReturnStmt lastReturnStmt = lastStmt instanceof ReturnStmt ? (ReturnStmt) lastStmt : null;
+
+        // Get list of all return statements inside children
+        List<ReturnStmt> returnStatements = bodyStmts.stream()
+                .flatMap(Stmt::getDescendantsStream)
+                .filter(ReturnStmt.class::isInstance)
+                .map(ReturnStmt.class::cast)
+                .collect(Collectors.toList());
+
+        AJoinPoint lastInsertPoint = null;
+
+        if (lastReturnStmt != null) {
+            returnStatements = SpecsCollections.concat(returnStatements, lastReturnStmt);
+        }
+
+        for (ReturnStmt returnStmt : returnStatements) {
+            ACxxWeaverJoinPoint returnJp = CxxJoinpoints.create(returnStmt);
+            lastInsertPoint = returnJp.insertBefore(code);
+        }
+
+        // If there is no return in the body, add at the end of the function
+        if (lastReturnStmt == null) {
+            lastInsertPoint = scope.insertEnd(code);
+        }
+
+        return lastInsertPoint;
     }
 }

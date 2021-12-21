@@ -607,6 +607,15 @@ public abstract class ABody extends AScope {
     }
 
     /**
+     * Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node
+     * @param code 
+     */
+    @Override
+    public AJoinPoint insertReturnImpl(AJoinPoint code) {
+        return this.aScope.insertReturnImpl(code);
+    }
+
+    /**
      * Adds a new local variable to this scope
      * @param name 
      * @param type 

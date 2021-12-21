@@ -15,7 +15,7 @@ import java.util.Arrays;
  * Auto-Generated class for join point AProgram
  * This class is overwritten by the Weaver Generator.
  * 
- * Represents the complete program and is the topmost joinpoint in the hierarchy
+ * Represents the complete program and is the top-most joinpoint in the hierarchy
  * @author Lara Weaver Generator
  */
 public abstract class AProgram extends ACxxWeaverJoinPoint {

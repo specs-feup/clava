@@ -460,6 +460,33 @@ public abstract class AScope extends AStatement {
     }
 
     /**
+     * Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node
+     * @param code 
+     */
+    public AJoinPoint insertReturnImpl(AJoinPoint code) {
+        throw new UnsupportedOperationException(get_class()+": Action insertReturn not implemented ");
+    }
+
+    /**
+     * Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node
+     * @param code 
+     */
+    public final AJoinPoint insertReturn(AJoinPoint code) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "insertReturn", this, Optional.empty(), code);
+        	}
+        	AJoinPoint result = this.insertReturnImpl(code);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "insertReturn", this, Optional.ofNullable(result), code);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "insertReturn", e);
+        }
+    }
+
+    /**
      * Adds a new local variable to this scope
      * @param name 
      * @param type 
@@ -1190,6 +1217,7 @@ public abstract class AScope extends AStatement {
         actions.add("joinpoint insertBegin(String)");
         actions.add("joinpoint insertEnd(joinpoint)");
         actions.add("joinpoint insertEnd(string)");
+        actions.add("joinpoint insertReturn(joinpoint)");
         actions.add("joinpoint addLocal(String, joinpoint, String)");
         actions.add("joinpoint addLocal(String, joinpoint)");
         actions.add("void setNaked(Boolean)");

@@ -369,4 +369,9 @@ public class CxxScope extends AScope {
         ClavaLog.info(dfgDot);
         return dfgDot;
     }
+
+    @Override
+    public AJoinPoint insertReturnImpl(AJoinPoint code) {
+        return CxxActions.insertReturn(this, code);
+    }
 }
