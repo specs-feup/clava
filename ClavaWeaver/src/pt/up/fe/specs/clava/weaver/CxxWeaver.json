@@ -8745,6 +8745,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "insertReturn"
+									},
+									{
+										"type": "String",
+										"name": "code",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)",
 						"children": [
 									{
@@ -64952,6 +64966,20 @@
 									},
 									{
 										"type": "joinpoint",
+										"name": "code",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "insertReturn"
+									},
+									{
+										"type": "String",
 										"name": "code",
 										"defaultValue": ""
 									}]

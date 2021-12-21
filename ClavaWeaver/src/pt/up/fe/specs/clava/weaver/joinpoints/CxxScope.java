@@ -374,4 +374,10 @@ public class CxxScope extends AScope {
     public AJoinPoint insertReturnImpl(AJoinPoint code) {
         return CxxActions.insertReturn(this, code);
     }
+
+    @Override
+    public AJoinPoint insertReturnImpl(String code) {
+        var stmt = CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code));
+        return insertReturnImpl(stmt);
+    }
 }
