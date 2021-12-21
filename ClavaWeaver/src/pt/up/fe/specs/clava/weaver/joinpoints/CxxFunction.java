@@ -421,14 +421,15 @@ public class CxxFunction extends AFunction {
         if (lastReturnStmt != null) {
             returnStatements = SpecsCollections.concat(returnStatements, lastReturnStmt);
         }
-        // If there is no return in the body, add at the end of the function
-        else {
-            lastInsertPoint = getBodyImpl().insertEnd(code);
-        }
 
         for (ReturnStmt returnStmt : returnStatements) {
             ACxxWeaverJoinPoint returnJp = CxxJoinpoints.create(returnStmt);
             lastInsertPoint = returnJp.insertBefore(code);
+        }
+
+        // If there is no return in the body, add at the end of the function
+        if (lastReturnStmt == null) {
+            lastInsertPoint = getBodyImpl().insertEnd(code);
         }
 
         return lastInsertPoint;
