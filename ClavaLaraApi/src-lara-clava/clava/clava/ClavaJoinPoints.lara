@@ -578,3 +578,4 @@ ClavaJoinPoints.declStmt = function() {
 ClavaJoinPoints.comment = function(text) {
 	return AstFactory.comment(text);
 }
+
