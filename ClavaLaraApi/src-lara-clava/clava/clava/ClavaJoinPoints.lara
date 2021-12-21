@@ -566,3 +566,15 @@ ClavaJoinPoints.declStmt = function() {
 			
 	return AstFactory.declStmt(decls);
 }
+
+
+/**
+ * Creates a comment join point from the given text. If text has one line, creates an inline comment, otherwise creates a multi-line comment.
+ * 
+ * @param {string} text - The text of the comment
+ * @return {@comment}
+ * 
+ */
+ClavaJoinPoints.comment = function(text) {
+	return AstFactory.comment(text);
+}
