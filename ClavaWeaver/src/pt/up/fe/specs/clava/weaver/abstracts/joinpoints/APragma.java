@@ -178,6 +178,13 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
     @Override
     public void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "type": {
         	if(value instanceof AType){
         		this.defTypeImpl((AType)value);

@@ -86,8 +86,9 @@ public class CxxActions {
 
         // Special case: inserting code after return
         if (base instanceof ReturnStmt && !(newNode instanceof WrapperStmt)) {
-            SpecsLogs.info("Warning: inserting code after return, check if this is intended.\nCode:\n"
-                    + newNode.getCode() + "\nReturn: " + base.getCode());
+            SpecsLogs.info("- Inserting code after return, check if this is intended.\n" + "Return:"
+                    + base.getCode() + "Code:\n"
+                    + newNode.getCode());
         }
     }
 

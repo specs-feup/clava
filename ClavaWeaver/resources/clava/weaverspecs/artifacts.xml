@@ -105,7 +105,9 @@
 		<attribute name="parentRegion" type="joinpoint" />
 		<attribute name="currentRegion" type="joinpoint" />
 		<attribute name="pragmas" type="pragma[]" tooltip="The pragmas associated with this node"/>
-		<attribute name="data" type="Object" tooltip="JS object with the parsed data of #pragma clava data, associated with this node"/>
+		<attribute name="data" type="Object" tooltip="JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.">
+			<def/>
+		</attribute>
 		<attribute name="keys" type="String[]" tooltip="A list of the properties currently supported by this node"/>
 		<attribute name="getValue" type="Object" tooltip="The value associated with the given property key">
 			<parameter name="key" type="String" />	

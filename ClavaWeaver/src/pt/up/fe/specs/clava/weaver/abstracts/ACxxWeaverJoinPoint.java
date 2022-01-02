@@ -1187,6 +1187,41 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
+    public void defDataImpl(Object source) {
+        ClavaLog.info(
+                "Warning: assigning an object directly to .data is not supported (e.g. $jp.data = {attr1: value1}). Use .assignData instead (e.g. $jp.assignData({attr1: value1}) ).");
+    }
+
+    @Override
+    public void setDataImpl(Object source) {
+        defDataImpl(source);
+    }
+
+    @Override
+    public void dataAssignImpl(Object source) {
+        // Get engine
+        var jsEngine = getWeaverEngine().getScriptEngine();
+
+        var data = getDataImpl();
+        var dataAssign = jsEngine.get(data, "_assign");
+
+        // Call _clear()
+        jsEngine.call(dataAssign, source);
+    }
+
+    @Override
+    public void dataClearImpl() {
+        // Get engine
+        var jsEngine = getWeaverEngine().getScriptEngine();
+
+        var data = getDataImpl();
+        var dataClear = jsEngine.get(data, "_clear");
+
+        // Call _clear()
+        jsEngine.call(dataClear);
+    }
+
+    @Override
     public String[] getKeysArrayImpl() {
         List<String> keys = new ArrayList<>(getNode().getStoreDefinition()
                 .getKeyMap()

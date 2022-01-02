@@ -100,6 +100,16 @@
 	<action name="setInlineComments" tooltip="Sets the commented that are embedded in a node">
 		<parameter name="comments" type="string" />
 	</action>
+
+	<action name="setData" tooltip="Setting data directly is not supported, this action just emits a warning and does nothing">
+		<parameter name="source" type="Object" />
+	</action>
+	
+	<action name="dataAssign" tooltip="Copies all enumerable own properties from the source object to the .data object">
+		<parameter name="source" type="Object" />
+	</action>
+
+	<action name="dataClear" tooltip="Clears all properties from the .data object"/>
 	
 	<!-- PROGRAM -->
 

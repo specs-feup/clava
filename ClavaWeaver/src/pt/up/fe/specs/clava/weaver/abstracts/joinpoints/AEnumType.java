@@ -452,6 +452,32 @@ public abstract class AEnumType extends ATagType {
     }
 
     /**
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
+     */
+    @Override
+    public void setDataImpl(Object source) {
+        this.aTagType.setDataImpl(source);
+    }
+
+    /**
+     * Copies all enumerable own properties from the source object to the .data object
+     * @param source 
+     */
+    @Override
+    public void dataAssignImpl(Object source) {
+        this.aTagType.dataAssignImpl(source);
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    @Override
+    public void dataClearImpl() {
+        this.aTagType.dataClearImpl();
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -499,6 +525,13 @@ public abstract class AEnumType extends ATagType {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "type": {
         	if(value instanceof AType){
         		this.defTypeImpl((AType)value);

@@ -224,7 +224,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -709,6 +709,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -829,6 +852,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -1237,7 +1274,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -1722,6 +1759,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -1842,6 +1902,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -2404,7 +2478,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -2974,6 +3048,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -3094,6 +3191,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -3545,7 +3656,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -4047,6 +4158,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -4167,6 +4301,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -4728,7 +4876,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -5298,6 +5446,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -5418,6 +5589,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -5816,7 +6001,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -6301,6 +6486,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -6421,6 +6629,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -6903,7 +7125,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -7429,6 +7651,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -7549,6 +7794,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -8029,7 +8288,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -8818,6 +9077,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -8938,6 +9220,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -9535,7 +9831,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -10105,6 +10401,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -10225,6 +10544,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -10799,7 +11132,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -11424,6 +11757,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -11544,6 +11900,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -11950,7 +12320,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -12510,6 +12880,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -12630,6 +13023,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -13096,7 +13503,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -13586,6 +13993,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -13706,6 +14136,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -14285,7 +14729,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -15076,6 +15520,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -15196,6 +15663,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -15770,7 +16251,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -16395,6 +16876,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -16515,6 +17019,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -16921,7 +17439,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -17481,6 +17999,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -17601,6 +18142,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -18073,7 +18628,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -18638,6 +19193,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -18758,6 +19336,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -19173,7 +19765,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -19658,6 +20250,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -19778,6 +20393,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -20176,7 +20805,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -20674,6 +21303,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -20794,6 +21446,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -21376,7 +22042,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -22027,6 +22693,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -22147,6 +22836,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -22547,7 +23250,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -23032,6 +23735,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -23152,6 +23878,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -23567,7 +24307,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -24127,6 +24867,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -24247,6 +25010,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -24679,7 +25456,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -25206,6 +25983,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -25326,6 +26126,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -25759,7 +26573,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -26249,6 +27063,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -26369,6 +27206,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -26950,7 +27801,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -27520,6 +28371,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -27640,6 +28514,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -28031,7 +28919,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -28516,6 +29404,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -28636,6 +29547,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -29076,7 +30001,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -29608,6 +30533,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -29728,6 +30676,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -30306,7 +31268,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -30876,6 +31838,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -30996,6 +31981,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -31427,7 +32426,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -31954,6 +32953,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -32074,6 +33096,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -32489,7 +33525,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -33049,6 +34085,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -33169,6 +34228,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -33602,7 +34675,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -34092,6 +35165,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -34212,6 +35308,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -34644,7 +35754,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -35171,6 +36281,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -35291,6 +36424,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -35830,7 +36977,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -36610,6 +37757,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -36730,6 +37900,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -37350,7 +38534,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -38217,6 +39401,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -38337,6 +39544,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -38906,7 +40127,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -39509,6 +40730,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -39629,6 +40873,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -40067,7 +41325,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -40694,6 +41952,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -40814,6 +42095,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -41241,7 +42536,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -41726,6 +43021,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -41846,6 +43164,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -42279,7 +43611,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -42769,6 +44101,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -42889,6 +44244,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -43468,7 +44837,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -44259,6 +45628,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -44379,6 +45771,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -44811,7 +46217,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -45332,6 +46738,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -45452,6 +46881,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -45918,7 +47361,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -46408,6 +47851,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -46528,6 +47994,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -47118,7 +48598,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -47743,6 +49223,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -47863,6 +49366,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -48491,7 +50008,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -49367,6 +50884,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -49487,6 +51027,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -49919,7 +51473,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -50446,6 +52000,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -50566,6 +52143,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -50999,7 +52590,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -51489,6 +53080,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -51609,6 +53223,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -52207,7 +53835,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -52989,6 +54617,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -53109,6 +54760,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -53567,7 +55232,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -54057,6 +55722,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -54177,6 +55865,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -54670,7 +56372,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -55248,6 +56950,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -55368,6 +57093,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -55921,7 +57660,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -56491,6 +58230,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -56611,6 +58373,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -57181,7 +58957,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -57765,6 +59541,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -57885,6 +59684,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -58300,7 +60113,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -58816,6 +60629,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -58936,6 +60772,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -59456,7 +61306,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -60175,6 +62025,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -60295,6 +62168,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -60864,7 +62751,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -61434,6 +63321,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -61554,6 +63464,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -62010,7 +63934,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -62556,6 +64480,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -62676,6 +64623,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -63090,7 +65051,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -63655,6 +65616,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -63775,6 +65759,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -64256,7 +66254,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -65045,6 +67043,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -65165,6 +67186,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -65571,7 +67606,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -66131,6 +68166,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -66251,6 +68309,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -66707,7 +68779,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -67253,6 +69325,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -67373,6 +69468,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -67779,7 +69888,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -68339,6 +70448,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -68459,6 +70591,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -68883,7 +71029,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -69399,6 +71545,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -69519,6 +71688,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -70089,7 +72272,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -70659,6 +72842,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -70779,6 +72985,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -71364,7 +73584,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -71934,6 +74154,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -72054,6 +74297,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -72536,7 +74793,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -73041,6 +75298,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -73161,6 +75441,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -73594,7 +75888,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -74084,6 +76378,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -74204,6 +76521,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -74757,7 +77088,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -75327,6 +77658,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -75447,6 +77801,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -75879,7 +78247,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -76406,6 +78774,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -76526,6 +78917,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -76958,7 +79363,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -77485,6 +79890,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -77605,6 +80033,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -78177,7 +80619,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -78747,6 +81189,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -78867,6 +81332,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -79340,7 +81819,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -79843,6 +82322,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -79963,6 +82465,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -80437,7 +82953,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -80932,6 +83448,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -81052,6 +83591,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -81605,7 +84158,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -82175,6 +84728,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -82295,6 +84871,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -82789,7 +85379,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -83367,6 +85957,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -83487,6 +86100,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -84056,7 +86683,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -84640,6 +87267,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -84760,6 +87410,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -85254,7 +87918,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -85757,6 +88421,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -85877,6 +88564,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},
@@ -86299,7 +89000,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "JS object with the parsed data of #pragma clava data, associated with this node",
+						"tooltip": "JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.",
 						"children": [
 									{
 										"type": "Object",
@@ -86859,6 +89560,29 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataAssign"
+									},
+									{
+										"type": "Object",
+										"name": "source",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Clears all properties from the .data object",
+						"children": [
+									{
+										"type": "void",
+										"name": "dataClear"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)",
 						"children": [
 									{
@@ -86979,6 +89703,20 @@
 									{
 										"type": "String",
 										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Setting data directly is not supported, this action just emits a warning and does nothing",
+						"children": [
+									{
+										"type": "void",
+										"name": "setData"
+									},
+									{
+										"type": "Object",
+										"name": "source",
 										"defaultValue": ""
 									}]
 					},

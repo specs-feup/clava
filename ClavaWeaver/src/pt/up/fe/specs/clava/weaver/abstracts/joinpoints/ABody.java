@@ -571,6 +571,32 @@ public abstract class ABody extends AScope {
     }
 
     /**
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
+     */
+    @Override
+    public void setDataImpl(Object source) {
+        this.aScope.setDataImpl(source);
+    }
+
+    /**
+     * Copies all enumerable own properties from the source object to the .data object
+     * @param source 
+     */
+    @Override
+    public void dataAssignImpl(Object source) {
+        this.aScope.dataAssignImpl(source);
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    @Override
+    public void dataClearImpl() {
+        this.aScope.dataClearImpl();
+    }
+
+    /**
      * 
      * @param node 
      */
@@ -810,6 +836,13 @@ public abstract class ABody extends AScope {
     @Override
     public final void defImpl(String attribute, Object value) {
         switch(attribute){
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "type": {
         	if(value instanceof AType){
         		this.defTypeImpl((AType)value);

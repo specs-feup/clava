@@ -33,10 +33,38 @@ function _buildClavaProxy(obj, astNode, pragma) {
 	});
 
 
-	return new Proxy(obj, _CLAVA_DATA_HANDLER);
+	// Define clear
+	Object.defineProperty(obj, '_clear',{
+    	value : function(){ 
+			// for enumerable properties
+			for (var key in this) {
+    			delete this[key];
+			}
+		},
+		writable: true,     	
+		enumerable: false
+	});
+	
+	// Define assign
+	Object.defineProperty(obj, '_assign',{
+    	value : function(source){ 
+			// for enumerable properties
+			for (var key in source) {
+    			this[key] = source[key];
+			}
+		},
+		writable: true,     	
+		enumerable: false
+	});
+
+
+	let proxy = new Proxy(obj, _CLAVA_DATA_HANDLER);
+	
+	
+	return proxy;
 }
 
-const _CLAVA_DATA_PROPS = ['_node', '_pragma', '_hasPragma']; 
+const _CLAVA_DATA_PROPS = ['_node', '_pragma', '_hasPragma', "_clear", "_assign"]; 
 
 
 /**

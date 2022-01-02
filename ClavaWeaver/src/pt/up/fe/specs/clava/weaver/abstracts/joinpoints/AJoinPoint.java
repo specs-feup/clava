@@ -59,6 +59,13 @@ public abstract class AJoinPoint extends JoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "data": {
+        	if(value instanceof Object){
+        		this.defDataImpl((Object)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "firstChild": {
         	if(value instanceof AJoinPoint){
         		this.defFirstChildImpl((AJoinPoint)value);
@@ -115,6 +122,9 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("toComment(String prefix, String suffix)");
         actions.add("setInlineComments(String[] comments)");
         actions.add("setInlineComments(String comments)");
+        actions.add("setData(Object source)");
+        actions.add("dataAssign(Object source)");
+        actions.add("dataClear()");
     }
 
     /**
@@ -696,6 +706,82 @@ public abstract class AJoinPoint extends JoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setInlineComments", e);
+        }
+    }
+
+    /**
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
+     */
+    public void setDataImpl(Object source) {
+        throw new UnsupportedOperationException(get_class()+": Action setData not implemented ");
+    }
+
+    /**
+     * Setting data directly is not supported, this action just emits a warning and does nothing
+     * @param source 
+     */
+    public final void setData(Object source) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setData", this, Optional.empty(), source);
+        	}
+        	this.setDataImpl(source);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setData", this, Optional.empty(), source);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setData", e);
+        }
+    }
+
+    /**
+     * Copies all enumerable own properties from the source object to the .data object
+     * @param source 
+     */
+    public void dataAssignImpl(Object source) {
+        throw new UnsupportedOperationException(get_class()+": Action dataAssign not implemented ");
+    }
+
+    /**
+     * Copies all enumerable own properties from the source object to the .data object
+     * @param source 
+     */
+    public final void dataAssign(Object source) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "dataAssign", this, Optional.empty(), source);
+        	}
+        	this.dataAssignImpl(source);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "dataAssign", this, Optional.empty(), source);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "dataAssign", e);
+        }
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    public void dataClearImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action dataClear not implemented ");
+    }
+
+    /**
+     * Clears all properties from the .data object
+     */
+    public final void dataClear() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "dataClear", this, Optional.empty());
+        	}
+        	this.dataClearImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "dataClear", this, Optional.empty());
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "dataClear", e);
         }
     }
 
@@ -2069,12 +2155,19 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * JS object with the parsed data of #pragma clava data, associated with this node
+     * JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.
      */
     public abstract Object getDataImpl();
 
     /**
-     * JS object with the parsed data of #pragma clava data, associated with this node
+     * 
+     */
+    public void defDataImpl(Object value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def data with type Object not implemented ");
+    }
+
+    /**
+     * JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.
      */
     public final Object getData() {
         try {
