@@ -1189,7 +1189,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public void defDataImpl(Object source) {
         ClavaLog.info(
-                "Warning: assigning an object directly to .data is not supported (e.g. $jp.data = {attr1: value1}). Use .assignData instead (e.g. $jp.assignData({attr1: value1}) ).");
+                "Warning: assigning an object directly to .data is not supported (e.g. $jp.data = {attr1: value1}). Use .dataAssign instead (e.g. $jp.dataAssign({attr1: value1}) ).");
     }
 
     @Override
