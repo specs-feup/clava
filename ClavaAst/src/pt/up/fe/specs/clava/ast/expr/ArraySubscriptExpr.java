@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -86,6 +87,14 @@ public class ArraySubscriptExpr extends Expr {
         subscripts.add(subscript);
 
         return subscripts;
+    }
+
+    public Optional<ArraySubscriptExpr> getParentAccess() {
+        var normalizedLhs = ClavaNodes.normalize(getLhs());
+
+        var parentAccess = normalizedLhs instanceof ArraySubscriptExpr ? (ArraySubscriptExpr) normalizedLhs : null;
+
+        return Optional.ofNullable(parentAccess);
     }
 
     /**
