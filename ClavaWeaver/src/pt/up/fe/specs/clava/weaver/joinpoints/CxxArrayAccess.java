@@ -83,4 +83,16 @@ public class CxxArrayAccess extends AArrayAccess {
         return Arrays.asList(getSubscriptArrayImpl());
     }
 
+    @Override
+    public AArrayAccess getParentAccessImpl() {
+        return arraySub.getParentAccess()
+                .map(parentAccess -> CxxJoinpoints.create(parentAccess, AArrayAccess.class))
+                .orElse(null);
+    }
+
+    @Override
+    public Integer getNumSubscriptsImpl() {
+        return arraySub.getSubscripts().size();
+    }
+
 }

@@ -3389,10 +3389,28 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The number of subscripts of this array access",
+						"children": [
+									{
+										"type": "int",
+										"name": "numSubscripts"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "A view of the current arrayAccess without the last subscript, or undefined if this arrayAccess only has one subscript",
+						"children": [
+									{
+										"type": "arrayAccess",
+										"name": "parentAccess"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "expression of the array access subscript",
 						"children": [
 									{
-										"type": "joinpoint[]",
+										"type": "expression[]",
 										"name": "subscript"
 									}]
 					},

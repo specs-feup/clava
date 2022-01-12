@@ -576,8 +576,12 @@
 	<artifact class="arrayAccess">
 		<attribute name="arrayVar" type="expression"
 			tooltip="expression representing the variable of the array access (can be a varref, memberAccess...)" />
-		<attribute name="subscript" type="joinpoint[]"
+		<attribute name="subscript" type="expression[]"
 			tooltip="expression of the array access subscript" />	
+		<attribute name="parentAccess" type="arrayAccess"
+			tooltip="A view of the current arrayAccess without the last subscript, or undefined if this arrayAccess only has one subscript" />			
+		<attribute name="numSubscripts" type="int"
+			tooltip="The number of subscripts of this array access" />						
 	</artifact>
 
 

@@ -54,14 +54,14 @@ public abstract class AArrayAccess extends AExpression {
      * Get value on attribute subscript
      * @return the attribute's value
      */
-    public abstract AJoinPoint[] getSubscriptArrayImpl();
+    public abstract AExpression[] getSubscriptArrayImpl();
 
     /**
      * expression of the array access subscript
      */
     public Object getSubscriptImpl() {
-        AJoinPoint[] aJoinPointArrayImpl0 = getSubscriptArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        AExpression[] aExpressionArrayImpl0 = getSubscriptArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
         return nativeArray0;
     }
 
@@ -80,6 +80,52 @@ public abstract class AArrayAccess extends AExpression {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "subscript", e);
+        }
+    }
+
+    /**
+     * A view of the current arrayAccess without the last subscript, or undefined if this arrayAccess only has one subscript
+     */
+    public abstract AArrayAccess getParentAccessImpl();
+
+    /**
+     * A view of the current arrayAccess without the last subscript, or undefined if this arrayAccess only has one subscript
+     */
+    public final Object getParentAccess() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "parentAccess", Optional.empty());
+        	}
+        	AArrayAccess result = this.getParentAccessImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "parentAccess", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "parentAccess", e);
+        }
+    }
+
+    /**
+     * The number of subscripts of this array access
+     */
+    public abstract Integer getNumSubscriptsImpl();
+
+    /**
+     * The number of subscripts of this array access
+     */
+    public final Object getNumSubscripts() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numSubscripts", Optional.empty());
+        	}
+        	Integer result = this.getNumSubscriptsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "numSubscripts", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "numSubscripts", e);
         }
     }
 
@@ -483,6 +529,8 @@ public abstract class AArrayAccess extends AExpression {
         this.aExpression.fillWithAttributes(attributes);
         attributes.add("arrayVar");
         attributes.add("subscript");
+        attributes.add("parentAccess");
+        attributes.add("numSubscripts");
     }
 
     /**
@@ -530,6 +578,8 @@ public abstract class AArrayAccess extends AExpression {
     protected enum ArrayAccessAttributes {
         ARRAYVAR("arrayVar"),
         SUBSCRIPT("subscript"),
+        PARENTACCESS("parentAccess"),
+        NUMSUBSCRIPTS("numSubscripts"),
         DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),
