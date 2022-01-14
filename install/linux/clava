@@ -5,7 +5,7 @@ SCRIPT=$(readlink -f "$0")
 # Absolute path this script is in, thus /home/user/bin
 SCRIPTPATH=$(dirname "$SCRIPT")
 JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1)
-echo $JAVA_VER
+#echo $JAVA_VER
 
 ILLEGAL_ACCESS_OPTION="-illegal-access=permit"
 
