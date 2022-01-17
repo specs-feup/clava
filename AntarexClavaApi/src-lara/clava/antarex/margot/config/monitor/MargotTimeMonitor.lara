@@ -1,0 +1,105 @@
+import antarex.margot.config.monitor.MargotMonitor;
+import antarex.margot.dse.metric.MargotMetric;
+
+import lara.units.TimeUnit;
+import lara.units.TimeModifier;
+
+/**
+ * This class represents a time monitor.
+ * 
+ * @extends MargotMonitor
+ * @constructor
+ * 
+ * @param {string} name - the name of this monitor
+ * */
+function MargotTimeMonitor(name) {
+    
+    // super contructor
+    MargotMonitor.call(this, name);
+    
+    // save super prototype
+    this._super = MargotMonitor.prototype;
+    
+    // default granularity, can be changed
+    this._granularity = MargotTimeMeasure.MICRO;
+    
+    // default matric, the unit can be changed
+    this._margotMetric = new MargotMetric(MargotMetricName.TIME, new TimeUnit('s', TimeModifier.MICRO));
+}
+// Inheritance
+MargotTimeMonitor.prototype = Object.create(MargotMonitor.prototype);
+
+/**
+ * Enum that represents the granularity of the time monitor.
+ * @enum
+ * */
+var MargotTimeMeasure = new Enumeration(
+    {SEC: 'margot::TimeUnit::SECONDS'},
+    {MILLI: 'margot::TimeUnit::MILLISECONDS'},
+    {MICRO: 'margot::TimeUnit::MICROSECONDS'}
+);
+
+/**
+ * Sets the granularity to microseconds.
+ * */
+MargotTimeMonitor.prototype.useMicro = function() {
+    
+    this._granularity = MargotTimeMeasure.MICRO;
+    
+    // change the unit of the metric
+    this._margotMetric.setUnit(new TimeUnit('s', TimeModifier.MICRO));
+}
+
+/**
+ * Sets the granularity to milliseconds.
+ * */
+MargotTimeMonitor.prototype.useMilli = function() {
+    
+    this._granularity = MargotTimeMeasure.MILLI;
+    
+    // change the unit of the metric
+    this._margotMetric.setUnit(new TimeUnit('s', TimeModifier.MILLI));
+}
+
+/**
+ * Sets the granularity to seconds.
+ * */
+MargotTimeMonitor.prototype.useSecond = function() {
+    
+    this._granularity = MargotTimeMeasure.SEC;
+    
+    // change the unit of the metric
+    this._margotMetric.setUnit(new TimeUnit('s', TimeModifier.SECOND));
+}
+
+/*
+ * CODE GENERATION
+ * ****************************************************************************/
+
+/**
+ * Makes the code of the time monitor using the base monitor.
+ * 
+ * Calls the super function to make the code for the monitor and passes additional code specific to this monitor.
+ * */
+MargotTimeMonitor.prototype._makeCode = function() {
+    
+    var granularityCode = _GranularityTemplate(this._granularity);
+        
+    return this._super._makeCode.call(this, 'TIME', granularityCode);
+}
+
+/*
+ * TEMPLATES
+ * ****************************************************************************/
+
+/**
+ * Template used for the generation of the XML code for the granularity portion of the time monitor.
+ * */
+codedef _GranularityTemplate(param1) %{
+<creation>    
+<param name="unit of measure">    
+<fixed value="[[param1]]"/>    
+</param>    
+</creation>
+}%
+end

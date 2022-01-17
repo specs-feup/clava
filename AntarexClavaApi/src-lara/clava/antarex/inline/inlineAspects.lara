@@ -1,0 +1,52 @@
+/*
+   Author(s): Loïc Besnard (loic.besnard@irisa.fr). 
+              IRISA-INRIA Rennes, France.
+              
+   This code has been developed during the ANTAREX project (http://www.antarex-project.eu).
+   It is provided under the MIT license (https://opensource.org/licenses/MIT).
+*/
+import antarex.utils.lowLevelFuncs;
+import antarex.inline.inlineFuncs;
+
+/**
+  This aspect adds inline attribute for the function/methods attrributed by the pragma INLINE.
+*/
+aspectdef inline 
+ var $externDecls;
+ var found=false;
+ // First step.
+ select pragma end
+  apply
+    if (isInlinePragma($pragma)) {
+      found = true;
+      var $target = $pragma.target;
+      if ($target.isInline)
+        println($target.getName() + " is already inlined !!!");
+      else if ( inlineObject($target) )	{
+      	  MESSAGE("", " >>> Inline of < " + $target.getName() + ", file =" + $target.ancestor("file").name 
+      	          + " > is managed by the symbol: " + $CURRENT_ID_INLINE, "");
+      	  $pragma.detach();
+      }
+      else 
+      	ERROR(" The pragma " + $INLINE_PRAGMA + " must be assigned to a function or method definition !");
+    }
+ end
+ if (!found) 
+   MESSAGE("", "No pragma " + $INLINE_PRAGMA + " found !!!", "");
+end
+
+/**
+ Initializing the inlining aspects.
+*/
+aspectdef inline_initialize
+
+end
+
+/**
+ Finalizing the inlining aspects.
+*/
+aspectdef inline_finalize
+
+end
+
+

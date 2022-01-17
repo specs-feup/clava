@@ -1,0 +1,215 @@
+/**
+ * This class represents an optimization state of the autotuner execution.
+ * 
+ * By default, metrics are combined with MargotCombination.SIMPLE.
+ * 
+ * @constructor
+ * @param {string} name - the name of the state
+ * @param {boolean} starting - whether this is a starting state
+ * */
+function MargotState(name, starting) {
+    
+    this._name = name;
+    
+    this._starting = starting;
+    if(this._starting === undefined) {
+        this._starting = false;
+    }
+    
+    this._subjects = [];
+    
+    this._minCombination = MargotCombination.SIMPLE;
+    this._minimizes = [];
+    this._maxCombination = MargotCombination.SIMPLE;
+    this._maximizes = [];
+}
+
+/**
+ * Enum for the possible combination of the metrics.
+ * */
+var MargotCombination = new Enumeration('LINEAR', 'SIMPLE', 'GEOMETRIC');
+
+/**
+ * Sets the combination for the metrics that will be minimized.
+ * 
+ * @param {MargotCombination} combination - the combination kind
+ * */
+MargotState.prototype.setMinimizeCombination = function(combination) {
+	this._minCombination = combination;
+}
+
+/**
+ * Sets the combination for the metrics that will be maximized.
+ * 
+ * @param {MargotCombination} combination - the combination kind
+ * */
+MargotState.prototype.setMaximizeCombination = function(combination) {
+	this._maxCombination = combination;
+}
+
+/**
+ * Sets whether this is the starting state or not.
+ * 
+ * @param {boolean} starting - whether this is a starting state
+ * */
+MargotState.prototype.setStarting = function(starting) {
+    
+    this._starting = starting;
+    if(this._starting === undefined) {
+        this._starting = true;
+    }
+}
+
+/**
+ * Adds a constraint to the state.
+ * 
+ * @param {string} goalName - the name of the goal
+ * @param {Number} confidence - the confidence level of the constraint
+ * @param {Number} priority - the priority of the constraint
+ * */
+MargotState.prototype.subjectTo = function(goalName, confidence, priority) {
+    
+    this._subjects.push({goalName: goalName, confidence: confidence, priority: priority});
+}
+
+/**
+ * Adds a metric for the optimization to minimize.
+ * 
+ * @param {string} name - the name of the metric
+ * @param {Number} coefficient - the coefficient to use when combining metrics/knobs
+ * */
+MargotState.prototype.minimizeMetric = function(name, coefficient) {
+    
+    this._minimizes.push({kind: 'metric', name: name, coefficient: coefficient});
+}
+
+/**
+ * Adds a knob for the optimization to minimize.
+ * 
+ * @param {string} name - the name of the knob
+ * @param {Number} coefficient - the coefficient to use when combining metrics/knobs
+ * */
+MargotState.prototype.minimizeKnob = function(name, coefficient) {
+    
+    this._minimizes.push({kind: 'knob', name: name, coefficient: coefficient});
+}
+
+/**
+ * Adds a metric for the optimization to maximize.
+ * 
+ * @param {string} name - the name of the metric
+ * @param {Number} coefficient - the coefficient to use when combining metrics/knobs
+ * */
+MargotState.prototype.maximizeMetric = function(name, coefficient) {
+    
+    this._maximizes.push({kind: 'metric', name: name, coefficient: coefficient});
+}
+
+/**
+ * Adds a knob for the optimization to maximize.
+ * 
+ * @param {string} name - the name of the knob
+ * @param {Number} coefficient - the coefficient to use when combining metrics/knobs
+ * */
+MargotState.prototype.maximizeKnob = function(name, coefficient) {
+    
+    this._maximizes.push({kind: 'knob', name: name, coefficient: coefficient});
+}
+
+/*
+ * CODE GENERATION
+ * ****************************************************************************/
+
+/**
+ * Makes the code for the state.
+ * */
+MargotState.prototype._makeCode = function () {
+    
+    var minimizesCode = '';
+    if(this._minimizes.length > 0) {
+		minimizesCode = this._makeMinMaxCode('minimize', this._minCombination, this._minimizes);
+	}
+	var maximizesCode = '';
+	if(this._maximizes.length > 0) {
+		maximizesCode = this._makeMinMaxCode('maximize', this._maxCombination, this._maximizes);
+	}
+	
+    var subjectCode = this._makeSubjectsCode();
+    
+    return _StateTemplate(this._name, this._starting ? 'yes' : 'no', minimizesCode, maximizesCode, subjectCode);
+}
+
+/**
+ * Makes the code for the minimizes and maximizes lists.
+ * 
+ * @param {string} kind - the type of problem, minimize or maximize
+ * @param {MargotCombination} - the kinds of combination for metrics/knobs
+ * @param {Object[]} list - the list of metrics/knobs
+ * */
+MargotState.prototype._makeMinMaxCode = function(kind, combination, list) {
+    
+    var elementsCode = '';
+    
+    for(var element of list) {
+        elementsCode += _MinMaxElementTemplate(element.kind, element.name, element.coefficient);
+    }
+    
+    return _MinMaxTemplate(kind, combination, elementsCode);
+}
+
+/**
+ * Makes the code for the constraints of a state.
+ * */
+MargotState.prototype._makeSubjectsCode = function () {
+    
+    var code = '';
+    
+    for(var subject of this._subjects) {
+        
+        code += _SubjectTemplate(subject.goalName, subject.confidence, subject.priority);
+    }
+    
+    return code;
+}
+
+/*
+ * TEMPLATES
+ * ****************************************************************************/
+
+/**
+ * Template for the state XML code.
+ * */
+ codedef _StateTemplate(name, starting, minimizesCode, maximizesCode, subjectCode) %{
+<state name="[[name]]" starting="[[starting]]">    
+[[minimizesCode]]
+[[maximizesCode]]
+[[subjectCode]]  
+</state> 
+}%
+end
+
+/**
+ * Template for the minimizes and maximizes XML code.
+ * */
+ codedef _MinMaxTemplate(kind, combination, elementsCode) %{
+<[[kind]] combination="[[combination]]">    
+[[elementsCode]]   
+</[[kind]]>
+}%
+end
+
+/**
+ * Template for the minimizes and maximizes XML code.
+ * */
+codedef _MinMaxElementTemplate(kind, name, coefficient) %{
+<[[kind]] name="[[name]]" coef="[[coefficient]]"/>  
+}%
+end
+
+/**
+ * Template for the constraint XML code.
+ * */
+ codedef _SubjectTemplate(goalName, confidence, priority) %{
+<subject to="[[goalName]]" confidence="[[confidence]]" priority="[[priority]]" />
+}%
+end

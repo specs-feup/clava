@@ -1,0 +1,102 @@
+import antarex.margot.config.monitor.MargotMonitor;
+import antarex.margot.config.MargotEnergyDomain;
+import antarex.margot.dse.metric.MargotMetric;
+
+import lara.units.SiUnit;
+import lara.units.SiModifier;
+
+/**
+ * This class represents an energy monitor.
+ * 
+ * We can define the domain in which the energy is measured.
+ * 
+ * @extends MargotMonitor
+ * @constructor
+ * 
+ * @param {string} name - the name of this monitor
+ * */
+function MargotEnergyMonitor(name) {
+    
+    // super contructor
+    MargotMonitor.call(this, name);
+    
+    // save super prototype
+    this._super = MargotMonitor.prototype;
+    
+    // default domain, can be changed
+    this._domain = MargotEnergyDomain.PACKAGE;
+    
+    // default metric, the unit can be changed if there are functions for it
+    this._margotMetric = new MargotMetric(MargotMetricName.ENERGY, new SiUnit('J', SiModifier.MICRO));
+}
+// Inheritance
+MargotEnergyMonitor.prototype = Object.create(MargotMonitor.prototype);
+
+/**
+ * Sets the domain as PACKAGE.
+ * */
+MargotEnergyMonitor.prototype.setPackage = function() {
+    this._domain = MargotEnergyDomain.PACKAGE;
+}
+
+/**
+ * Sets the domain as CORES.
+ * */
+MargotEnergyMonitor.prototype.setCores = function() {
+    this._domain = MargotEnergyDomain.CORES;
+}
+
+/**
+ * Sets the domain as RAM.
+ * */
+MargotEnergyMonitor.prototype.setRam = function() {
+    this._domain = MargotEnergyDomain.RAM;
+}
+
+/**
+ * Sets the domain as UNCORES.
+ * */
+MargotEnergyMonitor.prototype.setUncores = function() {
+    this._domain = MargotEnergyDomain.UNCORES;
+}
+
+/**
+ * Sets the domain to the one provided.
+ * 
+ * @param {MargotEnergyDomain} domain - the new domain
+ * */
+MargotEnergyMonitor.prototype.setDomain = function(domain) {
+    this._domain = domain;
+}
+
+
+/*
+ * CODE GENERATION
+ * ****************************************************************************/
+
+/**
+ * Makes the code of the energy monitor using the base monitor.
+ * 
+ * Calls the super function to make the code for the monitor and passes additional code specific to this monitor.
+ * */
+MargotEnergyMonitor.prototype._makeCode = function() {
+    
+    var domainCode = _DomainTemplate(this._domain);
+    return this._super._makeCode.call(this, 'ENERGY', domainCode);
+}
+
+/*
+ * TEMPLATES
+ * ****************************************************************************/
+
+/**
+ * Template used for the generation of the XML code for the domain portion of the energy monitor.
+ * */
+codedef _DomainTemplate(param1) %{
+<creation>    
+<param name="energy domain">    
+<fixed value="[[param1]]"/>    
+</param>    
+</creation>
+}%
+end

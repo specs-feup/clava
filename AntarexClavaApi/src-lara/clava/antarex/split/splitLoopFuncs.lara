@@ -1,0 +1,414 @@
+/*
+   Author(s): Loïc Besnard (loic.besnard@irisa.fr). 
+              IRISA-INRIA Rennes, France.
+              
+   This code has been developed during the ANTAREX project (http://www.antarex-project.eu).
+   It is provided under the MIT license (https://opensource.org/licenses/MIT).
+*/
+
+var $SPLITPRAGMA="SPLITLOOP";
+var $ID_SPLITTEDLOOP="INRIA_SPLITTED_LOOP";
+var $INRIA_SPLIT_LOOP_BEST_CODE_FILE="INRIA_SPLIT_LOOP_BEST_CODE.h";
+var $CPT_SPLITTEDLOOP=0; // counter.
+
+var $CURRENT_ID_SPLITTEDLOOP="";
+
+function satisfiesSplitLoopsCriteria(aloop) {
+   if (aloop.astName === 'CXXForRangeStmt') return false;
+   if (aloop.kind !== "for") return false;
+  var $begin = aloop.astChild(0);
+  var $end = aloop.astChild(1);
+  var $step = aloop.astChild(2);
+  var lbound = aloop.initValue;
+  if (lbound === undefined) return false;
+  var ubound = aloop.endValue;
+  if (ubound === undefined) return false;
+  var stepValued = aloop.stepValue;
+  if (stepValued === undefined) return false;
+  return true;
+ }
+
+ function tryToNormalizeLoopForSplitting(aloop) {
+  	if (aloop.astName === 'CXXForRangeStmt') return false;
+  	if (aloop.kind !== "for") return false;
+  	
+  	// xxxx
+  return false;
+ }
+
+/**
+  * Mangling 
+     - refParams = 'int, int ' [, delc_1, ... ,decl_n]
+  **/
+function getSplitLoopMangleNameOf($vFunction, $ident, $refParams) {
+ var line="\n";
+ var $vclass = getStrClassOf($vFunction);
+ if ($vclass !== "") $vclass = $vclass + "::";
+ 	
+ var srcFile = Io.getTempFolder()+ getFileSeparator() + "INRIA_IRISA_MANGLING.cpp";
+ Io.writeFile(srcFile, "// generated " + line);
+ var Includes = getImportedIncludes( $vFunction.ancestor("file"), $vFunction.astId);
+ // Adding declaration in the original file.
+ for (f= 0; f < Includes.length; f++) {
+    Io.appendFile(srcFile,Includes[f].code + line);
+ }
+
+ Io.appendFile(srcFile, "void " + $vclass + $ident + '(' + $refParams + ')' + '{};');
+ Io.appendFile(srcFile, line);
+
+ // modified class must be imported in the tmp folder.
+ if (isaMethod($vFunction))  {
+    var $vdecl = $vFunction.declarationJp;
+    var vfile = getFileOf($vdecl);
+    var vClassFile = Io.getTempFolder() + getFileSeparator() + vfile.name;
+    Io.writeFile(vClassFile,  vfile.code);
+ }
+    
+ var newmangling = getMangledName(srcFile, $vFunction.root.includeFolders, $ident);
+ newmangling = newmangling.substring(0, newmangling.length-1);
+ return newmangling;
+}
+
+function genLoaderLib($vFunction, $nbLibs, $refParams)
+{
+    var $currentFunction = mkNewFile(getCurrentLoadLibrary()+'.h', "");
+    
+    if (isaMethod($vFunction)) {
+      thisObj = "void * This,"; 
+      useCC = false;
+     }
+    else  {
+      thisObj ="";
+      useCC = manglingForC;
+    }
+    var rparams = 'int, int ' + getStrParams0($refParams, true);
+    
+    var theParameters = '(' + thisObj +  rparams + ')';
+    var VTYPEFUNC = '(void (*)' + theParameters + ')';
+    var manglingSymbol = getSplitLoopMangleNameOf($vFunction, $CURRENT_ID_SPLITTEDLOOP, rparams, useCC);
+    var symbol = '"'+ manglingSymbol +'"';
+    
+    $currentFunction.insert before %{ 
+    void * handle = dlopen(aLib, RTLD_LAZY);
+    if (!handle) {
+      fprintf(stderr, "%s\n", dlerror());
+      exit(EXIT_FAILURE);
+    }
+    printf(">>>>>>  Loading %s library\n", aLib);
+    dlerror();
+    [[$CURRENT_ID_SPLITTEDLOOP]] = [[VTYPEFUNC]] dlsym(handle,
+     [[symbol]]);
+   
+    char *error = dlerror();
+    if (error != NULL)  {
+      fprintf(stderr, "%s\n", error);
+      exit(EXIT_FAILURE);
+    }
+}
+}%;
+
+ 	$currentFunction.insert before 'void ' + getCurrentLoadLibrary() + '(const char* aLib){';
+	$currentFunction.insert before 'void (*' + $CURRENT_ID_SPLITTEDLOOP + ')' + theParameters + ';';
+	$currentFunction.insert before '';
+
+	// gen declaration of the counters, init to 0.
+	var TT=[];
+	for (var i=0; i < $nbLibs; i++) TT.push('0');
+	$currentFunction.insert before 'int ' + getCurrentCpt() + '[' + $nbLibs + '] = {' + TT + '};';
+	$currentFunction.insert before '#define ' + $CURRENT_ID_SPLITTEDLOOP + ' ' + manglingSymbol;
+	
+	// gen declaration of the includes.
+	$currentFunction.exec addInclude("time.h", true);
+	$currentFunction.exec addInclude("chrono", true);
+	$currentFunction.exec addInclude("dlfcn.h", true); 
+    $currentFunction.exec addInclude("iostream", true);
+    $currentFunction.exec addInclude("stdlib.h", true);
+	
+	// the loader is imported as include.
+	$vFunction.insert before '#include "'+ $currentFunction.name + '"';
+	var $vfile = $vFunction.ancestor("file");
+	$vfile.exec addInclude( $INRIA_SPLIT_LOOP_BEST_CODE_FILE, false); 
+}
+
+function AddGlobalDecls($theLoop, $nbLibs, $refParams)
+{
+   var $currentFunction = getFunctionOrMethod($theLoop);
+   
+   genLoaderLib($currentFunction, $nbLibs, $refParams);
+   var $currentFile = $theLoop.ancestor("file");
+   $currentFile.insert before '#define LB_TRACE(S)';
+
+   $currentFunction.insert before 'int ' + getLearning() + '= 1,'  + getSelectedId() + '= 0;';
+}
+
+
+function declareLoopAsNewFunctionOrMethod($theLoop, $referencedParameters) {
+    var id=$theLoop.astId;
+    var lb='lb_'+ $ID_SPLITTEDLOOP;
+    var ub='ub_'+ $ID_SPLITTEDLOOP;
+    var	nfunc = mkNewSplittedLoopName();
+    var $currentFunction = getFunctionOrMethod($theLoop);
+
+    var $theLoopCopy = $theLoop.copy();	
+    $theLoopCopy.setInit( 'int ' + $theLoop.controlVar + ' = ' + lb);
+    if ($theLoop.stepValue >0) $theLoopCopy.condRelation = "<"; else $theLoopCopy.condRelation = ">";
+    $theLoopCopy.setEndValue(ub); 
+    var strParams = getStrParams0( $referencedParameters, true);
+    var parameters = '(int ' + lb + ', int ' + ub + strParams + ')';
+    var inter = 'void ' + nfunc + parameters;
+    nfunc = declareNewMethod( $currentFunction, nfunc, inter); 
+    
+    // nfunc may change !!
+    var $CURRENT_NEW_FUNC = 'void ' + nfunc + parameters ;
+    var nfile=   mkNewFile(getCurrentSplittedFileName(), "");
+    nfile.insert before "}";
+    nfile.insertBefore ($theLoopCopy);
+    nfile.insert before $CURRENT_NEW_FUNC + '{';
+    
+    ImportDeclarations($theLoop, nfile);
+    ImportIncludes($theLoop, nfile);
+}
+
+/** 
+	@return the definitions of the number of iterations of a loop characterized by the parameters.
+	@lbound: lower bound
+    @ubound: upper bound
+    @stepValue: step value
+    @vop: operator of the test of the end of the loop.
+*/
+function getNbIterations(lbound, ubound, stepValued, vop ) {
+  // (UB-LB)[+1]/STEP or (LB-UB)[+1]/-STEP
+  // currently clava has some pb with i=i+2 in a loop for (i; i<; i=i+2) 
+  var vmin, vmax, by, nbIters;
+   if (stepValued > 0)
+      { vmin=lbound; vmax=ubound; by = stepValued;}
+   else
+      { vmin=ubound; vmax=lbound; by = -stepValued;}
+
+   if (vmin != 0) {
+       if ( (vop === Relation.LE) || (vop === Relation.GE))
+          nbIters = '((' + vmax + '-' + vmin + ') +1';
+      	else 
+      	  nbIters = '(' + vmax + '-' + vmin + ')';
+      }
+   else {
+      if ( (vop === Relation.LE) || (vop === Relation.GE)) 
+        nbIters = '(' + vmax + '+1'+ ')'; 
+      else 
+        nbIters = vmax;
+   }
+
+	if (by != 1) nbIters = '(' + nbIters + '/' + by + ')';
+	return nbIters;
+}
+
+/**
+	Replace a loop ( $loop ) by nbLoops loops, with the same body than the original one, 
+	but a subset of the iteration space. Different optimization sequences on each loop independently will be applied.
+    Timers around each chunk observe the performance of each fragment.
+    Global boolean variables are added for management (XX denotes a number to ensure the unicity of the identifiers)   
+      - INRIA_SPLITTED_LOOP_XX_LEARNING, initialy true, for the execution of the different fragments with time evaluation.
+      - INRIA_SPLITTED_LOOP_XX_SELECTED, initialy false, set to true when the "best" fragment is selected. The choice is 
+      done when the INRIA_SPLITTED_LOOP_XX_learning is false and when the INRIA_SPLITTED_LOOP_XX_SELECTED is false.
+	*/
+function replaceLoop( $loop, $nbLoops, $referencedParams){
+   var vobj="";
+   if (isaMethod(getFunctionOrMethod($loop))) vobj = "this,";
+   
+   var nbLibs = parseInt($nbLoops) ;
+   var loadLib = getCurrentLoadLibrary();
+   
+   var lbound = $loop.initValue;
+   
+   var ubound = $loop.endValue;
+   var stepValued = $loop.stepValue;
+   var i_ubound;
+   
+   var vop = $loop.condRelation;
+   var vLearning = getLearning();
+   var vbest = getBestId(); 
+   
+   var tloop_end   = $CURRENT_ID_SPLITTEDLOOP + '_end';
+   var tloop_begin = $CURRENT_ID_SPLITTEDLOOP + '_begin';
+   var tloop_took  = $CURRENT_ID_SPLITTEDLOOP + '_tloop';
+   var coefubound  = $CURRENT_ID_SPLITTEDLOOP + '_X';
+   var prefixChrono = "std::chrono::";
+   var chronoCode = " = " + prefixChrono + "high_resolution_clock::now();";
+   var cpt = getCurrentCpt();
+   var vmin = lbound;
+   var vmax = ubound;
+   var nbIters = getNbIterations(lbound, ubound, stepValued, vop );
+   $loop.insert before 'int ' + coefubound +  ' = ' + nbIters +'/' + nbLibs + ';';
+   var vSelected = getSelectedId();
+   var strParams = getStrNameParams0($referencedParams, true);
+   var VCALL_ITER_BEGIN = $CURRENT_ID_SPLITTEDLOOP + '(' + vobj;
+   var VCALL_END = ');';
+   
+   $loop.insert before 'if (' + vLearning +' ) {';
+   TRACE( " NB ITERS = " + nbIters);
+   for (var i=nbLibs; i > 0; i--) {
+      var vindex = (nbLibs-i)+1;
+      var isFirstIndex = (vindex === 1);
+      if (isFirstIndex) i_ubound = coefubound; else i_ubound = '(' + coefubound + "*" + vindex + ')'; 
+      if (stepValued < 0) i_ubound = $loop.initValue + '-' + i_ubound;
+       	
+      if ( isFirstIndex ) prefix = "auto "; else prefix=""; 
+      if ( isFirstIndex ) $loop.insert before vSelected + '= 0;';
+      
+      $loop.insert before '';
+      $loop.insert before prefix + tloop_begin + chronoCode;
+      $loop.insert before loadLib + "(" + '"' + getSplitLoopLib(vindex) + '"' + VCALL_END;
+      $loop.insert before VCALL_ITER_BEGIN + lbound + ',' + i_ubound + strParams + VCALL_END;
+      $loop.insert before prefix + tloop_end + chronoCode;
+      $loop.insert before prefix + tloop_took + " = " + prefixChrono + 
+                            "duration_cast<" + prefixChrono + "microseconds>(" + tloop_end + '-' + tloop_begin + ").count();";
+      $loop.insert before cpt+ "[" + vindex + "] = " + cpt +"["+ vindex + "] + " + tloop_took +";";
+      $loop.insert before 'LB_TRACE(cout << " MODE_LEARNING SPLIT " << ' + vindex + ' << " took " << ' + 
+      	                   tloop_took+ ' << " ms to run." << endl;);';
+        
+      lbound = i_ubound;
+   }
+ 
+   $loop.insert after "} "; 
+   if (vop === Relation.LE) vmax=vmax +'+1'; else if (vop === Relation.GE) vmax=vmax +'-1';
+   $loop.insert after VCALL_ITER_BEGIN  + vmin + ',' + vmax + strParams + VCALL_END;
+   $loop.insert after "} "; 
+   for (var i=nbLibs; i > 0; i--) {
+      if (i!==nbLibs) $loop.insert after "else";
+      $loop.insert after loadLib + "(" + '"' + getSplitLoopLib(i) + '"' + VCALL_END;
+      $loop.insert after "if (" + vbest + " == " + i +")";
+   }
+   $loop.insert after 'int ' + vbest +' = ' + getFunctionBestId() + '(' + cpt + ',' + nbLibs + VCALL_END;
+   $loop.insert after " // Selecting the best ";
+   $loop.insert after  vSelected + " = 1;";
+   $loop.insert after " if (! " + vSelected + ") { ";
+   $loop.insert after " else { "; 
+   $loop.insert after '} //end learning';
+   $loop.insert after vLearning + '=0;';
+   
+   AddGlobalDecls($loop, nbLibs+1, $referencedParams);
+    
+   // finalyzing the original loop.
+   $loop.replaceWith(VCALL_ITER_BEGIN  + i_ubound +',' + vmax + strParams + VCALL_END);
+}
+
+/**
+  Generate the code of the function that selects the best choice.
+  */
+function generateBestChoiceCode()
+{
+	var $nfile = mkNewFile($INRIA_SPLIT_LOOP_BEST_CODE_FILE, "");
+    var $X = getFunctionBestId();
+	$nfile.insert before %{ 
+ int [[$X]](int T[], int N) { 
+ int vbest = 1;
+ for(int i=1; i<=N; i++)
+   if (T[i] < T[vbest]) vbest = i;
+ return vbest;
+ }
+}%;
+	
+}
+
+/**
+  Make a new name for the current splitted loop, stored in $CURRENT_ID_SPLITTEDLOOP.
+  @return this new name.
+*/
+function mkNewSplittedLoopName()
+{
+	$CPT_SPLITTEDLOOP++;
+	$CURRENT_ID_SPLITTEDLOOP = $ID_SPLITTEDLOOP +'_' + $CPT_SPLITTEDLOOP;
+	return $CURRENT_ID_SPLITTEDLOOP;
+}
+
+/**
+  @return the name assigned to the current splitted name, fixed by the last call to mkNewSplittedLoopName() function.
+*/
+function getCurrentSplittedLoopName()
+{
+	return $CURRENT_ID_SPLITTEDLOOP;
+}
+
+/**
+@return the name of current splitted loop.
+The name is the concatenation of $CURRENT_ID_SPLITTEDLOOP  with "_code.cpp".
+*/
+function getCurrentSplittedFileName()
+{ 
+  return $CURRENT_ID_SPLITTEDLOOP + '_code' + '.cpp';
+}
+
+/**
+  @return the name of function used for loading the associated library of the current splitted loop. 
+  The name is the concatenation of $CURRENT_ID_SPLITTEDLOOP  with "_load".
+*/
+function getCurrentLoadLibrary()
+{
+	return $CURRENT_ID_SPLITTEDLOOP + '_load';
+}
+
+/**
+	@return the name of the array used to store the time execution of the fragments.
+	The name is the concatenation of $CURRENT_ID_SPLITTEDLOOP  with "_cpt".
+*/
+function getCurrentCpt()
+{
+	return $CURRENT_ID_SPLITTEDLOOP + '_cpt';
+}
+
+/**
+	@return the name of the library (os dependent) of the vindex-th fragment of the current splitted loop.
+	Example: (linux : libINRIA_SPLITTED_LOOP_2_3.so, witn vindex=3).
+*/
+function getSplitLoopLib(vindex)
+{
+ return getOSLibName($CURRENT_ID_SPLITTEDLOOP+ '_' + vindex);
+}
+
+/**
+  @return the pragma with name $SPLITPRAGMA or undefined, assigned to a statement ($s).
+*/
+function getSplipLoopPragma($s){
+  var p = $s.pragmas;
+  for (vp of p) 
+     if (vp.name === $SPLITPRAGMA)  
+		return vp;
+  return undefined;
+ }
+
+/**
+  @return the name of the variable used to store the choice of the selected fragment.
+  The name is the concatenation of $CURRENT_ID_SPLITTEDLOOP  with "_best".
+*/
+function getBestId() 
+{
+   return  $CURRENT_ID_SPLITTEDLOOP + '_best';
+} 
+
+/**
+ @return the name of the variable used to manage the execution of the different fragment is a learning step.
+ The name is the concatenation of $CURRENT_ID_SPLITTEDLOOP  with "_LEARNING".
+*/
+function getLearning()
+{ 
+  return $CURRENT_ID_SPLITTEDLOOP + '_LEARNING';
+}
+
+/**
+ @return the name of the variable used to manage the execution, to know if 
+ the best fragment has been selected after the learning step.
+ The name is the concatenation of $CURRENT_ID_SPLITTEDLOOP  with "_LEARNING".
+*/
+function getSelectedId()
+{  
+   return $CURRENT_ID_SPLITTEDLOOP + '_SELECTED';
+}
+
+/** 
+ @return the name of the function to call for the selection of the best choice.
+ This function is generated is the weaved code.
+*/
+function getFunctionBestId()
+{  
+   return $ID_SPLITTEDLOOP + '_BEST';
+}

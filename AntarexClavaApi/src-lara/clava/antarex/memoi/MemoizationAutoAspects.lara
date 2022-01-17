@@ -1,0 +1,160 @@
+/*
+   Author(s): Loïc Besnard (loic.besnard@irisa.fr). 
+              IRISA-INRIA Rennes, France.
+              
+   This code has been developed during the ANTAREX project (http://www.antarex-project.eu).
+   It is provided under the MIT license (https://opensource.org/licenses/MIT).
+*/
+import antarex.utils.messages;
+import antarex.memoi.Memoization;
+import antarex.memoi.MemoizationAutoFuncs;
+
+var stackCall=[];
+var callGraph=new LaraObject();
+var memoiFunctions={ };
+var STATE={NO:0, YES:1, VISITED:2, UNDEF:3};
+var STRSTATE=["NOT_MEMOIZABLE", "MEMOIZABLE", "RECURSIVE", "UNDEFINED"];
+var SomePredefinedPureFunctions =["isnan"];
+
+/** 
+  * Returns in memoizableFunctions the detected memoizable functions (excluding the math functions).
+  * @param {string[]} memoizableFunctions, the set of the detected 
+  * memoizable functions encoded by Filename%Line.
+  * */
+aspectdef findMemoizables
+output
+  memoizableFunctions=[]
+end
+   call BuildStaticCallGraph();
+   printCallGraph(callGraph);
+   // init
+   select file.function.body  end
+   apply
+     currentfunction = getidfunction($file, $function);
+     if (memoiFunctions[currentfunction] === undefined)  memoiFunctions[currentfunction] = STATE.UNDEF;
+     TRACE(" MemoiFunctions at initial value for " + currentfunction + " = " + STRSTATE[ memoiFunctions[currentfunction]]);
+   end
+
+   // Fix point computation.
+    var nbPrev = -1;
+    var nb = getNbMemoizable();
+    while (nb > nbPrev) {
+      nbPrev = nb;
+      call findmemoizable_fpstep();
+      nb = getNbMemoizable();
+    };
+   
+   // Export the results in memoizableFunctions
+   for (f in memoiFunctions) {
+      var code = memoiFunctions[f];
+      TRACE(" memoiFunctions [" + f + '] = ' + STRSTATE[code] );
+      if ( code === STATE.YES) memoizableFunctions.push(f);
+   }
+end
+
+/** Search the memoizable functions of the application.
+  * The status of a function for the memoization is stored in a global array ( memoiFunctions ).
+  * For a function F of a file FILENAME, memoiFunctions[getidfunction( F, FILENAME)]  = V, 
+  * where getidfunction(x,y) is a function that guarantees the of the reference.
+  *    - V =STATE.YES => F is memoizable
+  *    - V =STATE.NO => F is not memoizable
+  *    - V =STATE.UNDEF => the status of F is undefined
+  *    - V =STATE.VISITED => internal used (for recursivity detection). 
+  * The inline function are ignored.
+  * */
+aspectdef findmemoizable_fpstep
+  TRACE( " =================> STARTING FIX POINT STEP");
+  select file.function.body end
+  apply
+    currentfunction = getidfunction($file, $function);
+    if ($function.isInline)
+       MESSAGE("", " The Inline function " + $function.name + " is ignored", "");
+    else
+       memoiFunctions[currentfunction] = findmemoizable($file, $function, $body);
+  end
+end
+
+
+/**
+  * It builts the Static Call Graph of the application in a global variable callGraph.
+  * And in case of a reference to a known pure function, the information is stored in the
+  * global variable memoiFunctions["pure finction"] = STATE.YES that expresses 
+  * that the pure fonction is memoizable.
+  * */
+aspectdef BuildStaticCallGraph
+
+ TRACE_BEGIN_OP(" StaticCallGraph ");
+ select file.function.stmt.call end
+ apply
+   TRACE("StaticCallGraph for "  + $call.name );
+   source = getidfunction($file, $function);
+   var $def = $call.definition;
+   if ($def !== undefined) { 
+	  if (! $def.isInline)
+	    {
+	      target = getIdId($def.ancestor("file").name, $def.line);
+	      callGraph.inc(source, target);
+	    }
+    }
+    else
+       if (! declaredAsPure($call.name)) 
+         memoiFunctions[ source ]= STATE.NO;
+ end
+ TRACE_END_OP( "StaticCallGraph ");
+end
+
+
+/**
+  * Prints the detected memoizable functions/methods, elements of the input parameter. 
+  * @param {string[]} memoiFuncs. An element is a string Filename%Line. 
+  * */
+aspectdef printMemoizables
+input
+  memoiFuncs
+end
+   println( '\n \n Memoizable functions { ' );
+   select file.function  end
+   apply
+     currentfunction = getidfunction($file, $function);
+     if (memoiFuncs.indexOf(currentfunction) >=0)
+      {
+	   var T = currentfunction.split('%');
+	   if ($function.astName  === 'CXXMethodDecl') mf = "method" ; else mf="function";
+	   println( "\t * The " + mf + ' ' + $function.name + " at line " + T[1]  + " of the file " + T[0]);
+      }
+   end
+    println( '}\n \n');
+end
+
+/** 
+  * Memoizes the elements of the array memoiFuncs with the default parameters.
+  * @param {string[]} memoiFuncs. An element is a string Filename%Line.
+  * */
+aspectdef MemoizeElements
+input
+  memoiFuncs
+end
+   select file.function end
+   apply
+     currentfunction = getidfunction($file, $function);
+     if (memoiFuncs.indexOf(currentfunction) >=0)
+	   {
+	    // Perhaps add a test "if public" : $function.isPublic.
+         if ($function.astName  === 'CXXMethodDecl') {
+          
+           var nbparams = checkHeaderMemoizableMethod($function);
+     	   var functionType = $function.functionType;
+  	       var tt_return = functionType.returnType;
+  	       var aClass = $function.record.name;
+  	       var aMethod = $function.name;
+  	       var vtype = getMemoType(tt_return);
+           GenCode_CPP_Memoization(aClass, aMethod, vtype, nbparams, 'none', 'no', 'none', 'no', 0, DEFAULT_TABSIZE);
+           call CPP_UpdateCallMemoization(aClass, aMethod, vtype, nbparams);
+         }
+        else  // Function
+          call Memoize_Function($function.name);
+	   }
+   end
+end
+
+

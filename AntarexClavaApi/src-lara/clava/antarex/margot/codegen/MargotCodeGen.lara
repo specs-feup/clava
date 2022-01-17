@@ -1,0 +1,352 @@
+import antarex.margot.codegen._internal.MargotCodeGenAspects;
+import antarex.margot.codegen._internal.MargotStringsGen;
+
+import clava.Clava;
+import antarex.margot.config.MargotConfig;
+
+/**
+ * This class contains the methods to generate and insert the code of the mARGOt interface in a target application.
+ * 
+ * Every method provided here will include the mARGOt header in the correct place if needed.
+ * 
+ * Every method provided here, except {@link MargotCodeGen.init}, will also insert a default initialization to the mARGOt framework at the start of the main function.
+ * 
+ * @constructor
+ * @param {string} block - the name of the block, this is mandatory
+ * @param {...string} [vars] - the names of the knob variables
+ * */
+var MargotCodeGen = function (block) {
+    
+    this._block = block;
+    this._vars = arrayFromArgs(arguments, 1);
+    this._features = undefined;
+    
+    /* change the strings based on the standard */
+    this._stringsGen = new MargotStringsGen(
+		Clava.isCxx() ? MargotCxxStrings : MargotCStrings
+	);
+    
+    this._initDone = false;
+};
+
+/**
+ * Generates and returns the code generation instance needed for block with provided name.
+ * 
+ * @param {MargotConfig} config - the configuration from which we get the information
+ * @param {String} blockName - the name of the block for which the code generation infor will be returned
+ * 
+ * @returns {MargotCodeGen} an object with the code generation information
+ * */
+MargotCodeGen.fromConfig = function(config, blockName) {
+	
+	checkDefined(config, 'config', 'MargotCodeGen.fromConfig');
+	checkInstance(config, MargotConfig, 'MargotCodeGen.fromConfig(config)', 'MargotConfig');
+	checkDefined(blockName, 'blockName', 'MargotCodeGen.fromConfig');
+	checkString(blockName);
+	
+	var block = config._blocks[blockName];
+	if(block === undefined) {
+		throw 'Could not find a block with name ' + blockName;
+	}
+	
+	var codegen = new MargotCodeGen(blockName);
+	
+	// knobs
+	var knobNames = [];
+	for(var knob of block._knobs) {
+		knobNames.push(knob.getVarName()); // code generation needs the names of the code variables
+	}
+	codegen.setKnobs(knobNames);
+	
+	// features
+	if(block._features !== undefined) {
+		var featureNames = [];
+		for(var feature of block._features.getFeatures()) {
+			featureNames.push(feature.getName());
+		}
+		codegen.setFeatures(featureNames);
+	}
+	
+	return codegen;
+};
+
+/**
+ * Sets the names of the variables that hold the values of the knobs.
+ * 
+ * @param {(string[]|...string)} knobs - the list of variable names
+ * */
+MargotCodeGen.prototype.setKnobs = function(knobs) {
+
+	this._vars = arrayFromArgs(arguments, 0);
+}
+
+/**
+ * Sets the names of the variables that hold the values of the data features.
+ * 
+ * @param {(string[]|...string)} features - the list of variable names
+ * */
+MargotCodeGen.prototype.setFeatures = function(features) {
+
+	this._features = arrayFromArgs(arguments, 0);
+	
+}
+
+/**
+ * Inserts the include directive with the mARGOt header in the parent file of the provided join point.
+ * 
+ * @param {joinpoint} $joinpoint - The reference join point
+ * */
+MargotCodeGen.prototype._includeHeader = function($joinpoint) {
+	
+	var includeCode = this._stringsGen.inc();
+	var $parentFile = $joinpoint.ancestor('file');
+	$parentFile.exec addInclude(includeCode, true);
+}
+
+/**
+ * Checks if the initialization was performed and, if it wasn't, performes default initialization at the main function.
+ * 
+ * This should be called in every API function that inserts code, except 'init'.
+ * */
+MargotCodeGen.prototype._checkDefaultInit = function() {
+	
+	if(!this._initDone) {
+		
+		var mi = new MargotInitMain();
+		mi.call(this._stringsGen);
+		
+		this._initDone = true;
+	}
+}
+
+/**
+ * Inserts the update code before the provided join point.
+ * 
+ * @param {joinpoint} $joinpoint - the reference join point
+ * */
+MargotCodeGen.prototype.update = function($joinpoint) {
+	
+	checkJoinPoint($joinpoint, 'update ($joinpoint)');
+	
+	this._checkDefaultInit();
+	
+	var additionalCode = arrayFromArgs(arguments, 1);
+	var code = this._stringsGen.update(this._block, this._vars, this._features, additionalCode);
+	$joinpoint.insert before(code);
+
+	this._includeHeader($joinpoint);
+}
+
+/**
+ * Inserts code to start all monitors specified in the configuration before the provided join point.
+ * 
+ * @param {joinpoint} $joinpoint - the reference join point
+ * @param {...string} [startArgs] - the arguments to the start monitors call
+ * 
+ * */
+MargotCodeGen.prototype.startMonitors = function($joinpoint) {
+	
+	checkJoinPoint($joinpoint, 'startMonitors ($joinpoint)');
+	
+	this._checkDefaultInit();
+	
+	var monitorCode = this._stringsGen.startAllMonitors(this._block, arrayFromArgs(arguments, 1));
+	$joinpoint.insert before monitorCode;
+
+	this._includeHeader($joinpoint);
+};
+
+/**
+ * Inserts code to stop all monitors specified in the configuration after the provided join point.
+ * 
+ * @param {joinpoint} $joinpoint - the reference join point
+ * @param {...string} [stopArgs] - the arguments to the start monitors call
+ * 
+ * */
+MargotCodeGen.prototype.stopMonitors = function($joinpoint) {
+	
+	checkJoinPoint($joinpoint, 'stopMonitors ($joinpoint)');
+	
+	this._checkDefaultInit();
+	
+	var monitorCode = this._stringsGen.stopAllMonitors(this._block, arrayFromArgs(arguments, 1));
+	$joinpoint.insert after monitorCode;
+
+	this._includeHeader($joinpoint);
+};
+
+/**
+ * Inserts code to start a single monitor specified in the configuration before the provided join point.
+ * 
+ * @param {joinpoint} $joinpoint - the reference join point
+ * @param {string} monitorName - the name of the monitor to be started
+ * @param {...string} [args] - the arguments to the start monitor call
+ * 
+ * */
+MargotCodeGen.prototype.startMonitor = function($joinpoint, monitorName) {
+	
+	checkJoinPoint($joinpoint, 'startMonitors ($joinpoint)');
+	
+	checkDefined(monitorName, 'monitorName', 'startMonitor');
+	checkType(monitorName, 'string', 'startMonitor (monitorName)');
+
+	this._checkDefaultInit();
+
+	var monitorCode = this._stringsGen.startMonitor(this._block, monitorName, arrayFromArgs(arguments, 2));
+	$joinpoint.insert before monitorCode;
+
+	this._includeHeader($joinpoint);
+};
+
+/**
+ * Inserts code to stop a single monitor specified in the configuration after the provided join point.
+ * 
+ * @param {joinpoint} $joinpoint - the reference join point
+ * @param {string} monitorName - the name of the monitor to be stopped
+ * @param {...string} [args] - the arguments to the stop monitor call
+ * 
+ * */
+MargotCodeGen.prototype.stopMonitor = function($joinpoint, monitorName) {
+	
+	checkJoinPoint($joinpoint, 'stopMonitors ($joinpoint)');
+	
+	checkDefined(monitorName, 'monitorName', 'stopMonitor');
+	checkType(monitorName, 'string', 'stopMonitor (monitorName)');
+
+	this._checkDefaultInit();
+
+	var monitorCode = this._stringsGen.stopMonitor(this._block, monitorName, arrayFromArgs(arguments, 2));
+	$joinpoint.insert after monitorCode;
+
+	this._includeHeader($joinpoint);
+};
+
+/**
+ * Inserts code to start and stop all monitors specified in the configuration around the provided join point.
+ * 
+ * This is equivalent to calling {@link MargotCodeGen.startMonitors} and then {@link MargotCodeGen.stopMonitors} with the same join point.
+ * 
+ * @param {joinpoint} $joinpoint - the reference join point
+ * @param {string[]} [startArgs] - the arguments to the start monitors call
+ * @param {string[]} [stopArgs] - the arguments to the stop monitors call
+ * */
+MargotCodeGen.prototype.monitor = function($joinpoint, startArgs, stopArgs) {
+	
+	checkJoinPoint($joinpoint, 'monitor ($joinpoint)');
+
+	
+	if(startArgs === undefined) {
+		startArgs = [];
+	}
+	
+	if(stopArgs === undefined) {
+		stopArgs = [];
+	}
+	
+	this.startMonitors($joinpoint, startArgs);
+	this.stopMonitors($joinpoint, stopArgs);
+}
+
+/**
+ * Inserts code to log the collected data after the provided join point.
+ * 
+ * @param {joinpoint} $joinpoint - the reference join point
+ * */
+MargotCodeGen.prototype.log = function($joinpoint) {
+	
+	checkJoinPoint($joinpoint, 'log ($joinpoint)');
+	
+	this._checkDefaultInit();
+	
+	var code = this._stringsGen.log(this._block);
+	$joinpoint.insert after code;
+	
+	this._includeHeader($joinpoint);
+}
+
+
+/**
+ * Inserts code to start and stop all monitors specified in the configuration around the provided join point, and also inserts the code to log after the join point.
+ * 
+ * This is equivalent to calling {@link MargotCodeGen.monitor} and then {@link MargotCodeGen.log} with the same join point.
+ * 
+ * @param {joinpoint} $joinpoint The point in the code around which the code will be inserted
+ * @param {string[]} [startArgs] - The arguments to the start monitors call (optional)
+ * @param {string[]} [stopArgs] - The arguments to the stop monitors call (optional)
+ * */
+MargotCodeGen.prototype.monitorLog = function($joinpoint, startArgs, stopArgs) {
+	
+	checkJoinPoint($joinpoint, 'monitorLog ($joinpoint)');
+	
+	if(startArgs === undefined) {
+		startArgs = [];
+	}
+	
+	if(stopArgs === undefined) {
+		stopArgs = [];
+	}
+	
+	this.log($joinpoint);
+	this.startMonitors($joinpoint, startArgs);
+	this.stopMonitors($joinpoint, stopArgs);
+}
+
+/**
+ * Inserts code to set the value of a goal.
+ * 
+ * @param {joinpoint} $joinpoint - the reference join point
+ * @param {string} goalName  - the name of the goal
+ * @param {string} goalValue - the value to assign to the goal
+ * 
+ * */
+MargotCodeGen.prototype.setGoal = function($joinpoint, goalName, goalValue) {
+	
+	checkJoinPoint($joinpoint, 'setGoal ($joinpoint)');
+	
+	checkDefined(goalName, 'goalName', 'setGoal');
+	checkType(goalName, 'string', 'setGoal (goalName)');
+	
+	checkDefined(goalValue, 'goalValue', 'setGoal');
+	checkType(goalValue, 'string', 'setGoal (goalValue)');
+
+	this._checkDefaultInit();
+
+	var goalCode = this._stringsGen.setGoal(this._block, goalName, goalValue);
+	$joinpoint.insert before goalCode;
+
+	this._includeHeader($joinpoint);
+};
+
+/**
+ * Inserts the code for the mARGOt initialization call. This function will find the parent scope of the provided join point and will insert the 'init' call at the start of that scope.
+ * 
+ * This function will throw an exception if it is not possible to find a scope from the provided join point.
+ * 
+ * This function will issue a warning and perform nothing if the initialization was already performed. Two possible causes:
+ * 	1) This function is called following any other function that inserts code. By default, if any of those functions is called and 'init' was not called beforehand, the initialization code will be inserted at the start of the main function.
+ * 	2) This function is called multiple times.
+ * 
+ * @param {joinpoint} $joinpoint - the reference join point
+ * */
+MargotCodeGen.prototype.init = function($joinpoint) {
+	
+	if(this._initDone) {
+		println("\n[WARN] Initialization called multiple times. Make sure that if 'init' is being called explicitly, it is called before any other function and not called twice.\n");
+		return;
+	}
+	
+	checkJoinPoint($joinpoint, 'init ($joinpoint)');
+	
+	var scope = $joinpoint.ancestor('scope');
+	if(scope === undefined) {
+		
+		throw 'Could not find a suitable scope to insert the initialization code from the join point provided: \n' + $joinpoint.code;
+	}
+	
+	var initCode = this._stringsGen.init();
+	scope.insertBegin(initCode);
+	
+	this._includeHeader($joinpoint);
+	
+	this._initDone = true;
+}

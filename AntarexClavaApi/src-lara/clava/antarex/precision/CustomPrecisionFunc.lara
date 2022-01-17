@@ -1,0 +1,279 @@
+/*
+   Author(s): Loïc Besnard (loic.besnard@irisa.fr). 
+              IRISA-INRIA Rennes, France.
+              
+   This code has been developed during the ANTAREX project (http://www.antarex-project.eu).
+   It is provided under the MIT license (https://opensource.org/licenses/MIT).
+*/
+import lara.Io;
+import clava.Clava;
+import clava.ClavaJoinPoints;
+import antarex.utils.messages;
+import lara.Strings;
+
+var filepath = "";
+var predefinedTypes =["void", "float", "Bool", "bool" , "char" , 
+                      "signed" , "unsigned",  "int" , "short" , "long", "double"];
+                      
+// prefix of the created files for the customization.
+var FILENAME_PRECISION_PREFIX = "INRIA_PRECISION_DEFS";
+
+var DATATYPE='_INRIA_DATATYPE_'; // prefix of the generated type.
+var CPT_DATATYPE= 0; // counter of generated types
+var CPT_IOWithFormat=0;// counter of IO instructions with format (C code)
+
+var CPT_CSTE= 0; // counter of generated constant.
+/** 
+    An element extractedConstants[value]=SYMBOL, SYMBOL is a created new symbol
+    and where value is a string code of the constant.
+    */ 
+var extractedConstants={};
+
+
+/** @return the new symbol for a math function.
+  For example getNewNameFunc('sin') returns  sin_INRIA_DATATYPE_1 where _INRIA_DATATYPE_1 is the 
+  current symbol of the 'extracted' type. 
+  */
+function getNewNameFunc(name) 
+{ return name+getDataType();  }
+
+/** @return the prefix used for the added files for the parametrization.
+*/
+function getPrecisionPrefix() {
+  return FILENAME_PRECISION_PREFIX;
+}
+
+
+function  genConstants( $vf, bval){
+   var v;
+   for(var key in extractedConstants) {
+       var symb = extractedConstants[key];
+       if (bval) v = key;  else v = toBeFixed( key );
+       $vf.exec insertBefore%{#define [[symb]] [[v]] }%;
+   }
+  $vf.exec insertBefore%{/* Extracted constants */}%;
+}
+
+/**
+  Generate the file INRIA_PRECISION_DEFS_[vtype].h with the original definitions for the created symbols.
+  vtype is the current type of the customization.
+*/
+function genCodePrecisionDefsOriginalVersion() {
+ var targetVers, v;
+   var vfile = FILENAME_PRECISION_PREFIX + '_' + srcType + '.h';
+   var $vf = AstFactory.file(vfile, filepath);
+   Clava.addFile($vf);
+   
+   $vf.exec insertBefore%{}%;
+   for(var key of mathLibReferenced) {
+      var newName = getNewNameFunc(key);
+       targetVers = key;  
+       $vf.exec insertBefore%{#define [[newName]] [[targetVers]] }%;
+   }
+
+   for(var key of predefinedFuncsReferenced) {
+      var newName = getNewNameFunc(key);
+      $vf.exec insertBefore%{#define [[newName]] [[key]] }%;
+   }
+
+
+  $vf.exec insertBefore%{/* Referenced functions */}%;
+  for(var key in statementsWithFormatOriVersion) {
+    v = statementsWithFormatOriVersion[key];
+    $vf.exec insertBefore%{#define [[key]] [[v]] }%;
+  }
+  $vf.exec insertBefore%{/* IO with format */}%;
+  genConstants( $vf, true);
+
+  $vf.exec insertBefore%{#define [[getDataType()]] [[srcType]]}%; 
+  $vf.exec insertBefore%{// Original ([[srcType]]) Version. )
+   }%;
+ }
+ 
+/**
+  Generate the file INRIA_PRECISION_DEFS_template.h with undefined definitions for the created symbols.
+*/
+function genCodePrecisionDefsTemplate() {
+  var targetVers, v;
+  var vname = FILENAME_PRECISION_PREFIX + '_' + getDataType() + '_template.h';
+  $newFileJp_PRECISION_DEFS_template = AstFactory.file(vname, filepath);
+  var $vf = $newFileJp_PRECISION_DEFS_template;
+   Clava.addFile($vf);
+   
+   $vf.exec insertBefore%{}%;
+   for(var key of mathLibReferenced) {
+      var newName = getNewNameFunc(key);
+       targetVers = toBeFixed(key); 
+       $vf.exec insertBefore%{#define [[newName]] [[targetVers]] }%;
+   }
+
+   for(var key of predefinedFuncsReferenced) {
+      var newName = getNewNameFunc(key);
+      targetVers = toBeFixed(key); 
+      $vf.exec insertBefore%{#define [[newName]] [[targetVers]] }%;
+   }
+
+  $vf.exec insertBefore%{/* Referenced functions */}%;
+  for(var key in statementsWithFormatOriVersion) {
+    v = statementsWithFormatOriVersion[key];
+    v = toBeFixed(v);
+    $vf.exec insertBefore%{#define [[key]] [[v]] }%;
+  }
+  $vf.exec insertBefore%{/* IO with format */}%;
+  genConstants( $vf, false);
+  $vf.exec insertBefore%{#define [[getDataType()]] '_TO_BE_FIXED'}%; 
+  $vf.exec insertBefore%{// Template Version ( IT MUST BE UPDATED )
+  }%;
+ }
+
+/**
+  Generate the file INRIA_PRECISION_DEFS_[vtype].h, vtype restricted to float or double,
+  with vtype-typed definitions for the created symbols.
+*/
+
+function genCodePrecisionDefsAsked(vtype) {
+   if ((srcType !== 'double') && (srcType !== 'float') ) return;
+   
+   var targetVers, v;
+   var fname= FILENAME_PRECISION_PREFIX + '_'+ vtype + ".h";
+   var $vf = AstFactory.file(fname, filepath);
+   Clava.addFile($vf);
+   
+   $vf.exec insertBefore%{}%;
+   for(var key of mathLibReferenced) {
+      var newName = getNewNameFunc(key);
+       targetVers = getOtherMathFunc(key, vtype);
+       $vf.exec insertBefore%{#define [[newName]] [[targetVers]] }%;
+   }
+
+
+   for(var key of predefinedFuncsReferenced) {
+     
+      var newName = getNewNameFunc(key);
+      if (key ==='stod') targetVers='stof'; else if (key ==='stof') targetVers='stod'; else targetVers= toBeFixed(key); 
+      $vf.exec insertBefore%{#define [[newName]] [[targetVers]] }%;
+   }
+
+  $vf.exec insertBefore%{/* Referenced functions */}%;
+  
+  for(var key in statementsWithFormatOriVersion) {
+    v = statementsWithFormatOriVersion[key];
+    v = getOtherFormat(v, vtype);
+    $vf.exec insertBefore%{#define [[key]] [[v]] }%;
+  }
+  $vf.exec insertBefore%{/* IO with format */}%;
+  genConstants( $vf, true);
+  $vf.exec insertBefore%{#define [[getDataType()]] [[vtype]]}%; 
+  $vf.exec insertBefore%{// [[vtype]] Version.
+  }%;
+ }
+
+/**
+  Assigned a new symbol for the current type parametrization.
+*/
+function initNewDatatype() 
+ { 
+   CPT_DATATYPE ++;
+   DATATYPE = '_INRIA_DATATYPE_' + CPT_DATATYPE;
+ }
+
+/**
+  @return the symbol assigned to the current parameterized type.
+*/
+function getDataType() { return DATATYPE;}
+
+function getNextIOFormat() 
+ { 
+   CPT_IOWithFormat++;
+   return '_INRIA_IO_FORMAT_' + CPT_IOWithFormat;
+ }
+
+/** 
+   @return true if the string vstr contains the visin string, false otherwise.
+   */
+function isIn(vstr, visin) 
+ { 
+   return vstr.indexOf(visin) >= 0;
+ }
+
+/**
+  @return the format for the $vtype type obtained from $code format, or 'NOT_YET_IMPLEMENTED (...)'
+  for unknown translation.
+  Example: for $code="%d%7s%lf%lf%lf%7s" and $vtype='float', it returns "%d%7s%f%f%f%7s".
+*/
+function getOtherFormat($code, $vtype) {
+  TRACE("getOtherFormat (" + $code + ',' + $vtype +')');
+  if ((srcType == 'double') && ( $vtype === 'float')) {
+   var $ncode = Strings.replacer($code, "%lf", "%f"); 
+   var $ncode = Strings.replacer($ncode, "%le", "%e");
+   var $ncode = Strings.replacer($ncode, "%lE", "%E");
+   var $ncode = Strings.replacer($ncode, "%lg", "%g");
+   var $ncode = Strings.replacer($ncode, "%lG", "%G"); 
+   return $ncode;
+  }  
+  if ((srcType == 'float') && ( $vtype === 'double'))  { 
+   var $ncode = Strings.replacer($code, "%f", "%lf"); 
+   var $ncode = Strings.replacer($ncode,"%e", "%le");
+   var $ncode = Strings.replacer($ncode, "%E", "%lE");
+   var $ncode = Strings.replacer($ncode, "%g", "%lg");
+   var $ncode = Strings.replacer($ncode, "%G", "%lG");
+   return $ncode;
+  }
+ return 'NOT_YET_IMPLEMENTED ( ' + $code + ')';  
+}
+
+/**
+	@return the name of $vmfunc for the $vtype type.
+	It is assumed that $vmfunc is the name of math functions.
+	Example getOtherMathFunc( 'sin', 'float') returns 'sinf'.
+*/
+function getOtherMathFunc( $vmfunc, $vtype) {
+   if ((srcType == 'double') && ( $vtype === 'float')) 
+     return $vmfunc +'f';
+   if ((srcType == 'float') && ( $vtype === 'double'))  
+     return $vmfunc.substring(0, $vmfunc.lastIndexOf('f'));
+  return 'NOT_YET_IMPLEMENTED ( ' + $vmfunc + ')'; 
+}
+
+
+
+function mkJointPointType(atype) {
+    if ( predefinedTypes.indexOf(atype) > -1)
+  	return ClavaJoinPoints.builtinType(atype);
+    return ClavaJoinPoints.typeLiteral(atype);
+}
+
+
+function dclConstantDoubleFloat($expr) {
+ if ($expr.astName !== 'CXXDefaultArgExpr') {
+   var code=$expr.code;
+   if (code[0] !== '"')  // strings are filtered !      
+  	 if ( /[-+]?[0-9]*\.[0-9]+([eE][-+]?[0-9]+)?/.test(code))
+   	 {
+      TRACE( "  +++++  Detected Double/Float constant  = " + code);
+      var $symb = getExtractedConstantsSymbol(code);
+      if ($symb === undefined) {
+         $symb = getNewSymbolForExtractedConstant();
+         extractedConstants[code] = $symb;
+      }
+     $expr.insert replace ($symb);
+   }
+  }
+}
+
+/**
+  @return a new symbol for the constant parametrization.
+*/
+function getNewSymbolForExtractedConstant() 
+ { 
+   CPT_CSTE ++;
+   return '_INRIA_CSTE_' + CPT_CSTE;
+ }
+
+function getExtractedConstantsSymbol (val) {
+ return extractedConstants[val];
+}
+
+function toBeFixed(key) {
+  return '_TO_BE_FIXED ( ' + key + ')';
+}

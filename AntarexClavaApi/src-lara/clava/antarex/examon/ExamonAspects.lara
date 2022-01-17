@@ -1,0 +1,19 @@
+/**
+ * Declares a variable globally.
+ * 
+ * @param {string} varName - the name of the variable
+ * 
+ * @private
+ * @aspect
+ * */
+aspectdef ExamonCollectorDeclareGlobal
+	input varName end
+
+	var type = ClavaJoinPoints.typeLiteral('struct collector_val');
+	var init = '{ NULL, NULL, false, 0, 0, 0, {0}, {0} }';
+
+	select file end
+	apply
+		exec addGlobal(varName, type, init);
+	end
+end

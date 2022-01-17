@@ -1,0 +1,152 @@
+/*
+   Author(s): Loïc Besnard (loic.besnard@irisa.fr). 
+              IRISA-INRIA Rennes, France.
+              
+   This code has been developed during the ANTAREX project (http://www.antarex-project.eu).
+   It is provided under the MIT license (https://opensource.org/licenses/MIT).
+*/
+
+import antarex.utils.IdentReferences;
+
+/** A function/method is memoizable iff
+  * 1) The header "vtype func(parameters)" satisfies : 
+  *    - for all p of parameters type(p)=vtype and 1 <= |parameters| <=3
+  *    - returns a vtype value.
+  * 2) It refers only local variables and constants (pure functions), and no pointers.
+  */
+function findmemoizable($file, $function, $body){ 
+   currentfunction = getidfunction($file, $function);
+   var v = memoiFunctions[currentfunction];
+   if (v === STATE.NO) return v;
+   if (v === STATE.YES) return v;
+   if (v === STATE.VISITED) 
+     {
+       TRACE(" >>>>> CYCLIC GRAPH DETECTED");
+       return STATE.NO; // cyclic graph
+     }
+   
+   var nbparams = checkHeaderMemoizable($function);
+   if ( nbparams < 0 ) {
+     MESSAGE( " >>>>> ", currentfunction + " is NOT MEMOIZABLE: unexpected interface.", "");
+     v = STATE.NO;
+    }
+    else {
+      TRACE( " STATE.VISITED for " + currentfunction);
+      memoiFunctions[currentfunction] = STATE.VISITED;
+      v = checkBodyMemoizable($file, $function, $body);
+      if (v === STATE.NO)
+    	MESSAGE( " >>>>> ", currentfunction + " is NOT MEMOIZABLE: unexpected references in the body.", "");
+    }
+  memoiFunctions[currentfunction] = v;
+  return v;
+}
+
+/** 
+  * @return true if $name is declared as a pure function, false otherwise.
+  * Currently, restricted to the pure functions of math.h and those declared in SomePredefinedPureFunctions.
+  */
+function declaredAsPure ($name)
+{
+  // predefined memoizable function
+ if (MathMemoizableFuncs.indexOf($name) >=0) return true;
+ if (SomePredefinedPureFunctions.indexOf($name) >=0) return true;
+ return false;
+}
+
+/**
+  * @return the current number of memoizable functions.
+  * */
+function getNbMemoizable(){
+	var n = 0;
+	for (f in memoiFunctions) {
+      var code = memoiFunctions[f];
+      if ( code === STATE.YES) n++;
+   }
+   return n;
+}
+
+
+/** 
+  * @return the string $id%$suff 
+  * */
+function getIdId( $id, $suff) {
+   return $id + '%' + $suff;
+}
+
+function getidfunction( $file, $function) {
+   return getIdId($file.name, $function.line);
+}
+
+/**
+  * @return 
+  *   - STATE.YES if the successors of id are memoizable.
+  *   - STATE.NO if one of the sucessors is not memoizable, or in case of circuit.
+  *   - STATE.UNDEF if the status of one of the successors is undefined (ie not yet fixed).
+*/
+function successorsAreMemoizable(id)
+{
+   for (idSucc in callGraph[id]) {
+       var code = memoiFunctions[ idSucc ];
+       TRACE ( " °°°°°°° successorsAreMemoizable ( " + id + ") = " + idSucc );
+       if ( code === STATE.NO)  return code;
+       if ( code === STATE.VISITED) return STATE.NO; // circuit.
+       if ( code === STATE.UNDEF) return code;
+   }
+   return STATE.YES;
+}
+
+/**
+  * @return STATE.YES if the method/function $function defined in the file $file 
+  * is memoizable, STATE.NO or STATE.UNDEF otherwise.
+  * A function/method is memoizable:
+  *   - if the referenced functions/methods are memoizable 
+  *   - and the $body of $function refers only local variables and constants (pure functions).
+  * */
+function checkBodyMemoizable($file, $function, $body)
+{
+  currentfunction = getidfunction($file, $function);
+  var code = successorsAreMemoizable(currentfunction);
+  TRACE( " CheckBodyMemoizable:: successorsAreMemoizable for " + currentfunction + " returns " + STRSTATE[code]); 
+  if (code === STATE.YES) {
+    // If all referenced functions are memoizable, it must reference only local variables/constants
+  	if (! BodyReferencesLocalsOrConstants($function, $body)) { 
+      TRACE("checkBodyMemoizable::BodyReferencesLocalsOrConstants return false for " + currentfunction);
+      code =STATE.NO;
+    }
+  }
+  return code;
+}
+
+
+/**
+  * @return "true" if $body of $function references only local variables or constant objects, "false" otherwise.
+  * */
+function BodyReferencesLocalsOrConstants($function, $body)
+{
+  var $FunctionDecls=[];
+  var $varDecls=[];
+  var $externDecls = [];
+  getRefVarsInStmt($body, $varDecls, $FunctionDecls);
+  for (var $aDecl of $varDecls)  {
+	if (isOutsideDeclaration($aDecl, $function))
+		if (! isAConstantDecl($aDecl)) return false;
+  }
+  return true;
+}
+
+
+/** 
+  * Debug. Prints the gathered information of a graph ( callGraph) to the console.
+  * */
+function printCallGraph(callGraph) {
+    if ( is_mode_trace_on())  {
+      println('Static call graph {\n');
+	  for (f in callGraph) { 
+		for (c in callGraph[f]) {
+		  println('\t' + f + '->' + c + ' [label="' + callGraph[f][c] + '"];');
+		}
+	  }
+	  println('}');
+    }
+}
+

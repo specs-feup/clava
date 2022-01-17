@@ -1,0 +1,93 @@
+import antarex.margot.config.monitor.MargotMonitor;
+
+/**
+ * This class represents a throughput monitor.
+ * 
+ * @extends MargotMonitor
+ * @constructor
+ * 
+ * @param {string} name - the name of this monitor
+ * */
+function MargotThroughputMonitor(name) {
+	
+    // super contructor
+    MargotMonitor.call(this, name);
+    
+    // save super prototype
+    this._super = MargotMonitor.prototype;
+    
+    var args = arrayFromArgs(arguments, 1);
+    
+    this._numJobDoneParamType = undefined;
+    this._numJobDone = undefined;
+    this._numJobDoneCType = undefined;
+    
+    if(args.length == 1) {
+		
+		this._numJobDoneParamType = MargotParamType.FIXED;
+		this._numJobDone = args[0];
+	} else if(args.length == 2) {
+		
+		this._numJobDoneParamType = MargotParamType.LOCAL;
+		this._numJobDone = args[0];
+		this._numJobDoneCType = args[1];
+	} else {
+		throw "MargotThroughputMonitor must receive either 2 or 3 arguments:\n\tname, fixedValue\n\tname, varName, varType";
+	}
+}
+
+// Inheritance
+MargotThroughputMonitor.prototype = Object.create(MargotMonitor.prototype);
+
+
+/*
+ * CODE GENERATION
+ * ****************************************************************************/
+
+/**
+ * Makes the code of the throughput monitor using the base monitor.
+ * 
+ * Calls the super function to make the code for the monitor and passes additional code specific to this monitor.
+ * */
+MargotThroughputMonitor.prototype._makeCode = function() {
+    
+    var numJobsCode = "";
+    
+    switch (this._numJobDoneParamType) {
+		case MargotParamType.FIXED:
+			numJobsCode = _NumJobFixedTemplate(this._numJobDone);
+			break;
+		case MargotParamType.LOCAL:
+			numJobsCode = _NumJobLocalTemplate(this._numJobDoneCType, this._numJobDone);
+			break;
+		default:
+			numJobsCode = _NumJobFixedTemplate(this._numJobDone);
+	}
+    
+    return this._super._makeCode.call(this, 'THROUGHPUT', numJobsCode);
+}
+
+/*
+ * TEMPLATES
+ * ****************************************************************************/
+
+/**
+ * Templates used for the generation of the XML code for the number of jobs portion of the time monitor.
+ * */
+codedef _NumJobFixedTemplate(value) %{
+<stop>    
+<param name="num_job_done">    
+<fixed value="[[value]]"/>    
+</param>    
+</stop>
+}%
+end
+
+codedef _NumJobLocalTemplate(type, value) %{
+<stop>    
+<param name="num_job_done">    
+<local_var value="[[value]]" type="[[type]]"/>    
+</param>    
+</stop>
+}%
+end

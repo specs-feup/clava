@@ -1,0 +1,195 @@
+/*
+   Author(s): Loïc Besnard (loic.besnard@irisa.fr). 
+              IRISA-INRIA Rennes, France.
+              
+   This code has been developed during the ANTAREX project (http://www.antarex-project.eu).
+   It is provided under the MIT license (https://opensource.org/licenses/MIT).
+*/
+import lara.Io;
+import clava.Clava;
+import clava.ClavaJoinPoints;
+import lara.Strings;
+import antarex.utils.messages;
+
+// The preserved types (typedef)
+var DONTMODIFY=[];
+
+/**
+ Initialize the preserved types.
+ @param tab an array of names of types to preserved, assumed to be typedef types.
+*/
+function initPreservedTypes(tab){
+  DONTMODIFY=tab;
+}
+
+/**
+  @return true if the parameter (nametype) is a name of a preserved types, false otherwise.
+*/
+function isDeclareddDontModify(nametype)
+{
+  return (DONTMODIFY.indexOf(nametype) > -1);
+}
+
+/**
+  @return the result of the substitution of a type (oldType) by an other one (newType) 
+  in a type expression ($vardeclType).
+*/
+function getNewType($vardeclType, oldType, newType) {
+     if ($vardeclType.astIsInstance("AutoType")) return $vardeclType;
+     if (isDeclareddDontModify($vardeclType.code)) return $vardeclType;
+    if ( $vardeclType  === oldType ) return newType;
+    if ( $vardeclType.code === oldType.code ) return newType;
+    if (ClavaJoinPoints.equals($vardeclType, oldType)) return newType;
+
+    var typeKind = $vardeclType.kind;
+    TRACE(" -----------------  getNewType = " + typeKind + ' code = ' + $vardeclType.code);
+
+    if ($vardeclType.astIsInstance("BuiltinType")) return $vardeclType;
+    if ($vardeclType.astIsInstance("FunctionProtoType")) return $vardeclType;
+    if ($vardeclType.astIsInstance("NullType")) return $vardeclType;
+  //  if ($vardeclType.astIsInstance("AutoType")) return $vardeclType;
+    if ($vardeclType.astIsInstance("LiteralType")) return $vardeclType;
+
+    if ( $vardeclType.astIsInstance("ElaboratedType"))        {
+        // std::vector<double>  for example.
+        TRACE("  ====> ElaboratedType pre = " +  $vardeclType.code 
+        	+ " Desugar = " + $vardeclType.desugar.code);
+        var $child= $vardeclType.desugar;
+        var $ntype = getNewType($child, oldType, newType);
+        if ( $ntype !==  $child) $child.setType($ntype); 
+        TRACE("  <==== ElaboratedType post " + $vardeclType.code);
+        return $vardeclType;
+    }
+
+    if ( $vardeclType.astIsInstance("LValueReferenceType")) {
+        // TYPE & 
+        //   unqualifiedDesugaredType and pointeeTypeAsWritten fields
+        TRACE(" LValueReferenceType pre = " + $vardeclType.code);
+        var $child= $vardeclType.getValue("pointeeTypeAsWritten");
+        var $ntype = getNewType($child, oldType, newType);
+        if ( $ntype !==  $child) $vardeclType.setValue("pointeeTypeAsWritten", $ntype);
+        TRACE(" LValueReferenceType post = " + $vardeclType.code);
+        return $vardeclType; 
+    }
+
+     if ( $vardeclType.astIsInstance("RValueReferenceType")) {
+        // TYPE &&
+        //  unqualifiedDesugaredType and pointeeTypeAsWritten fields
+        TRACE(" RValueReferenceType pre = " + $vardeclType.code);
+        // TRACE(" RValueReferenceType pre keys = " + $vardeclType.keys);
+        var $child= $vardeclType.getValue("pointeeTypeAsWritten");
+        var $ntype = getNewType($child, oldType, newType);
+        if ( $ntype !==  $child) $vardeclType.setValue("pointeeTypeAsWritten", $ntype);
+        TRACE(" LValueReferenceType post = " + $vardeclType.code);
+        return $vardeclType; 
+    }
+
+    if ( $vardeclType.astIsInstance("QualType")) {
+        // TYPE const
+        TRACE(" +++> QualType pre = " + $vardeclType.code);
+	    var $child= $vardeclType.getValue("unqualifiedType");
+        var $ntype = getNewType($child, oldType, newType);
+        if ($ntype !== $child) $vardeclType.setValue("unqualifiedType", $ntype);
+        return $vardeclType;
+    }
+
+
+    if ( $vardeclType.astIsInstance("TemplateSpecializationType")) {
+        // vector<double> for example.
+        var $argTypes= $vardeclType.templateArgsTypes; 
+        TRACE("  >>> TemplateSpecializationType pre = " + $vardeclType.code);
+        for (var i=0; i< $argTypes.length; i++)
+            {
+                var $child = $argTypes[i];
+                if ( $child.kind !== 'NullType') {
+                    TRACE("  >>> templateArgTypes = " + $child.code);
+                    var $ntype = getNewType($child, oldType, newType);
+                    TRACE("  <<< templateArgTypes new =  " + $ntype.code);
+                    $vardeclType.setTemplateArgsTypes(i, $ntype);
+                }
+            }
+        TRACE( "  <<< TemplateSpecializationType post " + $vardeclType.code);
+        return $vardeclType;
+    }
+
+    if ( $vardeclType.astIsInstance("SubstTemplateTypeParmType")) {
+        TRACE("  >>> SubstTemplateTypeParmType pre = " + $vardeclType.code);
+        var Children =  $vardeclType.astChildren;
+        for (var x of Children)
+            {
+                TRACE(" SubstTemplateTypeParmType Child = " + x.code + " kind = " + x.kind);
+                var $ntype = getNe$expr.typewType(x, oldType, newType);
+                x.exec replaceWith($ntype); // or  x.setType($ntype); ?
+                TRACE( " SubstTemplateTypeParmType Child replaced by = " + x.code + 
+                       ", but ntype code is = " + $ntype.code);
+            }
+        TRACE("  >>> SubstTemplateTypeParmType post = " + $vardeclType.code);
+        return $vardeclType;
+    }
+
+    if ($vardeclType.astIsInstance("PointerType")) {
+    	TRACE( " PointerType " + $vardeclType.code);
+    	var $child= $vardeclType.getValue("pointeeType");
+        var $ntype = getNewType($child, oldType, newType);
+        if ($ntype !== $child) $vardeclType.setValue("pointeeType", $ntype);
+        return $vardeclType;
+    }
+
+     if ( $vardeclType.astIsInstance("ArrayType")) {
+         TRACE(" ArrayType element type  = " + $vardeclType.elementType.code);
+         TRACE(" ArrayType array size  = " + $vardeclType.arraySize);
+          var $child= $vardeclType.getValue("elementType");
+          var $ntype = getNewType($child, oldType, newType);
+          if ($ntype !== $child) $vardeclType.setValue("elementType", $ntype);
+          return $vardeclType; 
+    	}
+
+    if ( $vardeclType.astIsInstance("IncompleteArrayType") 
+         || $vardeclType.astIsInstance("ConstantArrayType")
+         || $vardeclType.astIsInstance("DecayedType")
+         ) {
+        var $unwrappedType = $vardeclType.unwrap;
+        if($unwrappedType !== undefined) {
+            TRACE(" unwrappedType = " + $unwrappedType.code);
+            var $ntype = getNewType($unwrappedType, oldType, newType);
+            TRACE(" unwrappedType replaced by = " + $ntype.code);
+            return setNewType($vardeclType, $unwrappedType, $ntype);
+        }
+        return $vardeclType; 
+    }
+
+    if ($vardeclType.astIsInstance("TypedefType")) {
+        return  $vardeclType;
+       // xxxx typedef n'est pas visit������ i������i.
+        var $ntype;
+        var $unwrappedType = $vardeclType.unwrap;
+        TRACE("  TypedefType  pre = " + $vardeclType.code);
+        if($unwrappedType === undefined) 
+            $ntype = $vardeclType;
+        else {
+            TRACE("\t TypedefType unwrappedType = " + $unwrappedType.code);
+            $ntype = getNewType($unwrappedType, oldType, newType);
+            TRACE("\t TypedefType unwrappedType replaced by = " + $ntype.code);
+            if ( $ntype === undefined ) $ntype = $vardeclType;
+        }
+        TRACE("  TypedefType  post = " + $ntype.code);
+        return $ntype;
+    }
+
+   // if ($vardeclType.astIsInstance("tagType")) return $vardeclType; // LB: Removed 18 April 2018.
+    if ($vardeclType.astIsInstance("TemplateTypeParmType")) return $vardeclType;
+    if ($vardeclType.astIsInstance("RecordType")) return $vardeclType;
+    NYI(" getNewType:: Type not yet analyzed = " + typeKind + ' code = ' + $vardeclType.code);
+    return $vardeclType; 
+}
+
+/**
+  Misc function local to getNewType() function.
+*/
+function setNewType($vardeclType, $child, $ntype ){
+    if  (( $ntype !== undefined ) && ( $ntype !== $child)) $child.replaceWith($ntype);
+    return $vardeclType;
+}
+
+
+

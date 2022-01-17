@@ -1,0 +1,103 @@
+/*
+   Author(s): Loïc Besnard (loic.besnard@irisa.fr). 
+              IRISA-INRIA Rennes, France.
+              
+   This code has been developed during the ANTAREX project (http://www.antarex-project.eu).
+   It is provided under the MIT license (https://opensource.org/licenses/MIT).
+*/
+
+/* This package defines the memoizing functions/methods for C, C++ language. 
+  * Restrictions:
+  *  - function/method with n input arguments (n in [1,4]) and one returned value.
+  *  - the type of the input arguments and the returned value are equal and restricted to int, float, double.
+  * 
+  * @example
+  * Example of a memoizatino session:
+  *   aspectdef Launcher
+      // Initialize
+      call Memoize_Initialize( );
+      
+      // memoize the log math function, with default parameters.
+      call Memoize_MathFunction('log');
+      
+      // memoize the method method3 of the class Test2, with default parameters.
+      call Memoize_Method ('Test2', 'method3');
+
+      // memoize the method method1 of the class Test, with user parameters.
+      call Memoize_Method_ARGS ('Test', 'method1', 'none', 'no', 'o1.data', 'yes', 0, 2048);
+
+      // memoize the method method1 of the class Test, this method has one float parameter (overloading).
+      call Memoize_Method_overloading('Test2', 'method1', "float",1);
+ 
+      // Finalize
+      call Memoize_Finalize( ); 
+    end
+  * */
+  
+import antarex.utils.messages;
+import antarex.utils.mangling;
+import antarex.utils.lowLevelFuncs;
+import antarex.utils.sysfile;
+import antarex.memoi.MemoizationC;
+import antarex.memoi.MemoizationMath;
+import antarex.memoi.MemoizationCXX;
+import antarex.memoi.MemoizationLibFuncs;
+
+var filepath = ""; 
+var FIRST_MEMOI_C = true;
+var FIRST_MEMOIZATION = true;
+var DEFAULT_TABSIZE = 65536; // how to declare a constant ?
+
+var memoizableTypes = ['float', 'double', 'int'];
+
+// This name must be the same than the name used in the INRIA memoization package.
+var varExposedToMARGOT = "_Memoize_"; 
+
+// Generated file for the memoization: functions/methods to be memoized
+var $newFileJp_MEMOI_DEFS;
+var FILENAME_MEMOI_DEFS="funs-static.def";
+
+// Generated file for wrappers management: declaration of the wrappers (C code)
+var $newFileJp_MEMOI_wrappers;
+var FILENAME_MEMOI_WRAPPERS="memoizing_wrappers.h"; 
+
+// Generated file for connection with mARGOt: declaration of the variable exposed to mARGOt
+var $newFileJp_MEMOI_MARGOT;
+var FILENAME_EXPOSED_VARS="memoizing_exposedVars.h"; 
+var CodeLanguages = [ "MF", "CPP", "C"]; // MF : Math functions
+
+// Set of exposed variables.
+var ExposedVariables = [];
+
+/** 
+  * Initializing the memoization
+  * */
+aspectdef Memoize_Initialize
+   TRACE(" BEGIN Memoize_Initialize");
+   setManglingForC(false);
+   FIRST_MEMOI_C = true;
+   FIRST_MEMOIZATION = true;
+end
+
+/** 
+  * Finalizing the memoization.
+  * It adds also some define in the memoizing_wrappers.h file for C specs.
+  * */
+aspectdef Memoize_Finalize
+   TRACE(" BEGIN Memoize_Finalize");
+   if (! FIRST_MEMOI_C) genExternSpec($newFileJp_MEMOI_wrappers);
+   // adding declaration for mARGOt
+   select file.function{'main'}.body end
+   apply
+   if (! FIRST_MEMOIZATION || ! FIRST_MEMOI_C)
+     {
+       genExposedVariables($newFileJp_MEMOI_MARGOT, ExposedVariables);
+       $file.exec addInclude( FILENAME_EXPOSED_VARS, false);
+       insert before( "INRIA_memoInit(1);");
+       }
+   end
+
+end
+
+
+

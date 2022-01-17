@@ -1,0 +1,248 @@
+aspectdef _LVC_INIT_
+	input name, compilerInit, lvc end
+	
+	select file.function{'main'}.body end
+	apply
+	
+		lvc._includeHeader($function);
+		lvc._includeErrorDecl($function);
+		lvc._includeIostream($function);
+		
+		exec insertBegin(compilerInit);
+		
+		$function.insert before %{
+void libVC_error_procedure(const std::string& msg)
+{
+	std::cerr << "libVC has incourred in an error" << std::endl;
+	std::cerr << msg << std::endl;
+	return;
+}
+		}%;
+	end
+end
+
+aspectdef _LVC_C_LINKAGE_
+	input $func end
+	
+	var funcName = $func.name;
+	
+	select function{name == funcName} end
+	apply
+		
+		//~ if(!$function.hasDefinition) {
+			
+			//~ if($function.getCode().trim().startsWith('extern')) {
+				//~ continue;
+			//~ }
+		//~ }
+		
+		var $linkage = AstFactory.externC($function);
+		
+		// Replace original function declaration with new linkage node, if created
+		if($linkage !== null) {
+			$function.exec replaceWith($linkage);
+		}
+	end
+end
+
+aspectdef _LVC_INSERT_ERROR_DECL_
+	input $file, declCode end
+	
+	select $file.function end
+	apply
+		insert before declCode;
+		break;
+	end
+end
+
+aspectdef _LVC_GET_VALUE_CODE_
+	input option, $joinpoint end
+	output code end
+	
+	/* find the declaration closest to the insert location */
+	call gvd : _LVC_GET_VALUE_DECL_(option.v, $joinpoint);
+	var $found = gvd.$found;
+	
+	/* generate the code based on the declaration */
+	call gvcfd : _LVC_GET_VALUE_CODE_FROM_DECL_($found, option);
+	code = gvcfd.code;
+end
+
+aspectdef _LVC_GET_VALUE_DECL_
+	input declName, $joinpoint end
+	output $found end
+	
+	var $file = $joinpoint.ancestor('file');
+	var $scope = $joinpoint.ancestor('scope');
+	if($scope === undefined) {
+		throw "The insert location for option building must be inside a function. Could not find an ancestor of type 'scope'.";
+	}
+	
+	while($scope !== undefined) {
+		
+		call lfdis : _LVC_FIND_DECL_IN_SCOPE_(declName, $scope);
+		if(lfdis.$found !== undefined) {
+			$found = lfdis.$found;
+			return;
+		}
+		
+		$scope = $scope.ancestor('scope');
+	}
+	
+	/* if we have no more scopes, we've reached a function already, look at the file for declarations */
+	select $file.vardecl{name == declName} end
+	apply
+		$found = $vardecl;
+		return;
+	end
+	
+	throw "Could not find the declaration of variable 'declName'.";
+end
+
+aspectdef _LVC_FIND_DECL_IN_SCOPE_
+	input declName, $scope end
+	output $found end
+	
+	select $scope.stmt.vardecl{name == declName} end
+	apply
+		$found = $vardecl;
+		return;
+	end
+end
+
+aspectdef _LVC_GET_VALUE_CODE_FROM_DECL_
+	input $vardecl, option end
+	output code end
+	
+	var type = $vardecl.type;
+	var typeCode = type.code.trim();
+	
+	var isString = typeCode.indexOf('string') != -1 || typeCode.indexOf('std::string') != -1;
+	
+	if(!isString) {
+		code = 'std::to_string('+ option.v +')';
+	} else {
+		code = '"\\\\\\\"" +' + option.v + '+ "\\\\\\\""';
+	}
+end
+
+aspectdef _LVC_CHANGE_IN_TAG_
+	input $stmt, symbolName end
+	
+	var foundCall = false;
+	
+	select $stmt.call end
+	apply
+		$call.exec setName(symbolName);
+		foundCall = true;
+	end
+	
+	if(!foundCall) {
+		throw "Could not find a 'call' from the provided tag.";
+	}
+end
+
+/* everything below is old code */
+
+aspectdef LibVersioningCompiler
+	input $fcall, id, flags end
+
+	// Add extern C to all declarations of the function
+	var functionDefFile = undefined;
+	select file.function{name === $fcall.name} end
+	apply
+		// Store the path to the definition of the function, for later use
+		if($function.hasDefinition) {
+			functionDefFile = $file.filepath;
+		}
+
+		// Build linkage node
+		var $linkage = AstFactory.externC($function);
+		
+		// Replace original function declaration with new linkage node, if created
+		if($linkage !== null) {
+			$function.exec replaceWith($linkage);
+		}
+	end
+
+	// Check if function definition was found
+	if(functionDefFile === undefined) {
+		println("ERROR: Could not find file were function call " + $fcall.name + " is defined");
+		return;
+	}
+
+
+	// Get joinpoint program
+	var $program = $fcall.root;
+
+	// Code for creating a compiled version of the function
+	var createVersion = "std::shared_ptr<vc::Version> " + id + " = vc::createVersion(";
+	
+	// Add file where function is
+	createVersion += '"' + Format.escape(functionDefFile) + '",\n';
+	createVersion += '"' + $fcall.name + '",\n';
+
+	// Create options
+	createVersion += "{";
+	// Add standard
+	createVersion += newOption($program.stdFlag);
+	// Add default flags
+	for(flag of $program.defaultFlags) {
+		createVersion += '\n,' + newOption(flag);
+	}
+	// Add weaver user flags
+	for(flag of $program.userFlags) {
+		createVersion += '\n,' + newOption(flag);
+	}
+	// Add include folders
+	for(folder of $program.includeFolders) {
+		createVersion += '\n,' + newOption("-I" + Format.escape(folder));
+	}
+	// Add user flags
+	for(flag of flags) {
+		createVersion += '\n,' + newOption(flag);
+	}	
+	createVersion += "}\n);\n";
+
+	var $fcallDeclType = $fcall.decl.functionType;
+	var typedefName = "signature_" + id;
+
+	// Add typedef of function signature
+	createVersion += "typedef " + $fcallDeclType.returnType.code;
+	createVersion += "(*" + typedefName + ")";
+
+	createVersion += "(";
+	createVersion +=  $fcallDeclType.paramTypes.map(function(type){return type.code;}).join(", ");
+	createVersion += ");\n";
+
+	var newFcallName = $fcall.name + "_" + id;
+
+	// Create a function pointer to the new compiled version of the function
+	createVersion += typedefName + " " + newFcallName + " = " + "(" + typedefName + ") vc::compileAndGetSymbol(" + id + ");\n"; 
+
+	// Change the original function call with the new compiled function
+	$fcall.exec setName(newFcallName);
+
+
+	// Insert version creation at the beginning of the function of the function call
+	var $fcallFunction = $fcall.ancestor("function");
+	select $fcallFunction.body end
+	apply
+		$body.insert before createVersion;
+	end
+
+	// Setup on the main function
+	select file{hasMain === true}.function{"main"}.body end
+	apply
+		// Include
+		$file.exec addInclude("versioningCompiler/Utils.hpp", false);
+
+		// Setup
+		$body.insert before "vc::vc_utils_init();";
+	end
+
+end
+
+function newOption(flag) {
+	return 'vc::Option("_", "' + flag + '")';
+}

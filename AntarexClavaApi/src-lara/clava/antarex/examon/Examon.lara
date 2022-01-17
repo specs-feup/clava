@@ -1,0 +1,496 @@
+import lara.util.IdGenerator;
+import lara.Compilation;
+import clava.ClavaJoinPoints;
+import antarex.examon.ExamonAspects;
+
+/**
+ *	 Utility class to represent a broker. This is meant to be passed to the
+ * initialization of collectors.
+ * 
+ * @param {string} ip - the IP of the broker
+ * @param {number} [port] - the port of the broker is listening to, defaults to 1883
+ * 
+ * @constructor
+ * */
+function ExamonBroker(ip, port) {
+
+	checkDefined(ip);
+	
+	port = defaultValue(port, 1883);
+	checkNumber(port, 'ExamonBroker(port)');
+	
+	/* fields */
+	this._ip = ip;
+	this._port = port;
+}
+
+/**
+ * Class that represents a raw connection.
+ * 
+ * @param {string} name - the name of the raw connection
+ * 
+ * @constructor
+ * */
+function ExamonRaw(name, $scope) {
+	
+	checkDefined(name);
+
+	if($scope !== undefined) {
+		
+		checkJoinPointType($scope, 'scope', 'ExamonRaw($scope)');
+		/* declare raw on scope */
+	} else {
+		/* declare raw globally */
+	}
+	
+	/* fields */
+	this._name = name;
+	this._varName = 'clava_' + IdGenerator.next('examon_raw') + '_' + name;
+	this._$scope = $scope;
+}
+
+ExamonRaw.prototype.getvarName = function() {
+	return this._varName;
+};
+
+ExamonRaw.prototype.init = function(broker, $scope) {
+	
+	checkType(broker, 'ExamonBroker', 'ExamonRaw.init(broker)');
+	checkJoinPointType($scope, 'scope', 'ExamonRaw.init($scope)');
+	
+	/* insert the code on the given scope */
+};
+
+ExamonRaw.prototype.clean = function($scope) {
+	
+	checkJoinPointType($scope, 'scope', 'ExamonRaw.clean(topic)');
+	
+	/* insert the code on the given scope */
+};
+
+ExamonRaw.prototype.send = function(contents, index, topic, $scope) {
+	
+	checkJoinPointType($scope, 'scope', 'ExamonRaw.send($scope)');
+	
+	/* insert the code on the given scope */
+};
+
+/**
+ * 	Utility method to perform far insertions after the provided reference join
+ * point. Far insertions make sure that the new code that is inserted is as far
+ * from the join point as possible, as opposed to the normal behavior of
+ * insertions.
+ * 
+ * 	This method inserts the code after the reference with 2 exceptions. 
+ * 	1) If the reference join point is a return statement, the code will be
+ * inserted before the statement.
+ * 	2) If the reference join point is a scope, the code will be inserted at the
+ * start or at the end of the scope, according to the value of the start
+ * parameter.
+ * 
+ * @param {joinpoint} $ref - the reference join point
+ * @param {string} code - the code that will be inserted
+ * @param {map} map - map used to control the far insertion
+ * @param {map} beforeMap - map used to control the far insertion of scopes
+ * @param {boolean} start - whether to insert the code at the start (if scope)
+ * 
+ * @private
+ * */
+function farInsertHelper($ref, code, map, beforeMap, start) {
+
+	// get far for this join point
+	if(($ref.astName === 'CompoundStmt') && (!start)) {
+		var $far = beforeMap[$ref.node];
+	} else {
+		var $far = map[$ref.node];
+	}
+	
+	if($far === undefined) {
+		$far = $ref;
+	}
+	
+	// create the new join point
+	var $toInsert = ClavaJoinPoints.stmtLiteral(code);
+
+	// insert
+	if($far.astName === 'ReturnStmt') {
+		$far.insertBefore($toInsert);
+	} else if($far.astName === 'CompoundStmt') {
+		if(start) {
+			$far.insertBegin($toInsert);
+		} else {
+			$far.insertEnd($toInsert);
+		}
+	} else {
+		$far.insertAfter($toInsert);
+	}
+
+	// update far
+	if($ref.astName === ' CompoundStmt' && !start) {
+		beforeMap[$ref.node] = $toInsert;
+	} else {
+		map[$ref.node] = $toInsert;
+	}
+}
+
+/**
+ * Class that represents an Examon collector.
+ * 
+ * @param {string} name - the name of the collector
+ * @param {joinpoint} [$scope] - the scope in which the collector will be declared. If not defined, this will be declared globally.
+ * 
+ * @constructor
+ * */
+function ExamonCollector(name, topic, $scope) {
+	
+	checkDefined(name);
+	checkString(name, 'ExamonCollector(name)');
+
+	checkString(topic, 'ExamonCollector(topic)');
+
+	if($scope !== undefined) {
+		
+		checkJoinPointType($scope, 'scope', 'ExamonCollector($scope)');
+	}
+	
+	/* fields */
+	this._name = name;
+	this._varName = 'clava_' + IdGenerator.next('examon_col_') + '_' + name;
+	this._topic = topic;
+	this._$scope = $scope;
+	this._farMap = {};
+	this._beforeFarMap = {};
+
+
+	if(this._$scope !== undefined) {
+		
+		/* declare collector on scope */
+		var type = 'struct collector_val';
+		var init = '{ NULL, NULL, false, 0, 0, 0, {0}, {0} }';
+
+		var code = type + " " + this._varName + " = " + init + ";";
+
+		farInsertHelper($scope, code, this._farMap, this._beforeFarMap, true);
+	} else {
+		/* declare collector globally */
+		var asp = new ExamonCollectorDeclareGlobal(this._varName);
+		asp.call();
+	}
+}
+
+/**
+ * Returns the name of the variable inserted in the code to represent this collector.
+ * */
+ExamonCollector.prototype.getvarName = function() {
+	return this._varName;
+};
+
+/**
+ *	 Inserts the include directive with the Examon headers in the parent file of
+ *  the provided join point.
+ * 
+ * @param {joinpoint} $jp - The reference join point
+ * 
+ * @private
+ * */
+ExamonCollector.prototype._includeHeaders = function($jp) {
+	
+	var code1 = "collector/collector.h";
+	//var code2 = "collector/sendmsg.hpp";
+	
+	var $parentFile = $jp.ancestor('file');
+	
+	$parentFile.exec addInclude(code1, true);
+	//$parentFile.exec addInclude(code2, true);
+	
+	// Adds Examon include
+	Compilation.addExtraIncludeFromGit("https://github.com/fbeneventi/examon.git", "");
+	
+}
+
+/**
+ * 	Utility method that inserts code after the provided reference join point and
+ * guarantees some consistency with the inserts performed by this library.
+ * 
+ * @param {joinpoint} $jp - the reference join point
+ * @param {string} code - the code to be inserted
+ * */
+ExamonCollector.prototype.insertAfter = function($jp, code) {
+	farInsertHelper($jp, code, this._farMap, this._beforeFarMap, false);	
+}
+
+/**
+ * 	Inserts code that initializes this collector in the code.
+ * 
+ * 	If the provided join point is a statement (or encapsulated by one) the
+ * code will be inserted after that statement. However, if the join point is a
+ * scope, the code will be inserted at the start of that scope.
+ * 
+ * @param {ExamonBroker} broker - the broker to which the collector will connect
+ * @param {stmt|scope} $jp - the reference join point for the insertion
+ * */
+ExamonCollector.prototype.init = function(broker, $jp) {
+	
+	checkInstance(broker, ExamonBroker, 'ExamonCollector.init(broker)', 'ExamonBroker');
+	checkJoinPoint($jp, 'ExamonCollector.init($jp)');
+
+	var code1 = this._varName + '.mqtt_topic = "' + this._topic + '";';
+	var code2 = 'collector_init(&' + this._varName + ', (char*)"' + broker._ip + '", ' + broker._port + ');';
+	
+	farInsertHelper($jp, code1, this._farMap, this._beforeFarMap, true);
+	farInsertHelper($jp, code2, this._farMap, this._beforeFarMap, true);
+	
+	this._includeHeaders($jp);
+};
+
+/**
+ * Inserts code that cleans this collector in the code.
+ * 
+ * 	If the provided join point is a statement (or encapsulated by one) the
+ * code will be inserted after that statement. However, if the join point is a
+ * scope, the code will be inserted at the end of that scope.
+ * 
+ * @param {stmt|scope} $jp - the reference join point for the insertion
+ * */
+ExamonCollector.prototype.clean = function($jp) {
+	
+	checkJoinPoint($jp, 'ExamonCollector.clean($jp)');
+	
+	farInsertHelper($jp, 'collector_clean(&' + this._varName + ');', this._farMap, this._beforeFarMap, false);
+	
+	this._includeHeaders($jp);
+}
+
+/**
+ * Inserts code that starts this collector in the code.
+ * 
+ * 	If the provided join point is a statement (or encapsulated by one) the
+ * code will be inserted after that statement. However, if the join point is a
+ * scope, the code will be inserted at the start of that scope.
+ * 
+ * @param {stmt|scope} $jp - the reference join point for the insertion
+ * */
+ExamonCollector.prototype.start = function($jp) {
+	
+	checkJoinPoint($jp, 'ExamonCollector.start($jp)');
+	
+	farInsertHelper($jp, 'collector_start(&' + this._varName + ');', this._farMap, this._beforeFarMap, true);
+	
+	this._includeHeaders($jp);
+};
+
+/**
+ * Inserts code that ends this collector in the code.
+ * 
+ * 	If the provided join point is a statement (or encapsulated by one) the
+ * code will be inserted after that statement. However, if the join point is a
+ * scope, the code will be inserted at the end of that scope.
+ * 
+ * @param {stmt|scope} $jp - the reference join point for the insertion
+ * */
+ExamonCollector.prototype.end = function($jp) {
+	
+	checkJoinPoint($jp, 'ExamonCollector.end($jp)');
+	
+	farInsertHelper($jp, 'collector_end(&' + this._varName + ');', this._farMap, this._beforeFarMap, false);
+	
+	this._includeHeaders($jp);
+};
+
+/**
+ * Inserts code that gets the data of this collector in the code.
+ * 
+ * 	If the provided join point is a statement (or encapsulated by one) the
+ * code will be inserted after that statement. However, if the join point is a
+ * scope, the code will be inserted at the start of that scope.
+ * 
+ * @param {stmt|scope} $jp - the reference join point for the insertion
+ * */
+ExamonCollector.prototype.get = function($jp) {
+
+	checkJoinPoint($jp, 'ExamonCollector.get($jp)');
+	
+	farInsertHelper($jp, 'collector_get(&' + this._varName + ');', this._farMap, this._beforeFarMap, true);
+	
+	this._includeHeaders($jp);
+};
+
+/**
+ * 	Returns the code needed to get the second component of the start point.
+ * */
+ExamonCollector.prototype.getStartSec = function() {
+	return this._varName + '.start.tv_sec';
+};
+
+/**
+ * 	Returns the code needed to get the microsecond component of the start point.
+ * */
+ExamonCollector.prototype.getStartMicroSec = function() {
+	return this._varName + '.start.tv_usec';
+};
+
+/**
+ * 	Returns the code needed to get the second component of the end point.
+ * */
+ExamonCollector.prototype.getEndSec = function() {
+	return this._varName + '.end.tv_sec';
+};
+
+/**
+ * 	Returns the code needed to get the microsecond component of the end point.
+ * */
+ExamonCollector.prototype.getEndMicroSec = function() {
+	return this._varName + '.end.tv_usec';
+};
+
+/**
+ * 	Returns the code needed to get the mean value component.
+ * */
+ExamonCollector.prototype.getMean = function() {
+	return this._varName + '.mean_val';
+};
+
+/**
+ * 	Declares a variable with the value of the second component of the start
+ * point and returns its name. The code insertion is performed after the
+ * provided reference join point.
+ * 
+ * @param {joinpoint} $jp - the reference join point (should not be a scope)
+ * 
+ * @returns {string} the name of the declared variable
+ * */
+ExamonCollector.prototype.declStartSec = function($jp) {
+
+	// preconditions: join point and non scope
+	checkJoinPoint($jp, 'ExamonCollector.declStartSec($jp)');
+	if($jp.astName === ' CompoundStmt') {
+		throw "Variable $jp should not be a scope join point: ExamonCollector.declStartSec($jp)";
+	}
+	
+	var declName = IdGenerator.next(this._varName) + '_start_sec';
+	var type = 'time_t ';
+	var code = type + declName + ' = ' + this.getStartSec() + ';';
+	
+	// insert var in scope
+	farInsertHelper($jp, code, this._farMap, this._beforeFarMap, false);
+
+	this._includeHeaders($jp);
+
+	return declName;
+};
+
+/**
+ * 	Declares a variable with the value of the microsecond component of the start
+ * point and returns its name. The code insertion is performed after the
+ * provided reference join point.
+ * 
+ * @param {joinpoint} $jp - the reference join point (should not be a scope)
+ * 
+ * @returns {string} the name of the declared variable
+ * */
+ExamonCollector.prototype.declStartMicroSec = function($jp) {
+
+	// preconditions: join point and non scope
+	checkJoinPoint($jp, 'ExamonCollector.declStartMicroSec($jp)');
+	if($jp.astName === ' CompoundStmt') {
+		throw "Variable $jp should not be a scope join point: ExamonCollector.declStartMicroSec($jp)";
+	}
+	
+	var declName = IdGenerator.next(this._varName) + '_start_usec';
+	var type = 'suseconds_t ';
+	var code = type + declName + ' = ' + this.getStartMicroSec() + ';';
+	
+	// insert var in scope
+	farInsertHelper($jp, code, this._farMap, this._beforeFarMap, false);
+
+	this._includeHeaders($jp);
+
+	return declName;
+};
+
+/**
+ * 	Declares a variable with the value of the second component of the end point
+ * and returns its name. The code insertion is performed after the provided
+ * reference join point.
+ * 
+ * @param {joinpoint} $jp - the reference join point (should not be a scope)
+ * 
+ * @returns {string} the name of the declared variable
+ * */
+ExamonCollector.prototype.declEndSec = function($jp) {
+
+	// preconditions: join point and non scope
+	checkJoinPoint($jp, 'ExamonCollector.declEndSec($jp)');
+	if($jp.astName === ' CompoundStmt') {
+		throw "Variable $jp should not be a scope join point: ExamonCollector.declEndSec($jp)";
+	}
+	
+	var declName = IdGenerator.next(this._varName) + '_end_sec';
+	var type = 'time_t ';
+	var code = type + declName + ' = ' + this.getEndSec() + ';';
+	
+	// insert var in scope
+	farInsertHelper($jp, code, this._farMap, this._beforeFarMap, false);
+
+	this._includeHeaders($jp);
+
+	return declName;
+};
+
+/**
+ * 	Declares a variable with the value of the microsecond component of the end
+ * point and returns its name. The code insertion is performed after the
+ * provided reference join point.
+ * 
+ * @param {joinpoint} $jp - the reference join point (should not be a scope)
+ * 
+ * @returns {string} the name of the declared variable
+ * */
+ExamonCollector.prototype.declEndMicroSec = function($jp) {
+
+	// preconditions: join point and non scope
+	checkJoinPoint($jp, 'ExamonCollector.declEndMicroSec($jp)');
+	if($jp.astName === ' CompoundStmt') {
+		throw "Variable $jp should not be a scope join point: ExamonCollector.declEndMicroSec($jp)";
+	}
+	
+	var declName = IdGenerator.next(this._varName) + '_end_usec';
+	var type = 'suseconds_t ';
+	var code = type + declName + ' = ' + this.getEndMicroSec() + ';';
+	
+	// insert var in scope
+	farInsertHelper($jp, code, this._farMap, this._beforeFarMap, false);
+
+	this._includeHeaders($jp);
+	
+	return declName;
+};
+
+/**
+ * 	Declares a variable with the value of the mean component and returns its
+ * name. The code insertion is performed after the provided reference join
+ * point.
+ * 
+ * @param {joinpoint} $jp - the reference join point (should not be a scope)
+ * 
+ * @returns {string} the name of the declared variable
+ * */
+ExamonCollector.prototype.declMean = function($jp) {
+
+	// preconditions: join point and non scope
+	checkJoinPoint($jp, 'ExamonCollector.declMean($jp)');
+	if($jp.astName === ' CompoundStmt') {
+		throw "Variable $jp should not be a scope join point: ExamonCollector.declMean($jp)";
+	}
+	
+	var declName = IdGenerator.next(this._varName) + '_mean';
+	var type = 'double ';
+	var code = type + declName + ' = ' + this.getMean() + ';';
+	
+	// insert var in scope
+	farInsertHelper($jp, code, this._farMap, this._beforeFarMap, false);
+
+	this._includeHeaders($jp);
+
+	return declName;
+};

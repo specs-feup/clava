@@ -1,0 +1,224 @@
+/**
+ * Object that contains the strings used to generate calls to the Cxx interface of mARGOt.
+ * */
+var MargotCxxStrings = {
+	
+	ns: 'margot',
+    sep: '::',
+    initCode: 'init();',
+    incCode: 'margot.hpp',
+    updCode: 'update',
+    appliedCode:  'manager.configuration_applied();',
+    startAllCode: 'start_monitor',
+    stopAllCode: 'stop_monitor',
+    monitorCode: 'monitor',
+    startCode: '.start',
+    stopCode: '.stop',
+    logCode: 'log();',
+    goalCode: 'goal',
+    setCode: '.set',
+    
+    makeVarList: function(vars) {
+		return vars.toString();
+	}
+};
+
+/**
+ * Object that contains the strings used to generate calls to the C interface of mARGOt.
+ * */
+var MargotCStrings = {
+	
+	ns: 'margot',
+    sep: '_',
+    initCode: 'init();',
+    incCode: 'margot.h',
+    updCode: 'update',
+    appliedCode:  'configuration_applied();',
+    startAllCode: 'start_monitor',
+    stopAllCode: 'stop_monitor',
+    monitorCode: 'monitor',
+    startCode: '.start',
+    stopCode: '.stop',
+    logCode: 'log();',
+    goalCode: 'goal',
+    setCode: '.set',
+    
+    makeVarList: function(vars) {
+		return vars
+			.map(function(v){return '&'+v;})
+			.toString();
+	}
+};
+
+
+
+/**
+ * Class with utility methods to generate calls to the interface of mARGOt.
+ * 
+ * This class is parameterized with the object that contains the strings for the desired language.
+ * 
+ * @constructor
+ * @param {(MargotCStrings|MargotCxxStrings)} strings - the object with the desired strings
+ * */
+var MargotStringsGen = function(strings) {
+    
+    this._strings = strings; 
+};
+
+/**
+ * Generates the code for the init call.
+ * */
+MargotStringsGen.prototype.init = function() {
+	return this._strings.ns + this._strings.sep + this._strings.initCode;
+};
+
+/**
+ * Generates the code for the header inclusion.
+ * */
+MargotStringsGen.prototype.inc = function() {
+	return this._strings.incCode;
+};
+
+/**
+ * Generates the code for the update call. It calls the update as the expression of an IF statement. The body of the IF has a call to signal the update was performed and can receive additional code.
+ * 
+ * @param {string} block - the name of the block
+ * @param {string[]} vars - the name of the knobs variables
+ * @param {string[]} features - the name of the data feature variables
+ * @param {string[]} [additionalCode] - lines of additional code to add to the body of the IF statement
+ * 
+ * */
+MargotStringsGen.prototype.update = function(block, vars, features, additionalCode) {
+	
+	var code = 'if(';
+	
+	code += this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.updCode;
+	code += '(';
+	code += this._strings.makeVarList(vars);
+	
+	if(features !== undefined) {
+		for(var f of features) {
+			code += ', ' + f;
+		}
+	}
+	
+	code += ')';
+	
+	code += ') {\n';
+	for(var ac of additionalCode) {
+		code += ac + '\n';
+	}
+	code += this._strings.ns + this._strings.sep + block  +this._strings.sep + this._strings.appliedCode + '\n}';
+	return code;
+};
+
+/**
+ * Generates the code for the start monitor call. It can receive monitor arguments.
+ * 
+ * @param {string} block - the name of the block
+ * @param {string} monitorName - the name of the monitor
+ * @param {string[]} [args] - arguments to the monitor
+ * 
+ * */
+MargotStringsGen.prototype.startMonitor = function(block, monitorName, args) {
+
+	var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.monitorCode + this._strings.sep + monitorName + this._strings.startCode;
+	code += '(';
+	
+	if(args !== undefined) {
+		code += args.toString();
+	}
+	
+	code += ');';
+	
+	return code;
+};
+
+/**
+ * Generates the code for the stop monitor call. It can receive monitor arguments.
+ * 
+ * @param {string} block - the name of the block
+ * @param {string} monitorName - the name of the monitor
+ * @param {string[]} [args] - arguments to the monitor
+ * 
+ * */
+MargotStringsGen.prototype.stopMonitor = function(block, monitorName, args) {
+	
+	var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.monitorCode + this._strings.sep + monitorName + this._strings.stopCode;
+	code += '(';
+	
+	if(args !== undefined) {
+		code += args.toString();
+	}
+	
+	code += ');';
+	
+	return code;
+};
+    
+/**
+ * Generates the code for the log call.
+ * 
+ * @param {string} block - the name of the block
+ * 
+ * */
+MargotStringsGen.prototype.log = function(block) {
+	return this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.logCode;
+};
+
+/**
+ * Generates the code for the start monitors call. It can receive monitor arguments.
+ * 
+ * @param {string} block - the name of the block
+ * @param {string[]} [args] - arguments to the monitor
+ * 
+ * */
+MargotStringsGen.prototype.startAllMonitors = function(block, args) {
+		
+	var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.startAllCode;
+	code += '(';
+	
+	if(args !== undefined) {
+		code += args.toString();
+	}
+	
+	code += ');';
+	
+	return code;
+};
+
+/**
+ * Generates the code for the stop monitors call. It can receive monitor arguments.
+ * 
+ * @param {string} block - the name of the block
+ * @param {string[]} [args] - arguments to the monitor
+ * 
+ * */
+MargotStringsGen.prototype.stopAllMonitors = function(block, args) {
+		
+	var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.stopAllCode;
+	code += '(';
+	
+	if(args !== undefined) {
+		code += args.toString();
+	}
+	
+	code += ');';
+	
+	return code;
+};
+
+/**
+ * Generates the code for the set goal call.
+ * 
+ * @param {string} block - the name of the block
+ * @param {string} goalName - the name of the goal
+ * @param {string} goalValue - the value of the goal
+ * 
+ * */
+MargotStringsGen.prototype.setGoal = function(block, goalName, goalValue) {
+		
+	var code = this._strings.ns + this._strings.sep + block + this._strings.sep + this._strings.goalCode + this._strings.sep + goalName + this._strings.setCode;
+	code += '(' + goalValue + ');';
+	return code;
+};

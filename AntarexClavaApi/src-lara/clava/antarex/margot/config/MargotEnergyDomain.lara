@@ -1,0 +1,10 @@
+/**
+ * Enum that represents the domain of the time monitor.
+ * @enum
+ * */
+var MargotEnergyDomain = new Enumeration(
+    {PACKAGE: 'margot::EnergyMonitor::Domain::Package'},
+    {CORES: 'margot::EnergyMonitor::Domain::Cores'},
+    {RAM: 'margot::EnergyMonitor::Domain::Ram'},
+    {UNCORES: 'margot::EnergyMonitor::Domain::Uncores'}
+);

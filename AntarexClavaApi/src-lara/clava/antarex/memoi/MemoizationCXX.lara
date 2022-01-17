@@ -1,0 +1,232 @@
+/*
+   Author(s): Loïc Besnard (loic.besnard@irisa.fr). 
+              IRISA-INRIA Rennes, France.
+              
+   This code has been developed during the ANTAREX project (http://www.antarex-project.eu).
+   It is provided under the MIT license (https://opensource.org/licenses/MIT).
+*/
+
+/** Memoizes a method of a class with default parameters.
+  * @param {string} aClass: the name of a class.
+  * @param {string} aMethod: the name of a method.
+  * It calls 
+  *   Memoize_Method_ARGS(aClass, aMethod, 'none', 'no', 'none','no', 0, DEFAULT_TABSIZE)).
+  * @see{Memoize_Method_ARGS()}.
+  * */
+aspectdef Memoize_Method
+input 
+  aClass,                // name of a class
+  aMethod               // name of a method of the class aClass
+end	
+  call Memoize_Method_ARGS(aClass, aMethod, 'none', 'no', 'none','no', 0, DEFAULT_TABSIZE);
+end
+
+/** 
+  * Memoizes a method of a class with given parameters.
+  * @param {string} aClass: the name of a class.
+  * @param {string} aMethod: the name of a method.
+  * @param {string} fileToLoad: the name of the file to load to initialse the internal table, or none. 
+  * @param {string} FullOffLine: yes or no. yes implies a full off lime memoization (requires a fileToLoad).
+  * @param {string} FileToSave:  the name of the file to save the data of the table, or none.
+  * @param {string} AlwaysReplace: yes or no. yes implis that in case of collisions, the table is updated.
+  * @param {int} precision:  the number of bit to delete (float/double) for internal approximation, 0 for int.
+  * @param {int} tsize: the size of the table.
+  * 
+  * First, it searches the existence of such a method in the application. 
+  * In case of success,  it controls that parameters and the type of the arguments are conformed for the
+  * INRIA memoization library. Then, it adds (see GenCode_CPP_Memoization()) the informations,  
+  * required for generating the memoization library, in a file called "funs-static.def".
+  * Finally, it updates the user code by replacing a reference to the memoized method by a reference 
+  * to the wrapper function. The wrapper is declared as a new method in the class.
+  * */
+aspectdef Memoize_Method_ARGS
+input 
+  aClass,                // name of a class
+  aMethod,               // name of a method of the class aClass
+  fileToLoad,            // name of the file to load for init the table OR none
+  FullOffLine,           // yes for a fully offline (pre-load table and no update)
+  FileToSave,            // name of the file to save the data of the table OR none
+  updateTableOnCollision, // = none , in case of collisions, the table is not updated.
+  precision,            //  number of bits to delete for approximation.
+  tsize                 // size of the internal table.
+end
+    call gm: getMethods(aClass, aMethod);
+    var tmethods = gm.tabOfMethods;
+    var nb= tmethods.length;
+    if (nb == 0) {
+    	WARNING("The method " + aMethod + " does not exist in the class" + aClass);
+    	return;
+    	}
+    if (nb > 1)
+        {  
+          WARNING("Several methods called " + aMethod + " in the class " + aClass );
+          WARNING("Details: -------------------------  ");
+          for (var i=0; i< nb; i++) {
+            println ( "\t \t" + tmethods[i].declaration(true) ); // functionType.code);
+          }
+          WARNING(" *** Please use the Memoize_Method_overloading aspect to be more precise");
+          return;
+        }
+    TRACE_BEGIN_OP(" >>> Memoize_Function++, method " + aMethod + " of the class " + aClass);
+	var  memoizable = false, nbparams;
+	
+	select class{aClass}.method{aMethod} end  
+	apply
+ 	 TRACE(" name of the class is = " + getClassNameMethod($method));
+ 	 nbparams = checkHeaderMemoizableMethod($method);
+  	 memoizable = (nbparams>0);
+  	 TRACE ( "NB PARAMS = " + nbparams);
+  	 var functionType = $method.functionType;
+  	 var tt_return = functionType.returnType;
+     var vtype = getMemoType(tt_return);
+	end
+	  if (! memoizable) 
+		WARNING("the method " + aMethod + " is not memoizable !");
+	else {
+	  TRACE(" The method " + aMethod + " is memoizable !");
+  	  var vtype = tt_return.code;
+   	  GenCode_CPP_Memoization(aClass, aMethod, vtype, nbparams, fileToLoad, FullOffLine, FileToSave, updateTableOnCollision, precision, tsize);
+      call CPP_UpdateCallMemoization(aClass, aMethod, vtype, nbparams);
+      }
+end
+
+/**
+  * Memoizes a method of a class giving the type and the number of inputs parameters, 
+  * required for solving the overloading of C++.
+  * @param {string} aClass: the name of a class.
+  * @param {string} aMethod: the name of a method.
+  * @param {string}  pType: the type of the arguments and returned value of the method.
+  * @param {int} nbArgs: number of input arguments.
+  * It calls  Memoize_Method_overloading_ARGS with default arguments:
+      Memoize_Method_overloading_ARGS(aClass, aMethod, pType, nbArgs, 
+                                      'none', 'no', 'none', 'no',0, DEFAULT_TABSIZE);
+     @see{Memoize_Method_overloading_ARGS}
+   */
+aspectdef Memoize_Method_overloading
+input 
+  aClass,                // name of a class
+  aMethod,               // name of a method of the class aClass
+  pType,                  // The name of the selected type  (required when overloading)
+  nbArgs               // the number of parameters of the method  (required when overloading).
+end
+
+call Memoize_Method_overloading_ARGS(aClass, aMethod, pType, nbArgs, 'none', 'no', 'none', 'no',0, DEFAULT_TABSIZE);
+end
+
+/**
+  * Memoizes a method of a class giving the type and the number of inputs parameters, 
+  * required for solving the overloading of C++.
+  * @param {string} aClass: the name of a class.
+  * @param {string} aMethod: the name of a method.
+  * @param {string}  pType: the type of the arguments and returned value of the method.
+  * @param {int} nbArgs: number of input arguments.
+  * @param {string} fileToLoad: the name of the file to load to initialse the internal table, or none. 
+  * @param {string} FullOffLine: yes or no. yes implies a full off lime memoization (requires a fileToLoad).
+  * @param {string} FileToSave:  the name of the file to save the data of the table, or none.
+  * @param {string} AlwaysReplace: yes or no. yes implis that in case of collisions, the table is updated.
+  * @param {int} precision:  the number of bit to delete (float/double) for internal approximation, 0 for int.
+  * @param {int} tsize: the size of the table.
+
+
+*/
+aspectdef Memoize_Method_overloading_ARGS
+input 
+  aClass,                // name of a class
+  aMethod,               // name of a method of the class aClass
+  pType,                  // The name of the selected type  (required when overloading)
+  nbArgs,                // the number of parameters of the method  (required when overloading).
+  fileToLoad,            // name of the file to load for init the table OR none
+  FullOffLine,           // yes for a fully offline (pre-load table and no update)
+  FileToSave,            // name of the file to save the data of the table OR none
+  updateTableOnCollision, // = none , in case of collisions, the table is not updated.
+  precision,            //  number of bits to delete for approximation.
+  tsize                 // size of the internal table.
+end
+   // Control on the parameters of the aspect.
+    if ((nbArgs < 0) || (nbArgs >3)) {
+       WARNING("Unexpected value " + nbArgs + " for the number of arguments. It must be in [1,3]");
+       return;
+	}
+	
+	var MethodToMemoize, found=false; 
+	select class{aClass}.method{aMethod} end  
+	apply
+	 if (! found) {
+	 	TRACE(" name of the class is = " + getClassNameMethod($method));
+ 	 	found = isTheSelectedMethod($method, nbArgs, pType);
+ 	 	if (found) MethodToMemoize=$method;
+ 	 	}
+	end
+	
+	if (!found) {
+      WARNING("Memoize_Method_overloading: The method " + aMethod + " of the class " + aClass + 
+              " with " + nbArgs + " arguments" + " of type "+ pType + " does not exist!");
+	}
+    else {
+    
+	   TRACE(" Memoize_Method_overloading: The method " + aMethod + " is memoizable !");
+   	   GenCode_CPP_Memoization(aClass, aMethod, pType, nbArgs, fileToLoad, FullOffLine, FileToSave, updateTableOnCollision, precision, tsize);
+       call CPP_UpdateCallMemoization(aClass, aMethod, pType, nbArgs);
+   }
+end	
+
+aspectdef getMethods
+input 
+  aClass,              // name of a class
+  aMethod              // name of a method of the class aClass
+end
+output
+  tabOfMethods=[]
+end    
+	select class{aClass}.method{aMethod} end  
+	apply
+ 	 tabOfMethods.push($method);
+	end
+end	
+
+
+aspectdef CPP_UpdateCallMemoization
+   input aClass, aMethod, vtype, nbparams end
+
+   var alreadyDeclared = false;
+   var wrapper = getFuncWrapperName(aMethod);
+   
+   select class{aClass}.method{wrapper} end  
+     apply
+        if (!alreadyDeclared)
+           alreadyDeclared = isTheSelectedMethod($method, nbparams, vtype);
+     end
+   if (  alreadyDeclared ) return;
+   var done = false;
+   var locationOfTheselectedMethod;
+   select class{aClass}.method{aMethod} end  
+   apply
+    if (!done)
+      if (isTheSelectedMethod($method, nbparams, vtype)) 
+       { 
+       	locationOfTheselectedMethod = $method.location;
+       	done = true;
+       	vparam = getDeclParameters(vtype, nbparams);
+      	var newDecl = vtype + ' ' + wrapper + " ( " + vparam + " ); ";
+      	$method.insert before(newDecl);
+      	}
+  end
+
+  select call{aMethod} end
+     apply
+        if ($call.isMemberAccess) {
+         // println("MemberAccess is = " + $call.code + "   $call.definition=" + $call.definition + " --- Call declaration:" + $call.declaration);
+	 // not a reference to a _wrapper
+         if ($call.definition !== undefined)
+       	  { 
+	    println("Call definition:" + $call.definition.location);
+            if ($call.declaration.location === locationOfTheselectedMethod )
+                         exec setName(getFuncWrapperName(aMethod));
+         }
+        } 
+     end
+end
+
+
+
+

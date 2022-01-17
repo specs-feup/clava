@@ -1,0 +1,76 @@
+import antarex.margot.config.MargotBlock;
+
+
+/**
+ * This class holds the data needed to generate an XML configuration file for the autotuner.
+ * */
+function MargotConfig() {
+    
+    this._blocks = {};
+}
+
+/**
+* Adds the provided block to the list of blocks.
+* 
+* @param {MargotBlock} block - the block to add
+* */
+MargotConfig.prototype.addBlock = function(block) {
+
+    this._blocks[block._name] = block;
+}
+
+/**
+* Builds a block, adds it to the list of blocks, and returns it.
+* 
+* @param {string} blockName - the name of the block to add
+* 
+* @returns {MargotBlock} the created block
+* */
+MargotConfig.prototype.newBlock = function(blockName) {
+
+    var block = new MargotBlock(blockName);
+    this._blocks[blockName] = block;
+    
+    return block;
+}
+
+
+/*
+ * CODE GENERATION
+ * ****************************************************************************/
+
+/**
+* Generates the XML code and writes it to the file, if a file path is provided.
+* 
+* @param {string} [filePath] - the path where the XML file will be generated
+* */
+MargotConfig.prototype.build = function(filePath) {
+ 
+    var code = '<margot>\n';
+    
+    code += this._makeBlocksCode();
+
+    code += '</margot>';
+
+    if(filePath !== undefined) {
+        println('Writing configuration to ' + filePath);
+        Io.writeFile(filePath, code);
+    }
+
+    return code;
+}
+
+/**
+* Generates the XML code for all blocks.
+* */
+MargotConfig.prototype._makeBlocksCode = function() {
+
+    var code = "";
+
+    for(var block of this._blocks) {
+        
+        code += block._makeCode();
+    }
+
+    return code;
+}

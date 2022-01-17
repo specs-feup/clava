@@ -1,0 +1,515 @@
+import lara.metrics.ExecutionTimeMetric;
+import lara.metrics.EnergyMetric;
+
+import lara.dse.DseLoop;
+import lara.dse.DseValuesList;
+import lara.dse.DseValuesSet;
+import lara.dse.VariableVariant;
+import lat.LatDseLoop;
+
+import antarex.margot.dse.metric.MargotMetric;
+import lara.units.TimeUnit;
+import lara.units.TimeModifier;
+
+import antarex.margot.config.MargotConfig;
+
+/**
+ * Class that holds information for the DSE step needed in mARGOt's toolflow. This concerns a single block.
+ * 
+ * @param {string} blockName - the name of the block for which this information is meant
+ * 
+ * @constructor
+ * */
+function MargotDseInfo(blockName) {
+	
+	/**
+	 * The name of the block
+	 * */
+	this._block = blockName;
+	
+	/**
+	 * The map of knobs
+	 * */
+	this._knobs = {};
+	/**
+	 * The map of data features
+	 * */
+	this._features = {};
+	/**
+	 * The array of margot monitors
+	 * */
+	this._monitors = [];
+	
+	/**
+	 * The number of DSE runs
+	 * */
+	this._dseRuns = 0;
+	
+	this._flags = undefined;
+	this._compFlags = undefined;
+	
+	this._scope = undefined;
+	this._measure = undefined;
+	
+	this.metricToResults = {};
+	
+	// Using LAT for now
+	this.dseLoop = new LatDseLoop();
+	
+	/**
+	 * The array of {@link VariableVariant} that is used by the DSE engine.
+	 * */
+	this._dseVars = [];
+	
+	/**
+	 * The array of {@link MargotMetric} which tells the DSE what to measure and what unit to write the results as.
+	 * */
+	this._metrics = {};
+}
+
+/**
+ * Generates and returns the DSE instance for the block with the provided name.
+ * 
+ * @param {MargotConfig} config - the configuration from which we get the information
+ * @param {String} blockName - the name of the block for which the DSE info will be returned.
+ * 
+ * @returns {MargotDseInfo} an object with the DSE information
+ * */
+MargotDseInfo.fromConfig = function(config, blockName) {
+	
+	checkDefined(config, 'config', 'MargotCodeGen.fromConfig');
+	checkInstance(config, MargotConfig, 'MargotCodeGen.fromConfig(config)', 'MargotConfig');
+	checkDefined(blockName, 'blockName', 'MargotCodeGen.fromConfig');
+	checkString(blockName);
+	
+	var block = config._blocks[blockName];
+	if(block === undefined) {
+		throw 'Could not find a block with name ' + blockName;
+	}
+	
+	var info = new MargotDseInfo(blockName);
+	
+	// knobs
+	var knobs = {};
+	for(var knob of block._knobs) {
+		knobs[knob.getName()] = knob;
+	}
+	info.setKnobs(knobs);
+	
+	// data features
+	if(block._features !== undefined) {
+		var features = {};
+		for(var feature of block._features.getFeatures()) {
+			features[feature.getName()] = feature;
+		}
+		info.setDataFeatures(features);
+	}
+	
+	// monitors
+	info.setMargotMonitors(block._monitors);
+	
+	return info;
+};
+
+/**
+ * Sets the execution flags.
+ * 
+ * @param {String} flags - a string with the execution flags
+ * */
+MargotDseInfo.prototype.setExecutionFlags = function(flags) {
+	
+	this._flags = flags;
+};
+
+/**
+ * Sets the compilation flags.
+ * 
+ * @param {String} flags - a string with the compilation flags
+ * */
+MargotDseInfo.prototype.setCompilationFlags = function(flags) {
+	
+	// splits by space and stores as array, since cmaker will later need multiple strings, one per flag
+	this._compFlags = flags.split(' ');
+};
+
+/**
+ * Returns the name of the block.
+ * */
+MargotDseInfo.prototype.getBlockName = function() {
+	
+	return this._block;
+};
+
+/**
+ * Returns the map of knobs.
+ * */
+MargotDseInfo.prototype.getKnobs = function() {
+	
+	return this._knobs;
+};
+
+/**
+ * Sets the map of knobs. The map of knobs should map a knob name to the corresponding {@link MargotKnob} instance.
+ * 
+ * @param {Object} knobs - the map of knobs
+ * */
+MargotDseInfo.prototype.setKnobs = function(knobs) {
+	
+	this._knobs = knobs;
+};
+
+/**
+ * Returns the data features.
+ * */
+MargotDseInfo.prototype.getDataFeatures = function() {
+	
+	return this._features;
+};
+
+/**
+ * Sets the map of data features. The map of data features should map a feature name to the corresponding {@link MargotDataFeature} instance.
+ * 
+ * @param {Object} dataFeatures - the map of features
+ * */
+MargotDseInfo.prototype.setDataFeatures = function(dataFeatures) {
+	
+	this._features = dataFeatures;
+};
+
+/**
+ * Returns the monitors to be measured.
+ * */
+MargotDseInfo.prototype.getMargotMonitors = function() {
+	
+	return this._monitors;
+};
+
+/**
+ * Sets the monitors to be measured.
+ * 
+ * @param {MargotMonitor[]} margotMonitors - the array of monitors to be measured
+ * */
+MargotDseInfo.prototype.setMargotMonitors = function(margotMonitors) {
+	
+	this._monitors = margotMonitors;
+};
+
+/**
+ * Returns the number of runs to perform.
+ * */
+MargotDseInfo.prototype.getDseRuns = function() {
+	
+	return this._dseRuns;
+};
+
+/**
+ * Sets the number of runs to perform.
+ * 
+ * @param {Number} dseRuns - the number of runs
+ * */
+MargotDseInfo.prototype.setDseRuns = function(dseRuns) {
+	
+	this._dseRuns = dseRuns;
+};
+
+/**
+ * Sets the scope of the DSE where the variables will be changed (e.g., the body of a function).
+ * 
+ * @param {joinpoint} $scope - the scope join point
+ * */
+MargotDseInfo.prototype.setScope = function ($scope) {
+	checkDefined($scope);
+	this._scope = $scope;
+};
+
+/**
+ * Sets the join point around which the monitors will be measured.
+ * 
+ * @param {joinpoint} $measure - the reference join point
+ * */
+MargotDseInfo.prototype.setMeasure = function ($measure) {
+	checkDefined($measure);	
+	this._measure = $measure;
+};
+
+/**
+ * Sets the values a knob can take during the exploration.
+ * 
+ * @param {string} knobName -  the name of the knob
+ * @param {(Object[]|...Object)} values - the values the knob is going to take during DSE
+ * */
+MargotDseInfo.prototype.setKnobValues = function (knobName) {
+	
+	var knob = this._knobs[knobName];
+	checkTrue(knob !== undefined, 'Could not find knob with name "' + knobName + '"', 'setKnobValues');
+	
+	var variant = new VariableVariant(knob.getVarName(), arrayFromArgs(arguments, 1));
+	
+	this._dseVars.push(variant);
+}
+
+/**
+ * Sets the values a feature can take during the exploration.
+ * 
+ * @param {string} featureName -  the name of the feature
+ * @param {(Object[]|...Object)} values - the values the feature is going to take during DSE
+ * */
+MargotDseInfo.prototype.setFeatureValues = function (featureName) {
+	
+	// this function treats a data feature the same way as a knob
+	
+	var feature = this._features[featureName];
+	checkTrue(feature !== undefined, 'Could not find feature with name "' + featureName + '"', 'setFeatureValues');
+	
+	var variant = new VariableVariant(featureName, arrayFromArgs(arguments, 1));
+	
+	this._dseVars.push(variant);
+}
+
+/**
+ * Sets the values that a set of data features can take during the exploration.
+ * 
+ * @param {string[]} featureNames -  the names of the data features
+ * @param {...Object[]} values - the values of the features, there should be as many arrays as there are data features
+ * */
+MargotDseInfo.prototype.setFeatureSetValues = function (featureNames) {
+	
+	var valueArrays = arrayFromArgs(arguments, 1);
+	
+	// check that there are as many value sets as there are features
+	if(featureNames.length !== valueArrays.length) {
+		throw 'You should specify as many arrays of values (' + valueArrays.length + ') as features (' + featureNames.length + ')';
+	}
+	
+	// check that each value set has the same length
+	if(valueArrays.some(function(e){return e.length !== valueArrays[0].length;})) {
+		throw 'All arrays of values should have the same length';
+	}
+	
+	var currentArray = 0;
+	var dseValues = [];
+	for(var featureName of featureNames) {
+		
+		var feature = this._features[featureName];
+		checkTrue(feature !== undefined, 'Could not find feature with name "' + featureName + '"', 'setFeatureSetValues');
+		
+		dseValues.push(new DseValuesList(valueArrays[currentArray]));
+		
+		currentArray++;
+	}
+	
+	var variant = new VariableVariant(featureNames, new DseValuesSet(dseValues));
+	
+	this._dseVars.push(variant);
+}
+
+
+/**
+ * Adds a time metric to the DSE. This is one of the measurements to be performed.
+ * 
+ * @param {string} name - the name of the metric
+ * @param {TimeUnit} unit - the unit of the metric
+ * */
+MargotDseInfo.prototype.addTimeMetric = function(name, unit) {
+	
+	var metric = new MargotMetric(MargotMetricName.TIME, unit);
+	
+	this._metrics[name] = metric;
+}
+
+/**
+ * Adds an energy metric to the DSE. This is one of the measurements to be performed.
+ * 
+ * @param {string} name - the name of this metric
+ * @param {SiUnit} unit the unit of this mertic
+ * @param {MargotEnergyDomain} domain - the domain of the energy measurement
+ * */
+MargotDseInfo.prototype.addEnergyMetric = function(name, unit, domain) {
+	
+	var metric = new MargotMetric(MargotMetricName.ENERGY, unit);
+
+	metric.addInfo('domain', domain);
+	
+	this._metrics[name] = metric;
+}
+
+MargotDseInfo.prototype.execute = function (filePath) {
+	// check undefined elements
+	
+	var laraMetrics = this._createLaraMetrics();
+
+	if(this._flags !== undefined) {
+		this.dseLoop.setExecutionFlags(this._flags);
+	}
+	
+	if(this._compFlags !== undefined) {
+		this.dseLoop.setCompilationFlags(this._compFlags);
+	}
+	
+	var results = this.dseLoop.execute(this._scope, this._measure, this._dseVars, laraMetrics, undefined, this._dseRuns);
+	
+	var opList = this._createOpList(results);
+	
+	if(filePath !== undefined) {
+        println('Writing oplist to ' + filePath);
+        Io.writeFile(filePath, opList);
+    }
+}
+
+
+
+
+MargotDseInfo.prototype._newSingleMetric = function(newMetric, metricsArray, margotMetricName) {
+
+
+	
+	this.metricToResults[margotMetricName] = newMetric.getName();
+
+	// Check if metric already exists in the array
+	for(var metric of metricsArray) {
+		if(metric.getName() === newMetric.getName()) {
+			return;
+		}
+	}
+	
+	// Metric not found, add it
+	metricsArray.push(newMetric);
+}
+
+MargotDseInfo.prototype._createLaraMetrics = function () {
+
+	var laraMetrics = [];
+	var temp = new EnergyMetric();
+
+
+
+	for(var margotMetricName in this._metrics) {
+//		println("Metric name: " + margotMetricName);
+		var margotMetric = this._metrics[margotMetricName];
+	//	println("SWITCH ARG:" + margotMetric.getName());
+	//	println("TIME CASE VALUE:" + MargotMetricName.TIME);
+	//	println("ENERGY CASE VALUE:" + MargotMetricName.ENERGY);
+		switch(margotMetric.getName()) {
+			case MargotMetricName.TIME:
+	//			println("TIME CASE");
+				this._newSingleMetric(new ExecutionTimeMetric(), laraMetrics, margotMetricName);
+				break;
+			case MargotMetricName.ENERGY:
+	//		println("ENERGY CASE");
+				this._newSingleMetric(new EnergyMetric(), laraMetrics, margotMetricName);
+				break;
+			default:
+				throw "Margot  metric not implemented yet: " + margotMetric.getName();
+		}
+	}
+//	println("Lara metrics");
+//	printObject(laraMetrics);
+	return laraMetrics;
+}
+
+MargotDseInfo.prototype._createOpList = function(results) {
+	
+	var opList = "";
+	
+	var numVariants = results.getNumVariants();
+	
+	opList += '<?xml version="1.0" encoding="UTF-8"?>\n';
+	opList += '<points xmlns="http://www.multicube.eu/" version="1.3" block="' + this._block + '">\n';
+	for(var i=0; i<numVariants; i++) {
+	
+		opList += "<point>\n";
+		
+		// knobs / parameters
+		opList += "<parameters>\n";
+		for(var knob of this._knobs) {
+			opList += "<parameter ";
+			
+			var knobName = knob.getName();
+			var knobValue = results.getVariantVariableValue(knob.getVarName(), i); 
+			
+			opList += 'name="' + knobName + '" value="' + knobValue + '"/>\n';
+			
+		}		
+		opList += "</parameters>\n";
+		
+		// features		
+		opList += this._buildFeaturesXml(results, i);
+		
+		// metrics
+		opList += "<system_metrics>\n";
+
+	
+		for(var margotMetricName in this._metrics) {
+			var metricResultsName = this.metricToResults[margotMetricName];	
+			var metricResults = results.getMetricResults(metricResultsName);
+			
+
+			
+			var executionValues = metricResults.getVariantValues(i);
+			var metricsArray = this._metrics;
+			var convertedExecutionValues = executionValues.map(function(element){ return metricsArray[margotMetricName].convertUnit(element, metricResults.getUnit(), true);});
+			var avg = this._calcAverage(convertedExecutionValues);
+			var stdDev = this._calcStdDev(convertedExecutionValues, avg);
+
+			opList += '<system_metric name="' + margotMetricName + '" value="' + avg + '" standard_dev="' + stdDev +'"/>\n';			
+			
+		}
+		opList += "</system_metrics>\n";
+		opList += "</point>\n";
+	}
+	opList += "</points>\n";
+	
+	
+	return opList;
+}
+
+MargotDseInfo.prototype._buildFeaturesXml = function(results, index) {
+	
+	// do not generate a 'features' element if we do not have at least a single feature
+	if(Object.keys(this._features).length === 0) {
+		return '';
+	}
+	
+	var code = "<features>\n";
+		
+	for(var feature of this._features) {
+		
+		var featureName = feature.getName();
+		var featureValue = results.getVariantVariableValue(featureName, index);
+		code += '<feature name="' + featureName + '" value="' + featureValue  + '" />';
+	}
+	
+	code += "</features>\n";
+	
+	return code;
+}
+
+MargotDseInfo.prototype._calcAverage = function(values) {
+
+	var sum = 0;
+	for( var i = 0; i < values.length; i++ ){
+		sum += parseFloat( values[i]); 
+	}
+
+	return sum/values.length;
+}
+
+MargotDseInfo.prototype._calcStdDev = function(values, average) {
+
+	if(average === undefined) {
+		average = this._calcAverage(values);
+	}
+
+	// Calculate sum of the squares of the differences
+	var sum = 0;
+	for(var value of values) {
+		var diff = average - value;
+		var square = diff * diff;
+		sum += square;
+	}
+	
+	var divided = sum / (values.length - 1);
+	
+	return Math.sqrt(divided);
+}
+

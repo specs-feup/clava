@@ -1,0 +1,96 @@
+/*
+   Author(s): Loïc Besnard (loic.besnard@irisa.fr). 
+              IRISA-INRIA Rennes, France.
+              
+   This code has been developed during the ANTAREX project (http://www.antarex-project.eu).
+   It is provided under the MIT license (https://opensource.org/licenses/MIT).
+*/
+import antarex.utils.messages;
+
+/**  Memoizes a C user function with default arguments.
+  *  @param (func) the name of the C function to memoize
+  *  It calls Memoize_Function_ARGS(cfunc, 'none', 'no', 'none','no', 0, DEFAULT_TABSIZE);
+  *  For more details, see Memoize_Function_ARGS.
+  *  For a function of math.h, use Memoize_MathFunction.
+  * */
+aspectdef Memoize_Function
+input 
+  cfunc
+end
+  call Memoize_Function_ARGS(cfunc, 'none', 'no', 'none','no', 0, DEFAULT_TABSIZE);
+end
+
+/**
+  * Memoizes a C function with arguments.
+  * @param {string} cfunc: the name of the function to memoize.
+  * @param {string} fileToLoad: the name of the file to load to initialse the internal table, or none. 
+  * @param {string} FullOffLine: yes or no. yes implies a full off lime memoization (requires a fileToLoad).
+  * @param {string} FileToSave:  the name of the file to save the data of the table, or none.
+  * @param {string} AlwaysReplace: yes or no. yes implis that in case of collisions, the table is updated.
+  * @param {int} precision:  the number of bit to delete (float/double) for internal approximation, 0 for int.
+  * @param {int} tsize: the size of the table.
+
+  * First, it searches the existence of such a function in the application. 
+  * In case of success, it controls that parameters and the type of the arguments are conformed with the
+  * INRIA memoization library. Then, it adds (function GenCode_C_Memoization) the informations,  
+  * required for generating the memoization library, in a file called "funs-static.def".
+  * Finally, it updates the user code by replacing a reference to the memoized 
+  * method by a reference to the wrapper function.
+  * */
+aspectdef Memoize_Function_ARGS
+input 
+  cfunc,                 // C function to memoize.
+  fileToLoad,            // name of the file to load for init the table OR none
+  FullOffLine,           // yes|no yes : full off lime memoization (requires a fileToLoad)
+  FileToSave,            // name of the file to save the data of the table OR none
+  AlwaysReplace, //yes|no , in case of collisions, the table is   updated.
+  precision,              // number of bit to delete (float/double), 0 for int
+  tsize                   // size of the table.
+end
+  TRACE_BEGIN_OP(" >>> Memoize_Function_ARGS: " + cfunc);
+  var found = false;
+  var memoizable = false;
+  // selecting the body to exclude the header declaration.
+  select function{cfunc}.body end  
+  apply
+       found = true;
+       var vtype = getMemoType($function.type);
+       nbparams = checkHeaderMemoizableFunction($function);
+       memoizable = nbparams>0;
+    end
+   
+  if (! found)     {
+      WARNING("the function " + cfunc + " does not exist !");
+    }
+  else if (! memoizable) {
+	WARNING("the function " + cfunc + " is not memoizable !");
+	}
+  else  {
+    TRACE(" The function " + cfunc + " is memoizable !");
+    GenCode_C_Memoization(cfunc, vtype, nbparams, fileToLoad, FullOffLine, FileToSave, 
+                          AlwaysReplace, precision, tsize);
+    call C_UpdateCallMemoization(cfunc);
+  }
+end
+
+
+/**
+  * This aspect adds the declaration of the header of the wrapper 
+  * in the files of the applications that reference a memoized function (cfunc).
+  * @param {string} cfunc: name of a memoized function.
+  * */
+aspectdef C_UpdateCallMemoization
+input 
+  cfunc
+end
+  select function.call end  
+    apply
+      if ($call.name === cfunc) {	
+        exec setName(getFuncWrapperName(cfunc));
+        var $file = $call.ancestor('file');
+        $file.exec addInclude(FILENAME_MEMOI_WRAPPERS, false); 
+    }
+  end
+end
+
+

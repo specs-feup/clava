@@ -1,0 +1,442 @@
+import antarex.margot.config.monitor.MargotTimeMonitor;
+import antarex.margot.config.monitor.MargotEnergyMonitor;
+import antarex.margot.config.monitor.MargotThroughputMonitor;
+import antarex.margot.config.MargotState;
+import antarex.margot.config.MargotKnob;
+import antarex.margot.config.MargotDataFeature;
+
+/**
+ * This holds information about a mARGOt configuration block.
+ * 
+ * @constructor
+ * 
+ * @param {string} name - the name of the this block
+ * */
+function MargotBlock(name) {
+    
+    this._name = name;
+    this._knobs = [];
+    this._goals = [];
+    this._monitors = [];
+    this._states = [];
+    this._metrics = [];
+    this._runtimes = [];
+    this._features = undefined;
+}
+
+/**
+ * Sets the distance type of the feature group of this block.
+ * 
+ * @param {MargotDistanceType} distanceType - the type of distance calculation for data features
+ * */
+MargotBlock.prototype.setDataFeatureDistanceType = function(distanceType) {
+	
+	if(this._features === undefined) {
+		
+		this._features = defaultValue(this._features, new MargotDataFeatureGroup(distanceType));
+	} else {
+		
+		this._features.setDistanceType(distanceType);
+	}
+}
+
+/**
+ * Adds a new feature to the feature group of this block.
+ * 
+ * If it wasn't defined before, a new group will be created with a default distance type value of MargotDistanceType.EUCLIDEAN.
+ * 
+ * @param {string} name - the name of the variable that holds the value of the data feature
+ * @param {string} type - the type of the variable that holds the value of the data feature
+ * @param {MargotValidity} [validity=MargotValidity.NONE] - the comparison used to test the validity
+ * */
+MargotBlock.prototype.addDataFeature = function(name, type, validity) {
+	
+	this._features = defaultValue(this._features, new MargotDataFeatureGroup(MargotDistanceType.EUCLIDEAN));
+	
+	this._features.addFeature(name, type, validity);
+}
+
+/**
+ * Adds a knob to the block with the given data.
+ * 
+ * @param {string} name - the name of the knob
+ * @param {string} varName - the name of the variable that holds the knob value
+ * @param {string} varType - the type of the variable that holds the knob value
+ * 
+ * @see MargotKnob
+ * */
+MargotBlock.prototype.addKnob = function(name, varName, varType) {
+    
+    if(name === undefined || varName === undefined || varType === undefined) {
+        
+        throw 'To define a knob you need a name, a variable name and a variable type.';
+    }
+    
+    this._knobs.push(new MargotKnob(name, varName, varType));
+};
+
+/**
+ * Adds a metric to the block with the given data.
+ * 
+ * @param {string} name - the name of the metric
+ * @param {string} type - the type of the metric
+ * @param {boolean} distribution - whether this metric is a distribution
+ * */
+MargotBlock.prototype.addMetric = function(name, type, distribution) {
+
+    if(name === undefined || type === undefined || distribution === undefined) {
+        
+        throw 'To define a metric you need a name, a type and a distribution.';
+    }
+    
+    this._metrics.push({name: name, type: type, distribution: distribution});
+}
+
+/**
+ * Adds a runtime information provider to the block with the given data.
+ * 
+ * @param {string} metricName - the name of the metric
+ * @param {string} monitorName - the name of the monitor
+ * @param {number} inertia - the inertia of the adaptation
+ * */
+MargotBlock.prototype.addRuntimeProvider = function(metricName, monitorName, inertia) {
+
+    if(metricName === undefined || monitorName === undefined || inertia === undefined) {
+        
+        throw 'To define a runtime information provider you need a metric name, a monitor name and an inertia value.';
+    }
+    
+    this._runtimes.push({metricName: metricName, monitorName: monitorName, inertia: inertia});
+}
+
+/**
+ * Adds a metric goal to the block with the given data.
+ * 
+ * @param {string} name - the name of the goal
+ * @param {MargotCFun} cFun - the comparison function
+ * @param {Number} value - the numeric value of the goal
+ * @param {string} metric - the name of the metric
+ * */
+MargotBlock.prototype.addMetricGoal = function(name, cFun, value, metric) {
+    
+    for(var arg of arguments) {
+        
+        if(arg === undefined) {
+            throw 'To define a metric goal you need a name, a cFun, a value and a metric name.';
+        }
+    }
+    
+    this._goals.push(new _MargotGoal(name, cFun, value, _MargotGoalKind.METRIC, metric));
+};
+
+/**
+ * Adds a knob goal to the block with the given data.
+ * 
+ * @param {string} name - the name of the goal
+ * @param {MargotCFun} cFun - the comparison function
+ * @param {Number} value - the numeric value of the goal
+ * @param {string} knob - the name of the knob
+ * */
+MargotBlock.prototype.addKnobGoal = function(name, cFun, value, knob) {
+    
+    for(var arg of arguments) {
+        
+        if(arg === undefined) {
+            throw 'To define a knob goal you need a name, a cFun, a value and a knob name.';
+        }
+    }
+    
+    this._goals.push(new _MargotGoal(name, cFun, value, _MargotGoalKind.KNOB, knob));
+};
+
+/**
+ * @constructor
+ * 
+ * A generic goal.
+ * 
+ * @param {string} name - the name of this goal
+ * @param {MargotCFun} cFun - the comparion function of this goal
+ * @param {string} value - the target value
+ * @param {_MargotGoalKind} kind - the kind of goal
+ * @param {string} knobOrMetricName - the name of the knob or metric
+ * */
+function _MargotGoal(name, cFun, value, kind, knobOrMetricName) {
+	
+	/* TODO: check parameters */
+	
+	this._name = name;
+	this._cFun = cFun;
+	this._value = value;
+	this._kind = kind;
+	this._knobOrMetricName = knobOrMetricName;
+	
+	this._makeCode = function() {
+		
+		return _GoalTemplate(this._name, this._cFun, this._value, this._kind, this._knobOrMetricName);
+	};
+}
+
+/**
+ * The kind of goal.
+ * @enum
+ * */
+var _MargotGoalKind = {
+	KNOB: 'knob',
+	METRIC: 'metric'
+};
+
+
+/**
+ * Comparison functions.
+ * 
+ * @enum
+ * */
+var MargotCFun = new Enumeration({LT: 'LT', LE: 'LE', GT: 'GT', GE: 'GE'});
+
+/**
+ * Adds a monitor to this block.
+ * 
+ * @param {MargotMonitor} monitor - the monitor to add
+ * */
+MargotBlock.prototype.addMonitor = function(monitor) {
+    
+    this._monitors.push(monitor);
+}
+
+/**
+* Builds an energy monitor, adds it to the list of monitors, and returns it.
+* 
+* @param {string} name - the name of the monitor
+* 
+* @returns {MargotEnergyMonitor} the created energy monitor
+* */
+MargotBlock.prototype.newEnergyMonitor = function(name) {
+    var em = new MargotEnergyMonitor(name);
+    this._monitors.push(em);
+    return em;
+}
+
+/**
+* Builds a time monitor, adds it to the list of monitors, and returns it.
+* 
+* @param {string} name - the name of the monitor
+* 
+* @returns {MargotTimeMonitor} the created time monitor
+* */
+MargotBlock.prototype.newTimeMonitor = function(name) {
+    var tm = new MargotTimeMonitor(name);
+    this._monitors.push(tm);
+    return tm;
+}
+
+/**
+* Builds throughput monitor, adds it to the list of monitors, and returns it.
+* 
+* @param {string} name - the name of the monitor
+* 
+* @returns {MargotThroughputMonitor} the created throughput monitor
+* */
+MargotBlock.prototype.newThroughputMonitor = function(name, param1, param2) {
+    
+    checkDefined(name, 'name', 'newThroughputMonitor');
+    checkDefined(param1, 'param1', 'newThroughputMonitor');
+    
+    var tpm = undefined;
+    
+	if(param2 !== undefined) {
+		tpm = new MargotThroughputMonitor(name, param1, param2);
+    } else {
+		tpm = new MargotThroughputMonitor(name, param1);
+	}
+    this._monitors.push(tpm);
+    return tpm;
+}
+
+/**
+ * Adds a state to the list of states.
+ * 
+ * @param {MargotState} state - the state to add
+ * */
+MargotBlock.prototype.addState = function (state) {
+    
+    this._states.push(state);
+}
+
+/**
+* Builds a state, adds it to the list of states, and returns it.
+* 
+* @param {string} name - the name of the state to create
+* 
+* @returns {MargotState} the created state
+* */
+MargotBlock.prototype.newState = function(name) {
+    var s = new MargotState(name);
+    this._states.push(s);
+    return s;
+}
+
+/*
+ * CODE GENERATION
+ * ****************************************************************************/
+
+/**
+ * Generates code for the entire block.
+ * */
+MargotBlock.prototype._makeCode = function() {
+    
+    var code = '<block name="' + this._name + '">\n';
+    
+    code += this._makeMonitorsCode();
+    code += this._makeKnobsCode();
+    code += this._makeMetricsCode();
+    code += this._makeFeaturesCode();
+    code += this._makeRuntimesCode();
+    code += this._makeGoalsCode();
+    code += this._makeStatesCode();
+    
+    code += '</block>\n';
+    
+    return code;
+}
+
+/**
+* Generates the code of the features.
+* */
+MargotBlock.prototype._makeFeaturesCode = function() {
+	
+	if(this._features === undefined) {
+		return '';
+	}
+	
+	var code = '<!-- FEATURE SECTION -->\n';
+	
+	code += this._features._makeCode();
+	
+	return code;
+}
+
+/**
+* Generates the code of the monitors.
+* */
+MargotBlock.prototype._makeMonitorsCode = function() {
+    
+    var code = '<!-- MONITOR SECTION -->\n';
+    
+    for (var monitor of this._monitors) {
+    
+        code += monitor._makeCode();
+    }
+    
+    return code;
+}
+
+/**
+* Generates the code of the goals.
+* */
+MargotBlock.prototype._makeGoalsCode = function() {
+    
+    var code = '<!-- GOAL SECTION -->\n';
+    
+    for (var goal of this._goals) {
+    
+        code += goal._makeCode() + '\n';
+    }
+    
+    return code;
+}
+
+/**
+* Generates the code of the software knobs.
+* */
+MargotBlock.prototype._makeKnobsCode = function() {
+    
+    var code = '<!-- SW-KNOB SECTION -->\n';
+    
+    for (var knob of this._knobs) {
+    
+        code += _KnobTemplate(knob.getName(), knob.getVarName(), knob.getVarType());
+    }
+    
+    return code;
+}
+
+/**
+* Generates the code of the metrics.
+* */
+MargotBlock.prototype._makeMetricsCode = function() {
+    
+    var code = '<!-- METRIC SECTION -->\n';
+    
+    for (var metric of this._metrics) {
+    
+        code += _MetricTemplate(metric.name, metric.type, metric.distribution ? 'yes' : 'no');
+    }
+    
+    return code;
+}
+
+/**
+* Generates the code of the runtime information providers.
+* */
+MargotBlock.prototype._makeRuntimesCode = function() {
+    
+    var code = '<!-- RUNTIME INFORMATION PROVIDER -->\n';
+    
+    for (var runtime of this._runtimes) {
+    
+        code += _RuntimeTemplate(runtime.metricName, runtime.monitorName, runtime.inertia);
+    }
+    
+    return code;
+}
+
+/**
+* Generates the code of the states.
+* */
+MargotBlock.prototype._makeStatesCode = function() {
+    
+    var code = '<!-- OPTIMIZATION SECTION -->\n';
+    
+    for (var state of this._states) {
+    
+        code += state._makeCode();
+    }
+    
+    return code;
+}
+
+/*
+ * TEMPLATES
+ * ****************************************************************************/
+
+/**
+ * Template used for the generation of the XML code for knobs.
+ * */
+codedef _KnobTemplate(param1, param2, param3) %{
+<knob name="[[param1]]" var_name="[[param2]]" var_type="[[param3]]"/> 
+}%
+end
+
+/**
+ * Template used for the generation of the XML code for metrics.
+ * */
+codedef _MetricTemplate(param1, param2, param3) %{
+<metric name="[[param1]]" type="[[param2]]" distribution="[[param3]]"/> 
+}%
+end
+
+/**
+ * Template used for the generation of the XML code for runtime information providers.
+ * */
+codedef _RuntimeTemplate(param1, param2, param3) %{
+<adapt metric_name="[[param1]]" using="[[param2]]" inertia="[[param3]]"/> 
+}%
+end
+
+/**
+ * Template used for the generation of the XML code for goals.
+ * */
+codedef _GoalTemplate(name, cFun, value, kind, knobOrMetricName) %{
+<goal name="[[name]]" cFun="[[cFun]]" value="[[value]]" [[kind]]_name="[[knobOrMetricName]]"/> 
+}%
+end

@@ -1,0 +1,299 @@
+
+import antarex.utils.IdentReferences;
+
+/** A function/method is memoizable iff
+  * 1) The header "vtype func(parameters)" satisfies : 
+  *    - for all p of parameters type(p)=vtype and 1 <= |parameters| <=3
+  *    - returns a vtype value.
+  * 2) It refers only local variables and constants (pure functions), and no pointers.
+  */
+function findmemoizable($file, $function, $body){ 
+   currentfunction = getidfunction($file, $function);
+   var v = memoiFunctions[currentfunction];
+   if (v === STATE.NO) return v;
+   if (v === STATE.YES) return v;
+   if (v === STATE.VISITED) 
+     {
+       TRACE(" >>>>> CYCLIC GRAPH DETECTED");
+       return STATE.NO; // cyclic graph
+     }
+   
+   var nbparams = checkHeaderMemoizable($function);
+   if ( nbparams < 0 ) {
+     MESSAGE( " >>>>> ", currentfunction + " is NOT MEMOIZABLE: unexpected interface.", "");
+     v = STATE.NO;
+    }
+    else {
+      TRACE( " STATE.VISITED for " + currentfunction);
+      memoiFunctions[currentfunction] = STATE.VISITED;
+      v = checkBodyMemoizable($file, $function, $body);
+      if (v === STATE.NO)
+    	MESSAGE( " >>>>> ", currentfunction + " is NOT MEMOIZABLE: unexpected references in the body.", "");
+    }
+  memoiFunctions[currentfunction] = v;
+  return v;
+}
+
+/** 
+  * @return true if $name is declared as a pure function, false otherwise.
+  * Currently, restricted to the pure functions of math.h and those declared in SomePredefinedPureFunctions.
+  */
+function declaredAsPure ($name)
+{
+  // predefined memoizable function
+ if (MathMemoizableFuncs.indexOf($name) >=0) return true;
+ if (SomePredefinedPureFunctions.indexOf($name) >=0) return true;
+ return false;
+}
+
+/**
+  * @return the current number of memoizable functions.
+  * */
+function getNbMemoizable(){
+	var n = 0;
+	for (f in memoiFunctions) {
+      var code = memoiFunctions[f];
+      if ( code === STATE.YES) n++;
+   }
+   return n;
+}
+
+
+/** 
+  * @return the string $id%$suff 
+  * */
+function getIdId( $id, $suff) {
+   return $id + '%' + $suff;
+}
+
+function getidfunction( $file, $function) {
+   return getIdId($file.name, $function.line);
+}
+
+/**
+  * @return 
+  *   - STATE.YES if the successors of id are memoizable.
+  *   - STATE.NO if one of the sucessors is not memoizable, or in case of circuit.
+  *   - STATE.UNDEF if the status of one of the successors is undefined (ie not yet fixed).
+*/
+function successorsAreMemoizable(id)
+{
+   for (idSucc in callGraph[id]) {
+       var code = memoiFunctions[ idSucc ];
+       TRACE ( " °°°°°°° successorsAreMemoizable ( " + id + ") = " + idSucc );
+       if ( code === STATE.NO)  return code;
+       if ( code === STATE.VISITED) return STATE.NO; // circuit.
+       if ( code === STATE.UNDEF) return code;
+   }
+   return STATE.YES;
+}
+
+/**
+  * @return STATE.YES if the method/function $function defined in the file $file 
+  * is memoizable, STATE.NO or STATE.UNDEF otherwise.
+  * A function/method is memoizable:
+  *   - if the referenced functions/methods are memoizable 
+  *   - and the $body of $function refers only local variables and constants (pure functions).
+  * */
+function checkBodyMemoizable($file, $function, $body)
+{
+  currentfunction = getidfunction($file, $function);
+  var code = successorsAreMemoizable(currentfunction);
+  TRACE( " CheckBodyMemoizable:: successorsAreMemoizable for " + currentfunction + " returns " + STRSTATE[code]); 
+  if (code === STATE.YES) {
+    // If all referenced functions are memoizable, it must reference only local variables/constants
+  	if (! BodyReferencesLocalsOrConstants($function, $body)) { 
+      TRACE("checkBodyMemoizable::BodyReferencesLocalsOrConstants return false for " + currentfunction);
+      code =STATE.NO;
+    }
+  }
+  return code;
+}
+
+
+/**
+  * @return "true" if $body of $function references only local variables or constant objects, "false" otherwise.
+  * */
+function BodyReferencesLocalsOrConstants($function, $body)
+{
+  var $varDecls=[];
+  var $externDecls = [];
+  getRefVarsInStmt($body, $varDecls);
+  for (var $aDecl of $varDecls)  {
+	if (isOutsideDeclaration($aDecl, $function))
+		if (! isAConstantDecl($aDecl)) return false;
+  }
+  return true;
+}
+
+
+/**
+  * @return "true" if $body of $function references only local variables or constant objects, "false" otherwise.
+  * */
+function BodyReferencesLocalsOrConstants__OLD($function, $body)
+{
+  for (var x = 0; x <  $body.astNumChildren ; x++) {
+	 var $stmt =  $body.astChild(x);
+	 if ( ! StatementReferencesLocalsOrConstants( $stmt, $function)) return false;
+   }
+  return true;
+}
+
+/**
+  * @return "true" if a $statement references only local variables of the function $function or 
+  * constant objects, "false" otherwise.
+  * */
+function StatementReferencesLocalsOrConstants($statement, $function) {
+   var $astname = $statement.astName;
+   switch ($astname) { 
+      case 'NullStmt':
+      case 'NullDecl':
+         return true;
+         
+     case 'ExprStmt':
+     case 'ReturnStmt':
+	  return exprReferencesLocalsOrConstants($statement.astChild(0), $function);
+	  
+    case 'IfStmt':
+      var $e = $statement.astChild(0); // condition
+      if ( ! exprReferencesLocalsOrConstants($e, $function)) return false;
+      for ( var i = 1; i < $statement.astNumChildren; i++)
+	    {
+	       var $e = $statement.astChild(i);
+	       TRACE( $astname + ", Decl [ " + i + " ] = " + $e.code + ", joinpointType =" + $e.joinPointType);
+	       if ( ! StatementReferencesLocalsOrConstants($e, $function)) return false;
+	    }
+      return true;
+    
+	case 'DeclStmt':
+	  for ( var i = 0; i < $statement.astNumChildren; i++)
+	    {
+	       var $e = $statement.astChild(i);
+	       TRACE( $astname + ", Decl [ " + i + " ] = " + $e.code + ", joinpointType =" + $e.joinPointType);
+	       if ( ! exprReferencesLocalsOrConstants($e, $function)) return false;
+	    }
+	 return true;
+	 
+     case 'CompoundStmt': 
+     case 'ForStmt':
+     case 'WhileStmt':
+     case 'CXXForRangeStmt':  //  for(auto edgeId : Pred[w]) {  }
+	   for ( var i = 0; i < $statement.astNumChildren; i++) {
+	      var $e = $statement.astChild(i);
+	      TRACE( $astname + ", child [ " + i + ' ] = ' + $e.astName);
+	      if (! StatementReferencesLocalsOrConstants($e, $function)) return false;
+	   }
+	   return true;
+	   
+     case 'WrapperStmt': // comment.
+     case 'CXXOperatorCallExpr':
+ 	return true;
+    		
+     default:
+	  NYI(" StatementReferencesLocalsOrConstants:: " + $astname);
+     }
+     return false;
+}
+
+/**
+  * @return "true" if an expression $expr references only local variables of $function, or constant objects, 
+  * "false" otherwise.
+  * */
+function exprReferencesLocalsOrConstants($expr, $function) {
+	// binaryOp unaryOp  varref   call arrayAccess  expression  memberAccess 
+	// vardecl memberCall stmCall childExpr
+	var $jpt = $expr.joinPointType;
+	TRACE(" exprReferencesLocalsOrConstants = " + $expr.code + "; joinPointType = " + $jpt);
+	switch ($jpt) {
+       case 'binaryOp':	
+		  var $e1 = $expr.left;
+		  TRACE (" binaryOp e1 joinPointType = " + $e1.joinPointType );
+	      if (! exprReferencesLocalsOrConstants($e1, $function)) return false;
+	      var $e2 = $expr.right;
+	      TRACE (" binaryOp e2 joinPointType = " + $e2.joinPointType );
+	      return exprReferencesLocalsOrConstants($e2, $function);
+          
+       case 'unaryOp': 
+	      var $e1 = $expr.operand;
+		  TRACE(" unaryOp operand  joinPointType = " + $e1.joinPointType );
+	      return exprReferencesLocalsOrConstants($e1, $function); 
+	  
+	 
+	   case 'arrayAccess':
+	   case 'expression':
+          for (var i = 0; i < $expr.astNumChildren; i++){
+            	if ( ! exprReferencesLocalsOrConstants($expr.astChild(i), $function)) return false;
+          }
+          return true;
+	      
+	   case 'call':
+	      for (var i = 1; i < $expr.astNumChildren; i++) {
+             if ( ! exprReferencesLocalsOrConstants($expr.astChild(i), $function)) return false;
+          }
+          return true;
+
+	   case  'varref':
+		  var $decl = $expr.vardecl;
+		  if (isConstantDeclaration($decl))  {
+		      TRACE(" isConstantDeclaration return true for " + $decl.code);
+		      return true;
+		    }
+		  var $ancestorFile = $decl.ancestor("function");
+		  if ( $ancestorFile === undefined ) $ancestorFile = $decl.ancestor("method");
+		  if ( $ancestorFile === undefined ) return false; // a global.
+		  return ($ancestorFile.location === $function.location);
+        
+        case 'memberCall':  //  obj.m
+           var $e = $expr.base;
+           TRACE("  case memberCall " + $e.code);
+           if ( $e.code === 'this') return false;
+           return exprReferencesLocalsOrConstants($e , $function);
+         	  
+	    case 'memberAccess':  //  obj-> m
+           var $e = $expr.base;
+           TRACE( "   case memberAccess. base = " + $e.code);
+           if ( $e.code === 'this') return false;
+           return exprReferencesLocalsOrConstants($e , $function);
+	    
+	    case 'vardecl':
+	       TRACE("  case vardecl = " + $expr.code);
+           if ( $expr.init === undefined ) return true;
+           return exprReferencesLocalsOrConstants($expr.init, $function);
+	   
+            case 'deleteExpr':
+	    case 'newExpr':
+	       return false;
+
+	    default:
+	       NYI(" exprReferencesLocalsOrConstants::" + ", joinPointType = " + $jpt + ", code = " + $expr.code);
+	}
+	return false;
+}
+
+/**
+  * @return "true" if $decl is a declaration of a constant, "false" otherwise.
+  * */
+function isConstantDeclaration($decl)
+{
+  var $vardeclType = $decl.type;
+  // println(" isConstantDeclaration :: vtype = " + $vardeclType.code);
+  return ($vardeclType.astIsInstance("QualType"));
+  //return ( $vardeclType.kind === "QualType");
+}
+
+
+/** 
+  * Debug. Prints the gathered information of a graph ( callGraph) to the console.
+  * */
+function printCallGraph(callGraph) {
+    if ( is_mode_trace_on())  {
+      println('Static call graph {\n');
+	  for (f in callGraph) { 
+		for (c in callGraph[f]) {
+		  println('\t' + f + '->' + c + ' [label="' + callGraph[f][c] + '"];');
+		}
+	  }
+	  println('}');
+    }
+}
+

@@ -1,0 +1,86 @@
+import antarex.margot.config.monitor.MargotMonitor;
+
+/**
+ * This class represents a custom monitor.
+ * 
+ * This class is incomplete and should not be used.
+ * 
+ * @extends MargotMonitor
+ * @constructor
+ * @param {string} name - the name of this monitor
+ * */
+function MargotCustomMonitor(name) {
+	
+    // super contructor
+    MargotMonitor.call(this, name);
+    
+    // save super prototype
+    this._super = MargotMonitor.prototype;
+    
+    this._spec = undefined;
+    
+    this._starts = [];
+    this._stops = [];
+}
+
+// Inheritance
+MargotCustomMonitor.prototype = Object.create(MargotMonitor.prototype);
+
+
+/**
+ * Adds a stop parameter to the custom monitor.
+ * 
+ * @param {string} name - the name of the parameter
+ * @param {string} value - the value of the parameter
+ * @param {string} [type] - the C type of the parameter
+ * */
+MargotCustomMonitor.prototype.addStopParam = function(name, value, type) {
+
+	var stop = undefined;
+	if(type === undefined) {
+		
+		stop = {paramType: MargotParamType.FIXED , name: name, value: value};
+	} else {
+		
+		stop = {paramType: MargotParamType.LOCAL , name: name, value: value, cType: type};
+	}
+	this._stops.push(stop);
+}
+
+
+
+
+/*
+ * TEMPLATES
+ * ****************************************************************************/
+
+/**
+ * Template used for the generation of the XML code for the stop parameters portion of the custom monitor.
+ * 
+ * @param {string} name - the name of the parameter
+ * @param {string} value - the value of the parameter
+ * */
+codedef _StopFixedTemplate(name, value) %{
+<stop>    
+<param name="[[name]]">    
+<fixed value="[[value]]"/>    
+</param>    
+</stop>
+}%
+end
+
+/**
+ * Template used for the generation of the XML code for the stop parameters portion of the custom monitor.
+ * 
+ * @param {string} name - the name of the parameter
+ * @param {string} value - the value of the parameter
+  * @param {string} [type] - the C type of the parameter
+ * */
+codedef _StopLocalTemplate(name, type, value) %{
+<stop>    
+<param name="[[name]]">    
+<local_var type="[[type]]" value="[[value]]"/>    
+</param>    
+</stop>
+}%
+end

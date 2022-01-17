@@ -1,0 +1,36 @@
+/**
+ * Class representing a mARGOt knob.
+ * 
+ * @constructor
+ * 
+ * @param {String} knobName - the name of the knob
+ * @param {String} varName - the name of the code variable that holds the knob value
+ * @param {String} varType - the type of the code variable that holds the knob value
+ * */
+function MargotKnob(knobName, varName, varType) {
+	
+	this._name = knobName;
+	this._var = varName;
+	this._type = varType;
+}
+
+/**
+ * Returns the name of the knob.
+ * */
+MargotKnob.prototype.getName = function() {
+	return this._name;
+}
+
+/**
+ * Returns the name of the code variable that holds the knob value.
+ * */
+MargotKnob.prototype.getVarName = function() {
+	return this._var;
+}
+
+/**
+ * Returns the type of the code variable that holds the knob value.
+ * */
+MargotKnob.prototype.getVarType = function() {
+	return this._type;
+}

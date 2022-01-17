@@ -1,0 +1,147 @@
+/**
+ * Class that represents a data feature in mARGOt.
+ * 
+ * 
+ * @param {string} name - the name of the variable that holds the value of the data feature
+ * @param {string} type - the type of the variable that holds the value of the data feature
+ * @param {MargotValidity} [validity=MargotValidity.NONE] - the comparison used to test the validity
+ * 
+ * @constructor
+ * */
+function MargotDataFeature(name, type, validity) {
+	
+	this._name = name;
+	this._type = type;
+	this._validity = defaultValue(validity, MargotValidity.NONE);
+}
+
+/**
+ * Enum that represents the type of conditions to check the validity of data features.
+ * 
+ * @enum
+ * */
+var MargotValidity = new Enumeration({
+	GE: 'GE',
+	LE: 'LE',
+	NONE: '-'
+});
+
+/**
+ * Returns the name of this data feature.
+ * */
+MargotDataFeature.prototype.getName = function() {
+	return this._name;
+}
+
+/**
+ * Returns the type of this data feature.
+ * */
+MargotDataFeature.prototype.getType = function() {
+	return this._type;
+}
+
+/**
+ * Returns the validity comparison of this data feature.
+ * */
+MargotDataFeature.prototype.getValidity = function() {
+	return this._validity;
+}
+
+/**
+ * Makes the XML code for a data feature of the XML configuration.
+ * */
+MargotDataFeature.prototype._makeCode = function() {
+	
+	return _FeatureTemplate(this._name, this._type, this._validity);
+}
+
+/**
+ * Template for the feature.
+ * */
+codedef _FeatureTemplate(name, type, validity) %{
+<feature name="[[name]]" type="[[type]]" comparison="[[validity]]"/>
+}%
+end
+
+
+
+
+/**
+ * Class that represents a group of data features in mARGOt.
+ * 
+ * @param {MargotDistanceType} distanceType - the type of distance calculation for data features
+ * 
+ * @constructor
+ * */
+function MargotDataFeatureGroup(distanceType) {
+	
+	this._distance = distanceType;
+	this._features = [];
+}
+
+/**
+ * Enum that represents the distance types supported by data features.
+ *
+ * @enum
+ *  */
+var MargotDistanceType = new Enumeration('NORMALIZED', 'EUCLIDEAN');
+
+/**
+ * Sets the type of distance calculation of this feature group.
+ * 
+ * @param {MargotDistanceType} distanceType - the type of distance calculation for data features
+ * */
+MargotDataFeatureGroup.prototype.setDistanceType = function(distanceType) {
+	
+	this._distance = distanceType;
+}
+
+/**
+ * Returns the array of data features in this group.
+ * */
+MargotDataFeatureGroup.prototype.getFeatures = function() {
+	
+	return this._features;
+}
+
+/**
+ * Adds a new data feature to this group.
+ * 
+ * @param {string} name - the name of the variable that holds the value of the data feature
+ * @param {string} type - the type of the variable that holds the value of the data feature
+ * @param {MargotValidity} [validity=MargotValidity.NONE] - the comparison used to test the validity
+ * */
+MargotDataFeatureGroup.prototype.addFeature = function(name, type, validity) {
+	
+	this._features.push(new MargotDataFeature(name, type, validity));
+}
+
+/**
+ * Makes the XML code for the data features group of the XML configuration.
+ * */
+MargotDataFeatureGroup.prototype._makeCode = function() {
+	
+	var featuresCode = '';
+	
+	// do not generate a 'features' element if we do not have at least a single feature
+	if(this._features.length === 0) {
+		
+		return featuresCode;
+	}
+	
+	for(var feature of this._features) {
+		featuresCode += feature._makeCode();
+	}
+	
+	return _FeatureGroupTemplate(this._distance, featuresCode);
+}
+
+/**
+ * Template for the features group.
+ * */
+codedef _FeatureGroupTemplate(distanceType, featuresCode) %{
+<features distance="[[distanceType]]">
+[[featuresCode]]
+</features>
+}%
+end

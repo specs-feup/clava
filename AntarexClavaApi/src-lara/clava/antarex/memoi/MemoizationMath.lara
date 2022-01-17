@@ -1,0 +1,100 @@
+/*
+   Author(s): Loïc Besnard (loic.besnard@irisa.fr). 
+              IRISA-INRIA Rennes, France.
+              
+   This code has been developed during the ANTAREX project (http://www.antarex-project.eu).
+   It is provided under the MIT license (https://opensource.org/licenses/MIT).
+*/
+import antarex.utils.messages;
+import antarex.memoi.MemoizationC;
+
+/*  -----------Memoizing Math functions ----------------------  */
+
+/** 
+  * Memoizes all the Math Functions referenced in the application, using default parameters.
+  */
+aspectdef Memoize_AllMathFunctions	
+   TRACE_BEGIN_OP(" >>> Begin Memoize_math");
+   call info: GetFunctions();
+   var apis = info.notDeclared;
+   if (apis.length > 0) 
+    call Memoize_MathFunctions(apis);
+end
+
+/** 
+  * Memoizes a set fo Math Functions.
+  * @param {array of string} functions to memoize.
+  * Example: call Memoize_MathFunctions(['sin', 'cos']);
+  * */
+aspectdef Memoize_MathFunctions 
+input
+ targets = []
+end
+
+  for (var target of targets) {
+     call vcall : Memoize_MathFunction(target);
+     if ( ! vcall.bres )
+	 WARNING( target + " is not a memoizable element (ignored) !");
+  }
+end
+
+/**
+  * Memoizes a Math Function with default parameters.
+  * @param {string} target of a math function.
+  * @param {boolean} bres: returned value, equal to "true" if the target is a memoizable mathematical function, "false" otherwise.
+  * */
+aspectdef Memoize_MathFunction
+input
+  target
+end
+output	
+  bres
+end
+call m : Memoize_MathFunction_ARGS(target, 'none', 'no', 'none', 'no', 0, DEFAULT_TABSIZE);
+bres = m.bres;
+end
+
+
+/**
+  * Memoizes a Math Function with specified parameters.
+  * @param {string} target of a math function.
+  * @param {string} fileToLoad: the name of the file to load to initialse the internal table, or none. 
+  * @param {string} FullOffLine: yes or no. yes implies a full off lime memoization (requires a fileToLoad).
+  * @param {string} FileToSave:  the name of the file to save the data of the table, or none.
+  * @param {string} AlwaysReplace: yes or no. yes implis that in case of collisions, the table is updated.
+  * @param {int} precision:  the number of bit to delete (float/double) for internal approximation, 0 for int.
+  * @param {int} tsize: the size of the table.
+
+  * @param {boolean} bres: returned value, equal to "true" if the target is a memoizable mathematical function, "false" otherwise.
+ * */
+aspectdef Memoize_MathFunction_ARGS
+input
+  target,
+  fileToLoad,            // name of the file to load for init the table OR none
+  FullOffLine,           // yes|no yes : full off lime memoization (requires a fileToLoad)
+  FileToSave,            // name of the file to save the data of the table OR none
+  AlwaysReplace,         //yes|no , in case of collisions, the table is   updated.
+  precision,              // number of bit to delete (float/double), 0 for int
+  tsize                   // size of the table.
+end
+output	
+  bres
+end
+  memoiDef = getKindMathFunc(target);
+  if ( memoiDef !== "none" ) {
+    bres= true;	
+    memoiDef = memoiDef + ',' + precision + ',' + fileToLoad + ',' 
+        + FullOffLine + ',' + FileToSave + ',' + AlwaysReplace + ',' + tsize + ")";
+    TRACE( " Memoization of " + target + " with " + memoiDef);
+
+    initFileMemoization();	
+    $newFileJp_MEMOI_DEFS.exec insertBefore(memoiDef);
+    initFileWrappers();
+    genCodeWrapperHeader( getWrapperDeclMathFunc(target) );
+    call C_UpdateCallMemoization(target);
+    ExposedVariables.push(target);
+  }
+  else
+    bres = false;
+end
+

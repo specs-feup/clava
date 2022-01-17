@@ -1,0 +1,412 @@
+/*
+   Author(s): Loïc Besnard (loic.besnard@irisa.fr). 
+              IRISA-INRIA Rennes, France.
+              
+   This code has been developed during the ANTAREX project (http://www.antarex-project.eu).
+   It is provided under the MIT license (https://opensource.org/licenses/MIT).
+*/
+
+import antarex.utils.messages;
+
+var wrapperSuffix = '_wrapper';
+
+
+/**
+  * Initializes the memoization by adding two files to Clava:
+  *   - One (FILENAME_MEMOI_DEFS) will contains the definitions used to produce the memoization library.
+  *   - The other one (FILENAME_EXPOSED_VARS) will contains the exposed variables.
+  * */
+function initFileMemoization(){ 
+   if (FIRST_MEMOIZATION) {
+     // Declaration of the file for the INRIA memoization library.
+     $newFileJp_MEMOI_DEFS = AstFactory.file(FILENAME_MEMOI_DEFS, filepath);
+     Clava.addFile($newFileJp_MEMOI_DEFS);
+     // Declaration of the exposed variables.
+     $newFileJp_MEMOI_MARGOT = AstFactory.file(FILENAME_EXPOSED_VARS, filepath);
+     Clava.addFile($newFileJp_MEMOI_MARGOT);
+    // GenCodeForMargot("toto");
+     FIRST_MEMOIZATION = false;
+   }
+}
+
+
+/**
+  * @return the string code of the type ($vtype) for
+  *   - a predefined one, 
+  *   - a typedef built on a predefined one, 
+      - or a const type.
+  * or "NO" otherwise.
+*/
+function getMemoType($vtype) {
+  // var typeKind = $vtype.kind;
+  
+  // if (typeKind === "BuiltinType") return $vtype.code;
+  if ($vtype.astIsInstance("BuiltinType")) return $vtype.code;
+  
+  //if (typeKind === "TypedefType") {
+  if ($vtype.astIsInstance("TypedefType")) {
+    var $unwrappedType = $vtype.unwrap;
+    if ($unwrappedType !== undefined) return getMemoType($unwrappedType);
+  }
+  else
+    // if (typeKind === "QualType")
+     if ($vtype.astIsInstance("QualType"))
+       return getMemoType($vtype.astChild(0)); // TYPE const
+  return "NO";
+ }
+
+
+/** 
+  * Testing if the header of a function satisfies the conditions for the memoization:
+  *  - the number of arguments is in the interval [1,3]
+  *  - all the arguments ans the returned value have the same 
+  *    type restricted to the types tested in getMemoType().
+  * @return the number of parameters or -1 if the C function is not memoizable,
+  * @see{getMemoType()}.
+*/
+function checkHeaderMemoizableFunction($function)
+{
+ // TODO: to be merge with checkHeaderMemoizableMethod
+  var functionType = $function.type;
+  // var typeKind = functionType.kind;
+  var memoizable= false;
+  var nbparams = 0;
+  var vtype = getMemoType(functionType);
+  if (memoizableTypes.indexOf(vtype) > -1) {
+    var v = $function.params;
+	var b = true;
+	for (var x of v) {
+	  if ( vtype !== getMemoType(x.type)) b=false;
+	    nbparams++; 
+	 }
+	 memoizable = b && (( nbparams == 1 ) || (nbparams == 2)  ||  (nbparams == 3));
+    }
+  if (!memoizable) nbparams= -1; 
+  return nbparams;
+}
+
+/** 
+  * Testing if the header of a method ($method) satisfies the conditions for the memoization:
+  *  - the number of arguments is in the interval [1,3]
+  *  - all the arguments ans the returned value have the same 
+  *    type restricted to the types tested in getMemoType().
+  * @return the number of parameters or -1 if the C function is not memoizable,
+  * @see{getMemoType()}.
+ 
+*/
+function checkHeaderMemoizableMethod($method)
+{
+ // TODO: to be merge with checkHeaderMemoizableFunction
+ var memoizable= false;
+  var functionType = $method.functionType;
+  var tt_return = functionType.returnType;
+  // var typeKind = tt_return.kind;
+  var nbparams = 0;
+  var vtype = getMemoType(tt_return);
+  
+  if (memoizableTypes.indexOf(vtype) > -1) {
+      var v = functionType.paramTypes;
+	  var b = true;
+	  for (var x of v) {
+	    if ( vtype !== getMemoType(x)) b=false;
+	    nbparams++; 
+	  }
+	  memoizable = b && (( nbparams == 1 ) || (nbparams == 2)  ||  (nbparams == 3) );
+    }
+  if (!memoizable) nbparams = -1; 
+  return nbparams;
+}
+
+/** 
+  * Testing if the header of a function or method ($fm) satisfies the conditions for the memoization.
+  * @return the number of parameters of $fm, or -1 if it is not memoizable.
+  */
+function checkHeaderMemoizable($fm)
+{
+  if ($fm.astName  === 'CXXMethodDecl') return checkHeaderMemoizableMethod($fm); 
+  return checkHeaderMemoizableFunction($fm);
+}
+
+
+/**
+  * @return an array (T) of 2 strings 
+  *   - T[0] contains the mangled name of a function or method (fmName) 
+  *   - T[1] contains the informations of the associated wrapper function.
+  * To produce these mangled names, it uses the className( "" for a function), 
+  *  the name of the type (typeName) and the numbers of arguments (nbparams).
+  * The rules for the mangling are compiler dependent.
+  * */
+function getMangledInfos(className, fmName, typeName, nbparams) {
+  var tab = [];
+  if ( className === "")  { // C code
+    tab[1] = getFuncWrapperName(fmName);
+    if ( manglingForC ) {     
+      var par_mangling = getManglingTypeFor(typeName, nbparams);
+      var prefix = "_Z";
+      tab[0] = prefix + fmName.length + fmName + par_mangling;
+	}
+    else
+      tab[0] = fmName;
+  }
+  else { 
+    // C++ code
+    var par_mangling = "E" + getManglingTypeFor(typeName, nbparams);
+    var classInfo = className.length + className;
+    var prefix = "_ZN";
+    tab[0] = prefix + classInfo + fmName.length + fmName + par_mangling;
+    var wrapper  = getFuncWrapperName(fmName);
+    tab[1] = prefix + classInfo + wrapper.length + wrapper + par_mangling;
+  }
+  return tab;
+}
+
+/**
+  * @return the string composed of nbparams times vtype separated by a comma.
+  * */
+function getDeclParameters(vtype, nbparams) {
+  var vparam = vtype;
+  var nb=1;
+  while (nb != nbparams) {
+    vparam = vparam + " , " + vtype;
+    nb++;
+  }
+  return vparam;
+}
+
+/**
+  * @return the name of the wrapper of func.
+  * */
+function getFuncWrapperName(func){
+  return func+wrapperSuffix;
+}
+
+/**
+  * @param {jointpoint $file} vfile.
+  * @param {array of string} ExposedVariables.
+  * It generates in the file (vfile) the exposed variables of ExposedVariables. 
+  * The variables that can be modified at run time (margot or other tool).
+  * */
+function genExposedVariables(vfile, ExposedVariables) {
+ // Used only in Memoization.lara.
+ vfile.exec insertBefore( "}");
+   for (var avar of ExposedVariables) {
+         vfile.exec insertBefore( varExposedToMARGOT + avar + "= B;");
+      }
+   vfile.exec insertBefore( "\n \n void INRIA_memoInit(int B) { " );
+      
+   var ExposedVariable;
+   for (var avar of ExposedVariables) {
+    ExposedVariable = "int " +  varExposedToMARGOT + avar + " = 1;\n";
+    vfile.exec insertBefore(ExposedVariable);
+    ExposedVariable = "extern int _alwaysReplace" + avar + ", _FullyOffLine" + avar + ";";
+    vfile.exec insertBefore(ExposedVariable);
+    } 
+} 
+
+/** 
+  * This function adds the declaration of the predefined __EXTERN__ keyword used
+  * to specify external C function with a C++ compiler.
+  * */
+function genExternSpec(vfile){
+ // Used only in Memoization.lara.
+ vfile.exec insertBefore%{
+#ifdef __cplusplus
+#define __EXTERN__ extern "C"
+#else
+#define __EXTERN__
+#endif
+}%;
+ }
+
+
+//-----  Functions for MemoizationMath.lara.
+
+var MathMemoizableFuncs =[ 
+    /* double, 1 parameter */ 
+    "acos", "acosh", "asin", "asinh", "atan", "atanh", 
+    "cbrt", "ceil", "cos", "cosh", "erf", "erfc", "exp", "exp2", "expm1", 
+    "fabs", "floor", "j0", "j1", "lgamma", "log", "log10", "log1p", "log2", 
+    "logb", "nearbyint", "rint", "round", "sin", "sinh", "sqrt", "tan", "tanh", "tgamma", "trunc", 
+    /* float, 1 parameter */
+    "acosf", "acoshf", "asinf", "asinhf", "atanf", "atanhf", 
+    "cbrtf", "ceilf", "cosf", "coshf", "erfcf", "erff", "exp2f", "expf", "expm1f", 
+    "fabsf", "floorf", "lgammaf", "log10f", "log1pf", "log2f", "logbf", "logf", "nearbyintf", 
+    "rintf", "roundf", "sinf", "sinhf", "sqrtf", "tanf", "tanhf", "tgammaf", "truncf", 
+    /* double,2 parameters */
+    "atan2", "copysign", "fdim", "fmax", "fmin", "fmod", "hypot", "nextafter", "pow", "remainder", "scalb",
+    /* float, 2 parameters */
+    "atan2f", "copysignf", "fdimf", "fmaxf", "fminf", "fmodf", "hypotf", "nextafterf", "powf", "remainderf"
+];
+
+/** 
+  * @return the code of the definition to add in the "funs-static.def" file for a math function, 
+  * or 'none' if aFunc is not a memoizable math function.
+  * @param {string} aFunc the name of the math function.
+*/
+function getKindMathFunc(aFunc) {
+    var index = MathMemoizableFuncs.indexOf(aFunc);
+    if (index < 0) return "none";
+    var prefix = "DEF(" + CodeLanguages.indexOf("MF") + ", " + aFunc + ", " + getFuncWrapperName(aFunc);
+    if (  0 <= index && index <= 34 ) return prefix + ", 1, double";
+    if ( 35 <= index && index <= 67 ) return prefix + ", 1, float";
+    if ( 67 <= index && index <= 79 ) return prefix + ", 2, double";
+    if ( 79 <= index && index <= 89 ) return prefix + ", 2, float";
+}
+
+/** 
+  * @returns the code of the header for the wrapper math function(aFunc). 
+  * */
+function getWrapperDeclMathFunc(aFunc) {
+    var index = MathMemoizableFuncs.indexOf(aFunc);
+    if (index < 0) return "none";
+    if (  0 <= index && index <= 34 ) return "double" +  " " + getFuncWrapperName(aFunc) + "(double);"; 
+    if ( 35 <= index && index <= 67 ) return "float" +  " " + getFuncWrapperName(aFunc) + "(float);";
+    if ( 67 <= index && index <= 79 ) return "double" +  " " + getFuncWrapperName(aFunc) + "(double, double);";
+    if ( 79 <= index && index <= 89 ) return "float" +  " " + getFuncWrapperName(aFunc) + "(float, float);";
+    return "XXXXX"; // to have an compiling error.
+}
+
+// ---- Functions referenced in MemoizationC.lara
+
+/**
+  * Initializes the wrapper file of the C memoized functions.
+  * */
+function initFileWrappers(){
+    if (FIRST_MEMOI_C) {
+	  $newFileJp_MEMOI_wrappers = AstFactory.file(FILENAME_MEMOI_WRAPPERS, filepath);
+	  Clava.addFile($newFileJp_MEMOI_wrappers);
+	  FIRST_MEMOI_C = false; 
+    }
+}
+/**
+  * Generates a DEF entry in the FILENAME_MEMOI_DEFS file for a C function, and declares the exposed variables.
+  * Such a definition will be used for the generation of the memoization library.
+
+  * @param {string} functionName: the name of the function to memoize.
+  * @param {string} typeName: the type of the argument (equal to the type of the returned value).
+  * @param {int} nbparams: the number of arguments of the function (input argument). 
+  * @param {string} fileToLoad: the name of the file to load to initialse the internal table, or none. 
+  * @param {string} FullOffLine: yes or no. yes implies a full off lime memoization (requires a fileToLoad).
+  * @param {string} FileToSave:  the name of the file to save the data of the table, or none.
+  * @param {string} updateTableOnCollision: yes or no. yes implis that in case of collisions, the table is updated.
+  * @param {int} precision:  the number of bit to delete (float/double) for internal approximation, 0 for int.
+  * @param {int} tsize: the size of the table.
+  
+  * */
+function GenCode_C_Memoization(functionName, typeName, nbparams, fileToLoad, FullOffLine, FileToSave, updateTableOnCollision, approx, tsize)
+{
+    /* 1) Generate the definition of a function (functionName) 
+     of type typeName with nbparams parmeters for the memoization.
+     N args :  DEF(functionName, N, typeName, approx, fileToLoad, FullOffLine, FileToSave, updateTableOnCollision, TableSize)
+     
+     2) Generates the declaration of the corresponding wrapper in the header file.
+     3) Generates the declaration of the corresponding settings for mARGOt.
+     */
+    var memoiDef;
+    TRACE(" FunctionName = " + functionName + "  typeName = " + typeName + " nbParams = " + nbparams);
+    initFileMemoization();
+    initFileWrappers();
+    var infoMangling = getMangledInfos("", functionName, typeName, nbparams);
+    
+    // Generate the DEF code for memoization (required by the INRIA memoization package)
+    strNb =nbparams.toString();
+    var prefix = "DEF(" + CodeLanguages.indexOf("C") + ", " + infoMangling[0] + ", " + infoMangling[1]  + ", ";
+
+    memoiDef = prefix + strNb + ", " + typeName + ", " +  approx + ", " +  fileToLoad + ", " + FullOffLine + ", " + FileToSave + ", " + updateTableOnCollision + ", " + tsize + " )"; 
+    $newFileJp_MEMOI_DEFS.exec insertBefore(memoiDef);
+    
+    // Generate the declaration of the wrapper in the header file.
+    var protoParam = getDeclParameters(typeName, nbparams);
+    var wname = getFuncWrapperName(functionName);
+    var memoiWrapper= typeName + ' ' + wname + ' (' + protoParam + ');';
+    genCodeWrapperHeader(memoiWrapper);
+    ExposedVariables.push(infoMangling[0]);
+}
+
+
+
+/** 
+  * Generates the declaration of the wrapper header in the FILENAME_MEMOI_WRAPPERS file.
+  *
+  * Example: __EXTERN__ double log_wrapper(double);
+  * The symbol __EXTERN__ is used to solve the compiling problem (C code compiled with or not a C++ compiler).
+  * */
+function genCodeWrapperHeader(vdecl)
+{
+    $newFileJp_MEMOI_wrappers.exec insertBefore("__EXTERN__ " + vdecl );
+}
+
+// ------  CPP memoizations;
+
+/**
+  * Generates a DEF entry in the FILENAME_MEMOI_DEFS file for a C++ method, and declares the exposed variables.
+  * Such a definition will be used for the generation of the memoization library.
+  * @param {string} className: the name of the class.
+  * @param {string} methName: the name of the method to memoize.
+  * @param {string} typeName: the type of the argument (equal to the type of the returned value).
+  * @param {int} nbparams: the number of arguments of the function (input argument). 
+  * @param {string} fileToLoad: the name of the file to load to initialse the internal table, or none. 
+  * @param {string} FullOffLine: yes or no. yes implies a full off lime memoization (requires a fileToLoad).
+  * @param {string} FileToSave:  the name of the file to save the data of the table, or none.
+  * @param {string} updateTableOnCollision: yes or no. yes implis that in case of collisions, the table is updated.
+  * @param {int} precision:  the number of bit to delete (float/double) for internal approximation, 0 for int.
+  * @param {int} tsize: the size of the table.
+  
+  * */
+function GenCode_CPP_Memoization(className, methName, typeName, nbparams, fileToLoad, fulloffline, FileToSave, updateTableOnCollision, approx, tsize)
+{
+  // quite similar to C function + mangling.    
+    var none="none";
+    var memoiDef;
+    TRACE(" methName = " + methName + "  typeName = " + typeName + " nbParams = " + nbparams);
+    var infoMangling = getMangledInfos(className, methName, typeName, nbparams);
+    initFileMemoization();
+    // Generate the DEF code for memoization (required by the INRIA memoization package)
+    strNb =nbparams.toString();
+    memoiDef = "DEF(" + CodeLanguages.indexOf("CPP") + "," + infoMangling[0] + ", " + infoMangling[1]  + "," 
+                + strNb + "," + typeName + ',' + approx + "," + fileToLoad + "," + fulloffline + "," 
+                + FileToSave + "," + updateTableOnCollision + "," +  tsize + " )"; 
+    $newFileJp_MEMOI_DEFS.exec insertBefore(memoiDef);
+    ExposedVariables.push(infoMangling[0]);
+}
+
+/**
+  
+  @return "true" if a method ($method) has nbArgs parameters of type pType, "false" otherwise.
+ * */
+function isTheSelectedMethod($method, nbArgs, pType) {
+ // Used to manage the overloading. 
+  var nbparams = checkHeaderMemoizableMethod($method);
+  if (nbparams != nbArgs) return false;
+  var functionType = $method.functionType;
+  var tt_return = functionType.returnType;
+  return (tt_return.code === pType);
+}
+
+/**
+  * @return the code used for the mangling of a type (tt).
+  * Restricted to memoization type ( int, double, float).
+  */
+function getManglingType(tt)
+{
+    if (tt === 'int') return "i";
+    if (tt === 'float') return "f";
+    if (tt === 'double') return "d";
+    return "undef";
+}
+
+
+/**
+  * @return the mangled name of a type (typeName) for a method with nbparams parameters of this type.
+  * Restricted to memoization type ( int, double, float).
+  * */
+function getManglingTypeFor(typeName, nbparams) {
+  var tm = getManglingType(typeName);  
+  var par_mangling =  tm; 
+  var nb = 1;
+  while (nb != nbparams) {
+    par_mangling = par_mangling + tm;
+    nb++;
+  }
+  return par_mangling;
+}

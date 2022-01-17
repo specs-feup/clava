@@ -1,0 +1,255 @@
+/*
+   Author(s): Loïc Besnard (loic.besnard@irisa.fr). 
+              IRISA-INRIA Rennes, France.
+              
+   This code has been developed during the ANTAREX project (http://www.antarex-project.eu).
+   It is provided under the MIT license (https://opensource.org/licenses/MIT).
+*/
+import lara.Io;
+import clava.Clava;
+import clava.ClavaJoinPoints;
+import antarex.utils.messages;
+import lara.Strings;
+import antarex.precision.rewTypes;
+import antarex.precision.CustomPrecisionFunc;
+
+/**
+  The current type of the customization. 
+ */ 
+var srcType="";
+
+/** 
+    An element statementsWithFormatOriVersion[SYMBOL]=FORMAT, SYMBOL is a created new symbol
+    and where FORMAT is a format used ibn the applications (C code)
+    */ 
+var statementsWithFormatOriVersion={};
+/** Array of the mathematical functions referenced in the application (from math.h) */
+var mathLibReferenced=[];
+
+var predefinedFuncsReferenced=[]; // other typed functions referenced (stof, stod,...)
+
+/**
+  It parametrizes the application for a type (vtype).
+  It calls CustomPrecisionForExcept(vtype, []), ie without no preserved types.
+*/
+aspectdef CustomPrecisionFor
+  input
+   vtype
+  end
+   call CustomPrecisionForExcept(vtype, []);
+end
+
+/**
+	It parametrizes the application by 
+	  - replacing the reference to a type (vtype) by a new symbol, 
+	     except the types declared in ArrayOfPreservedTypes
+	  - replacing the formats used in the IO instructions by new symbols.
+	  - replacing the references to math functions (sin, sinh, ...) by new symbols.
+	The parametrization creates some files in which the parameters are stored:
+	  - INRIA_PRECISION_DEFS_[vtype].h that defines the parameters with the original values 
+	    for each new created symbols.
+	  - INRIA_PRECISION_DEFS_XX_template.h in which the definition of the symbols must 
+	    be updated by the user, where XX denotes the new symbol assigned to to the customized type.
+
+    A type such that MYTYPE defined by
+       typedef double MYTYPE;
+    may be preserved by calling
+         CustomPrecisionForExcept('double', ['MYTYPE']). In this case the typedef is not modified.
+         
+	Note:  genParametersFor aspect can be called for float/double types to have definitions of the symbols.
+	@see CustomPrecisionFor may be used when there is no type to preserve.
+*/
+aspectdef CustomPrecisionForExcept
+  input
+   vtype,
+   ArrayOfPreservedTypes
+  end
+  srcType=vtype;
+  initNewDatatype();
+  initPreservedTypes(ArrayOfPreservedTypes);
+  call rewType(mkJointPointType(srcType), mkJointPointType(getDataType()));
+  call renameFunctions();
+  call extractFormat();
+  call ExtractDoubleFloatConstants();
+  genCodePrecisionDefsOriginalVersion();
+  genCodePrecisionDefsTemplate();
+  call addDeclarations();
+end
+
+aspectdef ExtractDoubleFloatConstants
+  select expr end
+  apply
+    if (! $expr.astIsInstance("NullExpr")) {
+      var $jpt = $expr.joinPointType;
+      if (($jpt  === 'expression') && ($expr.astNumChildren === 0))
+        dclConstantDoubleFloat($expr);
+      }
+  end
+end
+
+
+/**
+  Generate a include file INRIA_PRECISION_DEFS_[vtype].h that contains the 
+  definitions of the type parametrization for vtype, restricted to float/double
+  (i.e. it is an instance of INRIA_PRECISION_DEFS_XX_template.h for vtype).
+ */
+aspectdef CustomPrecisionGenParametersFor 
+input
+   vtype
+end
+  var B = ((srcType === 'double') && (vtype === 'float'))  
+        || ((srcType === 'float') && (vtype === 'double')); 
+  if (!B) 
+    WARNING(' Parameters are not generated for ' + vtype);
+  else
+    genCodePrecisionDefsAsked(vtype);
+end
+  
+/** 
+   It calls extractStatementWithFormat aspect for each IO of C language that references format 
+   with the index of the format in the instruction.
+       int scanf(const char *format, ...);
+       int fscanf(FILE *stream, const char *format, ...);
+       int sscanf(const char *str, const char *format, ...);
+       int vscanf(const char *format, va_list ap);
+       int vsscanf(const char *str, const char *format, va_list ap);
+       int vfscanf(FILE *stream, const char *format, va_list ap);
+
+    At the end, the global associative table statementsWithFormatOriVersion constains elements such that
+    statementsWithFormatOriVersion[_INRIA_IO_FORMAT_XX] = FORMAT, where _INRIA_IO_FORMAT_XX is a new symbol
+    and FORMAT is a format that references float/double codification (%f, %lf,...)
+     
+    Restiction to double/float types.
+    */
+ aspectdef extractFormat
+	var instrFormat = {};
+	if ((srcType == 'double') || (srcType == 'float')) {
+   	instrFormat['scanf'] = 1;
+ 	instrFormat['scanf'] = 2;
+ 	instrFormat['sscanf'] = 2;
+ 	instrFormat['vscanf'] = 1;
+ 	instrFormat['vsscanf'] = 2;
+ 	instrFormat['vfscanf'] = 2;
+    for(var key in instrFormat) 
+       call extractStatementWithFormat(key, instrFormat[key]);
+    }
+  end
+
+/** Store in the global table statementsWithFormatOriVersion the formats used in IO instructions (C language).
+    Each string (S) that references float/double format is replaced by a new name (NAME) and 
+    statementsWithFormatOriVersion[NAME] = S.
+    Restiction to double/float types.
+    */
+aspectdef extractStatementWithFormat
+  input
+   fname,
+   numarg
+  end
+    var B; 
+  select file.call{fname} end
+  apply
+   	 var $args = $call.argList;
+	 $varg = $args[numarg-1];
+	 var $code = $varg.code;
+	 B = true;
+	 var vextract = false;
+	 if (srcType == 'double') {
+	   vextract = isIn($code, "%lf") || isIn($code, "%le") 
+	     || isIn($code, "%lE")|| isIn($code, "%lg")|| isIn($code, "%lG");
+	 }
+	 else if (srcType == 'float')  { 
+	 vextract = isIn($code, "%f") || isIn($code, "%e") 
+	     || isIn($code, "%E")|| isIn($code, "%g")|| isIn($code, "%G");
+	 }
+	 else
+	  B=false;
+	 if (B && vextract) { 
+	  var $vio = getNextIOFormat();
+	  $varg.insert replace ($vio);
+	  statementsWithFormatOriVersion[$vio] = $code;
+	 }
+  end
+  end
+
+/** Extract the math functions if the source type is float or double.
+   The global mathLibReferenced array contains the referenced math functions.
+    Extract some predefined functions such that stod, stof,...
+    The global predefinedFuncsReferenced array contains these referenced functions.
+   */           
+aspectdef renameFunctions
+   if (srcType == 'double') suffix=''; 
+   else if (srcType == 'float') suffix='f';
+   else	return;
+   mathLibReferenced=[];
+   var mathLibDouble =['asin', 'atan' ,  'atan2' ,  'ceil',  'cos',  'cosh',  
+   	                'exp',  'fabs',  'floor', 'fmod' , 'frexp',  'ldexp',  
+   	                'log',  'log10',  'modf' , 'pow',  'sin',  'sinh',  
+   	                'sqrt',  'tan',  'tanh'];
+   for(var key of mathLibDouble ) {
+      var newName = getNewNameFunc(key);
+      call rename : renameFuncNames(key, newName+suffix);
+      if (rename.referenced) 
+ 	mathLibReferenced.push(key);
+     }
+   var tab=[];
+   if (srcType == 'double') tab=['stod']; else tab=['stof'];
+   for(var key of tab ) {
+      var newName = getNewNameFunc(key);
+      call rename2 : renameFuncNames(key, newName);
+      if (rename2.referenced) 
+	predefinedFuncsReferenced.push(key);
+     }
+   
+end
+
+/** Replace the calls to pname by nname, @return in referenced the value 'true' if 
+    pname is referenced in the application, 'false' otherwise.
+    */
+aspectdef renameFuncNames
+input
+  pname,
+  nname
+end
+output
+  referenced
+end
+  referenced = false;
+  select call end
+  apply
+  if ($call.name == pname) { 
+    exec setName(nname); 
+    referenced = true;
+  }	
+  end
+end
+
+/**
+  Add to each file (source, headers except the added files) the declaration of the include that defines the 
+  typed parameters.
+*/
+aspectdef addDeclarations
+  var vprefix = getPrecisionPrefix();
+  var vinclude = vprefix +".h";
+  select file end
+  apply
+   	$file.exec addInclude(vinclude, false);
+  end
+  condition
+    ($file.name.indexOf(vprefix) < 0)
+  end
+end
+
+/** 
+  Global Initialization of the component: it must be called once at the beginning 
+  of a type precision session.
+*/
+aspectdef CustomPrecision_Initialize
+  
+end
+
+/** 
+  Global Initialization of the component: it must be called once at the end of a type precision session.
+*/
+aspectdef CustomPrecision_Finalize
+ 
+end
