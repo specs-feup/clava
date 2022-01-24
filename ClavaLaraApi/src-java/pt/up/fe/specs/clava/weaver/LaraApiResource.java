@@ -111,6 +111,9 @@ public enum LaraApiResource implements LaraResourceProvider {
     // Parser
     BATCH_PARSER("parser/BatchParser.lara"),
 
+    // Pass
+    SIMPLIFY_VAR_DECLARATIONS("pass/SimplifyVarDeclarations.js"),
+
     // Stats
     OPS_BLOCK("stats/OpsBlock.lara"),
     OPS_COST("stats/OpsCost.lara"),
