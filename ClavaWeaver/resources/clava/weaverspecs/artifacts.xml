@@ -629,6 +629,7 @@
 		<attribute name="isTopLevel" type="Boolean" />
 		<attribute name="isArray" type="Boolean" />
 		<attribute name="isPointer" type="Boolean" />
+		<attribute name="isAuto" type="Boolean" tooltip="True if this is a type declared with the 'auto' keyword"/>		
 		<attribute name="arraySize" type="Integer" />
 		<attribute name="arrayDims" type="Integer[]" />		
 		<!-- <attribute name="elementType" type="joinpoint" />  -->

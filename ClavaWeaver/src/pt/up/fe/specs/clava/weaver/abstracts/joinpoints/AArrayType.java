@@ -88,6 +88,15 @@ public abstract class AArrayType extends AType {
     }
 
     /**
+     * Get value on attribute isAuto
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsAutoImpl() {
+        return this.aType.getIsAutoImpl();
+    }
+
+    /**
      * Get value on attribute arraySize
      * @return the attribute's value
      */
@@ -666,6 +675,7 @@ public abstract class AArrayType extends AType {
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),
         ISPOINTER("isPointer"),
+        ISAUTO("isAuto"),
         ARRAYSIZE("arraySize"),
         ARRAYDIMS("arrayDims"),
         HASTEMPLATEARGS("hasTemplateArgs"),

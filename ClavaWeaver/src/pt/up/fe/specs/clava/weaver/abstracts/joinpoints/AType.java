@@ -121,6 +121,29 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * True if this is a type declared with the 'auto' keyword
+     */
+    public abstract Boolean getIsAutoImpl();
+
+    /**
+     * True if this is a type declared with the 'auto' keyword
+     */
+    public final Object getIsAuto() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isAuto", Optional.empty());
+        	}
+        	Boolean result = this.getIsAutoImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isAuto", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isAuto", e);
+        }
+    }
+
+    /**
      * Get value on attribute arraySize
      * @return the attribute's value
      */
@@ -754,6 +777,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         attributes.add("isTopLevel");
         attributes.add("isArray");
         attributes.add("isPointer");
+        attributes.add("isAuto");
         attributes.add("arraySize");
         attributes.add("arrayDims");
         attributes.add("hasTemplateArgs");
@@ -808,6 +832,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),
         ISPOINTER("isPointer"),
+        ISAUTO("isAuto"),
         ARRAYSIZE("arraySize"),
         ARRAYDIMS("arrayDims"),
         HASTEMPLATEARGS("hasTemplateArgs"),

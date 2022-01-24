@@ -107,6 +107,15 @@ public abstract class AEnumType extends ATagType {
     }
 
     /**
+     * Get value on attribute isAuto
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsAutoImpl() {
+        return this.aTagType.getIsAutoImpl();
+    }
+
+    /**
      * Get value on attribute arraySize
      * @return the attribute's value
      */
@@ -639,6 +648,7 @@ public abstract class AEnumType extends ATagType {
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),
         ISPOINTER("isPointer"),
+        ISAUTO("isAuto"),
         ARRAYSIZE("arraySize"),
         ARRAYDIMS("arrayDims"),
         HASTEMPLATEARGS("hasTemplateArgs"),

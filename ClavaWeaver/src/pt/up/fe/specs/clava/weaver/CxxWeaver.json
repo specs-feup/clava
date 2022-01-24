@@ -2188,6 +2188,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "Boolean",
@@ -4609,6 +4618,15 @@
 									{
 										"type": "Boolean",
 										"name": "isArray"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
 									}]
 					},
 					{
@@ -9564,6 +9582,15 @@
 									{
 										"type": "Boolean",
 										"name": "isArray"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
 									}]
 					},
 					{
@@ -27538,6 +27565,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "Boolean",
@@ -31001,6 +31037,15 @@
 									{
 										"type": "Boolean",
 										"name": "isArray"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
 									}]
 					},
 					{
@@ -39860,6 +39905,15 @@
 									{
 										"type": "Boolean",
 										"name": "isArray"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
 									}]
 					},
 					{
@@ -57397,6 +57451,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "Boolean",
@@ -58690,6 +58753,15 @@
 									{
 										"type": "Boolean",
 										"name": "isArray"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
 									}]
 					},
 					{
@@ -62484,6 +62556,15 @@
 									{
 										"type": "Boolean",
 										"name": "isArray"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
 									}]
 					},
 					{
@@ -72009,6 +72090,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "Boolean",
@@ -73317,6 +73407,15 @@
 									{
 										"type": "Boolean",
 										"name": "isArray"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
 									}]
 					},
 					{
@@ -76821,6 +76920,15 @@
 									{
 										"type": "Boolean",
 										"name": "isArray"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
 									}]
 					},
 					{
@@ -80352,6 +80460,15 @@
 									{
 										"type": "Boolean",
 										"name": "isArray"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
 									}]
 					},
 					{
@@ -83895,6 +84012,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "Boolean",
@@ -86416,6 +86542,15 @@
 									{
 										"type": "Boolean",
 										"name": "isArray"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "True if this is a type declared with the 'auto' keyword",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isAuto"
 									}]
 					},
 					{

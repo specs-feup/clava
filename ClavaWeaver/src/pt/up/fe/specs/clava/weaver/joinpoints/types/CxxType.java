@@ -294,4 +294,9 @@ public class CxxType extends AType {
 
         return bitwidth != -1 ? bitwidth : null;
     }
+
+    @Override
+    public Boolean getIsAutoImpl() {
+        return type.isAuto();
+    }
 }
