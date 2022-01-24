@@ -1,0 +1,3 @@
+arrayAccess var: d_a
+arrayAccess var: h_a
+arrayAccess var: h_a
