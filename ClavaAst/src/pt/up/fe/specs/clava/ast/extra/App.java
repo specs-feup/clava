@@ -140,7 +140,7 @@ public class App extends ClavaNode {
      */
     @Override
     public SourceRange getLocation() {
-        throw new RuntimeException("Not implemented for AppNode");
+        return SourceRange.invalidRange();
     }
 
     @Override
@@ -670,4 +670,5 @@ public class App extends ClavaNode {
                 .findFirst()
                 .isPresent();
     }
+
 }
