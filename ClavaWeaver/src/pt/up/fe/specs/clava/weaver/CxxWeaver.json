@@ -3389,6 +3389,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "If the array access is done over a variable, returns the name of the variable. Equivalent to $arrayAccess.arrayVar.name",
+						"children": [
+									{
+										"type": "String",
+										"name": "name"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The number of subscripts of this array access",
 						"children": [
 									{
