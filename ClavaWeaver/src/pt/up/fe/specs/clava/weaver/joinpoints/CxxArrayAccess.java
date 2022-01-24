@@ -18,6 +18,7 @@ import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
+import pt.up.fe.specs.clava.utils.Nameable;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AArrayAccess;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
@@ -93,6 +94,17 @@ public class CxxArrayAccess extends AArrayAccess {
     @Override
     public Integer getNumSubscriptsImpl() {
         return arraySub.getSubscripts().size();
+    }
+
+    @Override
+    public String getNameImpl() {
+        var arrayVar = getArrayVarImpl().getNode();
+
+        if (!(arrayVar instanceof Nameable)) {
+            return null;
+        }
+
+        return ((Nameable) arrayVar).getName();
     }
 
 }

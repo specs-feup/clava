@@ -130,6 +130,29 @@ public abstract class AArrayAccess extends AExpression {
     }
 
     /**
+     * If the array access is done over a variable, returns the name of the variable. Equivalent to $arrayAccess.arrayVar.name
+     */
+    public abstract String getNameImpl();
+
+    /**
+     * If the array access is done over a variable, returns the name of the variable. Equivalent to $arrayAccess.arrayVar.name
+     */
+    public final Object getName() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "name", Optional.empty());
+        	}
+        	String result = this.getNameImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "name", e);
+        }
+    }
+
+    /**
      * varref to the variable of the array access
      * @return 
      */
@@ -531,6 +554,7 @@ public abstract class AArrayAccess extends AExpression {
         attributes.add("subscript");
         attributes.add("parentAccess");
         attributes.add("numSubscripts");
+        attributes.add("name");
     }
 
     /**
@@ -580,6 +604,7 @@ public abstract class AArrayAccess extends AExpression {
         SUBSCRIPT("subscript"),
         PARENTACCESS("parentAccess"),
         NUMSUBSCRIPTS("numSubscripts"),
+        NAME("name"),
         DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),

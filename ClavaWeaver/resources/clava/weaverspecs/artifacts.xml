@@ -582,6 +582,8 @@
 			tooltip="A view of the current arrayAccess without the last subscript, or undefined if this arrayAccess only has one subscript" />			
 		<attribute name="numSubscripts" type="int"
 			tooltip="The number of subscripts of this array access" />						
+		<attribute name="name" type="string"
+			tooltip="If the array access is done over a variable, returns the name of the variable. Equivalent to $arrayAccess.arrayVar.name" />									
 	</artifact>
 
 
