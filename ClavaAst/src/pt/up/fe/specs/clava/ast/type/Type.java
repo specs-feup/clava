@@ -606,6 +606,10 @@ public abstract class Type extends ClavaNode {
         throw new RuntimeException("Not implemented for " + getClass());
     }
 
+    public boolean isAuto() {
+        return false;
+    }
+
     /**
      * The bit width of this type.
      * 

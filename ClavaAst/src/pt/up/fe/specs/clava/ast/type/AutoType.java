@@ -54,4 +54,9 @@ public class AutoType extends Type {
         return "auto" + " " + name;
     }
 
+    @Override
+    public boolean isAuto() {
+        return true;
+    }
+
 }
