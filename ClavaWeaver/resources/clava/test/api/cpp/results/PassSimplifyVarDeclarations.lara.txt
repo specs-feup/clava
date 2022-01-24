@@ -1,0 +1,12 @@
+/**** File 'pass_simplify_var_declarations.cpp' ****/
+
+int main() {
+   int a;
+   a = 10;
+   int b, c, d;
+   c = 20;
+   int e;
+   e = 30;
+}
+
+/**** End File ****/

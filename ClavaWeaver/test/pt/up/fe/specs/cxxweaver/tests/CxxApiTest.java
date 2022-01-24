@@ -153,4 +153,9 @@ public class CxxApiTest {
     public void testStatementDecomposer() {
         newTester().test("StatementDecomposerTest.lara", "stmt_decomposer.cpp");
     }
+
+    @Test
+    public void testSimplifyVarDeclarations() {
+        newTester().test("PassSimplifyVarDeclarations.lara", "pass_simplify_var_declarations.cpp");
+    }
 }

@@ -1,0 +1,9 @@
+import weaver.Query;
+import clava.pass.SimplifyVarDeclarations;
+
+aspectdef PassSimplifyVarDeclarations
+
+	(new SimplifyVarDeclarations()).apply();
+	println(Query.root().code);
+
+end
