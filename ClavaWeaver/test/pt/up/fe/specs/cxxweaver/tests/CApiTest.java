@@ -93,7 +93,10 @@ public class CApiTest {
 
     @Test
     public void testCodeInserter() {
-        newTester().test("CodeInserterTest.lara", "code_inserter.c");
+        newTester()
+                // .set(LaraiKeys.DEBUG_MODE)
+                // .set(LaraiKeys.VERBOSE, VerboseLevel.all)
+                .test("CodeInserterTest.lara", "code_inserter.c");
     }
 
     @Test
