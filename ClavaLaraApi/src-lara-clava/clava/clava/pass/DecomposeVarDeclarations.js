@@ -1,10 +1,13 @@
 laraImport("lara.pass.Pass");
 laraImport("clava.ClavaJoinPoints");
 
-class SimplifyVarDeclarations extends Pass {
+/**
+ * 
+ */
+class DecomposeVarDeclarations extends Pass {
 	
 	constructor() {
-		super("SimplifyVarDeclarations");
+		super("DecomposeVarDeclarations");
 	}
 	
 	_apply_impl($jp) {
