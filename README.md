@@ -20,7 +20,7 @@ For a sample of Clava examples, please check the [Unit Tests](https://github.com
 
 # Resources
 
-A ZIP file with the compiled JAR for Clava can be downloaded from [here](http://specs.fe.up.pt/tools/clava.zip).
+A ZIP file with the last compiled JAR for Clava can be downloaded from [here](http://specs.fe.up.pt/tools/clava.zip) ([older releases](https://drive.google.com/drive/folders/1X3JeYB783ZfqoqIYrCitqABDWhM5bV_Y?usp=sharing)).
 
 There is an [installation script](http://specs.fe.up.pt/tools/clava/clava-update) for Linux that can be run locally and that will install the Clava binary in the script path (sudo is required for CMake module installation).
 
