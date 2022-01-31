@@ -4,13 +4,14 @@
 SCRIPT=$(readlink -f "$0")
 # Absolute path this script is in, thus /home/user/bin
 SCRIPTPATH=$(dirname "$SCRIPT")
-JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1)
+#JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1)
 #echo $JAVA_VER
 
-ILLEGAL_ACCESS_OPTION="-illegal-access=permit"
+#ILLEGAL_ACCESS_OPTION="-illegal-access=permit"
 
-if [ "$JAVA_VER" -lt "16" ]; then
-    ILLEGAL_ACCESS_OPTION=""
-fi
+#if [ "$JAVA_VER" -lt "16" ]; then
+#    ILLEGAL_ACCESS_OPTION=""
+#fi
 
-java ${ILLEGAL_ACCESS_OPTION} -jar $SCRIPTPATH/Clava/Clava.jar "$@"
+#java ${ILLEGAL_ACCESS_OPTION} -jar $SCRIPTPATH/Clava/Clava.jar "$@"
+java -jar $SCRIPTPATH/Clava/Clava.jar "$@"
