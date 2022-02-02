@@ -41,7 +41,7 @@ void ClangAstDumper::VisitTemplateNameChildren(const TemplateName& templateName)
             VisitDeclTop(templateName.getAsQualifiedTemplateName()->getTemplateDecl());
             break;
         case TemplateName::NameKind::SubstTemplateTemplateParm:
-            VisitDecl(templateName.getAsSubstTemplateTemplateParm()->getParameter());
+            VisitDeclTop(templateName.getAsSubstTemplateTemplateParm()->getParameter());
             VisitTemplateNameChildren(templateName.getAsSubstTemplateTemplateParm()->getReplacement());
             break;
         default:
