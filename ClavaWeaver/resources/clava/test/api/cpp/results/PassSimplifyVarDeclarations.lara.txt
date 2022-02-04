@@ -4,6 +4,7 @@ int main() {
    int a;
    a = 10;
    int b, c, d;
+   d = 25;
    c = 20;
    int e;
    e = 30;
