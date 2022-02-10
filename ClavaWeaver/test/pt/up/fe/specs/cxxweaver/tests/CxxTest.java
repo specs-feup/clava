@@ -20,6 +20,7 @@ import org.junit.Test;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 
 public class CxxTest {
@@ -154,6 +155,11 @@ public class CxxTest {
 
     @Test
     public void testWrap() {
+        if (SpecsSystem.isWindows()) {
+            SpecsLogs.info("Skipping test, results are different on Windows");
+            return;
+        }
+
         // newTester().test("Wrap.lara", "wrap.cpp", "wrap.h", "lib/lib.h", "lib/lib.cpp");
         newTester()
                 .set(CxxWeaverOption.PARSE_INCLUDES)

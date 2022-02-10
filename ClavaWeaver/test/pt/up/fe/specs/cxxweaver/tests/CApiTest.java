@@ -22,6 +22,7 @@ import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
 import pt.up.fe.specs.lang.SpecsPlatforms;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 
 public class CApiTest {
@@ -119,6 +120,11 @@ public class CApiTest {
 
     @Test
     public void testSerializeNode() {
+        if (SpecsSystem.getJavaVersionNumber() > 16) {
+            SpecsLogs.info("Skipping test, detected Java version 17 or higher");
+            return;
+        }
+
         newTester().test("SerializeNode.lara", "serialize_node.c");
     }
 

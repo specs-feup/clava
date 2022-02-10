@@ -21,6 +21,7 @@ import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 
 public class CTest {
@@ -112,6 +113,11 @@ public class CTest {
 
     @Test
     public void testInlineNasLu() {
+        if (SpecsSystem.isWindows()) {
+            SpecsLogs.info("Skipping test, does not work on Windows");
+            return;
+        }
+
         newTester().test("InlineNasLu.lara", "inline_nas_lu.c");
     }
 
