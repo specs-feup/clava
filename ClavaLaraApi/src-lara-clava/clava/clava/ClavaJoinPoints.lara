@@ -266,7 +266,7 @@ ClavaJoinPoints.returnStmt = function($expr) {
  */
 ClavaJoinPoints.functionType = function($returnType) {
 	var argTypes = arrayFromArgs(arguments, 1);
-	return AstFactory.functionType($function, argTypes);
+	return AstFactory.functionType($returnType, argTypes);
 }
 
 /**
