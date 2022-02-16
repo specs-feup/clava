@@ -98,7 +98,29 @@ ClavaJoinPoints.exprLiteral = function(code, type) {
 	
 	return AstFactory.exprLiteral(code, type);
 
-}; 
+};
+
+/**
+ *
+ * @param {Type} type The type of the constructed object
+ * @param  {...string|joinpoint} constructorArguments Arguments passed to the constructor function
+ * @returns
+ */
+ClavaJoinPoints.cxxConstructExpr = function(type, ...constructorArguments) {
+	constructorArguments = [...constructorArguments];
+	constructorArguments = constructorArguments.map((arg) => {
+		if (isString(arg)) {
+			return CustomClavaJoinPoints.exprLiteral(arg);
+		} else if (isJoinPoint(arg)) {
+			return arg;
+		}
+
+		throw new Error(
+			eval("`Constructor argument '${arg}' is of unsupported type.`")
+		);
+	});
+	return AstFactory.cxxConstructExpr(type, constructorArguments);
+}
 
 /**
  * @param {string} varName

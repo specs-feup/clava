@@ -74,6 +74,7 @@ import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
+import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
@@ -435,6 +436,13 @@ public class ClavaFactory {
         DataStore data = newDataStore(ParenExpr.class);
 
         return new ParenExpr(data, Arrays.asList(expr));
+    }
+    
+    public CXXConstructExpr cxxConstructExpr(Type type, List<Expr> constructorArguments) {
+        DataStore data = newDataStore(CXXConstructExpr.class)
+                .put(Expr.TYPE, Optional.of(type));
+
+        return new CXXConstructExpr(data, constructorArguments);
     }
 
     /// DECLS
