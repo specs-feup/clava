@@ -107,7 +107,7 @@ ClavaJoinPoints.exprLiteral = function(code, type) {
  * @returns
  */
 ClavaJoinPoints.cxxConstructExpr = function(type, ...constructorArguments) {
-	constructorArguments = [...constructorArguments];
+	constructorArguments = arrayFromArgs(arguments, 1);
 	constructorArguments = constructorArguments.map((arg) => {
 		if (isString(arg)) {
 			return CustomClavaJoinPoints.exprLiteral(arg);
