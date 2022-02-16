@@ -106,7 +106,7 @@ ClavaJoinPoints.exprLiteral = function(code, type) {
  * @param  {...string|joinpoint} constructorArguments Arguments passed to the constructor function
  * @returns
  */
-ClavaJoinPoints.cxxConstructExpr = function(type, ...constructorArguments) {
+ClavaJoinPoints.cxxConstructExpr = function(type) {
 	constructorArguments = arrayFromArgs(arguments, 1);
 	constructorArguments = constructorArguments.map((arg) => {
 		if (isString(arg)) {
