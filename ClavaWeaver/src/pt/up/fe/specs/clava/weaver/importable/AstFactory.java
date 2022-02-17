@@ -214,6 +214,14 @@ public class AstFactory {
 
         return CxxJoinpoints.create(CxxWeaver.getFactory().literalExpr(code, astType), AExpression.class);
     }
+    
+    public static AExpression cxxConstructExpr(AType type, AJoinPoint... constructorArguments) {
+        List<Expr> exprArgs = Arrays.stream(constructorArguments)
+                .map(arg -> (Expr) arg.getNode())
+                .collect(Collectors.toList());
+        
+        return CxxJoinpoints.create(CxxWeaver.getFactory().cxxConstructExpr((Type)type.getNode(), exprArgs), AExpression.class);
+    }
 
     public static ACall callFromFunction(AFunction function, AJoinPoint... args) {
         var functionDecl = (FunctionDecl) function.getNode();
