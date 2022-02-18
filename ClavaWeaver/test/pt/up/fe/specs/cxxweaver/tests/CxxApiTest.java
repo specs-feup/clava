@@ -154,7 +154,7 @@ public class CxxApiTest {
         newTester().test("StatementDecomposerTest.lara", "stmt_decomposer.cpp");
     }
 
-    @Test
+    // @Test
     public void testCode2Vec() {
         newTester().test("Code2VecTest.js", "code2vec.cpp");
     }
