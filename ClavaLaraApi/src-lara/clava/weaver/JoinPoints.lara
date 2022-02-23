@@ -7,7 +7,8 @@ import clava._ClavaJavaTypes;
 
 JoinPoints.prototype.toJoinPoint = function(node) {
 	var cxxJps = _ClavaJavaTypes.getCxxJoinPoints();
-	return cxxJps.createFromLara(node);
+	return wrapJoinPoint(cxxJps.createFromLara(node));
+	//return cxxJps.createFromLara(node);	
 }
 
 
