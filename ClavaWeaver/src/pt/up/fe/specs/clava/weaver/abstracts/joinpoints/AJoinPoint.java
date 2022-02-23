@@ -100,6 +100,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     @Override
     protected void fillWithActions(List<String> actions) {
+        super.fillWithActions(actions);
         actions.add("replaceWith(AJoinPoint node)");
         actions.add("replaceWith(String node)");
         actions.add("insertBefore(AJoinPoint node)");
@@ -790,6 +791,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     @Override
     protected void fillWithAttributes(List<String> attributes) {
+        super.fillWithAttributes(attributes);
         //Attributes available for all join points
         attributes.add("root");
         attributes.add("parent");
