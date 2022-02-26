@@ -36,7 +36,7 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "decl", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "decl", e);
         }
@@ -61,7 +61,7 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "vardecl", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "vardecl", e);
         }
@@ -86,7 +86,7 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "use", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "use", e);
         }
@@ -109,7 +109,7 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "isFunctionArgument", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isFunctionArgument", e);
         }
@@ -132,7 +132,7 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "implicitCast", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "implicitCast", e);
         }

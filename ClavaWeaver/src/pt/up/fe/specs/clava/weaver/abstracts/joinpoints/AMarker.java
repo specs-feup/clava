@@ -46,7 +46,7 @@ public abstract class AMarker extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "id", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "id", e);
         }
@@ -69,7 +69,7 @@ public abstract class AMarker extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "contents", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "contents", e);
         }

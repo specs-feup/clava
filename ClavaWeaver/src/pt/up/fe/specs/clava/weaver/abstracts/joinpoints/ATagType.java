@@ -45,7 +45,7 @@ public abstract class ATagType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
@@ -68,7 +68,7 @@ public abstract class ATagType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "decl", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "decl", e);
         }

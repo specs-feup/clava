@@ -37,7 +37,7 @@ public abstract class AAttribute extends ACxxWeaverJoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }

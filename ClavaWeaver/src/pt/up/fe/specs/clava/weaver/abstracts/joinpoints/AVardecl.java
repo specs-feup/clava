@@ -47,7 +47,7 @@ public abstract class AVardecl extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "hasInit", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasInit", e);
         }
@@ -70,7 +70,7 @@ public abstract class AVardecl extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "init", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "init", e);
         }
@@ -93,7 +93,7 @@ public abstract class AVardecl extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "initStyle", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "initStyle", e);
         }
@@ -116,7 +116,7 @@ public abstract class AVardecl extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "isParam", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isParam", e);
         }
@@ -141,7 +141,7 @@ public abstract class AVardecl extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "storageClass", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "storageClass", e);
         }
@@ -164,7 +164,7 @@ public abstract class AVardecl extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "isGlobal", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isGlobal", e);
         }
@@ -187,7 +187,7 @@ public abstract class AVardecl extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "definition", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "definition", e);
         }

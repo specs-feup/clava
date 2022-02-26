@@ -57,7 +57,7 @@ public abstract class AEnumDecl extends ANamedDecl {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "enumerators", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "enumerators", e);
         }

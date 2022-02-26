@@ -43,7 +43,7 @@ public abstract class ACast extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "isImplicitCast", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isImplicitCast", e);
         }
@@ -68,7 +68,7 @@ public abstract class ACast extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "fromType", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "fromType", e);
         }
@@ -93,7 +93,7 @@ public abstract class ACast extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "toType", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "toType", e);
         }
@@ -118,7 +118,7 @@ public abstract class ACast extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "subExpr", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "subExpr", e);
         }

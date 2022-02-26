@@ -43,7 +43,7 @@ public abstract class AElaboratedType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "keyword", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "keyword", e);
         }
@@ -66,7 +66,7 @@ public abstract class AElaboratedType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "qualifier", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "qualifier", e);
         }
@@ -89,7 +89,7 @@ public abstract class AElaboratedType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "namedType", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "namedType", e);
         }

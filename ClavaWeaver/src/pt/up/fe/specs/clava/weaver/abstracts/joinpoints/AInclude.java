@@ -43,7 +43,7 @@ public abstract class AInclude extends ADecl {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
@@ -66,7 +66,7 @@ public abstract class AInclude extends ADecl {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "isAngled", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isAngled", e);
         }
@@ -89,7 +89,7 @@ public abstract class AInclude extends ADecl {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "relativeFolderpath", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "relativeFolderpath", e);
         }

@@ -48,7 +48,7 @@ public abstract class AMethod extends AFunction {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "record", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "record", e);
         }

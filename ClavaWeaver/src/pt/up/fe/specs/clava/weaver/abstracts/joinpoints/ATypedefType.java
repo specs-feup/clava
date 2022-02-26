@@ -43,7 +43,7 @@ public abstract class ATypedefType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "decl", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "decl", e);
         }
@@ -66,7 +66,7 @@ public abstract class ATypedefType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "underlyingType", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "underlyingType", e);
         }

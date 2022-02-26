@@ -45,7 +45,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "numStatements", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "numStatements", e);
         }
@@ -72,7 +72,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "numStatements", Optional.ofNullable(result), flat);
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "numStatements", e);
         }
@@ -95,7 +95,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "naked", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "naked", e);
         }
@@ -135,7 +135,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "stmts", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "stmts", e);
         }
@@ -168,7 +168,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "allStmts", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "allStmts", e);
         }
@@ -193,7 +193,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "firstStmt", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "firstStmt", e);
         }
@@ -218,7 +218,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "lastStmt", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "lastStmt", e);
         }
@@ -241,7 +241,7 @@ public abstract class AScope extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "owner", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "owner", e);
         }

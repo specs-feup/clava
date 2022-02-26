@@ -44,7 +44,7 @@ public abstract class AArrayAccess extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "arrayVar", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "arrayVar", e);
         }
@@ -77,7 +77,7 @@ public abstract class AArrayAccess extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "subscript", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "subscript", e);
         }
@@ -100,7 +100,7 @@ public abstract class AArrayAccess extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "parentAccess", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "parentAccess", e);
         }
@@ -123,7 +123,7 @@ public abstract class AArrayAccess extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "numSubscripts", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "numSubscripts", e);
         }
@@ -146,7 +146,7 @@ public abstract class AArrayAccess extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }

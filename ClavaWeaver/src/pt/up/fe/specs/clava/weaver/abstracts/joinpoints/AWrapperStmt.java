@@ -45,7 +45,7 @@ public abstract class AWrapperStmt extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }
@@ -70,7 +70,7 @@ public abstract class AWrapperStmt extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "content", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "content", e);
         }

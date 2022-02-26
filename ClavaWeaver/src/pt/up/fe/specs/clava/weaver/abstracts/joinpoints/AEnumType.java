@@ -46,7 +46,7 @@ public abstract class AEnumType extends ATagType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "integerType", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "integerType", e);
         }

@@ -47,7 +47,7 @@ public abstract class AUnaryOp extends AOp {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "operand", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "operand", e);
         }
@@ -72,7 +72,7 @@ public abstract class AUnaryOp extends AOp {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "isPointerDeref", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPointerDeref", e);
         }

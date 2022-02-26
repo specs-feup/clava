@@ -43,7 +43,7 @@ public abstract class AAdjustedType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "originalType", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "originalType", e);
         }

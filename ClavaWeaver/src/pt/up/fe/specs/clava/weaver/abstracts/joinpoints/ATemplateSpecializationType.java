@@ -45,7 +45,7 @@ public abstract class ATemplateSpecializationType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "templateName", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "templateName", e);
         }
@@ -70,7 +70,7 @@ public abstract class ATemplateSpecializationType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "numArgs", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "numArgs", e);
         }
@@ -105,7 +105,7 @@ public abstract class ATemplateSpecializationType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "args", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "args", e);
         }
@@ -130,7 +130,7 @@ public abstract class ATemplateSpecializationType extends AType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "firstArgType", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "firstArgType", e);
         }

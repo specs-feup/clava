@@ -53,7 +53,7 @@ public abstract class ADeclStmt extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "decls", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "decls", e);
         }

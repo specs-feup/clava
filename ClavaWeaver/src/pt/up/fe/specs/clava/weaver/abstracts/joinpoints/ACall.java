@@ -47,7 +47,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
@@ -79,7 +79,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "numArgs", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "numArgs", e);
         }
@@ -114,7 +114,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "memberNames", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "memberNames", e);
         }
@@ -137,7 +137,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "declaration", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "declaration", e);
         }
@@ -160,7 +160,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "definition", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "definition", e);
         }
@@ -193,7 +193,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "argList", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "argList", e);
         }
@@ -226,7 +226,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "args", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "args", e);
         }
@@ -253,7 +253,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "arg", Optional.ofNullable(result), index);
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "arg", e);
         }
@@ -276,7 +276,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "returnType", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "returnType", e);
         }
@@ -299,7 +299,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "functionType", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "functionType", e);
         }
@@ -324,7 +324,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "isMemberAccess", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isMemberAccess", e);
         }
@@ -349,7 +349,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "memberAccess", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "memberAccess", e);
         }
@@ -374,7 +374,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "isStmtCall", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isStmtCall", e);
         }
@@ -397,7 +397,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "function", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "function", e);
         }
@@ -420,7 +420,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "signature", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "signature", e);
         }
@@ -443,7 +443,7 @@ public abstract class ACall extends AExpression {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "directCallee", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "directCallee", e);
         }

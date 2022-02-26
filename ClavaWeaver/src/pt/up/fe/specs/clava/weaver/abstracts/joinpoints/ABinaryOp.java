@@ -48,7 +48,7 @@ public abstract class ABinaryOp extends AOp {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "left", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "left", e);
         }
@@ -80,7 +80,7 @@ public abstract class ABinaryOp extends AOp {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "right", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "right", e);
         }
@@ -112,7 +112,7 @@ public abstract class ABinaryOp extends AOp {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "isAssignment", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isAssignment", e);
         }

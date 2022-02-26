@@ -57,7 +57,7 @@ public abstract class ACudaKernelCall extends ACall {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "config", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "config", e);
         }

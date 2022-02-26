@@ -47,7 +47,7 @@ public abstract class AIf extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "cond", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "cond", e);
         }
@@ -79,7 +79,7 @@ public abstract class AIf extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "condDecl", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "condDecl", e);
         }
@@ -104,7 +104,7 @@ public abstract class AIf extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "then", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "then", e);
         }
@@ -136,7 +136,7 @@ public abstract class AIf extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "else", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "else", e);
         }

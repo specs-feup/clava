@@ -58,7 +58,7 @@ public abstract class AClass extends ARecord {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "methods", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "methods", e);
         }
@@ -93,7 +93,7 @@ public abstract class AClass extends ARecord {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "bases", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "bases", e);
         }

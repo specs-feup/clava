@@ -44,7 +44,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "kind", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "kind", e);
         }
@@ -67,7 +67,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "numThreads", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "numThreads", e);
         }
@@ -97,7 +97,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "procBind", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "procBind", e);
         }
@@ -137,7 +137,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "private", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "private", e);
         }
@@ -164,7 +164,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "hasClause", Optional.ofNullable(result), clauseName);
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasClause", e);
         }
@@ -191,7 +191,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "isClauseLegal", Optional.ofNullable(result), clauseName);
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isClauseLegal", e);
         }
@@ -224,7 +224,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "clauseKinds", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "clauseKinds", e);
         }
@@ -262,7 +262,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "reduction", Optional.ofNullable(result), kind);
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "reduction", e);
         }
@@ -295,7 +295,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "reductionKinds", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "reductionKinds", e);
         }
@@ -318,7 +318,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "default", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "default", e);
         }
@@ -351,7 +351,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "firstprivate", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "firstprivate", e);
         }
@@ -384,7 +384,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "lastprivate", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "lastprivate", e);
         }
@@ -417,7 +417,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "shared", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "shared", e);
         }
@@ -450,7 +450,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "copyin", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "copyin", e);
         }
@@ -473,7 +473,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "scheduleKind", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "scheduleKind", e);
         }
@@ -496,7 +496,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "scheduleChunkSize", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "scheduleChunkSize", e);
         }
@@ -529,7 +529,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "scheduleModifiers", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "scheduleModifiers", e);
         }
@@ -552,7 +552,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "collapse", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "collapse", e);
         }
@@ -575,7 +575,7 @@ public abstract class AOmp extends APragma {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "ordered", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "ordered", e);
         }

@@ -46,7 +46,7 @@ public abstract class AMemberCall extends ACall {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "base", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "base", e);
         }
@@ -71,7 +71,7 @@ public abstract class AMemberCall extends ACall {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "rootBase", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "rootBase", e);
         }

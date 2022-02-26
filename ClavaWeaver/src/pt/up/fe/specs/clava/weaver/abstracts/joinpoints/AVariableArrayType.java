@@ -47,7 +47,7 @@ public abstract class AVariableArrayType extends AArrayType {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "sizeExpr", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "sizeExpr", e);
         }

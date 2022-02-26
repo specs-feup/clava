@@ -46,7 +46,7 @@ public abstract class ANamedDecl extends ADecl {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "name", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "name", e);
         }
@@ -78,7 +78,7 @@ public abstract class ANamedDecl extends ADecl {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "isPublic", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isPublic", e);
         }
@@ -103,7 +103,7 @@ public abstract class ANamedDecl extends ADecl {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "qualifiedPrefix", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "qualifiedPrefix", e);
         }
@@ -135,7 +135,7 @@ public abstract class ANamedDecl extends ADecl {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "qualifiedName", Optional.ofNullable(result));
         	}
-        	return result!=null?result:getUndefinedValue();
+        	return getWeaverEngine().getScriptEngine().toJs(result);
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "qualifiedName", e);
         }
