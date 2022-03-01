@@ -28,6 +28,8 @@ import pt.up.fe.specs.clava.ast.cilk.CilkNode;
 import pt.up.fe.specs.clava.ast.expr.ImplicitCastExpr;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.pragma.ClavaData;
+import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
+import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.utils.ClassesService;
@@ -396,7 +398,10 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
+
         Insert insert = Insert.getHelper().fromValue(position);
+        // CxxActions.in
+
         return new AJoinPoint[] { CxxActions.insertAsStmt(getNode(), code, insert, getWeaverEngine()) };
         //
         // if (insert == Insert.AFTER || insert == Insert.BEFORE) {
@@ -447,7 +452,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public AJoinPoint insertBeforeImpl(String code) {
         // return insertBeforeImpl(CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), this));
-        return insertBeforeImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code)));
+        // return insertBeforeImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code)));
+        return insertBeforeImpl(toJpToBeInserted(code));
+
     }
 
     @Override
@@ -463,8 +470,59 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        // return insertAfterImpl(CxxJoinpoints.create(ClavaNodeFactory.literalStmt(code), this));
-        return insertAfterImpl(CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code)));
+        return insertAfterImpl(toJpToBeInserted(code));
+    }
+
+    private AJoinPoint toJpToBeInserted(String code) {
+
+        // Special case: if this node is a statement in a loop header, insert as an expression
+        if (this instanceof AStatement && getIsInsideLoopHeaderImpl()) {
+            if (getNode() instanceof DeclStmt) {
+                System.out.println("Code: " + code);
+                // Convert to VarDecl
+                var equalIndex = code.indexOf('=');
+                System.out.println("Equal index: " + equalIndex);
+                var declarationEndIndex = equalIndex != -1 ? equalIndex : code.length();
+                System.out.println("Decl end index: " + declarationEndIndex);
+                var declaration = code.substring(0, declarationEndIndex).strip();
+                System.out.println("Decl: " + declaration);
+                // Separate name from type
+                var separationIndex = declaration.lastIndexOf(' ');
+
+                if (separationIndex == -1) {
+                    throw new RuntimeException(
+                            "Could not find a type before the name when inserting a declaration inside a loop header, please add a type: '"
+                                    + code + "'");
+                }
+
+                var type = declaration.substring(0, separationIndex).strip();
+                var declName = declaration.substring(separationIndex + 1, declaration.length()).strip();
+
+                var typeJp = AstFactory.typeLiteral(type);
+                System.out.println("TYPE: " + type);
+                System.out.println("DECLNAME: " + declName);
+                // if no index, assume no initialization
+                if (equalIndex == -1) {
+                    return AstFactory.varDeclNoInit(declName, typeJp);
+                }
+
+                // With inicialization
+                var init = AstFactory.exprLiteral(code.substring(equalIndex + 1, code.length()).strip(), typeJp);
+
+                return AstFactory.varDecl(declName, init);
+            }
+
+            if (getNode() instanceof ExprStmt) {
+                return AstFactory.exprLiteral(code);
+            }
+
+            throw new RuntimeException(
+                    "Inserting before/after a loop header statement only support for 'declStmt' and 'exprStmt', this is a "
+                            + getJoinPointType());
+
+        }
+
+        return CxxJoinpoints.create(CxxWeaver.getSnippetParser().parseStmt(code));
     }
 
     @Override

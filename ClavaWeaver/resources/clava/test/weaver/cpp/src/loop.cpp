@@ -52,6 +52,16 @@ void iterationsExpr() {
 	}	
 }
 
+
+void headerInsert1() {
+	for(int i=0; i<10; i++);
+}
+
+void headerInsert2() {
+	int i;
+	for(i=0; i<10; i++);
+}
+
 int main() {
 
 	for(int a=0; a<10; a++) {

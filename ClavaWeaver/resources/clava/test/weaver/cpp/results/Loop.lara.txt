@@ -87,3 +87,14 @@ iterations expr: (end - 1) - (start) + 1
 iterations: undefined
 iterations expr: 10
 iterations: 10
+After header insert:  {
+int newVar1;
+int newVar2;
+for(int newVar1 = 10, i = 0, newVar2 = 20; newVar1< 100 , i < 10 , newVar2< 200; newVar1++ , i++ , newVar2--);
+}
+After header insert:  {
+int i;
+int newVar1;
+int newVar2;
+for(newVar1 = 10 , i = 0 , newVar2 = 20; newVar1< 100 , i < 10 , newVar2< 200; newVar1++ , i++ , newVar2--);
+}
