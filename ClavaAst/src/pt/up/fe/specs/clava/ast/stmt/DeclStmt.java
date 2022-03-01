@@ -50,6 +50,12 @@ public class DeclStmt extends Stmt {
     public final static DataKey<Boolean> HAS_SEMICOLON = KeyFactory.bool("hasSemicolon")
             .setDefault(() -> true);
 
+    /**
+     * If true, forces single line declaration of initializations
+     */
+    public final static DataKey<Boolean> FORCE_SINGLE_LINE = KeyFactory.bool("forceSingleLine")
+            .setDefault(() -> false);
+
     /// DATAKEYS END
 
     public DeclStmt(DataStore data, Collection<? extends ClavaNode> children) {
@@ -188,6 +194,10 @@ public class DeclStmt extends Stmt {
     }
 
     private boolean isSingleLineDecl(List<Decl> decls) {
+
+        if (get(FORCE_SINGLE_LINE)) {
+            return true;
+        }
 
         // If not all decls have a type, return false
         List<Typable> typables = decls.stream()
