@@ -48,6 +48,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
+import pt.up.fe.specs.jsengine.JsFileType;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -1084,8 +1085,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                 .toArray(APragma[]::new);
     }
 
+    static int jsNameCounter = 0;
+
     @Override
     public Object getDataImpl() {
+
         final String dataKeyword = "data";
 
         var jsEngine = getWeaverEngine().getScriptEngine();
@@ -1094,40 +1098,23 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         var jsDataPragma = dataPragma != null ? dataPragma : jsEngine.getUndefined();
 
         // Check if data object already exists
-        var hasClavaDataJs = jsEngine.eval("var _data = _hasClavaData; _data;");
+        var hasClavaDataJs = jsEngine.eval(
+                "import { _hasClavaData } from 'clavaapi/dist/clava/js/DataHandler.js'; _hasClavaData;",
+                JsFileType.MODULE,
+                "[Java] ACxxWeaverJoinPoint.getDataImpl() [" + (jsNameCounter++) + "]");
         var hasClavaData = jsEngine.asBoolean(jsEngine.call(hasClavaDataJs, getNode()));
 
-        if (hasClavaData) {
-            // Return data object from managed cache
-            var dataCache = jsEngine.eval("var _data = _getClavaData; _data;");
-
-            // Create proxy object
-            return jsEngine.call(dataCache, getNode());
-        }
+        // Create proxy function
+        var proxyBuilder = jsEngine.eval(
+                "import { _getClavaData } from 'clavaapi/dist/clava/js/DataHandler.js'; _getClavaData;",
+                JsFileType.MODULE,
+                "[Java] ACxxWeaverJoinPoint.getDataImpl() [" + (jsNameCounter++) + "]");
 
         // TODO: Refactor, so that decoding of pragma is done separately
-
         // TODO: life-cycle management of data objects according to node id
 
         // Pragma exists and data has not been created yet
-        if (dataPragma != null) {
-            // for (APragma pragmaJp : getPragmasArrayImpl()) {
-            // Pragma pragma = (Pragma) pragmaJp.getNode();
-
-            // if (!pragma.getName().toLowerCase().equals("clava")) {
-            // continue;
-            // }
-
-            // Parse content
-            // StringSplitter splitter = new StringSplitter(pragma.getContent());
-            // boolean isDataDirective = splitter.parseTry(StringSplitterRules::string)
-            // .filter(string -> string.toLowerCase().equals(dataKeyword))
-            // .isPresent();
-            //
-            // if (!isDataDirective) {
-            // continue;
-            // }
-
+        if (!hasClavaData && dataPragma != null) {
             var node = getNode();
             var tu = node instanceof TranslationUnit ? (TranslationUnit) node
                     : node.getAncestorTry(TranslationUnit.class).orElse(null);
@@ -1146,44 +1133,23 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
             try {
                 // Create object
-                var newDataObject = jsEngine.eval("var _data = " + jsonString + "; _data;");
-
-                // Create proxy function
-                // var proxyBuilder = jsEngine.eval("var _data = _buildClavaProxy; _data;");
-                var proxyBuilder = jsEngine.eval("var _data = _getClavaData; _data;");
+                var newDataObject = jsEngine.eval("var _data = " + jsonString + "; _data;", JsFileType.MODULE,
+                        "[Java] ACxxWeaverJoinPoint.getDataImpl() [" + (jsNameCounter++) + "]");
 
                 // Create proxy object
-                // return jsEngine.call(proxyBuilder, newDataObject, getNode(), jsDataPragma);
                 return jsEngine.call(proxyBuilder, getNode(), newDataObject, jsDataPragma);
-
-                // return getWeaverEngine().getScriptEngine().eval("var _data = " + jsonString + "; _data;");
-                // return getWeaverEngine().getScriptEngine().eval("var _data = {" + splitter.toString() + "}; _data;");
             } catch (Exception e) {
                 SpecsLogs.warn(
                         "Could not decode #pragma clava " + dataKeyword + " for contents '" + splitter.toString()
                                 + "', returning empty object",
                         e);
-                // return getWeaverEngine().getScriptEngine().eval("var _data = {}; _data;");
             }
-
-            // System.out.println("NAME:" + pragma.getName());
-            // System.out.println("CONTENT:" + pragma.getContent());
         }
 
-        // Create object
-        // var newDataObject = jsEngine.eval("var _data = {}; _data;");
-
-        // Create proxy function
-        // var proxyBuilder = jsEngine.eval("var _data = _buildClavaProxy; _data;");
-
-        // Create proxy object
-        // return jsEngine.call(proxyBuilder, newDataObject, getNode(), jsDataPragma);
-
         // Return data object from managed cache
-        var dataCache = jsEngine.eval("var _data = _getClavaData; _data;");
-
         // Create proxy object
-        return jsEngine.call(dataCache, getNode());
+        return jsEngine.call(proxyBuilder, getNode());
+
     }
 
     @Override
