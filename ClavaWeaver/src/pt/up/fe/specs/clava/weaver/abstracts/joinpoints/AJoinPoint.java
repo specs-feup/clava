@@ -2180,7 +2180,8 @@ public abstract class AJoinPoint extends JoinPoint {
         	}
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
-        	throw new AttributeException(get_class(), "data", e);
+        	//throw new AttributeException(get_class(), "data", e);
+            throw e;
         }
     }
 
