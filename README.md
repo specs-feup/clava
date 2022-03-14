@@ -7,7 +7,7 @@ If you have used Clava, please consider filling the [Clava User Experience Feedb
 
 [Clava Tutorial - 2018 PACT](https://github.com/specs-feup/specs-lara/tree/master/2018-PACT) - Tutorial on how to use Clava (recommended parts 1-3).
 
-[LARA Reference Guide](http://specs.fe.up.pt/tools/lara/doku.php?id=lara:docs:sheet) - Start using LARA with examples.
+[LARA Reference Guide](https://web.fe.up.pt/~specs/wiki/doku.php?id=doc:lara) - Start using LARA with examples.
 
 [Language Specification](https://specs.fe.up.pt/tools/clava/language_specification.html) - List of all join points, attributes and actions available in Clava.
 
