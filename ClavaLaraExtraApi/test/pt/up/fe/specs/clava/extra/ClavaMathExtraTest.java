@@ -31,21 +31,7 @@ public class ClavaMathExtraTest {
     @Test
     public void test() {
 
-        //
-
         var expr = "2 + a + b * c";
-        // var expr = "2 + pow(3, 2)";
-        /*
-        var template = "#include <cmath>\n int main() {auto a = " + expr + "; return 0;}";
-        var tempFile = new File("test.cpp");
-        SpecsIo.write(tempFile, template);
-        
-        var cppParser = ParallelCodeParser.newInstance();
-        var app = cppParser.parse(Arrays.asList(tempFile), Arrays.asList("-std=c++11"));
-        
-        var expression = app.getDescendants(DeclStmt.class).get(0).getVarDecls().get(0).getInit().get();
-        System.out.println("Tree:" + expression.toTree());
-        */
 
         var exprNode = new ExpressionParser(Arrays.asList("a", "b", "c")).parse(expr);
 
