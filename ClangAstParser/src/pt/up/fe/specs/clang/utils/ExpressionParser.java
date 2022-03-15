@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clang.codeparser.ParallelCodeParser;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -29,21 +30,29 @@ import pt.up.fe.specs.util.SpecsLogs;
 
 public class ExpressionParser {
 
-    private static final String TEMPLATE_CODE = "void foo() {auto a = <EXPR_CODE>; }";
+    private static final String VAR_NAME = "expression_parser_result";
+    private static final String TEMPLATE_CODE = "void foo() {<VARIABLES>\nauto " + VAR_NAME + " = <EXPR_CODE>; }";
+    private static final List<String> DEFAULT_INCLUDES = Arrays.asList("<cmath>");
 
+    private final List<String> variables;
     private final List<String> includes;
     private final List<String> flags;
 
-    public ExpressionParser(List<String> includes, List<String> flags) {
+    public ExpressionParser(List<String> variables, List<String> includes, List<String> flags) {
+        this.variables = variables;
         this.includes = includes;
         this.flags = flags;
+    }
+
+    public ExpressionParser(List<String> variables) {
+        this(variables, DEFAULT_INCLUDES, Collections.emptyList());
     }
 
     /**
      * By default includes <cmath>
      */
     public ExpressionParser() {
-        this(Arrays.asList("<cmath>"), Collections.emptyList());
+        this(Collections.emptyList(), DEFAULT_INCLUDES, Collections.emptyList());
     }
 
     private String generateCode(String expressionCode) {
@@ -52,8 +61,11 @@ public class ExpressionParser {
         // Add includes
         includes.forEach(include -> code.append("#include ").append(include).append("\n"));
 
+        // Create variable declarations
+        var variablesCode = variables.isEmpty() ? "" : variables.stream().collect(Collectors.joining(";\n", "", ";"));
+
         // Add code with expression
-        code.append(TEMPLATE_CODE.replace("<EXPR_CODE>", expressionCode));
+        code.append(TEMPLATE_CODE.replace("<VARIABLES>", variablesCode).replace("<EXPR_CODE>", expressionCode));
 
         return code.toString();
     }
@@ -85,14 +97,15 @@ public class ExpressionParser {
             return Optional.empty();
         }
 
-        var varDecl = varDecls.get(0);
+        // Find correct vardecl
+        for (int i = varDecls.size() - 1; i >= 0; i--) {
+            var varDecl = varDecls.get(i);
+            if (varDecl.getDeclName().equals(VAR_NAME)) {
+                return varDecl.getInit();
+            }
+        }
 
-        return varDecl.getInit();
-
-        // System.out.println("App: " + app.toTree());
-        // var expression = app.getDescendants(DeclStmt.class).get(0).getVarDecls().get(0).getInit();
-
-        // return expression;
+        return Optional.empty();
     }
 
     public Expr parse(String expressionCode) {
