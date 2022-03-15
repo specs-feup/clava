@@ -62,7 +62,11 @@ public class ExpressionParser {
         includes.forEach(include -> code.append("#include ").append(include).append("\n"));
 
         // Create variable declarations
-        var variablesCode = variables.isEmpty() ? "" : variables.stream().collect(Collectors.joining(";\n", "", ";"));
+        var variablesCode = variables.isEmpty() ? ""
+                : variables.stream()
+                        // If no space, assume as double
+                        .map(var -> var.indexOf(" ") == -1 ? "double " + var : var)
+                        .collect(Collectors.joining(";\n", "", ";"));
 
         // Add code with expression
         code.append(TEMPLATE_CODE.replace("<VARIABLES>", variablesCode).replace("<EXPR_CODE>", expressionCode));
