@@ -24,7 +24,7 @@ function ClavaBenchmarkInstance(name) {
 // Inheritance
 ClavaBenchmarkInstance.prototype = Object.create(BenchmarkInstance.prototype);
 
-ClavaBenchmarkInstance._CACHE_ENABLE = true;
+ClavaBenchmarkInstance._CACHE_ENABLE = false;
 
 /**
  * @param {boolean} enable - if true, enables caching of parsed files. By default, caching is enabled.
