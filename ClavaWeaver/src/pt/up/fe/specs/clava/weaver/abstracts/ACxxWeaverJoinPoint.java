@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.lara.interpreter.utils.DefMap;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -147,6 +148,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         // }
 
         return CxxJoinpoints.create(currentParent);
+    }
+
+    @Override
+    public JoinPoint getJpParent() {
+        return getParentImpl();
     }
 
     @Override
@@ -791,6 +797,12 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         return node.getChildren();
     }
     */
+
+    @Override
+    public Stream<JoinPoint> getJpChildrenStream() {
+        return CxxSelects.selectedNodesToJpsStream(getNode().getChildren().stream(), getWeaverEngine())
+                .map(JoinPoint.class::cast);
+    }
 
     @Override
     public AJoinPoint[] getChildrenArrayImpl() {
