@@ -333,7 +333,12 @@ public class CxxFile extends AFile {
 
     @Override
     public void insertEndImpl(AJoinPoint node) {
-        super.insertEndImpl(node);
+        if (!tunit.hasChildren()) {
+            tunit.addChild(node.getNode());
+            return;
+        }
+
+        tunit.addChild(node.getNode());
     }
 
     @Override
