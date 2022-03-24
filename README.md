@@ -11,7 +11,7 @@ If you have used Clava, please consider filling the [Clava User Experience Feedb
 
 [Language Specification](https://specs.fe.up.pt/tools/clava/language_specification.html) - List of all join points, attributes and actions available in Clava.
 
-[API Documentation](https://specs.fe.up.pt/tools/clava/doc/) - List of LARA APIs available in Clava.
+[API Documentation](https://specs-feup.github.io/clava/api/) - List of LARA APIs available in Clava.
 
 [API Slides](https://drive.google.com/drive/u/1/folders/1IAqv7SpP8S-t5g3fpNO06cJ7J2j2aD7K) - Introduction to Clava and the LARA Framework APIs.
 
