@@ -34,8 +34,7 @@ public class CxxFloatLiteral extends AFloatLiteral {
 
     @Override
     public Double getValueImpl() {
-        return literal.get(FloatingLiteral.VALUE);
+        return literal.get(FloatingLiteral.VALUE).doubleValue();
     }
-
 
 }
