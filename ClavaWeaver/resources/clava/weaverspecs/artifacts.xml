@@ -608,6 +608,26 @@
 		<attribute name="argExpr" type="expression" />
 	</artifact>
 
+
+	<!-- LITERAL -->
+	<artifact class="literal">
+	</artifact>
+
+	<!-- INT LITERAL -->
+	<artifact class="intLiteral">
+		<attribute name="value" type="Long" />
+	</artifact>
+
+	<!-- FLOAT LITERAL -->
+	<artifact class="floatLiteral">
+		<attribute name="value" type="Double" />
+	</artifact>
+
+	<!-- BOOL LITERAL -->
+	<artifact class="boolLiteral">
+		<attribute name="value" type="Boolean" />
+	</artifact>
+
 	<!-- COMMENT -->
 	<artifact class="comment">
 		<attribute name="text" type="String">

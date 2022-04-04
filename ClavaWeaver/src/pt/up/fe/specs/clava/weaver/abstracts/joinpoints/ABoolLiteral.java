@@ -1,36 +1,64 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
+import org.lara.interpreter.weaver.interf.events.Stage;
+import java.util.Optional;
+import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
 /**
- * Auto-Generated class for join point ALiteral
+ * Auto-Generated class for join point ABoolLiteral
  * This class is overwritten by the Weaver Generator.
  * 
  * 
  * @author Lara Weaver Generator
  */
-public abstract class ALiteral extends AExpression {
+public abstract class ABoolLiteral extends ALiteral {
 
-    protected AExpression aExpression;
+    protected ALiteral aLiteral;
 
     /**
      * 
      */
-    public ALiteral(AExpression aExpression){
-        this.aExpression = aExpression;
+    public ABoolLiteral(ALiteral aLiteral){
+        super(aLiteral);
+        this.aLiteral = aLiteral;
     }
+    /**
+     * Get value on attribute value
+     * @return the attribute's value
+     */
+    public abstract Boolean getValueImpl();
+
+    /**
+     * Get value on attribute value
+     * @return the attribute's value
+     */
+    public final Object getValue() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "value", Optional.empty());
+        	}
+        	Boolean result = this.getValueImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "value", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "value", e);
+        }
+    }
+
     /**
      * Get value on attribute decl
      * @return the attribute's value
      */
     @Override
     public ADecl getDeclImpl() {
-        return this.aExpression.getDeclImpl();
+        return this.aLiteral.getDeclImpl();
     }
 
     /**
@@ -39,7 +67,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AVardecl getVardeclImpl() {
-        return this.aExpression.getVardeclImpl();
+        return this.aLiteral.getVardeclImpl();
     }
 
     /**
@@ -48,7 +76,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public String getUseImpl() {
-        return this.aExpression.getUseImpl();
+        return this.aLiteral.getUseImpl();
     }
 
     /**
@@ -57,7 +85,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public Boolean getIsFunctionArgumentImpl() {
-        return this.aExpression.getIsFunctionArgumentImpl();
+        return this.aLiteral.getIsFunctionArgumentImpl();
     }
 
     /**
@@ -66,7 +94,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public ACast getImplicitCastImpl() {
-        return this.aExpression.getImplicitCastImpl();
+        return this.aLiteral.getImplicitCastImpl();
     }
 
     /**
@@ -75,7 +103,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public List<? extends AVardecl> selectVardecl() {
-        return this.aExpression.selectVardecl();
+        return this.aLiteral.selectVardecl();
     }
 
     /**
@@ -84,7 +112,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
-        return this.aExpression.replaceWithImpl(node);
+        return this.aLiteral.replaceWithImpl(node);
     }
 
     /**
@@ -93,7 +121,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AJoinPoint replaceWithImpl(String node) {
-        return this.aExpression.replaceWithImpl(node);
+        return this.aLiteral.replaceWithImpl(node);
     }
 
     /**
@@ -102,7 +130,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AJoinPoint insertBeforeImpl(AJoinPoint node) {
-        return this.aExpression.insertBeforeImpl(node);
+        return this.aLiteral.insertBeforeImpl(node);
     }
 
     /**
@@ -111,7 +139,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AJoinPoint insertBeforeImpl(String node) {
-        return this.aExpression.insertBeforeImpl(node);
+        return this.aLiteral.insertBeforeImpl(node);
     }
 
     /**
@@ -120,7 +148,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AJoinPoint insertAfterImpl(AJoinPoint node) {
-        return this.aExpression.insertAfterImpl(node);
+        return this.aLiteral.insertAfterImpl(node);
     }
 
     /**
@@ -129,7 +157,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AJoinPoint insertAfterImpl(String code) {
-        return this.aExpression.insertAfterImpl(code);
+        return this.aLiteral.insertAfterImpl(code);
     }
 
     /**
@@ -137,7 +165,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public void detachImpl() {
-        this.aExpression.detachImpl();
+        this.aLiteral.detachImpl();
     }
 
     /**
@@ -146,7 +174,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public void setTypeImpl(AType type) {
-        this.aExpression.setTypeImpl(type);
+        this.aLiteral.setTypeImpl(type);
     }
 
     /**
@@ -154,7 +182,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AJoinPoint copyImpl() {
-        return this.aExpression.copyImpl();
+        return this.aLiteral.copyImpl();
     }
 
     /**
@@ -162,7 +190,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AJoinPoint deepCopyImpl() {
-        return this.aExpression.deepCopyImpl();
+        return this.aLiteral.deepCopyImpl();
     }
 
     /**
@@ -172,7 +200,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public Object setUserFieldImpl(String fieldName, Object value) {
-        return this.aExpression.setUserFieldImpl(fieldName, value);
+        return this.aLiteral.setUserFieldImpl(fieldName, value);
     }
 
     /**
@@ -181,7 +209,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public Object setUserFieldImpl(Map<?, ?> fieldNameAndValue) {
-        return this.aExpression.setUserFieldImpl(fieldNameAndValue);
+        return this.aLiteral.setUserFieldImpl(fieldNameAndValue);
     }
 
     /**
@@ -191,7 +219,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AJoinPoint setValueImpl(String key, Object value) {
-        return this.aExpression.setValueImpl(key, value);
+        return this.aLiteral.setValueImpl(key, value);
     }
 
     /**
@@ -200,7 +228,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public void messageToUserImpl(String message) {
-        this.aExpression.messageToUserImpl(message);
+        this.aLiteral.messageToUserImpl(message);
     }
 
     /**
@@ -208,7 +236,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public void removeChildrenImpl() {
-        this.aExpression.removeChildrenImpl();
+        this.aLiteral.removeChildrenImpl();
     }
 
     /**
@@ -217,7 +245,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public void setFirstChildImpl(AJoinPoint node) {
-        this.aExpression.setFirstChildImpl(node);
+        this.aLiteral.setFirstChildImpl(node);
     }
 
     /**
@@ -226,7 +254,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public void setLastChildImpl(AJoinPoint node) {
-        this.aExpression.setLastChildImpl(node);
+        this.aLiteral.setLastChildImpl(node);
     }
 
     /**
@@ -234,7 +262,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AJoinPoint toCommentImpl() {
-        return this.aExpression.toCommentImpl();
+        return this.aLiteral.toCommentImpl();
     }
 
     /**
@@ -243,7 +271,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AJoinPoint toCommentImpl(String prefix) {
-        return this.aExpression.toCommentImpl(prefix);
+        return this.aLiteral.toCommentImpl(prefix);
     }
 
     /**
@@ -253,7 +281,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AJoinPoint toCommentImpl(String prefix, String suffix) {
-        return this.aExpression.toCommentImpl(prefix, suffix);
+        return this.aLiteral.toCommentImpl(prefix, suffix);
     }
 
     /**
@@ -262,7 +290,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public void setInlineCommentsImpl(String[] comments) {
-        this.aExpression.setInlineCommentsImpl(comments);
+        this.aLiteral.setInlineCommentsImpl(comments);
     }
 
     /**
@@ -271,7 +299,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public void setInlineCommentsImpl(String comments) {
-        this.aExpression.setInlineCommentsImpl(comments);
+        this.aLiteral.setInlineCommentsImpl(comments);
     }
 
     /**
@@ -280,7 +308,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public void setDataImpl(Object source) {
-        this.aExpression.setDataImpl(source);
+        this.aLiteral.setDataImpl(source);
     }
 
     /**
@@ -289,7 +317,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public void dataAssignImpl(Object source) {
-        this.aExpression.dataAssignImpl(source);
+        this.aLiteral.dataAssignImpl(source);
     }
 
     /**
@@ -297,7 +325,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public void dataClearImpl() {
-        this.aExpression.dataClearImpl();
+        this.aLiteral.dataClearImpl();
     }
 
     /**
@@ -307,7 +335,7 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AJoinPoint[] insertImpl(String position, String code) {
-        return this.aExpression.insertImpl(position, code);
+        return this.aLiteral.insertImpl(position, code);
     }
 
     /**
@@ -317,29 +345,29 @@ public abstract class ALiteral extends AExpression {
      */
     @Override
     public AJoinPoint[] insertImpl(String position, JoinPoint code) {
-        return this.aExpression.insertImpl(position, code);
+        return this.aLiteral.insertImpl(position, code);
     }
 
     /**
      * 
      */
     @Override
-    public Optional<? extends AExpression> getSuper() {
-        return Optional.of(this.aExpression);
+    public Optional<? extends ALiteral> getSuper() {
+        return Optional.of(this.aLiteral);
     }
 
     /**
      * 
      */
     @Override
-    public List<? extends JoinPoint> select(String selectName) {
+    public final List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	case "vardecl": 
         		joinPointList = selectVardecl();
         		break;
         	default:
-        		joinPointList = this.aExpression.select(selectName);
+        		joinPointList = this.aLiteral.select(selectName);
         		break;
         }
         return joinPointList;
@@ -349,7 +377,7 @@ public abstract class ALiteral extends AExpression {
      * 
      */
     @Override
-    public void defImpl(String attribute, Object value) {
+    public final void defImpl(String attribute, Object value) {
         switch(attribute){
         case "data": {
         	if(value instanceof Object){
@@ -398,24 +426,25 @@ public abstract class ALiteral extends AExpression {
      * 
      */
     @Override
-    protected void fillWithAttributes(List<String> attributes) {
-        this.aExpression.fillWithAttributes(attributes);
+    protected final void fillWithAttributes(List<String> attributes) {
+        this.aLiteral.fillWithAttributes(attributes);
+        attributes.add("value");
     }
 
     /**
      * 
      */
     @Override
-    protected void fillWithSelects(List<String> selects) {
-        this.aExpression.fillWithSelects(selects);
+    protected final void fillWithSelects(List<String> selects) {
+        this.aLiteral.fillWithSelects(selects);
     }
 
     /**
      * 
      */
     @Override
-    protected void fillWithActions(List<String> actions) {
-        this.aExpression.fillWithActions(actions);
+    protected final void fillWithActions(List<String> actions) {
+        this.aLiteral.fillWithActions(actions);
     }
 
     /**
@@ -423,8 +452,8 @@ public abstract class ALiteral extends AExpression {
      * @return The join point type
      */
     @Override
-    public String get_class() {
-        return "literal";
+    public final String get_class() {
+        return "boolLiteral";
     }
 
     /**
@@ -432,17 +461,18 @@ public abstract class ALiteral extends AExpression {
      * @return True if this join point is an instanceof the given class
      */
     @Override
-    public boolean instanceOf(String joinpointClass) {
+    public final boolean instanceOf(String joinpointClass) {
         boolean isInstance = get_class().equals(joinpointClass);
         if(isInstance) {
         	return true;
         }
-        return this.aExpression.instanceOf(joinpointClass);
+        return this.aLiteral.instanceOf(joinpointClass);
     }
     /**
      * 
      */
-    protected enum LiteralAttributes {
+    protected enum BoolLiteralAttributes {
+        VALUE("value"),
         DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),
@@ -514,13 +544,13 @@ public abstract class ALiteral extends AExpression {
         /**
          * 
          */
-        private LiteralAttributes(String name){
+        private BoolLiteralAttributes(String name){
             this.name = name;
         }
         /**
          * Return an attribute enumeration item from a given attribute name
          */
-        public static Optional<LiteralAttributes> fromString(String name) {
+        public static Optional<BoolLiteralAttributes> fromString(String name) {
             return Arrays.asList(values()).stream().filter(attr -> attr.name.equals(name)).findAny();
         }
 
@@ -528,7 +558,7 @@ public abstract class ALiteral extends AExpression {
          * Return a list of attributes in String format
          */
         public static List<String> getNames() {
-            return Arrays.asList(values()).stream().map(LiteralAttributes::name).collect(Collectors.toList());
+            return Arrays.asList(values()).stream().map(BoolLiteralAttributes::name).collect(Collectors.toList());
         }
 
         /**
