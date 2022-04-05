@@ -1,5 +1,6 @@
 laraImport("lara.pass.Pass");
 laraImport("weaver.Query");
+//laraImport("clava.Clava");
 
 class SingleReturnFunction extends Pass {
   constructor() {
@@ -7,35 +8,39 @@ class SingleReturnFunction extends Pass {
   }
 
   _apply_impl($jp) {
-    if ($jp.joinpointType !== "function" || !$jp.isImplementation) {
+    if (!$jp.instanceOf("function") || !$jp.isImplementation) {
       return;
     }
     const $body = $jp.body;
     const $returnStmts = Array.from(Query.searchFrom($body, "returnStmt"));
-    if ($returnStmts.length <= 1) {
+    if (
+      $returnStmts.length === 0 ||
+      ($returnStmts.length === 1 && $body.lastChild.instanceOf("returnStmt"))
+    ) {
       return;
     }
 
-    $body.insertEnd("__returnLabel:");
+    $body.insertEnd("__return_label:");
 
     const returnType = $jp.returnType;
     const returnIsVoid =
-      !returnType.isBuiltin || returnType.builtinKind !== "Void";
+      returnType.isBuiltin && returnType.builtinKind === "Void";
     if (returnIsVoid) {
-      $body.addLocal("__returnValue", returnType);
-      $body.insertEnd("return __returnValue;");
-    } else {
       $body.insertEnd(";");
+    } else {
+      $body.addLocal("__return_value", returnType);
+      $body.insertEnd("return __return_value;");
     }
 
     for (const $returnStmt of $returnStmts) {
-      if (returnIsVoid) {
+      if (!returnIsVoid) {
         $returnStmt.insertBefore(
           `__return_value = ${$returnStmt.returnExpr.code};`
         );
       }
-      $returnStmt.insertBefore("goto __returnLabel;");
+      $returnStmt.insertBefore("goto __return_label;");
       $returnStmt.detach();
     }
+    //Clava.rebuild();
   }
 }
