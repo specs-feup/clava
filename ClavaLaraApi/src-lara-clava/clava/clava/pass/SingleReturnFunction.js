@@ -13,7 +13,7 @@ class SingleReturnFunction extends Pass {
       return;
     }
     const $body = $jp.body;
-    const $returnStmts = Array.from(Query.searchFrom($body, "returnStmt"));
+    const $returnStmts = Query.searchFrom($body, "returnStmt").get();
     if (
       $returnStmts.length === 0 ||
       ($returnStmts.length === 1 && $body.lastChild.instanceOf("returnStmt"))
