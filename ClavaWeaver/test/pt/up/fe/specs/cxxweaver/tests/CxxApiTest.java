@@ -163,4 +163,9 @@ public class CxxApiTest {
     public void testSimplifyVarDeclarations() {
         newTester().test("PassSimplifyVarDeclarations.lara", "pass_simplify_var_declarations.cpp");
     }
+
+    @Test
+    public void testSingleReturnFunction() {
+        newTester().test("PassSingleReturnTest.js", "pass_single_return.cpp");
+    }
 }

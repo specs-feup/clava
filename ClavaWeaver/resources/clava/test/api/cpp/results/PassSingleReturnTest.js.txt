@@ -1,0 +1,53 @@
+/**** File 'test.cpp' ****/
+
+#include <iostream>
+int single_return(double n) {
+   
+   return n > 0.0 ? 1 : 0;
+}
+
+int multiple_return(double n) {
+   int __return_value;
+   if(n < 0.01 && n > -0.01) {
+      __return_value = 0;
+      goto __return_label;
+   }
+   if(n > 0.0) {
+      __return_value = 1;
+      goto __return_label;
+   }
+   __return_value = -1;
+   goto __return_label;
+   __return_label:
+   
+   return __return_value;
+}
+
+int single_return_oob(double n) {
+   int __return_value;
+   if(n > 0.0) {
+      __return_value = 1;
+      goto __return_label;
+   }
+   __return_label:
+   
+   return __return_value;
+}
+
+void no_return(double n) {
+   if(n / 16.0 > 1.0) {
+      std::cout << "Greater than 16" << std::endl;
+   }
+}
+
+void earlyReturn(double n) {
+   if(n / 16.0 > 1.0) {
+      std::cout << "Greater than 16" << std::endl;
+      goto __return_label;
+   }
+   std::cout << "Not greater than 16" << std::endl;
+   __return_label:
+   ;
+}
+
+/**** End File ****/

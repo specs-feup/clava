@@ -1,6 +1,5 @@
 laraImport("lara.pass.Pass");
 laraImport("weaver.Query");
-laraImport("clava.Clava");
 laraImport("clava.pass.DecomposeVarDeclarations");
 
 class SingleReturnFunction extends Pass {
@@ -47,6 +46,5 @@ class SingleReturnFunction extends Pass {
       $returnStmt.insertBefore("goto __return_label;");
       $returnStmt.detach();
     }
-    Clava.rebuild();
   }
 }
