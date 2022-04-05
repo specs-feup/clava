@@ -1,6 +1,7 @@
 laraImport("lara.pass.Pass");
 laraImport("weaver.Query");
-//laraImport("clava.Clava");
+laraImport("clava.Clava");
+laraImport("clava.pass.DecomposeVarDeclarations");
 
 class SingleReturnFunction extends Pass {
   constructor() {
@@ -19,6 +20,11 @@ class SingleReturnFunction extends Pass {
     ) {
       return;
     }
+
+    // C++ spec has some restrictions about jumping over initialized values that
+    // would be invalidated by the generated code, so we need to decompose variable
+    // declarations first
+    new DecomposeVarDeclarations().apply($body);
 
     $body.insertEnd("__return_label:");
 
@@ -41,6 +47,6 @@ class SingleReturnFunction extends Pass {
       $returnStmt.insertBefore("goto __return_label;");
       $returnStmt.detach();
     }
-    //Clava.rebuild();
+    Clava.rebuild();
   }
 }
