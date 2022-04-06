@@ -112,7 +112,9 @@ public enum LaraApiResource implements LaraResourceProvider {
     BATCH_PARSER("parser/BatchParser.lara"),
 
     // Pass
+    DECOMPOSE_DECL_STMT("pass/DecomposeDeclStmt.js"),
     DECOMPOSE_VAR_DECLARATIONS("pass/DecomposeVarDeclarations.js"),
+    SINGLE_RETURN_FUNCTION("pass/SingleReturnFunction.js"),
 
     // Stats
     OPS_BLOCK("stats/OpsBlock.lara"),
