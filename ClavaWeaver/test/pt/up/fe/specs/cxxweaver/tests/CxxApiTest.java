@@ -159,7 +159,7 @@ public class CxxApiTest {
         newTester().test("Code2VecTest.js", "code2vec.cpp");
     }
 
-    // @Test
+    @Test
     public void testSimplifyVarDeclarations() {
         newTester().test("PassSimplifyVarDeclarations.lara", "pass_simplify_var_declarations.cpp");
     }

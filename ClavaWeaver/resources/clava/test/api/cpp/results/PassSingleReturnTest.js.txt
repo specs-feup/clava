@@ -1,4 +1,4 @@
-/**** File 'test.cpp' ****/
+/**** File 'cxx_weaver_output/pass_single_return.cpp' ****/
 
 #include <iostream>
 int single_return(double n) {
