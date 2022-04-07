@@ -30,6 +30,7 @@ import pt.up.fe.specs.clava.ast.decl.EnumDecl;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
+import pt.up.fe.specs.clava.ast.decl.LabelDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -66,7 +67,9 @@ import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
+import pt.up.fe.specs.clava.ast.stmt.GotoStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
+import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.LoopStmt;
 import pt.up.fe.specs.clava.ast.stmt.NullStmt;
 import pt.up.fe.specs.clava.ast.stmt.ReturnStmt;
@@ -94,6 +97,7 @@ import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.joinpoints.CXXCudaKernelCall;
+import pt.up.fe.specs.clava.weaver.joinpoints.CXXLabelStmt;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxAccessSpecifier;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxArrayAccess;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxBinaryOp;
@@ -115,9 +119,11 @@ import pt.up.fe.specs.clava.weaver.joinpoints.CxxField;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFile;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFloatLiteral;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxFunction;
+import pt.up.fe.specs.clava.weaver.joinpoints.CxxGotoStmt;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxIf;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxInclude;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxIntLiteral;
+import pt.up.fe.specs.clava.weaver.joinpoints.CxxLabelDecl;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxLiteral;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxLoop;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxMarker;
@@ -208,6 +214,8 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(SwitchCase.class, CxxCase::new);
         JOINPOINT_FACTORY.put(ExprStmt.class, CxxExprStmt::new);
         JOINPOINT_FACTORY.put(DeclStmt.class, CxxDeclStmt::new);
+        JOINPOINT_FACTORY.put(GotoStmt.class, CxxGotoStmt::new);
+        JOINPOINT_FACTORY.put(LabelStmt.class, CXXLabelStmt::new);
         JOINPOINT_FACTORY.put(Stmt.class, CxxStatement::new);
         JOINPOINT_FACTORY.put(CXXMethodDecl.class, CxxMethod::new);
         JOINPOINT_FACTORY.put(FunctionDecl.class, CxxFunction::new);
@@ -222,6 +230,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(NamedDecl.class, CxxNamedDecl::new);
         JOINPOINT_FACTORY.put(IncludeDecl.class, CxxInclude::new);
         JOINPOINT_FACTORY.put(AccessSpecDecl.class, CxxAccessSpecifier::new);
+        JOINPOINT_FACTORY.put(LabelDecl.class, CxxLabelDecl::new);
         JOINPOINT_FACTORY.put(Decl.class, CxxDecl::new);
         // JOINPOINT_FACTORY.put(LiteralDecl.class, CxxDecl::new);
         JOINPOINT_FACTORY.put(BuiltinType.class, CxxBuiltinType::new);
@@ -270,34 +279,36 @@ public class CxxJoinpoints {
      * @param newJoinPoint
      */
     /*
-    private static void setWeaverEngine(ACxxWeaverJoinPoint newJoinPoint) {
-        ACxxWeaverJoinPoint currentJoinpoint = newJoinPoint;
-        CxxWeaver weaver = getWeaver();
-    
-        while (currentJoinpoint != null) {
-    
-            // Set engine
-            currentJoinpoint.setWeaverEngine(weaver);
-            currentJoinpoint = currentJoinpoint.getSuper()
-                    .map(ACxxWeaverJoinPoint.class::cast)
-                    .orElse(null);
-    
-        }
-    }
-    */
+     * private static void setWeaverEngine(ACxxWeaverJoinPoint newJoinPoint) {
+     * ACxxWeaverJoinPoint currentJoinpoint = newJoinPoint;
+     * CxxWeaver weaver = getWeaver();
+     * 
+     * while (currentJoinpoint != null) {
+     * 
+     * // Set engine
+     * currentJoinpoint.setWeaverEngine(weaver);
+     * currentJoinpoint = currentJoinpoint.getSuper()
+     * .map(ACxxWeaverJoinPoint.class::cast)
+     * .orElse(null);
+     * 
+     * }
+     * }
+     */
 
     /*
-    private final CxxWeaver weaverEngine;
-    
-    public CxxJoinpoints(CxxWeaver weaverEngine) {
-        this.weaverEngine = weaverEngine;
-    }
-    */
-    // private static ACxxWeaverJoinPoint typeFactory(Type type, ACxxWeaverJoinPoint parent) {
+     * private final CxxWeaver weaverEngine;
+     * 
+     * public CxxJoinpoints(CxxWeaver weaverEngine) {
+     * this.weaverEngine = weaverEngine;
+     * }
+     */
+    // private static ACxxWeaverJoinPoint typeFactory(Type type, ACxxWeaverJoinPoint
+    // parent) {
     //
     // }
 
-    // private static ACxxWeaverJoinPoint tuFactory(TranslationUnit tu, ACxxWeaverJoinPoint parent) {
+    // private static ACxxWeaverJoinPoint tuFactory(TranslationUnit tu,
+    // ACxxWeaverJoinPoint parent) {
     // return new CxxFile(tu, parent);
     // // return new CxxFile(tu, parent == null ? null : parent.getRoot());
     // }
@@ -337,10 +348,10 @@ public class CxxJoinpoints {
 
     private static ACxxWeaverJoinPoint arrayAccessFactory(ArraySubscriptExpr expr) {
         /*
-        if (!expr.isTopLevel()) {
-            return CxxJoinpoints.nullNode(expr.getFactory().nullExpr());
-        }
-        */
+         * if (!expr.isTopLevel()) {
+         * return CxxJoinpoints.nullNode(expr.getFactory().nullExpr());
+         * }
+         */
         return new CxxArrayAccess(expr);
     }
 

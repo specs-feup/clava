@@ -118,6 +118,10 @@
 	<joinpoint class="enumeratorDecl" extends="namedDecl">
  	</joinpoint>  
  	
+ 	<!-- LABEL DECL -->
+ 	<joinpoint class="labelDecl" extends="namedDecl">
+ 	</joinpoint>
+ 	
  	<!-- ACCESS SPECIFIER -->
 	<joinpoint class="accessSpecifier" extends="decl">
  	</joinpoint>  	
@@ -230,6 +234,12 @@
 	<!-- EXPR STMT -->
 	<joinpoint class="exprStmt" extends="statement"/>
 
+	<!-- GOTO STMT -->
+	<joinpoint class="gotoStmt" extends="statement"/>
+	
+	<!-- LABEL STMT -->
+	<joinpoint class="labelStmt" extends="statement"/>
+	
 	<!-- CALL -->	
 	<joinpoint class="call" 	extends="expression">
 		<select alias="callee"		class="expression"/>
