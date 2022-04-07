@@ -22,11 +22,12 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ast.decl.LabelDecl;
 
 public class LabelStmt extends Stmt {
     /// DATAKEYS BEGIN
 
-    public final static DataKey<String> LABEL = KeyFactory.string("label");
+    public final static DataKey<LabelDecl> LABEL = KeyFactory.object("label", LabelDecl.class);
 
     /// DATAKEYS END
 
@@ -35,6 +36,10 @@ public class LabelStmt extends Stmt {
     }
 
     public String getLabel() {
+        return get(LABEL).getDeclName();
+    }
+
+    public LabelDecl getLabelDecl() {
         return get(LABEL);
     }
 
