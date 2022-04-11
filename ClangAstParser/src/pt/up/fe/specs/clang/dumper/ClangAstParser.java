@@ -33,6 +33,7 @@ import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.cilk.CilkAstAdapter;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
+import pt.up.fe.specs.clang.transforms.CreateEmptyStmts;
 import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;
 import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.FlattenSubStmtNodes;
@@ -87,7 +88,8 @@ public class ClangAstParser {
             new MoveImplicitCasts(),
             // new RemovePoison(),
             new FlattenSubStmtNodes(),
-            new ProcessCudaNodes()
+            new ProcessCudaNodes(),
+            new CreateEmptyStmts()
     // new CilkAstAdapter()
 
     // new AdaptBoolTypes(),
