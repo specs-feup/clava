@@ -19,11 +19,11 @@ import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALabelDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALabelStmt;
 
-public class CXXLabelStmt extends ALabelStmt {
+public class CxxLabelStmt extends ALabelStmt {
 
     private final LabelStmt labelStmt;
 
-    public CXXLabelStmt(LabelStmt labelStmt) {
+    public CxxLabelStmt(LabelStmt labelStmt) {
         super(new CxxStatement(labelStmt));
         this.labelStmt = labelStmt;
     }

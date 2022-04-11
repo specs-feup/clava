@@ -240,6 +240,9 @@
 	<!-- LABEL STMT -->
 	<joinpoint class="labelStmt" extends="statement"/>
 	
+	<!-- EMPTY STMT -->
+	<joinpoint class="emptyStmt" extends="statement"/>	
+	
 	<!-- CALL -->	
 	<joinpoint class="call" 	extends="expression">
 		<select alias="callee"		class="expression"/>

@@ -28,6 +28,7 @@ edge [fontsize=10]
 "deleteExpr"->"expression"
 "elaboratedType"->"type"
 "empty"->"joinpoint"
+"emptyStmt"->"statement"
 "enumDecl"->"namedDecl"
 "enumType"->"tagType"
 "enumeratorDecl"->"namedDecl"
