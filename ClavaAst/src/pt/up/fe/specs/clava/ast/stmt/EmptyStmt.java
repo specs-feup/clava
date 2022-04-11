@@ -18,19 +18,16 @@ import java.util.Collection;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.utils.NullNode;
 
 /**
- * Represents an empty statement or absence of statement.
- * 
- * This node is used for internal processing, should not appear in the final AST.
+ * Strictly represents an empty statement (unlike NullStmt, which can also represent absence of statement).
  * 
  * @author JoaoBispo
  *
  */
-public class NullStmt extends Stmt implements NullNode {
+public class EmptyStmt extends Stmt {
 
-    public NullStmt(DataStore data, Collection<? extends ClavaNode> children) {
+    public EmptyStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 

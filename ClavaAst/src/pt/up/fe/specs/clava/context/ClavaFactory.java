@@ -98,6 +98,7 @@ import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
+import pt.up.fe.specs.clava.ast.stmt.EmptyStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.GotoStmt;
@@ -632,6 +633,10 @@ public class ClavaFactory {
                 .set(GotoStmt.LABEL, label);
 
         return new GotoStmt(data, Collections.emptyList());
+    }
+
+    public EmptyStmt emptyStmt() {
+        return new EmptyStmt(newDataStore(EmptyStmt.class), Collections.emptyList());
     }
 
     public WrapperStmt wrapperStmt(ClavaNode node) {
