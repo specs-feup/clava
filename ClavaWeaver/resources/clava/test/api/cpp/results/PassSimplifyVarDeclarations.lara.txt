@@ -1,3 +1,4 @@
+Result: PassResult { name: DecomposeVarDeclarations; appliedPass: true; insertedLiteralCode: false; location: <Program>}
 /**** File 'pass_simplify_var_declarations.cpp' ****/
 
 int main() {
