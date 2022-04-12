@@ -30,12 +30,18 @@ public class SourceRange {
         return new SourceRange(SourceLocation.newUndefined(filepath), SourceLocation.newUndefined(filepath));
     }
 
+    public static SourceRange newCustomLocation(String customLocation) {
+        return new SourceRange(SourceLocation.newUndefined(customLocation), SourceLocation.newUndefined(customLocation),
+                customLocation);
+    }
+
     public static SourceRange invalidRange() {
         return INVALID_SOURCE_RANGE;
     }
 
     private final SourceLocation start;
     private final SourceLocation end;
+    private final String customLocation;
 
     public SourceRange(String filepath, int startLine, int startCol, int endLine, int endCol) {
         this(filepath, startLine, startCol, filepath, endLine, endCol);
@@ -50,8 +56,13 @@ public class SourceRange {
     }
 
     public SourceRange(SourceLocation start, SourceLocation end) {
+        this(start, end, null);
+    }
+
+    public SourceRange(SourceLocation start, SourceLocation end, String customLocation) {
         this.start = start;
         this.end = end;
+        this.customLocation = customLocation;
     }
 
     public SourceRange(SourceRange sourceRange) {
@@ -190,6 +201,12 @@ public class SourceRange {
     @Override
     public String toString() {
         if (!isValid()) {
+
+            // Check if custom location
+            if (customLocation != null) {
+                return customLocation;
+            }
+
             return "<Invalid Range>";
         }
 
