@@ -48,7 +48,6 @@ class DecomposeVarDeclarations extends Pass {
 		}
 		
 		return this._new_result($jp, appliedPass);
-		
 	}
 	
 	_new_result($jp, appliedPass) {
