@@ -119,3 +119,61 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'members', {
 	}
 });
 
+
+
+
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'listOfAllMethods', {
+	get: function () {  throw '.listOfAllMethods not implemented in clava'; 
+		
+		var allMethods = this.methods;
+
+		for ($interface of this.allInterfaces) {
+			allMethods = allMethods.concat($interface.methods);
+		}
+
+		for ($superClass of this.allSuperClasses) {
+			allMethods = allMethods.concat($superClass.methods);
+		}
+		
+		return allMethods;
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'interfaces', {
+	get: function () { throw '.interfaces not implemented in clava'; 
+	
+		var superInterfaces = this.astNode.getSuperInterfaces();
+		
+		// println(superInterfaces);
+		
+		if (superInterfaces == null) return [];
+		
+		var interfaces = [];
+
+		for (superInterface of superInterfaces) {
+			var superInterfaceJp = CommonJoinPoints.toJoinPoint(superInterface.getTypeDeclaration()); 
+			interfaces.push(superInterfaceJp);
+		}
+		
+		return interfaces; 
+	 }
+});
+
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'allInterfaces', {
+	get: function () { throw '.allInterfaces not implemented in clava'; 
+		
+		var allInterfaces = [];
+
+		for (superInterface of this.interfaces) {
+			allInterfaces.push(superInterface);
+			allInterfaces = allInterfaces.concat(superInterface.allInterfaces);
+		}
+
+		for ($superClass of this.allSuperClasses) {
+			allInterfaces = allInterfaces.concat($superClass.interfaces);
+		}
+		
+		return allInterfaces;
+	}
+});
+

@@ -1,0 +1,8 @@
+import weaver.jp.DeclJp;
+import weaver.Weaver;
+
+_lara_dummy_ = Object.defineProperty(DeclJp.prototype, 'isStatic', {
+	get: function () { throw '.isStatic not implemented in clava'; 
+		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).isStatic; 
+	}
+});

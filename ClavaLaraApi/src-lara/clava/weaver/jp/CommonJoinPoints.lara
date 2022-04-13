@@ -1,6 +1,9 @@
 // Enable Clava version of common join points
 import weaver.jp.ClavaJoinPoint;
 import weaver.jp.ClavaClassJp;
+import weaver.jp.ClavaClassTypeJp;
+import weaver.jp.ClavaInterfaceJp;
+import weaver.jp.ClavaDeclJp;
 import weaver.jp.ClavaMethodJp;
 import weaver.jp.ClavaFunctionJp;
 import weaver.jp.ClavaCallJp;

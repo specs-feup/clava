@@ -1,0 +1,57 @@
+import weaver.jp.InterfaceJp;
+import weaver.Weaver;
+
+
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'name', {
+	get: function () { 
+		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).name; 
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'methods', {
+	get: function () { 
+		var methods = Weaver.toJs(this.astNode.getMethods());
+		methods = methods.map(method=> method.getDefinition().isPresent()?method.getDefinition().get():method);
+		return CommonJoinPoints.toJoinPoints(Weaver.toJs(methods));
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'allMethods', {
+	get: function () { 
+		var methods = this.methods;
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'interfaces', {
+	get: function () { throw '.interfaces not implemented in clava'; 
+	
+		var superInterfaces = this.astNode.getSuperInterfaces();
+		
+		// println(superInterfaces);
+		
+		if (superInterfaces == null) return [];
+		
+		var interfaces = [];
+
+		for (superInterface of superInterfaces) {
+			var superInterfaceJp = CommonJoinPoints.toJoinPoint(superInterface.getTypeDeclaration()); 
+			interfaces.push(superInterfaceJp);
+		}
+		
+		return interfaces;
+	 }
+});
+
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'allInterfaces', {
+	get: function () { throw '.allInterfaces not implemented in clava'; 
+		
+		var allInterfaces = [];
+
+		for (superInterface of this.interfaces) {
+			allInterfaces.push(superInterface);
+			allInterfaces = allInterfaces.concat(superInterface.allInterfaces);
+		}
+		
+		return allInterfaces;
+	 }
+});

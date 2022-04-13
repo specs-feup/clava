@@ -34,6 +34,26 @@ _lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'isClass', {
 	}
 });
 
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'isInterface', {
+	get: function () { throw '.isInterface not implemented in clava';
+		return this.astNode.isInterface(); 
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'isClassType', {
+	get: function () {
+		return this.isInterface || this.isClass; 
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'classType', {
+	get: function () {
+		if (!this.isClassType) return null;
+		return CommonJoinPoints.toJoinPoint(this.astNode.getTypeDeclaration());
+	}
+});
+
 _lara_dummy_ = Object.defineProperty(TypeJp.prototype, '_hasSugar', {
 	get: function () {
 		return this.astNode.hasSugar();

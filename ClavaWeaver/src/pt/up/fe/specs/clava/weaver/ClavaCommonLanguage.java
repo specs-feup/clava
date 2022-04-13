@@ -96,9 +96,11 @@ public class ClavaCommonLanguage {
 
 	private static String cxxRecordDecl(CXXRecordDecl node) {
 
-		switch (node.getTagKind()) {
-		case CLASS:
-			return "ClassJp";
+        switch (node.getTagKind()) {
+        case CLASS:
+            return "ClassJp";
+        case INTERFACE:
+            return "InterfaceJp";
 		/*
 		 * case STRUCT: return "StructJp";
 		 */
