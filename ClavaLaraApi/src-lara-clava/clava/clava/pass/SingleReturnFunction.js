@@ -9,7 +9,7 @@ class SingleReturnFunction extends Pass {
 
   _apply_impl($jp) {
     if (!$jp.instanceOf("function") || !$jp.isImplementation) {
-      return;
+      return _new_result($jp, false);
     }
     const $body = $jp.body;
     const $returnStmts = Query.searchFrom($body, "returnStmt").get();
@@ -17,7 +17,7 @@ class SingleReturnFunction extends Pass {
       $returnStmts.length === 0 ||
       ($returnStmts.length === 1 && $body.lastChild.instanceOf("returnStmt"))
     ) {
-      return;
+      return _new_result($jp, false);
     }
 
     // C++ spec has some restrictions about jumping over initialized values that
@@ -46,5 +46,16 @@ class SingleReturnFunction extends Pass {
       $returnStmt.insertBefore("goto __return_label;");
       $returnStmt.detach();
     }
+    
+    return _new_result($jp, true);
   }
+  
+  _new_result($jp, appliedPass) {
+		var result = new PassResult(this.name);
+		result.isUndefined = false;
+		result.appliedPass = appliedPass;
+		result.insertedLiteralCode = true;
+		result.location = $jp.location;
+		return result;
+	}  
 }
