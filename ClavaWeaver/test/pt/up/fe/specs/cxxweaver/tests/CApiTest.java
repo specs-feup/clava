@@ -137,4 +137,9 @@ public class CApiTest {
     public void testStrcpyChecker() {
         newTester().test("StrcpyChecker.lara", "strcpy.c");
     }
+
+    @Test
+    public void testCfgBuilder() {
+        newTester().test("CfgBuilderTest.js", "cfg_builder.c");
+    }
 }
