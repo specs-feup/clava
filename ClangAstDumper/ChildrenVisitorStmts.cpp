@@ -337,6 +337,8 @@ void ClangAstDumper::VisitLabelStmtChildren(const LabelStmt *S, std::vector<std:
     // Do not visit sub-statements automatically, visit the if stmts in a controlled manner
     //VisitStmtChildren(S, children);
 
+    addChild(S->getSubStmt(), children);
+
     VisitDeclTop(S->getDecl());
 }
 
