@@ -68,4 +68,24 @@ public class CxxClass extends AClass {
         // .toArray(size -> new AClass[size]);
     }
 
+    @Override
+    public AMethod[] getAllMethodsArrayImpl() {
+        return CxxJoinpoints.create(cxxRecordDecl.getAllMethods(), AMethod.class);
+    }
+
+    @Override
+    public AClass[] getAllBasesArrayImpl() {
+        return CxxJoinpoints.create(cxxRecordDecl.getAllBases(), AClass.class);
+    }
+
+    @Override
+    public Boolean getIsAbstractImpl() {
+        return cxxRecordDecl.isAbstract();
+    }
+
+    @Override
+    public Boolean getIsInterfaceImpl() {
+        return cxxRecordDecl.isInterface();
+    }
+
 }
