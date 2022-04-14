@@ -55,6 +55,7 @@ public class CxxClass extends AClass {
 
     @Override
     public AClass[] getBasesArrayImpl() {
+
         return cxxRecordDecl.getBases().stream()
                 .map(decl -> CxxJoinpoints.create(decl, AClass.class))
                 // Collect to array

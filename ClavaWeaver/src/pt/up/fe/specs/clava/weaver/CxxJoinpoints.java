@@ -89,7 +89,6 @@ import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
-import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.weaver.abstracts.ACxxWeaverJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
@@ -130,7 +129,6 @@ import pt.up.fe.specs.clava.weaver.joinpoints.CxxOmp;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxParam;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxPragma;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxRecord;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxReturnStmt;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxScope;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxStatement;
@@ -211,7 +209,9 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(Stmt.class, CxxStatement::new);
         JOINPOINT_FACTORY.put(CXXMethodDecl.class, CxxMethod::new);
         JOINPOINT_FACTORY.put(FunctionDecl.class, CxxFunction::new);
-        JOINPOINT_FACTORY.put(RecordDecl.class, CxxJoinpoints::recordDeclFactory);
+        JOINPOINT_FACTORY.put(CXXRecordDecl.class, CxxClass::new);
+        JOINPOINT_FACTORY.put(RecordDecl.class, CxxStruct::new);
+        // JOINPOINT_FACTORY.put(RecordDecl.class, CxxJoinpoints::recordDeclFactory);
         JOINPOINT_FACTORY.put(FieldDecl.class, CxxField::new);
         JOINPOINT_FACTORY.put(ParmVarDecl.class, CxxParam::new);
         JOINPOINT_FACTORY.put(VarDecl.class, CxxVardecl::new);
@@ -322,18 +322,18 @@ public class CxxJoinpoints {
         return new CxxBody(stmt);
     }
 
-    private static ACxxWeaverJoinPoint recordDeclFactory(RecordDecl record) {
-
-        if (record.getTagKind() == TagKind.STRUCT) {
-            return new CxxStruct(record);
-        }
-
-        if (record.getTagKind() == TagKind.CLASS) {
-            return new CxxClass((CXXRecordDecl) record);
-        }
-
-        return new CxxRecord(record);
-    }
+    // private static ACxxWeaverJoinPoint recordDeclFactory(RecordDecl record) {
+    //
+    // if (record.getTagKind() == TagKind.STRUCT) {
+    // return new CxxStruct(record);
+    // }
+    //
+    // if (record.getTagKind() == TagKind.CLASS) {
+    // return new CxxClass((CXXRecordDecl) record);
+    // }
+    //
+    // return new CxxRecord(record);
+    // }
 
     private static ACxxWeaverJoinPoint arrayAccessFactory(ArraySubscriptExpr expr) {
         /*
