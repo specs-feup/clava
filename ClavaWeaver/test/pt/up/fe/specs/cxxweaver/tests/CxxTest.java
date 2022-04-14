@@ -330,4 +330,10 @@ public class CxxTest {
                 .test("CloneOnFile.lara", "clone_on_file.cpp",
                         "clone_on_file.h");
     }
+
+    @Test
+    public void testClass() {
+        newTester().test("Class.js", "class.cpp");
+    }
+
 }
