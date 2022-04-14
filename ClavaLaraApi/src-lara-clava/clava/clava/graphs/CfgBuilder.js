@@ -1,6 +1,7 @@
 laraImport("lara.graphs.Graphs")
 laraImport("clava.graphs.CfgNode")
 laraImport("lara.Strings")
+laraImport("lara.Check")
 
 class CfgBuilder {
 	
@@ -37,25 +38,116 @@ class CfgBuilder {
 		return this.#graph;
 	}
 	
-	_findBbs($scope) {
+	/**
+	 * Starts all basic blocks, with only the leader statement
+	 */
+	_findBbs($jp) {
+		
+		// Test all statements for leadership
+		// If they are leaders, create node
+		for(const $stmt of Query.searchFromInclusive($jp, "stmt")) {
+			const leaders = this._getLeaders($stmt);
+			for(const leader of leaders) {
+				this._getOrAddNode(leader);
+			}
+		}
+		
+	}
+			
+	
+	/** 
+	 * @return {$stmt[]} the leaders obtained from this statement, or undefined if no leader found
+	 */
+	_getLeaders($stmt, isLeader) {
+		
+		// Dead with undefined
+		if($stmt === undefined) {
+			return [];
+		}
+		
+		// If stmt, then and else are leaders
+		if($stmt.instanceOf("if")) {
+			return _getLeaders($stmt.then).concat(_getLeaders($stmt.else));			
+		}
+		
+		// Loop stmt, body is leader
+		if($stmt.instanceOf("loop")) {
+			return _getLeaders($stmt.body);
+		}
+		
+		// Goto stmt, target is a leader
+		//if($stmt.)
+		//_getLeaders();
+		
+		// Check if this statement is a leader
+		
+		// If first instruction of scope, is a leader, unless the parent of the scope is another scope
+		
+		return [];
+	}
+	
+	_findBbsOld($scope) {
+
+		let currentStmts = $scope.stmts;
+		let firstStmt = currentStmts.length > 0 ? currentStmts[0] : undefined;
+		let scopeNode = undefined;
 		
 		// Iterate over all statements in the scope
-		for(var $stmt of $scope.stmts) {
-			// 1) first stmt of the scope
-            if ($scope.firstStmt.equals($stmt)) {
-                this._getOrAddNode($stmt);
-                continue;
+		while(currentStmts.length > 0) {
+			const $stmt = currentStmts.shift();
+			
+			// Anonymous scopes get merged into current scope
+			if($stmt.instanceOf("scope")) {
+				// Add scope statements to the beginning of current stmts
+				currentStmts = $stmt.stmts.concat(currentStmts);
+				
+				// Fix in case scope is the first statement
+				if($stmt.equals(firstStmt)) {
+					
+					firstStmt = currentStmts[0];
+				}
+				
+				// Jump to next statement
+				continue;
+			}
+			
+			// First stmt of the scope
+            if (firstStmt.equals($stmt)) {
+				Check.isUndefined(scopeNode);
+                scopeNode = this._getOrAddNode($stmt);
             }
+            
+            Check.isDefined(scopeNode);
+            
+
+			// Ifs generate one, possible two nodes (then/else) that merge at the end
+            if($stmt.instanceOf("if")) {
+	            
+	            // 2) targets of a jmp
+                const then = $stmt.then;
+                
+                
+                /*
+                CompoundStmt t = ((IfStmt) stmt).getThen().get();
+                Stmt tChild = (Stmt) t.getChild(0);
+                addToMap(tChild);
+
+                Optional<CompoundStmt> e = ((IfStmt) stmt).getElse();
+                if (e.isPresent()) {
+                    Stmt eChild = (Stmt) e.get().getChild(0);
+                    addToMap(eChild);
+                }
+                */
+			}
+            
+            // gotos?
+            
+            // Any other statement, just add to current node
+            scopeNode.data().addStmt($stmt);
 		}
 		
 		/**
 		    for (Stmt stmt : body.getChildren(Stmt.class)) {
-
-            // 1) first stmt of the scope
-            if (body.getChild(0).equals(stmt)) {
-
-                addToMap(stmt);
-            }
 
             if (stmt instanceof IfStmt) {
 
@@ -143,9 +235,12 @@ class CfgBuilder {
 		let node = this.#nodes[$stmt];
 		
 		if(node === undefined) {
-			const nodeData = new CfgNode($stmt);
+			//const nodeData = new CfgNode($stmt);
 			//println("Node data id: " + nodeData.id)
-			node = this.#graph.add({ group: 'nodes', data: nodeData});
+			//node = this.#graph.add({ group: 'nodes', data: nodeData});
+			//node = Graphs.addNode(this.#graph, new CfgNode($stmt));
+			//node = this._addNode($stmt);
+			node = Graphs.addNode(this.#graph, new CfgNode($stmt));
 			//println("Node id: " + node.id())
 			this.#nodes[$stmt] = node;
 		}
@@ -153,5 +248,9 @@ class CfgBuilder {
 		return node;
 	}
 
-	
+/*
+	_addNode($stmt) {
+		return Graphs.addNode(this.#graph, new CfgNode($stmt));
+	}
+*/	
 }
