@@ -1,3 +1,37 @@
+int foo() {
+	
+	{
+		int scope;
+		int scopeStmt2;
+	}
+	
+	if(0 == 0) {
+		int ifWithoutElse;
+		int ifWithoutElseStmt2;		
+	}
+	
+	if(0 != 0) {
+		{
+			{
+				int ifWithElseThen;
+				int ifWithElseThenStmt2;		
+			}
+		}
+	} else {
+		int ifWithElseElse;
+		int ifWithElseElseStmt2;
+	}
+	
+	int afterIfElse;
+	
+	for(int i=0; i<10; i++) {
+		int loopBody;
+		int loopBodyStmt2;
+	}
+	
+	return 0;
+}
+/*
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
@@ -5,13 +39,14 @@
 // Knobs
 int BS2 = 32;
 int BS1 = 64;
-   
+  */ 
 /*
 Simple matrix multiplication example.
 */
 /*
 matrix multiplication
 */
+/*
 void matrix_mult(double const * A, double const * B, double * C, int const N, int const M, int const K) {
    for(int ii = 0; ii < N; ii++) {
       for(int jj = 0; jj < K; jj++) {
@@ -37,10 +72,11 @@ void matrix_mult(double const * A, double const * B, double * C, int const N, in
       }
    }
 }
-
+*/
 /*
 * Set an N by M matrix A to random values
 */
+/*
 void init_matrix(double * A, int const N, int const M) {
    for(int i = 0; i < N; ++i) {
       for(int j = 0; j < M; ++j) {
@@ -79,3 +115,4 @@ int main() {
    srand(0);
    test_matrix_mul();
 }
+*/
