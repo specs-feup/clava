@@ -46,8 +46,6 @@ jobs:
       run: |
         echo "Current folder"
         ls
-        echo "Showing clava"
-        ls clava
     - name: Publish Test Report 
       uses: mikepenz/action-junit-report@v3.0.1
       if: always() # always run even if the previous step fails
