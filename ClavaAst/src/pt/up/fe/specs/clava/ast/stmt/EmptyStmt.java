@@ -14,44 +14,26 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
-import java.util.Optional;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodes;
-import pt.up.fe.specs.clava.ast.decl.LabelDecl;
 
-public class LabelStmt extends Stmt {
-    /// DATAKEYS BEGIN
+/**
+ * Strictly represents an empty statement (unlike NullStmt, which can also represent absence of statement).
+ * 
+ * @author JoaoBispo
+ *
+ */
+public class EmptyStmt extends Stmt {
 
-    public final static DataKey<LabelDecl> LABEL = KeyFactory.object("label", LabelDecl.class);
-
-    /// DATAKEYS END
-
-    public LabelStmt(DataStore data, Collection<? extends ClavaNode> children) {
+    public EmptyStmt(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
-    }
-
-    public String getLabel() {
-        return get(LABEL).getDeclName();
-    }
-
-    public LabelDecl getLabelDecl() {
-        return get(LABEL);
-    }
-
-    public Optional<Stmt> getSubStmt() {
-        return ClavaNodes.nextNode(this).map(node -> (Stmt) node);
     }
 
     @Override
     public String getCode() {
-        String code = getLabel() + ":";
-
-        return code;
+        return ";";
     }
 
 }

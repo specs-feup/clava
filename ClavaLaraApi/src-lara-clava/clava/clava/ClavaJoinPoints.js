@@ -582,4 +582,25 @@ class ClavaJoinPoints {
   static comment(text) {
     return AstFactory.comment(text);
   }
+
+  static labelDecl(name) {
+    Check.isString(name);
+    return AstFactory.labelDecl(name);
+  }
+
+  static labelStmt(nameOrDecl) {
+    Check.isDefined(nameOrDecl);
+    if (
+      !isString(nameOrDecl) &&
+      (!isJoinPoint(nameOrDecl) || !nameOrDecl.instanceOf("labelDecl"))
+    ) {
+      throw TypeError("Expected nameOrDecl to be a string or labelDecl");
+    }
+    return AstFactory.labelStmt(nameOrDecl);
+  }
+
+  static gotoStmt(labelDecl) {
+    checkJoinPointType(labelDecl, "labelDecl");
+    return AstFactory.gotoStmt(labelDecl);
+  }
 }

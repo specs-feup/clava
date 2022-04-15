@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 SPeCS.
+ * Copyright 2022 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,32 +11,24 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.stmt;
-
-import java.util.Collection;
-
-import org.suikasoft.jOptions.Interfaces.DataStore;
+package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.utils.NullNode;
+import pt.up.fe.specs.clava.ast.stmt.EmptyStmt;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEmptyStmt;
 
-/**
- * Represents an empty statement or absence of statement.
- * 
- * This node is used for internal processing, should not appear in the final AST.
- * 
- * @author JoaoBispo
- *
- */
-public class NullStmt extends Stmt implements NullNode {
+public class CxxEmptyStmt extends AEmptyStmt {
 
-    public NullStmt(DataStore data, Collection<? extends ClavaNode> children) {
-        super(data, children);
+    private final EmptyStmt emptyStmt;
+
+    public CxxEmptyStmt(EmptyStmt emptyStmt) {
+        super(new CxxStatement(emptyStmt));
+        this.emptyStmt = emptyStmt;
     }
 
     @Override
-    public String getCode() {
-        return ";";
+    public ClavaNode getNode() {
+        return emptyStmt;
     }
 
 }
