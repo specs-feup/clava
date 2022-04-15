@@ -264,6 +264,8 @@
 <li>
 <a onclick="saveScroll()"  href="clava.pass.DecomposeVarDeclarations.html">clava.pass.DecomposeVarDeclarations</a></li>
 <li>
+<a onclick="saveScroll()"  href="clava.pass.SingleReturnFunction.html">clava.pass.SingleReturnFunction</a></li>
+<li>
 <a onclick="saveScroll()"  href="clava.stats.OpsBlock.html">clava.stats.OpsBlock</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.stats.OpsCost.html">clava.stats.OpsCost</a></li>
@@ -539,6 +541,8 @@
 <a onclick="saveScroll()"  href="lcl.metrics.om.NOL.html">lcl.metrics.om.NOL</a></li>
 <li>
 <a onclick="saveScroll()"  href="lcl.metrics.om.OtherMetricsIndex.html">lcl.metrics.om.OtherMetricsIndex</a></li>
+<li>
+<a onclick="saveScroll()"  href="lcl.ml.Code2Vec.html">lcl.ml.Code2Vec</a></li>
 </ul></div> 
     	<div id="column2">
     		<div id="doc_content"><div id='toc_container'><p class='toc_title'>import antarex.margot.config.MargotConfig;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>MargotConfig</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>MargotConfig</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Instance Members</div><li><em><a href='#C'>addBlock()</a></em></li><li><em><a href='#D'>build()</a></em></li><li><em><a href='#E'>newBlock()</a></em></li></ul></ul></div><h1 id='A'>MargotConfig</h1><h2>Constructor</h2><div class='function_block'><h3 id='B'>MargotConfig</h3><pre class='signature'><code class='language-js'>new <strong>MargotConfig</strong>()</code></pre><div class='function_content'><p>This class holds the data needed to generate an XML configuration file for the autotuner.</p></div><hr></div><h2>Instance Members</h2><div class='function_block'><h3 id='C'>addBlock</h3><pre class='signature'><code class='language-js'><strong>addBlock</strong>(block)</code></pre><div class='function_content'><p>Adds the provided block to the list of blocks.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>block</strong>: MargotBlock</span> - the block to add<br></div></div><hr></div><div class='function_block'><h3 id='D'>build</h3><pre class='signature'><code class='language-js'><strong>build</strong>([filePath])</code></pre><div class='function_content'><p>Generates the XML code and writes it to the file, if a file path is provided.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>filePath</strong>: string</span> - the path where the XML file will be generated <em>(optional)</em><br></div></div><hr></div><div class='function_block'><h3 id='E'>newBlock</h3><pre class='signature'><code class='language-js'><strong>newBlock</strong>(blockName)</code></pre><div class='function_content'><p>Builds a block, adds it to the list of blocks, and returns it.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>blockName</strong>: string</span> - the name of the block to add<br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>MargotBlock</span> - the created block<br></div></div><hr></div></div>

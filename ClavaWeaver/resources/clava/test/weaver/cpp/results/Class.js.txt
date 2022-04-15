@@ -1,0 +1,33 @@
+Class: Base
+Is abstract: false
+Is interface: false
+All Bases:
+All methods:
+Base::Base::g()
+Base::Base::~Base()
+Class: A
+Is abstract: true
+Is interface: false
+All Bases:
+Base
+All methods:
+A::A::f()
+A::A::g()
+A::A::h()
+A::A::~A()
+Base::Base::g()
+Base::Base::~Base()
+Class: B
+Is abstract: true
+Is interface: false
+All Bases:
+A
+Base
+All methods:
+B::B::b()
+A::A::f()
+A::A::g()
+A::A::h()
+A::A::~A()
+Base::Base::g()
+Base::Base::~Base()

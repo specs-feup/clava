@@ -5,27 +5,27 @@ Changed vardecl: float a = 10
 Inside header:
 binaryOp -> a > 0
 varref -> a
-literal -> 0
+intLiteral -> 0
 binaryOp -> a < 0
 varref -> a
-literal -> 0
+intLiteral -> 0
 declStmt -> int i = 0;
 vardecl -> int i = 0
-literal -> 0
+intLiteral -> 0
 exprStmt -> i < 10;
 binaryOp -> i < 10
 varref -> i
-literal -> 10
+intLiteral -> 10
 exprStmt -> i++
 unaryOp -> i++
 varref -> i
 declStmt -> int j = 0;
 vardecl -> int j = 0
-literal -> 0
+intLiteral -> 0
 exprStmt -> j < 10;
 binaryOp -> j < 10
 varref -> j
-literal -> 10
+intLiteral -> 10
 exprStmt -> j++
 unaryOp -> j++
 varref -> j

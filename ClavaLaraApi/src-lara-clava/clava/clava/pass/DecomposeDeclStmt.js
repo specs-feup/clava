@@ -24,12 +24,18 @@ class DecomposeDeclStmt extends Pass {
   }
 
   _apply_impl($jp) {
+
+	let appliedPass = false;
+	
     // Find all declaration statements
     for (const $declStmt of Query.searchFromInclusive($jp, "declStmt")) {
       // Ignore statement if it only declares one variable
       if ($declStmt.numChildren <= 1) {
         continue;
       }
+
+	  // Found declStmt to decompose
+	  appliedPass = true;
 
       // Create new statement for each declaration
       // Insert it before the old node to preserve the order of declarations
@@ -40,5 +46,16 @@ class DecomposeDeclStmt extends Pass {
       // Remove the old statement
       $declStmt.detach();
     }
+    
+	return this._new_result($jp, appliedPass);
   }
+  
+  _new_result($jp, appliedPass) {
+		var result = new PassResult(this.name);
+		result.isUndefined = false;
+		result.appliedPass = appliedPass;
+		result.insertedLiteralCode = false;
+		result.location = $jp.location;
+		return result;
+	}
 }

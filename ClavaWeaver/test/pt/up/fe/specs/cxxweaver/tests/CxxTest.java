@@ -334,5 +334,10 @@ public class CxxTest {
     @Test
     public void testEmptyStmt() {
         newTester().test("EmptyStmt.js", "empty_stmt.cpp");
+
+    @Test
+    public void testClass() {
+        newTester().test("Class.js", "class.cpp");
     }
+
 }

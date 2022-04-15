@@ -226,8 +226,12 @@
 	
 	<!-- CLASS -->
 	<artifact class="class" default="name">
-		<attribute name="methods" type="method[]" />	
-		<attribute name="bases" type="class[]" />			
+		<attribute name="methods" type="method[]" tooltip="The methods declared by this class"/>	
+		<attribute name="bases" type="class[]" tooltip="The classes this class directly inherits from"/>
+		<attribute name="allMethods" type="method[]" tooltip="All the methods of this class, including inherited ones"/>	
+		<attribute name="allBases" type="class[]" tooltip="All the classes this class inherits from"/>					
+		<attribute name="isAbstract" type="boolean" tooltip="True, if contains at least one pure function"/>							
+		<attribute name="isInterface" type="boolean" tooltip="True, if all functions are pure"/>									
 	</artifact>
 	
 	<!-- METHOD -->

@@ -2,7 +2,9 @@ laraImport("lara.pass.Pass");
 laraImport("clava.ClavaJoinPoints");
 
 /**
- * 
+ * Decomposes the vardecl nodes that are reachable from the given join point.
+ *
+ * E.g. transforms int i = 0; into int i; i = 0;
  */
 class DecomposeVarDeclarations extends Pass {
 	
@@ -11,7 +13,9 @@ class DecomposeVarDeclarations extends Pass {
 	}
 	
 	_apply_impl($jp) {
-	
+		
+		let appliedPass = false;
+		
 		// Find all var decls
 		for(var $vardecl of Query.searchFromInclusive($jp, "vardecl")) {
 			
@@ -19,6 +23,9 @@ class DecomposeVarDeclarations extends Pass {
 			if(!$vardecl.hasInit) {
 				continue;
 			}
+			
+			// Found vardecl to decompose
+			appliedPass = true;
 			
 			// Get initialization
 			let $init = $vardecl.init;
@@ -40,6 +47,15 @@ class DecomposeVarDeclarations extends Pass {
 			$vardecl.insertAfter($assign);
 		}
 		
+		return this._new_result($jp, appliedPass);
+	}
 	
+	_new_result($jp, appliedPass) {
+		var result = new PassResult(this.name);
+		result.isUndefined = false;
+		result.appliedPass = appliedPass;
+		result.insertedLiteralCode = false;
+		result.location = $jp.location;
+		return result;
 	}
 }

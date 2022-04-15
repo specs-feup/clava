@@ -19474,6 +19474,25 @@
 			"children": [
 					{
 						"type": "attribute",
+						"tooltip": "All the classes this class inherits from",
+						"children": [
+									{
+										"type": "class[]",
+										"name": "allBases"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "All the methods of this class, including inherited ones",
+						"children": [
+									{
+										"type": "method[]",
+										"name": "allMethods"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "The classes this class directly inherits from",
 						"children": [
 									{
 										"type": "class[]",
@@ -19482,6 +19501,25 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "True, if contains at least one pure function",
+						"children": [
+									{
+										"type": "boolean",
+										"name": "isAbstract"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "True, if all functions are pure",
+						"children": [
+									{
+										"type": "boolean",
+										"name": "isInterface"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "The methods declared by this class",
 						"children": [
 									{
 										"type": "method[]",
