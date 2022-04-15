@@ -272,7 +272,6 @@ public class CXXRecordDecl extends RecordDecl {
     */
     /**
      * 
-     * TODO: Handle override (maybe at getAllMethods() level).
      * 
      * @return true, if contains at least a pure function.
      */
@@ -285,18 +284,36 @@ public class CXXRecordDecl extends RecordDecl {
 
     /**
      * 
-     * TODO: Handle override (maybe at getAllMethods() level).
      * 
-     * @return true, if all functions are pure.
+     * @return true, if all functions are pure (not counting destructors).
      */
     public boolean isInterface() {
-        // If at least one non-pure, return false
-        boolean hasNonPure = getAllMethods(false).stream()
-                .filter(method -> !method.get(FunctionDecl.IS_PURE))
-                .findFirst()
-                .isPresent();
+        for (var method : getAllMethods(false)) {
+            // Check if destructor
+            if (method instanceof CXXDestructorDecl) {
+                // System.out.println("FOUND DESTRUCTOR: " + method.getSignature());
+                continue;
+            }
 
-        return !hasNonPure;
+            // Check if pure
+            if (method.get(FunctionDecl.IS_PURE)) {
+                // System.out.println("FOUND PURE: " + method.getSignature());
+                continue;
+            }
+
+            // System.out.println("NEITHER DESTRUCTOR OR PURE: " + method.getSignature());
+            return false;
+        }
+
+        return true;
+
+        // // If at least one non-pure, return false
+        // boolean hasNonPure = getAllMethods(false).stream()
+        // .filter(method -> !method.get(FunctionDecl.IS_PURE))
+        // .findFirst()
+        // .isPresent();
+        //
+        // return !hasNonPure;
     }
 
     // private static void getAllMethods(CXXRecordDecl aClass, Set<CXXMethodDecl> currentMethods) {
