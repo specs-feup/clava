@@ -70,7 +70,7 @@ public class CxxClass extends AClass {
 
     @Override
     public AMethod[] getAllMethodsArrayImpl() {
-        return CxxJoinpoints.create(cxxRecordDecl.getAllMethods(), AMethod.class);
+        return CxxJoinpoints.create(cxxRecordDecl.getAllMethods(false), AMethod.class);
     }
 
     @Override

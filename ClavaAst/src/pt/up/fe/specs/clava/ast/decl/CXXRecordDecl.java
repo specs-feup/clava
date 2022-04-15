@@ -15,10 +15,9 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -206,11 +205,11 @@ public class CXXRecordDecl extends RecordDecl {
      * 
      * @return
      */
-    public List<CXXMethodDecl> getAllMethods() {
+    public List<CXXMethodDecl> getAllMethods(boolean includeOverridenMethods) {
         // Uses signature to identify methods
-        Map<String, CXXMethodDecl> allMethods = new LinkedHashMap<>();
+        // Map<String, CXXMethodDecl> allMethods = new LinkedHashMap<>();
 
-        // Set<CXXMethodDecl> allMethods = new LinkedHashSet<>();
+        Set<CXXMethodDecl> allMethods = new LinkedHashSet<>();
 
         // Add own methods
         addMethods(getMethods(), allMethods);
@@ -223,24 +222,54 @@ public class CXXRecordDecl extends RecordDecl {
             // allMethods.addAll(base.getMethods());
         }
 
-        return new ArrayList<>(allMethods.values());
+        // Exclude overridden methods
+        if (!includeOverridenMethods) {
+            Set<CXXMethodDecl> overridenMethods = new HashSet<>();
+
+            // Collect overridden methods
+            for (var method : allMethods) {
+                overridenMethods.addAll(method.get(CXXMethodDecl.OVERRIDDEN_METHODS));
+            }
+
+            // Exclude overriden methods
+            allMethods.removeAll(overridenMethods);
+        }
+
+        // return new ArrayList<>(allMethods.values());
+        return new ArrayList<>(allMethods);
     }
 
+    private void addMethods(List<CXXMethodDecl> methods, Set<CXXMethodDecl> allMethods) {
+        for (var method : methods) {
+
+            if (allMethods.contains(method)) {
+                SpecsLogs.debug(
+                        () -> "CXXRecordDecl.addMethods: skipping method with signature '" + method.getSignature()
+                                + "', already present");
+                continue;
+            }
+
+            allMethods.add(method);
+        }
+
+    }
+
+    /*
     private void addMethods(List<CXXMethodDecl> methods, Map<String, CXXMethodDecl> allMethods) {
         for (var method : methods) {
             var signature = method.getSignature();
-
+    
             if (allMethods.containsKey(signature)) {
                 SpecsLogs.debug(() -> "CXXRecordDecl.addMethods: skipping method, signature '" + signature
                         + "' already present");
                 continue;
             }
-
+    
             allMethods.put(signature, method);
         }
-
+    
     }
-
+    */
     /**
      * 
      * TODO: Handle override (maybe at getAllMethods() level).
@@ -248,7 +277,7 @@ public class CXXRecordDecl extends RecordDecl {
      * @return true, if contains at least a pure function.
      */
     public boolean isAbstract() {
-        return getAllMethods().stream()
+        return getAllMethods(false).stream()
                 .filter(method -> method.get(FunctionDecl.IS_PURE))
                 .findFirst()
                 .isPresent();
@@ -262,7 +291,7 @@ public class CXXRecordDecl extends RecordDecl {
      */
     public boolean isInterface() {
         // If at least one non-pure, return false
-        boolean hasNonPure = getAllMethods().stream()
+        boolean hasNonPure = getAllMethods(false).stream()
                 .filter(method -> !method.get(FunctionDecl.IS_PURE))
                 .findFirst()
                 .isPresent();
