@@ -83,12 +83,12 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     /**
      * True if the "inline" keyword was specified for this function.
      */
-    public final static DataKey<Boolean> IS_INLINE = KeyFactory.bool("isInline");
+    public final static DataKey<Boolean> IS_INLINE_SPECIFIED = KeyFactory.bool("isInline");
 
     /**
      * True if this function is explicitly marked as virtual.
      */
-    public final static DataKey<Boolean> IS_VIRTUAL = KeyFactory.bool("isVirtual");
+    public final static DataKey<Boolean> IS_VIRTUAL_AS_WRITTEN = KeyFactory.bool("isVirtualAsWritten");
 
     /**
      * True if this virtual function is pure, i.e. makes the containing class abstract.
@@ -181,7 +181,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     public boolean isInline() {
-        return get(IS_INLINE);
+        return get(IS_INLINE_SPECIFIED);
     }
 
     /**
@@ -307,7 +307,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     public String getDeclarationId(boolean useReturnType) {
         List<String> codeElements = new ArrayList<>();
 
-        if (get(IS_INLINE)) {
+        if (get(IS_INLINE_SPECIFIED)) {
             if (getAncestor(TranslationUnit.class).get(TranslationUnit.LANGUAGE).get(Language.GNU_INLINE)) {
                 codeElements.add("__inline__");
             } else {
