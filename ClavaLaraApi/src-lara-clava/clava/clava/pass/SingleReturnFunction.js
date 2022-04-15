@@ -17,7 +17,7 @@ class SingleReturnFunction extends Pass {
       $returnStmts.length === 0 ||
       ($returnStmts.length === 1 && $body.lastChild.instanceOf("returnStmt"))
     ) {
-      return _new_result($jp, false);
+      return this._new_result($jp, false);
     }
 
     // C++ spec has some restrictions about jumping over initialized values that
@@ -47,7 +47,7 @@ class SingleReturnFunction extends Pass {
       $returnStmt.detach();
     }
     
-    return _new_result($jp, true);
+    return this._new_result($jp, true);
   }
   
   _new_result($jp, appliedPass) {
