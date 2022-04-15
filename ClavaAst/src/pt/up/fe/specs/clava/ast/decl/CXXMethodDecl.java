@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -23,6 +24,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.util.SpecsCheck;
 
 /**
@@ -40,10 +42,52 @@ public class CXXMethodDecl extends FunctionDecl {
 
     /// DATAKEYS BEGIN
 
-    // TODO: Change to CXXRecordDecl
+    // TODO: Change to Optional<CXXRecordDecl>, since it can be null
     public final static DataKey<Decl> RECORD = KeyFactory.object("record", Decl.class);
 
     public final static DataKey<String> RECORD_ID = KeyFactory.string("recordId");
+
+    public final static DataKey<List<CXXMethodDecl>> OVERRIDDEN_METHODS = KeyFactory.list("overriddenMethods",
+            CXXMethodDecl.class);
+
+    public final static DataKey<Boolean> IS_STATIC = KeyFactory.bool("isStatic");
+
+    public final static DataKey<Boolean> IS_INSTANCE = KeyFactory.bool("isInstance");
+
+    public final static DataKey<Boolean> IS_CONST = KeyFactory.bool("isConst");
+
+    public final static DataKey<Boolean> IS_VOLATILE = KeyFactory.bool("isVolatile");
+
+    public final static DataKey<Boolean> IS_VIRTUAL = KeyFactory.bool("isVirtual");
+
+    /**
+     * True if this is a copy-assignment operator, either declared implicitly or explicitly.
+     */
+    public final static DataKey<Boolean> IS_COPY_ASSIGNMENT_OPERATOR = KeyFactory.bool("isCopyAssignmentOperator");
+
+    /**
+     * 
+     */
+    public final static DataKey<Boolean> IS_MOVE_ASSIGNMENT_OPERATOR = KeyFactory.bool("isMoveAssignmentOperator");
+
+    /**
+     * Return the type of the 'this' pointer. Note that for the call operator of a lambda closure type, this returns the
+     * desugared 'this' type (a pointer to the closure type), not the captured 'this' type.
+     */
+    public final static DataKey<Type> THIS_TYPE = KeyFactory.object("thisType", Type.class);
+
+    /**
+     * The type of the object pointed by 'this'.
+     */
+    public final static DataKey<Type> THIS_OJBECT_TYPE = KeyFactory.object("thisObjectType", Type.class);
+
+    public final static DataKey<Boolean> HAS_INLINE_BODY = KeyFactory.bool("hasInlineBody");
+
+    /**
+     * True if this is a lambda closure type's static member function that is used for the result of the lambda's
+     * conversion to function pointer (for a lambda with no captures).
+     */
+    public final static DataKey<Boolean> IS_LAMBDA_STATIC_INVOKER = KeyFactory.bool("isLambdaStaticInvoker");
 
     /// DATAKEYS END
 
@@ -106,7 +150,7 @@ public class CXXMethodDecl extends FunctionDecl {
             code.append(get(STORAGE_CLASS).getString()).append(" ");
         }
 
-        if (get(IS_INLINE)) {
+        if (get(IS_INLINE_SPECIFIED)) {
             code.append("inline ");
         }
 
@@ -140,7 +184,7 @@ public class CXXMethodDecl extends FunctionDecl {
         // code.append(getCodeExcept());
 
         // Make method declaration pure
-        if (get(IS_PURE) && get(IS_VIRTUAL)) {
+        if (get(IS_PURE) && get(IS_VIRTUAL_AS_WRITTEN)) {
             code.append(" = 0");
         }
 

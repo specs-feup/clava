@@ -296,8 +296,8 @@ public class DeclDataParser {
         data.add(FunctionDecl.IS_CONSTEXPR, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.TEMPLATE_KIND, TemplateKind.getHelper().fromValue(LineStreamParsers.integer(lines)));
         data.add(FunctionDecl.STORAGE_CLASS, LineStreamParsers.enumFromName(StorageClass.class, lines));
-        data.add(FunctionDecl.IS_INLINE, LineStreamParsers.oneOrZero(lines));
-        data.add(FunctionDecl.IS_VIRTUAL, LineStreamParsers.oneOrZero(lines));
+        data.add(FunctionDecl.IS_INLINE_SPECIFIED, LineStreamParsers.oneOrZero(lines));
+        data.add(FunctionDecl.IS_VIRTUAL_AS_WRITTEN, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.IS_PURE, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.IS_DELETED, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.IS_EXPLICITLY_DEFAULTED, LineStreamParsers.oneOrZero(lines));
@@ -324,6 +324,27 @@ public class DeclDataParser {
 
         data.add(CXXMethodDecl.RECORD_ID, lines.nextLine());
         dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.RECORD, data.get(CXXMethodDecl.RECORD_ID));
+
+        var numOverriddenMethods = LineStreamParsers.integer(lines);
+        List<String> overriddenMethodsIds = new ArrayList<>();
+        for (int i = 0; i < numOverriddenMethods; i++) {
+            overriddenMethodsIds.add(lines.nextLine());
+        }
+        dataStore.getClavaNodes().queueSetNodeList(data, CXXMethodDecl.OVERRIDDEN_METHODS, overriddenMethodsIds);
+
+        data.add(CXXMethodDecl.IS_STATIC, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXMethodDecl.IS_INSTANCE, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXMethodDecl.IS_CONST, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXMethodDecl.IS_VOLATILE, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXMethodDecl.IS_VIRTUAL, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXMethodDecl.IS_COPY_ASSIGNMENT_OPERATOR, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXMethodDecl.IS_MOVE_ASSIGNMENT_OPERATOR, LineStreamParsers.oneOrZero(lines));
+
+        dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.THIS_TYPE, lines.nextLine());
+        dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.THIS_OJBECT_TYPE, lines.nextLine());
+
+        data.add(CXXMethodDecl.HAS_INLINE_BODY, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXMethodDecl.IS_LAMBDA_STATIC_INVOKER, LineStreamParsers.oneOrZero(lines));
 
         return data;
     }
