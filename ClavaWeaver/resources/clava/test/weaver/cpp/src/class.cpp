@@ -16,5 +16,20 @@ struct A : Base
 
 class B : A
 {
-    virtual int b();
+    virtual int b() = 0;
+	virtual int h() override = 0;
+};
+
+class IObserver {
+	public:
+		virtual ~IObserver(){};
+		virtual void Update() = 0;
+};
+
+class ISubject {
+	public:
+		virtual ~ISubject(){};
+		virtual void Attach(IObserver *observer) = 0;
+		virtual void Detach(IObserver *observer) = 0;
+		virtual void Notify() = 0;
 };

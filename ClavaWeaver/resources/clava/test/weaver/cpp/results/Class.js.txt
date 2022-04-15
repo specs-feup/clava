@@ -15,19 +15,31 @@ A::A::f()
 A::A::g()
 A::A::h()
 A::A::~A()
-Base::Base::g()
-Base::Base::~Base()
 Class: B
 Is abstract: true
-Is interface: false
+Is interface: true
 All Bases:
 A
 Base
 All methods:
 B::B::b()
+B::B::h()
 A::A::f()
 A::A::g()
-A::A::h()
 A::A::~A()
-Base::Base::g()
-Base::Base::~Base()
+Class: IObserver
+Is abstract: true
+Is interface: true
+All Bases:
+All methods:
+IObserver::IObserver::~IObserver()
+IObserver::IObserver::Update()
+Class: ISubject
+Is abstract: true
+Is interface: true
+All Bases:
+All methods:
+ISubject::ISubject::~ISubject()
+ISubject::ISubject::Attach(IObserver *)
+ISubject::ISubject::Detach(IObserver *)
+ISubject::ISubject::Notify()
