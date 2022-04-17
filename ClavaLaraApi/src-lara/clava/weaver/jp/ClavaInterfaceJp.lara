@@ -8,42 +8,41 @@ _lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'name', {
 	}
 });
 
-_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'methods', {
-	get: function () { 
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, '_allMethods', {
+	get: function () {
 		var methods = Weaver.toJs(this.astNode.getMethods());
 		methods = methods.map(method=> method.getDefinition().isPresent()?method.getDefinition().get():method);
 		return CommonJoinPoints.toJoinPoints(Weaver.toJs(methods));
 	}
 });
 
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'methods', {
+	get: function () {		
+		//return this._allMethods.filter(method => method.hasBody);
+		return this._allMethods;
+	}
+});
+
 _lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'allMethods', {
-	get: function () { 
+	get: function () {
 		var methods = this.methods;
+
+		for (superInterface of this.allInterfaces) {
+			methods = methods.concat(superInterface.methods);
+		}
+		
+		return methods;
 	}
 });
 
 _lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'interfaces', {
-	get: function () { throw '.interfaces not implemented in clava'; 
-	
-		var superInterfaces = this.astNode.getSuperInterfaces();
-		
-		// println(superInterfaces);
-		
-		if (superInterfaces == null) return [];
-		
-		var interfaces = [];
-
-		for (superInterface of superInterfaces) {
-			var superInterfaceJp = CommonJoinPoints.toJoinPoint(superInterface.getTypeDeclaration()); 
-			interfaces.push(superInterfaceJp);
-		}
-		
-		return interfaces;
-	 }
+	get: function () {
+		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getBases())).filter($jp=>$jp.instanceOf("interface")); 
+ 	}
 });
 
 _lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'allInterfaces', {
-	get: function () { throw '.allInterfaces not implemented in clava'; 
+	get: function () {
 		
 		var allInterfaces = [];
 
@@ -53,5 +52,5 @@ _lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'allInterfaces', {
 		}
 		
 		return allInterfaces;
-	 }
+	}
 });

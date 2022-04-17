@@ -123,7 +123,7 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'members', {
 
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'listOfAllMethods', {
-	get: function () {  throw '.listOfAllMethods not implemented in clava'; 
+	get: function () {
 		
 		var allMethods = this.methods;
 
@@ -140,27 +140,13 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'listOfAllMethods', {
 });
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'interfaces', {
-	get: function () { throw '.interfaces not implemented in clava'; 
-	
-		var superInterfaces = this.astNode.getSuperInterfaces();
-		
-		// println(superInterfaces);
-		
-		if (superInterfaces == null) return [];
-		
-		var interfaces = [];
-
-		for (superInterface of superInterfaces) {
-			var superInterfaceJp = CommonJoinPoints.toJoinPoint(superInterface.getTypeDeclaration()); 
-			interfaces.push(superInterfaceJp);
-		}
-		
-		return interfaces; 
+	get: function () { 
+		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getBases())).filter($jp=>$jp.instanceOf("interface"));
 	 }
 });
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'allInterfaces', {
-	get: function () { throw '.allInterfaces not implemented in clava'; 
+	get: function () {
 		
 		var allInterfaces = [];
 
