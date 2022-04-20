@@ -17,7 +17,7 @@ class SingleReturnFunction extends Pass {
       $returnStmts.length === 0 ||
       ($returnStmts.length === 1 && $body.lastChild.instanceOf("returnStmt"))
     ) {
-      return this._new_result($jp, false);
+      return this.#new_result($jp, false);
     }
 
     // C++ spec has some restrictions about jumping over initialized values that
@@ -46,16 +46,15 @@ class SingleReturnFunction extends Pass {
       $returnStmt.insertBefore("goto __return_label;");
       $returnStmt.detach();
     }
-    
-    return this._new_result($jp, true);
+
+    return this.#new_result($jp, true);
   }
-  
-  _new_result($jp, appliedPass) {
-		var result = new PassResult(this.name);
-		result.isUndefined = false;
-		result.appliedPass = appliedPass;
-		result.insertedLiteralCode = true;
-		result.location = $jp.location;
-		return result;
-	}  
+
+  #new_result($jp, appliedPass) {
+    return new PassResult(this.name, {
+      appliedPass,
+      insertedLiteralCode: true,
+      location: $jp.location,
+    });
+  }
 }
