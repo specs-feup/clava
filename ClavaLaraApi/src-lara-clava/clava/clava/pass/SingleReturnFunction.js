@@ -47,6 +47,7 @@ class SingleReturnFunction extends Pass {
     for (const $returnStmt of $returnStmts) {
       if (!returnIsVoid) {
         $returnStmt.insertBefore(
+          // null safety: $local is initialized whenever return is not void
           assign(varRef($local), $returnStmt.returnExpr)
         );
       }
