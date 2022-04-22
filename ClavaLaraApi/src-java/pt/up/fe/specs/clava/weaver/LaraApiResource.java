@@ -131,9 +131,9 @@ public enum LaraApiResource implements LaraResourceProvider {
     MEMOI_ANALYSIS("memoi/MemoiAnalysis.lara"),
 
     // Clava utils
-    CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
-    FILE_ITERATOR("util/FileIterator.lara"),
-    SINGLE_FILE("util/SingleFile.lara"),
+    CLAVA_DATA_STORE("util/ClavaDataStore.js"),
+    FILE_ITERATOR("util/FileIterator.js"),
+    SINGLE_FILE("util/SingleFile.js"),
 
     // UVE
     UVE("uve/UVE.lara"),
