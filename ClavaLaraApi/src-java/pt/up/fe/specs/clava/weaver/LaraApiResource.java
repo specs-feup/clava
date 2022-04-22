@@ -108,7 +108,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     OPENCL_KERNEL_REPLACER_AUTO("opencl/KernelReplacerAuto.lara"),
 
     // Parser
-    BATCH_PARSER("parser/BatchParser.lara"),
+    BATCH_PARSER("parser/BatchParser.js"),
 
     // Pass
     DECOMPOSE_DECL_STMT("pass/DecomposeDeclStmt.js"),
