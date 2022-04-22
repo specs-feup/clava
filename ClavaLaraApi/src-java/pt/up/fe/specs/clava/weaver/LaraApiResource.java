@@ -116,10 +116,10 @@ public enum LaraApiResource implements LaraResourceProvider {
     SINGLE_RETURN_FUNCTION("pass/SingleReturnFunction.js"),
 
     // Stats
-    OPS_BLOCK("stats/OpsBlock.lara"),
-    OPS_COST("stats/OpsCost.lara"),
-    OPS_COUNTER("stats/OpsCounter.lara"),
-    STATIC_OPS_COUNTER("stats/StaticOpsCounter.lara"),
+    OPS_BLOCK("stats/OpsBlock.js"),
+    OPS_COST("stats/OpsCost.js"),
+    OPS_COUNTER("stats/OpsCounter.js"),
+    STATIC_OPS_COUNTER("stats/StaticOpsCounter.js"),
 
     // Memoization
     MEMOI_PROF("memoi/MemoiProf.lara"),
