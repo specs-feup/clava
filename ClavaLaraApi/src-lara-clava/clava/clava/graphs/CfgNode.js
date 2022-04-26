@@ -10,13 +10,17 @@ class CfgNode extends GraphNode {
 	stmts;
 	type;
 	
-	constructor($stmt) {
-		//super($stmt.location);		
+	constructor(cfgNodeType, $stmt) {
 		super();
 		
 		this.stmts = [];
-		this.stmts.push($stmt);
-		this.type = CfgNodeType.UNDEFINED;
+		
+		// If statement defined, add it to list of statements
+		if($stmt !== undefined) {
+			this.stmts.push($stmt);			
+		}
+
+		this.type = cfgNodeType;
 	}
 
 	addStmt($stmt) {
@@ -24,19 +28,33 @@ class CfgNode extends GraphNode {
 	}
 
 	toString() {
+		// Special cases
+
+		if(this.type === CfgNodeType.START) {
+			return "Start";
+		}
+		
+		if(this.type === CfgNodeType.END) {
+			return "End";
+		}
+		
 		let code = "";
 		
-		// TODO: Each type of statement needs its "toString", for instance, a for only prints its header
+		// TODO: Each type of statement needs its "toString", for instance, a for should only print its header
 		for(let $stmt of this.stmts) {
-			if($stmt.instanceOf("loop")) {
-				$stmt = $stmt.copy();
-				const $emptyScope = ClavaJoinPoints.scope();
-				$emptyScope.naked = true;
-				$stmt.body = $emptyScope;
-			}
+			var nodeType = CfgUtils.getNodeType($stmt);
 			
-			code += $stmt.code.replaceAll("\n", "\\l").replaceAll("\r", "");
-			code += "\\l";
+			//println("Node type: " + nodeType)
+			//println("Node name: " + nodeType.name)
+			
+			let stmtCode = nodeType !== undefined ? nodeType.name : $stmt.code;
+			
+			//println("Code: " + stmtCode);
+			
+			//code += stmtCode.replaceAll("\n", "\\l").replaceAll("\r", "");
+			//code += "\\l";
+			
+			code += stmtCode + "\n";
 		}
 		
 		return code;

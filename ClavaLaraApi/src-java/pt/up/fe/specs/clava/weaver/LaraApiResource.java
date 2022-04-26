@@ -84,9 +84,13 @@ public enum LaraApiResource implements LaraResourceProvider {
     GPROFER_ASPECTS("gprofer/_GproferAspects.lara"),
 
     // Graphs
+    CFG("graphs/Cfg.js"),
     CFG_BUILDER("graphs/CfgBuilder.js"),
+    CFG_EDGE("graphs/CfgEdge.js"),
+    CFG_EDGE_TYPE("graphs/CfgEdgeType.js"),
     CFG_NODE("graphs/CfgNode.js"),
     CFG_NODE_TYPE("graphs/CfgNodeType.js"),
+    CFG_UTILS("graphs/CfgUtils.js"),
 
     // Hdf5
     HDF5("hdf5/Hdf5.lara"),

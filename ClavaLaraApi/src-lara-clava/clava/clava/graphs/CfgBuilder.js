@@ -1,232 +1,104 @@
 laraImport("lara.graphs.Graphs")
 laraImport("clava.graphs.CfgNode")
+laraImport("clava.graphs.CfgNodeType");
+laraImport("clava.graphs.CfgEdge")
+laraImport("clava.graphs.CfgEdgeType");
+laraImport("clava.graphs.Cfg");
+laraImport("clava.graphs.CfgUtils");
 laraImport("lara.Strings")
 laraImport("lara.Check")
 
 class CfgBuilder {
 	
 	/**
-	 * Scope to process
+	 * AST node to process
 	 */
-	#scope;
+	#jp;
+
 	/**
 	 * Graph being built
 	 */
 	#graph;
+	
 	/**
-	 * Maps stmts to nodes
+	 * Maps stmts to graph nodes
 	 */
 	#nodes; 
 	
-	constructor($scope) {
-		this.#scope = $scope;
+	/**
+	 * The start node of the graph
+	 */
+	#startNode;
+
+	/**
+ 	 * The end node of the graph
+ 	 */	
+	#endNode;
+	
+	constructor($jp) {
+		this.#jp = $jp;
 		
 		// Load graph library
 		Graphs.loadLibrary();
 		
 		this.#graph = cytoscape({ /* options */ });
 		this.#nodes = {};
+		
+		// Create start and end node
+		this.#startNode = Graphs.addNode(this.#graph, new CfgNode(CfgNodeType.START));
+		this.#endNode = Graphs.addNode(this.#graph, new CfgNode(CfgNodeType.END));
 	}
 	
-	static fromScope($jp) {
+	static buildGraph($jp) {
 		return new CfgBuilder($jp).build();
 	}
 	
 	build() {
-		this._findBbs(this.#scope);
+		this._createNodes();
+		this._fillNodes();	
+		this._connectNodes();		
 		
 		return this.#graph;
 	}
 	
+	
 	/**
-	 * Starts all basic blocks, with only the leader statement
+	 * Creates all nodes (except start and end), with only the leader statement
 	 */
-	_findBbs($jp) {
+	_createNodes() {
+		//println("Start jp: " + this.#jp.dump);
 		
 		// Test all statements for leadership
 		// If they are leaders, create node
-		for(const $stmt of Query.searchFromInclusive($jp, "stmt")) {
-			const leaders = this._getLeaders($stmt);
-			for(const leader of leaders) {
-				this._getOrAddNode(leader);
+		for(const $stmt of Query.searchFromInclusive(this.#jp, "statement")) {
+			//println("Stmt: " + $stmt.code);
+			//println("Is leader?: " + CfgUtils.isLeader($stmt));			
+			if(CfgUtils.isLeader($stmt)) {
+				this._getOrAddNode($stmt);
 			}
 		}
 		
 	}
-			
-	
-	/** 
-	 * @return {$stmt[]} the leaders obtained from this statement, or undefined if no leader found
-	 */
-	_getLeaders($stmt, isLeader) {
-		
-		// Dead with undefined
-		if($stmt === undefined) {
-			return [];
-		}
-		
-		// If stmt, then and else are leaders
-		if($stmt.instanceOf("if")) {
-			return _getLeaders($stmt.then).concat(_getLeaders($stmt.else));			
-		}
-		
-		// Loop stmt, body is leader
-		if($stmt.instanceOf("loop")) {
-			return _getLeaders($stmt.body);
-		}
-		
-		// Goto stmt, target is a leader
-		//if($stmt.)
-		//_getLeaders();
-		
-		// Check if this statement is a leader
-		
-		// If first instruction of scope, is a leader, unless the parent of the scope is another scope
-		
-		return [];
+
+
+	_fillNodes() {
+		// TODO
+
+		// Special case: if the leader is a scope, you should replace the first statement 
+		// (which is of type scope) with the first statement of the scope, and add statements
+		// until a leader statement appears. 
+		// If the first statement of the scope is a leader statement, the graph node should have
+		// 0 statements
+
 	}
 	
-	_findBbsOld($scope) {
+	_connectNodes() {
+		// TODO
 
-		let currentStmts = $scope.stmts;
-		let firstStmt = currentStmts.length > 0 ? currentStmts[0] : undefined;
-		let scopeNode = undefined;
-		
-		// Iterate over all statements in the scope
-		while(currentStmts.length > 0) {
-			const $stmt = currentStmts.shift();
-			
-			// Anonymous scopes get merged into current scope
-			if($stmt.instanceOf("scope")) {
-				// Add scope statements to the beginning of current stmts
-				currentStmts = $stmt.stmts.concat(currentStmts);
-				
-				// Fix in case scope is the first statement
-				if($stmt.equals(firstStmt)) {
-					
-					firstStmt = currentStmts[0];
-				}
-				
-				// Jump to next statement
-				continue;
-			}
-			
-			// First stmt of the scope
-            if (firstStmt.equals($stmt)) {
-				Check.isUndefined(scopeNode);
-                scopeNode = this._getOrAddNode($stmt);
-            }
-            
-            Check.isDefined(scopeNode);
-            
+	}			
+	
 
-			// Ifs generate one, possible two nodes (then/else) that merge at the end
-            if($stmt.instanceOf("if")) {
-	            
-	            // 2) targets of a jmp
-                const then = $stmt.then;
-                
-                
-                /*
-                CompoundStmt t = ((IfStmt) stmt).getThen().get();
-                Stmt tChild = (Stmt) t.getChild(0);
-                addToMap(tChild);
-
-                Optional<CompoundStmt> e = ((IfStmt) stmt).getElse();
-                if (e.isPresent()) {
-                    Stmt eChild = (Stmt) e.get().getChild(0);
-                    addToMap(eChild);
-                }
-                */
-			}
-            
-            // gotos?
-            
-            // Any other statement, just add to current node
-            scopeNode.data().addStmt($stmt);
-		}
-		
-		/**
-		    for (Stmt stmt : body.getChildren(Stmt.class)) {
-
-            if (stmt instanceof IfStmt) {
-
-                // 2) targets of a jmp
-                CompoundStmt t = ((IfStmt) stmt).getThen().get();
-                Stmt tChild = (Stmt) t.getChild(0);
-                addToMap(tChild);
-
-                Optional<CompoundStmt> e = ((IfStmt) stmt).getElse();
-                if (e.isPresent()) {
-                    Stmt eChild = (Stmt) e.get().getChild(0);
-                    addToMap(eChild);
-                }
-
-                // 3) stmt following a jmp
-                List<ClavaNode> ifSiblings = stmt.getRightSiblings();
-                if (!ifSiblings.isEmpty()) {
-
-                    Stmt ifSibling = (Stmt) ifSiblings.get(0);
-                    addToMap(ifSibling);
-                } else {
-
-                    // TODO: check if this is actually needed (isn't the parent loop always a
-                    // candidate?
-                    // if it has no siblings, it's either the last stmt
-                    // of the function or the last stmt of an intermediate scope
-                    Optional<ClavaNode> possibleParentLoop = stmt.getAscendantsStream()
-                            .filter(a -> a instanceof LoopStmt).findFirst();
-
-                    if (possibleParentLoop.isPresent()) {
-                        Stmt parentLoop = (Stmt) possibleParentLoop.get();
-                        addToMap(parentLoop);
-                    }
-                }
-
-                // recursively get the leaders from the if scope
-                findBBs(t);
-                if (e.isPresent()) {
-                    findBBs(e.get());
-                }
-            }
-
-            if (stmt instanceof LoopStmt) {
-
-                CompoundStmt b = ((LoopStmt) stmt).getBody();
-
-                // 2) targets of a jmp
-                Stmt bChild = (Stmt) b.getChild(0);
-                addToMap(stmt);
-                addToMap(bChild);
-
-                // 3) stmt following a jmp
-                List<ClavaNode> loopSiblings = stmt.getRightSiblings();
-                if (!loopSiblings.isEmpty()) {
-
-                    Stmt loopSibling = (Stmt) loopSiblings.get(0);
-                    addToMap(loopSibling);
-                } else {
-
-                    // TODO: check if this is actually needed (isn't the parent loop always a
-                    // candidate?
-                    // if it has no siblings, it's either the last stmt
-                    // of the function or the last stmt of an intermediate scope
-                    Optional<ClavaNode> possibleParentLoop = stmt.getAscendantsStream()
-                            .filter(a -> a instanceof LoopStmt).findFirst();
-
-                    if (possibleParentLoop.isPresent()) {
-                        Stmt parentLoop = (Stmt) possibleParentLoop.get();
-                        addToMap(parentLoop);
-                    }
-                }
-
-                // recursively get the leaders from the if scope
-                findBBs(b);
-            }
-        }
-		
-		 */
-	}
+	
 	
 	/**
 	 * Returns the node corresponding to this statement, or creates a new one if one does not exist yet.
@@ -234,23 +106,18 @@ class CfgBuilder {
 	_getOrAddNode($stmt) {
 		let node = this.#nodes[$stmt];
 		
+		// If there is not yet a node for this statement, create
 		if(node === undefined) {
-			//const nodeData = new CfgNode($stmt);
-			//println("Node data id: " + nodeData.id)
-			//node = this.#graph.add({ group: 'nodes', data: nodeData});
-			//node = Graphs.addNode(this.#graph, new CfgNode($stmt));
-			//node = this._addNode($stmt);
-			node = Graphs.addNode(this.#graph, new CfgNode($stmt));
-			//println("Node id: " + node.id())
+			const nodeType = CfgUtils.getNodeType($stmt);
+			node = Graphs.addNode(this.#graph, new CfgNode(nodeType, $stmt));
 			this.#nodes[$stmt] = node;
+			
+			// Example of how to add an edge:
+			//Graphs.addEdge(this.#graph, this.#startNode, node, new CfgEdge(CfgEdgeType.TRUE));
 		}
 		
 		return node;
 	}
-
-/*
-	_addNode($stmt) {
-		return Graphs.addNode(this.#graph, new CfgNode($stmt));
-	}
-*/	
+	
+	
 }
