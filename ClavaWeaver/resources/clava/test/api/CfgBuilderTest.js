@@ -5,7 +5,7 @@ laraImport("weaver.Query");
 
 
 //        try {
-			const cfg = CfgBuilder.fromScope($function.body);
+			const cfg = CfgBuilder.buildGraph($function);
 			println("Cfg for function at " + $function.location + ":");
 			println(Graphs.toDot(cfg));
 //        } catch(e) {
