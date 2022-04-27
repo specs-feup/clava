@@ -30,7 +30,7 @@ public enum LaraCoreApiResource implements LaraResourceProvider {
     TIMER("code/Timer.js"),
 
     // Lara
-    COMPILATION("Compilation.lara");
+    COMPILATION("Compilation.js");
 
     private final String resource;
 
