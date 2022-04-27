@@ -22,7 +22,7 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
 public enum LaraCoreApiResource implements LaraResourceProvider {
 
     // Benchmark
-    CLAVA_BENCHMARK_INSTANCE("benchmark/ClavaBenchmarkInstance.lara"),
+    CLAVA_BENCHMARK_INSTANCE("benchmark/ClavaBenchmarkInstance.js"),
 
     // Code
     LOGGER("code/Logger.lara"),
