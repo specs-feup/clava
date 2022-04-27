@@ -25,9 +25,9 @@ public enum LaraCoreApiResource implements LaraResourceProvider {
     CLAVA_BENCHMARK_INSTANCE("benchmark/ClavaBenchmarkInstance.js"),
 
     // Code
-    LOGGER("code/Logger.lara"),
-    ENERGY("code/Energy.lara"),
-    TIMER("code/Timer.lara"),
+    LOGGER("code/Logger.js"),
+    ENERGY("code/Energy.js"),
+    TIMER("code/Timer.js"),
 
     // Lara
     COMPILATION("Compilation.lara");
@@ -44,7 +44,9 @@ public enum LaraCoreApiResource implements LaraResourceProvider {
         this.resource = WEAVER_PACKAGE + getSeparatorChar() + BASE_PACKAGE + resource;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.suikasoft.SharedLibrary.Interfaces.ResourceProvider#getResource()
      */
     @Override
