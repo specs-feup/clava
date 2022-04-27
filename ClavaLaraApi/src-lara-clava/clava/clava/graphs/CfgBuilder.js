@@ -74,7 +74,7 @@ class CfgBuilder {
 			//println("Stmt: " + $stmt.code);
 			//println("Is leader?: " + CfgUtils.isLeader($stmt));			
 			if(CfgUtils.isLeader($stmt)) {
-				this._getOrAddNode($stmt);
+				this._addNode($stmt);
 			}
 		}
 		
@@ -98,26 +98,31 @@ class CfgBuilder {
 	}			
 	
 
-	
-	
 	/**
-	 * Returns the node corresponding to this statement, or creates a new one if one does not exist yet.
+	 * Creates a new node for this statement, or throws an exception if a node has already been created
 	 */
-	_getOrAddNode($stmt) {
-		let node = this.#nodes[$stmt];
-		
-		// If there is not yet a node for this statement, create
-		if(node === undefined) {
-			const nodeType = CfgUtils.getNodeType($stmt);
-			node = Graphs.addNode(this.#graph, new CfgNode(nodeType, $stmt));
-			this.#nodes[$stmt] = node;
-			
-			// Example of how to add an edge:
-			//Graphs.addEdge(this.#graph, this.#startNode, node, new CfgEdge(CfgEdgeType.TRUE));
+	_addNode($stmt) {
+
+		// If there already is a node for this statement, throw an error
+		if(this.#nodes[$stmt.astId] !== undefined) {
+			throw new Error("There is already a node for the statement at " + $stmt.location);
 		}
+
+		const nodeType = CfgUtils.getNodeType($stmt);
+		const node = Graphs.addNode(this.#graph, new CfgNode(nodeType, $stmt));
+			this.#nodes[$stmt.astId] = node;
+			
+		// Example of how to add an edge:
+		//Graphs.addEdge(this.#graph, this.#startNode, node, new CfgEdge(CfgEdgeType.TRUE));
 		
 		return node;
 	}
-	
+
+	/**
+	 * Returns the node corresponding to this statement, or undefined if a node does not exist
+	 */
+	_getNode($stmt) {
+		return this.#nodes[$stmt.astId];
+	}	
 	
 }
