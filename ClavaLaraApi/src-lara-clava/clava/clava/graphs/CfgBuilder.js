@@ -38,10 +38,9 @@ class CfgBuilder {
 	constructor($jp) {
 		this.#jp = $jp;
 		
-		// Load graph library
-		Graphs.loadLibrary();
-		
-		this.#graph = cytoscape({ /* options */ });
+		// Create new graph		
+		this.#graph = Graphs.newGraph();
+
 		this.#nodes = {};
 		
 		// Create start and end node
