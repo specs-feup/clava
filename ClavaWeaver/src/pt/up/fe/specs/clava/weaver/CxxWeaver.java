@@ -694,9 +694,10 @@ public class CxxWeaver extends ACxxWeaver {
         File firstSource = sources.stream()
                 .filter(source -> source.exists())
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException(
-                        "Needs to specify at least one source (file or folder) that exists, found none. Input sources:"
-                                + sources));
+                .orElse(SpecsIo.getWorkingDir());
+        // .orElseThrow(() -> new RuntimeException(
+        // "Needs to specify at least one source (file or folder) that exists, found none. Input sources:"
+        // + sources));
 
         if (firstSource.isDirectory()) {
             return firstSource;
