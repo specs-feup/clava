@@ -80,7 +80,7 @@ end
 aspectdef retReductionOpArray
 	input $expr, candidateVar, isdependentInnerloop, isdependentCurrentloop, isdependentOuterloop end
 	output reduction end
-println("Heello");
+//println("Heello");
 
 	reduction = [];
 	var candidateVarUse = null;
