@@ -73,6 +73,11 @@ public class CxxTest {
     }
 
     @Test
+    public void testPragmas2() {
+        newTester().test("Pragma2.js", "pragma2.cpp");
+    }
+
+    @Test
     public void testActions() {
         newTester().test("Actions.lara", "actions.cpp");
     }
