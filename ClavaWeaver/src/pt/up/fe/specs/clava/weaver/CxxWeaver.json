@@ -53861,6 +53861,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Everything that is after the name of the pragma",
 						"children": [
 									{
 										"type": "String",
@@ -53869,6 +53870,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The name of the pragma. E.g. for #pragma foo bar, returns 'foo'",
 						"children": [
 									{
 										"type": "String",
@@ -53877,10 +53879,33 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations",
 						"children": [
 									{
 										"type": "joinpoint",
 										"name": "target"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "All the nodes below the target node, including the target node",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "targetNodes"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "targetNodes"
+									},
+									{
+										"type": "String",
+										"name": "endPragma"
 									}]
 					},
 					{
@@ -61479,6 +61504,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Everything that is after the name of the pragma",
 						"children": [
 									{
 										"type": "String",
@@ -61487,6 +61513,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The name of the pragma. E.g. for #pragma foo bar, returns 'foo'",
 						"children": [
 									{
 										"type": "String",
@@ -61495,10 +61522,33 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations",
 						"children": [
 									{
 										"type": "joinpoint",
 										"name": "target"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "All the nodes below the target node, including the target node",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "targetNodes"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "targetNodes"
+									},
+									{
+										"type": "String",
+										"name": "endPragma"
 									}]
 					},
 					{
@@ -67775,6 +67825,7 @@
 			"children": [
 					{
 						"type": "attribute",
+						"tooltip": "Everything that is after the name of the pragma",
 						"children": [
 									{
 										"type": "String",
@@ -67783,6 +67834,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The name of the pragma. E.g. for #pragma foo bar, returns 'foo'",
 						"children": [
 									{
 										"type": "String",
@@ -67791,10 +67843,33 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations",
 						"children": [
 									{
 										"type": "joinpoint",
 										"name": "target"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "All the nodes below the target node, including the target node",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "targetNodes"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "targetNodes"
+									},
+									{
+										"type": "String",
+										"name": "endPragma"
 									}]
 					},
 					{
@@ -78700,6 +78775,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Everything that is after the name of the pragma",
 						"children": [
 									{
 										"type": "String",
@@ -78708,6 +78784,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The name of the pragma. E.g. for #pragma foo bar, returns 'foo'",
 						"children": [
 									{
 										"type": "String",
@@ -78716,10 +78793,33 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations",
 						"children": [
 									{
 										"type": "joinpoint",
 										"name": "target"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "All the nodes below the target node, including the target node",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "targetNodes"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "targetNodes"
+									},
+									{
+										"type": "String",
+										"name": "endPragma"
 									}]
 					},
 					{

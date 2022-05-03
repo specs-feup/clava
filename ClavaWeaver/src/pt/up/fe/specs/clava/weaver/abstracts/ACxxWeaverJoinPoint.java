@@ -828,72 +828,16 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public AJoinPoint[] getSiblingsRightArrayImpl() {
-        var node = getNode();
-        var indexOfSelf = node.indexOfSelf();
+        var siblingsRight = getNode().getSiblingsRight();
 
-        if (indexOfSelf == -1) {
-            ClavaLog.debug("getSiblingsRight: Could not find index of self");
-            return new AJoinPoint[0];
-        }
-
-        // Get siblings
-        var siblings = node.getParent().getChildren();
-
-        return CxxSelects.selectedNodesToJps(siblings.subList(indexOfSelf + 1, siblings.size()).stream(),
-                getWeaverEngine());
+        return CxxSelects.selectedNodesToJps(siblingsRight.stream(), getWeaverEngine());
     }
 
     @Override
     public AJoinPoint[] getSiblingsLeftArrayImpl() {
-        var node = getNode();
-        var indexOfSelf = node.indexOfSelf();
+        var siblingsLeft = getNode().getSiblingsLeft();
 
-        if (indexOfSelf == -1) {
-            ClavaLog.debug("getSiblingsLeft: Could not find index of self");
-            return new AJoinPoint[0];
-        }
-
-        // Get siblings
-        var siblings = node.getParent().getChildren();
-
-        /*
-        // If no parent, then no siblings
-        if (!node.hasParent()) {
-            return new AJoinPoint[0];
-        }
-        
-              // Get siblings
-        var siblings = node.getParent().getChildren();  
-        
-        // Get nodes until the current node is found
-        var endIndexExclusive = -1;
-        for (int i = 0; i < siblings.size(); i++) {
-            // Use ==, to check if same object
-            if (siblings.get(i) == node) {
-                endIndexExclusive = i;
-                break;
-            }
-        }
-        
-        SpecsCheck.checkArgument(endIndexExclusive != -1, () -> "Could not find self node");
-        */
-        return CxxSelects.selectedNodesToJps(siblings.subList(0, indexOfSelf).stream(), getWeaverEngine());
-        /*
-        AJoinPoint[] leftSiblings = siblings.subList(0, endIndexExclusive).stream()
-                .filter(sibling -> !(sibling instanceof NullNode))
-                .map(CxxJoinpoints::create)
-                .collect(Collectors.toList())
-                .toArray(new AJoinPoint[0]);
-        
-        // Count as selected nodes
-        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS, leftSiblings.length);
-        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, leftSiblings.length);
-        
-        // Count as a select
-        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
-        
-        return leftSiblings;
-        */
+        return CxxSelects.selectedNodesToJps(siblingsLeft.stream(), getWeaverEngine());
     }
 
     @Override
