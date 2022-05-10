@@ -685,7 +685,6 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     private static File getFirstSourceFolder(List<File> sources) {
-        // Preconditions.checkArgument(!sources.isEmpty(), "Needs at least one source specified (file or folder)");
 
         if (sources.isEmpty()) {
             return SpecsIo.getWorkingDir();
@@ -695,9 +694,6 @@ public class CxxWeaver extends ACxxWeaver {
                 .filter(source -> source.exists())
                 .findFirst()
                 .orElse(SpecsIo.getWorkingDir());
-        // .orElseThrow(() -> new RuntimeException(
-        // "Needs to specify at least one source (file or folder) that exists, found none. Input sources:"
-        // + sources));
 
         if (firstSource.isDirectory()) {
             return firstSource;
@@ -831,6 +827,7 @@ public class CxxWeaver extends ACxxWeaver {
                 getConfig().get(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS));
         // codeParser.set(ClangAstKeys.USE_PLATFORM_INCLUDES, getConfig().get(ClangAstKeys.USE_PLATFORM_INCLUDES));
         codeParser.set(ClangAstKeys.LIBC_CXX_MODE, getConfig().get(ClangAstKeys.LIBC_CXX_MODE));
+        codeParser.set(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE, getConfig().get(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE));
 
         List<String> allParserOptions = new ArrayList<>(parserOptions.size() + adaptedExtraOptions.size());
         allParserOptions.addAll(parserOptions);

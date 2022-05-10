@@ -22,9 +22,11 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import pt.up.fe.specs.clang.codeparser.CodeParser;
 import pt.up.fe.specs.clang.parsers.TopLevelNodesParser;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.providers.FileResourceManager;
@@ -44,12 +46,14 @@ public class ClangResources {
 
     // private final boolean dumpStdout;
     private final FileResourceManager clangAstResources;
+    private final CodeParser options;
 
     private static final AtomicInteger HAS_LIBC = new AtomicInteger(-1);
 
-    public ClangResources() {
+    public ClangResources(CodeParser options) {
         // this.dumpStdout = dumpStdout;
         clangAstResources = FileResourceManager.fromEnum(ClangAstFileResource.class);
+        this.options = options;
     }
 
     public ClangFiles getClangFiles(String version, LibcMode libcMode) {
@@ -184,7 +188,33 @@ public class ClangResources {
         return SpecsIo.getTempFolder(CLANG_FOLDERNAME);
     }
 
+    private Optional<FileResourceProvider> getCustomExecutable() {
+        // Check if theres is a custom executable
+        var customExe = options.get(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE);
+
+        if (customExe.getName().isBlank()) {
+            return Optional.empty();
+        }
+
+        if (!customExe.isFile()) {
+            SpecsLogs.info("Specified a custom executable but could not find file '" + customExe
+                    + "', using built-in executable");
+
+            return Optional.empty();
+        }
+
+        SpecsLogs.info("Using custom executable for ClangAstDumper: '" + customExe.getAbsolutePath() + "'");
+
+        return Optional.of(FileResourceProvider.newInstance(customExe));
+    }
+
     private FileResourceProvider getExecutableResource(SupportedPlatform platform) {
+
+        var customExecutable = getCustomExecutable();
+
+        if (customExecutable.isPresent()) {
+            return customExecutable.get();
+        }
 
         switch (platform) {
         case WINDOWS:

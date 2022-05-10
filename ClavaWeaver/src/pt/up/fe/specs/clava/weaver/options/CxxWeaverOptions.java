@@ -140,6 +140,9 @@ public class CxxWeaverOptions {
         addOneArgOption(ClangAstKeys.IGNORE_HEADER_INCLUDES, ClangAstKeys.getFlagIgnoreIncludes(),
                 "ignore-header-includes", "<Java regex list>",
                 "Headers to ignore when recreating #include directives (Java regexes)");
+
+        addOneArgOption(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE, "cde", "custom_dumper_exe", "dumper_exe",
+                "Path to a ClangAstDumper executable file");
     }
 
     private static final void addBooleanOption(DataKey<?> key, String shortOption, String longOption,
