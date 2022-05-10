@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.weaver;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
+import pt.up.fe.specs.clava.ast.decl.CXXDestructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
@@ -95,6 +96,26 @@ public class ClavaCommonLanguage {
 	}
 
 	private static String cxxRecordDecl(CXXRecordDecl node) {
+	    
+	    boolean isDeclarationOnly = node.getChildren().size() == 0;
+	    
+	    /*
+        System.err.println(" --- map - cxxRecordDecl - " + node.getFullyQualifiedName() + " - " + isDeclarationOnly);
+        System.err.println(" --- map - cxxRecordDecl - " + node.getFullyQualifiedName() + " - " + node.getMethods().size());
+        if (!node.getFullyQualifiedName().contains("basic_string"))
+            System.err.println(" --- map - cxxRecordDecl - " + node.getCode());
+        if (isDeclarationOnly) return "ClassTypeJp";
+        */
+        if (isDeclarationOnly) return "ClassJp";
+        
+        boolean areAllVirtualPureMethods = node.getMethods().stream()
+                .filter(method -> !(method instanceof CXXDestructorDecl))
+                .allMatch(method -> {
+                    return method.get(CXXMethodDecl.IS_VIRTUAL).booleanValue() &&
+                            method.get(CXXMethodDecl.IS_PURE).booleanValue();
+                });
+        
+	    if (areAllVirtualPureMethods) return "InterfaceJp";
 
         switch (node.getTagKind()) {
         case CLASS:

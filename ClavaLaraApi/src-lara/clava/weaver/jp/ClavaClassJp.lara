@@ -16,7 +16,7 @@ ClassJp = function(astNode, getDefinition) {
 		astNode = astNode.getDefinition().get();
 		
 	// Parent constructor
-    DeclJp.call(this,astNode);
+    ClassTypeJp.call(this,astNode,getDefinition);
 }
 
 ClassJp.prototype = oldClassJp;
@@ -104,6 +104,12 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'isCustom', {
 	get: function () {	
 		return this.ancestor("file") != null;
 	
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'isAbstract', {
+	get: function () {	
+	    return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).isAbstract();
 	}
 });
 

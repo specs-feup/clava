@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.CXXDestructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -31,6 +32,20 @@ public class CxxClass extends AClass {
         super(new CxxStruct(cxxRecordDecl));
 
         this.cxxRecordDecl = cxxRecordDecl;
+    }
+    
+    public boolean isAbstract() {
+        return this.cxxRecordDecl.getMethods().stream()
+                .filter(method -> !(method instanceof CXXDestructorDecl))
+                .anyMatch(method -> {
+                    /*
+                    System.err.println(" -> " + method.getFullyQualifiedName() 
+                    + " " + method.get(CXXMethodDecl.IS_VIRTUAL).booleanValue()
+                    + " " + method.get(CXXMethodDecl.IS_PURE).booleanValue());
+                    */
+                    
+                    return method.get(CXXMethodDecl.IS_VIRTUAL).booleanValue();
+                });
     }
 
     @Override

@@ -38,7 +38,7 @@ Selector.prototype._addJps = function($newJps, $jps, jpFilter, $jpChain, name) {
 			continue;
 		}
 		
-		if($jp.instanceOf("function") || $jp.instanceOf("class")){
+		if($jp.instanceOf("function") || $jp.instanceOf("classType")){
 		    var decl = $jp.originalAstNode;
             var declaration = decl.getDeclaration();
             var definition = decl.getDefinition();
@@ -59,7 +59,7 @@ Selector.prototype._addJps = function($newJps, $jps, jpFilter, $jpChain, name) {
 		
 		}
 		
-		
+        
 		if($filteredJp.length > 1) {
 			throw "Selector._addJps: Expected $filteredJp to have length 1, has " + $filteredJp.length;
 		}

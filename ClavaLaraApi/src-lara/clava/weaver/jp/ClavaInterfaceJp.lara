@@ -2,6 +2,28 @@ import weaver.jp.InterfaceJp;
 import weaver.Weaver;
 
 
+// Override InterfaceJp constructor
+var oldInterfaceJp = InterfaceJp.prototype;
+var oldInterface_JP_TYPES = InterfaceJp._JP_TYPES;
+
+
+InterfaceJp = function(astNode, getDefinition) {
+	// By default, it gets the definition
+	getDefinition = typeof getDefinition !== 'undefined' ? getDefinition : true;
+	
+	// check for definition
+	this.originalAstNode = astNode;
+	if (astNode.getDefinition().isPresent() && getDefinition)
+		astNode = astNode.getDefinition().get();
+		
+	// Parent constructor
+    ClassTypeJp.call(this,astNode,getDefinition);
+}
+
+InterfaceJp.prototype = oldInterfaceJp;
+InterfaceJp._JP_TYPES = oldInterface_JP_TYPES;
+
+
 _lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'name', {
 	get: function () { 
 		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).name; 
