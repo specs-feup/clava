@@ -247,14 +247,15 @@ void ClangAstDumper::VisitIfStmtChildren(const IfStmt *S, std::vector<std::strin
 }
 
 void ClangAstDumper::VisitForStmtChildren(const ForStmt *S, std::vector<std::string> &children) {
-    // Do not visit sub-statements automatically, visit the if stmts in a controlled manner
+    // Do not visit sub-statements automatically, visit the for stmts in a controlled manner
     //VisitStmtChildren(S, children);
 
-    //addChild(S->getConditionVariableDeclStmt(), children);
+
     addChild(S->getInit(), children);
     addChild(S->getCond(), children);
     addChild(S->getInc(), children);
     addChild(S->getBody(), children);
+    addChild(S->getConditionVariable(), children);
 }
 
 void ClangAstDumper::VisitWhileStmtChildren(const WhileStmt *S, std::vector<std::string> &children) {

@@ -29,6 +29,7 @@ import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.utils.Nameable;
+import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.clava.utils.foriter.ForIterationsExpression;
 import pt.up.fe.specs.util.treenode.NodeInsertUtils;
 
@@ -58,6 +59,16 @@ public class ForStmt extends LoopStmt {
         return getChild(CompoundStmt.class, 3);
     }
 
+    public Optional<VarDecl> getConditionVariable() {
+        var condVar = getChild(4);
+
+        if (condVar instanceof NullNode) {
+            return Optional.empty();
+        }
+
+        return Optional.of((VarDecl) condVar);
+    }
+
     @Override
     public String getCode() {
         return getCode("for");
@@ -72,7 +83,16 @@ public class ForStmt extends LoopStmt {
         code.append(getInit().map(init -> init.getCode()).orElse(";"));
 
         // Append 'cond'
-        code.append(getCond().map(init -> " " + init.getCode()).orElse(";"));
+
+        var condVar = getConditionVariable();
+        // System.out.println("COND CODE: " + getCond().map(cond -> " " + cond.getCode()).orElse(";"));
+        // System.out.println("VARDECL CODE: " + condVar.map(var -> var.getCode()).orElse("<no code>"));
+
+        var condCode = condVar.map(var -> var.getCode() + ";")
+                .orElse(getCond().map(cond -> " " + cond.getCode()).orElse(";"));
+
+        code.append(condCode);
+        // code.append(getCond().map(cond -> " " + cond.getCode()).orElse(";"));
 
         // Get 'inc' code
         String incCode = getInc().map(init -> " " + init.getCode()).orElse("");
