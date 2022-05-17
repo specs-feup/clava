@@ -83,6 +83,12 @@ public enum LaraApiResource implements LaraResourceProvider {
     GPROFER("gprofer/Gprofer.lara"),
     GPROFER_ASPECTS("gprofer/_GproferAspects.lara"),
 
+    // Graphs
+    STATIC_CALL_GRAPH("graphs/StaticCallGraph.js"),
+    STATIC_CALL_GRAPH_BUILDER("graphs/scg/StaticCallGraphBuilder.js"),
+    SCG_NODE_DATA("graphs/scg/ScgNodeData.js"),
+    SCG_EDGE_DATA("graphs/scg/ScgEdgeData.js"),
+
     // Hdf5
     HDF5("hdf5/Hdf5.lara"),
 
