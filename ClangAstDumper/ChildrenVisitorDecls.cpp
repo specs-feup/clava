@@ -379,8 +379,10 @@ void ClangAstDumper::VisitCXXMethodDeclChildren(const CXXMethodDecl *D, std::vec
     }
 
     // Types related to "this"
-    VisitTypeTop(D->getThisType());
-    VisitTypeTop(D->getThisObjectType());
+    if(D->isInstance()) {
+        VisitTypeTop(D->getThisType());
+        VisitTypeTop(D->getThisObjectType());
+    }
 }
 
 void ClangAstDumper::VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D, std::vector<std::string> &children) {

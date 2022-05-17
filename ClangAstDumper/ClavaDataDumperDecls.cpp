@@ -509,8 +509,14 @@ void clava::ClavaDataDumper::DumpCXXMethodDeclData(const CXXMethodDecl *D) {
     clava::dump(D->isCopyAssignmentOperator());
     clava::dump(D->isMoveAssignmentOperator());
 
-    clava::dump(clava::getId(D->getThisType(), id));
-    clava::dump(clava::getId(D->getThisObjectType(), id));
+    if(D->isInstance()) {
+        clava::dump(clava::getId(D->getThisType(), id));
+        clava::dump(clava::getId(D->getThisObjectType(), id));
+    } else {
+        clava::dump(clava::getId((const Type *) nullptr, id));
+        clava::dump(clava::getId((const Type *) nullptr, id));
+    }
+
 
     // RefQualifier?
 
