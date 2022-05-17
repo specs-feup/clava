@@ -739,7 +739,7 @@ public class ClavaFactory {
     public ForStmt forStmt(Stmt init, Stmt cond, Stmt inc, CompoundStmt body) {
         DataStore forStmtData = newDataStore(ForStmt.class);
 
-        return new ForStmt(forStmtData, Arrays.asList(init, cond, inc, body));
+        return new ForStmt(forStmtData, Arrays.asList(init, cond, inc, body, nullDecl()));
     }
 
     public WhileStmt whileStmt(Stmt cond, CompoundStmt body) {
