@@ -74,12 +74,12 @@ public class CXXMethodDecl extends FunctionDecl {
      * Return the type of the 'this' pointer. Note that for the call operator of a lambda closure type, this returns the
      * desugared 'this' type (a pointer to the closure type), not the captured 'this' type.
      */
-    public final static DataKey<Type> THIS_TYPE = KeyFactory.object("thisType", Type.class);
+    public final static DataKey<Optional<Type>> THIS_TYPE = KeyFactory.optional("thisType");
 
     /**
      * The type of the object pointed by 'this'.
      */
-    public final static DataKey<Type> THIS_OJBECT_TYPE = KeyFactory.object("thisObjectType", Type.class);
+    public final static DataKey<Optional<Type>> THIS_OJBECT_TYPE = KeyFactory.optional("thisObjectType");
 
     public final static DataKey<Boolean> HAS_INLINE_BODY = KeyFactory.bool("hasInlineBody");
 

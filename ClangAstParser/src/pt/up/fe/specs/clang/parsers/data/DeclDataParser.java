@@ -340,8 +340,8 @@ public class DeclDataParser {
         data.add(CXXMethodDecl.IS_COPY_ASSIGNMENT_OPERATOR, LineStreamParsers.oneOrZero(lines));
         data.add(CXXMethodDecl.IS_MOVE_ASSIGNMENT_OPERATOR, LineStreamParsers.oneOrZero(lines));
 
-        dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.THIS_TYPE, lines.nextLine());
-        dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.THIS_OJBECT_TYPE, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, CXXMethodDecl.THIS_TYPE, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, CXXMethodDecl.THIS_OJBECT_TYPE, lines.nextLine());
 
         data.add(CXXMethodDecl.HAS_INLINE_BODY, LineStreamParsers.oneOrZero(lines));
         data.add(CXXMethodDecl.IS_LAMBDA_STATIC_INVOKER, LineStreamParsers.oneOrZero(lines));
