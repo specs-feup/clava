@@ -107,6 +107,7 @@ public interface CxxWeaverOption {
             .addKey(ParallelCodeParser.PARALLEL_PARSING)
             .addKey(ParallelCodeParser.PARSING_NUM_THREADS)
             .addKey(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS)
+            .addKey(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE)
             .build();
 
 }

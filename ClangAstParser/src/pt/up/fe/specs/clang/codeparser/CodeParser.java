@@ -47,6 +47,8 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     public static final DataKey<String> CUDA_PATH = KeyFactory.string("cudaPath")
             .setLabel("CUDA Path (empty: uses system installed; <builtin>: uses builtin version)")
             .setDefaultString("");
+    public static final DataKey<File> CUSTOM_CLANG_AST_DUMPER_EXE = KeyFactory.file("customClangAstDumperExe")
+            .setLabel("Custom ClangAstDumper executable file");
 
     /**
      * Execution information, such as execution time and memory used.

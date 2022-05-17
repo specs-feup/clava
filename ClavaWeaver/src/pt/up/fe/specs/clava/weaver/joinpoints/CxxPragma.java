@@ -19,6 +19,7 @@ import java.util.List;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
+import pt.up.fe.specs.clava.weaver.CxxSelects;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
 
@@ -42,7 +43,7 @@ public class CxxPragma extends APragma {
 
     @Override
     public AJoinPoint getTargetImpl() {
-        return pragma.getTarget().map(target -> CxxJoinpoints.create(target)).orElse(null);
+        return pragma.getTarget().map(target -> CxxJoinpoints.create(target, AJoinPoint.class)).orElse(null);
     }
 
     @Override
@@ -67,6 +68,17 @@ public class CxxPragma extends APragma {
     @Override
     public List<? extends AJoinPoint> selectTarget() {
         return Arrays.asList(getTargetImpl());
+    }
+
+    @Override
+    public AJoinPoint[] getTargetNodesArrayImpl() {
+        return targetNodesArrayImpl(null);
+    }
+
+    @Override
+    public AJoinPoint[] targetNodesArrayImpl(String endPragma) {
+        var pragmaNodes = pragma.getPragmaNodes(endPragma);
+        return CxxSelects.selectedNodesToJps(pragmaNodes.stream(), getWeaverEngine());
     }
 
 }

@@ -79,7 +79,7 @@ public class CxxWeaverOptions {
                         "Disables printing of information about Clava", CxxWeaverOption.DISABLE_CLAVA_INFO));
 
         addOneArgOption(CxxWeaverOption.HEADER_INCLUDES, "ih", "includes-headers",
-                "dir1[,dir2]*",
+                "dir1[;dir2]*",
                 "Include folders for C/C++ headers. Include files that are used in C/C++ files are processed by Clava and appear in the AST.");
 
         // addBooleanOption(CxxWeaverOption.SKIP_HEADER_INCLUDES_PARSING, "sih", "skip-includes-headers-parsing",
@@ -89,7 +89,7 @@ public class CxxWeaverOptions {
                 "Parses headers inside the specified include folders.");
 
         addOneArgOption(CxxWeaverOption.SYSTEM_INCLUDES, "is", "includes-system",
-                "dir1[,dir2]*",
+                "dir1[;dir2]*",
                 "Include folders for C/C++ headers that should be considered 'system libraries'. System libraries are not processed by Clava and do not appear in the AST.");
 
         addOneArgOption(ParallelCodeParser.SYSTEM_INCLUDES_THRESHOLD, "ist", "includes-system-threshold",
@@ -140,6 +140,9 @@ public class CxxWeaverOptions {
         addOneArgOption(ClangAstKeys.IGNORE_HEADER_INCLUDES, ClangAstKeys.getFlagIgnoreIncludes(),
                 "ignore-header-includes", "<Java regex list>",
                 "Headers to ignore when recreating #include directives (Java regexes)");
+
+        addOneArgOption(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE, "cde", "custom_dumper_exe", "dumper_exe",
+                "Path to a ClangAstDumper executable file");
     }
 
     private static final void addBooleanOption(DataKey<?> key, String shortOption, String longOption,

@@ -505,12 +505,12 @@ public class CxxFunction extends AFunction {
 
     @Override
     public Boolean getIsInlineImpl() {
-        return function.get(FunctionDecl.IS_INLINE);
+        return function.get(FunctionDecl.IS_INLINE_SPECIFIED);
     }
 
     @Override
     public Boolean getIsVirtualImpl() {
-        return function.get(FunctionDecl.IS_VIRTUAL);
+        return function.get(FunctionDecl.IS_VIRTUAL_AS_WRITTEN);
     }
 
     @Override

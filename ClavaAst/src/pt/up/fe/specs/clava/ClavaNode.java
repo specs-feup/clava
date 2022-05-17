@@ -1437,4 +1437,33 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
         return ancestors;
     }
+
+    public List<ClavaNode> getSiblingsRight() {
+        var indexOfSelf = indexOfSelf();
+
+        if (indexOfSelf == -1) {
+            ClavaLog.debug("getSiblingsRight: Could not find index of self");
+            return Collections.emptyList();
+        }
+
+        // Get siblings
+        var siblings = getParent().getChildren();
+
+        return siblings.subList(indexOfSelf + 1, siblings.size());
+    }
+
+    public List<ClavaNode> getSiblingsLeft() {
+        var indexOfSelf = indexOfSelf();
+
+        if (indexOfSelf == -1) {
+            ClavaLog.debug("getSiblingsLeft: Could not find index of self");
+            return Collections.emptyList();
+        }
+
+        // Get siblings
+        var siblings = getParent().getChildren();
+
+        return siblings.subList(0, indexOfSelf);
+    }
+
 }

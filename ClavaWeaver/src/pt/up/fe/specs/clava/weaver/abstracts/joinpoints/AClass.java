@@ -36,8 +36,7 @@ public abstract class AClass extends ARecord {
     public abstract AMethod[] getMethodsArrayImpl();
 
     /**
-     * Get value on attribute methods
-     * @return the attribute's value
+     * The methods declared by this class
      */
     public Object getMethodsImpl() {
         AMethod[] aMethodArrayImpl0 = getMethodsArrayImpl();
@@ -46,8 +45,7 @@ public abstract class AClass extends ARecord {
     }
 
     /**
-     * Get value on attribute methods
-     * @return the attribute's value
+     * The methods declared by this class
      */
     public final Object getMethods() {
         try {
@@ -71,8 +69,7 @@ public abstract class AClass extends ARecord {
     public abstract AClass[] getBasesArrayImpl();
 
     /**
-     * Get value on attribute bases
-     * @return the attribute's value
+     * The classes this class directly inherits from
      */
     public Object getBasesImpl() {
         AClass[] aClassArrayImpl0 = getBasesArrayImpl();
@@ -81,8 +78,7 @@ public abstract class AClass extends ARecord {
     }
 
     /**
-     * Get value on attribute bases
-     * @return the attribute's value
+     * The classes this class directly inherits from
      */
     public final Object getBases() {
         try {
@@ -96,6 +92,118 @@ public abstract class AClass extends ARecord {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "bases", e);
+        }
+    }
+
+    /**
+     * Get value on attribute allMethods
+     * @return the attribute's value
+     */
+    public abstract AMethod[] getAllMethodsArrayImpl();
+
+    /**
+     * All the methods of this class, including inherited ones
+     */
+    public Object getAllMethodsImpl() {
+        AMethod[] aMethodArrayImpl0 = getAllMethodsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aMethodArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * All the methods of this class, including inherited ones
+     */
+    public final Object getAllMethods() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "allMethods", Optional.empty());
+        	}
+        	Object result = this.getAllMethodsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "allMethods", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "allMethods", e);
+        }
+    }
+
+    /**
+     * Get value on attribute allBases
+     * @return the attribute's value
+     */
+    public abstract AClass[] getAllBasesArrayImpl();
+
+    /**
+     * All the classes this class inherits from
+     */
+    public Object getAllBasesImpl() {
+        AClass[] aClassArrayImpl0 = getAllBasesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aClassArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * All the classes this class inherits from
+     */
+    public final Object getAllBases() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "allBases", Optional.empty());
+        	}
+        	Object result = this.getAllBasesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "allBases", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "allBases", e);
+        }
+    }
+
+    /**
+     * True, if contains at least one pure function
+     */
+    public abstract Boolean getIsAbstractImpl();
+
+    /**
+     * True, if contains at least one pure function
+     */
+    public final Object getIsAbstract() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isAbstract", Optional.empty());
+        	}
+        	Boolean result = this.getIsAbstractImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isAbstract", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isAbstract", e);
+        }
+    }
+
+    /**
+     * True, if all functions are pure
+     */
+    public abstract Boolean getIsInterfaceImpl();
+
+    /**
+     * True, if all functions are pure
+     */
+    public final Object getIsInterface() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInterface", Optional.empty());
+        	}
+        	Boolean result = this.getIsInterfaceImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isInterface", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isInterface", e);
         }
     }
 
@@ -592,6 +700,10 @@ public abstract class AClass extends ARecord {
         this.aRecord.fillWithAttributes(attributes);
         attributes.add("methods");
         attributes.add("bases");
+        attributes.add("allMethods");
+        attributes.add("allBases");
+        attributes.add("isAbstract");
+        attributes.add("isInterface");
     }
 
     /**
@@ -639,6 +751,10 @@ public abstract class AClass extends ARecord {
     protected enum ClassAttributes {
         METHODS("methods"),
         BASES("bases"),
+        ALLMETHODS("allMethods"),
+        ALLBASES("allBases"),
+        ISABSTRACT("isAbstract"),
+        ISINTERFACE("isInterface"),
         KIND("kind"),
         FIELDS("fields"),
         FUNCTIONS("functions"),

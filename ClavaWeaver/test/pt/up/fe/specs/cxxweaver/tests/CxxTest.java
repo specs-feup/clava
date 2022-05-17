@@ -73,6 +73,11 @@ public class CxxTest {
     }
 
     @Test
+    public void testPragmas2() {
+        newTester().test("Pragma2.js", "pragma2.cpp");
+    }
+
+    @Test
     public void testActions() {
         newTester().test("Actions.lara", "actions.cpp");
     }
@@ -330,4 +335,15 @@ public class CxxTest {
                 .test("CloneOnFile.lara", "clone_on_file.cpp",
                         "clone_on_file.h");
     }
+
+    @Test
+    public void testEmptyStmt() {
+        newTester().test("EmptyStmt.js", "empty_stmt.cpp");
+    }
+
+    @Test
+    public void testClass() {
+        newTester().test("Class.js", "class.cpp");
+    }
+
 }

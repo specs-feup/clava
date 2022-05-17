@@ -54,6 +54,11 @@ public class CxxMethod extends AMethod {
         return CxxJoinpoints.create(method.getReturnType(), AType.class);
     }
 
+    @Override
+    public Boolean getIsVirtualImpl() {
+        return method.get(CXXMethodDecl.IS_VIRTUAL);
+    }
+
     /*
     @Override
     public void defRecordImpl(AClass value) {

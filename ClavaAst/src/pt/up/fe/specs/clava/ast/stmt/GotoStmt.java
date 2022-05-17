@@ -38,9 +38,13 @@ public class GotoStmt extends Stmt {
         return getChild(Stmt.class, 0);
     }
 
+    public LabelDecl getLabel() {
+        return get(LABEL);
+    }
+
     @Override
     public String getCode() {
-        return "goto " + get(LABEL).get(LabelDecl.DECL_NAME) + ";";
+        return "goto " + getLabel().getDeclName() + ";" + ln();
         // return "goto: " + getSubStmt().getCode();
     }
 }

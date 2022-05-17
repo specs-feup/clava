@@ -226,8 +226,12 @@
 	
 	<!-- CLASS -->
 	<artifact class="class" default="name">
-		<attribute name="methods" type="method[]" />	
-		<attribute name="bases" type="class[]" />			
+		<attribute name="methods" type="method[]" tooltip="The methods declared by this class"/>	
+		<attribute name="bases" type="class[]" tooltip="The classes this class directly inherits from"/>
+		<attribute name="allMethods" type="method[]" tooltip="All the methods of this class, including inherited ones"/>	
+		<attribute name="allBases" type="class[]" tooltip="All the classes this class inherits from"/>					
+		<attribute name="isAbstract" type="boolean" tooltip="True, if contains at least one pure function"/>							
+		<attribute name="isInterface" type="boolean" tooltip="True, if all functions are pure"/>									
 	</artifact>
 	
 	<!-- METHOD -->
@@ -481,6 +485,14 @@
 		</attribute>		
 	</artifact>
 
+	<!-- GOTO -->
+	<artifact class="gotoStmt">
+		<attribute name="label" type="labelDecl" />
+	</artifact>
+	
+	<artifact class="labelStmt">
+		<attribute name="decl" type="labelDecl"/>
+	</artifact>
 
 	<!-- STATEMENT -->
 	<artifact class="statement">
@@ -499,9 +511,13 @@
 
 	<!-- PRAGMA -->
 	<artifact class="pragma" default="name">
-		<attribute name="name" type="String"/>
-		<attribute name="target" type="joinpoint" />
-		<attribute name="content" type="String"/>
+		<attribute name="name" type="String" tooltip="The name of the pragma. E.g. for #pragma foo bar, returns 'foo'"/>
+		<attribute name="target" type="joinpoint" tooltip="The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations"/>
+		<attribute name="content" type="String" tooltip="Everything that is after the name of the pragma"/>
+		<attribute name="targetNodes" type="joinpoint[]" tooltip="All the nodes below the target node, including the target node"/>
+		<attribute name="targetNodes" type="joinpoint[]" tooltip="All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument">
+			<parameter name="endPragma" type="String" />
+		</attribute>
 	</artifact>
 
 	<artifact class="returnStmt">

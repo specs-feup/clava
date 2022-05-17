@@ -15,8 +15,11 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -25,6 +28,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.data.CXXBaseSpecifier;
+import pt.up.fe.specs.util.SpecsLogs;
 
 /**
  * Represents a C++ class.
@@ -124,9 +128,18 @@ public class CXXRecordDecl extends RecordDecl {
 
     }
 
-    public List<Decl> getBases() {
+    public List<CXXRecordDecl> getBases() {
         return get(RECORD_BASES).stream()
                 .map(baseSpec -> baseSpec.getBaseDecl(this))
+                .filter(decl -> {
+                    if (!(decl instanceof CXXRecordDecl)) {
+                        SpecsLogs.info("Found base that is not a CXXRecordDecl, check how to handle this case (is a "
+                                + decl.getClass() + ")");
+                        return false;
+                    }
+                    return true;
+                })
+                .map(CXXRecordDecl.class::cast)
                 // .map(baseSpec -> baseSpec.get(CXXBaseSpecifier.TYPE).desugarAll().get(TagType.DECL))
                 .collect(Collectors.toList());
     }
@@ -161,5 +174,157 @@ public class CXXRecordDecl extends RecordDecl {
         // Search for the definition
         return getAppTry().flatMap(app -> app.getCxxRecordDefinition(this));
     }
+
+    /**
+     * All bases, including the ones from other the bases, if any.
+     * 
+     * @return
+     */
+    public List<CXXRecordDecl> getAllBases() {
+        Set<CXXRecordDecl> currentBases = new LinkedHashSet<>();
+
+        getAllBases(this, currentBases);
+
+        return new ArrayList<>(currentBases);
+    }
+
+    private static void getAllBases(CXXRecordDecl aClass, Set<CXXRecordDecl> currentBases) {
+        var bases = aClass.getBases();
+
+        // Add all bases from this class
+        currentBases.addAll(bases);
+
+        // Add all methods from the bases
+        for (var base : bases) {
+            getAllBases(base, currentBases);
+        }
+    }
+
+    /**
+     * All methods, including the ones from the bases, if any.
+     * 
+     * @return
+     */
+    public List<CXXMethodDecl> getAllMethods(boolean includeOverridenMethods) {
+        // Uses signature to identify methods
+        // Map<String, CXXMethodDecl> allMethods = new LinkedHashMap<>();
+
+        Set<CXXMethodDecl> allMethods = new LinkedHashSet<>();
+
+        // Add own methods
+        addMethods(getMethods(), allMethods);
+        // allMethods.addAll(getMethods());
+
+        var allBases = getAllBases();
+
+        for (var base : allBases) {
+            addMethods(base.getMethods(), allMethods);
+            // allMethods.addAll(base.getMethods());
+        }
+
+        // Exclude overridden methods
+        if (!includeOverridenMethods) {
+            Set<CXXMethodDecl> overridenMethods = new HashSet<>();
+
+            // Collect overridden methods
+            for (var method : allMethods) {
+                overridenMethods.addAll(method.get(CXXMethodDecl.OVERRIDDEN_METHODS));
+            }
+
+            // Exclude overriden methods
+            allMethods.removeAll(overridenMethods);
+        }
+
+        // return new ArrayList<>(allMethods.values());
+        return new ArrayList<>(allMethods);
+    }
+
+    private void addMethods(List<CXXMethodDecl> methods, Set<CXXMethodDecl> allMethods) {
+        for (var method : methods) {
+
+            if (allMethods.contains(method)) {
+                SpecsLogs.debug(
+                        () -> "CXXRecordDecl.addMethods: skipping method with signature '" + method.getSignature()
+                                + "', already present");
+                continue;
+            }
+
+            allMethods.add(method);
+        }
+
+    }
+
+    /*
+    private void addMethods(List<CXXMethodDecl> methods, Map<String, CXXMethodDecl> allMethods) {
+        for (var method : methods) {
+            var signature = method.getSignature();
+    
+            if (allMethods.containsKey(signature)) {
+                SpecsLogs.debug(() -> "CXXRecordDecl.addMethods: skipping method, signature '" + signature
+                        + "' already present");
+                continue;
+            }
+    
+            allMethods.put(signature, method);
+        }
+    
+    }
+    */
+    /**
+     * 
+     * 
+     * @return true, if contains at least a pure function.
+     */
+    public boolean isAbstract() {
+        return getAllMethods(false).stream()
+                .filter(method -> method.get(FunctionDecl.IS_PURE))
+                .findFirst()
+                .isPresent();
+    }
+
+    /**
+     * 
+     * 
+     * @return true, if all functions are pure (not counting destructors).
+     */
+    public boolean isInterface() {
+        for (var method : getAllMethods(false)) {
+            // Check if destructor
+            if (method instanceof CXXDestructorDecl) {
+                // System.out.println("FOUND DESTRUCTOR: " + method.getSignature());
+                continue;
+            }
+
+            // Check if pure
+            if (method.get(FunctionDecl.IS_PURE)) {
+                // System.out.println("FOUND PURE: " + method.getSignature());
+                continue;
+            }
+
+            // System.out.println("NEITHER DESTRUCTOR OR PURE: " + method.getSignature());
+            return false;
+        }
+
+        return true;
+
+        // // If at least one non-pure, return false
+        // boolean hasNonPure = getAllMethods(false).stream()
+        // .filter(method -> !method.get(FunctionDecl.IS_PURE))
+        // .findFirst()
+        // .isPresent();
+        //
+        // return !hasNonPure;
+    }
+
+    // private static void getAllMethods(CXXRecordDecl aClass, Set<CXXMethodDecl> currentMethods) {
+    // // Add all methods from this class
+    // currentMethods.addAll(aClass.getMethods());
+    //
+    // // Add all methods from the bases
+    // for (var base : aClass.getBases()) {
+    // var cxxRecord = base;
+    // getAllMethods(cxxRecord, currentMethods);
+    // }
+    // }
 
 }

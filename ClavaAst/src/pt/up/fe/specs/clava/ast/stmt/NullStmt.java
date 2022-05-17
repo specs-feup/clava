@@ -21,7 +21,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.utils.NullNode;
 
 /**
- * Represents an empty statement.
+ * Represents an empty statement or absence of statement.
  * 
  * This node is used for internal processing, should not appear in the final AST.
  * 

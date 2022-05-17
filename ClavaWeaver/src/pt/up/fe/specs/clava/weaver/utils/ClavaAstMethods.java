@@ -22,6 +22,7 @@ import org.lara.interpreter.weaver.interf.WeaverEngine;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.util.SpecsCheck;
 
 public class ClavaAstMethods extends TreeNodeAstMethods<ClavaNode> {
@@ -36,8 +37,11 @@ public class ClavaAstMethods extends TreeNodeAstMethods<ClavaNode> {
     @Override
     protected Object[] getChildrenImpl(ClavaNode node) {
         var children = node.getChildren().stream()
+                // Filter null nodes
+                .filter(child -> !(child instanceof NullNode))
                 // .filter(ClavaAstMethods::lclFilter)
                 .toArray();
+
         return children;
     }
 

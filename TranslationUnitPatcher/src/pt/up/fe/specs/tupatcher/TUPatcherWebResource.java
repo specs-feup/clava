@@ -26,13 +26,9 @@ public interface TUPatcherWebResource {
     }
 
     WebResourceProvider WIN_EXE = create("tu_dumper_windows.exe", "v1.0");
+    WebResourceProvider WIN_DLL1 = create("libwinpthread-1.dll", "v1.0");
+    WebResourceProvider WIN_DLL2 = create("zlib1.dll", "v1.0");
     WebResourceProvider LINUX_4_EXE = create("tu_dumper_ubuntu", "v1.0");
     WebResourceProvider LINUX_5_EXE = create("tu_dumper_linux5", "v1.0");
-
-    // WebResourceProvider LINUX_ARMV7_EXE = create("linux_ubuntu_14_armv7/clang_ast", "v4.2.10");
-    //
-    // WebResourceProvider CENTOS_EXE = create("centos7/clang_ast", "v4.2.10");
-    //
-    // WebResourceProvider MAC_OS_EXE = create("macos/clang_ast", "v4.2.10");
 
 }

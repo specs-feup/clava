@@ -1,6 +1,7 @@
 laraImport("lara.pass.Pass");
 laraImport("weaver.Query");
 laraImport("clava.pass.DecomposeVarDeclarations");
+laraImport("clava.ClavaJoinPoints");
 
 class SingleReturnFunction extends Pass {
   constructor() {
@@ -8,8 +9,12 @@ class SingleReturnFunction extends Pass {
   }
 
   _apply_impl($jp) {
+    // destructure joinpoint factories to prevent excessive verbosity
+    const { labelDecl, labelStmt, returnStmt, varRef, assign, gotoStmt } =
+      ClavaJoinPoints;
+
     if (!$jp.instanceOf("function") || !$jp.isImplementation) {
-      return;
+      return _new_result($jp, false);
     }
     const $body = $jp.body;
     const $returnStmts = Query.searchFrom($body, "returnStmt").get();
@@ -17,7 +22,7 @@ class SingleReturnFunction extends Pass {
       $returnStmts.length === 0 ||
       ($returnStmts.length === 1 && $body.lastChild.instanceOf("returnStmt"))
     ) {
-      return;
+      return this.#new_result($jp, false);
     }
 
     // C++ spec has some restrictions about jumping over initialized values that
@@ -25,26 +30,39 @@ class SingleReturnFunction extends Pass {
     // declarations first
     new DecomposeVarDeclarations().apply($body);
 
-    $body.insertEnd("__return_label:");
+    const $label = labelDecl("__return_label");
+    $body.insertEnd(labelStmt($label));
 
     const returnType = $jp.returnType;
     const returnIsVoid =
       returnType.isBuiltin && returnType.builtinKind === "Void";
+    let $local;
     if (returnIsVoid) {
-      $body.insertEnd(";");
+      $body.insertEnd(returnStmt());
     } else {
-      $body.addLocal("__return_value", returnType);
-      $body.insertEnd("return __return_value;");
+      $local = $body.addLocal("__return_value", returnType);
+      $body.insertEnd(returnStmt(varRef($local)));
     }
 
     for (const $returnStmt of $returnStmts) {
       if (!returnIsVoid) {
         $returnStmt.insertBefore(
-          `__return_value = ${$returnStmt.returnExpr.code};`
+          // null safety: $local is initialized whenever return is not void
+          assign(varRef($local), $returnStmt.returnExpr)
         );
       }
-      $returnStmt.insertBefore("goto __return_label;");
+      $returnStmt.insertBefore(gotoStmt($label));
       $returnStmt.detach();
     }
+
+    return this.#new_result($jp, true);
+  }
+
+  #new_result($jp, appliedPass) {
+    return new PassResult(this.name, {
+      appliedPass,
+      insertedLiteralCode: false,
+      location: $jp.location,
+    });
   }
 }

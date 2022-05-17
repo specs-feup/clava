@@ -47,7 +47,7 @@ void earlyReturn(double n) {
    }
    std::cout << "Not greater than 16" << std::endl;
    __return_label:
-   ;
+   return;
 }
 
 /**** End File ****/

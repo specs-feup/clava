@@ -128,7 +128,7 @@ public class ParallelCodeParser extends CodeParser {
         // System.out.println("PARALLEL OPTIONS: " + options);
         // Prepare resources before execution
         // ClangResources clangResources = new ClangResources(get(SHOW_CLANG_DUMP));
-        ClangResources clangResources = new ClangResources();
+        ClangResources clangResources = new ClangResources(this);
         var clangFiles = clangResources.getClangFiles(version, get(ClangAstKeys.LIBC_CXX_MODE));
         // File clangExecutable = clangResources.prepareResources(version);
         // List<String> builtinIncludes = clangResources.prepareIncludes(clangExecutable,

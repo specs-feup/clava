@@ -31,6 +31,7 @@ import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.LabelDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
@@ -87,8 +88,11 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AField;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFile;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunction;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AFunctionType;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AGotoStmt;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AIf;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALabelDecl;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALabelStmt;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALoop;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ANamedDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
@@ -214,13 +218,14 @@ public class AstFactory {
 
         return CxxJoinpoints.create(CxxWeaver.getFactory().literalExpr(code, astType), AExpression.class);
     }
-    
+
     public static AExpression cxxConstructExpr(AType type, AJoinPoint... constructorArguments) {
         List<Expr> exprArgs = Arrays.stream(constructorArguments)
                 .map(arg -> (Expr) arg.getNode())
                 .collect(Collectors.toList());
-        
-        return CxxJoinpoints.create(CxxWeaver.getFactory().cxxConstructExpr((Type)type.getNode(), exprArgs), AExpression.class);
+
+        return CxxJoinpoints.create(CxxWeaver.getFactory().cxxConstructExpr((Type) type.getNode(), exprArgs),
+                AExpression.class);
     }
 
     public static ACall callFromFunction(AFunction function, AJoinPoint... args) {
@@ -758,5 +763,53 @@ public class AstFactory {
         var declStmt = CxxWeaver.getFactory().declStmt(declNodes);
 
         return CxxJoinpoints.create(declStmt, ADeclStmt.class);
+    }
+
+    /**
+     * Creates a joinpoint representing a declaration of a label. This is not a `label:` statement. For that, you must
+     * create a `labelStmt` with returned `labelDecl`. This joinpoint is also used to create `gotoStmt`s.
+     * 
+     * @param name
+     *            Name of the label
+     * @return The created label declaration
+     */
+    public static ALabelDecl labelDecl(String name) {
+        var decl = CxxWeaver.getFactory().labelDecl(name);
+        return CxxJoinpoints.create(decl, ALabelDecl.class);
+    }
+
+    /**
+     * Creates a join point representing a label statement in the code.
+     * 
+     * @param decl
+     *            The declaration for this statement
+     * @return The label statement to be used in the code.
+     */
+    public static ALabelStmt labelStmt(ALabelDecl decl) {
+        var stmt = decl.getFactory().labelStmt((LabelDecl) decl.getNode());
+        return CxxJoinpoints.create(stmt, ALabelStmt.class);
+    }
+
+    /**
+     * Convenience method to create at once a label statement and its declaration
+     * 
+     * @param name
+     *            Name of the label
+     * @return The created
+     */
+    public static ALabelStmt labelStmt(String name) {
+        return labelStmt(labelDecl(name));
+    }
+
+    /**
+     * Create a joinpoint representing a goto statement.
+     * 
+     * @param label
+     *            The declaration of the label to jump to
+     * @return The created goto statement
+     */
+    public static AGotoStmt gotoStmt(ALabelDecl label) {
+        var stmt = label.getFactory().gotoStmt((LabelDecl) label.getNode());
+        return CxxJoinpoints.create(stmt, AGotoStmt.class);
     }
 }

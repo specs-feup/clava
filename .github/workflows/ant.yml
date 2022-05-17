@@ -14,9 +14,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./..
+    #defaults:
+    #  run:
+    #    working-directory: ./..
 
     steps:
     #- uses: actions/checkout@v3
@@ -37,16 +37,20 @@ jobs:
     - name: Build with Ant
       run: |
         ant -noinput -buildfile build.xml
-    - name: Copy test results        
+    #- name: Copy test results        
+    #  run: |
+    #    # Tried relative paths (not supported by junit action) and symlinks (are not followed by glob)
+    #    # Resorted to copying the tests to a folder in the repo folder
+    #    cp -a reports-eclipse-build/. clava/reports-eclipse-build/        
+    - name: List directory
       run: |
-        # Tried relative paths (not supported by junit action) and symlinks (are not followed by glob)
-        # Resorted to copying the tests to a folder in the repo folder
-        cp -a reports-eclipse-build/. clava/junit-reports/        
+        echo "Current folder"
+        ls
     - name: Publish Test Report 
       uses: mikepenz/action-junit-report@v3.0.1
       if: always() # always run even if the previous step fails
       with:
         #report_paths: '**/reports-eclipse-build/TEST-*.xml'
-        report_paths: 'junit-reports/*.xml'      
+        report_paths: '**/reports-eclipse-build/*.xml'      
         summary: true
         #exclude_sources: ''        

@@ -1103,6 +1103,24 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * Get value on attribute targetNodesArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getTargetNodesArrayImpl() {
+        return this.aPragma.getTargetNodesArrayImpl();
+    }
+
+    /**
+     * Get value on attribute targetNodesArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] targetNodesArrayImpl(String endPragma) {
+        return this.aPragma.targetNodesArrayImpl(endPragma);
+    }
+
+    /**
      * Method used by the lara interpreter to select targets
      * @return 
      */
@@ -1568,6 +1586,7 @@ public abstract class AOmp extends APragma {
         NAME("name"),
         TARGET("target"),
         CONTENT("content"),
+        TARGETNODES("targetNodes"),
         PARENT("parent"),
         ASTANCESTOR("astAncestor"),
         AST("ast"),

@@ -47,7 +47,8 @@ public class StmtDataParser {
     public static DataStore parseLabelStmtData(LineStream lines, ClangAstData dataStore) {
         DataStore data = parseStmtData(lines, dataStore);
 
-        data.add(LabelStmt.LABEL, lines.nextLine());
+        // data.add(LabelStmt.LABEL, lines.nextLine());
+        dataStore.getClavaNodes().queueSetNode(data, LabelStmt.LABEL, lines.nextLine());
 
         return data;
     }

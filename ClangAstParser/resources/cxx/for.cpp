@@ -50,4 +50,9 @@ int main() {
 	for(int ii=0, jj=0; ii<10 && jj<10; ii++, jj++) {
         i+= ii + jj;
     }
+	
+	// Decl in cond
+	for(int ii=0; int jj = ii + 1; ii++) {
+        i+= ii;
+    }
 }
