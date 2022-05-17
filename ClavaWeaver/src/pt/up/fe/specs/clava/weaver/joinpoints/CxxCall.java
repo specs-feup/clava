@@ -334,11 +334,19 @@ public class CxxCall extends ACall {
 
     @Override
     public AFunction getFunctionImpl() {
-        // return CxxJoinpoints.create(call.getFunctionDecl(), this, AFunction.class);
-        return call.getFunctionDecl()
-                .map(fDecl -> CxxJoinpoints.create(fDecl, AFunction.class))
-                .orElse(null);
-        // return CxxJoinpoints.create(call.getFunction(), this, AFunction.class);
+        // First, try the implementation
+        var definition = getDefinitionImpl();
+
+        if (definition != null) {
+            return definition;
+        }
+
+        // Implementation not found return declaration
+        return getDeclarationImpl();
+
+        // return call.getFunctionDecl()
+        // .map(fDecl -> CxxJoinpoints.create(fDecl, AFunction.class))
+        // .orElse(null);
     }
 
     @Override

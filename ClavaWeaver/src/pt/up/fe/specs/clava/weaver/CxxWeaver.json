@@ -11932,7 +11932,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a function join point associated with this call. No guarantees are made regarding if it is the declaration or definition of the function.",
+						"tooltip": "a function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration",
 						"children": [
 									{
 										"type": "function",
@@ -17051,7 +17051,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a function join point associated with this call. No guarantees are made regarding if it is the declaration or definition of the function.",
+						"tooltip": "a function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration",
 						"children": [
 									{
 										"type": "function",
@@ -22880,7 +22880,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a function join point associated with this call. No guarantees are made regarding if it is the declaration or definition of the function.",
+						"tooltip": "a function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration",
 						"children": [
 									{
 										"type": "function",
@@ -56164,7 +56164,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a function join point associated with this call. No guarantees are made regarding if it is the declaration or definition of the function.",
+						"tooltip": "a function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration",
 						"children": [
 									{
 										"type": "function",
