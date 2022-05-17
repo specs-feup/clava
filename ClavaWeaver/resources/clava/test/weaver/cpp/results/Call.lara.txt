@@ -7,5 +7,5 @@ Def:12
 function decl of call is definition?: false
 function decl of call is definition?: true
 function decl of call is definition?: true
-function decl of call is definition?: false
+function decl of call is definition?: true
 printf call has function decl?: true
