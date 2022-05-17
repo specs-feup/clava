@@ -45,6 +45,14 @@ public class ClavaAstMethods extends TreeNodeAstMethods<ClavaNode> {
         return children;
     }
 
+    /**
+     * Because we are filtering null nodes, the number of children must be adjusted
+     */
+    @Override
+    protected Integer getNumChildrenImpl(ClavaNode node) {
+        return getChildrenImpl(node).length;
+    }
+
     protected static boolean lclFilter(ClavaNode node) {
         // Function
         if (node instanceof FunctionDecl) {
