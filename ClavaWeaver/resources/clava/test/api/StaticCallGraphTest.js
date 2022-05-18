@@ -1,4 +1,3 @@
-laraImport("clava.graphs.scg.StaticCallGraphBuilder");
 laraImport("clava.graphs.StaticCallGraph");
 
 var fullGraph = StaticCallGraph.build().graph;

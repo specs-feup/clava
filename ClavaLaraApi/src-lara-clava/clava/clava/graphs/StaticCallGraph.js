@@ -2,6 +2,8 @@ laraImport("lara.graphs.Graphs");
 laraImport("weaver.Query");
 laraImport("lara.util.StringSet");
 
+laraImport("clava.graphs.scg.StaticCallGraphBuilder");
+
 class StaticCallGraph {
 	
 	// The static call graph
