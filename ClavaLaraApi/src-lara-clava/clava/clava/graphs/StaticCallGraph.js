@@ -30,5 +30,9 @@ class StaticCallGraph {
 	get functions() {
 		return this.#functions;
 	}
+	
+	getNode($function) {
+		return this.#functions[$function.signature];
+	}	
 
 }
