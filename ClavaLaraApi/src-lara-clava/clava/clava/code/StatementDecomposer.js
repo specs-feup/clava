@@ -1,3 +1,7 @@
+laraImport("clava.code.DecomposeResult");
+laraImport("clava.ClavaJoinPoints");
+laraImport("lara.Check");
+
 /**
  * Decomposes complex statements into several simpler ones.
  */
