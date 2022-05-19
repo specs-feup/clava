@@ -7,20 +7,20 @@ class StatementDecomposer {
 	 * @param {string} [tempPrefix="decomp_"]
 	 * @param {number} [startIndex=0]
 	 */
-	constructor(tempPrefix, startIndex) {	
-		this.tempPrefix = tempPrefix !== undefined ? tempPrefix : "decomp_";
-		this.startIndex = startIndex !== undefined ? startIndex : 0;
+	constructor(tempPrefix = "decomp", startIndex = 0) {	
+		this.tempPrefix = tempPrefix ?? "decomp_";
+		this.startIndex = startIndex ?? 0;
 		
 		Check.isString(this.tempPrefix);
 		Check.isNumber(this.startIndex);		
 	}
 
-	_throwNotImplemented(generalType, specificType) {
-		throw new Error("StatementDecomposer not implemented for "+generalType+" of type '"+specificType+"'");
+	#throwNotImplemented(generalType, specificType) {
+		throw new Error(`StatementDecomposer not implemented for ${generalType} of type '${specificType}'`);
 	}
 	
-	_newTempVarname() {
-		let varName = this.tempPrefix + this.startIndex;
+	#newTempVarname() {
+		const varName = `${this.tempPrefix}${this.startIndex}`;
 		this.startIndex++;
 		return varName;
 	}
@@ -31,7 +31,7 @@ class StatementDecomposer {
 	* @param {$statement} $stmt - A statement that will be decomposed.
 	*/
 	decomposeAndReplace($stmt) {
-		let stmts = this.decompose($stmt);
+		const stmts = this.decompose($stmt);
 		
 		// No statements to replace
 		if(stmts.length === 0) {
@@ -39,7 +39,7 @@ class StatementDecomposer {
 		}
 				
 		// Insert all statements in order, before original statement
-		for(let $newStmt of stmts) {
+		for(const $newStmt of stmts) {
 			$stmt.insertBefore($newStmt);
 		}
 		
@@ -55,7 +55,7 @@ class StatementDecomposer {
 		try {
 			return this.decomposeStmt($stmt);
 		} catch(e) {
-			println("StatementDecomposer: " + e);
+			println(`StatementDecomposer: ${e}`);
 			return [];
 		}
   	}
@@ -79,7 +79,7 @@ class StatementDecomposer {
 		}
 	
 	
-		debug("StatementDecomposer: not implemented for statement of type " + $stmt.joinPointType);
+		debug(`StatementDecomposer: not implemented for statement of type ${$stmt.joinPointType}`);
 		return [];
 	}
 	
@@ -87,7 +87,7 @@ class StatementDecomposer {
 	decomposeExprStmt($stmt) {
 		
 		// Statement represents an expression
-		let $expr = $stmt.expr;
+		const $expr = $stmt.expr;
 		
 		return this.decomposeExpr($expr).stmts;
 	}
@@ -95,50 +95,43 @@ class StatementDecomposer {
 	decomposeReturnStmt($stmt) {
 		
 		// Return may contain an expression
-		let $expr = $stmt.returnExpr;
+		const $expr = $stmt.returnExpr;
 		
 		if($expr === undefined) {
 			return [];
 		}
 		
-		let decomposeResult = this.decomposeExpr($expr);
-
-		let newStmts = decomposeResult.stmts;
-		let $newReturnStmt = ClavaJoinPoints.returnStmt(decomposeResult.$resultExpr);
+		const {stmts, $resultExpr} = this.decomposeExpr($expr);
+		const $newReturnStmt = ClavaJoinPoints.returnStmt($resultExpr);
 		
-		newStmts.push($newReturnStmt);
-		
-		return newStmts;
+		return [...stmts, $newReturnStmt];
 	}
 
 	decomposeDeclStmt($stmt) {
 		
 		// declStmt can have one or more declarations
-		let $decls = $stmt.decls;
-		
-		let newStmts = [];
-		
-		// Create a separate stmt for each declaration
-		for(let $decl of $decls) {
-			
-			if(!$decl.instanceOf("vardecl")) {
-				debug("StatementDecomposer.decomposeDeclStmt: not implemented for decl of type " + $decl.joinPointType);
-				newStmts.push(ClavaJoinPoints.declStmt($decl));
-				continue;
-			}
-			
-			// If vardecl has init, decompose expression
-			if($decl.hasInit) {
-				let decomposeResult = this.decomposeExpr($decl.init);				
-				newStmts = newStmts.concat(decomposeResult.stmts);
-				$decl.init = decomposeResult.$resultExpr;
-			}
+		const $decls = $stmt.decls;
 
-			newStmts.push(ClavaJoinPoints.declStmt($decl));
+		return $decls.flatMap(
+			($decl) => this.#decomposeDecl($decl)
+		);
+	}
+
+	#decomposeDecl($decl) {
+		if(!$decl.instanceOf("vardecl")) {
+			debug(`StatementDecomposer.decomposeDeclStmt: not implemented for decl of type ${$decl.joinPointType}`);
+			return [ClavaJoinPoints.declStmt($decl)];
 		}
-		
-		
-		return newStmts;
+
+		// If vardecl has init, decompose expression
+		if($decl.hasInit) {
+			const decomposeResult = this.decomposeExpr($decl.init);				
+			expr = newStmts.concat(decomposeResult.stmts);
+			$decl.init = decomposeResult.$resultExpr;
+			return [...decomposeResult.stmts, ClavaJoinPoints.declStmt($decl)]
+		}
+
+		return [ClavaJoinPoints.declStmt($decl)]
 	}
 	
 	/**
@@ -153,56 +146,50 @@ class StatementDecomposer {
 		
 		if($expr.numChildren === 0) {
 		//if($expr.instanceOf("varref") || $expr.instanceOf("literal")) {
-			let stmts = [];
-			//let dec = new DecomposeResult(stmts, $expr);
-
-			return new DecomposeResult(stmts, $expr);
+			return new DecomposeResult([], $expr);
 		}
 
-		this._throwNotImplemented("expressions", $expr.joinPointType);	
+		this.#throwNotImplemented("expressions", $expr.joinPointType);	
 	}
 	
 	decomposeBinaryOp($binaryOp) {
 		
-		let kind = $binaryOp.kind;
+		const kind = $binaryOp.kind;
 		
 		if(kind === "assign") {
-		
-			let stmts = [];
-			
 			// Get statements of right hand-side
-			let rightResult = this.decomposeExpr($binaryOp.right);
-			stmts = stmts.concat(rightResult.stmts);
+			const rightResult = this.decomposeExpr($binaryOp.right);
 
 			// Add assignment
-			let $newAssign = ClavaJoinPoints.assign($binaryOp.left, rightResult.$resultExpr);
-			stmts.push(ClavaJoinPoints.exprStmt($newAssign));
+			const $newAssign = ClavaJoinPoints.assign($binaryOp.left, rightResult.$resultExpr);
+			const $assignExpr = ClavaJoinPoints.exprStmt($newAssign);
 			
-			return new DecomposeResult(stmts, $binaryOp.left);			
+			return new DecomposeResult([...rightResult.stmts, $assignExpr], $binaryOp.left);			
 		} 
 		// TODO: Not taking into account += and other cases
 
 		// Apply decompose to both sides
-		let leftResult = this.decomposeExpr($binaryOp.left);
-
-		let rightResult = this.decomposeExpr($binaryOp.right);
-		
-		let stmts = [];
-		stmts = stmts.concat(leftResult.stmts);
-		stmts = stmts.concat(rightResult.stmts);
+		const leftResult = this.decomposeExpr($binaryOp.left);
+		const rightResult = this.decomposeExpr($binaryOp.right);
 		
 		// Create operation with result of decomposition
-		let $newExpr = ClavaJoinPoints.binaryOp($binaryOp.kind, leftResult.$resultExpr, rightResult.$resultExpr, $binaryOp.type);
+		const $newExpr = ClavaJoinPoints.binaryOp(
+			$binaryOp.kind,
+			leftResult.$resultExpr,
+			rightResult.$resultExpr,
+			$binaryOp.type
+		);
 		
 		// Create declaration statement with result to new temporary variable
-		let tempVarname = this._newTempVarname();
-		let tempVarDecl = ClavaJoinPoints.varDecl(tempVarname, $newExpr);
-		stmts.push(tempVarDecl.stmt);
+		const tempVarname = this.#newTempVarname();
+		const tempVarDecl = ClavaJoinPoints.varDecl(tempVarname, $newExpr);
 
+		const stmts = [...leftResult.stmts, ...rightResult.stmts, tempVarDecl.stmt];
+		
 		return new DecomposeResult(stmts, ClavaJoinPoints.varRefFromDecl(tempVarDecl));					
 
 
-		//this._throwNotImplemented("binary operators", kind);	
+		//this.#throwNotImplemented("binary operators", kind);	
 	}
 	
 	
