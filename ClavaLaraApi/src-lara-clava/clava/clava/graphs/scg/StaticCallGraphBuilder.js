@@ -69,7 +69,7 @@ class StaticCallGraphBuilder {
 		for(const pair of pairs) {
 			const $sourceFunction = pair["function"];
 			const $call = pair["call"];			
-			const $targetFunction = $call.function;	// Already normalizes function					
+			const $targetFunction = $call.function;	// Already canonical function					
 			
 			const sourceNode = this.#addOrGetNode($sourceFunction);
 			const targetNode = this.#addOrGetNode($targetFunction);			
@@ -149,10 +149,11 @@ class StaticCallGraphBuilder {
 					// Add function
 					jpsToSearch.push($functionDef);	
 					//println("Adding function " + $functionDef.signature)	
-				}
-			}					
+				}					
+			}
 		}
-
+		
 		return pairs;		
 	}
 }
+
