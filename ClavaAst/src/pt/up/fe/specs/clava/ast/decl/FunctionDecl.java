@@ -234,6 +234,13 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
      */
     public List<FunctionDecl> getPrototypes() {
 
+        // Search for the declaration
+        var prototypes = getAppTry().map(app -> app.getFunctionPrototypes(this)).orElse(Collections.emptyList());
+
+        if (!prototypes.isEmpty()) {
+            return prototypes;
+        }
+
         // If no body, return immediately
         // There are a number of situations where this should be done
         // e.g. node is still not inserted (no App), method is still not in class
@@ -241,8 +248,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
             return Arrays.asList(this);
         }
 
-        // Search for the declaration
-        return getAppTry().map(app -> app.getFunctionPrototypes(this)).orElse(Collections.emptyList());
+        return Collections.emptyList();
     }
 
     /**
