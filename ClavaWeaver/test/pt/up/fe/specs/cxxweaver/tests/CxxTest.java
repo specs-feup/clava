@@ -346,4 +346,8 @@ public class CxxTest {
         newTester().test("Class.js", "class.cpp");
     }
 
+    @Test
+    public void testCanonical() {
+        newTester().test("CanonicalTest.js", "canonical.cpp");
+    }
 }
