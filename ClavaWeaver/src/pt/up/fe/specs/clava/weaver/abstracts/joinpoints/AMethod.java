@@ -277,21 +277,21 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute normalize
+     * Get value on attribute canonical
      * @return the attribute's value
      */
     @Override
-    public AFunction getNormalizeImpl() {
-        return this.aFunction.getNormalizeImpl();
+    public AFunction getCanonicalImpl() {
+        return this.aFunction.getCanonicalImpl();
     }
 
     /**
-     * Get value on attribute isNormalized
+     * Get value on attribute isCanonical
      * @return the attribute's value
      */
     @Override
-    public Boolean getIsNormalizedImpl() {
-        return this.aFunction.getIsNormalizedImpl();
+    public Boolean getIsCanonicalImpl() {
+        return this.aFunction.getIsCanonicalImpl();
     }
 
     /**
@@ -1060,8 +1060,8 @@ public abstract class AMethod extends AFunction {
         SIGNATURE("signature"),
         RETURNTYPE("returnType"),
         ISCUDAKERNEL("isCudaKernel"),
-        NORMALIZE("normalize"),
-        ISNORMALIZED("isNormalized"),
+        CANONICAL("canonical"),
+        ISCANONICAL("isCanonical"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),

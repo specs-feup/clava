@@ -41515,6 +41515,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present",
+						"children": [
+									{
+										"type": "function",
+										"name": "canonical"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "String",
@@ -41580,6 +41589,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if this is the function returned by the 'normalize' attribute",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isCanonical"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "Boolean",
@@ -41621,15 +41639,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if this is the function returned by the 'normalize' attribute",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "isNormalized"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this particular function join point is a prototype (i.e. does not have a body), false otherwise",
 						"children": [
 									{
@@ -41651,15 +41660,6 @@
 									{
 										"type": "Boolean",
 										"name": "isVirtual"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present",
-						"children": [
-									{
-										"type": "function",
-										"name": "normalize"
 									}]
 					},
 					{
@@ -57506,6 +57506,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present",
+						"children": [
+									{
+										"type": "function",
+										"name": "canonical"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "String",
@@ -57571,6 +57580,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if this is the function returned by the 'normalize' attribute",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isCanonical"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "Boolean",
@@ -57612,15 +57630,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if this is the function returned by the 'normalize' attribute",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "isNormalized"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this particular function join point is a prototype (i.e. does not have a body), false otherwise",
 						"children": [
 									{
@@ -57642,15 +57651,6 @@
 									{
 										"type": "Boolean",
 										"name": "isVirtual"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present",
-						"children": [
-									{
-										"type": "function",
-										"name": "normalize"
 									}]
 					},
 					{

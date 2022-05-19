@@ -678,7 +678,7 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AFunction getNormalizeImpl() {
+    public AFunction getCanonicalImpl() {
         // First, try the implementation
         var definition = getDefinitionJpImpl();
 
@@ -691,12 +691,12 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public Boolean getIsNormalizedImpl() {
+    public Boolean getIsCanonicalImpl() {
         // Get normalized function
-        var normalizedFunction = getNormalizeImpl();
+        var canonicalFunction = getCanonicalImpl();
 
         // Compare
-        return function.equals(normalizedFunction.getNode());
+        return function.equals(canonicalFunction.getNode());
     }
 
 }
