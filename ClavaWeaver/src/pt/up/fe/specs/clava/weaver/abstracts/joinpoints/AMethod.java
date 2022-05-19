@@ -277,6 +277,24 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute normalize
+     * @return the attribute's value
+     */
+    @Override
+    public AFunction getNormalizeImpl() {
+        return this.aFunction.getNormalizeImpl();
+    }
+
+    /**
+     * Get value on attribute isNormalized
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsNormalizedImpl() {
+        return this.aFunction.getIsNormalizedImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select bodys
      * @return 
      */
@@ -1042,6 +1060,8 @@ public abstract class AMethod extends AFunction {
         SIGNATURE("signature"),
         RETURNTYPE("returnType"),
         ISCUDAKERNEL("isCudaKernel"),
+        NORMALIZE("normalize"),
+        ISNORMALIZED("isNormalized"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),

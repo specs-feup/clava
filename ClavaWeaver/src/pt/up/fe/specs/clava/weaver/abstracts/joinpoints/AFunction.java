@@ -642,6 +642,52 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
+     */
+    public abstract AFunction getNormalizeImpl();
+
+    /**
+     * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
+     */
+    public final Object getNormalize() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "normalize", Optional.empty());
+        	}
+        	AFunction result = this.getNormalizeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "normalize", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "normalize", e);
+        }
+    }
+
+    /**
+     * true, if this is the function returned by the 'normalize' attribute
+     */
+    public abstract Boolean getIsNormalizedImpl();
+
+    /**
+     * true, if this is the function returned by the 'normalize' attribute
+     */
+    public final Object getIsNormalized() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isNormalized", Optional.empty());
+        	}
+        	Boolean result = this.getIsNormalizedImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isNormalized", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isNormalized", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select bodys
      * @return 
      */
@@ -1680,6 +1726,8 @@ public abstract class AFunction extends ADeclarator {
         attributes.add("signature");
         attributes.add("returnType");
         attributes.add("isCudaKernel");
+        attributes.add("normalize");
+        attributes.add("isNormalized");
     }
 
     /**
@@ -1768,6 +1816,8 @@ public abstract class AFunction extends ADeclarator {
         SIGNATURE("signature"),
         RETURNTYPE("returnType"),
         ISCUDAKERNEL("isCudaKernel"),
+        NORMALIZE("normalize"),
+        ISNORMALIZED("isNormalized"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),

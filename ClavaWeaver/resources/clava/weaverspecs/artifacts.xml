@@ -467,7 +467,9 @@
 		<attribute name="returnType" type="type">
 			<def/>
 		</attribute>
-		<attribute name="isCudaKernel" type="Boolean"/>		
+		<attribute name="isCudaKernel" type="Boolean"/>
+		<attribute name="normalize" type="function" tooltip="Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present"/>				
+		<attribute name="isNormalized" type="Boolean" tooltip="true, if this is the function returned by the 'normalize' attribute"/>
 	</artifact>
 
 

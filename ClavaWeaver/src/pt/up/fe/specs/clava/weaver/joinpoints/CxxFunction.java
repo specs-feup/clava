@@ -677,4 +677,26 @@ public class CxxFunction extends AFunction {
                 .isPresent();
     }
 
+    @Override
+    public AFunction getNormalizeImpl() {
+        // First, try the implementation
+        var definition = getDefinitionJpImpl();
+
+        if (definition != null) {
+            return definition;
+        }
+
+        // Implementation not found return declaration
+        return getDeclarationJpImpl();
+    }
+
+    @Override
+    public Boolean getIsNormalizedImpl() {
+        // Get normalized function
+        var normalizedFunction = getNormalizeImpl();
+
+        // Compare
+        return function.equals(normalizedFunction.getNode());
+    }
+
 }
