@@ -34,7 +34,8 @@ class StaticCallGraph {
 	}
 	
 	getNode($function) {
-		return this.#functions[$function.signature];
+		// Normalize function 
+		return this.#functions[$function.normalize.astId];
 	}	
 
 }

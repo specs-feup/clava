@@ -69,7 +69,7 @@ class StaticCallGraphBuilder {
 		for(const pair of pairs) {
 			const $sourceFunction = pair["function"];
 			const $call = pair["call"];			
-			const $targetFunction = $call.function;						
+			const $targetFunction = $call.function;	// Already normalizes function					
 			
 			const sourceNode = this.#addOrGetNode($sourceFunction);
 			const targetNode = this.#addOrGetNode($targetFunction);			
@@ -80,14 +80,20 @@ class StaticCallGraphBuilder {
 		return this.#graph;
 	}
 
+	static getEdgeId(sourceNode, targetNode) {
+		return sourceNode.data().function.signature + "$" + targetNode.data().function.signature;
+	}
+
 	#addEdge(sourceNode, targetNode, $call) {
-		const sourceTargetId = sourceNode.data().function.signature + "$" + targetNode.data().function.signature;
+		const edgeId = StaticCallGraphBuilder.getEdgeId(sourceNode, targetNode);
 		//println("Source->Target Id: " + sourceTargetId);
 		
-		let edge = this.#edges[sourceTargetId];
+		let edge = this.#edges[edgeId];
 		if(edge === undefined) {
-			edge = Graphs.addEdge(this.#graph, sourceNode, targetNode, new ScgEdgeData());				
-			this.#edges[sourceTargetId] = edge;
+			const edgeData = new ScgEdgeData();
+			edgeData.id = edgeId;
+			edge = Graphs.addEdge(this.#graph, sourceNode, targetNode, edgeData);				
+			this.#edges[edgeId] = edge;
 		}
 		
 		// Increment edge value
