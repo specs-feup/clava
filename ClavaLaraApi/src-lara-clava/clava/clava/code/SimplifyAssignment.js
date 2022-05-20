@@ -26,15 +26,15 @@ class SimplifyAssignment {
       return;
     }
 
-    const $varRef = $complexAssignment.left;
-    const $rhs = $complexAssignment.right;
+    const $lValue = $complexAssignment.left;
+    const $rValue = $complexAssignment.right;
 
     const $binaryOp = ClavaJoinPoints.binaryOp(
       this.#ops.get($complexAssignment.operator),
-      $varRef.copy(),
-      $rhs,
-      $varRef.decl.type
+      $lValue.copy(),
+      $rValue,
+      $complexAssignment.type
     );
-    $complexAssignment.replaceWith(ClavaJoinPoints.assign($varRef, $binaryOp));
+    $complexAssignment.replaceWith(ClavaJoinPoints.assign($lValue, $binaryOp));
   }
 }
