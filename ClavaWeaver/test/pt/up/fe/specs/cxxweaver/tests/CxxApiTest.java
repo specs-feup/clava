@@ -170,4 +170,9 @@ public class CxxApiTest {
     public void testSingleReturnFunction() {
         newTester().test("PassSingleReturnTest.js", "pass_single_return.cpp");
     }
+
+    @Test
+    public void testSimplifyAssignment() {
+        newTester().test("CodeSimplifyAssignmentTest.js", "code_simplify_assignment.cpp");
+    }
 }
