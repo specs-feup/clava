@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -49,13 +50,18 @@ public class CXXMemberCallExpr extends CallExpr {
 
     /// DATAKEYS END
 
+    private final static List<Class<? extends ClavaNode>> MEMBER_BYPASS = Arrays.asList(ParenExpr.class);
+
     public CXXMemberCallExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
     @Override
     public MemberExpr getCallee() {
-        return (MemberExpr) super.getCallee();
+        var callee = super.getCallee();
+
+        // MemberExpr might be encapsulated by a ParenExpr
+        return (MemberExpr) callee.normalize(MEMBER_BYPASS);
     }
 
     @Override
