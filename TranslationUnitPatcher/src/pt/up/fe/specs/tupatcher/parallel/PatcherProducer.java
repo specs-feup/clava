@@ -90,6 +90,8 @@ public class PatcherProducer {
         command.add("-x");
         command.add("c++");
 
+        var workingDir = dumperExe.getAbsoluteFile().getParentFile();
+
         int n = 0;
         int maxIterations = config.get(TUPatcherConfig.MAX_ITERATIONS);
         ProcessOutput<Boolean, TUErrorsData> output = null;
@@ -98,6 +100,7 @@ public class PatcherProducer {
 
             try {
                 output = SpecsSystem.runProcess(command,
+                        workingDir,
                         TUPatcherLauncher::outputProcessor,
                         inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
                 patchData.write(sourceFile, patchedFile);
