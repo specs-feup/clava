@@ -152,7 +152,7 @@ public class TUPatcherLauncher {
 
         // If parallel execution, use parallel version
         if (config.get(TUPatcherConfig.PARALLEL)) {
-            return new ParallelPatcher(config).execute();
+            return new ParallelPatcher(config).executeV2();
         }
 
         var sourcePaths = config.get(TUPatcherConfig.SOURCE_PATHS).getStringList();
