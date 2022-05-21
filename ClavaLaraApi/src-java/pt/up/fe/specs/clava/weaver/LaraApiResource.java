@@ -78,6 +78,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     STATEMENT_DECOMPOSER("code/StatementDecomposer.lara"),
     STATEMENT_DECOMPOSER_JS("code/StatementDecomposer.js"),
     DECOMPOSE_RESULT_JS("code/DecomposeResult.js"),
+    CODE_SIMPLIFY_ASSIGNMENT("code/SimplifyAssignment.js"),
 
     // Gprofer
     GPROFER("gprofer/Gprofer.lara"),
