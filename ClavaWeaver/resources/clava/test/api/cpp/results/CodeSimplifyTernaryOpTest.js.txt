@@ -1,0 +1,21 @@
+/**** File 'cxx_weaver_output/code_simplify_ternary_op.cpp' ****/
+int main() {
+bool b = true;
+int i = b ? 1 : 0;
+int j;
+if(i > 0) {
+j = 2;
+}
+else {
+j = 4;
+}
+int k;
+if(b) {
+k += 1;
+}
+else {
+k += 0;
+}
+return 0;
+}
+/**** End File ****/
