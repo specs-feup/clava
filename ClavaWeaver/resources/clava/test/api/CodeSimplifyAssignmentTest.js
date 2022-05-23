@@ -3,7 +3,7 @@ laraImport("clava.code.SimplifyAssignment");
 laraImport("weaver.Query");
 
 for (const $op of Query.search("binaryOp")) {
-  SimplifyAssignment.apply($op);
+  SimplifyAssignment($op);
 }
 
 Clava.rebuild();
