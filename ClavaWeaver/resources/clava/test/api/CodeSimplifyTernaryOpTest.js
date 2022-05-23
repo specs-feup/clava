@@ -3,7 +3,7 @@ laraImport("clava.code.SimplifyTernaryOp");
 laraImport("weaver.Query");
 
 for ($stmt of Query.search("exprStmt")) {
-  SimplifyTernaryOp.apply($stmt);
+  SimplifyTernaryOp($stmt);
 }
 
 Clava.rebuild();
