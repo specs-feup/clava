@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +49,8 @@ public class CXXMemberCallExpr extends CallExpr {
     public final static DataKey<Optional<CXXMethodDecl>> METHOD_DECL = KeyFactory.optional("methodDecl");
 
     /// DATAKEYS END
+    
+    private final static List<Class<? extends ClavaNode>> MEMBER_BYPASS = Arrays.asList(ParenExpr.class);
 
     public CXXMemberCallExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
@@ -55,6 +58,12 @@ public class CXXMemberCallExpr extends CallExpr {
 
     @Override
     public MemberExpr getCallee() {
+        var callee = super.getCallee();
+        
+        if (false) return (MemberExpr) callee.normalize(MEMBER_BYPASS);
+        // TODO TMP
+        if (!(super.getCallee() instanceof MemberExpr)) return null;// (MemberExpr) ((ParenExpr) super.getCallee()).getSubExpr();
+
         return (MemberExpr) super.getCallee();
     }
 
@@ -62,6 +71,9 @@ public class CXXMemberCallExpr extends CallExpr {
     // public String getCalleeName() {
     public Optional<String> getCalleeNameTry() {
         ClavaNode callee = getCallee();
+        
+        // TODO TMP
+        if (callee == null) return Optional.empty();
 
         if (!(callee instanceof MemberExpr)) {
             throw new UnexpectedChildExpection(CXXMemberCallExpr.class, callee);

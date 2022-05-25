@@ -97,16 +97,18 @@ public class ClavaCommonLanguage {
 
 	private static String cxxRecordDecl(CXXRecordDecl node) {
 	    
+	    /*
+	    if (false || node.getDeclName().equals("TestSuite")) {
+            System.out.println(" -- cxxRecordDecl --  " + node.getDeclName());
+            System.out.println(" -- cxxRecordDecl --  " + node.getDeclName() + " ==> "  + node.getCode().split(" ").length);
+            // System.out.println(node);
+            System.out.println(node.getCode());
+	    }
+	    */
+	    
 	    boolean isDeclarationOnly = node.getChildren().size() == 0;
 	    
-	    /*
-        System.err.println(" --- map - cxxRecordDecl - " + node.getFullyQualifiedName() + " - " + isDeclarationOnly);
-        System.err.println(" --- map - cxxRecordDecl - " + node.getFullyQualifiedName() + " - " + node.getMethods().size());
-        if (!node.getFullyQualifiedName().contains("basic_string"))
-            System.err.println(" --- map - cxxRecordDecl - " + node.getCode());
-        if (isDeclarationOnly) return "ClassTypeJp";
-        */
-        if (isDeclarationOnly) return "ClassJp";
+	    if (isDeclarationOnly) return "ClassJp";
         
         boolean areAllVirtualPureMethods = node.getMethods().stream()
                 .filter(method -> !(method instanceof CXXDestructorDecl))
