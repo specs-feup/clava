@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -230,25 +229,27 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
     /**
      *
-     * @return the node representing the declaration of this function, if it exists
+     * @return the nodes representing the declarations of this function. Only takes into consideration nodes that are
+     *         already in the AST
      */
     public List<FunctionDecl> getPrototypes() {
 
         // Search for the declaration
-        var prototypes = getAppTry().map(app -> app.getFunctionPrototypes(this)).orElse(Collections.emptyList());
-
-        if (!prototypes.isEmpty()) {
-            return prototypes;
-        }
-
-        // If no body, return immediately
-        // There are a number of situations where this should be done
-        // e.g. node is still not inserted (no App), method is still not in class
-        if (!hasBody()) {
-            return Arrays.asList(this);
-        }
-
-        return Collections.emptyList();
+        return getAppTry().map(app -> app.getFunctionPrototypes(this)).orElse(Collections.emptyList());
+        // var prototypes = getAppTry().map(app -> app.getFunctionPrototypes(this)).orElse(Collections.emptyList());
+        //
+        // if (!prototypes.isEmpty()) {
+        // return prototypes;
+        // }
+        //
+        // // If no body, return immediately
+        // // There are a number of situations where this should be done
+        // // e.g. node is still not inserted (no App), method is still not in class
+        // if (!hasBody()) {
+        // return Arrays.asList(this);
+        // }
+        //
+        // return Collections.emptyList();
     }
 
     /**
@@ -262,21 +263,27 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
     /**
      * 
-     * @return the node representing the implementation of this function.
+     * @return the node representing the implementation of this function. Only takes into consideration nodes that are
+     *         already in the AST
      */
     public Optional<FunctionDecl> getImplementation() {
 
-        // If has body, return immediately
-        // There are a number of situations where this should be done
-        // e.g. node is still not inserted (no App), method is still not in class
-        if (hasBody()) {
-            return Optional.of(this);
-        }
-        // System.out.println("App: " + getAppTry());
-        // System.out.println("CLEARING CACHE");
-        // getAppTry().get().clearCache();
-        // Search for the definition
+        // Search for the definition, returns definitions that is already in the tree
         return getAppTry().flatMap(app -> app.getFunctionImplementation(this));
+        // var definition = getAppTry().flatMap(app -> app.getFunctionImplementation(this));
+        // if (definition.isPresent()) {
+        // return definition;
+        // }
+        //
+        // // If has body, return immediately
+        // // There are a number of situations where this should be done
+        // // e.g. node is still not inserted (no App), method is still not in class
+        // if (hasBody()) {
+        // return Optional.of(this);
+        // }
+        //
+        // return Optional.empty();
+
     }
 
     /**

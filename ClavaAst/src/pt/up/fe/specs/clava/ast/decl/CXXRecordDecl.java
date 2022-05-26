@@ -15,6 +15,7 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -149,15 +150,26 @@ public class CXXRecordDecl extends RecordDecl {
      * @return the node representing the declaration of this Record, if it exists
      */
     public Optional<CXXRecordDecl> getDeclaration() {
+        return getDeclarations().stream().findFirst();
+    }
 
-        // If no body, return immediately
-        if (!isCompleteDefinition()) {
-            return Optional.of(this);
-        }
+    /**
+     *
+     * @return the nodes representing the declarations of this Record, if it exists
+     */
+    public List<CXXRecordDecl> getDeclarations() {
 
-        // Search for the declaration
-        return getAppTry().flatMap(app -> app.getCxxRecordDeclaration(this));
+        // Search for the declarations
+        return getAppTry().map(app -> app.getCxxRecordDeclarations(this)).orElse(Collections.emptyList());
 
+        // if (!declarations.isEmpty()) {
+        // return declarations;
+        // }
+        //
+        // // If no body, return immediately
+        // if (!isCompleteDefinition()) {
+        // return Optional.of(this);
+        // }
     }
 
     /**
@@ -166,10 +178,10 @@ public class CXXRecordDecl extends RecordDecl {
      */
     public Optional<CXXRecordDecl> getDefinition() {
 
-        // If has body, return immediately
-        if (isCompleteDefinition()) {
-            return Optional.of(this);
-        }
+        // // If has body, return immediately
+        // if (isCompleteDefinition()) {
+        // return Optional.of(this);
+        // }
 
         // Search for the definition
         return getAppTry().flatMap(app -> app.getCxxRecordDefinition(this));
