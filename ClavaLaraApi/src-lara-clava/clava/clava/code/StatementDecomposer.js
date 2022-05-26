@@ -153,23 +153,8 @@ class StatementDecomposer {
   }
 
   decomposeBinaryOp($binaryOp) {
-    const kind = $binaryOp.kind;
-
-    if (kind === "assign") {
-      // Get statements of right hand-side
-      const rightResult = this.decomposeExpr($binaryOp.right);
-
-      // Add assignment
-      const $newAssign = ClavaJoinPoints.assign(
-        $binaryOp.left,
-        rightResult.$resultExpr
-      );
-      const $assignExpr = ClavaJoinPoints.exprStmt($newAssign);
-
-      return new DecomposeResult(
-        [...rightResult.stmts, $assignExpr],
-        $binaryOp.left
-      );
+    if ($binaryOp.isAssignment) {
+      return this.decomposeAssignment($binaryOp);
     }
     // TODO: Not taking into account += and other cases
 
@@ -197,5 +182,24 @@ class StatementDecomposer {
     );
 
     //this.#throwNotImplemented("binary operators", kind);
+  }
+
+  decomposeAssignment($assign) {
+    // Get statements of right hand-side
+    const rightResult = this.decomposeExpr($assign.right);
+
+    // Add assignment
+    const $newAssign = ClavaJoinPoints.binaryOp(
+      $assign.operator,
+      $assign.left,
+      rightResult.$resultExpr,
+      $assign.type
+    );
+    const $assignExpr = ClavaJoinPoints.exprStmt($newAssign);
+
+    return new DecomposeResult(
+      [...rightResult.stmts, $assignExpr],
+      $assign.left
+    );
   }
 }
