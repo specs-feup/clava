@@ -264,6 +264,7 @@ private:
     void VisitCaseStmtChildren(const CaseStmt *S, std::vector<std::string> &children);
     void VisitDefaultStmtChildren(const DefaultStmt *S, std::vector<std::string> &children);
     void VisitGotoStmtChildren(const GotoStmt *S, std::vector<std::string> &children);
+    void VisitLabelStmtChildren(const LabelStmt *S, std::vector<std::string> &children);
     void VisitAttributedStmtChildren(const AttributedStmt *S, std::vector<std::string> &children);
     void VisitCapturedStmtChildren(const CapturedStmt *S, std::vector<std::string> &children);
 

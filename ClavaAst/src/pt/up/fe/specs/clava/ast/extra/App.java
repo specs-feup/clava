@@ -136,11 +136,11 @@ public class App extends ClavaNode {
     }
 
     /**
-     * getLocation() is not implemented for AppNode
+     * Custom location that represents the program.
      */
     @Override
     public SourceRange getLocation() {
-        return SourceRange.invalidRange();
+        return SourceRange.newCustomLocation("<Program>");
     }
 
     @Override

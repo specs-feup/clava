@@ -505,12 +505,12 @@ public class CxxFunction extends AFunction {
 
     @Override
     public Boolean getIsInlineImpl() {
-        return function.get(FunctionDecl.IS_INLINE);
+        return function.get(FunctionDecl.IS_INLINE_SPECIFIED);
     }
 
     @Override
     public Boolean getIsVirtualImpl() {
-        return function.get(FunctionDecl.IS_VIRTUAL);
+        return function.get(FunctionDecl.IS_VIRTUAL_AS_WRITTEN);
     }
 
     @Override
@@ -675,6 +675,28 @@ public class CxxFunction extends AFunction {
                 .filter(attr -> attr instanceof CUDAGlobalAttr)
                 .findFirst()
                 .isPresent();
+    }
+
+    @Override
+    public AFunction getCanonicalImpl() {
+        // First, try the implementation
+        var definition = getDefinitionJpImpl();
+
+        if (definition != null) {
+            return definition;
+        }
+
+        // Implementation not found return declaration
+        return getDeclarationJpImpl();
+    }
+
+    @Override
+    public Boolean getIsCanonicalImpl() {
+        // Get normalized function
+        var canonicalFunction = getCanonicalImpl();
+
+        // Compare
+        return function.equals(canonicalFunction.getNode());
     }
 
 }

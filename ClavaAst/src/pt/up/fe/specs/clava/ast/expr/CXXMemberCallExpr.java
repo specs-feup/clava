@@ -49,7 +49,7 @@ public class CXXMemberCallExpr extends CallExpr {
     public final static DataKey<Optional<CXXMethodDecl>> METHOD_DECL = KeyFactory.optional("methodDecl");
 
     /// DATAKEYS END
-    
+
     private final static List<Class<? extends ClavaNode>> MEMBER_BYPASS = Arrays.asList(ParenExpr.class);
 
     public CXXMemberCallExpr(DataStore data, Collection<? extends ClavaNode> children) {
@@ -59,21 +59,15 @@ public class CXXMemberCallExpr extends CallExpr {
     @Override
     public MemberExpr getCallee() {
         var callee = super.getCallee();
-        
-        if (false) return (MemberExpr) callee.normalize(MEMBER_BYPASS);
-        // TODO TMP
-        if (!(super.getCallee() instanceof MemberExpr)) return null;// (MemberExpr) ((ParenExpr) super.getCallee()).getSubExpr();
 
-        return (MemberExpr) super.getCallee();
+        // MemberExpr might be encapsulated by a ParenExpr
+        return (MemberExpr) callee.normalize(MEMBER_BYPASS);
     }
 
     @Override
     // public String getCalleeName() {
     public Optional<String> getCalleeNameTry() {
         ClavaNode callee = getCallee();
-        
-        // TODO TMP
-        if (callee == null) return Optional.empty();
 
         if (!(callee instanceof MemberExpr)) {
             throw new UnexpectedChildExpection(CXXMemberCallExpr.class, callee);

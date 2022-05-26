@@ -1,0 +1,33 @@
+/**** File 'cxx_weaver_output/code_simplify_assignment.cpp' ****/
+
+#include <cstdlib>
+
+struct obj {
+   int **matrix;
+};
+
+int main() {
+   int i = 1;
+   i = i * 2;
+   i = i / 2;
+   i = i % 3;
+   i = i + i;
+   i = i - 4;
+   i = i << 2;
+   i = i >> 2;
+   i = i & 15;
+   i = i ^ i;
+   i = i | 2;
+   int *row = (int *) malloc(4);
+   int **col = (int **) malloc(8);
+   col[0] = row;
+   struct obj o;
+   o.matrix = col;
+   struct obj *ref = &o;
+   ref->matrix[0][0] = ref->matrix[0][0] + 1;
+   o.matrix = o.matrix + 1;
+   
+   return ref->matrix[-1][0];
+}
+
+/**** End File ****/

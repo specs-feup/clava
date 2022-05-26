@@ -70,6 +70,7 @@ public class CxxClass extends AClass {
 
     @Override
     public AClass[] getBasesArrayImpl() {
+
         return cxxRecordDecl.getBases().stream()
                 .map(decl -> CxxJoinpoints.create(decl, AClass.class))
                 // Collect to array
@@ -80,6 +81,26 @@ public class CxxClass extends AClass {
         // .map(baseSpec -> CxxJoinpoints.create(baseSpec.getBaseDecl(cxxRecordDecl), AClass.class))
         // // Collect to array
         // .toArray(size -> new AClass[size]);
+    }
+
+    @Override
+    public AMethod[] getAllMethodsArrayImpl() {
+        return CxxJoinpoints.create(cxxRecordDecl.getAllMethods(false), AMethod.class);
+    }
+
+    @Override
+    public AClass[] getAllBasesArrayImpl() {
+        return CxxJoinpoints.create(cxxRecordDecl.getAllBases(), AClass.class);
+    }
+
+    @Override
+    public Boolean getIsAbstractImpl() {
+        return cxxRecordDecl.isAbstract();
+    }
+
+    @Override
+    public Boolean getIsInterfaceImpl() {
+        return cxxRecordDecl.isInterface();
     }
 
 }

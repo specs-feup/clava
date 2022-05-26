@@ -154,8 +154,30 @@ public class CxxApiTest {
         newTester().test("StatementDecomposerTest.lara", "stmt_decomposer.cpp");
     }
 
-    // @Test
+    @Test
+    public void testCode2Vec() {
+        newTester().test("Code2VecTest.js", "code2vec.cpp");
+    }
+
+    // TODO: For some reason failing in the Jenkins server. Re-enable after upgrading GraalVM
+    @Test
     public void testSimplifyVarDeclarations() {
         newTester().test("PassSimplifyVarDeclarations.lara", "pass_simplify_var_declarations.cpp");
+    }
+
+    // TODO: For some reason failing in the Jenkins server. Re-enable after upgrading GraalVM
+    @Test
+    public void testSingleReturnFunction() {
+        newTester().test("PassSingleReturnTest.js", "pass_single_return.cpp");
+    }
+
+    @Test
+    public void testSimplifyAssignment() {
+        newTester().test("CodeSimplifyAssignmentTest.js", "code_simplify_assignment.cpp");
+    }
+
+    @Test
+    public void testSimplifyTernaryOp() {
+        newTester().test("CodeSimplifyTernaryOpTest.js", "code_simplify_ternary_op.cpp");
     }
 }

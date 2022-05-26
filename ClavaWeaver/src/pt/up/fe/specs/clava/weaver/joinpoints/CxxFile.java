@@ -35,7 +35,6 @@ import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
 import pt.up.fe.specs.clava.ast.pragma.Pragma;
 import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
-import pt.up.fe.specs.clava.language.TagKind;
 import pt.up.fe.specs.clava.weaver.CxxActions;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.CxxSelects;
@@ -203,13 +202,16 @@ public class CxxFile extends AFile {
     @Override
     public List<? extends AStruct> selectStruct() {
         return CxxSelects.select(AStruct.class, tunit.getChildren(), true,
-                node -> node instanceof RecordDecl && ((RecordDecl) node).getTagKind() == TagKind.STRUCT);
+                // node -> node instanceof RecordDecl && ((RecordDecl) node).getTagKind() == TagKind.STRUCT);
+                // Structs: RecordDecls that are not CXXRecordDecls
+                node -> node instanceof RecordDecl && !(node instanceof CXXRecordDecl));
     }
 
     @Override
     public List<? extends AClass> selectClass() {
         return CxxSelects.select(AClass.class, tunit.getChildren(), true,
-                node -> node instanceof CXXRecordDecl && ((CXXRecordDecl) node).getTagKind() == TagKind.CLASS);
+                // node -> node instanceof CXXRecordDecl && ((CXXRecordDecl) node).getTagKind() == TagKind.CLASS);
+                CXXRecordDecl.class);
     }
 
     @Override
@@ -333,7 +335,12 @@ public class CxxFile extends AFile {
 
     @Override
     public void insertEndImpl(AJoinPoint node) {
-        super.insertEndImpl(node);
+        if (!tunit.hasChildren()) {
+            tunit.addChild(node.getNode());
+            return;
+        }
+
+        tunit.addChild(node.getNode());
     }
 
     @Override

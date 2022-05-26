@@ -30,3 +30,14 @@ _lara_dummy_ = Object.defineProperty(JoinPoint.prototype, 'astId', {
 		return this.astNode.getValue("id"); 
 	}
 });
+
+JoinPoint.prototype.equals = function(joinPoint) {
+
+	if(joinPoint === undefined) {
+		return false;
+	}
+	
+	var javaJoinPoint = Weaver.AST_METHODS.toJavaJoinPoint(joinPoint.astNode);
+	return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).compareNodes(javaJoinPoint); 
+}
+

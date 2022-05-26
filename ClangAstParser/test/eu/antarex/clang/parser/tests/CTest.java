@@ -147,4 +147,8 @@ public class CTest {
         new CTester("naked_loops.c").test();
     }
 
+    @Test
+    public void testLabels() {
+        new CTester("labels.c").test();
+    }
 }

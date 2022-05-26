@@ -495,6 +495,34 @@ void clava::ClavaDataDumper::DumpCXXMethodDeclData(const CXXMethodDecl *D) {
     DumpFunctionDeclData(D);
 
     clava::dump(clava::getId(D->getParent(), id));
+
+    clava::dump(D->size_overridden_methods());
+    for(auto overriddenMethod : D->overridden_methods()) {
+        clava::dump(clava::getId(overriddenMethod, id));
+    }
+
+    clava::dump(D->isStatic());
+    clava::dump(D->isInstance());
+    clava::dump(D->isConst());
+    clava::dump(D->isVolatile());
+    clava::dump(D->isVirtual());
+    clava::dump(D->isCopyAssignmentOperator());
+    clava::dump(D->isMoveAssignmentOperator());
+
+    if(D->isInstance()) {
+        clava::dump(clava::getId(D->getThisType(), id));
+        clava::dump(clava::getId(D->getThisObjectType(), id));
+    } else {
+        clava::dump(clava::getId((const Type *) nullptr, id));
+        clava::dump(clava::getId((const Type *) nullptr, id));
+    }
+
+
+    // RefQualifier?
+
+    clava::dump(D->hasInlineBody());
+    clava::dump(D->isLambdaStaticInvoker());
+
     // Dump the corresponding CXXRecordDecl
 //    llvm::errs() << DUMP_CXX_METHOD_DECL_PARENT << "\n";
 //    llvm::errs() << getId(D) << "\n";

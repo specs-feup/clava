@@ -27,6 +27,7 @@ import org.suikasoft.jOptions.app.App;
 import org.suikasoft.jOptions.persistence.PropertiesPersistence;
 import org.suikasoft.jOptions.streamparser.LineStreamParser;
 
+import pt.up.fe.specs.clang.ClangResources;
 import pt.up.fe.specs.clang.SupportedPlatform;
 import pt.up.fe.specs.tupatcher.parallel.ParallelPatcher;
 import pt.up.fe.specs.tupatcher.parser.TUErrorParser;
@@ -89,7 +90,23 @@ public class TUPatcherLauncher {
 
         executable.makeExecutable(platform.isLinux());
 
+        // If Windows, copy additional dependencies
+        if (platform == SupportedPlatform.WINDOWS) {
+            for (FileResourceProvider resource : getWindowsResources()) {
+                resource.writeVersioned(resourceFolder, ClangResources.class);
+            }
+        }
+
         return executable.getFile();
+    }
+
+    private static List<FileResourceProvider> getWindowsResources() {
+        List<FileResourceProvider> windowsResources = new ArrayList<>();
+
+        windowsResources.add(TUPatcherWebResource.WIN_DLL1);
+        windowsResources.add(TUPatcherWebResource.WIN_DLL2);
+
+        return windowsResources;
     }
 
     private static FileResourceProvider getDumperResource(SupportedPlatform platform) {
@@ -135,7 +152,7 @@ public class TUPatcherLauncher {
 
         // If parallel execution, use parallel version
         if (config.get(TUPatcherConfig.PARALLEL)) {
-            return new ParallelPatcher(config).execute();
+            return new ParallelPatcher(config).executeV2();
         }
 
         var sourcePaths = config.get(TUPatcherConfig.SOURCE_PATHS).getStringList();

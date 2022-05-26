@@ -37,6 +37,7 @@ import pt.up.fe.specs.clava.ast.stmt.Stmt;
 import pt.up.fe.specs.clava.ast.stmt.WhileStmt;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.utils.NullNode;
+import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.classmap.ClassMap;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
@@ -87,14 +88,19 @@ public class ChildrenAdapter {
             return children;
         }
 
-        List<ClavaNode> adaptedChildren = children;
-
-        // Replace NullNodeOld instances with NullNode
-        // adaptedChildren = NULL_NODE_MAPPER.get(node.getClass()).adapt(context.get(ClavaContext.FACTORY),
-        // node, children);
+        // List<ClavaNode> adaptedChildren = children;
+        //
+        // // Apply normalization steps to children
+        // adaptedChildren = CHILDREN_ADAPTERS.get(node.getClass()).apply(adaptedChildren, context);
 
         // Apply normalization steps to children
-        adaptedChildren = CHILDREN_ADAPTERS.get(node.getClass()).apply(adaptedChildren, context);
+        List<ClavaNode> adaptedChildren = CHILDREN_ADAPTERS.get(node.getClass()).apply(children, context);
+
+        // Check if no child is left behind
+        SpecsCheck.checkArgument(children.size() == adaptedChildren.size(),
+                () -> "In node '" + node.getClass().getName() + "' expected number of adapted children ("
+                        + adaptedChildren.size()
+                        + ") to be the same as the number of original children (" + children.size() + ")");
 
         return adaptedChildren;
     }
@@ -127,6 +133,7 @@ public class ChildrenAdapter {
         adaptedChildren.add(toStmt(children.get(1), context));
         adaptedChildren.add(toStmt(children.get(2), false, context));
         adaptedChildren.add(toCompoundStmt(children.get(3), false, context));
+        adaptedChildren.add(children.get(4));
 
         return adaptedChildren;
     }

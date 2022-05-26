@@ -44,6 +44,10 @@ public class ExprStmt extends Stmt {
         return getChild(Expr.class, 0);
     }
 
+    public Expr setExpr(Expr newExpr) {
+        return (Expr) setChild(0, newExpr);
+    }
+
     public boolean hasSemicolon() {
         return get(HAS_SEMICOLON);
     }

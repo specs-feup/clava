@@ -218,6 +218,14 @@
 <li>
 <a onclick="saveScroll()"  href="clava.gprofer.Gprofer.html">clava.gprofer.Gprofer</a></li>
 <li>
+<a onclick="saveScroll()"  href="clava.graphs.StaticCallGraph.html">clava.graphs.StaticCallGraph</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.graphs.scg.ScgEdgeData.html">clava.graphs.scg.ScgEdgeData</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.graphs.scg.ScgNodeData.html">clava.graphs.scg.ScgNodeData</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.graphs.scg.StaticCallGraphBuilder.html">clava.graphs.scg.StaticCallGraphBuilder</a></li>
+<li>
 <a onclick="saveScroll()"  href="clava.hdf5.Hdf5.html">clava.hdf5.Hdf5</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.hls.HLSAnalysis.html">clava.hls.HLSAnalysis</a></li>
@@ -263,6 +271,8 @@
 <a onclick="saveScroll()"  href="clava.pass.DecomposeDeclStmt.html">clava.pass.DecomposeDeclStmt</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.pass.DecomposeVarDeclarations.html">clava.pass.DecomposeVarDeclarations</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.pass.SingleReturnFunction.html">clava.pass.SingleReturnFunction</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.stats.OpsBlock.html">clava.stats.OpsBlock</a></li>
 <li>
@@ -358,6 +368,16 @@
 <li>
 <a onclick="saveScroll()"  href="lara.dse.VariableVariant.html">lara.dse.VariableVariant</a></li>
 <li>
+<a onclick="saveScroll()"  href="lara.graphs.EdgeData.html">lara.graphs.EdgeData</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.GraphEdge.html">lara.graphs.GraphEdge</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.GraphNode.html">lara.graphs.GraphNode</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.Graphs.html">lara.graphs.Graphs</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.NodeData.html">lara.graphs.NodeData</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.iterators.LaraIterator.html">lara.iterators.LaraIterator</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.iterators.LineIterator.html">lara.iterators.LineIterator</a></li>
@@ -383,6 +403,8 @@
 <a onclick="saveScroll()"  href="lara.mutation.Mutator.html">lara.mutation.Mutator</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.pass.Pass.html">lara.pass.Pass</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.PassResult.html">lara.pass.PassResult</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.units.EnergyUnit.html">lara.units.EnergyUnit</a></li>
 <li>
@@ -539,6 +561,8 @@
 <a onclick="saveScroll()"  href="lcl.metrics.om.NOL.html">lcl.metrics.om.NOL</a></li>
 <li>
 <a onclick="saveScroll()"  href="lcl.metrics.om.OtherMetricsIndex.html">lcl.metrics.om.OtherMetricsIndex</a></li>
+<li>
+<a onclick="saveScroll()"  href="lcl.ml.Code2Vec.html">lcl.ml.Code2Vec</a></li>
 </ul></div> 
     	<div id="column2">
     		<div id="doc_content"><div id='toc_container'><p class='toc_title'>import lara.Csv;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>Csv</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>Csv</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Static Members</div><li><em><a href='#C'>generate()</a></em></li><li><em><a href='#D'>parse()</a></em></li><li><em><a href='#E'>read()</a></em></li></ul></ul></div><h1 id='A'>Csv</h1><div class='function_block'><h3 id='B'>Csv</h3><pre class='signature'><code class='language-js'><strong>Csv</strong></code></pre><div class='function_content'><p>Methods related with the CSV format.</p></div><hr></div><h2>Static Members</h2><div class='function_block'><h3 id='C'>generate</h3><pre class='signature'><code class='language-js'><strong>generate</strong>(data, separator)</code></pre><div class='function_content'><p>Converts an object in a specific format to a CSV string.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>data</strong>: object</span> - an aggregate of values with the same keys, uses the keys of the given aggregate as the name of the entries, and the keys of the values as column entries.<br><span class='parameter'><strong>separator</strong>: string</span> - the separator character to use. By default is ;.<br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>string</span> - the CSV corresponding to the object.<br></div></div><hr></div><div class='function_block'><h3 id='D'>parse</h3><pre class='signature'><code class='language-js'><strong>parse</strong>(contents, delimiter)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>contents</strong>: string</span><br><span class='parameter'><strong>delimiter</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='E'>read</h3><pre class='signature'><code class='language-js'><strong>read</strong>(path, delimiter)</code></pre><div class='function_content'><p>Reads a CSV file and returns an object with the data inside the file.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>path</strong>: any</span><br><span class='parameter'><strong>delimiter</strong>: any</span><br></div></div><hr></div></div>

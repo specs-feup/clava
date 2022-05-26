@@ -218,6 +218,14 @@
 <li>
 <a onclick="saveScroll()"  href="clava.gprofer.Gprofer.html">clava.gprofer.Gprofer</a></li>
 <li>
+<a onclick="saveScroll()"  href="clava.graphs.StaticCallGraph.html">clava.graphs.StaticCallGraph</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.graphs.scg.ScgEdgeData.html">clava.graphs.scg.ScgEdgeData</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.graphs.scg.ScgNodeData.html">clava.graphs.scg.ScgNodeData</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.graphs.scg.StaticCallGraphBuilder.html">clava.graphs.scg.StaticCallGraphBuilder</a></li>
+<li>
 <a onclick="saveScroll()"  href="clava.hdf5.Hdf5.html">clava.hdf5.Hdf5</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.hls.HLSAnalysis.html">clava.hls.HLSAnalysis</a></li>
@@ -263,6 +271,8 @@
 <a onclick="saveScroll()"  href="clava.pass.DecomposeDeclStmt.html">clava.pass.DecomposeDeclStmt</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.pass.DecomposeVarDeclarations.html">clava.pass.DecomposeVarDeclarations</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.pass.SingleReturnFunction.html">clava.pass.SingleReturnFunction</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.stats.OpsBlock.html">clava.stats.OpsBlock</a></li>
 <li>
@@ -358,6 +368,16 @@
 <li>
 <a onclick="saveScroll()"  href="lara.dse.VariableVariant.html">lara.dse.VariableVariant</a></li>
 <li>
+<a onclick="saveScroll()"  href="lara.graphs.EdgeData.html">lara.graphs.EdgeData</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.GraphEdge.html">lara.graphs.GraphEdge</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.GraphNode.html">lara.graphs.GraphNode</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.Graphs.html">lara.graphs.Graphs</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.NodeData.html">lara.graphs.NodeData</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.iterators.LaraIterator.html">lara.iterators.LaraIterator</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.iterators.LineIterator.html">lara.iterators.LineIterator</a></li>
@@ -383,6 +403,8 @@
 <a onclick="saveScroll()"  href="lara.mutation.Mutator.html">lara.mutation.Mutator</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.pass.Pass.html">lara.pass.Pass</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.PassResult.html">lara.pass.PassResult</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.units.EnergyUnit.html">lara.units.EnergyUnit</a></li>
 <li>
@@ -539,6 +561,8 @@
 <a onclick="saveScroll()"  href="lcl.metrics.om.NOL.html">lcl.metrics.om.NOL</a></li>
 <li>
 <a onclick="saveScroll()"  href="lcl.metrics.om.OtherMetricsIndex.html">lcl.metrics.om.OtherMetricsIndex</a></li>
+<li>
+<a onclick="saveScroll()"  href="lcl.ml.Code2Vec.html">lcl.ml.Code2Vec</a></li>
 </ul></div> 
     	<div id="column2">
     		<div id="doc_content"><div id='toc_container'><p class='toc_title'>import antarex.split.extractCodeFuncs;</p><ul class='toc_list'><p class='toc_class'>Global Functions:</p><li class='toc_class_element'><a href='#A'>declareIsolateFunctionOrMethod</a></li><li class='toc_class_element'><a href='#B'>declareNewIsolateCodeFunctionOrMethod</a></li><li class='toc_class_element'><a href='#C'>genDeclCreatedObjects</a></li><li class='toc_class_element'><a href='#D'>genIsolateCodeVersions</a></li><li class='toc_class_element'><a href='#E'>genSelectorCode</a></li><li class='toc_class_element'><a href='#F'>getAssociatedName</a></li><li class='toc_class_element'><a href='#G'>getCurrentExtractedCodeIdentifier</a></li><li class='toc_class_element'><a href='#H'>getExtractCodeSymbolSelectedId</a></li><li class='toc_class_element'><a href='#I'>isBeginIsolateCodePragma</a></li><li class='toc_class_element'><a href='#J'>isBeginIsolatePragma</a></li><li class='toc_class_element'><a href='#K'>mkNewExtractedCodeIdentifier</a></li><li class='toc_class_element'><a href='#L'>replaceCodeByCall</a></li></ul></div><h2>Global Functions</h2><div class='function_block'><h3 id='A'>declareIsolateFunctionOrMethod</h3><pre class='signature'><code class='language-js'><strong>declareIsolateFunctionOrMethod</strong>($funcOrMethodDecl, b)</code></pre><div class='function_content'><p>Declare a new function or method in a new file defined by $funcOrMethodDecl.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$funcOrMethodDecl</strong>: any</span><br><span class='parameter'><strong>b</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='B'>declareNewIsolateCodeFunctionOrMethod</h3><pre class='signature'><code class='language-js'><strong>declareNewIsolateCodeFunctionOrMethod</strong>($stmt, name)</code></pre><div class='function_content'><p>Declare a new function(or method) in a new file to encapsulate the code of a statement ($stmt).<br>The name of the function is a parameter.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$stmt</strong>: any</span><br><span class='parameter'><strong>name</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='C'>genDeclCreatedObjects</h3><pre class='signature'><code class='language-js'><strong>genDeclCreatedObjects</strong>($target, tabNewNames)</code></pre><div class='function_content'><p>Declare the created functions/methods, copies of $target but with new names (tabNewNames[])</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$target</strong>: any</span><br><span class='parameter'><strong>tabNewNames</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='D'>genIsolateCodeVersions</h3><pre class='signature'><code class='language-js'><strong>genIsolateCodeVersions</strong>($target, n)</code></pre><div class='function_content'><p>Generates n copies of the $target with a new name.<br>Each copy is generated in a new file.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$target</strong>: any</span><br><span class='parameter'><strong>n</strong>: any</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - the table that contains the new names of the function/method.<br></div></div><hr></div><div class='function_block'><h3 id='E'>genSelectorCode</h3><pre class='signature'><code class='language-js'><strong>genSelectorCode</strong>($target, tabNewNames)</code></pre><div class='function_content'><p>Generate the selector of the version to use for the isolated function&sect;method $target.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$target</strong>: any</span><br><span class='parameter'><strong>tabNewNames</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='F'>getAssociatedName</h3><pre class='signature'><code class='language-js'><strong>getAssociatedName</strong>($target)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$target</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='G'>getCurrentExtractedCodeIdentifier</h3><pre class='signature'><code class='language-js'><strong>getCurrentExtractedCodeIdentifier</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - the current identifier for the extraction of code.<br></div></div><hr></div><div class='function_block'><h3 id='H'>getExtractCodeSymbolSelectedId</h3><pre class='signature'><code class='language-js'><strong>getExtractCodeSymbolSelectedId</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - the current identifier of the selector for the extraction of code.<br></div></div><hr></div><div class='function_block'><h3 id='I'>isBeginIsolateCodePragma</h3><pre class='signature'><code class='language-js'><strong>isBeginIsolateCodePragma</strong>($apragma)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$apragma</strong>: any</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - true if a pragma ($apragma) is named $EXTRACT_CODE_PRAGMA<br></div></div><hr></div><div class='function_block'><h3 id='J'>isBeginIsolatePragma</h3><pre class='signature'><code class='language-js'><strong>isBeginIsolatePragma</strong>($apragma)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$apragma</strong>: any</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - true if a pragma ($apragma) is named $ISOLATE_PRAGMA<br></div></div><hr></div><div class='function_block'><h3 id='K'>mkNewExtractedCodeIdentifier</h3><pre class='signature'><code class='language-js'><strong>mkNewExtractedCodeIdentifier</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - a new identifier for the extraction of code. The created name is stored in the global variable $CURRENT_ID_EXTRACTED_CODE. The name is created from the global variables $EXTRACT_CODE_PRAGMA and $CPT_EXTRACTED_CODE.<br></div></div><hr></div><div class='function_block'><h3 id='L'>replaceCodeByCall</h3><pre class='signature'><code class='language-js'><strong>replaceCodeByCall</strong>($stmt, $name, $params)</code></pre><div class='function_content'><p>Replace a stamement ($stmt) by a call to $name + $params.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$stmt</strong>: any</span><br><span class='parameter'><strong>$name</strong>: any</span><br><span class='parameter'><strong>$params</strong>: any</span><br></div></div><hr></div></div>

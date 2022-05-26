@@ -218,6 +218,14 @@
 <li>
 <a onclick="saveScroll()"  href="clava.gprofer.Gprofer.html">clava.gprofer.Gprofer</a></li>
 <li>
+<a onclick="saveScroll()"  href="clava.graphs.StaticCallGraph.html">clava.graphs.StaticCallGraph</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.graphs.scg.ScgEdgeData.html">clava.graphs.scg.ScgEdgeData</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.graphs.scg.ScgNodeData.html">clava.graphs.scg.ScgNodeData</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.graphs.scg.StaticCallGraphBuilder.html">clava.graphs.scg.StaticCallGraphBuilder</a></li>
+<li>
 <a onclick="saveScroll()"  href="clava.hdf5.Hdf5.html">clava.hdf5.Hdf5</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.hls.HLSAnalysis.html">clava.hls.HLSAnalysis</a></li>
@@ -263,6 +271,8 @@
 <a onclick="saveScroll()"  href="clava.pass.DecomposeDeclStmt.html">clava.pass.DecomposeDeclStmt</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.pass.DecomposeVarDeclarations.html">clava.pass.DecomposeVarDeclarations</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.pass.SingleReturnFunction.html">clava.pass.SingleReturnFunction</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.stats.OpsBlock.html">clava.stats.OpsBlock</a></li>
 <li>
@@ -358,6 +368,16 @@
 <li>
 <a onclick="saveScroll()"  href="lara.dse.VariableVariant.html">lara.dse.VariableVariant</a></li>
 <li>
+<a onclick="saveScroll()"  href="lara.graphs.EdgeData.html">lara.graphs.EdgeData</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.GraphEdge.html">lara.graphs.GraphEdge</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.GraphNode.html">lara.graphs.GraphNode</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.Graphs.html">lara.graphs.Graphs</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.NodeData.html">lara.graphs.NodeData</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.iterators.LaraIterator.html">lara.iterators.LaraIterator</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.iterators.LineIterator.html">lara.iterators.LineIterator</a></li>
@@ -383,6 +403,8 @@
 <a onclick="saveScroll()"  href="lara.mutation.Mutator.html">lara.mutation.Mutator</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.pass.Pass.html">lara.pass.Pass</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.PassResult.html">lara.pass.PassResult</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.units.EnergyUnit.html">lara.units.EnergyUnit</a></li>
 <li>
@@ -539,6 +561,8 @@
 <a onclick="saveScroll()"  href="lcl.metrics.om.NOL.html">lcl.metrics.om.NOL</a></li>
 <li>
 <a onclick="saveScroll()"  href="lcl.metrics.om.OtherMetricsIndex.html">lcl.metrics.om.OtherMetricsIndex</a></li>
+<li>
+<a onclick="saveScroll()"  href="lcl.ml.Code2Vec.html">lcl.ml.Code2Vec</a></li>
 </ul></div> 
     	<div id="column2">
     		<div id="doc_content"><div id='toc_container'><p class='toc_title'>import antarex.precision.CustomPrecisionFunc;</p><ul class='toc_list'><p class='toc_class'>Global Functions:</p><li class='toc_class_element'><a href='#A'>dclConstantDoubleFloat</a></li><li class='toc_class_element'><a href='#B'>genCodePrecisionDefsAsked</a></li><li class='toc_class_element'><a href='#C'>genCodePrecisionDefsOriginalVersion</a></li><li class='toc_class_element'><a href='#D'>genCodePrecisionDefsTemplate</a></li><li class='toc_class_element'><a href='#E'>genConstants</a></li><li class='toc_class_element'><a href='#F'>getDataType</a></li><li class='toc_class_element'><a href='#G'>getExtractedConstantsSymbol</a></li><li class='toc_class_element'><a href='#H'>getNewNameFunc</a></li><li class='toc_class_element'><a href='#I'>getNewSymbolForExtractedConstant</a></li><li class='toc_class_element'><a href='#J'>getNextIOFormat</a></li><li class='toc_class_element'><a href='#K'>getOtherFormat</a></li><li class='toc_class_element'><a href='#L'>getOtherMathFunc</a></li><li class='toc_class_element'><a href='#M'>getPrecisionPrefix</a></li><li class='toc_class_element'><a href='#N'>initNewDatatype</a></li><li class='toc_class_element'><a href='#O'>isIn</a></li><li class='toc_class_element'><a href='#P'>mkJointPointType</a></li><li class='toc_class_element'><a href='#Q'>toBeFixed</a></li></ul></div><h2>Global Functions</h2><div class='function_block'><h3 id='A'>dclConstantDoubleFloat</h3><pre class='signature'><code class='language-js'><strong>dclConstantDoubleFloat</strong>($expr)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$expr</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='B'>genCodePrecisionDefsAsked</h3><pre class='signature'><code class='language-js'><strong>genCodePrecisionDefsAsked</strong>(vtype)</code></pre><div class='function_content'><p>Generate the file INRIA_PRECISION_DEFS_[vtype].h, vtype restricted to float or double,<br>with vtype-typed definitions for the created symbols.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>vtype</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='C'>genCodePrecisionDefsOriginalVersion</h3><pre class='signature'><code class='language-js'><strong>genCodePrecisionDefsOriginalVersion</strong>()</code></pre><div class='function_content'><p>Generate the file INRIA_PRECISION_DEFS_[vtype].h with the original definitions for the created symbols.<br>vtype is the current type of the customization.</p></div><hr></div><div class='function_block'><h3 id='D'>genCodePrecisionDefsTemplate</h3><pre class='signature'><code class='language-js'><strong>genCodePrecisionDefsTemplate</strong>()</code></pre><div class='function_content'><p>Generate the file INRIA_PRECISION_DEFS_template.h with undefined definitions for the created symbols.</p></div><hr></div><div class='function_block'><h3 id='E'>genConstants</h3><pre class='signature'><code class='language-js'><strong>genConstants</strong>($vf, bval)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$vf</strong>: any</span><br><span class='parameter'><strong>bval</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='F'>getDataType</h3><pre class='signature'><code class='language-js'><strong>getDataType</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - the symbol assigned to the current parameterized type.<br></div></div><hr></div><div class='function_block'><h3 id='G'>getExtractedConstantsSymbol</h3><pre class='signature'><code class='language-js'><strong>getExtractedConstantsSymbol</strong>(val)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>val</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='H'>getNewNameFunc</h3><pre class='signature'><code class='language-js'><strong>getNewNameFunc</strong>(name)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>name</strong>: any</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - the new symbol for a math function. For example getNewNameFunc('sin') returns  sin_INRIA_DATATYPE_1 where _INRIA_DATATYPE_1 is the current symbol of the 'extracted' type.<br></div></div><hr></div><div class='function_block'><h3 id='I'>getNewSymbolForExtractedConstant</h3><pre class='signature'><code class='language-js'><strong>getNewSymbolForExtractedConstant</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - a new symbol for the constant parametrization.<br></div></div><hr></div><div class='function_block'><h3 id='J'>getNextIOFormat</h3><pre class='signature'><code class='language-js'><strong>getNextIOFormat</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='K'>getOtherFormat</h3><pre class='signature'><code class='language-js'><strong>getOtherFormat</strong>($code, $vtype)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$code</strong>: any</span><br><span class='parameter'><strong>$vtype</strong>: any</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - the format for the $vtype type obtained from $code format, or 'NOT_YET_IMPLEMENTED (...)' for unknown translation. Example: for $code=&quot;%d%7s%lf%lf%lf%7s&quot; and $vtype='float', it returns &quot;%d%7s%f%f%f%7s&quot;.<br></div></div><hr></div><div class='function_block'><h3 id='L'>getOtherMathFunc</h3><pre class='signature'><code class='language-js'><strong>getOtherMathFunc</strong>($vmfunc, $vtype)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$vmfunc</strong>: any</span><br><span class='parameter'><strong>$vtype</strong>: any</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - the name of $vmfunc for the $vtype type. It is assumed that $vmfunc is the name of math functions. Example getOtherMathFunc( 'sin', 'float') returns 'sinf'.<br></div></div><hr></div><div class='function_block'><h3 id='M'>getPrecisionPrefix</h3><pre class='signature'><code class='language-js'><strong>getPrecisionPrefix</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - the prefix used for the added files for the parametrization.<br></div></div><hr></div><div class='function_block'><h3 id='N'>initNewDatatype</h3><pre class='signature'><code class='language-js'><strong>initNewDatatype</strong>()</code></pre><div class='function_content'><p>Assigned a new symbol for the current type parametrization.</p></div><hr></div><div class='function_block'><h3 id='O'>isIn</h3><pre class='signature'><code class='language-js'><strong>isIn</strong>(vstr, visin)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>vstr</strong>: any</span><br><span class='parameter'><strong>visin</strong>: any</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - true if the string vstr contains the visin string, false otherwise.<br></div></div><hr></div><div class='function_block'><h3 id='P'>mkJointPointType</h3><pre class='signature'><code class='language-js'><strong>mkJointPointType</strong>(atype)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>atype</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='Q'>toBeFixed</h3><pre class='signature'><code class='language-js'><strong>toBeFixed</strong>(key)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>key</strong>: any</span><br></div></div><hr></div></div>

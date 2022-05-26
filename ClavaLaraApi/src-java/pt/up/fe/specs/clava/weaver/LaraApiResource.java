@@ -78,10 +78,18 @@ public enum LaraApiResource implements LaraResourceProvider {
     STATEMENT_DECOMPOSER("code/StatementDecomposer.lara"),
     STATEMENT_DECOMPOSER_JS("code/StatementDecomposer.js"),
     DECOMPOSE_RESULT_JS("code/DecomposeResult.js"),
+    CODE_SIMPLIFY_ASSIGNMENT("code/SimplifyAssignment.js"),
+    CODE_SIMPLIFY_TERNARY_OP("code/SimplifyTernaryOp.js"),
 
     // Gprofer
     GPROFER("gprofer/Gprofer.lara"),
     GPROFER_ASPECTS("gprofer/_GproferAspects.lara"),
+
+    // Graphs
+    STATIC_CALL_GRAPH("graphs/StaticCallGraph.js"),
+    STATIC_CALL_GRAPH_BUILDER("graphs/scg/StaticCallGraphBuilder.js"),
+    SCG_NODE_DATA("graphs/scg/ScgNodeData.js"),
+    SCG_EDGE_DATA("graphs/scg/ScgEdgeData.js"),
 
     // Hdf5
     HDF5("hdf5/Hdf5.lara"),
@@ -112,7 +120,9 @@ public enum LaraApiResource implements LaraResourceProvider {
     BATCH_PARSER("parser/BatchParser.lara"),
 
     // Pass
+    DECOMPOSE_DECL_STMT("pass/DecomposeDeclStmt.js"),
     DECOMPOSE_VAR_DECLARATIONS("pass/DecomposeVarDeclarations.js"),
+    SINGLE_RETURN_FUNCTION("pass/SingleReturnFunction.js"),
 
     // Stats
     OPS_BLOCK("stats/OpsBlock.lara"),
@@ -144,7 +154,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     CLAVA("Clava.lara"),
     CLAVA_ASPECTS("ClavaAspects.lara"),
     CLAVA_CODE("ClavaCode.lara"),
-    CLAVA_JOIN_POINTS("ClavaJoinPoints.lara"),
+    CLAVA_JOIN_POINTS("ClavaJoinPoints.js"),
     CLAVA_TYPE("ClavaType.lara");
 
     private final String resource;

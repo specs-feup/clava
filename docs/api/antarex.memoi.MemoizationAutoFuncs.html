@@ -218,6 +218,14 @@
 <li>
 <a onclick="saveScroll()"  href="clava.gprofer.Gprofer.html">clava.gprofer.Gprofer</a></li>
 <li>
+<a onclick="saveScroll()"  href="clava.graphs.StaticCallGraph.html">clava.graphs.StaticCallGraph</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.graphs.scg.ScgEdgeData.html">clava.graphs.scg.ScgEdgeData</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.graphs.scg.ScgNodeData.html">clava.graphs.scg.ScgNodeData</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.graphs.scg.StaticCallGraphBuilder.html">clava.graphs.scg.StaticCallGraphBuilder</a></li>
+<li>
 <a onclick="saveScroll()"  href="clava.hdf5.Hdf5.html">clava.hdf5.Hdf5</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.hls.HLSAnalysis.html">clava.hls.HLSAnalysis</a></li>
@@ -263,6 +271,8 @@
 <a onclick="saveScroll()"  href="clava.pass.DecomposeDeclStmt.html">clava.pass.DecomposeDeclStmt</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.pass.DecomposeVarDeclarations.html">clava.pass.DecomposeVarDeclarations</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.pass.SingleReturnFunction.html">clava.pass.SingleReturnFunction</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.stats.OpsBlock.html">clava.stats.OpsBlock</a></li>
 <li>
@@ -358,6 +368,16 @@
 <li>
 <a onclick="saveScroll()"  href="lara.dse.VariableVariant.html">lara.dse.VariableVariant</a></li>
 <li>
+<a onclick="saveScroll()"  href="lara.graphs.EdgeData.html">lara.graphs.EdgeData</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.GraphEdge.html">lara.graphs.GraphEdge</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.GraphNode.html">lara.graphs.GraphNode</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.Graphs.html">lara.graphs.Graphs</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.graphs.NodeData.html">lara.graphs.NodeData</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.iterators.LaraIterator.html">lara.iterators.LaraIterator</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.iterators.LineIterator.html">lara.iterators.LineIterator</a></li>
@@ -383,6 +403,8 @@
 <a onclick="saveScroll()"  href="lara.mutation.Mutator.html">lara.mutation.Mutator</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.pass.Pass.html">lara.pass.Pass</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.PassResult.html">lara.pass.PassResult</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.units.EnergyUnit.html">lara.units.EnergyUnit</a></li>
 <li>
@@ -539,6 +561,8 @@
 <a onclick="saveScroll()"  href="lcl.metrics.om.NOL.html">lcl.metrics.om.NOL</a></li>
 <li>
 <a onclick="saveScroll()"  href="lcl.metrics.om.OtherMetricsIndex.html">lcl.metrics.om.OtherMetricsIndex</a></li>
+<li>
+<a onclick="saveScroll()"  href="lcl.ml.Code2Vec.html">lcl.ml.Code2Vec</a></li>
 </ul></div> 
     	<div id="column2">
     		<div id="doc_content"><div id='toc_container'><p class='toc_title'>import antarex.memoi.MemoizationAutoFuncs;</p><ul class='toc_list'><p class='toc_class'>Global Functions:</p><li class='toc_class_element'><a href='#A'>BodyReferencesLocalsOrConstants</a></li><li class='toc_class_element'><a href='#B'>checkBodyMemoizable</a></li><li class='toc_class_element'><a href='#C'>declaredAsPure</a></li><li class='toc_class_element'><a href='#D'>findmemoizable</a></li><li class='toc_class_element'><a href='#E'>getIdId</a></li><li class='toc_class_element'><a href='#F'>getNbMemoizable</a></li><li class='toc_class_element'><a href='#G'>getidfunction</a></li><li class='toc_class_element'><a href='#H'>printCallGraph</a></li><li class='toc_class_element'><a href='#I'>successorsAreMemoizable</a></li></ul></div><h2>Global Functions</h2><div class='function_block'><h3 id='A'>BodyReferencesLocalsOrConstants</h3><pre class='signature'><code class='language-js'><strong>BodyReferencesLocalsOrConstants</strong>($function, $body)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$function</strong>: any</span><br><span class='parameter'><strong>$body</strong>: any</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - &quot;true&quot; if $body of $function references only local variables or constant objects, &quot;false&quot; otherwise.<br></div></div><hr></div><div class='function_block'><h3 id='B'>checkBodyMemoizable</h3><pre class='signature'><code class='language-js'><strong>checkBodyMemoizable</strong>($file, $function, $body)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$file</strong>: any</span><br><span class='parameter'><strong>$function</strong>: any</span><br><span class='parameter'><strong>$body</strong>: any</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - STATE.YES if the method/function $function defined in the file $file is memoizable, STATE.NO or STATE.UNDEF otherwise. A function/method is memoizable: - if the referenced functions/methods are memoizable - and the $body of $function refers only local variables and constants (pure functions).<br></div></div><hr></div><div class='function_block'><h3 id='C'>declaredAsPure</h3><pre class='signature'><code class='language-js'><strong>declaredAsPure</strong>($name)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$name</strong>: any</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - true if $name is declared as a pure function, false otherwise. Currently, restricted to the pure functions of math.h and those declared in SomePredefinedPureFunctions.<br></div></div><hr></div><div class='function_block'><h3 id='D'>findmemoizable</h3><pre class='signature'><code class='language-js'><strong>findmemoizable</strong>($file, $function, $body)</code></pre><div class='function_content'><p>A function/method is memoizable iff<br>1) The header &quot;vtype func(parameters)&quot; satisfies :<br>- for all p of parameters type(p)=vtype and 1 &lt;= |parameters| &lt;=3<br>- returns a vtype value.<br>2) It refers only local variables and constants (pure functions), and no pointers.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$file</strong>: any</span><br><span class='parameter'><strong>$function</strong>: any</span><br><span class='parameter'><strong>$body</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='E'>getIdId</h3><pre class='signature'><code class='language-js'><strong>getIdId</strong>($id, $suff)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$id</strong>: any</span><br><span class='parameter'><strong>$suff</strong>: any</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - the string $id%$suff<br></div></div><hr></div><div class='function_block'><h3 id='F'>getNbMemoizable</h3><pre class='signature'><code class='language-js'><strong>getNbMemoizable</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - the current number of memoizable functions.<br></div></div><hr></div><div class='function_block'><h3 id='G'>getidfunction</h3><pre class='signature'><code class='language-js'><strong>getidfunction</strong>($file, $function)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$file</strong>: any</span><br><span class='parameter'><strong>$function</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='H'>printCallGraph</h3><pre class='signature'><code class='language-js'><strong>printCallGraph</strong>(callGraph)</code></pre><div class='function_content'><p>Debug. Prints the gathered information of a graph ( callGraph) to the console.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>callGraph</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='I'>successorsAreMemoizable</h3><pre class='signature'><code class='language-js'><strong>successorsAreMemoizable</strong>(id)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>id</strong>: any</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - STATE.YES if the successors of id are memoizable. - STATE.NO if one of the sucessors is not memoizable, or in case of circuit. - STATE.UNDEF if the status of one of the successors is undefined (ie not yet fixed).<br></div></div><hr></div></div>

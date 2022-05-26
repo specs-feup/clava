@@ -17,6 +17,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import pt.up.fe.specs.tupatcher.PatchData;
 import pt.up.fe.specs.tupatcher.TUPatcherConfig;
@@ -44,6 +45,11 @@ public class PatcherProducer {
         this.producer = producer;
         this.config = config;
         this.dumper = Lazy.newInstance(() -> TUPatcherLauncher.getDumper());
+    }
+
+    public static Callable<PatcherResult> createCall(File sourceFile, File baseFolder, TUPatcherConfig config) {
+        var patcher = new PatcherProducer(null, null, config);
+        return () -> patcher.patchFile(sourceFile, null);
     }
 
     public boolean execute() {
@@ -90,6 +96,8 @@ public class PatcherProducer {
         command.add("-x");
         command.add("c++");
 
+        var workingDir = dumperExe.getAbsoluteFile().getParentFile();
+
         int n = 0;
         int maxIterations = config.get(TUPatcherConfig.MAX_ITERATIONS);
         ProcessOutput<Boolean, TUErrorsData> output = null;
@@ -98,6 +106,7 @@ public class PatcherProducer {
 
             try {
                 output = SpecsSystem.runProcess(command,
+                        workingDir,
                         TUPatcherLauncher::outputProcessor,
                         inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
                 patchData.write(sourceFile, patchedFile);
