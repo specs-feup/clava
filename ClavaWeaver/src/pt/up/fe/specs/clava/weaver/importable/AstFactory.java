@@ -41,6 +41,7 @@ import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
+import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.expr.FloatingLiteral;
@@ -99,6 +100,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AParam;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStruct;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATernaryOp;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ATypedefDecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AUnaryOp;
@@ -622,6 +624,16 @@ public class AstFactory {
                 (Expr) expr.getNode());
 
         return CxxJoinpoints.create(opNode, AUnaryOp.class);
+    }
+
+    public static ATernaryOp ternaryOp(AExpression cond, AExpression trueExpr, AExpression falseExpr, AType type) {
+        ConditionalOperator opNode = CxxWeaver.getFactory().conditionalOperator(
+                (Type) type.getNode(),
+                (Expr) cond.getNode(),
+                (Expr) trueExpr.getNode(),
+                (Expr) falseExpr.getNode());
+
+        return CxxJoinpoints.create(opNode, ATernaryOp.class);
     }
 
     public static AExpression parenthesis(AExpression expression) {
