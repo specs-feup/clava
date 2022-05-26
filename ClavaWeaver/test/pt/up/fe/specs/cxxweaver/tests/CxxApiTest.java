@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.cxxweaver.tests;
 
+import java.util.Arrays;
+
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -21,8 +23,12 @@ import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
 import pt.up.fe.specs.util.SpecsSystem;
+import pt.up.fe.specs.util.lazy.Lazy;
 
 public class CxxApiTest {
+
+    private static final Lazy<Boolean> IS_CMAKE_AVAILABLE = Lazy
+            .newInstance(() -> SpecsSystem.runProcess(Arrays.asList("cmake"), false, false).getReturnValue() == 0);
 
     @BeforeClass
     public static void setupOnce() {
@@ -72,6 +78,10 @@ public class CxxApiTest {
 
     @Test
     public void testCMaker() {
+        if (!IS_CMAKE_AVAILABLE.get()) {
+            return;
+        }
+
         newTester()
                 .set(CxxWeaverOption.PARSE_INCLUDES)
                 .test("CMakerTest.lara", "cmaker_test.cpp", "cmaker_test.h");

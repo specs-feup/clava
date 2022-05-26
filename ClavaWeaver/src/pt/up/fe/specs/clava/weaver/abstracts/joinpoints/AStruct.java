@@ -53,6 +53,24 @@ public abstract class AStruct extends ARecord {
     }
 
     /**
+     * Get value on attribute isImplementation
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsImplementationImpl() {
+        return this.aRecord.getIsImplementationImpl();
+    }
+
+    /**
+     * Get value on attribute isPrototype
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsPrototypeImpl() {
+        return this.aRecord.getIsPrototypeImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select fields
      * @return 
      */
@@ -525,6 +543,8 @@ public abstract class AStruct extends ARecord {
         KIND("kind"),
         FIELDS("fields"),
         FUNCTIONS("functions"),
+        ISIMPLEMENTATION("isImplementation"),
+        ISPROTOTYPE("isPrototype"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),

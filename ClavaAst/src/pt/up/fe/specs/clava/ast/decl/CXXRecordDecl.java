@@ -14,7 +14,9 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -149,15 +151,28 @@ public class CXXRecordDecl extends RecordDecl {
      * @return the node representing the declaration of this Record, if it exists
      */
     public Optional<CXXRecordDecl> getDeclaration() {
+        return getDeclarations().stream().findFirst();
+    }
+
+    /**
+     *
+     * @return the nodes representing the declarations of this Record, if it exists
+     */
+    public List<CXXRecordDecl> getDeclarations() {
+
+        // Search for the declarations
+        var declarations = getAppTry().map(app -> app.getCxxRecordDeclarations(this)).orElse(Collections.emptyList());
+
+        if (!declarations.isEmpty()) {
+            return declarations;
+        }
 
         // If no body, return immediately
         if (!isCompleteDefinition()) {
-            return Optional.of(this);
+            return Arrays.asList(this);
         }
 
-        // Search for the declaration
-        return getAppTry().flatMap(app -> app.getCxxRecordDeclaration(this));
-
+        return Collections.emptyList();
     }
 
     /**
@@ -166,13 +181,21 @@ public class CXXRecordDecl extends RecordDecl {
      */
     public Optional<CXXRecordDecl> getDefinition() {
 
-        // If has body, return immediately
+        var definition = getAppTry().flatMap(app -> app.getCxxRecordDefinition(this));
+
+        if (definition.isPresent()) {
+            return definition;
+        }
+
+        // If has body, return
+        // There are a number of situations where this should be done
+        // e.g. node is still not inserted (no App)
         if (isCompleteDefinition()) {
             return Optional.of(this);
         }
 
-        // Search for the definition
-        return getAppTry().flatMap(app -> app.getCxxRecordDefinition(this));
+        return Optional.empty();
+
     }
 
     /**

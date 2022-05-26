@@ -65,6 +65,7 @@ import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXFunctionalCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
+import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -424,6 +425,13 @@ public class ClavaFactory {
             data.put(UnaryOperator.POSITION, UnaryOperatorPosition.POSTFIX);
 
         return new UnaryOperator(data, Arrays.asList(subExpr));
+    }
+
+    public ConditionalOperator conditionalOperator(Type type, Expr condition, Expr trueExpr, Expr falseExpr) {
+        DataStore data = newDataStore(ConditionalOperator.class)
+                .put(Expr.TYPE, Optional.of(type));
+
+        return new ConditionalOperator(data, Arrays.asList(condition, trueExpr, falseExpr));
     }
 
     public CStyleCastExpr cStyleCastExpr(Type type, Expr expr) {

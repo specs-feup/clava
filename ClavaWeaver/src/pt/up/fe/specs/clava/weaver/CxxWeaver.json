@@ -19501,11 +19501,38 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present",
+						"children": [
+									{
+										"type": "class",
+										"name": "canonical"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "The implementation (or definition) of this class present in the AST, or undefined if none is found",
+						"children": [
+									{
+										"type": "class",
+										"name": "implementation"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "True, if contains at least one pure function",
 						"children": [
 									{
 										"type": "boolean",
 										"name": "isAbstract"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if this is the class returned by the 'canonical' attribute",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isCanonical"
 									}]
 					},
 					{
@@ -19528,6 +19555,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "The prototypes (or declarations) of this class present in the AST, if any",
+						"children": [
+									{
+										"type": "class[]",
+										"name": "prototypes"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "joinpoint[]",
@@ -19540,6 +19576,24 @@
 									{
 										"type": "function[]",
 										"name": "functions"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true if this particular join point is an implementation (i.e. has its body fully specified), false otherwise",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isImplementation"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true if this particular join point is a prototype (i.e. does not have its body fully specified), false otherwise",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isPrototype"
 									}]
 					},
 					{
@@ -41589,7 +41643,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if this is the function returned by the 'normalize' attribute",
+						"tooltip": "true, if this is the function returned by the 'canonical' attribute",
 						"children": [
 									{
 										"type": "Boolean",
@@ -57580,7 +57634,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if this is the function returned by the 'normalize' attribute",
+						"tooltip": "true, if this is the function returned by the 'canonical' attribute",
 						"children": [
 									{
 										"type": "Boolean",
@@ -71691,6 +71745,24 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true if this particular join point is an implementation (i.e. has its body fully specified), false otherwise",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isImplementation"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true if this particular join point is a prototype (i.e. does not have its body fully specified), false otherwise",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isPrototype"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "String",
@@ -76532,6 +76604,24 @@
 									{
 										"type": "function[]",
 										"name": "functions"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true if this particular join point is an implementation (i.e. has its body fully specified), false otherwise",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isImplementation"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true if this particular join point is a prototype (i.e. does not have its body fully specified), false otherwise",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isPrototype"
 									}]
 					},
 					{

@@ -46,6 +46,7 @@ import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.transform.call.CallInliner;
 import pt.up.fe.specs.clava.utils.ExternalDependencies;
 import pt.up.fe.specs.clava.utils.GlobalManager;
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -378,14 +379,20 @@ public class App extends ClavaNode {
     */
 
     public Optional<CXXRecordDecl> getCxxRecordDeclaration(CXXRecordDecl record) {
+        return getCxxRecordDeclarations(record).stream().findFirst();
+    }
+
+    public List<CXXRecordDecl> getCxxRecordDeclarations(CXXRecordDecl record) {
         return getCxxRecordDeclaration(record, false);
     }
 
     public Optional<CXXRecordDecl> getCxxRecordDefinition(CXXRecordDecl record) {
-        return getCxxRecordDeclaration(record, true);
+        var definition = getCxxRecordDeclaration(record, true);
+
+        return SpecsCollections.toOptional(definition);
     }
 
-    private Optional<CXXRecordDecl> getCxxRecordDeclaration(CXXRecordDecl record, boolean isCompleteDefinition) {
+    private List<CXXRecordDecl> getCxxRecordDeclaration(CXXRecordDecl record, boolean isCompleteDefinition) {
 
         // Iterate over translation units, NamespaceDecl and CXXRecordDecl without namespace are directly under TUs
         Stream<ClavaNode> cxxRecordCandidates = getTranslationUnits().stream()
@@ -405,7 +412,7 @@ public class App extends ClavaNode {
                 .map(child -> (CXXRecordDecl) child)
                 .filter(recordDecl -> recordDecl.getDeclName().equals(record.getDeclName()))
                 .filter(recordDecl -> recordDecl.isCompleteDefinition() == isCompleteDefinition)
-                .findFirst();
+                .collect(Collectors.toList());
 
     }
 

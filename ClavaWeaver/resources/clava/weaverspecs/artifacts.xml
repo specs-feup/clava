@@ -221,7 +221,9 @@
 		<attribute name="kind" type="String" />
 		<!-- <attribute name="name" type="{struct,interface,union,class,enum}"/> -->
 		<attribute name="fields" type="joinpoint[]" />
-		<attribute name="functions" type="function[]" />		
+		<attribute name="functions" type="function[]" />
+		<attribute name="isImplementation" type="Boolean" tooltip="true if this particular join point is an implementation (i.e. has its body fully specified), false otherwise" />
+		<attribute name="isPrototype" type="Boolean" tooltip="true if this particular join point is a prototype (i.e. does not have its body fully specified), false otherwise" />				
 	</artifact>
 	
 	<!-- CLASS -->
@@ -231,7 +233,11 @@
 		<attribute name="allMethods" type="method[]" tooltip="All the methods of this class, including inherited ones"/>	
 		<attribute name="allBases" type="class[]" tooltip="All the classes this class inherits from"/>					
 		<attribute name="isAbstract" type="boolean" tooltip="True, if contains at least one pure function"/>							
-		<attribute name="isInterface" type="boolean" tooltip="True, if all functions are pure"/>									
+		<attribute name="isInterface" type="boolean" tooltip="True, if all functions are pure"/>
+		<attribute name="prototypes" type="class[]" tooltip="The prototypes (or declarations) of this class present in the AST, if any"/>
+		<attribute name="implementation" type="class" tooltip="The implementation (or definition) of this class present in the AST, or undefined if none is found"/>													
+		<attribute name="canonical" type="class" tooltip="Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present"/>				
+		<attribute name="isCanonical" type="Boolean" tooltip="true, if this is the class returned by the 'canonical' attribute"/>
 	</artifact>
 	
 	<!-- METHOD -->

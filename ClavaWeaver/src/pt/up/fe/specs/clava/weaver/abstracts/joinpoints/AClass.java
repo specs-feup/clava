@@ -208,6 +208,108 @@ public abstract class AClass extends ARecord {
     }
 
     /**
+     * Get value on attribute prototypes
+     * @return the attribute's value
+     */
+    public abstract AClass[] getPrototypesArrayImpl();
+
+    /**
+     * The prototypes (or declarations) of this class present in the AST, if any
+     */
+    public Object getPrototypesImpl() {
+        AClass[] aClassArrayImpl0 = getPrototypesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aClassArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * The prototypes (or declarations) of this class present in the AST, if any
+     */
+    public final Object getPrototypes() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "prototypes", Optional.empty());
+        	}
+        	Object result = this.getPrototypesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "prototypes", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "prototypes", e);
+        }
+    }
+
+    /**
+     * The implementation (or definition) of this class present in the AST, or undefined if none is found
+     */
+    public abstract AClass getImplementationImpl();
+
+    /**
+     * The implementation (or definition) of this class present in the AST, or undefined if none is found
+     */
+    public final Object getImplementation() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "implementation", Optional.empty());
+        	}
+        	AClass result = this.getImplementationImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "implementation", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "implementation", e);
+        }
+    }
+
+    /**
+     * Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present
+     */
+    public abstract AClass getCanonicalImpl();
+
+    /**
+     * Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present
+     */
+    public final Object getCanonical() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "canonical", Optional.empty());
+        	}
+        	AClass result = this.getCanonicalImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "canonical", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "canonical", e);
+        }
+    }
+
+    /**
+     * true, if this is the class returned by the 'canonical' attribute
+     */
+    public abstract Boolean getIsCanonicalImpl();
+
+    /**
+     * true, if this is the class returned by the 'canonical' attribute
+     */
+    public final Object getIsCanonical() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCanonical", Optional.empty());
+        	}
+        	Boolean result = this.getIsCanonicalImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isCanonical", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isCanonical", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select methods
      * @return 
      */
@@ -266,6 +368,24 @@ public abstract class AClass extends ARecord {
     @Override
     public AFunction[] getFunctionsArrayImpl() {
         return this.aRecord.getFunctionsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute isImplementation
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsImplementationImpl() {
+        return this.aRecord.getIsImplementationImpl();
+    }
+
+    /**
+     * Get value on attribute isPrototype
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsPrototypeImpl() {
+        return this.aRecord.getIsPrototypeImpl();
     }
 
     /**
@@ -704,6 +824,10 @@ public abstract class AClass extends ARecord {
         attributes.add("allBases");
         attributes.add("isAbstract");
         attributes.add("isInterface");
+        attributes.add("prototypes");
+        attributes.add("implementation");
+        attributes.add("canonical");
+        attributes.add("isCanonical");
     }
 
     /**
@@ -755,9 +879,15 @@ public abstract class AClass extends ARecord {
         ALLBASES("allBases"),
         ISABSTRACT("isAbstract"),
         ISINTERFACE("isInterface"),
+        PROTOTYPES("prototypes"),
+        IMPLEMENTATION("implementation"),
+        CANONICAL("canonical"),
+        ISCANONICAL("isCanonical"),
         KIND("kind"),
         FIELDS("fields"),
         FUNCTIONS("functions"),
+        ISIMPLEMENTATION("isImplementation"),
+        ISPROTOTYPE("isPrototype"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),

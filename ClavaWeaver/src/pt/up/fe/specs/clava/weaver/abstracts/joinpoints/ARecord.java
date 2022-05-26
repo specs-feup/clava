@@ -125,6 +125,52 @@ public abstract class ARecord extends ANamedDecl {
     }
 
     /**
+     * true if this particular join point is an implementation (i.e. has its body fully specified), false otherwise
+     */
+    public abstract Boolean getIsImplementationImpl();
+
+    /**
+     * true if this particular join point is an implementation (i.e. has its body fully specified), false otherwise
+     */
+    public final Object getIsImplementation() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isImplementation", Optional.empty());
+        	}
+        	Boolean result = this.getIsImplementationImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isImplementation", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isImplementation", e);
+        }
+    }
+
+    /**
+     * true if this particular join point is a prototype (i.e. does not have its body fully specified), false otherwise
+     */
+    public abstract Boolean getIsPrototypeImpl();
+
+    /**
+     * true if this particular join point is a prototype (i.e. does not have its body fully specified), false otherwise
+     */
+    public final Object getIsPrototype() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isPrototype", Optional.empty());
+        	}
+        	Boolean result = this.getIsPrototypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isPrototype", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isPrototype", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select fields
      * @return 
      */
@@ -597,6 +643,8 @@ public abstract class ARecord extends ANamedDecl {
         attributes.add("kind");
         attributes.add("fields");
         attributes.add("functions");
+        attributes.add("isImplementation");
+        attributes.add("isPrototype");
     }
 
     /**
@@ -645,6 +693,8 @@ public abstract class ARecord extends ANamedDecl {
         KIND("kind"),
         FIELDS("fields"),
         FUNCTIONS("functions"),
+        ISIMPLEMENTATION("isImplementation"),
+        ISPROTOTYPE("isPrototype"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),
