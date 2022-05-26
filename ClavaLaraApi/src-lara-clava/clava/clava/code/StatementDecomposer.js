@@ -202,4 +202,29 @@ class StatementDecomposer {
       $assign.left
     );
   }
+
+  decomposeTernaryOp($ternaryOp) {
+    const condResult = this.decomposeExpr($ternaryOp.cond);
+    const trueResult = this.decomposeExpr($ternaryOp.trueExpr);
+    const falseResult = this.decomposeExpr($ternaryOp.falseExpr);
+
+    const $newExpr = ClavaJoinPoints.ternaryOp(
+      condResult.$resultExpr,
+      trueResult.$resultExpr,
+      falseResult.$resultExpr,
+      $ternaryOp.type
+    );
+
+    const tempVarname = this.#newTempVarname();
+    const tempVarDecl = ClavaJoinPoints.varDecl(tempVarname, $newExpr);
+
+    const stmts = [
+      ...condResult.stmts,
+      ...trueResult.stmts,
+      ...falseResult.stmts,
+      tempVarDecl.stmt,
+    ];
+
+    return new DecomposeResult(stmts, ClavaJoinPoints.varRef(tempVarDecl));
+  }
 }
