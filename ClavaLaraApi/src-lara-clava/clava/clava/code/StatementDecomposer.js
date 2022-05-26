@@ -10,7 +10,7 @@ class StatementDecomposer {
    * @param {string} [tempPrefix="decomp_"]
    * @param {number} [startIndex=0]
    */
-  constructor(tempPrefix = "decomp", startIndex = 0) {
+  constructor(tempPrefix = "decomp_", startIndex = 0) {
     this.tempPrefix = tempPrefix ?? "decomp_";
     this.startIndex = startIndex ?? 0;
 
