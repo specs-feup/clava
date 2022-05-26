@@ -665,12 +665,12 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * true, if this is the function returned by the 'normalize' attribute
+     * true, if this is the function returned by the 'canonical' attribute
      */
     public abstract Boolean getIsCanonicalImpl();
 
     /**
-     * true, if this is the function returned by the 'normalize' attribute
+     * true, if this is the function returned by the 'canonical' attribute
      */
     public final Object getIsCanonical() {
         try {

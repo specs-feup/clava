@@ -88,4 +88,42 @@ public class CxxClass extends AClass {
         return cxxRecordDecl.isInterface();
     }
 
+    @Override
+    public AClass[] getPrototypesArrayImpl() {
+        return cxxRecordDecl.getDeclarations().stream()
+                .map(node -> CxxJoinpoints.create(node, AClass.class))
+                .toArray(size -> new AClass[size]);
+    }
+
+    @Override
+    public AClass getImplementationImpl() {
+        return cxxRecordDecl.getDefinition()
+                .map(node -> CxxJoinpoints.create(node, AClass.class))
+                .orElse(null);
+    }
+
+    @Override
+    public AClass getCanonicalImpl() {
+        // First, try the implementation
+        var implementation = getImplementationImpl();
+
+        if (implementation != null) {
+            return implementation;
+        }
+
+        // Implementation not found return prototype
+        var prototypes = getPrototypesArrayImpl();
+
+        if (prototypes.length == 0) {
+            return null;
+        }
+
+        return prototypes[0];
+    }
+
+    @Override
+    public Boolean getIsCanonicalImpl() {
+        return cxxRecordDecl.equals(getCanonicalImpl().getNode());
+    }
+
 }

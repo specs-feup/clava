@@ -72,4 +72,14 @@ public class CxxRecord extends ARecord {
     public void addFieldImpl(AField field) {
         recordDecl.addField((FieldDecl) field.getNode());
     }
+
+    @Override
+    public Boolean getIsImplementationImpl() {
+        return recordDecl.isCompleteDefinition();
+    }
+
+    @Override
+    public Boolean getIsPrototypeImpl() {
+        return !recordDecl.isCompleteDefinition();
+    }
 }
