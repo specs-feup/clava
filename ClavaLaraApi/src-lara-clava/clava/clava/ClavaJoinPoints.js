@@ -363,6 +363,24 @@ class ClavaJoinPoints {
   }
 
   /**
+   * Creates a new join point 'ternaryOp'
+   *
+   * @param {$expr|string} $cond The condition of the operator
+   * @param {$expr|string} $trueExpr The result when $cond evaluates to true
+   * @param {$expr|string} $falseExpr The result when $cond evaluates to false
+   * @param {$type|string} $type The type of the operation
+   * @returns {$ternaryOp} The newly created join point
+   */
+  static ternaryOp($cond, $trueExpr, $falseExpr, $type) {
+    $cond = ClavaType.asExpression($cond);
+    $trueExpr = ClavaType.asExpression($trueExpr);
+    $falseExpr = ClavaType.asExpression($falseExpr);
+    $type = ClavaType.asType($type);
+
+    return AstFactory.ternaryOp($cond, $trueExpr, $falseExpr, $type);
+  }
+
+  /**
    * Creates a new join point 'expr' representing a parenthesis expression.
    *
    * @param {String|$expr} $expr - The expression inside the parenthesis. If a string, it is converted to a literal expression.
