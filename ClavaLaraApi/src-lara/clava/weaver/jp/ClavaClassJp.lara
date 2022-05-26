@@ -109,7 +109,7 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'isCustom', {
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'isAbstract', {
 	get: function () {	
-	    return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).isAbstract();
+	    return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).getIsAbstract();
 	}
 });
 

@@ -61,13 +61,21 @@ public class CXXMemberCallExpr extends CallExpr {
         var callee = super.getCallee();
 
         // MemberExpr might be encapsulated by a ParenExpr
-        return (MemberExpr) callee.normalize(MEMBER_BYPASS);
+        var encapsulatedCallee = callee.normalize(MEMBER_BYPASS);
+        
+        if (encapsulatedCallee instanceof MemberExpr) {
+            return (MemberExpr) encapsulatedCallee;
+        }
+        
+        return null;
     }
 
     @Override
     // public String getCalleeName() {
     public Optional<String> getCalleeNameTry() {
         ClavaNode callee = getCallee();
+        
+        if (callee == null) return Optional.empty();
 
         if (!(callee instanceof MemberExpr)) {
             throw new UnexpectedChildExpection(CXXMemberCallExpr.class, callee);

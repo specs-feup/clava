@@ -106,6 +106,9 @@ public class ClavaCommonLanguage {
 	    }
 	    */
 	    
+	    if (node.isInterface()) return "InterfaceJp";
+	    
+	    /*
 	    boolean isDeclarationOnly = node.getChildren().size() == 0;
 	    
 	    if (isDeclarationOnly) return "ClassJp";
@@ -117,7 +120,7 @@ public class ClavaCommonLanguage {
                             method.get(CXXMethodDecl.IS_PURE).booleanValue();
                 });
         
-	    if (areAllVirtualPureMethods) return "InterfaceJp";
+	    if (areAllVirtualPureMethods) return "InterfaceJp";/**/
 
         switch (node.getTagKind()) {
         case CLASS:
