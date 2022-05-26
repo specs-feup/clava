@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -235,21 +236,21 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     public List<FunctionDecl> getPrototypes() {
 
         // Search for the declaration
-        return getAppTry().map(app -> app.getFunctionPrototypes(this)).orElse(Collections.emptyList());
-        // var prototypes = getAppTry().map(app -> app.getFunctionPrototypes(this)).orElse(Collections.emptyList());
-        //
-        // if (!prototypes.isEmpty()) {
-        // return prototypes;
-        // }
-        //
-        // // If no body, return immediately
-        // // There are a number of situations where this should be done
-        // // e.g. node is still not inserted (no App), method is still not in class
-        // if (!hasBody()) {
-        // return Arrays.asList(this);
-        // }
-        //
-        // return Collections.emptyList();
+        // return getAppTry().map(app -> app.getFunctionPrototypes(this)).orElse(Collections.emptyList());
+        var prototypes = getAppTry().map(app -> app.getFunctionPrototypes(this)).orElse(Collections.emptyList());
+
+        if (!prototypes.isEmpty()) {
+            return prototypes;
+        }
+
+        // If no body, return immediately
+        // There are a number of situations where this should be done
+        // e.g. node is still not inserted (no App), method is still not in class
+        if (!hasBody()) {
+            return Arrays.asList(this);
+        }
+
+        return Collections.emptyList();
     }
 
     /**
@@ -269,20 +270,20 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     public Optional<FunctionDecl> getImplementation() {
 
         // Search for the definition, returns definitions that is already in the tree
-        return getAppTry().flatMap(app -> app.getFunctionImplementation(this));
-        // var definition = getAppTry().flatMap(app -> app.getFunctionImplementation(this));
-        // if (definition.isPresent()) {
-        // return definition;
-        // }
-        //
-        // // If has body, return immediately
-        // // There are a number of situations where this should be done
-        // // e.g. node is still not inserted (no App), method is still not in class
-        // if (hasBody()) {
-        // return Optional.of(this);
-        // }
-        //
-        // return Optional.empty();
+        // return getAppTry().flatMap(app -> app.getFunctionImplementation(this));
+        var definition = getAppTry().flatMap(app -> app.getFunctionImplementation(this));
+        if (definition.isPresent()) {
+            return definition;
+        }
+
+        // If has body, return immediately
+        // There are a number of situations where this should be done
+        // e.g. node is still not inserted (no App), method is still not in class
+        if (hasBody()) {
+            return Optional.of(this);
+        }
+
+        return Optional.empty();
 
     }
 

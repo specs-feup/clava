@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -160,16 +161,18 @@ public class CXXRecordDecl extends RecordDecl {
     public List<CXXRecordDecl> getDeclarations() {
 
         // Search for the declarations
-        return getAppTry().map(app -> app.getCxxRecordDeclarations(this)).orElse(Collections.emptyList());
+        var declarations = getAppTry().map(app -> app.getCxxRecordDeclarations(this)).orElse(Collections.emptyList());
 
-        // if (!declarations.isEmpty()) {
-        // return declarations;
-        // }
-        //
-        // // If no body, return immediately
-        // if (!isCompleteDefinition()) {
-        // return Optional.of(this);
-        // }
+        if (!declarations.isEmpty()) {
+            return declarations;
+        }
+
+        // If no body, return immediately
+        if (!isCompleteDefinition()) {
+            return Arrays.asList(this);
+        }
+
+        return Collections.emptyList();
     }
 
     /**
@@ -178,13 +181,21 @@ public class CXXRecordDecl extends RecordDecl {
      */
     public Optional<CXXRecordDecl> getDefinition() {
 
-        // // If has body, return immediately
-        // if (isCompleteDefinition()) {
-        // return Optional.of(this);
-        // }
+        var definition = getAppTry().flatMap(app -> app.getCxxRecordDefinition(this));
 
-        // Search for the definition
-        return getAppTry().flatMap(app -> app.getCxxRecordDefinition(this));
+        if (definition.isPresent()) {
+            return definition;
+        }
+
+        // If has body, return
+        // There are a number of situations where this should be done
+        // e.g. node is still not inserted (no App)
+        if (isCompleteDefinition()) {
+            return Optional.of(this);
+        }
+
+        return Optional.empty();
+
     }
 
     /**
