@@ -16,9 +16,11 @@ package pt.up.fe.specs.clava.ast.expr;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -84,6 +86,12 @@ public class BinaryOperator extends Operator {
         KIND_NAMES.put(BinaryOperatorKind.Comma, "comma");
 
     }
+
+    /**
+     * Operators that when generating code, do not add spaces between operands
+     */
+    private static final Set<BinaryOperatorKind> NO_SPACES = EnumSet.of(BinaryOperatorKind.PtrMemD,
+            BinaryOperatorKind.PtrMemI);
 
     private static final Lazy<Map<String, BinaryOperatorKind>> OP_MAP = Lazy.newInstance(BinaryOperator::buildOpMap);
 
@@ -161,9 +169,24 @@ public class BinaryOperator extends Operator {
 
     @Override
     public String getCode() {
-        String opCode = getLhs().getCode() + " " + get(OP).getOpString() + " " + getRhs().getCode();
+        var addSpaces = !NO_SPACES.contains(get(OP));
+        StringBuilder opCode = new StringBuilder();
 
-        return opCode;
+        opCode.append(getLhs().getCode());
+
+        if (addSpaces) {
+            opCode.append(" ");
+        }
+
+        opCode.append(get(OP).getOpString());
+
+        if (addSpaces) {
+            opCode.append(" ");
+        }
+
+        opCode.append(getRhs().getCode());
+
+        return opCode.toString();
     }
 
     @Override
