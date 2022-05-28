@@ -312,7 +312,15 @@ public class CxxCall extends ACall {
             return null;
         }
 
-        MemberExpr memberExpr = ((CXXMemberCallExpr) call).getCallee();
+        var callee = ((CXXMemberCallExpr) call).getCallee();
+
+        // if (!(callee instanceof MemberExpr)) {
+        // return null;
+        // }
+
+        MemberExpr memberExpr = callee;
+
+        // MemberExpr memberExpr = ((CXXMemberCallExpr) call).getCallee();
 
         return CxxJoinpoints.create(memberExpr, AMemberAccess.class);
 

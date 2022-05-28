@@ -19528,7 +19528,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if this is the class returned by the 'canonical' attribute",
+						"tooltip": "true if this is the class returned by the 'canonical' attribute",
 						"children": [
 									{
 										"type": "Boolean",

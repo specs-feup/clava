@@ -287,12 +287,12 @@ public abstract class AClass extends ARecord {
     }
 
     /**
-     * true, if this is the class returned by the 'canonical' attribute
+     * true if this is the class returned by the 'canonical' attribute
      */
     public abstract Boolean getIsCanonicalImpl();
 
     /**
-     * true, if this is the class returned by the 'canonical' attribute
+     * true if this is the class returned by the 'canonical' attribute
      */
     public final Object getIsCanonical() {
         try {

@@ -237,7 +237,8 @@
 		<attribute name="prototypes" type="class[]" tooltip="The prototypes (or declarations) of this class present in the AST, if any"/>
 		<attribute name="implementation" type="class" tooltip="The implementation (or definition) of this class present in the AST, or undefined if none is found"/>													
 		<attribute name="canonical" type="class" tooltip="Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present"/>				
-		<attribute name="isCanonical" type="Boolean" tooltip="true, if this is the class returned by the 'canonical' attribute"/>
+		<attribute name="isCanonical" type="Boolean" tooltip="true if this is the class returned by the 'canonical' attribute"/>
+		<!-- <attribute name="isImplementation" type="Boolean" tooltip="true if this class is completely defined, false otherwise"/> -->		
 	</artifact>
 	
 	<!-- METHOD -->
