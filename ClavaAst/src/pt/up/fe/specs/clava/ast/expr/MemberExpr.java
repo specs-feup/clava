@@ -91,10 +91,14 @@ public class MemberExpr extends Expr {
         }
 
         code.append(baseCode)
-                .append(isArrow() ? "->" : ".")
+                .append(getSeparatorCode())
                 .append(getMemberName());
 
         return code.toString();
+    }
+
+    protected String getSeparatorCode() {
+        return isArrow() ? "->" : ".";
     }
 
     public List<String> getChain() {

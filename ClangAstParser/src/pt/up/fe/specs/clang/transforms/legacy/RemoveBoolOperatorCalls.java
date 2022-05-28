@@ -39,7 +39,13 @@ public class RemoveBoolOperatorCalls implements SimplePostClavaRule {
 
         CXXMemberCallExpr memberCall = (CXXMemberCallExpr) node;
 
-        MemberExpr memberExpr = memberCall.getCallee();
+        var callee = memberCall.getCallee();
+
+        // if (!(callee instanceof MemberExpr)) {
+        // return;
+        // }
+
+        MemberExpr memberExpr = callee;
 
         // Find operator bool
         if (!memberExpr.getMemberName().equals("operator bool")) {

@@ -76,6 +76,7 @@ import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
+import pt.up.fe.specs.clava.ast.expr.PointerToMemberExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
@@ -321,6 +322,18 @@ public class ClavaFactory {
         }
 
         return new MemberExpr(data, Arrays.asList(baseExpr));
+    }
+
+    public PointerToMemberExpr pointerToMemberExpr(String memberName, Type memberType, Expr baseExpr, boolean isArrow) {
+        DataStore data = newDataStore(PointerToMemberExpr.class)
+                .put(MemberExpr.MEMBER_NAME, memberName)
+                .put(Expr.TYPE, Optional.of(memberType))
+                .put(MemberExpr.IS_ARROW, isArrow);
+        // if (baseExpr.getType() instanceof PointerType) {
+        // data.put(MemberExpr.IS_ARROW, true);
+        // }
+
+        return new PointerToMemberExpr(data, Arrays.asList(baseExpr));
     }
 
     public DummyExpr dummyExpr(String dummyContent) {

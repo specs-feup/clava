@@ -14,7 +14,6 @@
 package pt.up.fe.specs.clava.ast.expr;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +26,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.exceptions.UnexpectedChildExpection;
 import pt.up.fe.specs.util.collections.SpecsList;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
@@ -50,17 +50,53 @@ public class CXXMemberCallExpr extends CallExpr {
 
     /// DATAKEYS END
 
-    private final static List<Class<? extends ClavaNode>> MEMBER_BYPASS = Arrays.asList(ParenExpr.class);
+    // private final static List<Class<? extends ClavaNode>> MEMBER_BYPASS = Arrays.asList(ParenExpr.class);
 
     public CXXMemberCallExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
+    /**
+     * Can either return a MemberExpr, or a pseudo-object PointerToMemberExpr, that is created from a ParenExpr that has
+     * inside a pointer-to-member binary operation.
+     */
     @Override
     public MemberExpr getCallee() {
         var callee = super.getCallee();
 
+        // If callee is a MemberExpr, just return
+        if (callee instanceof MemberExpr) {
+            return (MemberExpr) callee;
+        }
+
+        // Check if ParenExpr with a binary operator that is a pointer to member
+
+        // System.out.println("CALLEE: " + callee.getLocation());
+        // System.out.println("CALLE CODE: " + callee.getCode());
+        // System.out.println("CALLEE TYPE: " + callee.getClass());
+
+        if (callee instanceof ParenExpr) {
+            var subExpr = ((ParenExpr) callee).getSubExpr();
+            // System.out.println("SubExpr: " + subExpr);
+            if (subExpr instanceof BinaryOperator) {
+                var binOp = (BinaryOperator) subExpr;
+
+                if (binOp.getOp() == BinaryOperatorKind.PtrMemD || binOp.getOp() == BinaryOperatorKind.PtrMemI) {
+                    return PointerToMemberExpr.newInstance(binOp);
+                }
+
+                // var pointerToMember = PointerToMemberExpr.newInstance(binOp);
+                // System.out.println("PTM CODE: " + pointerToMember.getCode());
+
+                // System.out.println("LHS: " + binOp.getLhs().getChild(0));
+                // System.out.println("RHS: " + binOp.getRhs().getChild(0));
+            }
+        }
+
+        throw new RuntimeException("Case not defined to callee of this kind: " + callee);
         // MemberExpr might be encapsulated by a ParenExpr
+        // return (MemberExpr) callee.normalize(MEMBER_BYPASS);
+        /*
         var encapsulatedCallee = callee.normalize(MEMBER_BYPASS);
         
         if (encapsulatedCallee instanceof MemberExpr) {
@@ -68,6 +104,7 @@ public class CXXMemberCallExpr extends CallExpr {
         }
         
         return null;
+        */
     }
 
     @Override
@@ -75,7 +112,7 @@ public class CXXMemberCallExpr extends CallExpr {
     public Optional<String> getCalleeNameTry() {
         ClavaNode callee = getCallee();
         
-        if (callee == null) return Optional.empty();
+        // if (callee == null) return Optional.empty();
 
         if (!(callee instanceof MemberExpr)) {
             throw new UnexpectedChildExpection(CXXMemberCallExpr.class, callee);

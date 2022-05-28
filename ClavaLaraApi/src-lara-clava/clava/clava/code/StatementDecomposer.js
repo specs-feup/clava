@@ -128,7 +128,7 @@ class StatementDecomposer {
     // If vardecl has init, decompose expression
     if ($decl.hasInit) {
       const decomposeResult = this.decomposeExpr($decl.init);
-      expr = newStmts.concat(decomposeResult.stmts);
+      //expr = newStmts.concat(decomposeResult.stmts);
       $decl.init = decomposeResult.$resultExpr;
       return [...decomposeResult.stmts, ClavaJoinPoints.declStmt($decl)];
     }

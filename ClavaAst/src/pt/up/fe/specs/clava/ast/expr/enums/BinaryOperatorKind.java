@@ -153,10 +153,14 @@ public enum BinaryOperatorKind implements StringProvider {
             return "|=";
         case Comma:
             return ",";
+        case PtrMemD:
+            return ".*";
+        case PtrMemI:
+            return "->*";
         default:
             // Using debug level to not show messages every time the op map is built
             ClavaLog.debug("Code not defined for binary operator '" + this + "'");
-            return "<UNDEFINED_BINARY_OP>";
+            return "<UNDEFINED_BINARY_OP_STRING:" + this + ">";
         }
         // return opString;
     }
