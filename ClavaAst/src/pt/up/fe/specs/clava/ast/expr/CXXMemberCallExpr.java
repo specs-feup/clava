@@ -95,7 +95,6 @@ public class CXXMemberCallExpr extends CallExpr {
 
         throw new RuntimeException("Case not defined to callee of this kind: " + callee);
         // MemberExpr might be encapsulated by a ParenExpr
-        // return (MemberExpr) callee.normalize(MEMBER_BYPASS);
         /*
         var encapsulatedCallee = callee.normalize(MEMBER_BYPASS);
         
@@ -105,6 +104,7 @@ public class CXXMemberCallExpr extends CallExpr {
         
         return null;
         */
+        // return (MemberExpr) callee.normalize(MEMBER_BYPASS);
     }
 
     @Override
