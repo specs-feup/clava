@@ -25,4 +25,26 @@ public class MemberPointerType extends Type {
         super(data, children);
     }
 
+    @Override
+    public String getCode(ClavaNode sourceNode, String intermediateCode) {
+        // HACK: not sure if this always works, and anyway, should be generating the code from the type information
+        var bareType = getBareType();
+
+        if (intermediateCode != null) {
+            if (!bareType.endsWith(")()")) {
+                // throw new RuntimeException("Expected bare type to end with ')()': " + bareType);
+                return bareType + intermediateCode;
+            }
+
+            return bareType.substring(0, bareType.length() - 3) + intermediateCode + ")()";
+        }
+
+        // System.out.println("MemberPointerType intermediate code: " + intermediateCode);
+        // System.out.println("Source node: " + sourceNode);
+        // System.out.println("Bare type: " + getBareType());
+
+        // Otherwise, just return super
+        return super.getCode(sourceNode, intermediateCode);
+    }
+
 }
