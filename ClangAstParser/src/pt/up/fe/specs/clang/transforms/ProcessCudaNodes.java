@@ -44,7 +44,6 @@ public class ProcessCudaNodes implements SimplePostClavaRule {
 
     @Override
     public TransformResult apply(ClavaNode node, TransformQueue<ClavaNode> queue) {
-
         if (node instanceof TranslationUnit) {
             var tu = (TranslationUnit) node;
 
