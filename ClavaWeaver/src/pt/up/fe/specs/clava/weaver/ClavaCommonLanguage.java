@@ -107,7 +107,9 @@ public class ClavaCommonLanguage {
 	    if (definitionOpt.isPresent() && !node.equals(node.getDefinition().get())) {
 	        node = definitionOpt.get();
 	    }
-        
+
+        /* COMMENTED OUT, in order to avoid AST modifications. logic moved to ClavaAstMethods
+       
 	    // add implementation of methods as child
         addMethodImplementations(node);
         
@@ -115,6 +117,7 @@ public class ClavaCommonLanguage {
         for (CXXRecordDecl nodeBase : node.getAllBases()) {
             addMethodImplementations(nodeBase);
         }
+        */
 	    
         // check if has definition, if not return null;
         if (!definitionOpt.isPresent()) return "JoinPoint";
