@@ -49,8 +49,6 @@ public class CXXMemberCallExpr extends CallExpr {
 
     /// DATAKEYS END
 
-    // private final static List<Class<? extends ClavaNode>> MEMBER_BYPASS = Arrays.asList(ParenExpr.class);
-
     public CXXMemberCallExpr(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
@@ -75,50 +73,14 @@ public class CXXMemberCallExpr extends CallExpr {
             return Optional.of((MemberExpr) callee);
         }
 
-        // Check if ParenExpr with a binary operator that is a pointer to member
-
-        // System.out.println("CALLEE: " + callee.getLocation());
-        // System.out.println("CALLE CODE: " + callee.getCode());
-        // System.out.println("CALLEE TYPE: " + callee.getClass());
-
-        // HACK: .getSignature() is called before post-parsing transformations, if this is not done, it will throw
-        // exception
-        /*
-        if (callee instanceof ParenExpr) {
-            var subExpr = ((ParenExpr) callee).getSubExpr();
-            // System.out.println("SubExpr: " + subExpr);
-            if (subExpr instanceof BinaryOperator) {
-                var binOp = (BinaryOperator) subExpr;
-        
-                if (binOp.getOp() == BinaryOperatorKind.PtrMemD || binOp.getOp() == BinaryOperatorKind.PtrMemI) {
-                    return PointerToMemberExpr.newInstance(binOp);
-                }
-        
-                // var pointerToMember = PointerToMemberExpr.newInstance(binOp);
-                // System.out.println("PTM CODE: " + pointerToMember.getCode());
-        
-                // System.out.println("LHS: " + binOp.getLhs().getChild(0));
-                // System.out.println("RHS: " + binOp.getRhs().getChild(0));
-            }
-        }
-        */
-        // return null;
         return Optional.empty();
-        // MemberExpr might be encapsulated by a ParenExpr
-        // return (MemberExpr) callee.normalize(MEMBER_BYPASS);
     }
 
     @Override
-    // public String getCalleeName() {
     public Optional<String> getCalleeNameTry() {
         var callee = getCalleeTry();
 
         return callee.map(MemberExpr::getMemberName);
-        // if (!(callee instanceof MemberExpr)) {
-        // throw new UnexpectedChildExpection(CXXMemberCallExpr.class, callee);
-        // }
-        //
-        // return Optional.of(((MemberExpr) callee).getMemberName());
     }
 
     @Override
@@ -184,54 +146,6 @@ public class CXXMemberCallExpr extends CallExpr {
     public Optional<FunctionDecl> getFunctionDecl() {
         return get(METHOD_DECL).map(method -> (FunctionDecl) method);
     }
-
-    /*
-    private Optional<FunctionDecl> getFunctionDeclFromRecord(RecordType recordType) {
-        CXXRecordDecl recordDecl = getApp().getCXXRecordDeclTry(recordType).orElse(null);
-    
-        if (recordDecl == null) {
-            return Optional.empty();
-        }
-    
-        // Get methods with same name
-    
-        List<CXXMethodDecl> methods = recordDecl.getMethod(getCalleeName());
-    
-        List<Type> argTypes = getArgs().stream()
-                .map(Expr::getType)
-                .collect(Collectors.toList());
-    
-        // Choose the method with same argument types
-        for (CXXMethodDecl methodDecl : methods) {
-            FunctionProtoType functionType = methodDecl.getFunctionType();
-    
-            List<Type> paramTypes = functionType.getParamTypes();
-    
-            // Check number of arguments
-            if (paramTypes.size() != argTypes.size()) {
-                continue;
-            }
-    
-            // Compare each type
-            boolean paramsAreEqual = true;
-            for (int i = 0; i < paramTypes.size(); i++) {
-    
-                boolean areEqual = paramTypes.get(i).equals(argTypes.get(i));
-    
-                if (!areEqual) {
-                    paramsAreEqual = false;
-                    break;
-                }
-            }
-    
-            if (paramsAreEqual) {
-                return Optional.of(methodDecl);
-            }
-        }
-    
-        return Optional.empty();
-    }
-    */
 
     @Override
     public SpecsList<String> getSignatureCustomStrings() {
