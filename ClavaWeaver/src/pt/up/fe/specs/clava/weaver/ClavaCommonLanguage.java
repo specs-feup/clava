@@ -13,6 +13,11 @@
 
 package pt.up.fe.specs.clava.weaver;
 
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXDestructorDecl;
@@ -97,30 +102,25 @@ public class ClavaCommonLanguage {
 
 	private static String cxxRecordDecl(CXXRecordDecl node) {
 	    
-	    /*
-	    if (false || node.getDeclName().equals("TestSuite")) {
-            System.out.println(" -- cxxRecordDecl --  " + node.getDeclName());
-            System.out.println(" -- cxxRecordDecl --  " + node.getDeclName() + " ==> "  + node.getCode().split(" ").length);
-            // System.out.println(node);
-            System.out.println(node.getCode());
+	    // if has definition, use it for correct mapping
+	    Optional<CXXRecordDecl> definitionOpt = node.getDefinition();
+	    if (definitionOpt.isPresent() && !node.equals(node.getDefinition().get())) {
+	        node = definitionOpt.get();
 	    }
-	    */
+        
+	    // add implementation of methods as child
+        addMethodImplementations(node);
+        
+        // do same for bases
+        for (CXXRecordDecl nodeBase : node.getAllBases()) {
+            addMethodImplementations(nodeBase);
+        }
+	    
+        // check if has definition, if not return null;
+        if (!definitionOpt.isPresent()) return "JoinPoint";
+	    
 	    
 	    if (node.isInterface()) return "InterfaceJp";
-	    
-	    /*
-	    boolean isDeclarationOnly = node.getChildren().size() == 0;
-	    
-	    if (isDeclarationOnly) return "ClassJp";
-        
-        boolean areAllVirtualPureMethods = node.getMethods().stream()
-                .filter(method -> !(method instanceof CXXDestructorDecl))
-                .allMatch(method -> {
-                    return method.get(CXXMethodDecl.IS_VIRTUAL).booleanValue() &&
-                            method.get(CXXMethodDecl.IS_PURE).booleanValue();
-                });
-        
-	    if (areAllVirtualPureMethods) return "InterfaceJp";/**/
 
         switch (node.getTagKind()) {
         case CLASS:
@@ -166,5 +166,38 @@ public class ClavaCommonLanguage {
 		}
 			return "StmtJp";
 
+	}
+	
+	private static void addMethodImplementations(CXXRecordDecl node) {
+
+        for (CXXMethodDecl method : node.getMethods()) {
+            
+            // if has body, do nothing
+            if (method.hasBody()) continue;
+            
+            // if implementation is equal, do nothing
+            Optional<FunctionDecl> implementationOptional = method.getImplementation();
+            if (!implementationOptional.isPresent() || method.equals(implementationOptional.get())) continue; 
+            
+            FunctionDecl implementation = implementationOptional.get();
+
+            boolean isAlreadyInMethodsList = node.getMethods().stream()
+                    // filter its own
+                    .filter(m -> !m.equals(method))
+                    // map to implementation
+                    .map(m -> m.getImplementation())
+                    // filter those which do not have implementation
+                    .filter(impl -> impl.isPresent())
+                    // map to code
+                    .map(impl -> impl.get().getCode())
+                    .anyMatch(code -> code.equals(implementation.getCode()));
+            
+            if (isAlreadyInMethodsList) continue;
+
+            // node.addMethod((CXXMethodDecl) implementation);
+            node.addChild((CXXMethodDecl) implementation);
+
+            // System.out.println("adding impl for => " + node.getDeclName() + "." + method.getDeclName());
+        }
 	}
 }
