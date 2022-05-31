@@ -589,7 +589,7 @@ public class AstFactory {
         Expr lhs = (Expr) leftHand.getNode();
         Expr rhs = (Expr) rightHand.getNode();
 
-        BinaryOperator assign = CxxWeaver.getFactory().binaryOperator(BinaryOperatorKind.Assign, rhs.getType(), lhs,
+        BinaryOperator assign = CxxWeaver.getFactory().binaryOperator(BinaryOperatorKind.Assign, lhs.getType(), lhs,
                 rhs);
 
         return CxxJoinpoints.create(assign, ABinaryOp.class);
