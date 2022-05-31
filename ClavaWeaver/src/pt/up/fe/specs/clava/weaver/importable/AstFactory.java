@@ -613,6 +613,17 @@ public class AstFactory {
         return CxxJoinpoints.create(opNode, ABinaryOp.class);
     }
 
+    public static ABinaryOp compoundAssignment(String op, AExpression lhs, AExpression rhs) {
+        var opKind = BinaryOperator.getOpByNameOrSymbol(op);
+        var type = ((Expr) lhs.getNode()).getType();
+
+        var opNode = CxxWeaver.getFactory().compoundAssignOperator(opKind, type, (Expr) lhs.getNode(),
+                (Expr) rhs.getNode());
+
+        return CxxJoinpoints.create(opNode, ABinaryOp.class);
+
+    }
+
     public static AUnaryOp unaryOp(String op, AExpression expr, AType type) {
         UnaryOperatorKind opKind = UnaryOperator.getOpByNameOrSymbol(op);
 
