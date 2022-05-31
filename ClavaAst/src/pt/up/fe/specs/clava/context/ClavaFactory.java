@@ -65,6 +65,7 @@ import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXFunctionalCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
+import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
 import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
@@ -427,6 +428,18 @@ public class ClavaFactory {
         data.set(BinaryOperator.OP, op);
 
         return new BinaryOperator(data, Arrays.asList(lhs, rhs));
+    }
+
+    public CompoundAssignOperator compoundAssignOperator(BinaryOperatorKind op, Type type, Expr lhs, Expr rhs) {
+        if (!op.isCompoundAssign()) {
+            throw new IllegalArgumentException(
+                    "`op` should be a compound assignment op kind, is actually " + op.getOpString());
+        }
+        var data = newDataStore(CompoundAssignOperator.class)
+                .put(Expr.TYPE, Optional.of(type))
+                .put(BinaryOperator.OP, op);
+
+        return new CompoundAssignOperator(data, Arrays.asList(lhs, rhs));
     }
 
     public UnaryOperator unaryOperator(UnaryOperatorKind op, Type type, Expr subExpr) {
