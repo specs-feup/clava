@@ -313,6 +313,13 @@ class ClavaJoinPoints {
     return AstFactory.assignment($leftHand, $rightHand);
   }
 
+  static compoundAssign($op, $leftHand, $rightHand) {
+    Check.isJoinPoint($leftHand, "expression");
+    Check.isJoinPoint($rightHand, "expression");
+
+    return AstFactory.compoundAssignment($op, $leftHand, $rightHand);
+  }
+
   /**
    * Creates a new join point 'if'.
    *
