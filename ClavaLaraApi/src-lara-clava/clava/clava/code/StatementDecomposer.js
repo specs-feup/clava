@@ -188,13 +188,14 @@ class StatementDecomposer {
     // Get statements of right hand-side
     const rightResult = this.decomposeExpr($assign.right);
 
-    // Add assignment
-    const $newAssign = ClavaJoinPoints.binaryOp(
-      $assign.operator,
-      $assign.left,
-      rightResult.$resultExpr,
-      $assign.type
-    );
+    const $newAssign =
+      $assign.operator === "="
+        ? ClavaJoinPoints.assign($assign.left, rightResult.$resultExpr)
+        : ClavaJoinPoints.compoundAssign(
+            $assign.operator,
+            $assign.left,
+            rightResult.$resultExpr
+          );
     const $assignExpr = ClavaJoinPoints.exprStmt($newAssign);
 
     return new DecomposeResult(
