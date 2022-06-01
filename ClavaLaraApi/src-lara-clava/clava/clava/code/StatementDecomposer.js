@@ -153,23 +153,8 @@ class StatementDecomposer {
   }
 
   decomposeBinaryOp($binaryOp) {
-    const kind = $binaryOp.kind;
-
-    if (kind === "assign") {
-      // Get statements of right hand-side
-      const rightResult = this.decomposeExpr($binaryOp.right);
-
-      // Add assignment
-      const $newAssign = ClavaJoinPoints.assign(
-        $binaryOp.left,
-        rightResult.$resultExpr
-      );
-      const $assignExpr = ClavaJoinPoints.exprStmt($newAssign);
-
-      return new DecomposeResult(
-        [...rightResult.stmts, $assignExpr],
-        $binaryOp.left
-      );
+    if ($binaryOp.isAssignment) {
+      return this.decomposeAssignment($binaryOp);
     }
     // TODO: Not taking into account += and other cases
 
@@ -197,5 +182,50 @@ class StatementDecomposer {
     );
 
     //this.#throwNotImplemented("binary operators", kind);
+  }
+
+  decomposeAssignment($assign) {
+    // Get statements of right hand-side
+    const rightResult = this.decomposeExpr($assign.right);
+
+    const $newAssign =
+      $assign.operator === "="
+        ? ClavaJoinPoints.assign($assign.left, rightResult.$resultExpr)
+        : ClavaJoinPoints.compoundAssign(
+            $assign.operator,
+            $assign.left,
+            rightResult.$resultExpr
+          );
+    const $assignExpr = ClavaJoinPoints.exprStmt($newAssign);
+
+    return new DecomposeResult(
+      [...rightResult.stmts, $assignExpr],
+      $assign.left
+    );
+  }
+
+  decomposeTernaryOp($ternaryOp) {
+    const condResult = this.decomposeExpr($ternaryOp.cond);
+    const trueResult = this.decomposeExpr($ternaryOp.trueExpr);
+    const falseResult = this.decomposeExpr($ternaryOp.falseExpr);
+
+    const $newExpr = ClavaJoinPoints.ternaryOp(
+      condResult.$resultExpr,
+      trueResult.$resultExpr,
+      falseResult.$resultExpr,
+      $ternaryOp.type
+    );
+
+    const tempVarname = this.#newTempVarname();
+    const tempVarDecl = ClavaJoinPoints.varDecl(tempVarname, $newExpr);
+
+    const stmts = [
+      ...condResult.stmts,
+      ...trueResult.stmts,
+      ...falseResult.stmts,
+      tempVarDecl.stmt,
+    ];
+
+    return new DecomposeResult(stmts, ClavaJoinPoints.varRef(tempVarDecl));
   }
 }
