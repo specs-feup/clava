@@ -743,6 +743,17 @@ public class AstFactory {
         return CxxJoinpoints.create(forStmt, ALoop.class);
     }
 
+    public static ALoop whileStmt(AStatement condition, AStatement body) {
+        var condStmt = condition != null ? (Stmt) condition.getNode() : CxxWeaver.getFactory().nullStmt();
+        var bodyStmt = body != null ? (Stmt) body.getNode() : CxxWeaver.getFactory().nullStmt();
+
+        var compoundStmt = ClavaNodes.toCompoundStmt(bodyStmt);
+
+        var whileStmt = CxxWeaver.getFactory().whileStmt(condStmt, compoundStmt);
+
+        return CxxJoinpoints.create(whileStmt, ALoop.class);
+    }
+
     /**
      * Creates a join point representing a function parameter.
      *

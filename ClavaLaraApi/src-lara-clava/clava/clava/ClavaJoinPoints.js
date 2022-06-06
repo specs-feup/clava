@@ -519,6 +519,13 @@ class ClavaJoinPoints {
     return AstFactory.forStmt($init, $condition, $inc, $body);
   }
 
+  static whileStmt($condition, $body) {
+    const condition = ClavaType.asStatement($condition, true);
+    const body = ClavaType.asStatement($body, true);
+
+    return AstFactory.whileStmt(condition, body);
+  }
+
   /**
    * @param {string} name
    * @param {$type} $type

@@ -779,7 +779,7 @@ public class ClavaFactory {
     public WhileStmt whileStmt(Stmt cond, CompoundStmt body) {
         DataStore whileStmtData = newDataStore(WhileStmt.class);
 
-        return new WhileStmt(whileStmtData, Arrays.asList(cond, body));
+        return new WhileStmt(whileStmtData, Arrays.asList(nullDecl(), cond, body));
     }
 
     public BreakStmt breakStmt() {
