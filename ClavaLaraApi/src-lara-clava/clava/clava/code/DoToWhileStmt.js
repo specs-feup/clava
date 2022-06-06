@@ -5,5 +5,7 @@ function DoToWhileStmt($doStmt) {
   const firstIterStmts = $doStmt.scopeNodes.map(($stmt) => $stmt.copy());
 
   $doStmt.insertBefore(ClavaJoinPoints.scope(firstIterStmts));
-  $doStmt.replaceWith(ClavaJoinPoints.whileStmt($doStmt.cond, $doStmt.body));
+  const $while = ClavaJoinPoints.whileStmt($doStmt.cond, $doStmt.body);
+  $doStmt.replaceWith($while);
+  return $while;
 }
