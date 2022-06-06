@@ -133,10 +133,6 @@ public class ChildrenAdapter {
     private static final ClassSet<ClavaNode> STMT_OR_EXPR = ClassSet.newInstance(Stmt.class, Expr.class);
 
     private static List<ClavaNode> adaptIfStmt(List<ClavaNode> children, ClavaContext context) {
-        // Check if then and else statements are compound statements
-        if (children.get(2) instanceof CompoundStmt && children.get(3) instanceof CompoundStmt) {
-            return children;
-        }
 
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
 
