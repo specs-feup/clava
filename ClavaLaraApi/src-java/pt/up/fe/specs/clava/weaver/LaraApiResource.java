@@ -124,6 +124,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     DECOMPOSE_DECL_STMT("pass/DecomposeDeclStmt.js"),
     DECOMPOSE_VAR_DECLARATIONS("pass/DecomposeVarDeclarations.js"),
     SINGLE_RETURN_FUNCTION("pass/SingleReturnFunction.js"),
+    PASS_SIMPLIFY_LOOPS("pass/SimplifyLoops.js"),
 
     // Stats
     OPS_BLOCK("stats/OpsBlock.lara"),
