@@ -209,22 +209,40 @@ class StatementDecomposer {
     const trueResult = this.decomposeExpr($ternaryOp.trueExpr);
     const falseResult = this.decomposeExpr($ternaryOp.falseExpr);
 
-    const $newExpr = ClavaJoinPoints.ternaryOp(
-      condResult.$resultExpr,
-      trueResult.$resultExpr,
-      falseResult.$resultExpr,
+    const tempVarname = this.#newTempVarname();
+    const tempVarDecl = ClavaJoinPoints.varDeclNoInit(
+      tempVarname,
       $ternaryOp.type
     );
 
-    const tempVarname = this.#newTempVarname();
-    const tempVarDecl = ClavaJoinPoints.varDecl(tempVarname, $newExpr);
-
-    const stmts = [
-      ...condResult.stmts,
+    // assign the value of the new temp variable with an if-else statement
+    // to maintain the semantics of only evaluating the expression that
+    // falls on the right side of the ternary.
+    // we do not want side-effects to be executed without regard to the branch
+    // taken
+    const $thenBody = ClavaJoinPoints.scope([
       ...trueResult.stmts,
+      ClavaJoinPoints.assign(
+        ClavaJoinPoints.varRef(tempVarDecl),
+        trueResult.$resultExpr
+      ),
+    ]);
+
+    const $elseBody = ClavaJoinPoints.scope([
       ...falseResult.stmts,
-      tempVarDecl.stmt,
-    ];
+      ClavaJoinPoints.assign(
+        ClavaJoinPoints.varRef(tempVarDecl),
+        falseResult.$resultExpr
+      ),
+    ]);
+
+    const $ifStmt = ClavaJoinPoints.ifStmt(
+      condResult.$resultExpr,
+      $thenBody,
+      $elseBody
+    );
+
+    const stmts = [tempVarDecl.stmt, ...condResult.stmts, $ifStmt];
 
     return new DecomposeResult(stmts, ClavaJoinPoints.varRef(tempVarDecl));
   }
