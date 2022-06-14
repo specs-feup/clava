@@ -15,6 +15,10 @@ function SimplifyAssignments($startJp) {
 
 }
 
+function DummyPass($startJp, options) {
+	println("Dummy pass that has received an option object with the value '"+options["foo"]+"' for the key 'foo'");
+}
+
 
 const statementDecomposer = new StatementDecomposer();
 
@@ -28,10 +32,10 @@ declStmt.apply(Query.root());
 */
 
 
-const passes = [SimplifyAssignments, SimplifySelectionStmts, [statementDecomposer], new DecomposeDeclStmt()];
+const passes = [SimplifyAssignments, SimplifySelectionStmts, [statementDecomposer], new DecomposeDeclStmt(), DummyPass, {foo: "bar"}];
 const results = Passes.apply(Query.root(), passes);    
 
-println("Results: " + results)
+//println("Results: " + results)
 
 println(Query.root().code);    
 

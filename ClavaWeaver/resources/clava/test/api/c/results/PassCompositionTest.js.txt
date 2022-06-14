@@ -1,3 +1,5 @@
+Dummy pass that has received an option object with the value 'bar' for the key 'foo'
+
 /**** File 'pass_composition.c' ****/
 
 #include <stdio.h>
