@@ -142,4 +142,10 @@ public class CApiTest {
     public void testStaticCallGraph() {
         newTester().test("StaticCallGraphTest.js", "static_call_graph.c");
     }
+
+    @Test
+    public void testPassComposition() {
+        newTester().test("PassCompositionTest.js", "pass_composition.c");
+    }
+
 }
