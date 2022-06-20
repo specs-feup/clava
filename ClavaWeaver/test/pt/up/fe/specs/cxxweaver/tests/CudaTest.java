@@ -59,7 +59,7 @@ public class CudaTest {
     public void testCudaMatrixMul() {
         newTester().test("CudaMatrixMul.lara", "mult_matrix.cu");
     }
-    
+
     @Test
     public void testCudaQuery() {
         newTester().test("CudaQuery.lara", "sample.cu");
