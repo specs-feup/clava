@@ -13,9 +13,15 @@
 
 package pt.up.fe.specs.clava.weaver;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
+
+import org.lara.interpreter.weaver.interf.WeaverEngine;
+import org.lara.interpreter.weaver.interf.events.Stage;
 
 import com.google.common.base.Preconditions;
 
@@ -68,7 +74,12 @@ public class CxxActions {
      */
     public static AJoinPoint insertAsStmt(ClavaNode target, String code, Insert insert, CxxWeaver weaver) {
         // If target is part of App, clear caches
-        target.getAncestorTry(App.class).ifPresent(app -> app.clearCache());
+        target.getAncestorTry(App.class).ifPresent(app -> {
+            app.clearCache();
+            weaver.getEventTrigger().triggerAction(Stage.DURING,
+                    "CxxActions.insertAsStmt",
+                    CxxJoinpoints.create(target), Arrays.asList(insert, code), Optional.empty());
+        });
 
         // Convert Insert to NodePosition
         var position = insert.toPosition();
@@ -99,7 +110,12 @@ public class CxxActions {
 
     public static AJoinPoint[] insertAsChild(String position, ClavaNode base, ClavaNode node, CxxWeaver weaver) {
         // If base is part of App, clear caches
-        base.getAncestorTry(App.class).ifPresent(app -> app.clearCache());
+        base.getAncestorTry(App.class).ifPresent(app -> {
+            app.clearCache();
+            weaver.getEventTrigger().triggerAction(Stage.DURING,
+                    "CxxActions.insertAsChild",
+                    CxxJoinpoints.create(base), Arrays.asList(position, CxxJoinpoints.create(node)), Optional.empty());
+        });
 
         switch (position) {
         case "before":
@@ -200,10 +216,17 @@ public class CxxActions {
 
         insertFunction.accept(adaptedBase, adaptedNew);
 
-        // If base is part of App, clear caches
-        adaptedBase.getAncestorTry(App.class).ifPresent(app -> app.clearCache());
+        var returnedJp = CxxJoinpoints.create(adaptedNew);
 
-        return CxxJoinpoints.create(adaptedNew);
+        // If base is part of App, clear caches
+        adaptedBase.getAncestorTry(App.class).ifPresent(app -> {
+            app.clearCache();
+            WeaverEngine.getThreadLocalWeaver().getEventTrigger().triggerAction(Stage.DURING, "CxxActions.insert",
+                    baseJp,
+                    Arrays.asList(position, newJp), Optional.ofNullable((Object) returnedJp));
+        });
+
+        return returnedJp;
     }
 
     private static AJoinPoint insertInLoopHeader(AJoinPoint baseJp, AJoinPoint newJp, Insert position) {
@@ -301,7 +324,12 @@ public class CxxActions {
      */
     public static AJoinPoint insertJp(AJoinPoint baseJp, AJoinPoint newJp, String position, CxxWeaver weaver) {
         // If baseJp is part of App, clear caches
-        baseJp.getNode().getAncestorTry(App.class).ifPresent(app -> app.clearCache());
+        baseJp.getNode().getAncestorTry(App.class).ifPresent(app -> {
+            app.clearCache();
+            weaver.getEventTrigger().triggerAction(Stage.DURING,
+                    "CxxActions.insertJp",
+                    baseJp, Arrays.asList(position, newJp), Optional.empty());
+        });
 
         switch (position) {
         case "before":
@@ -330,7 +358,12 @@ public class CxxActions {
         Preconditions.checkArgument(body instanceof CompoundStmt);
 
         // If body is part of App, clear caches
-        body.getAncestorTry(App.class).ifPresent(app -> app.clearCache());
+        body.getAncestorTry(App.class).ifPresent(app -> {
+            app.clearCache();
+            weaver.getEventTrigger().triggerAction(Stage.DURING,
+                    "CxxActions.insertStmt",
+                    CxxJoinpoints.create(body), Arrays.asList(position, CxxJoinpoints.create(stmt)), Optional.empty());
+        });
 
         switch (position) {
         case "before":
@@ -361,7 +394,12 @@ public class CxxActions {
 
     public static void removeChildren(ClavaNode node, CxxWeaver weaver) {
         // If node is part of App, clear caches
-        node.getAncestorTry(App.class).ifPresent(app -> app.clearCache());
+        node.getAncestorTry(App.class).ifPresent(app -> {
+            app.clearCache();
+            weaver.getEventTrigger().triggerAction(Stage.DURING,
+                    "CxxActions.removeChildren",
+                    CxxJoinpoints.create(node), Collections.emptyList(), Optional.empty());
+        });
 
         // Clear use fields
         for (ClavaNode child : node.getChildren()) {
