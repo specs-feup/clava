@@ -730,7 +730,6 @@ public class ClavaFactory {
      */
     public ExprStmt exprStmt(Expr expr) {
         DataStore exprStmtData = newDataStore(ExprStmt.class)
-                .put(ExprStmt.HAS_SEMICOLON, true)
                 .put(ClavaNode.LOCATION, expr.getLocation());
 
         return new ExprStmt(exprStmtData, Arrays.asList(expr));

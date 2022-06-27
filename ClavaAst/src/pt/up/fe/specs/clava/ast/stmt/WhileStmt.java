@@ -44,10 +44,10 @@ public class WhileStmt extends LoopStmt {
     public String getCode() {
         StringBuilder code = new StringBuilder();
 
-        String conditionCode = getStmtCondition().map(ClavaNode::getCode).orElse("");
-        if (conditionCode.endsWith(";")) {
-            conditionCode = conditionCode.substring(0, conditionCode.length() - 1);
-        }
+        String conditionCode = getStmtCondition()
+                .map(ClavaNode::getCode)
+                .map(this::removeSemicolon)
+                .orElse("");
 
         code.append("while(").append(conditionCode).append(")").append(getThen().getCode());
 
