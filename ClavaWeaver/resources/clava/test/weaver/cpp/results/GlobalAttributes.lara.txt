@@ -16,7 +16,7 @@ exprStmt -> i < 10;
 binaryOp -> i < 10
 varref -> i
 intLiteral -> 10
-exprStmt -> i++
+exprStmt -> i++;
 unaryOp -> i++
 varref -> i
 declStmt -> int j = 0;
@@ -26,6 +26,6 @@ exprStmt -> j < 10;
 binaryOp -> j < 10
 varref -> j
 intLiteral -> 10
-exprStmt -> j++
+exprStmt -> j++;
 unaryOp -> j++
 varref -> j
