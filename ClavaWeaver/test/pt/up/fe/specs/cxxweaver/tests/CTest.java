@@ -212,6 +212,10 @@ public class CTest {
     }
 
     @Test
+    public void testExprStmt() {
+        newTester().test("ExprStmt.js", "expr_stmt.c");
+
+    @Test
     public void testTraversal() {
         newTester().test("Traversal.js", "traversal.c");
     }

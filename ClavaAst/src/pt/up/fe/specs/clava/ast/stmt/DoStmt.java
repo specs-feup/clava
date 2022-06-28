@@ -45,7 +45,7 @@ public class DoStmt extends LoopStmt {
         StringBuilder code = new StringBuilder();
 
         code.append("do ").append(getBody().getCode()).append("while (")
-                .append(getCondition().getCode()).append(");");
+                .append(removeSemicolon(getCondition().getCode())).append(");");
 
         return code.toString();
 
