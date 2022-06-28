@@ -350,4 +350,5 @@ public class CxxTest {
     public void testCanonical() {
         newTester().test("CanonicalTest.js", "canonical.cpp");
     }
+
 }
