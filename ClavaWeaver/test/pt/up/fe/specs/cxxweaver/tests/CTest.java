@@ -210,4 +210,9 @@ public class CTest {
     public void testCfg() {
         newTester().test("Cfg.lara", "cfg.c");
     }
+
+    @Test
+    public void testTraversal() {
+        newTester().test("Traversal.js", "traversal.c");
+    }
 }
