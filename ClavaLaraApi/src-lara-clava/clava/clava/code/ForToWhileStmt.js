@@ -1,5 +1,33 @@
 laraImport("clava.ClavaJoinPoints");
 
+/**
+ * Replaces for loop with an equivalent construct based on a while loop:
+ * ```c
+ * for (init; cond; step) {
+ *   //...
+ *   continue;
+ *   //...
+ *   //...
+ * }
+ * ```
+ * becomes
+ * ```c
+ * {
+ *   init;
+ *   while (cond) {
+ *     // ...
+ *     goto __for_loop_step_${step_label_suffix};
+ *     // ...
+ *     // ...
+ * __for_loop_step_${step_label_suffix}:
+ *     step;
+ *   }
+ * }
+ * ```
+ * @param {$loop} $forStmt For-loop joinpoint
+ * @param {number|string} stepLabelSuffix Suffix to attach to the for loop step label, added in case there are `continue` statements to account for
+ * @returns The newly created replacement joinpoint
+ */
 function ForToWhileStmt($forStmt, stepLabelSuffix) {
   // replace continues with gotos to the step statement for the new loop body
   const localContinues = [...ForToWhileStmt._findLocalContinue($forStmt.body)];
