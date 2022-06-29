@@ -217,8 +217,11 @@ class ClavaJoinPoints {
     return AstFactory.omp(directiveName);
   }
 
-  static scope($stmts) {
-    if ($stmts === undefined) {
+  static scope() {
+	const $stmts = arrayFromArgs(arguments);
+	
+	
+    if ($stmts.length === 0) {
       return AstFactory.scope();
     }
 
