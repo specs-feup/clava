@@ -177,6 +177,10 @@ class ClavaJoinPoints {
     return AstFactory.stmtLiteral(stmtString);
   }
 
+  static emptyStmt() {
+    return AstFactory.emptyStmt();
+  }
+
   /**
    * Creates a new join point 'call'.
    *
