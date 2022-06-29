@@ -16,7 +16,7 @@ class SimplifyLoops extends Pass {
 
   _apply_impl($jp) {
     let appliedPass = false;
-    for (const $loop of this.#findLoops($jp)) {
+    for (const $loop of this._findLoops($jp)) {
       appliedPass = true;
       const $whileLoop = this.#makeWhileLoop($loop);
       this.#transform($whileLoop);
@@ -29,10 +29,16 @@ class SimplifyLoops extends Pass {
     });
   }
 
-  #findLoops($jp) {
-    return Query.searchFromInclusive($jp, "loop", {
-      kind: (kind) => kind === "for" || kind === "dowhile" || kind === "while",
-    });
+  *_findLoops($jp) {
+    for (const child of $jp.children) {
+      yield* this._findLoops(child);
+    }
+    if (
+      $jp.instanceOf("loop") &&
+      ($jp.kind === "for" || $jp.kind === "dowhile" || $jp.kind === "while")
+    ) {
+      yield $jp;
+    }
   }
 
   #makeWhileLoop($loop) {
