@@ -190,4 +190,9 @@ public class CxxApiTest {
     public void testSimplifyTernaryOp() {
         newTester().test("CodeSimplifyTernaryOpTest.js", "code_simplify_ternary_op.cpp");
     }
+    
+    @Test
+    public void testSimplifyLoops() {
+        newTester().test("PassSimplifyLoopsTest.js", "pass_simplify_loops.cpp");
+    }
 }
