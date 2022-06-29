@@ -7,6 +7,7 @@ laraImport("weaver.Query");
 
 class SimplifyLoops extends Pass {
   #statementDecomposer;
+  #label_suffix = 0;
 
   constructor(statementDecomposer) {
     super("SimplifyLoops");
@@ -36,11 +37,11 @@ class SimplifyLoops extends Pass {
 
   #makeWhileLoop($loop) {
     if ($loop.kind === "for") {
-      const $forToWhileScope = ForToWhileStmt($loop);
+      const $forToWhileScope = ForToWhileStmt($loop, this.#label_suffix++);
       const [_, $while] = $forToWhileScope.children;
       return $while;
     } else if ($loop.kind === "dowhile") {
-      return DoToWhileStmt($loop);
+      return DoToWhileStmt($loop, this.#label_suffix++);
     } else {
       return $loop;
     }
