@@ -81,6 +81,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     CODE_SIMPLIFY_TERNARY_OP("code/SimplifyTernaryOp.js"),
     CODE_FOR_TO_WHILE_STMT("code/ForToWhileStmt.js"),
     CODE_DO_TO_WHILE_STMT("code/DoToWhileStmt.js"),
+    CODE_INLINER("code/Inliner.js"),
 
     // Gprofer
     GPROFER("gprofer/Gprofer.lara"),
