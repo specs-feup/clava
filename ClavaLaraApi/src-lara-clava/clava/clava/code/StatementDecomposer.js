@@ -93,7 +93,9 @@ class StatementDecomposer {
     // Statement represents an expression
     const $expr = $stmt.expr;
 
-    return this.decomposeExpr($expr).stmts;
+    const { precedingStmts, succeedingStmts } = this.decomposeExpr($expr);
+
+    return [...precedingStmts, ...succeedingStmts];
   }
 
   decomposeReturnStmt($stmt) {
@@ -104,10 +106,10 @@ class StatementDecomposer {
       return [];
     }
 
-    const { stmts, $resultExpr } = this.decomposeExpr($expr);
+    const { precedingStmts, $resultExpr } = this.decomposeExpr($expr);
     const $newReturnStmt = ClavaJoinPoints.returnStmt($resultExpr);
 
-    return [...stmts, $newReturnStmt];
+    return [...precedingStmts, $newReturnStmt];
   }
 
   decomposeDeclStmt($stmt) {
@@ -130,7 +132,11 @@ class StatementDecomposer {
       const decomposeResult = this.decomposeExpr($decl.init);
       //expr = newStmts.concat(decomposeResult.stmts);
       $decl.init = decomposeResult.$resultExpr;
-      return [...decomposeResult.stmts, ClavaJoinPoints.declStmt($decl)];
+      return [
+        ...decomposeResult.precedingStmts,
+        ClavaJoinPoints.declStmt($decl),
+        ...decomposeResult.succeedingStmts,
+      ];
     }
 
     return [ClavaJoinPoints.declStmt($decl)];
@@ -142,6 +148,14 @@ class StatementDecomposer {
   decomposeExpr($expr) {
     if ($expr.instanceOf("binaryOp")) {
       return this.decomposeBinaryOp($expr);
+    }
+
+    if ($expr.instanceOf("unaryOp")) {
+      return this.decomposeUnaryOp($expr);
+    }
+
+    if ($expr.instanceOf("ternaryOp")) {
+      return this.decomposeTernaryOp($expr);
     }
 
     if ($expr.numChildren === 0) {
@@ -156,7 +170,6 @@ class StatementDecomposer {
     if ($binaryOp.isAssignment) {
       return this.decomposeAssignment($binaryOp);
     }
-    // TODO: Not taking into account += and other cases
 
     // Apply decompose to both sides
     const leftResult = this.decomposeExpr($binaryOp.left);
@@ -174,11 +187,20 @@ class StatementDecomposer {
     const tempVarname = this.#newTempVarname();
     const tempVarDecl = ClavaJoinPoints.varDecl(tempVarname, $newExpr);
 
-    const stmts = [...leftResult.stmts, ...rightResult.stmts, tempVarDecl.stmt];
+    const precedingStmts = [
+      ...leftResult.precedingStmts,
+      ...rightResult.precedingStmts,
+      tempVarDecl.stmt,
+    ];
+    const succeedingStmts = [
+      ...leftResult.succeedingStmts,
+      ...rightResult.succeedingStmts,
+    ];
 
     return new DecomposeResult(
-      stmts,
-      ClavaJoinPoints.varRefFromDecl(tempVarDecl)
+      precedingStmts,
+      ClavaJoinPoints.varRef(tempVarDecl),
+      succeedingStmts
     );
 
     //this.#throwNotImplemented("binary operators", kind);
@@ -199,8 +221,9 @@ class StatementDecomposer {
     const $assignExpr = ClavaJoinPoints.exprStmt($newAssign);
 
     return new DecomposeResult(
-      [...rightResult.stmts, $assignExpr],
-      $assign.left
+      [...rightResult.precedingStmts, $assignExpr],
+      $assign.left,
+      rightResult.succeedingStmts
     );
   }
 
@@ -209,23 +232,78 @@ class StatementDecomposer {
     const trueResult = this.decomposeExpr($ternaryOp.trueExpr);
     const falseResult = this.decomposeExpr($ternaryOp.falseExpr);
 
-    const $newExpr = ClavaJoinPoints.ternaryOp(
-      condResult.$resultExpr,
-      trueResult.$resultExpr,
-      falseResult.$resultExpr,
+    const tempVarname = this.#newTempVarname();
+    const tempVarDecl = ClavaJoinPoints.varDeclNoInit(
+      tempVarname,
       $ternaryOp.type
     );
 
-    const tempVarname = this.#newTempVarname();
-    const tempVarDecl = ClavaJoinPoints.varDecl(tempVarname, $newExpr);
+    // assign the value of the new temp variable with an if-else statement
+    // to maintain the semantics of only evaluating the expression that
+    // falls on the right side of the ternary.
+    // we do not want side-effects to be executed without regard to the branch
+    // taken
+    const $thenBody = ClavaJoinPoints.scope([
+      ...condResult.succeedingStmts,
+      ...trueResult.precedingStmts,
+      ClavaJoinPoints.assign(
+        ClavaJoinPoints.varRef(tempVarDecl),
+        trueResult.$resultExpr
+      ),
+      ...trueResult.succeedingStmts,
+    ]);
 
-    const stmts = [
-      ...condResult.stmts,
-      ...trueResult.stmts,
-      ...falseResult.stmts,
+    const $elseBody = ClavaJoinPoints.scope([
+      ...condResult.succeedingStmts,
+      ...falseResult.precedingStmts,
+      ClavaJoinPoints.assign(
+        ClavaJoinPoints.varRef(tempVarDecl),
+        falseResult.$resultExpr
+      ),
+      ...falseResult.succeedingStmts,
+    ]);
+
+    const $ifStmt = ClavaJoinPoints.ifStmt(
+      condResult.$resultExpr,
+      $thenBody,
+      $elseBody
+    );
+
+    const precedingStmts = [
       tempVarDecl.stmt,
+      ...condResult.precedingStmts,
+      $ifStmt,
     ];
 
-    return new DecomposeResult(stmts, ClavaJoinPoints.varRef(tempVarDecl));
+    return new DecomposeResult(
+      precedingStmts,
+      ClavaJoinPoints.varRef(tempVarDecl)
+    );
+  }
+
+  decomposeUnaryOp($unaryOp) {
+    const kind = $unaryOp.kind;
+    // only decompose increment / decrement operations, separating the change
+    // from the result of the change
+    if (
+      kind !== "post_dec" &&
+      kind !== "post_inc" &&
+      kind !== "pre_dec" &&
+      kind !== "pre_inc"
+    ) {
+      return new DecomposeResult([], $unaryOp, []);
+    }
+
+    if (kind === "post_dec" || kind === "post_inc") {
+      const $innerExpr = $unaryOp.operand.copy();
+      const succeedingStmts = [ClavaJoinPoints.exprStmt($unaryOp)];
+      return new DecomposeResult([], $innerExpr, succeedingStmts);
+    }
+
+    if (kind === "pre_dec" || kind === "pre_inc") {
+      const $innerExpr = $unaryOp.operand.copy();
+      const precedingStmts = [ClavaJoinPoints.exprStmt($unaryOp)];
+      return new DecomposeResult(precedingStmts, $innerExpr, []);
+    }
   }
 }
