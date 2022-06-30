@@ -158,12 +158,38 @@ class StatementDecomposer {
       return this.decomposeTernaryOp($expr);
     }
 
+    if ($expr.instanceOf("call")) {
+      return this.decomposeCall($expr);
+    }
+
     if ($expr.numChildren === 0) {
       //if($expr.instanceOf("varref") || $expr.instanceOf("literal")) {
       return new DecomposeResult([], $expr);
     }
 
     this.#throwNotImplemented("expressions", $expr.joinPointType);
+  }
+
+  decomposeCall($call) {
+    const argResults = $call.args.map(($arg) => this.decomposeExpr($arg));
+
+    const precedingStmts = argResults.flatMap((res) => res.precedingStmts);
+    const succeedingStmts = argResults.flatMap((res) => res.succeedingStmts);
+
+    const newArgs = argResults.map((res) => res.$resultExpr);
+    const $newCall = ClavaJoinPoints.call($call.function, ...newArgs);
+    const tempVarname = this.#newTempVarname();
+    const tempVarDecl = ClavaJoinPoints.varDeclNoInit(tempVarname, $call.type);
+    const tempVarAssign = ClavaJoinPoints.assign(
+      ClavaJoinPoints.varRef(tempVarDecl),
+      $newCall
+    );
+
+    return new DecomposeResult(
+      [...precedingStmts, tempVarDecl.stmt, tempVarAssign.stmt],
+      ClavaJoinPoints.varRef(tempVarDecl),
+      succeedingStmts
+    );
   }
 
   decomposeBinaryOp($binaryOp) {
@@ -185,12 +211,20 @@ class StatementDecomposer {
 
     // Create declaration statement with result to new temporary variable
     const tempVarname = this.#newTempVarname();
-    const tempVarDecl = ClavaJoinPoints.varDecl(tempVarname, $newExpr);
+    const tempVarDecl = ClavaJoinPoints.varDeclNoInit(
+      tempVarname,
+      $binaryOp.type
+    );
+    const tempVarAssign = ClavaJoinPoints.assign(
+      ClavaJoinPoints.varRef(tempVarDecl),
+      $newExpr
+    );
 
     const precedingStmts = [
       ...leftResult.precedingStmts,
       ...rightResult.precedingStmts,
       tempVarDecl.stmt,
+      tempVarAssign.stmt,
     ];
     const succeedingStmts = [
       ...leftResult.succeedingStmts,

@@ -1,0 +1,61 @@
+/**** File 'pass_simplify_loops.cpp' ****/
+#include <cstddef>
+#include <iostream>
+int main() {
+int matrix[25];
+{
+size_t i = 0;
+bool decomp_0;
+decomp_0 = i < 25;
+while(decomp_0) {
+matrix[i] = 2;
+i++;
+decomp_0 = i < 25;
+}
+}
+{
+size_t row = 0;
+bool decomp_2;
+decomp_2 = row < 5;
+while(decomp_2) {
+if(row == 4) {
+break;
+}
+{
+size_t col = 0;
+bool decomp_1;
+decomp_1 = col < 5;
+while(decomp_1) {
+if(col == row) {
+goto __for_loop_step_1;
+}
+matrix[row * 5 + col] = 0;
+__for_loop_step_1:
+col++;
+decomp_1 = col < 5;
+}
+}
+row++;
+decomp_2 = row < 5;
+}
+}
+int i = 0;
+{
+if(i == 2) goto __do_loop_head_3;
+std::cout << i << std::endl;
+if(i < 0) goto __do_loop_end_3;
+}
+__do_loop_head_3:
+bool decomp_3;
+decomp_3 = i < 7;
+while(decomp_3) {
+if(i == 2) continue;
+std::cout << i << std::endl;
+if(i < 0) break;
+decomp_3 = i < 7;
+}
+__do_loop_end_3:
+;
+return 0;
+}
+/**** End File ****/
