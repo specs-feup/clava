@@ -229,7 +229,20 @@ class ClavaJoinPoints {
       return AstFactory.scope();
     }
 
-    return AstFactory.scope($stmts);
+	// Convert to statements
+	const $normalizedStmts = [];
+	for(const $stmt of $stmts) {
+		const $normalizedStmt = $stmt.stmt;
+		
+		if($normalizedStmt === undefined) {
+			throw new Error(`Could not convert ${$stmt} to a statement, and a scope only accepts statements`);
+		}
+		
+		$normalizedStmts.push($normalizedStmt);
+	}
+
+
+    return AstFactory.scope($normalizedStmts);
   }
 
   /**
