@@ -43,6 +43,7 @@ class DecomposeDeclStmt extends Pass {
       }
       $jp.insertBefore($singleDeclStmt);
     }
+    $jp.detach();
     return new PassTransformationResult({
       pass: DecomposeDeclStmt,
       $joinpoint: $firstDeclStmt,
