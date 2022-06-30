@@ -1,6 +1,6 @@
 laraImport("lara.pass.Pass");
 laraImport("clava.ClavaJoinPoints");
-laraImport("lara.pass.PassTransformResult");
+laraImport("lara.pass.PassTransformationResult");
 
 /**
  * Decomposes composite declaration statements into separate statements for each variable.
