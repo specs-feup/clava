@@ -68,6 +68,11 @@ class SimplifyLoops extends Pass {
     for (const stmt of decomposeResult.succeedingStmts.slice().reverse()) {
       $whileLoop.body.insertBegin(stmt);
     }
+    for (const stmt of decomposeResult.precedingStmts.filter(
+      ($stmt) => !$stmt.instanceOf("declStmt")
+    )) {
+      $whileLoop.body.insertEnd(stmt);
+    }
     $whileLoop.cond.replaceWith(
       ClavaJoinPoints.exprStmt(decomposeResult.$resultExpr)
     );
