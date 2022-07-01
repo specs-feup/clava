@@ -120,7 +120,7 @@ public class CApiTest {
 
     @Test
     public void testSerializeNode() {
-        if (SpecsSystem.getJavaVersionNumber() > 16) {
+        if (SpecsSystem.hasMinimumJavaVersion(17)) {
             SpecsLogs.info("Skipping test, detected Java version 17 or higher");
             return;
         }
