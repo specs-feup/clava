@@ -30,6 +30,12 @@ _lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'name', {
 	}
 });
 
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, '_qualifiedName', {
+	get: function () { 
+		return this.astNode.getFullyQualifiedName(); 
+	}
+});
+
 _lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, '_allMethods', {
 	get: function () {
 		var methods = Weaver.toJs(this.astNode.getMethods());

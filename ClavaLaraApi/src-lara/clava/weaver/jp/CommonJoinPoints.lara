@@ -38,7 +38,7 @@ Selector.prototype._addJps = function($newJps, $jps, jpFilter, $jpChain, name) {
 			continue;
 		}
 		
-		if($jp.instanceOf("function") || $jp.instanceOf("classType")){
+		if($jp.instanceOf("function")){
 		    var decl = $jp.originalAstNode;
             var declaration = decl.getDeclaration();
             var definition = decl.getDefinition();
@@ -55,7 +55,28 @@ Selector.prototype._addJps = function($newJps, $jps, jpFilter, $jpChain, name) {
             else if (declaration.get().equals(decl)){
             	continue;
             }            
+		
+		}
+		
+		if($jp.instanceOf("classType")){
+		    var decl = $jp.originalAstNode;
+            var declaration = decl.getDeclaration();
+            var definition = decl.getDefinition();
+            
+            if (!definition.isPresent()) continue;
+            
+            // If none is present
+            if(!declaration.isPresent() && !definition.isPresent())
+            	throw "Expected at least one of them to be present";
 
+            // XOR, if only one of them is present, current node must be one of them
+            if (declaration.isEmpty() ^ definition.isEmpty()) {
+              
+            }
+            // Both are present, only add current node if it is the definition
+            else if (declaration.get().equals(decl)){
+            	continue;
+            }            
 		
 		}
 		
