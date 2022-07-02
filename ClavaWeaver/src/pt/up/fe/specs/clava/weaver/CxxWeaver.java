@@ -22,6 +22,7 @@ import org.lara.interpreter.weaver.ast.AstMethods;
 import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.interf.WeaverEngine;
+import org.lara.interpreter.weaver.interf.events.Stage;
 import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.language.specification.LanguageSpecification;
 import org.lara.language.specification.dsl.LanguageSpecificationV2;
@@ -1452,6 +1453,9 @@ public class CxxWeaver extends ACxxWeaver {
 
         // After rebuilding, clear current app cache
         getApp().clearCache();
+        getEventTrigger().triggerAction(Stage.DURING,
+                "CxxWeaver.rebuildFile",
+                CxxJoinpoints.create(tUnit), Collections.emptyList(), Optional.empty());
 
         // Return correct TranslationUnit
         for (TranslationUnit tu : rebuiltApp.getTranslationUnits()) {

@@ -65,6 +65,7 @@ import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXFunctionalCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
+import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
 import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
@@ -429,6 +430,18 @@ public class ClavaFactory {
         return new BinaryOperator(data, Arrays.asList(lhs, rhs));
     }
 
+    public CompoundAssignOperator compoundAssignOperator(BinaryOperatorKind op, Type type, Expr lhs, Expr rhs) {
+        if (!op.isCompoundAssign()) {
+            throw new IllegalArgumentException(
+                    "`op` should be a compound assignment op kind, is actually " + op.getOpString());
+        }
+        var data = newDataStore(CompoundAssignOperator.class)
+                .put(Expr.TYPE, Optional.of(type))
+                .put(BinaryOperator.OP, op);
+
+        return new CompoundAssignOperator(data, Arrays.asList(lhs, rhs));
+    }
+
     public UnaryOperator unaryOperator(UnaryOperatorKind op, Type type, Expr subExpr) {
         DataStore data = newDataStore(UnaryOperator.class)
                 .put(Expr.TYPE, Optional.of(type))
@@ -717,7 +730,6 @@ public class ClavaFactory {
      */
     public ExprStmt exprStmt(Expr expr) {
         DataStore exprStmtData = newDataStore(ExprStmt.class)
-                .put(ExprStmt.HAS_SEMICOLON, true)
                 .put(ClavaNode.LOCATION, expr.getLocation());
 
         return new ExprStmt(exprStmtData, Arrays.asList(expr));
@@ -766,7 +778,7 @@ public class ClavaFactory {
     public WhileStmt whileStmt(Stmt cond, CompoundStmt body) {
         DataStore whileStmtData = newDataStore(WhileStmt.class);
 
-        return new WhileStmt(whileStmtData, Arrays.asList(cond, body));
+        return new WhileStmt(whileStmtData, Arrays.asList(nullDecl(), cond, body));
     }
 
     public BreakStmt breakStmt() {

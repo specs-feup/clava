@@ -21,7 +21,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
-import pt.up.fe.specs.clava.ast.expr.Expr;
 
 public class WhileStmt extends LoopStmt {
 
@@ -33,8 +32,8 @@ public class WhileStmt extends LoopStmt {
         return getOptionalChild(VarDecl.class, 0);
     }
 
-    public Expr getCondition() {
-        return getChild(Expr.class, 1);
+    public ExprStmt getCondition() {
+        return getChild(ExprStmt.class, 1);
     }
 
     public CompoundStmt getThen() {
@@ -45,7 +44,10 @@ public class WhileStmt extends LoopStmt {
     public String getCode() {
         StringBuilder code = new StringBuilder();
 
-        String conditionCode = getStmtCondition().map(ClavaNode::getCode).orElse("");
+        String conditionCode = getStmtCondition()
+                .map(ClavaNode::getCode)
+                .map(this::removeSemicolon)
+                .orElse("");
 
         code.append("while(").append(conditionCode).append(")").append(getThen().getCode());
 
@@ -59,9 +61,8 @@ public class WhileStmt extends LoopStmt {
 
     @Override
     public Optional<ClavaNode> getStmtCondition() {
-        return Optional.of(getDeclCondition()
-                .map(ClavaNode.class::cast)
-                .orElse(getCondition()));
+        var nullableStmtCondition = getDeclCondition().map(ClavaNode.class::cast).orElse(getCondition());
+        return Optional.of(nullableStmtCondition);
     }
 
 }

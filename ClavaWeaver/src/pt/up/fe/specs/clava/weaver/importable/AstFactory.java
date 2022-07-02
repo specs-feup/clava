@@ -81,6 +81,7 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACast;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AClass;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADecl;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEmptyStmt;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ADeclStmt;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AElaboratedType;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExprStmt;
@@ -589,7 +590,7 @@ public class AstFactory {
         Expr lhs = (Expr) leftHand.getNode();
         Expr rhs = (Expr) rightHand.getNode();
 
-        BinaryOperator assign = CxxWeaver.getFactory().binaryOperator(BinaryOperatorKind.Assign, rhs.getType(), lhs,
+        BinaryOperator assign = CxxWeaver.getFactory().binaryOperator(BinaryOperatorKind.Assign, lhs.getType(), lhs,
                 rhs);
 
         return CxxJoinpoints.create(assign, ABinaryOp.class);
@@ -611,6 +612,17 @@ public class AstFactory {
                 (Expr) left.getNode(), (Expr) right.getNode());
 
         return CxxJoinpoints.create(opNode, ABinaryOp.class);
+    }
+
+    public static ABinaryOp compoundAssignment(String op, AExpression lhs, AExpression rhs) {
+        var opKind = BinaryOperator.getOpByNameOrSymbol(op);
+        var type = ((Expr) lhs.getNode()).getType();
+
+        var opNode = CxxWeaver.getFactory().compoundAssignOperator(opKind, type, (Expr) lhs.getNode(),
+                (Expr) rhs.getNode());
+
+        return CxxJoinpoints.create(opNode, ABinaryOp.class);
+
     }
 
     public static AUnaryOp unaryOp(String op, AExpression expr, AType type) {
@@ -732,6 +744,17 @@ public class AstFactory {
         return CxxJoinpoints.create(forStmt, ALoop.class);
     }
 
+    public static ALoop whileStmt(AStatement condition, AStatement body) {
+        var condStmt = condition != null ? (Stmt) condition.getNode() : CxxWeaver.getFactory().nullStmt();
+        var bodyStmt = body != null ? (Stmt) body.getNode() : CxxWeaver.getFactory().nullStmt();
+
+        var compoundStmt = ClavaNodes.toCompoundStmt(bodyStmt);
+
+        var whileStmt = CxxWeaver.getFactory().whileStmt(condStmt, compoundStmt);
+
+        return CxxJoinpoints.create(whileStmt, ALoop.class);
+    }
+
     /**
      * Creates a join point representing a function parameter.
      *
@@ -823,5 +846,10 @@ public class AstFactory {
     public static AGotoStmt gotoStmt(ALabelDecl label) {
         var stmt = label.getFactory().gotoStmt((LabelDecl) label.getNode());
         return CxxJoinpoints.create(stmt, AGotoStmt.class);
+    }
+    
+    public static AEmptyStmt emptyStmt() {
+        var stmt = CxxWeaver.getFactory().emptyStmt();
+        return CxxJoinpoints.create(stmt, AEmptyStmt.class);
     }
 }

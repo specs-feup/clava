@@ -31,8 +31,8 @@ public class DoStmt extends LoopStmt {
         return Optional.of(getCondition());
     }
 
-    public Stmt getCondition() {
-        return getChild(Stmt.class, 1);
+    public ExprStmt getCondition() {
+        return getChild(ExprStmt.class, 1);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class DoStmt extends LoopStmt {
         StringBuilder code = new StringBuilder();
 
         code.append("do ").append(getBody().getCode()).append("while (")
-                .append(getCondition().getCode()).append(");");
+                .append(removeSemicolon(getCondition().getCode())).append(");");
 
         return code.toString();
 

@@ -1,15 +1,20 @@
 int foo() {
-   int a;
-   int b = 1;
-   int decomp_0 = 1 + 2;
-   int c = decomp_0;
-   int decomp_1 = 1 + 2;
-   int decomp_2 = decomp_1 + 3;
-   int d = decomp_2;
-   int decomp_3 = b * 2;
-   int decomp_4 = a + decomp_3;
-   c = decomp_4;
-   int decomp_5 = a + c;
-   
-   return decomp_5;
+int a;
+int b = 1;
+int decomp_0;
+decomp_0 = 1 + 2;
+int c = decomp_0;
+int decomp_1;
+decomp_1 = 1 + 2;
+int decomp_2;
+decomp_2 = decomp_1 + 3;
+int d = decomp_2;
+int decomp_3;
+decomp_3 = b * 2;
+int decomp_4;
+decomp_4 = a + decomp_3;
+c = decomp_4;
+int decomp_5;
+decomp_5 = a + c;
+return decomp_5;
 }

@@ -177,6 +177,10 @@ class ClavaJoinPoints {
     return AstFactory.stmtLiteral(stmtString);
   }
 
+  static emptyStmt() {
+    return AstFactory.emptyStmt();
+  }
+
   /**
    * Creates a new join point 'call'.
    *
@@ -217,12 +221,28 @@ class ClavaJoinPoints {
     return AstFactory.omp(directiveName);
   }
 
-  static scope($stmts) {
-    if ($stmts === undefined) {
+  static scope() {
+	const $stmts = arrayFromArgs(arguments);
+	
+	
+    if ($stmts.length === 0) {
       return AstFactory.scope();
     }
 
-    return AstFactory.scope($stmts);
+	// Convert to statements
+	const $normalizedStmts = [];
+	for(const $stmt of $stmts) {
+		const $normalizedStmt = $stmt.stmt;
+		
+		if($normalizedStmt === undefined) {
+			throw new Error(`Could not convert ${$stmt} to a statement, and a scope only accepts statements`);
+		}
+		
+		$normalizedStmts.push($normalizedStmt);
+	}
+
+
+    return AstFactory.scope($normalizedStmts);
   }
 
   /**
@@ -311,6 +331,13 @@ class ClavaJoinPoints {
     Check.isJoinPoint($rightHand, "expression");
 
     return AstFactory.assignment($leftHand, $rightHand);
+  }
+
+  static compoundAssign($op, $leftHand, $rightHand) {
+    Check.isJoinPoint($leftHand, "expression");
+    Check.isJoinPoint($rightHand, "expression");
+
+    return AstFactory.compoundAssignment($op, $leftHand, $rightHand);
   }
 
   /**
@@ -510,6 +537,13 @@ class ClavaJoinPoints {
     $body = ClavaType.asStatement($body, true);
 
     return AstFactory.forStmt($init, $condition, $inc, $body);
+  }
+
+  static whileStmt($condition, $body) {
+    const condition = ClavaType.asStatement($condition, true);
+    const body = ClavaType.asStatement($body, true);
+
+    return AstFactory.whileStmt(condition, body);
   }
 
   /**

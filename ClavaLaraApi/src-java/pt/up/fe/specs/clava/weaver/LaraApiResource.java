@@ -79,6 +79,10 @@ public enum LaraApiResource implements LaraResourceProvider {
     DECOMPOSE_RESULT_JS("code/DecomposeResult.js"),
     CODE_SIMPLIFY_ASSIGNMENT("code/SimplifyAssignment.js"),
     CODE_SIMPLIFY_TERNARY_OP("code/SimplifyTernaryOp.js"),
+    CODE_FOR_TO_WHILE_STMT("code/ForToWhileStmt.js"),
+    CODE_DO_TO_WHILE_STMT("code/DoToWhileStmt.js"),
+    CODE_INLINER("code/Inliner.js"),
+    CODE_REMOVE_SHADOWING("code/RemoveShadowing.js"),
 
     // Gprofer
     GPROFER("gprofer/Gprofer.lara"),
@@ -122,6 +126,8 @@ public enum LaraApiResource implements LaraResourceProvider {
     DECOMPOSE_DECL_STMT("pass/DecomposeDeclStmt.js"),
     DECOMPOSE_VAR_DECLARATIONS("pass/DecomposeVarDeclarations.js"),
     SINGLE_RETURN_FUNCTION("pass/SingleReturnFunction.js"),
+    PASS_SIMPLIFY_LOOPS("pass/SimplifyLoops.js"),
+    PASS_SIMPLIFY_SELECTION_STMTS("pass/SimplifySelectionStmts.js"),
 
     // Stats
     OPS_BLOCK("stats/OpsBlock.lara"),
@@ -146,6 +152,11 @@ public enum LaraApiResource implements LaraResourceProvider {
     // UVE
     UVE("uve/UVE.lara"),
     UVE_DETECT("uve/DetectStream.lara"),
+
+    // OPT
+    OPT_NORMALIZE_TO_SUBSET("opt/NormalizeToSubset.js"),
+    OPT_PREPARE_FOR_INLINING("opt/PrepareForInlining.js"),
+    OPT_INLINING("opt/Inlining.js"),
 
     // Static objects
 

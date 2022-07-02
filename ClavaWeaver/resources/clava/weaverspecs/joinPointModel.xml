@@ -242,6 +242,12 @@
 	
 	<!-- EMPTY STMT -->
 	<joinpoint class="emptyStmt" extends="statement"/>	
+
+	<!-- CONTINUE STMT -->
+	<joinpoint class="continue" extends="statement"/>	
+	
+	<!-- BREAK STMT -->
+	<joinpoint class="break" extends="statement"/>		
 	
 	<!-- CALL -->	
 	<joinpoint class="call" 	extends="expression">

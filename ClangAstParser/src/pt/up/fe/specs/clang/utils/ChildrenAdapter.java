@@ -21,15 +21,17 @@ import java.util.function.BiFunction;
 import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.NullDecl;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.clava.ast.stmt.CXXCatchStmt;
 import pt.up.fe.specs.clava.ast.stmt.CXXForRangeStmt;
 import pt.up.fe.specs.clava.ast.stmt.CXXTryStmt;
 import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
+import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.DefaultStmt;
 import pt.up.fe.specs.clava.ast.stmt.DoStmt;
-import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
@@ -39,6 +41,7 @@ import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.utils.NullNode;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.classmap.ClassMap;
+import pt.up.fe.specs.util.classmap.ClassSet;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
@@ -105,18 +108,37 @@ public class ChildrenAdapter {
         return adaptedChildren;
     }
 
+    /**
+     * Checks if the given Clava node is an instance of the expected class. Throws an exception if it is not.
+     * 
+     * @param <T>
+     * @param node
+     * @param expectedClass
+     * @return
+     */
+    private static <T extends ClavaNode> ClavaNode check(ClavaNode node, Class<T> expectedClass) {
+        SpecsCheck.checkClass(node, expectedClass);
+        return node;
+    }
+
+    private static ClavaNode check(ClavaNode node, ClassSet<ClavaNode> expectedClasses) {
+        SpecsCheck.checkArgument(expectedClasses.contains(node.getClass()),
+                () -> "Expected value to be an instance of " + expectedClasses + ", however it is a "
+                        + node.getClass());
+        return node;
+    }
+
+    private static final ClassSet<ClavaNode> OPTIONAL_VARDECL = ClassSet.newInstance(VarDecl.class, NullDecl.class);
+    private static final ClassSet<ClavaNode> STMT_OR_EXPR = ClassSet.newInstance(Stmt.class, Expr.class);
+
     private static List<ClavaNode> adaptIfStmt(List<ClavaNode> children, ClavaContext context) {
-        // Check if then and else statements are compound statements
-        if (children.get(2) instanceof CompoundStmt && children.get(3) instanceof CompoundStmt) {
-            return children;
-        }
 
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
 
-        adaptedChildren.add(children.get(0));
-        adaptedChildren.add(children.get(1));
-        adaptedChildren.add(toCompoundStmt(children.get(2), context));
-        adaptedChildren.add(toCompoundStmt(children.get(3), context));
+        adaptedChildren.add(check(children.get(0), OPTIONAL_VARDECL)); // If not present, will be a NullDecl
+        adaptedChildren.add(check(children.get(1), Expr.class));
+        adaptedChildren.add(toCompoundStmt(check(children.get(2), STMT_OR_EXPR), context));
+        adaptedChildren.add(toCompoundStmt(check(children.get(3), STMT_OR_EXPR), context));
 
         return adaptedChildren;
     }
@@ -129,11 +151,11 @@ public class ChildrenAdapter {
 
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
 
-        adaptedChildren.add(toStmt(children.get(0), context));
-        adaptedChildren.add(toStmt(children.get(1), context));
-        adaptedChildren.add(toStmt(children.get(2), false, context));
-        adaptedChildren.add(toCompoundStmt(children.get(3), false, context));
-        adaptedChildren.add(children.get(4));
+        adaptedChildren.add(toStmt(check(children.get(0), STMT_OR_EXPR), context));
+        adaptedChildren.add(toStmt(check(children.get(1), Expr.class), context));
+        adaptedChildren.add(toStmt(check(children.get(2), Expr.class), context));
+        adaptedChildren.add(toCompoundStmt(check(children.get(3), STMT_OR_EXPR), false, context));
+        adaptedChildren.add(check(children.get(4), OPTIONAL_VARDECL));
 
         return adaptedChildren;
     }
@@ -142,13 +164,13 @@ public class ChildrenAdapter {
 
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
 
-        adaptedChildren.add(toStmt(children.get(0), context));
-        adaptedChildren.add(toStmt(children.get(1), context));
-        adaptedChildren.add(toStmt(children.get(2), context));
-        adaptedChildren.add(toStmt(children.get(3), context));
-        adaptedChildren.add(toStmt(children.get(4), context));
-        adaptedChildren.add(toStmt(children.get(5), context));
-        adaptedChildren.add(toCompoundStmt(children.get(6), false, context));
+        adaptedChildren.add(toStmt(check(children.get(0), DeclStmt.class), context));
+        adaptedChildren.add(toStmt(check(children.get(1), DeclStmt.class), context));
+        adaptedChildren.add(toStmt(check(children.get(2), DeclStmt.class), context));
+        adaptedChildren.add(toStmt(check(children.get(3), Expr.class), context));
+        adaptedChildren.add(toStmt(check(children.get(4), Expr.class), context));
+        adaptedChildren.add(toStmt(check(children.get(5), DeclStmt.class), context));
+        adaptedChildren.add(toCompoundStmt(check(children.get(6), STMT_OR_EXPR), false, context));
 
         return adaptedChildren;
     }
@@ -157,10 +179,10 @@ public class ChildrenAdapter {
 
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
 
-        adaptedChildren.add(children.get(0));
-        // adaptedChildren.add(toStmt(children.get(1), false, context));
-        adaptedChildren.add(children.get(1));
-        adaptedChildren.add(toCompoundStmt(children.get(2), false, context));
+        adaptedChildren.add(check(children.get(0), OPTIONAL_VARDECL));
+        adaptedChildren.add(toStmt(check(children.get(1), Expr.class), context));
+        // adaptedChildren.add(children.get(1));
+        adaptedChildren.add(toCompoundStmt(check(children.get(2), STMT_OR_EXPR), false, context));
 
         return adaptedChildren;
     }
@@ -169,8 +191,8 @@ public class ChildrenAdapter {
 
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
 
-        adaptedChildren.add(toCompoundStmt(children.get(0), false, context));
-        adaptedChildren.add(toStmt(children.get(1), false, context));
+        adaptedChildren.add(toCompoundStmt(check(children.get(0), STMT_OR_EXPR), false, context));
+        adaptedChildren.add(toStmt(check(children.get(1), Expr.class), context));
 
         return adaptedChildren;
     }
@@ -207,8 +229,8 @@ public class ChildrenAdapter {
     private static List<ClavaNode> adaptCXXCatchStmt(List<ClavaNode> children, ClavaContext context) {
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
 
-        adaptedChildren.add(children.get(0));
-        adaptedChildren.add(toCompoundStmt(children.get(1), context));
+        adaptedChildren.add(check(children.get(0), OPTIONAL_VARDECL));
+        adaptedChildren.add(toCompoundStmt(check(children.get(1), STMT_OR_EXPR), context));
 
         return adaptedChildren;
     }
@@ -221,7 +243,7 @@ public class ChildrenAdapter {
         // if (children.get(0) instanceof Decl) {
         // System.out.println("FOUND DECL " + children.get(0).get(ClavaNode.ID) + " IN TRY:" + children.get(0));
         // }
-        adaptedChildren.add(toCompoundStmt(children.get(0), context));
+        adaptedChildren.add(toCompoundStmt(check(children.get(0), CompoundStmt.class), context));
         adaptedChildren.addAll(children.subList(1, children.size()));
 
         return adaptedChildren;
@@ -230,9 +252,9 @@ public class ChildrenAdapter {
     private static List<ClavaNode> adaptCaseStmt(List<ClavaNode> children, ClavaContext context) {
         List<ClavaNode> adaptedChildren = new ArrayList<>(children.size());
 
-        adaptedChildren.add(children.get(0));
-        adaptedChildren.add(children.get(1));
-        adaptedChildren.add(toStmt(children.get(2), context));
+        adaptedChildren.add(check(children.get(0), Expr.class));
+        adaptedChildren.add(check(children.get(1), Expr.class));
+        adaptedChildren.add(toStmt(check(children.get(2), STMT_OR_EXPR), context));
 
         return adaptedChildren;
     }
@@ -324,10 +346,6 @@ public class ChildrenAdapter {
     }
 
     static ClavaNode toStmt(ClavaNode clavaNode, ClavaContext context) {
-        return toStmt(clavaNode, true, context);
-    }
-
-    private static ClavaNode toStmt(ClavaNode clavaNode, boolean hasSemicolon, ClavaContext context) {
         if (clavaNode instanceof Stmt) {
             return clavaNode;
         }
@@ -340,22 +358,11 @@ public class ChildrenAdapter {
         // Wrap Expr around Stmt
         if (clavaNode instanceof Expr) {
 
-            // if (clavaNode.hasParent()) {
-            // clavaNode.detach();
-            // }
-
             Stmt exprStmt = context.get(ClavaContext.FACTORY).exprStmt((Expr) clavaNode);
-            if (!hasSemicolon) {
-                exprStmt.set(ExprStmt.HAS_SEMICOLON, false);
-            }
 
             return exprStmt;
-
         }
 
         throw new NotImplementedException(clavaNode.getClass());
-        // throw new RuntimeException(
-        // "Expected node to be of class " + Stmt.class + " but it " + clavaNode.getClass());
-
     }
 }

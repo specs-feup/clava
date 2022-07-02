@@ -95,10 +95,10 @@ public class ForStmt extends LoopStmt {
         // code.append(getCond().map(cond -> " " + cond.getCode()).orElse(";"));
 
         // Get 'inc' code
-        String incCode = getInc().map(init -> " " + init.getCode()).orElse("");
-        if (incCode.endsWith(";")) {
-            incCode = incCode.substring(0, incCode.length() - 1);
-        }
+        String incCode = getInc()
+                .map(init -> " " + removeSemicolon(init.getCode()))
+                .orElse("");
+
         code.append(incCode);
 
         code.append(")");

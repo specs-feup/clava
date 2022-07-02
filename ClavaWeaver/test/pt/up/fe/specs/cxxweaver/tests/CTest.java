@@ -210,4 +210,14 @@ public class CTest {
     public void testCfg() {
         newTester().test("Cfg.lara", "cfg.c");
     }
+
+    @Test
+    public void testExprStmt() {
+        newTester().test("ExprStmt.js", "expr_stmt.c");
+    }
+
+    @Test
+    public void testTraversal() {
+        newTester().test("Traversal.js", "traversal.c");
+    }
 }

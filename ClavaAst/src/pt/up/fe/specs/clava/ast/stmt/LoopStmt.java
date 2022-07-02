@@ -225,4 +225,16 @@ public abstract class LoopStmt extends Stmt implements StmtWithCondition, NodeWi
         return getLoopId();
     }
 
+    /**
+     * 
+     * @param code
+     * @return if 'code' ends with semicolon, returns the same string without it
+     */
+    protected String removeSemicolon(String code) {
+        if (code.endsWith(";")) {
+            return code.substring(0, code.length() - 1);
+        }
+
+        return code;
+    }
 }

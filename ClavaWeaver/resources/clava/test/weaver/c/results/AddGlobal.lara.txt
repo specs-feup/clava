@@ -6,7 +6,7 @@ int main() {
    return 0;
 }
 ---------------
+extern int num_threads;
 int var1;
 int var2 = 0;
-extern int num_threads;
 ---------------

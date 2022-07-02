@@ -20,7 +20,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaNode;
 
 /**
- * Strictly represents an empty statement (unlike NullStmt, which can also represent absence of statement).
+ * Strictly represents an empty statement (unlike NullStmt, which represents absence of statement).
  * 
  * @author JoaoBispo
  *

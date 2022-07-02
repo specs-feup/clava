@@ -773,13 +773,21 @@ public class CxxLoop extends ALoop {
 
     @Override
     public AStatement getInitImpl() {
-        if (!(loop instanceof ForStmt)) {
-            ClavaLog.warning(
-                    "Not supported for loops of kind '" + getKindImpl() + "', only 'for' loops.");
-            return null;
+
+        if (loop instanceof ForStmt) {
+            return ((ForStmt) loop).getInit()
+                    .map(init -> CxxJoinpoints.create(init, AStatement.class))
+                    .orElse(null);
         }
 
-        return ((ForStmt) loop).getInit().map(init -> CxxJoinpoints.create(init, AStatement.class)).orElse(null);
+        // If range stmt, return begin
+        if (loop instanceof CXXForRangeStmt) {
+            return ((CXXForRangeStmt) loop).getBegin()
+                    .map(init -> CxxJoinpoints.create(init, AStatement.class))
+                    .orElse(null);
+        }
+
+        return null;
 
     }
 

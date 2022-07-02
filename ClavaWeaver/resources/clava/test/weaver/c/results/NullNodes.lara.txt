@@ -2,7 +2,7 @@
 			 code : int A[100];	 astName : DeclStmt
 			 code : i = 0;	 astName : ExprStmt
 			 code : i < 100;	 astName : ExprStmt
-			 code : i++	 astName : ExprStmt
+			 code : i++;	 astName : ExprStmt
 			 code : A[i] = i;	 astName : ExprStmt
 			 code : 
 return 0;
