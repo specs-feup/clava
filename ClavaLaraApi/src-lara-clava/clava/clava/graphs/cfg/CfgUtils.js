@@ -202,16 +202,21 @@ class CfgUtils {
     // Special cases handled, check scope siblings
     const rightStmts = $scope.siblingsRight;
 
-    // If there are no statements, return next of parent
-    if (rightStmts.length === 0) {
-      // If parent is not a statement, there is no next statement
-      if (!$scope.parent.instanceOf("statement")) {
-        return undefined;
-      }
-      return CfgUtils.nextExecutedStmt($scope.parent);
+    // If there are statements, return next of parent
+    if (rightStmts.length > 0) {
+      return rightStmts[0];
     }
 
-    return rightStmts[0];
+    // There are no statements, check parent
+    const scopeParent = $scope.parent;
+
+    // If scope parent is not a statement, there is no next statement
+    if (!$scopeParent.instanceOf("statement")) {
+      return undefined;
+    }
+
+    // Return next statement of parent statement
+    return CfgUtils.nextExecutedStmt($scope.parent);
   }
 
   static getTarget(node, edgeType) {
