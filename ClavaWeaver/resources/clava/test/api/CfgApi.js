@@ -1,4 +1,4 @@
-laraImport("clava.graphs.cfg.ControlFlowGraph");
+laraImport("clava.graphs.ControlFlowGraph");
 laraImport("clava.graphs.cfg.CfgUtils");
 laraImport("clava.graphs.cfg.CfgEdgeType");
 laraImport("weaver.Query");
