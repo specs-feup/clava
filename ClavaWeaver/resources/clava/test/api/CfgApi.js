@@ -4,10 +4,12 @@ laraImport("clava.graphs.cfg.CfgEdgeType");
 laraImport("weaver.Query");
 
 const $fooFunction = Query.search("function", "foo").first();
-const cfg = ControlFlowGraph.build($fooFunction);
+const cfg = ControlFlowGraph.build($fooFunction, true);
+println("Graph for foo:");
+println(Graphs.toDot(cfg.graph));
 verifyGraph(cfg)
 println("Verification done")
-//println(Graphs.toDot(cfg.graph));
+
 
 function verifyGraph(cfg) {
 	for(const node of cfg.graph.nodes()) {
