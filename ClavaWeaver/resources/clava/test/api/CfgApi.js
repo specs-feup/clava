@@ -1,10 +1,10 @@
-laraImport("clava.graphs.cfg.CfgBuilder");
+laraImport("clava.graphs.cfg.ControlFlowGraph");
 laraImport("clava.graphs.cfg.CfgUtils");
 laraImport("clava.graphs.cfg.CfgEdgeType");
 laraImport("weaver.Query");
 
 const $fooFunction = Query.search("function", "foo").first();
-const cfg = CfgBuilder.buildGraph($fooFunction);
+const cfg = ControlFlowGraph.build($fooFunction);
 verifyGraph(cfg)
 println("Verification done")
 //println(Graphs.toDot(cfg.graph));

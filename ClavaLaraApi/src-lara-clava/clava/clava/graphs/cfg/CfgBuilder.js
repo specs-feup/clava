@@ -5,7 +5,6 @@ laraImport("clava.graphs.cfg.CfgNodeData");
 laraImport("clava.graphs.cfg.CfgNodeType");
 laraImport("clava.graphs.cfg.CfgEdge");
 laraImport("clava.graphs.cfg.CfgEdgeType");
-laraImport("clava.graphs.cfg.ControlFlowGraph");
 laraImport("clava.graphs.cfg.CfgUtils");
 laraImport("clava.graphs.cfg.nodedata.DataFactory");
 laraImport("clava.ClavaJoinPoints");
@@ -68,9 +67,11 @@ class CfgBuilder {
     this.#temporaryStmts = {};
   }
 
+  /*
   static buildGraph($jp) {
     return new CfgBuilder($jp).build();
   }
+  */
 
   build() {
     this._addAuxComments();
@@ -81,12 +82,7 @@ class CfgBuilder {
 
     this._cleanCfg();
 
-    return new ControlFlowGraph(
-      this.#graph,
-      this.#nodes,
-      this.#startNode,
-      this.#endNode
-    );
+    return [this.#graph, this.#nodes, this.#startNode, this.#endNode];
   }
 
   _addAuxComments() {

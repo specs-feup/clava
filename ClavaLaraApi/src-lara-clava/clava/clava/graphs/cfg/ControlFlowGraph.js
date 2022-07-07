@@ -1,3 +1,5 @@
+laraImport("clava.graphs.cfg.CfgBuilder");
+
 class ControlFlowGraph {
   /**
    * A Cytoscape graph representing the CFG
@@ -28,6 +30,11 @@ class ControlFlowGraph {
 
   get graph() {
     return this.#graph;
+  }
+
+  static build($jp) {
+    const builderResult = new CfgBuilder($jp).build();
+    return new ControlFlowGraph(...builderResult);
   }
 
   /**
