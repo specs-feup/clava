@@ -91,7 +91,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     // Graphs
     STATIC_CALL_GRAPH("graphs/StaticCallGraph.js"),
 
-    CFG("graphs/cfg/Cfg.js"),
+    CFG("graphs/cfg/ControlFlowGraph.js"),
     CFG_BUILDER("graphs/cfg/CfgBuilder.js"),
     CFG_EDGE("graphs/cfg/CfgEdge.js"),
     CFG_EDGE_TYPE("graphs/cfg/CfgEdgeType.js"),
