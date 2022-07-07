@@ -40,8 +40,20 @@ class CfgBuilder {
    */
   #temporaryStmts;
 
-  constructor($jp) {
+  /**
+   * {boolean} If true, uses deterministic ids for the graph ids (e.g. id_0, id_1...). Otherwise, uses $jp.astId whenever possible.
+   */
+  #deterministicIds;
+
+  /**
+   * Current id, in case deterministic ids are used
+   */
+  #currentId;
+
+  constructor($jp, deterministicIds = false) {
     this.#jp = $jp;
+    this.#deterministicIds = deterministicIds;
+    this.#currentId = 0;
 
     // Load graph library
     Graphs.loadLibrary();
@@ -65,6 +77,12 @@ class CfgBuilder {
     //this.#nodes.set('END', this.#endNode)
 
     this.#temporaryStmts = {};
+  }
+
+  #nextId() {
+    const nextId = "id_" + this.#currentId;
+    this.#currentId++;
+    return nextId;
   }
 
   /*
@@ -481,7 +499,12 @@ class CfgBuilder {
     // If there is not yet a node for this statement, create
     if (node === undefined && _create) {
       const nodeType = CfgUtils.getNodeType($stmt);
-      node = Graphs.addNode(this.#graph, DataFactory.newData(nodeType, $stmt));
+      const nodeId = this.#deterministicIds ? this.#nextId() : undefined;
+
+      node = Graphs.addNode(
+        this.#graph,
+        DataFactory.newData(nodeType, $stmt, nodeId)
+      );
 
       // Associate all statements of graph node
       for (const $nodeStmt of node.data().stmts) {

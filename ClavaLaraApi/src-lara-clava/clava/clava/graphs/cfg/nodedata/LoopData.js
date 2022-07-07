@@ -2,23 +2,19 @@ laraImport("clava.graphs.cfg.CfgNodeData");
 laraImport("clava.graphs.cfg.CfgNodeType");
 
 class LoopData extends CfgNodeData {
+  //#stmt
 
-    //#stmt
+  constructor($stmt, id) {
+    super(CfgNodeType.LOOP, $stmt, id);
 
-    constructor($stmt){
-        super(CfgNodeType.LOOP, $stmt)
+    //this.#stmt = $stmt
+  }
 
-        //this.#stmt = $stmt
+  get loop() {
+    return this.nodeStmt;
+  }
 
-    }
-
-	get loop() {
-		return this.nodeStmt;
-	}
-
-    toString() {
-        return "Loop: " + this.loop.kind;
-    }
-
-
+  toString() {
+    return "Loop: " + this.loop.kind;
+  }
 }

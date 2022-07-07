@@ -2,32 +2,29 @@ laraImport("clava.graphs.cfg.CfgNodeData");
 laraImport("clava.graphs.cfg.CfgNodeType");
 
 class HeaderData extends CfgNodeData {
+  //#stmt
 
-    //#stmt
+  constructor($stmt, nodeType, id) {
+    super(nodeType, $stmt, id);
 
-    constructor($stmt, nodeType) {
-        super(nodeType, $stmt)
+    //this.#stmt = $stmt
+  }
 
-        //this.#stmt = $stmt
-
-    }
-
-    /*
+  /*
 	getStmt() {
 		return this.#stmt;
 	}
     */
 
-    toString() {
-        return this.name + ": " + this.nodeStmt.code;
+  toString() {
+    return this.name + ": " + this.nodeStmt.code;
+  }
+
+  isBranch() {
+    if (this.type === CfgNodeType.COND) {
+      return true;
     }
 
-    isBranch() {
-        if(this.type === CfgNodeType.COND) {
-            return true;
-        }
-        
-		return false;
-	}
-
+    return false;
+  }
 }

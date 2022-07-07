@@ -32,8 +32,8 @@ class ControlFlowGraph {
     return this.#graph;
   }
 
-  static build($jp) {
-    const builderResult = new CfgBuilder($jp).build();
+  static build($jp, deterministicIds = false) {
+    const builderResult = new CfgBuilder($jp, deterministicIds).build();
     return new ControlFlowGraph(...builderResult);
   }
 

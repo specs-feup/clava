@@ -2,27 +2,24 @@ laraImport("clava.graphs.cfg.CfgNodeData");
 laraImport("clava.graphs.cfg.CfgNodeType");
 
 class IfData extends CfgNodeData {
+  //#stmt
 
-    //#stmt
+  constructor($stmt, id) {
+    super(CfgNodeType.IF, $stmt, id);
 
-    constructor($stmt){
-        super(CfgNodeType.IF, $stmt)
+    //this.#stmt = $stmt
+  }
 
-        //this.#stmt = $stmt
+  get if() {
+    return this.nodeStmt;
+    //return this.#stmt;
+  }
 
-    }
+  toString() {
+    return "if(" + this.if.cond.code + ")";
+  }
 
-	get if() {
-		return this.nodeStmt;
-        //return this.#stmt;
-	}
-
-    toString() {
-        return "if(" + this.if.cond.code + ")";
-    }
-
-	isBranch() {
-		return true;
-	}
-
+  isBranch() {
+    return true;
+  }
 }
