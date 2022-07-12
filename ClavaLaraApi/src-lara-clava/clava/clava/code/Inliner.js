@@ -52,12 +52,12 @@ class Inliner {
 
       const newName = this.#getInlinedVarName($varDecl.name);
       const $newDecl = ClavaJoinPoints.varDeclNoInit(newName, $varDecl.type);
-      newVariableMap.push($varDecl.name, $newDecl);
+      newVariableMap.set($varDecl.name, $newDecl);
     }
 
     const $newNodes = $function.body.copy();
     for (const $declStmt of $newNodes.descendants("declStmt")) {
-      const $varDecl = stmt.decls[0];
+      const $varDecl = $declStmt.decls[0];
       if (!$varDecl.instanceOf("vardecl")) {
         continue;
       }
