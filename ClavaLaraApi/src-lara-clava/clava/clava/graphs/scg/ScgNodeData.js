@@ -1,3 +1,4 @@
+laraImport("weaver.Query");
 laraImport("lara.graphs.NodeData");
 
 class ScgNodeData extends NodeData {
@@ -24,5 +25,9 @@ class ScgNodeData extends NodeData {
    */
   hasImplementation() {
     return this.#function.isImplementation;
+  }
+
+  hasCalls() {
+    return Query.searchFrom(this.#function, "call").get().length > 0;
   }
 }
