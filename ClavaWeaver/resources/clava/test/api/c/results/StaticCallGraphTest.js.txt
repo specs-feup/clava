@@ -1,7 +1,7 @@
 Full graph
 digraph test {
 "node_0" [label="foo2()" shape=box];
-"node_1" [label="foo3()" shape=box];
+"node_1" [label="foo3()" shape=box style=dashed];
 "node_2" [label="foo1()" shape=box];
 "node_3" [label="bar1()" shape=box];
 "node_4" [label="rec()" shape=box];
@@ -18,7 +18,7 @@ digraph test {
 Function graph
 digraph test {
 "node_0" [label="foo1()" shape=box];
-"node_1" [label="foo2()" shape=box];
+"node_1" [label="foo2()" shape=box style=filled];
 "node_2" [label="bar1()" shape=box];
 "node_0" -> "node_1" [label="1"];
 "node_0" -> "node_2" [label="1"];
@@ -29,7 +29,7 @@ digraph test {
 "node_0" [label="foo1()" shape=box];
 "node_1" [label="foo2()" shape=box];
 "node_2" [label="bar1()" shape=box];
-"node_3" [label="foo3()" shape=box];
+"node_3" [label="foo3()" shape=box style=dashed];
 "node_0" -> "node_1" [label="1"];
 "node_0" -> "node_2" [label="1"];
 "node_1" -> "node_3" [label="1"];
@@ -40,8 +40,12 @@ digraph test {
 "node_0" [label="foo1()" shape=box];
 "node_1" [label="foo2()" shape=box];
 "node_2" [label="bar1()" shape=box];
-"node_3" [label="foo3()" shape=box];
+"node_3" [label="foo3()" shape=box style=dashed];
 "node_0" -> "node_1" [label="1"];
 "node_0" -> "node_2" [label="1"];
 "node_1" -> "node_3" [label="1"];
 }
+
+Full graph leaf nodes: foo3(),bar1()
+Function graph leaf nodes: foo2(),bar1()
+Function graph leaf nodes with implementation: foo2()
