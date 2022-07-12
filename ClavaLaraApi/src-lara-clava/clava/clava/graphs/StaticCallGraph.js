@@ -1,10 +1,14 @@
 laraImport("lara.graphs.Graphs");
-laraImport("weaver.Query");
+laraImport("lara.graphs.DotFormatter");
 laraImport("lara.util.StringSet");
+
+laraImport("weaver.Query");
 
 laraImport("clava.graphs.scg.StaticCallGraphBuilder");
 
 class StaticCallGraph {
+  static #dotFormatter = undefined;
+
   // The static call graph
   #graph;
 
@@ -41,5 +45,25 @@ class StaticCallGraph {
   getNode($function) {
     // Normalize function
     return this.#functions[$function.canonical.astId];
+  }
+
+  static get dotFormatter() {
+    if (StaticCallGraph.#dotFormatter === undefined) {
+      StaticCallGraph.#dotFormatter = new DotFormatter();
+      StaticCallGraph.#dotFormatter.addNodeAttribute(
+        "style=dashed",
+        (node) => Graphs.isLeafNode(node) && !node.data().hasImplementation()
+      );
+      StaticCallGraph.#dotFormatter.addNodeAttribute(
+        "style=filled",
+        (node) => Graphs.isLeafNode(node) && node.data().hasCalls()
+      );
+    }
+
+    return StaticCallGraph.#dotFormatter;
+  }
+
+  toDot() {
+    return Graphs.toDot(this.#graph, StaticCallGraph.dotFormatter);
   }
 }
