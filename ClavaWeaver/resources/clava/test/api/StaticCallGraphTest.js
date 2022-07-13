@@ -1,10 +1,5 @@
 laraImport("clava.graphs.StaticCallGraph");
 laraImport("lara.graphs.Graphs");
-laraImport("lara.graphs.DotFormatter");
-
-const dotFormatter = new DotFormatter();
-dotFormatter.addNodeAttribute("style=dashed", node => Graphs.isLeafNode(node) && !node.data().hasImplementation());
-dotFormatter.addNodeAttribute("style=filled", node => Graphs.isLeafNode(node) && node.data().hasCalls());
  
 
 var fullGraph = StaticCallGraph.build();
@@ -24,9 +19,9 @@ println("Function graph full");
 println(callGraphFull.toDot());
 
 // Get leaf nodes
-const fullLeafNodes = fullGraph.graph.nodes().filter(node => Graphs.isLeafNode(node));
+const fullLeafNodes = fullGraph.graph.nodes().filter(node => Graphs.isLeaf(node));
 println("Full graph leaf nodes: " + fullLeafNodes.map(node => node.data()))
 
-const functionLeafNodes = functionGraph.graph.nodes().filter(node => Graphs.isLeafNode(node));
+const functionLeafNodes = functionGraph.graph.nodes().filter(node => Graphs.isLeaf(node));
 println("Function graph leaf nodes: " + functionLeafNodes.map(node => node.data()))
 println("Function graph leaf nodes with implementation: " + functionLeafNodes.filter(node => node.data().hasCalls()).map(node => node.data()))

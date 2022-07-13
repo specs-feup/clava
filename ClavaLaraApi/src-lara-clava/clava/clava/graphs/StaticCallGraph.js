@@ -52,11 +52,11 @@ class StaticCallGraph {
       StaticCallGraph.#dotFormatter = new DotFormatter();
       StaticCallGraph.#dotFormatter.addNodeAttribute(
         "style=dashed",
-        (node) => Graphs.isLeafNode(node) && !node.data().hasImplementation()
+        (node) => Graphs.isLeaf(node) && !node.data().hasImplementation()
       );
       StaticCallGraph.#dotFormatter.addNodeAttribute(
         "style=filled",
-        (node) => Graphs.isLeafNode(node) && node.data().hasCalls()
+        (node) => Graphs.isLeaf(node) && node.data().hasCalls()
       );
     }
 
