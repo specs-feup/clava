@@ -14,7 +14,7 @@ class SingleReturnFunction extends Pass {
       ClavaJoinPoints;
 
     if (!$jp.instanceOf("function") || !$jp.isImplementation) {
-      return _new_result($jp, false);
+      return this.#new_result($jp, false);
     }
     const $body = $jp.body;
     const $returnStmts = Query.searchFrom($body, "returnStmt").get();
