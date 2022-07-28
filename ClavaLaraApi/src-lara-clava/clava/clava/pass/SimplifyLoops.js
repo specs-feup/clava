@@ -13,20 +13,20 @@ class SimplifyLoops extends Pass {
   /**
    *
    * @param {*} statementDecomposer
-   * @param {object} options - Object with options. Supported options: 'for-to-while' (default: true), transforms for loops into while loops
+   * @param {object} options - Object with options. Supported options: 'forToWhile' (default: true), transforms for loops into while loops
    */
   constructor(statementDecomposer, options) {
     super("SimplifyLoops");
     this.#statementDecomposer = statementDecomposer;
     this.#options = options ?? {};
-    this.#options["for-to-while"] ??= true;
+    this.#options["forToWhile"] ??= true;
   }
 
   _apply_impl($jp) {
     let appliedPass = false;
     for (const $loop of this._findLoops($jp)) {
       appliedPass = true;
-      if (this.#options["for-to-while"]) {
+      if (this.#options["forToWhile"]) {
         const $whileLoop = this.#makeWhileLoop($loop);
         this.#transform($whileLoop);
       } else {
