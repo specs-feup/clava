@@ -148,7 +148,7 @@ aspectdef checkForOpenMPCanonicalForm
 	else if (initVardecl.length == 1 && initVardecl[0].varType != 'int')
 		initmsgError.push('typeOf(' + initVardecl[0].name + ') must have int type, not ' +  initVardecl[0].varType);
 	else if (initVardecl.length == 1 && initVardecl[0].hasInit == false)
-		initmsgError.push(' declaration without variable initialization' );
+		initmsgError.push(' loop init-expr declaration without variable initialization' );
 
 	//------------------------------------------------------------
 	// checking loop init-expr  (var = lb)
