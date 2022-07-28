@@ -29,8 +29,6 @@ class SimplifyLoops extends Pass {
       if (this.#options["forToWhile"]) {
         const $whileLoop = this.#makeWhileLoop($loop);
         this.#transform($whileLoop);
-      } else {
-        this.#transform($loop);
       }
     }
 
