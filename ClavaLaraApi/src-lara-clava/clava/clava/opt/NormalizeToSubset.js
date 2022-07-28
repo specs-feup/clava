@@ -9,12 +9,13 @@ laraImport("clava.code.SimplifyAssignment");
 /**
  *
  * @param {$jp} $startJp
- * @param {object} options - Object with options. Supported options: 'simplifyloops' (default: {}), options for pass SimplifyLoops
+ * @param {object} options - Object with options. Supported options: 'simplifyLoops' (default: {}), options for pass SimplifyLoops
  */
 function NormalizeToSubset($startJp, options) {
   const _options = options;
   _options["simplifyLoops"] ??= {};
-
+  println("Opt normalize:");
+  printlnObject(_options);
   const declStmt = new DecomposeDeclStmt();
   const varDecls = new DecomposeVarDeclarations();
   const statementDecomposer = new StatementDecomposer();
