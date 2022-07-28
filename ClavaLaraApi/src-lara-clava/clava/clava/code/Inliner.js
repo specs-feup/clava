@@ -118,7 +118,9 @@ class Inliner {
 
     const newVariableMap = new Map();
     const paramDeclStmts = [];
-    for (let i = 0; i < args.length; i++) {
+
+    // TODO: args can be greater than params, if varargs. How to deal with this?
+    for (let i = 0; i < params.length; i++) {
       const $arg = args[i];
       const $param = params[i];
 
@@ -159,6 +161,24 @@ class Inliner {
     for (const $varRef of $newNodes.descendants("varref")) {
       if ($varRef.kind === "function_call") {
         continue;
+      }
+
+      const $varDecl = $varRef.decl;
+
+      // If global variable, will not be in the variable map
+      if ($varDecl.isGlobal) {
+        continue;
+      }
+
+      const newVar = newVariableMap.get($varDecl.name);
+      if (newVar === undefined) {
+        throw new Error(
+          "Could not find variable " +
+            $varDecl.name +
+            "@" +
+            $varRef.location +
+            " in variable map"
+        );
       }
 
       $varRef.replaceWith(
