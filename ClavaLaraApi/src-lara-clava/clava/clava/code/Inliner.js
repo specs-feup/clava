@@ -1,15 +1,22 @@
 laraImport("clava.ClavaJoinPoints");
 
 class Inliner {
-  #variablePrefix;
+  #options;
   #variableIndex;
-  constructor() {
+
+  /**
+   *
+   * @param  {object} options - Object with options. Supported options: 'prefix' (default: "__inline"), the prefix that will be used in the name of variables inserted by the Inliner
+   */
+  constructor(options) {
+    this.#options = options ?? {};
+    this.#options["prefix"] ??= "__inline";
     this.#variableIndex = 0;
-    this.#variablePrefix = "__inline";
   }
 
   #getInlinedVarName(originalVarName) {
-    return `${this.#variablePrefix}_${this.#variableIndex}_${originalVarName}`;
+    const prefix = this.#options["prefix"];
+    return `${prefix}_${this.#variableIndex}_${originalVarName}`;
   }
 
   #hasCycle($function, _path = new Set()) {
