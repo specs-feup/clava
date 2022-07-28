@@ -19,6 +19,7 @@ function Inlining(options) {
 
   for (const $function of Query.search("function", {
     name: (name) => name !== "main",
+    isImplementation: true, // Only inline if function has a body
   })) {
     PrepareForInlining($function);
   }
