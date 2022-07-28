@@ -13,7 +13,9 @@ class DecomposeVarDeclarations extends Pass {
   }
 
   matchJoinpoint($jp) {
-    return $jp.instanceOf("vardecl") && $jp.hasInit;
+    return (
+      $jp.instanceOf("vardecl") && $jp.hasInit && $jp.storageClass !== "static"
+    );
   }
 
   transformJoinpoint($vardecl) {

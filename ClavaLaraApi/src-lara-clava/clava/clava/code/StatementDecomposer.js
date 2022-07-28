@@ -167,7 +167,10 @@ class StatementDecomposer {
       return new DecomposeResult([], $expr);
     }
 
-    this.#throwNotImplemented("expressions", $expr.joinPointType);
+    debug(
+      `StatementDecomposer: decomposition not implemented for type ${$expr.joinPointType}. Returning '${$expr.code}'as is`
+    );
+    return new DecomposeResult([], $expr);
   }
 
   decomposeCall($call) {
