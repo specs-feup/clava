@@ -12,6 +12,73 @@ class Inliner {
     return `${this.#variablePrefix}_${this.#variableIndex}_${originalVarName}`;
   }
 
+  #hasCycle($function, _path = new Set()) {
+    if (_path.has($function.name)) {
+      return true;
+    }
+
+    _path.add($function.name);
+    for (const $exprStmt of $function.descendants("exprStmt")) {
+      const $expr = $exprStmt.expr;
+      if (
+        !(
+          $expr.instanceOf("binaryOp") &&
+          $expr.isAssignment &&
+          $expr.right.instanceOf("call")
+        ) &&
+        !$expr.instanceOf("call")
+      ) {
+        continue;
+      }
+
+      const $call = $expr.instanceOf("call") ? $expr : $expr.right;
+      const $callee = $call.definition;
+      if ($callee == undefined) {
+        continue;
+      }
+      if (this.#hasCycle($callee, _path)) {
+        return true;
+      }
+    }
+
+    _path.delete($function.name);
+    return false;
+  }
+
+  inlineFunctionTree($function, _visited = new Set()) {
+    if (this.#hasCycle($function)) {
+      return false;
+    }
+    if (_visited.has($function.name)) {
+      return true;
+    }
+    _visited.add($function.name);
+
+    for (const $exprStmt of $function.descendants("exprStmt")) {
+      const $expr = $exprStmt.expr;
+      if (
+        !(
+          $expr.instanceOf("binaryOp") &&
+          $expr.isAssignment &&
+          $expr.right.instanceOf("call")
+        ) &&
+        !$expr.instanceOf("call")
+      ) {
+        continue;
+      }
+
+      const $call = $expr.instanceOf("call") ? $expr : $expr.right;
+      const $callee = $call.definition;
+      if ($callee == undefined) {
+        continue;
+      }
+      this.inlineFunctionTree($callee, _visited);
+      this.inline($exprStmt);
+    }
+
+    return true;
+  }
+
   inline($exprStmt) {
     let $target;
     let $call;
@@ -23,12 +90,23 @@ class Inliner {
       $call = $exprStmt.expr;
     }
 
+    if (!$call.function.isImplementation) {
+      return;
+    }
+
     let args = $call.args;
     if (!Array.isArray(args)) {
       args = [args];
     }
 
     const $function = $call.function;
+
+    if ($function.descendants("returnStmt").length > 1) {
+      throw new Error(
+        `'${$function.name}' cannot be inlined: more than one return statement`
+      );
+    }
+
     const params = $function.params;
 
     const newVariableMap = new Map();
@@ -38,10 +116,14 @@ class Inliner {
       const $param = params[i];
 
       const newName = this.#getInlinedVarName($param.name);
-      const $varDecl = ClavaJoinPoints.varDecl(newName, $arg.copy());
+      const $varDecl = ClavaJoinPoints.varDeclNoInit(newName, $param.type);
+      const $varDeclStmt = ClavaJoinPoints.declStmt($varDecl);
+      const $init = ClavaJoinPoints.exprStmt(
+        ClavaJoinPoints.assign(ClavaJoinPoints.varRef($varDecl), $arg.copy())
+      );
 
       newVariableMap.set($param.name, $varDecl);
-      paramDeclStmts.push(ClavaJoinPoints.declStmt($varDecl));
+      paramDeclStmts.push($varDeclStmt, $init);
     }
 
     for (const stmt of $function.body.descendants("declStmt")) {
@@ -68,6 +150,10 @@ class Inliner {
     }
 
     for (const $varRef of $newNodes.descendants("varref")) {
+      if ($varRef.kind === "function_call") {
+        continue;
+      }
+
       $varRef.replaceWith(
         ClavaJoinPoints.varRef(newVariableMap.get($varRef.decl.name))
       );

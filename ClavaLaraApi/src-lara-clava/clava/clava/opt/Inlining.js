@@ -9,21 +9,12 @@ function Inlining() {
   const inliner = new Inliner();
 
   for (const $function of Query.search("function", {
-    self: ($f) => $f.isCanonical && $f.body.numChildren <= 2,
+    name: (name) => name !== "main",
   })) {
     PrepareForInlining($function);
-    for (const $call of Query.search("call", {
-      self: ($c) =>
-        $c.parent.instanceOf("binaryOp") &&
-        $c.parent.isAssignment &&
-        $c.parent.parent.instanceOf("exprStmt") &&
-        $c.function.name === $function.name,
-    })) {
-      const $function = $call.ancestor("function");
-      println($function.name);
+  }
 
-      const $exprStmt = $call.parent.parent;
-      inliner.inline($exprStmt);
-    }
+  for (const $function of Query.search("function", "main")) {
+    inliner.inlineFunctionTree($function);
   }
 }
