@@ -6,6 +6,7 @@ laraImport("clava.graphs.cfg.CfgNodeType");
 laraImport("clava.graphs.cfg.CfgEdge");
 laraImport("clava.graphs.cfg.CfgEdgeType");
 laraImport("clava.graphs.cfg.CfgUtils");
+laraImport("clava.graphs.cfg.NextCfgNode");
 laraImport("clava.graphs.cfg.nodedata.DataFactory");
 laraImport("clava.ClavaJoinPoints");
 
@@ -55,11 +56,17 @@ class CfgBuilder {
    */
   #dataFactory;
 
+  /**
+   * Calculates what node is unconditionally executed after a given statement
+   */
+  #nextNodes;
+
   constructor($jp, deterministicIds = false) {
     this.#jp = $jp;
     this.#deterministicIds = deterministicIds;
     this.#currentId = 0;
     this.#dataFactory = new DataFactory(this.#jp);
+    this.#nextNodes = new NextCfgNode(this.#jp);
 
     // Load graph library
     Graphs.loadLibrary();
@@ -221,7 +228,7 @@ class CfgBuilder {
           // However, if an arbitary statement is given as the starting point,
           // sometimes there might not be nothing after. In this case, connect to the
           // end node.
-          const after = CfgUtils.nextExecutedStmt(ifStmt, this.#jp);
+          const after = this.#nextNodes.nextExecutedStmt(ifStmt);
 
           const afterNode =
             after !== undefined ? this.#nodes.get(after.astId) : this.#endNode;
@@ -281,7 +288,7 @@ class CfgBuilder {
         );
 
         // False - next stmt of the loop
-        const $nextExecutedStmt = CfgUtils.nextExecutedStmt($loop, this.#jp);
+        const $nextExecutedStmt = this.#nextNodes.nextExecutedStmt($loop);
 
         // If undefined, there is no next statement
         const falseNode =
@@ -354,10 +361,7 @@ class CfgBuilder {
         //const stmts = node.data().getStmts();
         //const $lastStmt = stmts[stmts.length-1];
         const $lastStmt = node.data().getLastStmt();
-        const $nextExecutedStmt = CfgUtils.nextExecutedStmt(
-          $lastStmt,
-          this.#jp
-        );
+        const $nextExecutedStmt = this.#nextNodes.nextExecutedStmt($lastStmt);
 
         let afterNode = undefined;
         if ($nextExecutedStmt === undefined) {
