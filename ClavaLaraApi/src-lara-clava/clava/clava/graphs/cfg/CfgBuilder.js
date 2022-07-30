@@ -391,6 +391,16 @@ class CfgBuilder {
       let targetNode = undefined;
       for (const edge of edges) {
         if (edge.source().equals(node)) {
+          // Check
+          if (targetNode !== undefined && targetNode !== edge.target()) {
+            throw new Error(
+              "Found multiple targets, there should be only one: " +
+                targetNode +
+                "; " +
+                edge.target()
+            );
+          }
+
           targetNode = edge.target();
         }
       }
