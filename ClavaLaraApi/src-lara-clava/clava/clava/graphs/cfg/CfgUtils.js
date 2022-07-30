@@ -128,12 +128,17 @@ class CfgUtils {
   /**
    * @return the the next stmt that executes unconditionally after the given stmt, of undefined if no statement is executed
    */
-  static nextExecutedStmt($stmt) {
+  static nextExecutedStmt($stmt, $entryPoint) {
+    // By definition, there is no statement executed after the entry point
+    if ($stmt.equals($entryPoint)) {
+      return undefined;
+    }
+
     Check.isJoinPoint($stmt, "statement");
 
     // If stmt is a scope, there are several special cases
     if ($stmt.instanceOf("scope")) {
-      return CfgUtils.#nextExecutedStmtAfterScope($stmt);
+      return CfgUtils.#nextExecutedStmtAfterScope($stmt, $entryPoint);
     }
 
     const rightStmts = $stmt.siblingsRight;
@@ -147,7 +152,7 @@ class CfgUtils {
     const $parent = $stmt.parent;
 
     if ($parent.instanceOf("statement")) {
-      return CfgUtils.nextExecutedStmt($parent);
+      return CfgUtils.nextExecutedStmt($parent, $entryPoint);
     }
     // There are no more statements
     else if ($parent.instanceOf("function")) {
@@ -163,14 +168,14 @@ class CfgUtils {
   /**
    * @return the the next stmt that executes unconditionally after the given scope, of undefined if no statement is executed
    */
-  static #nextExecutedStmtAfterScope($scope) {
+  static #nextExecutedStmtAfterScope($scope, $entryPoint) {
     // Before returning what's next to the scope of the statement, there are some special cases
 
     // Check if scope is a then/else of an if
     const $scopeParent = $scope.parent;
     if ($scopeParent.instanceOf("if")) {
       // Next stmt is what comes next of if
-      return CfgUtils.nextExecutedStmt($scopeParent);
+      return CfgUtils.nextExecutedStmt($scopeParent, $entryPoint);
     }
 
     // Check if scope is the body of a loop
@@ -216,7 +221,7 @@ class CfgUtils {
     }
 
     // Return next statement of parent statement
-    return CfgUtils.nextExecutedStmt($scope.parent);
+    return CfgUtils.nextExecutedStmt($scope.parent, $entryPoint);
   }
 
   static getTarget(node, edgeType) {

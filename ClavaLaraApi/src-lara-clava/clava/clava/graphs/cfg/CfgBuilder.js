@@ -135,6 +135,15 @@ class CfgBuilder {
         // TODO: If INST_LIST, associate all other statements of the INST_LIST to the node?
       }
     }
+
+    // Special case: if starting node is a statement and a graph node was not created for it (e.g. creating a graph starting from an arbitrary statement),
+    // create one with the type INST_LIST
+    if (
+      this.#jp.instanceOf("statement") &&
+      this.#nodes.get(this.#jp.astId) === undefined
+    ) {
+      this._getOrAddNode(this.#jp, true, CfgNodeType.INST_LIST);
+    }
   }
 
   _connectNodes() {
@@ -152,6 +161,8 @@ class CfgBuilder {
     }
 
     let afterNode = this.#nodes.get(startAstNode.astId);
+
+    // Add edge
     Graphs.addEdge(
       this.#graph,
       this.#startNode,
@@ -200,10 +211,16 @@ class CfgBuilder {
             new CfgEdge(CfgEdgeType.FALSE)
           );
         } else {
-          // There should always be a sibling, because of inserted comments
-          const after = ifStmt.siblingsRight[0];
-          //println(after)
-          const afterNode = this.#nodes.get(after.astId);
+          // Usually there should always be a sibling, because of inserted comments
+          // However, if an arbitary statement is given as the starting point,
+          // sometimes there might not be nothing after. In this case, connect to the
+          // end node.
+          const after = CfgUtils.nextExecutedStmt(ifStmt, this.#jp);
+
+          const afterNode =
+            after !== undefined ? this.#nodes.get(after.astId) : this.#endNode;
+
+          // Add edge
           Graphs.addEdge(
             this.#graph,
             node,
@@ -258,8 +275,15 @@ class CfgBuilder {
         );
 
         // False - next stmt of the loop
-        const $nextExecutedStmt = CfgUtils.nextExecutedStmt($loop);
-        const falseNode = this.#nodes.get($nextExecutedStmt.astId);
+        const $nextExecutedStmt = CfgUtils.nextExecutedStmt($loop, this.#jp);
+
+        // If undefined, there is no next statement
+        const falseNode =
+          $nextExecutedStmt !== undefined
+            ? this.#nodes.get($nextExecutedStmt.astId)
+            : this.#endNode;
+
+        // Create edge
         Graphs.addEdge(
           this.#graph,
           node,
@@ -285,6 +309,7 @@ class CfgBuilder {
         }
 
         const afterNode = this.#nodes.get($condStmt.astId);
+
         Graphs.addEdge(
           this.#graph,
           node,
@@ -323,7 +348,10 @@ class CfgBuilder {
         //const stmts = node.data().getStmts();
         //const $lastStmt = stmts[stmts.length-1];
         const $lastStmt = node.data().getLastStmt();
-        const $nextExecutedStmt = CfgUtils.nextExecutedStmt($lastStmt);
+        const $nextExecutedStmt = CfgUtils.nextExecutedStmt(
+          $lastStmt,
+          this.#jp
+        );
 
         let afterNode = undefined;
         if ($nextExecutedStmt === undefined) {
@@ -492,13 +520,13 @@ class CfgBuilder {
   /**
    * Returns the node corresponding to this statement, or creates a new one if one does not exist yet.
    */
-  _getOrAddNode($stmt, create) {
+  _getOrAddNode($stmt, create, forceNodeType) {
     const _create = create ?? false;
     let node = this.#nodes.get($stmt.astId);
 
     // If there is not yet a node for this statement, create
     if (node === undefined && _create) {
-      const nodeType = CfgUtils.getNodeType($stmt);
+      const nodeType = forceNodeType ?? CfgUtils.getNodeType($stmt);
       const nodeId = this.#deterministicIds ? this.#nextId() : undefined;
 
       node = Graphs.addNode(
