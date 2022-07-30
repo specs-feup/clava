@@ -103,12 +103,6 @@ class CfgBuilder {
     Graphs.addEdge(this.#graph, source, target, new CfgEdge(edgeType));
   }
 
-  /*
-  static buildGraph($jp) {
-    return new CfgBuilder($jp).build();
-  }
-  */
-
   build() {
     this._addAuxComments();
     this._createNodes();
@@ -384,40 +378,13 @@ class CfgBuilder {
         continue;
       }
 
-      // Get edges of node
-      const edges = node.connectedEdges();
-
-      // Get target of this node
-      let targetNode = undefined;
-      for (const edge of edges) {
-        if (edge.source().equals(node)) {
-          // Check
-          if (targetNode !== undefined && targetNode !== edge.target()) {
-            throw new Error(
-              "Found multiple targets, there should be only one: " +
-                targetNode +
-                "; " +
-                edge.target()
-            );
-          }
-
-          targetNode = edge.target();
-        }
-      }
-
-      if (targetNode === undefined) {
-        throw new Error("Could not find target node of node " + node.data().id);
-      }
-
-      for (const edge of edges) {
-        // Add new connections for nodes that connect to this node
-        if (edge.target().equals(node)) {
-          this.#addEdge(edge.source(), targetNode, edge.data().type);
-        }
-      }
-
-      // Remove node
-      node.remove();
+      // Remove node, replacing the connections with a new connection of the same type and the incoming edge
+      // of the node being removed
+      Graphs.removeNode(
+        this.#graph,
+        node,
+        (incoming, outgoing) => new CfgEdge(incoming.data().type)
+      );
     }
   }
 
