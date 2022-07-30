@@ -1,15 +1,55 @@
 laraImport("lara.Check");
 
 class NextCfgNode {
+  /**
+   * The AST node to process
+   */
   #entryPoint;
 
-  constructor($entryPoint) {
+  /**
+   * Maps stmts to graph nodes
+   */
+  #nodes;
+
+  /**
+   * The end node of the graph
+   */
+  #endNode;
+
+  constructor($entryPoint, nodes, endNode) {
     checkDefined($entryPoint);
     this.#entryPoint = $entryPoint;
+    this.#nodes = nodes;
+    this.#endNode = endNode;
   }
 
   /**
-   * @return the the next stmt that executes unconditionally after the given stmt, of undefined if no statement is executed
+   *
+   * @param {$stmt} $stmt
+   *
+   * @returns the next graph node that executes unconditionally after the given stmt, or end node if no statement is executed
+   */
+  nextExecutedNode($stmt) {
+    const afterStmt = this.nextExecutedStmt($stmt);
+
+    // If after statement is undefined, return end node
+    if (afterStmt === undefined) {
+      return this.#endNode;
+    }
+
+    // Get node corresponding to the after statement
+    const afterNode = this.#nodes.get(afterStmt.astId);
+
+    // If the statement does not have an associated node, this means the next node is out of scope and should be considered the end node
+    if (afterNode === undefined) {
+      return this.#endNode;
+    }
+
+    return afterNode;
+  }
+
+  /**
+   * @return the next stmt that executes unconditionally after the given stmt, of undefined if no statement is executed
    */
   nextExecutedStmt($stmt) {
     // By definition, there is no statement executed after the entry point

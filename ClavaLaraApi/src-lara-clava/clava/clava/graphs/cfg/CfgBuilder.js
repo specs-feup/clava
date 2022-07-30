@@ -66,7 +66,6 @@ class CfgBuilder {
     this.#deterministicIds = deterministicIds;
     this.#currentId = 0;
     this.#dataFactory = new DataFactory(this.#jp);
-    this.#nextNodes = new NextCfgNode(this.#jp);
 
     // Load graph library
     Graphs.loadLibrary();
@@ -90,6 +89,7 @@ class CfgBuilder {
     //this.#nodes.set('END', this.#endNode)
 
     this.#temporaryStmts = {};
+    this.#nextNodes = new NextCfgNode(this.#jp, this.#nodes, this.#endNode);
   }
 
   #nextId() {
@@ -112,6 +112,11 @@ class CfgBuilder {
     this._connectNodes();
 
     this._cleanCfg();
+
+    // TODO: Check graph invariants
+    // 1. Each node has either one unconditional outgoing edge,
+    // or two outgoing edges that must be a pair true/false,
+    // or if there is no outgoing edge must be the end node
 
     return [this.#graph, this.#nodes, this.#startNode, this.#endNode];
   }
@@ -228,10 +233,7 @@ class CfgBuilder {
           // However, if an arbitary statement is given as the starting point,
           // sometimes there might not be nothing after. In this case, connect to the
           // end node.
-          const after = this.#nextNodes.nextExecutedStmt(ifStmt);
-
-          const afterNode =
-            after !== undefined ? this.#nodes.get(after.astId) : this.#endNode;
+          const afterNode = this.#nextNodes.nextExecutedNode(ifStmt);
 
           // Add edge
           Graphs.addEdge(
@@ -262,7 +264,8 @@ class CfgBuilder {
             throw new Error("Case not defined for loops of kind " + $loop.kind);
         }
 
-        const afterNode = this.#nodes.get(afterStmt.astId);
+        const afterNode = this.#nodes.get(afterStmt.astId) ?? this.#endNode;
+
         Graphs.addEdge(
           this.#graph,
           node,
@@ -279,7 +282,7 @@ class CfgBuilder {
 
         const kind = $loop.kind;
         // True - first stmt of the loop body
-        const trueNode = this.#nodes.get($loop.body.astId);
+        const trueNode = this.#nodes.get($loop.body.astId) ?? this.#endNode;
         Graphs.addEdge(
           this.#graph,
           node,
@@ -288,6 +291,8 @@ class CfgBuilder {
         );
 
         // False - next stmt of the loop
+        const falseNode = this.#nextNodes.nextExecutedNode($loop);
+        /*
         const $nextExecutedStmt = this.#nextNodes.nextExecutedStmt($loop);
 
         // If undefined, there is no next statement
@@ -295,7 +300,7 @@ class CfgBuilder {
           $nextExecutedStmt !== undefined
             ? this.#nodes.get($nextExecutedStmt.astId)
             : this.#endNode;
-
+*/
         // Create edge
         Graphs.addEdge(
           this.#graph,
@@ -321,7 +326,7 @@ class CfgBuilder {
           );
         }
 
-        const afterNode = this.#nodes.get($condStmt.astId);
+        const afterNode = this.#nodes.get($condStmt.astId) ?? this.#endNode;
 
         Graphs.addEdge(
           this.#graph,
@@ -347,7 +352,7 @@ class CfgBuilder {
           );
         }
 
-        const afterNode = this.#nodes.get($condStmt.astId);
+        const afterNode = this.#nodes.get($condStmt.astId) ?? this.#endNode;
         Graphs.addEdge(
           this.#graph,
           node,
@@ -361,6 +366,10 @@ class CfgBuilder {
         //const stmts = node.data().getStmts();
         //const $lastStmt = stmts[stmts.length-1];
         const $lastStmt = node.data().getLastStmt();
+
+        const afterNode = this.#nextNodes.nextExecutedNode($lastStmt);
+
+        /*
         const $nextExecutedStmt = this.#nextNodes.nextExecutedStmt($lastStmt);
 
         let afterNode = undefined;
@@ -372,6 +381,7 @@ class CfgBuilder {
             afterNode = this.#endNode;
           }
         }
+        */
 
         //println("Adding edge for node " + node.data().id)
         Graphs.addEdge(
