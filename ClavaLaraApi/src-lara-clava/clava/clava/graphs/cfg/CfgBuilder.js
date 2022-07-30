@@ -50,10 +50,16 @@ class CfgBuilder {
    */
   #currentId;
 
+  /**
+   * An instance of DataFactory, for creating graph node data
+   */
+  #dataFactory;
+
   constructor($jp, deterministicIds = false) {
     this.#jp = $jp;
     this.#deterministicIds = deterministicIds;
     this.#currentId = 0;
+    this.#dataFactory = new DataFactory(this.#jp);
 
     // Load graph library
     Graphs.loadLibrary();
@@ -67,12 +73,12 @@ class CfgBuilder {
     // Do not add them to #nodes, since they have no associated statements
     this.#startNode = Graphs.addNode(
       this.#graph,
-      DataFactory.newData(CfgNodeType.START, undefined, "start")
+      this.#dataFactory.newData(CfgNodeType.START, undefined, "start")
     );
     //this.#nodes.set('START', this.#startNode)
     this.#endNode = Graphs.addNode(
       this.#graph,
-      DataFactory.newData(CfgNodeType.END, undefined, "end")
+      this.#dataFactory.newData(CfgNodeType.END, undefined, "end")
     );
     //this.#nodes.set('END', this.#endNode)
 
@@ -531,7 +537,7 @@ class CfgBuilder {
 
       node = Graphs.addNode(
         this.#graph,
-        DataFactory.newData(nodeType, $stmt, nodeId)
+        this.#dataFactory.newData(nodeType, $stmt, nodeId)
       );
 
       // Associate all statements of graph node
