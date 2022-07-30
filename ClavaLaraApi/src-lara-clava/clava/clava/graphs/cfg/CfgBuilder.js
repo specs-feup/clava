@@ -98,6 +98,11 @@ class CfgBuilder {
     return nextId;
   }
 
+  #addEdge(source, target, edgeType) {
+    // Add edge
+    Graphs.addEdge(this.#graph, source, target, new CfgEdge(edgeType));
+  }
+
   /*
   static buildGraph($jp) {
     return new CfgBuilder($jp).build();
@@ -144,13 +149,8 @@ class CfgBuilder {
     // Test all statements for leadership
     // If they are leaders, create node
     for (const $stmt of Query.searchFromInclusive(this.#jp, "statement")) {
-      //println("Is leader?: " + CfgUtils.isLeader($stmt) + ' -> ' +$stmt.line);
-
       if (CfgUtils.isLeader($stmt)) {
         this._getOrAddNode($stmt, true);
-        //println("STMTS: " + newNode.data().stmts);
-
-        // TODO: If INST_LIST, associate all other statements of the INST_LIST to the node?
       }
     }
 
@@ -181,12 +181,7 @@ class CfgBuilder {
     let afterNode = this.#nodes.get(startAstNode.astId);
 
     // Add edge
-    Graphs.addEdge(
-      this.#graph,
-      this.#startNode,
-      afterNode,
-      new CfgEdge(CfgEdgeType.UNCONDITIONAL)
-    );
+    this.#addEdge(this.#startNode, afterNode, CfgEdgeType.UNCONDITIONAL);
 
     for (const astId of this.#nodes.keys()) {
       const node = this.#nodes.get(astId);
@@ -199,7 +194,6 @@ class CfgBuilder {
       const nodeType = node.data().type;
 
       if (nodeType === undefined) {
-        //printlnObject( node.data());
         throw new Error("Node type is undefined: ");
         //continue;
       }
@@ -211,23 +205,13 @@ class CfgBuilder {
         const thenStmt = ifStmt.then;
         const thenNode = this.#nodes.get(thenStmt.astId);
 
-        Graphs.addEdge(
-          this.#graph,
-          node,
-          thenNode,
-          new CfgEdge(CfgEdgeType.TRUE)
-        );
+        this.#addEdge(node, thenNode, CfgEdgeType.TRUE);
 
         const elseStmt = ifStmt.else;
 
         if (elseStmt !== undefined) {
           const elseNode = this.#nodes.get(elseStmt.astId);
-          Graphs.addEdge(
-            this.#graph,
-            node,
-            elseNode,
-            new CfgEdge(CfgEdgeType.FALSE)
-          );
+          this.#addEdge(node, elseNode, CfgEdgeType.FALSE);
         } else {
           // Usually there should always be a sibling, because of inserted comments
           // However, if an arbitary statement is given as the starting point,
@@ -236,12 +220,7 @@ class CfgBuilder {
           const afterNode = this.#nextNodes.nextExecutedNode(ifStmt);
 
           // Add edge
-          Graphs.addEdge(
-            this.#graph,
-            node,
-            afterNode,
-            new CfgEdge(CfgEdgeType.FALSE)
-          );
+          this.#addEdge(node, afterNode, CfgEdgeType.FALSE);
         }
       }
 
@@ -266,12 +245,7 @@ class CfgBuilder {
 
         const afterNode = this.#nodes.get(afterStmt.astId) ?? this.#endNode;
 
-        Graphs.addEdge(
-          this.#graph,
-          node,
-          afterNode,
-          new CfgEdge(CfgEdgeType.UNCONDITIONAL)
-        );
+        this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
       }
 
       if (nodeType === CfgNodeType.COND) {
@@ -283,31 +257,13 @@ class CfgBuilder {
         const kind = $loop.kind;
         // True - first stmt of the loop body
         const trueNode = this.#nodes.get($loop.body.astId) ?? this.#endNode;
-        Graphs.addEdge(
-          this.#graph,
-          node,
-          trueNode,
-          new CfgEdge(CfgEdgeType.TRUE)
-        );
+        this.#addEdge(node, trueNode, CfgEdgeType.TRUE);
 
         // False - next stmt of the loop
         const falseNode = this.#nextNodes.nextExecutedNode($loop);
-        /*
-        const $nextExecutedStmt = this.#nextNodes.nextExecutedStmt($loop);
 
-        // If undefined, there is no next statement
-        const falseNode =
-          $nextExecutedStmt !== undefined
-            ? this.#nodes.get($nextExecutedStmt.astId)
-            : this.#endNode;
-*/
         // Create edge
-        Graphs.addEdge(
-          this.#graph,
-          node,
-          falseNode,
-          new CfgEdge(CfgEdgeType.FALSE)
-        );
+        this.#addEdge(node, falseNode, CfgEdgeType.FALSE);
       }
 
       if (nodeType === CfgNodeType.INIT) {
@@ -327,13 +283,7 @@ class CfgBuilder {
         }
 
         const afterNode = this.#nodes.get($condStmt.astId) ?? this.#endNode;
-
-        Graphs.addEdge(
-          this.#graph,
-          node,
-          afterNode,
-          new CfgEdge(CfgEdgeType.UNCONDITIONAL)
-        );
+        this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
       }
 
       if (nodeType === CfgNodeType.STEP) {
@@ -353,43 +303,16 @@ class CfgBuilder {
         }
 
         const afterNode = this.#nodes.get($condStmt.astId) ?? this.#endNode;
-        Graphs.addEdge(
-          this.#graph,
-          node,
-          afterNode,
-          new CfgEdge(CfgEdgeType.UNCONDITIONAL)
-        );
+        this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
       }
 
       // INST_LIST NODE
       if (nodeType === CfgNodeType.INST_LIST) {
-        //const stmts = node.data().getStmts();
-        //const $lastStmt = stmts[stmts.length-1];
         const $lastStmt = node.data().getLastStmt();
 
         const afterNode = this.#nextNodes.nextExecutedNode($lastStmt);
 
-        /*
-        const $nextExecutedStmt = this.#nextNodes.nextExecutedStmt($lastStmt);
-
-        let afterNode = undefined;
-        if ($nextExecutedStmt === undefined) {
-          afterNode = this.#endNode;
-        } else {
-          afterNode = this.#nodes.get($nextExecutedStmt.astId);
-          if (afterNode === undefined) {
-            afterNode = this.#endNode;
-          }
-        }
-        */
-
-        //println("Adding edge for node " + node.data().id)
-        Graphs.addEdge(
-          this.#graph,
-          node,
-          afterNode,
-          new CfgEdge(CfgEdgeType.UNCONDITIONAL)
-        );
+        this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
       }
 
       // SCOPE_NODEs
@@ -398,18 +321,11 @@ class CfgBuilder {
         nodeType === CfgNodeType.THEN ||
         nodeType === CfgNodeType.ELSE
       ) {
-        //const stmts = node.data().getStmts();
         const $scope = node.data().scope;
 
         // Scope connects to its own first statement that will be an INST_LIST
         let afterNode = this.#nodes.get($scope.firstStmt.astId);
-
-        Graphs.addEdge(
-          this.#graph,
-          node,
-          afterNode,
-          new CfgEdge(CfgEdgeType.UNCONDITIONAL)
-        );
+        this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
       }
     }
   }
@@ -419,13 +335,6 @@ class CfgBuilder {
     for (const stmtId in this.#temporaryStmts) {
       this.#temporaryStmts[stmtId].detach();
     }
-
-    /*
-		println("Keys in nodes before:");
-		for(const key of this.#nodes.keys()) {
-			println("Key: " + key);
-		}
-		*/
 
     // Remove temporary instructions from the instList nodes and this.#nodes
     for (const node of this.#nodes.values()) {
@@ -454,31 +363,14 @@ class CfgBuilder {
         }
         // Otherwise, remove from this.#nodes
         else {
-          //					println("Deleting " + $stmt.astId);
-          //					println("Before: " + this.#nodes.get($stmt.astId));
-          //					println("Has: " + this.#nodes.has($stmt.astId));
           this.#nodes.delete($stmt.astId);
-          //					println("After: " + this.#nodes.get($stmt.astId));
-          //					println("Has: " + this.#nodes.has($stmt.astId));
         }
       }
 
-      //node.data().stmts.filter($stmt => this.#temporaryStmts[$stmt.astId] === undefined);
-
       if (filteredStmts.length !== node.data().stmts.length) {
-        //println("Replacing " + node.data().stmts + " with " + filteredStmts);
         node.data().stmts = filteredStmts;
       }
-
-      //println("Node: " + node);
     }
-
-    /*
-		println("Keys in nodes after:");
-		for(const key of this.#nodes.keys()) {
-			println("Key: " + key);
-		}
-		*/
 
     // Remove empty instList CFG nodes
     for (const node of this.#graph.nodes()) {
@@ -500,7 +392,6 @@ class CfgBuilder {
       for (const edge of edges) {
         if (edge.source().equals(node)) {
           targetNode = edge.target();
-          //println("Target node: " + targetNode.data());
         }
       }
 
@@ -511,30 +402,13 @@ class CfgBuilder {
       for (const edge of edges) {
         // Add new connections for nodes that connect to this node
         if (edge.target().equals(node)) {
-          Graphs.addEdge(
-            this.#graph,
-            edge.source(),
-            targetNode,
-            new CfgEdge(edge.data().type)
-          );
+          this.#addEdge(edge.source(), targetNode, edge.data().type);
         }
-
-        //println("Edge: " + edge);
-        //println("Edge source: " + edge.source().data());
-        //println("Edge target: " + edge.target().data());
       }
 
       // Remove node
       node.remove();
-      //println("REMOVE NODE: " + node.data());
     }
-
-    /*
-		// Add link to node in data()
-		for(const node of this.#graph.nodes()) {
-			node.data().node = node;
-		}
-		*/
   }
 
   /**
@@ -566,10 +440,8 @@ class CfgBuilder {
           );
         }
 
-        //println("Adding " + $nodeStmt.astId + " to node " + node.data().id);
         this.#nodes.set($nodeStmt.astId, node);
       }
-      //this.#nodes.set($stmt.astId, node);
     } else {
       throw new Error("No node for statement at line " + $stmt.line);
     }
