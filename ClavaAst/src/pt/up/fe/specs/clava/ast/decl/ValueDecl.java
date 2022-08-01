@@ -14,12 +14,14 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.collections.SpecsList;
@@ -58,6 +60,19 @@ public abstract class ValueDecl extends NamedDecl implements Typable {
     @Override
     public void setType(Type type) {
         set(TYPE, type);
+    }
+
+    @Override
+    public Optional<AdjustedType> getAdjustedType() {
+        if (!hasValue(ADJUSTED_TYPE)) {
+            return Optional.empty();
+        }
+        return get(ADJUSTED_TYPE);
+    }
+
+    @Override
+    public void setAdjustedType(AdjustedType type) {
+        set(ADJUSTED_TYPE, Optional.of(type));
     }
 
     @Override

@@ -13,7 +13,13 @@
 
 package pt.up.fe.specs.clava.utils;
 
+import java.util.Optional;
+
+import org.suikasoft.jOptions.Datakey.DataKey;
+import org.suikasoft.jOptions.Datakey.KeyFactory;
+
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.Type;
 
 /**
@@ -23,6 +29,12 @@ import pt.up.fe.specs.clava.ast.type.Type;
  *
  */
 public interface Typable {
+
+    /**
+     * If the type was adjusted, the field contains the adjusted type
+     */
+    final static DataKey<Optional<AdjustedType>> ADJUSTED_TYPE = KeyFactory
+            .optional("adjustedType");
 
     Type getType();
 
@@ -35,4 +47,26 @@ public interface Typable {
     default String getTypeCode(String name) {
         return getType().getCode((ClavaNode) this, name);
     }
+
+    Optional<AdjustedType> getAdjustedType();
+
+    void setAdjustedType(AdjustedType type);
+
+    // <K> K get(DataKey<K> key);
+    //
+    // <K, E extends K, T extends DataClass<T>> T set(DataKey<K> key, E value);
+    //
+    // <VT> boolean hasValue(DataKey<VT> key);
+
+    // default Optional<AdjustedType> getAdjustedType() {
+    // if (!hasValue(ADJUSTED_TYPE)) {
+    // return Optional.empty();
+    // }
+    // return get(ADJUSTED_TYPE);
+    // }
+    //
+    // default void setAdjustedType(AdjustedType type) {
+    // set(ADJUSTED_TYPE, Optional.of(type));
+    // }
+
 }
