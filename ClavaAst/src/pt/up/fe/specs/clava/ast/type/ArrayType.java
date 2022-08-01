@@ -57,6 +57,33 @@ public abstract class ArrayType extends Type {
      */
     abstract protected String getArrayCode();
 
+    /**
+     * 
+     * @return an integer with the size of the array, of -1 if the size is not fixed and/or available statically
+     */
+    public int getConstant() {
+        return -1;
+    }
+
+    public List<Integer> getArrayDims() {
+
+        List<Integer> dims = new ArrayList<>();
+        getArrayDims(dims);
+        return dims;
+    }
+
+    private void getArrayDims(List<Integer> dims) {
+        dims.add(getConstant());
+
+        var elementType = getElementType();
+
+        if (!(elementType instanceof ArrayType)) {
+            return;
+        }
+
+        ((ArrayType) elementType).getArrayDims(dims);
+    }
+
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
         String nameCode = name == null ? "" : name;

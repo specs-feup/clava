@@ -29,4 +29,5 @@ public class IncompleteArrayType extends ArrayType {
     protected String getArrayCode() {
         return "";
     }
+
 }
