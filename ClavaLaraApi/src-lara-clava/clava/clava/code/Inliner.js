@@ -86,6 +86,27 @@ class Inliner {
     return true;
   }
 
+  #getInitStmts($vardecl, $expr) {
+    const type = $vardecl.type;
+
+    // If array, treat differently
+    if (type.isArray) {
+      const $assign = ClavaJoinPoints.assign(
+        ClavaJoinPoints.varRef($vardecl),
+        $expr
+      );
+
+      return [ClavaJoinPoints.exprStmt($assign)];
+    }
+
+    const $assign = ClavaJoinPoints.assign(
+      ClavaJoinPoints.varRef($vardecl),
+      $expr
+    );
+
+    return [ClavaJoinPoints.exprStmt($assign)];
+  }
+
   inline($exprStmt) {
     let $target;
     let $call;
@@ -127,12 +148,25 @@ class Inliner {
       const newName = this.#getInlinedVarName($param.name);
       const $varDecl = ClavaJoinPoints.varDeclNoInit(newName, $param.type);
       const $varDeclStmt = ClavaJoinPoints.declStmt($varDecl);
-      const $init = ClavaJoinPoints.exprStmt(
-        ClavaJoinPoints.assign(ClavaJoinPoints.varRef($varDecl), $arg.copy())
-      );
+
+      const $initStmts = this.#getInitStmts($varDecl, $arg);
+      //const $init = ClavaJoinPoints.exprStmt(
+      //  ClavaJoinPoints.assign(ClavaJoinPoints.varRef($varDecl), $arg.copy())
+      //);
+
+      if ($varDecl.type.isArray) {
+        println("Vardecl: " + $varDecl.code);
+        println("Vardecl type: " + $varDecl.type);
+        println("Array dims: " + $varDecl.type.arrayDims);
+        println("Array size: " + $varDecl.type.arraySize);
+      }
 
       newVariableMap.set($param.name, $varDecl);
-      paramDeclStmts.push($varDeclStmt, $init);
+      paramDeclStmts.push($varDeclStmt, ...$initStmts);
+
+      //const $init = ClavaJoinPoints.exprStmt(
+      //  ClavaJoinPoints.assign(ClavaJoinPoints.varRef($varDecl), $arg.copy())
+      //);
     }
 
     for (const stmt of $function.body.descendants("declStmt")) {
