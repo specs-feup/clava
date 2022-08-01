@@ -10,6 +10,15 @@ println(Graphs.toDot(cfg.graph));
 verifyGraph(cfg)
 println("Verification done")
 
+// Stress test
+for(const $stmt of Query.search("function", "foo").search("statement")) {
+//	println("CFG for stmt:\n" + $stmt.code)
+//	const smallCfg = 
+	ControlFlowGraph.build($stmt, true);	
+//	println(Graphs.toDot(smallCfg.graph));
+}
+
+
 
 function verifyGraph(cfg) {
 	for(const node of cfg.graph.nodes()) {

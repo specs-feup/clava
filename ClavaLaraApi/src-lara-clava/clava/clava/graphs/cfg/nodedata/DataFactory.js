@@ -7,10 +7,18 @@ laraImport("clava.graphs.cfg.nodedata.HeaderData");
 laraImport("clava.graphs.cfg.nodedata.IfData");
 
 class DataFactory {
-  static newData(cfgNodeType, $stmt, id) {
+  #entryPoint;
+
+  constructor($entryPoint) {
+    checkDefined($entryPoint);
+
+    this.#entryPoint = $entryPoint;
+  }
+
+  newData(cfgNodeType, $stmt, id) {
     switch (cfgNodeType) {
       case CfgNodeType.INST_LIST:
-        return new InstListNodeData($stmt, id);
+        return new InstListNodeData($stmt, id, this.#entryPoint);
       case CfgNodeType.THEN:
       case CfgNodeType.ELSE:
       case CfgNodeType.SCOPE:
