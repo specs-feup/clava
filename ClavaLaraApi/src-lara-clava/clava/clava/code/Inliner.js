@@ -56,6 +56,7 @@ class Inliner {
     if (this.#hasCycle($function)) {
       return false;
     }
+
     if (_visited.has($function.name)) {
       return true;
     }
@@ -79,6 +80,20 @@ class Inliner {
       if ($callee == undefined) {
         continue;
       }
+
+      // If any of the parameters of the function is an array, return.
+      // Not supported yet
+      if ($callee.params.filter(($param) => $param.type.isArray).length > 0) {
+        debug(
+          "Inliner: could not inline call to function " +
+            $callee.name +
+            "@" +
+            $callee.location +
+            " since array parameters not supported"
+        );
+        continue;
+      }
+
       this.inlineFunctionTree($callee, _visited);
       this.inline($exprStmt);
     }
@@ -86,21 +101,41 @@ class Inliner {
     return true;
   }
 
-  #getInitStmts($vardecl, $expr) {
-    const type = $vardecl.type;
+  #getInitStmts($varDecl, $expr) {
+    const type = $varDecl.type;
 
-    // If array, treat differently
+    // If array, how to deal with this?
+    /*
     if (type.isArray) {
+      const arrayDims = $varDecl.type.arrayDims;
+      const lastDim = arrayDims[arrayDims.length - 1];
+
+      if (lastDim < 0) {
+        throw new Error(
+          "Could not inline code with static array '" +
+            $varDecl.code +
+            "' whose last dimension is unknown (" +
+            lastDim +
+            ")"
+        );
+      }
+
+      println("Vardecl: " + $varDecl.code);
+      println("Vardecl type: " + $varDecl.type);
+      println("Array dims: " + $varDecl.type.arrayDims);
+      println("Array size: " + $varDecl.type.arraySize);
+      
       const $assign = ClavaJoinPoints.assign(
-        ClavaJoinPoints.varRef($vardecl),
+        ClavaJoinPoints.varRef($varDecl),
         $expr
       );
 
       return [ClavaJoinPoints.exprStmt($assign)];
     }
+    */
 
     const $assign = ClavaJoinPoints.assign(
-      ClavaJoinPoints.varRef($vardecl),
+      ClavaJoinPoints.varRef($varDecl),
       $expr
     );
 
@@ -150,23 +185,9 @@ class Inliner {
       const $varDeclStmt = ClavaJoinPoints.declStmt($varDecl);
 
       const $initStmts = this.#getInitStmts($varDecl, $arg);
-      //const $init = ClavaJoinPoints.exprStmt(
-      //  ClavaJoinPoints.assign(ClavaJoinPoints.varRef($varDecl), $arg.copy())
-      //);
-
-      if ($varDecl.type.isArray) {
-        println("Vardecl: " + $varDecl.code);
-        println("Vardecl type: " + $varDecl.type);
-        println("Array dims: " + $varDecl.type.arrayDims);
-        println("Array size: " + $varDecl.type.arraySize);
-      }
 
       newVariableMap.set($param.name, $varDecl);
       paramDeclStmts.push($varDeclStmt, ...$initStmts);
-
-      //const $init = ClavaJoinPoints.exprStmt(
-      //  ClavaJoinPoints.assign(ClavaJoinPoints.varRef($varDecl), $arg.copy())
-      //);
     }
 
     for (const stmt of $function.body.descendants("declStmt")) {
