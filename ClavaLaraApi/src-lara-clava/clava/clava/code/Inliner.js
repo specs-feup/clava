@@ -85,11 +85,7 @@ class Inliner {
       // Not supported yet
       if ($callee.params.filter(($param) => $param.type.isArray).length > 0) {
         debug(
-          "Inliner: could not inline call to function " +
-            $callee.name +
-            "@" +
-            $callee.location +
-            " since array parameters not supported"
+          `Inliner: could not inline call to function ${$callee.name}@${$callee.location} since array parameters are not supported`
         );
         continue;
       }
