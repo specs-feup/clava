@@ -14,9 +14,7 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -52,6 +50,7 @@ public class ConstantArrayType extends ArrayType {
         super(data, children);
     }
 
+    @Override
     public int getConstant() {
         return get(ARRAY_SIZE).intValue();
     }
@@ -60,24 +59,24 @@ public class ConstantArrayType extends ArrayType {
         return (int) SpecsMath.multiply(getArrayDims());
     }
 
-    public List<Integer> getArrayDims() {
-
-        List<Integer> dims = new ArrayList<>();
-        getArrayDims(dims);
-        return dims;
-    }
-
-    private void getArrayDims(List<Integer> dims) {
-        dims.add(getConstant());
-
-        var elementType = getElementType();
-
-        if (!(elementType instanceof ConstantArrayType)) {
-            return;
-        }
-
-        ((ConstantArrayType) elementType).getArrayDims(dims);
-    }
+    // public List<Integer> getArrayDims() {
+    //
+    // List<Integer> dims = new ArrayList<>();
+    // getArrayDims(dims);
+    // return dims;
+    // }
+    //
+    // private void getArrayDims(List<Integer> dims) {
+    // dims.add(getConstant());
+    //
+    // var elementType = getElementType();
+    //
+    // if (!(elementType instanceof ConstantArrayType)) {
+    // return;
+    // }
+    //
+    // ((ConstantArrayType) elementType).getArrayDims(dims);
+    // }
 
     @Override
     protected String getArrayCode() {

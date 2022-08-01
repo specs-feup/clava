@@ -27,6 +27,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
+import pt.up.fe.specs.clava.ast.type.ArrayType;
 import pt.up.fe.specs.clava.ast.type.BuiltinType;
 import pt.up.fe.specs.clava.ast.type.ConstantArrayType;
 import pt.up.fe.specs.clava.ast.type.Type;
@@ -64,11 +65,11 @@ public class CxxType extends AType {
 
     @Override
     public Integer[] getArrayDimsArrayImpl() {
-        if (!(type instanceof ConstantArrayType)) {
+        if (!(type instanceof ArrayType)) {
             return new Integer[0];
         }
 
-        return ((ConstantArrayType) type).getArrayDims().toArray(new Integer[0]);
+        return ((ArrayType) type).getArrayDims().toArray(new Integer[0]);
     }
     /*
     @Override
