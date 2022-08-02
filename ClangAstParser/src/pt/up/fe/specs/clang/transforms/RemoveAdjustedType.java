@@ -22,6 +22,9 @@ import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 /**
  * Replaces AdjustedType nodes, which are inserted when there are semantic conversions, with the original type nodes.
  * 
+ * <p>
+ * TODO: This transformation breaks CTest.testInline, because it breaks getting to the function implementation from the
+ * function declaration
  * 
  * @author JoaoBispo
  *
@@ -44,9 +47,9 @@ public class RemoveAdjustedType implements SimplePreClavaRule {
         }
 
         var adjustedType = (AdjustedType) type;
-
+        // System.out.println("ADJUSTED TYPE: " + adjustedType.getCode());
         var originalType = adjustedType.getOriginalType();
-
+        // System.out.println("ORIGINAL TYPE: " + originalType.getCode());
         // Set the type of the current node as being the original type
         typableNode.setType(originalType);
 
