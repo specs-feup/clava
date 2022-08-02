@@ -39,14 +39,14 @@ public class CxxAdjustedType extends AAdjustedType {
         return CxxJoinpoints.create(adjustedType.get(AdjustedType.ORIGINAL_TYPE), AType.class);
     }
 
-    // @Override
-    // public Integer[] getArrayDimsArrayImpl() {
-    // return getOriginalTypeImpl().getArrayDimsArrayImpl();
-    // }
-    //
-    // @Override
-    // public Integer getArraySizeImpl() {
-    // return getOriginalTypeImpl().getArraySizeImpl();
-    // }
+    @Override
+    public Integer[] getArrayDimsArrayImpl() {
+        return getOriginalTypeImpl().getArrayDimsArrayImpl();
+    }
+
+    @Override
+    public Integer getArraySizeImpl() {
+        return getOriginalTypeImpl().getArraySizeImpl();
+    }
 
 }
