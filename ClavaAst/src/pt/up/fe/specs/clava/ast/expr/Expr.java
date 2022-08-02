@@ -26,6 +26,7 @@ import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.expr.enums.ExprUse;
 import pt.up.fe.specs.clava.ast.expr.enums.ObjectKind;
 import pt.up.fe.specs.clava.ast.expr.enums.ValueKind;
+import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.utils.Typable;
 
@@ -63,12 +64,26 @@ public abstract class Expr extends ClavaNode implements Typable {
     @Override
     public Type getType() {
         return get(TYPE).orElse(null);
+        // return get(TYPE);
     }
 
     @Override
     public void setType(Type type) {
         // set(TYPE, type);
         set(TYPE, Optional.of(type));
+    }
+
+    @Override
+    public Optional<AdjustedType> getAdjustedType() {
+        if (!hasValue(ADJUSTED_TYPE)) {
+            return Optional.empty();
+        }
+        return get(ADJUSTED_TYPE);
+    }
+
+    @Override
+    public void setAdjustedType(AdjustedType type) {
+        set(ADJUSTED_TYPE, Optional.of(type));
     }
 
     public Optional<Type> getExprTypeTry() {

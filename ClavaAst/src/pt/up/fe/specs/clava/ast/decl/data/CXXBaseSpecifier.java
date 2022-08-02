@@ -13,12 +13,15 @@
 
 package pt.up.fe.specs.clava.ast.decl.data;
 
+import java.util.Optional;
+
 import org.suikasoft.jOptions.DataStore.ADataClass;
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.ast.type.TemplateSpecializationType;
 import pt.up.fe.specs.clava.ast.type.TemplateTypeParmType;
@@ -67,6 +70,19 @@ public class CXXBaseSpecifier extends ADataClass<CXXBaseSpecifier> implements Ty
     @Override
     public void setType(Type type) {
         set(TYPE, type);
+    }
+
+    @Override
+    public Optional<AdjustedType> getAdjustedType() {
+        if (!hasValue(ADJUSTED_TYPE)) {
+            return Optional.empty();
+        }
+        return get(ADJUSTED_TYPE);
+    }
+
+    @Override
+    public void setAdjustedType(AdjustedType type) {
+        set(ADJUSTED_TYPE, Optional.of(type));
     }
 
     /**

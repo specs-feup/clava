@@ -40,6 +40,7 @@ import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.FlattenSubStmtNodes;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
 import pt.up.fe.specs.clang.transforms.ProcessCudaNodes;
+import pt.up.fe.specs.clang.transforms.RemoveAdjustedType;
 import pt.up.fe.specs.clang.transforms.RemoveClangOmpNodes;
 import pt.up.fe.specs.clang.transforms.RemoveExtraNodes;
 import pt.up.fe.specs.clang.transforms.RemovePoison;
@@ -84,6 +85,7 @@ public class ClangAstParser {
 
             new DeleteTemplateSpecializations(),
             new RemoveExtraNodes(),
+            new RemoveAdjustedType(),
             // new RemoveClangComments(),
             new CreateDeclStmts(),
             new MoveImplicitCasts(),

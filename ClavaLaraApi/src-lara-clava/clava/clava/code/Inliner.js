@@ -1,15 +1,22 @@
 laraImport("clava.ClavaJoinPoints");
 
 class Inliner {
-  #variablePrefix;
+  #options;
   #variableIndex;
-  constructor() {
+
+  /**
+   *
+   * @param  {object} options - Object with options. Supported options: 'prefix' (default: "__inline"), the prefix that will be used in the name of variables inserted by the Inliner
+   */
+  constructor(options) {
+    this.#options = options ?? {};
+    this.#options["prefix"] ??= "__inline";
     this.#variableIndex = 0;
-    this.#variablePrefix = "__inline";
   }
 
   #getInlinedVarName(originalVarName) {
-    return `${this.#variablePrefix}_${this.#variableIndex}_${originalVarName}`;
+    const prefix = this.#options["prefix"];
+    return `${prefix}_${this.#variableIndex}_${originalVarName}`;
   }
 
   #hasCycle($function, _path = new Set()) {
@@ -49,6 +56,7 @@ class Inliner {
     if (this.#hasCycle($function)) {
       return false;
     }
+
     if (_visited.has($function.name)) {
       return true;
     }
@@ -72,11 +80,62 @@ class Inliner {
       if ($callee == undefined) {
         continue;
       }
+
+      // If any of the parameters of the function is an array, return.
+      // Not supported yet
+      if ($callee.params.filter(($param) => $param.type.isArray).length > 0) {
+        debug(
+          `Inliner: could not inline call to function ${$callee.name}@${$callee.location} since array parameters are not supported`
+        );
+        continue;
+      }
+
       this.inlineFunctionTree($callee, _visited);
       this.inline($exprStmt);
     }
 
     return true;
+  }
+
+  #getInitStmts($varDecl, $expr) {
+    const type = $varDecl.type;
+
+    // If array, how to deal with this?
+    /*
+    if (type.isArray) {
+      const arrayDims = $varDecl.type.arrayDims;
+      const lastDim = arrayDims[arrayDims.length - 1];
+
+      if (lastDim < 0) {
+        throw new Error(
+          "Could not inline code with static array '" +
+            $varDecl.code +
+            "' whose last dimension is unknown (" +
+            lastDim +
+            ")"
+        );
+      }
+
+      println("Vardecl: " + $varDecl.code);
+      println("Vardecl type: " + $varDecl.type);
+      println("Array dims: " + $varDecl.type.arrayDims);
+      println("Array size: " + $varDecl.type.arraySize);
+      
+      const $assign = ClavaJoinPoints.assign(
+        ClavaJoinPoints.varRef($varDecl),
+        $expr
+      );
+
+      return [ClavaJoinPoints.exprStmt($assign)];
+    }
+    */
+
+    const $assign = ClavaJoinPoints.assign(
+      ClavaJoinPoints.varRef($varDecl),
+      $expr
+    );
+
+    return [ClavaJoinPoints.exprStmt($assign)];
   }
 
   inline($exprStmt) {
@@ -111,19 +170,20 @@ class Inliner {
 
     const newVariableMap = new Map();
     const paramDeclStmts = [];
-    for (let i = 0; i < args.length; i++) {
+
+    // TODO: args can be greater than params, if varargs. How to deal with this?
+    for (let i = 0; i < params.length; i++) {
       const $arg = args[i];
       const $param = params[i];
 
       const newName = this.#getInlinedVarName($param.name);
       const $varDecl = ClavaJoinPoints.varDeclNoInit(newName, $param.type);
       const $varDeclStmt = ClavaJoinPoints.declStmt($varDecl);
-      const $init = ClavaJoinPoints.exprStmt(
-        ClavaJoinPoints.assign(ClavaJoinPoints.varRef($varDecl), $arg.copy())
-      );
+
+      const $initStmts = this.#getInitStmts($varDecl, $arg);
 
       newVariableMap.set($param.name, $varDecl);
-      paramDeclStmts.push($varDeclStmt, $init);
+      paramDeclStmts.push($varDeclStmt, ...$initStmts);
     }
 
     for (const stmt of $function.body.descendants("declStmt")) {
@@ -152,6 +212,24 @@ class Inliner {
     for (const $varRef of $newNodes.descendants("varref")) {
       if ($varRef.kind === "function_call") {
         continue;
+      }
+
+      const $varDecl = $varRef.decl;
+
+      // If global variable, will not be in the variable map
+      if ($varDecl.isGlobal) {
+        continue;
+      }
+
+      const newVar = newVariableMap.get($varDecl.name);
+      if (newVar === undefined) {
+        throw new Error(
+          "Could not find variable " +
+            $varDecl.name +
+            "@" +
+            $varRef.location +
+            " in variable map"
+        );
       }
 
       $varRef.replaceWith(

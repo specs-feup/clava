@@ -7,19 +7,29 @@ laraImport("weaver.Query");
 
 class SimplifyLoops extends Pass {
   #statementDecomposer;
+  #options;
   #label_suffix = 0;
 
-  constructor(statementDecomposer) {
+  /**
+   *
+   * @param {*} statementDecomposer
+   * @param {object} options - Object with options. Supported options: 'forToWhile' (default: true), transforms for loops into while loops
+   */
+  constructor(statementDecomposer, options) {
     super("SimplifyLoops");
     this.#statementDecomposer = statementDecomposer;
+    this.#options = options ?? {};
+    this.#options["forToWhile"] ??= true;
   }
 
   _apply_impl($jp) {
     let appliedPass = false;
     for (const $loop of this._findLoops($jp)) {
       appliedPass = true;
-      const $whileLoop = this.#makeWhileLoop($loop);
-      this.#transform($whileLoop);
+      if (this.#options["forToWhile"]) {
+        const $whileLoop = this.#makeWhileLoop($loop);
+        this.#transform($whileLoop);
+      }
     }
 
     return new PassResult(this.name, {

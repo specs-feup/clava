@@ -22,6 +22,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
@@ -62,6 +63,19 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
     @Override
     public void setType(Type type) {
         set(TYPE_FOR_DECL, Optional.of(type));
+    }
+
+    @Override
+    public Optional<AdjustedType> getAdjustedType() {
+        if (!hasValue(ADJUSTED_TYPE)) {
+            return Optional.empty();
+        }
+        return get(ADJUSTED_TYPE);
+    }
+
+    @Override
+    public void setAdjustedType(AdjustedType type) {
+        set(ADJUSTED_TYPE, Optional.of(type));
     }
 
     @Override
