@@ -9,11 +9,15 @@ var oldFunction_JP_TYPES = FunctionJp._JP_TYPES;
 FunctionJp = function(astNode, getDefinition) {
 	// By default, it gets the definition
 	getDefinition = typeof getDefinition !== 'undefined' ? getDefinition : true;
-
+	
 	// check for definition
+	// Update: No longer required, filtering is done at Selector._addJps
+	// If both a prototype and a definition are present, only the definition arrives here;
+	// If a prototype arrives here, it is because there is no definition
 	this.originalAstNode = astNode;
-	if(astNode.getDefinition().isPresent() && getDefinition)
-		astNode = astNode.getDefinition().get();
+	//if(astNode.getDefinition().isPresent() && getDefinition) {
+	//	astNode = astNode.getDefinition().get();
+	//}
 		
 	// Parent constructor
     DeclJp.call(this,astNode);
