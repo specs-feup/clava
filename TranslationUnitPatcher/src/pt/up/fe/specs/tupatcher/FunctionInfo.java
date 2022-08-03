@@ -140,7 +140,7 @@ public class FunctionInfo implements Definition {
         result += getFunctionBody();
 
         result += ";}\n";
-        System.out.println("RESULT: " + result);
+
         return result;
 
     }
@@ -159,19 +159,38 @@ public class FunctionInfo implements Definition {
 
         String returnTypeName = returnType.getKind().replace(" &", "");
 
+        // If return type is a pointer, just return 0
+        if (returnTypeName.contains("*")) {
+            return "return 0";
+        }
+
+        /*
         if (returnTypeName.contains("struct ")) {
             result.append(" " + returnTypeName.replace("*", "") + " x = {};");
         } else {
             result.append(" " + returnTypeName.replace("*", "") + " x = "
                     + returnTypeName.replace("*", "").replace("const ", "") + "();");
+        
+        }
+        */
+
+        if (returnTypeName.contains("struct ")) {
+            result.append(" " + returnTypeName + " x = {};");
+        } else {
+            result.append(" " + returnTypeName + " x = "
+                    + returnTypeName.replace("const ", "") + "();");
 
         }
 
+        /*
         if (returnTypeName.contains("*")) {
             result.append(" return &x");
         } else {
             result.append(" return x");
         }
+        */
+
+        result.append(" return x");
 
         return result.toString();
     }
