@@ -550,7 +550,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         builder.append("(");
         builder.append(getParameters().stream()
                 // TODO DBG, check if has children before getting
-                .filter(param -> param.getNumChildren() != 0)
+                // .filter(param -> param.getNumChildren() != 0)
                 // .map(param -> param.getType().getCode()
                 .map(param -> param.get(ValueDecl.TYPE).desugarAll().getCode())
                 .collect(Collectors.joining(", ")));
