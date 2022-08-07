@@ -59,6 +59,11 @@ public class CTest {
     }
 
     @Test
+    public void testStruct2() {
+        new CTester("struct2.c").test();
+    }
+
+    @Test
     public void testVariadic() {
         new CTester("variadic.c").test();
     }
