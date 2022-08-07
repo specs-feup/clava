@@ -20,7 +20,6 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
 import pt.up.fe.specs.clava.language.TagKind;
 
@@ -28,8 +27,7 @@ public abstract class TagType extends Type {
 
     /// DATAKEYS BEGIN
 
-    // TODO: Change to TagDecl
-    public final static DataKey<Decl> DECL = KeyFactory.object("decl", Decl.class);
+    public final static DataKey<TagDecl> DECL = KeyFactory.object("decl", TagDecl.class);
 
     /// DATAKEYS END
 
@@ -38,7 +36,7 @@ public abstract class TagType extends Type {
     }
 
     public TagDecl getDecl() {
-        return (TagDecl) get(DECL);
+        return get(DECL);
     }
 
     public TagKind getTagKind() {

@@ -106,7 +106,7 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
             // Link new decl copy
             if (typeCopy instanceof TagType) {
                 TagType tagType = (TagType) typeCopy;
-                tagType.set(TagType.DECL, declCopy);
+                tagType.set(TagType.DECL, (TagDecl) declCopy);
                 // String newTypeAsString = tagType.getTagKind().getCode() + " " + tagType.getDecl().getDeclName();
                 // tagType.set(Type.TYPE_AS_STRING, newTypeAsString);
 
