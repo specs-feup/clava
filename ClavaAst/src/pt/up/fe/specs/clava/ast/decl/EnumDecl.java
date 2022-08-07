@@ -104,6 +104,11 @@ public class EnumDecl extends TagDecl {
 
         // Add each enum declaration
         for (ClavaNode child : getChildren()) {
+            // Ignore variable declarations
+            if (!hasTagDeclCode(child)) {
+                continue;
+            }
+
             builder.append(getTab()).append(child.getCode());
             if (child instanceof EnumConstantDecl) {
                 builder.append(",");
@@ -111,7 +116,10 @@ public class EnumDecl extends TagDecl {
             builder.append(ln());
         }
 
-        builder.append("};" + ln());
+        builder.append("}")
+                .append(getDeclsString())
+                .append(";")
+                .append(ln());
 
         return builder.toString();
     }

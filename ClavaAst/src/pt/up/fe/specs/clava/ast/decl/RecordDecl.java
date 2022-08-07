@@ -44,6 +44,7 @@ public class RecordDecl extends TagDecl {
      * <p>
      * To be an anonymous struct or union, it must have been declared without a name and there must be no objects of
      * this type declared.
+     * 
      */
     public final static DataKey<Boolean> IS_ANONYMOUS = KeyFactory.bool("isAnonymous");
 
@@ -130,6 +131,9 @@ public class RecordDecl extends TagDecl {
             code.append(" ").append(postAttributesCode);
         }
 
+        // TODO: confirm this is the correct place
+        code.append(getDeclsString());
+
         code.append(";");
 
         if (addNewlines) {
@@ -162,6 +166,7 @@ public class RecordDecl extends TagDecl {
         // String membersCode = getRecordFields().stream()
         // .map(decl -> decl.getCode())
         String membersCode = getChildrenStream()
+                .filter(this::hasTagDeclCode)
                 .map(child -> child.getCode())
                 .collect(Collectors.joining(ln()));
 
@@ -212,15 +217,15 @@ public class RecordDecl extends TagDecl {
         return functions;
     }
 
-    @Override
-    public String getDeclName() {
-        // If anonymous, create name
-        if (get(IS_ANONYMOUS)) {
-            return "anonymous_" + get(ID);
-        }
-
-        return super.getDeclName();
-    }
+    // @Override
+    // public String getDeclName() {
+    // // If anonymous, create name
+    // if (get(IS_ANONYMOUS)) {
+    // return "anonymous_" + get(ID);
+    // }
+    //
+    // return super.getDeclName();
+    // }
 
     public void addField(FieldDecl field) {
         addChild(field);

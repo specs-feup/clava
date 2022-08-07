@@ -14,6 +14,8 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
@@ -42,6 +44,19 @@ public abstract class TagDecl extends TypeDecl {
      */
     public final static DataKey<Boolean> IS_COMPLETE_DEFINITION = KeyFactory.bool("isCompleteDefinition");
 
+    /**
+     * Variables declared by this TagDecl.
+     * 
+     * <p>
+     * E.g., struct { int i; } a_var;
+     * 
+     * <p>
+     * In the end this option was dropped in favor of adding the VarDecls in the tree, so that they can still be found
+     * through a query.
+     */
+    // public final static DataKey<List<DeclaratorDecl>> DECLS = KeyFactory.list("decls", DeclaratorDecl.class)
+    // .setDefault(() -> new ArrayList<>());
+
     /// DATAKEYS END
 
     public TagDecl(DataStore data, Collection<? extends ClavaNode> children) {
@@ -54,6 +69,48 @@ public abstract class TagDecl extends TypeDecl {
 
     public Boolean isCompleteDefinition() {
         return get(IS_COMPLETE_DEFINITION);
+    }
+
+    /**
+     * 
+     * @return if this TagDecl declares any variables, returns those variables
+     */
+    public List<DeclaratorDecl> getDeclaredVariables() {
+        return getChildrenOf(DeclaratorDecl.class).stream()
+                .filter(child -> child.get(DeclaratorDecl.IS_TAG_DECLARATION))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 
+     * @return if this TagDecl declares any variables, returns a string with the variable names separated by commas
+     *         (e.g. a, b). Otherwise, returns an empty string
+     */
+    protected String getDeclsString() {
+
+        var declsString = getDeclaredVariables().stream()
+                .map(decl -> decl.getDeclName())
+                .collect(Collectors.joining(", ", " ", ""));
+
+        // If only whitespace, return empty string
+        if (declsString.trim().isBlank()) {
+            return "";
+        }
+
+        return declsString;
+    }
+
+    /**
+     * 
+     * @param child
+     * @return true if the given node contributes with code for the TagDecl
+     */
+    protected boolean hasTagDeclCode(ClavaNode child) {
+        if (child instanceof DeclaratorDecl && child.get(DeclaratorDecl.IS_TAG_DECLARATION)) {
+            return false;
+        }
+
+        return true;
     }
 
 }
