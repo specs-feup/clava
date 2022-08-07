@@ -44,19 +44,6 @@ public abstract class TagDecl extends TypeDecl {
      */
     public final static DataKey<Boolean> IS_COMPLETE_DEFINITION = KeyFactory.bool("isCompleteDefinition");
 
-    /**
-     * Variables declared by this TagDecl.
-     * 
-     * <p>
-     * E.g., struct { int i; } a_var;
-     * 
-     * <p>
-     * In the end this option was dropped in favor of adding the VarDecls in the tree, so that they can still be found
-     * through a query.
-     */
-    // public final static DataKey<List<DeclaratorDecl>> DECLS = KeyFactory.list("decls", DeclaratorDecl.class)
-    // .setDefault(() -> new ArrayList<>());
-
     /// DATAKEYS END
 
     public TagDecl(DataStore data, Collection<? extends ClavaNode> children) {
