@@ -281,6 +281,11 @@ public class CxxTest {
         new CxxTester("pointer_to_member_operators.cpp").test();
     }
 
+    @Test
+    public void testStruct() {
+        new CxxTester("struct.cpp").test();
+    }
+
     // -Xclang-ast-dump-nostdinc-nocudalib-nocudainc--cuda-gpu-arch=sm_30
     // "--cuda-device-only"
 
