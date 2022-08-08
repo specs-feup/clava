@@ -36,8 +36,8 @@ import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
 import pt.up.fe.specs.clang.transforms.CreateEmptyStmts;
 import pt.up.fe.specs.clang.transforms.CreatePointerToMemberExpr;
 import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;
-import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.FlattenSubStmtNodes;
+import pt.up.fe.specs.clang.transforms.MoveDeclsToTagDecl;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
 import pt.up.fe.specs.clang.transforms.ProcessCudaNodes;
 import pt.up.fe.specs.clang.transforms.RemoveClangOmpNodes;
@@ -80,12 +80,13 @@ public class ClangAstParser {
     private final static Collection<ClavaRule> POST_PARSING_RULES = Arrays.asList(
             new RemoveClangOmpNodes(),
 
-            new DenanonymizeDecls(),
+            // new DenanonymizeDecls(),
 
             new DeleteTemplateSpecializations(),
             new RemoveExtraNodes(),
             // new RemoveAdjustedType(),
             // new RemoveClangComments(),
+            new MoveDeclsToTagDecl(),
             new CreateDeclStmts(),
             new MoveImplicitCasts(),
             // new RemovePoison(),

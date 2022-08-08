@@ -55,7 +55,14 @@ public class CTest {
 
     @Test
     public void testStruct() {
-        new CTester("struct.c").test();
+        new CTester("struct.c")
+                .addFlags("-Wno-gnu-designator")
+                .test();
+    }
+
+    @Test
+    public void testStruct2() {
+        new CTester("struct2.c").test();
     }
 
     @Test

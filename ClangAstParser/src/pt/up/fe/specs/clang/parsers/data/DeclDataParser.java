@@ -22,7 +22,6 @@ import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
@@ -157,10 +156,10 @@ public class DeclDataParser {
         DataStore data = parseTypeDeclData(lines, dataStore);
 
         // If TagDecl has no name, give it a name
-        if (data.get(NamedDecl.DECL_NAME).isEmpty()) {
-            String anonName = ClavaDataParsers.createAnonName(data.get(ClavaNode.LOCATION));
-            data.set(NamedDecl.DECL_NAME, anonName);
-        }
+        // if (data.get(NamedDecl.DECL_NAME).isEmpty()) {
+        // String anonName = ClavaDataParsers.createAnonName(data.get(ClavaNode.LOCATION));
+        // data.set(NamedDecl.DECL_NAME, anonName);
+        // }
 
         data.add(TagDecl.TAG_KIND, LineStreamParsers.enumFromName(TagKind.class, lines));
         data.add(TagDecl.IS_COMPLETE_DEFINITION, LineStreamParsers.oneOrZero(lines));

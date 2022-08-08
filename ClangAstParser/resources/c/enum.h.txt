@@ -29,34 +29,34 @@ enum simple_enum_with_init {
 
 // Enum with typedef
 
-enum enum_with_typedef {
+typedef enum enum_with_typedef {
    ENUM_WITH_TYPEDEF_1,
    ENUM_WITH_TYPEDEF_2,
    ENUM_WITH_TYPEDEF_3,
    ENUM_WITH_TYPEDEF_4,
-};
+} enum_with_typedef;
 
-typedef enum enum_with_typedef enum_with_typedef;
+
 // Enum without name in the declaration
 
-enum anon_enum_h_41 {
+typedef enum  {
    false,
    true,
-};
+} logical;
 
-typedef enum anon_enum_h_41 logical;
 
 // Anonymous enum
-enum anon_enum_h_44 {
-	BLACK,
-	RED,
+enum  {
+   BLACK,
+   RED,
 };
+
 // Anonymous enum with declaration
-enum anon_enum_h_47 {
-	REQUIRE_ORDER,
-	PERMUTE,
-	RETURN_IN_ORDER,
-};
-static enum anon_enum_h_47 ordering;
+static enum  {
+   REQUIRE_ORDER,
+   PERMUTE,
+   RETURN_IN_ORDER,
+} ordering;
+
 
 #endif

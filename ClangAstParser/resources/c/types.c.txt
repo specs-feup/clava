@@ -1,11 +1,9 @@
 // Incomplete array type
 
-struct anon_types_c_2 {
-   int dummy;
-   int data[];
-};
-
-struct anon_types_c_2 incompleteArrayType;
+struct {
+		int dummy;
+        int data[];
+} incompleteArrayType;
 
 int main() {
 }

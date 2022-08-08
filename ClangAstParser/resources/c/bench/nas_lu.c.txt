@@ -41,11 +41,10 @@
 //----------
 /*full problem size*/
 /*number of iterations and how often to print the norm*/
-struct anon_nas_lu_c_109 {
-double real;
-double imag;
-};
-typedef struct anon_nas_lu_c_109 dcomplex;
+typedef struct {
+    double real;
+    double imag;
+} dcomplex;
 //---------------------------------------------------------------------
 // parameters which can be overridden in runtime config file
 // isiz1,isiz2,isiz3 give the maximum size
