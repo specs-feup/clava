@@ -13,11 +13,16 @@
 
 package pt.up.fe.specs.clang.transforms;
 
+import java.util.Optional;
+
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
+import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
+import pt.up.fe.specs.clava.ast.decl.TypedefDecl;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.transform.SimplePreClavaRule;
+import pt.up.fe.specs.clava.utils.Typable;
 import pt.up.fe.specs.util.treenode.transform.TransformQueue;
 
 /**
@@ -35,15 +40,22 @@ public class MoveDeclsToTagDecl implements SimplePreClavaRule {
     @Override
     public void applySimple(ClavaNode node, TransformQueue<ClavaNode> queue) {
 
-        // Check if VarDecl
-        if (!(node instanceof DeclaratorDecl)) {
+        // Check if NamedDecl
+        var maybeNamedDecl = getNamedDeclWithType(node);
+
+        if (maybeNamedDecl.isEmpty()) {
             return;
         }
 
-        // Check if decl kind is struct or union
-        var declaratorDecl = (DeclaratorDecl) node;
+        // if (!(node instanceof DeclaratorDecl)) {
+        // return;
+        // }
 
-        var tagDecl = getTagDecl(declaratorDecl);
+        // Check if decl kind is struct or union
+        // var declaratorDecl = (DeclaratorDecl) node;
+        var namedDecl = maybeNamedDecl.get();
+
+        var tagDecl = getTagDecl(namedDecl);
 
         // If TagDecl could not be found, return
         if (tagDecl == null) {
@@ -51,7 +63,7 @@ public class MoveDeclsToTagDecl implements SimplePreClavaRule {
         }
 
         // Check if record is just above the node, ignoring other vardecls with the same tag decl
-        if (!isTagDeclDirectlyAbove(declaratorDecl, tagDecl)) {
+        if (!isTagDeclDirectlyAbove(namedDecl, tagDecl)) {
             return;
         }
 
@@ -59,13 +71,34 @@ public class MoveDeclsToTagDecl implements SimplePreClavaRule {
         var tagDeclVars = tagDecl.getTagDeclVars();
 
         // First delete node, so that the node itself is inserted, instead of a copy
-        queue.delete(declaratorDecl);
-        queue.addChild(tagDeclVars, declaratorDecl);
+        queue.delete(namedDecl);
+        queue.addChild(tagDeclVars, namedDecl);
 
+        // In Clang AST, typedef in a struct is moved to the var declaration. When moving the var declaration inside the
+        // struct, move the typedef also.
+        if (node instanceof TypedefDecl) {
+            tagDecl.set(TagDecl.HAS_TYPEDEF);
+        }
     }
 
-    private TagDecl getTagDecl(DeclaratorDecl decl) {
-        var declType = decl.getType().desugarAll();
+    private Optional<NamedDecl> getNamedDeclWithType(ClavaNode node) {
+        if (!(node instanceof Typable)) {
+            return Optional.empty();
+        }
+
+        if (node instanceof DeclaratorDecl) {
+            return Optional.of((DeclaratorDecl) node);
+        }
+
+        if (node instanceof TypedefDecl) {
+            return Optional.of((TypedefDecl) node);
+        }
+
+        return Optional.empty();
+    }
+
+    private TagDecl getTagDecl(NamedDecl decl) {
+        var declType = ((Typable) decl).getType().desugarAll();
 
         // Type must be a RecordType
         if (!(declType instanceof TagType)) {
@@ -78,7 +111,7 @@ public class MoveDeclsToTagDecl implements SimplePreClavaRule {
         return tagType.get(TagType.DECL);
     }
 
-    private boolean isTagDeclDirectlyAbove(DeclaratorDecl decl, TagDecl tagDecl) {
+    private boolean isTagDeclDirectlyAbove(NamedDecl decl, TagDecl tagDecl) {
         var leftNodes = decl.getLeftSiblings();
 
         // Iterate from last to first, looking for the same TagDecl
@@ -92,8 +125,9 @@ public class MoveDeclsToTagDecl implements SimplePreClavaRule {
 
             // Check if another variable declaration of the same TagDecl
             // If so, keep going backwards
-            if (currentSibling instanceof DeclaratorDecl) {
-                var siblingTagDecl = getTagDecl((DeclaratorDecl) currentSibling);
+
+            if (getNamedDeclWithType(currentSibling).isPresent()) {
+                var siblingTagDecl = getTagDecl((NamedDecl) currentSibling);
                 if (siblingTagDecl != null && tagDecl.equals(siblingTagDecl)) {
                     continue;
                 }

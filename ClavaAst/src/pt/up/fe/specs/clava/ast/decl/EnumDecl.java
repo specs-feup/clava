@@ -73,7 +73,13 @@ public class EnumDecl extends TagDecl {
 
         StringBuilder builder = new StringBuilder();
 
-        builder.append(ln() + "enum ");
+        builder.append(ln());
+
+        if (get(HAS_TYPEDEF)) {
+            builder.append("typedef ");
+        }
+
+        builder.append("enum ");
 
         switch (get(ENUM_SCOPE_KIND)) {
         case CLASS:

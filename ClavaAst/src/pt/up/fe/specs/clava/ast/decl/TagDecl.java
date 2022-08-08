@@ -47,6 +47,11 @@ public abstract class TagDecl extends TypeDecl {
      */
     public final static DataKey<Boolean> IS_COMPLETE_DEFINITION = KeyFactory.bool("isCompleteDefinition");
 
+    /**
+     * True if the decl has the keyword 'typedef'.
+     */
+    public final static DataKey<Boolean> HAS_TYPEDEF = KeyFactory.bool("hasTypedef");
+
     /// DATAKEYS END
 
     public TagDecl(DataStore data, Collection<? extends ClavaNode> children) {
@@ -65,9 +70,9 @@ public abstract class TagDecl extends TypeDecl {
      * 
      * @return if this TagDecl declares any variables, returns those variables
      */
-    public List<DeclaratorDecl> getDeclaredVariables() {
+    public List<NamedDecl> getDeclaredVariables() {
         return getTagDeclVarsTry()
-                .map(tagDeclVars -> tagDeclVars.getChildren(DeclaratorDecl.class))
+                .map(tagDeclVars -> tagDeclVars.getChildren(NamedDecl.class))
                 .orElseGet(() -> Collections.emptyList());
     }
 

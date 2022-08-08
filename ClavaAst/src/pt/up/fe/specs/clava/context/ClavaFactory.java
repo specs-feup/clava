@@ -41,7 +41,6 @@ import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.CIncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
-import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyNamedDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyValueDecl;
@@ -221,7 +220,7 @@ public class ClavaFactory {
         return new TranslationUnit(data, declarations);
     }
 
-    public TagDeclVars tagDeclVars(List<? extends DeclaratorDecl> children) {
+    public TagDeclVars tagDeclVars(List<? extends NamedDecl> children) {
         DataStore data = newDataStore(TagDeclVars.class);
 
         return new TagDeclVars(data, children);
