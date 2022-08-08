@@ -75,9 +75,7 @@ public class EnumDecl extends TagDecl {
 
         builder.append(ln());
 
-        if (get(HAS_TYPEDEF)) {
-            builder.append("typedef ");
-        }
+        builder.append(getTagDeclVarsQualifiersCode());
 
         builder.append("enum ");
 

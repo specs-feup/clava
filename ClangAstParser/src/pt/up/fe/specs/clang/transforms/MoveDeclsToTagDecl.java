@@ -76,9 +76,9 @@ public class MoveDeclsToTagDecl implements SimplePreClavaRule {
 
         // In Clang AST, typedef in a struct is moved to the var declaration. When moving the var declaration inside the
         // struct, move the typedef also.
-        if (node instanceof TypedefDecl) {
-            tagDecl.set(TagDecl.HAS_TYPEDEF);
-        }
+        // if (node instanceof TypedefDecl) {
+        // tagDecl.set(TagDecl.HAS_TYPEDEF);
+        // }
     }
 
     private Optional<NamedDecl> getNamedDeclWithType(ClavaNode node) {

@@ -80,9 +80,7 @@ public class RecordDecl extends TagDecl {
             code.append(ln());
         }
 
-        if (get(HAS_TYPEDEF)) {
-            code.append("typedef ");
-        }
+        code.append(getTagDeclVarsQualifiersCode());
 
         code.append(getTagKind().getCode());
 

@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.clava.ast.decl.enums;
 
+import java.util.Optional;
+
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -72,5 +74,13 @@ public enum StorageClass implements StringProvider {
     @Override
     public String getString() {
         return name;
+    }
+
+    public Optional<String> getCode() {
+        if (this == None) {
+            return Optional.empty();
+        }
+
+        return Optional.of(name);
     }
 }

@@ -13,10 +13,13 @@
 
 package pt.up.fe.specs.clava.ast.decl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -50,7 +53,7 @@ public abstract class TagDecl extends TypeDecl {
     /**
      * True if the decl has the keyword 'typedef'.
      */
-    public final static DataKey<Boolean> HAS_TYPEDEF = KeyFactory.bool("hasTypedef");
+    // public final static DataKey<Boolean> HAS_TYPEDEF = KeyFactory.bool("hasTypedef");
 
     /// DATAKEYS END
 
@@ -158,6 +161,36 @@ public abstract class TagDecl extends TypeDecl {
         return getChildrenStream()
                 .filter(this::hasTagDeclCode)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 
+     * @return a list of qualifiers inherited from the declared variables (e.g. typedef, static)
+     */
+    public List<String> getTagDeclVarsQualifiers() {
+        Set<String> qualifiers = new LinkedHashSet<>();
+        for (var declaredVar : getDeclaredVariables()) {
+            // Check typedef
+            if (declaredVar instanceof TypedefDecl) {
+                qualifiers.add("typedef");
+            }
+
+            if (declaredVar instanceof VarDecl) {
+                declaredVar.get(VarDecl.STORAGE_CLASS)
+                        .getCode()
+                        .ifPresent(code -> qualifiers.add(code));
+            }
+        }
+
+        return new ArrayList<>(qualifiers);
+    }
+
+    public String getTagDeclVarsQualifiersCode() {
+        var code = new StringBuilder();
+
+        getTagDeclVarsQualifiers().forEach(qualifier -> code.append(qualifier).append(" "));
+
+        return code.toString();
     }
 
 }
