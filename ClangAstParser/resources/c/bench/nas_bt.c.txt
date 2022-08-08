@@ -47,11 +47,11 @@ This file is generated automatically by the setparams utility.
 It sets the number of processors and the class of the NPB
 in this directory. Do not modify it by hand.
 */
-enum anon_nas_bt_c_72 {
-false,
-true,
-};
-typedef enum anon_nas_bt_c_72 logical;
+typedef enum { 
+	false, 
+	true 
+} logical;
+
 /*common /global/*/
 //double elapsed_time;
 int grid_points[3];
@@ -210,11 +210,12 @@ void timer_clear(int n);
 void timer_start(int n);
 void timer_stop(int n);
 double timer_read(int n);
-struct anon_nas_bt_c_212 {
-double real;
-double imag;
-};
-typedef struct anon_nas_bt_c_212 dcomplex;
+
+typedef struct { 
+  double real;
+  double imag;
+} dcomplex;
+
 double randlc(double *x, double a);
 void vranlc(int n, double *x, double a, double y[]);
 void wtime(double *t) {
