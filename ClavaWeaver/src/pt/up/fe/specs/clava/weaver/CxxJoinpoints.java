@@ -59,6 +59,7 @@ import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryExprOrTypeTraitExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.extra.TagDeclVars;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
@@ -273,6 +274,7 @@ public class CxxJoinpoints {
         JOINPOINT_FACTORY.put(CilkFor.class, CxxCilkFor::new);
         JOINPOINT_FACTORY.put(CilkSync.class, CxxCilkSync::new);
         JOINPOINT_FACTORY.put(CilkSpawn.class, CxxCilkSpawn::new);
+        JOINPOINT_FACTORY.put(TagDeclVars.class, GenericJoinpoint::new);
         JOINPOINT_FACTORY.put(ClavaNode.class, CxxJoinpoints::defaultFactory);
     }
 
