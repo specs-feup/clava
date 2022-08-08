@@ -35,3 +35,20 @@ struct foo {
         int x;
     } a;
 };
+
+typedef struct
+{
+    double real1;
+    double imag1;
+} struct_with_typedef_var;
+
+typedef struct
+{
+    double real2;
+    double imag2;
+};
+
+typedef enum enum_with_typedef {
+	C,
+	D
+} enum_with_typedef_var;
