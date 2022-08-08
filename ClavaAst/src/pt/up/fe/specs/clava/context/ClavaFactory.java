@@ -41,6 +41,7 @@ import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.CIncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.Decl;
+import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyNamedDecl;
 import pt.up.fe.specs.clava.ast.decl.DummyValueDecl;
@@ -84,6 +85,7 @@ import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.extra.TagDeclVars;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
@@ -217,6 +219,12 @@ public class ClavaFactory {
         TranslationUnit.setDataStore(sourceFile, data);
 
         return new TranslationUnit(data, declarations);
+    }
+
+    public TagDeclVars tagDeclVars(List<? extends DeclaratorDecl> children) {
+        DataStore data = newDataStore(TagDeclVars.class);
+
+        return new TagDeclVars(data, children);
     }
 
     public <T extends ClavaNode> T node(Class<T> nodeClass, ClavaNode... children) {
