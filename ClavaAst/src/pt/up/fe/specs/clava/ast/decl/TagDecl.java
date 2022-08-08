@@ -28,7 +28,9 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.extra.TagDeclVars;
+import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.language.TagKind;
+import pt.up.fe.specs.clava.utils.Typable;
 
 /**
  * Represents a declaration of a struct, union, class or enum.
@@ -129,7 +131,7 @@ public abstract class TagDecl extends TypeDecl {
     protected String getDeclsString() {
 
         var declsString = getDeclaredVariables().stream()
-                .map(decl -> decl.getDeclName())
+                .map(this::getDeclCode)
                 .collect(Collectors.joining(", ", " ", ""));
 
         // If only whitespace, return empty string
@@ -138,6 +140,15 @@ public abstract class TagDecl extends TypeDecl {
         }
 
         return declsString;
+    }
+
+    private String getDeclCode(NamedDecl decl) {
+
+        var code = new StringBuilder();
+
+        code.append(decl.getTypelessCode());
+
+        return code.toString();
     }
 
     /**
@@ -170,6 +181,15 @@ public abstract class TagDecl extends TypeDecl {
     public List<String> getTagDeclVarsQualifiers() {
         Set<String> qualifiers = new LinkedHashSet<>();
         for (var declaredVar : getDeclaredVariables()) {
+
+            if (declaredVar instanceof Typable) {
+                var declType = ((Typable) declaredVar).getType();
+
+                if (declType instanceof QualType) {
+                    qualifiers.addAll(((QualType) declType).getQualifierStrings());
+                }
+            }
+
             // Check typedef
             if (declaredVar instanceof TypedefDecl) {
                 qualifiers.add("typedef");

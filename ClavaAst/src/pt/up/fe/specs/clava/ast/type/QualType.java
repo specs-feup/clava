@@ -86,9 +86,7 @@ public class QualType extends Type {
             addressQualifier += " ";
         }
 
-        String qualifiersCode = get(C99_QUALIFIERS).stream()
-                .map(C99Qualifier::getCode)
-                .collect(Collectors.joining(" "));
+        String qualifiersCode = getQualifiersCode();
 
         // If constexpr, replace const with constexpr
         boolean isConstexpr = sourceNode != null
@@ -117,6 +115,12 @@ public class QualType extends Type {
 
         return addressQualifier + type + qualifiersCode;
 
+    }
+
+    public String getQualifiersCode() {
+        return get(C99_QUALIFIERS).stream()
+                .map(C99Qualifier::getCode)
+                .collect(Collectors.joining(" "));
     }
 
     public Type getUnqualifiedType() {
