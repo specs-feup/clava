@@ -165,8 +165,9 @@ public class RecordDecl extends TagDecl {
 
         // String membersCode = getRecordFields().stream()
         // .map(decl -> decl.getCode())
-        String membersCode = getChildrenStream()
-                .filter(this::hasTagDeclCode)
+        // String membersCode = getChildrenStream()
+        // .filter(this::hasTagDeclCode)
+        String membersCode = getChildrenWithCode().stream()
                 .map(child -> child.getCode())
                 .collect(Collectors.joining(ln()));
 

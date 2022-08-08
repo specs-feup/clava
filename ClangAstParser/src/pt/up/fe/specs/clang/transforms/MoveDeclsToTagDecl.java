@@ -64,13 +64,17 @@ public class MoveDeclsToTagDecl implements SimplePreClavaRule {
         // tagDecl.get(TagDecl.DECLS).add((DeclaratorDecl) declaratorDecl.copy(true));
 
         // Mark node as part of the tag
-        declaratorDecl.set(DeclaratorDecl.IS_TAG_DECLARATION);
+        // declaratorDecl.set(DeclaratorDecl.IS_TAG_DECLARATION);
 
-        // Add declarator as a child of TagDecl
-        queue.addChild(tagDecl, declaratorDecl);
+        // Add declarator as a child of tagDeclVars
+        var tagDeclVars = tagDecl.getTagDeclVars();
 
-        // Delete node
+        // First delete node, so that the node itself is inserted, instead of a copy
         queue.delete(declaratorDecl);
+
+        queue.addChild(tagDeclVars, declaratorDecl);
+        // Add declarator as a child of TagDecl
+        // queue.addChild(tagDecl, declaratorDecl);
 
         // System.out.println("VarDecl to join with tag: " + declaratorDecl.getDeclName());
         // System.out.println("Record decl: " + tagDecl.get(TagDecl.TAG_KIND));

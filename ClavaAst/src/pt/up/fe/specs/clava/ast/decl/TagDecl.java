@@ -14,7 +14,9 @@
 package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
@@ -22,6 +24,7 @@ import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.extra.TagDeclVars;
 import pt.up.fe.specs.clava.language.TagKind;
 
 /**
@@ -63,9 +66,55 @@ public abstract class TagDecl extends TypeDecl {
      * @return if this TagDecl declares any variables, returns those variables
      */
     public List<DeclaratorDecl> getDeclaredVariables() {
-        return getChildrenOf(DeclaratorDecl.class).stream()
-                .filter(child -> child.get(DeclaratorDecl.IS_TAG_DECLARATION))
-                .collect(Collectors.toList());
+        return getTagDeclVarsTry()
+                .map(tagDeclVars -> tagDeclVars.getChildren(DeclaratorDecl.class))
+                .orElseGet(() -> Collections.emptyList());
+
+        // return getChildrenOf(DeclaratorDecl.class).stream()
+        // .filter(child -> child.get(DeclaratorDecl.IS_TAG_DECLARATION))
+        // .collect(Collectors.toList());
+    }
+
+    /**
+     * 
+     * @return the node that contains the variables declared by this TagDecl, as children. If no node exists, one will
+     *         be created and added to the TagDecl children
+     */
+    public TagDeclVars getTagDeclVars() {
+        var maybeTagDeclVars = getTagDeclVarsTry();
+
+        // If exists, just return it
+        if (maybeTagDeclVars.isPresent()) {
+            return maybeTagDeclVars.get();
+        }
+
+        // Create node and add it
+        var tagDeclVars = getFactory().tagDeclVars(Collections.emptyList());
+
+        // Since the node was newly created and has no parent, the node was inserted, instead of a copy
+        addChild(tagDeclVars);
+
+        return tagDeclVars;
+
+    }
+
+    /**
+     * 
+     * @return the node that contains the variables declared by this TagDecl, as children
+     */
+    public Optional<TagDeclVars> getTagDeclVarsTry() {
+        var tagDeclVarsList = getChildrenOf(TagDeclVars.class);
+
+        if (tagDeclVarsList.size() > 1) {
+            throw new RuntimeException(
+                    "Inconsistent AST: found more than one instance of TagDeclVars (" + tagDeclVarsList.size() + ")");
+        }
+
+        if (tagDeclVarsList.size() == 1) {
+            return Optional.of(tagDeclVarsList.get(0));
+        }
+
+        return Optional.empty();
     }
 
     /**
@@ -93,11 +142,21 @@ public abstract class TagDecl extends TypeDecl {
      * @return true if the given node contributes with code for the TagDecl
      */
     protected boolean hasTagDeclCode(ClavaNode child) {
-        if (child instanceof DeclaratorDecl && child.get(DeclaratorDecl.IS_TAG_DECLARATION)) {
+        if (child instanceof TagDeclVars) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * 
+     * @return children of TagDecl which contribute with code for the declaration
+     */
+    protected List<ClavaNode> getChildrenWithCode() {
+        return getChildrenStream()
+                .filter(this::hasTagDeclCode)
+                .collect(Collectors.toList());
     }
 
 }

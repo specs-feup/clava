@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -28,15 +26,6 @@ import pt.up.fe.specs.clava.ClavaNode;
  *
  */
 public abstract class DeclaratorDecl extends ValueDecl {
-
-    /// DATAKEYS BEGIN
-
-    /**
-     * True if this declarator was declared by a TagDecl.
-     */
-    public final static DataKey<Boolean> IS_TAG_DECLARATION = KeyFactory.bool("isTagDeclaration");
-
-    /// DATAKEYS END
 
     public DeclaratorDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);

@@ -103,11 +103,12 @@ public class EnumDecl extends TagDecl {
         builder.append(" {" + ln());
 
         // Add each enum declaration
-        for (ClavaNode child : getChildren()) {
+        for (ClavaNode child : getChildrenWithCode()) {
+            // for (ClavaNode child : getChildren()) {
             // Ignore variable declarations
-            if (!hasTagDeclCode(child)) {
-                continue;
-            }
+            // if (!hasTagDeclCode(child)) {
+            // continue;
+            // }
 
             builder.append(getTab()).append(child.getCode());
             if (child instanceof EnumConstantDecl) {
