@@ -61,7 +61,6 @@ public class EnumDecl extends TagDecl {
 
     public Type getIntegerType() {
         return get(INTEGER_TYPE).orElse(getContext().getFactory().builtinType("int"));
-        // return integerType;
     }
 
     @Override
@@ -87,12 +86,6 @@ public class EnumDecl extends TagDecl {
             // Do nothing
         }
 
-        // System.out.println("QUAL NAME:" + get(QUALIFIED_NAME));
-        // System.out.println("DECL NAME:" + getDeclName());
-        // System.out.println("TYPE:" + getType().toTree());
-        // System.out.println("TYPE CODE:" + getType().getCode(this));
-        // builder.append(getDeclName());
-        // System.out.println("GET TYPE: " + getType());
         String enumTypeCode = getType().getCode(this);
 
         builder.append(enumTypeCode);
@@ -104,11 +97,6 @@ public class EnumDecl extends TagDecl {
 
         // Add each enum declaration
         for (ClavaNode child : getChildrenWithCode()) {
-            // for (ClavaNode child : getChildren()) {
-            // Ignore variable declarations
-            // if (!hasTagDeclCode(child)) {
-            // continue;
-            // }
 
             builder.append(getTab()).append(child.getCode());
             if (child instanceof EnumConstantDecl) {

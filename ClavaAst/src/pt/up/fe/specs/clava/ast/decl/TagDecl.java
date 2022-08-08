@@ -69,10 +69,6 @@ public abstract class TagDecl extends TypeDecl {
         return getTagDeclVarsTry()
                 .map(tagDeclVars -> tagDeclVars.getChildren(DeclaratorDecl.class))
                 .orElseGet(() -> Collections.emptyList());
-
-        // return getChildrenOf(DeclaratorDecl.class).stream()
-        // .filter(child -> child.get(DeclaratorDecl.IS_TAG_DECLARATION))
-        // .collect(Collectors.toList());
     }
 
     /**

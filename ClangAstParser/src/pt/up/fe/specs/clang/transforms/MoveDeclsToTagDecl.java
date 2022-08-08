@@ -34,7 +34,6 @@ public class MoveDeclsToTagDecl implements SimplePreClavaRule {
 
     @Override
     public void applySimple(ClavaNode node, TransformQueue<ClavaNode> queue) {
-        // System.out.println("PROCESSING NODE " + node.getClass());
 
         // Check if VarDecl
         if (!(node instanceof DeclaratorDecl)) {
@@ -44,8 +43,6 @@ public class MoveDeclsToTagDecl implements SimplePreClavaRule {
         // Check if decl kind is struct or union
         var declaratorDecl = (DeclaratorDecl) node;
 
-        // System.out.println("PROCESSING DECL " + declaratorDecl.getDeclName());
-
         var tagDecl = getTagDecl(declaratorDecl);
 
         // If TagDecl could not be found, return
@@ -53,32 +50,18 @@ public class MoveDeclsToTagDecl implements SimplePreClavaRule {
             return;
         }
 
-        // System.out.println("TAG DECL: " + tagDecl.getId());
-
         // Check if record is just above the node, ignoring other vardecls with the same tag decl
         if (!isTagDeclDirectlyAbove(declaratorDecl, tagDecl)) {
             return;
         }
-
-        // Copy node to field of TagDecl
-        // tagDecl.get(TagDecl.DECLS).add((DeclaratorDecl) declaratorDecl.copy(true));
-
-        // Mark node as part of the tag
-        // declaratorDecl.set(DeclaratorDecl.IS_TAG_DECLARATION);
 
         // Add declarator as a child of tagDeclVars
         var tagDeclVars = tagDecl.getTagDeclVars();
 
         // First delete node, so that the node itself is inserted, instead of a copy
         queue.delete(declaratorDecl);
-
         queue.addChild(tagDeclVars, declaratorDecl);
-        // Add declarator as a child of TagDecl
-        // queue.addChild(tagDecl, declaratorDecl);
 
-        // System.out.println("VarDecl to join with tag: " + declaratorDecl.getDeclName());
-        // System.out.println("Record decl: " + tagDecl.get(TagDecl.TAG_KIND));
-        // record
     }
 
     private TagDecl getTagDecl(DeclaratorDecl decl) {

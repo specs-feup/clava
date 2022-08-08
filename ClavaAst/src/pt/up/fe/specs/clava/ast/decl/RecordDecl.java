@@ -85,7 +85,6 @@ public class RecordDecl extends TagDecl {
         // Add attributes
         // recordDeclData.getAttributes().forEach(attr -> code.append(" ").append(attr.getCode()));
 
-        // String preAttributesCode = recordDeclData.getAttributes().stream()
         String preAttributesCode = get(ATTRIBUTES).stream()
                 .filter(attr -> !attr.isPostAttr())
                 .map(Attribute::getCode)
@@ -140,14 +139,11 @@ public class RecordDecl extends TagDecl {
             code.append(ln());
         }
 
-        // System.out.println("CXXRECORD CODE:\n" + code);
-        // System.out.println("HAS DECL NAME: " + hasDeclName());
-        // System.out.println("DECL NAME: " + getDeclName());
-
         return code.toString();
     }
 
     private boolean addNewLines() {
+
         // If inside a Template declaration, do not add new lines
         var parent = getParent();
 
@@ -163,10 +159,6 @@ public class RecordDecl extends TagDecl {
 
         code.append(" {" + ln());
 
-        // String membersCode = getRecordFields().stream()
-        // .map(decl -> decl.getCode())
-        // String membersCode = getChildrenStream()
-        // .filter(this::hasTagDeclCode)
         String membersCode = getChildrenWithCode().stream()
                 .map(child -> child.getCode())
                 .collect(Collectors.joining(ln()));
@@ -217,16 +209,6 @@ public class RecordDecl extends TagDecl {
 
         return functions;
     }
-
-    // @Override
-    // public String getDeclName() {
-    // // If anonymous, create name
-    // if (get(IS_ANONYMOUS)) {
-    // return "anonymous_" + get(ID);
-    // }
-    //
-    // return super.getDeclName();
-    // }
 
     public void addField(FieldDecl field) {
         addChild(field);
