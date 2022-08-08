@@ -123,10 +123,17 @@ public class MoveDeclsToTagDecl implements SimplePreClavaRule {
                 return true;
             }
 
-            // Check if another variable declaration of the same TagDecl
+            // Check if another variable declaration of the same TagDecl,
+            // and if of the same class type
             // If so, keep going backwards
+            var currentSiblingNamedDecl = getNamedDeclWithType(currentSibling);
+            if (currentSiblingNamedDecl.isPresent()) {
 
-            if (getNamedDeclWithType(currentSibling).isPresent()) {
+                // Must be of the same class
+                if (!currentSiblingNamedDecl.get().getClass().equals(decl.getClass())) {
+                    return false;
+                }
+
                 var siblingTagDecl = getTagDecl((NamedDecl) currentSibling);
                 if (siblingTagDecl != null && tagDecl.equals(siblingTagDecl)) {
                     continue;
