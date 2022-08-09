@@ -12,6 +12,16 @@ _lara_dummy_ = Object.defineProperty(MethodJp.prototype, 'class', {
 	}
 });
 
+_lara_dummy_ = Object.defineProperty(MethodJp.prototype, 'params', {
+	get: function () {
+		var params = [];
+		for (var param of this.astNode.getParameters()) {
+			params.push(CommonJoinPoints.toJoinPoint(param));
+		}
+		return params;
+	}
+});
+
 
 
 

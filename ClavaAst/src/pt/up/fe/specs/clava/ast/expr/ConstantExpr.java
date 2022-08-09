@@ -25,4 +25,7 @@ public class ConstantExpr extends FullExpr {
         super(data, children);
     }
 
+    // TODO: There might be a bug in .getCode(), FullExpr asks for child 0, but it was recorded an instance where
+    // ConstantExpr did not have children
+
 }

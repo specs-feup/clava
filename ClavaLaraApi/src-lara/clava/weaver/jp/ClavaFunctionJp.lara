@@ -6,15 +6,8 @@ import weaver.Weaver;
 var oldFunctionJp = FunctionJp.prototype;
 var oldFunction_JP_TYPES = FunctionJp._JP_TYPES;
 
-FunctionJp = function(astNode, getDefinition) {
-	// By default, it gets the definition
-	getDefinition = typeof getDefinition !== 'undefined' ? getDefinition : true;
-
-	// check for definition
-	this.originalAstNode = astNode;
-	if(astNode.getDefinition().isPresent() && getDefinition)
-		astNode = astNode.getDefinition().get();
-		
+FunctionJp = function(astNode) {
+			
 	// Parent constructor
     DeclJp.call(this,astNode);
 }
@@ -59,13 +52,13 @@ _lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'stmts', {
 
 _lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'hasBody', {
 	get: function () {  	
-		return this.originalAstNode.getBody().isPresent(); 
+		return this.astNode.getBody().isPresent(); 
 	}
 });
 
 _lara_dummy_ = Object.defineProperty(FunctionJp.prototype, 'children', {
 	get: function () {
-		return new FunctionJp(this.originalAstNode,false)._children;
+		return new FunctionJp(this.astNode,false)._children;
 	}
 });
 

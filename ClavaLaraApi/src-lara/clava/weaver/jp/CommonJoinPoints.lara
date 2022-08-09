@@ -1,6 +1,9 @@
 // Enable Clava version of common join points
 import weaver.jp.ClavaJoinPoint;
 import weaver.jp.ClavaClassJp;
+import weaver.jp.ClavaClassTypeJp;
+import weaver.jp.ClavaInterfaceJp;
+import weaver.jp.ClavaDeclJp;
 import weaver.jp.ClavaMethodJp;
 import weaver.jp.ClavaFunctionJp;
 import weaver.jp.ClavaCallJp;
@@ -35,8 +38,8 @@ Selector.prototype._addJps = function($newJps, $jps, jpFilter, $jpChain, name) {
 			continue;
 		}
 		
-		if($jp.instanceOf("function") || $jp.instanceOf("class")){
-		    var decl = $jp.originalAstNode;
+		if($jp.instanceOf("function")){
+		    var decl = $jp.astNode;
             var declaration = decl.getDeclaration();
             var definition = decl.getDefinition();
             
@@ -52,11 +55,32 @@ Selector.prototype._addJps = function($newJps, $jps, jpFilter, $jpChain, name) {
             else if (declaration.get().equals(decl)){
             	continue;
             }            
-
 		
 		}
 		
+		if($jp.instanceOf("classType")){
+		    var decl = $jp.astNode;
+            var declaration = decl.getDeclaration();
+            var definition = decl.getDefinition();
+            
+            if (!definition.isPresent()) continue;
+            
+            // If none is present
+            if(!declaration.isPresent() && !definition.isPresent())
+            	throw "Expected at least one of them to be present";
+
+            // XOR, if only one of them is present, current node must be one of them
+            if (declaration.isEmpty() ^ definition.isEmpty()) {
+              
+            }
+            // Both are present, only add current node if it is the definition
+            else if (declaration.get().equals(decl)){
+            	continue;
+            }            
 		
+		}
+		
+        
 		if($filteredJp.length > 1) {
 			throw "Selector._addJps: Expected $filteredJp to have length 1, has " + $filteredJp.length;
 		}

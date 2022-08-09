@@ -1,0 +1,6 @@
+import weaver.jp.DeclJp;
+import weaver.Weaver;
+
+_lara_dummy_ = Object.defineProperty(DeclJp.prototype, 'isStatic', {
+	get: function () { return false; }
+});
