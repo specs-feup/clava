@@ -1,15 +1,12 @@
-import lcl.LaraCommonLanguage;
-import weaver.jp.ClavaJoinPoint;
-import weaver.jp.FileJp;
-import weaver.Query;
-
-aspectdef LaraCommonLanguageTest
+laraImport("lcl.LaraCommonLanguage");
+laraImport("weaver.jp.ClavaJoinPoint");
+laraImport("weaver.jp.FileJp");
+laraImport("weaver.Query");
 
 	var $file = Query.search("file").first();
 	//printlnObject($file);
 	println("line: " + $file.line);
 	println("is FileJP? : " + ($file instanceof FileJp));
 
-	var $class = Query.search("class").first();
+	var $class = Query.search("classType").first();
 	println("Class name: " + $class.name);
-end

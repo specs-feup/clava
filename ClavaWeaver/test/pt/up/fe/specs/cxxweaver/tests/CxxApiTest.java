@@ -151,7 +151,7 @@ public class CxxApiTest {
 
     @Test
     public void testLaraCommonLanguage() {
-        newTester().test("LaraCommonLanguageTest.lara", "lara_common_language.cpp");
+        newTester().test("LaraCommonLanguageTest.js", "lara_common_language.cpp");
     }
 
     @Test
@@ -190,7 +190,7 @@ public class CxxApiTest {
     public void testSimplifyTernaryOp() {
         newTester().test("CodeSimplifyTernaryOpTest.js", "code_simplify_ternary_op.cpp");
     }
-    
+
     @Test
     public void testSimplifyLoops() {
         newTester().test("PassSimplifyLoopsTest.js", "pass_simplify_loops.cpp");
