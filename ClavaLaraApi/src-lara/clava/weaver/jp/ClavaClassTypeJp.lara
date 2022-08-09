@@ -11,9 +11,9 @@ ClassTypeJp = function(astNode, getDefinition) {
 	getDefinition = typeof getDefinition !== 'undefined' ? getDefinition : true;
 	
 	// check for definition
-	this.originalAstNode = astNode;
-	if (astNode.getDefinition().isPresent() && getDefinition)
-		astNode = astNode.getDefinition().get();
+	//this.originalAstNode = astNode;
+	//if (astNode.getDefinition().isPresent() && getDefinition)
+	//	astNode = astNode.getDefinition().get();
 	
 	// var name = Weaver.AST_METHODS.toJavaJoinPoint(astNode).name;
 	// println("CLASS TYPE " + name);

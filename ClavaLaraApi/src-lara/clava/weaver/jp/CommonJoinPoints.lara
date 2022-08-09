@@ -39,7 +39,7 @@ Selector.prototype._addJps = function($newJps, $jps, jpFilter, $jpChain, name) {
 		}
 		
 		if($jp.instanceOf("function")){
-		    var decl = $jp.originalAstNode;
+		    var decl = $jp.astNode;
             var declaration = decl.getDeclaration();
             var definition = decl.getDefinition();
             
@@ -59,7 +59,7 @@ Selector.prototype._addJps = function($newJps, $jps, jpFilter, $jpChain, name) {
 		}
 		
 		if($jp.instanceOf("classType")){
-		    var decl = $jp.originalAstNode;
+		    var decl = $jp.astNode;
             var declaration = decl.getDeclaration();
             var definition = decl.getDefinition();
             

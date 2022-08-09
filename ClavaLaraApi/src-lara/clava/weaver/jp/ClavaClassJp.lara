@@ -11,9 +11,9 @@ ClassJp = function(astNode, getDefinition) {
 	
 	//println("getDefinition:" + astNode.getDefinition().isPresent() && getDefinition);
 	// check for definition
-	this.originalAstNode = astNode;
-	if(astNode.getDefinition().isPresent() && getDefinition)
-		astNode = astNode.getDefinition().get();
+	//this.originalAstNode = astNode;
+	//if(astNode.getDefinition().isPresent() && getDefinition)
+	//	astNode = astNode.getDefinition().get();
 		
 	// Parent constructor
     ClassTypeJp.call(this,astNode,getDefinition);
@@ -115,7 +115,7 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'isAbstract', {
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'children', {
 	get: function () {
-		return new ClassJp(this.originalAstNode,false)._children;
+		return new ClassJp(this.astNode,false)._children;
 	}
 });
 
