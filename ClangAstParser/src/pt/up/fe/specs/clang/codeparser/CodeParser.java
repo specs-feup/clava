@@ -36,7 +36,6 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     // BEGIN DATAKEY
 
     public static final DataKey<Boolean> SHOW_CLANG_DUMP = KeyFactory.bool("showClangDump");
-    public static final DataKey<Boolean> SHOW_CLANG_AST = KeyFactory.bool("showClangAst");
     public static final DataKey<Boolean> SHOW_CLAVA_AST = KeyFactory.bool("showClavaAst");
     public static final DataKey<Boolean> SHOW_CODE = KeyFactory.bool("showCode");
     public static final DataKey<Boolean> USE_CUSTOM_RESOURCES = KeyFactory.bool("useCustomResources");

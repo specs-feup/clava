@@ -219,11 +219,6 @@ public class ParallelCodeParser extends CodeParser {
             SpecsLogs.msgInfo(clangDump.stream().collect(Collectors.joining("\n")));
         }
 
-        // if (showClangAst) {
-        if (get(SHOW_CLANG_AST)) {
-            SpecsLogs.msgInfo("Clang AST not supported for ParallelCodeParser");
-        }
-
         boolean hasParsingErrors = clangParserResults.stream()
                 .filter(data -> data.get(ClangAstData.HAS_ERRORS))
                 .findAny()
