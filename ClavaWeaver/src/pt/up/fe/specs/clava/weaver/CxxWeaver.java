@@ -217,11 +217,11 @@ public class CxxWeaver extends ACxxWeaver {
     private DataStore args = null;
 
     // Parsing Context
-    private final ClavaContext context;
+    private ClavaContext context = null;
 
     // Gears
-    private final ModifiedFilesGear modifiedFilesGear;
-    private final InsideApplyGear insideApplyGear;
+    private ModifiedFilesGear modifiedFilesGear = null;
+    private InsideApplyGear insideApplyGear = null;
 
     // Parsed program state
     // private Deque<App> apps;
@@ -250,9 +250,42 @@ public class CxxWeaver extends ACxxWeaver {
 
     private ClavaWeaverData weaverData;
 
-    private final ClavaMetrics metrics;
+    private ClavaMetrics metrics;
 
     public CxxWeaver() {
+        reset();
+        // // Gears
+        // this.modifiedFilesGear = new ModifiedFilesGear();
+        // this.insideApplyGear = new InsideApplyGear();
+        //
+        // context = new ClavaContext();
+        //
+        // // Weaver configuration
+        // args = null;
+        //
+        // // outputDir = null;
+        // currentSources = new ArrayList<>();
+        // userFlags = null;
+        //
+        // // baseFolder = null;
+        // // parserOptions = new ArrayList<>();
+        //
+        // // infoLogger = null;
+        // // previousLevel = null;
+        //
+        // // Set, in order to filter repeated messages
+        // // Linked, to preserve order
+        // messagesToUser = null;
+        //
+        // accMap = null;
+        //
+        // weaverData = null;
+        //
+        // metrics = new ClavaMetrics();
+        // this.setWeaverProfiler(metrics);
+    }
+
+    private void reset() {
         // Gears
         this.modifiedFilesGear = new ModifiedFilesGear();
         this.insideApplyGear = new InsideApplyGear();
@@ -282,6 +315,8 @@ public class CxxWeaver extends ACxxWeaver {
 
         metrics = new ClavaMetrics();
         this.setWeaverProfiler(metrics);
+
+        currentSources = new ArrayList<>();
     }
 
     public WeavingReport getWeavingReport() {
@@ -454,7 +489,8 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Init messages to user
         messagesToUser = new LinkedHashSet<>();
-
+        System.out.println("SOURCES SIZE: " + getSources().size());
+        System.out.println("SOURCES: " + getSources());
         // If weaving disabled, create empty App
         if (args.get(CxxWeaverOption.DISABLE_WEAVING)) {
             SpecsLogs.msgInfo("Initial parsing disabled, creating empty 'program'");
@@ -572,11 +608,6 @@ public class CxxWeaver extends ACxxWeaver {
             }
         }
 
-    }
-
-    private void reset() {
-        // Reset gears
-        modifiedFilesGear.reset();
     }
 
     public List<String> getUserFlags() {
