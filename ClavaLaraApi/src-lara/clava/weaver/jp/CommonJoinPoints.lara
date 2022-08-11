@@ -39,44 +39,18 @@ Selector.prototype._addJps = function($newJps, $jps, jpFilter, $jpChain, name) {
 		}
 		
 		if($jp.instanceOf("function")){
-		    var decl = $jp.astNode;
-            var declaration = decl.getDeclaration();
-            var definition = decl.getDefinition();
-            
-            // If none is present
-            if(!declaration.isPresent() && !definition.isPresent())
-            	throw "Expected at least one of them to be present";
-
-            // XOR, if only one of them is present, current node must be one of them
-            if (declaration.isEmpty() ^ definition.isEmpty()) {
-              
-            }
-            // Both are present, only add current node if it is the definition
-            else if (declaration.get().equals(decl)){
-            	continue;
-            }            
+		
+			if(!this._isFunctionValid($jp)) {
+				continue;
+			}     
 		
 		}
 		
 		if($jp.instanceOf("classType")){
-		    var decl = $jp.astNode;
-            var declaration = decl.getDeclaration();
-            var definition = decl.getDefinition();
-            
-            if (!definition.isPresent()) continue;
-            
-            // If none is present
-            if(!declaration.isPresent() && !definition.isPresent())
-            	throw "Expected at least one of them to be present";
-
-            // XOR, if only one of them is present, current node must be one of them
-            if (declaration.isEmpty() ^ definition.isEmpty()) {
-              
-            }
-            // Both are present, only add current node if it is the definition
-            else if (declaration.get().equals(decl)){
-            	continue;
-            }            
+		
+			if(!this._isClassValid($jp)) {
+				continue;
+			}   
 		
 		}
 		
@@ -98,4 +72,40 @@ Selector.prototype._addJps = function($newJps, $jps, jpFilter, $jpChain, name) {
 		$newJps.push($updatedChain);
 	}
 
+}
+
+Selector.prototype._isFunctionValid = function($function) {
+		    var decl = $function.astNode;
+			
+			// If definition, is always valid
+			if(decl.isDefinition()) {
+				return true;
+			}
+			
+			// It is a declaration, only valid if there is no definition 
+			// AND if it is the first declaration as returned by .getDefinition()
+			if(decl.getDefinition().isEmpty() && decl.getDeclaration().get().equals(decl)) {
+				return true;
+			}
+			
+			// In any other case, ignore the node
+			return false;
+}
+
+Selector.prototype._isClassValid = function($class) {
+		    var decl = $class.astNode;
+			
+			// If definition, is always valid
+			if(decl.isCompleteDefinition()) {
+				return true;
+			}
+			
+			// It is a declaration, only valid if there is no definition 
+			// AND if it is the first declaration as returned by .getDefinition()
+			if(decl.getDefinition().isEmpty() && decl.getDeclaration().get().equals(decl)) {
+				return true;
+			}
+			
+			// In any other case, ignore the node
+			return false;
 }
