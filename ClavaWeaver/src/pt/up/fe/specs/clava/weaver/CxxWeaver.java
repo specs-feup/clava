@@ -387,7 +387,7 @@ public class CxxWeaver extends ACxxWeaver {
      */
     @Override
     public boolean begin(List<File> sources, File outputDir, DataStore args) {
-        reset();
+        // reset();
 
         // Set args
         this.args = args;
@@ -489,8 +489,7 @@ public class CxxWeaver extends ACxxWeaver {
 
         // Init messages to user
         messagesToUser = new LinkedHashSet<>();
-        System.out.println("SOURCES SIZE: " + getSources().size());
-        System.out.println("SOURCES: " + getSources());
+
         // If weaving disabled, create empty App
         if (args.get(CxxWeaverOption.DISABLE_WEAVING)) {
             SpecsLogs.msgInfo("Initial parsing disabled, creating empty 'program'");
