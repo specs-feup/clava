@@ -1,5 +1,13 @@
+#include "lara_common_language.h"
+
+class A;
+
 class A {
 };
+
+void foo();
+
+void foo();
 
 void foo() {
 	
@@ -7,6 +15,14 @@ void foo() {
 	}
 	
 }
+
+void fooOnlyDecl();
+
+void fooOnlyDecl();
+
+class classOnlyDecl;
+
+class classOnlyDecl;
 
 int main() {
 	

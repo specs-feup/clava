@@ -8,5 +8,14 @@ laraImport("weaver.Query");
 	println("line: " + $file.line);
 	println("is FileJP? : " + ($file instanceof FileJp));
 
-	var $class = Query.search("classType").first();
-	println("Class name: " + $class.name);
+	var classes = Query.search("classType", "A").get();
+	println("# A classes: " + classes.length);
+
+	var classesOnlyDecl = Query.search("classType", "classOnlyDecl").get();
+	println("# onlyDecl classes: " + classesOnlyDecl.length);
+	
+	var fooFunctions = Query.search("function", "foo").get();
+	println("# foo functions: " + fooFunctions.length);
+
+	var fooOnlyDeclFunctions = Query.search("function", "fooOnlyDecl").get();
+	println("# fooOnlyDecl functions: " + fooOnlyDeclFunctions.length);

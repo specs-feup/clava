@@ -151,7 +151,9 @@ public class CxxApiTest {
 
     @Test
     public void testLaraCommonLanguage() {
-        newTester().test("LaraCommonLanguageTest.js", "lara_common_language.cpp");
+        newTester()
+                .set(CxxWeaverOption.PARSE_INCLUDES)
+                .test("LaraCommonLanguageTest.js", "lara_common_language.cpp", "lara_common_language.h");
     }
 
     @Test
