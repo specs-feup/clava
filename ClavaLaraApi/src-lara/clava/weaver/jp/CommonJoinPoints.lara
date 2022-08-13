@@ -94,12 +94,12 @@ Selector.prototype._isFunctionValid = function($function) {
 
 Selector.prototype._isClassValid = function($class) {
 		    var decl = $class.astNode;
-			
+
 			// If definition, is always valid
 			if(decl.isCompleteDefinition()) {
 				return true;
 			}
-			
+		
 			// It is a declaration, only valid if there is no definition 
 			// AND if it is the first declaration as returned by .getDefinition()
 			if(decl.getDefinition().isEmpty() && decl.getDeclaration().get().equals(decl)) {

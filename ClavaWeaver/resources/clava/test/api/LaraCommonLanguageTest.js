@@ -19,3 +19,10 @@ laraImport("weaver.Query");
 
 	var fooOnlyDeclFunctions = Query.search("function", "fooOnlyDecl").get();
 	println("# fooOnlyDecl functions: " + fooOnlyDeclFunctions.length);
+
+	
+	var classes = Query.search("classType", "B").get();
+	println("# B classes: " + classes.length);
+	
+	var classes = Query.search("classType", "C").get();
+	println("# C classes: " + classes.length);

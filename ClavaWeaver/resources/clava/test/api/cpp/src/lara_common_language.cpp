@@ -28,3 +28,26 @@ int main() {
 	
 	return 0;
 }
+
+
+namespace b {
+	
+	class B;
+	
+}
+
+
+namespace b {
+	
+	class B;	
+	
+	class B {
+	};
+	
+}
+
+namespace c {
+	namespace cc {
+		class C;
+	}
+}

@@ -4,3 +4,5 @@ is FileJP? : true
 # onlyDecl classes: 1
 # foo functions: 1
 # fooOnlyDecl functions: 1
+# B classes: 1
+# C classes: 1
