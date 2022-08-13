@@ -249,20 +249,4 @@ public class VarDecl extends DeclaratorDecl {
 
     }
 
-    // /**
-    // * @deprecated
-    // * @param app
-    // * @param varDecl
-    // * @return
-    // */
-    // @Deprecated
-    // public static VarDecl getGlobalDefinition(App app, VarDecl varDecl) {
-    // return app.getDescendantsStream()
-    // .filter(node -> node instanceof VarDecl)
-    // .map(node -> (VarDecl) node)
-    // .filter(vardecl -> vardecl.get(DECL_NAME).equals(varDecl.get(DECL_NAME)))
-    // .filter(vardecl -> vardecl.get(STORAGE_CLASS) == StorageClass.None)
-    // .findFirst()
-    // .orElse(null);
-    // }
 }

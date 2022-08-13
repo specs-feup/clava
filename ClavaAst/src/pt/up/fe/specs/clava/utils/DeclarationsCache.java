@@ -45,10 +45,7 @@ public class DeclarationsCache {
     private final Map<String, TagDecl> tagImplementations;
     private final Map<String, VarDecl> globalVarDefinitions;
 
-    // private boolean isInitialized;
-
     public DeclarationsCache(App app) {
-        // clear();
         functionPrototypes = new MultiMap<>();
         functionImplementations = new HashMap<>();
         tagPrototypes = new MultiMap<>();
@@ -96,12 +93,6 @@ public class DeclarationsCache {
     public Optional<VarDecl> getGlobalVarDefinition(VarDecl varDecl) {
         return Optional.ofNullable(globalVarDefinitions.get(getVarDeclKey(varDecl)));
     }
-
-    // private void initialize(App app) {
-    //
-    //
-    // // isInitialized = true;
-    // }
 
     private void processNode(ClavaNode node) {
 
@@ -157,15 +148,6 @@ public class DeclarationsCache {
             tagPrototypes.put(signature, tagDecl);
         }
 
-        // return getDescendantsStream().filter(child -> child instanceof CXXRecordDecl)
-        // .map(child -> (CXXRecordDecl) child)
-        // // Only if it has the same record name
-        // .filter(recordDecl -> recordDecl.getDeclName().equals(record.getDeclName()))
-        // // Only if it is a complete definition
-        // .filter(recordDecl -> recordDecl.isCompleteDefinition())
-        // // There should be only one definition
-        // .findFirst();
-
     }
 
     private <T extends ClavaNode> void addImplementation(String key, T node, Map<String, T> cache) {
@@ -206,38 +188,9 @@ public class DeclarationsCache {
         // Store decl in appropriate map
         if (hasBody) {
             addImplementation(signature, normalizedFunction, functionImplementations);
-
-            // var previousValue = functionImplementations.put(signature, normalizedFunction);
-            //
-            // // There should be only one
-            // if (previousValue != null) {
-            // SpecsLogs.info("Found more than one implementation for function '" + signature
-            // + "', returning the first occurence:\n"
-            // + "1 -> " + previousValue.getLocation() + "\n"
-            // + "2 -> " + normalizedFunction.getLocation());
-            //
-            // // Setting to previous value, this way we avoid asking if the map contains the value
-            // // and the more common path does not have that overhead
-            // functionImplementations.put(signature, normalizedFunction);
-            // }
         } else {
             functionPrototypes.put(signature, normalizedFunction);
         }
     }
 
-    // private void initMaps() {
-    // functionPrototypes = new MultiMap<>();
-    // functionImplementations = new HashMap<>();
-    // tagPrototypes = new MultiMap<>();
-    // tagImplementations = new HashMap<>();
-    // }
-    //
-    // public void clear() {
-    // this.functionPrototypes = null;
-    // this.functionImplementations = null;
-    // this.tagPrototypes = null;
-    // this.tagImplementations = null;
-    //
-    // this.isInitialized = false;
-    // }
 }
