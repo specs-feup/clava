@@ -399,11 +399,14 @@ public class App extends ClavaNode {
                 .flatMap(tu -> tu.getChildrenStream());
 
         // If there is a namespace, filter the stream for the corresponding NamespaceDecl first
-        if (record.getCurrentNamespace().isPresent()) {
+        // System.out.println("RECORD: " + record);
+
+        if (record.getCurrentQualifiedPrefix().isPresent()) {
             cxxRecordCandidates = cxxRecordCandidates
                     .filter(child -> child instanceof NamespaceDecl)
                     .map(namespaceDecl -> (NamespaceDecl) namespaceDecl)
-                    .filter(namespaceDecl -> namespaceDecl.getDeclName().equals(record.getCurrentNamespace().get()))
+                    .filter(namespaceDecl -> namespaceDecl.getDeclName()
+                            .equals(record.getCurrentQualifiedPrefix().get()))
                     .flatMap(namespaceDecl -> namespaceDecl.getChildrenStream());
         }
 

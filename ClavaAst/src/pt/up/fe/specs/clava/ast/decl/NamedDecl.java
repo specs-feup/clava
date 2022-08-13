@@ -123,7 +123,7 @@ public abstract class NamedDecl extends Decl {
      * <p>
      * For instance, if Decl has the qualified prefix a::b, and is inside the namespace a, returns b.
      */
-    public Optional<String> getCurrentNamespace() {
+    public Optional<String> getCurrentQualifiedPrefix() {
 
         // Get namespace
         String namespace = getNamespace().orElse(null);
@@ -204,7 +204,7 @@ public abstract class NamedDecl extends Decl {
     public String getCurrentQualifiedName() {
         var declName = getDeclName();
 
-        String qualifiedPrefix = getCurrentNamespace().orElse("");
+        String qualifiedPrefix = getCurrentQualifiedPrefix().orElse("");
 
         if (qualifiedPrefix.isEmpty()) {
             return declName;

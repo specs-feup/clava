@@ -343,7 +343,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
             codeElements.add(returnType);
         }
 
-        var currentNamespace = getCurrentNamespace().map(namespace -> namespace + "::").orElse("");
+        var currentNamespace = getCurrentQualifiedPrefix().map(namespace -> namespace + "::").orElse("");
         var typelessCode = currentNamespace + getTypelessCode();
         codeElements.add(typelessCode);
 
