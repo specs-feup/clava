@@ -49,6 +49,7 @@ import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.parsing.snippet.SnippetParser;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
+import pt.up.fe.specs.clava.weaver.gears.CacheHandlerGear;
 import pt.up.fe.specs.clava.weaver.gears.InsideApplyGear;
 import pt.up.fe.specs.clava.weaver.gears.ModifiedFilesGear;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
@@ -222,6 +223,7 @@ public class CxxWeaver extends ACxxWeaver {
     // Gears
     private ModifiedFilesGear modifiedFilesGear = null;
     private InsideApplyGear insideApplyGear = null;
+    private CacheHandlerGear cacheHandlerGear = null;
 
     // Parsed program state
     // private Deque<App> apps;
@@ -289,6 +291,7 @@ public class CxxWeaver extends ACxxWeaver {
         // Gears
         this.modifiedFilesGear = new ModifiedFilesGear();
         this.insideApplyGear = new InsideApplyGear();
+        this.cacheHandlerGear = new CacheHandlerGear();
 
         context = new ClavaContext();
 
@@ -1383,7 +1386,7 @@ public class CxxWeaver extends ACxxWeaver {
      */
     @Override
     public List<AGear> getGears() {
-        return Arrays.asList(modifiedFilesGear, insideApplyGear);
+        return Arrays.asList(modifiedFilesGear, insideApplyGear, cacheHandlerGear);
     }
 
     @Override
