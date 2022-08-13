@@ -296,6 +296,26 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         return getImplementation();
     }
 
+    public FunctionDecl canonical() {
+        // First, try the implementation
+        var definition = getDefinition();
+
+        if (definition.isPresent()) {
+            return definition.get();
+        }
+
+        // Implementation not found return declaration
+        return getDeclaration().get();
+    }
+
+    public boolean isCanonical() {
+        // Get normalized function
+        var canonicalFunction = canonical();
+
+        // Compare
+        return this.equals(canonicalFunction);
+    }
+
     /**
      * 
      * @return all the FunctionDecl related to this function (e.g., prototypes, implementation)
