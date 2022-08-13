@@ -83,7 +83,7 @@ public class App extends ClavaNode {
     private DeclarationsCache declarationsCache;
     // private final Map<String, List<FunctionDecl>> functionPrototypesCache;
     // private final Map<String, List<FunctionDecl>> functionImplementationsCache;
-    private final Map<String, VarDecl> globalVarDefinitionCache;
+    // private final Map<String, VarDecl> globalVarDefinitionCache;
 
     private final IdNormalizer idNormalizer;
     private final CallInliner callInliner;
@@ -106,7 +106,7 @@ public class App extends ClavaNode {
         declarationsCache = null;
         // functionPrototypesCache = new HashMap<>();
         // functionImplementationsCache = new HashMap<>();
-        globalVarDefinitionCache = new HashMap<>();
+        // globalVarDefinitionCache = new HashMap<>();
 
         idNormalizer = new IdNormalizer();
         callInliner = new CallInliner(idNormalizer);
@@ -129,7 +129,7 @@ public class App extends ClavaNode {
         // nodesCache.clear();
         // functionImplementationsCache.clear();
         // functionPrototypesCache.clear();
-        globalVarDefinitionCache.clear();
+        // globalVarDefinitionCache.clear();
     }
 
     public DataStore getAppData() {
