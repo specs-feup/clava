@@ -42,6 +42,8 @@ namespace b {
 	class B;	
 	
 	class B {
+		public:
+		void bar();
 	};
 	
 }
@@ -54,6 +56,24 @@ namespace c {
 
 namespace c {
 	namespace cc {
-		class C {};
+		class C {
+			public:
+			void bar();
+		};
 	}
+}
+
+
+namespace d {
+	
+	class D;
+	
+	class D {
+		void bar(b::B b, c::cc::C c);
+	};
+}
+
+void d::D::bar(b::B b, c::cc::C c) {
+	b.bar();
+	c.bar();	
 }

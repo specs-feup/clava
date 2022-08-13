@@ -21,8 +21,11 @@ laraImport("weaver.Query");
 	println("# fooOnlyDecl functions: " + fooOnlyDeclFunctions.length);
 
 	
-	var classes = Query.search("classType", "B").get();
-	println("# B classes: " + classes.length);
+	var bClasses = Query.search("classType", "B").get();
+	println("# B classes: " + bClasses.length);
 	
-	var classes = Query.search("classType", "C").get();
-	println("# C classes: " + classes.length);
+	var cClasses = Query.search("classType", "C").get();
+	println("# C classes: " + cClasses.length);
+	
+	var dCalls = Query.search("classType", "D").search("call").get();
+	println("# calls in D: " + dCalls.length);
