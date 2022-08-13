@@ -24,28 +24,25 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
-import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
-import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.SourceRange;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
-import pt.up.fe.specs.clava.ast.decl.NamespaceDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.extra.data.IdNormalizer;
-import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.transform.call.CallInliner;
+import pt.up.fe.specs.clava.utils.DeclarationsCache;
 import pt.up.fe.specs.clava.utils.ExternalDependencies;
 import pt.up.fe.specs.clava.utils.GlobalManager;
+import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -83,8 +80,9 @@ public class App extends ClavaNode {
     private GlobalManager globalManager;
     // private final Map<String, ClavaNode> nodesCache;
 
-    private final Map<String, List<FunctionDecl>> functionPrototypesCache;
-    private final Map<String, List<FunctionDecl>> functionImplementationsCache;
+    private DeclarationsCache declarationsCache;
+    // private final Map<String, List<FunctionDecl>> functionPrototypesCache;
+    // private final Map<String, List<FunctionDecl>> functionImplementationsCache;
     private final Map<String, VarDecl> globalVarDefinitionCache;
 
     private final IdNormalizer idNormalizer;
@@ -105,21 +103,32 @@ public class App extends ClavaNode {
         globalManager = new GlobalManager();
         // nodesCache = new HashMap<>();
 
-        functionPrototypesCache = new HashMap<>();
-        functionImplementationsCache = new HashMap<>();
+        declarationsCache = null;
+        // functionPrototypesCache = new HashMap<>();
+        // functionImplementationsCache = new HashMap<>();
         globalVarDefinitionCache = new HashMap<>();
 
         idNormalizer = new IdNormalizer();
         callInliner = new CallInliner(idNormalizer);
     }
 
+    private DeclarationsCache getDeclarationsCache() {
+        // If null, initialize it
+        if (declarationsCache == null) {
+            declarationsCache = new DeclarationsCache(this);
+        }
+
+        return declarationsCache;
+    }
+
     /**
      * Clears cached data.
      */
     public void clearCache() {
+        declarationsCache = null;
         // nodesCache.clear();
-        functionImplementationsCache.clear();
-        functionPrototypesCache.clear();
+        // functionImplementationsCache.clear();
+        // functionPrototypesCache.clear();
         globalVarDefinitionCache.clear();
     }
 
@@ -296,80 +305,86 @@ public class App extends ClavaNode {
     // }
 
     public List<FunctionDecl> getFunctionPrototypes(FunctionDecl function) {
-        return getFunctions(function, functionPrototypesCache, false);
+        return getDeclarationsCache().getFunctionPrototypes(function);
+        // return getFunctions(function, functionPrototypesCache, false);
     }
 
     public Optional<FunctionDecl> getFunctionImplementation(FunctionDecl function) {
-        var functionImplementations = getFunctions(function, functionImplementationsCache, true);
-
-        if (functionImplementations.isEmpty()) {
-            return Optional.empty();
-        }
-
-        if (functionImplementations.size() != 1) {
-            ClavaLog.info("Found more than one implementation for function '" + function.getSignature()
-                    + "', returning first occurrence");
-        }
-
-        return Optional.of(functionImplementations.get(0));
+        return getDeclarationsCache().getFunctionImplementation(function);
+        // var functionImplementations = getFunctions(function, functionImplementationsCache, true);
+        //
+        // if (functionImplementations.isEmpty()) {
+        // return Optional.empty();
+        // }
+        //
+        // if (functionImplementations.size() != 1) {
+        // ClavaLog.info("Found more than one implementation for function '" + function.getSignature()
+        // + "', returning first occurrence");
+        // }
+        //
+        // return Optional.of(functionImplementations.get(0));
     }
 
-    private List<FunctionDecl> getFunctions(FunctionDecl function, Map<String, List<FunctionDecl>> cache,
-            boolean hasBody) {
+    // private List<FunctionDecl> getFunctions(FunctionDecl function, Map<String, List<FunctionDecl>> cache,
+    // boolean hasBody) {
+    //
+    // // Check if node was already asked
+    // var functionId = function.getSignature();
+    //
+    // var cachedFunctions = cache.get(functionId);
+    // if (cachedFunctions != null) {
+    // return cachedFunctions;
+    // }
+    //
+    // var functions = getDescendantsStream()
+    // .filter(FunctionDecl.class::isInstance)
+    // .map(FunctionDecl.class::cast)
+    // // Check hasBody flag
+    // .filter(fdecl -> fdecl.hasBody() == hasBody)
+    // // Filter by id
+    // .filter(fdecl -> fdecl.getSignature().equals(functionId))
+    // // Normalize FunctionDecl before returning
+    // .map(fdecl -> (FunctionDecl) ClavaNodes.normalizeDecl(fdecl))
+    // .collect(Collectors.toList());
+    //
+    // // Store return in cache
+    // cache.put(functionId, functions);
+    //
+    // return functions;
+    // }
 
-        // Check if node was already asked
-        var functionId = function.getSignature();
-
-        var cachedFunctions = cache.get(functionId);
-        if (cachedFunctions != null) {
-            return cachedFunctions;
-        }
-
-        var functions = getDescendantsStream()
-                .filter(FunctionDecl.class::isInstance)
-                .map(FunctionDecl.class::cast)
-                // Check hasBody flag
-                .filter(fdecl -> fdecl.hasBody() == hasBody)
-                // Filter by id
-                .filter(fdecl -> fdecl.getSignature().equals(functionId))
-                // Normalize FunctionDecl before returning
-                .map(fdecl -> (FunctionDecl) ClavaNodes.normalizeDecl(fdecl))
-                .collect(Collectors.toList());
-
-        // Store return in cache
-        cache.put(functionId, functions);
-
-        return functions;
-    }
-
-    public Optional<CXXRecordDecl> getCxxRecordDeclaration(CXXRecordDecl record) {
-        return getCxxRecordDeclarations(record).stream().findFirst();
-    }
+    // public Optional<CXXRecordDecl> getCxxRecordDeclaration(CXXRecordDecl record) {
+    // return getCxxRecordDeclarations(record).stream().findFirst();
+    // }
 
     public List<CXXRecordDecl> getCxxRecordDeclarations(CXXRecordDecl record) {
+        return SpecsCollections.castUnchecked(getDeclarationsCache().getTagPrototypes(record), CXXRecordDecl.class);
+
         // Find CXXRecordDecl
-        return getDescendantsStream().filter(child -> child instanceof CXXRecordDecl)
-                .map(child -> (CXXRecordDecl) child)
-                // Only if it has the same record name
-                .filter(recordDecl -> recordDecl.getDeclName().equals(record.getDeclName()))
-                // Only if it is not a complete definition
-                .filter(recordDecl -> !recordDecl.isCompleteDefinition())
-                // There can be more than one declaration
-                .collect(Collectors.toList());
+        // return getDescendantsStream().filter(child -> child instanceof CXXRecordDecl)
+        // .map(child -> (CXXRecordDecl) child)
+        // // Only if it has the same record name
+        // .filter(recordDecl -> recordDecl.getDeclName().equals(record.getDeclName()))
+        // // Only if it is not a complete definition
+        // .filter(recordDecl -> !recordDecl.isCompleteDefinition())
+        // // There can be more than one declaration
+        // .collect(Collectors.toList());
 
         // return getCxxRecordDeclaration(record, false);
     }
 
     public Optional<CXXRecordDecl> getCxxRecordDefinition(CXXRecordDecl record) {
-        // Find CXXRecordDecl
-        return getDescendantsStream().filter(child -> child instanceof CXXRecordDecl)
-                .map(child -> (CXXRecordDecl) child)
-                // Only if it has the same record name
-                .filter(recordDecl -> recordDecl.getDeclName().equals(record.getDeclName()))
-                // Only if it is a complete definition
-                .filter(recordDecl -> recordDecl.isCompleteDefinition())
-                // There should be only one definition
-                .findFirst();
+        return getDeclarationsCache().getTagImplementation(record).map(CXXRecordDecl.class::cast);
+
+        // // Find CXXRecordDecl
+        // return getDescendantsStream().filter(child -> child instanceof CXXRecordDecl)
+        // .map(child -> (CXXRecordDecl) child)
+        // // Only if it has the same record name
+        // .filter(recordDecl -> recordDecl.getDeclName().equals(record.getDeclName()))
+        // // Only if it is a complete definition
+        // .filter(recordDecl -> recordDecl.isCompleteDefinition())
+        // // There should be only one definition
+        // .findFirst();
 
         // var definition = getCxxRecordDeclaration(record, true);
         //
@@ -401,44 +416,50 @@ public class App extends ClavaNode {
      * @param declName
      * @return
      */
-    @Deprecated
-    public CXXRecordDecl getCXXRecordDecl(String declName) {
-        return getDescendantsStream().filter(child -> child instanceof CXXRecordDecl)
-                .map(child -> (CXXRecordDecl) child)
-                .filter(recordDecl -> recordDecl.getDeclName().equals(declName))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Could not find CXXRecordDecl with name '" + declName + "'"));
+    // @Deprecated
+    // public CXXRecordDecl getCXXRecordDecl(String declName) {
+    // return getDescendantsStream().filter(child -> child instanceof CXXRecordDecl)
+    // .map(child -> (CXXRecordDecl) child)
+    // .filter(recordDecl -> recordDecl.getDeclName().equals(declName))
+    // .findFirst()
+    // .orElseThrow(() -> new RuntimeException("Could not find CXXRecordDecl with name '" + declName + "'"));
+    //
+    // }
 
-    }
+    /**
+     * 
+     * @param namespace
+     * @param declName
+     * @return
+     */
+    // public CXXRecordDecl getCXXRecordDecl(String namespace, String declName) {
+    // return getCXXRecordDeclTry(namespace, declName)
+    // .orElseThrow(() -> new RuntimeException(
+    // "Could not find CXXRecordDecl with name '" + (namespace == null ? "" : namespace + "::")
+    // + declName + "'"));
+    // }
 
-    public CXXRecordDecl getCXXRecordDecl(String namespace, String declName) {
-        return getCXXRecordDeclTry(namespace, declName)
-                .orElseThrow(() -> new RuntimeException(
-                        "Could not find CXXRecordDecl with name '" + (namespace == null ? "" : namespace + "::")
-                                + declName + "'"));
-    }
-
-    public Optional<CXXRecordDecl> getCXXRecordDeclTry(String namespace, String declName) {
-
-        // Iterate over translation units, NamespaceDecl and CXXRecordDecl without namespace are directly under TUs
-        Stream<ClavaNode> cxxRecordCandidates = getTranslationUnits().stream()
-                .flatMap(tu -> tu.getChildrenStream());
-
-        // If there is a namespace, filter the stream for the corresponding NamespaceDecl first
-        if (namespace != null) {
-            cxxRecordCandidates = cxxRecordCandidates
-                    .filter(child -> child instanceof NamespaceDecl)
-                    .map(namespaceDecl -> (NamespaceDecl) namespaceDecl)
-                    .filter(namespaceDecl -> namespaceDecl.getDeclName().equals(namespace))
-                    .flatMap(namespaceDecl -> namespaceDecl.getChildrenStream());
-        }
-
-        // Find CXXRecordDecl
-        return cxxRecordCandidates.filter(child -> child instanceof CXXRecordDecl)
-                .map(child -> (CXXRecordDecl) child)
-                .filter(recordDecl -> recordDecl.getDeclName().equals(declName))
-                .findFirst();
-    }
+    // public Optional<CXXRecordDecl> getCXXRecordDeclTry(String namespace, String declName) {
+    //
+    // // Iterate over translation units, NamespaceDecl and CXXRecordDecl without namespace are directly under TUs
+    // Stream<ClavaNode> cxxRecordCandidates = getTranslationUnits().stream()
+    // .flatMap(tu -> tu.getChildrenStream());
+    //
+    // // If there is a namespace, filter the stream for the corresponding NamespaceDecl first
+    // if (namespace != null) {
+    // cxxRecordCandidates = cxxRecordCandidates
+    // .filter(child -> child instanceof NamespaceDecl)
+    // .map(namespaceDecl -> (NamespaceDecl) namespaceDecl)
+    // .filter(namespaceDecl -> namespaceDecl.getDeclName().equals(namespace))
+    // .flatMap(namespaceDecl -> namespaceDecl.getChildrenStream());
+    // }
+    //
+    // // Find CXXRecordDecl
+    // return cxxRecordCandidates.filter(child -> child instanceof CXXRecordDecl)
+    // .map(child -> (CXXRecordDecl) child)
+    // .filter(recordDecl -> recordDecl.getDeclName().equals(declName))
+    // .findFirst();
+    // }
 
     /**
      * Helper method that accepts a RecordType.
@@ -446,9 +467,9 @@ public class App extends ClavaNode {
      * @param recordType
      * @return
      */
-    public Optional<CXXRecordDecl> getCXXRecordDeclTry(RecordType recordType) {
-        return getCXXRecordDeclTry(recordType.getNamespace().orElse(null), recordType.getSimpleRecordName());
-    }
+    // public Optional<CXXRecordDecl> getCXXRecordDeclTry(RecordType recordType) {
+    // return getCXXRecordDeclTry(recordType.getNamespace().orElse(null), recordType.getSimpleRecordName());
+    // }
 
     public GlobalManager getGlobalManager() {
         return globalManager;

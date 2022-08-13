@@ -57,19 +57,35 @@ public class DeclarationsCache {
 
     }
 
-    public List<FunctionDecl> getFunctionPrototypes(String signature) {
+    public List<FunctionDecl> getFunctionPrototypes(FunctionDecl function) {
+        return getFunctionPrototypes(getFunctionKey(function));
+    }
+
+    private List<FunctionDecl> getFunctionPrototypes(String signature) {
         return functionPrototypes.get(signature);
     }
 
-    public Optional<FunctionDecl> getFunctionImplementation(String signature) {
+    public Optional<FunctionDecl> getFunctionImplementation(FunctionDecl function) {
+        return getFunctionImplementation(getFunctionKey(function));
+    }
+
+    private Optional<FunctionDecl> getFunctionImplementation(String signature) {
         return Optional.ofNullable(functionImplementations.get(signature));
     }
 
-    public List<TagDecl> getTagPrototypes(String signature) {
+    public List<TagDecl> getTagPrototypes(TagDecl tagDecl) {
+        return getTagPrototypes(getTagKey(tagDecl));
+    }
+
+    private List<TagDecl> getTagPrototypes(String signature) {
         return tagPrototypes.get(signature);
     }
 
-    public Optional<TagDecl> getTagImplementation(String signature) {
+    public Optional<TagDecl> getTagImplementation(TagDecl tagDecl) {
+        return getTagImplementation(getTagKey(tagDecl));
+    }
+
+    private Optional<TagDecl> getTagImplementation(String signature) {
         return Optional.ofNullable(tagImplementations.get(signature));
     }
 
@@ -98,18 +114,24 @@ public class DeclarationsCache {
     }
 
     private void processTag(TagDecl tagDecl) {
-        var signature = tagDecl.getDeclName();
+        var signature = getTagKey(tagDecl);
         var isCompleteDefinition = tagDecl.isCompleteDefinition();
 
         // Store decl in appropriate map
         if (isCompleteDefinition) {
+
             var previousValue = tagImplementations.put(signature, tagDecl);
 
             // There should be only one
             if (previousValue != null) {
-                SpecsLogs.info("Found more than one implementation for record '" + signature + "':\n"
+                SpecsLogs.info("Found more than one implementation for record '" + signature
+                        + "', returning the first occurence:\n"
                         + "1 -> " + previousValue.getLocation() + "\n"
                         + "2 -> " + tagDecl.getLocation());
+
+                // Setting to previous value, this way we avoid asking if the map contains the value
+                // and the more common path does not have that overhead
+                tagImplementations.put(signature, previousValue);
             }
         } else {
             tagPrototypes.put(signature, tagDecl);
@@ -126,13 +148,21 @@ public class DeclarationsCache {
 
     }
 
+    public String getFunctionKey(FunctionDecl function) {
+        return function.getSignature();
+    }
+
+    public String getTagKey(TagDecl tagDecl) {
+        return tagDecl.getDeclName();
+    }
+
     private void processFunction(FunctionDecl function) {
 
         // Check hasBody flag
         var hasBody = function.hasBody();
 
         // Get signature
-        var signature = function.getSignature();
+        var signature = getFunctionKey(function);
 
         // Normalize function decl
         var normalizedFunction = (FunctionDecl) ClavaNodes.normalizeDecl(function);
@@ -143,9 +173,14 @@ public class DeclarationsCache {
 
             // There should be only one
             if (previousValue != null) {
-                SpecsLogs.info("Found more than one implementation for function '" + signature + "':\n"
+                SpecsLogs.info("Found more than one implementation for function '" + signature
+                        + "', returning the first occurence:\n"
                         + "1 -> " + previousValue.getLocation() + "\n"
                         + "2 -> " + normalizedFunction.getLocation());
+
+                // Setting to previous value, this way we avoid asking if the map contains the value
+                // and the more common path does not have that overhead
+                functionImplementations.put(signature, normalizedFunction);
             }
         } else {
             functionPrototypes.put(signature, normalizedFunction);
