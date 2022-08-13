@@ -81,7 +81,7 @@ public class App extends ClavaNode {
     // private Map<File, String> sourceFoldernames;
 
     private GlobalManager globalManager;
-    private final Map<String, ClavaNode> nodesCache;
+    // private final Map<String, ClavaNode> nodesCache;
 
     private final Map<String, List<FunctionDecl>> functionPrototypesCache;
     private final Map<String, List<FunctionDecl>> functionImplementationsCache;
@@ -103,7 +103,7 @@ public class App extends ClavaNode {
 
         sourceFiles = new HashMap<>();
         globalManager = new GlobalManager();
-        nodesCache = new HashMap<>();
+        // nodesCache = new HashMap<>();
 
         functionPrototypesCache = new HashMap<>();
         functionImplementationsCache = new HashMap<>();
@@ -117,7 +117,7 @@ public class App extends ClavaNode {
      * Clears cached data.
      */
     public void clearCache() {
-        nodesCache.clear();
+        // nodesCache.clear();
         functionImplementationsCache.clear();
         functionPrototypesCache.clear();
         globalVarDefinitionCache.clear();
@@ -269,31 +269,31 @@ public class App extends ClavaNode {
                 .findFirst();
     }
 
-    public ClavaNode getNode(String id) {
-        return getNodeTry(id)
-                .orElseThrow(() -> new RuntimeException("Could not find node with id '" + id + "'"));
-    }
+    // public ClavaNode getNode(String id) {
+    // return getNodeTry(id)
+    // .orElseThrow(() -> new RuntimeException("Could not find node with id '" + id + "'"));
+    // }
 
-    public Optional<ClavaNode> getNodeTry(String id) {
-
-        // Check if id is an alias
-        String normalizedId = idNormalizer.normalize(id);
-
-        // Check if node was already asked
-        ClavaNode cachedNode = nodesCache.get(normalizedId);
-        if (cachedNode != null) {
-            return Optional.of(cachedNode);
-        }
-
-        Optional<ClavaNode> askedNode = getDescendantsAndSelfStream()
-                .filter(node -> node.getExtendedId().isPresent())
-                .filter(node -> node.getExtendedId().get().equals(normalizedId))
-                .findFirst();
-
-        askedNode.ifPresent(node -> nodesCache.put(normalizedId, node));
-
-        return askedNode;
-    }
+    // public Optional<ClavaNode> getNodeTry(String id) {
+    //
+    // // Check if id is an alias
+    // String normalizedId = idNormalizer.normalize(id);
+    //
+    // // Check if node was already asked
+    // ClavaNode cachedNode = nodesCache.get(normalizedId);
+    // if (cachedNode != null) {
+    // return Optional.of(cachedNode);
+    // }
+    //
+    // Optional<ClavaNode> askedNode = getDescendantsAndSelfStream()
+    // .filter(node -> node.getExtendedId().isPresent())
+    // .filter(node -> node.getExtendedId().get().equals(normalizedId))
+    // .findFirst();
+    //
+    // askedNode.ifPresent(node -> nodesCache.put(normalizedId, node));
+    //
+    // return askedNode;
+    // }
 
     public List<FunctionDecl> getFunctionPrototypes(FunctionDecl function) {
         return getFunctions(function, functionPrototypesCache, false);
@@ -342,41 +342,6 @@ public class App extends ClavaNode {
         return functions;
     }
 
-    /*
-    private Optional<FunctionDecl> getFunctionDeclaration(FunctionDecl function, Map<String, FunctionDecl> cache,
-            boolean hasBody) {
-    
-        // Check if node was already asked
-        var functionId = function.getSignature();
-    
-        FunctionDecl cachedNode = cache.get(functionId);
-        if (cachedNode != null) {
-            // Check if no function is available
-            if (cachedNode == getNoFunctionFound()) {
-                return Optional.empty();
-            }
-    
-            return Optional.of(cachedNode);
-        }
-    
-        Optional<FunctionDecl> functionDeclaration = getDescendantsStream()
-                .filter(FunctionDecl.class::isInstance)
-                .map(FunctionDecl.class::cast)
-                // Check hasBody flag
-                .filter(fdecl -> fdecl.hasBody() == hasBody)
-                // Filter by id
-                .filter(fdecl -> fdecl.getSignature().equals(functionId))
-                .findFirst()
-                // Normalize FunctionDecl before returning
-                .map(fdecl -> (FunctionDecl) ClavaNodes.normalizeDecl(fdecl));
-    
-        // Store return in cache
-        cache.put(functionId, functionDeclaration.orElse(getNoFunctionFound()));
-    
-        return functionDeclaration;
-    }
-    */
-
     public Optional<CXXRecordDecl> getCxxRecordDeclaration(CXXRecordDecl record) {
         return getCxxRecordDeclarations(record).stream().findFirst();
     }
@@ -409,36 +374,6 @@ public class App extends ClavaNode {
         // var definition = getCxxRecordDeclaration(record, true);
         //
         // return SpecsCollections.toOptional(definition);
-    }
-
-    private List<CXXRecordDecl> getCxxRecordDeclaration(CXXRecordDecl record, boolean isCompleteDefinition) {
-
-        // // Iterate over translation units, NamespaceDecl and CXXRecordDecl without namespace are directly under TUs
-        // Stream<ClavaNode> cxxRecordCandidates = getTranslationUnits().stream()
-        // .flatMap(tu -> tu.getChildrenStream());
-        //
-        // // If record is inside a namespace, look only inside the corresponding namespace
-        // // if (record.getCurrentQualifiedPrefix().isPresent()) {
-        // if (!record.get(CXXRecordDecl.QUALIFIED_PREFIX).isEmpty()) {
-        // cxxRecordCandidates = cxxRecordCandidates
-        // .filter(child -> child instanceof NamespaceDecl)
-        // .map(namespaceDecl -> (NamespaceDecl) namespaceDecl)
-        // .filter(namespaceDecl -> namespaceDecl.getDeclName()
-        // // .equals(record.getCurrentQualifiedPrefix().get()))
-        // .equals(record.get(CXXRecordDecl.QUALIFIED_PREFIX)))
-        // // .flatMap(namespaceDecl -> namespaceDecl.getChildrenStream());
-        // .flatMap(namespaceDecl -> namespaceDecl.getDescendantsAndSelfStream());
-        // }
-
-        // return cxxRecordCandidates.
-
-        // Find CXXRecordDecl
-        return getDescendantsStream().filter(child -> child instanceof CXXRecordDecl)
-                .map(child -> (CXXRecordDecl) child)
-                .filter(recordDecl -> recordDecl.getDeclName().equals(record.getDeclName()))
-                .filter(recordDecl -> recordDecl.isCompleteDefinition() == isCompleteDefinition)
-                .collect(Collectors.toList());
-
     }
 
     public Optional<VarDecl> getGlobalVarDefinition(VarDecl varDecl) {
