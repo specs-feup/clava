@@ -680,25 +680,11 @@ public class CxxFunction extends AFunction {
     @Override
     public AFunction getCanonicalImpl() {
         return CxxJoinpoints.create(function.canonical(), AFunction.class);
-        // // First, try the implementation
-        // var definition = getDefinitionJpImpl();
-        //
-        // if (definition != null) {
-        // return definition;
-        // }
-        //
-        // // Implementation not found return declaration
-        // return getDeclarationJpImpl();
     }
 
     @Override
     public Boolean getIsCanonicalImpl() {
         return function.isCanonical();
-        // // Get normalized function
-        // var canonicalFunction = getCanonicalImpl();
-        //
-        // // Compare
-        // return function.equals(canonicalFunction.getNode());
     }
 
 }

@@ -44,9 +44,18 @@ public class ClavaAstMethods extends TreeNodeAstMethods<ClavaNode> {
         var children = node.getChildren().stream()
                 // Filter null nodes
                 .filter(child -> !(child instanceof NullNode))
+                .map(ClavaAstMethods::processChild)
                 // .filter(ClavaAstMethods::lclFilter)
                 // .map(child -> replaceMethodImplementation(child, childrenList))
                 .toArray();
+
+        // If node is a RecordDecl, make sure present functions are implementations and not declarations,
+        // in case an implementation is present
+        // if (node instanceof RecordDecl) {
+        // System.out.println("Class: " + node.get(NamedDecl.DECL_NAME));
+        // System.out.println("Children: "
+        // + node.getChildren().stream().map(child -> child.getNodeName()).collect(Collectors.toList()));
+        // }
 
         /* */
 
@@ -185,6 +194,14 @@ public class ClavaAstMethods extends TreeNodeAstMethods<ClavaNode> {
         }
 
         return children;
+    }
+
+    protected static ClavaNode processChild(ClavaNode child) {
+        if (child instanceof CXXMethodDecl) {
+            return ((CXXMethodDecl) child).canonical();
+        }
+
+        return child;
     }
 
 }
