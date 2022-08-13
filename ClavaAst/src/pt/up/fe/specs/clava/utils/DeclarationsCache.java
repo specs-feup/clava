@@ -22,6 +22,8 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.TagDecl;
+import pt.up.fe.specs.clava.ast.decl.VarDecl;
+import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.collections.MultiMap;
@@ -41,6 +43,7 @@ public class DeclarationsCache {
     private final Map<String, FunctionDecl> functionImplementations;
     private final MultiMap<String, TagDecl> tagPrototypes;
     private final Map<String, TagDecl> tagImplementations;
+    private final Map<String, VarDecl> globalVarDefinitions;
 
     // private boolean isInitialized;
 
@@ -50,6 +53,7 @@ public class DeclarationsCache {
         functionImplementations = new HashMap<>();
         tagPrototypes = new MultiMap<>();
         tagImplementations = new HashMap<>();
+        globalVarDefinitions = new HashMap<>();
 
         // Build maps
         app.getDescendantsStream()
@@ -89,6 +93,10 @@ public class DeclarationsCache {
         return Optional.ofNullable(tagImplementations.get(signature));
     }
 
+    public Optional<VarDecl> getGlobalVarDefinition(VarDecl varDecl) {
+        return Optional.ofNullable(globalVarDefinitions.get(getVarDeclKey(varDecl)));
+    }
+
     // private void initialize(App app) {
     //
     //
@@ -109,8 +117,33 @@ public class DeclarationsCache {
             return;
         }
 
+        if (node instanceof VarDecl) {
+            processVarDecl((VarDecl) node);
+            return;
+        }
+
         // Nothing to do
 
+    }
+
+    private void processVarDecl(VarDecl varDecl) {
+        // Only globals
+        if (!varDecl.get(VarDecl.HAS_GLOBAL_STORAGE)) {
+            return;
+        }
+
+        var key = getVarDeclKey(varDecl);
+
+        // If not none, is not the definition
+        if (varDecl.get(VarDecl.STORAGE_CLASS) != StorageClass.None) {
+            return;
+        }
+
+        addImplementation(key, varDecl, globalVarDefinitions);
+    }
+
+    private String getVarDeclKey(VarDecl varDecl) {
+        return varDecl.get(VarDecl.DECL_NAME);
     }
 
     private void processTag(TagDecl tagDecl) {
@@ -119,20 +152,7 @@ public class DeclarationsCache {
 
         // Store decl in appropriate map
         if (isCompleteDefinition) {
-
-            var previousValue = tagImplementations.put(signature, tagDecl);
-
-            // There should be only one
-            if (previousValue != null) {
-                SpecsLogs.info("Found more than one implementation for record '" + signature
-                        + "', returning the first occurence:\n"
-                        + "1 -> " + previousValue.getLocation() + "\n"
-                        + "2 -> " + tagDecl.getLocation());
-
-                // Setting to previous value, this way we avoid asking if the map contains the value
-                // and the more common path does not have that overhead
-                tagImplementations.put(signature, previousValue);
-            }
+            addImplementation(signature, tagDecl, tagImplementations);
         } else {
             tagPrototypes.put(signature, tagDecl);
         }
@@ -146,6 +166,22 @@ public class DeclarationsCache {
         // // There should be only one definition
         // .findFirst();
 
+    }
+
+    private <T extends ClavaNode> void addImplementation(String key, T node, Map<String, T> cache) {
+        var previousValue = cache.put(key, node);
+
+        // There should be only one
+        if (previousValue != null) {
+            SpecsLogs.info("Found more than one implementation for node " + node.getClass().getSimpleName() + " '" + key
+                    + "', returning the first occurence:\n"
+                    + "1 -> " + previousValue.getLocation() + "\n"
+                    + "2 -> " + node.getLocation());
+
+            // Setting to previous value, this way we avoid asking if the map contains the value
+            // and the more common path does not have that overhead
+            cache.put(key, previousValue);
+        }
     }
 
     public String getFunctionKey(FunctionDecl function) {
@@ -169,19 +205,21 @@ public class DeclarationsCache {
 
         // Store decl in appropriate map
         if (hasBody) {
-            var previousValue = functionImplementations.put(signature, normalizedFunction);
+            addImplementation(signature, normalizedFunction, functionImplementations);
 
-            // There should be only one
-            if (previousValue != null) {
-                SpecsLogs.info("Found more than one implementation for function '" + signature
-                        + "', returning the first occurence:\n"
-                        + "1 -> " + previousValue.getLocation() + "\n"
-                        + "2 -> " + normalizedFunction.getLocation());
-
-                // Setting to previous value, this way we avoid asking if the map contains the value
-                // and the more common path does not have that overhead
-                functionImplementations.put(signature, normalizedFunction);
-            }
+            // var previousValue = functionImplementations.put(signature, normalizedFunction);
+            //
+            // // There should be only one
+            // if (previousValue != null) {
+            // SpecsLogs.info("Found more than one implementation for function '" + signature
+            // + "', returning the first occurence:\n"
+            // + "1 -> " + previousValue.getLocation() + "\n"
+            // + "2 -> " + normalizedFunction.getLocation());
+            //
+            // // Setting to previous value, this way we avoid asking if the map contains the value
+            // // and the more common path does not have that overhead
+            // functionImplementations.put(signature, normalizedFunction);
+            // }
         } else {
             functionPrototypes.put(signature, normalizedFunction);
         }

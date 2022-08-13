@@ -392,23 +392,25 @@ public class App extends ClavaNode {
     }
 
     public Optional<VarDecl> getGlobalVarDefinition(VarDecl varDecl) {
-        var id = varDecl.get(ID);
+        return getDeclarationsCache().getGlobalVarDefinition(varDecl);
 
-        var globalDef = globalVarDefinitionCache.get(id);
-        if (globalDef != null) {
-            // Check if no vardecl was found
-            if (globalDef == getNoVarDeclFound()) {
-                return Optional.empty();
-            }
-
-            return Optional.of(globalDef);
-        }
-
-        globalDef = VarDecl.getGlobalDefinition(this, varDecl);
-        var globalDefToStore = globalDef != null ? globalDef : getNoVarDeclFound();
-        globalVarDefinitionCache.put(id, globalDefToStore);
-
-        return Optional.ofNullable(globalDef);
+        // var id = varDecl.get(ID);
+        //
+        // var globalDef = globalVarDefinitionCache.get(id);
+        // if (globalDef != null) {
+        // // Check if no vardecl was found
+        // if (globalDef == getNoVarDeclFound()) {
+        // return Optional.empty();
+        // }
+        //
+        // return Optional.of(globalDef);
+        // }
+        //
+        // globalDef = VarDecl.getGlobalDefinition(this, varDecl);
+        // var globalDefToStore = globalDef != null ? globalDef : getNoVarDeclFound();
+        // globalVarDefinitionCache.put(id, globalDefToStore);
+        //
+        // return Optional.ofNullable(globalDef);
     }
 
     /**
