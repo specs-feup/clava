@@ -172,7 +172,8 @@ public class CXXMethodDecl extends FunctionDecl {
 
         // Add namespace if not inside namespace decl and not inside RecordDecl
         if (addNamespace()) {
-            String namespace = getCurrentNamespace(getRecordName()).map(str -> str + "::").orElse("");
+            // String namespace = getCurrentNamespace(getRecordName()).map(str -> str + "::").orElse("");
+            String namespace = getCurrentNamespace().map(str -> str + "::").orElse("");
 
             code.append(namespace);
         }

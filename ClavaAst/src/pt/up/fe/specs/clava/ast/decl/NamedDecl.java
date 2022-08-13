@@ -117,11 +117,14 @@ public abstract class NamedDecl extends Decl {
         return getDeclName();
     }
 
+    /**
+     * The qualified prefix that should be used for this record in the scope it currently is.
+     * 
+     * <p>
+     * For instance, if Decl has the qualified prefix a::b, and is inside the namespace a, returns b.
+     */
     public Optional<String> getCurrentNamespace() {
-        return getCurrentNamespace("");
-    }
 
-    public Optional<String> getCurrentNamespace(String recordName) {
         // Get namespace
         String namespace = getNamespace().orElse(null);
 
