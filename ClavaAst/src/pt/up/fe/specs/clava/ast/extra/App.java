@@ -46,7 +46,6 @@ import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.transform.call.CallInliner;
 import pt.up.fe.specs.clava.utils.ExternalDependencies;
 import pt.up.fe.specs.clava.utils.GlobalManager;
-import pt.up.fe.specs.util.SpecsCollections;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 
@@ -383,35 +382,58 @@ public class App extends ClavaNode {
     }
 
     public List<CXXRecordDecl> getCxxRecordDeclarations(CXXRecordDecl record) {
-        return getCxxRecordDeclaration(record, false);
+        // Find CXXRecordDecl
+        return getDescendantsStream().filter(child -> child instanceof CXXRecordDecl)
+                .map(child -> (CXXRecordDecl) child)
+                // Only if it has the same record name
+                .filter(recordDecl -> recordDecl.getDeclName().equals(record.getDeclName()))
+                // Only if it is not a complete definition
+                .filter(recordDecl -> !recordDecl.isCompleteDefinition())
+                // There can be more than one declaration
+                .collect(Collectors.toList());
+
+        // return getCxxRecordDeclaration(record, false);
     }
 
     public Optional<CXXRecordDecl> getCxxRecordDefinition(CXXRecordDecl record) {
-        var definition = getCxxRecordDeclaration(record, true);
+        // Find CXXRecordDecl
+        return getDescendantsStream().filter(child -> child instanceof CXXRecordDecl)
+                .map(child -> (CXXRecordDecl) child)
+                // Only if it has the same record name
+                .filter(recordDecl -> recordDecl.getDeclName().equals(record.getDeclName()))
+                // Only if it is a complete definition
+                .filter(recordDecl -> recordDecl.isCompleteDefinition())
+                // There should be only one definition
+                .findFirst();
 
-        return SpecsCollections.toOptional(definition);
+        // var definition = getCxxRecordDeclaration(record, true);
+        //
+        // return SpecsCollections.toOptional(definition);
     }
 
     private List<CXXRecordDecl> getCxxRecordDeclaration(CXXRecordDecl record, boolean isCompleteDefinition) {
 
-        // Iterate over translation units, NamespaceDecl and CXXRecordDecl without namespace are directly under TUs
-        Stream<ClavaNode> cxxRecordCandidates = getTranslationUnits().stream()
-                .flatMap(tu -> tu.getChildrenStream());
+        // // Iterate over translation units, NamespaceDecl and CXXRecordDecl without namespace are directly under TUs
+        // Stream<ClavaNode> cxxRecordCandidates = getTranslationUnits().stream()
+        // .flatMap(tu -> tu.getChildrenStream());
+        //
+        // // If record is inside a namespace, look only inside the corresponding namespace
+        // // if (record.getCurrentQualifiedPrefix().isPresent()) {
+        // if (!record.get(CXXRecordDecl.QUALIFIED_PREFIX).isEmpty()) {
+        // cxxRecordCandidates = cxxRecordCandidates
+        // .filter(child -> child instanceof NamespaceDecl)
+        // .map(namespaceDecl -> (NamespaceDecl) namespaceDecl)
+        // .filter(namespaceDecl -> namespaceDecl.getDeclName()
+        // // .equals(record.getCurrentQualifiedPrefix().get()))
+        // .equals(record.get(CXXRecordDecl.QUALIFIED_PREFIX)))
+        // // .flatMap(namespaceDecl -> namespaceDecl.getChildrenStream());
+        // .flatMap(namespaceDecl -> namespaceDecl.getDescendantsAndSelfStream());
+        // }
 
-        // If record is inside a namespace, look only inside the corresponding namespace
-        // if (record.getCurrentQualifiedPrefix().isPresent()) {
-        if (!record.get(CXXRecordDecl.QUALIFIED_PREFIX).isEmpty()) {
-            cxxRecordCandidates = cxxRecordCandidates
-                    .filter(child -> child instanceof NamespaceDecl)
-                    .map(namespaceDecl -> (NamespaceDecl) namespaceDecl)
-                    .filter(namespaceDecl -> namespaceDecl.getDeclName()
-                            // .equals(record.getCurrentQualifiedPrefix().get()))
-                            .equals(record.get(CXXRecordDecl.QUALIFIED_PREFIX)))
-                    .flatMap(namespaceDecl -> namespaceDecl.getChildrenStream());
-        }
+        // return cxxRecordCandidates.
 
         // Find CXXRecordDecl
-        return cxxRecordCandidates.filter(child -> child instanceof CXXRecordDecl)
+        return getDescendantsStream().filter(child -> child instanceof CXXRecordDecl)
                 .map(child -> (CXXRecordDecl) child)
                 .filter(recordDecl -> recordDecl.getDeclName().equals(record.getDeclName()))
                 .filter(recordDecl -> recordDecl.isCompleteDefinition() == isCompleteDefinition)

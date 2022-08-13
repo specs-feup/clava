@@ -51,3 +51,9 @@ namespace c {
 		class C;
 	}
 }
+
+namespace c {
+	namespace cc {
+		class C {};
+	}
+}
