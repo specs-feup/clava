@@ -58,7 +58,7 @@ public class ClavaAstMethods extends TreeNodeAstMethods<ClavaNode> {
                 .filter(child -> !(child instanceof NullNode))
                 // Process the child, it might be removed if it is transformed
                 // into null
-                .map(ClavaAstMethods::processChild)
+                .map(child -> CHILDREN_PROCESSORS.apply(child))
                 // Some children might be removed after processChild,
                 // this is identified by returning null
                 .filter(child -> child != null)
@@ -138,10 +138,6 @@ public class ClavaAstMethods extends TreeNodeAstMethods<ClavaNode> {
 
         // In any other case, ignore the node
         return null;
-    }
-
-    protected static ClavaNode processChild(ClavaNode child) {
-        return CHILDREN_PROCESSORS.apply(child);
     }
 
 }
