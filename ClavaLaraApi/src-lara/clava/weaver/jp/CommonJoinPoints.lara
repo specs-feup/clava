@@ -37,7 +37,7 @@ Selector.prototype._addJps = function($newJps, $jps, jpFilter, $jpChain, name) {
 		if($filteredJp.length === 0) {
 			continue;
 		}
-		
+		/*
 		if($jp.instanceOf("function")){
 		
 			if(!this._isFunctionValid($jp)) {
@@ -45,6 +45,7 @@ Selector.prototype._addJps = function($newJps, $jps, jpFilter, $jpChain, name) {
 			}     
 		
 		}
+		*/
 		
 		if($jp.instanceOf("classType")){
 		
@@ -74,6 +75,7 @@ Selector.prototype._addJps = function($newJps, $jps, jpFilter, $jpChain, name) {
 
 }
 
+/*
 Selector.prototype._isFunctionValid = function($function) {
 		    var decl = $function.astNode;
 			
@@ -91,6 +93,7 @@ Selector.prototype._isFunctionValid = function($function) {
 			// In any other case, ignore the node
 			return false;
 }
+*/
 
 Selector.prototype._isClassValid = function($class) {
 		    var decl = $class.astNode;
