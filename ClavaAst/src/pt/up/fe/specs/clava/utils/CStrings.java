@@ -34,35 +34,7 @@ public class CStrings {
         ESCAPE_SEQUENCES.put((byte) 0x09, "\\t");
         ESCAPE_SEQUENCES.put((byte) 0x0b, "\\v");
 
-        // if (currentChar == '\b') {
-        // return "\\b";
-        // }
-        //
-        // if (currentChar == '\f') {
-        // return "\\f";
-        // }
-        //
-        // if (currentChar == '\n') {
-        // return "\\n";
-        // }
-        // if (currentChar == '\r') {
-        // return "\\r";
-        // }
-        //
-        // if (currentChar == '\t') {
-        // escapedString.append("\\t");
-        // continue;
-        // }
-        //
-        // if (currentChar == '\"' || currentChar == '\\') {
-        // escapedString.append("\\");
-        // }
-
     }
-
-    // public static String escapeString(String string) {
-    //
-    // }
 
     /**
      * Transforms a byte representing an ASCII character into the equivalent C string representation.
@@ -95,8 +67,8 @@ public class CStrings {
             return "\\x" + String.format("%02X", (byte) intValue);
         }
 
+        // Since it is accepting a byte, this should never execute
         throw new RuntimeException("Not implemented for values higher than 255. Current value: " + intValue);
-
     }
 
 }

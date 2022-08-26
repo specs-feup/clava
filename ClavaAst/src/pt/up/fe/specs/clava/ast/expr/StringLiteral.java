@@ -126,11 +126,6 @@ public class StringLiteral extends Literal {
         }
 
         throw new CaseNotDefinedException(kind);
-        // ASCII and WIDE remaining
-        // var chars = getBytesAsCharArray();
-
-        // Build the string, escaping characters as necessary
-        // return new String(getBytesAsCharArray());
     }
 
     private char[] getBytesAsCharArray() {
