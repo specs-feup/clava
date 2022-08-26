@@ -23,7 +23,9 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.enums.StringKind;
+import pt.up.fe.specs.clava.utils.CStrings;
 import pt.up.fe.specs.util.SpecsStrings;
+import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
 
 public class StringLiteral extends Literal {
 
@@ -61,7 +63,7 @@ public class StringLiteral extends Literal {
         // return super.getLiteral();
         // }
 
-        return get(STRING_KIND).getPrefix() + "\"" + SpecsStrings.escapeJson(getStringFromBytes()) + "\"";
+        return get(STRING_KIND).getPrefix() + "\"" + getStringFromBytes() + "\"";
     }
 
     @Override
@@ -84,10 +86,51 @@ public class StringLiteral extends Literal {
                 bytes[i] = byteList.get(i);
             }
 
-            return new String(bytes, kind.getCharset());
+            return SpecsStrings.escapeJson(new String(bytes, kind.getCharset()));
         }
 
-        return new String(getBytesAsCharArray());
+        // If ASCII, convert each byte directly
+        if (kind == StringKind.ASCII) {
+            var literal = new StringBuilder();
+
+            for (var aByte : get(STRING_BYTES)) {
+                literal.append(CStrings.toCString(aByte));
+            }
+
+            return literal.toString();
+        }
+
+        // If WIDE, take into account number of bytes per character
+        if (kind == StringKind.WIDE) {
+
+            // Build the string, escaping characters as necessary
+            var chars = getBytesAsCharArray();
+
+            var literal = new StringBuilder();
+
+            for (var aChar : chars) {
+                var asInt = (int) aChar;
+
+                // If inside ASCII range, use ASCII mappings
+                if (asInt < 256) {
+                    literal.append(CStrings.toCString((byte) asInt));
+                    continue;
+                }
+
+                literal.append(aChar);
+            }
+
+            return literal.toString();
+
+            // return new String(getBytesAsCharArray());
+        }
+
+        throw new CaseNotDefinedException(kind);
+        // ASCII and WIDE remaining
+        // var chars = getBytesAsCharArray();
+
+        // Build the string, escaping characters as necessary
+        // return new String(getBytesAsCharArray());
     }
 
     private char[] getBytesAsCharArray() {
