@@ -18,22 +18,38 @@ import java.util.Map;
 
 public class CStrings {
 
-    private static final Map<Byte, String> ESCAPE_SEQUENCES;
+    private static final Map<Byte, String> GENERAL_ESCAPE_SEQUENCES;
     static {
-        ESCAPE_SEQUENCES = new HashMap<>();
+        GENERAL_ESCAPE_SEQUENCES = new HashMap<>();
 
-        ESCAPE_SEQUENCES.put((byte) 0x27, "\\'");
-        ESCAPE_SEQUENCES.put((byte) 0x22, "\\\"");
-        ESCAPE_SEQUENCES.put((byte) 0x3f, "\\?");
-        ESCAPE_SEQUENCES.put((byte) 0x5c, "\\\\");
-        ESCAPE_SEQUENCES.put((byte) 0x07, "\\a");
-        ESCAPE_SEQUENCES.put((byte) 0x08, "\\b");
-        ESCAPE_SEQUENCES.put((byte) 0x0c, "\\f");
-        ESCAPE_SEQUENCES.put((byte) 0x0a, "\\n");
-        ESCAPE_SEQUENCES.put((byte) 0x0d, "\\r");
-        ESCAPE_SEQUENCES.put((byte) 0x09, "\\t");
-        ESCAPE_SEQUENCES.put((byte) 0x0b, "\\v");
+        // ESCAPE_SEQUENCES.put((byte) 0x27, "\\'");
+        // ESCAPE_SEQUENCES.put((byte) 0x22, "\\\"");
+        // ESCAPE_SEQUENCES.put((byte) 0x3f, "\\?");
+        GENERAL_ESCAPE_SEQUENCES.put((byte) 0x5c, "\\\\");
+        GENERAL_ESCAPE_SEQUENCES.put((byte) 0x07, "\\a");
+        GENERAL_ESCAPE_SEQUENCES.put((byte) 0x08, "\\b");
+        GENERAL_ESCAPE_SEQUENCES.put((byte) 0x0c, "\\f");
+        GENERAL_ESCAPE_SEQUENCES.put((byte) 0x0a, "\\n");
+        GENERAL_ESCAPE_SEQUENCES.put((byte) 0x0d, "\\r");
+        GENERAL_ESCAPE_SEQUENCES.put((byte) 0x09, "\\t");
+        GENERAL_ESCAPE_SEQUENCES.put((byte) 0x0b, "\\v");
 
+    }
+
+    private static final Map<Byte, String> CHAR_ESCAPE_SEQUENCES;
+    static {
+        CHAR_ESCAPE_SEQUENCES = new HashMap<>();
+
+        CHAR_ESCAPE_SEQUENCES.put((byte) 0x27, "\\'");
+        CHAR_ESCAPE_SEQUENCES.put((byte) 0x22, "\\\"");
+        CHAR_ESCAPE_SEQUENCES.put((byte) 0x3f, "\\?");
+    }
+
+    private static final Map<Byte, String> STRING_ESCAPE_SEQUENCES;
+    static {
+        STRING_ESCAPE_SEQUENCES = new HashMap<>();
+
+        STRING_ESCAPE_SEQUENCES.put((byte) 0x22, "\\\"");
     }
 
     /**
@@ -45,14 +61,32 @@ public class CStrings {
      * @param aByte
      * @return
      */
-    public static String toCString(byte aByte) {
+    public static String toCString(byte aByte, TextLiteralKind literalKind) {
 
-        // Check if escape sequence
-        var escapeSequence = ESCAPE_SEQUENCES.get(aByte);
+        // Check if general escape sequence
+        var escapeSequence = GENERAL_ESCAPE_SEQUENCES.get(aByte);
 
         if (escapeSequence != null) {
             return escapeSequence;
         }
+
+        if (literalKind == TextLiteralKind.CHAR && CHAR_ESCAPE_SEQUENCES.containsKey(aByte)) {
+            return CHAR_ESCAPE_SEQUENCES.get(aByte);
+        }
+
+        if (literalKind == TextLiteralKind.STRING && STRING_ESCAPE_SEQUENCES.containsKey(aByte)) {
+            return STRING_ESCAPE_SEQUENCES.get(aByte);
+        }
+
+        // Check if delimiter ' and correctly escape according to the case
+        // if (aByte == 0x27) {
+        // return literalKind == TextLiteralKind.CHAR ? "\\'" : "'";
+        // }
+        //
+        // // Check if delimiter "
+        // if (aByte == 0x22) {
+        // return literalKind == TextLiteralKind.STRING ? "\\\"" : "\"";
+        // }
 
         // Check if byte can be safely converted to a character
         int intValue = aByte;
