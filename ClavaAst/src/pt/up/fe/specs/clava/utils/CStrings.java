@@ -22,9 +22,6 @@ public class CStrings {
     static {
         GENERAL_ESCAPE_SEQUENCES = new HashMap<>();
 
-        // ESCAPE_SEQUENCES.put((byte) 0x27, "\\'");
-        // ESCAPE_SEQUENCES.put((byte) 0x22, "\\\"");
-        // ESCAPE_SEQUENCES.put((byte) 0x3f, "\\?");
         GENERAL_ESCAPE_SEQUENCES.put((byte) 0x5c, "\\\\");
         GENERAL_ESCAPE_SEQUENCES.put((byte) 0x07, "\\a");
         GENERAL_ESCAPE_SEQUENCES.put((byte) 0x08, "\\b");
@@ -77,16 +74,6 @@ public class CStrings {
         if (literalKind == TextLiteralKind.STRING && STRING_ESCAPE_SEQUENCES.containsKey(aByte)) {
             return STRING_ESCAPE_SEQUENCES.get(aByte);
         }
-
-        // Check if delimiter ' and correctly escape according to the case
-        // if (aByte == 0x27) {
-        // return literalKind == TextLiteralKind.CHAR ? "\\'" : "'";
-        // }
-        //
-        // // Check if delimiter "
-        // if (aByte == 0x22) {
-        // return literalKind == TextLiteralKind.STRING ? "\\\"" : "\"";
-        // }
 
         // Check if byte can be safely converted to a character
         int intValue = aByte;

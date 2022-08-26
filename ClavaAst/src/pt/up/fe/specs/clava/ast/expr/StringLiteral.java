@@ -122,8 +122,6 @@ public class StringLiteral extends Literal {
             }
 
             return literal.toString();
-
-            // return new String(getBytesAsCharArray());
         }
 
         throw new CaseNotDefinedException(kind);
