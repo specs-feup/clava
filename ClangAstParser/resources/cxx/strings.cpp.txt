@@ -1,0 +1,8 @@
+int main() {
+   // Issue #102
+   char bom[3] = "\xFF\xFE";
+   wchar_t const *s4 = L"ABCDEF\xFF猫"; // ok, same as
+   wchar_t const *s5 = L"ABCDEF\xFF猫";
+   
+   return 0;
+}

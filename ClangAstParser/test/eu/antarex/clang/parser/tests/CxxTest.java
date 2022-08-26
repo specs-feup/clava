@@ -286,6 +286,11 @@ public class CxxTest {
         new CxxTester("struct.cpp").test();
     }
 
+    @Test
+    public void testStrings() {
+        new CxxTester("strings.cpp").test();
+    }
+
     // -Xclang-ast-dump-nostdinc-nocudalib-nocudainc--cuda-gpu-arch=sm_30
     // "--cuda-device-only"
 
