@@ -23,7 +23,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.expr.enums.StringKind;
-import pt.up.fe.specs.clava.utils.CStrings;
+import pt.up.fe.specs.clava.utils.CText;
 import pt.up.fe.specs.clava.utils.TextLiteralKind;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.exceptions.CaseNotDefinedException;
@@ -95,7 +95,7 @@ public class StringLiteral extends Literal {
             var literal = new StringBuilder();
 
             for (var aByte : get(STRING_BYTES)) {
-                literal.append(CStrings.toCString(aByte, TextLiteralKind.STRING));
+                literal.append(CText.toCString(aByte, TextLiteralKind.STRING));
             }
 
             return literal.toString();
@@ -114,7 +114,7 @@ public class StringLiteral extends Literal {
 
                 // If inside ASCII range, use ASCII mappings
                 if (asInt < 256) {
-                    literal.append(CStrings.toCString((byte) asInt, TextLiteralKind.STRING));
+                    literal.append(CText.toCString((byte) asInt, TextLiteralKind.STRING));
                     continue;
                 }
 

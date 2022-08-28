@@ -16,7 +16,7 @@ package pt.up.fe.specs.clava.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CStrings {
+public class CText {
 
     private static final Map<Byte, String> GENERAL_ESCAPE_SEQUENCES;
     static {
