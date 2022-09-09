@@ -8,20 +8,20 @@ laraImport("lara.pass.Passes");
 laraImport("weaver.Query");
 
 function SimplifyAssignments($startJp) {
-	for(const $op of Query.searchFromInclusive($startJp, "binaryOp")) {
-		SimplifyAssignment($op);
-	}	
-
-
+  for (const $op of Query.searchFromInclusive($startJp, "binaryOp")) {
+    SimplifyAssignment($op);
+  }
 }
 
 function DummyPass($startJp, options) {
-	println("Dummy pass that has received an option object with the value '"+options["foo"]+"' for the key 'foo'");
+  println(
+    "Dummy pass that has received an option object with the value '" +
+      options["foo"] +
+      "' for the key 'foo'"
+  );
 }
 
-
 const statementDecomposer = new StatementDecomposer();
-
 
 /*
 const simplifyIfs = new SimplifySelectionStmts(statementDecomposer);
@@ -31,12 +31,15 @@ simplifyIfs.apply(Query.root());
 declStmt.apply(Query.root());
 */
 
+const passes = [
+  SimplifyAssignments,
+  [SimplifySelectionStmts, statementDecomposer],
+  new DecomposeDeclStmt(),
+  [DummyPass, { foo: "bar" }],
+];
 
-const passes = [SimplifyAssignments, SimplifySelectionStmts, [statementDecomposer], new DecomposeDeclStmt(), DummyPass, {foo: "bar"}];
-const results = Passes.apply(Query.root(), passes);    
+const results = Passes.apply(Query.root(), passes);
 
 //println("Results: " + results)
 
-println(Query.root().code);    
-
-
+println(Query.root().code);
