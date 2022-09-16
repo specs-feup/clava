@@ -1099,14 +1099,14 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
         // Check if data object already exists
         var hasClavaDataJs = jsEngine.eval(
-                "import { _hasClavaData } from 'clavaapi/dist/clava/js/DataHandler.js'; _hasClavaData;",
+                "import { _hasClavaData } from 'node_modules/clavaapi/dist/clava/js/DataHandler.js'; _hasClavaData;",
                 JsFileType.MODULE,
                 "[Java] ACxxWeaverJoinPoint.getDataImpl() [" + (jsNameCounter++) + "]");
         var hasClavaData = jsEngine.asBoolean(jsEngine.call(hasClavaDataJs, getNode()));
 
         // Create proxy function
         var proxyBuilder = jsEngine.eval(
-                "import { _getClavaData } from 'clavaapi/dist/clava/js/DataHandler.js'; _getClavaData;",
+                "import { _getClavaData } from 'node_modules/clavaapi/dist/clava/js/DataHandler.js'; _getClavaData;",
                 JsFileType.MODULE,
                 "[Java] ACxxWeaverJoinPoint.getDataImpl() [" + (jsNameCounter++) + "]");
 
