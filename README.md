@@ -18,7 +18,7 @@ If you have used Clava, please consider filling the [Clava User Experience Feedb
 For a sample of Clava examples, please check the [Unit Tests](https://github.com/specs-feup/clava/tree/master/ClavaWeaver/resources/clava/test).
 
 
-# Resources
+# Installing
 
 A ZIP file with the last compiled JAR for Clava can be downloaded from [here](http://specs.fe.up.pt/tools/clava.zip) ([previous releases](https://drive.google.com/drive/folders/1X3JeYB783ZfqoqIYrCitqABDWhM5bV_Y?usp=sharing)).
 
