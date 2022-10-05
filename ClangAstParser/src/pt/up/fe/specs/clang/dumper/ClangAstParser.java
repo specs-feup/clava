@@ -479,6 +479,10 @@ public class ClangAstParser {
 
             Decl decl = (Decl) clavaNode;
 
+            // Decl can have inside descendants that are not of this file (e.g. inside extern C)
+            // Filter them out
+            removeDescendantsFromOtherTus(decl, clavaNode.getLocation().getFilename());
+
             declarations.put(canonicalPath, decl);
         }
 
@@ -574,6 +578,37 @@ public class ClangAstParser {
         // tUnits.add(tUnit);
 
         return tUnit;
+    }
+
+    private void removeDescendantsFromOtherTus(ClavaNode node, String tuFilename) {
+        // Search children, if a child is not from the file, remove.
+        // Call recursively if from the same file
+        var nodesToRemove = new ArrayList<ClavaNode>();
+        var nodesToCheck = new ArrayList<ClavaNode>();
+
+        for (var child : node.getChildren()) {
+            String childFilename = child.getLocationTry().flatMap(loc -> loc.getFilenameTry()).orElse(null);
+
+            // Ignore if no location
+            if (childFilename == null) {
+                continue;
+            }
+
+            var list = childFilename.equals(tuFilename) ? nodesToCheck : nodesToRemove;
+            list.add(child);
+        }
+
+        // Remove children
+        for (var childToRemove : nodesToRemove) {
+            ClavaLog.debug(() -> "Removing node in TU '" + tuFilename + "' that is from TU '"
+                    + childToRemove.getLocation().getFilename() + "'");
+            childToRemove.detach();
+        }
+
+        // Call recursively
+        for (var childToCheck : nodesToCheck) {
+            removeDescendantsFromOtherTus(childToCheck, tuFilename);
+        }
     }
 
     private List<Pattern> getHeaderExcludePatterns() {
