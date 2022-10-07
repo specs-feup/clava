@@ -8,9 +8,6 @@ var outputFolder = Clava.getWeavingFolder();
 //var outputFolder = Io.getAbsolutePath(Io.mkdir("./codeInserter"));
 
 // Select the only file of the test
-//println("Program:" + Query.root().descendants("function"));
-println("Program:" + Clava.getProgram().descendants("function"));
-
 var $file = Clava.getProgram().descendants("file")[0];
 
 codeInserter.add(
