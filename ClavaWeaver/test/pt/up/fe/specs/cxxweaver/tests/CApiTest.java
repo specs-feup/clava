@@ -97,7 +97,7 @@ public class CApiTest {
         newTester()
                 // .set(LaraiKeys.DEBUG_MODE)
                 // .set(LaraiKeys.VERBOSE, VerboseLevel.all)
-                .test("CodeInserterTest.lara", "code_inserter.c");
+                .test("CodeInserterTest.js", "code_inserter.c");
     }
 
     @Test
