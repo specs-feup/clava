@@ -83,12 +83,12 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     /**
      * True if the "inline" keyword was specified for this function.
      */
-    public final static DataKey<Boolean> IS_INLINE = KeyFactory.bool("isInline");
+    public final static DataKey<Boolean> IS_INLINE_SPECIFIED = KeyFactory.bool("isInline");
 
     /**
      * True if this function is explicitly marked as virtual.
      */
-    public final static DataKey<Boolean> IS_VIRTUAL = KeyFactory.bool("isVirtual");
+    public final static DataKey<Boolean> IS_VIRTUAL_AS_WRITTEN = KeyFactory.bool("isVirtualAsWritten");
 
     /**
      * True if this virtual function is pure, i.e. makes the containing class abstract.
@@ -181,7 +181,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     }
 
     public boolean isInline() {
-        return get(IS_INLINE);
+        return get(IS_INLINE_SPECIFIED);
     }
 
     /**
@@ -230,9 +230,18 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
     /**
      *
-     * @return the node representing the declaration of this function, if it exists
+     * @return the nodes representing the declarations of this function. Only takes into consideration nodes that are
+     *         already in the AST
      */
     public List<FunctionDecl> getPrototypes() {
+
+        // Search for the declaration
+        // return getAppTry().map(app -> app.getFunctionPrototypes(this)).orElse(Collections.emptyList());
+        var prototypes = getAppTry().map(app -> app.getFunctionPrototypes(this)).orElse(Collections.emptyList());
+
+        if (!prototypes.isEmpty()) {
+            return prototypes;
+        }
 
         // If no body, return immediately
         // There are a number of situations where this should be done
@@ -241,8 +250,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
             return Arrays.asList(this);
         }
 
-        // Search for the declaration
-        return getAppTry().map(app -> app.getFunctionPrototypes(this)).orElse(Collections.emptyList());
+        return Collections.emptyList();
     }
 
     /**
@@ -256,9 +264,17 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
     /**
      * 
-     * @return the node representing the implementation of this function.
+     * @return the node representing the implementation of this function. Only takes into consideration nodes that are
+     *         already in the AST
      */
     public Optional<FunctionDecl> getImplementation() {
+
+        // Search for the definition, returns definitions that is already in the tree
+        // return getAppTry().flatMap(app -> app.getFunctionImplementation(this));
+        var definition = getAppTry().flatMap(app -> app.getFunctionImplementation(this));
+        if (definition.isPresent()) {
+            return definition;
+        }
 
         // If has body, return immediately
         // There are a number of situations where this should be done
@@ -266,11 +282,9 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
         if (hasBody()) {
             return Optional.of(this);
         }
-        // System.out.println("App: " + getAppTry());
-        // System.out.println("CLEARING CACHE");
-        // getAppTry().get().clearCache();
-        // Search for the definition
-        return getAppTry().flatMap(app -> app.getFunctionImplementation(this));
+
+        return Optional.empty();
+
     }
 
     /**
@@ -280,6 +294,26 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
      */
     public Optional<FunctionDecl> getDefinition() {
         return getImplementation();
+    }
+
+    public FunctionDecl canonical() {
+        // First, try the implementation
+        var definition = getDefinition();
+
+        if (definition.isPresent()) {
+            return definition.get();
+        }
+
+        // Implementation not found return declaration
+        return getDeclaration().get();
+    }
+
+    public boolean isCanonical() {
+        // Get normalized function
+        var canonicalFunction = canonical();
+
+        // Compare
+        return this.equals(canonicalFunction);
     }
 
     /**
@@ -307,7 +341,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     public String getDeclarationId(boolean useReturnType) {
         List<String> codeElements = new ArrayList<>();
 
-        if (get(IS_INLINE)) {
+        if (get(IS_INLINE_SPECIFIED)) {
             if (getAncestor(TranslationUnit.class).get(TranslationUnit.LANGUAGE).get(Language.GNU_INLINE)) {
                 codeElements.add("__inline__");
             } else {
@@ -329,7 +363,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
             codeElements.add(returnType);
         }
 
-        var currentNamespace = getCurrentNamespace().map(namespace -> namespace + "::").orElse("");
+        var currentNamespace = getCurrentQualifiedPrefix().map(namespace -> namespace + "::").orElse("");
         var typelessCode = currentNamespace + getTypelessCode();
         codeElements.add(typelessCode);
 
@@ -535,7 +569,9 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
 
         builder.append("(");
         builder.append(getParameters().stream()
-                // .map(param -> param.getType().getCode())
+                // TODO DBG, check if has children before getting
+                // .filter(param -> param.getNumChildren() != 0)
+                // .map(param -> param.getType().getCode()
                 .map(param -> param.get(ValueDecl.TYPE).desugarAll().getCode())
                 .collect(Collectors.joining(", ")));
         builder.append(")");

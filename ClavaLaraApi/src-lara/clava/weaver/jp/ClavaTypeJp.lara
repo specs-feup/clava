@@ -28,11 +28,95 @@ _lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'isPrimitive', {
 
 _lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'isClass', {
 	get: function () {
-		if(this.kind !== 'RecordType')
-			return false;
-		return this.astNode.getTagKind().toString()==="CLASS";
+		// if(this.kind !== 'RecordType') return false;
+		// return this.astNode.getTagKind().toString()==="CLASS";
+		
+		var classType = this.classType;
+		return this.classType.instanceOf("class");
 	}
 });
+
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'isInterface', {
+	get: function () {
+		var classType = this.classType;
+		return classType.instanceOf("interface"); 
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'isClassType', {
+	get: function () {
+		var classType = this.classType;
+		return classType.instanceOf("interface") || classType.instanceOf("class"); 
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(TypeJp.prototype, 'classType', {
+	get: function () {
+		
+		var name = this.astNode.getCode().replace(" &", "").trim();
+		var subtype = getRecordType(this);
+		return subtype;
+	}
+});
+
+function getRecordType(type) {
+	if (type == null) return null;
+	if (type == undefined) return null;
+
+	if (type.kind === 'RecordType') return CommonJoinPoints.toJoinPoint(type.astNode.getDecl());
+	
+	var childType = null;
+	
+	if (type.kind === 'PointerType') {
+		childType = type.astNode.getPointeeType();
+	}
+	if (type.kind === 'LValueReferenceType' || this.kind === 'RValueReferenceType') {
+		childType = type.astNode.getReferencee();
+	}
+	if (type.kind === 'QualType') {
+		childType = type.astNode.getUnqualifiedType();
+	}
+	if (type.kind === 'ElaboratedType') {
+		childType = type.astNode.getNamedType();
+	}
+	if (type.kind === 'ReferenceType') {
+		childType = type.astNode.getReferencee();
+	}
+	
+	if (childType == null || childType == undefined) return null;
+	
+	return getRecordType(CommonJoinPoints.toJoinPoint(childType));
+}
+/*
+public static Type getSingleElement(Type type) {
+        if (type instanceof DecayedType) {
+            return ((DecayedType) type).getOriginalType();
+        }
+
+        if (type instanceof AdjustedType) {
+            return ((AdjustedType) type).getAdjustedType();
+        }
+
+        if (type instanceof PointerType) {
+            return ((PointerType) type).getPointeeType();
+        }
+
+        if (type instanceof ArrayType) {
+            return ((ArrayType) type).getElementType();
+        }
+
+        if (type instanceof QualType) {
+            return ((QualType) type).getUnqualifiedType();
+        }
+
+        if (type instanceof TypedefType) {
+            return ((TypedefType) type).getTypeClass();
+        }
+
+        return null;
+    }
+*/
 
 _lara_dummy_ = Object.defineProperty(TypeJp.prototype, '_hasSugar', {
 	get: function () {

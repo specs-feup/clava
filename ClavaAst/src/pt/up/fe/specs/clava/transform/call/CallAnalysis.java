@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.comment.Comment;
+import pt.up.fe.specs.clava.ast.decl.NullDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.expr.ArraySubscriptExpr;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
@@ -54,6 +55,8 @@ public class CallAnalysis {
         ALLOWED_NODES.add(LoopStmt.class);
         ALLOWED_NODES.add(ReturnStmt.class);
         ALLOWED_NODES.add(ParenExpr.class);
+        // Can appear as child of While and For
+        ALLOWED_NODES.add(NullDecl.class);
     }
 
     public CallAnalysis() {

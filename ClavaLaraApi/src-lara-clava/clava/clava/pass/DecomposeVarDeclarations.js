@@ -1,45 +1,42 @@
 laraImport("lara.pass.Pass");
 laraImport("clava.ClavaJoinPoints");
+laraImport("lara.pass.PassTransformationResult");
 
 /**
- * 
+ * Decomposes the vardecl nodes that are reachable from the given join point.
+ *
+ * E.g. transforms int i = 0; into int i; i = 0;
  */
 class DecomposeVarDeclarations extends Pass {
-	
-	constructor() {
-		super("DecomposeVarDeclarations");
-	}
-	
-	_apply_impl($jp) {
-	
-		// Find all var decls
-		for(var $vardecl of Query.searchFromInclusive($jp, "vardecl")) {
-			
-			// Ignore vardecl if no initialization
-			if(!$vardecl.hasInit) {
-				continue;
-			}
-			
-			// Get initialization
-			let $init = $vardecl.init;
+  constructor() {
+    super();
+  }
 
-			// Remove initialization from vardecl
-			$vardecl.removeInit();
-			
-			// If vardecl is of type auto, replace with initialization type
-			if($vardecl.type.isAuto) {
-				$vardecl.type = $init.type;
-			}
+  matchJoinpoint($jp) {
+    return (
+      $jp.instanceOf("vardecl") && $jp.hasInit && $jp.storageClass !== "static" && !$jp.isInsideLoopHeader
+    );
+  }
 
-			
-			// Create varref and assignment
-			let $varref = ClavaJoinPoints.varRef($vardecl);
-			let $assign = ClavaJoinPoints.assign($varref, $init);
+  transformJoinpoint($vardecl) {
+    // store init expression for later
+    const $init = $vardecl.init;
 
-			// Insert assignment			
-			$vardecl.insertAfter($assign);
-		}
-		
-	
-	}
+    // remove init from ast and make type explicit, if necessary
+    $vardecl.removeInit();
+    if ($vardecl.type.isAuto) {
+      $vardecl.type = $init.type;
+    }
+
+    const { assign, varRef, exprStmt } = ClavaJoinPoints;
+    const $newInitStmt = exprStmt(assign(varRef($vardecl), $init));
+
+    $vardecl.insertAfter($newInitStmt);
+
+    return new PassTransformationResult({
+      pass: DecomposeVarDeclarations,
+      $joinpoint: $vardecl,
+      insertedLiteralCode: false,
+    });
+  }
 }

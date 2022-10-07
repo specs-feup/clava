@@ -13,6 +13,8 @@
 
 package pt.up.fe.specs.cxxweaver.tests;
 
+import java.util.Arrays;
+
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -21,8 +23,12 @@ import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.cxxweaver.ClavaWeaverTester;
 import pt.up.fe.specs.util.SpecsSystem;
+import pt.up.fe.specs.util.lazy.Lazy;
 
 public class CxxApiTest {
+
+    private static final Lazy<Boolean> IS_CMAKE_AVAILABLE = Lazy
+            .newInstance(() -> SpecsSystem.runProcess(Arrays.asList("cmake"), false, false).getReturnValue() == 0);
 
     @BeforeClass
     public static void setupOnce() {
@@ -72,6 +78,10 @@ public class CxxApiTest {
 
     @Test
     public void testCMaker() {
+        if (!IS_CMAKE_AVAILABLE.get()) {
+            return;
+        }
+
         newTester()
                 .set(CxxWeaverOption.PARSE_INCLUDES)
                 .test("CMakerTest.lara", "cmaker_test.cpp", "cmaker_test.h");
@@ -141,7 +151,9 @@ public class CxxApiTest {
 
     @Test
     public void testLaraCommonLanguage() {
-        newTester().test("LaraCommonLanguageTest.lara", "lara_common_language.cpp");
+        newTester()
+                .set(CxxWeaverOption.PARSE_INCLUDES)
+                .test("LaraCommonLanguageTest.js", "lara_common_language.cpp", "lara_common_language.h");
     }
 
     @Test
@@ -159,8 +171,30 @@ public class CxxApiTest {
         newTester().test("Code2VecTest.js", "code2vec.cpp");
     }
 
-    // @Test
+    // TODO: For some reason failing in the Jenkins server. Re-enable after upgrading GraalVM
+    @Test
     public void testSimplifyVarDeclarations() {
         newTester().test("PassSimplifyVarDeclarations.lara", "pass_simplify_var_declarations.cpp");
+    }
+
+    // TODO: For some reason failing in the Jenkins server. Re-enable after upgrading GraalVM
+    @Test
+    public void testSingleReturnFunction() {
+        newTester().test("PassSingleReturnTest.js", "pass_single_return.cpp");
+    }
+
+    @Test
+    public void testSimplifyAssignment() {
+        newTester().test("CodeSimplifyAssignmentTest.js", "code_simplify_assignment.cpp");
+    }
+
+    @Test
+    public void testSimplifyTernaryOp() {
+        newTester().test("CodeSimplifyTernaryOpTest.js", "code_simplify_ternary_op.cpp");
+    }
+
+    @Test
+    public void testSimplifyLoops() {
+        newTester().test("PassSimplifyLoopsTest.js", "pass_simplify_loops.cpp");
     }
 }

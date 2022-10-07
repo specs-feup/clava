@@ -13,7 +13,9 @@
 
 package pt.up.fe.specs.clava.ast.pragma;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -22,6 +24,7 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ast.stmt.WrapperStmt;
 import pt.up.fe.specs.util.stringparser.StringParser;
 import pt.up.fe.specs.util.stringparser.StringParsers;
 
@@ -109,4 +112,64 @@ public abstract class Pragma extends ClavaNode {
                 ", parameters: " + param;
     }
 
+    /**
+     * All the nodes below the target node, including the target node.
+     * 
+     * @return
+     */
+    public List<ClavaNode> getPragmaNodes() {
+        return getPragmaNodes(null);
+    }
+
+    /**
+     * All the nodes below the target node, including the target node, up until a pragma with the name given by argument
+     * 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument
+     * 
+     * @param endPragma
+     * @return
+     */
+    public List<ClavaNode> getPragmaNodes(String endPragma) {
+        var nodesBetweenPragmas = new ArrayList<ClavaNode>();
+
+        // Get first node below the pragma that is not another pragma or comment
+        var startNode = getTarget().orElse(null);
+
+        nodesBetweenPragmas.add(startNode);
+
+        // Iterate over right sibling, looking for the end pragma
+        for (var currentNode : startNode.getSiblingsRight()) {
+
+            if (endPragma != null && isEndPragma(currentNode, endPragma)) {
+                // Found end pragma
+                break;
+            }
+
+            // Otherwise continue adding statements
+            nodesBetweenPragmas.add(currentNode);
+        }
+
+        return nodesBetweenPragmas;
+    }
+
+    private boolean isEndPragma(ClavaNode node, String pragmaName) {
+        // Wrapper stmts wrap comments and pragmas, which are not stmts per se
+        if (!(node instanceof WrapperStmt)) {
+            return false;
+        }
+
+        var wrappedNode = ((WrapperStmt) node).getWrappedNode();
+
+        if (!(wrappedNode instanceof Pragma)) {
+            return false;
+        }
+
+        var pragma = (Pragma) wrappedNode;
+
+        if (!pragmaName.equals(pragma.getName())) {
+            return false;
+        }
+
+        return true;
+
+    }
 }

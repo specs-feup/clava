@@ -22,6 +22,7 @@ import org.lara.interpreter.weaver.ast.AstMethods;
 import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.interf.WeaverEngine;
+import org.lara.interpreter.weaver.interf.events.Stage;
 import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.language.specification.LanguageSpecification;
 import org.lara.language.specification.dsl.LanguageSpecificationV2;
@@ -48,6 +49,7 @@ import pt.up.fe.specs.clava.language.Standard;
 import pt.up.fe.specs.clava.parsing.snippet.SnippetParser;
 import pt.up.fe.specs.clava.utils.SourceType;
 import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
+import pt.up.fe.specs.clava.weaver.gears.CacheHandlerGear;
 import pt.up.fe.specs.clava.weaver.gears.InsideApplyGear;
 import pt.up.fe.specs.clava.weaver.gears.ModifiedFilesGear;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
@@ -216,11 +218,12 @@ public class CxxWeaver extends ACxxWeaver {
     private DataStore args = null;
 
     // Parsing Context
-    private final ClavaContext context;
+    private ClavaContext context = null;
 
     // Gears
-    private final ModifiedFilesGear modifiedFilesGear;
-    private final InsideApplyGear insideApplyGear;
+    private ModifiedFilesGear modifiedFilesGear = null;
+    private InsideApplyGear insideApplyGear = null;
+    private CacheHandlerGear cacheHandlerGear = null;
 
     // Parsed program state
     // private Deque<App> apps;
@@ -249,12 +252,46 @@ public class CxxWeaver extends ACxxWeaver {
 
     private ClavaWeaverData weaverData;
 
-    private final ClavaMetrics metrics;
+    private ClavaMetrics metrics;
 
     public CxxWeaver() {
+        reset();
+        // // Gears
+        // this.modifiedFilesGear = new ModifiedFilesGear();
+        // this.insideApplyGear = new InsideApplyGear();
+        //
+        // context = new ClavaContext();
+        //
+        // // Weaver configuration
+        // args = null;
+        //
+        // // outputDir = null;
+        // currentSources = new ArrayList<>();
+        // userFlags = null;
+        //
+        // // baseFolder = null;
+        // // parserOptions = new ArrayList<>();
+        //
+        // // infoLogger = null;
+        // // previousLevel = null;
+        //
+        // // Set, in order to filter repeated messages
+        // // Linked, to preserve order
+        // messagesToUser = null;
+        //
+        // accMap = null;
+        //
+        // weaverData = null;
+        //
+        // metrics = new ClavaMetrics();
+        // this.setWeaverProfiler(metrics);
+    }
+
+    private void reset() {
         // Gears
         this.modifiedFilesGear = new ModifiedFilesGear();
         this.insideApplyGear = new InsideApplyGear();
+        this.cacheHandlerGear = new CacheHandlerGear();
 
         context = new ClavaContext();
 
@@ -281,6 +318,8 @@ public class CxxWeaver extends ACxxWeaver {
 
         metrics = new ClavaMetrics();
         this.setWeaverProfiler(metrics);
+
+        currentSources = new ArrayList<>();
     }
 
     public WeavingReport getWeavingReport() {
@@ -351,7 +390,7 @@ public class CxxWeaver extends ACxxWeaver {
      */
     @Override
     public boolean begin(List<File> sources, File outputDir, DataStore args) {
-        reset();
+        // reset();
 
         // Set args
         this.args = args;
@@ -573,11 +612,6 @@ public class CxxWeaver extends ACxxWeaver {
 
     }
 
-    private void reset() {
-        // Reset gears
-        modifiedFilesGear.reset();
-    }
-
     public List<String> getUserFlags() {
         return userFlags;
     }
@@ -685,7 +719,6 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     private static File getFirstSourceFolder(List<File> sources) {
-        // Preconditions.checkArgument(!sources.isEmpty(), "Needs at least one source specified (file or folder)");
 
         if (sources.isEmpty()) {
             return SpecsIo.getWorkingDir();
@@ -694,9 +727,7 @@ public class CxxWeaver extends ACxxWeaver {
         File firstSource = sources.stream()
                 .filter(source -> source.exists())
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException(
-                        "Needs to specify at least one source (file or folder) that exists, found none. Input sources:"
-                                + sources));
+                .orElse(SpecsIo.getWorkingDir());
 
         if (firstSource.isDirectory()) {
             return firstSource;
@@ -830,6 +861,7 @@ public class CxxWeaver extends ACxxWeaver {
                 getConfig().get(ParallelCodeParser.CONTINUE_ON_PARSING_ERRORS));
         // codeParser.set(ClangAstKeys.USE_PLATFORM_INCLUDES, getConfig().get(ClangAstKeys.USE_PLATFORM_INCLUDES));
         codeParser.set(ClangAstKeys.LIBC_CXX_MODE, getConfig().get(ClangAstKeys.LIBC_CXX_MODE));
+        codeParser.set(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE, getConfig().get(CodeParser.CUSTOM_CLANG_AST_DUMPER_EXE));
 
         List<String> allParserOptions = new ArrayList<>(parserOptions.size() + adaptedExtraOptions.size());
         allParserOptions.addAll(parserOptions);
@@ -1354,7 +1386,7 @@ public class CxxWeaver extends ACxxWeaver {
      */
     @Override
     public List<AGear> getGears() {
-        return Arrays.asList(modifiedFilesGear, insideApplyGear);
+        return Arrays.asList(modifiedFilesGear, insideApplyGear, cacheHandlerGear);
     }
 
     @Override
@@ -1454,6 +1486,9 @@ public class CxxWeaver extends ACxxWeaver {
 
         // After rebuilding, clear current app cache
         getApp().clearCache();
+        getEventTrigger().triggerAction(Stage.DURING,
+                "CxxWeaver.rebuildFile",
+                CxxJoinpoints.create(tUnit), Collections.emptyList(), Optional.empty());
 
         // Return correct TranslationUnit
         for (TranslationUnit tu : rebuiltApp.getTranslationUnits()) {

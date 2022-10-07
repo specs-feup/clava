@@ -41,6 +41,9 @@ public class InsideApplyGear extends AGear {
             Preconditions.checkArgument(insideApplyCounter > 0,
                     "Leaving apply, expected apply counter to be a number greater than zero, is " + insideApplyCounter);
             insideApplyCounter--;
+        default:
+            // Do nothing
+            break;
         }
     }
 }

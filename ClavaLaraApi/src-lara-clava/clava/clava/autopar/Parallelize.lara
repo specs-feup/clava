@@ -9,7 +9,7 @@ import clava.autopar.CheckForSafeFunctionCall;
 import clava.autopar.AutoParStats;
 
 import clava.Clava;
-import lara.util.CodeInserter;    
+import clava.util.CodeInserter;    
 import lara.Io;
 
 import weaver.WeaverJps;

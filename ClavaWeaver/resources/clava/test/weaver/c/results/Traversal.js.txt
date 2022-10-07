@@ -1,0 +1,13 @@
+Postorder traversal
+Joinpoint 'vardecl'
+Joinpoint 'declStmt'
+Joinpoint 'varref'
+Joinpoint 'intLiteral'
+Joinpoint 'intLiteral'
+Joinpoint 'intLiteral'
+Joinpoint 'binaryOp'
+Joinpoint 'binaryOp'
+Joinpoint 'binaryOp'
+Joinpoint 'exprStmt'
+Joinpoint 'body'
+Joinpoint 'function'

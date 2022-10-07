@@ -381,12 +381,12 @@ public abstract class ACall extends AExpression {
     }
 
     /**
-     * a function join point associated with this call. No guarantees are made regarding if it is the declaration or definition of the function.
+     * a function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration
      */
     public abstract AFunction getFunctionImpl();
 
     /**
-     * a function join point associated with this call. No guarantees are made regarding if it is the declaration or definition of the function.
+     * a function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration
      */
     public final Object getFunction() {
         try {

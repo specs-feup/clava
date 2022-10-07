@@ -372,6 +372,17 @@ void ClangAstDumper::VisitCXXMethodDeclChildren(const CXXMethodDecl *D, std::vec
 
     // Visit record decl
     VisitDeclTop(D->getParent());
+
+    // Visit overridden methods
+    for(auto overriddenMethod : D->overridden_methods()) {
+        VisitDeclTop(overriddenMethod);
+    }
+
+    // Types related to "this"
+    if(D->isInstance()) {
+        VisitTypeTop(D->getThisType());
+        VisitTypeTop(D->getThisObjectType());
+    }
 }
 
 void ClangAstDumper::VisitCXXConstructorDeclChildren(const CXXConstructorDecl *D, std::vector<std::string> &children) {

@@ -1,0 +1,28 @@
+import weaver.jp.ClassTypeJp;
+import weaver.Weaver;
+
+
+// Override ClassTypeJp constructor
+var oldClassTypeJp = ClassTypeJp.prototype;
+var oldClassType_JP_TYPES = ClassTypeJp._JP_TYPES;
+
+ClassTypeJp = function(astNode, getDefinition) {
+	// By default, it gets the definition
+	getDefinition = typeof getDefinition !== 'undefined' ? getDefinition : true;
+	
+	// check for definition
+	//this.originalAstNode = astNode;
+	//if (astNode.getDefinition().isPresent() && getDefinition)
+	//	astNode = astNode.getDefinition().get();
+	
+	// var name = Weaver.AST_METHODS.toJavaJoinPoint(astNode).name;
+	// println("CLASS TYPE " + name);
+	// if (name != 'basic_string') println("CLASS TYPE " + astNode.getCode());
+		
+	// Parent constructor
+    DeclJp.call(this,astNode);
+}
+
+ClassTypeJp.prototype = oldClassTypeJp;
+ClassTypeJp._JP_TYPES = oldClassType_JP_TYPES;
+

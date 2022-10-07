@@ -22,7 +22,6 @@ import org.suikasoft.jOptions.streamparser.LineStreamParsers;
 
 import pt.up.fe.specs.clang.dumper.ClangAstData;
 import pt.up.fe.specs.clang.parsers.NodeDataParser;
-import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.decl.AccessSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXConstructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXConversionDecl;
@@ -157,10 +156,10 @@ public class DeclDataParser {
         DataStore data = parseTypeDeclData(lines, dataStore);
 
         // If TagDecl has no name, give it a name
-        if (data.get(NamedDecl.DECL_NAME).isEmpty()) {
-            String anonName = ClavaDataParsers.createAnonName(data.get(ClavaNode.LOCATION));
-            data.set(NamedDecl.DECL_NAME, anonName);
-        }
+        // if (data.get(NamedDecl.DECL_NAME).isEmpty()) {
+        // String anonName = ClavaDataParsers.createAnonName(data.get(ClavaNode.LOCATION));
+        // data.set(NamedDecl.DECL_NAME, anonName);
+        // }
 
         data.add(TagDecl.TAG_KIND, LineStreamParsers.enumFromName(TagKind.class, lines));
         data.add(TagDecl.IS_COMPLETE_DEFINITION, LineStreamParsers.oneOrZero(lines));
@@ -296,8 +295,8 @@ public class DeclDataParser {
         data.add(FunctionDecl.IS_CONSTEXPR, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.TEMPLATE_KIND, TemplateKind.getHelper().fromValue(LineStreamParsers.integer(lines)));
         data.add(FunctionDecl.STORAGE_CLASS, LineStreamParsers.enumFromName(StorageClass.class, lines));
-        data.add(FunctionDecl.IS_INLINE, LineStreamParsers.oneOrZero(lines));
-        data.add(FunctionDecl.IS_VIRTUAL, LineStreamParsers.oneOrZero(lines));
+        data.add(FunctionDecl.IS_INLINE_SPECIFIED, LineStreamParsers.oneOrZero(lines));
+        data.add(FunctionDecl.IS_VIRTUAL_AS_WRITTEN, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.IS_PURE, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.IS_DELETED, LineStreamParsers.oneOrZero(lines));
         data.add(FunctionDecl.IS_EXPLICITLY_DEFAULTED, LineStreamParsers.oneOrZero(lines));
@@ -324,6 +323,27 @@ public class DeclDataParser {
 
         data.add(CXXMethodDecl.RECORD_ID, lines.nextLine());
         dataStore.getClavaNodes().queueSetNode(data, CXXMethodDecl.RECORD, data.get(CXXMethodDecl.RECORD_ID));
+
+        var numOverriddenMethods = LineStreamParsers.integer(lines);
+        List<String> overriddenMethodsIds = new ArrayList<>();
+        for (int i = 0; i < numOverriddenMethods; i++) {
+            overriddenMethodsIds.add(lines.nextLine());
+        }
+        dataStore.getClavaNodes().queueSetNodeList(data, CXXMethodDecl.OVERRIDDEN_METHODS, overriddenMethodsIds);
+
+        data.add(CXXMethodDecl.IS_STATIC, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXMethodDecl.IS_INSTANCE, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXMethodDecl.IS_CONST, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXMethodDecl.IS_VOLATILE, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXMethodDecl.IS_VIRTUAL, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXMethodDecl.IS_COPY_ASSIGNMENT_OPERATOR, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXMethodDecl.IS_MOVE_ASSIGNMENT_OPERATOR, LineStreamParsers.oneOrZero(lines));
+
+        dataStore.getClavaNodes().queueSetOptionalNode(data, CXXMethodDecl.THIS_TYPE, lines.nextLine());
+        dataStore.getClavaNodes().queueSetOptionalNode(data, CXXMethodDecl.THIS_OJBECT_TYPE, lines.nextLine());
+
+        data.add(CXXMethodDecl.HAS_INLINE_BODY, LineStreamParsers.oneOrZero(lines));
+        data.add(CXXMethodDecl.IS_LAMBDA_STATIC_INVOKER, LineStreamParsers.oneOrZero(lines));
 
         return data;
     }

@@ -22,6 +22,7 @@ const std::map<const std::string, clava::StmtNode > ClangAstDumper::STMT_CHILDRE
         {"CaseStmt", clava::StmtNode::CASE_STMT},
         {"DefaultStmt", clava::StmtNode::DEFAULT_STMT},
         {"GotoStmt", clava::StmtNode::GOTO_STMT},
+        {"LabelStmt", clava::StmtNode::LABEL_STMT},
         {"AttributedStmt", clava::StmtNode::ATTRIBUTED_STMT},
         {"CapturedStmt", clava::StmtNode::CAPTURED_STMT},
 };
@@ -117,6 +118,8 @@ void ClangAstDumper::visitChildren(clava::StmtNode stmtNode, const Stmt* S) {
             VisitDefaultStmtChildren(static_cast<const DefaultStmt *>(S), visitedChildren); break;
        case clava::StmtNode::GOTO_STMT:
             VisitGotoStmtChildren(static_cast<const GotoStmt *>(S), visitedChildren); break;
+        case clava::StmtNode::LABEL_STMT:
+            VisitLabelStmtChildren(static_cast<const LabelStmt *>(S), visitedChildren); break;
        case clava::StmtNode::ATTRIBUTED_STMT:
             VisitAttributedStmtChildren(static_cast<const AttributedStmt *>(S), visitedChildren); break;
        case clava::StmtNode::CAPTURED_STMT:
@@ -244,14 +247,15 @@ void ClangAstDumper::VisitIfStmtChildren(const IfStmt *S, std::vector<std::strin
 }
 
 void ClangAstDumper::VisitForStmtChildren(const ForStmt *S, std::vector<std::string> &children) {
-    // Do not visit sub-statements automatically, visit the if stmts in a controlled manner
+    // Do not visit sub-statements automatically, visit the for stmts in a controlled manner
     //VisitStmtChildren(S, children);
 
-    //addChild(S->getConditionVariableDeclStmt(), children);
+
     addChild(S->getInit(), children);
     addChild(S->getCond(), children);
     addChild(S->getInc(), children);
     addChild(S->getBody(), children);
+    addChild(S->getConditionVariable(), children);
 }
 
 void ClangAstDumper::VisitWhileStmtChildren(const WhileStmt *S, std::vector<std::string> &children) {
@@ -330,6 +334,14 @@ void ClangAstDumper::VisitGotoStmtChildren(const GotoStmt *S, std::vector<std::s
     VisitDeclTop(S->getLabel());
 }
 
+void ClangAstDumper::VisitLabelStmtChildren(const LabelStmt *S, std::vector<std::string> &children) {
+    // Do not visit sub-statements automatically, visit the if stmts in a controlled manner
+    //VisitStmtChildren(S, children);
+
+    addChild(S->getSubStmt(), children);
+
+    VisitDeclTop(S->getDecl());
+}
 
 void ClangAstDumper::VisitAttributedStmtChildren(const AttributedStmt *S, std::vector<std::string> &children) {
     // Do not visit sub-statements automatically, visit the if stmts in a controlled manner

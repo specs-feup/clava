@@ -47,6 +47,7 @@ import pt.up.fe.specs.clava.ast.decl.DummyValueDecl;
 import pt.up.fe.specs.clava.ast.decl.FieldDecl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
+import pt.up.fe.specs.clava.ast.decl.LabelDecl;
 import pt.up.fe.specs.clava.ast.decl.LinkageSpecDecl;
 import pt.up.fe.specs.clava.ast.decl.LiteralDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
@@ -60,9 +61,12 @@ import pt.up.fe.specs.clava.ast.decl.VarDecl;
 import pt.up.fe.specs.clava.ast.decl.enums.LanguageId;
 import pt.up.fe.specs.clava.ast.expr.BinaryOperator;
 import pt.up.fe.specs.clava.ast.expr.CStyleCastExpr;
+import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.CXXFunctionalCastExpr;
 import pt.up.fe.specs.clava.ast.expr.CallExpr;
 import pt.up.fe.specs.clava.ast.expr.CastExpr;
+import pt.up.fe.specs.clava.ast.expr.CompoundAssignOperator;
+import pt.up.fe.specs.clava.ast.expr.ConditionalOperator;
 import pt.up.fe.specs.clava.ast.expr.DeclRefExpr;
 import pt.up.fe.specs.clava.ast.expr.DummyExpr;
 import pt.up.fe.specs.clava.ast.expr.Expr;
@@ -73,13 +77,14 @@ import pt.up.fe.specs.clava.ast.expr.LiteralExpr;
 import pt.up.fe.specs.clava.ast.expr.MemberExpr;
 import pt.up.fe.specs.clava.ast.expr.NullExpr;
 import pt.up.fe.specs.clava.ast.expr.ParenExpr;
+import pt.up.fe.specs.clava.ast.expr.PointerToMemberExpr;
 import pt.up.fe.specs.clava.ast.expr.UnaryOperator;
-import pt.up.fe.specs.clava.ast.expr.CXXConstructExpr;
 import pt.up.fe.specs.clava.ast.expr.enums.BinaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.FloatKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorPosition;
 import pt.up.fe.specs.clava.ast.extra.App;
+import pt.up.fe.specs.clava.ast.extra.TagDeclVars;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.lara.LaraMarkerPragma;
 import pt.up.fe.specs.clava.ast.lara.LaraTagPragma;
@@ -97,8 +102,10 @@ import pt.up.fe.specs.clava.ast.stmt.CaseStmt;
 import pt.up.fe.specs.clava.ast.stmt.CompoundStmt;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.stmt.DummyStmt;
+import pt.up.fe.specs.clava.ast.stmt.EmptyStmt;
 import pt.up.fe.specs.clava.ast.stmt.ExprStmt;
 import pt.up.fe.specs.clava.ast.stmt.ForStmt;
+import pt.up.fe.specs.clava.ast.stmt.GotoStmt;
 import pt.up.fe.specs.clava.ast.stmt.IfStmt;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.ast.stmt.LiteralStmt;
@@ -213,6 +220,12 @@ public class ClavaFactory {
         return new TranslationUnit(data, declarations);
     }
 
+    public TagDeclVars tagDeclVars(List<? extends NamedDecl> children) {
+        DataStore data = newDataStore(TagDeclVars.class);
+
+        return new TagDeclVars(data, children);
+    }
+
     public <T extends ClavaNode> T node(Class<T> nodeClass, ClavaNode... children) {
         return node(nodeClass, Arrays.asList(children));
     }
@@ -319,6 +332,18 @@ public class ClavaFactory {
         return new MemberExpr(data, Arrays.asList(baseExpr));
     }
 
+    public PointerToMemberExpr pointerToMemberExpr(String memberName, Type memberType, Expr baseExpr, boolean isArrow) {
+        DataStore data = newDataStore(PointerToMemberExpr.class)
+                .put(MemberExpr.MEMBER_NAME, memberName)
+                .put(Expr.TYPE, Optional.of(memberType))
+                .put(MemberExpr.IS_ARROW, isArrow);
+        // if (baseExpr.getType() instanceof PointerType) {
+        // data.put(MemberExpr.IS_ARROW, true);
+        // }
+
+        return new PointerToMemberExpr(data, Arrays.asList(baseExpr));
+    }
+
     public DummyExpr dummyExpr(String dummyContent) {
         DataStore data = newDataStore(DummyExpr.class)
                 .put(DummyExpr.DUMMY_CONTENT, dummyContent)
@@ -412,6 +437,18 @@ public class ClavaFactory {
         return new BinaryOperator(data, Arrays.asList(lhs, rhs));
     }
 
+    public CompoundAssignOperator compoundAssignOperator(BinaryOperatorKind op, Type type, Expr lhs, Expr rhs) {
+        if (!op.isCompoundAssign()) {
+            throw new IllegalArgumentException(
+                    "`op` should be a compound assignment op kind, is actually " + op.getOpString());
+        }
+        var data = newDataStore(CompoundAssignOperator.class)
+                .put(Expr.TYPE, Optional.of(type))
+                .put(BinaryOperator.OP, op);
+
+        return new CompoundAssignOperator(data, Arrays.asList(lhs, rhs));
+    }
+
     public UnaryOperator unaryOperator(UnaryOperatorKind op, Type type, Expr subExpr) {
         DataStore data = newDataStore(UnaryOperator.class)
                 .put(Expr.TYPE, Optional.of(type))
@@ -421,6 +458,13 @@ public class ClavaFactory {
             data.put(UnaryOperator.POSITION, UnaryOperatorPosition.POSTFIX);
 
         return new UnaryOperator(data, Arrays.asList(subExpr));
+    }
+
+    public ConditionalOperator conditionalOperator(Type type, Expr condition, Expr trueExpr, Expr falseExpr) {
+        DataStore data = newDataStore(ConditionalOperator.class)
+                .put(Expr.TYPE, Optional.of(type));
+
+        return new ConditionalOperator(data, Arrays.asList(condition, trueExpr, falseExpr));
     }
 
     public CStyleCastExpr cStyleCastExpr(Type type, Expr expr) {
@@ -437,7 +481,7 @@ public class ClavaFactory {
 
         return new ParenExpr(data, Arrays.asList(expr));
     }
-    
+
     public CXXConstructExpr cxxConstructExpr(Type type, List<Expr> constructorArguments) {
         DataStore data = newDataStore(CXXConstructExpr.class)
                 .put(Expr.TYPE, Optional.of(type));
@@ -606,17 +650,34 @@ public class ClavaFactory {
         return new AccessSpecDecl(data, Collections.emptyList());
     }
 
-    /// STMTS
-
-    public LabelStmt labelStmt(String label) {
-        return labelStmt(label, null);
+    public LabelDecl labelDecl(String declName) {
+        DataStore data = newDataStore(LabelDecl.class);
+        data.set(LabelDecl.DECL_NAME, declName);
+        return new LabelDecl(data, Collections.emptyList());
     }
 
-    public LabelStmt labelStmt(String label, Stmt subStmt) {
+    /// STMTS
+
+    public LabelStmt labelStmt(LabelDecl labelDecl) {
+        return labelStmt(labelDecl, null);
+    }
+
+    public LabelStmt labelStmt(LabelDecl label, Stmt subStmt) {
         DataStore data = newDataStore(LabelStmt.class)
                 .set(LabelStmt.LABEL, label);
 
         return new LabelStmt(data, SpecsCollections.ofNullable(subStmt));
+    }
+
+    public GotoStmt gotoStmt(LabelDecl label) {
+        DataStore data = newDataStore(GotoStmt.class)
+                .set(GotoStmt.LABEL, label);
+
+        return new GotoStmt(data, Collections.emptyList());
+    }
+
+    public EmptyStmt emptyStmt() {
+        return new EmptyStmt(newDataStore(EmptyStmt.class), Collections.emptyList());
     }
 
     public WrapperStmt wrapperStmt(ClavaNode node) {
@@ -676,7 +737,6 @@ public class ClavaFactory {
      */
     public ExprStmt exprStmt(Expr expr) {
         DataStore exprStmtData = newDataStore(ExprStmt.class)
-                .put(ExprStmt.HAS_SEMICOLON, true)
                 .put(ClavaNode.LOCATION, expr.getLocation());
 
         return new ExprStmt(exprStmtData, Arrays.asList(expr));
@@ -719,13 +779,13 @@ public class ClavaFactory {
     public ForStmt forStmt(Stmt init, Stmt cond, Stmt inc, CompoundStmt body) {
         DataStore forStmtData = newDataStore(ForStmt.class);
 
-        return new ForStmt(forStmtData, Arrays.asList(init, cond, inc, body));
+        return new ForStmt(forStmtData, Arrays.asList(init, cond, inc, body, nullDecl()));
     }
 
     public WhileStmt whileStmt(Stmt cond, CompoundStmt body) {
         DataStore whileStmtData = newDataStore(WhileStmt.class);
 
-        return new WhileStmt(whileStmtData, Arrays.asList(cond, body));
+        return new WhileStmt(whileStmtData, Arrays.asList(nullDecl(), cond, body));
     }
 
     public BreakStmt breakStmt() {

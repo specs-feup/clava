@@ -38,16 +38,16 @@ import pt.up.fe.specs.util.treenode.transform.TransformQueue;
  */
 public class RemoveExtraNodes implements SimplePreClavaRule {
 
-    private static Set<Class<? extends ClavaNode>> CLEANUP_NODES;
+    private final static Set<Class<? extends ClavaNode>> CLEANUP_NODES;
     static {
-        RemoveExtraNodes.CLEANUP_NODES = new HashSet<>();
-        RemoveExtraNodes.CLEANUP_NODES.add(ExprWithCleanups.class);
-        RemoveExtraNodes.CLEANUP_NODES.add(MaterializeTemporaryExpr.class);
-        RemoveExtraNodes.CLEANUP_NODES.add(CXXBindTemporaryExpr.class);
-        RemoveExtraNodes.CLEANUP_NODES.add(OpaqueValueExpr.class);
-        RemoveExtraNodes.CLEANUP_NODES.add(CapturedStmt.class);
+        CLEANUP_NODES = new HashSet<>();
+        CLEANUP_NODES.add(ExprWithCleanups.class);
+        CLEANUP_NODES.add(MaterializeTemporaryExpr.class);
+        CLEANUP_NODES.add(CXXBindTemporaryExpr.class);
+        CLEANUP_NODES.add(OpaqueValueExpr.class);
+        CLEANUP_NODES.add(CapturedStmt.class);
 
-        // RemoveExtraNodes.CLEANUP_NODES.add(ImplicitCastExpr.class);
+        // CLEANUP_NODES.add(ImplicitCastExpr.class);
     }
 
     @Override

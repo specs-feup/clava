@@ -3,7 +3,8 @@ import clava.pass.DecomposeVarDeclarations;
 
 aspectdef PassSimplifyVarDeclarations
 
-	(new DecomposeVarDeclarations()).apply();
+	var result = (new DecomposeVarDeclarations()).apply();
+	println("Result: " + result);
 	println(Query.root().code);
 
 end

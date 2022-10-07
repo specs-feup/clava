@@ -1,0 +1,9 @@
+line: 1
+is FileJP? : true
+# A classes: 1
+# onlyDecl classes: 1
+# foo functions: 1
+# fooOnlyDecl functions: 1
+# B classes: 1
+# C classes: 1
+# calls in D: 2

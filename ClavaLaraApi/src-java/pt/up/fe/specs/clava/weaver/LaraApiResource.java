@@ -75,13 +75,41 @@ public enum LaraApiResource implements LaraResourceProvider {
 
     // Code
     GLOBAL_VARIABLE("code/GlobalVariable.lara"),
-    STATEMENT_DECOMPOSER("code/StatementDecomposer.lara"),
     STATEMENT_DECOMPOSER_JS("code/StatementDecomposer.js"),
     DECOMPOSE_RESULT_JS("code/DecomposeResult.js"),
+    CODE_SIMPLIFY_ASSIGNMENT("code/SimplifyAssignment.js"),
+    CODE_SIMPLIFY_TERNARY_OP("code/SimplifyTernaryOp.js"),
+    CODE_FOR_TO_WHILE_STMT("code/ForToWhileStmt.js"),
+    CODE_DO_TO_WHILE_STMT("code/DoToWhileStmt.js"),
+    CODE_INLINER("code/Inliner.js"),
+    CODE_REMOVE_SHADOWING("code/RemoveShadowing.js"),
 
     // Gprofer
     GPROFER("gprofer/Gprofer.lara"),
     GPROFER_ASPECTS("gprofer/_GproferAspects.lara"),
+
+    // Graphs
+    STATIC_CALL_GRAPH("graphs/StaticCallGraph.js"),
+    CONTROL_FLOW_GRAPH("graphs/ControlFlowGraph.js"),
+
+    CFG_BUILDER("graphs/cfg/CfgBuilder.js"),
+    CFG_EDGE("graphs/cfg/CfgEdge.js"),
+    CFG_EDGE_TYPE("graphs/cfg/CfgEdgeType.js"),
+    CFG_NODE_DATA("graphs/cfg/CfgNodeData.js"),
+    CFG_NODE_TYPE("graphs/cfg/CfgNodeType.js"),
+    CFG_UTILS("graphs/cfg/CfgUtils.js"),
+    NEXT_CFG_NODE("graphs/cfg/NextCfgNode.js"),
+
+    CFG_DATA_FACTORY("graphs/cfg/nodedata/DataFactory.js"),
+    CFG_HEADER_DATA("graphs/cfg/nodedata/HeaderData.js"),
+    CFG_IF_DATA("graphs/cfg/nodedata/IfData.js"),
+    CFG_INST_LIST_NODE_DATA("graphs/cfg/nodedata/InstListNodeData.js"),
+    CFG_LOOP_DATA("graphs/cfg/nodedata/LoopData.js"),
+    CFG_SCOPE_NODE_DATA("graphs/cfg/nodedata/ScopeNodeData.js"),
+
+    STATIC_CALL_GRAPH_BUILDER("graphs/scg/StaticCallGraphBuilder.js"),
+    SCG_NODE_DATA("graphs/scg/ScgNodeData.js"),
+    SCG_EDGE_DATA("graphs/scg/ScgEdgeData.js"),
 
     // Hdf5
     HDF5("hdf5/Hdf5.lara"),
@@ -112,7 +140,11 @@ public enum LaraApiResource implements LaraResourceProvider {
     BATCH_PARSER("parser/BatchParser.lara"),
 
     // Pass
+    DECOMPOSE_DECL_STMT("pass/DecomposeDeclStmt.js"),
     DECOMPOSE_VAR_DECLARATIONS("pass/DecomposeVarDeclarations.js"),
+    SINGLE_RETURN_FUNCTION("pass/SingleReturnFunction.js"),
+    PASS_SIMPLIFY_LOOPS("pass/SimplifyLoops.js"),
+    PASS_SIMPLIFY_SELECTION_STMTS("pass/SimplifySelectionStmts.js"),
 
     // Stats
     OPS_BLOCK("stats/OpsBlock.lara"),
@@ -131,6 +163,7 @@ public enum LaraApiResource implements LaraResourceProvider {
 
     // Clava utils
     CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
+    CODE_INSERTER("util/CodeInserter.lara"),
     FILE_ITERATOR("util/FileIterator.lara"),
     SINGLE_FILE("util/SingleFile.lara"),
 
@@ -138,13 +171,18 @@ public enum LaraApiResource implements LaraResourceProvider {
     UVE("uve/UVE.lara"),
     UVE_DETECT("uve/DetectStream.lara"),
 
+    // OPT
+    OPT_NORMALIZE_TO_SUBSET("opt/NormalizeToSubset.js"),
+    OPT_PREPARE_FOR_INLINING("opt/PrepareForInlining.js"),
+    OPT_INLINING("opt/Inlining.js"),
+
     // Static objects
 
     _CLAVA_JAVA_TYPES("_ClavaJavaTypes.lara"),
     CLAVA("Clava.lara"),
     CLAVA_ASPECTS("ClavaAspects.lara"),
     CLAVA_CODE("ClavaCode.lara"),
-    CLAVA_JOIN_POINTS("ClavaJoinPoints.lara"),
+    CLAVA_JOIN_POINTS("ClavaJoinPoints.js"),
     CLAVA_TYPE("ClavaType.lara");
 
     private final String resource;

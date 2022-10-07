@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 import java.util.List;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.CXXDestructorDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXMethodDecl;
 import pt.up.fe.specs.clava.ast.decl.CXXRecordDecl;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
@@ -31,6 +32,23 @@ public class CxxClass extends AClass {
         super(new CxxStruct(cxxRecordDecl));
 
         this.cxxRecordDecl = cxxRecordDecl;
+    }
+    
+    public Boolean isAbstract() {
+        return (Boolean) this.getIsAbstract();
+        /*
+        return this.cxxRecordDecl.getMethods().stream()
+                .filter(method -> !(method instanceof CXXDestructorDecl))
+                .anyMatch(method -> {/*
+                    System.err.println(" -> " + method.getFullyQualifiedName() 
+                    + " " + method.get(CXXMethodDecl.IS_VIRTUAL).booleanValue()
+                    + " " + method.get(CXXMethodDecl.IS_PURE).booleanValue());
+                    /** /
+                    // System.err.println(method.getCode());
+                    
+                    return method.get(CXXMethodDecl.IS_PURE).booleanValue();
+                });
+        */
     }
 
     @Override
@@ -55,6 +73,7 @@ public class CxxClass extends AClass {
 
     @Override
     public AClass[] getBasesArrayImpl() {
+
         return cxxRecordDecl.getBases().stream()
                 .map(decl -> CxxJoinpoints.create(decl, AClass.class))
                 // Collect to array
@@ -65,6 +84,64 @@ public class CxxClass extends AClass {
         // .map(baseSpec -> CxxJoinpoints.create(baseSpec.getBaseDecl(cxxRecordDecl), AClass.class))
         // // Collect to array
         // .toArray(size -> new AClass[size]);
+    }
+
+    @Override
+    public AMethod[] getAllMethodsArrayImpl() {
+        return CxxJoinpoints.create(cxxRecordDecl.getAllMethods(false), AMethod.class);
+    }
+
+    @Override
+    public AClass[] getAllBasesArrayImpl() {
+        return CxxJoinpoints.create(cxxRecordDecl.getAllBases(), AClass.class);
+    }
+
+    @Override
+    public Boolean getIsAbstractImpl() {
+        return cxxRecordDecl.isAbstract();
+    }
+
+    @Override
+    public Boolean getIsInterfaceImpl() {
+        return cxxRecordDecl.isInterface();
+    }
+
+    @Override
+    public AClass[] getPrototypesArrayImpl() {
+        return cxxRecordDecl.getDeclarations().stream()
+                .map(node -> CxxJoinpoints.create(node, AClass.class))
+                .toArray(size -> new AClass[size]);
+    }
+
+    @Override
+    public AClass getImplementationImpl() {
+        return cxxRecordDecl.getDefinition()
+                .map(node -> CxxJoinpoints.create(node, AClass.class))
+                .orElse(null);
+    }
+
+    @Override
+    public AClass getCanonicalImpl() {
+        // First, try the implementation
+        var implementation = getImplementationImpl();
+
+        if (implementation != null) {
+            return implementation;
+        }
+
+        // Implementation not found return prototype
+        var prototypes = getPrototypesArrayImpl();
+
+        if (prototypes.length == 0) {
+            return null;
+        }
+
+        return prototypes[0];
+    }
+
+    @Override
+    public Boolean getIsCanonicalImpl() {
+        return cxxRecordDecl.equals(getCanonicalImpl().getNode());
     }
 
 }

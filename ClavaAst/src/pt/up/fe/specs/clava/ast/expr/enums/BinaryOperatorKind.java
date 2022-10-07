@@ -59,6 +59,9 @@ public enum BinaryOperatorKind implements StringProvider {
     private static final Set<BinaryOperatorKind> BITWISE = EnumSet.of(And, Or, Xor, Shl, Shr, AndAssign, OrAssign,
             XorAssign, ShlAssign, ShrAssign);
 
+    private static final Set<BinaryOperatorKind> COMPOUND_ASSIGN = EnumSet.of(MulAssign, DivAssign, RemAssign,
+            AddAssign, SubAssign, ShlAssign, ShrAssign, AndAssign, XorAssign);
+
     private static final Lazy<EnumHelperWithValue<BinaryOperatorKind>> HELPER = EnumHelperWithValue
             .newLazyHelperWithValue(BinaryOperatorKind.class);
 
@@ -68,6 +71,14 @@ public enum BinaryOperatorKind implements StringProvider {
 
     public boolean isBitwise() {
         return BITWISE.contains(this);
+    }
+
+    public boolean isCompoundAssign() {
+        return COMPOUND_ASSIGN.contains(this);
+    }
+
+    public boolean isAssign() {
+        return isCompoundAssign() || this.equals(Assign);
     }
 
     // private static final Set<BinaryOperatorKind> IS_ASSIGN = EnumSet.of(ASSIGN, MUL_ASSIGN, DIV_ASSIGN, REM_ASSIGN,
@@ -153,10 +164,14 @@ public enum BinaryOperatorKind implements StringProvider {
             return "|=";
         case Comma:
             return ",";
+        case PtrMemD:
+            return ".*";
+        case PtrMemI:
+            return "->*";
         default:
             // Using debug level to not show messages every time the op map is built
             ClavaLog.debug("Code not defined for binary operator '" + this + "'");
-            return "<UNDEFINED_BINARY_OP>";
+            return "<UNDEFINED_BINARY_OP_STRING:" + this + ">";
         }
         // return opString;
     }

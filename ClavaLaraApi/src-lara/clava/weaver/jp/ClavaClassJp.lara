@@ -11,12 +11,12 @@ ClassJp = function(astNode, getDefinition) {
 	
 	//println("getDefinition:" + astNode.getDefinition().isPresent() && getDefinition);
 	// check for definition
-	this.originalAstNode = astNode;
-	if(astNode.getDefinition().isPresent() && getDefinition)
-		astNode = astNode.getDefinition().get();
+	//this.originalAstNode = astNode;
+	//if(astNode.getDefinition().isPresent() && getDefinition)
+	//	astNode = astNode.getDefinition().get();
 		
 	// Parent constructor
-    DeclJp.call(this,astNode);
+    ClassTypeJp.call(this,astNode,getDefinition);
 }
 
 ClassJp.prototype = oldClassJp;
@@ -107,15 +107,65 @@ _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'isCustom', {
 	}
 });
 
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'isAbstract', {
+	get: function () {	
+	    return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).getIsAbstract();
+	}
+});
+
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'children', {
 	get: function () {
-		return new ClassJp(this.originalAstNode,false)._children;
+		return new ClassJp(this.astNode,false)._children;
 	}
 });
 
 _lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'members', {
 	get: function () {
 		return  this.fields.concat(this.allMethods);
+	}
+});
+
+
+
+
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'listOfAllMethods', {
+	get: function () {
+		
+		var allMethods = this.methods;
+
+		for ($interface of this.allInterfaces) {
+			allMethods = allMethods.concat($interface.methods);
+		}
+
+		for ($superClass of this.allSuperClasses) {
+			allMethods = allMethods.concat($superClass.methods);
+		}
+		
+		return allMethods;
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'interfaces', {
+	get: function () { 
+		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getBases())).filter($jp=>$jp.instanceOf("interface"));
+	 }
+});
+
+_lara_dummy_ = Object.defineProperty(ClassJp.prototype, 'allInterfaces', {
+	get: function () {
+		
+		var allInterfaces = [];
+
+		for (superInterface of this.interfaces) {
+			allInterfaces.push(superInterface);
+			allInterfaces = allInterfaces.concat(superInterface.allInterfaces);
+		}
+
+		for ($superClass of this.allSuperClasses) {
+			allInterfaces = allInterfaces.concat($superClass.interfaces);
+		}
+		
+		return allInterfaces;
 	}
 });
 

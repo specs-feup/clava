@@ -215,6 +215,7 @@ public class ClavaNodeParser implements LineStreamWorker<ClangAstData> {
 
         // Queue setting the children
         data.getClavaNodes().queueAction(() -> {
+
             // Get the children nodes
             List<ClavaNode> newChildren = new ArrayList<>(childrenIds.size());
             // for (String childId : childrenIds) {

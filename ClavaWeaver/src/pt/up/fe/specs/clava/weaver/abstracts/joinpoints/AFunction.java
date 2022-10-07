@@ -642,6 +642,52 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
+     */
+    public abstract AFunction getCanonicalImpl();
+
+    /**
+     * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
+     */
+    public final Object getCanonical() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "canonical", Optional.empty());
+        	}
+        	AFunction result = this.getCanonicalImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "canonical", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "canonical", e);
+        }
+    }
+
+    /**
+     * true, if this is the function returned by the 'canonical' attribute
+     */
+    public abstract Boolean getIsCanonicalImpl();
+
+    /**
+     * true, if this is the function returned by the 'canonical' attribute
+     */
+    public final Object getIsCanonical() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isCanonical", Optional.empty());
+        	}
+        	Boolean result = this.getIsCanonicalImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isCanonical", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isCanonical", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select bodys
      * @return 
      */
@@ -1680,6 +1726,8 @@ public abstract class AFunction extends ADeclarator {
         attributes.add("signature");
         attributes.add("returnType");
         attributes.add("isCudaKernel");
+        attributes.add("canonical");
+        attributes.add("isCanonical");
     }
 
     /**
@@ -1768,6 +1816,8 @@ public abstract class AFunction extends ADeclarator {
         SIGNATURE("signature"),
         RETURNTYPE("returnType"),
         ISCUDAKERNEL("isCudaKernel"),
+        CANONICAL("canonical"),
+        ISCANONICAL("isCanonical"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),

@@ -15,8 +15,6 @@ package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
 
-import org.suikasoft.jOptions.Datakey.DataKey;
-import org.suikasoft.jOptions.Datakey.KeyFactory;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
@@ -32,8 +30,6 @@ public class ExprStmt extends Stmt {
 
     /// DATAKEYS BEGIN
 
-    public final static DataKey<Boolean> HAS_SEMICOLON = KeyFactory.bool("hasSemicolon");
-
     /// DATAKEYS END
 
     public ExprStmt(DataStore data, Collection<? extends ClavaNode> children) {
@@ -44,19 +40,13 @@ public class ExprStmt extends Stmt {
         return getChild(Expr.class, 0);
     }
 
-    public boolean hasSemicolon() {
-        return get(HAS_SEMICOLON);
+    public Expr setExpr(Expr newExpr) {
+        return (Expr) setChild(0, newExpr);
     }
 
     @Override
     public String getCode() {
-        String suffix = hasSemicolon() ? ";" : "";
-        return getExpr().getCode() + suffix;
-    }
-
-    public ExprStmt setHasSemicolon(boolean hasSemicolon) {
-        set(HAS_SEMICOLON, hasSemicolon);
-        return this;
+        return getExpr().getCode() + ";";
     }
 
 }

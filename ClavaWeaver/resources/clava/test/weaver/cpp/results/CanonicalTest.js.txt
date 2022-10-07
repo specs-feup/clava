@@ -1,0 +1,2 @@
+Canonical function foo() at line 3
+Canonical function bar() at line 9

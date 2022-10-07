@@ -33,9 +33,11 @@ import pt.up.fe.specs.clang.ClangAstKeys;
 import pt.up.fe.specs.clang.cilk.CilkAstAdapter;
 import pt.up.fe.specs.clang.parsers.ClavaNodes;
 import pt.up.fe.specs.clang.transforms.CreateDeclStmts;
+import pt.up.fe.specs.clang.transforms.CreateEmptyStmts;
+import pt.up.fe.specs.clang.transforms.CreatePointerToMemberExpr;
 import pt.up.fe.specs.clang.transforms.DeleteTemplateSpecializations;
-import pt.up.fe.specs.clang.transforms.DenanonymizeDecls;
 import pt.up.fe.specs.clang.transforms.FlattenSubStmtNodes;
+import pt.up.fe.specs.clang.transforms.MoveDeclsToTagDecl;
 import pt.up.fe.specs.clang.transforms.MoveImplicitCasts;
 import pt.up.fe.specs.clang.transforms.ProcessCudaNodes;
 import pt.up.fe.specs.clang.transforms.RemoveClangOmpNodes;
@@ -78,16 +80,20 @@ public class ClangAstParser {
     private final static Collection<ClavaRule> POST_PARSING_RULES = Arrays.asList(
             new RemoveClangOmpNodes(),
 
-            new DenanonymizeDecls(),
+            // new DenanonymizeDecls(),
 
             new DeleteTemplateSpecializations(),
             new RemoveExtraNodes(),
+            // new RemoveAdjustedType(),
             // new RemoveClangComments(),
+            new MoveDeclsToTagDecl(),
             new CreateDeclStmts(),
             new MoveImplicitCasts(),
             // new RemovePoison(),
             new FlattenSubStmtNodes(),
-            new ProcessCudaNodes()
+            new ProcessCudaNodes(),
+            new CreateEmptyStmts(),
+            new CreatePointerToMemberExpr()
     // new CilkAstAdapter()
 
     // new AdaptBoolTypes(),
@@ -473,6 +479,10 @@ public class ClangAstParser {
 
             Decl decl = (Decl) clavaNode;
 
+            // Decl can have inside descendants that are not of this file (e.g. inside extern C)
+            // Filter them out
+            removeDescendantsFromOtherTus(decl, clavaNode.getLocation().getFilename());
+
             declarations.put(canonicalPath, decl);
         }
 
@@ -568,6 +578,37 @@ public class ClangAstParser {
         // tUnits.add(tUnit);
 
         return tUnit;
+    }
+
+    private void removeDescendantsFromOtherTus(ClavaNode node, String tuFilename) {
+        // Search children, if a child is not from the file, remove.
+        // Call recursively if from the same file
+        var nodesToRemove = new ArrayList<ClavaNode>();
+        var nodesToCheck = new ArrayList<ClavaNode>();
+
+        for (var child : node.getChildren()) {
+            String childFilename = child.getLocationTry().flatMap(loc -> loc.getFilenameTry()).orElse(null);
+
+            // Ignore if no location
+            if (childFilename == null) {
+                continue;
+            }
+
+            var list = childFilename.equals(tuFilename) ? nodesToCheck : nodesToRemove;
+            list.add(child);
+        }
+
+        // Remove children
+        for (var childToRemove : nodesToRemove) {
+            ClavaLog.debug(() -> "Removing node in TU '" + tuFilename + "' that is from TU '"
+                    + childToRemove.getLocation().getFilename() + "'");
+            childToRemove.detach();
+        }
+
+        // Call recursively
+        for (var childToCheck : nodesToCheck) {
+            removeDescendantsFromOtherTus(childToCheck, tuFilename);
+        }
     }
 
     private List<Pattern> getHeaderExcludePatterns() {

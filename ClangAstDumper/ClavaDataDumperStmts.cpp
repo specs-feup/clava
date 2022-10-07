@@ -239,7 +239,8 @@ void clava::ClavaDataDumper::DumpLabelStmtData(const LabelStmt *S) {
     // Hierarchy
     DumpStmtData(S);
 
-    clava::dump(S->getName());
+    //clava::dump(S->getName());
+    clava::dump(clava::getId(S->getDecl(), id));
 }
 
 void clava::ClavaDataDumper::DumpGotoStmtData(const GotoStmt *S) {

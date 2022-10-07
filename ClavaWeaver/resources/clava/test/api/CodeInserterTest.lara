@@ -1,4 +1,4 @@
-import lara.util.CodeInserter;
+import clava.util.CodeInserter;
 import clava.Clava;
 
 aspectdef CodeInserterTest

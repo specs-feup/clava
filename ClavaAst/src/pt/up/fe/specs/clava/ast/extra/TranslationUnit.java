@@ -27,7 +27,6 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.SourceRange;
-import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
 import pt.up.fe.specs.clava.ast.decl.IncludeDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
@@ -423,21 +422,38 @@ public class TranslationUnit extends ClavaNode {
 
     public void addDeclaration(NamedDecl namedDecl) {
 
+        DeclStmt stmt = getFactory().declStmt(namedDecl);
+
+        // Find insertion point. Insert after last include
+        List<ClavaNode> includes = getChildrenStream()
+                .filter(child -> child instanceof IncludeDecl)
+                .collect(Collectors.toList());
+
+        if (includes.isEmpty()) {
+            // Add at the beginning of the translation unit
+            addChild(0, stmt);
+            return;
+        }
+
+        NodeInsertUtils.insertAfter(includes.get(includes.size() - 1), stmt);
+
+        /*
         // Find insertion point. Insert before first function declaration
         Optional<ClavaNode> firstFunction = getChildrenStream()
                 .filter(child -> child instanceof FunctionDecl)
                 .findFirst();
-
+        
         DeclStmt stmt = getFactory().declStmt(namedDecl);
-
+        
         if (firstFunction.isPresent()) {
             NodeInsertUtils.insertBefore(firstFunction.get(), stmt);
             return;
         }
-
+        
+        
         // Add at the end of the translation unit
         addChild(getNumChildren(), stmt);
-
+        */
     }
 
     public File write(File destinationFolder) {

@@ -128,7 +128,7 @@ public class ParallelCodeParser extends CodeParser {
         // System.out.println("PARALLEL OPTIONS: " + options);
         // Prepare resources before execution
         // ClangResources clangResources = new ClangResources(get(SHOW_CLANG_DUMP));
-        ClangResources clangResources = new ClangResources();
+        ClangResources clangResources = new ClangResources(this);
         var clangFiles = clangResources.getClangFiles(version, get(ClangAstKeys.LIBC_CXX_MODE));
         // File clangExecutable = clangResources.prepareResources(version);
         // List<String> builtinIncludes = clangResources.prepareIncludes(clangExecutable,
@@ -217,11 +217,6 @@ public class ParallelCodeParser extends CodeParser {
 
         if (get(SHOW_CLANG_DUMP)) {
             SpecsLogs.msgInfo(clangDump.stream().collect(Collectors.joining("\n")));
-        }
-
-        // if (showClangAst) {
-        if (get(SHOW_CLANG_AST)) {
-            SpecsLogs.msgInfo("Clang AST not supported for ParallelCodeParser");
         }
 
         boolean hasParsingErrors = clangParserResults.stream()

@@ -31,12 +31,11 @@ int main() {
    int const n3 = 0; // const object (same as n2)
    int volatile n4 = 0; // volatile object
    
-   struct anon_qualifiers_cpp_33 {
+   const struct {
       int n1;
       mutable int n2;
-      
-   };
-   struct anon_qualifiers_cpp_33 const x = {0, 0}; // const object with mutable member
+   } x = {0, 0};
+
    n1 = 1; // ok, modifiable object
    //  n2 = 2; // error: non-modifiable object
    n4 = 3; // ok, treated as a side-effect
@@ -57,9 +56,7 @@ int main() {
    // constant pointer to a constant integer
    int const * const constant4 = nullptr;
    
-   struct anon_qualifiers_cpp_64 {
+   const struct {
       int n1;
-   };
-
-   struct anon_qualifiers_cpp_64 const x2 = {0}; // const object with single member
+   } x2 = {0};
 }

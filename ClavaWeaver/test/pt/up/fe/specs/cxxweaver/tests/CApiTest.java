@@ -120,7 +120,7 @@ public class CApiTest {
 
     @Test
     public void testSerializeNode() {
-        if (SpecsSystem.getJavaVersionNumber() > 16) {
+        if (SpecsSystem.hasMinimumJavaVersion(17)) {
             SpecsLogs.info("Skipping test, detected Java version 17 or higher");
             return;
         }
@@ -137,4 +137,20 @@ public class CApiTest {
     public void testStrcpyChecker() {
         newTester().test("StrcpyChecker.lara", "strcpy.c");
     }
+
+    @Test
+    public void testStaticCallGraph() {
+        newTester().test("StaticCallGraphTest.js", "static_call_graph.c");
+    }
+
+    @Test
+    public void testPassComposition() {
+        newTester().test("PassCompositionTest.js", "pass_composition.c");
+    }
+
+    @Test
+    public void testCfgApi() {
+        newTester().test("CfgApi.js", "cfg_api.c");
+    }
+
 }

@@ -22,6 +22,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.type.AdjustedType;
 import pt.up.fe.specs.clava.ast.type.TagType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
@@ -65,6 +66,19 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
     }
 
     @Override
+    public Optional<AdjustedType> getAdjustedType() {
+        if (!hasValue(ADJUSTED_TYPE)) {
+            return Optional.empty();
+        }
+        return get(ADJUSTED_TYPE);
+    }
+
+    @Override
+    public void setAdjustedType(AdjustedType type) {
+        set(ADJUSTED_TYPE, Optional.of(type));
+    }
+
+    @Override
     public ClavaNode copy(boolean keepId, boolean copyChildren) {
         var declCopy = (TypeDecl) super.copy(keepId, copyChildren);
         // System.out.println("TYPE DECL: " + getClass());
@@ -92,7 +106,7 @@ public abstract class TypeDecl extends NamedDecl implements Typable {
             // Link new decl copy
             if (typeCopy instanceof TagType) {
                 TagType tagType = (TagType) typeCopy;
-                tagType.set(TagType.DECL, declCopy);
+                tagType.set(TagType.DECL, (TagDecl) declCopy);
                 // String newTypeAsString = tagType.getTagKind().getCode() + " " + tagType.getDecl().getDeclName();
                 // tagType.set(Type.TYPE_AS_STRING, newTypeAsString);
 

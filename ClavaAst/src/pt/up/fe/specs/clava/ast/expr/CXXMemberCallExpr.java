@@ -53,21 +53,34 @@ public class CXXMemberCallExpr extends CallExpr {
         super(data, children);
     }
 
+    /**
+     * Can either return a MemberExpr, or a pseudo-object PointerToMemberExpr, that is created from a ParenExpr that has
+     * inside a pointer-to-member binary operation.
+     */
     @Override
     public MemberExpr getCallee() {
-        return (MemberExpr) super.getCallee();
+        var callee = getCalleeTry();
+
+        return callee
+                .orElseThrow(() -> new RuntimeException("Case not defined to callee of this kind: " + getChild(0)));
+    }
+
+    public Optional<MemberExpr> getCalleeTry() {
+        var callee = super.getCallee();
+
+        // If callee is a MemberExpr, just return
+        if (callee instanceof MemberExpr) {
+            return Optional.of((MemberExpr) callee);
+        }
+
+        return Optional.empty();
     }
 
     @Override
-    // public String getCalleeName() {
     public Optional<String> getCalleeNameTry() {
-        ClavaNode callee = getCallee();
+        var callee = getCalleeTry();
 
-        if (!(callee instanceof MemberExpr)) {
-            throw new UnexpectedChildExpection(CXXMemberCallExpr.class, callee);
-        }
-
-        return Optional.of(((MemberExpr) callee).getMemberName());
+        return callee.map(MemberExpr::getMemberName);
     }
 
     @Override
@@ -133,54 +146,6 @@ public class CXXMemberCallExpr extends CallExpr {
     public Optional<FunctionDecl> getFunctionDecl() {
         return get(METHOD_DECL).map(method -> (FunctionDecl) method);
     }
-
-    /*
-    private Optional<FunctionDecl> getFunctionDeclFromRecord(RecordType recordType) {
-        CXXRecordDecl recordDecl = getApp().getCXXRecordDeclTry(recordType).orElse(null);
-    
-        if (recordDecl == null) {
-            return Optional.empty();
-        }
-    
-        // Get methods with same name
-    
-        List<CXXMethodDecl> methods = recordDecl.getMethod(getCalleeName());
-    
-        List<Type> argTypes = getArgs().stream()
-                .map(Expr::getType)
-                .collect(Collectors.toList());
-    
-        // Choose the method with same argument types
-        for (CXXMethodDecl methodDecl : methods) {
-            FunctionProtoType functionType = methodDecl.getFunctionType();
-    
-            List<Type> paramTypes = functionType.getParamTypes();
-    
-            // Check number of arguments
-            if (paramTypes.size() != argTypes.size()) {
-                continue;
-            }
-    
-            // Compare each type
-            boolean paramsAreEqual = true;
-            for (int i = 0; i < paramTypes.size(); i++) {
-    
-                boolean areEqual = paramTypes.get(i).equals(argTypes.get(i));
-    
-                if (!areEqual) {
-                    paramsAreEqual = false;
-                    break;
-                }
-            }
-    
-            if (paramsAreEqual) {
-                return Optional.of(methodDecl);
-            }
-        }
-    
-        return Optional.empty();
-    }
-    */
 
     @Override
     public SpecsList<String> getSignatureCustomStrings() {

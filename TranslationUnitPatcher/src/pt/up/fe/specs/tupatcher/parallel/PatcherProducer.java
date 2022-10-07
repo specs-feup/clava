@@ -17,6 +17,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import pt.up.fe.specs.tupatcher.PatchData;
 import pt.up.fe.specs.tupatcher.TUPatcherConfig;
@@ -25,6 +26,7 @@ import pt.up.fe.specs.tupatcher.TUPatcherUtils;
 import pt.up.fe.specs.tupatcher.parser.TUErrorsData;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.collections.concurrentchannel.ChannelProducer;
 import pt.up.fe.specs.util.lazy.Lazy;
@@ -46,6 +48,11 @@ public class PatcherProducer {
         this.dumper = Lazy.newInstance(() -> TUPatcherLauncher.getDumper());
     }
 
+    public static Callable<PatcherResult> createCall(File sourceFile, File baseFolder, TUPatcherConfig config) {
+        var patcher = new PatcherProducer(null, null, config);
+        return () -> patcher.patchFile(sourceFile, null);
+    }
+
     public boolean execute() {
         for (File sourceFile : sourceFiles.keySet()) {
             var baseFolder = sourceFiles.get(sourceFile);
@@ -62,6 +69,8 @@ public class PatcherProducer {
     }
 
     private PatcherResult patchFile(File sourceFile, File baseFolder) {
+        SpecsLogs.info("Patching file " + sourceFile.getName());
+
         var outputFolder = SpecsIo.mkdir(config.get(TUPatcherConfig.OUTPUT_FOLDER));
 
         // Get base output folder for the file
@@ -90,6 +99,8 @@ public class PatcherProducer {
         command.add("-x");
         command.add("c++");
 
+        var workingDir = dumperExe.getAbsoluteFile().getParentFile();
+
         int n = 0;
         int maxIterations = config.get(TUPatcherConfig.MAX_ITERATIONS);
         ProcessOutput<Boolean, TUErrorsData> output = null;
@@ -98,6 +109,7 @@ public class PatcherProducer {
 
             try {
                 output = SpecsSystem.runProcess(command,
+                        workingDir,
                         TUPatcherLauncher::outputProcessor,
                         inputStream -> TUPatcherLauncher.lineStreamProcessor(inputStream, patchData));
                 patchData.write(sourceFile, patchedFile);
@@ -109,6 +121,7 @@ public class PatcherProducer {
                 }
             } catch (Exception e) {
                 var endTime = System.nanoTime();
+                SpecsLogs.info("Failed patching of file " + sourceFile.getName());
                 return new PatcherResult(sourceFile, false, n, endTime - startTime);
             }
 
@@ -137,6 +150,8 @@ public class PatcherProducer {
             System.out.println("Std err result: " + output.getStdErr());
         }
         */
+        var finishedFailed = success ? "Success on" : "Failed";
+        SpecsLogs.info(finishedFailed + " patching of file " + sourceFile.getName());
         return new PatcherResult(sourceFile, success, n, endTime - startTime);
     }
 

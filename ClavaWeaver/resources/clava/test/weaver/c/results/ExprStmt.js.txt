@@ -1,0 +1,4 @@
+Loop 5 cond: i < 10;
+Loop 5 step: i++;
+Loop 8 cond: count < 10;
+Loop 12 cond: count < 20;

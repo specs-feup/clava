@@ -45,7 +45,6 @@ public abstract class AClangAstTester {
     private final Collection<ResourceProvider> resources;
     private List<String> compilerOptions;
 
-    private boolean showClangAst = false;
     private boolean showClavaAst = false;
     private boolean showClangDump = false;
     private boolean showCode = false;
@@ -189,7 +188,6 @@ public abstract class AClangAstTester {
         // Parse files
 
         CodeParser codeParser = CodeParser.newInstance()
-                .set(CodeParser.SHOW_CLANG_AST, showClangAst)
                 .set(CodeParser.SHOW_CLANG_DUMP, showClangDump)
                 .set(CodeParser.SHOW_CLAVA_AST, showClavaAst)
                 .set(CodeParser.SHOW_CODE, showCode);

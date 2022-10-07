@@ -36,7 +36,6 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     // BEGIN DATAKEY
 
     public static final DataKey<Boolean> SHOW_CLANG_DUMP = KeyFactory.bool("showClangDump");
-    public static final DataKey<Boolean> SHOW_CLANG_AST = KeyFactory.bool("showClangAst");
     public static final DataKey<Boolean> SHOW_CLAVA_AST = KeyFactory.bool("showClavaAst");
     public static final DataKey<Boolean> SHOW_CODE = KeyFactory.bool("showCode");
     public static final DataKey<Boolean> USE_CUSTOM_RESOURCES = KeyFactory.bool("useCustomResources");
@@ -47,6 +46,8 @@ public abstract class CodeParser extends ADataClass<CodeParser> {
     public static final DataKey<String> CUDA_PATH = KeyFactory.string("cudaPath")
             .setLabel("CUDA Path (empty: uses system installed; <builtin>: uses builtin version)")
             .setDefaultString("");
+    public static final DataKey<File> CUSTOM_CLANG_AST_DUMPER_EXE = KeyFactory.file("customClangAstDumperExe")
+            .setLabel("Custom ClangAstDumper executable file");
 
     /**
      * Execution information, such as execution time and memory used.

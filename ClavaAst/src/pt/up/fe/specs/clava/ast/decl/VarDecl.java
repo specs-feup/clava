@@ -25,7 +25,6 @@ import pt.up.fe.specs.clava.ast.comment.InlineComment;
 import pt.up.fe.specs.clava.ast.decl.enums.InitializationStyle;
 import pt.up.fe.specs.clava.ast.decl.enums.StorageClass;
 import pt.up.fe.specs.clava.ast.expr.Expr;
-import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.stmt.DeclStmt;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.TLSKind;
@@ -238,7 +237,7 @@ public class VarDecl extends DeclaratorDecl {
         }
 
         switch (get(VarDecl.STORAGE_CLASS)) {
-        // Is global and storageClass is 'none', this is the global declaration
+        // Is global and storageClass is 'none', this is the global definition
         case None:
             return this;
         case Extern:
@@ -250,13 +249,4 @@ public class VarDecl extends DeclaratorDecl {
 
     }
 
-    public static VarDecl getGlobalDefinition(App app, VarDecl varDecl) {
-        return app.getDescendantsStream()
-                .filter(node -> node instanceof VarDecl)
-                .map(node -> (VarDecl) node)
-                .filter(vardecl -> vardecl.get(DECL_NAME).equals(varDecl.get(DECL_NAME)))
-                .filter(vardecl -> vardecl.get(STORAGE_CLASS) == StorageClass.None)
-                .findFirst()
-                .orElse(null);
-    }
 }

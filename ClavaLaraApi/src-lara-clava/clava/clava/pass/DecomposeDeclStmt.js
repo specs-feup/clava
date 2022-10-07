@@ -1,5 +1,6 @@
 laraImport("lara.pass.Pass");
 laraImport("clava.ClavaJoinPoints");
+laraImport("lara.pass.PassTransformationResult");
 
 /**
  * Decomposes composite declaration statements into separate statements for each variable.
@@ -20,25 +21,33 @@ laraImport("clava.ClavaJoinPoints");
  */
 class DecomposeDeclStmt extends Pass {
   constructor() {
-    super("DecomposeDeclStmt");
+    super();
   }
 
-  _apply_impl($jp) {
-    // Find all declaration statements
-    for (const $declStmt of Query.searchFromInclusive($jp, "declStmt")) {
-      // Ignore statement if it only declares one variable
-      if ($declStmt.numChildren <= 1) {
-        continue;
-      }
-
-      // Create new statement for each declaration
-      // Insert it before the old node to preserve the order of declarations
-      for (const $varDecl of $declStmt.decls) {
-        $declStmt.insertBefore(ClavaJoinPoints.declStmt($varDecl));
-      }
-
-      // Remove the old statement
-      $declStmt.detach();
+  matchJoinpoint($jp) {
+    if (!$jp.instanceOf("declStmt")) {
+      return false;
     }
+    if ($jp.numChildren <= 1) {
+      return false;
+    }
+    return true;
+  }
+
+  transformJoinpoint($jp) {
+    let $firstDeclStmt;
+    for (const $decl of $jp.decls) {
+      const $singleDeclStmt = ClavaJoinPoints.declStmt($decl);
+      if (!$firstDeclStmt) {
+        $firstDeclStmt = $singleDeclStmt;
+      }
+      $jp.insertBefore($singleDeclStmt);
+    }
+    $jp.detach();
+    return new PassTransformationResult({
+      pass: DecomposeDeclStmt,
+      $joinpoint: $firstDeclStmt,
+      insertedLiteralCode: false,
+    });
   }
 }

@@ -277,6 +277,24 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * Get value on attribute canonical
+     * @return the attribute's value
+     */
+    @Override
+    public AFunction getCanonicalImpl() {
+        return this.aFunction.getCanonicalImpl();
+    }
+
+    /**
+     * Get value on attribute isCanonical
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsCanonicalImpl() {
+        return this.aFunction.getIsCanonicalImpl();
+    }
+
+    /**
      * Method used by the lara interpreter to select bodys
      * @return 
      */
@@ -1042,6 +1060,8 @@ public abstract class AMethod extends AFunction {
         SIGNATURE("signature"),
         RETURNTYPE("returnType"),
         ISCUDAKERNEL("isCudaKernel"),
+        CANONICAL("canonical"),
+        ISCANONICAL("isCanonical"),
         NAME("name"),
         ISPUBLIC("isPublic"),
         QUALIFIEDPREFIX("qualifiedPrefix"),

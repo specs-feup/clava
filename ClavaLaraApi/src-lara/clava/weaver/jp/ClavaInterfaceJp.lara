@@ -1,0 +1,84 @@
+import weaver.jp.InterfaceJp;
+import weaver.Weaver;
+
+
+// Override InterfaceJp constructor
+var oldInterfaceJp = InterfaceJp.prototype;
+var oldInterface_JP_TYPES = InterfaceJp._JP_TYPES;
+
+
+InterfaceJp = function(astNode, getDefinition) {
+	// By default, it gets the definition
+	getDefinition = typeof getDefinition !== 'undefined' ? getDefinition : true;
+	
+	// check for definition
+	//this.originalAstNode = astNode;
+	//if (astNode.getDefinition().isPresent() && getDefinition)
+	//	astNode = astNode.getDefinition().get();
+		
+	// Parent constructor
+    ClassTypeJp.call(this,astNode,getDefinition);
+}
+
+InterfaceJp.prototype = oldInterfaceJp;
+InterfaceJp._JP_TYPES = oldInterface_JP_TYPES;
+
+
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'name', {
+	get: function () { 
+		return Weaver.AST_METHODS.toJavaJoinPoint(this.astNode).name; 
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, '_qualifiedName', {
+	get: function () { 
+		return this.astNode.getFullyQualifiedName(); 
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, '_allMethods', {
+	get: function () {
+		var methods = Weaver.toJs(this.astNode.getMethods());
+		methods = methods.map(method=> method.getDefinition().isPresent()?method.getDefinition().get():method);
+		return CommonJoinPoints.toJoinPoints(Weaver.toJs(methods));
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'methods', {
+	get: function () {		
+		//return this._allMethods.filter(method => method.hasBody);
+		return this._allMethods;
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'allMethods', {
+	get: function () {
+		var methods = this.methods;
+
+		for (superInterface of this.allInterfaces) {
+			methods = methods.concat(superInterface.methods);
+		}
+		
+		return methods;
+	}
+});
+
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'interfaces', {
+	get: function () {
+		return CommonJoinPoints.toJoinPoints(Weaver.toJs(this.astNode.getBases())).filter($jp=>$jp.instanceOf("interface")); 
+ 	}
+});
+
+_lara_dummy_ = Object.defineProperty(InterfaceJp.prototype, 'allInterfaces', {
+	get: function () {
+		
+		var allInterfaces = [];
+
+		for (superInterface of this.interfaces) {
+			allInterfaces.push(superInterface);
+			allInterfaces = allInterfaces.concat(superInterface.allInterfaces);
+		}
+		
+		return allInterfaces;
+	}
+});

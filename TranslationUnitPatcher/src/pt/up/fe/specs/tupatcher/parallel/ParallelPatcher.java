@@ -15,11 +15,13 @@ package pt.up.fe.specs.tupatcher.parallel;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -93,6 +95,73 @@ public class ParallelPatcher {
                 .sum();
         var programTime = endTime - startTime;
         var producersProgramRatio = (double) producersTime / (double) programTime;
+
+        var parallelismEfficiency = producersProgramRatio / numThreads;
+
+        System.out.println("Program execution: " + SpecsStrings.parseTime(programTime));
+        System.out.println("Producers execution: " + SpecsStrings.parseTime(producersTime));
+        System.out.println("Producers/Program ratio: " + String.format(Locale.UK, "%f", producersProgramRatio));
+        System.out.println("Num threads: " + numThreads);
+        System.out.println("Parallelism efficiency: " + SpecsStrings.toPercentage(parallelismEfficiency));
+        // var subLists = Lists.partition(sourceFiles, sourceFiles.size() / numThreads);
+        // for(int i=0; i<)
+        // Create as many producers as threads
+        // IntStream.of(numThreads).mapToObj(i -> new PatcherProducer(sourceFiles, channel.createProducer()))
+
+        // Have a single consumer that collects results
+
+        return 0;
+
+    }
+
+    public int executeV2() {
+        long startTime = System.nanoTime();
+
+        var sourcePaths = config.get(TUPatcherConfig.SOURCE_PATHS).getStringList();
+
+        var validExtensions = new HashSet<>(config.get(TUPatcherConfig.SOURCE_EXTENSIONS).getStringList());
+
+        // Convert source paths to list of files
+        var sourceFiles = getSourceFiles(sourcePaths, validExtensions);
+        System.out.println("Found " + sourceFiles.size() + " source files");
+
+        var numThreads = config.get(TUPatcherConfig.NUM_THREADS);
+        numThreads = numThreads > 0 ? numThreads : Runtime.getRuntime().availableProcessors();
+
+        var fixedThreadPool = Executors.newFixedThreadPool(numThreads);
+
+        // Create list of callables
+        var jobs = new ArrayList<Callable<PatcherResult>>();
+        for (var key : sourceFiles.keySet()) {
+            jobs.add(PatcherProducer.createCall(key, sourceFiles.get(key), config));
+        }
+
+        List<Future<PatcherResult>> jobResults = Collections.emptyList();
+        try {
+            jobResults = fixedThreadPool.invokeAll(jobs);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            // SpecsLogs.msgWarn("Error message:\n", e);
+        }
+
+        // Obtain values of futures, to synchronize execution
+        var results = new ArrayList<PatcherResult>();
+        int acc = 1;
+        for (var future : jobResults) {
+            results.add(SpecsSystem.get(future));
+            System.out.println("Collected result for file " + acc);
+            acc++;
+        }
+
+        System.out.println("FINISHED!");
+
+        long endTime = System.nanoTime();
+
+        // Sum times of all producers
+        var producersTime = results.stream().mapToLong(patcherResult -> patcherResult.getExecutionTime())
+                .sum();
+        var programTime = endTime - startTime;
+        var producersProgramRatio = (double) producersTime / programTime;
 
         var parallelismEfficiency = producersProgramRatio / numThreads;
 

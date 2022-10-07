@@ -1,0 +1,32 @@
+MemberChain Types:varref,memberAccess
+MemberChain Names:ts,a
+MemberChain Types:varref,memberAccess
+MemberChain Names:ts,d
+MemberChain Types:varref,memberAccess
+MemberChain Names:ts,a
+MemberChain Types:varref,memberAccess
+MemberChain Names:ts,a
+MemberChain Types:varref,memberAccess
+MemberChain Names:ts2,a
+MemberChain Types:varref,memberAccess
+MemberChain Names:ts2,a
+varref:ts
+has decl:true
+varref:ts
+has decl:true
+varref:ts
+has decl:true
+varref:ts
+has decl:true
+varref:ts2
+has decl:true
+varref:ts2
+has decl:true
+varref:a
+has decl:true
+varref:x
+has decl:true
+varref:y
+has decl:true
+varref:x
+has decl:true

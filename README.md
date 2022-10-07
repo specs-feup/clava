@@ -7,18 +7,18 @@ If you have used Clava, please consider filling the [Clava User Experience Feedb
 
 [Clava Tutorial - 2018 PACT](https://github.com/specs-feup/specs-lara/tree/master/2018-PACT) - Tutorial on how to use Clava (recommended parts 1-3).
 
-[LARA Reference Guide](http://specs.fe.up.pt/tools/lara/doku.php?id=lara:docs:sheet) - Start using LARA with examples.
+[LARA Reference Guide](https://web.fe.up.pt/~specs/wiki/doku.php?id=doc:lara) - Start using LARA with examples.
 
 [Language Specification](https://specs.fe.up.pt/tools/clava/language_specification.html) - List of all join points, attributes and actions available in Clava.
 
-[API Documentation](https://specs.fe.up.pt/tools/clava/doc/) - List of LARA APIs available in Clava.
+[API Documentation](https://specs-feup.github.io/clava/api/) - List of LARA APIs available in Clava.
 
 [API Slides](https://drive.google.com/drive/u/1/folders/1IAqv7SpP8S-t5g3fpNO06cJ7J2j2aD7K) - Introduction to Clava and the LARA Framework APIs.
 
 For a sample of Clava examples, please check the [Unit Tests](https://github.com/specs-feup/clava/tree/master/ClavaWeaver/resources/clava/test).
 
 
-# Resources
+# Installing
 
 A ZIP file with the last compiled JAR for Clava can be downloaded from [here](http://specs.fe.up.pt/tools/clava.zip) ([previous releases](https://drive.google.com/drive/folders/1X3JeYB783ZfqoqIYrCitqABDWhM5bV_Y?usp=sharing)).
 

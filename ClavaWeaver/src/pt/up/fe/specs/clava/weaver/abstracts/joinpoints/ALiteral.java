@@ -332,7 +332,7 @@ public abstract class ALiteral extends AExpression {
      * 
      */
     @Override
-    public final List<? extends JoinPoint> select(String selectName) {
+    public List<? extends JoinPoint> select(String selectName) {
         List<? extends JoinPoint> joinPointList;
         switch(selectName) {
         	case "vardecl": 
@@ -349,7 +349,7 @@ public abstract class ALiteral extends AExpression {
      * 
      */
     @Override
-    public final void defImpl(String attribute, Object value) {
+    public void defImpl(String attribute, Object value) {
         switch(attribute){
         case "data": {
         	if(value instanceof Object){
@@ -398,7 +398,7 @@ public abstract class ALiteral extends AExpression {
      * 
      */
     @Override
-    protected final void fillWithAttributes(List<String> attributes) {
+    protected void fillWithAttributes(List<String> attributes) {
         this.aExpression.fillWithAttributes(attributes);
     }
 
@@ -406,7 +406,7 @@ public abstract class ALiteral extends AExpression {
      * 
      */
     @Override
-    protected final void fillWithSelects(List<String> selects) {
+    protected void fillWithSelects(List<String> selects) {
         this.aExpression.fillWithSelects(selects);
     }
 
@@ -414,7 +414,7 @@ public abstract class ALiteral extends AExpression {
      * 
      */
     @Override
-    protected final void fillWithActions(List<String> actions) {
+    protected void fillWithActions(List<String> actions) {
         this.aExpression.fillWithActions(actions);
     }
 
@@ -423,7 +423,7 @@ public abstract class ALiteral extends AExpression {
      * @return The join point type
      */
     @Override
-    public final String get_class() {
+    public String get_class() {
         return "literal";
     }
 
@@ -432,7 +432,7 @@ public abstract class ALiteral extends AExpression {
      * @return True if this join point is an instanceof the given class
      */
     @Override
-    public final boolean instanceOf(String joinpointClass) {
+    public boolean instanceOf(String joinpointClass) {
         boolean isInstance = get_class().equals(joinpointClass);
         if(isInstance) {
         	return true;
