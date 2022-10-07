@@ -123,6 +123,7 @@ public class ParallelPatcher {
 
         // Convert source paths to list of files
         var sourceFiles = getSourceFiles(sourcePaths, validExtensions);
+        System.out.println("Found " + sourceFiles.size() + " source files");
 
         var numThreads = config.get(TUPatcherConfig.NUM_THREADS);
         numThreads = numThreads > 0 ? numThreads : Runtime.getRuntime().availableProcessors();

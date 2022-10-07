@@ -26,6 +26,7 @@ import pt.up.fe.specs.tupatcher.TUPatcherUtils;
 import pt.up.fe.specs.tupatcher.parser.TUErrorsData;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.collections.concurrentchannel.ChannelProducer;
 import pt.up.fe.specs.util.lazy.Lazy;
@@ -68,6 +69,8 @@ public class PatcherProducer {
     }
 
     private PatcherResult patchFile(File sourceFile, File baseFolder) {
+        SpecsLogs.info("Patching file " + sourceFile.getName());
+
         var outputFolder = SpecsIo.mkdir(config.get(TUPatcherConfig.OUTPUT_FOLDER));
 
         // Get base output folder for the file
@@ -118,6 +121,7 @@ public class PatcherProducer {
                 }
             } catch (Exception e) {
                 var endTime = System.nanoTime();
+                SpecsLogs.info("Failed patching of file " + sourceFile.getName());
                 return new PatcherResult(sourceFile, false, n, endTime - startTime);
             }
 
@@ -146,6 +150,8 @@ public class PatcherProducer {
             System.out.println("Std err result: " + output.getStdErr());
         }
         */
+        var finishedFailed = success ? "Success on" : "Failed";
+        SpecsLogs.info(finishedFailed + " patching of file " + sourceFile.getName());
         return new PatcherResult(sourceFile, success, n, endTime - startTime);
     }
 

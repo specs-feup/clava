@@ -38,10 +38,10 @@ public class TUPatcherUtils {
         public int number;
     }
 
-    static CharFunction isTokenChar = (char ch) -> {
+    static final CharFunction isTokenChar = (char ch) -> {
         return Character.isLetterOrDigit(ch) || ch == '_';
     };
-    static CharFunction isNotTokenChar = (char ch) -> {
+    static final CharFunction isNotTokenChar = (char ch) -> {
         return !isTokenChar.run(ch);
     };
 
@@ -54,7 +54,7 @@ public class TUPatcherUtils {
     /**
      * List of operators used in c/c++
      */
-    static List<String> operators;
+    static final List<String> operators;
     static {
         String[] temp = { "+", "-", "*", "&", "/", "%", "^", "|", "~", "!",
                 "=", "<", ">", "+=", "-=", "*=", "/=", "%=",
