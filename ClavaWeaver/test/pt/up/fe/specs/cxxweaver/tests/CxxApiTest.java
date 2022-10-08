@@ -197,4 +197,10 @@ public class CxxApiTest {
     public void testSimplifyLoops() {
         newTester().test("PassSimplifyLoopsTest.js", "pass_simplify_loops.cpp");
     }
+
+    @Test
+    public void testMpiScatterGather() {
+        newTester()
+                .test("MpiScatterGatherTest.js", "mpi_scatter_gather.cpp", "mpi_scatter_gather.h");
+    }
 }
