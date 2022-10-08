@@ -222,25 +222,25 @@ class ClavaJoinPoints {
   }
 
   static scope() {
-	const $stmts = arrayFromArgs(arguments);
-	
-	
+    const $stmts = arrayFromArgs(arguments);
+
     if ($stmts.length === 0) {
       return AstFactory.scope();
     }
 
-	// Convert to statements
-	const $normalizedStmts = [];
-	for(const $stmt of $stmts) {
-		const $normalizedStmt = $stmt.stmt;
-		
-		if($normalizedStmt === undefined) {
-			throw new Error(`Could not convert ${$stmt} to a statement, and a scope only accepts statements`);
-		}
-		
-		$normalizedStmts.push($normalizedStmt);
-	}
+    // Convert to statements
+    const $normalizedStmts = [];
+    for (const $stmt of $stmts) {
+      const $normalizedStmt = $stmt.stmt;
 
+      if ($normalizedStmt === undefined) {
+        throw new Error(
+          `Could not convert ${$stmt} to a statement, and a scope only accepts statements`
+        );
+      }
+
+      $normalizedStmts.push($normalizedStmt);
+    }
 
     return AstFactory.scope($normalizedStmts);
   }
@@ -654,5 +654,14 @@ class ClavaJoinPoints {
   static gotoStmt(labelDecl) {
     checkJoinPointType(labelDecl, "labelDecl");
     return AstFactory.gotoStmt(labelDecl);
+  }
+
+  /**
+   * Creates a new literal join point 'decl'.
+   *
+   * @param {string} declString The literal code of the decl.
+   */
+  static declLiteral(declString) {
+    return AstFactory.declLiteral(declString);
   }
 }
