@@ -160,7 +160,7 @@ public class CTest {
 
     @Test
     public void testScope() {
-        newTester().test("Scope.lara", "scope.c");
+        newTester().test("Scope.js", "scope.c");
     }
 
     @Test

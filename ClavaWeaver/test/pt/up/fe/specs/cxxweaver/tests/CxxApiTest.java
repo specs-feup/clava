@@ -84,7 +84,7 @@ public class CxxApiTest {
 
         newTester()
                 .set(CxxWeaverOption.PARSE_INCLUDES)
-                .test("CMakerTest.lara", "cmaker_test.cpp", "cmaker_test.h");
+                .test("CMakerTest.js", "cmaker_test.cpp", "cmaker_test.h");
     }
 
     @Test
