@@ -165,7 +165,6 @@ public enum LaraApiResource implements LaraResourceProvider {
     CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
     CODE_INSERTER("util/CodeInserter.js"),
     FILE_ITERATOR("util/FileIterator.lara"),
-    SINGLE_FILE("util/SingleFile.lara"),
 
     // UVE
     UVE("uve/UVE.lara"),
