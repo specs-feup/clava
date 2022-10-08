@@ -3,6 +3,7 @@ import clava.mpi.patterns.MpiAccessPatterns;
 
 import clava.Clava;
 import clava.ClavaJoinPoints;
+import clava.ClavaCode;
 
 /**
  * Applies an MPI scatter-gather strategy to loops.
@@ -42,15 +43,19 @@ MpiScatterGatherLoop.prototype.execute = function() {
 	
 	// Add include
 	$mainFile.addInclude("mpi.h");
+	$mainFile.addInclude("iostream", true);
 	
 	// Add global variables
 	$intType = ClavaJoinPoints.builtinType("int");
-	$mainFile.addGlobal(MpiUtils.VAR_NUM_TASKS, $intType, 0);
-	$mainFile.addGlobal(MpiUtils.VAR_NUM_WORKERS, $intType, 0);
-	var $rankDecl = $mainFile.addGlobal(MpiUtils.VAR_RANK, $intType, 0);
+	$mainFile.addGlobal(MpiUtils.VAR_NUM_TASKS, $intType, "0");
+	$mainFile.addGlobal(MpiUtils.VAR_NUM_WORKERS, $intType, "0");
+	var $rankDecl = $mainFile.addGlobal(MpiUtils.VAR_RANK, $intType, "0");
 
+	// Create decl
+	var mpiWorkerFunction = ClavaJoinPoints.declLiteral(this._buildMpiWorker());
+	
 	// Add MPI Worker
-	$rankDecl.insertAfter(this._buildMpiWorker());	
+	$rankDecl.insertAfter(mpiWorkerFunction);	
 
 	// Replace loop with MPI Master routine
 	this._replaceLoop();
@@ -199,6 +204,7 @@ MpiScatterGatherLoop.prototype._addVariable = function(varName, accessPattern, n
 
 /** CODEDEFS **/
 
+// TODO: std::cerr should not be hardcoded, lara.code.Logger should be used instead
 codedef MpiInit(argc, argv, rank, numTasks, numWorkers, mpiWorker) %{
     MPI_Init(&[[argc]], &[[argv]]);
     MPI_Comm_rank(MPI_COMM_WORLD, &[[rank]]);
