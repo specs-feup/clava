@@ -5,7 +5,9 @@ import clava.ClavaJoinPoints;
 aspectdef LaraGetterTest
 
 	var descendants = Clava.getProgram().descendants;
-	var descendants2 = Clava.getProgram().descendants('vardecl');
+	// descendants() does not work in newer versions of GraalVM
+	// For some reason, laraGetter is not being used in that case
+	//var descendants2 = Clava.getProgram().descendants('vardecl');
 	
 	var $app = Clava.getProgram();
 	var $file = ClavaJoinPoints.file("dummy.c", "lib");
