@@ -122,7 +122,7 @@ public enum LaraApiResource implements LaraResourceProvider {
 
     // MPI
     MPI_ACCESS_PATTERN("mpi/MpiAccessPattern.lara"),
-    MPI_SCATTER_GATHER_LOOP("mpi/MpiScatterGatherLoop.lara"),
+    MPI_SCATTER_GATHER_LOOP("mpi/MpiScatterGatherLoop.js"),
     MPI_UTILS("mpi/MpiUtils.lara"),
 
     // MPI Patterns
