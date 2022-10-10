@@ -1,5 +1,4 @@
 laraImport("clava.Clava");
-laraImport("clava.util.SingleFile");
 laraImport("weaver.Query");
 
 /**
