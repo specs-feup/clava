@@ -1,78 +1,54 @@
 /**** File 'mpi_scatter_gather.cpp' ****/
-
 #include "mpi_scatter_gather.h"
 #include "mpi.h"
 #include <iostream>
 int mpi_rank = 0;
 void mpi_worker() {
-    MPI_Status mpi_status;
-
-	// Number of loop iterations
-    int mpi_loop_num_elems;
-
-    MPI_Recv(&mpi_loop_num_elems, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, &mpi_status);
-	
-	
-	
-	
-	
-	for(int i = 0; i < mpi_loop_num_elems; i++) {
-   bar();
+MPI_Status mpi_status;
+// Number of loop iterations
+int mpi_loop_num_elems;
+MPI_Recv(&mpi_loop_num_elems, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, &mpi_status);
+for(int i = 0; i < mpi_loop_num_elems; i++) {
+bar();
 }
-
-	
-		
-};
+}
+;
 int mpi_num_workers = 0;
 int mpi_num_tasks = 0;
 void bar() {
-   // Do something parallel
+// Do something parallel
 }
-
 void foo() {
-   	// Master routine
-   	
-   	// split iterations of the loop
-   	int clava_mpi_total_iter = 1000;
-   	int clava_mpi_loop_limit = clava_mpi_total_iter;
-   	// A better distribution calculation could be used
-   	int clava_mpi_num_iter = clava_mpi_total_iter / mpi_num_workers;
-   	int clava_mpi_num_iter_last = clava_mpi_num_iter + clava_mpi_total_iter % mpi_num_workers;
-   	// int clava_mpi_num_iter_last = clava_mpi_num_iter + (clava_mpi_loop_limit - (clava_mpi_num_iter * mpi_num_workers));
-   	
-   	// send number of iterations
-   	for(int i=0; i<mpi_num_workers-1; i++) {
-   		MPI_Send(&clava_mpi_num_iter, 1, MPI_INT, i+1, 1, MPI_COMM_WORLD);
-   	}
-   	MPI_Send(&clava_mpi_num_iter_last, 1, MPI_INT, mpi_num_workers, 1, MPI_COMM_WORLD);
-   	
-   	
-   	
-   	
-   	MPI_Status mpi_status;
-   	
-   	
-   	
-   	MPI_Finalize();
+// Master routine
+// split iterations of the loop
+int clava_mpi_total_iter = 1000;
+int clava_mpi_loop_limit = clava_mpi_total_iter;
+// A better distribution calculation could be used
+int clava_mpi_num_iter = clava_mpi_total_iter / mpi_num_workers;
+int clava_mpi_num_iter_last = clava_mpi_num_iter + clava_mpi_total_iter % mpi_num_workers;
+// int clava_mpi_num_iter_last = clava_mpi_num_iter + (clava_mpi_loop_limit - (clava_mpi_num_iter * mpi_num_workers));
+// send number of iterations
+for(int i=0; i<mpi_num_workers-1; i++) {
+MPI_Send(&clava_mpi_num_iter, 1, MPI_INT, i+1, 1, MPI_COMM_WORLD);
 }
-
+MPI_Send(&clava_mpi_num_iter_last, 1, MPI_INT, mpi_num_workers, 1, MPI_COMM_WORLD);
+MPI_Status mpi_status;
+MPI_Finalize();
+}
 int main(int argc, char** argv) {
-       MPI_Init(&argc, &argv);
-       MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
-       MPI_Comm_size(MPI_COMM_WORLD, &mpi_num_tasks);
-       mpi_num_workers = mpi_num_tasks - 1;
-   
-       if(mpi_num_workers == 0) {
-           std::cerr << "This program does not support working with a single process." << std::endl;
-           return 1;
-       }
-   
-   	if(mpi_rank > 0) {
-   		mpi_worker();
-   		MPI_Finalize();
-   		return 0;
-   	}
-   foo();
+MPI_Init(&argc, &argv);
+MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
+MPI_Comm_size(MPI_COMM_WORLD, &mpi_num_tasks);
+mpi_num_workers = mpi_num_tasks - 1;
+if(mpi_num_workers == 0) {
+std::cerr << "This program does not support working with a single process." << std::endl;
+return 1;
 }
-
+if(mpi_rank > 0) {
+mpi_worker();
+MPI_Finalize();
+return 0;
+}
+foo();
+}
 /**** End File ****/

@@ -7,6 +7,9 @@ const mpiGsl = new MpiScatterGatherLoop(
   Query.searchFrom($function, "loop").first()
 );
 
+// Not yet implemented
+//mpiGsl.addInput("a");
+
 mpiGsl.execute();
 
 println(Query.root().code);
