@@ -796,6 +796,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("ancestor(String type)");
         attributes.add("descendants");
         attributes.add("descendants(String type)");
+        attributes.add("laraDescendants(String type)");
         attributes.add("descendantsAndSelf(String type)");
         attributes.add("chainAncestor(String type)");
         attributes.add("astParent");
@@ -996,6 +997,44 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "descendants", e);
+        }
+    }
+
+    /**
+     * 
+     * @param type
+     * @return 
+     */
+    public abstract AJoinPoint[] laraDescendantsArrayImpl(String type);
+
+    /**
+     * 
+     * @param type
+     * @return 
+     */
+    public Object laraDescendantsImpl(String type) {
+        AJoinPoint[] aJoinPointArrayImpl0 = laraDescendantsArrayImpl(type);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * 
+     * @param type
+     * @return 
+     */
+    public final Object laraDescendants(String type) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "laraDescendants", Optional.empty(), type);
+        	}
+        	Object result = this.laraDescendantsImpl(type);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "laraDescendants", Optional.ofNullable(result), type);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "laraDescendants", e);
         }
     }
 

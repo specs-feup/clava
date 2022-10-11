@@ -22,6 +22,10 @@
 			tooltip="Retrieves the descendants of the given type">
 			<parameter name="type" type="String" />
 		</attribute>
+		<attribute name="laraDescendants" type="joinpoint[]"
+			tooltip="[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type">
+			<parameter name="type" type="String" />
+		</attribute>
 		
 		<attribute name="descendantsAndSelf" type="joinpoint[]"
 			tooltip="Retrieves the descendants of the given type, including the node itself">

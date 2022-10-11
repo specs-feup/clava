@@ -515,6 +515,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -1561,6 +1574,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -2778,6 +2804,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -3979,6 +4018,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -5212,6 +5264,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -6337,6 +6402,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -7457,6 +7535,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -8620,6 +8711,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -10011,6 +10115,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -11060,6 +11177,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -12387,6 +12517,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -13688,6 +13831,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -14876,6 +15032,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -16055,6 +16224,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -17281,6 +17463,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -18807,6 +19002,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -19991,6 +20199,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -21276,6 +21497,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -22413,6 +22647,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -23449,6 +23696,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -24510,6 +24770,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -25813,6 +26086,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -27021,6 +27307,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -28074,6 +28373,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -29227,6 +29539,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -30340,6 +30665,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -31581,6 +31919,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -32699,6 +33050,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -33743,6 +34107,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -34900,6 +35277,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -36180,6 +36570,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -37338,6 +37741,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -38433,6 +38849,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -39587,6 +40016,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -40662,6 +41104,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -41885,6 +42340,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -43267,6 +43735,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -44548,6 +45029,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -46154,6 +46648,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -47328,6 +47835,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -48479,6 +48999,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -49694,6 +50227,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -50777,6 +51323,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -51851,6 +52410,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -52949,6 +53521,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -54099,6 +54684,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -55325,6 +55923,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -56734,6 +57345,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -57874,6 +58498,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -59111,6 +59748,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -60539,6 +61189,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -62008,6 +62671,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -63121,6 +63797,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -64391,6 +65080,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -65792,6 +66494,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -66928,6 +67643,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -68225,6 +68953,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -69535,6 +70276,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -70712,6 +71466,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -71905,6 +72672,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -73363,6 +74143,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -74564,6 +75357,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -75677,6 +76483,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -76880,6 +77699,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -78236,6 +79068,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -79427,6 +80272,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -80532,6 +81390,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -81698,6 +82569,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -82950,6 +83834,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -84275,6 +85172,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -85484,6 +86394,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -86575,6 +87498,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -87788,6 +88724,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -88947,6 +89896,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -90059,6 +91021,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -91328,6 +92303,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -92528,6 +93516,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -93658,6 +94659,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -94872,6 +95886,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -96093,6 +97120,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{
@@ -97410,6 +98450,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -98645,6 +99698,19 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns the last child of this node, or undefined if it has no child",
 						"children": [
 									{
@@ -99723,6 +100789,19 @@
 									{
 										"type": "String[]",
 										"name": "keys"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "laraDescendants"
+									},
+									{
+										"type": "String",
+										"name": "type"
 									}]
 					},
 					{

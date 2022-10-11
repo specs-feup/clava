@@ -201,6 +201,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
+    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
+        return descendantsArrayImpl(type);
+    }
+
+    @Override
     public AJoinPoint[] descendantsArrayImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
 
