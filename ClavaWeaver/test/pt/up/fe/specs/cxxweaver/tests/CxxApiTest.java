@@ -200,7 +200,9 @@ public class CxxApiTest {
 
     @Test
     public void testMpiScatterGather() {
-        newTester()
-                .test("MpiScatterGatherTest.js", "mpi_scatter_gather.cpp", "mpi_scatter_gather.h");
+        newTester()    
+        // Disable syntax check of woven code, mpi.h may not be available
+        .setCheckWovenCodeSyntax(false)
+        	.test("MpiScatterGatherTest.js", "mpi_scatter_gather.cpp", "mpi_scatter_gather.h");
     }
 }
