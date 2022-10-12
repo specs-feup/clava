@@ -20,6 +20,7 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
@@ -1149,9 +1150,25 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
             var jsonString = SpecsStrings.normalizeJsonObject(splitter.toString().trim(), baseFolder);
 
+            // Sanitize json string
+            String sanitizedJsonString = null;
+            try {
+                var gson = new Gson();
+                var parsedJson = gson.fromJson(jsonString, Object.class);
+                sanitizedJsonString = gson.toJson(parsedJson);
+            } catch (Exception e) {
+
+                var message = "Invalid JSON";
+                if (dataPragma.getLocation().isValid()) {
+                    message += " at " + dataPragma.getLocation();
+                }
+                throw new RuntimeException(
+                        message + " in #pragma clava " + dataPragma.getContent());
+            }
+
             try {
                 // Create object
-                var newDataObject = jsEngine.eval("var _data = " + jsonString + "; _data;");
+                var newDataObject = jsEngine.eval("var _data = " + sanitizedJsonString + "; _data;");
 
                 // Create proxy function
                 var proxyBuilder = jsEngine.eval("var _data = _getClavaData; _data;");
@@ -1170,7 +1187,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         var dataCache = jsEngine.eval("var _data = _getClavaData; _data;");
 
         // Create proxy object
-        return jsEngine.call(dataCache, getNode());
+        return jsEngine.call(dataCache,
+
+                getNode());
     }
 
     @Override
