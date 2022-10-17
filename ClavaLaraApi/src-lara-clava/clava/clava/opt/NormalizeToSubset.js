@@ -12,7 +12,7 @@ laraImport("clava.code.SimplifyAssignment");
  * @param {object} options - Object with options. Supported options: 'simplifyLoops' (default: {}), options for pass SimplifyLoops
  */
 function NormalizeToSubset($startJp, options) {
-  const _options = options;
+  const _options = options ?? {};
   _options["simplifyLoops"] ??= {};
 
   const declStmt = new DecomposeDeclStmt();
