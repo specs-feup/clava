@@ -560,12 +560,22 @@ void clava::ClavaDataDumper::DumpCXXConstructorDeclData(const CXXConstructorDecl
 
         clava::dump((*init)->isInClassMemberInitializer());
         clava::dump((*init)->isWritten());
-
     }
 
     clava::dump(D->isDefaultConstructor());
     clava::dump(D->isExplicit());
     clava::dump(D->getExplicitSpecifier(), id);
+
+
+    if((*D).isTemplated()) {
+        clava::dump((*D).getTemplateDepth());
+        clava::dump(D->getDescribedFunctionTemplate());
+        clava::dump(D->getDescribedTemplate());
+        clava::dump(D->getDescribedTemplateParams());
+        clava::dump(D->getPrimaryTemplate());
+        clava::dump(D->getTemplatedKind());
+    }
+
 
 }
 

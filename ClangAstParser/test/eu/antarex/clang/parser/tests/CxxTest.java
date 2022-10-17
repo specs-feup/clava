@@ -291,6 +291,15 @@ public class CxxTest {
         new CxxTester("strings.cpp").test();
     }
 
+    @Test
+    public void testFunctionTemplate() {
+        new CxxTester("function_template.h")
+                .showClavaAst()
+                .onePass()
+                .showCode()
+                .test();
+    }
+
     // -Xclang-ast-dump-nostdinc-nocudalib-nocudainc--cuda-gpu-arch=sm_30
     // "--cuda-device-only"
 

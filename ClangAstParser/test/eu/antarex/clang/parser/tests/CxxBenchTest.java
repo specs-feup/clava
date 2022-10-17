@@ -79,4 +79,13 @@ public class CxxBenchTest {
         }
 
     }
+
+    @Test
+    public void testStereoMatcherTemplate() {
+        new CxxTester("bench/stereo_matcher_template.h")
+                .onePass()
+                .showClavaAst()
+                .showCode()
+                .test();
+    }
 }
