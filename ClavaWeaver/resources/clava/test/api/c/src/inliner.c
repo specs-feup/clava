@@ -61,7 +61,7 @@ int main() {
         sumB += B[i];
         sumC += C[i];
     }
-    printf("A: %d, B: %d, C: %d, x: %d\n", sumA, sumB, sumC, x);
+
 
     return A[2];
 }

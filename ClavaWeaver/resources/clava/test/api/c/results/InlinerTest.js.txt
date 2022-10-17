@@ -237,10 +237,6 @@ int main() {
          decomp_7 = i < 100;
       }
    }
-   {
-      char const *__inline_7___format;
-      __inline_7___format = "A: %d, B: %d, C: %d, x: %d\n";
-   }
    
    return A[2];
 }
