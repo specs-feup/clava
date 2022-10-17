@@ -153,4 +153,8 @@ public class CApiTest {
         newTester().test("CfgApi.js", "cfg_api.c");
     }
 
+    @Test
+    public void testInliner() {
+        newTester().test("InlinerTest.js", "inliner.c");
+    }
 }
