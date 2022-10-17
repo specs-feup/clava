@@ -6,6 +6,8 @@ laraImport("lara.pass.PassTransformationResult");
  * Decomposes the vardecl nodes that are reachable from the given join point.
  *
  * E.g. transforms int i = 0; into int i; i = 0;
+ *
+ * Does not support decomposition for variables that are arrays, in those cases the code stays unchanged.
  */
 class DecomposeVarDeclarations extends Pass {
   constructor() {
@@ -14,7 +16,11 @@ class DecomposeVarDeclarations extends Pass {
 
   matchJoinpoint($jp) {
     return (
-      $jp.instanceOf("vardecl") && $jp.hasInit && $jp.storageClass !== "static" && !$jp.isInsideLoopHeader
+      $jp.instanceOf("vardecl") &&
+      $jp.hasInit &&
+      $jp.storageClass !== "static" &&
+      !$jp.isInsideLoopHeader &&
+      !$jp.type.instanceOf("arrayType")
     );
   }
 
