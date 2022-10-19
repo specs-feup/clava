@@ -282,7 +282,7 @@
 		<parameter name="name" type="string" />
 	</action>
 	
-	<action name="inline" class="call" tooltip="Tries to inline this call"/>
+	<action name="inline" class="call" return="boolean" tooltip="Tries to inline this call"/>
 	
 	<action name="setArgFromString" class="call">
 		<parameter name="index" type="int" />
