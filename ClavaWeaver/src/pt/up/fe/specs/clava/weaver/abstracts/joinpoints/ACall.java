@@ -520,22 +520,23 @@ public abstract class ACall extends AExpression {
     /**
      * Tries to inline this call
      */
-    public void inlineImpl() {
+    public boolean inlineImpl() {
         throw new UnsupportedOperationException(get_class()+": Action inline not implemented ");
     }
 
     /**
      * Tries to inline this call
      */
-    public final void inline() {
+    public final boolean inline() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "inline", this, Optional.empty());
         	}
-        	this.inlineImpl();
+        	boolean result = this.inlineImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "inline", this, Optional.empty());
+        		eventTrigger().triggerAction(Stage.END, "inline", this, Optional.ofNullable(result));
         	}
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "inline", e);
         }
@@ -1104,7 +1105,7 @@ public abstract class ACall extends AExpression {
         this.aExpression.fillWithActions(actions);
         actions.add("void setName(string)");
         actions.add("void wrap(string)");
-        actions.add("void inline()");
+        actions.add("boolean inline()");
         actions.add("void setArgFromString(int, string)");
         actions.add("void setArg(Integer, expression)");
         actions.add("void addArg(String, type)");

@@ -233,14 +233,14 @@ public class CxxCall extends ACall {
     }
 
     @Override
-    public void inlineImpl() {
+    public boolean inlineImpl() {
         // Only inline if call is associated to an App
         if (!call.getAppTry().isPresent()) {
             SpecsLogs.msgInfo("Tried to inline call that is not associated to an app");
-            return;
+            return false;
         }
 
-        call.getApp().inline(call);
+        return call.getApp().inline(call);
         // call.getAncestor(App.class).inline(call);
         // new CallInliner(call).inline();
     }
