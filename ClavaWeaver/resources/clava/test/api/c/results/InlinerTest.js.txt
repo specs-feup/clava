@@ -274,17 +274,17 @@ int inlineTest2() {
       int __inline_0_i;
       __inline_0_i = a;
       {
-         __label__ __return_label_;
+         __label__ __return_label;
          int __inline_0___return_value;
          int __inline_0_decomp_8;
          __inline_0_decomp_8 = __inline_0_i == 0;
          if(__inline_0_decomp_8) {
             __inline_0___return_value = 1;
-            goto __return_label_;
+            goto __return_label;
          }
          __inline_0___return_value = 2;
-         goto __return_label_;
-         __return_label_:
+         goto __return_label;
+         __return_label:
          b = __inline_0___return_value;
       }
    }
@@ -293,17 +293,17 @@ int inlineTest2() {
       int __inline_1_i;
       __inline_1_i = a;
       {
-         __label__ __return_label_;
+         __label__ __return_label;
          int __inline_1___return_value;
          int __inline_1_decomp_8;
          __inline_1_decomp_8 = __inline_1_i == 0;
          if(__inline_1_decomp_8) {
             __inline_1___return_value = 1;
-            goto __return_label_;
+            goto __return_label;
          }
          __inline_1___return_value = 2;
-         goto __return_label_;
-         __return_label_:
+         goto __return_label;
+         __return_label:
          b = __inline_1___return_value;
       }
    }
