@@ -14063,7 +14063,7 @@
 						"tooltip": "Tries to inline this call",
 						"children": [
 									{
-										"type": "void",
+										"type": "boolean",
 										"name": "inline"
 									}]
 					},
@@ -19234,7 +19234,7 @@
 						"tooltip": "Tries to inline this call",
 						"children": [
 									{
-										"type": "void",
+										"type": "boolean",
 										"name": "inline"
 									}]
 					},
@@ -26344,7 +26344,7 @@
 						"tooltip": "Tries to inline this call",
 						"children": [
 									{
-										"type": "void",
+										"type": "boolean",
 										"name": "inline"
 									}]
 					},
@@ -59984,7 +59984,7 @@
 						"tooltip": "Tries to inline this call",
 						"children": [
 									{
-										"type": "void",
+										"type": "boolean",
 										"name": "inline"
 									}]
 					},

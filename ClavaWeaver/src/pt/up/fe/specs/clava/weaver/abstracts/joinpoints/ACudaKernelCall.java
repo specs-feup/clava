@@ -589,8 +589,8 @@ public abstract class ACudaKernelCall extends ACall {
      * Tries to inline this call
      */
     @Override
-    public void inlineImpl() {
-        this.aCall.inlineImpl();
+    public boolean inlineImpl() {
+        return this.aCall.inlineImpl();
     }
 
     /**
