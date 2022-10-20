@@ -25,4 +25,9 @@ public class LabelDecl extends NamedDecl {
         super(data, children);
     }
 
+    @Override
+    public String getCode() {
+        return "__label__ " + getDeclName();
+    }
+
 }
