@@ -11,8 +11,15 @@ class SingleReturnFunction extends Pass {
 
   _apply_impl($jp) {
     // destructure joinpoint factories to prevent excessive verbosity
-    const { labelDecl, labelStmt, returnStmt, varRef, assign, gotoStmt } =
-      ClavaJoinPoints;
+    const {
+      labelDecl,
+      labelStmt,
+      returnStmt,
+      varRef,
+      assign,
+      gotoStmt,
+      declStmt,
+    } = ClavaJoinPoints;
 
     if (!$jp.instanceOf("function") || !$jp.isImplementation) {
       return this.#new_result($jp, false);
@@ -31,7 +38,7 @@ class SingleReturnFunction extends Pass {
     // declarations first
     new DecomposeVarDeclarations().apply($body);
 
-    const $label = labelDecl("__return_label_" + Strings.uuid());
+    const $label = labelDecl("__return_label_");
     $body.insertEnd(labelStmt($label));
 
     const returnType = $jp.returnType;
@@ -55,6 +62,9 @@ class SingleReturnFunction extends Pass {
       $returnStmt.insertBefore(gotoStmt($label));
       $returnStmt.detach();
     }
+
+    // Local label declaration must appear at the beginning of the block
+    $body.insertBegin($label);
 
     return this.#new_result($jp, true);
   }

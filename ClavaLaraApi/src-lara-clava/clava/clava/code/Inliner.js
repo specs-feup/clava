@@ -262,9 +262,14 @@ class Inliner {
       }
     }
 
-    $exprStmt.replaceWith(
-      ClavaJoinPoints.scope([...paramDeclStmts, ...$newNodes.children])
-    );
+    // Let the function body be on its own scope
+    // If the function uses local labels they must appear at the beginning of the scope
+    const inlinedScope =
+      paramDeclStmts.length === 0
+        ? $newNodes
+        : ClavaJoinPoints.scope([...paramDeclStmts, $newNodes]);
+
+    $exprStmt.replaceWith(inlinedScope);
 
     this.#variableIndex++;
   }
