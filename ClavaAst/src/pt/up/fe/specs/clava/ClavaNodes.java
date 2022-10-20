@@ -29,6 +29,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clava.ast.comment.Comment;
 import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.FunctionDecl;
+import pt.up.fe.specs.clava.ast.decl.LabelDecl;
 import pt.up.fe.specs.clava.ast.decl.NamedDecl;
 import pt.up.fe.specs.clava.ast.decl.ParmVarDecl;
 import pt.up.fe.specs.clava.ast.decl.VarDecl;
@@ -90,8 +91,9 @@ public class ClavaNodes {
             return Optional.of(node.getFactory().exprStmt((Expr) node));
         }
 
-        if (node instanceof VarDecl) {
-            return Optional.of(node.getFactoryWithNode().declStmt((VarDecl) node));
+        // TODO: Is this too restrictive?
+        if (node instanceof VarDecl || node instanceof LabelDecl) {
+            return Optional.of(node.getFactoryWithNode().declStmt((Decl) node));
         }
 
         if (node instanceof Comment || node instanceof Pragma) {
