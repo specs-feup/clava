@@ -38,7 +38,7 @@ class SingleReturnFunction extends Pass {
     // declarations first
     new DecomposeVarDeclarations().apply($body);
 
-    const $label = labelDecl("__return_label_");
+    const $label = labelDecl("__return_label");
     $body.insertEnd(labelStmt($label));
 
     const returnType = $jp.returnType;
