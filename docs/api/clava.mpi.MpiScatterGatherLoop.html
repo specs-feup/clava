@@ -246,6 +246,8 @@
 <li>
 <a onclick="saveScroll()"  href="clava.graphs.cfg.CfgUtils.html">clava.graphs.cfg.CfgUtils</a></li>
 <li>
+<a onclick="saveScroll()"  href="clava.graphs.cfg.NextCfgNode.html">clava.graphs.cfg.NextCfgNode</a></li>
+<li>
 <a onclick="saveScroll()"  href="clava.graphs.cfg.nodedata.DataFactory.html">clava.graphs.cfg.nodedata.DataFactory</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.graphs.cfg.nodedata.HeaderData.html">clava.graphs.cfg.nodedata.HeaderData</a></li>
@@ -332,9 +334,9 @@
 <li>
 <a onclick="saveScroll()"  href="clava.util.ClavaDataStore.html">clava.util.ClavaDataStore</a></li>
 <li>
-<a onclick="saveScroll()"  href="clava.util.FileIterator.html">clava.util.FileIterator</a></li>
+<a onclick="saveScroll()"  href="clava.util.CodeInserter.html">clava.util.CodeInserter</a></li>
 <li>
-<a onclick="saveScroll()"  href="clava.util.SingleFile.html">clava.util.SingleFile</a></li>
+<a onclick="saveScroll()"  href="clava.util.FileIterator.html">clava.util.FileIterator</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.uve.DetectStream.html">clava.uve.DetectStream</a></li>
 <li>
@@ -488,8 +490,6 @@
 <li>
 <a onclick="saveScroll()"  href="lara.util.Checkpoint.html">lara.util.Checkpoint</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.util.CodeInserter.html">lara.util.CodeInserter</a></li>
-<li>
 <a onclick="saveScroll()"  href="lara.util.Combinations.html">lara.util.Combinations</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.util.DataStore.html">lara.util.DataStore</a></li>
@@ -544,9 +544,13 @@
 <li>
 <a onclick="saveScroll()"  href="weaver.jp.ClavaClassJp.html">weaver.jp.ClavaClassJp</a></li>
 <li>
+<a onclick="saveScroll()"  href="weaver.jp.ClavaClassTypeJp.html">weaver.jp.ClavaClassTypeJp</a></li>
+<li>
 <a onclick="saveScroll()"  href="weaver.jp.ClavaConstructorCallJp.html">weaver.jp.ClavaConstructorCallJp</a></li>
 <li>
 <a onclick="saveScroll()"  href="weaver.jp.ClavaConstructorJp.html">weaver.jp.ClavaConstructorJp</a></li>
+<li>
+<a onclick="saveScroll()"  href="weaver.jp.ClavaDeclJp.html">weaver.jp.ClavaDeclJp</a></li>
 <li>
 <a onclick="saveScroll()"  href="weaver.jp.ClavaElseJp.html">weaver.jp.ClavaElseJp</a></li>
 <li>
@@ -559,6 +563,8 @@
 <a onclick="saveScroll()"  href="weaver.jp.ClavaFunctionJp.html">weaver.jp.ClavaFunctionJp</a></li>
 <li>
 <a onclick="saveScroll()"  href="weaver.jp.ClavaIfJp.html">weaver.jp.ClavaIfJp</a></li>
+<li>
+<a onclick="saveScroll()"  href="weaver.jp.ClavaInterfaceJp.html">weaver.jp.ClavaInterfaceJp</a></li>
 <li>
 <a onclick="saveScroll()"  href="weaver.jp.ClavaJoinPoint.html">weaver.jp.ClavaJoinPoint</a></li>
 <li>
@@ -631,9 +637,18 @@
 <a onclick="saveScroll()"  href="lcl.metrics.om.OtherMetricsIndex.html">lcl.metrics.om.OtherMetricsIndex</a></li>
 <li>
 <a onclick="saveScroll()"  href="lcl.ml.Code2Vec.html">lcl.ml.Code2Vec</a></li>
+<li>
+<a onclick="saveScroll()"  href="lcl.patterns.DetectionAlgorithm.html">lcl.patterns.DetectionAlgorithm</a></li>
+<li>
+<a onclick="saveScroll()"  href="lcl.patterns.PatternsReader.html">lcl.patterns.PatternsReader</a></li>
+<li>
+<a onclick="saveScroll()"  href="lcl.patterns.grouping.GroupingUtils.html">lcl.patterns.grouping.GroupingUtils</a></li>
 </ul></div> 
     	<div id="column2">
-    		<div id="doc_content"><div id='toc_container'><p class='toc_title'>import clava.mpi.MpiScatterGatherLoop;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>MpiScatterGatherLoop</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>MpiScatterGatherLoop</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Instance Members</div><li><em><a href='#C'>addInput()</a></em></li><li><em><a href='#D'>addOutput()</a></em></li><li><em><a href='#E'>execute()</a></em></li></ul><p class='toc_class'>Global Functions:</p><li class='toc_class_element'><a href='#F'>MpiInit</a></li><li class='toc_class_element'><a href='#G'>MpiMaster</a></li><li class='toc_class_element'><a href='#H'>MpiWorker</a></li></ul></div><h1 id='A'>MpiScatterGatherLoop</h1><h2>Constructor</h2><div class='function_block'><h3 id='B'>MpiScatterGatherLoop</h3><pre class='signature'><code class='language-js'>new <strong>MpiScatterGatherLoop</strong>($loop)</code></pre><div class='function_content'><p>Applies an MPI scatter-gather strategy to loops.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$loop</strong>: any</span><br></div></div><hr></div><h2>Instance Members</h2><div class='function_block'><h3 id='C'>addInput</h3><pre class='signature'><code class='language-js'><strong>addInput</strong>(varName, accessPattern)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>varName</strong>: any</span><br><span class='parameter'><strong>accessPattern</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='D'>addOutput</h3><pre class='signature'><code class='language-js'><strong>addOutput</strong>(varName, accessPattern)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>varName</strong>: any</span><br><span class='parameter'><strong>accessPattern</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='E'>execute</h3><pre class='signature'><code class='language-js'><strong>execute</strong>()</code></pre><div class='function_content'><p>Adapts code to use the MPI strategy.</p></div><hr></div><h2>Global Functions</h2><div class='function_block'><h3 id='F'>MpiInit</h3><pre class='signature'><code class='language-js'><strong>MpiInit</strong>(argc, argv, rank, numTasks, numWorkers, mpiWorker)</code></pre><div class='function_content'><p>CODEDEFS</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>argc</strong>: any</span><br><span class='parameter'><strong>argv</strong>: any</span><br><span class='parameter'><strong>rank</strong>: any</span><br><span class='parameter'><strong>numTasks</strong>: any</span><br><span class='parameter'><strong>numWorkers</strong>: any</span><br><span class='parameter'><strong>mpiWorker</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='G'>MpiMaster</h3><pre class='signature'><code class='language-js'><strong>MpiMaster</strong>(numWorkers, numIterations, masterSend, masterReceive, status)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>numWorkers</strong>: any</span><br><span class='parameter'><strong>numIterations</strong>: any</span><br><span class='parameter'><strong>masterSend</strong>: any</span><br><span class='parameter'><strong>masterReceive</strong>: any</span><br><span class='parameter'><strong>status</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='H'>MpiWorker</h3><pre class='signature'><code class='language-js'><strong>MpiWorker</strong>(functionName, status, numElems, receiveData, outputDecl, loop, sendData)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>functionName</strong>: any</span><br><span class='parameter'><strong>status</strong>: any</span><br><span class='parameter'><strong>numElems</strong>: any</span><br><span class='parameter'><strong>receiveData</strong>: any</span><br><span class='parameter'><strong>outputDecl</strong>: any</span><br><span class='parameter'><strong>loop</strong>: any</span><br><span class='parameter'><strong>sendData</strong>: any</span><br></div></div><hr></div></div>
+    		<div id="doc_content"><div id='toc_container'><p class='toc_title'><span style="font-weight:normal"><i>(.js)</i></span><br>
+laraImport("clava.mpi.MpiScatterGatherLoop");<br><br>
+<span style="font-weight:normal"><i>(.lara)</i></span><br>
+import clava.mpi.MpiScatterGatherLoop;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>MpiScatterGatherLoop</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>MpiScatterGatherLoop</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Static Members</div><li><em><a href='#C'>_MpiInit()</a></em></li><li><em><a href='#D'>_MpiMaster()</a></em></li><li><em><a href='#E'>_MpiWorker()</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Instance Members</div><li><em><a href='#F'>_addMpiInit()</a></em></li><li><em><a href='#G'>_addVariable()</a></em></li><li><em><a href='#H'>_buildMpiWorker()</a></em></li><li><em><a href='#I'>_getWorkerLoopCode()</a></em></li><li><em><a href='#J'>_replaceLoop()</a></em></li><li><em><a href='#K'>addInput()</a></em></li><li><em><a href='#L'>addOutput()</a></em></li><li><em><a href='#M'>constructor()</a></em></li><li><em><a href='#N'>execute()</a></em></li></ul></ul></div><h1 id='A'>MpiScatterGatherLoop</h1><h2>Constructor</h2><div class='function_block'><h3 id='B'>MpiScatterGatherLoop</h3><pre class='signature'><code class='language-js'>new <strong>MpiScatterGatherLoop</strong>()</code></pre><div class='function_content'><p>Applies an MPI scatter-gather strategy to loops.</p></div><hr></div><h2>Static Members</h2><div class='function_block'><h3 id='C'>_MpiInit</h3><pre class='signature'><code class='language-js'><strong>_MpiInit</strong>(argc, argv, rank, numTasks, numWorkers, mpiWorker)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>argc</strong>: unknown</span><br><span class='parameter'><strong>argv</strong>: unknown</span><br><span class='parameter'><strong>rank</strong>: unknown</span><br><span class='parameter'><strong>numTasks</strong>: unknown</span><br><span class='parameter'><strong>numWorkers</strong>: unknown</span><br><span class='parameter'><strong>mpiWorker</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='D'>_MpiMaster</h3><pre class='signature'><code class='language-js'><strong>_MpiMaster</strong>(numWorkers, numIterations, masterSend, masterReceive, status)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>numWorkers</strong>: unknown</span><br><span class='parameter'><strong>numIterations</strong>: unknown</span><br><span class='parameter'><strong>masterSend</strong>: unknown</span><br><span class='parameter'><strong>masterReceive</strong>: unknown</span><br><span class='parameter'><strong>status</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='E'>_MpiWorker</h3><pre class='signature'><code class='language-js'><strong>_MpiWorker</strong>(functionName, status, numElems, receiveData, outputDecl, loop, sendData)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>functionName</strong>: unknown</span><br><span class='parameter'><strong>status</strong>: unknown</span><br><span class='parameter'><strong>numElems</strong>: unknown</span><br><span class='parameter'><strong>receiveData</strong>: unknown</span><br><span class='parameter'><strong>outputDecl</strong>: unknown</span><br><span class='parameter'><strong>loop</strong>: unknown</span><br><span class='parameter'><strong>sendData</strong>: unknown</span><br></div></div><hr></div><h2>Instance Members</h2><div class='function_block'><h3 id='F'>_addMpiInit</h3><pre class='signature'><code class='language-js'><strong>_addMpiInit</strong>($mainFunction)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$mainFunction</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='G'>_addVariable</h3><pre class='signature'><code class='language-js'><strong>_addVariable</strong>(varName, accessPattern, namesArray, accessesArray)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>varName</strong>: unknown</span><br><span class='parameter'><strong>accessPattern</strong>: unknown</span><br><span class='parameter'><strong>namesArray</strong>: unknown</span><br><span class='parameter'><strong>accessesArray</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='H'>_buildMpiWorker</h3><pre class='signature'><code class='language-js'><strong>_buildMpiWorker</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='I'>_getWorkerLoopCode</h3><pre class='signature'><code class='language-js'><strong>_getWorkerLoopCode</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='J'>_replaceLoop</h3><pre class='signature'><code class='language-js'><strong>_replaceLoop</strong>()</code></pre><div class='function_content'><p>PRIVATE SECTION</p></div><hr></div><div class='function_block'><h3 id='K'>addInput</h3><pre class='signature'><code class='language-js'><strong>addInput</strong>(varName, accessPattern)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>varName</strong>: unknown</span><br><span class='parameter'><strong>accessPattern</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='L'>addOutput</h3><pre class='signature'><code class='language-js'><strong>addOutput</strong>(varName, accessPattern)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>varName</strong>: unknown</span><br><span class='parameter'><strong>accessPattern</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='M'>constructor</h3><pre class='signature'><code class='language-js'><strong>constructor</strong>($loop)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$loop</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='N'>execute</h3><pre class='signature'><code class='language-js'><strong>execute</strong>()</code></pre><div class='function_content'><p>Adapts code to use the MPI strategy.</p></div><hr></div></div>
     		<!-- <iframe id="doc_frame" src=""></iframe> -->
     	</div>
 	</div>    

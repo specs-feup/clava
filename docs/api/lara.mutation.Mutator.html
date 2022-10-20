@@ -246,6 +246,8 @@
 <li>
 <a onclick="saveScroll()"  href="clava.graphs.cfg.CfgUtils.html">clava.graphs.cfg.CfgUtils</a></li>
 <li>
+<a onclick="saveScroll()"  href="clava.graphs.cfg.NextCfgNode.html">clava.graphs.cfg.NextCfgNode</a></li>
+<li>
 <a onclick="saveScroll()"  href="clava.graphs.cfg.nodedata.DataFactory.html">clava.graphs.cfg.nodedata.DataFactory</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.graphs.cfg.nodedata.HeaderData.html">clava.graphs.cfg.nodedata.HeaderData</a></li>
@@ -332,9 +334,9 @@
 <li>
 <a onclick="saveScroll()"  href="clava.util.ClavaDataStore.html">clava.util.ClavaDataStore</a></li>
 <li>
-<a onclick="saveScroll()"  href="clava.util.FileIterator.html">clava.util.FileIterator</a></li>
+<a onclick="saveScroll()"  href="clava.util.CodeInserter.html">clava.util.CodeInserter</a></li>
 <li>
-<a onclick="saveScroll()"  href="clava.util.SingleFile.html">clava.util.SingleFile</a></li>
+<a onclick="saveScroll()"  href="clava.util.FileIterator.html">clava.util.FileIterator</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.uve.DetectStream.html">clava.uve.DetectStream</a></li>
 <li>
@@ -488,8 +490,6 @@
 <li>
 <a onclick="saveScroll()"  href="lara.util.Checkpoint.html">lara.util.Checkpoint</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.util.CodeInserter.html">lara.util.CodeInserter</a></li>
-<li>
 <a onclick="saveScroll()"  href="lara.util.Combinations.html">lara.util.Combinations</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.util.DataStore.html">lara.util.DataStore</a></li>
@@ -544,9 +544,13 @@
 <li>
 <a onclick="saveScroll()"  href="weaver.jp.ClavaClassJp.html">weaver.jp.ClavaClassJp</a></li>
 <li>
+<a onclick="saveScroll()"  href="weaver.jp.ClavaClassTypeJp.html">weaver.jp.ClavaClassTypeJp</a></li>
+<li>
 <a onclick="saveScroll()"  href="weaver.jp.ClavaConstructorCallJp.html">weaver.jp.ClavaConstructorCallJp</a></li>
 <li>
 <a onclick="saveScroll()"  href="weaver.jp.ClavaConstructorJp.html">weaver.jp.ClavaConstructorJp</a></li>
+<li>
+<a onclick="saveScroll()"  href="weaver.jp.ClavaDeclJp.html">weaver.jp.ClavaDeclJp</a></li>
 <li>
 <a onclick="saveScroll()"  href="weaver.jp.ClavaElseJp.html">weaver.jp.ClavaElseJp</a></li>
 <li>
@@ -559,6 +563,8 @@
 <a onclick="saveScroll()"  href="weaver.jp.ClavaFunctionJp.html">weaver.jp.ClavaFunctionJp</a></li>
 <li>
 <a onclick="saveScroll()"  href="weaver.jp.ClavaIfJp.html">weaver.jp.ClavaIfJp</a></li>
+<li>
+<a onclick="saveScroll()"  href="weaver.jp.ClavaInterfaceJp.html">weaver.jp.ClavaInterfaceJp</a></li>
 <li>
 <a onclick="saveScroll()"  href="weaver.jp.ClavaJoinPoint.html">weaver.jp.ClavaJoinPoint</a></li>
 <li>
@@ -631,9 +637,18 @@
 <a onclick="saveScroll()"  href="lcl.metrics.om.OtherMetricsIndex.html">lcl.metrics.om.OtherMetricsIndex</a></li>
 <li>
 <a onclick="saveScroll()"  href="lcl.ml.Code2Vec.html">lcl.ml.Code2Vec</a></li>
+<li>
+<a onclick="saveScroll()"  href="lcl.patterns.DetectionAlgorithm.html">lcl.patterns.DetectionAlgorithm</a></li>
+<li>
+<a onclick="saveScroll()"  href="lcl.patterns.PatternsReader.html">lcl.patterns.PatternsReader</a></li>
+<li>
+<a onclick="saveScroll()"  href="lcl.patterns.grouping.GroupingUtils.html">lcl.patterns.grouping.GroupingUtils</a></li>
 </ul></div> 
     	<div id="column2">
-    		<div id="doc_content"><div id='toc_container'><p class='toc_title'>import lara.mutation.Mutator;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>Mutator</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>Mutator</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Instance Members</div><li><em><a href='#C'>getCurrentMutation()</a></em></li><li><em><a href='#D'>getMutationPoint()</a></em></li><li><em><a href='#E'>getName()</a></em></li><li><em><a href='#F'>hasMutations()</a></em></li><li><em><a href='#G'>mutate()</a></em></li><li><em><a href='#H'>restore()</a></em></li><li><em><a href='#I'>setAutomaticRestore()</a></em></li></ul></ul></div><h1 id='A'>Mutator</h1><h2>Constructor</h2><div class='function_block'><h3 id='B'>Mutator</h3><pre class='signature'><code class='language-js'>new <strong>Mutator</strong>([name = &quot;&lt;unnamed mutator&gt;&quot;])</code></pre><div class='function_content'><p>Base class that represents a code mutator.<br><br>This should not be instantiated directly, instead it should be extended.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>name</strong>: String</span> - the name of the mutator <em>(optional)</em><br></div></div><hr></div><h2>Instance Members</h2><div class='function_block'><h3 id='C'>getCurrentMutation</h3><pre class='signature'><code class='language-js'><strong>getCurrentMutation</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>$jp</span> - the point with currently mutated code, or undefined if this concept is not applicable to this mutator.<br></div></div><hr></div><div class='function_block'><h3 id='D'>getMutationPoint</h3><pre class='signature'><code class='language-js'><strong>getMutationPoint</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>$jp</span> - the point in the code where the mutation will occur or his occurring, or undefined if there are not more mutations left, or if this concept is not applicable to this mutator.<br></div></div><hr></div><div class='function_block'><h3 id='E'>getName</h3><pre class='signature'><code class='language-js'><strong>getName</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>String</span> - the name of this mutator<br></div></div><hr></div><div class='function_block'><h3 id='F'>hasMutations</h3><pre class='signature'><code class='language-js'><strong>hasMutations</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>boolean</span> - true, if the Mutator still has mutations left to do, false otherwise.<br></div></div><hr></div><div class='function_block'><h3 id='G'>mutate</h3><pre class='signature'><code class='language-js'><strong>mutate</strong>()</code></pre><div class='function_content'><p>Introduces a single mutation to the code.<br>If the code has been mutated already, restores the code before mutating again.<br>If there are no mutations left, does nothing.</p></div><hr></div><div class='function_block'><h3 id='H'>restore</h3><pre class='signature'><code class='language-js'><strong>restore</strong>()</code></pre><div class='function_content'><p>If the code has been mutated, restores the code to its original state. If not, does nothing.</p></div><hr></div><div class='function_block'><h3 id='I'>setAutomaticRestore</h3><pre class='signature'><code class='language-js'><strong>setAutomaticRestore</strong>([value = true])</code></pre><div class='function_content'><p>Enables/disables automatic restore. Is enabled by default.<br><br>If enabled, before each call to .mutate() will check if the code is already mutated, and call restore before the mutation is applied.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>value</strong>: boolean</span> - true to enable, false to disable <em>(optional)</em><br></div></div><hr></div></div>
+    		<div id="doc_content"><div id='toc_container'><p class='toc_title'><span style="font-weight:normal"><i>(.js)</i></span><br>
+laraImport("lara.mutation.Mutator");<br><br>
+<span style="font-weight:normal"><i>(.lara)</i></span><br>
+import lara.mutation.Mutator;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>Mutator</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>Mutator</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Instance Members</div><li><em><a href='#C'>addJp()</a></em></li><li><em><a href='#D'>getCurrentMutation()</a></em></li><li><em><a href='#E'>getMutationPoint()</a></em></li><li><em><a href='#F'>getName()</a></em></li><li><em><a href='#G'><strike>getType()</strike></a></em></li><li><em><a href='#H'>hasMutations()</a></em></li><li><em><a href='#I'>mutate()</a></em></li><li><em><a href='#J'>restore()</a></em></li><li><em><a href='#K'>setAutomaticRestore()</a></em></li></ul></ul></div><h1 id='A'>Mutator</h1><h2>Constructor</h2><div class='function_block'><h3 id='B'>Mutator</h3><pre class='signature'><code class='language-js'>new <strong>Mutator</strong>([name = &quot;&lt;unnamed mutator&gt;&quot;])</code></pre><div class='function_content'><p>Base class that represents a code mutator.<br><br>This should not be instantiated directly, instead it should be extended.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>name</strong>: String</span> - the name of the mutator <em>(optional)</em><br></div></div><hr></div><h2>Instance Members</h2><div class='function_block'><h3 id='C'>addJp</h3><pre class='signature'><code class='language-js'><strong>addJp</strong>($joinpoint)</code></pre><div class='function_content'><p>Adds a join point to this Mutator. Is only added if the Mutator can be applied over this join point, otherwise it will be ignored.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$joinpoint</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='D'>getCurrentMutation</h3><pre class='signature'><code class='language-js'><strong>getCurrentMutation</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>$jp</span> - the point with currently mutated code, or undefined if this concept is not applicable to this mutator.<br></div></div><hr></div><div class='function_block'><h3 id='E'>getMutationPoint</h3><pre class='signature'><code class='language-js'><strong>getMutationPoint</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>$jp</span> - the point in the code where the mutation will occur or his occurring, or undefined if there are not more mutations left, or if this concept is not applicable to this mutator.<br></div></div><hr></div><div class='function_block'><h3 id='F'>getName</h3><pre class='signature'><code class='language-js'><strong>getName</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>String</span> - the name of this mutator<br></div></div><hr></div><div class='function_block'><h3 id='G'>getType</h3><pre class='signature'><code class='language-js'><strike><strong>getType</strong>()</strike></code></pre><div class='function_content'><p><em><strong>This function is deprecated. use getName() instead</strong></em></p><h4>Returns</h4><div class='parameters'><span class='parameter'>String</span> - the name of this Mutator<br></div></div><hr></div><div class='function_block'><h3 id='H'>hasMutations</h3><pre class='signature'><code class='language-js'><strong>hasMutations</strong>()</code></pre><div class='function_content'><h4>Returns</h4><div class='parameters'><span class='parameter'>boolean</span> - true, if the Mutator still has mutations left to do, false otherwise.<br></div></div><hr></div><div class='function_block'><h3 id='I'>mutate</h3><pre class='signature'><code class='language-js'><strong>mutate</strong>()</code></pre><div class='function_content'><p>Introduces a single mutation to the code.<br>If the code has been mutated already, restores the code before mutating again.<br>If there are no mutations left, does nothing.</p></div><hr></div><div class='function_block'><h3 id='J'>restore</h3><pre class='signature'><code class='language-js'><strong>restore</strong>()</code></pre><div class='function_content'><p>If the code has been mutated, restores the code to its original state. If not, does nothing.</p></div><hr></div><div class='function_block'><h3 id='K'>setAutomaticRestore</h3><pre class='signature'><code class='language-js'><strong>setAutomaticRestore</strong>([value = true])</code></pre><div class='function_content'><p>Enables/disables automatic restore. Is enabled by default.<br><br>If enabled, before each call to .mutate() will check if the code is already mutated, and call restore before the mutation is applied.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>value</strong>: boolean</span> - true to enable, false to disable <em>(optional)</em><br></div></div><hr></div></div>
     		<!-- <iframe id="doc_frame" src=""></iframe> -->
     	</div>
 	</div>    
