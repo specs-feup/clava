@@ -4,6 +4,7 @@ laraImport("clava.pass.SimplifyLoops");
 laraImport("clava.pass.DecomposeVarDeclarations");
 laraImport("clava.pass.DecomposeDeclStmt");
 laraImport("clava.pass.SimplifySelectionStmts");
+laraImport("clava.pass.SimplifyReturnStmts");
 laraImport("clava.code.SimplifyAssignment");
 
 /**
@@ -23,9 +24,11 @@ function NormalizeToSubset($startJp, options) {
     _options["simplifyLoops"]
   );
   const simplifyIfs = new SimplifySelectionStmts(statementDecomposer);
+  const simplifyReturns = new SimplifyReturnStmts(statementDecomposer);
 
   simplifyLoops.apply($startJp);
   simplifyIfs.apply($startJp);
+  simplifyReturns.apply($startJp);
 
   declStmt.apply($startJp);
   varDecls.apply($startJp);

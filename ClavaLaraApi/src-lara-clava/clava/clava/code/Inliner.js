@@ -83,12 +83,14 @@ class Inliner {
 
       // If any of the parameters of the function is an array, return.
       // Not supported yet
+      /*
       if ($callee.params.filter(($param) => $param.type.isArray).length > 0) {
         debug(
           `Inliner: could not inline call to function ${$callee.name}@${$callee.location} since array parameters are not supported`
         );
         continue;
       }
+      */
 
       this.inlineFunctionTree($callee, _visited);
       this.inline($exprStmt);
@@ -176,14 +178,28 @@ class Inliner {
       const $arg = args[i];
       const $param = params[i];
 
-      const newName = this.#getInlinedVarName($param.name);
-      const $varDecl = ClavaJoinPoints.varDeclNoInit(newName, $param.type);
-      const $varDeclStmt = ClavaJoinPoints.declStmt($varDecl);
+      // Arrays cannot be assigned
+      // If param is array, there is no need to add declaration,
+      // simply rename the param to the name of the arg
+      if ($param.type.isArray) {
+        if (!$arg.instanceOf("varref")) {
+          throw new Error(
+            "Expected varref, found '" + $arg.joinPointType + "'"
+          );
+        }
 
-      const $initStmts = this.#getInitStmts($varDecl, $arg);
+        // If varref, has decl
+        newVariableMap.set($param.name, $arg.decl);
+      } else {
+        const newName = this.#getInlinedVarName($param.name);
+        const $varDecl = ClavaJoinPoints.varDeclNoInit(newName, $param.type);
+        const $varDeclStmt = ClavaJoinPoints.declStmt($varDecl);
 
-      newVariableMap.set($param.name, $varDecl);
-      paramDeclStmts.push($varDeclStmt, ...$initStmts);
+        const $initStmts = this.#getInitStmts($varDecl, $arg);
+
+        newVariableMap.set($param.name, $varDecl);
+        paramDeclStmts.push($varDeclStmt, ...$initStmts);
+      }
     }
 
     for (const stmt of $function.body.descendants("declStmt")) {
@@ -217,6 +233,7 @@ class Inliner {
       const $varDecl = $varRef.decl;
 
       // If global variable, will not be in the variable map
+      // TODO: Add extern to the target Translation Unit, in case it is not already declared
       if ($varDecl.isGlobal) {
         continue;
       }
