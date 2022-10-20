@@ -65,3 +65,22 @@ int main() {
 
     return A[2];
 }
+
+int repeatedCall(int i) {
+	if(i == 0) {
+		return 1;
+	}
+	
+	return 2;
+}
+
+int inlineTest2() {
+	int a = 0;
+
+	int b = repeatedCall(a);
+	a = b;
+	b = repeatedCall(a);
+	a = b;
+
+	return a;
+}

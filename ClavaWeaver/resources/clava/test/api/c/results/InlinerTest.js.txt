@@ -10,14 +10,16 @@ int main() {
       int *__inline_0_Y;
       __inline_0_Y = B;
       {
-         int __inline_0_i;
-         __inline_0_i = 0;
-         int __inline_0_decomp_0;
-         __inline_0_decomp_0 = __inline_0_i < 100;
-         while(__inline_0_decomp_0) {
-            __inline_0_X[__inline_0_i] = __inline_0_Y[__inline_0_i] * __inline_0_x;
-            __inline_0_i++;
+         {
+            int __inline_0_i;
+            __inline_0_i = 0;
+            int __inline_0_decomp_0;
             __inline_0_decomp_0 = __inline_0_i < 100;
+            while(__inline_0_decomp_0) {
+               __inline_0_X[__inline_0_i] = __inline_0_Y[__inline_0_i] * __inline_0_x;
+               __inline_0_i++;
+               __inline_0_decomp_0 = __inline_0_i < 100;
+            }
          }
       }
    }
@@ -28,49 +30,55 @@ int main() {
       int *__inline_3_Y;
       __inline_3_Y = C;
       {
-         int __inline_3_i;
-         __inline_3_i = 0;
-         int __inline_3_decomp_1;
-         __inline_3_decomp_1 = __inline_3_i < 100;
-         while(__inline_3_decomp_1) {
-            __inline_3_X[__inline_3_i] = __inline_3_X[__inline_3_i] * __inline_3_Y[__inline_3_i];
-            __inline_3_i++;
+         {
+            int __inline_3_i;
+            __inline_3_i = 0;
+            int __inline_3_decomp_1;
             __inline_3_decomp_1 = __inline_3_i < 100;
-         }
-      }
-      {
-         int __inline_3_i;
-         __inline_3_i = 0;
-         int __inline_3_decomp_2;
-         __inline_3_decomp_2 = __inline_3_i < 100;
-         while(__inline_3_decomp_2) {
-            __inline_3_Y[__inline_3_i] = __inline_3_X[__inline_3_i] + __inline_3_Y[__inline_3_i];
-            {
-               int __inline_3___inline_1_x;
-               __inline_3___inline_1_x = __inline_3_Y[__inline_3_i];
-               __inline_3_Y[__inline_3_i] = __inline_3___inline_1_x * __inline_3___inline_1_x * __inline_3___inline_1_x;
+            while(__inline_3_decomp_1) {
+               __inline_3_X[__inline_3_i] = __inline_3_X[__inline_3_i] * __inline_3_Y[__inline_3_i];
+               __inline_3_i++;
+               __inline_3_decomp_1 = __inline_3_i < 100;
             }
-            __inline_3_i++;
+         }
+         {
+            int __inline_3_i;
+            __inline_3_i = 0;
+            int __inline_3_decomp_2;
             __inline_3_decomp_2 = __inline_3_i < 100;
-         }
-      }
-      {
-         int __inline_3_i;
-         __inline_3_i = 0;
-         int __inline_3_decomp_3;
-         __inline_3_decomp_3 = __inline_3_i < 100;
-         while(__inline_3_decomp_3) {
-            __inline_3_Y[__inline_3_i] = __inline_3_X[__inline_3_i] * __inline_3_Y[__inline_3_i];
-            {
-               int __inline_3___inline_2_x;
-               __inline_3___inline_2_x = __inline_3_Y[__inline_3_i];
-               __inline_3_Y[__inline_3_i] = __inline_3___inline_2_x * __inline_3___inline_2_x * __inline_3___inline_2_x;
+            while(__inline_3_decomp_2) {
+               __inline_3_Y[__inline_3_i] = __inline_3_X[__inline_3_i] + __inline_3_Y[__inline_3_i];
+               {
+                  int __inline_3___inline_1_x;
+                  __inline_3___inline_1_x = __inline_3_Y[__inline_3_i];
+                  {
+                     __inline_3_Y[__inline_3_i] = __inline_3___inline_1_x * __inline_3___inline_1_x * __inline_3___inline_1_x;
+                  }
+               }
+               __inline_3_i++;
+               __inline_3_decomp_2 = __inline_3_i < 100;
             }
-            __inline_3_i++;
-            __inline_3_decomp_3 = __inline_3_i < 100;
          }
+         {
+            int __inline_3_i;
+            __inline_3_i = 0;
+            int __inline_3_decomp_3;
+            __inline_3_decomp_3 = __inline_3_i < 100;
+            while(__inline_3_decomp_3) {
+               __inline_3_Y[__inline_3_i] = __inline_3_X[__inline_3_i] * __inline_3_Y[__inline_3_i];
+               {
+                  int __inline_3___inline_2_x;
+                  __inline_3___inline_2_x = __inline_3_Y[__inline_3_i];
+                  {
+                     __inline_3_Y[__inline_3_i] = __inline_3___inline_2_x * __inline_3___inline_2_x * __inline_3___inline_2_x;
+                  }
+               }
+               __inline_3_i++;
+               __inline_3_decomp_3 = __inline_3_i < 100;
+            }
+         }
+         x = __inline_3_X[0] + __inline_3_Y[0];
       }
-      x = __inline_3_X[0] + __inline_3_Y[0];
    }
    {
       int ii;
@@ -104,51 +112,59 @@ int main() {
                   int *__inline_5_X;
                   __inline_5_X = C;
                   {
-                     int *__inline_5___inline_4_X;
-                     __inline_5___inline_4_X = __inline_5_X;
-                     int *__inline_5___inline_4_Y;
-                     __inline_5___inline_4_Y = __inline_5_X;
                      {
-                        int __inline_5___inline_4_i;
-                        __inline_5___inline_4_i = 0;
-                        int __inline_5___inline_4_decomp_1;
-                        __inline_5___inline_4_decomp_1 = __inline_5___inline_4_i < 100;
-                        while(__inline_5___inline_4_decomp_1) {
-                           __inline_5___inline_4_X[__inline_5___inline_4_i] = __inline_5___inline_4_X[__inline_5___inline_4_i] * __inline_5___inline_4_Y[__inline_5___inline_4_i];
-                           __inline_5___inline_4_i++;
-                           __inline_5___inline_4_decomp_1 = __inline_5___inline_4_i < 100;
-                        }
-                     }
-                     {
-                        int __inline_5___inline_4_i;
-                        __inline_5___inline_4_i = 0;
-                        int __inline_5___inline_4_decomp_2;
-                        __inline_5___inline_4_decomp_2 = __inline_5___inline_4_i < 100;
-                        while(__inline_5___inline_4_decomp_2) {
-                           __inline_5___inline_4_Y[__inline_5___inline_4_i] = __inline_5___inline_4_X[__inline_5___inline_4_i] + __inline_5___inline_4_Y[__inline_5___inline_4_i];
+                        int *__inline_5___inline_4_X;
+                        __inline_5___inline_4_X = __inline_5_X;
+                        int *__inline_5___inline_4_Y;
+                        __inline_5___inline_4_Y = __inline_5_X;
+                        {
                            {
-                              int __inline_5___inline_4___inline_1_x;
-                              __inline_5___inline_4___inline_1_x = __inline_5___inline_4_Y[__inline_5___inline_4_i];
-                              __inline_5___inline_4_Y[__inline_5___inline_4_i] = __inline_5___inline_4___inline_1_x * __inline_5___inline_4___inline_1_x * __inline_5___inline_4___inline_1_x;
+                              int __inline_5___inline_4_i;
+                              __inline_5___inline_4_i = 0;
+                              int __inline_5___inline_4_decomp_1;
+                              __inline_5___inline_4_decomp_1 = __inline_5___inline_4_i < 100;
+                              while(__inline_5___inline_4_decomp_1) {
+                                 __inline_5___inline_4_X[__inline_5___inline_4_i] = __inline_5___inline_4_X[__inline_5___inline_4_i] * __inline_5___inline_4_Y[__inline_5___inline_4_i];
+                                 __inline_5___inline_4_i++;
+                                 __inline_5___inline_4_decomp_1 = __inline_5___inline_4_i < 100;
+                              }
                            }
-                           __inline_5___inline_4_i++;
-                           __inline_5___inline_4_decomp_2 = __inline_5___inline_4_i < 100;
-                        }
-                     }
-                     {
-                        int __inline_5___inline_4_i;
-                        __inline_5___inline_4_i = 0;
-                        int __inline_5___inline_4_decomp_3;
-                        __inline_5___inline_4_decomp_3 = __inline_5___inline_4_i < 100;
-                        while(__inline_5___inline_4_decomp_3) {
-                           __inline_5___inline_4_Y[__inline_5___inline_4_i] = __inline_5___inline_4_X[__inline_5___inline_4_i] * __inline_5___inline_4_Y[__inline_5___inline_4_i];
                            {
-                              int __inline_5___inline_4___inline_2_x;
-                              __inline_5___inline_4___inline_2_x = __inline_5___inline_4_Y[__inline_5___inline_4_i];
-                              __inline_5___inline_4_Y[__inline_5___inline_4_i] = __inline_5___inline_4___inline_2_x * __inline_5___inline_4___inline_2_x * __inline_5___inline_4___inline_2_x;
+                              int __inline_5___inline_4_i;
+                              __inline_5___inline_4_i = 0;
+                              int __inline_5___inline_4_decomp_2;
+                              __inline_5___inline_4_decomp_2 = __inline_5___inline_4_i < 100;
+                              while(__inline_5___inline_4_decomp_2) {
+                                 __inline_5___inline_4_Y[__inline_5___inline_4_i] = __inline_5___inline_4_X[__inline_5___inline_4_i] + __inline_5___inline_4_Y[__inline_5___inline_4_i];
+                                 {
+                                    int __inline_5___inline_4___inline_1_x;
+                                    __inline_5___inline_4___inline_1_x = __inline_5___inline_4_Y[__inline_5___inline_4_i];
+                                    {
+                                       __inline_5___inline_4_Y[__inline_5___inline_4_i] = __inline_5___inline_4___inline_1_x * __inline_5___inline_4___inline_1_x * __inline_5___inline_4___inline_1_x;
+                                    }
+                                 }
+                                 __inline_5___inline_4_i++;
+                                 __inline_5___inline_4_decomp_2 = __inline_5___inline_4_i < 100;
+                              }
                            }
-                           __inline_5___inline_4_i++;
-                           __inline_5___inline_4_decomp_3 = __inline_5___inline_4_i < 100;
+                           {
+                              int __inline_5___inline_4_i;
+                              __inline_5___inline_4_i = 0;
+                              int __inline_5___inline_4_decomp_3;
+                              __inline_5___inline_4_decomp_3 = __inline_5___inline_4_i < 100;
+                              while(__inline_5___inline_4_decomp_3) {
+                                 __inline_5___inline_4_Y[__inline_5___inline_4_i] = __inline_5___inline_4_X[__inline_5___inline_4_i] * __inline_5___inline_4_Y[__inline_5___inline_4_i];
+                                 {
+                                    int __inline_5___inline_4___inline_2_x;
+                                    __inline_5___inline_4___inline_2_x = __inline_5___inline_4_Y[__inline_5___inline_4_i];
+                                    {
+                                       __inline_5___inline_4_Y[__inline_5___inline_4_i] = __inline_5___inline_4___inline_2_x * __inline_5___inline_4___inline_2_x * __inline_5___inline_4___inline_2_x;
+                                    }
+                                 }
+                                 __inline_5___inline_4_i++;
+                                 __inline_5___inline_4_decomp_3 = __inline_5___inline_4_i < 100;
+                              }
+                           }
                         }
                      }
                   }
@@ -161,51 +177,59 @@ int main() {
                   int *__inline_6_X;
                   __inline_6_X = C;
                   {
-                     int *__inline_6___inline_4_X;
-                     __inline_6___inline_4_X = __inline_6_X;
-                     int *__inline_6___inline_4_Y;
-                     __inline_6___inline_4_Y = __inline_6_X;
                      {
-                        int __inline_6___inline_4_i;
-                        __inline_6___inline_4_i = 0;
-                        int __inline_6___inline_4_decomp_1;
-                        __inline_6___inline_4_decomp_1 = __inline_6___inline_4_i < 100;
-                        while(__inline_6___inline_4_decomp_1) {
-                           __inline_6___inline_4_X[__inline_6___inline_4_i] = __inline_6___inline_4_X[__inline_6___inline_4_i] * __inline_6___inline_4_Y[__inline_6___inline_4_i];
-                           __inline_6___inline_4_i++;
-                           __inline_6___inline_4_decomp_1 = __inline_6___inline_4_i < 100;
-                        }
-                     }
-                     {
-                        int __inline_6___inline_4_i;
-                        __inline_6___inline_4_i = 0;
-                        int __inline_6___inline_4_decomp_2;
-                        __inline_6___inline_4_decomp_2 = __inline_6___inline_4_i < 100;
-                        while(__inline_6___inline_4_decomp_2) {
-                           __inline_6___inline_4_Y[__inline_6___inline_4_i] = __inline_6___inline_4_X[__inline_6___inline_4_i] + __inline_6___inline_4_Y[__inline_6___inline_4_i];
+                        int *__inline_6___inline_4_X;
+                        __inline_6___inline_4_X = __inline_6_X;
+                        int *__inline_6___inline_4_Y;
+                        __inline_6___inline_4_Y = __inline_6_X;
+                        {
                            {
-                              int __inline_6___inline_4___inline_1_x;
-                              __inline_6___inline_4___inline_1_x = __inline_6___inline_4_Y[__inline_6___inline_4_i];
-                              __inline_6___inline_4_Y[__inline_6___inline_4_i] = __inline_6___inline_4___inline_1_x * __inline_6___inline_4___inline_1_x * __inline_6___inline_4___inline_1_x;
+                              int __inline_6___inline_4_i;
+                              __inline_6___inline_4_i = 0;
+                              int __inline_6___inline_4_decomp_1;
+                              __inline_6___inline_4_decomp_1 = __inline_6___inline_4_i < 100;
+                              while(__inline_6___inline_4_decomp_1) {
+                                 __inline_6___inline_4_X[__inline_6___inline_4_i] = __inline_6___inline_4_X[__inline_6___inline_4_i] * __inline_6___inline_4_Y[__inline_6___inline_4_i];
+                                 __inline_6___inline_4_i++;
+                                 __inline_6___inline_4_decomp_1 = __inline_6___inline_4_i < 100;
+                              }
                            }
-                           __inline_6___inline_4_i++;
-                           __inline_6___inline_4_decomp_2 = __inline_6___inline_4_i < 100;
-                        }
-                     }
-                     {
-                        int __inline_6___inline_4_i;
-                        __inline_6___inline_4_i = 0;
-                        int __inline_6___inline_4_decomp_3;
-                        __inline_6___inline_4_decomp_3 = __inline_6___inline_4_i < 100;
-                        while(__inline_6___inline_4_decomp_3) {
-                           __inline_6___inline_4_Y[__inline_6___inline_4_i] = __inline_6___inline_4_X[__inline_6___inline_4_i] * __inline_6___inline_4_Y[__inline_6___inline_4_i];
                            {
-                              int __inline_6___inline_4___inline_2_x;
-                              __inline_6___inline_4___inline_2_x = __inline_6___inline_4_Y[__inline_6___inline_4_i];
-                              __inline_6___inline_4_Y[__inline_6___inline_4_i] = __inline_6___inline_4___inline_2_x * __inline_6___inline_4___inline_2_x * __inline_6___inline_4___inline_2_x;
+                              int __inline_6___inline_4_i;
+                              __inline_6___inline_4_i = 0;
+                              int __inline_6___inline_4_decomp_2;
+                              __inline_6___inline_4_decomp_2 = __inline_6___inline_4_i < 100;
+                              while(__inline_6___inline_4_decomp_2) {
+                                 __inline_6___inline_4_Y[__inline_6___inline_4_i] = __inline_6___inline_4_X[__inline_6___inline_4_i] + __inline_6___inline_4_Y[__inline_6___inline_4_i];
+                                 {
+                                    int __inline_6___inline_4___inline_1_x;
+                                    __inline_6___inline_4___inline_1_x = __inline_6___inline_4_Y[__inline_6___inline_4_i];
+                                    {
+                                       __inline_6___inline_4_Y[__inline_6___inline_4_i] = __inline_6___inline_4___inline_1_x * __inline_6___inline_4___inline_1_x * __inline_6___inline_4___inline_1_x;
+                                    }
+                                 }
+                                 __inline_6___inline_4_i++;
+                                 __inline_6___inline_4_decomp_2 = __inline_6___inline_4_i < 100;
+                              }
                            }
-                           __inline_6___inline_4_i++;
-                           __inline_6___inline_4_decomp_3 = __inline_6___inline_4_i < 100;
+                           {
+                              int __inline_6___inline_4_i;
+                              __inline_6___inline_4_i = 0;
+                              int __inline_6___inline_4_decomp_3;
+                              __inline_6___inline_4_decomp_3 = __inline_6___inline_4_i < 100;
+                              while(__inline_6___inline_4_decomp_3) {
+                                 __inline_6___inline_4_Y[__inline_6___inline_4_i] = __inline_6___inline_4_X[__inline_6___inline_4_i] * __inline_6___inline_4_Y[__inline_6___inline_4_i];
+                                 {
+                                    int __inline_6___inline_4___inline_2_x;
+                                    __inline_6___inline_4___inline_2_x = __inline_6___inline_4_Y[__inline_6___inline_4_i];
+                                    {
+                                       __inline_6___inline_4_Y[__inline_6___inline_4_i] = __inline_6___inline_4___inline_2_x * __inline_6___inline_4___inline_2_x * __inline_6___inline_4___inline_2_x;
+                                    }
+                                 }
+                                 __inline_6___inline_4_i++;
+                                 __inline_6___inline_4_decomp_3 = __inline_6___inline_4_i < 100;
+                              }
+                           }
                         }
                      }
                   }
@@ -239,4 +263,51 @@ int main() {
    }
    
    return A[2];
+}
+
+# Test inline of successive calls
+int inlineTest2() {
+   int a;
+   a = 0;
+   int b;
+   {
+      int __inline_0_i;
+      __inline_0_i = a;
+      {
+         __label__ __return_label_;
+         int __inline_0___return_value;
+         int __inline_0_decomp_8;
+         __inline_0_decomp_8 = __inline_0_i == 0;
+         if(__inline_0_decomp_8) {
+            __inline_0___return_value = 1;
+            goto __return_label_;
+         }
+         __inline_0___return_value = 2;
+         goto __return_label_;
+         __return_label_:
+         b = __inline_0___return_value;
+      }
+   }
+   a = b;
+   {
+      int __inline_1_i;
+      __inline_1_i = a;
+      {
+         __label__ __return_label_;
+         int __inline_1___return_value;
+         int __inline_1_decomp_8;
+         __inline_1_decomp_8 = __inline_1_i == 0;
+         if(__inline_1_decomp_8) {
+            __inline_1___return_value = 1;
+            goto __return_label_;
+         }
+         __inline_1___return_value = 2;
+         goto __return_label_;
+         __return_label_:
+         b = __inline_1___return_value;
+      }
+   }
+   a = b;
+   
+   return a;
 }

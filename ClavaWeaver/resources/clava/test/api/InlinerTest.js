@@ -2,6 +2,7 @@
 
 laraImport("clava.opt.NormalizeToSubset");
 laraImport("clava.code.Inliner");
+laraImport("clava.opt.PrepareForInlining");
 
 laraImport("weaver.WeaverJps");
 laraImport("weaver.Query");
@@ -29,3 +30,14 @@ const inliner = new Inliner();
 inliner.inlineFunctionTree(Query.search("function", "main").first());
 
 println(Query.search("function", "main").first().code);
+
+// Multile successive inlines of the same function
+println("# Test inline of successive calls");
+for (const $call of Query.search("function", "inlineTest2").search("call")) {
+  PrepareForInlining($call.function);
+}
+
+new Inliner().inlineFunctionTree(
+  Query.search("function", "inlineTest2").first()
+);
+println(Query.search("function", "inlineTest2").first().code);
