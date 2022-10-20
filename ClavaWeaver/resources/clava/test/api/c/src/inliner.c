@@ -84,3 +84,26 @@ int inlineTest2() {
 
 	return a;
 }
+
+
+
+int arrayParamL3(int key[32]) {
+	return key[0];
+}
+
+int arrayParamL2(int key[32]) {
+	return arrayParamL3(key);
+}
+
+int arrayParamL1(int key[32]) {
+	return arrayParamL2(key);
+}
+
+
+void arrayParam() {
+    int a[32];
+    int b;
+    
+    b = arrayParamL1(a);
+    
+}

@@ -7,6 +7,8 @@ laraImport("clava.opt.PrepareForInlining");
 laraImport("weaver.WeaverJps");
 laraImport("weaver.Query");
 
+//setDebug(true);
+
 // Normalize all code
 NormalizeToSubset(Query.root());
 
@@ -41,3 +43,8 @@ new Inliner().inlineFunctionTree(
   Query.search("function", "inlineTest2").first()
 );
 println(Query.search("function", "inlineTest2").first().code);
+
+new Inliner().inlineFunctionTree(
+  Query.search("function", "arrayParam").first()
+);
+println(Query.search("function", "arrayParam").first().code);
