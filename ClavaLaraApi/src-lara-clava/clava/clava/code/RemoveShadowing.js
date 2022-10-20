@@ -8,6 +8,7 @@ function RemoveShadowing($function) {
 
   for (const $vardecl of $function.body.descendants("vardecl")) {
     if (usedNames.has($vardecl.name)) {
+      // TODO: ensure the new name is not part of the usedNames
       const newName = `${$vardecl.name}_${aliasIndex++}`;
       $vardecl.name = newName;
       usedNames.add(newName);

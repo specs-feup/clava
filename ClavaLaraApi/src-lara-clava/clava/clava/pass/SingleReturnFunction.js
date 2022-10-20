@@ -2,6 +2,7 @@ laraImport("lara.pass.Pass");
 laraImport("weaver.Query");
 laraImport("clava.pass.DecomposeVarDeclarations");
 laraImport("clava.ClavaJoinPoints");
+laraImport("lara.Strings");
 
 class SingleReturnFunction extends Pass {
   constructor() {
@@ -30,7 +31,7 @@ class SingleReturnFunction extends Pass {
     // declarations first
     new DecomposeVarDeclarations().apply($body);
 
-    const $label = labelDecl("__return_label");
+    const $label = labelDecl("__return_label_" + Strings.uuid());
     $body.insertEnd(labelStmt($label));
 
     const returnType = $jp.returnType;
