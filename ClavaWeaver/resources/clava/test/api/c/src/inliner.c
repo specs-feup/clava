@@ -115,17 +115,21 @@ int functionThatCallsFunctionThatUsesGlobal() {
 	return functionThatUsesGlobal();
 }
 
-int globalVar[10];
+const int globalVar[2] = {1, 2};
 
 int functionThatUsesGlobal() {
 	return globalVar[0];
 }
 
 
-int functionThatReturns() {
+int functionThatReturns(int a) {
+	if(a) {
+		return 1;
+	}
+	
 	return 0;
 }
   
 int functionThatCallsFunctionWithReturnButsDoesNotUseResult() {
-	functionThatReturns();
+	functionThatReturns(10);
 }

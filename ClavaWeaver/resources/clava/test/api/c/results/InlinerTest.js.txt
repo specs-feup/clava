@@ -422,3 +422,22 @@ int functionThatCallsFunctionThatUsesGlobal() {
    
    return decomp_18;
 }
+
+int functionThatCallsFunctionWithReturnButsDoesNotUseResult() {
+   {
+      int __inline_0_a;
+      __inline_0_a = 10;
+      {
+         __label__ __return_label;
+         int __inline_0___return_value;
+         if(__inline_0_a) {
+            __inline_0___return_value = 1;
+            goto __return_label;
+         }
+         __inline_0___return_value = 0;
+         goto __return_label;
+         __return_label:
+         ;
+      }
+   }
+}

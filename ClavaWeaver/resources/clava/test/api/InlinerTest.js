@@ -58,6 +58,27 @@ println(
     .code
 );
 
+for (const $call of Query.search(
+  "function",
+  "functionThatCallsFunctionWithReturnButsDoesNotUseResult"
+).search("call")) {
+  PrepareForInlining($call.function);
+}
+
+new Inliner().inlineFunctionTree(
+  Query.search(
+    "function",
+    "functionThatCallsFunctionWithReturnButsDoesNotUseResult"
+  ).first()
+);
+
+println(
+  Query.search(
+    "function",
+    "functionThatCallsFunctionWithReturnButsDoesNotUseResult"
+  ).first().code
+);
+
 /*
 const callFiltezL1 = Query.search("function", "callFiltezL1")
   .search("call")
