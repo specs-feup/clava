@@ -168,7 +168,13 @@ public class CompoundStmt extends Stmt {
     }
 
     public boolean isNaked() {
-        return get(IS_NAKED);
+
+        // If has more than one statement, cannot be naked
+        var oneOrZeroStatements = getStatements().size() < 2;
+
+        // If one statement but is a scope, cannot be naked
+        var noScope = getStatements().size() == 1 ? !(getStatements().get(0) instanceof CompoundStmt) : true;
+        return get(IS_NAKED) && oneOrZeroStatements && noScope;
     }
 
     public CompoundStmt setNaked(boolean isNaked) {
