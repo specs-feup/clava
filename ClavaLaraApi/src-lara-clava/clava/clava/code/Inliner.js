@@ -247,7 +247,7 @@ class Inliner {
         const $varDeclNoInit = $varDecl.copy();
 
         // Remove initialization
-        $varDeclNoInit.removeInit();
+        $varDeclNoInit.removeInit(false);
 
         // Change storage class to extern
         $varDeclNoInit.storageClass = "extern";
