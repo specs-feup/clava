@@ -165,6 +165,13 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
+     * 
+     */
+    public void defStorageClassImpl(String value) {
+        this.aVardecl.defStorageClassImpl(value);
+    }
+
+    /**
      * Replaces this join point with the given join
      * @param node 
      */
@@ -421,6 +428,15 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
+     * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
+     * @param storageClass 
+     */
+    @Override
+    public void setStorageClassImpl(String storageClass) {
+        this.aVardecl.setStorageClassImpl(storageClass);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -506,6 +522,13 @@ public abstract class AParam extends AVardecl {
         case "lastChild": {
         	if(value instanceof AJoinPoint){
         		this.defLastChildImpl((AJoinPoint)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "storageClass": {
+        	if(value instanceof String){
+        		this.defStorageClassImpl((String)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

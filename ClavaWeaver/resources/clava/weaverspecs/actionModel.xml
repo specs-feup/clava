@@ -657,6 +657,11 @@
 	<action name="varref" class="vardecl" return="varref" tooltip="Creates a new varref based on this vardecl">
 	</action>
 	
+	<action name="setStorageClass" class="vardecl" tooltip="Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl">
+		<parameter name="storageClass" type="String" />
+	</action>
+
+	
 	<!-- VARREF -->
 	<action name="setName" class="varref">
 		<parameter name="name" type="String" />

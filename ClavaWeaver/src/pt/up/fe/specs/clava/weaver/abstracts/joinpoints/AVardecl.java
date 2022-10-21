@@ -123,14 +123,12 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
-     * Get value on attribute storageClass
-     * @return the attribute's value
+     * Storage class specifier, which can be none, extern, static, __private_extern__, auto, register
      */
     public abstract String getStorageClassImpl();
 
     /**
-     * Get value on attribute storageClass
-     * @return the attribute's value
+     * Storage class specifier, which can be none, extern, static, __private_extern__, auto, register
      */
     public final Object getStorageClass() {
         try {
@@ -145,6 +143,13 @@ public abstract class AVardecl extends ADeclarator {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "storageClass", e);
         }
+    }
+
+    /**
+     * 
+     */
+    public void defStorageClassImpl(String value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def storageClass with type String not implemented ");
     }
 
     /**
@@ -299,6 +304,32 @@ public abstract class AVardecl extends ADeclarator {
         	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "varref", e);
+        }
+    }
+
+    /**
+     * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
+     * @param storageClass 
+     */
+    public void setStorageClassImpl(String storageClass) {
+        throw new UnsupportedOperationException(get_class()+": Action setStorageClass not implemented ");
+    }
+
+    /**
+     * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
+     * @param storageClass 
+     */
+    public final void setStorageClass(String storageClass) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setStorageClass", this, Optional.empty(), storageClass);
+        	}
+        	this.setStorageClassImpl(storageClass);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setStorageClass", this, Optional.empty(), storageClass);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setStorageClass", e);
         }
     }
 
@@ -680,6 +711,13 @@ public abstract class AVardecl extends ADeclarator {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "storageClass": {
+        	if(value instanceof String){
+        		this.defStorageClassImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "name": {
         	if(value instanceof String){
         		this.defNameImpl((String)value);
@@ -739,6 +777,7 @@ public abstract class AVardecl extends ADeclarator {
         actions.add("void setInit(String)");
         actions.add("void removeInit()");
         actions.add("varref varref()");
+        actions.add("void setStorageClass(String)");
     }
 
     /**

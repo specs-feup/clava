@@ -67092,6 +67092,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Storage class specifier, which can be none, extern, static, __private_extern__, auto, register",
 						"children": [
 									{
 										"type": "String",
@@ -67846,6 +67847,20 @@
 									{
 										"type": "String",
 										"name": "init",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl",
+						"children": [
+									{
+										"type": "void",
+										"name": "setStorageClass"
+									},
+									{
+										"type": "String",
+										"name": "storageClass",
 										"defaultValue": ""
 									}]
 					},
@@ -96569,6 +96584,7 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Storage class specifier, which can be none, extern, static, __private_extern__, auto, register",
 						"children": [
 									{
 										"type": "String",
@@ -97323,6 +97339,20 @@
 									{
 										"type": "String",
 										"name": "init",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl",
+						"children": [
+									{
+										"type": "void",
+										"name": "setStorageClass"
+									},
+									{
+										"type": "String",
+										"name": "storageClass",
 										"defaultValue": ""
 									}]
 					},
