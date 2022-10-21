@@ -249,4 +249,11 @@ public class VarDecl extends DeclaratorDecl {
 
     }
 
+    public void setStorageClass(String value) {
+        // Get corresponding enum
+        var storageClass = StorageClass.getHelper().fromValue(value);
+        // Store it
+        set(STORAGE_CLASS, storageClass);
+    }
+
 }

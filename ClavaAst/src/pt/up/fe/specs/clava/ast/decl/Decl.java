@@ -91,7 +91,7 @@ public abstract class Decl extends ClavaNode {
             // If generic class, do not generated code for it
             if (attr.getClass().equals(Attribute.class)) {
                 ClavaLog.info(
-                        "Attribute '" + attr.getKind() + "' not implemented and is needed for code generation");
+                        "Attribute '" + attr.getKind() + "' not implemented, not generating code for it");
                 continue;
             }
 
