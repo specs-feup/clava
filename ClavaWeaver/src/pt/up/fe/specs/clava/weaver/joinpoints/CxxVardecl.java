@@ -85,7 +85,12 @@ public class CxxVardecl extends AVardecl {
 
     @Override
     public void removeInitImpl() {
-        varDecl.removeInit();
+        removeInit(true);
+    }
+
+    @Override
+    public void removeInitImpl(boolean removeConst) {
+        varDecl.removeInit(removeConst);
     }
 
     @Override
