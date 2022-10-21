@@ -179,8 +179,9 @@ class Inliner {
       const $param = params[i];
 
       // Arrays cannot be assigned
-      // If param is array, there is no need to add declaration,
+      // If param is array or pointer, there is no need to add declaration,
       // simply rename the param to the name of the arg
+      //if ($param.type.isArray || $param.type.isPointer) {
       if ($param.type.isArray) {
         if (!$arg.instanceOf("varref")) {
           throw new Error(
@@ -235,6 +236,23 @@ class Inliner {
       // If global variable, will not be in the variable map
       // TODO: Add extern to the target Translation Unit, in case it is not already declared
       if ($varDecl.isGlobal) {
+        /*
+        println(
+          "Add global declaration before this function: " +
+            $call.ancestor("function").id
+        );
+        */
+
+        // Copy vardecl to work over it
+        const $varDeclNoInit = $varDecl.copy();
+
+        // Remove initialization
+        $varDeclNoInit.removeInit();
+
+        // Change storage class to extern
+        $varDeclNoInit.storageClass = "extern";
+
+        $call.ancestor("function").insertBefore($varDeclNoInit);
         continue;
       }
 
