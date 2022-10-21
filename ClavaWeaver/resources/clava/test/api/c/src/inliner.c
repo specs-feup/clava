@@ -107,3 +107,25 @@ void arrayParam() {
     b = arrayParamL1(a);
     
 }
+
+
+int functionThatUsesGlobal();
+
+int functionThatCallsFunctionThatUsesGlobal() {
+	return functionThatUsesGlobal();
+}
+
+int globalVar[10];
+
+int functionThatUsesGlobal() {
+	return globalVar[0];
+}
+
+
+int functionThatReturns() {
+	return 0;
+}
+  
+int functionThatCallsFunctionWithReturnButsDoesNotUseResult() {
+	functionThatReturns();
+}

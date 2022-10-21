@@ -413,3 +413,12 @@ void arrayParam() {
       b = __inline_2_decomp_17;
    }
 }
+
+int functionThatCallsFunctionThatUsesGlobal() {
+   int decomp_18;
+   {
+      decomp_18 = globalVar[0];
+   }
+   
+   return decomp_18;
+}

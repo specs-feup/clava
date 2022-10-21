@@ -48,3 +48,38 @@ new Inliner().inlineFunctionTree(
   Query.search("function", "arrayParam").first()
 );
 println(Query.search("function", "arrayParam").first().code);
+
+new Inliner().inlineFunctionTree(
+  Query.search("function", "functionThatCallsFunctionThatUsesGlobal").first()
+);
+
+println(
+  Query.search("function", "functionThatCallsFunctionThatUsesGlobal").first()
+    .code
+);
+
+/*
+const callFiltezL1 = Query.search("function", "callFiltezL1")
+  .search("call")
+  .first();
+
+println("Bef:\n" + callFiltezL1.function.code);
+PrepareForInlining(callFiltezL1.function);
+println("Aft:\n" + callFiltezL1.function.code);
+
+const stmtFiltezL1 = callFiltezL1.ancestor("exprStmt");
+
+inliner.inline(stmtFiltezL1);
+
+println(Query.search("function", "callFiltezL1").first().code);
+*/
+//PrepareForInlining(Query.search("function", "filtez").first());
+//PrepareForInlining(Query.search("function", "callFiltezL1").first());
+//PrepareForInlining(Query.search("function", "callFiltezL2").first());
+
+/*
+new Inliner().inlineFunctionTree(
+  Query.search("function", "callFiltezL2").first()
+);
+println(Query.search("function", "callFiltezL2").first().code);
+*/
