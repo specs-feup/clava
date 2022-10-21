@@ -290,25 +290,7 @@ class Inliner {
         }
       }
     } else if ($exprStmt.expr.instanceOf("call")) {
-      //println("INLINED BODY: " + $newNodes.code);
       for (const $returnStmt of $newNodes.descendants("returnStmt")) {
-        //println("RETURN STMT CODE: " + $returnStmt.code);
-        //println("RETURN STMT EXPR: " + $returnStmt.returnExpr);
-        //println("RETURN STMT AST: " + $returnStmt.ast);
-        //if ($returnStmt.expr !== null && $returnStmt.expr !== undefined) {
-        //$returnStmt.replaceWith(ClavaJoinPoints.exprStmt($returnStmt.expr));
-        /*
-        if (
-          $returnStmt.returnExpr !== null &&
-          $returnStmt.returnExpr !== undefined
-        ) {
-          $returnStmt.replaceWith(
-            ClavaJoinPoints.exprStmt($returnStmt.returnExpr)
-          );
-        } else {
-          $returnStmt.detach();
-        }
-        */
         // Replace the return with a nop (i.e. empty statement), in case there is a label before. Otherwise, just remove return
         const left = $returnStmt.siblingsLeft;
         if (left.length > 0 && left[left.length - 1].instanceOf("labelStmt")) {
@@ -317,7 +299,6 @@ class Inliner {
           $returnStmt.detach();
         }
       }
-      //println("INLINED BODY AFTER: " + $newNodes.code);
     }
 
     // Let the function body be on its own scope
