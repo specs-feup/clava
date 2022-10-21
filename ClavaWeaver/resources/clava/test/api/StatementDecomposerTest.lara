@@ -2,7 +2,7 @@ import clava.code.StatementDecomposer;
 import weaver.Query;
 
 aspectdef StatementDecomposerTest
-setDebug();
+//setDebug();
 	var decomposer = new StatementDecomposer();
 
 	for(var $stmt of Query.search("function", "foo").search("statement")) {
