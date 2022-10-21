@@ -204,7 +204,7 @@ public class VarDecl extends DeclaratorDecl {
 
     }
 
-    public void removeInit() {
+    public void removeInit(boolean removeConst) {
         // If no init, do nothing
         if (!hasInit()) {
             return;
@@ -214,12 +214,15 @@ public class VarDecl extends DeclaratorDecl {
         removeChild(0);
 
         // If element type is const, remove const
-        var declType = getType();
-        if (declType.isConst()) {
-            // Copy
-            var copy = (Type) declType.deepCopy();
-            setType(copy);
-            copy.removeConst();
+        if (removeConst) {
+            var declType = getType();
+            if (declType.isConst()) {
+                // Copy
+                var copy = (Type) declType.deepCopy();
+                setType(copy);
+                copy.removeConst();
+            }
+
         }
 
     }
