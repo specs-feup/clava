@@ -69,7 +69,7 @@ class StatementDecomposer {
     // Unsupported
     if ($stmt.instanceOf("scope") || $stmt.joinPointType === "statement") {
       debug(
-        `StatementDecomposer: unsupported statement with code ${$stmt.code}`
+        `StatementDecomposer: skipping scope or generic statement join point`
       );
       return [];
     }
