@@ -227,6 +227,7 @@ class Inliner {
       );
     }
 
+    // Update varrefs
     for (const $varRef of $newNodes.descendants("varref")) {
       if ($varRef.kind === "function_call") {
         continue;
@@ -271,6 +272,23 @@ class Inliner {
       $varRef.replaceWith(
         ClavaJoinPoints.varRef(newVariableMap.get($varRef.decl.name))
       );
+    }
+
+    // Update varrefs inside types
+    for (const $jp of $newNodes.descendants("joinpoint")) {
+      // If no type, ignore
+
+      if (!$jp.hasType) {
+        continue;
+      }
+
+      const type = $jp.type;
+
+      const result = this.#updateType(type, $call, newVariableMap);
+
+      if (result[0]) {
+        $jp.type = result[1];
+      }
     }
 
     // Remove/replace return statements
@@ -330,5 +348,119 @@ class Inliner {
     $exprStmt.replaceWith(inlinedScope);
 
     this.#variableIndex++;
+  }
+
+  #updateType(type, $call, newVariableMap) {
+    // Default result
+    // TODO: Replace with just the node, can always test if it is itself
+    // Since any type node can be shared, any change must be made in copies
+    let result = [false, type];
+
+    // If pointer type, check pointee
+    if (type.instanceOf("pointerType")) {
+      //println("UPDATE POINTER TYPE");
+      const updated = this.#updateType(type.pointee, $call, newVariableMap);
+
+      if (updated[0]) {
+        const newType = type.copy();
+        newType.pointee = updated[1];
+        result[0] = true;
+        result[1] = newType;
+      }
+    } else if (type.instanceOf("parenType")) {
+      //println("UPDATE PAREN TYPE");
+      const updated = this.#updateType(type.innerType, $call, newVariableMap);
+
+      if (updated[0]) {
+        const newType = type.copy();
+        newType.innerType = updated[1];
+        result[0] = true;
+        result[1] = newType;
+      }
+    } else if (type.instanceOf("variableArrayType")) {
+      //println("UPDATE VARIABLE ARRAY TYPE");
+      let $sizeExprCopy = type.sizeExpr.copy();
+
+      // Update any children of sizeExpr
+      //println("UPDATE SIZEEXPR CHILDREN");
+      let hasChanges = false;
+      //println("SIZE EXPR COPY: " + $sizeExprCopy.ast);
+      for (const $varRef of Query.searchFrom($sizeExprCopy, "varref")) {
+        //println("VARREF: " + $varRef.code);
+        const $newVarref = this.#updateVarRef($varRef, $call, newVariableMap);
+        //println("HAS CHANGED: " + ($newVarref !== $varRef));
+        if ($newVarref !== $varRef) {
+          hasChanges = true;
+          $varRef.replaceWith($newVarref);
+        }
+      }
+
+      // Update top expr, if needed
+      //println("UPDATE TOP EXPR");
+      const $newVarref = this.#updateVarRef(
+        $sizeExprCopy,
+        $call,
+        newVariableMap
+      );
+
+      if ($newVarref !== $sizeExprCopy) {
+        hasChanges = true;
+        $sizeExprCopy = $newVarref;
+      }
+      //println("HAS CHANGES: " + hasChanges);
+      if (hasChanges) {
+        //println("CHANGES");
+        //println("OLD: " + type.sizeExpr.code);
+        //println("NEW: " + $sizeExprCopy.code);
+        const newType = type.copy();
+        newType.sizeExpr = $sizeExprCopy;
+
+        result[0] = true;
+        result[1] = newType;
+      }
+    }
+
+    // By default, return type with no changes
+    return result;
+  }
+
+  #updateVarRef($varRef, $call, newVariableMap) {
+    //if ($varRef.kind === "function_call") {
+    //  return $varRef;
+    //}
+
+    const $varDecl = $varRef.decl;
+
+    // If global variable, will not be in the variable map
+    // TODO: Add extern to the target Translation Unit, in case it is not already declared
+    if ($varDecl.isGlobal) {
+      /*
+      println(
+        "Add global declaration before this function: " +
+          $call.ancestor("function").id
+      );
+      */
+
+      // Copy vardecl to work over it
+      const $varDeclNoInit = $varDecl.copy();
+
+      // Remove initialization
+      $varDeclNoInit.removeInit(false);
+
+      // Change storage class to extern
+      $varDeclNoInit.storageClass = "extern";
+
+      $call.ancestor("function").insertBefore($varDeclNoInit);
+      return $varRef;
+    }
+
+    const newVar = newVariableMap.get($varDecl.name);
+
+    // If not found, just return
+    if (newVar === undefined) {
+      return $varRef;
+    }
+
+    return ClavaJoinPoints.varRef(newVariableMap.get($varRef.decl.name));
   }
 }
