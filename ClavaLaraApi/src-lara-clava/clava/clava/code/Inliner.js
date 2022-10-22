@@ -284,10 +284,10 @@ class Inliner {
 
       const type = $jp.type;
 
-      const result = this.#updateType(type, $call, newVariableMap);
+      const updatedType = this.#updateType(type, $call, newVariableMap);
 
-      if (result[0]) {
-        $jp.type = result[1];
+      if (updatedType !== type) {
+        $jp.type = updatedType;
       }
     }
 
@@ -354,36 +354,51 @@ class Inliner {
     // Default result
     // TODO: Replace with just the node, can always test if it is itself
     // Since any type node can be shared, any change must be made in copies
-    let result = [false, type];
+    //let result = type;
 
     // If pointer type, check pointee
     if (type.instanceOf("pointerType")) {
       //println("UPDATE POINTER TYPE");
-      const updated = this.#updateType(type.pointee, $call, newVariableMap);
+      const original = type.pointee;
+      const updated = this.#updateType(original, $call, newVariableMap);
 
-      if (updated[0]) {
+      if (original !== updated) {
         const newType = type.copy();
-        newType.pointee = updated[1];
-        result[0] = true;
-        result[1] = newType;
+        newType.pointee = updated;
+        return newType;
       }
-    } else if (type.instanceOf("parenType")) {
+    }
+
+    if (type.instanceOf("parenType")) {
       //println("UPDATE PAREN TYPE");
-      const updated = this.#updateType(type.innerType, $call, newVariableMap);
+      const original = type.innerType;
+      const updated = this.#updateType(original, $call, newVariableMap);
 
-      if (updated[0]) {
+      if (original !== updated) {
         const newType = type.copy();
-        newType.innerType = updated[1];
-        result[0] = true;
-        result[1] = newType;
+        newType.innerType = updated;
+        return newType;
       }
-    } else if (type.instanceOf("variableArrayType")) {
+    }
+
+    if (type.instanceOf("variableArrayType")) {
+      // Has to track changes both for element type and its own array expression
+      // Either was, has to update this type
+      let hasChanges = false;
+
+      // Element type
+      const original = type.elementType;
+      const updated = this.#updateType(original, $call, newVariableMap);
+
+      if (original !== updated) {
+        hasChanges = true;
+      }
+
       //println("UPDATE VARIABLE ARRAY TYPE");
       let $sizeExprCopy = type.sizeExpr.copy();
 
       // Update any children of sizeExpr
       //println("UPDATE SIZEEXPR CHILDREN");
-      let hasChanges = false;
       //println("SIZE EXPR COPY: " + $sizeExprCopy.ast);
       for (const $varRef of Query.searchFrom($sizeExprCopy, "varref")) {
         //println("VARREF: " + $varRef.code);
@@ -405,7 +420,7 @@ class Inliner {
 
       if ($newVarref !== $sizeExprCopy) {
         hasChanges = true;
-        $sizeExprCopy = $newVarref;
+        //$sizeExprCopy = $newVarref;
       }
       //println("HAS CHANGES: " + hasChanges);
       if (hasChanges) {
@@ -413,15 +428,15 @@ class Inliner {
         //println("OLD: " + type.sizeExpr.code);
         //println("NEW: " + $sizeExprCopy.code);
         const newType = type.copy();
-        newType.sizeExpr = $sizeExprCopy;
+        newType.elementType = updated;
+        newType.sizeExpr = $newVarref;
 
-        result[0] = true;
-        result[1] = newType;
+        return newType;
       }
     }
 
     // By default, return type with no changes
-    return result;
+    return type;
   }
 
   #updateVarRef($varRef, $call, newVariableMap) {
