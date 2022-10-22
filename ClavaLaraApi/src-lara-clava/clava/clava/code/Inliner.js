@@ -1,4 +1,5 @@
 laraImport("clava.ClavaJoinPoints");
+laraImport("lara.util.StringSet");
 
 class Inliner {
   #options;
@@ -299,6 +300,24 @@ class Inliner {
           $returnStmt.detach();
         }
       }
+    }
+
+    // For any calls inside $newNodes, add forward declarations before the function
+    const $parentFunction = $call.ancestor("function");
+    const addedDeclarations = new StringSet();
+    for (const $newCall of Query.searchFrom($newNodes, "call")) {
+      if (addedDeclarations.has($newCall.function.id)) {
+        continue;
+      }
+
+      addedDeclarations.add($newCall.function.id);
+
+      const $newFunctionDecl = ClavaJoinPoints.functionDeclFromType(
+        $newCall.function.name,
+        $newCall.function.functionType
+      );
+
+      $parentFunction.insertBefore($newFunctionDecl);
     }
 
     // Let the function body be on its own scope
