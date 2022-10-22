@@ -51,6 +51,10 @@ public abstract class ArrayType extends Type {
         return get(ELEMENT_TYPE);
     }
 
+    public void setElementType(Type type) {
+        set(ELEMENT_TYPE, type);
+    }
+
     /**
      *
      * @return the core refering just to the array part (e.g., 2 in a ConstantArrayType)
