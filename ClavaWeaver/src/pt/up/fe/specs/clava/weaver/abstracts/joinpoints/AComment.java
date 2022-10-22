@@ -245,6 +245,7 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
+        HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),
         HASPARENT("hasParent");

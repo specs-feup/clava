@@ -615,6 +615,7 @@ public abstract class ACast extends AExpression {
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
+        HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),
         HASPARENT("hasParent");

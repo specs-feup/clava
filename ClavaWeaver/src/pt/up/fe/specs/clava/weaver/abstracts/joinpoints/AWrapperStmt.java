@@ -701,6 +701,7 @@ public abstract class AWrapperStmt extends AStatement {
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
+        HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),
         HASPARENT("hasParent");

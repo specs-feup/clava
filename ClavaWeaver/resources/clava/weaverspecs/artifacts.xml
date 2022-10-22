@@ -63,6 +63,7 @@
 		<attribute name="type" type="type">
 			<def/>
 		</attribute>
+		<attribute name="hasType" type="Boolean" tooltip="true, if the join point has a type"/>
 		<attribute name="bitWidth" type="Integer" tooltip="The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit"/>
 		
 		<attribute name="astName" type="String" />
@@ -774,6 +775,14 @@
 		<attribute name="isSigned" type="Boolean" tooltip="true, if it is a signed integer type" />
 		<attribute name="isUnsigned" type="Boolean" tooltip="true, if it is an unsigned integer type" />
 	</artifact>	
+
+	<!-- PAREN TYPE -->
+	<artifact class="parenType">
+		<attribute name="innerType" type="type">
+			<def/>	
+		</attribute>
+	</artifact>
+
 	
 	<!-- ADJUSTED TYPE -->
 	<artifact class="adjustedType">

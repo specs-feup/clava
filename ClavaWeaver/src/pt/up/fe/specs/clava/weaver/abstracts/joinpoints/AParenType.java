@@ -1,8 +1,11 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
+import org.lara.interpreter.weaver.interf.events.Stage;
+import java.util.Optional;
+import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import java.util.Optional;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Arrays;
@@ -24,6 +27,64 @@ public abstract class AParenType extends AType {
     public AParenType(AType aType){
         this.aType = aType;
     }
+    /**
+     * Get value on attribute innerType
+     * @return the attribute's value
+     */
+    public abstract AType getInnerTypeImpl();
+
+    /**
+     * Get value on attribute innerType
+     * @return the attribute's value
+     */
+    public final Object getInnerType() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "innerType", Optional.empty());
+        	}
+        	AType result = this.getInnerTypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "innerType", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "innerType", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defInnerTypeImpl(AType value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def innerType with type AType not implemented ");
+    }
+
+    /**
+     * Sets the inner type of this paren type
+     * @param innerType 
+     */
+    public void setInnerTypeImpl(AType innerType) {
+        throw new UnsupportedOperationException(get_class()+": Action setInnerType not implemented ");
+    }
+
+    /**
+     * Sets the inner type of this paren type
+     * @param innerType 
+     */
+    public final void setInnerType(AType innerType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setInnerType", this, Optional.empty(), innerType);
+        	}
+        	this.setInnerTypeImpl(innerType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setInnerType", this, Optional.empty(), innerType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setInnerType", e);
+        }
+    }
+
     /**
      * Get value on attribute kind
      * @return the attribute's value
@@ -575,6 +636,13 @@ public abstract class AParenType extends AType {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "innerType": {
+        	if(value instanceof AType){
+        		this.defInnerTypeImpl((AType)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "templateArgsTypes": {
         	if(value instanceof AType[]){
         		this.defTemplateArgsTypesImpl((AType[])value);
@@ -599,6 +667,7 @@ public abstract class AParenType extends AType {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aType.fillWithAttributes(attributes);
+        attributes.add("innerType");
     }
 
     /**
@@ -615,6 +684,7 @@ public abstract class AParenType extends AType {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aType.fillWithActions(actions);
+        actions.add("void setInnerType(type)");
     }
 
     /**
@@ -642,6 +712,7 @@ public abstract class AParenType extends AType {
      * 
      */
     protected enum ParenTypeAttributes {
+        INNERTYPE("innerType"),
         KIND("kind"),
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),
@@ -720,6 +791,7 @@ public abstract class AParenType extends AType {
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
+        HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),
         HASPARENT("hasParent");

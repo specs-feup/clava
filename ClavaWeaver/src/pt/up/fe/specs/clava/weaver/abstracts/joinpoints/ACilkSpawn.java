@@ -781,6 +781,7 @@ public abstract class ACilkSpawn extends ACall {
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
+        HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),
         HASPARENT("hasParent");

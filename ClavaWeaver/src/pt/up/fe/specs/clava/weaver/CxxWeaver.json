@@ -398,6 +398,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -1457,6 +1466,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -2687,6 +2705,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -3901,6 +3928,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -5147,6 +5183,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -6285,6 +6330,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -7418,6 +7472,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -8594,6 +8657,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -9998,6 +10070,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -11060,6 +11141,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -12400,6 +12490,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -13714,6 +13813,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -14915,6 +15023,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -16107,6 +16224,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -17346,6 +17472,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -18885,6 +19020,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -20082,6 +20226,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -21380,6 +21533,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -22530,6 +22692,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -23579,6 +23750,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -24653,6 +24833,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -25969,6 +26158,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -27190,6 +27388,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -28256,6 +28463,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -29422,6 +29638,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -30548,6 +30773,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -31802,6 +32036,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -32933,6 +33176,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -33990,6 +34242,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -35160,6 +35421,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -36453,6 +36723,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -37624,6 +37903,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -38732,6 +39020,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -39899,6 +40196,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -40987,6 +41293,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -42223,6 +42538,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -43618,6 +43942,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -44912,6 +45245,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -46531,6 +46873,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -47718,6 +48069,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -48882,6 +49242,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -50110,6 +50479,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -51206,6 +51584,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -52293,6 +52680,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -53404,6 +53800,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -54567,6 +54972,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -55806,6 +56220,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -57228,6 +57651,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -58381,6 +58813,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -59631,6 +60072,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -61072,6 +61522,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -62554,6 +63013,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -63680,6 +64148,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -64963,6 +65440,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -66377,6 +66863,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -67531,6 +68026,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -68310,6 +68814,14 @@
 						"type": "attribute",
 						"children": [
 									{
+										"type": "type",
+										"name": "innerType"
+									}]
+					},
+					{
+						"type": "attribute",
+						"children": [
+									{
 										"type": "Integer[]",
 										"name": "arrayDims"
 									}]
@@ -68869,6 +69381,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -69144,6 +69665,20 @@
 									{
 										"type": "String",
 										"name": "name"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Sets the inner type of this paren type",
+						"children": [
+									{
+										"type": "void",
+										"name": "setInnerType"
+									},
+									{
+										"type": "type",
+										"name": "innerType",
+										"defaultValue": ""
 									}]
 					},
 					{
@@ -70184,6 +70719,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -71378,6 +71922,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -72584,6 +73137,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -74055,6 +74617,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -75269,6 +75840,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -76395,6 +76975,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -77611,6 +78200,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -78980,6 +79578,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -80184,6 +80791,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -81302,6 +81918,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -82481,6 +83106,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -83746,6 +84380,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -85084,6 +85727,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -86306,6 +86958,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -87410,6 +88071,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -88636,6 +89306,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -89808,6 +90487,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -90933,6 +91621,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -92215,6 +92912,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -93428,6 +94134,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -94571,6 +95286,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -95798,6 +96522,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -97033,6 +97766,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{
@@ -98391,6 +99133,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -99639,6 +100390,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "Returns comments that are not explicitly in the AST, but embedded in other nodes",
 						"children": [
 									{
@@ -100730,6 +101490,15 @@
 									{
 										"type": "boolean",
 										"name": "hasParent"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point has a type",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasType"
 									}]
 					},
 					{

@@ -736,6 +736,9 @@
 		<parameter name="sizeExpr" type="expression" />
 	</action>
 	
-	
+	<!-- PAREN TYPE -->
+	<action name="setInnerType" class="parenType" tooltip="Sets the inner type of this paren type">
+		<parameter name="innerType" type="type" />
+	</action>	
 	
 </actions>

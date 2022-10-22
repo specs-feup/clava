@@ -817,6 +817,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("code");
         attributes.add("joinpointType");
         attributes.add("type");
+        attributes.add("hasType");
         attributes.add("bitWidth");
         attributes.add("astName");
         attributes.add("astNumChildren");
@@ -1549,6 +1550,29 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "type", e);
+        }
+    }
+
+    /**
+     * true, if the join point has a type
+     */
+    public abstract Boolean getHasTypeImpl();
+
+    /**
+     * true, if the join point has a type
+     */
+    public final Object getHasType() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasType", Optional.empty());
+        	}
+        	Boolean result = this.getHasTypeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasType", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasType", e);
         }
     }
 

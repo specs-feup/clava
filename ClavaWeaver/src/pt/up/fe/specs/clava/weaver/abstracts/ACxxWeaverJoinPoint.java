@@ -584,6 +584,13 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         return CxxJoinpoints.create(((Typable) node).getType(), AType.class);
     }
 
+    @Override
+    public Boolean getHasTypeImpl() {
+        ClavaNode node = getNode();
+
+        return node instanceof Typable;
+    }
+
     // @Override
     // public String toString() {
     // return "Joinpoint '" + getJoinpointType() + "'";
