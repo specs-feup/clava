@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.type;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -33,6 +34,10 @@ public class ParenType extends Type {
 
     public Type getInnerType() {
         return get(UNQUALIFIED_DESUGARED_TYPE).get();
+    }
+
+    public void setInnerType(Type type) {
+        set(UNQUALIFIED_DESUGARED_TYPE, Optional.of(type));
     }
 
     @Override

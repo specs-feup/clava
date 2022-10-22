@@ -45,7 +45,6 @@ public class PointerType extends Type {
     public String getCode(ClavaNode sourceNode, String name) {
 
         String nameWithPointer = name == null ? "*" : "*" + name;
-
         return getPointeeType().getCode(sourceNode, nameWithPointer);
     }
 
