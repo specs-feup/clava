@@ -130,6 +130,52 @@ int functionThatReturns(int a) {
 	return 0;
 }
   
-int functionThatCallsFunctionWithReturnButsDoesNotUseResult() {
+void functionThatCallsFunctionWithReturnButsDoesNotUseResult() {
 	functionThatReturns(10);
+}
+
+int functionWithComments() {
+	// This is a comment
+	return 1;
+}
+
+int functionWithNakedIf(a) {
+	int b = 0;
+	if(a) b = functionWithComments();
+	return b;
+}
+
+// Forward declaration
+double functionWithCall(int a);
+
+double functionWhichCallIsNotDeclared() {
+	return functionWithCall(10);
+}
+
+double functionCalledByOtherFunction(double a) {
+	return a + 10;
+}
+
+double functionWithCall(int a) {
+	return functionCalledByOtherFunction(a) + functionCalledByOtherFunction(a);
+}
+
+
+typedef struct {
+   double a;
+   double b;
+} a_struct;
+
+double functionWithVarInStruct(a_struct a) {
+	double m;
+	m = 10;
+	a = (a_struct){m, 20};
+	
+	return a.a;
+}
+
+double functionThatCallsOtherWithVarInStruct() {
+	a_struct b;
+	
+	return functionWithVarInStruct(b);
 }

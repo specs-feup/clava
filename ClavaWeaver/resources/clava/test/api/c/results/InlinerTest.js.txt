@@ -423,7 +423,7 @@ int functionThatCallsFunctionThatUsesGlobal() {
    return decomp_18;
 }
 
-int functionThatCallsFunctionWithReturnButsDoesNotUseResult() {
+void functionThatCallsFunctionWithReturnButsDoesNotUseResult() {
    {
       int __inline_0_a;
       __inline_0_a = 10;
@@ -440,4 +440,52 @@ int functionThatCallsFunctionWithReturnButsDoesNotUseResult() {
          ;
       }
    }
+}
+
+int functionWithNakedIf(int a) {
+   int b;
+   b = 0;
+   if(a)
+      {
+         b = 1;
+         // This is a comment
+      }
+   
+   return b;
+}
+
+double functionWhichCallIsNotDeclared() {
+   double decomp_19;
+   {
+      int __inline_0_a;
+      __inline_0_a = 10;
+      {
+         double __inline_0_decomp_21;
+         __inline_0_decomp_21 = functionCalledByOtherFunction(__inline_0_a);
+         double __inline_0_decomp_22;
+         __inline_0_decomp_22 = functionCalledByOtherFunction(__inline_0_a);
+         double __inline_0_decomp_23;
+         __inline_0_decomp_23 = __inline_0_decomp_21 + __inline_0_decomp_22;
+         decomp_19 = __inline_0_decomp_23;
+      }
+   }
+   
+   return decomp_19;
+}
+
+double functionThatCallsOtherWithVarInStruct() {
+   a_struct b;
+   double decomp_24;
+   {
+      a_struct __inline_0_a;
+      __inline_0_a = b;
+      {
+         double __inline_0_m;
+         __inline_0_m = 10;
+         __inline_0_a = (a_struct){__inline_0_m, 20};
+         decomp_24 = __inline_0_a.a;
+      }
+   }
+   
+   return decomp_24;
 }

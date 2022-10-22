@@ -79,6 +79,37 @@ println(
   ).first().code
 );
 
+new Inliner().inlineFunctionTree(
+  Query.search("function", "functionWithNakedIf").first()
+);
+
+println(Query.search("function", "functionWithNakedIf").first().code);
+
+new Inliner().inline(
+  Query.search("function", "functionWhichCallIsNotDeclared")
+    .search("call")
+    .first()
+    .ancestor("exprStmt")
+);
+
+println(
+  Query.search("function", "functionWhichCallIsNotDeclared").first().code
+);
+
+new Inliner().inlineFunctionTree(
+  Query.search("function", "functionThatCallsOtherWithVarInStruct").first()
+);
+
+println(
+  Query.search("function", "functionThatCallsOtherWithVarInStruct").first().code
+);
+
+//println(
+//  Query.search("function", "functionThatCallsOtherWithVarInStruct").first().ast
+//);
+
+//println(Query.root().code);
+
 /*
 const callFiltezL1 = Query.search("function", "callFiltezL1")
   .search("call")
