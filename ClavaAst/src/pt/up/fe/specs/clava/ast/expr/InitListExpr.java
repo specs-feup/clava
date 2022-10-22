@@ -78,7 +78,17 @@ public class InitListExpr extends Expr {
         InitListExpr syntaticForm = get(SYNTACTIC_FORM).orElse(null);
         if (syntaticForm != null) {
             if (!syntaticForm.getId().equals(getId())) {
-                return syntaticForm.getCode();
+
+                // If there are varrefs with custom names, cannot use syntatic form
+                var hasCustomNames = getDescendantsStream()
+                        .filter(node -> node instanceof DeclRefExpr && node.hasValue(DeclRefExpr.CUSTOM_NAME))
+                        .findFirst().isPresent();
+
+                // System.out.println("SYN FORM: " + syntaticForm.getCode());
+                if (!hasCustomNames) {
+                    return syntaticForm.getCode();
+                }
+
             }
         }
 
