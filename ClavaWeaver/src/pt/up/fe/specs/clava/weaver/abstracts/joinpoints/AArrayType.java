@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.exception.ActionException;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
 import java.util.List;
@@ -48,6 +49,39 @@ public abstract class AArrayType extends AType {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "elementType", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defElementTypeImpl(AType value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def elementType with type AType not implemented ");
+    }
+
+    /**
+     * Sets the element type of the array
+     * @param arrayElementType 
+     */
+    public void setElementTypeImpl(AType arrayElementType) {
+        throw new UnsupportedOperationException(get_class()+": Action setElementType not implemented ");
+    }
+
+    /**
+     * Sets the element type of the array
+     * @param arrayElementType 
+     */
+    public final void setElementType(AType arrayElementType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setElementType", this, Optional.empty(), arrayElementType);
+        	}
+        	this.setElementTypeImpl(arrayElementType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setElementType", this, Optional.empty(), arrayElementType);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setElementType", e);
         }
     }
 
@@ -602,6 +636,13 @@ public abstract class AArrayType extends AType {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "elementType": {
+        	if(value instanceof AType){
+        		this.defElementTypeImpl((AType)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         case "templateArgsTypes": {
         	if(value instanceof AType[]){
         		this.defTemplateArgsTypesImpl((AType[])value);
@@ -643,6 +684,7 @@ public abstract class AArrayType extends AType {
     @Override
     protected void fillWithActions(List<String> actions) {
         this.aType.fillWithActions(actions);
+        actions.add("void setElementType(type)");
     }
 
     /**

@@ -290,6 +290,13 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
+     * 
+     */
+    public void defElementTypeImpl(AType value) {
+        this.aArrayType.defElementTypeImpl(value);
+    }
+
+    /**
      * Replaces this join point with the given join
      * @param node 
      */
@@ -512,6 +519,15 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
+     * Sets the element type of the array
+     * @param arrayElementType 
+     */
+    @Override
+    public void setElementTypeImpl(AType arrayElementType) {
+        this.aArrayType.setElementTypeImpl(arrayElementType);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -601,6 +617,13 @@ public abstract class AVariableArrayType extends AArrayType {
         case "sizeExpr": {
         	if(value instanceof AExpression){
         		this.defSizeExprImpl((AExpression)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "elementType": {
+        	if(value instanceof AType){
+        		this.defElementTypeImpl((AType)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);

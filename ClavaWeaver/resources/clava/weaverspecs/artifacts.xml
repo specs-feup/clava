@@ -720,7 +720,9 @@
 	
 	<!-- ARRAY TYPE -->
 	<artifact class="arrayType">
-		<attribute name="elementType" type="type" />
+		<attribute name="elementType" type="type">
+			<def/>
+		</attribute>
 	</artifact>
 	
 	<!-- VARIABLE ARRAY TYPE -->

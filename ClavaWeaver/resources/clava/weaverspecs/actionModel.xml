@@ -731,6 +731,11 @@
 		<parameter name="pointeeType" type="type" />
 	</action>
 
+	<!-- ARRAY TYPE -->
+	<action name="setElementType" class="arrayType" tooltip="Sets the element type of the array">
+		<parameter name="arrayElementType" type="type" />
+	</action>
+
 	<!-- VARIABLE ARRAY TYPE -->
 	<action name="setSizeExpr" class="variableArrayType" tooltip="Sets the size expression of this variable array type">
 		<parameter name="sizeExpr" type="expression" />

@@ -5471,6 +5471,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Sets the element type of the array",
+						"children": [
+									{
+										"type": "void",
+										"name": "setElementType"
+									},
+									{
+										"type": "type",
+										"name": "arrayElementType",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Sets the desugared type of this type",
 						"children": [
 									{
@@ -99430,6 +99444,20 @@
 									{
 										"type": "expression",
 										"name": "sizeExpr",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Sets the element type of the array",
+						"children": [
+									{
+										"type": "void",
+										"name": "setElementType"
+									},
+									{
+										"type": "type",
+										"name": "arrayElementType",
 										"defaultValue": ""
 									}]
 					},
