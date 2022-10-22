@@ -489,3 +489,23 @@ double functionThatCallsOtherWithVarInStruct() {
    
    return decomp_24;
 }
+
+void functionThatCallsFunctionWithStruct(void *ox2) {
+   int n2;
+   n2 = 3;
+   int xd2;
+   xd2 = 2;
+   a_struct exponent2[3];
+   {
+      int __inline_0_n;
+      __inline_0_n = n2;
+      int __inline_0_xd1;
+      __inline_0_xd1 = xd2;
+      void *__inline_0_ox;
+      __inline_0_ox = ox2;
+      {
+         a_struct (*__inline_0_x)[__inline_0_xd1];
+         __inline_0_x = (a_struct (*)[__inline_0_xd1]) __inline_0_ox;
+      }
+   }
+}

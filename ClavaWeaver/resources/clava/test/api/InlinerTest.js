@@ -104,6 +104,25 @@ println(
   Query.search("function", "functionThatCallsOtherWithVarInStruct").first().code
 );
 
+new Inliner().inlineFunctionTree(
+  Query.search("function", "functionThatCallsFunctionWithStruct").first()
+);
+
+println(
+  Query.search("function", "functionThatCallsFunctionWithStruct").first().code
+);
+
+/*
+println(
+  Query.search("function", "functionThatCallsFunctionWithStruct")
+    .search("vardecl", "__inline_0_x")
+    .first().type.ast
+);
+*/
+
+//println(Query.search("function", "functioWithStruct").search("vardecl", "x").first().type.ast)
+//println(Query.search("function", "functioWithStruct").search("vardecl", "x").first().type.code)
+
 //println(
 //  Query.search("function", "functionThatCallsOtherWithVarInStruct").first().ast
 //);

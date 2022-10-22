@@ -179,3 +179,15 @@ double functionThatCallsOtherWithVarInStruct() {
 	
 	return functionWithVarInStruct(b);
 }
+
+void functioWithStruct(int n, int xd1, void *ox, a_struct exponent[n])
+{
+    a_struct (*x)[xd1] = (a_struct (*)[xd1])ox;
+}
+
+void functionThatCallsFunctionWithStruct(void* ox2) {
+	int n2 = 3;
+	int xd2 = 2;
+	a_struct exponent2[3];
+	functioWithStruct(n2, xd2, ox2, exponent2);
+}
