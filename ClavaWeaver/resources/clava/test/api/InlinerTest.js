@@ -112,6 +112,21 @@ println(
   Query.search("function", "functionThatCallsFunctionWithStruct").first().code
 );
 
+new Inliner().inlineFunctionTree(
+  Query.search("function", "functionThatCallFunctionWith2DimPointer").first()
+);
+
+println(
+  Query.search("function", "functionThatCallFunctionWith2DimPointer").first()
+    .code
+);
+/*
+println(
+  Query.search("function", "functionWith2DimPointer").search("exprStmt").first()
+    .expr.type.pointee.innerType.elementType.elementType
+);
+*/
+
 /*
 println(
   Query.search("function", "functionThatCallsFunctionWithStruct")

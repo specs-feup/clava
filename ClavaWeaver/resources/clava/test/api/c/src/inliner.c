@@ -191,3 +191,13 @@ void functionThatCallsFunctionWithStruct(void* ox2) {
 	a_struct exponent2[3];
 	functioWithStruct(n2, xd2, ox2, exponent2);
 }
+
+
+void functionWith2DimPointer(void * os, int n, int m)
+{
+    double (*r)[n][m] = (double (*)[n][m]) os;
+}
+
+void functionThatCallFunctionWith2DimPointer(void * os) {
+	functionWith2DimPointer(os, 10, 20);
+}

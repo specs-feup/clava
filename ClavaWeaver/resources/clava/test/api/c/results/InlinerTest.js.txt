@@ -509,3 +509,18 @@ void functionThatCallsFunctionWithStruct(void *ox2) {
       }
    }
 }
+
+void functionThatCallFunctionWith2DimPointer(void *os) {
+   {
+      void *__inline_0_os;
+      __inline_0_os = os;
+      int __inline_0_n;
+      __inline_0_n = 10;
+      int __inline_0_m;
+      __inline_0_m = 20;
+      {
+         double (*__inline_0_r)[__inline_0_n][__inline_0_m];
+         __inline_0_r = (double (*)[__inline_0_n][__inline_0_m]) __inline_0_os;
+      }
+   }
+}
