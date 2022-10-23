@@ -82,6 +82,11 @@ class Inliner {
         continue;
       }
 
+      // Manually ignoring printf and fprintf
+      if ($call.name === "printf" || $call.name === "fprintf") {
+        continue;
+      }
+
       // If any of the parameters of the function is an array, return.
       // Not supported yet
       /*
@@ -320,10 +325,17 @@ class Inliner {
       }
     }
 
-    // For any calls inside $newNodes, add forward declarations before the function
+    // For any calls inside $newNodes, add forward declarations before the function, if they have definition
+    // TODO: this should be done for calls of functions that are on this file. For other files, the corresponding include
+    // should be added
     const $parentFunction = $call.ancestor("function");
     const addedDeclarations = new StringSet();
     for (const $newCall of Query.searchFrom($newNodes, "call")) {
+      // Ignore if only declaration exists (include should be added instead)
+      if (!$newCall.function.isImplementation) {
+        continue;
+      }
+
       if (addedDeclarations.has($newCall.function.id)) {
         continue;
       }
