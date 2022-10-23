@@ -51,7 +51,6 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AScope;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
-import pt.up.fe.specs.clava.weaver.joinpoints.types.CxxFunctionType;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
@@ -91,7 +90,7 @@ public class CxxFunction extends AFunction {
 
     @Override
     public AFunctionType getFunctionTypeImpl() {
-        return (CxxFunctionType) CxxJoinpoints.create(function.getType());
+        return CxxJoinpoints.create(function.getFunctionType(), AFunctionType.class);
     }
 
     @Override
