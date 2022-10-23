@@ -332,7 +332,12 @@ class Inliner {
     const addedDeclarations = new StringSet();
     for (const $newCall of Query.searchFrom($newNodes, "call")) {
       // Ignore if only declaration exists (include should be added instead)
-      if (!$newCall.function.isImplementation) {
+      //if (!$newCall.function.isImplementation) {
+      //  continue;
+      //}
+
+      // HACK: manually adding printf and fprintf as a special case
+      if ($newCall.name == "printf" || $newCall.name == "fprintf") {
         continue;
       }
 
