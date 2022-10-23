@@ -30,6 +30,29 @@ class StatementDecomposer {
     return varName;
   }
 
+  #isValidNode($jp) {
+    if ($jp.instanceOf("statement")) {
+      // Currently cannot decompose if preceeding statement is a CaseStmt
+      const left = $jp.siblingsLeft;
+      if (left.length > 0 && left[left.length - 1].instanceOf("case")) {
+        debug(
+          `StatementDecomposer: statement just before case label, declaring a variable would produce an error`
+        );
+        return false;
+      }
+
+      return true;
+    }
+
+    const parentStmt = $jp.ancestor("statement");
+
+    if (parentStmt !== undefined) {
+      return this.#isValidNode(parentStmt);
+    }
+
+    return true;
+  }
+
   /**
    * If the given statement can be decomposed in two or more statements, replaces the statement with the decomposition.
    *
@@ -71,6 +94,10 @@ class StatementDecomposer {
       debug(
         `StatementDecomposer: skipping scope or generic statement join point`
       );
+      return [];
+    }
+
+    if (!this.#isValidNode($stmt)) {
       return [];
     }
 
@@ -149,6 +176,10 @@ class StatementDecomposer {
    * @return {DecomposeResult}
    */
   decomposeExpr($expr) {
+    if (!this.#isValidNode($expr)) {
+      return new DecomposeResult([], $expr);
+    }
+
     if ($expr.instanceOf("binaryOp")) {
       return this.decomposeBinaryOp($expr);
     }
