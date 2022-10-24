@@ -1,0 +1,3 @@
+Type kind:BuiltinType
+Is builtin? true
+Is decl? true

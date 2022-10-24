@@ -1,0 +1,12 @@
+Code:
+/**** File 'macros.cpp' ****/
+
+int x = 3 + (1 + 2) + 5;
+int y = (1 + 2);
+int a = 2 + (2 + 2);
+int main() {
+   
+   return a;
+}
+
+/**** End File ****/

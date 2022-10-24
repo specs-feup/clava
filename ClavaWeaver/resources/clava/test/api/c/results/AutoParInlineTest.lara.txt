@@ -1,0 +1,29 @@
+Code:
+/**** File 'autopar_inline.c' ****/
+
+int bar() {
+   int a = 0;
+   for(int i = 0; i < 10; i++) {
+      a++;
+   }
+   
+   return a;
+}
+
+int foo() {
+   int a = 0;
+   for(int i = 0; i < 10; i++) {
+      // Variable that may already after inline renaming
+      int i_1 = 1;
+      int a_NaN = 0;
+      for(int i_NaN = 0; i_NaN < 10; i_NaN++) {
+         a_NaN++;
+      }
+      a += a_NaN;
+      // ClavaInlineFunction : a += bar();  countCallInlinedFunction : NaN
+   }
+   
+   return a;
+}
+
+/**** End File ****/

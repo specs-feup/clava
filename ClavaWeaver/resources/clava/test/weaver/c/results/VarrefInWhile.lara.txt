@@ -1,0 +1,3 @@
+while line#4
+while cond.code = m < 10;
+m
