@@ -31,14 +31,22 @@ class StatementDecomposer {
   }
 
   #isValidNode($jp) {
-    if ($jp.instanceOf("statement")) {
-      // Currently cannot decompose if preceeding statement is a CaseStmt
-      const left = $jp.siblingsLeft;
-      if (left.length > 0 && left[left.length - 1].instanceOf("case")) {
+    // If preceeding statement is a CaseStmt or a LabelStmt it might generate invalid code if a declaration is inserted
+    // Add empty statement after the label to avoid this situation
+    if ($jp.instanceOf("statement") && !$jp.instanceOf("emptyStmt")) {
+      const $leftStmt = $jp.leftJp;
+
+      if (
+        $leftStmt !== undefined &&
+        ($leftStmt.instanceOf("case") || $leftStmt.instanceOf("labelStmt"))
+      ) {
         debug(
-          `StatementDecomposer: statement just before case label, declaring a variable would produce an error`
+          `StatementDecomposer: statement just before label, inserting empty statement after as a precaution`
         );
-        return false;
+
+        $leftStmt.insertAfter(ClavaJoinPoints.emptyStmt());
+
+        return true;
       }
 
       return true;
@@ -221,6 +229,10 @@ class StatementDecomposer {
       ClavaJoinPoints.varRef(tempVarDecl),
       $newCall
     );
+
+    // Since a new declaration is being introduced, it might not be always safe to add it at any place
+    // (e.g. in C, declarations are not supported after labels)
+    // Add temporary variable and use inside a scope
 
     return new DecomposeResult(
       [...precedingStmts, tempVarDecl.stmt, tempVarAssign.stmt],
