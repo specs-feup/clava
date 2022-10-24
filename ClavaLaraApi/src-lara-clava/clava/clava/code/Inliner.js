@@ -82,8 +82,8 @@ class Inliner {
         continue;
       }
 
-      // Manually ignoring printf and fprintf
-      if ($call.name === "printf" || $call.name === "fprintf") {
+      // Ignore functions that are part of the system headers
+      if ($call.function.isInSystemHeader) {
         continue;
       }
 
