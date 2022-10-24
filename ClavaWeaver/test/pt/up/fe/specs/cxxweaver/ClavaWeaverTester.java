@@ -53,6 +53,7 @@ public class ClavaWeaverTester {
     private final String compilerFlags;
 
     private boolean checkWovenCodeSyntax;
+    private boolean checkExpectedOutput;
     private String srcPackage;
     private String resultPackage;
     private String resultsFile;
@@ -71,7 +72,14 @@ public class ClavaWeaverTester {
         resultsFile = null;
         run = true;
         additionalSettings = DataStore.newInstance("Additional Settings");
+        checkExpectedOutput = true;
         // debug = false;
+    }
+
+    public ClavaWeaverTester checkExpectedOutput(boolean checkExpectedOutput) {
+        this.checkExpectedOutput = checkExpectedOutput;
+
+        return this;
     }
 
     /**
@@ -165,6 +173,12 @@ public class ClavaWeaverTester {
         List<ResourceProvider> codes = SpecsCollections.map(codeResources, this::buildCodeResource);
 
         File log = runCxxWeaver(() -> basePackage + laraResource, codes);
+
+        // Do not check expected output
+        if (!this.checkExpectedOutput) {
+            return;
+        }
+
         String logContents = SpecsIo.read(log);
 
         StringBuilder expectedResourceBuilder = new StringBuilder();
@@ -183,7 +197,9 @@ public class ClavaWeaverTester {
         if (!SpecsIo.hasResource(expectedResource)) {
             SpecsLogs.msgInfo("Could not find resource '" + expectedResource
                     + "', skipping verification. Actual output:\n" + logContents);
-            return;
+
+            throw new RuntimeException("Expected outputs not found");
+            // return;
         }
 
         assertEquals(normalize(SpecsIo.getResource(expectedResource)), normalize(logContents));
