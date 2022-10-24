@@ -202,8 +202,13 @@ class Inliner {
 
         // If varref, use expression as-is, with some parenthesis around to guarantee order of operations
         //const $adaptedArg = this.#adaptArg($arg);
-        println("PAREN: " + ClavaJoinPoints.parenthesis($arg).code);
-        newVariableMap.set($param.name, ClavaJoinPoints.parenthesis($arg));
+        /*
+        const $adaptedArg = $arg.instanceOf("parenExpr")
+          ? $arg
+          : ClavaJoinPoints.parenthesis($arg);
+*/
+        //newVariableMap.set($param.name, $adaptedArg);
+        newVariableMap.set($param.name, $arg);
       } else {
         const newName = this.#getInlinedVarName($param.name);
         const $varDecl = ClavaJoinPoints.varDeclNoInit(newName, $param.type);
@@ -291,7 +296,11 @@ class Inliner {
       }
       // If expression, simply replace varref with the expression
       else if (newVar.instanceOf("expression")) {
-        $varRef.replaceWith(newVar);
+        const $adaptedVar = $varRef.parent.instanceOf("parenExpr")
+          ? newVar
+          : ClavaJoinPoints.parenthesis(newVar);
+
+        $varRef.replaceWith($adaptedVar);
       } else {
         throw new Error(
           "Not defined when newVar is of type '" + newVar.joinPointType + "'"
