@@ -3,6 +3,7 @@ laraImport("clava.code.StatementDecomposer");
 laraImport("clava.pass.SimplifyLoops");
 laraImport("clava.pass.DecomposeVarDeclarations");
 laraImport("clava.pass.DecomposeDeclStmt");
+laraImport("clava.pass.LocalStaticToGlobal");
 laraImport("clava.pass.SimplifySelectionStmts");
 laraImport("clava.pass.SimplifyReturnStmts");
 laraImport("clava.code.SimplifyAssignment");
@@ -25,6 +26,7 @@ function NormalizeToSubset($startJp, options) {
   );
   const simplifyIfs = new SimplifySelectionStmts(statementDecomposer);
   const simplifyReturns = new SimplifyReturnStmts(statementDecomposer);
+  const localStaticToGlobal = new LocalStaticToGlobal();
 
   simplifyLoops.apply($startJp);
   simplifyIfs.apply($startJp);
@@ -32,6 +34,7 @@ function NormalizeToSubset($startJp, options) {
 
   declStmt.apply($startJp);
   varDecls.apply($startJp);
+  localStaticToGlobal.apply($startJp);
 
   for (const $assign of Query.searchFrom($startJp, "binaryOp", {
     self: (self) => self.isAssignment && self.operator !== "=",
