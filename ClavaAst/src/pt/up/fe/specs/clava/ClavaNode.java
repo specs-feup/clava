@@ -1449,7 +1449,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         // Get siblings
         var siblings = getParent().getChildren();
 
-        return siblings.subList(indexOfSelf + 1, siblings.size());
+        var rightIndex = indexOfSelf + 1;
+
+        return siblings.subList(rightIndex, siblings.size());
     }
 
     public List<ClavaNode> getSiblingsLeft() {
@@ -1464,6 +1466,48 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         var siblings = getParent().getChildren();
 
         return siblings.subList(0, indexOfSelf);
+    }
+
+    public Optional<ClavaNode> getRight() {
+        var indexOfSelf = indexOfSelf();
+
+        if (indexOfSelf == -1) {
+            ClavaLog.debug("getRight: Could not find index of self");
+            return Optional.empty();
+        }
+
+        // Get siblings
+        var siblings = getParent().getChildren();
+
+        var rightIndex = indexOfSelf + 1;
+
+        // No more elements to the right
+        if (rightIndex > (siblings.size() - 1)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(siblings.get(rightIndex));
+    }
+
+    public Optional<ClavaNode> getLeft() {
+        var indexOfSelf = indexOfSelf();
+
+        if (indexOfSelf == -1) {
+            ClavaLog.debug("getLeft: Could not find index of self");
+            return Optional.empty();
+        }
+
+        // Get siblings
+        var siblings = getParent().getChildren();
+
+        var leftIndex = indexOfSelf - 1;
+
+        // No more elements to the right
+        if (leftIndex < 0) {
+            return Optional.empty();
+        }
+
+        return Optional.of(siblings.get(leftIndex));
     }
 
 }
