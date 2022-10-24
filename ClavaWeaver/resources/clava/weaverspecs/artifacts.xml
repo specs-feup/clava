@@ -79,6 +79,8 @@
 		</attribute>		
 		<attribute name="siblingsLeft" type="joinpoint[]" tooltip="Returns an array with the siblings that came before this node"/>
 		<attribute name="siblingsRight" type="joinpoint[]" tooltip="Returns an array with the siblings that come after this node"/>
+		<attribute name="leftJp" type="joinpoint" tooltip="Returns the node that came before this node, or undefined if there is none"/>
+		<attribute name="rightJp" type="joinpoint" tooltip="Returns the node that comes after this node, or undefined if there is none"/>		
 		<attribute name="astIsInstance" type="boolean">
 			<parameter name="className" type="String" />
 		</attribute>

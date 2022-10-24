@@ -854,6 +854,16 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
+    public AJoinPoint getLeftJpImpl() {
+        return getNode().getLeft().map(CxxJoinpoints::create).orElse(null);
+    }
+
+    @Override
+    public AJoinPoint getRightJpImpl() {
+        return getNode().getRight().map(CxxJoinpoints::create).orElse(null);
+    }
+
+    @Override
     public AJoinPoint childImpl(Integer index) {
         return getNode().getChildren().stream()
                 // return getChildrenPrivate().stream()

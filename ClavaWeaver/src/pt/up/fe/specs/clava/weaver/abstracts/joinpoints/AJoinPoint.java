@@ -828,6 +828,8 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("child(Integer index)");
         attributes.add("siblingsLeft");
         attributes.add("siblingsRight");
+        attributes.add("leftJp");
+        attributes.add("rightJp");
         attributes.add("astIsInstance(String className)");
         attributes.add("hasNode(Object nodeOrJp)");
         attributes.add("chain");
@@ -1853,6 +1855,52 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "siblingsRight", e);
+        }
+    }
+
+    /**
+     * Returns the node that came before this node, or undefined if there is none
+     */
+    public abstract AJoinPoint getLeftJpImpl();
+
+    /**
+     * Returns the node that came before this node, or undefined if there is none
+     */
+    public final Object getLeftJp() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "leftJp", Optional.empty());
+        	}
+        	AJoinPoint result = this.getLeftJpImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "leftJp", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "leftJp", e);
+        }
+    }
+
+    /**
+     * Returns the node that comes after this node, or undefined if there is none
+     */
+    public abstract AJoinPoint getRightJpImpl();
+
+    /**
+     * Returns the node that comes after this node, or undefined if there is none
+     */
+    public final Object getRightJp() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "rightJp", Optional.empty());
+        	}
+        	AJoinPoint result = this.getRightJpImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "rightJp", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "rightJp", e);
         }
     }
 

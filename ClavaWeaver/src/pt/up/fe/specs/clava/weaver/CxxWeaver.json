@@ -546,6 +546,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -594,6 +603,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -1618,6 +1636,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -1666,6 +1693,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -2853,6 +2889,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -2901,6 +2946,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -4080,6 +4134,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -4128,6 +4191,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -5331,6 +5403,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -5379,6 +5460,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -6492,6 +6582,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -6540,6 +6639,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -7638,6 +7746,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -7686,6 +7803,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -8823,6 +8949,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -8871,6 +9006,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -10232,6 +10376,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -10280,6 +10433,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -11307,6 +11469,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -11355,6 +11526,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -12652,6 +12832,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -12700,6 +12889,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -13975,6 +14173,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -14023,6 +14230,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -15185,6 +15401,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -15233,6 +15458,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -16390,6 +16624,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -16438,6 +16681,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -17638,6 +17890,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -17686,6 +17947,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -19182,6 +19452,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -19230,6 +19509,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -20392,6 +20680,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -20440,6 +20737,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -21695,6 +22001,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -21743,6 +22058,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -22854,6 +23178,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -22902,6 +23235,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -23916,6 +24258,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -23964,6 +24315,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -24999,6 +25359,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -25047,6 +25416,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -26320,6 +26698,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -26368,6 +26755,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -27550,6 +27946,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -27598,6 +28003,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -28629,6 +29043,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -28677,6 +29100,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -29800,6 +30232,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -29848,6 +30289,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -30939,6 +31389,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -30987,6 +31446,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -32198,6 +32666,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -32246,6 +32723,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -33338,6 +33824,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -33386,6 +33881,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -34408,6 +34912,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -34456,6 +34969,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -35587,6 +36109,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -35635,6 +36166,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -36885,6 +37425,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -36933,6 +37482,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -38065,6 +38623,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -38113,6 +38680,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -39186,6 +39762,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -39234,6 +39819,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -40358,6 +40952,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -40406,6 +41009,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -41459,6 +42071,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -41507,6 +42128,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -42704,6 +43334,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -42752,6 +43391,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -44104,6 +44752,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -44152,6 +44809,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -45411,6 +46077,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -45459,6 +46134,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -47035,6 +47719,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -47083,6 +47776,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -48231,6 +48933,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -48279,6 +48990,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -49408,6 +50128,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -49456,6 +50185,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -50641,6 +51379,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -50689,6 +51436,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -51746,6 +52502,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -51794,6 +52559,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -52846,6 +53620,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -52894,6 +53677,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -53966,6 +54758,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -54014,6 +54815,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -55138,6 +55948,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -55186,6 +56005,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -56386,6 +57214,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -56434,6 +57271,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -57813,6 +58659,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -57861,6 +58716,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -58979,6 +59843,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -59027,6 +59900,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -60238,6 +61120,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -60286,6 +61177,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -61688,6 +62588,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -61736,6 +62645,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -63175,6 +64093,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -63223,6 +64150,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -64314,6 +65250,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -64362,6 +65307,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -65606,6 +66560,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -65654,6 +66617,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -67025,6 +67997,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -67073,6 +68054,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -68188,6 +69178,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -68236,6 +69235,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -69543,6 +70551,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -69591,6 +70608,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -70885,6 +71911,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -70933,6 +71968,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -72088,6 +73132,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -72136,6 +73189,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -73303,6 +74365,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -73351,6 +74422,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -74779,6 +75859,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -74827,6 +75916,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -76002,6 +77100,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -76050,6 +77157,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -77141,6 +78257,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -77189,6 +78314,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -78366,6 +79500,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -78414,6 +79557,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -79740,6 +80892,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -79788,6 +80949,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -80953,6 +82123,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -81001,6 +82180,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -82084,6 +83272,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -82132,6 +83329,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -83272,6 +84478,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -83320,6 +84535,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -84546,6 +85770,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -84594,6 +85827,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -85889,6 +87131,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -85937,6 +87188,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -87120,6 +88380,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -87168,6 +88437,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -88237,6 +89515,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -88285,6 +89572,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -89468,6 +90764,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -89516,6 +90821,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -90649,6 +91963,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -90697,6 +92020,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -91787,6 +93119,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -91835,6 +93176,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -93074,6 +94424,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -93122,6 +94481,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -94296,6 +95664,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -94344,6 +95721,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -95452,6 +96838,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -95500,6 +96895,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -96688,6 +98092,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -96736,6 +98149,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -97932,6 +99354,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -97980,6 +99411,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -99295,6 +100735,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -99343,6 +100792,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -100566,6 +102024,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -100614,6 +102081,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
@@ -101670,6 +103146,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "Returns the node that came before this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "leftJp"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "The starting line of the current node in the original code",
 						"children": [
 									{
@@ -101718,6 +103203,15 @@
 									{
 										"type": "pragma[]",
 										"name": "pragmas"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "Returns the node that comes after this node, or undefined if there is none",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "rightJp"
 									}]
 					},
 					{
