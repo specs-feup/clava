@@ -526,6 +526,7 @@ void functionThatCallFunctionWith2DimPointer(void *os) {
 }
 
 int functionWithCallWithStatic() {
+   printf("a");
    int decomp_25;
    {
       functionWithStatic_static_x++;

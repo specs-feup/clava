@@ -212,5 +212,6 @@ int functionWithStatic() {
 }
 
 int functionWithCallWithStatic() {
+	printf("a");
 	return functionWithStatic();
 }
