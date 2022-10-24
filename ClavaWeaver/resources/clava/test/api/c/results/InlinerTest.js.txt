@@ -524,3 +524,13 @@ void functionThatCallFunctionWith2DimPointer(void *os) {
       }
    }
 }
+
+int functionWithCallWithStatic() {
+   int decomp_25;
+   {
+      functionWithStatic_static_x++;
+      decomp_25 = functionWithStatic_static_x;
+   }
+   
+   return decomp_25;
+}

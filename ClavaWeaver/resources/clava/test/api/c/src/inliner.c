@@ -201,3 +201,16 @@ void functionWith2DimPointer(void * os, int n, int m)
 void functionThatCallFunctionWith2DimPointer(void * os) {
 	functionWith2DimPointer(os, 10, 20);
 }
+
+int x;
+
+
+int functionWithStatic() {
+	static int x = 10;
+	x++;
+	return x;
+}
+
+int functionWithCallWithStatic() {
+	return functionWithStatic();
+}

@@ -120,6 +120,15 @@ println(
   Query.search("function", "functionThatCallFunctionWith2DimPointer").first()
     .code
 );
+
+new Inliner().inlineFunctionTree(
+  Query.search("function", "functionWithCallWithStatic").first()
+);
+
+println(Query.search("function", "functionWithCallWithStatic").first().code);
+
+//println(Query.search("function", "functionWithStatic").first().ast);
+
 /*
 println(
   Query.search("function", "functionWith2DimPointer").search("exprStmt").first()
