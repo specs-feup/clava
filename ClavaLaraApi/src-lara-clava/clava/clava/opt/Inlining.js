@@ -15,6 +15,8 @@ function Inlining(options) {
   // TODO: Maybe passing a NormalizeToSubset instance is preferrable, but that means making NormalizeToSubset a class instead of a function
   NormalizeToSubset(Query.root(), _options["normalizeToSubset"]);
 
+  // println("Code after: " + Query.root().code);
+
   const inliner = new Inliner(_options["inliner"]);
 
   for (const $function of Query.search("function", {

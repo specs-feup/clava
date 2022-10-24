@@ -189,14 +189,21 @@ class Inliner {
       // simply rename the param to the name of the arg
       //if ($param.type.isArray || $param.type.isPointer) {
       if ($param.type.isArray) {
+        /*
         if (!$arg.instanceOf("varref")) {
           throw new Error(
-            "Expected varref, found '" + $arg.joinPointType + "'"
+            `Expected varref, found '${$arg.joinPointType}' (${$arg.code}) at ${$arg.location}`
           );
         }
+        */
 
         // If varref, has decl
-        newVariableMap.set($param.name, $arg.decl);
+        //newVariableMap.set($param.name, $arg.decl);
+
+        // If varref, use expression as-is, with some parenthesis around to guarantee order of operations
+        //const $adaptedArg = this.#adaptArg($arg);
+        println("PAREN: " + ClavaJoinPoints.parenthesis($arg).code);
+        newVariableMap.set($param.name, ClavaJoinPoints.parenthesis($arg));
       } else {
         const newName = this.#getInlinedVarName($param.name);
         const $varDecl = ClavaJoinPoints.varDeclNoInit(newName, $param.type);
@@ -220,6 +227,7 @@ class Inliner {
       newVariableMap.set($varDecl.name, $newDecl);
     }
 
+    // Replace decl stmts of old vardecls with vardecls of new names (params are not included)
     const $newNodes = $function.body.copy();
     for (const $declStmt of $newNodes.descendants("declStmt")) {
       const $varDecl = $declStmt.decls[0];
@@ -227,7 +235,7 @@ class Inliner {
         continue;
       }
 
-      $declStmt.replaceWith(
+      const $newVarDecl = $declStmt.replaceWith(
         ClavaJoinPoints.declStmt(newVariableMap.get($varDecl.name))
       );
     }
@@ -263,6 +271,7 @@ class Inliner {
         continue;
       }
 
+      // Verify if there is a mapping
       const newVar = newVariableMap.get($varDecl.name);
       if (newVar === undefined) {
         throw new Error(
@@ -274,9 +283,31 @@ class Inliner {
         );
       }
 
+      // If vardecl, map contains reference to old vardecl, create a varref from the new vardecl
+      if (newVar.instanceOf("vardecl")) {
+        //const newVarDecl = newVariableMap.get(newVar.name);
+        //$varRef.replaceWith(ClavaJoinPoints.varRef(newVarDecl));
+        $varRef.replaceWith(ClavaJoinPoints.varRef(newVar));
+      }
+      // If expression, simply replace varref with the expression
+      else if (newVar.instanceOf("expression")) {
+        $varRef.replaceWith(newVar);
+      } else {
+        throw new Error(
+          "Not defined when newVar is of type '" + newVar.joinPointType + "'"
+        );
+      }
+
+      // Replace old varrefs with new expressions
+
+      // Take into account the case where the node is a vardecl, and when it is an expression
+
+      // Create varref from vardecl, to create a connection between decl and expr
+      /*
       $varRef.replaceWith(
         ClavaJoinPoints.varRef(newVariableMap.get($varRef.decl.name))
       );
+      */
     }
 
     // Update varrefs inside types
@@ -493,6 +524,38 @@ class Inliner {
       return $varRef;
     }
 
-    return ClavaJoinPoints.varRef(newVariableMap.get($varRef.decl.name));
+    // If vardecl, create a new varref
+    if (newVar.instanceOf("vardecl")) {
+      return ClavaJoinPoints.varRef(newVar);
+    }
+
+    // If expression, return expression
+    if (newVar.instanceOf("expression")) {
+      return newVar;
+    }
+
+    throw new Error(
+      "Case not supported, newVar of type '" + newVar.joinPointType + "'"
+    );
+
+    //return ClavaJoinPoints.varRef(newVariableMap.get($varRef.decl.name));
   }
+
+  /*
+  #adaptArg($arg) {
+    println("Type of arg: " + $arg.joinPointType);
+
+    if ($arg.instanceOf("unaryOp")) {
+      // If address of, can be removed
+      println("ARG OP: " + $arg.operator);
+      return $arg;
+    }
+
+    if ($arg.instanceOf("parenExpr")) {
+      return ClavaJoinPoints.parenthesis(this.#adaptArg($arg.subExpr));
+    }
+
+    return $arg;
+  }
+  */
 }
