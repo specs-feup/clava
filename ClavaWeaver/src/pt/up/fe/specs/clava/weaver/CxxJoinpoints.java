@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.weaver;
 import java.util.List;
 import java.util.Optional;
 
+import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.cilk.CilkFor;
 import pt.up.fe.specs.clava.ast.cilk.CilkSpawn;
@@ -381,6 +382,11 @@ public class CxxJoinpoints {
     }
 
     public static ACxxWeaverJoinPoint create(ClavaNode node) {
+        if (node == null) {
+            ClavaLog.info("CxxJoinpoints: tried to create join point from null node, returning undefined");
+            return null;
+        }
+
         return JOINPOINT_FACTORY.apply(node);
     }
 

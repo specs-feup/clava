@@ -58,6 +58,7 @@ edge [fontsize=10]
 "omp"->"pragma"
 "op"->"expression"
 "param"->"vardecl"
+"parenExpr"->"expression"
 "parenType"->"type"
 "pointerType"->"type"
 "pragma"->"joinpoint"

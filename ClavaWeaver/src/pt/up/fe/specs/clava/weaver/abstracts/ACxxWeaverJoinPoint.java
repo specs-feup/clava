@@ -587,7 +587,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public Boolean getHasTypeImpl() {
         ClavaNode node = getNode();
-
         return node instanceof Typable;
     }
 

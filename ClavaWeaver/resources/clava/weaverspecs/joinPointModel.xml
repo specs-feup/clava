@@ -305,7 +305,10 @@
 
 	<!-- CAST -->
 	<joinpoint class="cast" extends="expression"/>	
-
+	
+	
+	<!-- PAREN EXPR -->
+	<joinpoint class="parenExpr" extends="expression"/>	
 
 	<!-- ArrayAccess -->
 	<joinpoint class="arrayAccess" extends="expression">	

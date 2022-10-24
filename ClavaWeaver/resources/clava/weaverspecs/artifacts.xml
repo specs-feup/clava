@@ -605,6 +605,11 @@
 		<attribute name="toType" type="type" />
 		<attribute name="subExpr" type="expression" />
 	</artifact>
+	
+	<!-- PAREN EXPR -->
+	<artifact class="parenExpr">
+		<attribute name="subExpr" type="expression" tooltip="Returns the expression inside this parenthesis expression"/> 
+	</artifact>
 
 	<!-- ARRAY ACCESS -->
 	<artifact class="arrayAccess">
