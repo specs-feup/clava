@@ -296,9 +296,15 @@ class Inliner {
       }
       // If expression, simply replace varref with the expression
       else if (newVar.instanceOf("expression")) {
-        const $adaptedVar = $varRef.parent.instanceOf("parenExpr")
-          ? newVar
-          : ClavaJoinPoints.parenthesis(newVar);
+        const $adaptedVar =
+          // If varref, does not need parenthesis
+          newVar.instanceOf("varref")
+            ? newVar
+            : // For other expressions, if parent is already a parenthesis, does not need to add a new one
+            $varRef.parent.instanceOf("parenExpr")
+            ? newVar
+            : // Add parenthesis
+              ClavaJoinPoints.parenthesis(newVar);
 
         $varRef.replaceWith($adaptedVar);
       } else {
