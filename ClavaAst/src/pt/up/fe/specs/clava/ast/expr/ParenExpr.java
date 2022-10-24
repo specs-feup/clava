@@ -18,6 +18,7 @@ import java.util.Collection;
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.type.Type;
 
 /**
  * Represents a parethesized expression.
@@ -38,6 +39,11 @@ public class ParenExpr extends Expr {
     @Override
     public String getCode() {
         return "(" + getSubExpr().getCode() + ")";
+    }
+
+    @Override
+    public Type getType() {
+        return getSubExpr().getType();
     }
 
 }
