@@ -81,8 +81,7 @@ public class CTest {
 
     @Test
     public void testDijkstra() {
-        newTester().setCheckWovenCodeSyntax(false).test("Dijkstra.lara", "dijkstra.c");
-        newTester().setCheckWovenCodeSyntax(false).test("Dijkstra.lara", "dijkstra.c");
+        newTester().setCheckWovenCodeSyntax(false).checkExpectedOutput(false).test("Dijkstra.lara", "dijkstra.c");
     }
 
     @Test
@@ -124,7 +123,7 @@ public class CTest {
 
     @Test
     public void testInlineNasFt() {
-        newTester().test("InlineNasFt.lara", "inline_nas_ft.c");
+        newTester().checkExpectedOutput(false).test("InlineNasFt.lara", "inline_nas_ft.c");
     }
 
     @Test

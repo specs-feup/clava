@@ -47,7 +47,7 @@ public class CxxBenchTest {
 
     @Test
     public void testLoicEx2() {
-        newTester().setCheckWovenCodeSyntax(false).test("LoicEx2.lara", "loic_ex2.cpp");
+        newTester().setCheckWovenCodeSyntax(false).checkExpectedOutput(false).test("LoicEx2.lara", "loic_ex2.cpp");
     }
 
     @Test

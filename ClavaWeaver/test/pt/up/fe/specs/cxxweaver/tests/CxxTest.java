@@ -155,7 +155,7 @@ public class CxxTest {
 
     @Test
     public void testParamType() {
-        newTester().test("ParamType.lara", "param_type.cpp");
+        newTester().checkExpectedOutput(false).test("ParamType.lara", "param_type.cpp");
     }
 
     @Test
@@ -303,7 +303,7 @@ public class CxxTest {
 
     @Test
     public void testFieldRef() {
-        newTester().test("FieldRef.lara", "fieldRef.cpp");
+        newTester().checkExpectedOutput(false).test("FieldRef.lara", "fieldRef.cpp");
     }
 
     @Test
