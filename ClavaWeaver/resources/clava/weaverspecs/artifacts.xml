@@ -97,6 +97,7 @@
 		</attribute>
 		<attribute name="isInsideLoopHeader" type="Boolean" tooltip="true, if the join point is inside a loop header (e.g., for, while)"/>
 		<attribute name="isInsideHeader" type="Boolean" tooltip = "true, if the join point is inside a header (e.g., if condition, for, while)"/>
+		<attribute name="isInSystemHeader" type="Boolean" tooltip = "true, if the join point is part of a system header file"/>
 		 <!--  
 		<attribute name="setUserField" type="Object">
 			<parameter name="fieldName" type="String" />

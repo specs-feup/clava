@@ -786,6 +786,7 @@ public abstract class APointerType extends AType {
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
         ASTPARENT("astParent"),
         USERFIELD("userField"),
         HASNODE("hasNode"),

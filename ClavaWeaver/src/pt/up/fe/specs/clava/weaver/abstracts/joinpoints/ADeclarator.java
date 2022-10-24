@@ -534,6 +534,7 @@ public abstract class ADeclarator extends ANamedDecl {
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
         ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),

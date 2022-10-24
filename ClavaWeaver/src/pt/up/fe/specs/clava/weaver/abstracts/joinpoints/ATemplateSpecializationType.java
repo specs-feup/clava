@@ -810,6 +810,7 @@ public abstract class ATemplateSpecializationType extends AType {
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
         ASTPARENT("astParent"),
         USERFIELD("userField"),
         HASNODE("hasNode"),

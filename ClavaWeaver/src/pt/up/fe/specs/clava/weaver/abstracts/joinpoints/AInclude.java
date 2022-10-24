@@ -501,6 +501,7 @@ public abstract class AInclude extends ADecl {
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
         ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),

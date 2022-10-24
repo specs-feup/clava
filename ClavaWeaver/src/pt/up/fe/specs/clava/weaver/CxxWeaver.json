@@ -425,6 +425,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -1511,6 +1520,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -2768,6 +2786,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -4009,6 +4036,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -5282,6 +5318,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -6461,6 +6506,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -7621,6 +7675,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -8824,6 +8887,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -10255,6 +10327,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -11344,6 +11425,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -12711,6 +12801,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -14052,6 +14151,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -15280,6 +15388,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -16499,6 +16616,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -17765,6 +17891,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -19331,6 +19466,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -20555,6 +20699,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -21880,6 +22033,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -23057,6 +23219,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -24133,6 +24304,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -25234,6 +25414,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -26577,6 +26766,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -27825,6 +28023,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -28918,6 +29125,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -30111,6 +30327,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -31264,6 +31489,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -32545,6 +32779,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -33703,6 +33946,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -34787,6 +35039,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -35984,6 +36245,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -37304,6 +37574,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -38502,6 +38781,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -39637,6 +39925,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -40831,6 +41128,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -41946,6 +42252,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -43209,6 +43524,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -44631,6 +44955,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -45952,6 +46285,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -47598,6 +47940,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -48812,6 +49163,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -50003,6 +50363,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -51258,6 +51627,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -52381,6 +52759,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -53495,6 +53882,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -54633,6 +55029,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -55823,6 +56228,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -57089,6 +57503,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -58538,6 +58961,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -59718,6 +60150,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -60995,6 +61436,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -62463,6 +62913,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -63972,6 +64431,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -65125,6 +65593,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -66435,6 +66912,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -67876,6 +68362,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -69053,6 +69548,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -70298,6 +70802,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -71555,6 +72068,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -72919,6 +73441,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -74136,6 +74667,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -75369,6 +75909,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -76867,6 +77416,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -78108,6 +78666,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -79261,6 +79828,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -80504,6 +81080,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -81900,6 +82485,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -83131,6 +83725,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -84276,6 +84879,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -85482,6 +86094,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -86774,6 +87395,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -88139,6 +88769,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -89388,6 +90027,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -90519,6 +91167,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -91772,6 +92429,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -92971,6 +93637,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -94123,6 +94798,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -95432,6 +96116,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -96672,6 +97365,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -97842,6 +98544,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -99096,6 +99807,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -100358,6 +101078,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{
@@ -101743,6 +102472,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -103032,6 +103770,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true, if the join point is inside a header (e.g., if condition, for, while)",
 						"children": [
 									{
@@ -104150,6 +104897,15 @@
 									{
 										"type": "Boolean",
 										"name": "isCilk"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true, if the join point is part of a system header file",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInSystemHeader"
 									}]
 					},
 					{

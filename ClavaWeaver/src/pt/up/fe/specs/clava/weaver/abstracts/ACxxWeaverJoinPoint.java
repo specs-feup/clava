@@ -1551,4 +1551,8 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         defInlineCommentsImpl(comment);
     }
 
+    @Override
+    public Boolean getIsInSystemHeaderImpl() {
+        return getNode().get(ClavaNode.IS_IN_SYSTEM_HEADER);
+    }
 }

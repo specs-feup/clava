@@ -507,6 +507,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
         ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),

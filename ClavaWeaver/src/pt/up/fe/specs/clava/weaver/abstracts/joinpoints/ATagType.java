@@ -744,6 +744,7 @@ public abstract class ATagType extends AType {
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
         ASTPARENT("astParent"),
         USERFIELD("userField"),
         HASNODE("hasNode"),

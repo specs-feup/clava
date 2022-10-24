@@ -972,6 +972,7 @@ public abstract class ABody extends AScope {
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
+        ISINSYSTEMHEADER("isInSystemHeader"),
         ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
