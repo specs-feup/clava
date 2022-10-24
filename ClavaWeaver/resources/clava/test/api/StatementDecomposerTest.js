@@ -1,13 +1,12 @@
-import clava.code.StatementDecomposer;
-import weaver.Query;
+laraImport("clava.code.StatementDecomposer");
+laraImport("weaver.Query");
 
-aspectdef StatementDecomposerTest
-//setDebug();
-	var decomposer = new StatementDecomposer();
+setDebug();
+var decomposer = new StatementDecomposer();
 
-	for(var $stmt of Query.search("function", "foo").search("statement")) {
-		decomposer.decomposeAndReplace($stmt);
-		/*
+for (var $stmt of Query.search("function", "foo").search("statement")) {
+  decomposer.decomposeAndReplace($stmt);
+  /*
 		var decomposedStmts = decomposer.decompose($stmt);
 		
 		if(decomposedStmts.length > 0) {
@@ -17,7 +16,6 @@ aspectdef StatementDecomposerTest
 			}		
 		}
 		*/
-	}
-	
-	println(Query.search("function", "foo").first().code);
-end
+}
+
+println(Query.search("function", "foo").first().code);
