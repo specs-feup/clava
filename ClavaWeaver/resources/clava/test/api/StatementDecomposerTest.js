@@ -1,7 +1,7 @@
 laraImport("clava.code.StatementDecomposer");
 laraImport("weaver.Query");
 
-setDebug();
+//setDebug();
 var decomposer = new StatementDecomposer();
 
 for (var $stmt of Query.search("function", "foo").search("statement")) {

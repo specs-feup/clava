@@ -163,7 +163,7 @@ public class CxxApiTest {
 
     @Test
     public void testStatementDecomposer() {
-        newTester().test("StatementDecomposerTest.lara", "stmt_decomposer.cpp");
+        newTester().test("StatementDecomposerTest.js", "stmt_decomposer.cpp");
     }
 
     @Test

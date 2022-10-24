@@ -157,4 +157,9 @@ public class CApiTest {
     public void testInliner() {
         newTester().test("InlinerTest.js", "inliner.c");
     }
+
+    @Test
+    public void testStatementDecomposer() {
+        newTester().test("StatementDecomposerTest.js", "stmt_decomposer.c");
+    }
 }

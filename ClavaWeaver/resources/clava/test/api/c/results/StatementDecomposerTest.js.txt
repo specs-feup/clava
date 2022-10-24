@@ -1,0 +1,29 @@
+int foo(int a) {
+   int b = 1;
+   int c = 2;
+   switch (a) {
+      // In C, declarations are now allowed after labels
+      case 0:
+      ;
+      int decomp_0;
+      decomp_0 = b * 2;
+      int decomp_1;
+      decomp_1 = a + decomp_0;
+      c = decomp_1;
+      break;
+      default:
+      ;
+      c = 0;
+   }
+   some_label:
+   ;
+   int decomp_2;
+   decomp_2 = a * b;
+   int decomp_3;
+   decomp_3 = decomp_2 / 2;
+   c = decomp_3;
+   int decomp_4;
+   decomp_4 = a + c;
+   
+   return decomp_4;
+}
