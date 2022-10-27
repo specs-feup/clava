@@ -118,7 +118,7 @@ public class CTest {
             return;
         }
 
-        newTester().test("InlineNasLu.lara", "inline_nas_lu.c");
+        newTester().checkExpectedOutput(false).test("InlineNasLu.lara", "inline_nas_lu.c");
     }
 
     @Test
