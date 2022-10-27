@@ -255,7 +255,7 @@ class Inliner {
 
       // If global variable, will not be in the variable map
       // TODO: Add extern to the target Translation Unit, in case it is not already declared
-      if ($varDecl.isGlobal) {
+      if ($varDecl !== undefined && $varDecl.isGlobal) {
         /*
         println(
           "Add global declaration before this function: " +
@@ -382,8 +382,8 @@ class Inliner {
       //  continue;
       //}
 
-      // HACK: manually adding printf and fprintf as a special case
-      if ($newCall.name == "printf" || $newCall.name == "fprintf") {
+      // Ignore functions that are part of the system headers
+      if ($newCall.function.isInSystemHeader) {
         continue;
       }
 
@@ -511,7 +511,7 @@ class Inliner {
 
     // If global variable, will not be in the variable map
     // TODO: Add extern to the target Translation Unit, in case it is not already declared
-    if ($varDecl.isGlobal) {
+    if ($varDecl !== undefined && $varDecl.isGlobal) {
       /*
       println(
         "Add global declaration before this function: " +
