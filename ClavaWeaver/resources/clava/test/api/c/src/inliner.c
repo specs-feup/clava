@@ -213,5 +213,7 @@ int functionWithStatic() {
 
 int functionWithCallWithStatic() {
 	printf("a");
+    char size[16];
+	sprintf( size, "%15.0lf", 4000.0 );
 	return functionWithStatic();
 }
