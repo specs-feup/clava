@@ -164,8 +164,8 @@ public abstract class ABoolLiteral extends ALiteral {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aLiteral.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aLiteral.detachImpl();
     }
 
     /**

@@ -149,8 +149,8 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aTypedefNameDecl.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aTypedefNameDecl.detachImpl();
     }
 
     /**

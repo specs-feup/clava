@@ -354,8 +354,8 @@ public abstract class AVariableArrayType extends AArrayType {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aArrayType.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aArrayType.detachImpl();
     }
 
     /**

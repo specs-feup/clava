@@ -36,7 +36,7 @@
 
 
 	<!-- Removes node associated to the joinpoint from the AST -->
-	<action name="detach" tooltip="Removes the node associated to this joinpoint from the AST"/>
+	<action name="detach" return="joinpoint" tooltip="Removes the node associated to this joinpoint from the AST"/>
 
 	<!-- Sets the type of a node, if it has a type -->
 	<action name="setType" tooltip="Sets the type of a node, if it has a type">

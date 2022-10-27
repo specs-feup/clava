@@ -502,8 +502,8 @@ public abstract class ACilkFor extends ALoop {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aLoop.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aLoop.detachImpl();
     }
 
     /**

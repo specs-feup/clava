@@ -292,22 +292,23 @@ public abstract class AJoinPoint extends JoinPoint {
     /**
      * Removes the node associated to this joinpoint from the AST
      */
-    public void detachImpl() {
+    public AJoinPoint detachImpl() {
         throw new UnsupportedOperationException(get_class()+": Action detach not implemented ");
     }
 
     /**
      * Removes the node associated to this joinpoint from the AST
      */
-    public final void detach() {
+    public final AJoinPoint detach() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "detach", this, Optional.empty());
         	}
-        	this.detachImpl();
+        	AJoinPoint result = this.detachImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "detach", this, Optional.empty());
+        		eventTrigger().triggerAction(Stage.END, "detach", this, Optional.ofNullable(result));
         	}
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "detach", e);
         }

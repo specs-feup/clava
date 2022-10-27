@@ -480,8 +480,8 @@ public abstract class AMethod extends AFunction {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aFunction.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aFunction.detachImpl();
     }
 
     /**

@@ -483,8 +483,8 @@ public abstract class AVardecl extends ADeclarator {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aDeclarator.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aDeclarator.detachImpl();
     }
 
     /**

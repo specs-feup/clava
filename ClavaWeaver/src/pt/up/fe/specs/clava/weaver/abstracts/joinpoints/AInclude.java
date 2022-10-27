@@ -162,8 +162,8 @@ public abstract class AInclude extends ADecl {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aDecl.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aDecl.detachImpl();
     }
 
     /**

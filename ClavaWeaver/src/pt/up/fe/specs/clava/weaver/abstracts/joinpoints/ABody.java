@@ -432,8 +432,8 @@ public abstract class ABody extends AScope {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aScope.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aScope.detachImpl();
     }
 
     /**

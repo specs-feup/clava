@@ -306,8 +306,8 @@ public abstract class ACilkSpawn extends ACall {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aCall.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aCall.detachImpl();
     }
 
     /**

@@ -792,8 +792,8 @@ public abstract class ACall extends AExpression {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aExpression.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aExpression.detachImpl();
     }
 
     /**

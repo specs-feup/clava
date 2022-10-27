@@ -161,8 +161,8 @@ public abstract class ATag extends APragma {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aPragma.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aPragma.detachImpl();
     }
 
     /**

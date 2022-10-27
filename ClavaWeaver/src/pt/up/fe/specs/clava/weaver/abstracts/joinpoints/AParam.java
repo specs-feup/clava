@@ -229,8 +229,8 @@ public abstract class AParam extends AVardecl {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aVardecl.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aVardecl.detachImpl();
     }
 
     /**

@@ -337,8 +337,8 @@ public abstract class AArrayType extends AType {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aType.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aType.detachImpl();
     }
 
     /**

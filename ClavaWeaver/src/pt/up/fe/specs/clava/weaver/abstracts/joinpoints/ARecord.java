@@ -328,8 +328,8 @@ public abstract class ARecord extends ANamedDecl {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aNamedDecl.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aNamedDecl.detachImpl();
     }
 
     /**

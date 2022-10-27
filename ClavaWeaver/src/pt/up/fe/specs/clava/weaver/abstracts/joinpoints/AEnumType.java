@@ -322,8 +322,8 @@ public abstract class AEnumType extends ATagType {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aTagType.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aTagType.detachImpl();
     }
 
     /**

@@ -552,23 +552,23 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public void detachImpl() {
+    public AJoinPoint detachImpl() {
         ClavaNode node = getNode();
 
         if (!node.hasParent()) {
             SpecsLogs.msgInfo(
                     "action detach: could not find a parent in joinpoint of type '" + getJoinPointType() + "'");
-            return;
+            return this;
         }
 
-        // If node is wrapped, detach wrapper
+        // If node is wrapped, detach wrapper before detaching itself
         ClavaNode parentNode = node.getParent();
         if (parentNode.isWrapper()) {
             parentNode.detach();
-            return;
         }
 
         node.detach();
+        return this;
     }
 
     @Override

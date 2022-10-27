@@ -287,8 +287,8 @@ public abstract class ATernaryOp extends AOp {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aOp.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aOp.detachImpl();
     }
 
     /**

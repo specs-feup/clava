@@ -262,8 +262,8 @@ public abstract class AGotoStmt extends AStatement {
      * Removes the node associated to this joinpoint from the AST
      */
     @Override
-    public void detachImpl() {
-        this.aStatement.detachImpl();
+    public AJoinPoint detachImpl() {
+        return this.aStatement.detachImpl();
     }
 
     /**
