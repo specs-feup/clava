@@ -230,10 +230,6 @@ class StatementDecomposer {
       $newCall
     );
 
-    // Since a new declaration is being introduced, it might not be always safe to add it at any place
-    // (e.g. in C, declarations are not supported after labels)
-    // Add temporary variable and use inside a scope
-
     return new DecomposeResult(
       [...precedingStmts, tempVarDecl.stmt, tempVarAssign.stmt],
       ClavaJoinPoints.varRef(tempVarDecl),

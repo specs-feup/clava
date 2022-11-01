@@ -87,17 +87,6 @@ class Inliner {
         continue;
       }
 
-      // If any of the parameters of the function is an array, return.
-      // Not supported yet
-      /*
-      if ($callee.params.filter(($param) => $param.type.isArray).length > 0) {
-        debug(
-          `Inliner: could not inline call to function ${$callee.name}@${$callee.location} since array parameters are not supported`
-        );
-        continue;
-      }
-      */
-
       this.inlineFunctionTree($callee, _visited);
       this.inline($exprStmt);
     }
@@ -107,36 +96,6 @@ class Inliner {
 
   #getInitStmts($varDecl, $expr) {
     const type = $varDecl.type;
-
-    // If array, how to deal with this?
-    /*
-    if (type.isArray) {
-      const arrayDims = $varDecl.type.arrayDims;
-      const lastDim = arrayDims[arrayDims.length - 1];
-
-      if (lastDim < 0) {
-        throw new Error(
-          "Could not inline code with static array '" +
-            $varDecl.code +
-            "' whose last dimension is unknown (" +
-            lastDim +
-            ")"
-        );
-      }
-
-      println("Vardecl: " + $varDecl.code);
-      println("Vardecl type: " + $varDecl.type);
-      println("Array dims: " + $varDecl.type.arrayDims);
-      println("Array size: " + $varDecl.type.arraySize);
-      
-      const $assign = ClavaJoinPoints.assign(
-        ClavaJoinPoints.varRef($varDecl),
-        $expr
-      );
-
-      return [ClavaJoinPoints.exprStmt($assign)];
-    }
-    */
 
     const $assign = ClavaJoinPoints.assign(
       ClavaJoinPoints.varRef($varDecl),
@@ -189,25 +148,6 @@ class Inliner {
       // simply rename the param to the name of the arg
       //if ($param.type.isArray || $param.type.isPointer) {
       if ($param.type.isArray) {
-        /*
-        if (!$arg.instanceOf("varref")) {
-          throw new Error(
-            `Expected varref, found '${$arg.joinPointType}' (${$arg.code}) at ${$arg.location}`
-          );
-        }
-        */
-
-        // If varref, has decl
-        //newVariableMap.set($param.name, $arg.decl);
-
-        // If varref, use expression as-is, with some parenthesis around to guarantee order of operations
-        //const $adaptedArg = this.#adaptArg($arg);
-        /*
-        const $adaptedArg = $arg.instanceOf("parenExpr")
-          ? $arg
-          : ClavaJoinPoints.parenthesis($arg);
-*/
-        //newVariableMap.set($param.name, $adaptedArg);
         newVariableMap.set($param.name, $arg);
       } else {
         const newName = this.#getInlinedVarName($param.name);
@@ -254,15 +194,7 @@ class Inliner {
       const $varDecl = $varRef.decl;
 
       // If global variable, will not be in the variable map
-      // TODO: Add extern to the target Translation Unit, in case it is not already declared
       if ($varDecl !== undefined && $varDecl.isGlobal) {
-        /*
-        println(
-          "Add global declaration before this function: " +
-            $call.ancestor("function").id
-        );
-        */
-
         // Copy vardecl to work over it
         const $varDeclNoInit = $varDecl.copy();
 
@@ -290,8 +222,6 @@ class Inliner {
 
       // If vardecl, map contains reference to old vardecl, create a varref from the new vardecl
       if (newVar.instanceOf("vardecl")) {
-        //const newVarDecl = newVariableMap.get(newVar.name);
-        //$varRef.replaceWith(ClavaJoinPoints.varRef(newVarDecl));
         $varRef.replaceWith(ClavaJoinPoints.varRef(newVar));
       }
       // If expression, simply replace varref with the expression
@@ -312,17 +242,6 @@ class Inliner {
           "Not defined when newVar is of type '" + newVar.joinPointType + "'"
         );
       }
-
-      // Replace old varrefs with new expressions
-
-      // Take into account the case where the node is a vardecl, and when it is an expression
-
-      // Create varref from vardecl, to create a connection between decl and expr
-      /*
-      $varRef.replaceWith(
-        ClavaJoinPoints.varRef(newVariableMap.get($varRef.decl.name))
-      );
-      */
     }
 
     // Update varrefs inside types
@@ -377,11 +296,6 @@ class Inliner {
     const $parentFunction = $call.ancestor("function");
     const addedDeclarations = new StringSet();
     for (const $newCall of Query.searchFrom($newNodes, "call")) {
-      // Ignore if only declaration exists (include should be added instead)
-      //if (!$newCall.function.isImplementation) {
-      //  continue;
-      //}
-
       // Ignore functions that are part of the system headers
       if ($newCall.function.isInSystemHeader) {
         continue;
@@ -414,14 +328,10 @@ class Inliner {
   }
 
   #updateType(type, $call, newVariableMap) {
-    // Default result
-    // TODO: Replace with just the node, can always test if it is itself
     // Since any type node can be shared, any change must be made in copies
-    //let result = type;
 
     // If pointer type, check pointee
     if (type.instanceOf("pointerType")) {
-      //println("UPDATE POINTER TYPE");
       const original = type.pointee;
       const updated = this.#updateType(original, $call, newVariableMap);
 
@@ -433,7 +343,6 @@ class Inliner {
     }
 
     if (type.instanceOf("parenType")) {
-      //println("UPDATE PAREN TYPE");
       const original = type.innerType;
       const updated = this.#updateType(original, $call, newVariableMap);
 
@@ -457,16 +366,11 @@ class Inliner {
         hasChanges = true;
       }
 
-      //println("UPDATE VARIABLE ARRAY TYPE");
       let $sizeExprCopy = type.sizeExpr.copy();
 
       // Update any children of sizeExpr
-      //println("UPDATE SIZEEXPR CHILDREN");
-      //println("SIZE EXPR COPY: " + $sizeExprCopy.ast);
       for (const $varRef of Query.searchFrom($sizeExprCopy, "varref")) {
-        //println("VARREF: " + $varRef.code);
         const $newVarref = this.#updateVarRef($varRef, $call, newVariableMap);
-        //println("HAS CHANGED: " + ($newVarref !== $varRef));
         if ($newVarref !== $varRef) {
           hasChanges = true;
           $varRef.replaceWith($newVarref);
@@ -474,7 +378,6 @@ class Inliner {
       }
 
       // Update top expr, if needed
-      //println("UPDATE TOP EXPR");
       const $newVarref = this.#updateVarRef(
         $sizeExprCopy,
         $call,
@@ -483,13 +386,9 @@ class Inliner {
 
       if ($newVarref !== $sizeExprCopy) {
         hasChanges = true;
-        //$sizeExprCopy = $newVarref;
       }
-      //println("HAS CHANGES: " + hasChanges);
+
       if (hasChanges) {
-        //println("CHANGES");
-        //println("OLD: " + type.sizeExpr.code);
-        //println("NEW: " + $sizeExprCopy.code);
         const newType = type.copy();
         newType.elementType = updated;
         newType.sizeExpr = $newVarref;
@@ -503,22 +402,10 @@ class Inliner {
   }
 
   #updateVarRef($varRef, $call, newVariableMap) {
-    //if ($varRef.kind === "function_call") {
-    //  return $varRef;
-    //}
-
     const $varDecl = $varRef.decl;
 
     // If global variable, will not be in the variable map
-    // TODO: Add extern to the target Translation Unit, in case it is not already declared
     if ($varDecl !== undefined && $varDecl.isGlobal) {
-      /*
-      println(
-        "Add global declaration before this function: " +
-          $call.ancestor("function").id
-      );
-      */
-
       // Copy vardecl to work over it
       const $varDeclNoInit = $varDecl.copy();
 
@@ -552,25 +439,5 @@ class Inliner {
     throw new Error(
       "Case not supported, newVar of type '" + newVar.joinPointType + "'"
     );
-
-    //return ClavaJoinPoints.varRef(newVariableMap.get($varRef.decl.name));
   }
-
-  /*
-  #adaptArg($arg) {
-    println("Type of arg: " + $arg.joinPointType);
-
-    if ($arg.instanceOf("unaryOp")) {
-      // If address of, can be removed
-      println("ARG OP: " + $arg.operator);
-      return $arg;
-    }
-
-    if ($arg.instanceOf("parenExpr")) {
-      return ClavaJoinPoints.parenthesis(this.#adaptArg($arg.subExpr));
-    }
-
-    return $arg;
-  }
-  */
 }
