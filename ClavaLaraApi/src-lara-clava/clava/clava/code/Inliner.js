@@ -64,28 +64,13 @@ class Inliner {
     _visited.add($function.name);
 
     for (const $exprStmt of $function.descendants("exprStmt")) {
-      const $expr = $exprStmt.expr;
-      if (
-        !(
-          $expr.instanceOf("binaryOp") &&
-          $expr.isAssignment &&
-          $expr.right.instanceOf("call")
-        ) &&
-        !$expr.instanceOf("call")
-      ) {
+      const inlineData = this.checkInline($exprStmt);
+
+      if (inlineData === undefined) {
         continue;
       }
 
-      const $call = $expr.instanceOf("call") ? $expr : $expr.right;
-      const $callee = $call.definition;
-      if ($callee == undefined) {
-        continue;
-      }
-
-      // Ignore functions that are part of the system headers
-      if ($call.function.isInSystemHeader) {
-        continue;
-      }
+      const $callee = inlineData.$call.definition;
 
       this.inlineFunctionTree($callee, _visited);
       this.inline($exprStmt);
@@ -105,21 +90,117 @@ class Inliner {
     return [ClavaJoinPoints.exprStmt($assign)];
   }
 
-  inline($exprStmt) {
-    let $target;
-    let $call;
+  /**
+   *
+   * @param {$exprStmt} $exprStmt
+   * @return {object} an object with the properties below or undefined if this exprStmt cannot be inlined.
+   * Only exprStmt that are an isolated call, or that are an assignment with a single call
+   * in the right-hand side can be inlined.
+   *
+   * - type: a string with either the value 'call' or 'assign', indicating the type of inlining
+   * that can be applied to the given exprStmt.
+   * - $target: if the type is 'assign', contains the left-hand side of the assignment. Otherwise, is undefined.
+   * - $call: the call to be inlined
+   *
+   */
+  #extractInlineData($exprStmt) {
+    if (
+      $exprStmt.expr.instanceOf("binaryOp") &&
+      $exprStmt.expr.isAssignment &&
+      $exprStmt.expr.right.instanceOf("call")
+    ) {
+      return {
+        type: "assignment",
+        $target: $exprStmt.expr.left,
+        $call: $exprStmt.expr.right,
+      };
+    }
 
+    if ($exprStmt.expr.instanceOf("call")) {
+      return {
+        type: "call",
+        $target: undefined,
+        $call: $exprStmt.expr,
+      };
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Check if the given $exprStmt can be inlined or not. If it can, returns an object with information important for inlining,
+   * otherwise returns undefined.
+   *
+   * A call can be inline if the following rules apply:
+   * - The exprStmt is an isolated call, or an assignment with a single call in the right-hand side.
+   * - The call has a definition/implementation available.
+   * - The call is not a function that is part of the system headers.
+   *
+   * @param {$exprStmt} $exprStmt
+   * @return {object} an object with the properties below or undefined if this exprStmt cannot be inlined.
+   *
+   * - type: a string with either the value 'call' or 'assign', indicating the type of inlining
+   * that can be applied to the given exprStmt.
+   * - $target: if the type is 'assign', contains the left-hand side of the assignment. Otherwise, is undefined.
+   * - $call: the call to be inlined
+   *
+   */
+  checkInline($exprStmt) {
+    // Extract inline information
+    const inlineData = this.#extractInlineData($exprStmt);
+
+    if (inlineData === undefined) {
+      return undefined;
+    }
+
+    // Check if call has an implementation
+    if (!inlineData.$call.function.isImplementation) {
+      debug(
+        `Inliner: call '${inlineData.$call}' not inlined because implementation was not found`
+      );
+      return undefined;
+    }
+
+    // Ignore functions that are part of the system headers
+    if (inlineData.$call.function.isInSystemHeader) {
+      debug(
+        `Inliner: call '${inlineData.$call}' not inlined function belongs to a system header`
+      );
+      return undefined;
+    }
+
+    return inlineData;
+  }
+
+  inline($exprStmt) {
+    const inlineData = this.checkInline($exprStmt);
+
+    if (inlineData === undefined) {
+      return false;
+    }
+
+    this.#inlinePrivate($exprStmt, inlineData);
+    return true;
+  }
+
+  #inlinePrivate($exprStmt, inlineData) {
+    let $target = inlineData.$target;
+    let $call = inlineData.$call;
+    /*
     if ($exprStmt.expr.instanceOf("binaryOp") && $exprStmt.expr.isAssignment) {
       $target = $exprStmt.expr.left;
       $call = $exprStmt.expr.right;
+      isAssignment = true;
     } else if ($exprStmt.expr.instanceOf("call")) {
+      $target = undefined;
       $call = $exprStmt.expr;
+      isAssignment = false;
     }
 
     if (!$call.function.isImplementation) {
       return;
     }
-
+*/
     let args = $call.args;
     if (!Array.isArray(args)) {
       args = [args];
@@ -172,8 +253,11 @@ class Inliner {
       newVariableMap.set($varDecl.name, $newDecl);
     }
 
-    // Replace decl stmts of old vardecls with vardecls of new names (params are not included)
     const $newNodes = $function.body.copy();
+
+    this.#processBodyToInline($newNodes, newVariableMap, $call);
+    /*
+    // Replace decl stmts of old vardecls with vardecls of new names (params are not included)
     for (const $declStmt of $newNodes.descendants("declStmt")) {
       const $varDecl = $declStmt.decls[0];
       if (!$varDecl.instanceOf("vardecl")) {
@@ -184,85 +268,9 @@ class Inliner {
         ClavaJoinPoints.declStmt(newVariableMap.get($varDecl.name))
       );
     }
-
-    // Update varrefs
-    for (const $varRef of $newNodes.descendants("varref")) {
-      if ($varRef.kind === "function_call") {
-        continue;
-      }
-
-      const $varDecl = $varRef.decl;
-
-      // If global variable, will not be in the variable map
-      if ($varDecl !== undefined && $varDecl.isGlobal) {
-        // Copy vardecl to work over it
-        const $varDeclNoInit = $varDecl.copy();
-
-        // Remove initialization
-        $varDeclNoInit.removeInit(false);
-
-        // Change storage class to extern
-        $varDeclNoInit.storageClass = "extern";
-
-        $call.ancestor("function").insertBefore($varDeclNoInit);
-        continue;
-      }
-
-      // Verify if there is a mapping
-      const newVar = newVariableMap.get($varDecl.name);
-      if (newVar === undefined) {
-        throw new Error(
-          "Could not find variable " +
-            $varDecl.name +
-            "@" +
-            $varRef.location +
-            " in variable map"
-        );
-      }
-
-      // If vardecl, map contains reference to old vardecl, create a varref from the new vardecl
-      if (newVar.instanceOf("vardecl")) {
-        $varRef.replaceWith(ClavaJoinPoints.varRef(newVar));
-      }
-      // If expression, simply replace varref with the expression
-      else if (newVar.instanceOf("expression")) {
-        const $adaptedVar =
-          // If varref, does not need parenthesis
-          newVar.instanceOf("varref")
-            ? newVar
-            : // For other expressions, if parent is already a parenthesis, does not need to add a new one
-            $varRef.parent.instanceOf("parenExpr")
-            ? newVar
-            : // Add parenthesis
-              ClavaJoinPoints.parenthesis(newVar);
-
-        $varRef.replaceWith($adaptedVar);
-      } else {
-        throw new Error(
-          "Not defined when newVar is of type '" + newVar.joinPointType + "'"
-        );
-      }
-    }
-
-    // Update varrefs inside types
-    for (const $jp of $newNodes.descendants("joinpoint")) {
-      // If no type, ignore
-
-      if (!$jp.hasType) {
-        continue;
-      }
-
-      const type = $jp.type;
-
-      const updatedType = this.#updateType(type, $call, newVariableMap);
-
-      if (updatedType !== type) {
-        $jp.type = updatedType;
-      }
-    }
+    */
 
     // Remove/replace return statements
-
     if ($exprStmt.expr.instanceOf("binaryOp") && $exprStmt.expr.isAssignment) {
       for (const $returnStmt of $newNodes.descendants("returnStmt")) {
         if (
@@ -325,6 +333,121 @@ class Inliner {
     $exprStmt.replaceWith(inlinedScope);
 
     this.#variableIndex++;
+  }
+
+  #processBodyToInline($newNodes, newVariableMap, $call) {
+    this.#updateVarDecls($newNodes, newVariableMap);
+    this.#updateVarrefs($newNodes, newVariableMap, $call);
+    this.#updateVarrefsInTypes($newNodes, newVariableMap, $call);
+  }
+
+  #updateVarDecls($newNodes, newVariableMap) {
+    // Replace decl stmts of old vardecls with vardecls of new names (params are not included)
+    for (const $declStmt of $newNodes.descendants("declStmt")) {
+      const decls = $declStmt.decls;
+
+      /*
+      // Check that there is only one decl
+      if (decls.length != 0) {
+        throw new Error(
+          "Expected declStmt to have only 1 decl, it has " +
+            decls.length +
+            ". Ensure subset normalization was previously applied"
+        );
+      }
+      */
+
+      for (const $varDecl of decls) {
+        if (!$varDecl.instanceOf("vardecl")) {
+          continue;
+        }
+
+        // Replace decl
+        $declStmt.replaceWith(
+          ClavaJoinPoints.declStmt(newVariableMap.get($varDecl.name))
+        );
+      }
+    }
+  }
+
+  #updateVarrefs($newNodes, newVariableMap, $call) {
+    // Update varrefs
+    for (const $varRef of $newNodes.descendants("varref")) {
+      if ($varRef.kind === "function_call") {
+        continue;
+      }
+
+      const $varDecl = $varRef.decl;
+
+      // If global variable, will not be in the variable map
+      if ($varDecl !== undefined && $varDecl.isGlobal) {
+        // Copy vardecl to work over it
+        const $varDeclNoInit = $varDecl.copy();
+
+        // Remove initialization
+        $varDeclNoInit.removeInit(false);
+
+        // Change storage class to extern
+        $varDeclNoInit.storageClass = "extern";
+
+        $call.ancestor("function").insertBefore($varDeclNoInit);
+        continue;
+      }
+
+      // Verify if there is a mapping
+      const newVar = newVariableMap.get($varDecl.name);
+      if (newVar === undefined) {
+        throw new Error(
+          "Could not find variable " +
+            $varDecl.name +
+            "@" +
+            $varRef.location +
+            " in variable map"
+        );
+      }
+
+      // If vardecl, map contains reference to old vardecl, create a varref from the new vardecl
+      if (newVar.instanceOf("vardecl")) {
+        $varRef.replaceWith(ClavaJoinPoints.varRef(newVar));
+      }
+      // If expression, simply replace varref with the expression
+      else if (newVar.instanceOf("expression")) {
+        const $adaptedVar =
+          // If varref, does not need parenthesis
+          newVar.instanceOf("varref")
+            ? newVar
+            : // For other expressions, if parent is already a parenthesis, does not need to add a new one
+            $varRef.parent.instanceOf("parenExpr")
+            ? newVar
+            : // Add parenthesis
+              ClavaJoinPoints.parenthesis(newVar);
+
+        $varRef.replaceWith($adaptedVar);
+      } else {
+        throw new Error(
+          "Not defined when newVar is of type '" + newVar.joinPointType + "'"
+        );
+      }
+    }
+  }
+
+  #updateVarrefsInTypes($newNodes, newVariableMap, $call) {
+    // Update varrefs inside types
+    for (const $jp of $newNodes.descendants("joinpoint")) {
+      // If no type, ignore
+
+      if (!$jp.hasType) {
+        continue;
+      }
+
+      const type = $jp.type;
+
+      const updatedType = this.#updateType(type, $call, newVariableMap);
+
+      if (updatedType !== type) {
+        $jp.type = updatedType;
+      }
+    }
   }
 
   #updateType(type, $call, newVariableMap) {
