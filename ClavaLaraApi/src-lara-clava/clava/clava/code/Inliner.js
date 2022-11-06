@@ -186,21 +186,7 @@ class Inliner {
   #inlinePrivate($exprStmt, inlineData) {
     let $target = inlineData.$target;
     let $call = inlineData.$call;
-    /*
-    if ($exprStmt.expr.instanceOf("binaryOp") && $exprStmt.expr.isAssignment) {
-      $target = $exprStmt.expr.left;
-      $call = $exprStmt.expr.right;
-      isAssignment = true;
-    } else if ($exprStmt.expr.instanceOf("call")) {
-      $target = undefined;
-      $call = $exprStmt.expr;
-      isAssignment = false;
-    }
 
-    if (!$call.function.isImplementation) {
-      return;
-    }
-*/
     let args = $call.args;
     if (!Array.isArray(args)) {
       args = [args];
@@ -256,19 +242,6 @@ class Inliner {
     const $newNodes = $function.body.copy();
 
     this.#processBodyToInline($newNodes, newVariableMap, $call);
-    /*
-    // Replace decl stmts of old vardecls with vardecls of new names (params are not included)
-    for (const $declStmt of $newNodes.descendants("declStmt")) {
-      const $varDecl = $declStmt.decls[0];
-      if (!$varDecl.instanceOf("vardecl")) {
-        continue;
-      }
-
-      const $newVarDecl = $declStmt.replaceWith(
-        ClavaJoinPoints.declStmt(newVariableMap.get($varDecl.name))
-      );
-    }
-    */
 
     // Remove/replace return statements
     if ($exprStmt.expr.instanceOf("binaryOp") && $exprStmt.expr.isAssignment) {
@@ -345,17 +318,6 @@ class Inliner {
     // Replace decl stmts of old vardecls with vardecls of new names (params are not included)
     for (const $declStmt of $newNodes.descendants("declStmt")) {
       const decls = $declStmt.decls;
-
-      /*
-      // Check that there is only one decl
-      if (decls.length != 0) {
-        throw new Error(
-          "Expected declStmt to have only 1 decl, it has " +
-            decls.length +
-            ". Ensure subset normalization was previously applied"
-        );
-      }
-      */
 
       for (const $varDecl of decls) {
         if (!$varDecl.instanceOf("vardecl")) {
