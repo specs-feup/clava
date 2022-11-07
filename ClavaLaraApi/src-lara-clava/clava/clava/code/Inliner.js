@@ -73,7 +73,7 @@ class Inliner {
       const $callee = inlineData.$call.definition;
 
       this.inlineFunctionTree($callee, _visited);
-      this.inline($exprStmt);
+      this.#inlinePrivate($exprStmt, inlineData);
     }
 
     return true;
