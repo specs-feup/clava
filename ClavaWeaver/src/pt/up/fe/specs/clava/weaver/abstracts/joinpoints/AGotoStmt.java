@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.exception.ActionException;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -48,6 +49,39 @@ public abstract class AGotoStmt extends AStatement {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "label", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defLabelImpl(ALabelDecl value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def label with type ALabelDecl not implemented ");
+    }
+
+    /**
+     * sets the label of the goto
+     * @param label 
+     */
+    public void setLabelImpl(ALabelDecl label) {
+        throw new UnsupportedOperationException(get_class()+": Action setLabel not implemented ");
+    }
+
+    /**
+     * sets the label of the goto
+     * @param label 
+     */
+    public final void setLabel(ALabelDecl label) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setLabel", this, Optional.empty(), label);
+        	}
+        	this.setLabelImpl(label);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setLabel", this, Optional.empty(), label);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setLabel", e);
         }
     }
 
@@ -558,6 +592,13 @@ public abstract class AGotoStmt extends AStatement {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "label": {
+        	if(value instanceof ALabelDecl){
+        		this.defLabelImpl((ALabelDecl)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -585,6 +626,7 @@ public abstract class AGotoStmt extends AStatement {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aStatement.fillWithActions(actions);
+        actions.add("void setLabel(labelDecl)");
     }
 
     /**

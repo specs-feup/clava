@@ -506,11 +506,15 @@
 
 	<!-- GOTO -->
 	<artifact class="gotoStmt">
-		<attribute name="label" type="labelDecl" />
+		<attribute name="label" type="labelDecl">
+			<def/>
+		</attribute>
 	</artifact>
 	
 	<artifact class="labelStmt">
-		<attribute name="decl" type="labelDecl"/>
+		<attribute name="decl" type="labelDecl">
+			<def/>
+		</attribute>
 	</artifact>
 
 	<!-- STATEMENT -->

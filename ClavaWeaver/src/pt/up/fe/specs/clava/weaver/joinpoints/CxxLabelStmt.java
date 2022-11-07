@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.LabelDecl;
 import pt.up.fe.specs.clava.ast.stmt.LabelStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ALabelDecl;
@@ -31,6 +32,16 @@ public class CxxLabelStmt extends ALabelStmt {
     @Override
     public ALabelDecl getDeclImpl() {
         return CxxJoinpoints.create(labelStmt.getLabelDecl(), ALabelDecl.class);
+    }
+
+    @Override
+    public void defDeclImpl(ALabelDecl value) {
+        labelStmt.setLabelDecl((LabelDecl) value.getNode());
+    }
+
+    @Override
+    public void setDeclImpl(ALabelDecl label) {
+        defDeclImpl(label);
     }
 
     @Override

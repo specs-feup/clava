@@ -568,6 +568,16 @@
 	<action name="setElse" class="if" tooltip="sets the body of the else">
 		<parameter name="else" type="statement" />
 	</action>	
+
+	<!-- GOTO -->
+	<action name="setLabel" class="gotoStmt" tooltip="sets the label of the goto">
+		<parameter name="label" type="labelDecl" />
+	</action>
+
+	<!-- LABEL STMT -->
+	<action name="setDecl" class="labelStmt" tooltip="sets the label of the label statement">
+		<parameter name="label" type="labelDecl" />
+	</action>
 	
 	<!-- OMP -->
 	<action name="setKind" class="omp" tooltip="Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded">

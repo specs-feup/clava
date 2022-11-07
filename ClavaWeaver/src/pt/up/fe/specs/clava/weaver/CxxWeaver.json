@@ -49526,6 +49526,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "sets the label of the goto",
+						"children": [
+									{
+										"type": "void",
+										"name": "setLabel"
+									},
+									{
+										"type": "labelDecl",
+										"name": "label",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"children": [
 									{
 										"type": "void",
@@ -55393,6 +55407,20 @@
 						"type": "select",
 						"clazz": "cilkSpawn",
 						"alias": ""
+					},
+					{
+						"type": "action",
+						"tooltip": "sets the label of the label statement",
+						"children": [
+									{
+										"type": "void",
+										"name": "setDecl"
+									},
+									{
+										"type": "labelDecl",
+										"name": "label",
+										"defaultValue": ""
+									}]
 					},
 					{
 						"type": "action",

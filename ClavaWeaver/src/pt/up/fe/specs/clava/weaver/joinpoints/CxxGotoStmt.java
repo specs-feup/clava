@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.decl.LabelDecl;
 import pt.up.fe.specs.clava.ast.stmt.GotoStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AGotoStmt;
@@ -32,6 +33,16 @@ public class CxxGotoStmt extends AGotoStmt {
     @Override
     public ClavaNode getNode() {
         return gotoStmt;
+    }
+
+    @Override
+    public void defLabelImpl(ALabelDecl value) {
+        gotoStmt.setLabel((LabelDecl) value.getNode());
+    }
+
+    @Override
+    public void setLabelImpl(ALabelDecl label) {
+        defLabelImpl(label);
     }
 
     @Override
