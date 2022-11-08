@@ -7,7 +7,6 @@ int single_return(double n) {
 }
 
 int multiple_return(double n) {
-   __label__ __return_label;
    int __return_value;
    if(n < 0.01 && n > -0.01) {
       __return_value = 0;
@@ -25,7 +24,6 @@ int multiple_return(double n) {
 }
 
 int single_return_oob(double n) {
-   __label__ __return_label;
    int __return_value;
    if(n > 0.0) {
       __return_value = 1;
@@ -43,7 +41,6 @@ void no_return(double n) {
 }
 
 void earlyReturn(double n) {
-   __label__ __return_label;
    if(n / 16.0 > 1.0) {
       std::cout << "Greater than 16" << std::endl;
       goto __return_label;
