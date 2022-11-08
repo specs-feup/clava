@@ -1,0 +1,13 @@
+/**** File 'subset.cpp' ****/
+
+#include <string.h>
+void strcmpTest() {
+   int decomp_0;
+   decomp_0 = strcmp("a", "b");
+   bool decomp_1;
+   decomp_1 = decomp_0 == 0;
+   if(decomp_1) {
+   }
+}
+
+/**** End File ****/

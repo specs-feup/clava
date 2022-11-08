@@ -204,4 +204,9 @@ public class CxxApiTest {
                 .test("MpiScatterGatherTest.js", "mpi_scatter_gather.cpp", "mpi_scatter_gather.h");
     }
 
+    @Test
+    public void testSubset() {
+        newTester().test("SubsetTest.js", "subset.cpp");
+    }
+
 }
