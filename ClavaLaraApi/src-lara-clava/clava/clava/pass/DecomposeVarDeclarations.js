@@ -18,8 +18,8 @@ class DecomposeVarDeclarations extends Pass {
     return (
       $jp.instanceOf("vardecl") &&
       $jp.hasInit &&
+      $jp.initStyle === "cinit" &&
       !$jp.isGlobal && // Ignore global variables
-      //$jp.storageClass !== "static" &&
       !$jp.isInsideLoopHeader &&
       !$jp.type.instanceOf("arrayType")
     );
