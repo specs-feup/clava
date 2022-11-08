@@ -32,23 +32,28 @@ function ForToWhileStmt($forStmt, stepLabelSuffix) {
   // replace continues with gotos to the step statement for the new loop body
   const localContinues = [...ForToWhileStmt._findLocalContinue($forStmt.body)];
   let loopStepStatements;
+
+  const initStmt = $forStmt.init ?? ClavaJoinPoints.emptyStmt();
+  const condStmt = $forStmt.cond ?? ClavaJoinPoints.integerLiteral(1);
+  const stepStmt = $forStmt.step ?? ClavaJoinPoints.emptyStmt();
+
   if (localContinues.length > 0) {
     const $labelDecl = ClavaJoinPoints.labelDecl(
       `__for_loop_step_${stepLabelSuffix}`
     );
-    loopStepStatements = [ClavaJoinPoints.labelStmt($labelDecl), $forStmt.step];
+    loopStepStatements = [ClavaJoinPoints.labelStmt($labelDecl), stepStmt];
 
     for (const $continue of localContinues) {
       $continue.replaceWith(ClavaJoinPoints.gotoStmt($labelDecl));
     }
   } else {
-    loopStepStatements = [$forStmt.step];
+    loopStepStatements = [stepStmt];
   }
 
   const $scope = ClavaJoinPoints.scope([
-    $forStmt.init,
+    initStmt,
     ClavaJoinPoints.whileStmt(
-      $forStmt.cond,
+      condStmt,
       ClavaJoinPoints.scope([...$forStmt.scopeNodes, ...loopStepStatements])
     ),
   ]);
