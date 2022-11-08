@@ -155,7 +155,9 @@ public class CApiTest {
 
     @Test
     public void testInliner() {
-        newTester().test("InlinerTest.js", "inliner.c");
+        newTester()
+                // .setCheckWovenCodeSyntax(false)
+                .test("InlinerTest.js", "inliner.c");
     }
 
     @Test

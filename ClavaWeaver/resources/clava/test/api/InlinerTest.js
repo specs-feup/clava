@@ -127,6 +127,12 @@ new Inliner().inlineFunctionTree(
 
 println(Query.search("function", "functionWithCallWithStatic").first().code);
 
+new Inliner().inlineFunctionTree(
+  Query.search("function", "callsFunctionWithLabels").first()
+);
+
+println(Query.search("function", "callsFunctionWithLabels").first().code);
+
 //println(Query.search("function", "functionWithStatic").first().ast);
 
 /*

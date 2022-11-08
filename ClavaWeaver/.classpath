@@ -9,8 +9,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=CxxWeaver&amp;ivyXmlPath=ivy.xml&amp;confs=*"/>
-	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=ClavaWeaver&amp;ivyXmlPath=ivy.xml&amp;confs=*"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/LaraCommonLanguageApi"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/LaraFramework"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/LaraLoc"/>
@@ -31,5 +29,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ClangAstParser"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/LanguageSpecification"/>
 	<classpathentry kind="src" path="/ClavaHls"/>
+	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=ClavaWeaver&amp;ivyXmlPath=ivy.xml&amp;confs=*"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

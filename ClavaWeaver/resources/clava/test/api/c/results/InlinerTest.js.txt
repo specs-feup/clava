@@ -360,17 +360,16 @@ int inlineTest2() {
       int __inline_0_i;
       __inline_0_i = a;
       {
-         __label__ __return_label;
          int __inline_0___return_value;
          int __inline_0_decomp_8;
          __inline_0_decomp_8 = __inline_0_i == 0;
          if(__inline_0_decomp_8) {
             __inline_0___return_value = 1;
-            goto __return_label;
+            goto inliner_3___return_label;
          }
          __inline_0___return_value = 2;
-         goto __return_label;
-         __return_label:
+         goto inliner_3___return_label;
+         inliner_3___return_label:
          b = __inline_0___return_value;
       }
    }
@@ -379,17 +378,16 @@ int inlineTest2() {
       int __inline_1_i;
       __inline_1_i = a;
       {
-         __label__ __return_label;
          int __inline_1___return_value;
          int __inline_1_decomp_8;
          __inline_1_decomp_8 = __inline_1_i == 0;
          if(__inline_1_decomp_8) {
             __inline_1___return_value = 1;
-            goto __return_label;
+            goto inliner_0___return_label;
          }
          __inline_1___return_value = 2;
-         goto __return_label;
-         __return_label:
+         goto inliner_0___return_label;
+         inliner_0___return_label:
          b = __inline_1___return_value;
       }
    }
@@ -428,7 +426,6 @@ void functionThatCallsFunctionWithReturnButsDoesNotUseResult() {
       int __inline_0_a;
       __inline_0_a = 10;
       {
-         __label__ __return_label;
          int __inline_0___return_value;
          if(__inline_0_a) {
             __inline_0___return_value = 1;
@@ -536,4 +533,29 @@ int functionWithCallWithStatic() {
    }
    
    return decomp_25;
+}
+
+int callsFunctionWithLabels() {
+   int a;
+   a = 0;
+   {
+      int __inline_0_a;
+      __inline_0_a = 0;
+      goto inliner_11_a_label;
+      __inline_0_a = __inline_0_a + 20;
+      inliner_11_a_label:
+      __inline_0_a = __inline_0_a + 10;
+      a = __inline_0_a;
+   }
+   {
+      int __inline_1_a;
+      __inline_1_a = 0;
+      goto inliner_5_a_label;
+      __inline_1_a = __inline_1_a + 20;
+      inliner_5_a_label:
+      __inline_1_a = __inline_1_a + 10;
+      a = __inline_1_a;
+   }
+   
+   return a;
 }

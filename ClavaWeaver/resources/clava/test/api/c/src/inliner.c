@@ -217,3 +217,25 @@ int functionWithCallWithStatic() {
 	sprintf( size, "%15.0lf", 4000.0 );
 	return functionWithStatic();
 }
+
+
+int functionWithLabel() {
+	int a = 0;
+	
+	goto a_label;
+	a += 20;
+	
+	a_label:
+		a += 10;
+	
+	return a;
+}
+
+int callsFunctionWithLabels() {
+	int a = 0;
+	
+	a = functionWithLabel();
+	a = functionWithLabel();
+	
+	return a;
+}
