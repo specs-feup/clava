@@ -419,7 +419,7 @@
 	<artifact class="vardecl" default="name">
 		<attribute name="hasInit" type="Boolean" tooltip="true, if vardecl has an initialization value" />
 		<attribute name="init" type="expression" tooltip="If vardecl has an initialization value, returns an expression with that value"/>
-		<attribute name="initStyle" type="InitializationStyle" tooltip="The initialization style of this vardecl"/>
+		<attribute name="initStyle" type="String" tooltip="The initialization style of this vardecl, which can be no_init, cinit, callinit, listinit"/>
 		<attribute name="isParam" type="Boolean" tooltip="true, if vardecl is a function parameter" />
 		<attribute name="storageClass" type="String" tooltip="Storage class specifier, which can be none, extern, static, __private_extern__, auto, register">
 			<def/>
@@ -871,13 +871,13 @@
 		<value name="EQ"/>		
 		<value name="NE"/>
 	</enum>
-	
+	<!--
 	<enum name="InitializationStyle">	
 		<value name="NO_INIT"/>
 		<value name="CINIT"/>
 		<value name="CALL_INIT"/>
 		<value name="LIST_INIT"/>
 	</enum>
-
+   -->
 
 </artifacts>

@@ -69087,10 +69087,10 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The initialization style of this vardecl",
+						"tooltip": "The initialization style of this vardecl, which can be no_init, cinit, callinit, listinit",
 						"children": [
 									{
-										"type": "InitializationStyle",
+										"type": "String",
 										"name": "initStyle"
 									}]
 					},
@@ -100617,10 +100617,10 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The initialization style of this vardecl",
+						"tooltip": "The initialization style of this vardecl, which can be no_init, cinit, callinit, listinit",
 						"children": [
 									{
-										"type": "InitializationStyle",
+										"type": "String",
 										"name": "initStyle"
 									}]
 					},
@@ -105720,28 +105720,6 @@
 					{
 						"string": "null",
 						"value": "NE"
-					}]
-		},
-		{
-			"type": "enum",
-			"name": "InitializationStyle"
-			,
-			"children": [
-					{
-						"string": "null",
-						"value": "CALL_INIT"
-					},
-					{
-						"string": "null",
-						"value": "CINIT"
-					},
-					{
-						"string": "null",
-						"value": "LIST_INIT"
-					},
-					{
-						"string": "null",
-						"value": "NO_INIT"
 					}]
 		}]
 }

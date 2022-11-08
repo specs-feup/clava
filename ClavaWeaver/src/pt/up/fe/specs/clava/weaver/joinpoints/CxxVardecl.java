@@ -23,7 +23,6 @@ import pt.up.fe.specs.clava.weaver.CxxWeaver;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVardecl;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AVarref;
-import pt.up.fe.specs.clava.weaver.enums.InitializationStyle;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.util.SpecsCollections;
 
@@ -120,8 +119,9 @@ public class CxxVardecl extends AVardecl {
     }
 
     @Override
-    public InitializationStyle getInitStyleImpl() {
-        return InitializationStyle.valueOf(varDecl.get(VarDecl.INIT_STYLE).name());
+    public String getInitStyleImpl() {
+        return varDecl.get(VarDecl.INIT_STYLE).getString();
+        // return InitializationStyle.valueOf(varDecl.get(VarDecl.INIT_STYLE).name());
     }
 
     @Override

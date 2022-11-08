@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import pt.up.fe.specs.clava.weaver.enums.InitializationStyle;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
@@ -77,19 +76,19 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
-     * The initialization style of this vardecl
+     * The initialization style of this vardecl, which can be no_init, cinit, callinit, listinit
      */
-    public abstract InitializationStyle getInitStyleImpl();
+    public abstract String getInitStyleImpl();
 
     /**
-     * The initialization style of this vardecl
+     * The initialization style of this vardecl, which can be no_init, cinit, callinit, listinit
      */
     public final Object getInitStyle() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "initStyle", Optional.empty());
         	}
-        	InitializationStyle result = this.getInitStyleImpl();
+        	String result = this.getInitStyleImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "initStyle", Optional.ofNullable(result));
         	}
