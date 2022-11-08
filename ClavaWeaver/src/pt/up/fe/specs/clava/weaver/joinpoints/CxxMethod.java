@@ -46,7 +46,7 @@ public class CxxMethod extends AMethod {
     }
 
     /**
-     * TODO: CxxFunction already overrides this method, this sould not be necessary. Change the WeaverGenerator so that
+     * TODO: CxxFunction already overrides this method, this should not be necessary. Change the WeaverGenerator so that
      * this is not required
      */
     @Override
