@@ -5,8 +5,12 @@ laraImport("clava.ClavaJoinPoints");
 laraImport("lara.Strings");
 
 class SingleReturnFunction extends Pass {
-  constructor() {
+  #useLocalLabel;
+
+  constructor(useLocalLabel = false) {
     super("SingleReturnFunction");
+
+    this.#useLocalLabel = useLocalLabel;
   }
 
   _apply_impl($jp) {
@@ -64,7 +68,9 @@ class SingleReturnFunction extends Pass {
     }
 
     // Local label declaration must appear at the beginning of the block
-    $body.insertBegin($label);
+    if (this.#useLocalLabel) {
+      $body.insertBegin($label);
+    }
 
     return this.#new_result($jp, true);
   }
