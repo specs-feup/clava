@@ -42,6 +42,10 @@ public class GotoStmt extends Stmt {
         return get(LABEL);
     }
 
+    public void setLabel(LabelDecl labelDecl) {
+        set(LABEL, labelDecl);
+    }
+
     @Override
     public String getCode() {
         return "goto " + getLabel().getDeclName() + ";" + ln();

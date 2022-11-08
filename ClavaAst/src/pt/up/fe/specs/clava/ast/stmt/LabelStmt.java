@@ -43,6 +43,10 @@ public class LabelStmt extends Stmt {
         return get(LABEL);
     }
 
+    public void setLabelDecl(LabelDecl labelDecl) {
+        set(LABEL, labelDecl);
+    }
+
     public Optional<Stmt> getSubStmt() {
         return ClavaNodes.nextNode(this).map(node -> (Stmt) node);
     }
