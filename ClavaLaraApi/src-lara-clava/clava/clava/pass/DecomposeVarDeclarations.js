@@ -16,12 +16,12 @@ class DecomposeVarDeclarations extends Pass {
 
   matchJoinpoint($jp) {
     return (
-      $jp.instanceOf("vardecl") &&
-      $jp.hasInit &&
-      $jp.initStyle === "cinit" &&
+      $jp.instanceOf("vardecl") && // Must be a variable declaration
+      $jp.hasInit && // Must have initialization
+      $jp.initStyle === "cinit" && // Only C-style initializations
       !$jp.isGlobal && // Ignore global variables
-      !$jp.isInsideLoopHeader &&
-      !$jp.type.instanceOf("arrayType")
+      !$jp.isInsideHeader && // Ignore if inside any header (e.g. if, switch, loop...)
+      !$jp.type.instanceOf("arrayType") // Ignore if array
     );
   }
 
