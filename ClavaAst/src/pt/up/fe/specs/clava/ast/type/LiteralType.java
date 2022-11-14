@@ -39,4 +39,9 @@ public class LiteralType extends Type implements LiteralNode {
         // return getLiteralCode() + " " + name;
     }
 
+    @Override
+    public boolean isAuto() {
+        return getLiteralCode().equals("auto");
+    }
+
 }
