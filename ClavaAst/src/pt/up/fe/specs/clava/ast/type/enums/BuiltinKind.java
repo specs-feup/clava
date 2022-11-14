@@ -22,6 +22,7 @@ import java.util.function.Function;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
 import pt.up.fe.specs.clava.ast.extra.data.Language;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 public enum BuiltinKind {
     OCLImage1dRO,
@@ -248,13 +249,32 @@ public enum BuiltinKind {
      */
     private static final Map<BuiltinKind, String> BUILTIN_CODE;
     static {
+        // Some of the built-in types:
+        // https://android.googlesource.com/platform/prebuilts/clang/darwin-x86/sdk/3.5/+/refs/heads/master/include/clang/AST/BuiltinTypes.def
+
         BUILTIN_CODE = new HashMap<>();
+
+        // Invert literal kinds
+        for (var entry : LITERAL_KINDS.entrySet()) {
+            // Skip bool and half, they have their own rules
+            if (entry.getValue() == BuiltinKind.Bool || entry.getValue() == BuiltinKind.Half) {
+                continue;
+            }
+
+            BUILTIN_CODE.put(entry.getValue(), entry.getKey());
+        }
+
+        // Manually add certain cases
+        BUILTIN_CODE.put(Char_S, "char");
+
+        /*
         BUILTIN_CODE.put(Void, "void");
         BUILTIN_CODE.put(Int, "int");
         BUILTIN_CODE.put(Long, "long");
         BUILTIN_CODE.put(LongLong, "long long");
         BUILTIN_CODE.put(Float, "float");
         BUILTIN_CODE.put(Double, "double");
+        */
     }
 
     /**
@@ -312,8 +332,8 @@ public enum BuiltinKind {
         case Bool:
             return getCodeBool(sourceNode);
         default:
-            return null;
-        // throw new RuntimeException("Case not defined:" + this);
+            // return null;
+            throw new NotImplementedException(this);
         }
     }
 
