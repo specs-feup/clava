@@ -1,13 +1,29 @@
 /**** File 'subset.cpp' ****/
 
 #include <string.h>
+#include <fstream>
+
 void strcmpTest() {
-   int decomp_0;
-   decomp_0 = strcmp("a", "b");
-   bool decomp_1;
-   decomp_1 = decomp_0 == 0;
-   if(decomp_1) {
+   int decomp_1;
+   decomp_1 = strcmp("a", "b");
+   bool decomp_2;
+   decomp_2 = decomp_1 == 0;
+   if(decomp_2) {
+      
+      return;
    }
 }
+
+void fstreamTest(char const *fn) {
+   std::fstream f(fn, std::fstream::in);
+   bool decomp_0;
+   decomp_0 = f.good();
+   while(decomp_0) {
+      
+      return;
+      decomp_0 = f.good();
+   }
+}
+
 
 /**** End File ****/
