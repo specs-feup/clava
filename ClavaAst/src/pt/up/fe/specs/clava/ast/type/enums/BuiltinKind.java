@@ -266,6 +266,7 @@ public enum BuiltinKind {
 
         // Manually add certain cases
         BUILTIN_CODE.put(Char_S, "char");
+        BUILTIN_CODE.put(WChar_U, "wchar_t");
 
         /*
         BUILTIN_CODE.put(Void, "void");
@@ -331,10 +332,32 @@ public enum BuiltinKind {
         switch (this) {
         case Bool:
             return getCodeBool(sourceNode);
+        case Half:
+            return getCodeHalf(sourceNode);
         default:
             // return null;
             throw new NotImplementedException(this);
         }
+    }
+
+    private String getCodeHalf(ClavaNode sourceNode) {
+        if (sourceNode == null) {
+            return "__fp16";
+        }
+
+        // Get translation unit
+        TranslationUnit tunit = sourceNode.getAncestorTry(TranslationUnit.class).orElse(null);
+        if (tunit == null) {
+            return "__fp16";
+        }
+
+        // If OpenCL, return half
+        if (tunit.get(TranslationUnit.LANGUAGE).get(Language.OPEN_CL)) {
+            return "half";
+        }
+
+        // By default, return __fp16
+        return "__fp16";
     }
 
     private String getCodeBool(ClavaNode sourceNode) {
