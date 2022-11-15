@@ -222,7 +222,8 @@ class StatementDecomposer {
     const succeedingStmts = argResults.flatMap((res) => res.succeedingStmts);
 
     const newArgs = argResults.map((res) => res.$resultExpr);
-    const $newCall = ClavaJoinPoints.call($call.function, ...newArgs);
+    const $newCall = this.#copyCall($call, newArgs);
+    //const $newCall = ClavaJoinPoints.call($call.function, ...newArgs);
     const tempVarname = this.#newTempVarname();
     const tempVarDecl = ClavaJoinPoints.varDeclNoInit(tempVarname, $call.type);
     const tempVarAssign = ClavaJoinPoints.assign(
@@ -235,6 +236,25 @@ class StatementDecomposer {
       ClavaJoinPoints.varRef(tempVarDecl),
       succeedingStmts
     );
+  }
+
+  #copyCall($call, newArgs) {
+    // Instance method
+    if ($call.instanceOf("memberCall")) {
+      // Copy node
+      const $newCall = $call.copy();
+
+      // Update args
+      // TODO: use a kind of .setArgs that replaces all
+      for (let i = 0; i < newArgs.length; i++) {
+        $newCall.setArg(i, newArgs[i]);
+      }
+
+      return $newCall;
+    }
+
+    // Default
+    return ClavaJoinPoints.call($call.function, ...newArgs);
   }
 
   decomposeBinaryOp($binaryOp) {
