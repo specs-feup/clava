@@ -13,8 +13,11 @@ class SimplifyReturnStmts extends Pass {
   _apply_impl($jp) {
     let appliedPass = false;
     for (const $returnStmt of this.#findStmts($jp)) {
-      appliedPass = true;
-      this.#transform($returnStmt);
+      const transformed = this.#transform($returnStmt);
+      // If any change, mark as applied
+      if (transformed) {
+        appliedPass = true;
+      }
     }
 
     return new PassResult(this.name, {
@@ -28,8 +31,17 @@ class SimplifyReturnStmts extends Pass {
     return Query.searchFromInclusive($jp, "returnStmt");
   }
 
+  /**
+   *
+   * @param {$returnStmt} $returnStmt
+   * @returns true if there were changes, false otherwise
+   */
   #transform($returnStmt) {
     const decomposeResult = this.#statementDecomposer.decompose($returnStmt);
+
+    if (decomposeResult.length === 0) {
+      return false;
+    }
 
     // Returns a list of stmts, replace with current return
     for (const stmt of decomposeResult) {
@@ -37,5 +49,7 @@ class SimplifyReturnStmts extends Pass {
     }
 
     $returnStmt.detach();
+
+    return true;
   }
 }
