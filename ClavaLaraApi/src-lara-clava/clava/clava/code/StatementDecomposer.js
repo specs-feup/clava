@@ -225,7 +225,14 @@ class StatementDecomposer {
     const $newCall = this.#copyCall($call, newArgs);
     //const $newCall = ClavaJoinPoints.call($call.function, ...newArgs);
     const tempVarname = this.#newTempVarname();
-    const tempVarDecl = ClavaJoinPoints.varDeclNoInit(tempVarname, $call.type);
+
+    // Desugaring type, to avoid possible problems of code generation of more complex types
+    // E.g. for vector.size(), currently is generating code without the qualifier
+    const tempVarDecl = ClavaJoinPoints.varDeclNoInit(
+      tempVarname,
+      $call.type.desugarAll
+    );
+
     const tempVarAssign = ClavaJoinPoints.assign(
       ClavaJoinPoints.varRef(tempVarDecl),
       $newCall
