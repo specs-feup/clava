@@ -114,7 +114,18 @@ public abstract class NamedDecl extends Decl {
      * @return
      */
     public String getTypelessCode() {
+        // var declName = getDeclName();
+
+        // return getCurrentQualifiedPrefix().map(prefix -> "prefix::" + declName).orElse(declName);
+
+        // return getCurrentQualifiedName();
+
         return getDeclName();
+    }
+
+    public Optional<String> getCurrentQualifiedPrefix() {
+        // Use current node as source
+        return getCurrentQualifiedPrefix(this);
     }
 
     /**
@@ -123,7 +134,7 @@ public abstract class NamedDecl extends Decl {
      * <p>
      * For instance, if Decl has the qualified prefix a::b, and is inside the namespace a, returns b.
      */
-    public Optional<String> getCurrentQualifiedPrefix() {
+    public Optional<String> getCurrentQualifiedPrefix(ClavaNode sourceNode) {
 
         // Get namespace
         String namespace = getNamespace().orElse(null);
@@ -136,7 +147,7 @@ public abstract class NamedDecl extends Decl {
         List<String> namespaceElements = new ArrayList<>(Arrays.asList(namespace.split("::")));
 
         // Get namespace chain for this node
-        List<ClavaNode> ancestors = this.getAncestors(Arrays.asList(NamespaceDecl.class, TagDecl.class));
+        List<ClavaNode> ancestors = sourceNode.getAncestors(Arrays.asList(NamespaceDecl.class, TagDecl.class));
 
         int prefixElementsToRemove = 0;
 

@@ -69,18 +69,45 @@ public class ElaboratedType extends TypeWithKeyword {
             code += " ";
         }
 
-        String qualifier = getQualifier();
-        code += qualifier + getNamedType().getCode(sourceNode, name);
+        var namedType = getNamedType();
 
+        String qualifier = namedType.hasQualifier() ? "" : getQualifier();
+        var namedTypeCode = namedType.getCode(sourceNode, name);
+        code += qualifier + namedTypeCode;
+        // code += getNamedType().getCode(sourceNode, name);
+        // System.out.println("---- BEGIN ----");
+        // System.out.println("Named type class: " + getNamedType().getClass());
+        // System.out.println("Named type class desugared: " + getNamedType().desugarAll().getClass());
+        // System.out.println("Named type as string: " + getNamedType().get(TYPE_AS_STRING));
+        // System.out.println("Named type code simple: " + getNamedType().getCode());
+        // System.out.println("Elaborated as string: " + get(TYPE_AS_STRING));
+        // // System.out.println("Qualifier: " + getQualifier());
+        // System.out.println("Elaborated code: " + code);
+        // System.out.println("---- END ----");
+        // System.out.println("Type as string 2: " + get(TYPE_AS_STRING));
+        // System.out.println("named type class: " + getNamedType().getClass());
+        // System.out.println("Named type code: " + getNamedType().getCode(sourceNode, name));
+        // System.out.println("Code: " + code);
         return code;
     }
 
     /**
      * Takes into account if TemplateArguments where changed.
      * 
+     * @param namedTypeCode
+     * 
      * @return
      */
     public String getQualifier() {
+        // If code already has qualifier, do not use qualifier
+        // Consider only until a template appears
+        // var templateIndexBegin = namedTypeCode.indexOf('<');
+        // if (templateIndexBegin != -1) {
+        // if (namedTypeCode.substring(0, templateIndexBegin).contains("::")) {
+        // return "";
+        // }
+        // }
+
         String qualifier = get(QUALIFIER);
         if (!hasUpdatedTemplateArgTypes()) {
             return qualifier;

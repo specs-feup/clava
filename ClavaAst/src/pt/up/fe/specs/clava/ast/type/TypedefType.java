@@ -59,10 +59,19 @@ public class TypedefType extends Type {
 
     @Override
     public String getCode(ClavaNode sourceNode, String name) {
-
         String type = get(DECL).getTypelessCode();
 
+        // Inside getCode(), resolve qualified name. "Absolute" namespace can be used
+        // This cannot be done... there are cases such as ElaboratedType that calls
+        // getNamedType().getCode(), and in some cases the type does not have qualifier
+        // (e.g. TemplateSpecializationType) but needs one
+        // String type = get(DECL).getCurrentQualifiedName();
         return name == null ? type : type + " " + name;
     }
+
+    // @Override
+    // public boolean hasQualifier() {
+    // return true;
+    // }
 
 }

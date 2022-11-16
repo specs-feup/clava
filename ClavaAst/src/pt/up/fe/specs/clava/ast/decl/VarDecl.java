@@ -125,10 +125,14 @@ public class VarDecl extends DeclaratorDecl {
 
         // Type.getCode() accepts null if no name
         declName = declName.isEmpty() ? null : declName;
-
+        // System.out.println("DECL NAME: " + declName);
         code.append(getType().getCode(this, declName));
         code.append(getInitializationCode());
-
+        // System.out.println("Type: " + getType());
+        // System.out.println("VARDECL CODE: " + getType().getCode(this, declName));
+        // System.out.println("Type: " + getType());
+        // System.out.println("Type code: " + getType().getCode(this, declName));
+        // System.out.println("VARDECL CODE: " + code);
         return code.toString();
     }
 
@@ -140,6 +144,7 @@ public class VarDecl extends DeclaratorDecl {
     @Override
     public String getTypelessCode() {
         return getDeclNameCode() + getInitializationCode();
+        // return getDeclNameCode() + getInitializationCode();
     }
 
     public String getInitializationCode() {

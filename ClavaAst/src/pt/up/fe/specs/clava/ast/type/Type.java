@@ -628,4 +628,12 @@ public abstract class Type extends ClavaNode {
         return desugaredType.getBitwidth(node);
     }
 
+    /**
+     * 
+     * @return true if calling .getCode() already introduces a qualifier, false otherwise
+     */
+    public boolean hasQualifier() {
+        return false;
+    }
+
 }

@@ -374,6 +374,7 @@ public class FunctionDecl extends DeclaratorDecl implements NodeWithScope {
     public String getTypelessCode() {
         List<String> codeElements = new ArrayList<>();
 
+        // codeElements.add(getCurrentQualifiedName() + "(" + getParametersCode() + ")");
         codeElements.add(getDeclName() + "(" + getParametersCode() + ")");
 
         var codeAfterParams = getCodeAfterParams();
