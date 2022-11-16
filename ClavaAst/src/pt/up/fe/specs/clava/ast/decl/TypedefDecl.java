@@ -80,9 +80,9 @@ public class TypedefDecl extends TypedefNameDecl {
 
     }
 
-    @Override
-    public String getTypelessCode() {
-        return getDeclName();
-    }
+    // @Override
+    // public String getTypelessCode() {
+    // return getDeclName();
+    // }
 
 }
