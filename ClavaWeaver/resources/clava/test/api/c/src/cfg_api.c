@@ -1,5 +1,5 @@
 int foo() {
-	int i;
+   int i;
    int k;
    int h;
    int m;
@@ -16,7 +16,7 @@ int foo() {
       
 	}
 	int abc;
-   abc = 0;
+    abc = 0;
 	if(0 != 0) {
 		{
          
@@ -87,5 +87,13 @@ int foo() {
          int argrghr;
       }
    }
-	
+   
+   if(1) {
+	   return 10;
+	   // After return
+   }	
+
+   betweenFor = 0;   
+   
+   return 20;
 }
