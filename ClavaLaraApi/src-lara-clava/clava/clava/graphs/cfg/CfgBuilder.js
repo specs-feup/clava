@@ -309,6 +309,11 @@ class CfgBuilder {
         this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
       }
 
+      // RETURN NODE
+      if (nodeType === CfgNodeType.RETURN) {
+        this.#addEdge(node, this.#endNode, CfgEdgeType.UNCONDITIONAL);
+      }
+
       // SCOPE_NODEs
       if (
         nodeType === CfgNodeType.SCOPE ||
@@ -385,6 +390,27 @@ class CfgBuilder {
         node,
         (incoming, outgoing) => new CfgEdge(incoming.data().type)
       );
+    }
+
+    // Remove nodes that have no incoming edge and are not start
+    for (const node of this.#graph.nodes()) {
+      // Only nodes that are not start
+      if (node.data().type === CfgNodeType.START) {
+        continue;
+      }
+
+      // Ignore nodes with incoming edges
+      if (node.incomers().length > 0) {
+        continue;
+      }
+
+      // Remove node
+      debug(
+        "[CfgBuilder] Removing statement that is not executed (e.g. is after a return): " +
+          node.stmts
+      );
+
+      Graphs.removeNode(this.#graph, node);
     }
   }
 

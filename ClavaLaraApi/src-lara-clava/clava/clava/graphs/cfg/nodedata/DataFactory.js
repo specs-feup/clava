@@ -5,6 +5,7 @@ laraImport("clava.graphs.cfg.nodedata.ScopeNodeData");
 laraImport("clava.graphs.cfg.nodedata.LoopData");
 laraImport("clava.graphs.cfg.nodedata.HeaderData");
 laraImport("clava.graphs.cfg.nodedata.IfData");
+laraImport("clava.graphs.cfg.nodedata.ReturnData");
 
 class DataFactory {
   #entryPoint;
@@ -31,6 +32,8 @@ class DataFactory {
         return new IfData($stmt, id);
       case CfgNodeType.LOOP:
         return new LoopData($stmt, id);
+      case CfgNodeType.RETURN:
+        return new ReturnData($stmt, id);
       default:
         return new CfgNodeData(cfgNodeType, $stmt, id);
     }

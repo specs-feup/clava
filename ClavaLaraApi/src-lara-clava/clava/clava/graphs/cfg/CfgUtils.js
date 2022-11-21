@@ -25,6 +25,11 @@ class CfgUtils {
       return CfgNodeType.LOOP;
     }
 
+    // Return stmt
+    if ($stmt.instanceOf("returnStmt")) {
+      return CfgNodeType.RETURN;
+    }
+
     // Stmt is part of loop header
     if ($stmt.isInsideLoopHeader) {
       const $loop = $stmt.parent;
@@ -46,41 +51,6 @@ class CfgUtils {
       }
     }
 
-    // For stmt
-    //if($stmt.instanceOf("loop") && $stmt.kind === "for") {
-    //	return CfgNodeType.FOR;
-    //}
-
-    // Body stmt
-    /*
-		if($stmt.instanceOf("body")) {
-			return CfgNodeType.BODY;
-		}
-		*/
-    /*
-		if($stmt.instanceOf("wrapperStmt")) {
-			if($stmt.code.trim() === "//SCOPE_START")
-				return CfgNodeType.SCOPE_START
-			if($stmt.code.trim() === "//SCOPE_END")
-				return CfgNodeType.SCOPE_END
-			if($stmt.code.trim() === "//FOR_START")
-				return CfgNodeType.FOR_START
-			if($stmt.code.trim() === "//FOR_END")
-				return CfgNodeType.FOR_END
-			if($stmt.code.trim() === "//IF_START")
-				return CfgNodeType.IF_START
-			if($stmt.code.trim() === "//IF_END")
-				return CfgNodeType.IF_END
-			
-		}
-		*/
-    /*
-		if($stmt.instanceOf("body")) {
-			const parent = $stmt.parent
-			if(parent.instanceOf("function"))
-				return CfgNodeType.SCOPE_DATA
-		}
-		*/
     // Scope stmt
     if ($stmt.instanceOf("scope")) {
       const parent = $stmt.parent;
