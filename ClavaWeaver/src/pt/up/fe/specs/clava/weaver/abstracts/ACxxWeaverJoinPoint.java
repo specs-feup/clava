@@ -175,6 +175,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public Boolean getHasAstParentImpl() {
+        ClavaLog.deprecated("attribute 'hasAstParent' is deprecated, please use 'hasParent' instead");
         return getNode().hasParent();
     }
 
@@ -336,7 +337,8 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public Boolean getHasParentImpl() {
-        return getParent() != null;
+        return getNode().hasParent();
+        // return getParentImpl() != null;
     }
 
     @Override
