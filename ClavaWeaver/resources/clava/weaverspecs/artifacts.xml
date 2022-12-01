@@ -40,11 +40,11 @@
 			tooltip="Looks for an ancestor AST name, walking back on the AST">
 			<parameter name="type" type="String" />
 		</attribute>
-		<attribute name="contains" type="Boolean">
+		<attribute name="contains" type="Boolean" tooltip="true if the given node is a descendant of this node">
 			<parameter name="jp" type="joinpoint" />
 		</attribute>
-		<attribute name="hasParent" type="boolean" />
-		<attribute name="hasAstParent" type="boolean" />
+		<attribute name="hasParent" type="boolean" tooltip="true if this node has a parent"/>
+		<attribute name="hasAstParent" type="boolean" tooltip="[DEPRECATED: use hasParent instead]"/>
 		<attribute name="firstJp" type="joinpoint"
 			tooltip="Looks in the descendants for the first node of the given type">
 			<parameter name="type" type="String" />
@@ -53,20 +53,20 @@
 		<attribute name="column" type="Integer" tooltip="The starting column of the current node in the original code"/>
 		<attribute name="endLine" type="Integer" tooltip="The ending line of the current node in the original code"/>
 		<attribute name="endColumn" type="Integer" tooltip="The ending column of the current node in the original code"/>		
-		<attribute name="location" type="String" />
-		<attribute name="filename" type="String" />
+		<attribute name="location" type="String" tooltip="A string with information about the file and code position of this node, if available"/>
+		<attribute name="filename" type="String" tooltip="The name of the file where the code of this node is located, if available"/>
 		<attribute name="filepath" type="String" tooltip="the complete path to the file where the code of this node comes from"/>
-		<attribute name="astId" type="String" />
-		<attribute name="ast" type="String" />
-		<attribute name="code" type="String" />
-		<attribute name="joinpointType" type="String" tooltip="[DEPRECATED: please use joinPointType instead (uppercase P)]"/>
+		<attribute name="astId" type="String" tooltip="String that uniquely identifies this node"/>
+		<attribute name="ast" type="String" tooltip="String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'"/>
+		<attribute name="code" type="String" tooltip="String with the code represented by this node"/>
+		<attribute name="joinpointType" type="String" tooltip="[DEPRECATED: use joinPointType instead (uppercase P)]"/>
 		<attribute name="type" type="type">
 			<def/>
 		</attribute>
 		<attribute name="hasType" type="Boolean" tooltip="true, if the join point has a type"/>
 		<attribute name="bitWidth" type="Integer" tooltip="The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit"/>
 		
-		<attribute name="astName" type="String" />
+		<attribute name="astName" type="String" tooltip="The name of the Java class of this node, which is similar to the equivalent node in Clang AST"/>
 		<attribute name="astNumChildren" type="Integer" tooltip="Returns the number of children of the node, considering null nodes"/>
 		<attribute name="astChildren" type="joinpoint[]" tooltip="Returns an array with the children of the node, considering null nodes" />
 		<attribute name="astChild" type="joinpoint" tooltip="Returns the child of the node at the given index, considering null nodes">
@@ -81,18 +81,18 @@
 		<attribute name="siblingsRight" type="joinpoint[]" tooltip="Returns an array with the siblings that come after this node"/>
 		<attribute name="leftJp" type="joinpoint" tooltip="Returns the node that came before this node, or undefined if there is none"/>
 		<attribute name="rightJp" type="joinpoint" tooltip="Returns the node that comes after this node, or undefined if there is none"/>		
-		<attribute name="astIsInstance" type="boolean">
+		<attribute name="astIsInstance" type="boolean" tooltip="true, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'">
 			<parameter name="className" type="String" />
 		</attribute>
 		<attribute name="hasNode" type="Boolean" tooltip="true, if the given join point or AST node is the same (== test) as the current join point AST node">
 			<parameter name="nodeOrJp" type="object" />
 		</attribute>
-		<attribute name="chain" type="String[]" />
-		<attribute name="javaFields" type="String[]" />
-		<attribute name="javaValue" type="Object">
+		<attribute name="chain" type="String[]" tooltip="String list of the names of the join points that form a path from the root to this node"/>
+		<attribute name="javaFields" type="String[]" tooltip="[DEPRECATED: used attribute 'keys' instead, together with 'getValue'] The names of the Java fields of this node. Can be used as key of the attribute 'javaValue'"/>
+		<attribute name="javaValue" type="Object" tooltip="[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name">
 			<parameter name="fieldName" type="String" />
 		</attribute>
-		<attribute name="javaFieldType" type="String">
+		<attribute name="javaFieldType" type="String" tooltip="String with the full Java class name of the type of the Java field with the provided name">
 			<parameter name="fieldName" type="String" />
 		</attribute>
 		<attribute name="isInsideLoopHeader" type="Boolean" tooltip="true, if the join point is inside a loop header (e.g., for, while)"/>
@@ -104,19 +104,19 @@
 			<parameter name="value" type="Object" />	
 		</attribute> 
 		  -->
-		<attribute name="getUserField" type="Object" tooltip="Deprecated version of 'userField'">
+		<attribute name="getUserField" type="Object" tooltip="[DEPRECATED: use 'userField' instead]">
 			<parameter name="fieldName" type="String" />	
 		</attribute>
 		<attribute name="userField" type="Object" tooltip="Retrives values that have been associated to nodes of the AST with 'setUserField'">
 			<parameter name="fieldName" type="String" />	
 		</attribute>
-		<attribute name="parentRegion" type="joinpoint" />
-		<attribute name="currentRegion" type="joinpoint" />
+		<attribute name="parentRegion" type="joinpoint" tooltip="Returns the node that declares the scope that is a parent of the scope of this node"/>
+		<attribute name="currentRegion" type="joinpoint" tooltip="Returns the node that declares the scope of this node"/>
 		<attribute name="pragmas" type="pragma[]" tooltip="The pragmas associated with this node"/>
 		<attribute name="data" type="Object" tooltip="JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.">
 			<def/>
 		</attribute>
-		<attribute name="keys" type="String[]" tooltip="A list of the properties currently supported by this node"/>
+		<attribute name="keys" type="String[]" tooltip="A list of the properties currently supported by this node. Can be used as parameter of the attribute 'getValue'"/>
 		<attribute name="getValue" type="Object" tooltip="The value associated with the given property key">
 			<parameter name="key" type="String" />	
 		</attribute>
@@ -452,7 +452,7 @@
 	<!-- FUNCTION -->
 	<artifact class="function" default="name">
 		<!--  <attribute name="name" type="String" />  -->
-		<attribute name="hasDefinition" type="Boolean" tooltip="[DEPRECATED] Use .isImplementation instead. True if this particular function join point has a body, false otherwise" />
+		<attribute name="hasDefinition" type="Boolean" tooltip="[DEPRECATED: Use .isImplementation instead] True if this particular function join point has a body, false otherwise" />
 		<attribute name="isImplementation" type="Boolean" tooltip="true if this particular function join point is an implementation (i.e. has a body), false otherwise" />
 		<attribute name="isPrototype" type="Boolean" tooltip="true if this particular function join point is a prototype (i.e. does not have a body), false otherwise" />
 		<attribute name="functionType" type="functionType" tooltip="the type of the call, which includes the return type and the types of the parameters">
@@ -605,7 +605,7 @@
 
 	<!-- CAST -->
 	<artifact class="cast">
-		<attribute name="isImplicitCast" type="Boolean" tooltip="[DEPRECATED] Use expr.implicitCast instead"/> 
+		<attribute name="isImplicitCast" type="Boolean" tooltip="[DEPRECATED: Use expr.implicitCast instead]"/> 
 		<attribute name="fromType" type="type" />
 		<attribute name="toType" type="type" />
 		<attribute name="subExpr" type="expression" />
