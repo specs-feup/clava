@@ -47,7 +47,7 @@ jobs:
         echo "Current folder"
         ls
     - name: Publish Test Report 
-      uses: mikepenz/action-junit-report@v3.0.1
+      uses: mikepenz/action-junit-report@v3.6.1
       if: always() # always run even if the previous step fails
       with:
         #report_paths: '**/reports-eclipse-build/TEST-*.xml'
