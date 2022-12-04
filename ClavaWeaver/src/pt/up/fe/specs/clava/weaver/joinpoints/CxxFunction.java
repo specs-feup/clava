@@ -529,6 +529,7 @@ public class CxxFunction extends AFunction {
 
     @Override
     public List<? extends ADecl> selectDecl() {
+        SpecsLogs.info("[DEPRECATED] Selecting 'decl' from 'function' is deprecated");
         return CxxSelects.select(ADecl.class, function.getChildren(), true, Decl.class);
     }
 
