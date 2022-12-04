@@ -1102,6 +1102,7 @@
 		{
 			"type": "joinpoint",
 			"name": "accessSpecifier",
+			"defaultAttr": "kind",
 			"extends": "decl"		,
 			"children": [
 					{
@@ -13723,6 +13724,7 @@
 		{
 			"type": "joinpoint",
 			"name": "call",
+			"defaultAttr": "name",
 			"extends": "expression"		,
 			"children": [
 					{
@@ -17510,6 +17512,7 @@
 		{
 			"type": "joinpoint",
 			"name": "cilkFor",
+			"defaultAttr": "kind",
 			"extends": "loop"		,
 			"children": [
 					{
@@ -19102,6 +19105,7 @@
 		{
 			"type": "joinpoint",
 			"name": "cilkSpawn",
+			"defaultAttr": "name",
 			"extends": "call"		,
 			"children": [
 					{
@@ -21711,6 +21715,7 @@
 		{
 			"type": "joinpoint",
 			"name": "class",
+			"defaultAttr": "name",
 			"extends": "record"		,
 			"tooltip": "Represents a C++ class",
 			"children": [
@@ -26490,6 +26495,7 @@
 		{
 			"type": "joinpoint",
 			"name": "cudaKernelCall",
+			"defaultAttr": "name",
 			"extends": "call"		,
 			"children": [
 					{
@@ -30249,6 +30255,7 @@
 		{
 			"type": "joinpoint",
 			"name": "declarator",
+			"defaultAttr": "name",
 			"extends": "namedDecl"		,
 			"tooltip": "Represents a decl that comes from a declarator (e.g., function, field, variable)",
 			"children": [
@@ -36243,6 +36250,7 @@
 		{
 			"type": "joinpoint",
 			"name": "enumDecl",
+			"defaultAttr": "name",
 			"extends": "namedDecl"		,
 			"tooltip": "Represents an enum",
 			"children": [
@@ -38816,6 +38824,7 @@
 		{
 			"type": "joinpoint",
 			"name": "enumeratorDecl",
+			"defaultAttr": "name",
 			"extends": "namedDecl"		,
 			"children": [
 					{
@@ -42338,6 +42347,7 @@
 		{
 			"type": "joinpoint",
 			"name": "field",
+			"defaultAttr": "name",
 			"extends": "declarator"		,
 			"tooltip": "Represents a member of a struct/union/class",
 			"children": [
@@ -43519,6 +43529,7 @@
 		{
 			"type": "joinpoint",
 			"name": "file",
+			"defaultAttr": "name",
 			"extends": "joinpoint"		,
 			"tooltip": "Represents a source file (.c, .cpp., .cl, etc)",
 			"children": [
@@ -46213,6 +46224,7 @@
 		{
 			"type": "joinpoint",
 			"name": "function",
+			"defaultAttr": "name",
 			"extends": "declarator"		,
 			"tooltip": "Represents a function declaration or definition",
 			"children": [
@@ -51840,6 +51852,7 @@
 		{
 			"type": "joinpoint",
 			"name": "include",
+			"defaultAttr": "name",
 			"extends": "decl"		,
 			"tooltip": "Represents an include directive (e.g., #include <stdio.h>)",
 			"children": [
@@ -54127,6 +54140,7 @@
 		{
 			"type": "joinpoint",
 			"name": "labelDecl",
+			"defaultAttr": "name",
 			"extends": "namedDecl"		,
 			"children": [
 					{
@@ -57662,6 +57676,7 @@
 		{
 			"type": "joinpoint",
 			"name": "loop",
+			"defaultAttr": "kind",
 			"extends": "statement"		,
 			"children": [
 					{
@@ -59254,6 +59269,7 @@
 		{
 			"type": "joinpoint",
 			"name": "marker",
+			"defaultAttr": "id",
 			"extends": "pragma"		,
 			"tooltip": "Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)",
 			"children": [
@@ -61632,6 +61648,7 @@
 		{
 			"type": "joinpoint",
 			"name": "memberCall",
+			"defaultAttr": "name",
 			"extends": "call"		,
 			"children": [
 					{
@@ -63069,6 +63086,7 @@
 		{
 			"type": "joinpoint",
 			"name": "method",
+			"defaultAttr": "name",
 			"extends": "function"		,
 			"tooltip": "Represents a C++ class method declaration or definition",
 			"children": [
@@ -64813,6 +64831,7 @@
 		{
 			"type": "joinpoint",
 			"name": "namedDecl",
+			"defaultAttr": "name",
 			"extends": "decl"		,
 			"tooltip": "Represents a decl with a name",
 			"children": [
@@ -67139,6 +67158,7 @@
 		{
 			"type": "joinpoint",
 			"name": "omp",
+			"defaultAttr": "kind",
 			"extends": "pragma"		,
 			"tooltip": "Represents an OpenMP pragma (e.g., #pragma omp parallel)",
 			"children": [
@@ -69936,6 +69956,7 @@
 		{
 			"type": "joinpoint",
 			"name": "param",
+			"defaultAttr": "name",
 			"extends": "vardecl"		,
 			"children": [
 					{
@@ -75173,6 +75194,7 @@
 		{
 			"type": "joinpoint",
 			"name": "pragma",
+			"defaultAttr": "name",
 			"extends": "joinpoint"		,
 			"tooltip": "Represents a pragma in the code (e.g., #pragma kernel)",
 			"children": [
@@ -76351,6 +76373,7 @@
 		{
 			"type": "joinpoint",
 			"name": "program",
+			"defaultAttr": "name",
 			"extends": "joinpoint"		,
 			"tooltip": "Represents the complete program and is the top-most joinpoint in the hierarchy",
 			"children": [
@@ -79182,6 +79205,7 @@
 		{
 			"type": "joinpoint",
 			"name": "record",
+			"defaultAttr": "name",
 			"extends": "namedDecl"		,
 			"tooltip": "Common class of struct, union and class",
 			"children": [
@@ -84305,6 +84329,7 @@
 		{
 			"type": "joinpoint",
 			"name": "struct",
+			"defaultAttr": "name",
 			"extends": "record"		,
 			"tooltip": "Represets a struct declaration",
 			"children": [
@@ -86735,6 +86760,7 @@
 		{
 			"type": "joinpoint",
 			"name": "tag",
+			"defaultAttr": "id",
 			"extends": "pragma"		,
 			"tooltip": "A pragma that references a point in the code and sticks to it",
 			"children": [
@@ -94387,6 +94413,7 @@
 		{
 			"type": "joinpoint",
 			"name": "typedefDecl",
+			"defaultAttr": "name",
 			"extends": "typedefNameDecl"		,
 			"tooltip": "Declaration of a typedef-name via the 'typedef' type specifier",
 			"children": [
@@ -95568,6 +95595,7 @@
 		{
 			"type": "joinpoint",
 			"name": "typedefNameDecl",
+			"defaultAttr": "name",
 			"extends": "namedDecl"		,
 			"tooltip": "Base node for declarations which introduce a typedef-name",
 			"children": [
@@ -101865,6 +101893,7 @@
 		{
 			"type": "joinpoint",
 			"name": "vardecl",
+			"defaultAttr": "name",
 			"extends": "declarator"		,
 			"tooltip": "Represents a variable declaration or definition",
 			"children": [
@@ -104586,6 +104615,7 @@
 		{
 			"type": "joinpoint",
 			"name": "varref",
+			"defaultAttr": "name",
 			"extends": "expression"		,
 			"tooltip": "A reference to a variable",
 			"children": [
