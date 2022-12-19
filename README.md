@@ -1,13 +1,21 @@
 # Clava
-Clava is a C/C++/CUDA/OpenCL source-to-source compiler. It applies analysis and transformations written in LARA scripts (which is based on JavaScript), and can be installed in under a minute.
+Clava is a C/C++/CUDA/OpenCL source-to-source compiler. It applies analysis and transformations written in JavaScript scripts, and can be installed in under a minute.
 
 If you have used Clava, please consider filling the [Clava User Experience Feedback form](https://forms.gle/SioZSAv1KL7XpQ5j6) (it's short, really!)
 
+Clava also supports LARA files (`.lara`), but the LARA DSL is now considered legacy, please use JavaScript instead. 
+
 # Quickstart
 
+<!--
 [Clava Tutorial - 2018 PACT](https://github.com/specs-feup/specs-lara/tree/master/2018-PACT) - Tutorial on how to use Clava (recommended parts 1-3).
+-->
 
+<!--
 [LARA Reference Guide](https://web.fe.up.pt/~specs/wiki/doku.php?id=doc:lara) - Start using LARA with examples.
+-->
+
+[Clava Web-based Tutorial - 2022](https://specs.fe.up.pt/tools/clava/Clava%20Web-based%20Tutorial%20(2022).pdf) - Tutorial on how to use Clava, based on the online demo version.
 
 [Language Specification](https://specs.fe.up.pt/tools/clava/language_specification.html) - List of all join points, attributes and actions available in Clava.
 
