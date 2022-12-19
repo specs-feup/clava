@@ -20,16 +20,17 @@ Logger.prototype.printfFormat[Logger.prototype.Type.LONGLONG] = "%I64lld";
  * If enabled, uses the SpecsLogger library for the C++ code.
  */
 //Logger.prototype.useSpecsLogger = true;
-
+/*
 Logger.prototype.ln = function(expr) {
 // At this point, we don't know if the new line will be in a C++ or C file
-/*
-    if(Clava.isCxx()) {
-		return this._append_private("std::endl", this.Type.LITERAL);
-	}
-*/
+
+    //if(Clava.isCxx()) {
+	//	return this._append_private("std::endl", this.Type.LITERAL);
+	//}
+
 	return this._append_private("\\n", this.Type.NORMAL);
 } 
+*/
  
 /**
  * Adds code that prints the message built up to that point with the append() functions.
@@ -80,6 +81,9 @@ Logger.prototype.log = function($jp, insertBefore) {
 
 /**
  * Appends an expression that represents a long long.
+ *
+ * @param {$jp} expr - the expression to append
+ * @return {lara.code.Logger} the current logger instance 
  */
 Logger.prototype.appendLongLong = function(expr) {
     return this._append_private(expr, this.Type.LONGLONG);
@@ -87,6 +91,9 @@ Logger.prototype.appendLongLong = function(expr) {
 
 /**
  * Appends an expression that represents a long long.
+ *
+ * @param {$jp} expr - the expression to append
+ * @return {lara.code.Logger} the current logger instance 
  */
 Logger.prototype.longLong = function(expr) {
     return this.appendLongLong(expr);

@@ -258,6 +258,8 @@
 <li>
 <a onclick="saveScroll()"  href="clava.graphs.cfg.nodedata.LoopData.html">clava.graphs.cfg.nodedata.LoopData</a></li>
 <li>
+<a onclick="saveScroll()"  href="clava.graphs.cfg.nodedata.ReturnData.html">clava.graphs.cfg.nodedata.ReturnData</a></li>
+<li>
 <a onclick="saveScroll()"  href="clava.graphs.cfg.nodedata.ScopeNodeData.html">clava.graphs.cfg.nodedata.ScopeNodeData</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.graphs.scg.ScgEdgeData.html">clava.graphs.scg.ScgEdgeData</a></li>
@@ -318,7 +320,11 @@
 <li>
 <a onclick="saveScroll()"  href="clava.pass.DecomposeVarDeclarations.html">clava.pass.DecomposeVarDeclarations</a></li>
 <li>
+<a onclick="saveScroll()"  href="clava.pass.LocalStaticToGlobal.html">clava.pass.LocalStaticToGlobal</a></li>
+<li>
 <a onclick="saveScroll()"  href="clava.pass.SimplifyLoops.html">clava.pass.SimplifyLoops</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.pass.SimplifyReturnStmts.html">clava.pass.SimplifyReturnStmts</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.pass.SimplifySelectionStmts.html">clava.pass.SimplifySelectionStmts</a></li>
 <li>
@@ -468,6 +474,10 @@
 <li>
 <a onclick="saveScroll()"  href="lara.pass.Passes.html">lara.pass.Passes</a></li>
 <li>
+<a onclick="saveScroll()"  href="lara.tool.Tool.html">lara.tool.Tool</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.tool.ToolUtils.html">lara.tool.ToolUtils</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.units.EnergyUnit.html">lara.units.EnergyUnit</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.units.SiModifier.html">lara.units.SiModifier</a></li>
@@ -517,6 +527,12 @@
 <a onclick="saveScroll()"  href="lara.util.TimeUnits.html">lara.util.TimeUnits</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.util.TupleId.html">lara.util.TupleId</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.vitishls.VitisHls.html">lara.vitishls.VitisHls</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.vitishls.VitisHlsReportParser.html">lara.vitishls.VitisHlsReportParser</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.vitishls.VitisHlsUtils.html">lara.vitishls.VitisHlsUtils</a></li>
 <li>
 <a onclick="saveScroll()"  href="weaver.Ast.html">weaver.Ast</a></li>
 <li>
@@ -648,7 +664,7 @@
     		<div id="doc_content"><div id='toc_container'><p class='toc_title'><span style="font-weight:normal"><i>(.js)</i></span><br>
 laraImport("lara.cmake.CMakerUtils");<br><br>
 <span style="font-weight:normal"><i>(.lara)</i></span><br>
-import lara.cmake.CMakerUtils;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>CMakerUtils</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>CMakerUtils</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Static Members</div><li><em><a href='#C'>getCompiler()</a></em></li><li><em><a href='#D'>parsePath()</a></em></li></ul></ul></div><h1 id='A'>CMakerUtils</h1><div class='function_block'><h3 id='B'>CMakerUtils</h3><pre class='signature'><code class='language-js'><strong>CMakerUtils</strong></code></pre><div class='function_content'></div><hr></div><h2>Static Members</h2><div class='function_block'><h3 id='C'>getCompiler</h3><pre class='signature'><code class='language-js'><strong>getCompiler</strong>(compilerName)</code></pre><div class='function_content'><p>Creates a CMakerCompiler object based on a string with the name.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>compilerName</strong>: string</span> - Name of the compiler. Currently supported names:  'gcc', 'clang', 'icc'.<br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>lara.cmake.compilers.CMakeCompiler</span><br></div></div><hr></div><div class='function_block'><h3 id='D'>parsePath</h3><pre class='signature'><code class='language-js'><strong>parsePath</strong>(path)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>path</strong>: any</span><br></div></div><hr></div></div>
+import lara.cmake.CMakerUtils;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>CMakerUtils</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>CMakerUtils</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Static Members</div><li><em><a href='#C'>getCompiler()</a></em></li></ul></ul></div><h1 id='A'>CMakerUtils</h1><div class='function_block'><h3 id='B'>CMakerUtils</h3><pre class='signature'><code class='language-js'><strong>CMakerUtils</strong></code></pre><div class='function_content'></div><hr></div><h2>Static Members</h2><div class='function_block'><h3 id='C'>getCompiler</h3><pre class='signature'><code class='language-js'><strong>getCompiler</strong>(compilerName)</code></pre><div class='function_content'><p>Creates a CMakerCompiler object based on a string with the name.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>compilerName</strong>: string</span> - Name of the compiler. Currently supported names:  'gcc', 'clang', 'icc'.<br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>lara.cmake.compilers.CMakeCompiler</span><br></div></div><hr></div></div>
     		<!-- <iframe id="doc_frame" src=""></iframe> -->
     	</div>
 	</div>    

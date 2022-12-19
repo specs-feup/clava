@@ -1186,14 +1186,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute hasParent
-     * @return the attribute's value
+     * true if this node has a parent
      */
     public abstract Boolean getHasParentImpl();
 
     /**
-     * Get value on attribute hasParent
-     * @return the attribute's value
+     * true if this node has a parent
      */
     public final Object getHasParent() {
         try {
@@ -1211,14 +1209,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute hasAstParent
-     * @return the attribute's value
+     * [DEPRECATED: use hasParent instead]
      */
     public abstract Boolean getHasAstParentImpl();
 
     /**
-     * Get value on attribute hasAstParent
-     * @return the attribute's value
+     * [DEPRECATED: use hasParent instead]
      */
     public final Object getHasAstParent() {
         try {
@@ -1355,14 +1351,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute location
-     * @return the attribute's value
+     * A string with information about the file and code position of this node, if available
      */
     public abstract String getLocationImpl();
 
     /**
-     * Get value on attribute location
-     * @return the attribute's value
+     * A string with information about the file and code position of this node, if available
      */
     public final Object getLocation() {
         try {
@@ -1380,14 +1374,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute filename
-     * @return the attribute's value
+     * The name of the file where the code of this node is located, if available
      */
     public abstract String getFilenameImpl();
 
     /**
-     * Get value on attribute filename
-     * @return the attribute's value
+     * The name of the file where the code of this node is located, if available
      */
     public final Object getFilename() {
         try {
@@ -1428,14 +1420,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute astId
-     * @return the attribute's value
+     * String that uniquely identifies this node
      */
     public abstract String getAstIdImpl();
 
     /**
-     * Get value on attribute astId
-     * @return the attribute's value
+     * String that uniquely identifies this node
      */
     public final Object getAstId() {
         try {
@@ -1453,14 +1443,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute ast
-     * @return the attribute's value
+     * String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'
      */
     public abstract String getAstImpl();
 
     /**
-     * Get value on attribute ast
-     * @return the attribute's value
+     * String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'
      */
     public final Object getAst() {
         try {
@@ -1478,14 +1466,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute code
-     * @return the attribute's value
+     * String with the code represented by this node
      */
     public abstract String getCodeImpl();
 
     /**
-     * Get value on attribute code
-     * @return the attribute's value
+     * String with the code represented by this node
      */
     public final Object getCode() {
         try {
@@ -1503,12 +1489,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * [DEPRECATED: please use joinPointType instead (uppercase P)]
+     * [DEPRECATED: use joinPointType instead (uppercase P)]
      */
     public abstract String getJoinpointTypeImpl();
 
     /**
-     * [DEPRECATED: please use joinPointType instead (uppercase P)]
+     * [DEPRECATED: use joinPointType instead (uppercase P)]
      */
     public final Object getJoinpointType() {
         try {
@@ -1604,14 +1590,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute astName
-     * @return the attribute's value
+     * The name of the Java class of this node, which is similar to the equivalent node in Clang AST
      */
     public abstract String getAstNameImpl();
 
     /**
-     * Get value on attribute astName
-     * @return the attribute's value
+     * The name of the Java class of this node, which is similar to the equivalent node in Clang AST
      */
     public final Object getAstName() {
         try {
@@ -1967,8 +1951,7 @@ public abstract class AJoinPoint extends JoinPoint {
     public abstract String[] getChainArrayImpl();
 
     /**
-     * Get value on attribute chain
-     * @return the attribute's value
+     * String list of the names of the join points that form a path from the root to this node
      */
     public Object getChainImpl() {
         String[] stringArrayImpl0 = getChainArrayImpl();
@@ -1977,8 +1960,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute chain
-     * @return the attribute's value
+     * String list of the names of the join points that form a path from the root to this node
      */
     public final Object getChain() {
         try {
@@ -2002,8 +1984,7 @@ public abstract class AJoinPoint extends JoinPoint {
     public abstract String[] getJavaFieldsArrayImpl();
 
     /**
-     * Get value on attribute javaFields
-     * @return the attribute's value
+     * [DEPRECATED: used attribute 'keys' instead, together with 'getValue'] The names of the Java fields of this node. Can be used as key of the attribute 'javaValue'
      */
     public Object getJavaFieldsImpl() {
         String[] stringArrayImpl0 = getJavaFieldsArrayImpl();
@@ -2012,8 +1993,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute javaFields
-     * @return the attribute's value
+     * [DEPRECATED: used attribute 'keys' instead, together with 'getValue'] The names of the Java fields of this node. Can be used as key of the attribute 'javaValue'
      */
     public final Object getJavaFields() {
         try {
@@ -2208,14 +2188,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute parentRegion
-     * @return the attribute's value
+     * Returns the node that declares the scope that is a parent of the scope of this node
      */
     public abstract AJoinPoint getParentRegionImpl();
 
     /**
-     * Get value on attribute parentRegion
-     * @return the attribute's value
+     * Returns the node that declares the scope that is a parent of the scope of this node
      */
     public final Object getParentRegion() {
         try {
@@ -2233,14 +2211,12 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Get value on attribute currentRegion
-     * @return the attribute's value
+     * Returns the node that declares the scope of this node
      */
     public abstract AJoinPoint getCurrentRegionImpl();
 
     /**
-     * Get value on attribute currentRegion
-     * @return the attribute's value
+     * Returns the node that declares the scope of this node
      */
     public final Object getCurrentRegion() {
         try {
@@ -2327,7 +2303,7 @@ public abstract class AJoinPoint extends JoinPoint {
     public abstract String[] getKeysArrayImpl();
 
     /**
-     * A list of the properties currently supported by this node
+     * A list of the properties currently supported by this node. Can be used as parameter of the attribute 'getValue'
      */
     public Object getKeysImpl() {
         String[] stringArrayImpl0 = getKeysArrayImpl();
@@ -2336,7 +2312,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * A list of the properties currently supported by this node
+     * A list of the properties currently supported by this node. Can be used as parameter of the attribute 'getValue'
      */
     public final Object getKeys() {
         try {

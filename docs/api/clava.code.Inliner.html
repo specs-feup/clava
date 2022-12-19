@@ -258,6 +258,8 @@
 <li>
 <a onclick="saveScroll()"  href="clava.graphs.cfg.nodedata.LoopData.html">clava.graphs.cfg.nodedata.LoopData</a></li>
 <li>
+<a onclick="saveScroll()"  href="clava.graphs.cfg.nodedata.ReturnData.html">clava.graphs.cfg.nodedata.ReturnData</a></li>
+<li>
 <a onclick="saveScroll()"  href="clava.graphs.cfg.nodedata.ScopeNodeData.html">clava.graphs.cfg.nodedata.ScopeNodeData</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.graphs.scg.ScgEdgeData.html">clava.graphs.scg.ScgEdgeData</a></li>
@@ -318,7 +320,11 @@
 <li>
 <a onclick="saveScroll()"  href="clava.pass.DecomposeVarDeclarations.html">clava.pass.DecomposeVarDeclarations</a></li>
 <li>
+<a onclick="saveScroll()"  href="clava.pass.LocalStaticToGlobal.html">clava.pass.LocalStaticToGlobal</a></li>
+<li>
 <a onclick="saveScroll()"  href="clava.pass.SimplifyLoops.html">clava.pass.SimplifyLoops</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.pass.SimplifyReturnStmts.html">clava.pass.SimplifyReturnStmts</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.pass.SimplifySelectionStmts.html">clava.pass.SimplifySelectionStmts</a></li>
 <li>
@@ -468,6 +474,10 @@
 <li>
 <a onclick="saveScroll()"  href="lara.pass.Passes.html">lara.pass.Passes</a></li>
 <li>
+<a onclick="saveScroll()"  href="lara.tool.Tool.html">lara.tool.Tool</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.tool.ToolUtils.html">lara.tool.ToolUtils</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.units.EnergyUnit.html">lara.units.EnergyUnit</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.units.SiModifier.html">lara.units.SiModifier</a></li>
@@ -517,6 +527,12 @@
 <a onclick="saveScroll()"  href="lara.util.TimeUnits.html">lara.util.TimeUnits</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.util.TupleId.html">lara.util.TupleId</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.vitishls.VitisHls.html">lara.vitishls.VitisHls</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.vitishls.VitisHlsReportParser.html">lara.vitishls.VitisHlsReportParser</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.vitishls.VitisHlsUtils.html">lara.vitishls.VitisHlsUtils</a></li>
 <li>
 <a onclick="saveScroll()"  href="weaver.Ast.html">weaver.Ast</a></li>
 <li>
@@ -648,7 +664,7 @@
     		<div id="doc_content"><div id='toc_container'><p class='toc_title'><span style="font-weight:normal"><i>(.js)</i></span><br>
 laraImport("clava.code.Inliner");<br><br>
 <span style="font-weight:normal"><i>(.lara)</i></span><br>
-import clava.code.Inliner;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>Inliner</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>Inliner</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Instance Members</div><li><em><a href='#C'>constructor()</a></em></li><li><em><a href='#D'>inline()</a></em></li><li><em><a href='#E'>inlineFunctionTree()</a></em></li></ul></ul></div><h1 id='A'>Inliner</h1><h2>Constructor</h2><div class='function_block'><h3 id='B'>Inliner</h3><pre class='signature'><code class='language-js'>new <strong>Inliner</strong>()</code></pre><div class='function_content'></div><hr></div><h2>Instance Members</h2><div class='function_block'><h3 id='C'>constructor</h3><pre class='signature'><code class='language-js'><strong>constructor</strong>(options)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>options</strong>: object</span> - Object with options. Supported options: 'prefix' (default: "__inline"), the prefix that will be used in the name of variables inserted by the Inliner<br></div></div><hr></div><div class='function_block'><h3 id='D'>inline</h3><pre class='signature'><code class='language-js'><strong>inline</strong>($exprStmt)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$exprStmt</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='E'>inlineFunctionTree</h3><pre class='signature'><code class='language-js'><strong>inlineFunctionTree</strong>($function, _visited)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$function</strong>: unknown</span><br><span class='parameter'><strong>_visited</strong>: unknown</span><br></div></div><hr></div></div>
+import clava.code.Inliner;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>Inliner</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>Inliner</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Instance Members</div><li><em><a href='#C'>checkInline()</a></em></li><li><em><a href='#D'>constructor()</a></em></li><li><em><a href='#E'>inline()</a></em></li><li><em><a href='#F'>inlineFunctionTree()</a></em></li></ul></ul></div><h1 id='A'>Inliner</h1><h2>Constructor</h2><div class='function_block'><h3 id='B'>Inliner</h3><pre class='signature'><code class='language-js'>new <strong>Inliner</strong>()</code></pre><div class='function_content'></div><hr></div><h2>Instance Members</h2><div class='function_block'><h3 id='C'>checkInline</h3><pre class='signature'><code class='language-js'><strong>checkInline</strong>($exprStmt)</code></pre><div class='function_content'><p>Check if the given $exprStmt can be inlined or not. If it can, returns an object with information important for inlining,<br>otherwise returns undefined.<br><br>A call can be inline if the following rules apply:<br>- The exprStmt is an isolated call, or an assignment with a single call in the right-hand side.<br>- The call has a definition/implementation available.<br>- The call is not a function that is part of the system headers.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$exprStmt</strong>: $exprStmt</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>object</span> - an object with the properties below or undefined if this exprStmt cannot be inlined. - type: a string with either the value 'call' or 'assign', indicating the type of inlining that can be applied to the given exprStmt. - $target: if the type is 'assign', contains the left-hand side of the assignment. Otherwise, is undefined. - $call: the call to be inlined<br></div></div><hr></div><div class='function_block'><h3 id='D'>constructor</h3><pre class='signature'><code class='language-js'><strong>constructor</strong>(options)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>options</strong>: object</span> - Object with options. Supported options: 'prefix' (default: "__inline"), the prefix that will be used in the name of variables inserted by the Inliner<br></div></div><hr></div><div class='function_block'><h3 id='E'>inline</h3><pre class='signature'><code class='language-js'><strong>inline</strong>($exprStmt)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$exprStmt</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='F'>inlineFunctionTree</h3><pre class='signature'><code class='language-js'><strong>inlineFunctionTree</strong>($function, _visited)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$function</strong>: unknown</span><br><span class='parameter'><strong>_visited</strong>: unknown</span><br></div></div><hr></div></div>
     		<!-- <iframe id="doc_frame" src=""></iframe> -->
     	</div>
 	</div>    

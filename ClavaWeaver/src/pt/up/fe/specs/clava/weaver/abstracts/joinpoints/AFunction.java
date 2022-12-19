@@ -31,12 +31,12 @@ public abstract class AFunction extends ADeclarator {
         this.aDeclarator = aDeclarator;
     }
     /**
-     * [DEPRECATED] Use .isImplementation instead. True if this particular function join point has a body, false otherwise
+     * [DEPRECATED: Use .isImplementation instead] True if this particular function join point has a body, false otherwise
      */
     public abstract Boolean getHasDefinitionImpl();
 
     /**
-     * [DEPRECATED] Use .isImplementation instead. True if this particular function join point has a body, false otherwise
+     * [DEPRECATED: Use .isImplementation instead] True if this particular function join point has a body, false otherwise
      */
     public final Object getHasDefinition() {
         try {
