@@ -32,7 +32,8 @@ public interface ClangAstWebResource {
     // WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx_windows.zip", "v1.0");
     WebResourceProvider LIBC_CXX_WINDOWS = create("libc_cxx_windows.zip", "v12.0.1");
 
-    WebResourceProvider CUDA_LIB = create("cudalib.zip", "v11.3.0");
+    // For some reason, on Linux, this file no longer downloads
+    WebResourceProvider CUDA_LIB = create("cudalib.zip_", "v11.3.0");
 
     // WebResourceProvider LIBC_CXX_MAC_OS = create("libc_cxx_mac_os.zip", "v1.0");
     // WebResourceProvider LIBC_CXX_LINUX = create("libc_cxx_linux.zip", "v1.0");
