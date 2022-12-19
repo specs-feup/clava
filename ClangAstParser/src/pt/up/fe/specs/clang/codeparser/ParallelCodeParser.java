@@ -86,26 +86,15 @@ public class ParallelCodeParser extends CodeParser {
 
     @Override
     public App parse(List<File> inputSources, List<String> compilerOptions, ClavaContext context) {
-        // System.out.println("CLAVA CONTEXT: " + context);
-
-        // ClavaLog.debug(() -> "[ParallelCodeParser] Input sources: " + inputSources);
 
         // All files, header and implementation
         Map<String, File> allUserSources = SpecsIo.getFileMap(inputSources, SourceType.getPermittedExtensions());
-        // ClavaLog.debug(() -> "[ParallelCodeParser] All user sources: " + allUserSources);
 
-        // System.out.println("sources:" + sources);
         List<File> allSourceFolders = getInputSourceFolders(inputSources, compilerOptions);
-        // ClavaLog.debug(() -> "[ParallelCodeParser] All source folders: " + allSourceFolders);
 
         Map<String, File> allSources = SpecsIo.getFileMap(allSourceFolders, SourceType.getPermittedExtensions());
-        // ClavaLog.debug(() -> "[ParallelCodeParser] All sources: " + allSources.values());
-        // System.out.println("ALL SOURCES:" + allSources);
-        // System.out.println(
-        // "All Sources:" + allSources.keySet().stream().map(Object::toString).collect(Collectors.joining(", ")));
 
         ConcurrentLinkedQueue<String> clangDump = new ConcurrentLinkedQueue<>();
-        // ConcurrentLinkedQueue<File> workingFolders = new ConcurrentLinkedQueue<>();
 
         DataStore options = ClangAstKeys.toDataStore(compilerOptions);
 

@@ -850,6 +850,8 @@ public class CxxWeaver extends ACxxWeaver {
         boolean useCustomResources = getConfig().get(ClavaOptions.CUSTOM_RESOURCES);
 
         CodeParser codeParser = CodeParser.newInstance();
+
+        // Setup code parser
         codeParser.set(CodeParser.USE_CUSTOM_RESOURCES, useCustomResources);
         codeParser.set(CodeParser.CUDA_GPU_ARCH, getConfig().get(CodeParser.CUDA_GPU_ARCH));
         codeParser.set(CodeParser.CUDA_PATH, getConfig().get(CodeParser.CUDA_PATH));
