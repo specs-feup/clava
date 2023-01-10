@@ -1,4 +1,5 @@
 import clava.ClavaJoinPoints;
+import clava.ClavaNodes; // Test if alias loads correctly
 
 aspectdef ClavaJoinPointsTest
 
