@@ -1,5 +1,5 @@
 laraImport("clava.ClavaJoinPoints");
-~
+
 /**
  * Alias for clava.ClavaJoinPoints.
  */
