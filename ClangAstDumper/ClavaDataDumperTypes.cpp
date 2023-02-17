@@ -457,8 +457,9 @@ void clava::ClavaDataDumper::DumpConstantArrayTypeData(const ConstantArrayType *
     DumpArrayTypeData(T);
 
     //clava::dump(T->getSize().VAL);
-    clava::dump(T->getSize().toString(10, false));
-
+    SmallString<0> str;
+    T->getSize().toString(str, 10, false);
+    clava::dump(str);
 }
 
 void clava::ClavaDataDumper::DumpVariableArrayTypeData(const VariableArrayType *T) {
