@@ -14,7 +14,8 @@ include("../deps.cmake")
 # Add Modules
 #deps_find_package(llvm3.8 REQUIRED) # LLVM
 #deps_find_package(llvm7 REQUIRED) # LLVM
-deps_find_package(llvm12 REQUIRED) # LLVM
+#deps_find_package(llvm12 REQUIRED) # LLVM
+deps_find_package(llvm14 REQUIRED) # LLVM
 
 set(COMMON_CXX_FLAGS "-std=c++14 -O3 -Wall -Wno-unused-function")
 #set(COMMON_CXX_FLAGS "-std=c++14 -O3 -Wall -Wno-unused-function -fuse-ld=\"C:/Program Files/LLVM/bin/ld.lld.exe\"")
