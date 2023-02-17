@@ -24,7 +24,7 @@ int main(int argc, const char *argv[])
     // but could not detect a significant difference
     //llvm::errs().SetBuffered();
 
-    CommonOptionsParser OptionsParser(argc, argv, MyToolCategory);
+    CommonOptionsParser& OptionsParser = CommonOptionsParser::create(argc, argv, MyToolCategory).get();
     ClangTool Tool(OptionsParser.getCompilations(),
                    OptionsParser.getSourcePathList());
 
