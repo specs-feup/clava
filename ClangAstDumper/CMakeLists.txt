@@ -14,7 +14,8 @@ include("../deps.cmake")
 # Add Modules
 #deps_find_package(llvm3.8 REQUIRED) # LLVM
 #deps_find_package(llvm7 REQUIRED) # LLVM
-deps_find_package(llvm12 REQUIRED) # LLVM
+#deps_find_package(llvm12 REQUIRED) # LLVM
+deps_find_package(llvm14 REQUIRED) # LLVM
 
 set(COMMON_CXX_FLAGS "-std=c++14 -O3 -Wall -Wno-unused-function")
 #-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -DVISIT_CHECK
