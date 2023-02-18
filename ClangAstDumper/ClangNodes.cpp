@@ -460,6 +460,7 @@ void clava::dump(NestedNameSpecifier* qualifier, int id) {
 
 void clava::dump(const TemplateArgument &templateArg, int id, ASTContext* Context) {
     clava::dump(clava::TEMPLATE_ARG_KIND[templateArg.getKind()]);
+    llvm::SmallString<0> str;
     switch (templateArg.getKind()) {
         case TemplateArgument::ArgKind::Type:
             clava::dump(clava::getId(templateArg.getAsType(), id));
@@ -476,7 +477,9 @@ void clava::dump(const TemplateArgument &templateArg, int id, ASTContext* Contex
             break;
         case TemplateArgument::ArgKind::Integral:
             //bool isSigned = templateArg.getAsIntegral().isSigned();
-            clava::dump(templateArg.getAsIntegral().toString(10));
+            templateArg.getAsIntegral().toString(str, 10);
+            clava::dump(str);
+
 //    const std::string source = getSource(E);
 //    clava::dump(source);
             break;

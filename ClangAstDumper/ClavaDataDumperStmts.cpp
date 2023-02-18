@@ -394,7 +394,9 @@ void clava::ClavaDataDumper::DumpIntegerLiteralData(const IntegerLiteral *E) {
 
 //    const std::string source = getSource(E);
 //    clava::dump(source);
-    clava::dump(E->getValue().toString(10, isSigned));
+    llvm::SmallString<0> str;
+    E->getValue().toString(str, 10, isSigned);
+    clava::dump(str);
 
 /*
     const SourceManager &sm = Context->getSourceManager();

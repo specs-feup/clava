@@ -23,10 +23,20 @@ int main(int argc, const char *argv[])
     // Errs is the main way we dump information, we tested if making it buffered improved performance
     // but could not detect a significant difference
     //llvm::errs().SetBuffered();
+    auto parserResult = CommonOptionsParser::create(argc, argv, MyToolCategory);
+    if (auto E = parserResult.takeError()) {
+        // We must consume the error. Typically one of:
+        // - return the error to our caller
+        // - toString(), when logging
+        // - consumeError(), to silently swallow the error
+        // - handleErrors(), to distinguish error types
+        llvm::errs() << "Problem while creating options parser: " << toString(std::move(E)) << "\n";
+        return -1;
+    }
 
-    CommonOptionsParser OptionsParser(argc, argv, MyToolCategory);
-    ClangTool Tool(OptionsParser.getCompilations(),
-                   OptionsParser.getSourcePathList());
+    //CommonOptionsParser OptionsParser = *parserResult;
+    ClangTool Tool((*parserResult).getCompilations(),
+                   (*parserResult).getSourcePathList());
 
     /*
     for(auto source : OptionsParser.getSourcePathList()) {
