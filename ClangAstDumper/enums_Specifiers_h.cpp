@@ -16,6 +16,7 @@ extern const std::string clava::CALLING_CONVENTION[] = {
         "SpirFunction",
         "OpenCLKernel",
         "Swift",
+        "SwiftAsync",
         "PreserveMost",
         "PreserveAll",
         "AArch64VectorCall",

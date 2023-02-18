@@ -26,6 +26,7 @@ extern const std::string clava::CAST_KIND[] = {
         "PointerToIntegral",
         "PointerToBoolean",
         "ToVoid",
+        "MatrixCast",
         "VectorSplat",
         "IntegralCast",
         "IntegralToBoolean",
