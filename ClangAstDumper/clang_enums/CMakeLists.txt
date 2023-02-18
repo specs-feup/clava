@@ -7,10 +7,11 @@ include("../../deps.cmake")
 # Add Modules
 #deps_find_package(llvm3.8 REQUIRED) # LLVM
 #deps_find_package(llvm7 REQUIRED) # LLVM
-deps_find_package(llvm12 REQUIRED) # LLVM
+#deps_find_package(llvm12 REQUIRED) # LLVM
+deps_find_package(llvm14 REQUIRED) # LLVM
 
 # Set base llvm dir
-set(LLVM_DIR ${llvm12_DIR})
+set(LLVM_DIR ${llvm14_DIR})
 
 set(COMMON_CXX_FLAGS "-O3 -Wall -Wno-unused-function")
 
@@ -19,13 +20,19 @@ find_package(Clava REQUIRED)
 
 message(STATUS "LLVM DIR: ${LLVM_DIR}")
 
+# Create target for clang/AST/Type.h
+add_library(EnumGen)
+
+clava_weave(EnumGen "Main.js"  ARGS "llvmFolder:'${LLVM_DIR}', outputFolder:'${CMAKE_CURRENT_LIST_DIR}/..'" JAVA_FLAGS -Xmx8000m)
+
+
 # Make enum extractor available
-include(${CMAKE_CURRENT_LIST_DIR}/ExtractEnums.cmake)
+#include(${CMAKE_CURRENT_LIST_DIR}/ExtractEnums.cmake)
      
 #extract_enums("${LLVM_DIR}/src/include/clang/AST" "Type.h")
 #extract_enums("${LLVM_DIR}/src/include/clang/AST" "OperationKinds.h")
 #extract_enums("${LLVM_DIR}/src/include/clang/Basic" "AttrKinds.h")
-extract_enums("${LLVM_DIR}/src/include/clang/Basic" "Specifiers.h")
+#extract_enums("${LLVM_DIR}/src/include/clang/Basic" "Specifiers.h")
 #extract_enums("${LLVM_DIR}/src/include/clang/Basic" "ExceptionSpecificationType.h")
 #extract_enums("${LLVM_DIR}/src/include/clang/Basic" "Linkage.h")
 #extract_enums("${LLVM_DIR}/src/include/clang/Basic" "Visibility.h")
