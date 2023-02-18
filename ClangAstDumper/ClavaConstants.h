@@ -155,6 +155,7 @@ namespace clava {
         FORMAT,
         NON_NULL,
         VISIBILITY,
+        TYPE_VISIBILITY,
     };
 
 
