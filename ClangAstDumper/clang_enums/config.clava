@@ -131,7 +131,7 @@
     </entry>
     <entry>
       <string>argv</string>
-      <string>{&quot;llvmFolder&quot;:&quot;C:/Users/JBispo/Work/Repos/Lab/clava/deps/deps-lib/../artifacts/llvm14-Windows-gcc5&quot;}</string>
+      <string>{&quot;llvmFolder&quot;:&quot;C:/Users/JBispo/Work/Repos/Lab/clava/deps/deps-lib/../artifacts/llvm14.0.6-Windows-gcc5&quot;}</string>
     </entry>
     <entry>
       <string>tools</string>
