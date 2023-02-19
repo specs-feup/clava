@@ -5,7 +5,7 @@ name: Java CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, clang-14.0.6 ]
   pull_request:
     branches: [ master ]
 
