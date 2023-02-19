@@ -35,10 +35,6 @@ public interface ClangAstWebResource {
     // For some reason, on Linux, this file no longer downloads
     WebResourceProvider CUDA_LIB = create("cudalib.zip_", "v11.3.0");
 
-    // WebResourceProvider LIBC_CXX_MAC_OS = create("libc_cxx_mac_os.zip", "v1.0");
-    // WebResourceProvider LIBC_CXX_LINUX = create("libc_cxx_linux.zip", "v1.0");
-    // WebResourceProvider LIBC_CXX_CENTOS6 = create("libc_cxx_centos6.zip", "v1.0");
-
     WebResourceProvider WIN_EXE = create("windows/clang_ast.exe", "v14.0.6_0");
     WebResourceProvider WIN_DLL1 = create("windows/libwinpthread-1.dll");
     WebResourceProvider WIN_DLL2 = create("windows/zlib1.dll");
