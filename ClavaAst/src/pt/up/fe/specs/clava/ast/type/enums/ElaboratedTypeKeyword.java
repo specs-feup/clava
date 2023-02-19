@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.ast.type.enums;
 
+import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -27,7 +28,7 @@ public enum ElaboratedTypeKeyword implements StringProvider {
     NONE;
 
     private static final Lazy<EnumHelperWithValue<ElaboratedTypeKeyword>> HELPER = EnumHelperWithValue
-            .newLazyHelperWithValue(ElaboratedTypeKeyword.class, NONE);
+            .newLazyHelperWithValue(ElaboratedTypeKeyword.class);
 
     public static EnumHelperWithValue<ElaboratedTypeKeyword> getHelper() {
         return HELPER.get();
@@ -43,6 +44,6 @@ public enum ElaboratedTypeKeyword implements StringProvider {
 
     @Override
     public String getString() {
-        return name().toLowerCase();
+        return SpecsStrings.toCamelCase(name());
     }
 }
