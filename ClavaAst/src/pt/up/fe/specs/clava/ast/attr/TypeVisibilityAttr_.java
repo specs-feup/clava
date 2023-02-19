@@ -19,9 +19,9 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class TypeVisibilityAttr extends InheritableAttr {
+public class TypeVisibilityAttr_ extends InheritableAttr {
 
-    public TypeVisibilityAttr(DataStore data, Collection<? extends ClavaNode> children) {
+    public TypeVisibilityAttr_(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 
