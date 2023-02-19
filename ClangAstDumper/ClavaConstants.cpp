@@ -145,7 +145,7 @@ const std::string clava::getName(const AttrNode attrNode) {
         case clava::AttrNode::FORMAT: return "FormatAttr";
         case clava::AttrNode::NON_NULL: return "NonNullAttr";
         case clava::AttrNode::VISIBILITY: return "VisibilityAttr";
-        case clava::AttrNode::TYPE_VISIBILITY: return "TypeVisibilityAttr";
+        //case clava::AttrNode::TYPE_VISIBILITY: return "TypeVisibilityAttr";
 
         default: {
             std::string enumValue = std::to_string(static_cast<std::underlying_type<AttrNode>::type>(attrNode));
