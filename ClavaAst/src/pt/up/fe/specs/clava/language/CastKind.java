@@ -44,6 +44,7 @@ public enum CastKind implements StringProvider {
     PointerToIntegral,
     PointerToBoolean,
     ToVoid,
+    MatrixCast,
     VectorSplat,
     IntegralCast,
     IntegralToBoolean,
