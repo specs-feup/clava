@@ -17,7 +17,7 @@ int main() {
       omp_set_num_threads(omp_thread_measure);
       omp_thread_measure_loop1 << omp_thread_measure;
       	
-      #pragma omp parallel for reduction(min : a, i)
+      #pragma omp parallel for reduction(min : a)
       for(int i = 0; i < 10; i++) {
          a += i;
       }
