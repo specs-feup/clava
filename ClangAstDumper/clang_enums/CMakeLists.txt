@@ -8,10 +8,10 @@ include("../../deps.cmake")
 #deps_find_package(llvm3.8 REQUIRED) # LLVM
 #deps_find_package(llvm7 REQUIRED) # LLVM
 #deps_find_package(llvm12 REQUIRED) # LLVM
-deps_find_package(llvm14 REQUIRED) # LLVM
+deps_find_package(llvm14.0.6 REQUIRED) # LLVM
 
 # Set base llvm dir
-set(LLVM_DIR ${llvm14_DIR})
+set(LLVM_DIR ${llvm14.0.6_DIR})
 
 set(COMMON_CXX_FLAGS "-O3 -Wall -Wno-unused-function")
 
