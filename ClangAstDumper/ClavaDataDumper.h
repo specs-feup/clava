@@ -238,7 +238,7 @@ namespace clava {
         void DumpFormatAttrData(const FormatAttr *A);
         void DumpNonNullAttrData(const NonNullAttr *A);
         void DumpVisibilityAttrData(const VisibilityAttr *A);
-        void DumpTypeVisibilityAttrData(const TypeVisibilityAttr *A);
+        //void DumpTypeVisibilityAttrData(const TypeVisibilityAttr *A);
         const std::string getDataName(DeclNode node);
         const std::string getDataName(StmtNode node);
         const std::string getDataName(TypeNode node);
