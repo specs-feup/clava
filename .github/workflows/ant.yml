@@ -5,9 +5,11 @@ name: Java CI
 
 on:
   push:
-    branches: [ master, clang-14.0.6 ]
-  pull_request:
     branches: [ master ]
+  pull_request:
+
+permissions:
+  checks: write
 
 jobs:
   build:
