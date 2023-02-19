@@ -11,7 +11,7 @@
 
 
 #include <bitset>
-
+#include <iostream>
 
 using namespace clang;
 
@@ -30,8 +30,28 @@ const std::string clava::getClassName(const Type* T) {
     return kindName + "Type";
 }
 
+const std::string clava::getAttrKind(const Attr* A) {
+    // Print information about Attr
+    //clava::dump(clava::ATTRIBUTES[A->getKind()]);
+    {
+        switch (A->getKind()) {
+#define ATTR(X)                                                                \
+  case attr::X:                                                                \
+    return #X;                                                                  \
+    break;
+#include "clang/Basic/AttrList.inc"
+        }
+
+    }
+
+    return "<undefined_attribute>";
+}
+
 const std::string clava::getClassName(const Attr* A) {
-    const std::string kindName =  clava::ATTRIBUTES[A->getKind()];
+
+    //const std::string kindName =  clava::ATTRIBUTES[A->getKind()];
+    const std::string kindName =  clava::getAttrKind(A);
+
     return kindName + "Attr";
 }
 

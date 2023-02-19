@@ -47,6 +47,15 @@ namespace clava {
     const std::string getClassName(const Type* T);
 
     /**
+     * Returns the kind name of the class of the given Attribute.
+     *
+     * @param A
+     * @return
+     */
+    const std::string getAttrKind(const Attr* A);
+
+
+    /**
      * Returns the name of the class of the given Attribute.
      *
      * @param A

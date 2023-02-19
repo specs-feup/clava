@@ -65,8 +65,7 @@ void clava::ClavaDataDumper::dump(clava::AttrNode attrNode, const Attr* A) {
 void clava::ClavaDataDumper::DumpAttrData(const Attr *A) {
     clava::dumpSourceInfo(Context, A->getRange().getBegin(), A->getRange().getEnd());
 
-    // Print information about Attr
-    clava::dump(clava::ATTRIBUTES[A->getKind()]);
+    clava::dump(clava::getAttrKind(A));
     clava::dump(A->isImplicit());
     clava::dump(A->isInherited());
     clava::dump(A->isLateParsed());
