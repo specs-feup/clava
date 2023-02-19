@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.2)
 
 # Download library
-deps_resolve("llvm14" LIB_DIR)
+deps_resolve("llvm14.0.6" LIB_DIR)
 
 # Expose LLVM library
-set("llvm14_DIR" ${LIB_DIR})
+set("llvm14.0.6_DIR" ${LIB_DIR})
 
 # LLVM requires C++11
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 
 if(UNIX)
 	# Unix version uses pre-build clang binaries, which disable rtti
@@ -16,7 +16,7 @@ endif()
 
 
 #LLVM and Clang includes
-list(APPEND llvm14_INCLUDES
+list(APPEND llvm14.0.6_INCLUDES
 	"${LIB_DIR}/src/include"
 	"${LIB_DIR}/build/include"
 )
@@ -45,8 +45,8 @@ endif()
 
 
 
-#find_libraries(llvm14_LIBRARIES "${LIB_DIR}/build/lib" 
-list(APPEND llvm14_LIBRARIES 
+#find_libraries(llvm14.0.6_LIBRARIES "${LIB_DIR}/build/lib" 
+list(APPEND llvm14.0.6_LIBRARIES 
 	
 	# Clang libraries, they have circular dependencies, so they are inside a group
   ${LINKER_GROUP_START}
@@ -166,7 +166,7 @@ list(APPEND llvm14_LIBRARIES
     LLVMBinaryFormat
     LLVMTableGen
     LLVMSupport
-    LLVMDemangle	
+    LLVMDemangle
 )
 
 
@@ -174,7 +174,7 @@ list(APPEND llvm14_LIBRARIES
 
 if(UNIX AND NOT APPLE)
   # Generic UNIX dependencies
-	list(APPEND llvm14_LIBRARIES 
+	list(APPEND llvm14.0.6_LIBRARIES 
 		rt
 		tinfo
 		z
@@ -183,7 +183,7 @@ if(UNIX AND NOT APPLE)
 	)
 elseif(APPLE)
   # macOS dependencies
-  list(APPEND llvm14_LIBRARIES 
+  list(APPEND llvm14.0.6_LIBRARIES 
 		c++abi
 		#stdc++
 		z
@@ -193,7 +193,7 @@ elseif(APPLE)
 	)
 elseif(WIN32)
   # Windows dependencies
-  list(APPEND llvm14_LIBRARIES 
+  list(APPEND llvm14.0.6_LIBRARIES 
 		version
 		z
 	)	
