@@ -7,7 +7,7 @@ deps_resolve("llvm14.0.6" LIB_DIR)
 set("llvm14.0.6_DIR" ${LIB_DIR})
 
 # LLVM requires C++11
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
 if(UNIX)
 	# Unix version uses pre-build clang binaries, which disable rtti
