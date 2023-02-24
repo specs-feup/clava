@@ -722,6 +722,32 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Changes the name of the file
+     * @param filename 
+     */
+    public void setNameImpl(String filename) {
+        throw new UnsupportedOperationException(get_class()+": Action setName not implemented ");
+    }
+
+    /**
+     * Changes the name of the file
+     * @param filename 
+     */
+    public final void setName(String filename) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setName", this, Optional.empty(), filename);
+        	}
+        	this.setNameImpl(filename);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setName", this, Optional.empty(), filename);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setName", e);
+        }
+    }
+
+    /**
      * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
      */
     public AFile rebuildImpl() {
@@ -1103,6 +1129,7 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         actions.add("void addCInclude(string)");
         actions.add("vardecl addGlobal(String, joinpoint, String)");
         actions.add("String write(String)");
+        actions.add("void setName(String)");
         actions.add("file rebuild()");
         actions.add("joinpoint rebuildTry()");
         actions.add("void insertBegin(joinpoint)");

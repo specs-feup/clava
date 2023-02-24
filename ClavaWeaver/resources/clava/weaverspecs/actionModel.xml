@@ -217,6 +217,9 @@
 		<parameter name="destinationFoldername" type="String" />
 	</action>
 
+	<action name="setName" class="file" return="void" tooltip="Changes the name of the file">
+		<parameter name="filename" type="String" />
+	</action>
 
 	<action name="rebuild" class="file" return="file" tooltip="Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens"/>
 	

@@ -44670,6 +44670,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Changes the name of the file",
+						"children": [
+									{
+										"type": "void",
+										"name": "setName"
+									},
+									{
+										"type": "String",
+										"name": "filename",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Sets the path to the folder of the source file relative to the base source path",
 						"children": [
 									{

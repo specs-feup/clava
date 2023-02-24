@@ -74,6 +74,14 @@ public class CxxFile extends AFile {
     }
 
     @Override
+    public void setNameImpl(String filename) {
+        var previousFile = tunit.get(TranslationUnit.SOURCE_FILE);
+        var baseFolder = previousFile != null ? previousFile.getParentFile() : null;
+        var newFile = new File(baseFolder, filename);
+        tunit.set(TranslationUnit.SOURCE_FILE, newFile);
+    }
+
+    @Override
     public List<? extends AFunction> selectFunction() {
         return getFunctions().stream()
                 .map(function -> CxxJoinpoints.create(function, AFunction.class))
