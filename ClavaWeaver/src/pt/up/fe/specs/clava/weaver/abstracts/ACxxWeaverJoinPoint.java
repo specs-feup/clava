@@ -1136,23 +1136,23 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         var jsDataPragma = dataPragma != null ? dataPragma : jsEngine.getUndefined();
 
         // Check if data object already exists
-        var hasClavaDataJs = jsEngine.eval("var _data = _hasClavaData; _data;");
+        var hasClavaDataJs = jsEngine.eval(
+                "import { _hasClavaData } from 'clavaapi/dist/clava/js/DataHandler.js'; _hasClavaData;",
+                JsFileType.MODULE,
+                "[Java] ACxxWeaverJoinPoint.getDataImpl() [" + (jsNameCounter++) + "]");
         var hasClavaData = jsEngine.asBoolean(jsEngine.call(hasClavaDataJs, getNode()));
 
-        if (hasClavaData) {
-            // Return data object from managed cache
-            var dataCache = jsEngine.eval("var _data = _getClavaData; _data;");
-
-            // Create proxy object
-            return jsEngine.call(dataCache, getNode());
-        }
+        // Create proxy function
+        var proxyBuilder = jsEngine.eval(
+                "import { _getClavaData } from 'clavaapi/dist/clava/js/DataHandler.js'; _getClavaData;",
+                JsFileType.MODULE,
+                "[Java] ACxxWeaverJoinPoint.getDataImpl() [" + (jsNameCounter++) + "]");
 
         // TODO: Refactor, so that decoding of pragma is done separately
         // TODO: life-cycle management of data objects according to node id
 
         // Pragma exists and data has not been created yet
-        // if (!hasClavaData && dataPragma != null) {
-        if (dataPragma != null) {
+        if (!hasClavaData && dataPragma != null) {
             var node = getNode();
             var tu = node instanceof TranslationUnit ? (TranslationUnit) node
                     : node.getAncestorTry(TranslationUnit.class).orElse(null);
@@ -1187,10 +1187,8 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
             try {
                 // Create object
-                var newDataObject = jsEngine.eval("var _data = " + sanitizedJsonString + "; _data;");
-
-                // Create proxy function
-                var proxyBuilder = jsEngine.eval("var _data = _getClavaData; _data;");
+                var newDataObject = jsEngine.eval("var _data = " + sanitizedJsonString + "; _data;", JsFileType.MODULE,
+                        "[Java] ACxxWeaverJoinPoint.getDataImpl() [" + (jsNameCounter++) + "]");
 
                 // Create proxy object
                 return jsEngine.call(proxyBuilder, getNode(), newDataObject, jsDataPragma);
@@ -1203,12 +1201,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         }
 
         // Return data object from managed cache
-        var dataCache = jsEngine.eval("var _data = _getClavaData; _data;");
-
         // Create proxy object
-        return jsEngine.call(dataCache,
+        return jsEngine.call(proxyBuilder, getNode());
 
-                getNode());
     }
 
     @Override
