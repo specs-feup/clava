@@ -466,24 +466,25 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Recompiles the program currently represented by the AST, transforming literal code into AST nodes
+     * Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise
      */
-    public void rebuildImpl() {
+    public boolean rebuildImpl() {
         throw new UnsupportedOperationException(get_class()+": Action rebuild not implemented ");
     }
 
     /**
-     * Recompiles the program currently represented by the AST, transforming literal code into AST nodes
+     * Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise
      */
-    public final void rebuild() {
+    public final boolean rebuild() {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "rebuild", this, Optional.empty());
         	}
-        	this.rebuildImpl();
+        	boolean result = this.rebuildImpl();
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "rebuild", this, Optional.empty());
+        		eventTrigger().triggerAction(Stage.END, "rebuild", this, Optional.ofNullable(result));
         	}
+        	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "rebuild", e);
         }
@@ -989,7 +990,7 @@ public abstract class AProgram extends ACxxWeaverJoinPoint {
     @Override
     protected final void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
-        actions.add("void rebuild()");
+        actions.add("boolean rebuild()");
         actions.add("void rebuildFuzzy()");
         actions.add("joinpoint addFile(file)");
         actions.add("joinpoint addFileFromPath(Object)");

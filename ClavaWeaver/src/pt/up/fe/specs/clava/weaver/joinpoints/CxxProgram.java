@@ -82,9 +82,9 @@ public class CxxProgram extends AProgram {
     }
 
     @Override
-    public void rebuildImpl() {
+    public boolean rebuildImpl() {
         SpecsLogs.msgInfo("Rebuilding tree...");
-        weaver.rebuildAst(true);
+        return weaver.rebuildAst(true);
     }
 
     @Override

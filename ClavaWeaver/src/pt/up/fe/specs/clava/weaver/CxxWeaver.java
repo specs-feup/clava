@@ -1582,7 +1582,7 @@ public class CxxWeaver extends ACxxWeaver {
      * @param update
      *            if true, the weaver will update its state to use the rebuilt tree instead of the original tree
      */
-    public void rebuildAst(boolean update) {
+    public boolean rebuildAst(boolean update) {
         // Check if inside apply
 
         // Write current tree to a temporary folder
@@ -1724,6 +1724,8 @@ public class CxxWeaver extends ACxxWeaver {
 
             // baseFolder = tempFolder;
         }
+
+        return rebuiltApp.get(App.IGNORED_FILES).size() == 0;
 
         // Clear user values, all stored nodes are invalid now
         // userValues = new HashMap<>();

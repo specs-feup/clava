@@ -77458,10 +77458,10 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Recompiles the program currently represented by the AST, transforming literal code into AST nodes",
+						"tooltip": "Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise",
 						"children": [
 									{
-										"type": "void",
+										"type": "boolean",
 										"name": "rebuild"
 									}]
 					},
