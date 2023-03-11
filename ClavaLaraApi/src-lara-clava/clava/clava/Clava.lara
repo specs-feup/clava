@@ -5,6 +5,7 @@ import clava.ClavaAspects;
 import clava.util.ClavaDataStore;
 import weaver.WeaverOptions;
 import weaver.Weaver;
+import weaver.Query;
 
 /**
  * @class
@@ -34,7 +35,7 @@ Clava.isCxx = function() {
 }
 
 Clava.rebuild = function() {
-	call Rebuild();
+	return Query.root().rebuild();
 }; 
 
 Clava.rebuildFuzzy = function() {
