@@ -72,6 +72,11 @@ public class App extends ClavaNode {
             .setDefault(() -> DataStore.newInstance("Clava App Arbitrary Data"))
             .setCopyFunction(dataStore -> DataStore.newInstance(dataStore.getName(), dataStore));
 
+    /**
+     * Contains the list of source files that were ignored during parsing (e.g. due to parsing errors)
+     */
+    public final static DataKey<List<File>> IGNORED_FILES = KeyFactory.list("ignoredFiles", File.class);
+
     /// DATAKEYS END
 
     private Map<File, File> sourceFiles;
