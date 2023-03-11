@@ -159,6 +159,7 @@ public class ParallelCodeParser extends CodeParser {
 
         // Collect parsing results
         List<ClangAstData> clangParserResults = new ArrayList<>();
+        List<File> ignoredFiles = new ArrayList<>();
         for (int i = 0; i < sources.size(); i++) {
             var future = futureTUnits.get(i);
             try {
@@ -167,6 +168,7 @@ public class ParallelCodeParser extends CodeParser {
                 clangParserResults.add(parserData);
             } catch (Exception e) {
                 SpecsLogs.warn("Could not parse file '" + sources.get(i) + "', will be ignored", e);
+                ignoredFiles.add(sources.get(i));
                 continue;
             }
 
@@ -238,6 +240,7 @@ public class ParallelCodeParser extends CodeParser {
         }
 
         App app = context.get(ClavaContext.FACTORY).app(tUnits);
+        app.set(App.IGNORED_FILES, ignoredFiles);
 
         // Add App to context
         // app.getContext().set(ClavaContext.APP, app);
