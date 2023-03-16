@@ -1,3 +1,10 @@
+##### User-added #####
+dist/
+
+# Extensions
+ltex.dictionary.*
+######################
+
 # Logs
 logs
 *.log

@@ -1,0 +1,13 @@
+{
+    "diff": true,
+    "extension": ["ts", "js", "cjs", "mjs"],
+    "reporter": "spec",
+    "parallel": false,
+    "enable-source-maps": true,
+    "recursive": true,
+
+    "node-option": [
+        "experimental-specifier-resolution=node",
+        "loader=ts-node/esm"
+    ]
+}

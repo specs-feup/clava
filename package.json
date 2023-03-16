@@ -1,0 +1,51 @@
+{
+    "name": "clava",
+    "version": "0.0.1",
+    "description": "A C/C++ source-to-source compiler written in Typescript",
+    "main": "index.js",
+    "type": "module",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "run": "node dist/index.js",
+        "build": "tsc",
+        "build:watch": "tsc --watch",
+        "lint": "eslint .",
+        "test": "npx mocha --enable-source-maps --recursive",
+        "test:watch": "npx mocha --enable-source-maps --recursive --watch"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/lm-sousa/Clava-JS.git"
+    },
+    "keywords": [
+        "C",
+        "C++",
+        "source-to-source",
+        "compiler",
+        "metaprogramming"
+    ],
+    "author": "L. Sousa",
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/lm-sousa/Clava-JS/issues"
+    },
+    "homepage": "https://github.com/lm-sousa/Clava-JS#readme",
+    "dependencies": {
+        "typescript": "^4.4.3",
+        "@types/node": "^16.10.3"
+    },
+    "devDependencies": {
+        "@types/chai": "^4.2.22",
+        "@types/mocha": "^9.0.0",
+        "@typescript-eslint/eslint-plugin": "^4.33.0",
+        "@typescript-eslint/parser": "^4.33.0",
+        "chai": "^4.3.4",
+        "eslint": "^7.32.0",
+        "eslint-plugin-mocha": "^9.0.0",
+        "eslint-plugin-tsdoc": "^0.2.14",
+        "mocha": "^9.1.2",
+        "ts-node": "^10.9.1"
+    }
+}
