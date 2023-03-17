@@ -1,7 +1,6 @@
 import lara.Io;
 import lara.Check;
 import lara.JavaInterop;
-import clava.ClavaAspects;
 import clava.util.ClavaDataStore;
 import weaver.WeaverOptions;
 import weaver.Weaver;
@@ -23,15 +22,11 @@ Clava.useSpecsLogger = false;
  * Returns the standard being used for compilation.
  */
 Clava.getStandard = function() {
-	call standardResult:ClavaStandard();
-
-	return standardResult.standard;
+	return Query.root().standard;
 }
 
 Clava.isCxx = function() {	
-	call standardResult:ClavaIsCxx();
-
-	return standardResult.isCxx;
+	return Query.root().isCxx;
 }
 
 Clava.rebuild = function() {
@@ -39,25 +34,21 @@ Clava.rebuild = function() {
 }; 
 
 Clava.rebuildFuzzy = function() {
-	call RebuildFuzzy();
+	Query.root().rebuildFuzzy();
 }; 
 
 /**
  * @return {J#java.io.File} The folder of the first input source element, either itself, if a folder, or the parent folder, if it is a file. 
  */
 Clava.getBaseFolder = function() {
-	call baseFolderResult:ClavaBaseFolder();
-	
-	return baseFolderResult.baseFolder;
+	return Query.root().baseFolder;
 }; 
 
 /**
  * @return {J#java.io.File} The folder where the code represented by the AST will be written at the end of execution.
  */
 Clava.getWeavingFolder = function() {
-	call weavingFolderResult:ClavaWeavingFolder();
-	
-	return weavingFolderResult.weavingFolder;
+	return Query.root().weavingFolder;
 }; 
 
 /**
@@ -69,7 +60,8 @@ Clava.addFile = function($file) {
 		println("Clava.addFile: Input must be a 'file' join point, it is a '" + $file.joinPointType + "'");
 		return;
 	}
-	call ClavaAddFile($file);
+	
+	Query.root().addFile($file);
 }; 
 
 
@@ -173,7 +165,7 @@ Clava.runClavaParallel = function(argsLists, threads, clavaCommand) {
  */
 Clava.pushAst = function($program) {
 	if($program === undefined) {
-		call PushAst();
+		Query.root().push();
 		return;
 	}
 
@@ -185,7 +177,7 @@ Clava.pushAst = function($program) {
  * Discards the AST at the top of the current AST stack.
  */
 Clava.popAst = function() {
-	call PopAst();
+	Query.root().pop();
 }
 
 /**
@@ -241,8 +233,7 @@ Clava.getData = function() {
  * @return the join point $program.
  */
 Clava.getProgram = function() {
-	call results : GetProgram();
-	return results.programJp;
+	return Query.root();
 }
 
 /**
