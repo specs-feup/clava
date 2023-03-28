@@ -2,3 +2,8 @@ CMakeFiles
 CMakeCache.txt
 build
 *.so
+cmake_install.cmake
+Makefile
+*.gch
+*.o
+*.a
