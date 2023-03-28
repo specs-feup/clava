@@ -37,8 +37,16 @@ public class ClavaParserException extends RuntimeException {
     public String getMessage() {
         StringBuilder errorMessage = new StringBuilder();
 
-        errorMessage.append("There are errors in the source code:");
-        getErrors().stream().forEach(error -> errorMessage.append("\n").append(error));
+        errorMessage.append("There are " + getErrors().size() + " errors in the source code:");
+
+        var errors = new StringBuilder();
+        getErrors().stream().forEach(error -> errors.append("\n").append(error));
+        var errorsString = errors.toString();
+        if (errorsString.strip().isBlank()) {
+            errorsString = "\n<No error messages, check if dumper binary was correctly downloaded>";
+        }
+
+        errorMessage.append(errorsString);
 
         return errorMessage.toString();
     }
