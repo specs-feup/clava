@@ -31,7 +31,6 @@
 
 using namespace clang;
 
-//#define OLD_OUTPUT
 
 static llvm::cl::OptionCategory ToolingSampleCategory("Tooling Sample");
 
@@ -44,18 +43,11 @@ static constexpr const char* const PREFIX = "COUNTER";
 bool DumpAstVisitor::TraverseDecl(Decl *D) {
     FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
     if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
-#ifdef OLD_OUTPUT
-        (*D).dump(llvm::outs());
-#endif
+
         // Top-level Node
         llvm::errs() << TOP_LEVEL_NODES << "\n";
         llvm::errs() << D << "_" << id << "\n";
 
-        // If it is not being visited, if this is called it can give an error
-        // Visit Top Node
-        // Experiment: can this visitor replace all other visitors?
-        //dumper.VisitDeclTop(D);
-        //dumper->VisitDeclTop(D);
     }
 
     return false;
@@ -64,36 +56,10 @@ bool DumpAstVisitor::TraverseDecl(Decl *D) {
 
 
 
-//bool PrintNodesTypesRelationsVisitor::TraverseDecl(Decl *D) {
-/*
-    FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
-    if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
-        // Visit Top Node
-        // Experiment: can this visitor replace all other visitors?
-        dumper.VisitDeclTop(D);
-    }
-
-*/
-//    return RecursiveASTVisitor::TraverseDecl(D);
-    /*
-    FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
-    if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
-        // Visit Top Node
-        // Experiment: can this visitor replace all other visitors?
-        dumper.VisitDeclTop(D);
-        //dumper->VisitDeclTop(D);
-    }
-
-    // TODO: If at some moment dumper provides all information, this can be set to false
-    return true;
-*/
-//}
-
 
 
 
 PrintNodesTypesRelationsVisitor::PrintNodesTypesRelationsVisitor(ASTContext *Context, int id, ClangAstDumper dumper) : Context(Context), id(id), dumper(dumper)  {};
-//PrintNodesTypesRelationsVisitor::PrintNodesTypesRelationsVisitor(ASTContext *Context, int id, ClangAstDumper *dumper) : Context(Context), id(id), dumper(dumper)  {};
 
 static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::LangOptions lopt) {
     clang::SourceLocation b(d->getBeginLoc()), _e(d->getEndLoc());
@@ -110,50 +76,6 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
         clang::SourceLocation e(clang::Lexer::getLocForEndOfToken(_e, 0, *sm, lopt));
         return std::string(sm->getCharacterData(b), sm->getCharacterData(e)-sm->getCharacterData(b));
     }
-
-
-/*
-    bool PrintNodesTypesRelationsVisitor::VisitOMPExecutableDirective(OMPExecutableDirective * D) {
-
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
-
-        if (!fullLocation.isInSystemHeader()) {
-            // Get OMP Directive
-            DumpResources::omp << D << "_" << id << "->" << stmt2str(D, &Context->getSourceManager(), Context->getLangOpts()) << "\n";
-            DumpResources::omp << "NUM_CLAUSES" << "->" << D->getNumClauses() << "\n";
-            for(unsigned i=0; i<D->getNumClauses(); i++) {
-                OMPClause* clause = D->getClause(i);
-                DumpResources::omp << clause->getClauseKind() << "->" << loc2str(clause->getBeginLoc(), clause->getEndLoc(), Context) << "\n";
-            }
-        }
-
-        return true;
-    }
-*/
-
-/*
-    bool PrintNodesTypesRelationsVisitor::VisitDeclRefExpr(DeclRefExpr * D) {
-
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
-
-        if (!fullLocation.isInSystemHeader()) {
-            if (D->getQualifier() != nullptr) {
-                llvm::errs() << "DECL_REF_EXPR QUALIFIER BEGIN\n";
-                llvm::errs() << D << "_" << id << "\n";
-                D->getQualifier()->dump();
-                llvm::errs() << "\nDECL_REF_EXPR QUALIFIER END\n";
-            }
-
-
-            if(D->hasExplicitTemplateArgs()) {
-                DumpResources::template_args <<  D << "_" << id << "\n";
-            }
-
-        }
-        return true;
-    }
-*/
-
 
     bool PrintNodesTypesRelationsVisitor::VisitCXXConstructExpr(CXXConstructExpr * D) {
 
@@ -173,28 +95,10 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
     // Dump types for Expr, TypeDecl and ValueDecl, as well as the connection between them
     bool PrintNodesTypesRelationsVisitor::VisitExpr(Expr *D) {
-#ifdef OLD_OUTPUT
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
-        if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
-            //if(D->getType().isNull()) {
-            //    llvm::errs() << "VisitExpr null type\n";
-            //}
-            dumpNodeToType(DumpResources::nodetypes,D, D->getType());
-
-        }
-#endif
         return true;
     }
 
     bool PrintNodesTypesRelationsVisitor::VisitTypeDecl(TypeDecl *D) {
-
-#ifdef OLD_OUTPUT
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
-        if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
-            //llvm::errs() << "Visiting Type Decl: " << D << "\n";
-            dumpNodeToType(DumpResources::nodetypes, D, D->getTypeForDecl());
-        }
-#endif
         return true;
     }
 
@@ -204,16 +108,6 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
      * @return
      */
     bool PrintNodesTypesRelationsVisitor::VisitTypedefNameDecl(TypedefNameDecl *D) {
-#ifdef OLD_OUTPUT
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
-        if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
-            //if(D->getUnderlyingType().isNull()) {
-            //    llvm::errs() << "VisitNameDecl null type\n";
-            //}
-            dumpNodeToType(DumpResources::nodetypes, D, D->getUnderlyingType());
-
-        }
-#endif
         return true;
     }
 
@@ -234,18 +128,6 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
 
 
     bool PrintNodesTypesRelationsVisitor::VisitValueDecl(ValueDecl *D) {
-#ifdef OLD_OUTPUT
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getLocStart());
-        if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
-            //llvm::errs() << "Visiting Value Decl: " << D << "\n";
-            //if(D->getType().isNull()) {
-            //    llvm::errs() << "VisitValueDecl null type\n";
-            //}
-            dumpNodeToType(DumpResources::nodetypes, D, D->getType());
-
-            return true;
-        }
-#endif
         return true;
     }
 
@@ -275,20 +157,6 @@ static std::string stmt2str(clang::Stmt *d, clang::SourceManager *sm, clang::Lan
     }
 
     bool PrintNodesTypesRelationsVisitor::VisitLambdaExpr(LambdaExpr *D) {
-
-        #ifdef OLD_OUTPUT
-        FullSourceLoc fullLocation = Context->getFullLoc(D->getBeginLoc());
-        if (fullLocation.isValid() && !fullLocation.isInSystemHeader()) {
-            // Dump self
-            dumpNodeToType(DumpResources::nodetypes,D, D->getType());
-
-            // Traverse lambda class
-            TraverseCXXRecordDecl(D->getLambdaClass());
-            //TraverseDecl(D->getLambdaClass());
-            //VisitTypeDecl(D->getLambdaClass());
-        }
-        #endif
-
         return true;
     }
 
@@ -297,7 +165,6 @@ void PrintNodesTypesRelationsVisitor::dumpNodeToType(std::ofstream &stream, void
 
     // Opaque pointer, so that we can obtain the qualifiers
     void* typeAddr = !type.isNull() ? type.getAsOpaquePtr() : nullptr;
-    //const Type* typeAddr = type.getTypePtrOrNull();
 
     if(checkDuplicates) {
         if(seenNodes.count(nodeAddr) == 0) {
@@ -310,7 +177,6 @@ void PrintNodesTypesRelationsVisitor::dumpNodeToType(std::ofstream &stream, void
 
 
     dumper.VisitTypeTop(type);
-    //dumper->VisitTypeTop(type);
 }
 
 
@@ -331,32 +197,11 @@ void PrintNodesTypesRelationsVisitor::dumpNodeToType(std::ofstream &stream, void
     }
 
     dumper.VisitTypeTop(typeAddr);
-    // dumper->VisitTypeTop(typeAddr);
 }
 
-/*
-ClangAstDumper PrintNodesTypesRelationsVisitor::getDumper() {
-        return dumper;
-    }
-*/
-/*
-    MyASTConsumer::MyASTConsumer(ASTContext *C, int id) : topLevelDeclVisitor(C, id), printRelationsVisitor(C, id), id(id) {
-        std::ofstream consumer;
-        consumer.open("consumer_order.txt", std::ofstream::app);
-        consumer << "ASTConsumer built " << id << "\n";
-        consumer.close();
-    }
-*/
 MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(id)
-//MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper *dumper) : id(id)
         ,topLevelDeclVisitor(C, id), printRelationsVisitor(C, id, dumper)  {
-/*
-    this->id = id;
-    this->dumper = ClangAstDumper(C, id);
-    topLevelDeclVisitor = DumpAstVisitor(C, id, dumper);
-    printRelationsVisitor = PrintNodesTypesRelationsVisitor(C, id, dumper);
-*/
-    //dumper(C, id), topLevelDeclVisitor(C, id, dumper), printRelationsVisitor(C, id, dumper), id(id)
+
     std::ofstream consumer;
     consumer.open("consumer_order.txt", std::ofstream::app);
     consumer << "ASTConsumer built " << id << "\n";
@@ -390,26 +235,7 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
     }
 
     void MyASTConsumer::HandleTranslationUnit(ASTContext &Ctx) {
-    /*
-        for (auto b = Ctx.getTranslationUnitDecl()->decls().begin(), e = Ctx.getTranslationUnitDecl()->decls().end(); b != e; ++b) {
-            //counter++;
-            //llvm::errs() << "Decl kind: " << (*b)->getKind() << " decls\n";
-            topLevelDeclVisitor.TraverseDecl(*b);
-        }
-
-        for (auto b = Ctx.getTranslationUnitDecl()->decls().begin(), e = Ctx.getTranslationUnitDecl()->decls().end(); b != e; ++b) {
-            printRelationsVisitor.TraverseDecl(*b);
-        }
-
-        //llvm::errs() << "Found " << counter << " decls\n";
-
-        int counter = 0;
-        llvm::errs() << "After translation unit\n";
-        for (auto b = Ctx.getTranslationUnitDecl()->decls().begin(), e = Ctx.getTranslationUnitDecl()->decls().end(); b != e; ++b) {
-            counter++;
-            llvm::errs() << "Decl kind: " << (*b)->getKind() << " decls\n";
-        }
-        */
+    
     }
 
 
@@ -431,11 +257,6 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
             counter = DumpResources::runId;
         }
 
-#ifdef OLD_OUTPUT
-        DumpResources::writeCounter(counter);
-#endif
-        //llvm::errs() << "CUSTOM ID: " << DumpResources::runId  << "\n";
-
 
         dumpCompilerInstanceData(CI, file);
 
@@ -449,14 +270,12 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
         ClangAstDumper dumper(Context, counter, DumpResources::systemHeaderThreshold);
 
         return std::make_unique<MyASTConsumer>(Context, counter, dumper);
-        //return llvm::make_unique<MyASTConsumer>(Context, counter, &dumper);
     }
 
 
     void DumpAstAction::dumpCompilerInstanceData(CompilerInstance &CI, StringRef file) {
         clava::dump(COMPILER_INSTANCE_DATA);
 
-        //llvm::errs() << "File\n";
         clava::dump(file.str());
 
         clava::dump(CI.getInvocation().getLangOpts()->LineComment);
@@ -522,16 +341,8 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
                                         bool IsAngled, CharSourceRange FilenameRange, const FileEntry *File,
                                         StringRef SearchPath, StringRef RelativePath, const Module *Imported, SrcMgr::CharacteristicKind FileType) {
 
-        //clang::SourceManager &sm = compilerInstance.getSourceManager();
-
+        
         if (!sm.isInSystemHeader(HashLoc)) {
-#ifdef OLD_OUTPUT
-            DumpResources::includes << "source:" << sm.getFilename(HashLoc).str() << "|";
-            DumpResources::includes << "include:" << FileName.str() << "|";
-            DumpResources::includes << "line:" << sm.getSpellingLineNumber(HashLoc) << "|";
-            DumpResources::includes << "angled:" << IsAngled ? "true" : "false";
-            DumpResources::includes << "\n";
-#endif
             // Includes information in stream
             llvm::errs() << INCLUDES << "\n";
             // Source
@@ -545,8 +356,7 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
 
     void IncludeDumper::PragmaDirective(SourceLocation Loc, PragmaIntroducerKind Introducer) {
 
-        //clang::SourceManager &sm = compilerInstance.getSourceManager();
-
+        
         // Ignore system headers
         if(sm.isInSystemHeader(Loc)) {
             return;
@@ -560,57 +370,11 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
     }
 
     void IncludeDumper::FileChanged(SourceLocation Loc, FileChangeReason Reason, SrcMgr::CharacteristicKind FileType, FileID PrevFID) {
-//llvm::errs() << "File changed: " << sm.getFilename(Loc) << "\n";
-//llvm::errs() << "Reason: " << Reason << "\n";
+
     }
 
     void IncludeDumper::MacroExpands(const Token & MacroNameTok, const MacroDefinition & MD, SourceRange Range, const MacroArgs * Args) {
-/*
-        llvm::errs() << "Dumping Macro info:\n";
-        MD.getMacroInfo()->dump();
-        llvm::errs() << "\n";
-        //llvm::errs() << "\nDumping Macro info end\n";
 
-
-        llvm::errs() << "Definition begin:\n";
-        MD.getMacroInfo()->getDefinitionLoc().dump(compilerInstance.getSourceManager());
-        llvm::errs() << "\nDefinition length: " << MD.getMacroInfo()->getDefinitionLength(compilerInstance.getSourceManager()) <<"\n";
-        llvm::errs() << "\n";
-        //llvm::errs() << "\nDefinition begin end\n";
-
-        llvm::errs() << "Expansion begin:\n";
-        Range.getBegin().dump(compilerInstance.getSourceManager());
-        llvm::errs() << "\n";
-
-        */
-
-
-
-/*
-        llvm::errs() << "Is id: " << MacroNameTok.isAnyIdentifier() << "\n";
-        if(MacroNameTok.isAnyIdentifier()) {
-            llvm::errs() << "RAW id: " << MacroNameTok.getRawIdentifier().str() << "\n";
-        }
-        llvm::errs() << "Kind: " << MacroNameTok.getKind() << "\n";
-        */
- //       llvm::errs() << "ID INFO: " << MacroNameTok. << "\n";
-//       llvm::errs() << "Token begin:\n";
-  //      MacroNameTok.getLocation().dump(compilerInstance.getSourceManager());
-    //    llvm::errs() << "\nToken end\n";
-
-
-        //llvm::errs() << "\nSource begin end\n";
-
-/*
-        llvm::errs() << "Source end:\n";
-        Range.getEnd().dump(compilerInstance.getSourceManager());
-        llvm::errs() << "\nSource end end\n";
-*/
-/*
-        if(MacroNameTok.isLiteral()) {
-            llvm::errs() << "Token literal: " << MacroNameTok.getLiteralData() << "\n";
-        }
-*/
     }
 
 
@@ -648,7 +412,6 @@ MyASTConsumer::MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper) : id(
 // File instantiations
 std::ofstream DumpResources::includes;
 std::ofstream DumpResources::nodetypes;
-//std::ofstream DumpResources::template_args;
 std::ofstream DumpResources::is_temporary;
 std::ofstream DumpResources::omp;
 std::ofstream DumpResources::enum_integer_type;
@@ -675,14 +438,6 @@ void DumpResources::init(int runId, int systemLevelThreshold) {
     DumpResources::runId = runId;
     DumpResources::systemHeaderThreshold = systemLevelThreshold;
 
-    // Clear files
-#ifdef OLD_OUTPUT
-    DumpResources::includes.open("includes.txt", std::ofstream::out | std::fstream::trunc);
-    DumpResources::nodetypes.open("nodetypes.txt", std::ofstream::out | std::ofstream::trunc);
-#endif
-
-
-    //DumpResources::template_args.open("template_args.txt", std::ofstream::out | std::ofstream::trunc);
     DumpResources::is_temporary.open("is_temporary.txt", std::ofstream::out | std::ofstream::trunc);
     DumpResources::omp.open("omp.txt", std::ofstream::out | std::ofstream::trunc);
     DumpResources::enum_integer_type.open("enum_integer_type.txt", std::ofstream::out | std::ofstream::trunc);
@@ -691,13 +446,6 @@ void DumpResources::init(int runId, int systemLevelThreshold) {
 }
 
 void DumpResources::finish() {
-#ifdef OLD_OUTPUT
-    DumpResources::includes.close();
-    DumpResources::nodetypes.close();
-#endif
-
-
-    //DumpResources::template_args.close();
     DumpResources::is_temporary.close();
     DumpResources::omp.close();
     DumpResources::enum_integer_type.close();
