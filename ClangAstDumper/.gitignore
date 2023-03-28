@@ -1,8 +1,11 @@
+.vscode
+build
 CMakeFiles/
 cmake_install.cmake
 CMakeCache.txt
-*.so
 Makefile
-.vscode
 testSources
-build
+*.so
+*.gch
+*.o
+*.a

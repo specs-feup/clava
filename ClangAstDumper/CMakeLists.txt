@@ -1,111 +1,59 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.14)
 project(ClangAstDumper)
 
-#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
-#message(STATUS HELLO)
+set(LLVM_VERSION 14)
 
+SET(CMAKE_C_COMPILER "clang-14")
+SET(CMAKE_CXX_COMPILER "clang++-14")
 
-#SET(CMAKE_C_COMPILER "clang")
-#SET(CMAKE_CXX_COMPILER "clang++")
-
-# Initialize Deps
-include("../deps.cmake")
-
-# Add Modules
-#deps_find_package(llvm3.8 REQUIRED) # LLVM
-#deps_find_package(llvm7 REQUIRED) # LLVM
-#deps_find_package(llvm12 REQUIRED) # LLVM
-deps_find_package(llvm14.0.6 REQUIRED) # LLVM
-
-set(COMMON_CXX_FLAGS "-std=c++17 -O3 -Wall -Wno-unused-function")
-#-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -DVISIT_CHECK
-
-#add_definitions(-DOLD_OUTPUT)
-
-if(SYSTEM_PLATFORM STREQUAL "MacOS")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_CXX_FLAGS} -stdlib=libc++")
-else()
-  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_CXX_FLAGS} -static-libgcc -static-libstdc++")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_CXX_FLAGS}")  
-endif()
-
-
-#Enable debug
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG")
-
-# For CentOS and macOS
-# Set SYSTEM_PLATFORM in deps_config.cmake
-if(SYSTEM_PLATFORM STREQUAL "Centos" OR SYSTEM_PLATFORM STREQUAL "MacOS")
-  	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS")
-endif()
-
-
-OPTION(USE_CLAVA "Uses Clava during compilation")
-
-# Enable Clava
-if(USE_CLAVA)
-#	message(STATUS "Using Clava in this project")
-	find_package(Clava REQUIRED)
-#else()
-#    message(STATUS "Not using Clava")
-endif(USE_CLAVA)
-unset(USE_CLAVA CACHE) # So that the value is refreshed
+find_package(Clang REQUIRED CONFIG)
+include_directories(/usr/lib/llvm-14/include)
 
 
 set(SOURCE_FILES
-		main.cpp
-		ClangAst.cpp
-		ClangAstDumper.cpp
-		ClangAstDumperTypes.cpp
-		ClangAstDumperStmts.cpp
-		ClangAstDumperDecls.cpp
-        ClangAstDumperExtra.cpp
-		TypeMarker.cpp
-        ClavaDataDumper.cpp
-        ClavaDataDumperDecls.cpp
-    	ChildrenVisitorDecls.cpp
-    	ClangNodes.cpp
-		ClavaDataDumperStmts.cpp
-		ClavaDataDumperTypes.cpp
-		ClangAstDumperExprs.cpp
-		ChildrenVisitorStmts.cpp
-		ClavaConstants.cpp
-		ChildrenVisitorTypes.cpp
-		ClangEnums.cpp
-		ClangastDumperAttr.cpp
-		ChildrenVisitorAttrs.cpp
-		ClavaDataDumperAttrs.cpp
-		ChildrenVisitorExtras.cpp
-		ClavaDecl.cpp
-		enums_Type_h.cpp
-		enums_OperationKinds_h.cpp
-		enums_AttrKinds_h.cpp
-		enums_Specifiers_h.cpp
-		enums_ExceptionSpecificationType_h.cpp
-		enums_Linkage_h.cpp
-		enums_Visibility_h.cpp
-		enums_TemplateBase_h.cpp
-		enums_Decl_h.cpp
-		enums_ExprCXX_h.cpp
-		enums_TypeTraits_h.cpp
-		enums_NestedNameSpecifier_h.cpp
-		enums_DeclCxx_h.cpp
-		enums_Lambda_h.cpp
-		enums_TemplateName_h.cpp
-		enums_Attr_h.cpp
-		enums_Expr_h.cpp
+		src/newmain.cpp
+		src/ClangAst.cpp
+    	src/ClangNodes.cpp
+		src/TypeMarker.cpp
+        src/ClavaDataDumper.cpp
+		src/ClavaDataDumperAttrs.cpp
+        src/ClavaDataDumperDecls.cpp
+		src/ClavaDataDumperStmts.cpp
+		src/ClavaDataDumperTypes.cpp
+		src/ClavaConstants.cpp
+		src/ClavaDecl.cpp
+		src/ChildrenVisitorAttrs.cpp
+    	src/ChildrenVisitorDecls.cpp
+		src/ChildrenVisitorExtras.cpp
+		src/ChildrenVisitorStmts.cpp
+		src/ChildrenVisitorTypes.cpp
+		src/ClangAstDumper.cpp
+		src/ClangAstDumperAttr.cpp
+		src/ClangAstDumperDecls.cpp
+		src/ClangAstDumperExprs.cpp
+        src/ClangAstDumperExtra.cpp
+		src/ClangAstDumperStmts.cpp
+		src/ClangAstDumperTypes.cpp
+		src/ClangEnums.cpp
+		src/enums_Type_h.cpp
+		src/enums_OperationKinds_h.cpp
+		src/enums_AttrKinds_h.cpp
+		src/enums_Specifiers_h.cpp
+		src/enums_ExceptionSpecificationType_h.cpp
+		src/enums_Linkage_h.cpp
+		src/enums_Visibility_h.cpp
+		src/enums_TemplateBase_h.cpp
+		src/enums_Decl_h.cpp
+		src/enums_ExprCXX_h.cpp
+		src/enums_TypeTraits_h.cpp
+		src/enums_NestedNameSpecifier_h.cpp
+		src/enums_DeclCxx_h.cpp
+		src/enums_Lambda_h.cpp
+		src/enums_TemplateName_h.cpp
+		src/enums_Attr_h.cpp
+		src/enums_Expr_h.cpp
 		)
 
-add_executable(ClangAstDumper ${SOURCE_FILES})
+add_library(MyPlugin SHARED ${SOURCE_FILES})
 
-# Add includes
-target_include_directories(ClangAstDumper
-       SYSTEM PUBLIC ${DEPS_INCLUDES}
-)
-
-# Add enums helper
-
-# Add Libraries
-target_link_libraries(ClangAstDumper
-        ${DEPS_LIBRARIES}
-)
+target_compile_features(MyPlugin PRIVATE cxx_std_17)
