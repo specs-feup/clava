@@ -936,7 +936,8 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public String getAstIdImpl() {
-        return getNode().getExtendedId().orElse("<NO_ID>");
+        // return getNode().getExtendedId().orElse("<NO_ID>");
+        return getNode().getExtendedId().orElseThrow(() -> new RuntimeException("No ID found in node " + getNode()));
     }
 
     @Override
