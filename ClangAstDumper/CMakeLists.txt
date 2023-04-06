@@ -3,11 +3,11 @@ project(ClangAstDumper)
 
 set(LLVM_VERSION 14)
 
-SET(CMAKE_C_COMPILER "clang-14")
-SET(CMAKE_CXX_COMPILER "clang++-14")
+SET(CMAKE_C_COMPILER "clang")
+SET(CMAKE_CXX_COMPILER "clang++")
 
 find_package(Clang REQUIRED CONFIG)
-include_directories(/usr/lib/llvm-14/include)
+include_directories(C:/msys64/mingw64/include)
 
 
 set(SOURCE_FILES
