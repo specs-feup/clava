@@ -26,12 +26,14 @@ import com.google.common.base.Preconditions;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ast.decl.Decl;
 import pt.up.fe.specs.clava.ast.decl.DeclaratorDecl;
 import pt.up.fe.specs.clava.ast.decl.EnumConstantDecl;
 import pt.up.fe.specs.clava.ast.decl.ValueDecl;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
 import pt.up.fe.specs.clava.ast.expr.enums.DeclRefKind;
 import pt.up.fe.specs.clava.ast.expr.enums.UnaryOperatorKind;
+import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.language.CXXOperator;
 import pt.up.fe.specs.clava.utils.Nameable;
 import pt.up.fe.specs.util.collections.SpecsList;
@@ -107,9 +109,13 @@ public class DeclRefExpr extends Expr implements Nameable {
      * 
      * @return
      */
-
     public ValueDecl getDeclaration() {
         return (ValueDecl) ClavaNodes.normalizeDecl(get(DECL));
+    }
+
+    @Override
+    public Optional<Decl> getDecl() {
+        return Optional.of(getDeclaration());
     }
 
     public Optional<DeclaratorDecl> getVariableDeclaration() {
@@ -268,5 +274,13 @@ public class DeclRefExpr extends Expr implements Nameable {
     @Override
     public SpecsList<String> getSignatureCustomStrings() {
         return super.getSignatureCustomStrings().andAdd(getRefName());
+    }
+
+    /**
+     * Type should refer to the type of the corresponding VarDecl
+     */
+    @Override
+    public Type getType() {
+        return getDeclaration().getType();
     }
 }
