@@ -281,6 +281,12 @@ public class DeclRefExpr extends Expr implements Nameable {
      */
     @Override
     public Type getType() {
-        return getDeclaration().getType();
+        var decl = getDeclaration();
+
+        if (decl != null) {
+            return decl.getType();
+        }
+
+        return super.getType();
     }
 }
