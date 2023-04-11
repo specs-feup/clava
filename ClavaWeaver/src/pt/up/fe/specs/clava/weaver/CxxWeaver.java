@@ -127,8 +127,6 @@ public class CxxWeaver extends ACxxWeaver {
                 ClavaWeaverResource.ACTIONS, true);
     }
 
-    // private static final boolean SHOW_MEMORY_USAGE = true;
-
     private static final String TEMP_WEAVING_FOLDER = "__clava_woven";
     private static final String TEMP_SRC_FOLDER = "__clava_src";
     private static final String WOVEN_CODE_FOLDERNAME = "woven_code";
@@ -143,16 +141,11 @@ public class CxxWeaver extends ACxxWeaver {
     private static final String CMAKE_IMPLEMENTATION_FILES_FILENAME = "clava_implementation_files.txt";
     private static final String CMAKE_INCLUDE_DIRS_FILENAME = "clava_include_dirs.txt";
 
-    // private static final Set<String> EXTENSIONS_IMPLEMENTATION = new HashSet<>(Arrays.asList(
-    // "c", "cpp"));
-    // private static final Set<String> EXTENSIONS_HEADERS = new HashSet<>(Arrays.asList("h", "hpp"));
-
     public static String getWovenCodeFoldername() {
         return WOVEN_CODE_FOLDERNAME;
     }
 
     private static final List<String> DEFAULT_COMMON_DUMPER_FLAGS = Arrays.asList("-Wno-unknown-pragmas");
-    // private static final List<String> DEFAULT_DUMPER_FLAGS = Arrays.asList();
 
     private static final List<String> DEFAULT_DUMPER_FLAGS = buildDefaultDumperFlags();
 
