@@ -1,4 +1,10 @@
 {
-    "prettier.tabWidth": 4,
-    "editor.formatOnPaste": true
+  "prettier.tabWidth": 2,
+  "editor.formatOnPaste": true,
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "./dist/**": true
+  }
 }
