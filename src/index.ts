@@ -25,14 +25,12 @@ const explorer = cosmiconfigSync(moduleName, {
 });
 
 program
+  .name(moduleName)
   .addOption(
     new Option(
-      "-d, --directory <directory...>",
-      "Add C/C++ source code directories for parsing"
-    ).default("./CxxSource")
-  )
-  .addOption(
-    new Option("-w, --watch", "Watch the directory for changes").default(false)
+      "-w, --watch <directory...>",
+      "Watch the following directory for changes"
+    ).default([])
   )
   .addOption(new Option("-c, --config <config>", "Path to config file"))
   //.addCommand(new Command("init").description("Initialize a new clava project"))
