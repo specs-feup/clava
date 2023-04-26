@@ -38,6 +38,7 @@
         "cosmiconfig": "^8.1.0",
         "cosmiconfig-typescript-loader": "^4.3.0",
         "debug": "^4.3.4",
+        "java": "^0.13.0",
         "supports-color": "^9.3.1"
     },
     "devDependencies": {
@@ -45,6 +46,7 @@
         "@types/chai": "^4.2.22",
         "@types/commander": "^2.12.2",
         "@types/debug": "^4.1.7",
+        "@types/java": "^0.9.2",
         "@types/mocha": "^9.0.0",
         "@types/node": "^18.15.3",
         "@typescript-eslint/eslint-plugin": "^4.33.0",
