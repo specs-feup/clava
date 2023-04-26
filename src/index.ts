@@ -1,6 +1,6 @@
 import { program, Option, Command } from "commander";
 //import { program, Option, Command } from "@commander-js/extra-typings";
-import { main } from "./Clava.js";
+import { main } from "./ClavaLauncher.js";
 import { cosmiconfigSync } from "cosmiconfig";
 import { TypeScriptLoader } from "cosmiconfig-typescript-loader";
 
