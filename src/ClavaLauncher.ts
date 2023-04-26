@@ -51,5 +51,5 @@ function executeClava(args: OptionValues) {
     }
   }
 
-  activeProcesses.push(fork(path.join("dist", "Test.js"), args));
+  activeProcesses.push(fork(path.join("dist", "Clava.js"), args));
 }
