@@ -112,10 +112,21 @@ public class CxxWeaver extends ACxxWeaver {
 
     private static final List<String> CLAVA_PREDEFINED_EXTERNAL_DEPS = Arrays.asList("LAT - Lara Autotuning Tool",
             "https://github.com/specs-feup/LAT-Lara-Autotuning-Tool.git",
+            "Benchmark - CHStone (import lara.benchmark.CHStoneBenchmarkSet)",
+            "https://github.com/specs-feup/clava-benchmarks.git?folder=CHStone",
+            "Benchmark - HiFlipVX (import lara.benchmark.HiFlipVXBenchmarkSet)",
+            "https://github.com/specs-feup/clava-benchmarks.git?folder=HiFlipVX",
+            // TODO: Missing LsuBencharkSet
+            // "Benchmark - LSU (import lara.benchmark.LsuBenchmarkSet)",
+            // "https://github.com/specs-feup/clava-benchmarks.git?folder=LSU",
             "Benchmark - NAS (import lara.benchmark.NasBenchmarkSet)",
             "https://github.com/specs-feup/clava-benchmarks.git?folder=NAS",
+            "Benchmark - Parboil (import lara.benchmark.ParboilBenchmarkSet)",
+            "https://github.com/specs-feup/clava-benchmarks.git?folder=Parboil",
             "Benchmark - Polybench (import lara.benchmark.PolybenchBenchmarkSet)",
-            "https://github.com/specs-feup/clava-benchmarks.git?folder=Polybench");
+            "https://github.com/specs-feup/clava-benchmarks.git?folder=Polybench",
+            "Benchmark - Rosetta (import lara.benchmark.RosettaBenchmarkSet)",
+            "https://github.com/specs-feup/clava-benchmarks.git?folder=Rosetta");
 
     /**
      * @deprecated
