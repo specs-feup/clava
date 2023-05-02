@@ -1,61 +1,51 @@
-import { program, Option, Command } from "commander";
-//import { program, Option, Command } from "@commander-js/extra-typings";
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 import { main } from "./ClavaLauncher.js";
-import { cosmiconfigSync } from "cosmiconfig";
-import { TypeScriptLoader } from "cosmiconfig-typescript-loader";
 
 const moduleName = "clava";
-const explorer = cosmiconfigSync(moduleName, {
-  searchPlaces: [
-    "package.json",
-    `.${moduleName}rc`,
-    `.${moduleName}rc.json`,
-    `.${moduleName}rc.yaml`,
-    `.${moduleName}rc.yml`,
-    `.${moduleName}rc.js`,
-    `.${moduleName}rc.ts`,
-    `.${moduleName}rc.cjs`,
-    `${moduleName}.config.js`,
-    `${moduleName}.config.ts`,
-    `${moduleName}.config.cjs`,
-  ],
-  loaders: {
-    ".ts": TypeScriptLoader(),
-  },
-});
+const prettyName = "Clava";
 
-program
-  .name(moduleName)
-  .addOption(
-    new Option(
-      "-w, --watch <directory...>",
-      "Watch the following directory for changes"
-    ).default([])
-  )
-  .addOption(new Option("-c, --config <config>", "Path to config file"))
-  //.addCommand(new Command("init").description("Initialize a new clava project"))
-  //.addCommand(new Command("run").description("Run clava"))
-  .showHelpAfterError()
+const config = await yargs(hideBin(process.argv))
+  .scriptName(moduleName)
+  .command({
+    command: "$0 [script-file]",
+    describe: `Execute a ${prettyName} script`,
+    builder: (yargs) => {
+      return yargs
+        .positional("script-file", {
+          describe: `Path to ${prettyName} script file`,
+          type: "string",
+        })
+        .option("c", {
+          alias: "config",
+          describe: "Path to JSON config file",
+          type: "string",
+          config: true,
+        })
+        .option("w", {
+          alias: "watch",
+          describe: "Watch the following directory for changes",
+          type: "array",
+          default: [],
+          defaultDescription: "none",
+        });
+    },
+    handler: async (argv) => {
+      console.log(`Executing ${prettyName} script...`);
+      main(argv);
+    },
+  })
+  .command({
+    command: "init",
+    describe: `Initialize a new ${prettyName} project`,
+    handler: async () => {
+      console.log(`Initializing new ${prettyName} project...`);
+    },
+  })
+  .help()
+  .showHelpOnFail(true)
+  .strict()
+  .pkgConf(moduleName)
   .parse();
 
-const config = program.opts();
-let configFromFile;
-if (config.config) {
-  try {
-    configFromFile = explorer.load(config.config);
-  } catch (error) {
-    console.error("Error: Configuration file not found");
-    process.exit(1);
-  }
-} else {
-  configFromFile = explorer.search();
-}
-config.config = configFromFile?.filepath;
-
-if (configFromFile?.hasOwnProperty("config")) {
-  for (const [key, value] of Object.entries(config)) {
-    config[key] = configFromFile.config[key] || value;
-  }
-}
-
-await main(config);
+export type Config = typeof config;

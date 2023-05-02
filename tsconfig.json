@@ -8,7 +8,8 @@
     //"allowJs": true,
     //"checkJs": true,
     "moduleResolution": "node",
-    "sourceMap": true
+    "sourceMap": true,
+    "esModuleInterop": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]

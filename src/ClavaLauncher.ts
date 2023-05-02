@@ -1,8 +1,8 @@
 import Debug from "debug";
 import * as path from "path";
 import * as chokidar from "chokidar";
-import { OptionValues } from "commander";
 import { ChildProcess, fork } from "child_process";
+import { Config } from "./index.js";
 
 const debug = Debug("clava:main");
 let activeProcesses: Array<ChildProcess> = [];
@@ -11,7 +11,7 @@ function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export async function main(args: OptionValues) {
+export async function main(args: { [key: string]: any }) {
   debug("Clava execution arguments: %O", args);
   executeClava(args);
 
@@ -35,13 +35,13 @@ export async function main(args: OptionValues) {
 function filesystemEventHandler(
   event: string,
   filepath: string,
-  args: OptionValues
+  args: { [key: string]: any }
 ) {
   debug(`Source file event: ${capitalizeFirstLetter(event)} '${filepath}'`);
   executeClava(args);
 }
 
-function executeClava(args: OptionValues) {
+async function executeClava(args: { [key: string]: any }) {
   const activeProcess = activeProcesses.shift();
   if (activeProcess?.exitCode === null) {
     if (activeProcess.kill("SIGKILL")) {

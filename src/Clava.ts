@@ -1,8 +1,8 @@
 // @ts-ignore
 import java from "java";
 import Debug from "debug";
-import { OptionValues } from "commander";
 import { promisify } from "util";
+import { hideBin } from "yargs/helpers";
 
 const debug = Debug("clava:weaver");
 java.asyncOptions = {
@@ -13,7 +13,7 @@ java.asyncOptions = {
 };
 java.classpath.push("../../../.local/bin/Clava/Clava.jar");
 
-const args: OptionValues = process.argv.slice(2);
+const args: { [key: string]: any } = hideBin(process.argv);
 
 debug("Clava execution arguments: %O", args);
 
