@@ -44,7 +44,13 @@ function filesystemEventHandler(
 async function executeClava(args: { [key: string]: any }) {
   const activeProcess = activeProcesses.shift();
   if (activeProcess?.exitCode === null) {
+    const promise = new Promise((resolve) => {
+      activeProcess.once("exit", (code) => {
+        resolve(code);
+      });
+    });
     if (activeProcess.kill("SIGKILL")) {
+      await promise;
       debug("Killed active process");
     } else {
       throw new Error("Could not kill active process");
@@ -53,3 +59,18 @@ async function executeClava(args: { [key: string]: any }) {
 
   activeProcesses.push(fork(path.join("dist", "Clava.js"), args));
 }
+
+// Kill all active processes on exit
+process.on("SIGINT", async () => {
+  for (const activeProcess of activeProcesses) {
+    const promise = new Promise((resolve) => {
+      activeProcess.once("exit", (code) => {
+        resolve(code);
+      });
+    });
+    activeProcess.kill("SIGKILL");
+    await promise;
+  }
+
+  process.exit(0);
+});
