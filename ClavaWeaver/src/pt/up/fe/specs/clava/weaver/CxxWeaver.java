@@ -112,10 +112,21 @@ public class CxxWeaver extends ACxxWeaver {
 
     private static final List<String> CLAVA_PREDEFINED_EXTERNAL_DEPS = Arrays.asList("LAT - Lara Autotuning Tool",
             "https://github.com/specs-feup/LAT-Lara-Autotuning-Tool.git",
+            "Benchmark - CHStone (import lara.benchmark.CHStoneBenchmarkSet)",
+            "https://github.com/specs-feup/clava-benchmarks.git?folder=CHStone",
+            "Benchmark - HiFlipVX (import lara.benchmark.HiFlipVXBenchmarkSet)",
+            "https://github.com/specs-feup/clava-benchmarks.git?folder=HiFlipVX",
+            // TODO: Missing LsuBencharkSet
+            // "Benchmark - LSU (import lara.benchmark.LsuBenchmarkSet)",
+            // "https://github.com/specs-feup/clava-benchmarks.git?folder=LSU",
             "Benchmark - NAS (import lara.benchmark.NasBenchmarkSet)",
             "https://github.com/specs-feup/clava-benchmarks.git?folder=NAS",
+            "Benchmark - Parboil (import lara.benchmark.ParboilBenchmarkSet)",
+            "https://github.com/specs-feup/clava-benchmarks.git?folder=Parboil",
             "Benchmark - Polybench (import lara.benchmark.PolybenchBenchmarkSet)",
-            "https://github.com/specs-feup/clava-benchmarks.git?folder=Polybench");
+            "https://github.com/specs-feup/clava-benchmarks.git?folder=Polybench",
+            "Benchmark - Rosetta (import lara.benchmark.RosettaBenchmarkSet)",
+            "https://github.com/specs-feup/clava-benchmarks.git?folder=Rosetta");
 
     /**
      * @deprecated
@@ -126,8 +137,6 @@ public class CxxWeaver extends ACxxWeaver {
         return LanguageSpecification.newInstance(ClavaWeaverResource.JOINPOINTS, ClavaWeaverResource.ARTIFACTS,
                 ClavaWeaverResource.ACTIONS, true);
     }
-
-    // private static final boolean SHOW_MEMORY_USAGE = true;
 
     private static final String TEMP_WEAVING_FOLDER = "__clava_woven";
     private static final String TEMP_SRC_FOLDER = "__clava_src";
@@ -143,16 +152,11 @@ public class CxxWeaver extends ACxxWeaver {
     private static final String CMAKE_IMPLEMENTATION_FILES_FILENAME = "clava_implementation_files.txt";
     private static final String CMAKE_INCLUDE_DIRS_FILENAME = "clava_include_dirs.txt";
 
-    // private static final Set<String> EXTENSIONS_IMPLEMENTATION = new HashSet<>(Arrays.asList(
-    // "c", "cpp"));
-    // private static final Set<String> EXTENSIONS_HEADERS = new HashSet<>(Arrays.asList("h", "hpp"));
-
     public static String getWovenCodeFoldername() {
         return WOVEN_CODE_FOLDERNAME;
     }
 
     private static final List<String> DEFAULT_COMMON_DUMPER_FLAGS = Arrays.asList("-Wno-unknown-pragmas");
-    // private static final List<String> DEFAULT_DUMPER_FLAGS = Arrays.asList();
 
     private static final List<String> DEFAULT_DUMPER_FLAGS = buildDefaultDumperFlags();
 
