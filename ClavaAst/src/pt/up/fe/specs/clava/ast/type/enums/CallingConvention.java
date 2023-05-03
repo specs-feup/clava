@@ -34,6 +34,7 @@ public enum CallingConvention implements StringProvider {
     SpirFunction,
     OpenCLKernel,
     Swift,
+    SwiftAsync,
     PreserveMost,
     PreserveAll,
     AArch64VectorCall;

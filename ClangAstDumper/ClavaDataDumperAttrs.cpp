@@ -15,6 +15,8 @@ const std::map<const std::string, clava::AttrNode > clava::ATTR_DATA_MAP = {
         {"FormatAttr", clava::AttrNode::FORMAT},
         {"NonNullAttr", clava::AttrNode::NON_NULL},
         {"VisibilityAttr", clava::AttrNode::VISIBILITY},
+        //{"TypeVisibilityAttr", clava::AttrNode::TYPE_VISIBILITY},
+
 };
 
 
@@ -52,6 +54,8 @@ void clava::ClavaDataDumper::dump(clava::AttrNode attrNode, const Attr* A) {
             DumpNonNullAttrData(static_cast<const NonNullAttr*>(A)); break;
         case clava::AttrNode::VISIBILITY:
             DumpVisibilityAttrData(static_cast<const VisibilityAttr*>(A)); break;
+        //case clava::AttrNode::TYPE_VISIBILITY:
+        //    DumpTypeVisibilityAttrData(static_cast<const TypeVisibilityAttr*>(A)); break;
         default:
             throw std::invalid_argument("ClangDataDumper::dump(DeclNode):: Case not implemented, '" + getName(attrNode) + "'");
     }
@@ -61,8 +65,7 @@ void clava::ClavaDataDumper::dump(clava::AttrNode attrNode, const Attr* A) {
 void clava::ClavaDataDumper::DumpAttrData(const Attr *A) {
     clava::dumpSourceInfo(Context, A->getRange().getBegin(), A->getRange().getEnd());
 
-    // Print information about Attr
-    clava::dump(clava::ATTRIBUTES[A->getKind()]);
+    clava::dump(clava::getAttrKind(A));
     clava::dump(A->isImplicit());
     clava::dump(A->isInherited());
     clava::dump(A->isLateParsed());
@@ -122,3 +125,11 @@ void clava::ClavaDataDumper::DumpVisibilityAttrData(const VisibilityAttr *A) {
 
     clava::dump(clava::VISIBILITY_ATTR_TYPE[A->getVisibility()]);
 }
+/*
+void clava::ClavaDataDumper::DumpTypeVisibilityAttrData(const TypeVisibilityAttr *A) {
+    // Common
+    DumpAttrData(A);
+
+    clava::dump(clava::VISIBILITY_ATTR_TYPE[A->getVisibility()]);
+}
+ */

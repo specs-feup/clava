@@ -18,7 +18,7 @@ namespace clava {
     /* Clang Enums */
 
     extern const std::string CAST_KIND[];
-    extern const std::string ATTRIBUTES[];
+    extern const std::string ATTRIBUTES[]; // Deprecated, no not use. Instead, use clava::getAttrKind(const Attr* A)
     extern const std::string CALLING_CONVENTION[];
     extern const std::string REFERENCE_QUALIFIER[];
     extern const std::string EXCEPTION_SPECIFICATION_TYPE[];

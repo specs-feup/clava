@@ -13,6 +13,7 @@
 
 package pt.up.fe.specs.clava.language;
 
+import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.enums.EnumHelperWithValue;
 import pt.up.fe.specs.util.lazy.Lazy;
 import pt.up.fe.specs.util.providers.StringProvider;
@@ -49,6 +50,7 @@ public enum TagKind implements StringProvider {
 
     @Override
     public String getString() {
-        return getCode();
+        return SpecsStrings.toCamelCase(name());
+        // return getCode();
     }
 }

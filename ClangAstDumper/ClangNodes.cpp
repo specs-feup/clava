@@ -11,7 +11,7 @@
 
 
 #include <bitset>
-
+#include <iostream>
 
 using namespace clang;
 
@@ -30,8 +30,28 @@ const std::string clava::getClassName(const Type* T) {
     return kindName + "Type";
 }
 
+const std::string clava::getAttrKind(const Attr* A) {
+    // Print information about Attr
+    //clava::dump(clava::ATTRIBUTES[A->getKind()]);
+    {
+        switch (A->getKind()) {
+#define ATTR(X)                                                                \
+  case attr::X:                                                                \
+    return #X;                                                                  \
+    break;
+#include "clang/Basic/AttrList.inc"
+        }
+
+    }
+
+    return "<undefined_attribute>";
+}
+
 const std::string clava::getClassName(const Attr* A) {
-    const std::string kindName =  clava::ATTRIBUTES[A->getKind()];
+
+    //const std::string kindName =  clava::ATTRIBUTES[A->getKind()];
+    const std::string kindName =  clava::getAttrKind(A);
+
     return kindName + "Attr";
 }
 
@@ -459,7 +479,10 @@ void clava::dump(NestedNameSpecifier* qualifier, int id) {
 
 
 void clava::dump(const TemplateArgument &templateArg, int id, ASTContext* Context) {
+    SmallString<0> str;
+
     clava::dump(clava::TEMPLATE_ARG_KIND[templateArg.getKind()]);
+
     switch (templateArg.getKind()) {
         case TemplateArgument::ArgKind::Type:
             clava::dump(clava::getId(templateArg.getAsType(), id));
@@ -475,10 +498,8 @@ void clava::dump(const TemplateArgument &templateArg, int id, ASTContext* Contex
             }
             break;
         case TemplateArgument::ArgKind::Integral:
-            //bool isSigned = templateArg.getAsIntegral().isSigned();
-            clava::dump(templateArg.getAsIntegral().toString(10));
-//    const std::string source = getSource(E);
-//    clava::dump(source);
+            templateArg.getAsIntegral().toString(str, 10);
+            clava::dump(str);
             break;
         case TemplateArgument::ArgKind::Template:
             clava::dump(templateArg.getAsTemplate(), id, Context);

@@ -29,7 +29,7 @@ void vectorSizeTest(std::vector<float> & v) {
    {
       int i;
       i = 0;
-      unsigned long decomp_1;
+      unsigned long long decomp_1;
       decomp_1 = v.size();
       bool decomp_2;
       decomp_2 = i < decomp_1;

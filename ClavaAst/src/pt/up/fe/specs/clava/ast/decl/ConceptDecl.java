@@ -1,5 +1,5 @@
 /**
- * Copyright 2018 SPeCS.
+ * Copyright 2023 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.clava.ast.attr;
+package pt.up.fe.specs.clava.ast.decl;
 
 import java.util.Collection;
 
@@ -19,9 +19,9 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 
-public class TypeVisibilityAttr extends InheritableAttr {
+public class ConceptDecl extends TemplateDecl {
 
-    public TypeVisibilityAttr(DataStore data, Collection<? extends ClavaNode> children) {
+    public ConceptDecl(DataStore data, Collection<? extends ClavaNode> children) {
         super(data, children);
     }
 

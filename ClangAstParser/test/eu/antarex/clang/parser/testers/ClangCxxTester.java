@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package eu.antarex.clang.parser.tests;
+package eu.antarex.clang.parser.testers;
 
 import org.junit.After;
 import org.junit.BeforeClass;
