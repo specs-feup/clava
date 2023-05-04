@@ -57,7 +57,9 @@ async function executeClava(args: { [key: string]: any }) {
     }
   }
 
-  activeProcesses.push(fork(path.join("dist", "Clava.js"), args));
+  activeProcesses.push(
+    fork(path.join("dist", "Clava.js"), [JSON.stringify(args)])
+  );
 }
 
 // Kill all active processes on exit

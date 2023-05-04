@@ -1,26 +1,49 @@
+import * as fs from "fs";
+import * as path from "path";
 // @ts-ignore
 import java from "java";
 import Debug from "debug";
 import { promisify } from "util";
+import { isValidFileExtension } from "./FileExtensions.js";
 import { hideBin } from "yargs/helpers";
 
 const debug = Debug("clava:weaver");
+const args: { [key: string]: any } = JSON.parse(hideBin(process.argv)[0]);
+
 java.asyncOptions = {
-  asyncSuffix: undefined,
+  asyncSuffix: "",
   syncSuffix: "Sync",
-  promiseSuffix: "",
+  promiseSuffix: "P",
   promisify: promisify,
 };
 java.classpath.push("../../../.local/bin/Clava/Clava.jar");
-
-const args: { [key: string]: any } = hideBin(process.argv);
+await java.ensureJvm();
 
 debug("Clava execution arguments: %O", args);
 
-await java.callStaticMethod(
-  "pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher",
-  "main",
-  [""]
+/* const javaClass = await java.import(
+  "pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher"
 );
 
+javaClass.mainP(["testscript.js"]); */
+
+const javaLangSystem = java.import("java.lang.System");
+await javaLangSystem.out.printlnP("JAVA Code execution...");
+
+if (
+  fs.existsSync(args.scriptFile) &&
+  isValidFileExtension(path.extname(args.scriptFile))
+) {
+  await import(path.resolve(args.scriptFile))
+    .then(() => {
+      debug("Execution completed successfully.");
+    })
+    .catch((error) => {
+      debug(error);
+    });
+} else {
+  console.error("Invalid file path or file type.");
+}
+
+debug("Exiting...");
 process.exit(0);
