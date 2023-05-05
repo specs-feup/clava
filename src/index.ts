@@ -2,6 +2,7 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { main } from "./ClavaLauncher.js";
+import ClangPlugin from "./ClangPlugin/ClangPlugin.js";
 
 const moduleName = "clava";
 const prettyName = "Clava";
@@ -32,14 +33,21 @@ const config = await yargs(hideBin(process.argv))
         });
     },
     handler: async (argv) => {
-      console.log(`Executing ${prettyName} script...`);
-      main(argv);
+      try {
+        console.log(`Executing ${prettyName} script...`);
+        //main(argv);
+        const out = ClangPlugin.getPluginPath(argv._.join(" "));
+        console.log(out);
+      } catch (error) {
+        console.error(error);
+      }
     },
   })
   .command({
     command: "init",
     describe: `Initialize a new ${prettyName} project`,
     handler: async () => {
+      // TODO: Implement
       console.log(`Initializing new ${prettyName} project...`);
     },
   })
