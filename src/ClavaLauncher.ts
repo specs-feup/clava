@@ -2,7 +2,6 @@ import Debug from "debug";
 import * as path from "path";
 import * as chokidar from "chokidar";
 import { ChildProcess, fork } from "child_process";
-import { Config } from "./index.js";
 
 const debug = Debug("clava:main");
 let activeProcesses: Array<ChildProcess> = [];

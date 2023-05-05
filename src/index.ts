@@ -47,5 +47,3 @@ const config = await yargs(hideBin(process.argv))
   .strict()
   .pkgConf(moduleName)
   .parse();
-
-export type Config = typeof config;
