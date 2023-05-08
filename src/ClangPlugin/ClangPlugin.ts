@@ -8,20 +8,23 @@ export default class ClangPlugin {
   static pluginNamePrefix = "ClangASTDumper";
 
   /**
-   * Gets the clang executable name from a compilation command.
+   * Validate that the executable provided is indeed a clang executable
    *
    * **Sanitize the input before calling this method**
    *
-   * @param executionCommand String containing the command the user uses to compile their code normally
+   * @param executableName String containing the command the user uses to compile their code normally
    * @returns String containing the clang executable name
    */
-  static getClangExecutable(executionCommand: string): string {
-    const commandRegex = /(?:^|\s)(\S*clang\S*)(?=\s|$)/;
-    const clangExecutable = executionCommand.match(commandRegex);
-    if (!clangExecutable) {
-      throw new Error("Could not find clang executable");
-    }
-    return clangExecutable[1];
+  static validateClangExecutable(executableName: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const commandRegex = /(?:^|\s)(\S*clang\S*)(?=\s|$)/;
+      const clangExecutable = executableName.match(commandRegex);
+      if (clangExecutable) {
+        resolve(clangExecutable[1]);
+      } else {
+        reject(new Error("Could not find clang executable"));
+      }
+    });
   }
 
   /**
@@ -32,30 +35,36 @@ export default class ClangPlugin {
    * @param clangExecutable String containing the clang executable name
    * @returns String containing the clang version number (e.g. 14.0.0)
    */
-  static getClangVersionNumberFromExecutable(clangExecutable: string): string {
-    const output = Sandbox.executeSandboxedCommand(
-      clangExecutable,
-      "--version"
-    );
+  static getClangVersionNumberFromExecutable(
+    clangExecutable: string
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const output = Sandbox.executeSandboxedCommand(
+        clangExecutable,
+        [],
+        ["--version"]
+      );
 
-    const versionRegex = /clang version (\d+\.\d+\.\d+)/;
-    const version = output.match(versionRegex);
-    if (!version) {
-      throw new Error("Could not find clang version");
-    }
-    return version[1];
+      const versionRegex = /clang version (\d+\.\d+\.\d+)/;
+      const version = output.match(versionRegex);
+      if (version) {
+        resolve(version[1]);
+      } else {
+        reject(new Error("Could not find clang version"));
+      }
+    });
   }
 
   /**
-   * Gets the clang version number from a compilation command
+   * Gets the clang version number from a compiler executable
    *
    * **Sanitize the input before calling this method**
    *
-   * @param executionCommand String containing the command the user uses to compile their code normally
+   * @param executableName String containing the executable the user uses to compile their code normally
    * @returns String containing the clang version number (e.g. 14.0.0)
    */
-  static getClangVersion(executionCommand: string): string {
-    const clangExecutable = this.getClangExecutable(executionCommand);
+  static async getClangVersion(executableName: string): Promise<string> {
+    const clangExecutable = await this.validateClangExecutable(executableName);
     return this.getClangVersionNumberFromExecutable(clangExecutable);
   }
 
@@ -65,61 +74,101 @@ export default class ClangPlugin {
    *
    * @returns Map of available clang plugins
    */
-  static getAvailablePlugins(): { [version: string]: string } {
-    const basedir = path.dirname(
-      path.dirname(path.dirname(new URL(import.meta.url).pathname))
-    );
-    const dir = path.join(basedir, this.clangPluginDir);
+  static getAvailablePlugins(): Promise<{ [version: string]: string }> {
+    return new Promise((resolve, reject) => {
+      const basedir = path.dirname(
+        path.dirname(path.dirname(new URL(import.meta.url).pathname))
+      );
+      const dir = path.join(basedir, this.clangPluginDir);
 
-    const regexPattern = new RegExp(
-      `${this.pluginNamePrefix}_(\\d+\\.\\d+\\.\\d+)\\.so`
-    );
+      const regexPattern = new RegExp(
+        `${this.pluginNamePrefix}_(\\d+\\.\\d+\\.\\d+)\\.so`
+      );
 
-    if (!fs.existsSync(dir)) {
-      throw new Error("Could not find 'clang-plugin-binaries' directory");
-    }
-    const files = fs.readdirSync(dir);
-    const map: { [version: string]: string } = {};
-    for (const file of files) {
-      const match = file.match(regexPattern);
-      if (match) {
-        const version = match[1];
-        map[version] = path.join(dir, file);
+      if (!fs.existsSync(dir)) {
+        reject(new Error("Could not find 'clang-plugin-binaries' directory"));
       }
-    }
-    return map;
+      const files = fs.readdirSync(dir);
+      const map: { [version: string]: string } = {};
+      for (const file of files) {
+        const match = file.match(regexPattern);
+        if (match) {
+          const version = match[1];
+          map[version] = path.join(dir, file);
+        }
+      }
+      resolve(map);
+    });
   }
 
   /**
-   * Gets the absolute path to the clang plugin for the compiler used in a compilation command
+   * Gets the absolute path to the clang plugin for a compiler
    *
-   * @param command Command used to execute the compiler
+   * @param executableName Name of the compiler executable
    * @returns The absolute path to the clang plugin or throws an error if no compatible plugin found
    */
-  static getPluginPath(command: string): string {
-    const sanitizedCommand = Sandbox.sanitizeCommand(command);
-    const clangVersion = this.getClangVersion(sanitizedCommand);
+  static getPluginPath(executableName: string): Promise<string> {
+    return new Promise(async (resolve, reject) => {
+      const [clangVersion, availablePlugins] = await Promise.all([
+        this.getClangVersion(executableName),
+        this.getAvailablePlugins(),
+      ]);
 
-    const availablePlugins = this.getAvailablePlugins();
-
-    if (clangVersion in availablePlugins) {
-      return availablePlugins[clangVersion];
-    } else {
-      throw new Error("Could not find plugin for clang version");
-    }
+      if (clangVersion in availablePlugins) {
+        resolve(availablePlugins[clangVersion]);
+      } else {
+        reject(
+          new Error("Could not find plugin for provided clang executable")
+        );
+      }
+    });
   }
 
   /**
    * Executes the clang plugin in a sandboxed environment with the given arguments
    * and returns a pipe to the output.
    *
-   * @param command Command used to execute the compiler by the user
+   * @param commandList Command used to execute the compiler by the user
    * @param pluginPath Path to the clang plugin aligned with the compiler version
    * @param args Arguments to pass to the clang plugin
    */
-  static executeClangPlugin(
-    command: string,
-    pluginPath: string,
-    ...args: string[]
-  ) {}
+  static async executeClangPlugin(commandList: (string | number)[]) {
+    const sanitizedCommand = await Sandbox.sanitizeCommand(commandList);
+
+    const [command, env, args] = await Sandbox.splitCommandArgsEnv(
+      sanitizedCommand
+    );
+    const pluginPath = await this.getPluginPath(command);
+
+    const envMap = env.reduce((acc, curr) => {
+      const [key, value] = curr.split("=");
+      return acc.set(key, value);
+    }, new Map<string, string>());
+
+    const commandArgs = [
+      ...args.map((arg) => this.#ensureAbsolutePath(arg.toString())),
+      "-Xclang",
+      "-load",
+      "-Xclang",
+      pluginPath,
+    ];
+
+    return Sandbox.executeSandboxedCommand(command, envMap, commandArgs);
+  }
+
+  /**
+   * Ensures that the argument is an absolute path if it exists
+   * otherwise returns the argument itself
+   *
+   * @private
+   * @param argument String containing the argument to check
+   * @returns The absolute path to the argument if it exists, otherwise the argument itself
+   */
+  static #ensureAbsolutePath(argument: string) {
+    if (fs.existsSync(argument)) {
+      return path.resolve(argument);
+    } else {
+      return argument;
+    }
+  }
 }
