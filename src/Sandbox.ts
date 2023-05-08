@@ -1,4 +1,5 @@
-import { spawnSync, spawn } from "child_process";
+import { ChildProcess, spawn, spawnSync } from "child_process";
+import { addActiveChildProcess } from "./ChildProcessHandling.js";
 
 export default class Sandbox {
   /**
@@ -10,13 +11,18 @@ export default class Sandbox {
    * @param args Array of strings containing the arguments to be passed to the command
    * @returns Output of the command as a string
    */
-  static executeSandboxedCommand(command: string, ...args: string[]): string {
+  static executeSandboxedCommand(
+    command: string,
+    env: { [keyof: string]: any } = {},
+    args: string[]
+  ): string {
     // Set up a new child process with a restricted environment
-    const child = spawnSync(command, [...args], {
+    const child = spawnSync(command, args, {
       env: {
         PATH: "/usr/local/bin:/usr/bin:/bin", // Set a limited PATH environment variable
         HOME: "/tmp", // Set a limited HOME environment variable
         USER: "sandbox", // Set a limited user for the child process
+        ...env,
       },
       cwd: "/tmp", // Set a restricted current working directory
       stdio: ["ignore", "pipe", "ignore", "ignore"],
@@ -26,21 +32,34 @@ export default class Sandbox {
     return child.stdout.toString();
   }
 
+  /**
+   * Executes a command in a restricted environment and returns the output as a string
+   *
+   * **Sanitize the input before calling this method**
+   *
+   * @param command String containing the command to be executed
+   * @param args Array of strings containing the arguments to be passed to the command
+   * @returns Output of the command as a string
+   */
   static executeSandboxedCommandAsync(
     command: string,
-    ...args: string[]
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const child = spawn(command, [...args], {
-        env: {
-          PATH: "/usr/local/bin:/usr/bin:/bin", // Set a limited PATH environment variable
-          HOME: "/tmp", // Set a limited HOME environment variable
-          USER: "sandbox", // Set a limited user for the child process
-        },
-        cwd: "/tmp", // Set a restricted current working directory
-        stdio: ["ignore", "pipe", "ignore", "ignore"],
-      });
+    env: { [keyof: string]: any } = {},
+    args: string[]
+  ): ChildProcess {
+    // Set up a new child process with a restricted environment
+    const child = spawn(command, args, {
+      env: {
+        PATH: "/usr/local/bin:/usr/bin:/bin", // Set a limited PATH environment variable
+        HOME: "/tmp", // Set a limited HOME environment variable
+        USER: "sandbox", // Set a limited user for the child process
+        ...env,
+      },
+      cwd: "/tmp", // Set a restricted current working directory
+      stdio: ["ignore", "pipe", "ignore", "ignore"],
     });
+    addActiveChildProcess(child);
+
+    return child;
   }
 
   /**
@@ -49,19 +68,47 @@ export default class Sandbox {
    * @param command String containing the command to be sanitized
    * @returns The original command or throws an error if invalid
    */
-  static sanitizeCommand(command: string): string {
-    /**
-     * This regular expression, /^[^;&|]*$/, is a pattern that matches any
-     * string that does not contain certain characters often used in shell
-     * commands. Specifically, it matches strings that do not contain
-     * semicolons (;), ampersands (&), or vertical bars (|).
-     */
-    const pattern = /^[^;&|]*$/;
+  static sanitizeCommand(
+    command: (string | number)[]
+  ): Promise<(string | number)[]> {
+    return new Promise((resolve, reject) => {
+      /**
+       * This regular expression, /^[^;&|]*$/, is a pattern that matches any
+       * string that does not contain certain characters often used in shell
+       * commands. Specifically, it matches strings that do not contain
+       * semicolons (;), ampersands (&), or vertical bars (|).
+       */
+      const pattern = /^[^;&|]*$/;
 
-    if (!pattern.test(command)) {
-      throw new Error("Invalid command");
-    }
+      if (!pattern.test(String(command))) {
+        reject(new Error("Invalid command"));
+      }
 
-    return command;
+      resolve(command);
+    });
+  }
+
+  static splitCommandArgsEnv(
+    commandArgs: (string | number)[]
+  ): Promise<[string, string[], (string | number)[]]> {
+    return new Promise((resolve, reject) => {
+      // regex to match environment variable declarations
+      const envRegex = /^([a-zA-Z_][a-zA-Z0-9_]*)=(.*)$/;
+
+      // filter environment variables
+      const env = commandArgs.filter(
+        (arg) => typeof arg === "string" && envRegex.test(arg)
+      ) as string[];
+
+      // filter command and arguments
+      const commandArgsWithoutEnv = commandArgs.filter(
+        (arg) => !env.includes(String(arg))
+      );
+
+      // take the first argument as the command
+      const command = commandArgsWithoutEnv.shift()! as string;
+
+      resolve([command, env, commandArgsWithoutEnv]);
+    });
   }
 }
