@@ -2,9 +2,12 @@ import Debug from "debug";
 import * as path from "path";
 import * as chokidar from "chokidar";
 import { ChildProcess, fork } from "child_process";
+import {
+  addActiveChildProcess,
+  activeChildProcesses,
+} from "./ChildProcessHandling.js";
 
 const debug = Debug("clava:main");
-let activeProcesses: Array<ChildProcess> = [];
 
 function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -40,15 +43,19 @@ function filesystemEventHandler(
   executeClava(args);
 }
 
+let midExecution = false;
 async function executeClava(args: { [key: string]: any }) {
-  const activeProcess = activeProcesses.shift();
+  if (midExecution) return;
+  midExecution = true;
+  const activeProcess = Object.values(activeChildProcesses)[0];
+
   if (activeProcess?.exitCode === null) {
     const promise = new Promise((resolve) => {
       activeProcess.once("exit", (code) => {
         resolve(code);
       });
     });
-    if (activeProcess.kill("SIGKILL")) {
+    if (activeProcess.kill()) {
       await promise;
       debug("Killed active process");
     } else {
@@ -56,22 +63,8 @@ async function executeClava(args: { [key: string]: any }) {
     }
   }
 
-  activeProcesses.push(
+  addActiveChildProcess(
     fork(path.join("dist", "Clava.js"), [JSON.stringify(args)])
   );
+  midExecution = false;
 }
-
-// Kill all active processes on exit
-process.on("SIGINT", async () => {
-  for (const activeProcess of activeProcesses) {
-    const promise = new Promise((resolve) => {
-      activeProcess.once("exit", (code) => {
-        resolve(code);
-      });
-    });
-    activeProcess.kill("SIGKILL");
-    await promise;
-  }
-
-  process.exit(0);
-});

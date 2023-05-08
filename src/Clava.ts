@@ -6,6 +6,7 @@ import Debug from "debug";
 import { promisify } from "util";
 import { isValidFileExtension } from "./FileExtensions.js";
 import { hideBin } from "yargs/helpers";
+import ClangPlugin from "./ClangPlugin/ClangPlugin.js";
 
 const debug = Debug("clava:weaver");
 const args: { [key: string]: any } = JSON.parse(hideBin(process.argv)[0]);
@@ -21,11 +22,13 @@ await java.ensureJvm();
 
 debug("Clava execution arguments: %O", args);
 
-/* const javaClass = await java.import(
+/*
+const javaClass = await java.import(
   "pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher"
 );
 
-javaClass.mainP(["testscript.js"]); */
+await javaClass.mainP(["testscript.js"]);
+*/
 
 const javaLangSystem = java.import("java.lang.System");
 await javaLangSystem.out.printlnP("JAVA Code execution...");
@@ -44,6 +47,9 @@ if (
 } else {
   console.error("Invalid file path or file type.");
 }
+
+const out = await ClangPlugin.executeClangPlugin(args._);
+console.log(out);
 
 debug("Exiting...");
 process.exit(0);
