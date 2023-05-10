@@ -415,6 +415,10 @@ public enum BuiltinKind {
         return this.ordinal() >= Half.ordinal() && this.ordinal() <= LongDouble.ordinal();
     }
 
+    public boolean isVoid() {
+        return this == Void;
+    }
+
     public String getCode() {
         return getCodePrivate(null);
     }
