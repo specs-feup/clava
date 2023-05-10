@@ -236,11 +236,8 @@ class StatementDecomposer {
     // E.g. for vector.size(), currently is generating code without the qualifier
     const desugaredReturnType = $newCall.type.desugarAll;
 
-    // If return type is void, the call itself is the value expr
-    if (
-      desugaredReturnType.instanceOf("builtinType") &&
-      desugaredReturnType.isVoid
-    ) {
+    // If call is inside an exprStmt, just convert new call to statement
+    if ($call.parent !== undefined && $call.parent.instanceOf("exprStmt")) {
       // Using .exprStmt() to ensure a new statement is created.
       // .stmt might not create a new statement, and interfere with detaching the previous stmt
       const newStmts = [...precedingStmts, ClavaJoinPoints.exprStmt($newCall)];
