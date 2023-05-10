@@ -210,6 +210,7 @@ public class CxxActions {
 
         // If adaptedNew is not a comment or a pragma, and we are inserting before, adaptedBase should be the first
         // comment or pragma associated with current base
+        // TODO: Considerer parameterizing this behaviour
         if (position == Insert.BEFORE) {
             adaptedBase = ClavaNodes.getFirstNodeOfTargetRegion(adaptedBase, adaptedNew);
         }

@@ -144,6 +144,29 @@ public abstract class ABuiltinType extends AType {
     }
 
     /**
+     * true, if it is the type 'void'
+     */
+    public abstract Boolean getIsVoidImpl();
+
+    /**
+     * true, if it is the type 'void'
+     */
+    public final Object getIsVoid() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isVoid", Optional.empty());
+        	}
+        	Boolean result = this.getIsVoidImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isVoid", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isVoid", e);
+        }
+    }
+
+    /**
      * Get value on attribute kind
      * @return the attribute's value
      */
@@ -723,6 +746,7 @@ public abstract class ABuiltinType extends AType {
         attributes.add("isFloat");
         attributes.add("isSigned");
         attributes.add("isUnsigned");
+        attributes.add("isVoid");
     }
 
     /**
@@ -771,6 +795,7 @@ public abstract class ABuiltinType extends AType {
         ISFLOAT("isFloat"),
         ISSIGNED("isSigned"),
         ISUNSIGNED("isUnsigned"),
+        ISVOID("isVoid"),
         KIND("kind"),
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),

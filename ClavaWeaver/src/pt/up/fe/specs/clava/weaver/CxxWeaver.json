@@ -12374,6 +12374,15 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "true, if it is the type 'void'",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isVoid"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "Integer[]",
