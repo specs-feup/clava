@@ -75,8 +75,15 @@ class StatementDecomposer {
     }
 
     // Insert all statements in order, before original statement
+    /*
     for (const $newStmt of stmts) {
       $stmt.insertBefore($newStmt);
+    }
+    */
+
+    // Insert after, in reverse order, to preserve comments
+    for (const $newStmt of stmts.reverse()) {
+      $stmt.insertAfter($newStmt);
     }
 
     // Remove original statement
@@ -224,13 +231,29 @@ class StatementDecomposer {
     const newArgs = argResults.map((res) => res.$resultExpr);
     const $newCall = this.#copyCall($call, newArgs);
     //const $newCall = ClavaJoinPoints.call($call.function, ...newArgs);
-    const tempVarname = this.#newTempVarname();
 
     // Desugaring type, to avoid possible problems of code generation of more complex types
     // E.g. for vector.size(), currently is generating code without the qualifier
+    const desugaredReturnType = $newCall.type.desugarAll;
+
+    // If return type is void, the call itself is the value expr
+    if (
+      desugaredReturnType.instanceOf("builtinType") &&
+      desugaredReturnType.isVoid
+    ) {
+      // Using .exprStmt() to ensure a new statement is created.
+      // .stmt might not create a new statement, and interfere with detaching the previous stmt
+      const newStmts = [...precedingStmts, ClavaJoinPoints.exprStmt($newCall)];
+      return new DecomposeResult(newStmts, $newCall, []);
+    }
+
+    // Otherwise, create a variable to store the result of the call
+    // and return the variable as the value expression
+    const tempVarname = this.#newTempVarname();
+
     const tempVarDecl = ClavaJoinPoints.varDeclNoInit(
       tempVarname,
-      $call.type.desugarAll
+      desugaredReturnType
     );
 
     const tempVarAssign = ClavaJoinPoints.assign(
