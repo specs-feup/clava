@@ -894,7 +894,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -916,6 +916,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -2010,7 +2038,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -2032,6 +2060,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -3373,7 +3429,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -3395,6 +3451,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -4575,7 +4659,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -4597,6 +4681,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -5951,7 +6063,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -5973,6 +6085,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -7056,7 +7196,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -7078,6 +7218,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -8286,7 +8454,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -8308,6 +8476,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -9777,7 +9973,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -9799,6 +9995,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -10930,7 +11154,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -10952,6 +11176,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -12118,7 +12370,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -12140,6 +12392,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -13525,7 +13805,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -13547,6 +13827,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -14947,7 +15255,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -14969,6 +15277,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -16135,7 +16471,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -16157,6 +16493,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -17313,7 +17677,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -17335,6 +17699,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -18906,7 +19298,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -18928,6 +19320,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -20328,7 +20748,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -20350,6 +20770,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -21516,7 +21964,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -21538,6 +21986,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -22868,7 +23344,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -22890,6 +23366,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -23990,7 +24494,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -24012,6 +24516,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -25108,7 +25640,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -25130,6 +25662,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -26296,7 +26856,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -26318,6 +26878,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -27752,7 +28340,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -27774,6 +28362,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -28859,7 +29475,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -28881,6 +29497,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -30056,7 +30700,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -30078,6 +30722,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -31238,7 +31910,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -31260,6 +31932,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -32383,7 +33083,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -32405,6 +33105,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -33765,7 +34493,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -33787,6 +34515,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -34863,7 +35619,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -34885,6 +35641,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -36051,7 +36835,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -36073,6 +36857,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -37246,7 +38058,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -37268,6 +38080,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -38625,7 +39465,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -38647,6 +39487,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -39806,7 +40674,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -39828,6 +40696,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -41003,7 +41899,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -41025,6 +41921,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -42148,7 +43072,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -42170,6 +43094,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -43330,7 +44282,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -43352,6 +44304,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -44886,7 +45866,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -44908,6 +45888,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -46039,7 +47047,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -46061,6 +47069,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -47767,7 +48803,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -47789,6 +48825,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -49170,7 +50234,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -49192,6 +50256,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -50380,7 +51472,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -50402,6 +51494,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -51667,7 +52787,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -51689,6 +52809,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -52802,7 +53950,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -52824,6 +53972,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -53955,7 +55131,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -53977,6 +55153,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -55136,7 +56340,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -55158,6 +56362,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -56346,7 +57578,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -56368,6 +57600,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -57491,7 +58751,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -57513,6 +58773,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -59084,7 +60372,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -59106,6 +60394,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -60285,7 +61601,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -60307,6 +61623,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -61463,7 +62807,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -61485,6 +62829,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -62901,7 +64273,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -62923,6 +64295,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -64646,7 +66046,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -64668,6 +66068,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -65828,7 +67256,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -65850,6 +67278,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -66973,7 +68429,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -66995,6 +68451,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -68601,7 +70085,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -68623,6 +70107,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -69771,7 +71283,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -69793,6 +71305,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -71094,7 +72634,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -71116,6 +72656,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -72248,7 +73816,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -72270,6 +73838,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -73624,7 +75220,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -73646,6 +75242,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -75009,7 +76633,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -75031,6 +76655,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -76188,7 +77840,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -76210,6 +77862,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -77650,7 +79330,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -77672,6 +79352,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -79020,7 +80728,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -79042,6 +80750,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -80263,7 +81999,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -80285,6 +82021,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -81464,7 +83228,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -81486,6 +83250,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -82956,7 +84748,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -82978,6 +84770,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -84144,7 +85964,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -84166,6 +85986,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -85387,7 +87235,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -85409,6 +87257,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -86575,7 +88451,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -86597,6 +88473,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -87763,7 +89667,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -87785,6 +89689,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -89134,7 +91066,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -89156,6 +91088,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -90520,7 +92480,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -90542,6 +92502,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -91729,7 +93717,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -91751,6 +93739,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -92874,7 +94890,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -92896,6 +94912,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -94228,7 +96272,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -94250,6 +96294,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -95410,7 +97482,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -95432,6 +97504,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -96592,7 +98692,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -96614,6 +98714,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -97965,7 +100093,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -97987,6 +100115,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -99163,7 +101319,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -99185,6 +101341,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -100354,7 +102538,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -100376,6 +102560,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -101708,7 +103920,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -101730,6 +103942,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -103032,7 +105272,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -103054,6 +105294,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -104430,7 +106698,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -104452,6 +106720,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -105650,7 +107946,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -105672,6 +107968,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]
@@ -106854,7 +109178,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Replaces this join point with the given join",
+						"tooltip": "Replaces this node with the given node",
 						"children": [
 									{
 										"type": "joinpoint",
@@ -106876,6 +109200,34 @@
 									},
 									{
 										"type": "String",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of join points",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWith"
+									},
+									{
+										"type": "joinpoint[]",
+										"name": "node",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Overload which accepts a list of strings",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "replaceWithStrings"
+									},
+									{
+										"type": "String[]",
 										"name": "node",
 										"defaultValue": ""
 									}]

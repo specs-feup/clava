@@ -554,6 +554,34 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
+    public AJoinPoint replaceWithImpl(AJoinPoint[] node) {
+        // Insert nodes after in reverse order, to preserve order of comments and pragmas
+        var reverseNodes = Arrays.asList(node);
+        Collections.reverse(reverseNodes);
+
+        for (var nodeToInsert : reverseNodes) {
+            insertAfter(nodeToInsert);
+        }
+
+        // Remove current node from the tree and return it
+        return detach();
+    }
+
+    @Override
+    public AJoinPoint replaceWithStringsImpl(String[] node) {
+        // Insert nodes after in reverse order, to preserve order of comments and pragmas
+        var reverseNodes = Arrays.asList(node);
+        Collections.reverse(reverseNodes);
+
+        for (var nodeToInsert : reverseNodes) {
+            insertAfter(nodeToInsert);
+        }
+
+        // Remove current node from the tree and return it
+        return detach();
+    }
+
+    @Override
     public AJoinPoint detachImpl() {
         ClavaNode node = getNode();
 

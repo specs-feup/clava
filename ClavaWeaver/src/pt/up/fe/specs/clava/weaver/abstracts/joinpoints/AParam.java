@@ -171,7 +171,7 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
-     * Replaces this join point with the given join
+     * Replaces this node with the given node
      * @param node 
      */
     @Override
@@ -186,6 +186,24 @@ public abstract class AParam extends AVardecl {
     @Override
     public AJoinPoint replaceWithImpl(String node) {
         return this.aVardecl.replaceWithImpl(node);
+    }
+
+    /**
+     * Overload which accepts a list of join points
+     * @param node 
+     */
+    @Override
+    public AJoinPoint replaceWithImpl(AJoinPoint[] node) {
+        return this.aVardecl.replaceWithImpl(node);
+    }
+
+    /**
+     * Overload which accepts a list of strings
+     * @param node 
+     */
+    @Override
+    public AJoinPoint replaceWithStringsImpl(String[] node) {
+        return this.aVardecl.replaceWithStringsImpl(node);
     }
 
     /**

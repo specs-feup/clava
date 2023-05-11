@@ -102,6 +102,8 @@ public abstract class AJoinPoint extends JoinPoint {
     protected void fillWithActions(List<String> actions) {
         actions.add("replaceWith(AJoinPoint node)");
         actions.add("replaceWith(String node)");
+        actions.add("replaceWith(AJoinPoint[] node)");
+        actions.add("replaceWithStrings(String[] node)");
         actions.add("insertBefore(AJoinPoint node)");
         actions.add("insertBefore(String node)");
         actions.add("insertAfter(AJoinPoint node)");
@@ -128,7 +130,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Replaces this join point with the given join
+     * Replaces this node with the given node
      * @param node 
      */
     public AJoinPoint replaceWithImpl(AJoinPoint node) {
@@ -136,7 +138,7 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Replaces this join point with the given join
+     * Replaces this node with the given node
      * @param node 
      */
     public final AJoinPoint replaceWith(AJoinPoint node) {
@@ -178,6 +180,60 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "replaceWith", e);
+        }
+    }
+
+    /**
+     * Overload which accepts a list of join points
+     * @param node 
+     */
+    public AJoinPoint replaceWithImpl(AJoinPoint[] node) {
+        throw new UnsupportedOperationException(get_class()+": Action replaceWith not implemented ");
+    }
+
+    /**
+     * Overload which accepts a list of join points
+     * @param node 
+     */
+    public final AJoinPoint replaceWith(AJoinPoint[] node) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "replaceWith", this, Optional.empty(), new Object[] { node});
+        	}
+        	AJoinPoint result = this.replaceWithImpl(node);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "replaceWith", this, Optional.ofNullable(result), new Object[] { node});
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "replaceWith", e);
+        }
+    }
+
+    /**
+     * Overload which accepts a list of strings
+     * @param node 
+     */
+    public AJoinPoint replaceWithStringsImpl(String[] node) {
+        throw new UnsupportedOperationException(get_class()+": Action replaceWithStrings not implemented ");
+    }
+
+    /**
+     * Overload which accepts a list of strings
+     * @param node 
+     */
+    public final AJoinPoint replaceWithStrings(String[] node) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "replaceWithStrings", this, Optional.empty(), new Object[] { node});
+        	}
+        	AJoinPoint result = this.replaceWithStringsImpl(node);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "replaceWithStrings", this, Optional.ofNullable(result), new Object[] { node});
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "replaceWithStrings", e);
         }
     }
 
