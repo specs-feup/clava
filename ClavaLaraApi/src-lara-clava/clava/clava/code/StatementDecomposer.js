@@ -81,6 +81,9 @@ class StatementDecomposer {
     }
     */
 
+    // Replace stmt with array of statements
+    $stmt.replaceWith(stmts);
+    /*
     // Insert after, in reverse order, to preserve comments
     for (const $newStmt of stmts.reverse()) {
       $stmt.insertAfter($newStmt);
@@ -88,6 +91,7 @@ class StatementDecomposer {
 
     // Remove original statement
     $stmt.detach();
+*/
   }
 
   /**
