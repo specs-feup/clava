@@ -300,4 +300,9 @@ public class CxxType extends AType {
     public Boolean getIsAutoImpl() {
         return type.isAuto();
     }
+
+    @Override
+    public AType asConstImpl() {
+        return CxxJoinpoints.create(type.asConst(), AType.class);
+    }
 }

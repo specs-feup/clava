@@ -569,6 +569,14 @@ public abstract class AQualType extends AType {
     }
 
     /**
+     * Returns a copy of this type with the qualifier const
+     */
+    @Override
+    public AType asConstImpl() {
+        return this.aType.asConstImpl();
+    }
+
+    /**
      * 
      * @param position 
      * @param code 

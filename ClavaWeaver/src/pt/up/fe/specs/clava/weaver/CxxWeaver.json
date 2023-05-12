@@ -3179,6 +3179,15 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Sets the desugared type of this type",
 						"children": [
 									{
@@ -5809,6 +5818,15 @@
 										"type": "type",
 										"name": "arrayElementType",
 										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
 									}]
 					},
 					{
@@ -13551,6 +13569,15 @@
 									{
 										"type": "String",
 										"name": "name"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
 									}]
 					},
 					{
@@ -34243,6 +34270,15 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Sets the desugared type of this type",
 						"children": [
 									{
@@ -39211,6 +39247,15 @@
 									{
 										"type": "String",
 										"name": "name"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
 									}]
 					},
 					{
@@ -49980,6 +50025,15 @@
 										"type": "type",
 										"name": "newType",
 										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
 									}]
 					},
 					{
@@ -74970,6 +75024,15 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Sets the desugared type of this type",
 						"children": [
 									{
@@ -76379,6 +76442,15 @@
 										"type": "type",
 										"name": "pointeeType",
 										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
 									}]
 					},
 					{
@@ -80474,6 +80546,15 @@
 									{
 										"type": "String",
 										"name": "name"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
 									}]
 					},
 					{
@@ -90816,6 +90897,15 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Sets the desugared type of this type",
 						"children": [
 									{
@@ -92226,6 +92316,15 @@
 									{
 										"type": "String",
 										"name": "name"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
 									}]
 					},
 					{
@@ -96018,6 +96117,15 @@
 									{
 										"type": "String",
 										"name": "name"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
 									}]
 					},
 					{
@@ -99839,6 +99947,15 @@
 									{
 										"type": "String",
 										"name": "name"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
 									}]
 					},
 					{
@@ -103670,6 +103787,15 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Sets the desugared type of this type",
 						"children": [
 									{
@@ -106444,6 +106570,15 @@
 										"type": "type",
 										"name": "arrayElementType",
 										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Returns a copy of this type with the qualifier const",
+						"children": [
+									{
+										"type": "type",
+										"name": "asConst"
 									}]
 					},
 					{

@@ -729,6 +729,9 @@
 		<parameter name="oldValue" type="type" />
 		<parameter name="newValue" type="type" />
 	</action>
+	
+	<action name="asConst" return="type" class="type" tooltip="Returns a new node based on this type with the qualifier const">
+	</action>
 
 	
 	<!-- FUNCTION TYPE -->
