@@ -32,6 +32,7 @@ import com.google.common.base.Preconditions;
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.Types;
 import pt.up.fe.specs.clava.ast.decl.data.templates.TemplateArgument;
+import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.TypeDependency;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
@@ -381,6 +382,14 @@ public abstract class Type extends ClavaNode {
      */
     public void removeConst() {
         // Do nothing
+    }
+
+    /**
+     * 
+     * @return a new Type that is const
+     */
+    public Type asConst() {
+        return getFactory().qualType(this, C99Qualifier.CONST);
     }
 
     public boolean isArray() {

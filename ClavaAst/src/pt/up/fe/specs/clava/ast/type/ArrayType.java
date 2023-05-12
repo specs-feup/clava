@@ -144,4 +144,13 @@ public abstract class ArrayType extends Type {
     public void removeConst() {
         get(ELEMENT_TYPE).removeConst();
     }
+
+    @Override
+    public Type asConst() {
+        var typeCopy = copy();
+
+        typeCopy.set(ELEMENT_TYPE, get(ELEMENT_TYPE).asConst());
+
+        return typeCopy;
+    }
 }

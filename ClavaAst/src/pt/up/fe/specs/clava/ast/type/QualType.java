@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -134,6 +135,23 @@ public class QualType extends Type {
         }
 
         return getUnqualifiedType().isConst();
+    }
+
+    @Override
+    public Type asConst() {
+        // To ensure contract of the method
+        var typeCopy = copy();
+
+        if (typeCopy.isConst()) {
+            return typeCopy;
+        }
+
+        var qualifiers = new HashSet<>(get(C99_QUALIFIERS));
+        qualifiers.add(C99Qualifier.CONST);
+
+        typeCopy.set(C99_QUALIFIERS, new ArrayList<>(qualifiers));
+
+        return typeCopy;
     }
 
     @Override
