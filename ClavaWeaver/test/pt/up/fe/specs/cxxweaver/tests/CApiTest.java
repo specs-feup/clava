@@ -164,4 +164,9 @@ public class CApiTest {
     public void testStatementDecomposer() {
         newTester().test("StatementDecomposerTest.js", "stmt_decomposer.c");
     }
+
+    @Test
+    public void testToSingleFile() {
+        newTester().test("ToSingleFile.js", "to_single_file_1.c", "to_single_file_2.c");
+    }
 }
