@@ -51,6 +51,7 @@ namespace clava {
     private:
         //ClangAstDumper dumper;
         ASTContext *Context;
+        //ASTContext * const ContextConst;
         //const ASTContext& ConstContext;
         const int id;
 

@@ -127,6 +127,9 @@ void ClangAstDumper::visitChildren(const QualType &T) {
     //llvm::errs() << "QUAL TYPE: " << T.getAsOpaquePtr() << " -> " << T.getTypePtr() << "\n";
     VisitTypeTop(T.getTypePtr());
 
+    // Visit unqualified type
+
+    VisitTypeTop(T.getSingleStepDesugaredType(*const_cast<const ASTContext*>(Context)));
 
     //VisitTypeTop(T.getTypePtr());
     //visitedChildren.push_back(clava::getId(T.getTypePtr(), id));
