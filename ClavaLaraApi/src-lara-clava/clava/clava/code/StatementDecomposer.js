@@ -74,24 +74,8 @@ class StatementDecomposer {
       return;
     }
 
-    // Insert all statements in order, before original statement
-    /*
-    for (const $newStmt of stmts) {
-      $stmt.insertBefore($newStmt);
-    }
-    */
-
     // Replace stmt with array of statements
     $stmt.replaceWith(stmts);
-    /*
-    // Insert after, in reverse order, to preserve comments
-    for (const $newStmt of stmts.reverse()) {
-      $stmt.insertAfter($newStmt);
-    }
-
-    // Remove original statement
-    $stmt.detach();
-*/
   }
 
   /**
@@ -240,8 +224,14 @@ class StatementDecomposer {
     // E.g. for vector.size(), currently is generating code without the qualifier
     const desugaredReturnType = $newCall.type.desugarAll;
 
-    // If call is inside an exprStmt, just convert new call to statement
-    if ($call.parent !== undefined && $call.parent.instanceOf("exprStmt")) {
+    // If call is inside an exprStmt, and exprStmt is inside a scope, just convert new call to statement
+    // The scope test is to avoid wrong code in situations such as loop headers
+    if (
+      $call.parent !== undefined &&
+      $call.parent.instanceOf("exprStmt") &&
+      $call.parent.parent !== undefined &&
+      $call.parent.parent.instanceOf("scope")
+    ) {
       // Using .exprStmt() to ensure a new statement is created.
       // .stmt might not create a new statement, and interfere with detaching the previous stmt
       const newStmts = [...precedingStmts, ClavaJoinPoints.exprStmt($newCall)];
