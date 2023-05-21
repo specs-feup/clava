@@ -22,8 +22,18 @@ int foo(int a) {
    int decomp_3;
    decomp_3 = decomp_2 / 2;
    c = decomp_3;
+   // Call to void function
+   bar1();
+   // Call to void function that contains an expression as arguments
    int decomp_4;
-   decomp_4 = a + c;
+   decomp_4 = 1 + 2;
+   int decomp_5;
+   decomp_5 = decomp_4 + 3;
+   bar2(decomp_5);
+   // Call to function that does not return void, but does not use result
+   bar3();
+   int decomp_6;
+   decomp_6 = a + c;
    
-   return decomp_4;
+   return decomp_6;
 }

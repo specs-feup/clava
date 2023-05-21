@@ -691,6 +691,31 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * Returns a copy of this type with the qualifier const
+     */
+    public AType asConstImpl() {
+        throw new UnsupportedOperationException(get_class()+": Action asConst not implemented ");
+    }
+
+    /**
+     * Returns a copy of this type with the qualifier const
+     */
+    public final AType asConst() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "asConst", this, Optional.empty());
+        	}
+        	AType result = this.asConstImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "asConst", this, Optional.ofNullable(result));
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "asConst", e);
+        }
+    }
+
+    /**
      * 
      */
     @Override
@@ -814,6 +839,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         actions.add("void setDesugar(type)");
         actions.add("boolean setTypeFieldByValueRecursive(Object, Object)");
         actions.add("type setUnderlyingType(type, type)");
+        actions.add("type asConst()");
     }
 
     /**

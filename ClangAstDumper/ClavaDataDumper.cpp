@@ -9,7 +9,9 @@
 
 #include <sstream>
 
-clava::ClavaDataDumper::ClavaDataDumper(ASTContext *Context, int id) : Context(Context), id(id)  {};
+clava::ClavaDataDumper::ClavaDataDumper(ASTContext *Context, int id) : Context(Context), id(id)  {
+//    ContextConst = Context;
+};
 
 /*
 void clava::ClavaDataDumper::DumpHeader(const std::string tag, const void *pointer) {

@@ -144,6 +144,29 @@ public abstract class ABuiltinType extends AType {
     }
 
     /**
+     * true, if it is the type 'void'
+     */
+    public abstract Boolean getIsVoidImpl();
+
+    /**
+     * true, if it is the type 'void'
+     */
+    public final Object getIsVoid() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isVoid", Optional.empty());
+        	}
+        	Boolean result = this.getIsVoidImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isVoid", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isVoid", e);
+        }
+    }
+
+    /**
      * Get value on attribute kind
      * @return the attribute's value
      */
@@ -338,7 +361,7 @@ public abstract class ABuiltinType extends AType {
     }
 
     /**
-     * Replaces this join point with the given join
+     * Replaces this node with the given node
      * @param node 
      */
     @Override
@@ -353,6 +376,24 @@ public abstract class ABuiltinType extends AType {
     @Override
     public AJoinPoint replaceWithImpl(String node) {
         return this.aType.replaceWithImpl(node);
+    }
+
+    /**
+     * Overload which accepts a list of join points
+     * @param node 
+     */
+    @Override
+    public AJoinPoint replaceWithImpl(AJoinPoint[] node) {
+        return this.aType.replaceWithImpl(node);
+    }
+
+    /**
+     * Overload which accepts a list of strings
+     * @param node 
+     */
+    @Override
+    public AJoinPoint replaceWithStringsImpl(String[] node) {
+        return this.aType.replaceWithStringsImpl(node);
     }
 
     /**
@@ -608,6 +649,14 @@ public abstract class ABuiltinType extends AType {
     }
 
     /**
+     * Returns a copy of this type with the qualifier const
+     */
+    @Override
+    public AType asConstImpl() {
+        return this.aType.asConstImpl();
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -723,6 +772,7 @@ public abstract class ABuiltinType extends AType {
         attributes.add("isFloat");
         attributes.add("isSigned");
         attributes.add("isUnsigned");
+        attributes.add("isVoid");
     }
 
     /**
@@ -771,6 +821,7 @@ public abstract class ABuiltinType extends AType {
         ISFLOAT("isFloat"),
         ISSIGNED("isSigned"),
         ISUNSIGNED("isUnsigned"),
+        ISVOID("isVoid"),
         KIND("kind"),
         ISTOPLEVEL("isTopLevel"),
         ISARRAY("isArray"),

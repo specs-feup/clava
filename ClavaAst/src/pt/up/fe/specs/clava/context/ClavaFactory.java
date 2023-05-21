@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,12 +124,14 @@ import pt.up.fe.specs.clava.ast.type.FunctionProtoType;
 import pt.up.fe.specs.clava.ast.type.LiteralType;
 import pt.up.fe.specs.clava.ast.type.NullType;
 import pt.up.fe.specs.clava.ast.type.PointerType;
+import pt.up.fe.specs.clava.ast.type.QualType;
 import pt.up.fe.specs.clava.ast.type.RecordType;
 import pt.up.fe.specs.clava.ast.type.Type;
 import pt.up.fe.specs.clava.ast.type.TypeWithKeyword;
 import pt.up.fe.specs.clava.ast.type.TypedefType;
 import pt.up.fe.specs.clava.ast.type.VariableArrayType;
 import pt.up.fe.specs.clava.ast.type.enums.BuiltinKind;
+import pt.up.fe.specs.clava.ast.type.enums.C99Qualifier;
 import pt.up.fe.specs.clava.ast.type.enums.ElaboratedTypeKeyword;
 import pt.up.fe.specs.clava.language.AccessSpecifier;
 import pt.up.fe.specs.clava.language.CastKind;
@@ -316,6 +319,22 @@ public class ClavaFactory {
                 .put(RecordType.DECL, recordDecl);
 
         return new RecordType(data, Collections.emptyList());
+    }
+
+    public QualType qualType(Type unqualifiedType, C99Qualifier... qualifiers) {
+        SpecsCheck.checkArgument(!(unqualifiedType instanceof QualType),
+                () -> "Unqualified type is qualified: " + unqualifiedType);
+        SpecsCheck.checkArgument(qualifiers.length > 0, () -> "Must have at least one qualifier");
+
+        // Ensure only one of each
+        var qualifiersList = qualifiers.length == 1 ? Arrays.asList(qualifiers)
+                : new ArrayList<>(new HashSet<>(Arrays.asList(qualifiers)));
+
+        DataStore data = newDataStore(QualType.class)
+                .put(QualType.UNQUALIFIED_TYPE, unqualifiedType)
+                .put(QualType.C99_QUALIFIERS, qualifiersList);
+
+        return new QualType(data, Collections.emptyList());
     }
 
     /// EXPRS

@@ -788,6 +788,7 @@
 		<attribute name="isFloat" type="Boolean" tooltip="true, if ot is a floating type (e.g., float, double)"/>
 		<attribute name="isSigned" type="Boolean" tooltip="true, if it is a signed integer type" />
 		<attribute name="isUnsigned" type="Boolean" tooltip="true, if it is an unsigned integer type" />
+		<attribute name="isVoid" type="Boolean" tooltip="true, if it is the type 'void'" />		
 	</artifact>	
 
 	<!-- PAREN TYPE -->

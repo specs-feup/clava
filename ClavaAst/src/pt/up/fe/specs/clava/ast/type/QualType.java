@@ -16,6 +16,7 @@ package pt.up.fe.specs.clava.ast.type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,12 +42,16 @@ public class QualType extends Type {
     /// DATAKEYs BEGIN
 
     public final static DataKey<List<C99Qualifier>> C99_QUALIFIERS = KeyFactory
-            .generic("c99Qualifiers", new ArrayList<>());
+            .list("c99Qualifiers", C99Qualifier.class);
 
     public final static DataKey<AddressSpaceQualifierV2> ADDRESS_SPACE_QUALIFIER = KeyFactory
-            .enumeration("addressSpaceQualifier", AddressSpaceQualifierV2.class);
+            .enumeration("addressSpaceQualifier", AddressSpaceQualifierV2.class)
+            // HACK: not sure what value should be
+            .setDefault(() -> AddressSpaceQualifierV2.NONE);
 
-    public final static DataKey<Long> ADDRESS_SPACE = KeyFactory.longInt("addressSpace");
+    public final static DataKey<Long> ADDRESS_SPACE = KeyFactory.longInt("addressSpace")
+            // HACK: not sure what value should be
+            .setDefault(() -> -1l);
 
     public final static DataKey<Type> UNQUALIFIED_TYPE = KeyFactory.object("unqualifiedType", Type.class);
 
@@ -134,6 +139,23 @@ public class QualType extends Type {
         }
 
         return getUnqualifiedType().isConst();
+    }
+
+    @Override
+    public Type asConst() {
+        // To ensure contract of the method
+        var typeCopy = copy();
+
+        if (typeCopy.isConst()) {
+            return typeCopy;
+        }
+
+        var qualifiers = new HashSet<>(get(C99_QUALIFIERS));
+        qualifiers.add(C99Qualifier.CONST);
+
+        typeCopy.set(C99_QUALIFIERS, new ArrayList<>(qualifiers));
+
+        return typeCopy;
     }
 
     @Override

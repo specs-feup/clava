@@ -57,4 +57,9 @@ public class CxxBuiltinType extends ABuiltinType {
         return builtinType.get(BuiltinType.KIND).isUnsignedInteger();
     }
 
+    @Override
+    public Boolean getIsVoidImpl() {
+        return builtinType.get(BuiltinType.KIND).isVoid();
+    }
+
 }

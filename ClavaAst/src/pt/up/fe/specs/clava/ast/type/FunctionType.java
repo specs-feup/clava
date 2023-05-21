@@ -96,6 +96,15 @@ public abstract class FunctionType extends Type {
         set(IS_CONST, false);
     }
 
+    @Override
+    public Type asConst() {
+        var typeCopy = copy();
+
+        typeCopy.set(IS_CONST, true);
+
+        return typeCopy;
+    }
+
     /**
      * Return type comes after desugared type, if present.
      * 

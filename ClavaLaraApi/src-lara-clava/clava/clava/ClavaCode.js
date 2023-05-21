@@ -18,6 +18,26 @@ class ClavaCode {
       optionalFile = "main." + extension;
     }
 
+    const singleFileCode = ClavaCode.toSingleFileCode();
+
+    var outputFile = Io.getPath(fileOrBaseFolder, optionalFile);
+
+    Io.writeFile(outputFile, singleFileCode);
+
+    // Copy includes
+    var baseFolder = outputFile.getParentFile();
+    for (var $include of Clava.getAvailableIncludes()) {
+      var outputFile = Io.getPath(baseFolder, $include.name);
+      Io.writeFile(outputFile, Io.readFile($include.filepath));
+    }
+  }
+
+  /**
+   * Generates code for a single fime corresponding to the current AST.
+   *
+   * @return {String} the code of the current AST as a single file.
+   */
+  static toSingleFileCode() {
     const staticVerification = true;
 
     var includes = new StringSet();
@@ -37,20 +57,20 @@ class ClavaCode {
         staticVerification
       );
       if (codeChanged) {
-        bodyCode += $file.code;
+        bodyCode += $file.code + "\n";
         println(
           "Generated file '" +
             $file.filepath +
             "' from AST, macros have disappeared"
         );
       } else {
-        bodyCode += Io.readFile($file.filepath);
+        bodyCode += Io.readFile($file.filepath) + "\n";
       }
 
       //bodyCode += Io.readFile($file.filepath);
 
       // Collects all includes from input files, in order to put them at the beginning of the file
-      for ($child of $file.astChildren) {
+      for (const $child of $file.astChildren) {
         if ($child.astName === "IncludeDecl") {
           includes.add($child.code);
         }
@@ -58,16 +78,8 @@ class ClavaCode {
     }
 
     var singleFileCode = includes.values().join("\n") + "\n" + bodyCode;
-    var outputFile = Io.getPath(fileOrBaseFolder, optionalFile);
 
-    Io.writeFile(outputFile, singleFileCode);
-
-    // Copy includes
-    var baseFolder = outputFile.getParentFile();
-    for (var $include of Clava.getAvailableIncludes()) {
-      var outputFile = Io.getPath(baseFolder, $include.name);
-      Io.writeFile(outputFile, Io.readFile($include.filepath));
-    }
+    return singleFileCode;
   }
 
   static _renameStaticDeclarations($file, staticVerification) {

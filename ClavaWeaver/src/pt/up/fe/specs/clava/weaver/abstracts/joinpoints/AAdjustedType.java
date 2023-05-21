@@ -244,7 +244,7 @@ public abstract class AAdjustedType extends AType {
     }
 
     /**
-     * Replaces this join point with the given join
+     * Replaces this node with the given node
      * @param node 
      */
     @Override
@@ -259,6 +259,24 @@ public abstract class AAdjustedType extends AType {
     @Override
     public AJoinPoint replaceWithImpl(String node) {
         return this.aType.replaceWithImpl(node);
+    }
+
+    /**
+     * Overload which accepts a list of join points
+     * @param node 
+     */
+    @Override
+    public AJoinPoint replaceWithImpl(AJoinPoint[] node) {
+        return this.aType.replaceWithImpl(node);
+    }
+
+    /**
+     * Overload which accepts a list of strings
+     * @param node 
+     */
+    @Override
+    public AJoinPoint replaceWithStringsImpl(String[] node) {
+        return this.aType.replaceWithStringsImpl(node);
     }
 
     /**
@@ -511,6 +529,14 @@ public abstract class AAdjustedType extends AType {
     @Override
     public AType setUnderlyingTypeImpl(AType oldValue, AType newValue) {
         return this.aType.setUnderlyingTypeImpl(oldValue, newValue);
+    }
+
+    /**
+     * Returns a copy of this type with the qualifier const
+     */
+    @Override
+    public AType asConstImpl() {
+        return this.aType.asConstImpl();
     }
 
     /**

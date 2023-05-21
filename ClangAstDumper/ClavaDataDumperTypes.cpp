@@ -277,6 +277,9 @@ void clava::ClavaDataDumper::dump(const QualType& T) {
     // Unqualified type
     clava::dump(clava::getId(T.getTypePtr(), id));
 
+    // Single desugar step
+    clava::dump(clava::getId(T.getSingleStepDesugaredType(*const_cast<const ASTContext*>(Context)), id));
+
 /*    DumpTypeData(T.getTypePtr());
 
     DumpTypeData(const_cast<Type*>(static_cast<Type*>(T.getAsOpaquePtr())));

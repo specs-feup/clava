@@ -146,7 +146,7 @@ public abstract class AStruct extends ARecord {
     }
 
     /**
-     * Replaces this join point with the given join
+     * Replaces this node with the given node
      * @param node 
      */
     @Override
@@ -161,6 +161,24 @@ public abstract class AStruct extends ARecord {
     @Override
     public AJoinPoint replaceWithImpl(String node) {
         return this.aRecord.replaceWithImpl(node);
+    }
+
+    /**
+     * Overload which accepts a list of join points
+     * @param node 
+     */
+    @Override
+    public AJoinPoint replaceWithImpl(AJoinPoint[] node) {
+        return this.aRecord.replaceWithImpl(node);
+    }
+
+    /**
+     * Overload which accepts a list of strings
+     * @param node 
+     */
+    @Override
+    public AJoinPoint replaceWithStringsImpl(String[] node) {
+        return this.aRecord.replaceWithStringsImpl(node);
     }
 
     /**

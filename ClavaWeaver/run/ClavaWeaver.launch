@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+    <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
         <listEntry value="/ClavaWeaver/src/pt/up/fe/specs/clava/weaver/ClavaWeaverLauncher.java"/>
     </listAttribute>
@@ -11,8 +12,7 @@
     <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher"/>
     <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="ClavaWeaver"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--help"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-c &quot;C:\Temp\2023-03-11 Clava parsing fail\config.clava&quot;"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="ClavaWeaver"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="--illegal-access=deny"/>
-    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:ClavaWeaver/run/weaver}"/>
+    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="C:\Temp\2023-03-11 Clava parsing fail"/>
 </launchConfiguration>
