@@ -3,10 +3,9 @@
 laraImport("weaver.Query");
 laraImport("clava.ClavaJoinPoints");
 laraImport("clava.ClavaType");
+laraImport("lara.util.IdGenerator");
 
 class Outliner {
-    static #GLOBAL_OUTLINE_FUN_ID = 1;
-    static #GLOBAL_OUTLINE_VAR_ID = 1;
     #verbose;
 
     constructor() {
@@ -154,7 +153,7 @@ class Outliner {
 
         // actions before the function call
         const type = returnStmts[0].children[0].type;
-        const id = Outliner.#getUniqueVarID();
+        const id = IdGenerator.next();
         const resVar = ClavaJoinPoints.varDeclNoInit("__return_val_" + id, type);
         const boolVar = ClavaJoinPoints.varDecl("__return_flag_" + id, ClavaJoinPoints.integerLiteral(0));
         const resVarRef = resVar.varref();
@@ -211,8 +210,8 @@ class Outliner {
     }
 
     #findParentFunction(jp) {
-        while (jp.joinPointType != "function") {
-            if (jp.joinPointType == "file") {
+        while (!jp.instanceOf("function")) {
+            if (jp.instanceOf("file")) {
                 return null;
             }
             jp = jp.parent;
@@ -256,7 +255,7 @@ class Outliner {
                 if (decl.name === param.name) {
                     const ref = ClavaJoinPoints.varRef(decl);
 
-                    if (param.type.joinPointType === "pointerType" && ref.type.joinPointType === "builtinType") {
+                    if (param.type.instanceOf("pointerType") && ref.type.instanceOf("builtinType")) {
                         const addressOfScalar = ClavaJoinPoints.unaryOp("&", ref);
                         args.push(addressOfScalar);
                     }
@@ -273,7 +272,7 @@ class Outliner {
 
     #createFunction(name, region, params) {
         let oldFun = region[0];
-        while (oldFun.joinPointType != "function") {
+        while (!oldFun.instanceOf("function")) {
             oldFun = oldFun.parent;
         }
 
@@ -315,7 +314,7 @@ class Outliner {
         for (const stmt of region) {
             for (const varref of Query.searchFrom(stmt, "varref")) {
                 for (const param of params) {
-                    if (param.name === varref.name && varref.type.joinPointType === "builtinType") {
+                    if (param.name === varref.name && varref.type.instanceOf("builtinType")) {
                         const newVarref = ClavaJoinPoints.varRef(param);
                         const op = ClavaJoinPoints.unaryOp("*", newVarref);
                         varref.replaceWith(op);
@@ -332,11 +331,11 @@ class Outliner {
             const name = ref.name;
             const varType = ref.type;
 
-            if (["arrayType", "adjustedType", "pointerType"].includes(varType.joinPointType)) {
+            if (varType.instanceOf(["arrayType", "adjustedType", "pointerType"])) {
                 const param = ClavaJoinPoints.param(name, varType);
                 params.push(param);
             }
-            else if (varType.joinPointType == "builtinType") {
+            else if (varType.instanceOf("builtinType")) {
                 const newType = ClavaJoinPoints.pointer(varType);
                 const param = ClavaJoinPoints.param(name, newType);
                 params.push(param);
@@ -380,7 +379,7 @@ class Outliner {
         const regionDecls = [];
         const regionDeclsNames = [];
         for (const stmt of region) {
-            if (stmt.joinPointType == "declStmt") {
+            if (stmt.instanceOf("declStmt")) {
                 regionDecls.push(stmt);
                 regionDeclsNames.push(stmt.children[0].name);
             }
@@ -445,20 +444,7 @@ class Outliner {
     }
 
     #generateFunctionName() {
-        var name = "__outlined_function_" + Outliner.#getUniqueFunctionID();
+        var name = "__outlined_function_" + IdGenerator.next();
         return name;
     }
-
-    static #getUniqueVarID() {
-        const id = Outliner.#GLOBAL_OUTLINE_VAR_ID;
-        Outliner.#GLOBAL_OUTLINE_VAR_ID++;
-        return id;
-    }
-
-    static #getUniqueFunctionID() {
-        const id = Outliner.#GLOBAL_OUTLINE_FUN_ID;
-        Outliner.#GLOBAL_OUTLINE_FUN_ID++;
-        return id;
-    }
-
 }
