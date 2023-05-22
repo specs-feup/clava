@@ -15,12 +15,12 @@ export default class ClangPlugin {
    * @param executableName String containing the command the user uses to compile their code normally
    * @returns String containing the clang executable name
    */
-  static validateClangExecutable(executableName: string): Promise<string> {
+  static validateClangExecutable(executableName: string): Promise<void> {
     return new Promise((resolve, reject) => {
       const commandRegex = /(?:^|\s)(\S*clang\S*)(?=\s|$)/;
       const clangExecutable = executableName.match(commandRegex);
       if (clangExecutable) {
-        resolve(clangExecutable[1]);
+        resolve();
       } else {
         reject(new Error("Could not find clang executable"));
       }
@@ -39,18 +39,22 @@ export default class ClangPlugin {
     clangExecutable: string
   ): Promise<string> {
     return new Promise((resolve, reject) => {
-      const output = Sandbox.executeSandboxedCommand(
-        clangExecutable,
-        [],
-        ["--version"]
-      );
+      try {
+        const output = Sandbox.executeSandboxedCommand(
+          clangExecutable,
+          ["--version"],
+          []
+        );
 
-      const versionRegex = /clang version (\d+\.\d+\.\d+)/;
-      const version = output.match(versionRegex);
-      if (version) {
-        resolve(version[1]);
-      } else {
-        reject(new Error("Could not find clang version"));
+        const versionRegex = /clang version (\d+\.\d+\.\d+)/;
+        const version = output.match(versionRegex);
+        if (version) {
+          resolve(version[1]);
+        } else {
+          reject(new Error("Could not find clang version"));
+        }
+      } catch (error) {
+        reject(error);
       }
     });
   }
@@ -64,8 +68,8 @@ export default class ClangPlugin {
    * @returns String containing the clang version number (e.g. 14.0.0)
    */
   static async getClangVersion(executableName: string): Promise<string> {
-    const clangExecutable = await this.validateClangExecutable(executableName);
-    return this.getClangVersionNumberFromExecutable(clangExecutable);
+    await this.validateClangExecutable(executableName);
+    return this.getClangVersionNumberFromExecutable(executableName);
   }
 
   /**
@@ -135,7 +139,7 @@ export default class ClangPlugin {
   static async executeClangPlugin(commandList: (string | number)[]) {
     const sanitizedCommand = await Sandbox.sanitizeCommand(commandList);
 
-    const [command, env, args] = await Sandbox.splitCommandArgsEnv(
+    const [command, args, env] = await Sandbox.splitCommandArgsEnv(
       sanitizedCommand
     );
     const pluginPath = await this.getPluginPath(command);
@@ -153,7 +157,7 @@ export default class ClangPlugin {
       pluginPath,
     ];
 
-    return Sandbox.executeSandboxedCommand(command, envMap, commandArgs);
+    return Sandbox.executeSandboxedCommand(command, commandArgs, envMap);
   }
 
   /**

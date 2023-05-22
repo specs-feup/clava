@@ -9,12 +9,13 @@ export default class Sandbox {
    *
    * @param command String containing the command to be executed
    * @param args Array of strings containing the arguments to be passed to the command
+   * @param env Object containing the environment variables to be set for the command
    * @returns Output of the command as a string
    */
   static executeSandboxedCommand(
     command: string,
-    env: { [keyof: string]: any } = {},
-    args: string[]
+    args: string[] = [],
+    env: { [keyof: string]: any } = {}
   ): string {
     // Set up a new child process with a restricted environment
     const child = spawnSync(command, args, {
@@ -28,6 +29,14 @@ export default class Sandbox {
       stdio: ["ignore", "pipe", "ignore", "ignore"],
     });
 
+    if (child.error) {
+      throw new Error("Invalid executable");
+    } else if (child.status !== 0) {
+      throw new Error(
+        `Command exited with status ${child.status}: ${child.stderr.toString()}`
+      );
+    }
+
     // Return the output of the child process as a string
     return child.stdout.toString();
   }
@@ -39,12 +48,13 @@ export default class Sandbox {
    *
    * @param command String containing the command to be executed
    * @param args Array of strings containing the arguments to be passed to the command
+   * @param env Object containing environment variables to be set for the child process
    * @returns Output of the command as a string
    */
   static executeSandboxedCommandAsync(
     command: string,
-    env: { [keyof: string]: any } = {},
-    args: string[]
+    args: string[] = [],
+    env: { [keyof: string]: any } = {}
   ): ChildProcess {
     // Set up a new child process with a restricted environment
     const child = spawn(command, args, {
@@ -80,7 +90,7 @@ export default class Sandbox {
        */
       const pattern = /^[^;&|]*$/;
 
-      if (!pattern.test(String(command))) {
+      if (!pattern.test(command.join(" "))) {
         reject(new Error("Invalid command"));
       }
 
@@ -90,7 +100,7 @@ export default class Sandbox {
 
   static splitCommandArgsEnv(
     commandArgs: (string | number)[]
-  ): Promise<[string, string[], (string | number)[]]> {
+  ): Promise<[string, (string | number)[], string[]]> {
     return new Promise((resolve, reject) => {
       // regex to match environment variable declarations
       const envRegex = /^([a-zA-Z_][a-zA-Z0-9_]*)=(.*)$/;
@@ -108,7 +118,7 @@ export default class Sandbox {
       // take the first argument as the command
       const command = commandArgsWithoutEnv.shift()! as string;
 
-      resolve([command, env, commandArgsWithoutEnv]);
+      resolve([command, commandArgsWithoutEnv, env]);
     });
   }
 }

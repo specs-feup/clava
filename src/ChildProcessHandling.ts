@@ -1,4 +1,7 @@
+import Debug from "debug";
 import { fork, spawn } from "child_process";
+
+const debug = Debug("ChildProcessHandling");
 
 export const activeChildProcesses: Record<
   number,
@@ -16,7 +19,7 @@ export function addActiveChildProcess(
   });
 }
 
-export async function handleExit() {
+export async function handleExit(exitProcess: boolean = true) {
   const closingChildren: Promise<any>[] = [];
 
   for (const child of Object.values(activeChildProcesses)) {
@@ -30,8 +33,11 @@ export async function handleExit() {
     child.kill();
   }
   await Promise.all(closingChildren);
-  console.log("Closed all child processes");
-  process.exit();
+  debug("Closed all child processes");
+
+  if (exitProcess) {
+    process.exit();
+  }
 }
 
 // Listen for termination signals
