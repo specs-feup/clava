@@ -163,9 +163,12 @@ class Outliner {
 
         // actions before the function call
         const type = returnStmts[0].children[0].type;
-        const id = IdGenerator.next();
-        const resVar = ClavaJoinPoints.varDeclNoInit("__return_val_" + id, type);
-        const boolVar = ClavaJoinPoints.varDecl("__return_flag_" + id, ClavaJoinPoints.integerLiteral(0));
+        const resId = IdGenerator.next("__rtr_val_");
+        const resVar = ClavaJoinPoints.varDeclNoInit(resId, type);
+
+        const boolId = IdGenerator.next("__rtr_flag_");
+        const boolVar = ClavaJoinPoints.varDecl(boolId, ClavaJoinPoints.integerLiteral(0));
+
         const resVarRef = resVar.varref();
         const boolVarRef = boolVar.varref();
 
@@ -454,7 +457,7 @@ class Outliner {
     }
 
     #generateFunctionName() {
-        var name = this.#defaultPrefix + IdGenerator.next();
+        var name = IdGenerator.next(this.#defaultPrefix);
         return name;
     }
 }
