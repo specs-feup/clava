@@ -31,10 +31,10 @@ const config = await yargs(hideBin(process.argv))
           defaultDescription: "none",
         });
     },
-    handler: async (argv) => {
+    handler: (argv) => {
       try {
         console.log(`Executing ${prettyName} script...`);
-        main(argv);
+        void main(argv);
       } catch (error) {
         console.error(error);
       }
@@ -43,7 +43,7 @@ const config = await yargs(hideBin(process.argv))
   .command({
     command: "init",
     describe: `Initialize a new ${prettyName} project`,
-    handler: async () => {
+    handler: () => {
       // TODO: Implement
       console.log(`Initializing new ${prettyName} project...`);
     },

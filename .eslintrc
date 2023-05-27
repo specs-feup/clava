@@ -1,20 +1,19 @@
 {
-    "root": true,
-    "parser": "@typescript-eslint/parser",
-    "plugins": ["@typescript-eslint", "mocha", "eslint-plugin-tsdoc"],
-    "parserOptions": {
-        "tsconfigRootDir": "__dirname",
-        "project": ["./tsconfig.json"]
-    },
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:mocha/recommended",
-        "prettier",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking"
-    ],
-    "rules": {
-        "tsdoc/syntax": "warn"
-    }
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "mocha", "eslint-plugin-tsdoc"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:mocha/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "tsdoc/syntax": "warn"
+  }
 }

@@ -12,13 +12,13 @@ export default class ClangPlugin {
    *
    * **Sanitize the input before calling this method**
    *
-   * @param executableName String containing the command the user uses to compile their code normally
+   * @param executableName - String containing the command the user uses to compile their code normally
    * @returns String containing the clang executable name
    */
   static validateClangExecutable(executableName: string): Promise<void> {
     return new Promise((resolve, reject) => {
       const commandRegex = /(?:^|\s)(\S*clang\S*)(?=\s|$)/;
-      const clangExecutable = executableName.match(commandRegex);
+      const clangExecutable = commandRegex.exec(executableName);
       if (clangExecutable) {
         resolve();
       } else {
@@ -32,7 +32,7 @@ export default class ClangPlugin {
    *
    * **Sanitize the input before calling this method**
    *
-   * @param clangExecutable String containing the clang executable name
+   * @param clangExecutable - String containing the clang executable name
    * @returns String containing the clang version number (e.g. 14.0.0)
    */
   static getClangVersionNumberFromExecutable(
@@ -43,11 +43,11 @@ export default class ClangPlugin {
         const output = Sandbox.executeSandboxedCommand(
           clangExecutable,
           ["--version"],
-          []
+          {}
         );
 
         const versionRegex = /clang version (\d+\.\d+\.\d+)/;
-        const version = output.match(versionRegex);
+        const version = versionRegex.exec(output);
         if (version) {
           resolve(version[1]);
         } else {
@@ -64,7 +64,7 @@ export default class ClangPlugin {
    *
    * **Sanitize the input before calling this method**
    *
-   * @param executableName String containing the executable the user uses to compile their code normally
+   * @param executableName - String containing the executable the user uses to compile their code normally
    * @returns String containing the clang version number (e.g. 14.0.0)
    */
   static async getClangVersion(executableName: string): Promise<string> {
@@ -108,7 +108,7 @@ export default class ClangPlugin {
   /**
    * Gets the absolute path to the clang plugin for a compiler
    *
-   * @param executableName Name of the compiler executable
+   * @param executableName - Name of the compiler executable
    * @returns The absolute path to the clang plugin or throws an error if no compatible plugin found
    */
   static getPluginPath(executableName: string): Promise<string> {
@@ -132,11 +132,13 @@ export default class ClangPlugin {
    * Executes the clang plugin in a sandboxed environment with the given arguments
    * and returns a pipe to the output.
    *
-   * @param commandList Command used to execute the compiler by the user
-   * @param pluginPath Path to the clang plugin aligned with the compiler version
-   * @param args Arguments to pass to the clang plugin
+   * @param commandList - Command used to execute the compiler by the user
+   * @param pluginPath - Path to the clang plugin aligned with the compiler version
+   * @param args - Arguments to pass to the clang plugin
    */
-  static async executeClangPlugin(commandList: (string | number)[]) {
+  static async executeClangPlugin(
+    commandList: (string | number)[]
+  ): Promise<string> {
     const sanitizedCommand = await Sandbox.sanitizeCommand(commandList);
 
     const [command, args, env] = await Sandbox.splitCommandArgsEnv(
@@ -164,11 +166,10 @@ export default class ClangPlugin {
    * Ensures that the argument is an absolute path if it exists
    * otherwise returns the argument itself
    *
-   * @private
-   * @param argument String containing the argument to check
+   * @param argument - String containing the argument to check
    * @returns The absolute path to the argument if it exists, otherwise the argument itself
    */
-  static #ensureAbsolutePath(argument: string) {
+  static #ensureAbsolutePath(argument: string): string {
     if (fs.existsSync(argument)) {
       return path.resolve(argument);
     } else {

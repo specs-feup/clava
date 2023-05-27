@@ -1,7 +1,7 @@
 import Debug from "debug";
 import * as path from "path";
 import * as chokidar from "chokidar";
-import { ChildProcess, fork } from "child_process";
+import { fork } from "child_process";
 import {
   addActiveChildProcess,
   activeChildProcesses,
@@ -13,17 +13,17 @@ function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export async function main(args: { [key: string]: any }) {
+export function main(args: Record<string, unknown>): void {
   debug("Clava execution arguments: %O", args);
-  executeClava(args);
+  void executeClava(args);
 
   if (args.watch) {
-    for (const directory of args.watch) {
-      debug("Watching directory: " + directory);
+    for (const directory of args.watch as string[]) {
+      debug(`Watching directory: ${directory}`);
     }
 
     chokidar
-      .watch(args.watch, { ignoreInitial: true })
+      .watch(args.watch as string[], { ignoreInitial: true })
       .on("all", (event: string, filepath: string) => {
         try {
           return filesystemEventHandler(event, filepath, args);
@@ -37,14 +37,14 @@ export async function main(args: { [key: string]: any }) {
 function filesystemEventHandler(
   event: string,
   filepath: string,
-  args: { [key: string]: any }
+  args: Record<string, unknown>
 ) {
   debug(`Source file event: ${capitalizeFirstLetter(event)} '${filepath}'`);
-  executeClava(args);
+  void executeClava(args);
 }
 
 let midExecution = false;
-async function executeClava(args: { [key: string]: any }) {
+async function executeClava(args: Record<string, unknown>) {
   if (midExecution) return;
   midExecution = true;
   const activeProcess = Object.values(activeChildProcesses)[0];

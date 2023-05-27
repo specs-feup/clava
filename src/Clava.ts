@@ -1,6 +1,5 @@
 import * as fs from "fs";
 import * as path from "path";
-// @ts-ignore
 import java from "java";
 import Debug from "debug";
 import { promisify } from "util";
@@ -10,7 +9,7 @@ import ClangPlugin from "./ClangPlugin/ClangPlugin.js";
 import Sandbox from "./Sandbox.js";
 
 const debug = Debug("clava:weaver");
-const args: { [key: string]: any } = JSON.parse(hideBin(process.argv)[0]);
+const args = JSON.parse(hideBin(process.argv)[0]) as Record<string, unknown>;
 
 java.asyncOptions = {
   asyncSuffix: "Async",
@@ -23,16 +22,18 @@ await java.ensureJvm();
 
 debug("Clava execution arguments: %O", args);
 
-const JavaArrayList = java.import("java.util.ArrayList");
-const JavaFile = java.import("java.io.File");
-const JavaCxxWeaver = java.import("pt.up.fe.specs.clava.weaver.CxxWeaver");
-const JavaLaraIDataStore = java.import(
+const JavaArrayList: unknown = java.import("java.util.ArrayList");
+const JavaFile: unknown = java.import("java.io.File");
+const JavaCxxWeaver: unknown = java.import(
+  "pt.up.fe.specs.clava.weaver.CxxWeaver"
+);
+const JavaLaraIDataStore: unknown = java.import(
   "org.lara.interpreter.joptions.config.interpreter.LaraIDataStore"
 );
-const JavaDataStore = java.import(
+const JavaDataStore: unknown = java.import(
   "org.suikasoft.jOptions.Interfaces.DataStore"
 );
-const LaraiKeys = java.import(
+const LaraiKeys: unknown = java.import(
   "org.lara.interpreter.joptions.config.interpreter.LaraiKeys"
 );
 

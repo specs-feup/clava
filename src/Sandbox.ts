@@ -7,15 +7,15 @@ export default class Sandbox {
    *
    * **Sanitize the input before calling this method**
    *
-   * @param command String containing the command to be executed
-   * @param args Array of strings containing the arguments to be passed to the command
-   * @param env Object containing the environment variables to be set for the command
+   * @param command - String containing the command to be executed
+   * @param args - Array of strings containing the arguments to be passed to the command
+   * @param env - Object containing the environment variables to be set for the command
    * @returns Output of the command as a string
    */
   static executeSandboxedCommand(
     command: string,
     args: string[] = [],
-    env: { [keyof: string]: any } = {}
+    env: Record<string, unknown> = {}
   ): string {
     // Set up a new child process with a restricted environment
     const child = spawnSync(command, args, {
@@ -33,7 +33,9 @@ export default class Sandbox {
       throw new Error("Invalid executable");
     } else if (child.status !== 0) {
       throw new Error(
-        `Command exited with status ${child.status}: ${child.stderr.toString()}`
+        `Command exited with status ${String(
+          child.status
+        )}: ${child.stderr.toString()}`
       );
     }
 
@@ -46,15 +48,15 @@ export default class Sandbox {
    *
    * **Sanitize the input before calling this method**
    *
-   * @param command String containing the command to be executed
-   * @param args Array of strings containing the arguments to be passed to the command
-   * @param env Object containing environment variables to be set for the child process
+   * @param command - String containing the command to be executed
+   * @param args - Array of strings containing the arguments to be passed to the command
+   * @param env - Object containing environment variables to be set for the child process
    * @returns Output of the command as a string
    */
   static executeSandboxedCommandAsync(
     command: string,
     args: string[] = [],
-    env: { [keyof: string]: any } = {}
+    env: Record<string, unknown> = {}
   ): ChildProcess {
     // Set up a new child process with a restricted environment
     const child = spawn(command, args, {
@@ -75,7 +77,7 @@ export default class Sandbox {
   /**
    * Ensure command string does not contain any characters that could be used
    *
-   * @param command String containing the command to be sanitized
+   * @param command - String containing the command to be sanitized
    * @returns The original command or throws an error if invalid
    */
   static sanitizeCommand(
@@ -101,7 +103,7 @@ export default class Sandbox {
   static splitCommandArgsEnv(
     commandArgs: (string | number)[]
   ): Promise<[string, (string | number)[], string[]]> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       // regex to match environment variable declarations
       const envRegex = /^([a-zA-Z_][a-zA-Z0-9_]*)=(.*)$/;
 
@@ -116,7 +118,8 @@ export default class Sandbox {
       );
 
       // take the first argument as the command
-      const command = commandArgsWithoutEnv.shift()! as string;
+      const commandCandidate = commandArgsWithoutEnv.shift();
+      const command = commandCandidate ? String(commandCandidate) : "";
 
       resolve([command, commandArgsWithoutEnv, env]);
     });

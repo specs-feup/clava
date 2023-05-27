@@ -19,7 +19,7 @@ export function addActiveChildProcess(
   });
 }
 
-export async function handleExit(exitProcess: boolean = true) {
+export async function handleExit(exitProcess = true) {
   const closingChildren: Promise<any>[] = [];
 
   for (const child of Object.values(activeChildProcesses)) {
