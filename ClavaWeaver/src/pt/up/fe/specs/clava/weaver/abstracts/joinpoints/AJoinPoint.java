@@ -920,7 +920,7 @@ public abstract class AJoinPoint extends JoinPoint {
     /**
      * Returns the 'program' joinpoint
      */
-    public abstract AJoinPoint getRootImpl();
+    public abstract AProgram getRootImpl();
 
     /**
      * Returns the 'program' joinpoint
@@ -930,7 +930,7 @@ public abstract class AJoinPoint extends JoinPoint {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "root", Optional.empty());
         	}
-        	AJoinPoint result = this.getRootImpl();
+        	AProgram result = this.getRootImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "root", Optional.ofNullable(result));
         	}

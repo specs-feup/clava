@@ -8,7 +8,7 @@
 	<!-- Global Joinpoint -->
 	<!-- These properties are shared by all joinpoints -->
 	<global>
-		<attribute name="root" type="joinpoint"
+		<attribute name="root" type="program"
 			tooltip="Returns the 'program' joinpoint" />
 		<attribute name="parent" type="joinpoint" tooltip="Returns the parent node in the AST, or undefined if it is the root node"/>
 		<attribute name="ancestor" type="joinpoint"

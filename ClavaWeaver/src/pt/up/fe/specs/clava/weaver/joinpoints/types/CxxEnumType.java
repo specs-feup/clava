@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.weaver.joinpoints.types;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.type.EnumType;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AEnumType;
@@ -41,7 +42,7 @@ public class CxxEnumType extends AEnumType {
             return null;
         }
 
-        return CxxJoinpoints.create(enumType.getEnumDecl(getRootImpl().getNode()).getIntegerType(), AType.class);
+        return CxxJoinpoints.create(enumType.getEnumDecl((App) getRootImpl().getNode()).getIntegerType(), AType.class);
     }
 
 }

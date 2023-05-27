@@ -47,11 +47,11 @@ import pt.up.fe.specs.clava.weaver.Insert;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AComment;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AJoinPoint;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.APragma;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AProgram;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
-import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
@@ -115,7 +115,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public CxxProgram getRootImpl() {
+    public AProgram getRootImpl() {
         return getWeaverEngine().getAppJp();
         /*
         ACxxWeaverJoinPoint current = this;
@@ -137,7 +137,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
      * @return the parent joinpoint
      */
     @Override
-    public ACxxWeaverJoinPoint getParentImpl() {
+    public AJoinPoint getParentImpl() {
         ClavaNode node = getNode();
         if (!node.hasParent()) {
             return null;
@@ -157,7 +157,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public ACxxWeaverJoinPoint getAstParentImpl() {
+    public AJoinPoint getAstParentImpl() {
         ClavaLog.deprecated("attribute 'astParent' is deprecated, please use 'parent' instead");
         return getParentImpl();
         // ClavaNode node = getNode();
@@ -300,9 +300,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             ClavaLog.warning("Consider using attribute .root, instead of .chainAncestor('program')");
         }
 
-        ACxxWeaverJoinPoint currentJp = this;
+        AJoinPoint currentJp = this;
         while (currentJp.getHasParentImpl()) {
-            ACxxWeaverJoinPoint parentJp = currentJp.getParentImpl();
+            var parentJp = currentJp.getParentImpl();
             // if (parentJp.getJoinpointType().equals(type)) {
             if (parentJp.instanceOf(type)) {
                 return parentJp;
