@@ -3,6 +3,7 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
+import org.lara.interpreter.exception.ActionException;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -141,6 +142,62 @@ public abstract class AMemberAccess extends AExpression {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "base", e);
+        }
+    }
+
+    /**
+     * true if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)
+     */
+    public abstract Boolean getArrowImpl();
+
+    /**
+     * true if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)
+     */
+    public final Object getArrow() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "arrow", Optional.empty());
+        	}
+        	Boolean result = this.getArrowImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "arrow", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "arrow", e);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void defArrowImpl(Boolean value) {
+        throw new UnsupportedOperationException("Join point "+get_class()+": Action def arrow with type Boolean not implemented ");
+    }
+
+    /**
+     * 
+     * @param isArrow 
+     */
+    public void setArrowImpl(Boolean isArrow) {
+        throw new UnsupportedOperationException(get_class()+": Action setArrow not implemented ");
+    }
+
+    /**
+     * 
+     * @param isArrow 
+     */
+    public final void setArrow(Boolean isArrow) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setArrow", this, Optional.empty(), isArrow);
+        	}
+        	this.setArrowImpl(isArrow);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setArrow", this, Optional.empty(), isArrow);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setArrow", e);
         }
     }
 
@@ -1122,6 +1179,13 @@ public abstract class AMemberAccess extends AExpression {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
+        case "arrow": {
+        	if(value instanceof Boolean){
+        		this.defArrowImpl((Boolean)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
         default: throw new UnsupportedOperationException("Join point "+get_class()+": attribute '"+attribute+"' cannot be defined");
         }
     }
@@ -1136,6 +1200,7 @@ public abstract class AMemberAccess extends AExpression {
         attributes.add("memberChain");
         attributes.add("memberChainNames");
         attributes.add("base");
+        attributes.add("arrow");
     }
 
     /**
@@ -1152,6 +1217,7 @@ public abstract class AMemberAccess extends AExpression {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aExpression.fillWithActions(actions);
+        actions.add("void setArrow(Boolean)");
     }
 
     /**
@@ -1183,6 +1249,7 @@ public abstract class AMemberAccess extends AExpression {
         MEMBERCHAIN("memberChain"),
         MEMBERCHAINNAMES("memberChainNames"),
         BASE("base"),
+        ARROW("arrow"),
         DECL("decl"),
         VARDECL("vardecl"),
         USE("use"),

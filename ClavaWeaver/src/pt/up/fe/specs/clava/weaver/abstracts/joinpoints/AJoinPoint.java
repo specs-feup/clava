@@ -847,6 +847,9 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     @Override
     protected void fillWithAttributes(List<String> attributes) {
+        // Default attributes
+        super.fillWithAttributes(attributes);
+        
         //Attributes available for all join points
         attributes.add("root");
         attributes.add("parent");

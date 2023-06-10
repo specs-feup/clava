@@ -61463,6 +61463,15 @@
 			"children": [
 					{
 						"type": "attribute",
+						"tooltip": "true if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "arrow"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "expression of the base of this member access",
 						"children": [
 									{
@@ -62252,6 +62261,19 @@
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
+					},
+					{
+						"type": "action",
+						"children": [
+									{
+										"type": "void",
+										"name": "setArrow"
+									},
+									{
+										"type": "Boolean",
+										"name": "isArrow",
+										"defaultValue": ""
+									}]
 					},
 					{
 						"type": "action",

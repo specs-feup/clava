@@ -636,8 +636,10 @@
 		<attribute name="name" type="String" />
 		<attribute name="memberChain" type="expression[]" />
 		<attribute name="memberChainNames" type="String[]" />
-		<attribute name="base" type="expression"
-			tooltip="expression of the base of this member access" />
+		<attribute name="base" type="expression" tooltip="expression of the base of this member access" />
+		<attribute name="arrow" type="Boolean" tooltip="true if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)">
+			<def/>
+		</attribute>
 	</artifact>
 
 
