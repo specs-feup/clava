@@ -9,7 +9,7 @@ import ClangPlugin from "./ClangPlugin/ClangPlugin.js";
 import Sandbox from "./Sandbox.js";
 
 const debug = Debug("clava:weaver");
-const args = JSON.parse(hideBin(process.argv)[0]) as Record<string, unknown>;
+const args = JSON.parse(hideBin(process.argv)[0]);
 
 java.asyncOptions = {
   asyncSuffix: "Async",
@@ -17,24 +17,27 @@ java.asyncOptions = {
   promiseSuffix: "P",
   promisify: promisify,
 };
-java.classpath.push("../../../.local/bin/Clava/Clava.jar");
+//java.classpath.push("../../../.local/bin/Clava/Clava.jar");
+java.classpath.push("../SPeCS/ClavaWeaver.jar");
 await java.ensureJvm();
 
 debug("Clava execution arguments: %O", args);
 
-const JavaArrayList: unknown = java.import("java.util.ArrayList");
-const JavaFile: unknown = java.import("java.io.File");
-const JavaCxxWeaver: unknown = java.import(
-  "pt.up.fe.specs.clava.weaver.CxxWeaver"
-);
-const JavaLaraIDataStore: unknown = java.import(
+const JavaArrayList = java.import("java.util.ArrayList");
+const JavaFile = java.import("java.io.File");
+const JavaCxxWeaver = java.import("pt.up.fe.specs.clava.weaver.CxxWeaver");
+const JavaLaraIDataStore = java.import(
   "org.lara.interpreter.joptions.config.interpreter.LaraIDataStore"
 );
-const JavaDataStore: unknown = java.import(
+const JavaDataStore = java.import(
   "org.suikasoft.jOptions.Interfaces.DataStore"
 );
-const LaraiKeys: unknown = java.import(
+const LaraiKeys = java.import(
   "org.lara.interpreter.joptions.config.interpreter.LaraiKeys"
+);
+const NodeJsEngine = java.import("pt.up.fe.specs.jsengine.NodeJsEngine");
+const JavaEventTrigger = java.import(
+  "org.lara.interpreter.weaver.events.EventTrigger"
 );
 
 const fileList = new JavaArrayList();
@@ -46,6 +49,8 @@ clangArgs.forEach((arg: string | number) => {
 
 const weaver = new JavaCxxWeaver();
 weaver.setWeaver();
+weaver.setScriptEngine(new NodeJsEngine());
+weaver.setEventTrigger(new JavaEventTrigger());
 
 const datastore = await new JavaDataStore.newInstanceP("CxxWeaverDataStore");
 datastore.set(LaraiKeys.LARA_FILE, new JavaFile("placeholderFileName"));
@@ -57,8 +62,6 @@ weaver.begin(
   laraIDataStore.getWeaverArgs()
 );
 
-console.log("AST: %O", weaver.getRootJp().getAst().root);
-
 Object.defineProperty(globalThis, "clava", {
   value: {
     rootJp: weaver.getRootJp(),
@@ -68,7 +71,7 @@ Object.defineProperty(globalThis, "clava", {
   writable: true,
 });
 
-console.log("Hi");
+debug("Executing user script...");
 
 if (
   fs.existsSync(args.scriptFile) &&
@@ -79,6 +82,12 @@ if (
       debug("Execution completed successfully.");
     })
     .catch((error) => {
+      console.error("Execution failed.");
+
+      if (error.cause !== undefined) {
+        // Java exception
+        console.error(error.cause.getMessage());
+      }
       debug(error);
     });
 } else {

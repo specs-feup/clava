@@ -5,7 +5,10 @@ import { fork } from "child_process";
 import {
   addActiveChildProcess,
   activeChildProcesses,
+  listenForTerminationSignals,
 } from "./ChildProcessHandling.js";
+
+listenForTerminationSignals();
 
 const debug = Debug("clava:main");
 

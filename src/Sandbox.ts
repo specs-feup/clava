@@ -15,7 +15,7 @@ export default class Sandbox {
   static executeSandboxedCommand(
     command: string,
     args: string[] = [],
-    env: Record<string, unknown> = {}
+    env: Map<string, string> = new Map()
   ): string {
     // Set up a new child process with a restricted environment
     const child = spawnSync(command, args, {
@@ -23,7 +23,7 @@ export default class Sandbox {
         PATH: "/usr/local/bin:/usr/bin:/bin", // Set a limited PATH environment variable
         HOME: "/tmp", // Set a limited HOME environment variable
         USER: "sandbox", // Set a limited user for the child process
-        ...env,
+        ...Object.fromEntries(env),
       },
       cwd: "/tmp", // Set a restricted current working directory
       stdio: ["ignore", "pipe", "ignore", "ignore"],

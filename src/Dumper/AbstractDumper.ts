@@ -1,3 +1,3 @@
 export default interface AbstractDumper {
-  dump(): Record<string, unknown>;
+  dump(): Promise<Record<string, unknown>>;
 }

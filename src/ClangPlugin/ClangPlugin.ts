@@ -40,11 +40,9 @@ export default class ClangPlugin {
   ): Promise<string> {
     return new Promise((resolve, reject) => {
       try {
-        const output = Sandbox.executeSandboxedCommand(
-          clangExecutable,
-          ["--version"],
-          {}
-        );
+        const output = Sandbox.executeSandboxedCommand(clangExecutable, [
+          "--version",
+        ]);
 
         const versionRegex = /clang version (\d+\.\d+\.\d+)/;
         const version = versionRegex.exec(output);

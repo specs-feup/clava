@@ -10,20 +10,25 @@ export const activeChildProcesses: Record<
 
 export function addActiveChildProcess(
   child: ReturnType<typeof fork> | ReturnType<typeof spawn>
-) {
-  activeChildProcesses[child.pid!] = child;
+): void {
+  if (child.pid === undefined) {
+    throw new Error("Child process doesn't have a pid");
+  }
+  const pid = child.pid;
+
+  activeChildProcesses[pid] = child;
 
   // Listen for the 'exit' event of the child process
-  child.on("exit", (code, signal) => {
-    delete activeChildProcesses[child.pid!];
+  child.on("exit", () => {
+    delete activeChildProcesses[pid];
   });
 }
 
-export async function handleExit(exitProcess = true) {
-  const closingChildren: Promise<any>[] = [];
+export function handleExit(exitProcess = true): void {
+  const closingChildren: Promise<number | null>[] = [];
 
   for (const child of Object.values(activeChildProcesses)) {
-    const promise = new Promise((resolve) => {
+    const promise: Promise<number | null> = new Promise((resolve) => {
       child.once("exit", (code) => {
         resolve(code);
       });
@@ -32,17 +37,23 @@ export async function handleExit(exitProcess = true) {
 
     child.kill();
   }
-  await Promise.all(closingChildren);
-  debug("Closed all child processes");
-
-  if (exitProcess) {
-    process.exit();
-  }
+  Promise.all(closingChildren)
+    .then((codes) => {
+      debug("Closed all child processes");
+      if (exitProcess) {
+        process.exit();
+      }
+    })
+    .catch((err: Error) => {
+      debug(`Error closing child processes: ${err}`);
+    });
 }
 
-// Listen for termination signals
-process.on("SIGINT", handleExit);
-process.on("SIGTERM", handleExit);
-process.on("SIGQUIT", handleExit);
-process.on("uncaughtException", handleExit);
-process.on("unhandledRejection", handleExit);
+export function listenForTerminationSignals(): void {
+  // Listen for termination signals
+  process.on("SIGINT", handleExit);
+  process.on("SIGTERM", handleExit);
+  process.on("SIGQUIT", handleExit);
+  process.on("uncaughtException", handleExit /*  as unknown as () => void */);
+  process.on("unhandledRejection", handleExit);
+}
