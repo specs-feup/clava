@@ -2,21 +2,17 @@
   "name": "clava-js",
   "version": "0.0.1",
   "description": "A C/C++ source-to-source compiler written in Typescript",
-  "main": "index.js",
   "type": "module",
-  "directories": {
-    "test": "test"
-  },
   "bin": {
     "clava-js": "./dist/index.js"
   },
   "scripts": {
-    "run": "node dist/index.js",
+    "run": "npx clava-js",
     "build": "tsc",
-    "build:watch": "tsc --watch",
+    "build:watch": "npm run build -- --watch",
     "lint": "eslint .",
-    "test": "npx mocha --enable-source-maps --recursive",
-    "test:watch": "npx mocha --enable-source-maps --recursive --watch"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "npm run test -- --watch"
   },
   "repository": {
     "type": "git",
