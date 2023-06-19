@@ -7,7 +7,7 @@ import sinon from "sinon";
 import fs from "fs";
 import path from "path";
 
-import ClangPlugin from "../../src/ClangPlugin/ClangPlugin";
+import ClangPlugin from "./ClangPlugin";
 
 describe("ClangPlugin", () => {
   describe("validateClangExecutable", () => {

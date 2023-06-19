@@ -4,7 +4,7 @@ import chaiAsPromised from "chai-as-promised";
 const expect = chai.expect;
 chai.use(chaiAsPromised);
 
-import Sandbox from "../src/Sandbox";
+import Sandbox from "./Sandbox";
 
 describe("Sandbox", () => {
   describe("sanitizeCommand", () => {

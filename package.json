@@ -1,5 +1,5 @@
 {
-  "name": "clava",
+  "name": "clava-js",
   "version": "0.0.1",
   "description": "A C/C++ source-to-source compiler written in Typescript",
   "main": "index.js",
@@ -36,11 +36,8 @@
   },
   "homepage": "https://github.com/lm-sousa/Clava-JS#readme",
   "dependencies": {
-    "chokidar": "^3.5.3",
-    "debug": "^4.3.4",
-    "java": "^0.13.0",
-    "supports-color": "^9.3.1",
-    "yargs": "^17.7.2"
+    "lara-js": "^0.0.1",
+    "clavaapi": "^0.1.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.22",
