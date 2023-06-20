@@ -2,7 +2,7 @@ import { jest } from "@jest/globals";
 import fs from "fs";
 import path from "path";
 
-import ClangPlugin from "./ClangPlugin";
+import ClangPlugin from "./ClangPlugin.js";
 
 describe("ClangPlugin", () => {
   describe("validateClangExecutable", () => {

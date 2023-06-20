@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals";
-import Sandbox from "./Sandbox";
+import Sandbox from "./Sandbox.js";
 
 describe("Sandbox", () => {
   describe("sanitizeCommand", () => {

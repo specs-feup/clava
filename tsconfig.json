@@ -7,7 +7,7 @@
     "strict": true,
     //"allowJs": true,
     //"checkJs": true,
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "sourceMap": true,
     "declarationMap": true,
     "allowSyntheticDefaultImports": true

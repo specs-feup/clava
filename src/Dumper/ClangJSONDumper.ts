@@ -1,4 +1,4 @@
-import AbstractDumper from "./AbstractDumper";
+import AbstractDumper from "./AbstractDumper.js";
 
 import { spawn } from "child_process";
 

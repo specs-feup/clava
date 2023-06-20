@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import Sandbox from "../Sandbox";
+import Sandbox from "../Sandbox.js";
 import { fileURLToPath } from "url";
 
 export default class ClangPlugin {

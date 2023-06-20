@@ -8,5 +8,8 @@
   "coverageDirectory": "coverage",
   "coverageReporters": ["text", "lcov"],
   "collectCoverageFrom": ["src/**/*.(t|j)s"],
-  "coverageProvider": "v8"
+  "coverageProvider": "v8",
+  "moduleNameMapper": {
+    "(.+)\\.js": "$1"
+  }
 }

@@ -1,5 +1,5 @@
 import { ChildProcess, spawn, spawnSync } from "child_process";
-import { addActiveChildProcess } from "lara-js/dist/ChildProcessHandling.js";
+import { addActiveChildProcess } from "lara-js/ChildProcessHandling.js";
 
 export default class Sandbox {
   /**
