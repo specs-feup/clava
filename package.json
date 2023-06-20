@@ -3,15 +3,33 @@
   "version": "0.0.1",
   "description": "A C/C++ source-to-source compiler written in Typescript",
   "type": "module",
+  "files": [
+    "api",
+    "code",
+    "src-api",
+    "src-code",
+    "clang-plugin-binaries",
+    ".gitignore",
+    "jest.config.json",
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "tsconfig.json"
+  ],
   "bin": {
-    "clava-js": "./dist/index.js"
+    "clava-js": "./dist/src/index.js"
   },
   "scripts": {
-    "run": "npx clava-js",
-    "build": "tsc",
+    "run": "node ./dist/src/index.js",
+    "build": "tsc -b src-api src-code",
+    "build:api": "tsc -b src-api",
+    "build:code": "tsc -b src-code",
     "build:watch": "npm run build -- --watch",
     "lint": "eslint .",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:api": "npm run test -- src-api",
+    "test:code": "npm run test -- src-code",
+    "test:cov": "npm run test -- --coverage",
     "test:watch": "npm run test -- --watch"
   },
   "repository": {

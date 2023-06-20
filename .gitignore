@@ -1,6 +1,7 @@
 ##### User-added #####
-dist/
 woven_code/
+api/
+code/
 
 # Extensions
 ltex.dictionary.*
