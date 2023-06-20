@@ -1,5 +1,5 @@
 {
-  "preset": "ts-jest",
+  "preset": "ts-jest/presets/js-with-ts-esm",
   "testEnvironment": "node",
   "notify": true,
   "notifyMode": "always",

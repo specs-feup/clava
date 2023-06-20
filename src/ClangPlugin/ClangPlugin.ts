@@ -1,7 +1,7 @@
-import * as fs from "fs";
-import * as path from "path";
-import Sandbox from "../Sandbox.js";
-import { URL } from "url";
+import fs from "fs";
+import path from "path";
+import Sandbox from "../Sandbox";
+import { fileURLToPath } from "url";
 
 export default class ClangPlugin {
   static clangPluginDir = "clang-plugin-binaries";
@@ -79,7 +79,7 @@ export default class ClangPlugin {
   static getAvailablePlugins(): Promise<{ [version: string]: string }> {
     return new Promise((resolve, reject) => {
       const basedir = path.dirname(
-        path.dirname(path.dirname(new URL(import.meta.url).pathname))
+        path.dirname(path.dirname(fileURLToPath(import.meta.url)))
       );
       const dir = path.join(basedir, this.clangPluginDir);
 
@@ -109,21 +109,17 @@ export default class ClangPlugin {
    * @param executableName - Name of the compiler executable
    * @returns The absolute path to the clang plugin or throws an error if no compatible plugin found
    */
-  static getPluginPath(executableName: string): Promise<string> {
-    return new Promise(async (resolve, reject) => {
-      const [clangVersion, availablePlugins] = await Promise.all([
-        this.getClangVersion(executableName),
-        this.getAvailablePlugins(),
-      ]);
+  static async getPluginPath(executableName: string): Promise<string> {
+    const [clangVersion, availablePlugins] = await Promise.all([
+      this.getClangVersion(executableName),
+      this.getAvailablePlugins(),
+    ]);
 
-      if (clangVersion in availablePlugins) {
-        resolve(availablePlugins[clangVersion]);
-      } else {
-        reject(
-          new Error("Could not find plugin for provided clang executable")
-        );
-      }
-    });
+    if (clangVersion in availablePlugins) {
+      return availablePlugins[clangVersion];
+    } else {
+      throw new Error("Could not find plugin for provided clang executable");
+    }
   }
 
   /**

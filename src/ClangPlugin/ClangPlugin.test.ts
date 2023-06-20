@@ -1,9 +1,4 @@
-import "mocha";
-import * as chai from "chai";
-import chaiAsPromised from "chai-as-promised";
-const expect = chai.expect;
-chai.use(chaiAsPromised);
-import sinon from "sinon";
+import { jest } from "@jest/globals";
 import fs from "fs";
 import path from "path";
 
@@ -14,8 +9,8 @@ describe("ClangPlugin", () => {
     it("should return the clang executable name when given a valid command", async () => {
       const executableName = "clang -o main main.c";
 
-      await expect(ClangPlugin.validateClangExecutable(executableName)).to.be
-        .fulfilled;
+      await expect(ClangPlugin.validateClangExecutable(executableName))
+        .resolves;
     });
 
     it("should throw an error when given an invalid command", async () => {
@@ -23,7 +18,7 @@ describe("ClangPlugin", () => {
 
       await expect(
         ClangPlugin.validateClangExecutable(executableName)
-      ).rejectedWith(Error, "Could not find clang executable");
+      ).rejects.toThrowError("Could not find clang executable");
     });
   });
 
@@ -35,7 +30,7 @@ describe("ClangPlugin", () => {
       const actualVersionNumber =
         await ClangPlugin.getClangVersionNumberFromExecutable(clangExecutable);
 
-      expect(actualVersionNumber).to.equal(expectedVersionNumber);
+      expect(actualVersionNumber).toBe(expectedVersionNumber);
     });
 
     it("should throw an error when given an invalid clang executable", async () => {
@@ -43,7 +38,7 @@ describe("ClangPlugin", () => {
 
       await expect(
         ClangPlugin.getClangVersionNumberFromExecutable(clangExecutable)
-      ).rejectedWith(Error, "Invalid executable");
+      ).rejects.toThrowError("Invalid executable");
     });
   });
 
@@ -52,14 +47,14 @@ describe("ClangPlugin", () => {
       const clangExecutable = "clang-14";
       const expectedVersion = "14.0.0";
       const actualVersion = await ClangPlugin.getClangVersion(clangExecutable);
-      expect(actualVersion).to.equal(expectedVersion);
+      expect(actualVersion).toBe(expectedVersion);
     });
 
     it("should throw an error when given an invalid clang executable", async () => {
       const clangExecutable = "gcc";
       await expect(
         ClangPlugin.getClangVersion(clangExecutable)
-      ).to.be.rejectedWith("Could not find clang executable");
+      ).rejects.toThrowError("Could not find clang executable");
     });
   });
 
@@ -73,26 +68,23 @@ describe("ClangPlugin", () => {
         //"15.0.0": `${testDir}/ClangASTDumper_15.0.0.so`,
       };
 
-      //sinon.stub(fs, "existsSync").returns(true);
-      sinon.stub(ClangPlugin, "pluginNamePrefix").get(() => "ClangASTDumper");
-      sinon
-        .stub(ClangPlugin, "clangPluginDir")
-        .get(() => "clang-plugin-binaries");
+      expect(ClangPlugin.clangPluginDir).toBe("clang-plugin-binaries");
+      expect(ClangPlugin.pluginNamePrefix).toBe("ClangASTDumper");
 
       const actualMap = await ClangPlugin.getAvailablePlugins();
 
-      expect(actualMap).to.deep.equal(expectedMap);
-      sinon.restore();
+      expect(actualMap).toEqual(expectedMap);
+      jest.restoreAllMocks();
     });
 
     it("should throw an error when the clang-plugin-binaries directory does not exist", async () => {
-      sinon.stub(fs, "existsSync").returns(false);
+      jest.spyOn(fs, "existsSync").mockClear().mockReturnValue(false);
 
-      await expect(ClangPlugin.getAvailablePlugins()).to.be.rejectedWith(
+      await expect(ClangPlugin.getAvailablePlugins()).rejects.toThrowError(
         "Could not find 'clang-plugin-binaries' directory"
       );
 
-      sinon.restore();
+      jest.restoreAllMocks();
     });
   });
 });
