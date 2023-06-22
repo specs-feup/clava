@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import WeaverLauncher from "lara-js/WeaverLauncher.js";
-import WeaverConfiguration from "lara-js/WeaverConfiguration.js";
+import WeaverLauncher from "lara-js/code/WeaverLauncher.js";
+import WeaverConfiguration from "lara-js/code/WeaverConfiguration.js";
 
 const weaverConfig: WeaverConfiguration = {
   weaverName: "clava",

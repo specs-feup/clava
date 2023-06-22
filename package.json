@@ -17,10 +17,10 @@
     "tsconfig.json"
   ],
   "bin": {
-    "clava-js": "./dist/src/index.js"
+    "clava-js": "./code/index.js"
   },
   "scripts": {
-    "run": "node ./dist/src/index.js",
+    "run": "node ./code/index.js",
     "build": "tsc -b src-api src-code",
     "build:api": "tsc -b src-api",
     "build:code": "tsc -b src-code",

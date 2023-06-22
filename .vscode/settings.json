@@ -5,7 +5,8 @@
     "**/node_modules": true,
     "**/bower_components": true,
     "**/*.code-search": true,
-    "./dist/**": true
+    "./api/**": true,
+    "./code/**": true
   },
   "cmake.configureOnOpen": false
 }
