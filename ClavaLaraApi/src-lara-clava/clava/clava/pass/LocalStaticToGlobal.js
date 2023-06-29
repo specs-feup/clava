@@ -1,6 +1,7 @@
-laraImport("lara.pass.Pass");
+laraImport("lara.pass.SimplePass");
 laraImport("clava.ClavaJoinPoints");
-laraImport("lara.pass.PassTransformationResult");
+laraImport("lara.pass.results.PassResult");
+laraImport("lara.pass.PassTransformationError");
 
 /**
  * Transforms local static variables into global variables.
@@ -24,9 +25,14 @@ laraImport("lara.pass.PassTransformationResult");
  * }
  * ```
  */
-class LocalStaticToGlobal extends Pass {
-  constructor() {
-    super();
+class LocalStaticToGlobal extends SimplePass {
+
+  /**
+   * @return {string} Name of the pass
+   * @override
+   */
+  get name() {
+    return "LocalStaticToGlobal";
   }
 
   matchJoinpoint($jp) {
@@ -57,7 +63,7 @@ class LocalStaticToGlobal extends Pass {
 
     const $declStmt = $jp.parent;
     if (!$declStmt.instanceOf("declStmt")) {
-      throw new Error(
+      throw new PassTransformationError(
         "Expected declStmt, found '" + $declStmt.joinPointType + "'"
       );
     }
@@ -83,10 +89,6 @@ class LocalStaticToGlobal extends Pass {
 
     */
 
-    return new PassTransformationResult({
-      pass: LocalStaticToGlobal,
-      $joinpoint: ClavaJoinPoints.emptyStmt(),
-      insertedLiteralCode: false,
-    });
+    return new PassResult(this, ClavaJoinPoints.emptyStmt());
   }
 }

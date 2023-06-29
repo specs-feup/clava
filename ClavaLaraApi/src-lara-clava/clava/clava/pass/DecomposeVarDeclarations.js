@@ -1,6 +1,6 @@
-laraImport("lara.pass.Pass");
+laraImport("lara.pass.SimplePass");
 laraImport("clava.ClavaJoinPoints");
-laraImport("lara.pass.PassTransformationResult");
+laraImport("lara.pass.results.PassResult");
 
 /**
  * Decomposes the vardecl nodes that are reachable from the given join point.
@@ -9,9 +9,14 @@ laraImport("lara.pass.PassTransformationResult");
  *
  * Does not support decomposition for variables that are arrays, in those cases the code stays unchanged.
  */
-class DecomposeVarDeclarations extends Pass {
-  constructor() {
-    super();
+class DecomposeVarDeclarations extends SimplePass {
+
+  /**
+   * @return {string} Name of the pass
+   * @override
+   */
+  get name() {
+    return "DecomposeVarDeclarations";
   }
 
   matchJoinpoint($jp) {
@@ -45,10 +50,6 @@ class DecomposeVarDeclarations extends Pass {
 
     $vardecl.insertAfter($newInitStmt);
 
-    return new PassTransformationResult({
-      pass: DecomposeVarDeclarations,
-      $joinpoint: $vardecl,
-      insertedLiteralCode: false,
-    });
+    return new PassResult(this, $vardecl);
   }
 }
