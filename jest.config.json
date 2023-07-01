@@ -4,7 +4,7 @@
   "notify": true,
   "notifyMode": "always",
   //"verbose": true,
-  "collectCoverage": true,
+  "collectCoverage": false,
   "coverageDirectory": "coverage",
   "coverageReporters": ["text", "lcov"],
   "collectCoverageFrom": ["src/**/*.(t|j)s"],
