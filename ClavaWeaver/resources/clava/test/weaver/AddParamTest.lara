@@ -2,13 +2,13 @@ aspectdef AddParamTest
 
 	select function{'foo'} end
 	apply
-		exec addParam("char* str");
+		$function.exec addParam("char* str");
 		println($function.code);
 	end
 
 	select function{'bar'} end
 	apply
-		exec addParam("int num");
+		$function.exec addParam("int num");
 		println($function.code);
 		println("---------------");
 	end

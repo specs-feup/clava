@@ -2,7 +2,7 @@ aspectdef ClavaSandbox
 
 	select function{hasDefinition === true} end
 	apply
-		exec clone('new_' + $function.name);
+		$function.exec clone('new_' + $function.name);
 	end
 	
 	select file end

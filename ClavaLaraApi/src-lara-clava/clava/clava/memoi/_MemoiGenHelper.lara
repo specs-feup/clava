@@ -36,7 +36,7 @@ aspectdef _Memoi_WrapGlobalTarget
 		var normalizedSig = _normalizeSig(signature);
 		
 		wrapperName = "mw_" + normalizedSig;
-		exec wrap(wrapperName);
+		$stmt.exec wrap(wrapperName);
 		
 		debug('wrapped');
 	end
@@ -58,7 +58,7 @@ aspectdef _Memoi_WrapSingleTarget
 		var normalizedSig = _normalizeSig(signature);
 		
 		wrapperName = IdGenerator.next("mw_" + normalizedSig);
-		exec wrap(wrapperName);
+		$stmt.exec wrap(wrapperName);
 		
 		debug('wrapped');
 		return;

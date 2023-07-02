@@ -217,7 +217,7 @@ end
   select call end
   apply
   if ($call.name == pname) { 
-    exec setName(nname); 
+    $call.exec setName(nname); 
     referenced = true;
   }	
   end

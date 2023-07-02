@@ -41,7 +41,7 @@ aspectdef SetNumThreads
 	select omp{kind} end
 	apply
         println("num_threads:" + $omp.numThreads);
-		exec setNumThreads(num);
+		$omp.exec setNumThreads(num);
         println("num_threads:" + $omp.numThreads);
 	end
 end
@@ -54,7 +54,7 @@ aspectdef SetProcBind
 	select omp{kind} end
 	apply
         println("proc_bind:" + $omp.procBind);
-		exec setProcBind(proc);
+		$omp.exec setProcBind(proc);
         println("proc_bind:" + $omp.procBind);
 	end
 end
