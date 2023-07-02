@@ -3,11 +3,13 @@ import clava.Clava;
 import lara.code.Logger;
 import lara.util.TupleId;
 
+
 /**
- * Inserts code for increments as a comma operator,
- * as suggested by Pedro Silva (up201304961@fc.up.pt)
- */
+* Inserts code for increments as a comma operator,
+* as suggested by Pedro Silva (up201304961@fc.up.pt)
+*/
 var _DCG_USE_COMMA_OPERATOR_ = true;
+
 
 /**
  * Instruments code in order to build a runtime call graph.
@@ -114,7 +116,7 @@ function insertIncrement($call, code) {
 	// Increments using comma operator
 	if(_DCG_USE_COMMA_OPERATOR_) {
 		// First, replace call with parenthesis
-		$parenthesis = $call.replaceWith(ClavaJoinPoints.parenthesis("/* DCG TEMP */"));
+		var $parenthesis = $call.replaceWith(ClavaJoinPoints.parenthesis("/* DCG TEMP */"));
 
 		// Create comma operator
 		var $commaOp = ClavaJoinPoints.binaryOp("comma", code, $call, $call.type);

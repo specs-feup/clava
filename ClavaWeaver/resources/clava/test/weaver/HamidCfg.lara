@@ -110,15 +110,6 @@ aspectdef add_stmt_to_graph
 
 
 
-    /*
-    call FuncCalls : checkforFuncCalls($stmt);
-    if(FuncCalls.calls.length > 0)
-    {
-        println('line #' + $stmt.line + '\t' + $stmt.code);
-        println('\t\t\tFuncCalls =' + FuncCalls.calls.join(' --- '));
-        println('------------------\n');
-    }
-    */
     switch ($stmt.astName)
     {
        case 'ForStmt':
@@ -217,7 +208,7 @@ end
 /********************************************/
 aspectdef addNode_ExprStmt
     input   $stmt   end
-    
+
     call FuncCalls : checkforFuncCalls($stmt);
     if(FuncCalls.calls.length > 0)
     {
@@ -273,12 +264,12 @@ aspectdef checkforFuncCalls
     input   $stmt   end
     output calls end
     
-    calls = [];
+    this.calls = [];
     select $stmt.call end
     apply
         if (SearchStruct(function_list,'Name',$call.name).length == 1)
         {
-            calls.push($call.name);
+            this.calls.push($call.name);
         }
     end    
 end
@@ -286,7 +277,7 @@ end
 function add_node(type,label,func_calls)
 {
     func_calls = (typeof func_calls !== 'undefined') ?  func_calls : [];
-    add_edge_opt = (typeof add_edge_opt !== 'undefined') ?  add_edge_opt : null;
+    var add_edge_opt = (typeof add_edge_opt !== 'undefined') ?  add_edge_opt : null;
 
     var node_ID = ++curr_node_ID;
     
