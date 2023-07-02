@@ -5,9 +5,9 @@ name: Java CI
 
 on:
   push:
-    branches: [ master , staging ]
+    branches: [ master ]
   pull_request:
-    branches: [ master , staging ]
+    branches: [ master ]
 
 permissions:
   checks: write
