@@ -180,6 +180,8 @@ public class CxxWeaver extends ACxxWeaver {
         return DEFAULT_DUMPER_FLAGS;
     }
 
+    private static final String CLAVA_API_NAME = "clava-js";
+
     private static final List<ResourceProvider> CLAVA_LARA_API = new ArrayList<>();
     static {
         CLAVA_LARA_API.addAll(LaraExtraApis.getApis());
@@ -259,6 +261,7 @@ public class CxxWeaver extends ACxxWeaver {
     private ClavaMetrics metrics;
 
     public CxxWeaver() {
+        // addApis(CLAVA_API_NAME, CLAVA_LARA_API);
         reset();
         // // Gears
         // this.modifiedFilesGear = new ModifiedFilesGear();
@@ -289,6 +292,11 @@ public class CxxWeaver extends ACxxWeaver {
         //
         // metrics = new ClavaMetrics();
         // this.setWeaverProfiler(metrics);
+    }
+
+    @Override
+    protected void addWeaverApis() {
+        addApis(CLAVA_API_NAME, CLAVA_LARA_API);
     }
 
     private void reset() {
