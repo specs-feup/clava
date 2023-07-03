@@ -14,6 +14,6 @@ aspectdef ExamonCollectorDeclareGlobal
 
 	select file end
 	apply
-		exec addGlobal(varName, type, init);
+		$file.exec addGlobal(varName, type, init);
 	end
 end

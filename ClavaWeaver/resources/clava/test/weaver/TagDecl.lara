@@ -26,7 +26,7 @@ aspectdef TagDecl
 		// Create type for new structure, returns an elaboratedType
 		var $newStructType = ClavaJoinPoints.structType($newStruct);
 		// Create typedef for new structure
-		$typedef = ClavaJoinPoints.typedefDecl($newStructType, "new_typedef"); 		
+		var $typedef = ClavaJoinPoints.typedefDecl($newStructType, "new_typedef"); 		
 		// Insert typedef after vardecl
 		$vardecl.insertAfter($typedef);
 	end

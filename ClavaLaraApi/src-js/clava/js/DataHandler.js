@@ -127,7 +127,7 @@ const _CLAVA_DATA_HANDLER = {
 };
 
 
-let _CLAVA_DATA_CACHE = {}; 
+globalThis._CLAVA_DATA_CACHE = {}; 
 
 
 function _getClavaData(astNode, obj, pragma) {

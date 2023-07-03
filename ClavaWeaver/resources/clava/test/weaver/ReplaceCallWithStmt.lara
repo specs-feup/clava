@@ -6,7 +6,7 @@ aspectdef ReplaceCallWithStmt
 	apply
 		var varName = $stmtCall.name + "Result";
 	
-		$varDecl = AstFactory.varDecl(varName, $stmtCall);
+		var $varDecl = AstFactory.varDecl(varName, $stmtCall);
 		$stmt.exec replaceWith($varDecl);
 	end
 	

@@ -1,13 +1,13 @@
 # This workflow will build a Java project with Ant
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
 
-name: Java CI - Main
+name: Java CI - Staging
 
 on:
   push:
-    branches: [ master ]
+    branches: [ staging ]
   pull_request:
-    branches: [ master ]
+    branches: [ staging ]
 
 permissions:
   checks: write
@@ -35,7 +35,7 @@ jobs:
     - name: Generate build.xml
       run: | 
         wget -N http://specs.fe.up.pt/tools/eclipse-build.jar
-        java -jar eclipse-build.jar https://github.com/specs-feup/specs-java-libs https://github.com/specs-feup/lara-framework https://github.com/specs-feup/clava
+        java -jar eclipse-build.jar https://github.com/specs-feup/specs-java-libs https://github.com/specs-feup/lara-framework?commit=staging https://github.com/specs-feup/clava?commit=staging
         wget -N -O /usr/share/ant/lib/ivy-2.5.0.jar specs.fe.up.pt/libs/ivy-2.5.0.jar
     - name: Build with Ant
       run: |

@@ -1,6 +1,6 @@
 package pt.up.fe.specs.clava.weaver.abstracts.weaver;
 
-import org.lara.interpreter.weaver.interf.WeaverEngine;
+import org.lara.interpreter.weaver.LaraWeaverEngine;
 import java.util.Arrays;
 import java.util.List;
 import pt.up.fe.specs.clava.weaver.enums.StorageClass;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * The implementation of the abstract methods is mandatory!
  * @author Lara C.
  */
-public abstract class ACxxWeaver extends WeaverEngine {
+public abstract class ACxxWeaver extends LaraWeaverEngine {
 
     /**
      * Get the list of available actions in the weaver
