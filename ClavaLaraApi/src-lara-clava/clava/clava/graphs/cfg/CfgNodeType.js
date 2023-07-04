@@ -14,6 +14,8 @@ class CfgNodeType {
   static STEP = new CfgNodeType("STEP");
   static SCOPE = new CfgNodeType("SCOPE");
   static INST_LIST = new CfgNodeType("INST_LIST");
+  static BREAK = new CfgNodeType("BREAK");
+  static CONTINUE = new CfgNodeType("CONTINUE");
   static RETURN = new CfgNodeType("RETURN");
   // To add: WHILE, DOWHILE?
 
