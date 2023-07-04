@@ -25,6 +25,14 @@ class CfgUtils {
       return CfgNodeType.LOOP;
     }
 
+    if ($stmt.instanceOf("break")) {
+      return CfgNodeType.BREAK;
+    }
+
+    if ($stmt.instanceOf("continue")) {
+      return CfgNodeType.CONTINUE;
+    }
+
     // Return stmt
     if ($stmt.instanceOf("returnStmt")) {
       return CfgNodeType.RETURN;
