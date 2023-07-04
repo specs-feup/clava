@@ -309,7 +309,8 @@ class CfgBuilder {
         const switchStatements = switchStmt.children[1].children;
         let caseStmtsNodes = [];
         let nextCaseNode = undefined;
-
+        let isDefaultCase = (caseStmt.children.length > 0) ? false : true;
+        
         for (let i = 0; i < switchStatements.length; i++) {
           const stmtAstId = switchStatements[i].astId;
           const stmtNode = this.#nodes.get(stmtAstId);
@@ -333,18 +334,22 @@ class CfgBuilder {
           }
         }
 
-        if(nextCaseNode !== undefined)
+        if (nextCaseNode !== undefined)
           this.#addEdge(node, nextCaseNode, CfgEdgeType.FALSE); 
-        // TODO: if it is the last case (not a default), add a false edge to the postSwitchNode
+
+        else if (!isDefaultCase)
+          this.#addEdge(node, postSwitchNode, CfgEdgeType.FALSE);  
         
-        for(let i=0; i < caseStmtsNodes.length; i++){
-          if (i === 0)  // TODO: if it is the default case, edge should be UNCONDITIONAL
-            this.#addEdge(node, caseStmtsNodes[i], CfgEdgeType.TRUE);   
-            
+        for (let i=0; i < caseStmtsNodes.length; i++) {
+          if(i === 0 ) {
+            if(!isDefaultCase)
+              this.#addEdge(node, caseStmtsNodes[i], CfgEdgeType.TRUE); 
+            else
+              this.#addEdge(node, caseStmtsNodes[i], CfgEdgeType.UNCONDITIONAL); 
+          }
 
-          if (caseStmtsNodes[i].data().type === CfgNodeType.BREAK) 
-            this.#addEdge(caseStmtsNodes[i], postSwitchNode, CfgEdgeType.UNCONDITIONAL);   
-
+          if (caseStmtsNodes[i].data().type === CfgNodeType.BREAK)
+            this.#addEdge(caseStmtsNodes[i], postSwitchNode, CfgEdgeType.UNCONDITIONAL);  
         }
       }
 
@@ -394,7 +399,8 @@ class CfgBuilder {
 
         const afterNode = this.#nextNodes.nextExecutedNode($lastStmt);
 
-        this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+        if (afterNode.data().type !== CfgNodeType.CASE)
+          this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
       }
 
       // RETURN NODE
