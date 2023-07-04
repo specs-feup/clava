@@ -33,6 +33,15 @@ class CfgUtils {
       return CfgNodeType.CONTINUE;
     }
 
+    
+    if ($stmt.instanceOf("switch")) {
+      return CfgNodeType.SWITCH;
+    }
+
+    if ($stmt.instanceOf("case")) {
+      return CfgNodeType.CASE;
+    }
+
     // Return stmt
     if ($stmt.instanceOf("returnStmt")) {
       return CfgNodeType.RETURN;
