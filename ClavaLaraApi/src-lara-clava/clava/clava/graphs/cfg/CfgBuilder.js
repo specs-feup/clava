@@ -260,14 +260,17 @@ class CfgBuilder {
         this.#addEdge(node, falseNode, CfgEdgeType.FALSE);
       }
       
-      //TODO: check if the break statement is inside a switch-case
       if (nodeType === CfgNodeType.BREAK) {
         const breakStmt = node.data().nodeStmt;
         const $loop = breakStmt.ancestor("loop");
-        
-        const postBreakNode = this.#nextNodes.nextExecutedNode($loop);
-        
-        this.#addEdge(node, postBreakNode, CfgEdgeType.UNCONDITIONAL);
+        const $switch = breakStmt.ancestor("switch");
+        const $loopDepth = ($loop !== undefined) ? $loop.depth : -1;
+        const $switchDepth = ($switch !== undefined) ? $switch.depth : -1;
+
+        if($loopDepth > $switchDepth) {
+          const postBreakNode = this.#nextNodes.nextExecutedNode($loop);
+          this.#addEdge(node, postBreakNode, CfgEdgeType.UNCONDITIONAL);
+        }
       }
 
       if (nodeType === CfgNodeType.CONTINUE) {
