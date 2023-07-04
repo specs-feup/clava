@@ -16,6 +16,8 @@ class CfgNodeType {
   static INST_LIST = new CfgNodeType("INST_LIST");
   static BREAK = new CfgNodeType("BREAK");
   static CONTINUE = new CfgNodeType("CONTINUE");
+  static SWITCH = new CfgNodeType("SWITCH");
+  static CASE = new CfgNodeType("CASE");
   static RETURN = new CfgNodeType("RETURN");
   // To add: WHILE, DOWHILE?
 
