@@ -264,10 +264,10 @@ class CfgBuilder {
         const breakStmt = node.data().nodeStmt;
         const $loop = breakStmt.ancestor("loop");
         const $switch = breakStmt.ancestor("switch");
-        const $loopDepth = ($loop !== undefined) ? $loop.depth : -1;
-        const $switchDepth = ($switch !== undefined) ? $switch.depth : -1;
+        const loopDepth = ($loop !== undefined) ? $loop.depth : -1;
+        const switchDepth = ($switch !== undefined) ? $switch.depth : -1;
 
-        if($loopDepth > $switchDepth) {
+        if(loopDepth > switchDepth) {
           const postBreakNode = this.#nextNodes.nextExecutedNode($loop);
           this.#addEdge(node, postBreakNode, CfgEdgeType.UNCONDITIONAL);
         }
@@ -281,6 +281,71 @@ class CfgBuilder {
         const afterNode = this.#nodes.get(afterStmt.astId) ?? this.#endNode; 
 
         this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+      }
+
+      
+      if (nodeType === CfgNodeType.SWITCH) {
+        const switchStmt = node.data().nodeStmt;
+        const switchStatements = switchStmt.children[1].children;
+
+        let firstCaseNode = undefined;
+        for (let i=0; i < switchStatements.length; i++) {
+          const currentStmtNode = this.#nodes.get(switchStatements[i].astId);
+
+          if (currentStmtNode.data().type === CfgNodeType.CASE) {
+            firstCaseNode = currentStmtNode;
+            break;
+          }
+        }
+
+        this.#addEdge(node, firstCaseNode, CfgEdgeType.UNCONDITIONAL);
+      }
+      
+      if (nodeType === CfgNodeType.CASE) {
+        const caseStmt = node.data().nodeStmt;
+        const switchStmt = caseStmt.ancestor("switch");
+        const postSwitchNode = this.#nextNodes.nextExecutedNode(switchStmt);
+
+        const switchStatements = switchStmt.children[1].children;
+        let caseStmtsNodes = [];
+        let nextCaseNode = undefined;
+
+        for (let i = 0; i < switchStatements.length; i++) {
+          const stmtAstId = switchStatements[i].astId;
+          const stmtNode = this.#nodes.get(stmtAstId);
+
+          if (stmtNode.data().type === CfgNodeType.CASE && stmtAstId === caseStmt.astId) {
+            i++;
+
+            while (i < switchStatements.length) {
+              const currentStmtNode = this.#nodes.get(switchStatements[i].astId);
+
+              if (currentStmtNode.data().type ===  CfgNodeType.CASE) {
+                nextCaseNode = currentStmtNode;
+                break;
+              }
+              else
+                caseStmtsNodes.push(currentStmtNode);
+              
+              i += 1;  
+            }
+            break;
+          }
+        }
+
+        if(nextCaseNode !== undefined)
+          this.#addEdge(node, nextCaseNode, CfgEdgeType.FALSE); 
+        // TODO: if it is the last case (not a default), add a false edge to the postSwitchNode
+        
+        for(let i=0; i < caseStmtsNodes.length; i++){
+          if (i === 0)  // TODO: if it is the default case, edge should be UNCONDITIONAL
+            this.#addEdge(node, caseStmtsNodes[i], CfgEdgeType.TRUE);   
+            
+
+          if (caseStmtsNodes[i].data().type === CfgNodeType.BREAK) 
+            this.#addEdge(caseStmtsNodes[i], postSwitchNode, CfgEdgeType.UNCONDITIONAL);   
+
+        }
       }
 
       if (nodeType === CfgNodeType.INIT) {
