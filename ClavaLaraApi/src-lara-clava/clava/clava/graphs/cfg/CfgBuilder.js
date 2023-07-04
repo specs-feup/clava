@@ -259,6 +259,26 @@ class CfgBuilder {
         // Create edge
         this.#addEdge(node, falseNode, CfgEdgeType.FALSE);
       }
+      
+      //TODO: check if the break statement is inside a switch-case
+      if (nodeType === CfgNodeType.BREAK) {
+        const breakStmt = node.data().nodeStmt;
+        const $loop = breakStmt.ancestor("loop");
+        
+        const postBreakNode = this.#nextNodes.nextExecutedNode($loop);
+        
+        this.#addEdge(node, postBreakNode, CfgEdgeType.UNCONDITIONAL);
+      }
+
+      if (nodeType === CfgNodeType.CONTINUE) {
+        const continueStmt = node.data().nodeStmt;
+        const $loop = continueStmt.ancestor("loop");
+        
+        const afterStmt = ($loop.kind === "for") ? $loop.step : $loop.cond;
+        const afterNode = this.#nodes.get(afterStmt.astId) ?? this.#endNode; 
+
+        this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+      }
 
       if (nodeType === CfgNodeType.INIT) {
         // Get loop
