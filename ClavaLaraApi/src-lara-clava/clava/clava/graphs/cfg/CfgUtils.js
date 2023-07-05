@@ -137,4 +137,124 @@ class CfgUtils {
 
     return target;
   }
+
+  static getSwitchStmts(switchStmt) {
+    return switchStmt.children[1].children;
+  }
+
+  static isDefaultCaseStmt(caseStmt) {
+    return caseStmt.children.length === 0;
+  }
+
+  static getCaseStmtIndex(caseStmt, nodes) {
+    const switchStmts = this.getSwitchStmts(caseStmt.ancestor("switch"));
+    let caseIndex = undefined;
+
+    for(let i=0; i < switchStmts.length; i++) {
+      const stmtAstId = switchStmts[i].astId;
+      const stmtNode = nodes.get(switchStmts[i].astId);
+
+      if (stmtNode.data().type === CfgNodeType.CASE && stmtAstId === caseStmt.astId){
+        caseIndex = i;
+        break;
+      }
+    }
+
+    return caseIndex;
+  }
+
+  static isEmptyCase(caseStmt, nodes) {
+    const switchStmts = this.getSwitchStmts(caseStmt.ancestor("switch"));
+    const caseIndex = this.getCaseStmtIndex(caseStmt, nodes);
+    let isEmptyCase = false;
+
+    if (caseIndex + 1 >= switchStmts.length)
+      isEmptyCase = true;
+    else {
+      const nextStmtNode = nodes.get(switchStmts[caseIndex + 1].astId);
+
+      if (nextStmtNode.data().type === CfgNodeType.CASE)
+        isEmptyCase = true;
+    }
+    return isEmptyCase;
+  }
+
+  static getNextCaseNode(caseStmt, nodes) {
+    const switchStmts = this.getSwitchStmts(caseStmt.ancestor("switch"));
+    const caseIndex = this.getCaseStmtIndex(caseStmt, nodes);
+
+    for (let i=caseIndex + 1; i < switchStmts.length; i++) {
+      const currentStmtNode = nodes.get(switchStmts[i].astId);
+
+      if (currentStmtNode.data().type ===  CfgNodeType.CASE)
+        return currentStmtNode;
+    }
+
+    // The considered case statement is the final case of the corresponding switch
+    return undefined;
+  }
+
+  static getFirstInst(caseStmt, nodes) {
+    const switchStmts = this.getSwitchStmts(caseStmt.ancestor("switch"));
+    const caseIndex = this.getCaseStmtIndex(caseStmt, nodes);
+
+    for (let i=caseIndex + 1; i<switchStmts.length; i++) {
+      firstInst = nodes.get(switchStmts[i].astId);
+
+      if(firstInst.data().type !== CfgNodeType.CASE)
+        return firstInst;
+    }
+
+    /*
+     * The first instruction to be executed when reaching the caseStmt was not found, i.e, the instruction is not inside the switch
+     * E.g: the considered case statement is/reaches the final case of the swicth and this final case does not contain any code or statements (empty case).
+     */
+    return postSwitchNode;
+  }
+
+  /**
+   * Used when the case statement does not contain a break statement
+   * @return the last statement inside the considered case statement
+   */
+  static getLastInst(caseStmt, nodes) {  
+    const switchStmts = this.getSwitchStmts(caseStmt.ancestor("switch"));
+    const caseIndex = this.getCaseStmtIndex(caseStmt, nodes);
+    const nextCaseNode = this.getNextCaseNode(caseStmt, nodes);
+    let lastInst = undefined;
+
+    if (this.isEmptyCase(caseStmt, nodes)) 
+      return undefined;
+
+    else if (nextCaseNode === undefined)  //It is the last case
+      lastInst = nodes.get(switchStmts[switchStmts.length - 1].astId)
+    
+    else {
+      for (let i=caseIndex + 1; i<switchStmts.length - 1; i++) {
+        const currentStmtNode = nodes.get(switchStmts[i].astId);
+        const nextStmtNode = nodes.get(switchStmts[i + 1].astId);
+
+        if (nextStmtNode.data().type === CfgNodeType.CASE)
+          lastInst = currentStmtNode;
+      }
+    }
+
+    return lastInst;
+  }
+
+  static getCaseBreakNode(caseStmt, nodes) {
+    const switchStmts = this.getSwitchStmts(caseStmt.ancestor("switch"));
+    const caseIndex = this.getCaseStmtIndex(caseStmt, nodes);
+
+    for (let i=caseIndex + 1; i < switchStmts.length; i++) {
+      const currentStmtNode = nodes.get(switchStmts[i].astId);
+
+      if (currentStmtNode.data().type ===  CfgNodeType.BREAK) //contains a break statement
+        return currentStmtNode;
+      else if (currentStmtNode.data().type ===  CfgNodeType.CASE)
+        break;
+    }
+
+    // The considered case statement does not contain a break statement
+    return undefined;
+  }
 }
