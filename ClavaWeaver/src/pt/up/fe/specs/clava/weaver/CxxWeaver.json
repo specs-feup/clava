@@ -644,7 +644,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -703,15 +703,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -1788,7 +1779,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -1847,15 +1838,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -3094,7 +3076,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -3157,15 +3139,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -3179,7 +3152,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -4401,7 +4374,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -4460,15 +4433,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -5723,7 +5687,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -5786,15 +5750,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -5822,7 +5777,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -6964,7 +6919,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -7023,15 +6978,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -8181,7 +8127,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -8240,15 +8186,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -9437,7 +9374,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -9496,15 +9433,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -10917,7 +10845,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -10976,15 +10904,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -12063,7 +11982,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -12122,15 +12041,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -13488,7 +13398,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -13551,15 +13461,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -13573,7 +13474,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -14892,7 +14793,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -14951,15 +14852,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -16173,7 +16065,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -16232,15 +16124,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -17449,7 +17332,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -17508,15 +17391,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -18769,7 +18643,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -18828,15 +18702,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -20385,7 +20250,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -20444,15 +20309,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -21666,7 +21522,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -21725,15 +21581,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -23041,7 +22888,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -23100,15 +22947,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -24271,7 +24109,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -24330,15 +24168,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -25404,7 +25233,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -25463,15 +25292,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -26558,7 +26378,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -26617,15 +26437,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -27951,7 +27762,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -28010,15 +27821,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -29252,7 +29054,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -29311,15 +29113,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -30402,7 +30195,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -30461,15 +30254,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -31645,7 +31429,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -31704,15 +31488,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -32855,7 +32630,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -32914,15 +32689,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -34185,7 +33951,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -34248,15 +34014,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -34270,7 +34027,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -35405,7 +35162,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -35464,15 +35221,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -36546,7 +36294,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -36605,15 +36353,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -37797,7 +37536,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -37856,15 +37595,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -39166,7 +38896,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -39229,15 +38959,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -39251,7 +38972,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -40427,7 +40148,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -40486,15 +40207,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -41619,7 +41331,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -41678,15 +41390,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -42862,7 +42565,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -42921,15 +42624,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -44035,7 +43729,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -44094,15 +43788,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -45352,7 +45037,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -45411,15 +45096,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -46837,7 +46513,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -46896,15 +46572,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -48216,7 +47883,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -48275,15 +47942,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -49911,7 +49569,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -49974,15 +49632,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -50029,7 +49678,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -51187,7 +50836,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -51246,15 +50895,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -52449,7 +52089,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -52508,15 +52148,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -53754,7 +53385,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -53813,15 +53444,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -54930,7 +54552,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -54989,15 +54611,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -56102,7 +55715,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -56161,15 +55774,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -57293,7 +56897,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -57352,15 +56956,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -58550,7 +58145,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -58609,15 +58204,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -59870,7 +59456,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -59929,15 +59515,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -61369,7 +60946,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -61428,15 +61005,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -61893,6 +61461,15 @@
 			"name": "memberAccess",
 			"extends": "expression"		,
 			"children": [
+					{
+						"type": "attribute",
+						"tooltip": "true if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "arrow"
+									}]
+					},
 					{
 						"type": "attribute",
 						"tooltip": "expression of the base of this member access",
@@ -62606,7 +62183,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -62669,15 +62246,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -62693,6 +62261,19 @@
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
+					},
+					{
+						"type": "action",
+						"children": [
+									{
+										"type": "void",
+										"name": "setArrow"
+									},
+									{
+										"type": "Boolean",
+										"name": "isArrow",
+										"defaultValue": ""
+									}]
 					},
 					{
 						"type": "action",
@@ -63937,7 +63518,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -63996,15 +63577,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -65459,7 +65031,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -65518,15 +65090,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -67018,7 +66581,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -67077,15 +66640,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -68228,7 +67782,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -68287,15 +67841,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -69592,7 +69137,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -69651,15 +69196,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -71082,7 +70618,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -71141,15 +70677,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -72317,7 +71844,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -72376,15 +71903,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -73615,7 +73133,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -73674,15 +73192,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -74925,7 +74434,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -74988,15 +74497,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -75024,7 +74524,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -76347,7 +75847,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -76410,15 +75910,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -76446,7 +75937,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -77631,7 +77122,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -77690,15 +77181,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -78918,7 +78400,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -78977,15 +78459,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -80465,7 +79938,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -80528,15 +80001,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -80550,7 +80014,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -81769,7 +81233,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -81828,15 +81292,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -82979,7 +82434,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -83038,15 +82493,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -84275,7 +83721,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -84334,15 +83780,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -85720,7 +85157,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -85779,15 +85216,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -87005,7 +86433,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -87064,15 +86492,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -88207,7 +87626,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -88266,15 +87685,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -89467,7 +88877,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -89526,15 +88936,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -90812,7 +90213,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -90875,15 +90276,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -90897,7 +90289,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -92235,7 +91627,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -92298,15 +91690,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -92320,7 +91703,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -93546,7 +92929,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -93605,15 +92988,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -94734,7 +94108,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -94793,15 +94167,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -96036,7 +95401,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -96099,15 +95464,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -96121,7 +95477,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -97298,7 +96654,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -97357,15 +96713,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -98508,7 +97855,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -98567,15 +97914,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -99866,7 +99204,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -99929,15 +99267,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -99951,7 +99280,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -101168,7 +100497,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -101227,15 +100556,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -102395,7 +101715,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -102454,15 +101774,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -103702,7 +103013,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -103765,15 +103076,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -103787,7 +103089,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -105027,7 +104329,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -105086,15 +104388,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -106461,7 +105754,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -106524,15 +105817,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -106574,7 +105858,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Returns a copy of this type with the qualifier const",
+						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
 									{
 										"type": "type",
@@ -107813,7 +107097,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -107872,15 +107156,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{
@@ -108988,7 +108263,7 @@
 						"tooltip": "Returns the 'program' joinpoint",
 						"children": [
 									{
-										"type": "joinpoint",
+										"type": "program",
 										"name": "root"
 									}]
 					},
@@ -109047,15 +108322,6 @@
 									{
 										"type": "String",
 										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "a String with the type of the join point",
-						"children": [
-									{
-										"type": "String",
-										"name": "joinPointType"
 									}]
 					},
 					{

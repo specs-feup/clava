@@ -86,7 +86,7 @@ end
   select function.call end  
     apply
       if ($call.name === cfunc) {	
-        exec setName(getFuncWrapperName(cfunc));
+        $function.exec setName(getFuncWrapperName(cfunc));
         var $file = $call.ancestor('file');
         $file.exec addInclude(FILENAME_MEMOI_WRAPPERS, false); 
     }

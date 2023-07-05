@@ -29,6 +29,6 @@ aspectdef _MVP_InitPointers_
 	
 	select $function.body end
 	apply
-		exec insertBegin(code);
+		$function.exec insertBegin(code);
 	end
 end

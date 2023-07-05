@@ -703,7 +703,10 @@
 		<parameter name="right" type="expression" />
 	</action>
 	
-	
+	<!-- MEMBER ACCESS -->
+	<action name="setArrow" class="memberAccess">
+		<parameter name="isArrow" type="Boolean" />
+	</action>	
 
 	 
 	<!-- TYPE -->

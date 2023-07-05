@@ -221,7 +221,7 @@ aspectdef CPP_UpdateCallMemoization
        	  { 
 	    println("Call definition:" + $call.definition.location);
             if ($call.declaration.location === locationOfTheselectedMethod )
-                         exec setName(getFuncWrapperName(aMethod));
+                         $call.exec setName(getFuncWrapperName(aMethod));
          }
         } 
      end

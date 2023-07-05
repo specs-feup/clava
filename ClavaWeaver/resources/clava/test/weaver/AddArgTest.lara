@@ -10,7 +10,7 @@ aspectdef AddArgTest
 			continue;
 		}
 		
-		exec addParam("char* str");
+		$function.exec addParam("char* str");
 	end
 
 	select function{'bar'} end
@@ -19,18 +19,18 @@ aspectdef AddArgTest
 			continue;
 		}
 		
-		exec addParam("int num");
+		$function.exec addParam("int num");
 	end
 	
 	select call{'bar'} end
 	apply
-		exec addArg("0", ClavaJoinPoints.builtinType("int"));
+		$call.exec addArg("0", ClavaJoinPoints.builtinType("int"));
 	end	
 	
 	select call{'foo'} end
 	apply
 		var type = ClavaJoinPoints.pointerFromBuiltin("unsigned char");
-		exec addArg('"foo"', type);
+		$call.exec addArg('"foo"', type);
 	end
 
 	select program end

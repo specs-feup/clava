@@ -8,9 +8,16 @@ class SingleReturnFunction extends Pass {
   #useLocalLabel;
 
   constructor(useLocalLabel = false) {
-    super("SingleReturnFunction");
-
+    super();
     this.#useLocalLabel = useLocalLabel;
+  }
+
+  /**
+   * @return {string} Name of the pass
+   * @override
+   */
+  get name() {
+    return "SingleReturnFunctions";
   }
 
   _apply_impl($jp) {
@@ -76,10 +83,6 @@ class SingleReturnFunction extends Pass {
   }
 
   #new_result($jp, appliedPass) {
-    return new PassResult(this.name, {
-      appliedPass,
-      insertedLiteralCode: false,
-      location: $jp.location,
-    });
+    return new PassResult(this, $jp, { appliedPass: appliedPass });
   }
 }

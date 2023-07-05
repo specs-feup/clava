@@ -248,7 +248,7 @@ public class CxxFunction extends AFunction {
     @Override
     public AFunction cloneOnFileImpl(String newName, String fileName) {
         // First, check if the given filename is the same as a file in the AST
-        App app = getRootImpl().getNode();
+        App app = (App) getRootImpl().getNode();
         var currentFile = new File(fileName);
 
         var existingFile = app.getTranslationUnits().stream()

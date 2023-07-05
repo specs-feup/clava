@@ -8,7 +8,7 @@ aspectdef _LVC_INIT_
 		lvc._includeErrorDecl($function);
 		lvc._includeIostream($function);
 		
-		exec insertBegin(compilerInit);
+		$file.exec insertBegin(compilerInit);
 		
 		$function.insert before %{
 void libVC_error_procedure(const std::string& msg)

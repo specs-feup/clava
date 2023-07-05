@@ -251,7 +251,7 @@ aspectdef inlinePreparation
 
 	replacedCallStr = '';
 
-	$newStmts = [];	
+	this.$newStmts = [];	
 
 	var funcJP = null;
 	var funcJP_backup = null;
@@ -479,7 +479,7 @@ aspectdef inlinePreparation
 	//var changedReplacedCall = false;
 	select funcJP.body.childStmt end
 	apply
-		$newStmts.push($childStmt.copy());
+		this.$newStmts.push($childStmt.copy());
 		replacedCallStr += $childStmt.code + '\n';
 		//changedReplacedCall = true;
 		//println("ADDING: " + $childStmt.code);

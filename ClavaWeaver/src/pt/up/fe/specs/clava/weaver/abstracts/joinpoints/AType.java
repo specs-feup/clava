@@ -691,14 +691,14 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Returns a copy of this type with the qualifier const
+     * Returns a new node based on this type with the qualifier const
      */
     public AType asConstImpl() {
         throw new UnsupportedOperationException(get_class()+": Action asConst not implemented ");
     }
 
     /**
-     * Returns a copy of this type with the qualifier const
+     * Returns a new node based on this type with the qualifier const
      */
     public final AType asConst() {
         try {

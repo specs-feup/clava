@@ -8,7 +8,7 @@
 	<!-- Global Joinpoint -->
 	<!-- These properties are shared by all joinpoints -->
 	<global>
-		<attribute name="root" type="joinpoint"
+		<attribute name="root" type="program"
 			tooltip="Returns the 'program' joinpoint" />
 		<attribute name="parent" type="joinpoint" tooltip="Returns the parent node in the AST, or undefined if it is the root node"/>
 		<attribute name="ancestor" type="joinpoint"
@@ -636,8 +636,10 @@
 		<attribute name="name" type="String" />
 		<attribute name="memberChain" type="expression[]" />
 		<attribute name="memberChainNames" type="String[]" />
-		<attribute name="base" type="expression"
-			tooltip="expression of the base of this member access" />
+		<attribute name="base" type="expression" tooltip="expression of the base of this member access" />
+		<attribute name="arrow" type="Boolean" tooltip="true if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)">
+			<def/>
+		</attribute>
 	</artifact>
 
 

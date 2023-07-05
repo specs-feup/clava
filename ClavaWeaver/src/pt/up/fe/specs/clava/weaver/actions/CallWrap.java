@@ -72,7 +72,7 @@ public class CallWrap {
 
     public CallWrap(CxxCall cxxCall) {
         this.cxxCall = cxxCall;
-        app = cxxCall.getRootImpl();
+        app = (CxxProgram) cxxCall.getRootImpl();
 
         factory = app.getNode().getFactory();
     }
