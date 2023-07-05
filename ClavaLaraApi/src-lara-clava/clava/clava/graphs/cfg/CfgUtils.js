@@ -179,7 +179,7 @@ class CfgUtils {
     return isEmptyCase;
   }
 
-  static getNextCaseNode(caseStmt, nodes) {
+  static getNextCaseStmt(caseStmt, nodes) {
     const switchStmts = this.getSwitchStmts(caseStmt.ancestor("switch"));
     const caseIndex = this.getCaseStmtIndex(caseStmt, nodes);
 
@@ -187,7 +187,7 @@ class CfgUtils {
       const currentStmtNode = nodes.get(switchStmts[i].astId);
 
       if (currentStmtNode.data().type ===  CfgNodeType.CASE)
-        return currentStmtNode;
+        return switchStmts[i];
     }
 
     // The considered case statement is the final case of the corresponding switch
@@ -199,17 +199,13 @@ class CfgUtils {
     const caseIndex = this.getCaseStmtIndex(caseStmt, nodes);
 
     for (let i=caseIndex + 1; i<switchStmts.length; i++) {
-      firstInst = nodes.get(switchStmts[i].astId);
+      const firstInst = nodes.get(switchStmts[i].astId);
 
       if(firstInst.data().type !== CfgNodeType.CASE)
         return firstInst;
     }
 
-    /*
-     * The first instruction to be executed when reaching the caseStmt was not found, i.e, the instruction is not inside the switch
-     * E.g: the considered case statement is/reaches the final case of the swicth and this final case does not contain any code or statements (empty case).
-     */
-    return postSwitchNode;
+    return undefined;
   }
 
   /**
@@ -219,7 +215,8 @@ class CfgUtils {
   static getLastInst(caseStmt, nodes) {  
     const switchStmts = this.getSwitchStmts(caseStmt.ancestor("switch"));
     const caseIndex = this.getCaseStmtIndex(caseStmt, nodes);
-    const nextCaseNode = this.getNextCaseNode(caseStmt, nodes);
+    const nextCaseStmt = this.getNextCaseStmt(caseStmt, nodes);
+    const nextCaseNode = (nextCaseStmt !== undefined) ? nodes.get(nextCaseStmt.astId) : undefined;
     let lastInst = undefined;
 
     if (this.isEmptyCase(caseStmt, nodes)) 
@@ -233,8 +230,10 @@ class CfgUtils {
         const currentStmtNode = nodes.get(switchStmts[i].astId);
         const nextStmtNode = nodes.get(switchStmts[i + 1].astId);
 
-        if (nextStmtNode.data().type === CfgNodeType.CASE)
+        if (nextStmtNode.data().type === CfgNodeType.CASE) {
           lastInst = currentStmtNode;
+          break;
+        }
       }
     }
 
