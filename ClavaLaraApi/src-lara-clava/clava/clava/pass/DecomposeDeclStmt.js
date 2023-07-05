@@ -1,6 +1,6 @@
-laraImport("lara.pass.Pass");
+laraImport("lara.pass.SimplePass");
 laraImport("clava.ClavaJoinPoints");
-laraImport("lara.pass.PassTransformationResult");
+laraImport("lara.pass.results.PassResult");
 
 /**
  * Decomposes composite declaration statements into separate statements for each variable.
@@ -19,9 +19,14 @@ laraImport("lara.pass.PassTransformationResult");
  * int c;
  * ```
  */
-class DecomposeDeclStmt extends Pass {
-  constructor() {
-    super();
+class DecomposeDeclStmt extends SimplePass {
+
+  /**
+   * @return {string} Name of the pass
+   * @override
+   */
+  get name() {
+    return "DecomposeDeclStmt";
   }
 
   matchJoinpoint($jp) {
@@ -44,10 +49,6 @@ class DecomposeDeclStmt extends Pass {
       $jp.insertBefore($singleDeclStmt);
     }
     $jp.detach();
-    return new PassTransformationResult({
-      pass: DecomposeDeclStmt,
-      $joinpoint: $firstDeclStmt,
-      insertedLiteralCode: false,
-    });
+    return new PassResult(this, $firstDeclStmt);
   }
 }

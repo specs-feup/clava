@@ -1,13 +1,23 @@
 laraImport("lara.pass.Pass");
 laraImport("clava.code.StatementDecomposer");
 laraImport("weaver.Query");
+laraImport("lara.pass.results.PassResult");
 
+// TODO: Refactor to use the SimplePass pattern
 class SimplifySelectionStmts extends Pass {
   #statementDecomposer;
 
   constructor(statementDecomposer) {
-    super("SimplifySelectionStmts");
+    super();
     this.#statementDecomposer = statementDecomposer;
+  }
+
+  /**
+   * @return {string} Name of the pass
+   * @override
+   */
+  get name() {
+    return "SimplifySelectionStmts";
   }
 
   _apply_impl($jp) {
@@ -17,11 +27,7 @@ class SimplifySelectionStmts extends Pass {
       this.#transform($if);
     }
 
-    return new PassResult(this.name, {
-      appliedPass,
-      insertedLiteralCode: false,
-      location: $jp.location,
-    });
+    return new PassResult(this, $jp, { appliedPass: appliedPass });
   }
 
   #findStmts($jp) {
