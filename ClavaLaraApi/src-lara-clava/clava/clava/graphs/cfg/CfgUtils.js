@@ -154,6 +154,22 @@ class CfgUtils {
     return undefined;
   }
 
+  static hasIntermediateDefaultCase(switchStmt, nodes) {
+    const switchStmts = this.getSwitchStmts(switchStmt);
+
+    for (const stmt of switchStmts) {
+      const stmtNode = nodes.get(stmt.astId);
+
+      if (
+        stmtNode.data().type === CfgNodeType.CASE && 
+        this.isDefaultCaseStmt(stmt) && 
+        this.getNextCaseStmt(stmt, nodes) !== undefined
+      )
+        return true;
+    }
+    return false;
+  }
+
   static isDefaultCaseStmt(caseStmt) {
     return caseStmt.children.length === 0;
   }
