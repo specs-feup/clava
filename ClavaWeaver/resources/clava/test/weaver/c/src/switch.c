@@ -12,3 +12,14 @@ int foo1(int a) {
 	
 	
 }
+
+int foo2(int a) {
+	
+	switch(a) {
+		case 0:
+		case 1:
+			a = 0;
+			return 1;	
+	}
+	
+}
