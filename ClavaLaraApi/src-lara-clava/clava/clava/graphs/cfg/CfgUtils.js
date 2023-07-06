@@ -138,68 +138,67 @@ class CfgUtils {
     return target;
   }
 
-  static getSwitchStmts(switchStmt) {
-    return switchStmt.children[1].children;
+  static getSwitchStmts($switchStmt) {
+    return $switchStmt.children[1].children;
   }
 
-  static getDefaultCaseNode(switchStmt, nodes) {
-    const switchStmts = this.getSwitchStmts(switchStmt);
+  static getDefaultCaseNode($switchStmt, nodes) {
+    const $switchStmts = this.getSwitchStmts($switchStmt);
 
-    for (const stmt of switchStmts) {
-      const stmtNode = nodes.get(stmt.astId);
+    for (const $stmt of $switchStmts) {
+      const stmtNode = nodes.get($stmt.astId);
 
-      if (stmtNode.data().type === CfgNodeType.CASE && this.isDefaultCaseStmt(stmt))
+      if (stmtNode.data().type === CfgNodeType.CASE && this.isDefaultCaseStmt($stmt))
         return stmtNode;
     }
     return undefined;
   }
 
-  static hasIntermediateDefaultCase(switchStmt, nodes) {
-    const switchStmts = this.getSwitchStmts(switchStmt);
+  static hasIntermediateDefaultCase($switchStmt, nodes) {
+    const $switchStmts = this.getSwitchStmts($switchStmt);
 
-    for (const stmt of switchStmts) {
-      const stmtNode = nodes.get(stmt.astId);
+    for (const $stmt of $switchStmts) {
+      const stmtNode = nodes.get($stmt.astId);
 
       if (
         stmtNode.data().type === CfgNodeType.CASE && 
-        this.isDefaultCaseStmt(stmt) && 
-        this.getNextCaseStmt(stmt, nodes) !== undefined
+        this.isDefaultCaseStmt($stmt) && 
+        this.getNextCaseStmt($stmt, nodes) !== undefined
       )
         return true;
     }
     return false;
   }
 
-  static isDefaultCaseStmt(caseStmt) {
-    return caseStmt.children.length === 0;
+  static isDefaultCaseStmt($caseStmt) {
+    return $caseStmt.children.length === 0;
   }
 
-  static getCaseStmtIndex(caseStmt, nodes) {
-    const switchStmts = this.getSwitchStmts(caseStmt.ancestor("switch"));
+  static getCaseStmtIndex($caseStmt, nodes) {
+    const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
     let caseIndex = undefined;
 
-    for(let i=0; i < switchStmts.length; i++) {
-      const stmtAstId = switchStmts[i].astId;
-      const stmtNode = nodes.get(switchStmts[i].astId);
+    for(let i=0; i < $switchStmts.length; i++) {
+      const stmtAstId = $switchStmts[i].astId;
+      const stmtNode = nodes.get($switchStmts[i].astId);
 
-      if (stmtNode.data().type === CfgNodeType.CASE && stmtAstId === caseStmt.astId){
+      if (stmtNode.data().type === CfgNodeType.CASE && stmtAstId === $caseStmt.astId){
         caseIndex = i;
         break;
       }
     }
-
     return caseIndex;
   }
 
-  static isEmptyCase(caseStmt, nodes) {
-    const switchStmts = this.getSwitchStmts(caseStmt.ancestor("switch"));
-    const caseIndex = this.getCaseStmtIndex(caseStmt, nodes);
+  static isEmptyCase($caseStmt, nodes) {
+    const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
+    const caseIndex = this.getCaseStmtIndex($caseStmt, nodes);
     let isEmptyCase = false;
 
-    if (caseIndex + 1 >= switchStmts.length)
+    if (caseIndex + 1 >= $switchStmts.length)
       isEmptyCase = true;
     else {
-      const nextStmtNode = nodes.get(switchStmts[caseIndex + 1].astId);
+      const nextStmtNode = nodes.get($switchStmts[caseIndex + 1].astId);
 
       if (nextStmtNode.data().type === CfgNodeType.CASE)
         isEmptyCase = true;
@@ -207,32 +206,31 @@ class CfgUtils {
     return isEmptyCase;
   }
 
-  static getNextCaseStmt(caseStmt, nodes) {
-    const switchStmts = this.getSwitchStmts(caseStmt.ancestor("switch"));
-    const caseIndex = this.getCaseStmtIndex(caseStmt, nodes);
+  static getNextCaseStmt($caseStmt, nodes) {
+    const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
+    const caseIndex = this.getCaseStmtIndex($caseStmt, nodes);
 
-    for (let i=caseIndex + 1; i < switchStmts.length; i++) {
-      const currentStmtNode = nodes.get(switchStmts[i].astId);
+    for (let i=caseIndex + 1; i < $switchStmts.length; i++) {
+      const currentStmtNode = nodes.get($switchStmts[i].astId);
 
       if (currentStmtNode.data().type ===  CfgNodeType.CASE)
-        return switchStmts[i];
+        return $switchStmts[i];
     }
 
     // The considered case statement is the final case of the corresponding switch
     return undefined;
   }
 
-  static getFirstInst(caseStmt, nodes) {
-    const switchStmts = this.getSwitchStmts(caseStmt.ancestor("switch"));
-    const caseIndex = this.getCaseStmtIndex(caseStmt, nodes);
+  static getFirstInst($caseStmt, nodes) {
+    const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
+    const caseIndex = this.getCaseStmtIndex($caseStmt, nodes);
 
-    for (let i=caseIndex + 1; i<switchStmts.length; i++) {
-      const firstInst = nodes.get(switchStmts[i].astId);
+    for (let i=caseIndex + 1; i<$switchStmts.length; i++) {
+      const firstInst = nodes.get($switchStmts[i].astId);
 
       if(firstInst.data().type !== CfgNodeType.CASE)
         return firstInst;
     }
-
     return undefined;
   }
 
@@ -240,23 +238,23 @@ class CfgUtils {
    * Used when the case statement does not contain a break statement
    * @return the last statement inside the considered case statement
    */
-  static getLastInst(caseStmt, nodes) {  
-    const switchStmts = this.getSwitchStmts(caseStmt.ancestor("switch"));
-    const caseIndex = this.getCaseStmtIndex(caseStmt, nodes);
-    const nextCaseStmt = this.getNextCaseStmt(caseStmt, nodes);
-    const nextCaseNode = (nextCaseStmt !== undefined) ? nodes.get(nextCaseStmt.astId) : undefined;
+  static getLastInst($caseStmt, nodes) {  
+    const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
+    const caseIndex = this.getCaseStmtIndex($caseStmt, nodes);
+    const $nextCaseStmt = this.getNextCaseStmt($caseStmt, nodes);
+    const nextCaseNode = ($nextCaseStmt !== undefined) ? nodes.get($nextCaseStmt.astId) : undefined;
     let lastInst = undefined;
 
-    if (this.isEmptyCase(caseStmt, nodes)) 
+    if (this.isEmptyCase($caseStmt, nodes)) 
       return undefined;
 
     else if (nextCaseNode === undefined)  //It is the last case
-      lastInst = nodes.get(switchStmts[switchStmts.length - 1].astId)
+      lastInst = nodes.get($switchStmts[$switchStmts.length - 1].astId)
     
     else {
-      for (let i=caseIndex + 1; i<switchStmts.length - 1; i++) {
-        const currentStmtNode = nodes.get(switchStmts[i].astId);
-        const nextStmtNode = nodes.get(switchStmts[i + 1].astId);
+      for (let i=caseIndex + 1; i<$switchStmts.length - 1; i++) {
+        const currentStmtNode = nodes.get($switchStmts[i].astId);
+        const nextStmtNode = nodes.get($switchStmts[i + 1].astId);
 
         if (nextStmtNode.data().type === CfgNodeType.CASE) {
           lastInst = currentStmtNode;
@@ -268,12 +266,12 @@ class CfgUtils {
     return lastInst;
   }
 
-  static getCaseBreakNode(caseStmt, nodes) {
-    const switchStmts = this.getSwitchStmts(caseStmt.ancestor("switch"));
-    const caseIndex = this.getCaseStmtIndex(caseStmt, nodes);
+  static getCaseBreakNode($caseStmt, nodes) {
+    const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
+    const caseIndex = this.getCaseStmtIndex($caseStmt, nodes);
 
-    for (let i=caseIndex + 1; i < switchStmts.length; i++) {
-      const currentStmtNode = nodes.get(switchStmts[i].astId);
+    for (let i=caseIndex + 1; i < $switchStmts.length; i++) {
+      const currentStmtNode = nodes.get($switchStmts[i].astId);
 
       if (currentStmtNode.data().type ===  CfgNodeType.BREAK) //contains a break statement
         return currentStmtNode;
