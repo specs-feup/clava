@@ -1,9 +1,11 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
+import org.lara.interpreter.weaver.interf.events.Stage;
+import java.util.Optional;
+import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -24,6 +26,85 @@ public abstract class ASwitch extends AStatement {
     public ASwitch(AStatement aStatement){
         this.aStatement = aStatement;
     }
+    /**
+     * true if there is a default case in this switch statement, false otherwise
+     */
+    public abstract Boolean getHasDefaultCaseImpl();
+
+    /**
+     * true if there is a default case in this switch statement, false otherwise
+     */
+    public final Object getHasDefaultCase() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasDefaultCase", Optional.empty());
+        	}
+        	Boolean result = this.getHasDefaultCaseImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasDefaultCase", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasDefaultCase", e);
+        }
+    }
+
+    /**
+     * the default case statement of this switch statement or undefined if it does not have a default case
+     */
+    public abstract ACase getGetDefaultCaseImpl();
+
+    /**
+     * the default case statement of this switch statement or undefined if it does not have a default case
+     */
+    public final Object getGetDefaultCase() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getDefaultCase", Optional.empty());
+        	}
+        	ACase result = this.getGetDefaultCaseImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "getDefaultCase", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "getDefaultCase", e);
+        }
+    }
+
+    /**
+     * Get value on attribute cases
+     * @return the attribute's value
+     */
+    public abstract ACase[] getCasesArrayImpl();
+
+    /**
+     * the case statements inside this switch
+     */
+    public Object getCasesImpl() {
+        ACase[] aCaseArrayImpl0 = getCasesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aCaseArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * the case statements inside this switch
+     */
+    public final Object getCases() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "cases", Optional.empty());
+        	}
+        	Object result = this.getCasesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "cases", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "cases", e);
+        }
+    }
+
     /**
      * Get value on attribute isFirst
      * @return the attribute's value
@@ -1153,6 +1234,9 @@ public abstract class ASwitch extends AStatement {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
+        attributes.add("hasDefaultCase");
+        attributes.add("getDefaultCase");
+        attributes.add("cases");
     }
 
     /**
@@ -1196,6 +1280,9 @@ public abstract class ASwitch extends AStatement {
      * 
      */
     protected enum SwitchAttributes {
+        HASDEFAULTCASE("hasDefaultCase"),
+        GETDEFAULTCASE("getDefaultCase"),
+        CASES("cases"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),

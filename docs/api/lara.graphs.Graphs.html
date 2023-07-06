@@ -106,8 +106,6 @@
 </ul><h2>Clava API</h2><ul><li>
 <a onclick="saveScroll()"  href="clava.Clava.html">clava.Clava</a></li>
 <li>
-<a onclick="saveScroll()"  href="clava.ClavaAspects.html">clava.ClavaAspects</a></li>
-<li>
 <a onclick="saveScroll()"  href="clava.ClavaCode.html">clava.ClavaCode</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.ClavaJoinPoints.html">clava.ClavaJoinPoints</a></li>
@@ -221,6 +219,8 @@
 <a onclick="saveScroll()"  href="clava.code.GlobalVariable.html">clava.code.GlobalVariable</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.code.Inliner.html">clava.code.Inliner</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.code.Outliner.html">clava.code.Outliner</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.code.RemoveShadowing.html">clava.code.RemoveShadowing</a></li>
 <li>
@@ -350,6 +350,12 @@
 <li>
 <a onclick="saveScroll()"  href="clava.uve.UVE.html">clava.uve.UVE</a></li>
 </ul><h2>LARA API</h2><ul><li>
+<a onclick="saveScroll()"  href="core.html">core</a></li>
+<li>
+<a onclick="saveScroll()"  href="core.coretest.html">core.coretest</a></li>
+<li>
+<a onclick="saveScroll()"  href="core.output.html">core.output</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.Check.html">lara.Check</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.Collections.html">lara.Collections</a></li>
@@ -414,6 +420,12 @@
 <li>
 <a onclick="saveScroll()"  href="lara.code.Timer.html">lara.code.Timer</a></li>
 <li>
+<a onclick="saveScroll()"  href="lara.core.JavaTypes.html">lara.core.JavaTypes</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.core.LaraCore.html">lara.core.LaraCore</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.core.output.html">lara.core.output</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.dse.DseLoop.html">lara.dse.DseLoop</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.dse.DseValues.html">lara.dse.DseValues</a></li>
@@ -462,19 +474,21 @@
 <li>
 <a onclick="saveScroll()"  href="lara.mutation.Mutator.html">lara.mutation.Mutator</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.AggregatePassResult.html">lara.pass.AggregatePassResult</a></li>
+<a onclick="saveScroll()"  href="lara.pass.AdapterPass.html">lara.pass.AdapterPass</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.pass.Pass.html">lara.pass.Pass</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.PassApplyArg.html">lara.pass.PassApplyArg</a></li>
-<li>
-<a onclick="saveScroll()"  href="lara.pass.PassResult.html">lara.pass.PassResult</a></li>
-<li>
 <a onclick="saveScroll()"  href="lara.pass.PassTransformationError.html">lara.pass.PassTransformationError</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.PassTransformationResult.html">lara.pass.PassTransformationResult</a></li>
+<a onclick="saveScroll()"  href="lara.pass.SimplePass.html">lara.pass.SimplePass</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.Passes.html">lara.pass.Passes</a></li>
+<a onclick="saveScroll()"  href="lara.pass.composition.PassApplyArg.html">lara.pass.composition.PassApplyArg</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.composition.Passes.html">lara.pass.composition.Passes</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.results.AggregatePassResult.html">lara.pass.results.AggregatePassResult</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.results.PassResult.html">lara.pass.results.PassResult</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.tool.Tool.html">lara.tool.Tool</a></li>
 <li>
@@ -507,6 +521,8 @@
 <a onclick="saveScroll()"  href="lara.util.DataStore.html">lara.util.DataStore</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.util.IdGenerator.html">lara.util.IdGenerator</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.util.JavaTypes.html">lara.util.JavaTypes</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.util.JpFilter.html">lara.util.JpFilter</a></li>
 <li>
@@ -666,14 +682,14 @@
     		<div id="doc_content"><div id='toc_container'><p class='toc_title'><span style="font-weight:normal"><i>(.js)</i></span><br>
 laraImport("lara.graphs.Graphs");<br><br>
 <span style="font-weight:normal"><i>(.lara)</i></span><br>
-import lara.graphs.Graphs;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>Graphs</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>Graphs</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Static Members</div><li><em><a href='#C'>_sanitizeDotLabel()</a></em></li><li><em><a href='#D'>addEdge()</a></em></li><li><em><a href='#E'>addNode()</a></em></li><li><em><a href='#F'>isLeaf()</a></em></li><li><em><a href='#G'>loadLibrary()</a></em></li><li><em><a href='#H'>newGraph()</a></em></li><li><em><a href='#I'>removeNode()</a></em></li><li><em><a href='#J'>toDot()</a></em></li></ul></ul></div><h1 id='A'>Graphs</h1><div class='function_block'><h3 id='B'>Graphs</h3><pre class='signature'><code class='language-js'><strong>Graphs</strong></code></pre><div class='function_content'><p>Utility class related with graph creation and manipulation.<br><br>Current implementation uses Cytoscape.js (https://js.cytoscape.org/)</p></div><hr></div><h2>Static Members</h2><div class='function_block'><h3 id='C'>_sanitizeDotLabel</h3><pre class='signature'><code class='language-js'><strong>_sanitizeDotLabel</strong>(label)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>label</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='D'>addEdge</h3><pre class='signature'><code class='language-js'><strong>addEdge</strong>(graph, sourceNode, targetNode, edgeData)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>graph</strong>: unknown</span><br><span class='parameter'><strong>sourceNode</strong>: unknown</span><br><span class='parameter'><strong>targetNode</strong>: unknown</span><br><span class='parameter'><strong>edgeData</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='E'>addNode</h3><pre class='signature'><code class='language-js'><strong>addNode</strong>(graph, nodeData)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>graph</strong>: unknown</span><br><span class='parameter'><strong>nodeData</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='F'>isLeaf</h3><pre class='signature'><code class='language-js'><strong>isLeaf</strong>(node, [loopsAreLeafs = false])</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>node</strong>: node</span><br><span class='parameter'><strong>loopsAreLeafs</strong>: boolean</span> <em>(optional)</em><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - true if the outdegree (number of edges with this node as source) is zero, false otherwise. By default, if a node has a connection to itself (loop) it is not considered a leaf<br></div></div><hr></div><div class='function_block'><h3 id='G'>loadLibrary</h3><pre class='signature'><code class='language-js'><strong>loadLibrary</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='H'>newGraph</h3><pre class='signature'><code class='language-js'><strong>newGraph</strong>([config = {}])</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>config</strong>: Object</span> - configuration for the graph, according to what Cytoscape accepts as configuration object <em>(optional)</em><br></div></div><hr></div><div class='function_block'><h3 id='I'>removeNode</h3><pre class='signature'><code class='language-js'><strong>removeNode</strong>(graph, node, edgeMap)</code></pre><div class='function_content'><p>Removes a node from the graph. Before removing the node, creates connections between all connecting sources and targets.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>graph</strong>: graph</span><br><span class='parameter'><strong>node</strong>: node</span><br><span class='parameter'><strong>edgeMap</strong>: (edge, edge) -> EdgeData)</span> - function that receives the incoming edge and the outgoing edge, and returns a new EdgeData that replaces both edges<br></div></div><hr></div><div class='function_block'><h3 id='J'>toDot</h3><pre class='signature'><code class='language-js'><strong>toDot</strong>(graph, dotFormatter)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>graph</strong>: graph</span><br><span class='parameter'><strong>dotFormatter</strong>: lara.graphs.DotFormatter</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span><br></div></div><hr></div></div>
+import lara.graphs.Graphs;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>Graphs</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>Graphs</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Static Members</div><li><em><a href='#C'>addEdge()</a></em></li><li><em><a href='#D'>addNode()</a></em></li><li><em><a href='#E'>isLeaf()</a></em></li><li><em><a href='#F'>loadLibrary()</a></em></li><li><em><a href='#G'>newGraph()</a></em></li><li><em><a href='#H'>removeNode()</a></em></li><li><em><a href='#I'>toDot()</a></em></li></ul></ul></div><h1 id='A'>Graphs</h1><div class='function_block'><h3 id='B'>Graphs</h3><pre class='signature'><code class='language-js'><strong>Graphs</strong></code></pre><div class='function_content'><p>Utility class related with graph creation and manipulation.<br><br>Current implementation uses Cytoscape.js (https://js.cytoscape.org/)</p></div><hr></div><h2>Static Members</h2><div class='function_block'><h3 id='C'>addEdge</h3><pre class='signature'><code class='language-js'><strong>addEdge</strong>(graph, sourceNode, targetNode, edgeData)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>graph</strong>: unknown</span><br><span class='parameter'><strong>sourceNode</strong>: unknown</span><br><span class='parameter'><strong>targetNode</strong>: unknown</span><br><span class='parameter'><strong>edgeData</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='D'>addNode</h3><pre class='signature'><code class='language-js'><strong>addNode</strong>(graph, nodeData)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>graph</strong>: unknown</span><br><span class='parameter'><strong>nodeData</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='E'>isLeaf</h3><pre class='signature'><code class='language-js'><strong>isLeaf</strong>(node, [loopsAreLeafs = false])</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>node</strong>: node</span><br><span class='parameter'><strong>loopsAreLeafs</strong>: boolean</span> <em>(optional)</em><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - true if the outdegree (number of edges with this node as source) is zero, false otherwise. By default, if a node has a connection to itself (loop) it is not considered a leaf<br></div></div><hr></div><div class='function_block'><h3 id='F'>loadLibrary</h3><pre class='signature'><code class='language-js'><strong>loadLibrary</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='G'>newGraph</h3><pre class='signature'><code class='language-js'><strong>newGraph</strong>([config = {}])</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>config</strong>: Object</span> - configuration for the graph, according to what Cytoscape accepts as configuration object <em>(optional)</em><br></div></div><hr></div><div class='function_block'><h3 id='H'>removeNode</h3><pre class='signature'><code class='language-js'><strong>removeNode</strong>(graph, node, edgeMap)</code></pre><div class='function_content'><p>Removes a node from the graph. Before removing the node, creates connections between all connecting sources and targets.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>graph</strong>: graph</span><br><span class='parameter'><strong>node</strong>: node</span><br><span class='parameter'><strong>edgeMap</strong>: (edge, edge) -> EdgeData)</span> - function that receives the incoming edge and the outgoing edge, and returns a new EdgeData that replaces both edges<br></div></div><hr></div><div class='function_block'><h3 id='I'>toDot</h3><pre class='signature'><code class='language-js'><strong>toDot</strong>(graph, dotFormatter)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>graph</strong>: graph</span><br><span class='parameter'><strong>dotFormatter</strong>: lara.graphs.DotFormatter</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span><br></div></div><hr></div></div>
     		<!-- <iframe id="doc_frame" src=""></iframe> -->
     	</div>
 	</div>    
     	
 		 <button onclick="goToTop()" id="topButton"><i class='fas fa-angle-double-up'></i></button> 
 	
-  <script src="jquery-3.2.1.min.js"></script>
+  <script src="jquery-3.6.4.min.js"></script>
   <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   <script src="JsDoc.js"></script>
 </body>

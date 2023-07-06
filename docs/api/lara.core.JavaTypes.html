@@ -106,8 +106,6 @@
 </ul><h2>Clava API</h2><ul><li>
 <a onclick="saveScroll()"  href="clava.Clava.html">clava.Clava</a></li>
 <li>
-<a onclick="saveScroll()"  href="clava.ClavaAspects.html">clava.ClavaAspects</a></li>
-<li>
 <a onclick="saveScroll()"  href="clava.ClavaCode.html">clava.ClavaCode</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.ClavaJoinPoints.html">clava.ClavaJoinPoints</a></li>
@@ -221,6 +219,8 @@
 <a onclick="saveScroll()"  href="clava.code.GlobalVariable.html">clava.code.GlobalVariable</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.code.Inliner.html">clava.code.Inliner</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.code.Outliner.html">clava.code.Outliner</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.code.RemoveShadowing.html">clava.code.RemoveShadowing</a></li>
 <li>
@@ -350,6 +350,12 @@
 <li>
 <a onclick="saveScroll()"  href="clava.uve.UVE.html">clava.uve.UVE</a></li>
 </ul><h2>LARA API</h2><ul><li>
+<a onclick="saveScroll()"  href="core.html">core</a></li>
+<li>
+<a onclick="saveScroll()"  href="core.coretest.html">core.coretest</a></li>
+<li>
+<a onclick="saveScroll()"  href="core.output.html">core.output</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.Check.html">lara.Check</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.Collections.html">lara.Collections</a></li>
@@ -414,6 +420,12 @@
 <li>
 <a onclick="saveScroll()"  href="lara.code.Timer.html">lara.code.Timer</a></li>
 <li>
+<a onclick="saveScroll()"  href="lara.core.JavaTypes.html">lara.core.JavaTypes</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.core.LaraCore.html">lara.core.LaraCore</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.core.output.html">lara.core.output</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.dse.DseLoop.html">lara.dse.DseLoop</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.dse.DseValues.html">lara.dse.DseValues</a></li>
@@ -462,19 +474,21 @@
 <li>
 <a onclick="saveScroll()"  href="lara.mutation.Mutator.html">lara.mutation.Mutator</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.AggregatePassResult.html">lara.pass.AggregatePassResult</a></li>
+<a onclick="saveScroll()"  href="lara.pass.AdapterPass.html">lara.pass.AdapterPass</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.pass.Pass.html">lara.pass.Pass</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.PassApplyArg.html">lara.pass.PassApplyArg</a></li>
-<li>
-<a onclick="saveScroll()"  href="lara.pass.PassResult.html">lara.pass.PassResult</a></li>
-<li>
 <a onclick="saveScroll()"  href="lara.pass.PassTransformationError.html">lara.pass.PassTransformationError</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.PassTransformationResult.html">lara.pass.PassTransformationResult</a></li>
+<a onclick="saveScroll()"  href="lara.pass.SimplePass.html">lara.pass.SimplePass</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.Passes.html">lara.pass.Passes</a></li>
+<a onclick="saveScroll()"  href="lara.pass.composition.PassApplyArg.html">lara.pass.composition.PassApplyArg</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.composition.Passes.html">lara.pass.composition.Passes</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.results.AggregatePassResult.html">lara.pass.results.AggregatePassResult</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.results.PassResult.html">lara.pass.results.PassResult</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.tool.Tool.html">lara.tool.Tool</a></li>
 <li>
@@ -507,6 +521,8 @@
 <a onclick="saveScroll()"  href="lara.util.DataStore.html">lara.util.DataStore</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.util.IdGenerator.html">lara.util.IdGenerator</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.util.JavaTypes.html">lara.util.JavaTypes</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.util.JpFilter.html">lara.util.JpFilter</a></li>
 <li>
@@ -664,16 +680,16 @@
 </ul></div> 
     	<div id="column2">
     		<div id="doc_content"><div id='toc_container'><p class='toc_title'><span style="font-weight:normal"><i>(.js)</i></span><br>
-laraImport("lara.pass.Passes");<br><br>
+laraImport("lara.core.JavaTypes");<br><br>
 <span style="font-weight:normal"><i>(.lara)</i></span><br>
-import lara.pass.Passes;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>Passes</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>Passes</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Static Members</div><li><em><a href='#C'>apply()</a></em></li><li><em><a href='#D'>getArgType()</a></em></li></ul></ul></div><h1 id='A'>Passes</h1><div class='function_block'><h3 id='B'>Passes</h3><pre class='signature'><code class='language-js'><strong>Passes</strong></code></pre><div class='function_content'></div><hr></div><h2>Static Members</h2><div class='function_block'><h3 id='C'>apply</h3><pre class='signature'><code class='language-js'><strong>apply</strong>($jp, args)</code></pre><div class='function_content'><p>Applies a sequence of passes.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$jp</strong>: $jp</span> - Apply pass using this join point as the starting point<br><span class='parameter'><strong>args</strong>: ...</span> - An array or sequence of: 1) Pass instance; 2) Pass class; 3) function that accepts a $jp; 4) An array where the first element is 2) or 3), followed by arguments that are passed as arguments of the function or class constructor.<br></div></div><hr></div><div class='function_block'><h3 id='D'>getArgType</h3><pre class='signature'><code class='language-js'><strong>getArgType</strong>(applyArg)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>applyArg</strong>: unknown</span><br></div></div><hr></div></div>
+import lara.core.JavaTypes;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>JavaTypes</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>JavaTypes</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Static Members</div><li><em><a href='#C'>ApacheStrings()</a></em></li><li><em><a href='#D'>Collections()</a></em></li><li><em><a href='#E'>Gprofer()</a></em></li><li><em><a href='#F'>JavaDiff()</a></em></li><li><em><a href='#G'>JavaFile()</a></em></li><li><em><a href='#H'>JavaSystem()</a></em></li><li><em><a href='#I'>JoinPoint()</a></em></li><li><em><a href='#J'>LaraApiTools()</a></em></li><li><em><a href='#K'>LaraCli()</a></em></li><li><em><a href='#L'>LaraI()</a></em></li><li><em><a href='#M'>LaraIo()</a></em></li><li><em><a href='#N'>LaraSystemTools()</a></em></li><li><em><a href='#O'>List()</a></em></li><li><em><a href='#P'>SpecsIo()</a></em></li><li><em><a href='#Q'>SpecsStrings()</a></em></li><li><em><a href='#R'>SpecsSystem()</a></em></li><li><em><a href='#S'>StringLines()</a></em></li><li><em><a href='#T'>Uuid()</a></em></li><li><em><a href='#U'>XStreamUtils()</a></em></li><li><em><a href='#V'>getType()</a></em></li></ul></ul></div><h1 id='A'>JavaTypes</h1><div class='function_block'><h3 id='B'>JavaTypes</h3><pre class='signature'><code class='language-js'><strong>JavaTypes</strong></code></pre><div class='function_content'><p>Static variables with class names of Java classes used in the API.</p></div><hr></div><h2>Static Members</h2><div class='function_block'><h3 id='C'>ApacheStrings</h3><pre class='signature'><code class='language-js'><strong>ApacheStrings</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='D'>Collections</h3><pre class='signature'><code class='language-js'><strong>Collections</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='E'>Gprofer</h3><pre class='signature'><code class='language-js'><strong>Gprofer</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='F'>JavaDiff</h3><pre class='signature'><code class='language-js'><strong>JavaDiff</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='G'>JavaFile</h3><pre class='signature'><code class='language-js'><strong>JavaFile</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='H'>JavaSystem</h3><pre class='signature'><code class='language-js'><strong>JavaSystem</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='I'>JoinPoint</h3><pre class='signature'><code class='language-js'><strong>JoinPoint</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='J'>LaraApiTools</h3><pre class='signature'><code class='language-js'><strong>LaraApiTools</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='K'>LaraCli</h3><pre class='signature'><code class='language-js'><strong>LaraCli</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='L'>LaraI</h3><pre class='signature'><code class='language-js'><strong>LaraI</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='M'>LaraIo</h3><pre class='signature'><code class='language-js'><strong>LaraIo</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='N'>LaraSystemTools</h3><pre class='signature'><code class='language-js'><strong>LaraSystemTools</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='O'>List</h3><pre class='signature'><code class='language-js'><strong>List</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='P'>SpecsIo</h3><pre class='signature'><code class='language-js'><strong>SpecsIo</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='Q'>SpecsStrings</h3><pre class='signature'><code class='language-js'><strong>SpecsStrings</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='R'>SpecsSystem</h3><pre class='signature'><code class='language-js'><strong>SpecsSystem</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='S'>StringLines</h3><pre class='signature'><code class='language-js'><strong>StringLines</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='T'>Uuid</h3><pre class='signature'><code class='language-js'><strong>Uuid</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='U'>XStreamUtils</h3><pre class='signature'><code class='language-js'><strong>XStreamUtils</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='V'>getType</h3><pre class='signature'><code class='language-js'><strong>getType</strong>(javaType)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>javaType</strong>: unknown</span><br></div></div><hr></div></div>
     		<!-- <iframe id="doc_frame" src=""></iframe> -->
     	</div>
 	</div>    
     	
 		 <button onclick="goToTop()" id="topButton"><i class='fas fa-angle-double-up'></i></button> 
 	
-  <script src="jquery-3.2.1.min.js"></script>
+  <script src="jquery-3.6.4.min.js"></script>
   <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   <script src="JsDoc.js"></script>
 </body>
