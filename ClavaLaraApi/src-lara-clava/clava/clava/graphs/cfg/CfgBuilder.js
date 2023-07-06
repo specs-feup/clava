@@ -283,7 +283,6 @@ class CfgBuilder {
         this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
       }
 
-      
       if (nodeType === CfgNodeType.SWITCH) {
         const switchStmt = node.data().nodeStmt;
         const switchStatements = switchStmt.children[1].children;
@@ -307,30 +306,46 @@ class CfgBuilder {
         const postSwitchNode = this.#nextNodes.nextExecutedNode(switchStmt);
 
         const isDefaultCase = CfgUtils.isDefaultCaseStmt(caseStmt);
-        const firstExecutedInst = CfgUtils.getFirstInst(caseStmt, this.#nodes, postSwitchNode);
-        const lastExecutedInst = CfgUtils.getLastInst(caseStmt, this.#nodes);
-        const breakNode = CfgUtils.getCaseBreakNode(caseStmt, this.#nodes);
         const nextCaseStmt = CfgUtils.getNextCaseStmt(caseStmt, this.#nodes);
         const nextCaseNode = (nextCaseStmt !== undefined) ? this.#nodes.get(nextCaseStmt.astId) : undefined;
         
-        if (nextCaseNode !== undefined ) // if it not the final case, add a FALSE edge to the next case
-          this.#addEdge(node, nextCaseNode, CfgEdgeType.FALSE); 
-        else if (!isDefaultCase) // if it is the final case but not a default node, add a FALSE edge to the code executed after the switch
-          this.#addEdge(node, postSwitchNode, CfgEdgeType.FALSE);  
-        
+
+        if (nextCaseNode !== undefined) { //not the last case
+          const isNextCaseDefault = CfgUtils.isDefaultCaseStmt(nextCaseStmt);
+          const nextNextCaseStmt = CfgUtils.getNextCaseStmt(nextCaseStmt, this.#nodes);
+          const nextNextCaseNode = (nextNextCaseStmt !== undefined) ? this.#nodes.get(nextNextCaseStmt.astId) : undefined;
+
+          if(isNextCaseDefault && nextNextCaseNode !== undefined) // next case is an intermediate default case
+            this.#addEdge(node, nextNextCaseNode, CfgEdgeType.FALSE); //connect node with the CASE node following the intermediate default 
+          else if (!isDefaultCase) //not an intermediate default case
+            this.#addEdge(node, nextCaseNode, CfgEdgeType.FALSE);
+        }
+        else if (!isDefaultCase) {
+          const hasIntermediateDefaultCase = CfgUtils.hasIntermediateDefaultCase(switchStmt, this.#nodes);
+
+          if(hasIntermediateDefaultCase) {
+            const defaultCaseNode = CfgUtils.getDefaultCaseNode(switchStmt, this.#nodes);
+            this.#addEdge(node, defaultCaseNode, CfgEdgeType.FALSE);
+          }
+          else
+            this.#addEdge(node, postSwitchNode, CfgEdgeType.FALSE);
+        }
+
 
         // connect the node with the first instruction to be executed
+        const firstExecutedInst = CfgUtils.getFirstInst(caseStmt, this.#nodes);
         if(isDefaultCase) 
           this.#addEdge(node, firstExecutedInst, CfgEdgeType.UNCONDITIONAL); 
         else
           this.#addEdge(node, firstExecutedInst, CfgEdgeType.TRUE); 
           
         
+        const breakNode = CfgUtils.getCaseBreakNode(caseStmt, this.#nodes);
+        const lastExecutedInst = CfgUtils.getLastInst(caseStmt, this.#nodes);
         if (breakNode !== undefined) // if the case statement contains a BREAK node, connect it to the code executed after the switch
           this.#addEdge(breakNode, postSwitchNode, CfgEdgeType.UNCONDITIONAL); 
-        else if (lastExecutedInst !== undefined && nextCaseNode !== undefined) { //if not an empty case and not the last case, connect the last instruction with the first instruction of the next case
-            this.#addEdge(lastExecutedInst, CfgUtils.getFirstInst(nextCaseStmt, this.#nodes, postSwitchNode), CfgEdgeType.UNCONDITIONAL); 
-        }  
+        else if (lastExecutedInst !== undefined && nextCaseNode !== undefined) //if not an empty case and not the last case, connect the last instruction with the first instruction of the next case
+          this.#addEdge(lastExecutedInst, CfgUtils.getFirstInst(nextCaseStmt, this.#nodes), CfgEdgeType.UNCONDITIONAL); 
       }
 
       if (nodeType === CfgNodeType.INIT) {
