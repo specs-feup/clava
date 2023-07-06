@@ -20,6 +20,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.util.SpecsCheck;
 
 /**
  * Represents a switch case.
@@ -36,4 +37,27 @@ public abstract class SwitchCase extends Stmt {
     public Optional<Stmt> getSubStmt() {
         return ClavaNodes.nextNode(this).map(node -> (Stmt) node);
     }
+
+    public boolean isEmptyCase() {
+        var nextStmt = getSubStmt().orElse(null);
+        SpecsCheck.checkNotNull(nextStmt, () -> "Case has no sub statement, is this correct?");
+
+        return nextStmt instanceof SwitchCase;
+    }
+
+    /**
+     * 
+     * @return the next instruction that is not a case statement, or null if none is found (is it possible to return
+     *         null?)
+     */
+    public Stmt nextExecutedInstruction() {
+        var nextNode = ClavaNodes.nextNode(this).orElse(null);
+        while (nextNode instanceof SwitchCase) {
+            nextNode = ClavaNodes.nextNode(nextNode).orElse(null);
+        }
+
+        return (Stmt) nextNode;
+    }
+
+    public abstract boolean isDefaultCase();
 }

@@ -27,14 +27,12 @@ public abstract class ASwitch extends AStatement {
         this.aStatement = aStatement;
     }
     /**
-     * Get value on attribute hasDefaultCase
-     * @return the attribute's value
+     * true if there is a default case in this switch statement, false otherwise
      */
     public abstract Boolean getHasDefaultCaseImpl();
 
     /**
-     * Get value on attribute hasDefaultCase
-     * @return the attribute's value
+     * true if there is a default case in this switch statement, false otherwise
      */
     public final Object getHasDefaultCase() {
         try {
@@ -52,14 +50,12 @@ public abstract class ASwitch extends AStatement {
     }
 
     /**
-     * Get value on attribute getDefaultCase
-     * @return the attribute's value
+     * the default case statement of this switch statement or undefined if it does not have a default case
      */
     public abstract ACase getGetDefaultCaseImpl();
 
     /**
-     * Get value on attribute getDefaultCase
-     * @return the attribute's value
+     * the default case statement of this switch statement or undefined if it does not have a default case
      */
     public final Object getGetDefaultCase() {
         try {
@@ -73,6 +69,39 @@ public abstract class ASwitch extends AStatement {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "getDefaultCase", e);
+        }
+    }
+
+    /**
+     * Get value on attribute cases
+     * @return the attribute's value
+     */
+    public abstract ACase[] getCasesArrayImpl();
+
+    /**
+     * the case statements inside this switch
+     */
+    public Object getCasesImpl() {
+        ACase[] aCaseArrayImpl0 = getCasesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aCaseArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * the case statements inside this switch
+     */
+    public final Object getCases() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "cases", Optional.empty());
+        	}
+        	Object result = this.getCasesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "cases", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "cases", e);
         }
     }
 
@@ -1207,6 +1236,7 @@ public abstract class ASwitch extends AStatement {
         this.aStatement.fillWithAttributes(attributes);
         attributes.add("hasDefaultCase");
         attributes.add("getDefaultCase");
+        attributes.add("cases");
     }
 
     /**
@@ -1252,6 +1282,7 @@ public abstract class ASwitch extends AStatement {
     protected enum SwitchAttributes {
         HASDEFAULTCASE("hasDefaultCase"),
         GETDEFAULTCASE("getDefaultCase"),
+        CASES("cases"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),

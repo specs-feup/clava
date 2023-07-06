@@ -45,4 +45,9 @@ public class CxxSwitch extends ASwitch {
                 .orElse(null);
     }
 
+    @Override
+    public ACase[] getCasesArrayImpl() {
+        return CxxJoinpoints.create(switchStmt.getCases(), ACase.class);
+    }
+
 }

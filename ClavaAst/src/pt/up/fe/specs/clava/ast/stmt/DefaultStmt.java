@@ -26,6 +26,11 @@ public class DefaultStmt extends SwitchCase {
     }
 
     @Override
+    public boolean isDefaultCase() {
+        return true;
+    }
+
+    @Override
     public String getCode() {
         StringBuilder builder = new StringBuilder();
 
