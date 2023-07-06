@@ -289,7 +289,7 @@ class CfgBuilder {
       }
 
       if (nodeType === CfgNodeType.SWITCH) {
-        const $switchStmt = node.data().nodeStmt;
+        const $switchStmt = node.data().switch;
         const $switchStatements = CfgUtils.getSwitchStmts($switchStmt);
 
         let firstCaseNode = undefined;
