@@ -86977,6 +86977,22 @@
 						"type": "attribute",
 						"children": [
 									{
+										"type": "case",
+										"name": "getDefaultCase"
+									}]
+					},
+					{
+						"type": "attribute",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasDefaultCase"
+									}]
+					},
+					{
+						"type": "attribute",
+						"children": [
+									{
 										"type": "Boolean",
 										"name": "isFirst"
 									}]

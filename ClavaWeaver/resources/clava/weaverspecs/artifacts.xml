@@ -517,6 +517,12 @@
 		</attribute>
 	</artifact>
 
+	<!-- SWITCH -->
+	<artifact class="switch">
+		<attribute name="hasDefaultCase" type="Boolean" />		
+		<attribute name="getDefaultCase" type="case" />				
+	</artifact>
+	
 	<!-- STATEMENT -->
 	<artifact class="statement">
 		<attribute name="isFirst" type="Boolean" />

@@ -14,6 +14,7 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -47,6 +48,18 @@ public class SwitchStmt extends Stmt {
 
     public Stmt getBody() {
         return getChild(Stmt.class, 1);
+    }
+
+    public boolean hasDefaultCase() {
+        return getDefaultCase()
+                .isPresent();
+    }
+
+    public Optional<DefaultStmt> getDefaultCase() {
+        return getBody().getChildrenStream()
+                .filter(node -> node instanceof DefaultStmt)
+                .map(DefaultStmt.class::cast)
+                .findFirst();
     }
 
 }

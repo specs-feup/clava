@@ -1,9 +1,11 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
+import org.lara.interpreter.weaver.interf.events.Stage;
+import java.util.Optional;
+import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -24,6 +26,56 @@ public abstract class ASwitch extends AStatement {
     public ASwitch(AStatement aStatement){
         this.aStatement = aStatement;
     }
+    /**
+     * Get value on attribute hasDefaultCase
+     * @return the attribute's value
+     */
+    public abstract Boolean getHasDefaultCaseImpl();
+
+    /**
+     * Get value on attribute hasDefaultCase
+     * @return the attribute's value
+     */
+    public final Object getHasDefaultCase() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasDefaultCase", Optional.empty());
+        	}
+        	Boolean result = this.getHasDefaultCaseImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasDefaultCase", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasDefaultCase", e);
+        }
+    }
+
+    /**
+     * Get value on attribute getDefaultCase
+     * @return the attribute's value
+     */
+    public abstract ACase getGetDefaultCaseImpl();
+
+    /**
+     * Get value on attribute getDefaultCase
+     * @return the attribute's value
+     */
+    public final Object getGetDefaultCase() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getDefaultCase", Optional.empty());
+        	}
+        	ACase result = this.getGetDefaultCaseImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "getDefaultCase", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "getDefaultCase", e);
+        }
+    }
+
     /**
      * Get value on attribute isFirst
      * @return the attribute's value
@@ -1153,6 +1205,8 @@ public abstract class ASwitch extends AStatement {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
+        attributes.add("hasDefaultCase");
+        attributes.add("getDefaultCase");
     }
 
     /**
@@ -1196,6 +1250,8 @@ public abstract class ASwitch extends AStatement {
      * 
      */
     protected enum SwitchAttributes {
+        HASDEFAULTCASE("hasDefaultCase"),
+        GETDEFAULTCASE("getDefaultCase"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),
