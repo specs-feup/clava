@@ -13,7 +13,9 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -57,6 +59,24 @@ public abstract class SwitchCase extends Stmt {
         }
 
         return (Stmt) nextNode;
+    }
+
+    /**
+     * 
+     * @return the instructions that are associated with this case in the source code. This does not represent what
+     *         instructions are actually executed (e.g., if a case does not have a break, does not show instructions of
+     *         the next case)
+     */
+    public List<Stmt> getInstructions() {
+        var instructions = new ArrayList<Stmt>();
+        var nextNode = ClavaNodes.nextNode(this).orElse(null);
+
+        while (nextNode != null && !(nextNode instanceof SwitchCase)) {
+            instructions.add((Stmt) nextNode);
+            nextNode = ClavaNodes.nextNode(nextNode).orElse(null);
+        }
+
+        return instructions;
     }
 
     public abstract boolean isDefaultCase();

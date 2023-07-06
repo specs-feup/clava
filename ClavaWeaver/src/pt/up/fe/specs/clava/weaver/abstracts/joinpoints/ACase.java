@@ -73,12 +73,12 @@ public abstract class ACase extends AStatement {
     }
 
     /**
-     * the first statement that will be executed by this case statement
+     * the first statement that is not a case that will be executed by this case statement
      */
     public abstract AStatement getNextInstructionImpl();
 
     /**
-     * the first statement that will be executed by this case statement
+     * the first statement that is not a case that will be executed by this case statement
      */
     public final Object getNextInstruction() {
         try {
@@ -92,6 +92,39 @@ public abstract class ACase extends AStatement {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "nextInstruction", e);
+        }
+    }
+
+    /**
+     * Get value on attribute instructions
+     * @return the attribute's value
+     */
+    public abstract AStatement[] getInstructionsArrayImpl();
+
+    /**
+     * the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
+     */
+    public Object getInstructionsImpl() {
+        AStatement[] aStatementArrayImpl0 = getInstructionsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
+     */
+    public final Object getInstructions() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "instructions", Optional.empty());
+        	}
+        	Object result = this.getInstructionsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "instructions", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "instructions", e);
         }
     }
 
@@ -1227,6 +1260,7 @@ public abstract class ACase extends AStatement {
         attributes.add("isDefault");
         attributes.add("isEmpty");
         attributes.add("nextInstruction");
+        attributes.add("instructions");
     }
 
     /**
@@ -1273,6 +1307,7 @@ public abstract class ACase extends AStatement {
         ISDEFAULT("isDefault"),
         ISEMPTY("isEmpty"),
         NEXTINSTRUCTION("nextInstruction"),
+        INSTRUCTIONS("instructions"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),

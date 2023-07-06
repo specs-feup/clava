@@ -15414,6 +15414,15 @@
 			"children": [
 					{
 						"type": "attribute",
+						"tooltip": "the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)",
+						"children": [
+									{
+										"type": "statement[]",
+										"name": "instructions"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "true if this is a default case, false otherwise",
 						"children": [
 									{
@@ -15432,7 +15441,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "the first statement that will be executed by this case statement",
+						"tooltip": "the first statement that is not a case that will be executed by this case statement",
 						"children": [
 									{
 										"type": "statement",

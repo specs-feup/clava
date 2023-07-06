@@ -53,4 +53,9 @@ public class CxxCase extends ACase {
         return CxxJoinpoints.create(nextInst, AStatement.class);
     }
 
+    @Override
+    public AStatement[] getInstructionsArrayImpl() {
+        return CxxJoinpoints.create(caseStmt.getInstructions(), AStatement.class);
+    }
+
 }
