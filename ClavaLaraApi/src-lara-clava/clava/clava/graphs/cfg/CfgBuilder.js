@@ -306,7 +306,7 @@ class CfgBuilder {
       }
       
       if (nodeType === CfgNodeType.CASE) {
-        const $caseStmt = node.data().nodeStmt;
+        const $caseStmt = node.data().case;
         const $switchStmt = $caseStmt.ancestor("switch");
         const postSwitchNode = this.#nextNodes.nextExecutedNode($switchStmt);
 
