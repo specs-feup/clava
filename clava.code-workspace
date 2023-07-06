@@ -1,0 +1,11 @@
+{
+  "folders": [
+	{
+		"path": "ClavaLaraApi/src-lara-clava/clava"
+	},
+	{
+		"path": "../lara-framework/LaraApi/src-lara"
+	}
+],
+  "settings": {}
+}

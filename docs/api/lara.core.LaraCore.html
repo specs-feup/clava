@@ -106,8 +106,6 @@
 </ul><h2>Clava API</h2><ul><li>
 <a onclick="saveScroll()"  href="clava.Clava.html">clava.Clava</a></li>
 <li>
-<a onclick="saveScroll()"  href="clava.ClavaAspects.html">clava.ClavaAspects</a></li>
-<li>
 <a onclick="saveScroll()"  href="clava.ClavaCode.html">clava.ClavaCode</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.ClavaJoinPoints.html">clava.ClavaJoinPoints</a></li>
@@ -221,6 +219,8 @@
 <a onclick="saveScroll()"  href="clava.code.GlobalVariable.html">clava.code.GlobalVariable</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.code.Inliner.html">clava.code.Inliner</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.code.Outliner.html">clava.code.Outliner</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.code.RemoveShadowing.html">clava.code.RemoveShadowing</a></li>
 <li>
@@ -350,6 +350,12 @@
 <li>
 <a onclick="saveScroll()"  href="clava.uve.UVE.html">clava.uve.UVE</a></li>
 </ul><h2>LARA API</h2><ul><li>
+<a onclick="saveScroll()"  href="core.html">core</a></li>
+<li>
+<a onclick="saveScroll()"  href="core.coretest.html">core.coretest</a></li>
+<li>
+<a onclick="saveScroll()"  href="core.output.html">core.output</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.Check.html">lara.Check</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.Collections.html">lara.Collections</a></li>
@@ -414,6 +420,12 @@
 <li>
 <a onclick="saveScroll()"  href="lara.code.Timer.html">lara.code.Timer</a></li>
 <li>
+<a onclick="saveScroll()"  href="lara.core.JavaTypes.html">lara.core.JavaTypes</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.core.LaraCore.html">lara.core.LaraCore</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.core.output.html">lara.core.output</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.dse.DseLoop.html">lara.dse.DseLoop</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.dse.DseValues.html">lara.dse.DseValues</a></li>
@@ -462,19 +474,21 @@
 <li>
 <a onclick="saveScroll()"  href="lara.mutation.Mutator.html">lara.mutation.Mutator</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.AggregatePassResult.html">lara.pass.AggregatePassResult</a></li>
+<a onclick="saveScroll()"  href="lara.pass.AdapterPass.html">lara.pass.AdapterPass</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.pass.Pass.html">lara.pass.Pass</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.PassApplyArg.html">lara.pass.PassApplyArg</a></li>
-<li>
-<a onclick="saveScroll()"  href="lara.pass.PassResult.html">lara.pass.PassResult</a></li>
-<li>
 <a onclick="saveScroll()"  href="lara.pass.PassTransformationError.html">lara.pass.PassTransformationError</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.PassTransformationResult.html">lara.pass.PassTransformationResult</a></li>
+<a onclick="saveScroll()"  href="lara.pass.SimplePass.html">lara.pass.SimplePass</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.Passes.html">lara.pass.Passes</a></li>
+<a onclick="saveScroll()"  href="lara.pass.composition.PassApplyArg.html">lara.pass.composition.PassApplyArg</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.composition.Passes.html">lara.pass.composition.Passes</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.results.AggregatePassResult.html">lara.pass.results.AggregatePassResult</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.results.PassResult.html">lara.pass.results.PassResult</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.tool.Tool.html">lara.tool.Tool</a></li>
 <li>
@@ -507,6 +521,8 @@
 <a onclick="saveScroll()"  href="lara.util.DataStore.html">lara.util.DataStore</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.util.IdGenerator.html">lara.util.IdGenerator</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.util.JavaTypes.html">lara.util.JavaTypes</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.util.JpFilter.html">lara.util.JpFilter</a></li>
 <li>
@@ -664,16 +680,16 @@
 </ul></div> 
     	<div id="column2">
     		<div id="doc_content"><div id='toc_container'><p class='toc_title'><span style="font-weight:normal"><i>(.js)</i></span><br>
-laraImport("clava.ClavaAspects");<br><br>
+laraImport("lara.core.LaraCore");<br><br>
 <span style="font-weight:normal"><i>(.lara)</i></span><br>
-import clava.ClavaAspects;</p><ul class='toc_list'><p class='toc_class'>Aspects:</p><li class='toc_class_element toc_top_element'><a href='#A'>ClavaAddFile</a></li><li class='toc_class_element toc_top_element'><a href='#B'>ClavaBaseFolder</a></li><li class='toc_class_element toc_top_element'><a href='#C'>ClavaIsCxx</a></li><li class='toc_class_element toc_top_element'><a href='#D'>ClavaStandard</a></li><li class='toc_class_element toc_top_element'><a href='#E'>ClavaWeavingFolder</a></li><li class='toc_class_element toc_top_element'><a href='#F'>GetProgram</a></li><li class='toc_class_element toc_top_element'><a href='#G'>PopAst</a></li><li class='toc_class_element toc_top_element'><a href='#H'>PushAst</a></li><li class='toc_class_element toc_top_element'><a href='#I'>Rebuild</a></li><li class='toc_class_element toc_top_element'><a href='#J'>RebuildFuzzy</a></li></ul></div><h2>Aspects</h2><h3 id='A'>ClavaAddFile</h3><h4>Inputs</h4><div class='parameters'><span class='parameter'><strong>$file</strong>: any</span><br></div><hr><h3 id='B'>ClavaBaseFolder</h3><h4>Outputs</h4><div class='parameters'><span class='parameter'><strong>baseFolder</strong>: any</span><br></div><hr><h3 id='C'>ClavaIsCxx</h3><h4>Outputs</h4><div class='parameters'><span class='parameter'><strong>isCxx</strong>: any</span><br></div><hr><h3 id='D'>ClavaStandard</h3><h4>Outputs</h4><div class='parameters'><span class='parameter'><strong>standard</strong>: any</span><br></div><hr><h3 id='E'>ClavaWeavingFolder</h3><h4>Outputs</h4><div class='parameters'><span class='parameter'><strong>weavingFolder</strong>: any</span><br></div><hr><h3 id='F'>GetProgram</h3><h4>Outputs</h4><div class='parameters'><span class='parameter'><strong>programJp</strong>: any</span><br></div><hr><h3 id='G'>PopAst</h3><hr><h3 id='H'>PushAst</h3><hr><h3 id='I'>Rebuild</h3><p>ASPECTS</p><br><hr><h3 id='J'>RebuildFuzzy</h3><hr></div>
+import lara.core.LaraCore;</p><ul class='toc_list'><p class='toc_class'>Global Functions:</p><li class='toc_class_element'><a href='#A'>checkArray</a></li><li class='toc_class_element'><a href='#B'>checkBoolean</a></li><li class='toc_class_element'><a href='#C'>checkDefined</a></li><li class='toc_class_element'><a href='#D'>checkInstance</a></li><li class='toc_class_element'><a href='#E'>checkNumber</a></li><li class='toc_class_element'><a href='#F'>checkString</a></li><li class='toc_class_element'><a href='#G'>checkTrue</a></li><li class='toc_class_element'><a href='#H'>checkType</a></li><li class='toc_class_element'><a href='#I'>defaultValue</a></li><li class='toc_class_element'><a href='#J'>isArray</a></li><li class='toc_class_element'><a href='#K'>isDebug</a></li><li class='toc_class_element'><a href='#L'>isUndefined</a></li><li class='toc_class_element'><a href='#M'>notImplemented</a></li><li class='toc_class_element'><a href='#N'>setDebug</a></li></ul></div><h2>Global Functions</h2><div class='function_block'><h3 id='A'>checkArray</h3><pre class='signature'><code class='language-js'><strong>checkArray</strong>(variable, source)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>variable</strong>: any</span><br><span class='parameter'><strong>source</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='B'>checkBoolean</h3><pre class='signature'><code class='language-js'><strong>checkBoolean</strong>(variable, source)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>variable</strong>: any</span><br><span class='parameter'><strong>source</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='C'>checkDefined</h3><pre class='signature'><code class='language-js'><strong>checkDefined</strong>(value, varName, source)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>value</strong>: any</span><br><span class='parameter'><strong>varName</strong>: any</span><br><span class='parameter'><strong>source</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='D'>checkInstance</h3><pre class='signature'><code class='language-js'><strong>checkInstance</strong>(value, type, source, userTypeName)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>value</strong>: any</span><br><span class='parameter'><strong>type</strong>: any</span><br><span class='parameter'><strong>source</strong>: any</span><br><span class='parameter'><strong>userTypeName</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='E'>checkNumber</h3><pre class='signature'><code class='language-js'><strong>checkNumber</strong>(variable, source)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>variable</strong>: any</span><br><span class='parameter'><strong>source</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='F'>checkString</h3><pre class='signature'><code class='language-js'><strong>checkString</strong>(variable, source)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>variable</strong>: any</span><br><span class='parameter'><strong>source</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='G'>checkTrue</h3><pre class='signature'><code class='language-js'><strong>checkTrue</strong>(booleanExpr, message, source)</code></pre><div class='function_content'><p>Throws an exception if the given expression evaluates to false.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>booleanExpr</strong>: any</span><br><span class='parameter'><strong>message</strong>: any</span><br><span class='parameter'><strong>source</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='H'>checkType</h3><pre class='signature'><code class='language-js'><strong>checkType</strong>(value, type, source)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>value</strong>: any</span><br><span class='parameter'><strong>type</strong>: any</span><br><span class='parameter'><strong>source</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='I'>defaultValue</h3><pre class='signature'><code class='language-js'><strong>defaultValue</strong>(value, defaultValue)</code></pre><div class='function_content'><p>Returns the value if defined or the provided default value. This useful for optional parameters of functions.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>value</strong>: any</span> - the original value<br><span class='parameter'><strong>defaultValue</strong>: any</span> - the default value<br></div></div><hr></div><div class='function_block'><h3 id='J'>isArray</h3><pre class='signature'><code class='language-js'><strong>isArray</strong>(value)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>value</strong>: any</span><br></div><h4>Returns</h4><div class='parameters'><span class='parameter'>any</span> - true if the given value is an array, false otherwise<br></div></div><hr></div><div class='function_block'><h3 id='K'>isDebug</h3><pre class='signature'><code class='language-js'><strong>isDebug</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='L'>isUndefined</h3><pre class='signature'><code class='language-js'><strong>isUndefined</strong>(value)</code></pre><div class='function_content'><p>Temporary method that returns true if the given value is undefined or null,<br>to be used while WeaverGenerator does not support returning undefined from Java.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>value</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='M'>notImplemented</h3><pre class='signature'><code class='language-js'><strong>notImplemented</strong>(functionName)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>functionName</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='N'>setDebug</h3><pre class='signature'><code class='language-js'><strong>setDebug</strong>(value)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>value</strong>: any</span><br></div></div><hr></div></div>
     		<!-- <iframe id="doc_frame" src=""></iframe> -->
     	</div>
 	</div>    
     	
 		 <button onclick="goToTop()" id="topButton"><i class='fas fa-angle-double-up'></i></button> 
 	
-  <script src="jquery-3.2.1.min.js"></script>
+  <script src="jquery-3.6.4.min.js"></script>
   <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   <script src="JsDoc.js"></script>
 </body>
