@@ -16,7 +16,6 @@ class CaseData extends CfgNodeData {
   }
 
   toString() {
-    
     return (this.case.children.length > 0) ? "case(" + this.case.children[0].code + ")" : "default";
   }
 
