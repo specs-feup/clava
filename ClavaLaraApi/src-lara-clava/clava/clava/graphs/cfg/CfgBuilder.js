@@ -61,6 +61,11 @@ class CfgBuilder {
    */
   #nextNodes;
 
+  /**
+   * Creates a new instance of the CfgBuilder class
+   * @param {joinpoint} $jp 
+   * @param {boolean} deterministicIds 
+   */
   constructor($jp, deterministicIds = false) {
     this.#jp = $jp;
     this.#deterministicIds = deterministicIds;
@@ -92,17 +97,30 @@ class CfgBuilder {
     this.#nextNodes = new NextCfgNode(this.#jp, this.#nodes, this.#endNode);
   }
 
+  /**
+   * Returns the next id that will be used to identify a graph node
+   */
   #nextId() {
     const nextId = "id_" + this.#currentId;
     this.#currentId++;
     return nextId;
   }
 
+  /**
+   * Connects two nodes using a directed edge
+   * @param {Cytoscape.node} source starting point from which the edge originates
+   * @param {Cytoscape.node} target destination point to which the edge points
+   * @param {CfgEdgeType} edgeType the edge label that connects
+   */
   #addEdge(source, target, edgeType) {
     // Add edge
     Graphs.addEdge(this.#graph, source, target, new CfgEdge(edgeType));
   }
 
+  /**
+   * Builds the control flow graph
+   * @returns {Array} a array that includes the built graph, the nodes, the start and end nodes
+   */
   build() {
     this._addAuxComments();
     this._createNodes();
@@ -120,6 +138,9 @@ class CfgBuilder {
     return [this.#graph, this.#nodes, this.#startNode, this.#endNode];
   }
 
+  /**
+   * Inserts comments that specify the beginning and end of a scope
+   */
   _addAuxComments() {
     for (const $currentJp of this.#jp.descendants) {
       if ($currentJp.instanceOf("scope")) {
@@ -158,6 +179,9 @@ class CfgBuilder {
     }
   }
 
+  /**
+   * Connects leader statement nodes according to their type
+   */
   _connectNodes() {
     // Connect start
     let startAstNode = this.#jp;
