@@ -34,6 +34,10 @@ class StaticCallGraph {
     return new StaticCallGraph(graph, builder.nodes);
   }
 
+  get nani() {
+    return "nani";
+  }
+
   get graph() {
     return this.#graph;
   }
