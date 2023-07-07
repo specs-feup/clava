@@ -13,13 +13,16 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.util.SpecsCheck;
 
 /**
  * Represents a switch case.
@@ -36,4 +39,45 @@ public abstract class SwitchCase extends Stmt {
     public Optional<Stmt> getSubStmt() {
         return ClavaNodes.nextNode(this).map(node -> (Stmt) node);
     }
+
+    public boolean isEmptyCase() {
+        var nextStmt = getSubStmt().orElse(null);
+        SpecsCheck.checkNotNull(nextStmt, () -> "Case has no sub statement, is this correct?");
+
+        return nextStmt instanceof SwitchCase;
+    }
+
+    /**
+     * 
+     * @return the next instruction that is not a case statement, or null if none is found (is it possible to return
+     *         null?)
+     */
+    public Stmt nextExecutedInstruction() {
+        var nextNode = ClavaNodes.nextNode(this).orElse(null);
+        while (nextNode instanceof SwitchCase) {
+            nextNode = ClavaNodes.nextNode(nextNode).orElse(null);
+        }
+
+        return (Stmt) nextNode;
+    }
+
+    /**
+     * 
+     * @return the instructions that are associated with this case in the source code. This does not represent what
+     *         instructions are actually executed (e.g., if a case does not have a break, does not show instructions of
+     *         the next case)
+     */
+    public List<Stmt> getInstructions() {
+        var instructions = new ArrayList<Stmt>();
+        var nextNode = ClavaNodes.nextNode(this).orElse(null);
+
+        while (nextNode != null && !(nextNode instanceof SwitchCase)) {
+            instructions.add((Stmt) nextNode);
+            nextNode = ClavaNodes.nextNode(nextNode).orElse(null);
+        }
+
+        return instructions;
+    }
+
+    public abstract boolean isDefaultCase();
 }

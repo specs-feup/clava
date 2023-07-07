@@ -106,8 +106,6 @@
 </ul><h2>Clava API</h2><ul><li>
 <a onclick="saveScroll()"  href="clava.Clava.html">clava.Clava</a></li>
 <li>
-<a onclick="saveScroll()"  href="clava.ClavaAspects.html">clava.ClavaAspects</a></li>
-<li>
 <a onclick="saveScroll()"  href="clava.ClavaCode.html">clava.ClavaCode</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.ClavaJoinPoints.html">clava.ClavaJoinPoints</a></li>
@@ -221,6 +219,8 @@
 <a onclick="saveScroll()"  href="clava.code.GlobalVariable.html">clava.code.GlobalVariable</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.code.Inliner.html">clava.code.Inliner</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.code.Outliner.html">clava.code.Outliner</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.code.RemoveShadowing.html">clava.code.RemoveShadowing</a></li>
 <li>
@@ -350,6 +350,12 @@
 <li>
 <a onclick="saveScroll()"  href="clava.uve.UVE.html">clava.uve.UVE</a></li>
 </ul><h2>LARA API</h2><ul><li>
+<a onclick="saveScroll()"  href="core.html">core</a></li>
+<li>
+<a onclick="saveScroll()"  href="core.coretest.html">core.coretest</a></li>
+<li>
+<a onclick="saveScroll()"  href="core.output.html">core.output</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.Check.html">lara.Check</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.Collections.html">lara.Collections</a></li>
@@ -414,6 +420,12 @@
 <li>
 <a onclick="saveScroll()"  href="lara.code.Timer.html">lara.code.Timer</a></li>
 <li>
+<a onclick="saveScroll()"  href="lara.core.JavaTypes.html">lara.core.JavaTypes</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.core.LaraCore.html">lara.core.LaraCore</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.core.output.html">lara.core.output</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.dse.DseLoop.html">lara.dse.DseLoop</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.dse.DseValues.html">lara.dse.DseValues</a></li>
@@ -462,19 +474,21 @@
 <li>
 <a onclick="saveScroll()"  href="lara.mutation.Mutator.html">lara.mutation.Mutator</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.AggregatePassResult.html">lara.pass.AggregatePassResult</a></li>
+<a onclick="saveScroll()"  href="lara.pass.AdapterPass.html">lara.pass.AdapterPass</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.pass.Pass.html">lara.pass.Pass</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.PassApplyArg.html">lara.pass.PassApplyArg</a></li>
-<li>
-<a onclick="saveScroll()"  href="lara.pass.PassResult.html">lara.pass.PassResult</a></li>
-<li>
 <a onclick="saveScroll()"  href="lara.pass.PassTransformationError.html">lara.pass.PassTransformationError</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.PassTransformationResult.html">lara.pass.PassTransformationResult</a></li>
+<a onclick="saveScroll()"  href="lara.pass.SimplePass.html">lara.pass.SimplePass</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.Passes.html">lara.pass.Passes</a></li>
+<a onclick="saveScroll()"  href="lara.pass.composition.PassApplyArg.html">lara.pass.composition.PassApplyArg</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.composition.Passes.html">lara.pass.composition.Passes</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.results.AggregatePassResult.html">lara.pass.results.AggregatePassResult</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.results.PassResult.html">lara.pass.results.PassResult</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.tool.Tool.html">lara.tool.Tool</a></li>
 <li>
@@ -507,6 +521,8 @@
 <a onclick="saveScroll()"  href="lara.util.DataStore.html">lara.util.DataStore</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.util.IdGenerator.html">lara.util.IdGenerator</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.util.JavaTypes.html">lara.util.JavaTypes</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.util.JpFilter.html">lara.util.JpFilter</a></li>
 <li>
@@ -664,16 +680,16 @@
 </ul></div> 
     	<div id="column2">
     		<div id="doc_content"><div id='toc_container'><p class='toc_title'><span style="font-weight:normal"><i>(.js)</i></span><br>
-laraImport("lara.pass.PassResult");<br><br>
+laraImport("lara.pass.composition.Passes");<br><br>
 <span style="font-weight:normal"><i>(.lara)</i></span><br>
-import lara.pass.PassResult;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>PassResult</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>PassResult</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Instance Members</div><li><em><a href='#C'>appliedPass()</a></em></li><li><em><a href='#D'>appliedPass()</a></em></li><li><em><a href='#E'>constructor()</a></em></li><li><em><a href='#F'>insertedLiteralCode()</a></em></li><li><em><a href='#G'>insertedLiteralCode()</a></em></li><li><em><a href='#H'>isUndefined()</a></em></li><li><em><a href='#I'>isUndefined()</a></em></li><li><em><a href='#J'>location()</a></em></li><li><em><a href='#K'>location()</a></em></li><li><em><a href='#L'>name()</a></em></li><li><em><a href='#M'>toString()</a></em></li></ul></ul></div><h1 id='A'>PassResult</h1><h2>Constructor</h2><div class='function_block'><h3 id='B'>PassResult</h3><pre class='signature'><code class='language-js'>new <strong>PassResult</strong>()</code></pre><div class='function_content'><p>The result of a Lara transformation pass.</p></div><hr></div><h2>Instance Members</h2><div class='function_block'><h3 id='C'>appliedPass</h3><pre class='signature'><code class='language-js'><strong>appliedPass</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='D'>appliedPass</h3><pre class='signature'><code class='language-js'><strong>appliedPass</strong>(newValue)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>newValue</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='E'>constructor</h3><pre class='signature'><code class='language-js'><strong>constructor</strong>(name, [params])</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>name</strong>: string</span> - Name of the pass this result came from<br><span class='parameter'><strong>params</strong>: PassResultParams</span> - Properties of a defined PassResult <em>(optional)</em><br></div></div><hr></div><div class='function_block'><h3 id='F'>insertedLiteralCode</h3><pre class='signature'><code class='language-js'><strong>insertedLiteralCode</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='G'>insertedLiteralCode</h3><pre class='signature'><code class='language-js'><strong>insertedLiteralCode</strong>(newValue)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>newValue</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='H'>isUndefined</h3><pre class='signature'><code class='language-js'><strong>isUndefined</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='I'>isUndefined</h3><pre class='signature'><code class='language-js'><strong>isUndefined</strong>(newValue)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>newValue</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='J'>location</h3><pre class='signature'><code class='language-js'><strong>location</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='K'>location</h3><pre class='signature'><code class='language-js'><strong>location</strong>(newValue)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>newValue</strong>: unknown</span><br></div></div><hr></div><div class='function_block'><h3 id='L'>name</h3><pre class='signature'><code class='language-js'><strong>name</strong>()</code></pre><div class='function_content'></div><hr></div><div class='function_block'><h3 id='M'>toString</h3><pre class='signature'><code class='language-js'><strong>toString</strong>()</code></pre><div class='function_content'></div><hr></div></div>
+import lara.pass.composition.Passes;</p><ul class='toc_list'><p class='toc_class'>Classes:</p><li class='toc_class_element toc_top_element'><a href='#A'>Passes</a></li><ul class='toc_sublist'><div class='toc_sublist_title'>Constructor</div><li><em><a href='#B'>Passes</a></em></li></ul><ul class='toc_sublist'><div class='toc_sublist_title'>Static Members</div><li><em><a href='#C'>apply()</a></em></li><li><em><a href='#D'>getArgType()</a></em></li></ul></ul></div><h1 id='A'>Passes</h1><div class='function_block'><h3 id='B'>Passes</h3><pre class='signature'><code class='language-js'><strong>Passes</strong></code></pre><div class='function_content'></div><hr></div><h2>Static Members</h2><div class='function_block'><h3 id='C'>apply</h3><pre class='signature'><code class='language-js'><strong>apply</strong>($jp, args)</code></pre><div class='function_content'><p>Applies a sequence of passes.</p><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>$jp</strong>: JoinPoint</span> - Apply pass using this join point as the starting point<br><span class='parameter'><strong>args</strong>: ...</span> - An array or sequence of: 1) Pass instance; 2) Pass class; 3) function that accepts a $jp; 4) An array where the first element is 2) or 3), followed by arguments that are passed as arguments of the function or class constructor.<br></div></div><hr></div><div class='function_block'><h3 id='D'>getArgType</h3><pre class='signature'><code class='language-js'><strong>getArgType</strong>(applyArg)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>applyArg</strong>: unknown</span><br></div></div><hr></div></div>
     		<!-- <iframe id="doc_frame" src=""></iframe> -->
     	</div>
 	</div>    
     	
 		 <button onclick="goToTop()" id="topButton"><i class='fas fa-angle-double-up'></i></button> 
 	
-  <script src="jquery-3.2.1.min.js"></script>
+  <script src="jquery-3.6.4.min.js"></script>
   <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   <script src="JsDoc.js"></script>
 </body>

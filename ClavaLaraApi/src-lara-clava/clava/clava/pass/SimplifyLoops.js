@@ -6,6 +6,7 @@ laraImport("clava.code.DoToWhileStmt");
 laraImport("weaver.Query");
 
 class SimplifyLoops extends Pass {
+
   #statementDecomposer;
   #options;
   #label_suffix = 0;
@@ -22,6 +23,14 @@ class SimplifyLoops extends Pass {
     this.#options["forToWhile"] ??= true;
   }
 
+  /**
+   * @return {string} Name of the pass
+   * @override
+   */
+  get name() {
+    return "SimplifyLoops";
+  }
+
   _apply_impl($jp) {
     let appliedPass = false;
     for (const $loop of this._findLoops($jp)) {
@@ -32,11 +41,7 @@ class SimplifyLoops extends Pass {
       }
     }
 
-    return new PassResult(this.name, {
-      appliedPass,
-      insertedLiteralCode: false,
-      location: $jp.location,
-    });
+    return new PassResult(this, $jp, { appliedPass: appliedPass });
   }
 
   *_findLoops($jp) {

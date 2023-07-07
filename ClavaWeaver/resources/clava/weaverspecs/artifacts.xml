@@ -517,6 +517,22 @@
 		</attribute>
 	</artifact>
 
+	<!-- SWITCH -->
+	<artifact class="switch">
+		<attribute name="hasDefaultCase" type="Boolean" tooltip="true if there is a default case in this switch statement, false otherwise"/>		
+		<attribute name="getDefaultCase" type="case" tooltip="the default case statement of this switch statement or undefined if it does not have a default case"/>				
+		<attribute name="cases" type="case[]" tooltip="the case statements inside this switch"/>				
+		</artifact>
+
+	<!-- CASE -->
+	<artifact class="case">
+		<attribute name="isDefault" type="Boolean" tooltip="true if this is a default case, false otherwise"/>		
+		<attribute name="isEmpty" type="Boolean" tooltip="true if this case does not contain instructions (i.e., it is directly above another case), false otherwise"/>				
+		<attribute name="nextInstruction" type="statement" tooltip="the first statement that is not a case that will be executed by this case statement"/>						
+		<attribute name="instructions" type="statement[]" tooltip="the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)"/>						
+	</artifact>
+	
+	
 	<!-- STATEMENT -->
 	<artifact class="statement">
 		<attribute name="isFirst" type="Boolean" />

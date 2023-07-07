@@ -3,7 +3,7 @@ laraImport("clava.pass.SimplifySelectionStmts");
 laraImport("clava.code.SimplifyAssignment");
 laraImport("clava.code.StatementDecomposer");
 
-laraImport("lara.pass.Passes");
+laraImport("lara.pass.composition.Passes");
 
 laraImport("weaver.Query");
 

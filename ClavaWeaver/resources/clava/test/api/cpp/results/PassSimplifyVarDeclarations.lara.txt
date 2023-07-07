@@ -1,4 +1,4 @@
-Result: AggregatePassResult { pass: DecomposeVarDeclarations, casesFound: 4, casesApplied: 4, transformationErrors: [0 errors], insertedLiteralCode: false }
+Result: PassResult { name: DecomposeVarDeclarations; appliedPass: true; insertedLiteralCode: false; casesFound: 4; casesApplied: 4; casesFailed: 0 }
 /**** File 'pass_simplify_var_declarations.cpp' ****/
 
 int main() {
