@@ -179,6 +179,223 @@ class CfgBuilder {
     }
   }
 
+  #connectIfNode(node) {
+    const ifStmt = node.data().if;
+
+    const thenStmt = ifStmt.then;
+    const thenNode = this.#nodes.get(thenStmt.astId);
+
+    this.#addEdge(node, thenNode, CfgEdgeType.TRUE);
+
+    const elseStmt = ifStmt.else;
+
+    if (elseStmt !== undefined) {
+      const elseNode = this.#nodes.get(elseStmt.astId);
+      this.#addEdge(node, elseNode, CfgEdgeType.FALSE);
+    } else {
+      // Usually there should always be a sibling, because of inserted comments
+      // However, if an arbitary statement is given as the starting point,
+      // sometimes there might not be nothing after. In this case, connect to the
+      // end node.
+      const afterNode = this.#nextNodes.nextExecutedNode(ifStmt);
+
+      // Add edge
+      this.#addEdge(node, afterNode, CfgEdgeType.FALSE);
+    }
+  }
+
+  #connectLoopNode(node) {
+    const $loop = node.data().loop;
+
+    let afterStmt = undefined;
+
+    switch ($loop.kind) {
+      case "for":
+        afterStmt = $loop.init;
+        break;
+      case "while":
+        afterStmt = $loop.cond;
+        break;
+      case "dowhile":
+        afterStmt = $loop.body;
+        break;
+      default:
+        throw new Error("Case not defined for loops of kind " + $loop.kind);
+    }
+
+    const afterNode = this.#nodes.get(afterStmt.astId) ?? this.#endNode;
+
+    this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+  }
+
+  #connectCondNode(node) {
+     // Get kind of loop
+     const $condStmt = node.data().nodeStmt;
+     const $loop = $condStmt.parent;
+     isJoinPoint($loop, "loop");
+
+     const kind = $loop.kind;
+     // True - first stmt of the loop body
+     const trueNode = this.#nodes.get($loop.body.astId) ?? this.#endNode;
+     this.#addEdge(node, trueNode, CfgEdgeType.TRUE);
+
+     // False - next stmt of the loop
+     const falseNode = this.#nextNodes.nextExecutedNode($loop);
+
+     // Create edge
+     this.#addEdge(node, falseNode, CfgEdgeType.FALSE);
+  }
+
+  #connectBreakNode(node) {
+    const $breakStmt = node.data().nodeStmt;
+    const $loop = $breakStmt.ancestor("loop");
+    const $switch = $breakStmt.ancestor("switch");
+    const loopDepth = ($loop !== undefined) ? $loop.depth : -1;
+    const switchDepth = ($switch !== undefined) ? $switch.depth : -1;
+
+    if (loopDepth > switchDepth) { // Statement is used to terminate a loop
+      const postBreakNode = this.#nextNodes.nextExecutedNode($loop);
+      this.#addEdge(node, postBreakNode, CfgEdgeType.UNCONDITIONAL);
+    }
+
+    else { // Statement is used to exit a switch block
+      const postSwitchNode = this.#nextNodes.nextExecutedNode($switch);
+      this.#addEdge(node, postSwitchNode, CfgEdgeType.UNCONDITIONAL); 
+    }
+  }
+
+  #connectContinueNode(node) {
+    const $continueStmt = node.data().nodeStmt;
+    const $loop = $continueStmt.ancestor("loop");
+    
+    const $afterStmt = ($loop.kind === "for") ? $loop.step : $loop.cond;
+    const afterNode = this.#nodes.get($afterStmt.astId) ?? this.#endNode; 
+
+    this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+  }
+
+  #connectSwitchNode(node) {
+    const $switchStmt = node.data().switch;
+    const $switchStatements = CfgUtils.getSwitchStmts($switchStmt);
+
+    let firstCaseNode = undefined;
+    for (let i=0; i < $switchStatements.length; i++) {
+      const currentStmtNode = this.#nodes.get($switchStatements[i].astId);
+
+      if (currentStmtNode.data().type === CfgNodeType.CASE) {
+        firstCaseNode = currentStmtNode;
+        break;
+      }
+    }
+
+    this.#addEdge(node, firstCaseNode, CfgEdgeType.UNCONDITIONAL);
+  }
+
+  #connectCaseNode(node) {
+    const $caseStmt = node.data().case;
+    const $switchStmt = $caseStmt.ancestor("switch");
+    const postSwitchNode = this.#nextNodes.nextExecutedNode($switchStmt);
+
+    const isDefaultCase = CfgUtils.isDefaultCaseStmt($caseStmt);
+    const $nextCaseStmt = CfgUtils.getNextCaseStmt($caseStmt, this.#nodes);
+    const nextCaseNode = ($nextCaseStmt !== undefined) ? this.#nodes.get($nextCaseStmt.astId) : undefined;
+    
+    if (nextCaseNode !== undefined) { // Not the last case
+      const isNextCaseDefault = CfgUtils.isDefaultCaseStmt($nextCaseStmt);
+      const $nextNextCaseStmt = CfgUtils.getNextCaseStmt($nextCaseStmt, this.#nodes);
+      const nextNextCaseNode = ($nextNextCaseStmt !== undefined) ? this.#nodes.get($nextNextCaseStmt.astId) : undefined;
+
+      if(isNextCaseDefault && nextNextCaseNode !== undefined) // Next case is an intermediate default case
+        this.#addEdge(node, nextNextCaseNode, CfgEdgeType.FALSE); // Connect node with the CASE node following the intermediate default 
+      else if (!isDefaultCase) // Not an intermediate default case
+        this.#addEdge(node, nextCaseNode, CfgEdgeType.FALSE);
+    }
+    else if (!isDefaultCase) {
+      const hasIntermediateDefaultCase = CfgUtils.hasIntermediateDefaultCase($switchStmt, this.#nodes);
+
+      if (hasIntermediateDefaultCase) {
+        const defaultCaseNode = CfgUtils.getDefaultCaseNode($switchStmt, this.#nodes);
+        this.#addEdge(node, defaultCaseNode, CfgEdgeType.FALSE);
+      }
+      else
+        this.#addEdge(node, postSwitchNode, CfgEdgeType.FALSE);
+    }
+
+    // Connect the node with the first instruction to be executed
+    const firstExecutedInst = CfgUtils.getFirstInst($caseStmt, this.#nodes);
+    if (isDefaultCase) 
+      this.#addEdge(node, firstExecutedInst, CfgEdgeType.UNCONDITIONAL); 
+    else
+      this.#addEdge(node, firstExecutedInst, CfgEdgeType.TRUE); 
+      
+    /* 
+    If the node has no BREAK statement, is not empty and not the last case, the last 
+    instruction should be connected to the first instruction of the next case */
+    const hasBreak = (CfgUtils.getCaseBreakNode($caseStmt, this.#nodes) !== undefined) ? true : false;
+    const lastExecutedInst = CfgUtils.getLastInst($caseStmt, this.#nodes);
+    if (!hasBreak && lastExecutedInst !== undefined && nextCaseNode !== undefined) 
+      this.#addEdge(lastExecutedInst, CfgUtils.getFirstInst($nextCaseStmt, this.#nodes), CfgEdgeType.UNCONDITIONAL); 
+  }
+
+  #connectInitNode(node) {
+    const $initStmt = node.data().nodeStmt;
+    const $loop = $initStmt.parent;
+    isJoinPoint($loop, "loop");
+    if ($loop.kind !== "for") {
+      throw new Error("Not implemented for loops of kind " + $loop.kind);
+    }
+
+    const $condStmt = $loop.cond;
+    if ($condStmt === undefined) {
+      throw new Error(
+        "Not implemented when for loops do not have a condition statement"
+      );
+    }
+
+    const afterNode = this.#nodes.get($condStmt.astId) ?? this.#endNode;
+    this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+  }
+
+  #connectStepNode(node) {
+    // Get loop
+    const $stepStmt = node.data().nodeStmt;
+    const $loop = $stepStmt.parent;
+    isJoinPoint($loop, "loop");
+    if ($loop.kind !== "for") {
+      throw new Error("Not implemented for loops of kind " + $loop.kind);
+    }
+
+    const $condStmt = $loop.cond;
+    if ($condStmt === undefined) {
+      throw new Error(
+        "Not implemented when for loops do not have a condition statement"
+      );
+    }
+
+    const afterNode = this.#nodes.get($condStmt.astId) ?? this.#endNode;
+    this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+  }
+
+  #connectInstListNode(node) {
+    const $lastStmt = node.data().getLastStmt();
+
+    const afterNode = this.#nextNodes.nextExecutedNode($lastStmt);
+
+    if (afterNode.data().type !== CfgNodeType.CASE)
+      this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+  }
+
+  #connectReturnNode(node) {
+    this.#addEdge(node, this.#endNode, CfgEdgeType.UNCONDITIONAL);
+  }
+
+  #connectScopeNode(node) {
+    const $scope = node.data().scope;
+
+    // Scope connects to its own first statement that will be an INST_LIST
+    let afterNode = this.#nodes.get($scope.firstStmt.astId);
+    this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+  }
   /**
    * Connects leader statement nodes according to their type
    */
@@ -205,9 +422,8 @@ class CfgBuilder {
       const node = this.#nodes.get(astId);
 
       // Only add connections for astIds of leader statements
-      if (node.data().nodeStmt.astId !== astId) {
+      if (node.data().nodeStmt.astId !== astId)
         continue;
-      }
 
       const nodeType = node.data().type;
 
@@ -216,231 +432,45 @@ class CfgBuilder {
         //continue;
       }
 
-      // IF NODE - TODO, adapt to specific node data
-      if (nodeType === CfgNodeType.IF) {
-        const ifStmt = node.data().if;
-
-        const thenStmt = ifStmt.then;
-        const thenNode = this.#nodes.get(thenStmt.astId);
-
-        this.#addEdge(node, thenNode, CfgEdgeType.TRUE);
-
-        const elseStmt = ifStmt.else;
-
-        if (elseStmt !== undefined) {
-          const elseNode = this.#nodes.get(elseStmt.astId);
-          this.#addEdge(node, elseNode, CfgEdgeType.FALSE);
-        } else {
-          // Usually there should always be a sibling, because of inserted comments
-          // However, if an arbitary statement is given as the starting point,
-          // sometimes there might not be nothing after. In this case, connect to the
-          // end node.
-          const afterNode = this.#nextNodes.nextExecutedNode(ifStmt);
-
-          // Add edge
-          this.#addEdge(node, afterNode, CfgEdgeType.FALSE);
-        }
-      }
-
-      if (nodeType === CfgNodeType.LOOP) {
-        const $loop = node.data().loop;
-
-        let afterStmt = undefined;
-
-        switch ($loop.kind) {
-          case "for":
-            afterStmt = $loop.init;
-            break;
-          case "while":
-            afterStmt = $loop.cond;
-            break;
-          case "dowhile":
-            afterStmt = $loop.body;
-            break;
-          default:
-            throw new Error("Case not defined for loops of kind " + $loop.kind);
-        }
-
-        const afterNode = this.#nodes.get(afterStmt.astId) ?? this.#endNode;
-
-        this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
-      }
-
-      if (nodeType === CfgNodeType.COND) {
-        // Get kind of loop
-        const $condStmt = node.data().nodeStmt;
-        const $loop = $condStmt.parent;
-        isJoinPoint($loop, "loop");
-
-        const kind = $loop.kind;
-        // True - first stmt of the loop body
-        const trueNode = this.#nodes.get($loop.body.astId) ?? this.#endNode;
-        this.#addEdge(node, trueNode, CfgEdgeType.TRUE);
-
-        // False - next stmt of the loop
-        const falseNode = this.#nextNodes.nextExecutedNode($loop);
-
-        // Create edge
-        this.#addEdge(node, falseNode, CfgEdgeType.FALSE);
-      }
-      
-      if (nodeType === CfgNodeType.BREAK) {
-        const $breakStmt = node.data().nodeStmt;
-        const $loop = $breakStmt.ancestor("loop");
-        const $switch = $breakStmt.ancestor("switch");
-        const loopDepth = ($loop !== undefined) ? $loop.depth : -1;
-        const switchDepth = ($switch !== undefined) ? $switch.depth : -1;
-
-        if (loopDepth > switchDepth) { // Statement is used to terminate a loop
-          const postBreakNode = this.#nextNodes.nextExecutedNode($loop);
-          this.#addEdge(node, postBreakNode, CfgEdgeType.UNCONDITIONAL);
-        }
-
-        else { // Statement is used to exit a switch block
-          const postSwitchNode = this.#nextNodes.nextExecutedNode($switch);
-          this.#addEdge(node, postSwitchNode, CfgEdgeType.UNCONDITIONAL); 
-        }
-      }
-
-      if (nodeType === CfgNodeType.CONTINUE) {
-        const $continueStmt = node.data().nodeStmt;
-        const $loop = $continueStmt.ancestor("loop");
-        
-        const $afterStmt = ($loop.kind === "for") ? $loop.step : $loop.cond;
-        const afterNode = this.#nodes.get($afterStmt.astId) ?? this.#endNode; 
-
-        this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
-      }
-
-      if (nodeType === CfgNodeType.SWITCH) {
-        const $switchStmt = node.data().switch;
-        const $switchStatements = CfgUtils.getSwitchStmts($switchStmt);
-
-        let firstCaseNode = undefined;
-        for (let i=0; i < $switchStatements.length; i++) {
-          const currentStmtNode = this.#nodes.get($switchStatements[i].astId);
-
-          if (currentStmtNode.data().type === CfgNodeType.CASE) {
-            firstCaseNode = currentStmtNode;
-            break;
-          }
-        }
-
-        this.#addEdge(node, firstCaseNode, CfgEdgeType.UNCONDITIONAL);
-      }
-      
-      if (nodeType === CfgNodeType.CASE) {
-        const $caseStmt = node.data().case;
-        const $switchStmt = $caseStmt.ancestor("switch");
-        const postSwitchNode = this.#nextNodes.nextExecutedNode($switchStmt);
-
-        const isDefaultCase = CfgUtils.isDefaultCaseStmt($caseStmt);
-        const $nextCaseStmt = CfgUtils.getNextCaseStmt($caseStmt, this.#nodes);
-        const nextCaseNode = ($nextCaseStmt !== undefined) ? this.#nodes.get($nextCaseStmt.astId) : undefined;
-        
-        if (nextCaseNode !== undefined) { // Not the last case
-          const isNextCaseDefault = CfgUtils.isDefaultCaseStmt($nextCaseStmt);
-          const $nextNextCaseStmt = CfgUtils.getNextCaseStmt($nextCaseStmt, this.#nodes);
-          const nextNextCaseNode = ($nextNextCaseStmt !== undefined) ? this.#nodes.get($nextNextCaseStmt.astId) : undefined;
-
-          if(isNextCaseDefault && nextNextCaseNode !== undefined) // Next case is an intermediate default case
-            this.#addEdge(node, nextNextCaseNode, CfgEdgeType.FALSE); // Connect node with the CASE node following the intermediate default 
-          else if (!isDefaultCase) // Not an intermediate default case
-            this.#addEdge(node, nextCaseNode, CfgEdgeType.FALSE);
-        }
-        else if (!isDefaultCase) {
-          const hasIntermediateDefaultCase = CfgUtils.hasIntermediateDefaultCase($switchStmt, this.#nodes);
-
-          if (hasIntermediateDefaultCase) {
-            const defaultCaseNode = CfgUtils.getDefaultCaseNode($switchStmt, this.#nodes);
-            this.#addEdge(node, defaultCaseNode, CfgEdgeType.FALSE);
-          }
-          else
-            this.#addEdge(node, postSwitchNode, CfgEdgeType.FALSE);
-        }
-
-        // Connect the node with the first instruction to be executed
-        const firstExecutedInst = CfgUtils.getFirstInst($caseStmt, this.#nodes);
-        if (isDefaultCase) 
-          this.#addEdge(node, firstExecutedInst, CfgEdgeType.UNCONDITIONAL); 
-        else
-          this.#addEdge(node, firstExecutedInst, CfgEdgeType.TRUE); 
-          
-        /* 
-        If the node has no BREAK statement, is not empty and not the last case, the last 
-        instruction should be connected to the first instruction of the next case */
-        const hasBreak = (CfgUtils.getCaseBreakNode($caseStmt, this.#nodes) !== undefined) ? true : false;
-        const lastExecutedInst = CfgUtils.getLastInst($caseStmt, this.#nodes);
-        if (!hasBreak && lastExecutedInst !== undefined && nextCaseNode !== undefined) 
-          this.#addEdge(lastExecutedInst, CfgUtils.getFirstInst($nextCaseStmt, this.#nodes), CfgEdgeType.UNCONDITIONAL); 
-      }
-
-      if (nodeType === CfgNodeType.INIT) {
-        // Get loop
-        const $initStmt = node.data().nodeStmt;
-        const $loop = $initStmt.parent;
-        isJoinPoint($loop, "loop");
-        if ($loop.kind !== "for") {
-          throw new Error("Not implemented for loops of kind " + $loop.kind);
-        }
-
-        const $condStmt = $loop.cond;
-        if ($condStmt === undefined) {
-          throw new Error(
-            "Not implemented when for loops do not have a condition statement"
-          );
-        }
-
-        const afterNode = this.#nodes.get($condStmt.astId) ?? this.#endNode;
-        this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
-      }
-
-      if (nodeType === CfgNodeType.STEP) {
-        // Get loop
-        const $stepStmt = node.data().nodeStmt;
-        const $loop = $stepStmt.parent;
-        isJoinPoint($loop, "loop");
-        if ($loop.kind !== "for") {
-          throw new Error("Not implemented for loops of kind " + $loop.kind);
-        }
-
-        const $condStmt = $loop.cond;
-        if ($condStmt === undefined) {
-          throw new Error(
-            "Not implemented when for loops do not have a condition statement"
-          );
-        }
-
-        const afterNode = this.#nodes.get($condStmt.astId) ?? this.#endNode;
-        this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
-      }
-
-      // INST_LIST NODE
-      if (nodeType === CfgNodeType.INST_LIST) {
-        const $lastStmt = node.data().getLastStmt();
-
-        const afterNode = this.#nextNodes.nextExecutedNode($lastStmt);
-
-        if (afterNode.data().type !== CfgNodeType.CASE)
-          this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
-      }
-
-      // RETURN NODE
-      if (nodeType === CfgNodeType.RETURN) {
-        this.#addEdge(node, this.#endNode, CfgEdgeType.UNCONDITIONAL);
-      }
-
-      // SCOPE_NODEs
-      if (
-        nodeType === CfgNodeType.SCOPE ||
-        nodeType === CfgNodeType.THEN ||
-        nodeType === CfgNodeType.ELSE
-      ) {
-        const $scope = node.data().scope;
-
-        // Scope connects to its own first statement that will be an INST_LIST
-        let afterNode = this.#nodes.get($scope.firstStmt.astId);
-        this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+      switch(nodeType) {
+        case CfgNodeType.IF:
+          this.#connectIfNode(node); 
+        break;
+        case CfgNodeType.LOOP:
+          this.#connectLoopNode(node); 
+        break;
+        case CfgNodeType.COND:
+          this.#connectCondNode(node); 
+        break;
+        case CfgNodeType.BREAK:
+          this.#connectBreakNode(node); 
+        break;
+        case CfgNodeType.CONTINUE:
+          this.#connectContinueNode(node); 
+        break;
+        case CfgNodeType.SWITCH:
+          this.#connectSwitchNode(node); 
+        break;
+        case CfgNodeType.CASE:
+          this.#connectCaseNode(node); 
+        break;
+        case CfgNodeType.INIT:
+          this.#connectInitNode(node); 
+        break;
+        case CfgNodeType.STEP:
+          this.#connectStepNode(node); 
+        break;
+        case CfgNodeType.INST_LIST:
+          this.#connectInstListNode(node); 
+        break;
+        case CfgNodeType.RETURN:
+          this.#connectReturnNode(node); 
+        break;
+        case CfgNodeType.SCOPE:
+        case CfgNodeType.THEN:
+        case CfgNodeType.ELSE:
+          this.#connectScopeNode(node); 
+        break;
       }
     }
   }
