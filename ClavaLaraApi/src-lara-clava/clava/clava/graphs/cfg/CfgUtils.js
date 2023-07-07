@@ -3,6 +3,7 @@ laraImport("lara.Check");
 
 class CfgUtils {
   /**
+   * @param {joinpoint} $stmt the statement join point
    * @return {boolean} true if the statement is considered a leader
    */
   static isLeader($stmt) {
@@ -13,6 +14,7 @@ class CfgUtils {
 
   /**
    * Returns the type of graph node based on the type of the leader statement. If this statement is not a leader, returns undefined
+   * @param {joinpoint} $stmt the statement join point
    */
   static getNodeType($stmt) {
     // If stmt
@@ -25,19 +27,22 @@ class CfgUtils {
       return CfgNodeType.LOOP;
     }
 
+    // Break stmt
     if ($stmt.instanceOf("break")) {
       return CfgNodeType.BREAK;
     }
 
+    // Continue stmt
     if ($stmt.instanceOf("continue")) {
       return CfgNodeType.CONTINUE;
     }
 
-    
+    // Switch stmt
     if ($stmt.instanceOf("switch")) {
       return CfgNodeType.SWITCH;
     }
 
+    //Case stmt
     if ($stmt.instanceOf("case")) {
       return CfgNodeType.CASE;
     }
@@ -138,10 +143,19 @@ class CfgUtils {
     return target;
   }
 
+  /**
+   * Returns all the statements of a switch
+   * @param {joinpoint} $switchStmt the switch statement join point
+   */
   static getSwitchStmts($switchStmt) {
     return $switchStmt.children[1].children;
   }
 
+  /**
+   * Returns the default case node of a switch. If it does not contain a default case, returns undefined
+   * @param {joinpoint} $switchStmt the switch statement join point
+   * @param {Map} nodes maps statements to graph nodes
+   */
   static getDefaultCaseNode($switchStmt, nodes) {
     const $switchStmts = this.getSwitchStmts($switchStmt);
 
@@ -154,6 +168,11 @@ class CfgUtils {
     return undefined;
   }
 
+  /**
+   * @param {joinpoint} $switchStmt the switch statement join point
+   * @param {Map} nodes maps statements to graph nodes
+   * @return {boolean} true if the default case appears in the middle of the switch statement, rather than at the end 
+   */
   static hasIntermediateDefaultCase($switchStmt, nodes) {
     const $switchStmts = this.getSwitchStmts($switchStmt);
 
@@ -170,10 +189,20 @@ class CfgUtils {
     return false;
   }
 
+  /**
+   * @param {joinpoint} $switchStmt the switch statement join point
+   * @param {Map} nodes maps statements to graph nodes
+   * @return {boolean} true if the statement is a default case
+   */
   static isDefaultCaseStmt($caseStmt) {
     return $caseStmt.children.length === 0;
   }
 
+  /**
+   * @param {joinpoint} $switchStmt the switch statement join point
+   * @param {Map} nodes maps statements to graph nodes
+   * @return {boolean} true if the default case appears in the middle of the switch statement, rather than at the end 
+   */
   static getCaseStmtIndex($caseStmt, nodes) {
     const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
     let caseIndex = undefined;
@@ -190,6 +219,11 @@ class CfgUtils {
     return caseIndex;
   }
 
+  /**
+   * @param {joinpoint} $caseStmt is the case statement join point
+   * @param {Map} nodes maps statements to graph nodes
+   * @return {boolean} true if the case statement does not contain any code or statements
+   */
   static isEmptyCase($caseStmt, nodes) {
     const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
     const caseIndex = this.getCaseStmtIndex($caseStmt, nodes);
@@ -206,6 +240,11 @@ class CfgUtils {
     return isEmptyCase;
   }
 
+  /**
+   * Returns the case statement that  @param $caseStmt
+   * @param {joinpoint} $caseStmt is the case statement join point
+   * @param {Map} nodes maps statements to graph nodes
+   */
   static getNextCaseStmt($caseStmt, nodes) {
     const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
     const caseIndex = this.getCaseStmtIndex($caseStmt, nodes);
