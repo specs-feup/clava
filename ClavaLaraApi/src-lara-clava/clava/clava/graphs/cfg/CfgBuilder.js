@@ -64,7 +64,7 @@ class CfgBuilder {
   /**
    * Creates a new instance of the CfgBuilder class
    * @param {joinpoint} $jp 
-   * @param {boolean} deterministicIds 
+   * @param {boolean} deterministicIds If true, uses deterministic ids for the graph ids (e.g. id_0, id_1...). Otherwise, uses $jp.astId whenever possible
    */
   constructor($jp, deterministicIds = false) {
     this.#jp = $jp;
@@ -179,6 +179,10 @@ class CfgBuilder {
     }
   }
 
+  /**
+   * Connects a node associated with a statement that is an instance of a "if" statement.
+   * @param {Cytoscape.node} node node whose type is "IF"
+   */
   #connectIfNode(node) {
     const ifStmt = node.data().if;
 
@@ -204,6 +208,10 @@ class CfgBuilder {
     }
   }
 
+  /**
+   * Connects a node associated with a statement that is an instance of a "loop" statement.
+   * @param {Cytoscape.node} node node whose type is "LOOP"
+   */
   #connectLoopNode(node) {
     const $loop = node.data().loop;
 
@@ -228,6 +236,10 @@ class CfgBuilder {
     this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
   }
 
+   /**
+   * Connects a node associated with a statement that is part of a loop header and corresponds to the loop condition
+   * @param {Cytoscape.node} node node whose type is "COND"
+   */
   #connectCondNode(node) {
      // Get kind of loop
      const $condStmt = node.data().nodeStmt;
@@ -246,6 +258,10 @@ class CfgBuilder {
      this.#addEdge(node, falseNode, CfgEdgeType.FALSE);
   }
 
+   /**
+   * Connects a node associated with a statement that is an instance of a "break" statement.
+   * @param {Cytoscape.node} node node whose type is "BREAK"
+   */
   #connectBreakNode(node) {
     const $breakStmt = node.data().nodeStmt;
     const $loop = $breakStmt.ancestor("loop");
@@ -263,6 +279,10 @@ class CfgBuilder {
     this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL); 
   }
 
+   /**
+   * Connects a node associated with a statement that is an instance of a "continue" statement.
+   * @param {Cytoscape.node} node node whose type is "CONTINUE"
+   */
   #connectContinueNode(node) {
     const $continueStmt = node.data().nodeStmt;
     const $loop = $continueStmt.ancestor("loop");
@@ -273,6 +293,10 @@ class CfgBuilder {
     this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
   }
 
+  /**
+   * Connects a node associated with a statement that is an instance of a "switch" statement.
+   * @param {Cytoscape.node} node node whose type is "SWITCH"
+   */
   #connectSwitchNode(node) {
     const $switchStmt = node.data().switch;
     let firstReachedCase = undefined;
@@ -288,6 +312,10 @@ class CfgBuilder {
     this.#addEdge(node, firstReachedCase, CfgEdgeType.UNCONDITIONAL);
   }
 
+  /**
+   * Connects a node associated with a statement that is an instance of a "case" statement.
+   * @param {Cytoscape.node} node node whose type is "CASE"
+   */
   #connectCaseNode(node) {
     const $caseStmt = node.data().case;
     const $switchStmt = $caseStmt.ancestor("switch");
@@ -324,7 +352,11 @@ class CfgBuilder {
         this.#addEdge(node, postSwitchNode, CfgEdgeType.FALSE);
     }
   }
-
+  
+  /**
+   * Connects a node associated with a statement that is part of a loop header and corresponds to the loop initialization
+   * @param {Cytoscape.node} node node whose type is "INIT"
+   */
   #connectInitNode(node) {
     const $initStmt = node.data().nodeStmt;
     const $loop = $initStmt.parent;
@@ -344,6 +376,10 @@ class CfgBuilder {
     this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
   }
 
+  /**
+   * Connects a node associated with a statement that is part of a loop header and corresponds to the loop step
+   * @param {Cytoscape.node} node node whose type is "STEP"
+   */
   #connectStepNode(node) {
     // Get loop
     const $stepStmt = node.data().nodeStmt;
@@ -364,6 +400,9 @@ class CfgBuilder {
     this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
   }
 
+  /**
+   * @param {Cytoscape.node} node node whose type is "INST_LIST"
+   */
   #connectInstListNode(node) {
     const $lastStmt = node.data().getLastStmt();
 
@@ -371,10 +410,18 @@ class CfgBuilder {
     this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
   }
 
+  /**
+   * Connects a node associated with a statement that is an instance of a "return" statement.
+   * @param {Cytoscape.node} node node whose type is "RETURN"
+   */
   #connectReturnNode(node) {
     this.#addEdge(node, this.#endNode, CfgEdgeType.UNCONDITIONAL);
   }
 
+  /**
+   * Connects a node associated with a statement that is an instance of a "scope" statement.
+   * @param {Cytoscape.node} node node whose type is "SCOPE", "THEN" or "ELSE"
+   */
   #connectScopeNode(node) {
     const $scope = node.data().scope;
 
@@ -382,8 +429,9 @@ class CfgBuilder {
     let afterNode = this.#nodes.get($scope.firstStmt.astId);
     this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
   }
+
   /**
-   * Connects leader statement nodes according to their type
+   * Connects the leader statement nodes according to their type
    */
   _connectNodes() {
     // Connect start

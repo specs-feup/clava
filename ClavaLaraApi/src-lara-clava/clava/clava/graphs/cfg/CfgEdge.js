@@ -26,7 +26,7 @@ class CfgEdge extends EdgeData {
 	
 	/**
 	 * 
-	 * @returns string representation of the edge. If it a unconditional edge, an empty string is returned
+	 * @returns string representation of the edge. If it is a unconditional edge, an empty string is returned
 	 */
 	toString() {
 		// If unconditional jump, do not print a label

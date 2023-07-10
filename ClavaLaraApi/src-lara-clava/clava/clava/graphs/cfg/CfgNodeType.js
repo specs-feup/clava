@@ -33,14 +33,25 @@ class CfgNodeType {
 
   #name;
 
+  /**
+   * Creates a new instance of the CfgNodeType class
+   * @param {String} name the name of the CFG node type
+   */
   constructor(name) {
     this.#name = name;
   }
 
+  /**
+   * @returns {String} the name of the CFG node type
+   */
   get name() {
     return this.#name;
   }
 
+  /**
+   * 
+   * @returns {String} string representation of the CFG node type, which corresponds to its name
+   */
   toString() {
     return this.name;
   }
