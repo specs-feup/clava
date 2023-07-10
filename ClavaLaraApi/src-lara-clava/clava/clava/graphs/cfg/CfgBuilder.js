@@ -252,16 +252,15 @@ class CfgBuilder {
     const $switch = $breakStmt.ancestor("switch");
     const loopDepth = ($loop !== undefined) ? $loop.depth : -1;
     const switchDepth = ($switch !== undefined) ? $switch.depth : -1;
+    let afterNode = undefined;
 
-    if (loopDepth > switchDepth) { // Statement is used to terminate a loop
-      const postBreakNode = this.#nextNodes.nextExecutedNode($loop);
-      this.#addEdge(node, postBreakNode, CfgEdgeType.UNCONDITIONAL);
-    }
+    if (loopDepth > switchDepth)  // Statement is used to terminate a loop
+      afterNode = this.#nextNodes.nextExecutedNode($loop);
 
-    else { // Statement is used to exit a switch block
-      const postSwitchNode = this.#nextNodes.nextExecutedNode($switch);
-      this.#addEdge(node, postSwitchNode, CfgEdgeType.UNCONDITIONAL); 
-    }
+    else  // Statement is used to exit a switch block
+      afterNode = this.#nextNodes.nextExecutedNode($switch);
+
+    this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL); 
   }
 
   #connectContinueNode(node) {
