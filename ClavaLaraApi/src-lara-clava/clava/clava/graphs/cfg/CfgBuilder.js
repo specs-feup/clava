@@ -276,19 +276,18 @@ class CfgBuilder {
 
   #connectSwitchNode(node) {
     const $switchStmt = node.data().switch;
-    const $switchStatements = CfgUtils.getSwitchStmts($switchStmt);
+    let firstReachedCase = undefined;
 
-    let firstCaseNode = undefined;
-    for (let i=0; i < $switchStatements.length; i++) {
-      const currentStmtNode = this.#nodes.get($switchStatements[i].astId);
-
-      if (currentStmtNode.data().type === CfgNodeType.CASE) {
-        firstCaseNode = currentStmtNode;
+    // The first reached case is the first non-default case. 
+    // If the switch only has one case statement, and it is the default case, then this default case will be the first reached case
+    for(const $case of $switchStmt.cases) { 
+      firstReachedCase = this.#nodes.get($case.astId);
+      
+      if(!$case.isDefault)
         break;
-      }
     }
 
-    this.#addEdge(node, firstCaseNode, CfgEdgeType.UNCONDITIONAL);
+    this.#addEdge(node, firstReachedCase, CfgEdgeType.UNCONDITIONAL);
   }
 
   #connectCaseNode(node) {
