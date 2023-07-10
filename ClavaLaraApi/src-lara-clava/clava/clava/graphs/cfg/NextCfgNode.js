@@ -66,9 +66,12 @@ class NextCfgNode {
 
     const rightStmts = $stmt.siblingsRight;
 
-    // If there are statements to the right, the rightmost is the next to be executed
+    // If there are statements to the right, the rightmost non-case statement is the next to be executed
     if (rightStmts.length > 0) {
-      return rightStmts[0];
+      for (const sibling of rightStmts) {
+        if (!sibling.instanceOf("case"))
+          return sibling;
+      }
     }
 
     // When there are no more statements, return what's next for the parent

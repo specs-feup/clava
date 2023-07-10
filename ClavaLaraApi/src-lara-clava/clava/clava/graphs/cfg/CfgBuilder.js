@@ -285,54 +285,44 @@ class CfgBuilder {
       if(!$case.isDefault)
         break;
     }
-
     this.#addEdge(node, firstReachedCase, CfgEdgeType.UNCONDITIONAL);
   }
 
   #connectCaseNode(node) {
     const $caseStmt = node.data().case;
     const $switchStmt = $caseStmt.ancestor("switch");
+    const firstExecutedInst = this.#nextNodes.nextExecutedNode($caseStmt);
     const postSwitchNode = this.#nextNodes.nextExecutedNode($switchStmt);
 
-    const isDefaultCase = CfgUtils.isDefaultCaseStmt($caseStmt);
     const $nextCaseStmt = CfgUtils.getNextCaseStmt($caseStmt, this.#nodes);
     const nextCaseNode = ($nextCaseStmt !== undefined) ? this.#nodes.get($nextCaseStmt.astId) : undefined;
     
+    // Connect the node to the first instruction to be executed
+    if ($caseStmt.isDefault) 
+      this.#addEdge(node, firstExecutedInst, CfgEdgeType.UNCONDITIONAL); 
+    else
+      this.#addEdge(node, firstExecutedInst, CfgEdgeType.TRUE); 
+
+
+    // Connect the node to the next case to be tested if the current case statement is false
+    // or to the statement following the switch
     if (nextCaseNode !== undefined) { // Not the last case
-      const isNextCaseDefault = CfgUtils.isDefaultCaseStmt($nextCaseStmt);
       const $nextNextCaseStmt = CfgUtils.getNextCaseStmt($nextCaseStmt, this.#nodes);
       const nextNextCaseNode = ($nextNextCaseStmt !== undefined) ? this.#nodes.get($nextNextCaseStmt.astId) : undefined;
 
-      if(isNextCaseDefault && nextNextCaseNode !== undefined) // Next case is an intermediate default case
-        this.#addEdge(node, nextNextCaseNode, CfgEdgeType.FALSE); // Connect node with the CASE node following the intermediate default 
-      else if (!isDefaultCase) // Not an intermediate default case
+      if ($nextCaseStmt.isDefault && nextNextCaseNode !== undefined) // Next case is an intermediate default case
+        this.#addEdge(node, nextNextCaseNode, CfgEdgeType.FALSE); // Connect node to the CASE node following the intermediate default 
+      else if (!$caseStmt.isDefault) // Not an intermediate default case
         this.#addEdge(node, nextCaseNode, CfgEdgeType.FALSE);
     }
-    else if (!isDefaultCase) {
-      const hasIntermediateDefaultCase = CfgUtils.hasIntermediateDefaultCase($switchStmt, this.#nodes);
-
-      if (hasIntermediateDefaultCase) {
-        const defaultCaseNode = CfgUtils.getDefaultCaseNode($switchStmt, this.#nodes);
+    else if (!$caseStmt.isDefault) {
+      if ($switchStmt.hasDefaultCase) { // Switch statement has an intermediate default case
+        const defaultCaseNode = this.#nodes.get($caseStmt.getDefaultCase.astId);
         this.#addEdge(node, defaultCaseNode, CfgEdgeType.FALSE);
       }
       else
         this.#addEdge(node, postSwitchNode, CfgEdgeType.FALSE);
     }
-
-    // Connect the node with the first instruction to be executed
-    const firstExecutedInst = CfgUtils.getFirstInst($caseStmt, this.#nodes);
-    if (isDefaultCase) 
-      this.#addEdge(node, firstExecutedInst, CfgEdgeType.UNCONDITIONAL); 
-    else
-      this.#addEdge(node, firstExecutedInst, CfgEdgeType.TRUE); 
-      
-    /* 
-    If the node has no BREAK statement, is not empty and not the last case, the last 
-    instruction should be connected to the first instruction of the next case */
-    const hasBreak = (CfgUtils.getCaseBreakNode($caseStmt, this.#nodes) !== undefined) ? true : false;
-    const lastExecutedInst = CfgUtils.getLastInst($caseStmt, this.#nodes);
-    if (!hasBreak && lastExecutedInst !== undefined && nextCaseNode !== undefined) 
-      this.#addEdge(lastExecutedInst, CfgUtils.getFirstInst($nextCaseStmt, this.#nodes), CfgEdgeType.UNCONDITIONAL); 
   }
 
   #connectInitNode(node) {
@@ -378,9 +368,7 @@ class CfgBuilder {
     const $lastStmt = node.data().getLastStmt();
 
     const afterNode = this.#nextNodes.nextExecutedNode($lastStmt);
-
-    if (afterNode.data().type !== CfgNodeType.CASE)
-      this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+    this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
   }
 
   #connectReturnNode(node) {
