@@ -152,53 +152,6 @@ class CfgUtils {
   }
 
   /**
-   * Returns the default case node of a switch. If it does not contain a default case, returns undefined
-   * @param {joinpoint} $switchStmt the switch statement join point
-   * @param {Map} nodes maps statements to graph nodes
-   */
-  static getDefaultCaseNode($switchStmt, nodes) {
-    const $switchStmts = this.getSwitchStmts($switchStmt);
-
-    for (const $stmt of $switchStmts) {
-      const stmtNode = nodes.get($stmt.astId);
-
-      if (stmtNode.data().type === CfgNodeType.CASE && this.isDefaultCaseStmt($stmt))
-        return stmtNode;
-    }
-    return undefined;
-  }
-
-  /**
-   * @param {joinpoint} $switchStmt the switch statement join point
-   * @param {Map} nodes maps statements to graph nodes
-   * @return {boolean} true if the default case appears in the middle of the switch statement, rather than at the end 
-   */
-  static hasIntermediateDefaultCase($switchStmt, nodes) {
-    const $switchStmts = this.getSwitchStmts($switchStmt);
-
-    for (const $stmt of $switchStmts) {
-      const stmtNode = nodes.get($stmt.astId);
-
-      if (
-        stmtNode.data().type === CfgNodeType.CASE && 
-        this.isDefaultCaseStmt($stmt) && 
-        this.getNextCaseStmt($stmt, nodes) !== undefined
-      )
-        return true;
-    }
-    return false;
-  }
-
-  /**
-   * @param {joinpoint} $switchStmt the switch statement join point
-   * @param {Map} nodes maps statements to graph nodes
-   * @return {boolean} true if the statement is a default case
-   */
-  static isDefaultCaseStmt($caseStmt) {
-    return $caseStmt.children.length === 0;
-  }
-
-  /**
    * @param {joinpoint} $switchStmt the switch statement join point
    * @param {Map} nodes maps statements to graph nodes
    * @return {boolean} true if the default case appears in the middle of the switch statement, rather than at the end 
@@ -220,27 +173,6 @@ class CfgUtils {
   }
 
   /**
-   * @param {joinpoint} $caseStmt is the case statement join point
-   * @param {Map} nodes maps statements to graph nodes
-   * @return {boolean} true if the case statement does not contain any code or statements
-   */
-  static isEmptyCase($caseStmt, nodes) {
-    const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
-    const caseIndex = this.getCaseStmtIndex($caseStmt, nodes);
-    let isEmptyCase = false;
-
-    if (caseIndex + 1 >= $switchStmts.length)
-      isEmptyCase = true;
-    else {
-      const nextStmtNode = nodes.get($switchStmts[caseIndex + 1].astId);
-
-      if (nextStmtNode.data().type === CfgNodeType.CASE)
-        isEmptyCase = true;
-    }
-    return isEmptyCase;
-  }
-
-  /**
    * Returns the case statement that  @param $caseStmt
    * @param {joinpoint} $caseStmt is the case statement join point
    * @param {Map} nodes maps statements to graph nodes
@@ -257,68 +189,6 @@ class CfgUtils {
     }
 
     // The considered case statement is the final case of the corresponding switch
-    return undefined;
-  }
-
-  static getFirstInst($caseStmt, nodes) {
-    const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
-    const caseIndex = this.getCaseStmtIndex($caseStmt, nodes);
-
-    for (let i=caseIndex + 1; i<$switchStmts.length; i++) {
-      const firstInst = nodes.get($switchStmts[i].astId);
-
-      if(firstInst.data().type !== CfgNodeType.CASE)
-        return firstInst;
-    }
-    return undefined;
-  }
-
-  /**
-   * Used when the case statement does not contain a break statement
-   * @return the last statement inside the considered case statement
-   */
-  static getLastInst($caseStmt, nodes) {  
-    const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
-    const caseIndex = this.getCaseStmtIndex($caseStmt, nodes);
-    const $nextCaseStmt = this.getNextCaseStmt($caseStmt, nodes);
-    const nextCaseNode = ($nextCaseStmt !== undefined) ? nodes.get($nextCaseStmt.astId) : undefined;
-    let lastInst = undefined;
-
-    if (this.isEmptyCase($caseStmt, nodes)) 
-      return undefined;
-
-    else if (nextCaseNode === undefined)  //It is the last case
-      lastInst = nodes.get($switchStmts[$switchStmts.length - 1].astId)
-    
-    else {
-      for (let i=caseIndex + 1; i<$switchStmts.length - 1; i++) {
-        const currentStmtNode = nodes.get($switchStmts[i].astId);
-        const nextStmtNode = nodes.get($switchStmts[i + 1].astId);
-
-        if (nextStmtNode.data().type === CfgNodeType.CASE) {
-          lastInst = currentStmtNode;
-          break;
-        }
-      }
-    }
-
-    return lastInst;
-  }
-
-  static getCaseBreakNode($caseStmt, nodes) {
-    const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
-    const caseIndex = this.getCaseStmtIndex($caseStmt, nodes);
-
-    for (let i=caseIndex + 1; i < $switchStmts.length; i++) {
-      const currentStmtNode = nodes.get($switchStmts[i].astId);
-
-      if (currentStmtNode.data().type ===  CfgNodeType.BREAK) //contains a break statement
-        return currentStmtNode;
-      else if (currentStmtNode.data().type ===  CfgNodeType.CASE)
-        break;
-    }
-
-    // The considered case statement does not contain a break statement
     return undefined;
   }
 }
