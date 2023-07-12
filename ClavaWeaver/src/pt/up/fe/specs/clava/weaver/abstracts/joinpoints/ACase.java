@@ -1,9 +1,11 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
+import org.lara.interpreter.weaver.interf.events.Stage;
+import java.util.Optional;
+import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -24,6 +26,108 @@ public abstract class ACase extends AStatement {
     public ACase(AStatement aStatement){
         this.aStatement = aStatement;
     }
+    /**
+     * true if this is a default case, false otherwise
+     */
+    public abstract Boolean getIsDefaultImpl();
+
+    /**
+     * true if this is a default case, false otherwise
+     */
+    public final Object getIsDefault() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isDefault", Optional.empty());
+        	}
+        	Boolean result = this.getIsDefaultImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isDefault", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isDefault", e);
+        }
+    }
+
+    /**
+     * true if this case does not contain instructions (i.e., it is directly above another case), false otherwise
+     */
+    public abstract Boolean getIsEmptyImpl();
+
+    /**
+     * true if this case does not contain instructions (i.e., it is directly above another case), false otherwise
+     */
+    public final Object getIsEmpty() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isEmpty", Optional.empty());
+        	}
+        	Boolean result = this.getIsEmptyImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isEmpty", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isEmpty", e);
+        }
+    }
+
+    /**
+     * the first statement that is not a case that will be executed by this case statement
+     */
+    public abstract AStatement getNextInstructionImpl();
+
+    /**
+     * the first statement that is not a case that will be executed by this case statement
+     */
+    public final Object getNextInstruction() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nextInstruction", Optional.empty());
+        	}
+        	AStatement result = this.getNextInstructionImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "nextInstruction", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "nextInstruction", e);
+        }
+    }
+
+    /**
+     * Get value on attribute instructions
+     * @return the attribute's value
+     */
+    public abstract AStatement[] getInstructionsArrayImpl();
+
+    /**
+     * the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
+     */
+    public Object getInstructionsImpl() {
+        AStatement[] aStatementArrayImpl0 = getInstructionsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aStatementArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
+     */
+    public final Object getInstructions() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "instructions", Optional.empty());
+        	}
+        	Object result = this.getInstructionsImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "instructions", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "instructions", e);
+        }
+    }
+
     /**
      * Get value on attribute isFirst
      * @return the attribute's value
@@ -1153,6 +1257,10 @@ public abstract class ACase extends AStatement {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
+        attributes.add("isDefault");
+        attributes.add("isEmpty");
+        attributes.add("nextInstruction");
+        attributes.add("instructions");
     }
 
     /**
@@ -1196,6 +1304,10 @@ public abstract class ACase extends AStatement {
      * 
      */
     protected enum CaseAttributes {
+        ISDEFAULT("isDefault"),
+        ISEMPTY("isEmpty"),
+        NEXTINSTRUCTION("nextInstruction"),
+        INSTRUCTIONS("instructions"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),

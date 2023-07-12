@@ -15414,6 +15414,42 @@
 			"children": [
 					{
 						"type": "attribute",
+						"tooltip": "the instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)",
+						"children": [
+									{
+										"type": "statement[]",
+										"name": "instructions"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true if this is a default case, false otherwise",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isDefault"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true if this case does not contain instructions (i.e., it is directly above another case), false otherwise",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isEmpty"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "the first statement that is not a case that will be executed by this case statement",
+						"children": [
+									{
+										"type": "statement",
+										"name": "nextInstruction"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "Boolean",
@@ -86973,6 +87009,33 @@
 			"name": "switch",
 			"extends": "statement"		,
 			"children": [
+					{
+						"type": "attribute",
+						"tooltip": "the case statements inside this switch",
+						"children": [
+									{
+										"type": "case[]",
+										"name": "cases"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "the default case statement of this switch statement or undefined if it does not have a default case",
+						"children": [
+									{
+										"type": "case",
+										"name": "getDefaultCase"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "true if there is a default case in this switch statement, false otherwise",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasDefaultCase"
+									}]
+					},
 					{
 						"type": "attribute",
 						"children": [

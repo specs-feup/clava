@@ -5,3 +5,47 @@ Switch line: 4
 Case line: 7
 Switch line: 4
 Case line: 9
+foo1
+hasDefaultCase: true
+getDefaultCase: Joinpoint 'case'
+case is default: false
+case is empty: false
+case next instruction: 
+return 1;
+
+case instructions:
+
+return 1;
+
+case is default: false
+case is empty: false
+case next instruction: 
+return 2;
+
+case instructions:
+
+return 2;
+
+case is default: true
+case is empty: false
+case next instruction: 
+return 3;
+
+case instructions:
+
+return 3;
+
+foo2
+hasDefaultCase: false
+getDefaultCase: undefined
+case is default: false
+case is empty: true
+case next instruction: a = 0;
+case instructions:
+case is default: false
+case is empty: false
+case next instruction: a = 0;
+case instructions:
+a = 0;
+
+return 1;

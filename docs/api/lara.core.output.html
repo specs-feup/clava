@@ -106,8 +106,6 @@
 </ul><h2>Clava API</h2><ul><li>
 <a onclick="saveScroll()"  href="clava.Clava.html">clava.Clava</a></li>
 <li>
-<a onclick="saveScroll()"  href="clava.ClavaAspects.html">clava.ClavaAspects</a></li>
-<li>
 <a onclick="saveScroll()"  href="clava.ClavaCode.html">clava.ClavaCode</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.ClavaJoinPoints.html">clava.ClavaJoinPoints</a></li>
@@ -221,6 +219,8 @@
 <a onclick="saveScroll()"  href="clava.code.GlobalVariable.html">clava.code.GlobalVariable</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.code.Inliner.html">clava.code.Inliner</a></li>
+<li>
+<a onclick="saveScroll()"  href="clava.code.Outliner.html">clava.code.Outliner</a></li>
 <li>
 <a onclick="saveScroll()"  href="clava.code.RemoveShadowing.html">clava.code.RemoveShadowing</a></li>
 <li>
@@ -350,6 +350,12 @@
 <li>
 <a onclick="saveScroll()"  href="clava.uve.UVE.html">clava.uve.UVE</a></li>
 </ul><h2>LARA API</h2><ul><li>
+<a onclick="saveScroll()"  href="core.html">core</a></li>
+<li>
+<a onclick="saveScroll()"  href="core.coretest.html">core.coretest</a></li>
+<li>
+<a onclick="saveScroll()"  href="core.output.html">core.output</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.Check.html">lara.Check</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.Collections.html">lara.Collections</a></li>
@@ -414,6 +420,12 @@
 <li>
 <a onclick="saveScroll()"  href="lara.code.Timer.html">lara.code.Timer</a></li>
 <li>
+<a onclick="saveScroll()"  href="lara.core.JavaTypes.html">lara.core.JavaTypes</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.core.LaraCore.html">lara.core.LaraCore</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.core.output.html">lara.core.output</a></li>
+<li>
 <a onclick="saveScroll()"  href="lara.dse.DseLoop.html">lara.dse.DseLoop</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.dse.DseValues.html">lara.dse.DseValues</a></li>
@@ -462,19 +474,21 @@
 <li>
 <a onclick="saveScroll()"  href="lara.mutation.Mutator.html">lara.mutation.Mutator</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.AggregatePassResult.html">lara.pass.AggregatePassResult</a></li>
+<a onclick="saveScroll()"  href="lara.pass.AdapterPass.html">lara.pass.AdapterPass</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.pass.Pass.html">lara.pass.Pass</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.PassApplyArg.html">lara.pass.PassApplyArg</a></li>
-<li>
-<a onclick="saveScroll()"  href="lara.pass.PassResult.html">lara.pass.PassResult</a></li>
-<li>
 <a onclick="saveScroll()"  href="lara.pass.PassTransformationError.html">lara.pass.PassTransformationError</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.PassTransformationResult.html">lara.pass.PassTransformationResult</a></li>
+<a onclick="saveScroll()"  href="lara.pass.SimplePass.html">lara.pass.SimplePass</a></li>
 <li>
-<a onclick="saveScroll()"  href="lara.pass.Passes.html">lara.pass.Passes</a></li>
+<a onclick="saveScroll()"  href="lara.pass.composition.PassApplyArg.html">lara.pass.composition.PassApplyArg</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.composition.Passes.html">lara.pass.composition.Passes</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.results.AggregatePassResult.html">lara.pass.results.AggregatePassResult</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.pass.results.PassResult.html">lara.pass.results.PassResult</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.tool.Tool.html">lara.tool.Tool</a></li>
 <li>
@@ -507,6 +521,8 @@
 <a onclick="saveScroll()"  href="lara.util.DataStore.html">lara.util.DataStore</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.util.IdGenerator.html">lara.util.IdGenerator</a></li>
+<li>
+<a onclick="saveScroll()"  href="lara.util.JavaTypes.html">lara.util.JavaTypes</a></li>
 <li>
 <a onclick="saveScroll()"  href="lara.util.JpFilter.html">lara.util.JpFilter</a></li>
 <li>
@@ -664,16 +680,16 @@
 </ul></div> 
     	<div id="column2">
     		<div id="doc_content"><div id='toc_container'><p class='toc_title'><span style="font-weight:normal"><i>(.js)</i></span><br>
-laraImport("lara.pass.AggregatePassResult");<br><br>
+laraImport("lara.core.output");<br><br>
 <span style="font-weight:normal"><i>(.lara)</i></span><br>
-import lara.pass.AggregatePassResult;</p><ul class='toc_list'></ul></div></div>
+import lara.core.output;</p><ul class='toc_list'><p class='toc_class'>Global Functions:</p><li class='toc_class_element'><a href='#A'>JSONtoFile</a></li><li class='toc_class_element'><a href='#B'>error</a></li><li class='toc_class_element'><a href='#C'>errorln</a></li><li class='toc_class_element'><a href='#D'>getFnName</a></li><li class='toc_class_element'><a href='#E'>getFnParamNames</a></li><li class='toc_class_element'><a href='#F'>object2string</a></li><li class='toc_class_element'><a href='#G'>object2stringSimple</a></li><li class='toc_class_element'><a href='#H'>print</a></li><li class='toc_class_element'><a href='#I'>printObject</a></li><li class='toc_class_element'><a href='#J'>printTo</a></li><li class='toc_class_element'><a href='#K'>printToln</a></li><li class='toc_class_element'><a href='#L'>println</a></li><li class='toc_class_element'><a href='#M'>printlnObject</a></li><li class='toc_class_element'><a href='#N'>setPrintStream</a></li><li class='toc_class_element'><a href='#O'>writeFile</a></li></ul></div><h2>Global Functions</h2><div class='function_block'><h3 id='A'>JSONtoFile</h3><pre class='signature'><code class='language-js'><strong>JSONtoFile</strong>(path, object)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>path</strong>: any</span><br><span class='parameter'><strong>object</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='B'>error</h3><pre class='signature'><code class='language-js'><strong>error</strong>(message)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>message</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='C'>errorln</h3><pre class='signature'><code class='language-js'><strong>errorln</strong>(message)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>message</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='D'>getFnName</h3><pre class='signature'><code class='language-js'><strong>getFnName</strong>(fn)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>fn</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='E'>getFnParamNames</h3><pre class='signature'><code class='language-js'><strong>getFnParamNames</strong>(fn)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>fn</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='F'>object2string</h3><pre class='signature'><code class='language-js'><strong>object2string</strong>(obj, space)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>obj</strong>: any</span><br><span class='parameter'><strong>space</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='G'>object2stringSimple</h3><pre class='signature'><code class='language-js'><strong>object2stringSimple</strong>(obj, space)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>obj</strong>: any</span><br><span class='parameter'><strong>space</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='H'>print</h3><pre class='signature'><code class='language-js'><strong>print</strong>(message)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>message</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='I'>printObject</h3><pre class='signature'><code class='language-js'><strong>printObject</strong>(obj, space)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>obj</strong>: any</span><br><span class='parameter'><strong>space</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='J'>printTo</h3><pre class='signature'><code class='language-js'><strong>printTo</strong>(message, stream)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>message</strong>: any</span><br><span class='parameter'><strong>stream</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='K'>printToln</h3><pre class='signature'><code class='language-js'><strong>printToln</strong>(message, stream)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>message</strong>: any</span><br><span class='parameter'><strong>stream</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='L'>println</h3><pre class='signature'><code class='language-js'><strong>println</strong>(message)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>message</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='M'>printlnObject</h3><pre class='signature'><code class='language-js'><strong>printlnObject</strong>(obj, space)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>obj</strong>: any</span><br><span class='parameter'><strong>space</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='N'>setPrintStream</h3><pre class='signature'><code class='language-js'><strong>setPrintStream</strong>(stream)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>stream</strong>: any</span><br></div></div><hr></div><div class='function_block'><h3 id='O'>writeFile</h3><pre class='signature'><code class='language-js'><strong>writeFile</strong>(path, content)</code></pre><div class='function_content'><h4>Parameters</h4><div class='parameters'><span class='parameter'><strong>path</strong>: any</span><br><span class='parameter'><strong>content</strong>: any</span><br></div></div><hr></div></div>
     		<!-- <iframe id="doc_frame" src=""></iframe> -->
     	</div>
 	</div>    
     	
 		 <button onclick="goToTop()" id="topButton"><i class='fas fa-angle-double-up'></i></button> 
 	
-  <script src="jquery-3.2.1.min.js"></script>
+  <script src="jquery-3.6.4.min.js"></script>
   <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
   <script src="JsDoc.js"></script>
 </body>
