@@ -22,6 +22,7 @@ import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ClavaNodes;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 import pt.up.fe.specs.util.SpecsCheck;
 
 /**
@@ -63,6 +64,19 @@ public abstract class SwitchCase extends Stmt {
 
     /**
      * 
+     * @return the case statement that comes after this case, or undefined if there are no more case statements
+     */
+    public SwitchCase nextCase() {
+        var nextNode = ClavaNodes.nextNode(this).orElse(null);
+        while (nextNode != null && !(nextNode instanceof SwitchCase)) {
+            nextNode = ClavaNodes.nextNode(nextNode).orElse(null);
+        }
+
+        return (SwitchCase) nextNode;
+    }
+
+    /**
+     * 
      * @return the instructions that are associated with this case in the source code. This does not represent what
      *         instructions are actually executed (e.g., if a case does not have a break, does not show instructions of
      *         the next case)
@@ -80,4 +94,12 @@ public abstract class SwitchCase extends Stmt {
     }
 
     public abstract boolean isDefaultCase();
+
+    /**
+     * The values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or
+     * two (e.g., 'case 2...4:') expressions, depending on the format of the case
+     * 
+     * @return a List with the expressions of the case values
+     */
+    public abstract List<Expr> getValues();
 }
