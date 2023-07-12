@@ -142,53 +142,5 @@ class CfgUtils {
 
     return target;
   }
-
-  /**
-   * Returns all the statements of a switch
-   * @param {joinpoint} $switchStmt the switch statement join point
-   */
-  static getSwitchStmts($switchStmt) {
-    return $switchStmt.children[1].children;
-  }
-
-  /**
-   * @param {joinpoint} $switchStmt the switch statement join point
-   * @param {Map} nodes maps statements to graph nodes
-   * @return {boolean} true if the default case appears in the middle of the switch statement, rather than at the end 
-   */
-  static getCaseStmtIndex($caseStmt, nodes) {
-    const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
-    let caseIndex = undefined;
-
-    for(let i=0; i < $switchStmts.length; i++) {
-      const stmtAstId = $switchStmts[i].astId;
-      const stmtNode = nodes.get($switchStmts[i].astId);
-
-      if (stmtNode.data().type === CfgNodeType.CASE && stmtAstId === $caseStmt.astId){
-        caseIndex = i;
-        break;
-      }
-    }
-    return caseIndex;
-  }
-
-  /**
-   * Returns the case statement that  @param $caseStmt
-   * @param {joinpoint} $caseStmt is the case statement join point
-   * @param {Map} nodes maps statements to graph nodes
-   */
-  static getNextCaseStmt($caseStmt, nodes) {
-    const $switchStmts = this.getSwitchStmts($caseStmt.ancestor("switch"));
-    const caseIndex = this.getCaseStmtIndex($caseStmt, nodes);
-
-    for (let i=caseIndex + 1; i < $switchStmts.length; i++) {
-      const currentStmtNode = nodes.get($switchStmts[i].astId);
-
-      if (currentStmtNode.data().type ===  CfgNodeType.CASE)
-        return $switchStmts[i];
-    }
-
-    // The considered case statement is the final case of the corresponding switch
-    return undefined;
-  }
+  
 }

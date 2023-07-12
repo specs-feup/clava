@@ -319,38 +319,41 @@ class CfgBuilder {
   #connectCaseNode(node) {
     const $caseStmt = node.data().case;
     const $switchStmt = $caseStmt.ancestor("switch");
-    const firstExecutedInst = this.#nextNodes.nextExecutedNode($caseStmt);
-    const postSwitchNode = this.#nextNodes.nextExecutedNode($switchStmt);
 
-    const $nextCaseStmt = CfgUtils.getNextCaseStmt($caseStmt, this.#nodes);
-    const nextCaseNode = ($nextCaseStmt !== undefined) ? this.#nodes.get($nextCaseStmt.astId) : undefined;
+    const numCases = $switchStmt.cases.length;
+    const hasIntermediateDefault = $switchStmt.hasDefaultCase && !$switchStmt.cases[numCases - 1].isDefault;
     
     // Connect the node to the first instruction to be executed
+    const firstExecutedInst = this.#nextNodes.nextExecutedNode($caseStmt);
     if ($caseStmt.isDefault) 
       this.#addEdge(node, firstExecutedInst, CfgEdgeType.UNCONDITIONAL); 
     else
       this.#addEdge(node, firstExecutedInst, CfgEdgeType.TRUE); 
 
 
-    // Connect the node to the next case to be tested if the current case statement is false
-    // or to the statement following the switch
-    if (nextCaseNode !== undefined) { // Not the last case
-      const $nextNextCaseStmt = CfgUtils.getNextCaseStmt($nextCaseStmt, this.#nodes);
-      const nextNextCaseNode = ($nextNextCaseStmt !== undefined) ? this.#nodes.get($nextNextCaseStmt.astId) : undefined;
+    let falseNode = undefined;
+    if ($caseStmt.nextCase !== undefined) { // Not the last case
 
-      if ($nextCaseStmt.isDefault && nextNextCaseNode !== undefined) // Next case is an intermediate default case
-        this.#addEdge(node, nextNextCaseNode, CfgEdgeType.FALSE); // Connect node to the CASE node following the intermediate default 
-      else if (!$caseStmt.isDefault) // Not an intermediate default case
-        this.#addEdge(node, nextCaseNode, CfgEdgeType.FALSE);
+      // If the next case is an intermediate default case, the node should be connected to the CASE node following the default case
+      if (hasIntermediateDefault && $caseStmt.nextCase.isDefault)
+        falseNode = this.#nodes.get($caseStmt.nextCase.nextCase.astId);
+
+      else if (!$caseStmt.isDefault) // Else, if it is not an intermediate default case, it should be connected to the next case
+        falseNode = this.#nodes.get($caseStmt.nextCase.astId);
     }
-    else if (!$caseStmt.isDefault) {
-      if ($switchStmt.hasDefaultCase) { // Switch statement has an intermediate default case
-        const defaultCaseNode = this.#nodes.get($caseStmt.getDefaultCase.astId);
-        this.#addEdge(node, defaultCaseNode, CfgEdgeType.FALSE);
-      }
-      else
-        this.#addEdge(node, postSwitchNode, CfgEdgeType.FALSE);
+
+    else if (!$caseStmt.isDefault) {  // Last case but not a default case
+
+      // If switch statement has an intermediate default case, connect the current statement to the default case
+      if (hasIntermediateDefault)
+        falseNode = this.#nodes.get($switchStmt.getDefaultCase.astId);
+      
+      else  // Else, connect it to the statement following the switch
+        falseNode = this.#nextNodes.nextExecutedNode($switchStmt);
     }
+
+    if (falseNode !== undefined)
+      this.#addEdge(node, falseNode, CfgEdgeType.FALSE);
   }
   
   /**

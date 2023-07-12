@@ -16,7 +16,9 @@ class CaseData extends CfgNodeData {
   }
 
   toString() {
-    return this.case.isDefault ? "default" : "case(" + this.case.children[0].code + ")";
+    if (this.case.isDefault)
+      return "default";
+    return "case " + this.case.values.map(value => value.code).join(" || ");
   }
 
   isBranch() {

@@ -16,7 +16,7 @@ class SwitchData extends CfgNodeData {
   }
 
   toString() {
-    return "switch(" + this.switch.children[0].code + ")";
+    return "switch(" + this.switch.condition.code + ")";
   }
 
   isBranch() {
