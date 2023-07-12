@@ -49,9 +49,12 @@ end
 function testSwitch($switch) {
 	println("hasDefaultCase: " + $switch.hasDefaultCase);
 	println("getDefaultCase: " + $switch.getDefaultCase);		
+	println("condition: " + $switch.condition.code);			
 	for(var $caseStmt of $switch.cases) {
 		println("case is default: " + $caseStmt.isDefault);
 		println("case is empty: " + $caseStmt.isEmpty);
+		println("values: " + $caseStmt.values.map(v => v.code));		
+		println("next case: " + ($caseStmt.nextCase !== undefined ? $caseStmt.nextCase.code : "undefined"));
 		println("case next instruction: " + $caseStmt.nextInstruction.code);		
 		println("case instructions:");
 		for(var $caseInst of $caseStmt.instructions) {
