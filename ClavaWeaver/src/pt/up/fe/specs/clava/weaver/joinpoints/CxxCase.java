@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.SwitchCase;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACase;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 
 public class CxxCase extends ACase {
@@ -56,6 +57,16 @@ public class CxxCase extends ACase {
     @Override
     public AStatement[] getInstructionsArrayImpl() {
         return CxxJoinpoints.create(caseStmt.getInstructions(), AStatement.class);
+    }
+
+    @Override
+    public ACase getNextCaseImpl() {
+        return CxxJoinpoints.create(caseStmt.nextCase(), ACase.class);
+    }
+
+    @Override
+    public AExpression[] getValuesArrayImpl() {
+        return CxxJoinpoints.create(caseStmt.getValues(), AExpression.class);
     }
 
 }

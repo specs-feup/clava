@@ -8,8 +8,12 @@ Case line: 9
 foo1
 hasDefaultCase: true
 getDefaultCase: Joinpoint 'case'
+condition: a
 case is default: false
 case is empty: false
+values: 0
+next case: case 1:
+
 case next instruction: 
 return 1;
 
@@ -19,6 +23,9 @@ return 1;
 
 case is default: false
 case is empty: false
+values: 1
+next case: default:
+
 case next instruction: 
 return 2;
 
@@ -28,6 +35,9 @@ return 2;
 
 case is default: true
 case is empty: false
+values: 
+
+next case: undefined
 case next instruction: 
 return 3;
 
@@ -38,12 +48,19 @@ return 3;
 foo2
 hasDefaultCase: false
 getDefaultCase: undefined
+condition: a
 case is default: false
 case is empty: true
+values: 0
+next case: case 1 ... 2:
+
 case next instruction: a = 0;
 case instructions:
 case is default: false
 case is empty: false
+values: 1,2
+
+next case: undefined
 case next instruction: a = 0;
 case instructions:
 a = 0;

@@ -15441,11 +15441,29 @@
 					},
 					{
 						"type": "attribute",
+						"tooltip": "the case statement that comes after this case, or undefined if there are no more case statements",
+						"children": [
+									{
+										"type": "case",
+										"name": "nextCase"
+									}]
+					},
+					{
+						"type": "attribute",
 						"tooltip": "the first statement that is not a case that will be executed by this case statement",
 						"children": [
 									{
 										"type": "statement",
 										"name": "nextInstruction"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "the values that the case statement will match. It can return one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case",
+						"children": [
+									{
+										"type": "expression[]",
+										"name": "values"
 									}]
 					},
 					{
@@ -87016,6 +87034,15 @@
 									{
 										"type": "case[]",
 										"name": "cases"
+									}]
+					},
+					{
+						"type": "attribute",
+						"tooltip": "the condition of this switch statement",
+						"children": [
+									{
+										"type": "expression",
+										"name": "condition"
 									}]
 					},
 					{

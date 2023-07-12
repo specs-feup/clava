@@ -129,6 +129,62 @@ public abstract class ACase extends AStatement {
     }
 
     /**
+     * the case statement that comes after this case, or undefined if there are no more case statements
+     */
+    public abstract ACase getNextCaseImpl();
+
+    /**
+     * the case statement that comes after this case, or undefined if there are no more case statements
+     */
+    public final Object getNextCase() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "nextCase", Optional.empty());
+        	}
+        	ACase result = this.getNextCaseImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "nextCase", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "nextCase", e);
+        }
+    }
+
+    /**
+     * Get value on attribute values
+     * @return the attribute's value
+     */
+    public abstract AExpression[] getValuesArrayImpl();
+
+    /**
+     * the values that the case statement will match. It can return one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
+     */
+    public Object getValuesImpl() {
+        AExpression[] aExpressionArrayImpl0 = getValuesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aExpressionArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * the values that the case statement will match. It can return one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
+     */
+    public final Object getValues() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "values", Optional.empty());
+        	}
+        	Object result = this.getValuesImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "values", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "values", e);
+        }
+    }
+
+    /**
      * Get value on attribute isFirst
      * @return the attribute's value
      */
@@ -1261,6 +1317,8 @@ public abstract class ACase extends AStatement {
         attributes.add("isEmpty");
         attributes.add("nextInstruction");
         attributes.add("instructions");
+        attributes.add("nextCase");
+        attributes.add("values");
     }
 
     /**
@@ -1308,6 +1366,8 @@ public abstract class ACase extends AStatement {
         ISEMPTY("isEmpty"),
         NEXTINSTRUCTION("nextInstruction"),
         INSTRUCTIONS("instructions"),
+        NEXTCASE("nextCase"),
+        VALUES("values"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),

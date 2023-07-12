@@ -17,6 +17,7 @@ import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.SwitchStmt;
 import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ACase;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AExpression;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ASwitch;
 
 public class CxxSwitch extends ASwitch {
@@ -48,6 +49,11 @@ public class CxxSwitch extends ASwitch {
     @Override
     public ACase[] getCasesArrayImpl() {
         return CxxJoinpoints.create(switchStmt.getCases(), ACase.class);
+    }
+
+    @Override
+    public AExpression getConditionImpl() {
+        return CxxJoinpoints.create(switchStmt.getCond(), AExpression.class);
     }
 
 }
