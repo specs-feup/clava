@@ -69,10 +69,12 @@ class CfgBuilder {
   /**
    * Creates a new instance of the CfgBuilder class
    * @param {joinpoint} $jp
+   * @param {boolean} splitInstList If true, statements of each instruction list must be split
    * @param {boolean} [deterministicIds = false] If true, uses deterministic ids for the graph ids (e.g. id_0, id_1...). Otherwise, uses $jp.astId whenever possible
    */
-  constructor($jp, deterministicIds = false) {
+  constructor($jp, splitInstList, deterministicIds = false) {
     this.#jp = $jp;
+    this.#splitInstList = splitInstList;
     this.#deterministicIds = deterministicIds;
     this.#currentId = 0;
     this.#dataFactory = new DataFactory(this.#jp);
@@ -126,8 +128,7 @@ class CfgBuilder {
    * Builds the control flow graph
    * @returns {Array} a array that includes the built graph, the nodes, the start and end nodes
    */
-  build(splitInstList = true) {
-    this.#splitInstList = splitInstList;
+  build() {
 
     this._addAuxComments();
     this._createNodes();
