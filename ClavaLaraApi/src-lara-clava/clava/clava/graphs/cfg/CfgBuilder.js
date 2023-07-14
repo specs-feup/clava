@@ -85,12 +85,12 @@ class CfgBuilder {
     // Do not add them to #nodes, since they have no associated statements
     this.#startNode = Graphs.addNode(
       this.#graph,
-      this.#dataFactory.newData(CfgNodeType.START, undefined, "start")
+      this.#dataFactory.newData(CfgNodeType.START, undefined, "start", this.#splitInstList)
     );
     //this.#nodes.set('START', this.#startNode)
     this.#endNode = Graphs.addNode(
       this.#graph,
-      this.#dataFactory.newData(CfgNodeType.END, undefined, "end")
+      this.#dataFactory.newData(CfgNodeType.END, undefined, "end", this.#splitInstList)
     );
     //this.#nodes.set('END', this.#endNode)
 
@@ -169,11 +169,11 @@ class CfgBuilder {
       if (CfgUtils.isLeader($stmt)) {
 
         if (this.#splitInstList && CfgUtils.getNodeType($stmt) === CfgNodeType.INST_LIST) {
-          this._getOrAddNode($stmt, true, CfgNodeType.SINGLE_INST);
+          this._getOrAddNode($stmt, true, CfgNodeType.INST_LIST);
 
           for (const $right of $stmt.siblingsRight) {
             if (!CfgUtils.isLeader($right))
-              this._getOrAddNode($right, true, CfgNodeType.SINGLE_INST);
+              this._getOrAddNode($right, true, CfgNodeType.INST_LIST);
             else 
               break;
           }
@@ -425,16 +425,6 @@ class CfgBuilder {
   }
 
   /**
-   * @param {Cytoscape.node} node node whose type is "SINGLE_INST"
-   */
-  #connectSingleInstNode(node) {
-    const $stmt = node.data().nodeStmt;
-
-    const afterNode = this.#nextNodes.nextExecutedNode($stmt);
-    this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
-  }
-
-  /**
    * Connects a node associated with a statement that is an instance of a "return" statement.
    * @param {Cytoscape.node} node node whose type is "RETURN"
    */
@@ -519,9 +509,6 @@ class CfgBuilder {
           break;
         case CfgNodeType.INST_LIST:
           this.#connectInstListNode(node);
-          break;
-        case CfgNodeType.SINGLE_INST:
-          this.#connectSingleInstNode(node);
           break;
         case CfgNodeType.RETURN:
           this.#connectReturnNode(node);
@@ -634,7 +621,7 @@ class CfgBuilder {
 
       node = Graphs.addNode(
         this.#graph,
-        this.#dataFactory.newData(nodeType, $stmt, nodeId)
+        this.#dataFactory.newData(nodeType, $stmt, nodeId, this.#splitInstList)
       );
 
       // Associate all statements of graph node

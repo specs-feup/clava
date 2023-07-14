@@ -107,7 +107,6 @@ public enum LaraApiResource implements LaraResourceProvider {
     CFG_INST_LIST_NODE_DATA("graphs/cfg/nodedata/InstListNodeData.js"),
     CFG_LOOP_DATA("graphs/cfg/nodedata/LoopData.js"),
     CFG_SCOPE_NODE_DATA("graphs/cfg/nodedata/ScopeNodeData.js"),
-    CFG_SINGLE_INST_DATA("graphs/cfg/nodedata/SingleInstData.js"),
     CFG_SWITCH_DATA("graphs/cfg/nodedata/SwitchData.js"),
     CFG_RETURN_DATA("graphs/cfg/nodedata/ReturnData.js"),
 
