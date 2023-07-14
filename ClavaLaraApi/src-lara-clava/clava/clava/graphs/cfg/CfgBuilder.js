@@ -172,7 +172,19 @@ class CfgBuilder {
     // If they are leaders, create node
     for (const $stmt of Query.searchFromInclusive(this.#jp, "statement")) {
       if (CfgUtils.isLeader($stmt)) {
-        this._getOrAddNode($stmt, true);
+
+        if (this.#splitInstList && CfgUtils.getNodeType($stmt) === CfgNodeType.INST_LIST) {
+          this._getOrAddNode($stmt, true, CfgNodeType.SINGLE_INST);
+
+          for (const $right of $stmt.siblingsRight) {
+            if (!CfgUtils.isLeader($right))
+              this._getOrAddNode($right, true, CfgNodeType.SINGLE_INST);
+            else 
+              break;
+          }
+        }
+        else
+          this._getOrAddNode($stmt, true);
       }
     }
 
