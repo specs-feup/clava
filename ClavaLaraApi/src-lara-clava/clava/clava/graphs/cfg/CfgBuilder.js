@@ -62,6 +62,11 @@ class CfgBuilder {
   #nextNodes;
 
   /**
+  * Indicates whether an instruction list should be split
+  */
+  #splitInstList;
+
+  /**
    * Creates a new instance of the CfgBuilder class
    * @param {joinpoint} $jp
    * @param {boolean} [deterministicIds = false] If true, uses deterministic ids for the graph ids (e.g. id_0, id_1...). Otherwise, uses $jp.astId whenever possible
@@ -121,7 +126,9 @@ class CfgBuilder {
    * Builds the control flow graph
    * @returns {Array} a array that includes the built graph, the nodes, the start and end nodes
    */
-  build() {
+  build(splitInstList = true) {
+    this.#splitInstList = splitInstList;
+
     this._addAuxComments();
     this._createNodes();
 
@@ -411,6 +418,16 @@ class CfgBuilder {
   }
 
   /**
+   * @param {Cytoscape.node} node node whose type is "SINGLE_INST"
+   */
+  #connectSingleInstNode(node) {
+    const $stmt = node.data().nodeStmt;
+
+    const afterNode = this.#nextNodes.nextExecutedNode($stmt);
+    this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+  }
+
+  /**
    * Connects a node associated with a statement that is an instance of a "return" statement.
    * @param {Cytoscape.node} node node whose type is "RETURN"
    */
@@ -495,6 +512,9 @@ class CfgBuilder {
           break;
         case CfgNodeType.INST_LIST:
           this.#connectInstListNode(node);
+          break;
+        case CfgNodeType.SINGLE_INST:
+          this.#connectSingleInstNode(node);
           break;
         case CfgNodeType.RETURN:
           this.#connectReturnNode(node);
