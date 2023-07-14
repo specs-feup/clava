@@ -78,13 +78,7 @@ class CfgBuilder {
     this.#deterministicIds = deterministicIds;
     this.#currentId = 0;
     this.#dataFactory = new DataFactory(this.#jp);
-
-    // Load graph library
-    Graphs.loadLibrary();
-
-    this.#graph = cytoscape({
-      /* options */
-    });
+    this.#graph = Graphs.newGraph();
     this.#nodes = new Map();
 
     // Create start and end nodes
