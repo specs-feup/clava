@@ -8,6 +8,7 @@ laraImport("clava.graphs.cfg.nodedata.IfData");
 laraImport("clava.graphs.cfg.nodedata.SwitchData");
 laraImport("clava.graphs.cfg.nodedata.CaseData");
 laraImport("clava.graphs.cfg.nodedata.ReturnData");
+laraImport("clava.graphs.cfg.nodedata.SingleInstData");
 
 class DataFactory {
   #entryPoint;
@@ -22,6 +23,8 @@ class DataFactory {
     switch (cfgNodeType) {
       case CfgNodeType.INST_LIST:
         return new InstListNodeData($stmt, id, this.#entryPoint);
+      case CfgNodeType.SINGLE_INST:
+        return new SingleInstData($stmt, id);
       case CfgNodeType.THEN:
       case CfgNodeType.ELSE:
       case CfgNodeType.SCOPE:
