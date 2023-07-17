@@ -19,14 +19,15 @@ class ControlFlowGraph extends Graph {
   #endNode;
 
   constructor(graph, nodes, startNode, endNode) {
-    super(graph.json());
+    super();
+    super.graph = graph;
     this.#nodes = nodes;
     this.#startNode = startNode;
     this.#endNode = endNode;
   }
 
-  static build($jp, splitInstList, deterministicIds = false) {
-    const builderResult = new CfgBuilder($jp, splitInstList, deterministicIds).build();
+  static build($jp, deterministicIds = false, splitInstList = false) {
+    const builderResult = new CfgBuilder($jp, deterministicIds, splitInstList).build();
     return new ControlFlowGraph(...builderResult);
   }
 

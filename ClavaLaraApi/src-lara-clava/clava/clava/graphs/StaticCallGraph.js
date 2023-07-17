@@ -14,7 +14,8 @@ class StaticCallGraph extends Graph {
   #functions;
 
   constructor(graph, functions) {
-    super(graph.json());
+    super();
+    super.graph = graph;
     this.#functions = functions;
   }
 
