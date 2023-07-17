@@ -13,7 +13,6 @@ class CfgNodeType {
   static INIT = new CfgNodeType("INIT");
   static STEP = new CfgNodeType("STEP");
   static SCOPE = new CfgNodeType("SCOPE");
-  static SINGLE_INST = new CfgNodeType("SINGLE_INST");
   static INST_LIST = new CfgNodeType("INST_LIST");
   static BREAK = new CfgNodeType("BREAK");
   static CONTINUE = new CfgNodeType("CONTINUE");
