@@ -18,10 +18,10 @@ class DataFactory {
     this.#entryPoint = $entryPoint;
   }
 
-  newData(cfgNodeType, $stmt, id) {
+  newData(cfgNodeType, $stmt, id, splitInstList) {
     switch (cfgNodeType) {
       case CfgNodeType.INST_LIST:
-        return new InstListNodeData($stmt, id, this.#entryPoint);
+        return new InstListNodeData($stmt, id, this.#entryPoint, splitInstList);
       case CfgNodeType.THEN:
       case CfgNodeType.ELSE:
       case CfgNodeType.SCOPE:

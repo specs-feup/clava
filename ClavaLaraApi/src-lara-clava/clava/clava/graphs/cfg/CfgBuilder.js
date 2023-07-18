@@ -62,34 +62,35 @@ class CfgBuilder {
   #nextNodes;
 
   /**
+  * Indicates whether an instruction list should be split
+  */
+  #splitInstList;
+
+  /**
    * Creates a new instance of the CfgBuilder class
    * @param {joinpoint} $jp
+   * @param {boolean} [splitInstList = false] If true, statements of each instruction list must be split
    * @param {boolean} [deterministicIds = false] If true, uses deterministic ids for the graph ids (e.g. id_0, id_1...). Otherwise, uses $jp.astId whenever possible
    */
-  constructor($jp, deterministicIds = false) {
+  constructor($jp, deterministicIds = false, splitInstList = false) {
     this.#jp = $jp;
+    this.#splitInstList = splitInstList;
     this.#deterministicIds = deterministicIds;
     this.#currentId = 0;
     this.#dataFactory = new DataFactory(this.#jp);
-
-    // Load graph library
-    Graphs.loadLibrary();
-
-    this.#graph = cytoscape({
-      /* options */
-    });
+    this.#graph = Graphs.newGraph();
     this.#nodes = new Map();
 
     // Create start and end nodes
     // Do not add them to #nodes, since they have no associated statements
     this.#startNode = Graphs.addNode(
       this.#graph,
-      this.#dataFactory.newData(CfgNodeType.START, undefined, "start")
+      this.#dataFactory.newData(CfgNodeType.START, undefined, "start", this.#splitInstList)
     );
     //this.#nodes.set('START', this.#startNode)
     this.#endNode = Graphs.addNode(
       this.#graph,
-      this.#dataFactory.newData(CfgNodeType.END, undefined, "end")
+      this.#dataFactory.newData(CfgNodeType.END, undefined, "end", this.#splitInstList)
     );
     //this.#nodes.set('END', this.#endNode)
 
@@ -122,6 +123,7 @@ class CfgBuilder {
    * @returns {Array} a array that includes the built graph, the nodes, the start and end nodes
    */
   build() {
+
     this._addAuxComments();
     this._createNodes();
 
@@ -165,7 +167,19 @@ class CfgBuilder {
     // If they are leaders, create node
     for (const $stmt of Query.searchFromInclusive(this.#jp, "statement")) {
       if (CfgUtils.isLeader($stmt)) {
-        this._getOrAddNode($stmt, true);
+
+        if (this.#splitInstList && CfgUtils.getNodeType($stmt) === CfgNodeType.INST_LIST) {
+          this._getOrAddNode($stmt, true, CfgNodeType.INST_LIST);
+
+          for (const $right of $stmt.siblingsRight) {
+            if (!CfgUtils.isLeader($right))
+              this._getOrAddNode($right, true, CfgNodeType.INST_LIST);
+            else 
+              break;
+          }
+        }
+        else
+          this._getOrAddNode($stmt, true);
       }
     }
 
@@ -607,7 +621,7 @@ class CfgBuilder {
 
       node = Graphs.addNode(
         this.#graph,
-        this.#dataFactory.newData(nodeType, $stmt, nodeId)
+        this.#dataFactory.newData(nodeType, $stmt, nodeId, this.#splitInstList)
       );
 
       // Associate all statements of graph node

@@ -5,7 +5,7 @@ laraImport("clava.graphs.cfg.CfgUtils");
 class InstListNodeData extends CfgNodeData {
   #stmts;
 
-  constructor($stmt, id, $entryPoint) {
+  constructor($stmt, id, $entryPoint, splitInstList) {
     super(CfgNodeType.INST_LIST, $stmt, id);
 
     this.#stmts = [];
@@ -13,14 +13,16 @@ class InstListNodeData extends CfgNodeData {
     // Given statement is start of the list
     this.#stmts.push($stmt);
 
-    // Add non-leader statements corresponding to this list, unless this node is the starting point
-    const rightNodes = !$stmt.equals($entryPoint) ? $stmt.siblingsRight : [];
+    if (!splitInstList) {
+      // Add non-leader statements corresponding to this list, unless this node is the starting point
+      const rightNodes = !$stmt.equals($entryPoint) ? $stmt.siblingsRight : [];
 
-    for (const $right of rightNodes) {
-      if (!CfgUtils.isLeader($right)) {
-        this.#stmts.push($right);
-      } else {
-        break;
+      for (const $right of rightNodes) {
+        if (!CfgUtils.isLeader($right)) {
+          this.#stmts.push($right);
+        } else {
+          break;
+        }
       }
     }
   }

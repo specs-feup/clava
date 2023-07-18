@@ -1,22 +1,20 @@
 laraImport("lara.graphs.Graphs");
 laraImport("lara.graphs.DotFormatter");
 laraImport("lara.util.StringSet");
+laraImport("lara.graphs.Graph");
 
 laraImport("weaver.Query");
 
 laraImport("clava.graphs.scg.StaticCallGraphBuilder");
 
-class StaticCallGraph {
+class StaticCallGraph extends Graph {
   static #dotFormatter = undefined;
-
-  // The static call graph
-  #graph;
 
   // Maps functions to graph nodes
   #functions;
 
   constructor(graph, functions) {
-    this.#graph = graph;
+    super(graph);
     this.#functions = functions;
   }
 
@@ -32,10 +30,6 @@ class StaticCallGraph {
     const graph = builder.build($jp, visitCalls);
 
     return new StaticCallGraph(graph, builder.nodes);
-  }
-
-  get graph() {
-    return this.#graph;
   }
 
   get functions() {
@@ -64,6 +58,6 @@ class StaticCallGraph {
   }
 
   toDot() {
-    return Graphs.toDot(this.#graph, StaticCallGraph.dotFormatter);
+    return super.toDot(StaticCallGraph.dotFormatter);
   }
 }
