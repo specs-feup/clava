@@ -30,7 +30,7 @@ class LivenessAnalysis {
     /**
      * 
      */
-    liveOut;
+    #liveOut;
 
     constructor($jp) {
         this.#jp = $jp;
@@ -44,18 +44,18 @@ class LivenessAnalysis {
     #computeDefs() {
         for (const node of this.#cfg.nodes()) {
             const $nodeStmt = node.data().nodeStmt;
-            let def = [];
+            let def = new Set();
             
             const $varDecls = Query.searchFromInclusive($nodeStmt, "vardecl");
             for (const decl of $varDecls) {
                 if(decl.hasInit)
-                    def.push(decl.name);
+                    def.add(decl.name);
             }
 
             const $binaryOps = Query.searchFromInclusive($nodeStmt, "binaryOp");
             for (const $binOp of $binaryOps) {
                 if ($binOp.isAssignment && $binOp.left.instanceOf("varref"))
-                    def.push($binOp.left.name);
+                    def.add($binOp.left.name);
             }
 
             this.#defs.set($nodeStmt.astId, def);
@@ -65,7 +65,7 @@ class LivenessAnalysis {
     #computeUses() {
         for (const node of this.#cfg.nodes()) {
             const $nodeStmt = node.data().nodeStmt;
-            let use = [];
+            let use = new Set();
             
             const $varRefs = Query.searchFromInclusive($nodeStmt, "varref");
             for (const $var of $varRefs) {
@@ -74,7 +74,7 @@ class LivenessAnalysis {
                 if ($parent.instanceOf("binaryOp") && $parent.isAssignment && $parent.left.astId === $var.astId)
                     continue;
 
-                use.push($var.name);
+                use.add($var.name);
             }
 
             this.#uses.set($nodeStmt.astId, use);
@@ -83,21 +83,32 @@ class LivenessAnalysis {
 
     #computeLiveInOut() {
         for (const node of this.#cfg.nodes()) {
-            //TODO: set liveIn = {}
-            //TODO: set liveOut = {}
+            const $nodeStmt = node.data().nodeStmt;
+
+            this.#liveIn.set($nodeStmt.astId, new Set());
+            this.#liveOut.set($nodeStmt.astId, new Set());
         }
 
         let liveChanged = true;
 
         while (liveChanged) {
             for (const node of this.#cfg.nodes()) {
-                // TODO: copy node Live in 
-                // TODO: copy node Live out
-                // TODO: compute new Live in
-                // TODO: compute new Live out
+                const $nodeStmt = node.data().nodeStmt;
+                const def = this.#defs.get($nodeStmt.astId);
+                const use = this.#uses.get($nodeStmt.astId);
+
+                //Save current liveIn and liveOut
+                const oldLiveIn = this.#liveIn.get($nodeStmt.astId);
+                const oldLiveOut = this.#liveOut.get($nodeStmt.astId);
+                
+
+                // Compute new liveIn
+                const diff = new Set([...oldLiveOut].filter(_var => !def.has(_var))); // Difference between liveOut and def
+                const newLiveIn =  new Set([...use, ...diff]);
+
+                // TODO: Compute new liveOut
                 // TODO: update liveChanged
             }
-            
         }
 
     }
@@ -107,6 +118,6 @@ class LivenessAnalysis {
     }
 
     getLiveOut($stmt) {
-        return this.liveOut.get($stmt.astId);
+        return this.#liveOut.get($stmt.astId);
     }
 }
