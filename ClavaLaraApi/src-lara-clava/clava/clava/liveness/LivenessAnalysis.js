@@ -46,16 +46,14 @@ class LivenessAnalysis {
             const $nodeStmt = node.data().nodeStmt;
             let def = new Set();
             
-            const $varDecls = Query.searchFromInclusive($nodeStmt, "vardecl");
-            for (const decl of $varDecls) {
-                if(decl.hasInit)
-                    def.add(decl.name);
-            }
+            const $varDecls = Query.searchFromInclusive($nodeStmt, "vardecl", {hasInit: true});
+            for (const $var of $varDecls)
+                    def.add($var.name);
 
-            const $binaryOps = Query.searchFromInclusive($nodeStmt, "binaryOp");
-            for (const $binOp of $binaryOps) {
-                if ($binOp.isAssignment && $binOp.left.instanceOf("varref"))
-                    def.add($binOp.left.name);
+            const $assignments = Query.searchFromInclusive($nodeStmt, "binaryOp", {isAssignment: true});
+            for (const $assign of $assignments) {
+                if ($assign.left.instanceOf("varref"))
+                    def.add($assign.left.name);
             }
 
             this.#defs.set($nodeStmt.astId, def);
@@ -69,9 +67,9 @@ class LivenessAnalysis {
             
             const $varRefs = Query.searchFromInclusive($nodeStmt, "varref");
             for (const $var of $varRefs) {
-                const $parent = $var.astParent;
+                const $parent = $var.parent;
 
-                if ($parent.instanceOf("binaryOp") && $parent.isAssignment && $parent.left.astId === $var.astId)
+                if ($parent.isAssignment && $parent.left.astId === $var.astId)
                     continue;
 
                 use.add($var.name);
