@@ -19,8 +19,7 @@ class ControlFlowGraph extends Graph {
   #endNode;
 
   constructor(graph, nodes, startNode, endNode) {
-    super();
-    super.graph = graph;
+    super(graph);
     this.#nodes = nodes;
     this.#startNode = startNode;
     this.#endNode = endNode;
