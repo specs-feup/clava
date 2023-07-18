@@ -123,6 +123,9 @@ public enum LaraApiResource implements LaraResourceProvider {
     HLS_MATH("hls/MathAnalysis.lara"),
     HLS_MATH_H("hls/MathHInfo.lara"),
 
+    // LIVENESS
+    LIVENESS_ANALYSIS("liveness/LivenessAnalysis.js"),
+
     // MPI
     MPI_ACCESS_PATTERN("mpi/MpiAccessPattern.lara"),
     MPI_SCATTER_GATHER_LOOP("mpi/MpiScatterGatherLoop.js"),
