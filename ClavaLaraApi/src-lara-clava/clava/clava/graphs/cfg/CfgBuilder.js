@@ -69,7 +69,7 @@ class CfgBuilder {
   /**
    * Creates a new instance of the CfgBuilder class
    * @param {joinpoint} $jp
-   * @param {boolean} splitInstList If true, statements of each instruction list must be split
+   * @param {boolean} [splitInstList = false] If true, statements of each instruction list must be split
    * @param {boolean} [deterministicIds = false] If true, uses deterministic ids for the graph ids (e.g. id_0, id_1...). Otherwise, uses $jp.astId whenever possible
    */
   constructor($jp, deterministicIds = false, splitInstList = false) {
