@@ -36,16 +36,34 @@ class LivenessAnalysis {
         this.#jp = $jp;
         this.#cfg = ControlFlowGraph.build($jp, true, true).graph;
 
-        this.#computeDefsAndUses();
+        this.#computeDefs();
+        this.#computeUses();
         this.#computeLiveInOut();
     }
 
-    #computeDefsAndUses() {
+    #computeDefs() {
         for (const node of this.#cfg.nodes()) {
-            //TODO: compute def of node
-            //TODO: compute use of node
-            println (node.data().type);
+            const $nodeStmt = node.data().nodeStmt;
+            let def = [];
+            
+            const $vardecls = Query.searchFromInclusive($nodeStmt, "vardecl");
+            for (const decl of $vardecls){
+                if(decl.hasInit)
+                    def.push(decl.name);
+            }
+
+            const $binaryOps = Query.searchFromInclusive($nodeStmt, "binaryOp");
+            for (const $binOp of $binaryOps) {
+                if ($binOp.isAssignment && $binOp.left.instanceOf("varref"))
+                    def.push($binOp.left.name);
+            }
+
+            this.#defs.set($nodeStmt.astId, def);
         }
+    }
+
+    #computeUses() {
+
     }
 
     #computeLiveInOut() {
