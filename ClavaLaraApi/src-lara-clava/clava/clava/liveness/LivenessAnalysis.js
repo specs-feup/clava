@@ -46,8 +46,8 @@ class LivenessAnalysis {
             const $nodeStmt = node.data().nodeStmt;
             let def = [];
             
-            const $vardecls = Query.searchFromInclusive($nodeStmt, "vardecl");
-            for (const decl of $vardecls){
+            const $varDecls = Query.searchFromInclusive($nodeStmt, "vardecl");
+            for (const decl of $varDecls) {
                 if(decl.hasInit)
                     def.push(decl.name);
             }
@@ -63,7 +63,22 @@ class LivenessAnalysis {
     }
 
     #computeUses() {
+        for (const node of this.#cfg.nodes()) {
+            const $nodeStmt = node.data().nodeStmt;
+            let use = [];
+            
+            const $varRefs = Query.searchFromInclusive($nodeStmt, "varref");
+            for (const $var of $varRefs) {
+                const $parent = $var.astParent;
 
+                if ($parent.instanceOf("binaryOp") && $parent.isAssignment && $parent.left.astId === $var.astId)
+                    continue;
+
+                use.push($var.name);
+            }
+
+            this.#uses.set($nodeStmt.astId, use);
+        }
     }
 
     #computeLiveInOut() {
@@ -94,5 +109,4 @@ class LivenessAnalysis {
     getLiveOut($stmt) {
         return this.liveOut.get($stmt.astId);
     }
-
 }
