@@ -4,22 +4,16 @@ laraImport("weaver.Query");
 class LivenessUtils {
   static getVarDeclsWithInit($stmt) {
     const $varDecls = Query.searchFromInclusive($stmt, "vardecl", {hasInit: true});
+    const varNames = [...$varDecls].map(($decl) => $decl.name);
 
-    let varNames = new Set();
-    for (const $decl of $varDecls)
-        varNames.add($decl.name);
-
-    return varNames;
+    return new Set(varNames);
   }
 
   static getAssignedVars($stmt) {
     const $assignments = Query.searchFromInclusive($stmt, "binaryOp", {isAssignment: true, left: left => left.instanceOf("varref")});
+    const assignedVars = [...$assignments].map(($assign) => $assign.left.name);
 
-    let assignedVars = new Set();
-    for (const $assign of $assignments) 
-        assignedVars.add($assign.left.name);
-
-    return assignedVars;
+    return new Set(assignedVars);
   }
 
   static getVarRefs($stmt) {
