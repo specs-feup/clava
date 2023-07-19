@@ -1,0 +1,8 @@
+{
+  "preset": "ts-jest/presets/default-esm",
+  "testEnvironment": "node",
+  "collectCoverageFrom": ["./**/*.(t|j)s"],
+  "moduleNameMapper": {
+    "(.+)\\.js": "$1"
+  }
+}

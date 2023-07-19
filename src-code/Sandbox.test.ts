@@ -1,4 +1,3 @@
-import { jest } from "@jest/globals";
 import Sandbox from "./Sandbox.js";
 
 describe("Sandbox", () => {
@@ -11,21 +10,21 @@ describe("Sandbox", () => {
 
     it("should throw an error if the command contains a semicolon", async () => {
       const command = ["echo", "Hello; world!"];
-      await expect(Sandbox.sanitizeCommand(command)).rejects.toThrowError(
+      await expect(Sandbox.sanitizeCommand(command)).rejects.toThrow(
         "Invalid command"
       );
     });
 
     it("should throw an error if the command contains an ampersand", async () => {
       const command = ["echo", "Hello & world!"];
-      await expect(Sandbox.sanitizeCommand(command)).rejects.toThrowError(
+      await expect(Sandbox.sanitizeCommand(command)).rejects.toThrow(
         "Invalid command"
       );
     });
 
     it("should throw an error if the command contains a vertical bar", async () => {
       const command = ["echo", "Hello | world!"];
-      await expect(Sandbox.sanitizeCommand(command)).rejects.toThrowError(
+      await expect(Sandbox.sanitizeCommand(command)).rejects.toThrow(
         "Invalid command"
       );
     });

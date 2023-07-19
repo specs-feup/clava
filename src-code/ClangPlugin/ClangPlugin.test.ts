@@ -25,7 +25,7 @@ describe("ClangPlugin", () => {
   describe("getClangVersionNumberFromExecutable", () => {
     it("should return the clang version number when given a valid clang executable", async () => {
       const clangExecutable = "clang++-14";
-      const expectedVersionNumber = "14.0.0";
+      const expectedVersionNumber = "14.0.6";
 
       const actualVersionNumber =
         await ClangPlugin.getClangVersionNumberFromExecutable(clangExecutable);
@@ -45,7 +45,7 @@ describe("ClangPlugin", () => {
   describe("getClangVersion", () => {
     it("should return the clang version number when given a valid clang executable", async () => {
       const clangExecutable = "clang-14";
-      const expectedVersion = "14.0.0";
+      const expectedVersion = "14.0.6";
       const actualVersion = await ClangPlugin.getClangVersion(clangExecutable);
       expect(actualVersion).toBe(expectedVersion);
     });
