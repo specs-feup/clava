@@ -125,6 +125,7 @@ public enum LaraApiResource implements LaraResourceProvider {
 
     // LIVENESS
     LIVENESS_ANALYSIS("liveness/LivenessAnalysis.js"),
+    LIVENESS_UTILS("liveness/LivenessUtils.js"),
 
     // MPI
     MPI_ACCESS_PATTERN("mpi/MpiAccessPattern.lara"),
