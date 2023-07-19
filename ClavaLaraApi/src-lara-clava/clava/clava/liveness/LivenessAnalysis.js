@@ -87,28 +87,41 @@ class LivenessAnalysis {
             this.#liveOut.set($nodeStmt.astId, new Set());
         }
 
-        let liveChanged = true;
+        let liveChanged;
+        do {
+            liveChanged = false;
 
-        while (liveChanged) {
             for (const node of this.#cfg.nodes()) {
-                const $nodeStmt = node.data().nodeStmt;
-                const def = this.#defs.get($nodeStmt.astId);
-                const use = this.#uses.get($nodeStmt.astId);
+                const nodeId = node.data().nodeStmt.astId;
+                const def = this.#defs.get(nodeId);
+                const use = this.#uses.get(nodeId);
 
-                //Save current liveIn and liveOut
-                const oldLiveIn = this.#liveIn.get($nodeStmt.astId);
-                const oldLiveOut = this.#liveOut.get($nodeStmt.astId);
-                
+                // Save current liveIn and liveOut
+                const oldLiveIn = this.#liveIn.get(nodeId);
+                const oldLiveOut = this.#liveOut.get(nodeId);
 
-                // Compute new liveIn
+                // Compute and save new liveIn
                 const diff = new Set([...oldLiveOut].filter(_var => !def.has(_var))); // Difference between liveOut and def
                 const newLiveIn =  new Set([...use, ...diff]);
+                this.#liveIn.set(nodeId, newLiveIn);
 
-                // TODO: Compute new liveOut
-                // TODO: update liveChanged
+                // Compute and save new liveOut
+                let newLiveOut = new Set();
+                for(const child of node.children()) {
+                    const childId = child.data().nodeStmt.astId;
+                    const childLiveIn = this.#liveIn.get(childId);
+
+                    newLiveOut = new Set(...newLiveOut, ...childLiveIn);
+                }
+                this.#liveOut.set(nodeId, newLiveOut);
+
+                // Update liveChanged
+                const inEqual = oldLiveIn.size === newLiveIn.size && [...oldLiveIn].every(newLiveIn.has, newLiveIn);
+                const outEqual = oldLiveOut.size === newLiveOut.size && [...oldLiveOut].every(newLiveOut.has, newLiveOut);
+                if (!inEqual || !outEqual)
+                    liveChanged = true;
             }
-        }
-
+        } while(liveChanged);
     }
 
     getLiveIn($stmt) {
