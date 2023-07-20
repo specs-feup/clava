@@ -49,11 +49,15 @@ class LivenessAnalyser {
     #computeDefs() {
         for (const node of this.#cfg.nodes()) {
             const $nodeStmt = node.data().nodeStmt;
+            let def;
 
-            const declaredVars = LivenessUtils.getVarDeclsWithInit($nodeStmt);
-            const assignedVars = LivenessUtils.getAssignedVars($nodeStmt);
-            const def = LivenessUtils.unionSets(declaredVars, assignedVars);
-
+            if (node.id() === "start" || node.id() === "end" || $nodeStmt.instanceOf("scope"))
+                def = new Set();
+            else {
+                const declaredVars = LivenessUtils.getVarDeclsWithInit($nodeStmt);
+                const assignedVars = LivenessUtils.getAssignedVars($nodeStmt);
+                def = LivenessUtils.unionSets(declaredVars, assignedVars);
+            }
             this.#defs.set(node.id(), def);
         }
     }
@@ -61,16 +65,19 @@ class LivenessAnalyser {
     #computeUses() {
         for (const node of this.#cfg.nodes()) {
             const $nodeStmt = node.data().nodeStmt;
+            let use;
 
-            const use = LivenessUtils.getVarRefs($nodeStmt);
+            if (node.id() === "start" || node.id() === "end" || $nodeStmt.instanceOf("scope"))
+                use = new Set();
+            else
+                use = LivenessUtils.getVarRefs($nodeStmt);
+
             this.#uses.set(node.id(), use);
         }
     }
 
     #computeLiveInOut() {
         for (const node of this.#cfg.nodes()) {
-            const $nodeStmt = node.data().nodeStmt;
-
             this.#liveIn.set(node.id(), new Set());
             this.#liveOut.set(node.id(), new Set());
         }
@@ -80,18 +87,17 @@ class LivenessAnalyser {
             liveChanged = false;
 
             for (const node of this.#cfg.nodes()) {
-                const nodeId = node.id();
-                const def = this.#defs.get(nodeId);
-                const use = this.#uses.get(nodeId);
+                const def = this.#defs.get(node.id());
+                const use = this.#uses.get(node.id());
 
                 // Save current liveIn and liveOut
-                const oldLiveIn = this.#liveIn.get(nodeId);
-                const oldLiveOut = this.#liveOut.get(nodeId);
+                const oldLiveIn = this.#liveIn.get(node.id());
+                const oldLiveOut = this.#liveOut.get(node.id());
 
                 // Compute and save new liveIn
                 const diff = LivenessUtils.differenceSets(oldLiveOut, def);
                 const newLiveIn = LivenessUtils.unionSets(use, diff);
-                this.#liveIn.set(nodeId, newLiveIn);
+                this.#liveIn.set(node.id(), newLiveIn);
 
                 // Compute and save new liveOut
                 let newLiveOut = new Set();
@@ -101,7 +107,7 @@ class LivenessAnalyser {
 
                     newLiveOut = LivenessUtils.unionSets(newLiveOut, childLiveIn);
                 }
-                this.#liveOut.set(nodeId, newLiveOut);
+                this.#liveOut.set(node.id(), newLiveOut);
 
                 // Update liveChanged
                 if(!LivenessUtils.isSameSet(oldLiveIn, newLiveIn) || !LivenessUtils.isSameSet(oldLiveOut, newLiveOut))
