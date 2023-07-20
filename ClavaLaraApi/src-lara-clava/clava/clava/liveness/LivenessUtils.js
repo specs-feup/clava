@@ -42,4 +42,10 @@ class LivenessUtils {
         return false;
     return [...set1].every(set2.has, set2);
   }
+
+  static getChildren(node) {
+    const edges = node.connectedEdges();
+    const outgoingEdges = edges.filter((edge) => edge.source().equals(node));
+    return outgoingEdges.map((edge) => edge.target());
+  }
 }
