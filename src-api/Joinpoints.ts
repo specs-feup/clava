@@ -14,6 +14,7 @@ import {
   type JoinpointMapperType,
   registerJoinpointMapper,
   wrapJoinPoint,
+  unwrapJoinPoint,
 } from "lara-js/api/LaraJoinPoint.js";
 
 export class Joinpoint extends LaraJoinPoint {
@@ -244,7 +245,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * True if the given node is a descendant of this node
    */
-  getContains(jp: Joinpoint): boolean { return wrapJoinPoint(this._javaObject.getContains(jp)); }
+  getContains(jp: Joinpoint): boolean { return wrapJoinPoint(this._javaObject.getContains(unwrapJoinPoint(jp))); }
   /**
    * Retrieves the descendants of the given type
    */
@@ -319,11 +320,11 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Inserts the given join point after this join point
    */
-  insertAfter(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.insertAfter(node)); }
+  insertAfter(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.insertAfter(unwrapJoinPoint(node))); }
   /**
    * Inserts the given join point before this join point
    */
-  insertBefore(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.insertBefore(node)); }
+  insertBefore(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.insertBefore(unwrapJoinPoint(node))); }
   /**
    * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
    */
@@ -335,7 +336,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Replaces this node with the given node
    */
-  replaceWith(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.replaceWith(node)); }
+  replaceWith(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.replaceWith(unwrapJoinPoint(node))); }
   /**
    * Overload which accepts a list of strings
    */
@@ -347,7 +348,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Replaces the first child, or inserts the join point if no child is present
    */
-  setFirstChild(node: Joinpoint): void { return wrapJoinPoint(this._javaObject.setFirstChild(node)); }
+  setFirstChild(node: Joinpoint): void { return wrapJoinPoint(this._javaObject.setFirstChild(unwrapJoinPoint(node))); }
   /**
    * Sets the commented that are embedded in a node
    */
@@ -355,11 +356,11 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Replaces the last child, or inserts the join point if no child is present
    */
-  setLastChild(node: Joinpoint): void { return wrapJoinPoint(this._javaObject.setLastChild(node)); }
+  setLastChild(node: Joinpoint): void { return wrapJoinPoint(this._javaObject.setLastChild(unwrapJoinPoint(node))); }
   /**
    * Sets the type of a node, if it has a type
    */
-  setType(type: Type): void { return wrapJoinPoint(this._javaObject.setType(type)); }
+  setType(type: Type): void { return wrapJoinPoint(this._javaObject.setType(unwrapJoinPoint(type))); }
   /**
    * Associates arbitrary values to nodes of the AST
    */
@@ -446,7 +447,7 @@ export class Expression extends Joinpoint {
   /**
    * Represents a source file (.c, .cpp., .cl, etc)
    */
-export class File extends Joinpoint {
+export class FileJp extends Joinpoint {
   /**
    * The path to the source folder that was given as the base folder of this file
    */
@@ -524,7 +525,7 @@ export class File extends Joinpoint {
   /**
    * Adds a global variable to this file
    */
-  addGlobal(name: string, type: Joinpoint, initValue: string): Vardecl { return wrapJoinPoint(this._javaObject.addGlobal(name, type, initValue)); }
+  addGlobal(name: string, type: Joinpoint, initValue: string): Vardecl { return wrapJoinPoint(this._javaObject.addGlobal(name, unwrapJoinPoint(type), initValue)); }
   /**
    * Adds an include to the current file. If the file already has the include, it does nothing
    */
@@ -532,19 +533,19 @@ export class File extends Joinpoint {
   /**
    * Overload of addInclude which accepts a join point
    */
-  addIncludeJp(jp: Joinpoint): void { return wrapJoinPoint(this._javaObject.addIncludeJp(jp)); }
+  addIncludeJp(jp: Joinpoint): void { return wrapJoinPoint(this._javaObject.addIncludeJp(unwrapJoinPoint(jp))); }
   /**
    * Adds the node in the join point to the start of the file
    */
-  insertBegin(node: Joinpoint): void { return wrapJoinPoint(this._javaObject.insertBegin(node)); }
+  insertBegin(node: Joinpoint): void { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(node))); }
   /**
    * Adds the node in the join point to the end of the file
    */
-  insertEnd(node: Joinpoint): void { return wrapJoinPoint(this._javaObject.insertEnd(node)); }
+  insertEnd(node: Joinpoint): void { return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(node))); }
   /**
    * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
    */
-  rebuild(): File { return wrapJoinPoint(this._javaObject.rebuild()); }
+  rebuild(): FileJp { return wrapJoinPoint(this._javaObject.rebuild()); }
   /**
    * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
    */
@@ -692,7 +693,7 @@ export class Program extends Joinpoint {
   /**
    * The source files in this program
    */
-  get files(): File[] { return wrapJoinPoint(this._javaObject.getFiles()) }
+  get files(): FileJp[] { return wrapJoinPoint(this._javaObject.getFiles()) }
   get includeFolders(): string[] { return wrapJoinPoint(this._javaObject.getIncludeFolders()) }
   /**
    * True if the program was compiled with a C++ standard
@@ -738,7 +739,7 @@ export class Program extends Joinpoint {
   /**
    * Adds a file join point to the current program
    */
-  addFile(file: File): Joinpoint { return wrapJoinPoint(this._javaObject.addFile(file)); }
+  addFile(file: FileJp): Joinpoint { return wrapJoinPoint(this._javaObject.addFile(unwrapJoinPoint(file))); }
   /**
    * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
    */
@@ -750,7 +751,7 @@ export class Program extends Joinpoint {
   /**
    * Registers a function to be executed when the program exits
    */
-  atexit(func: FunctionJp): void { return wrapJoinPoint(this._javaObject.atexit(func)); }
+  atexit(func: FunctionJp): void { return wrapJoinPoint(this._javaObject.atexit(unwrapJoinPoint(func))); }
   /**
    * Discards the AST at the top of the ASt stack
    */
@@ -788,7 +789,7 @@ export class Record extends NamedDecl {
   /**
    * Adds a field to a record (struct, class).
    */
-  addField(field: Field): void { return wrapJoinPoint(this._javaObject.addField(field)); }
+  addField(field: Field): void { return wrapJoinPoint(this._javaObject.addField(unwrapJoinPoint(field))); }
 }
 
 export class Statement extends Joinpoint {
@@ -873,7 +874,7 @@ export class Type extends Joinpoint {
   /**
    * The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined
    */
-  getBitWidth(reference: Joinpoint): number { return wrapJoinPoint(this._javaObject.getBitWidth(reference)); }
+  getBitWidth(reference: Joinpoint): number { return wrapJoinPoint(this._javaObject.getBitWidth(unwrapJoinPoint(reference))); }
   /**
    * Returns a copy of this type with the qualifier const
    */
@@ -881,7 +882,7 @@ export class Type extends Joinpoint {
   /**
    * Sets the desugared type of this type
    */
-  setDesugar(desugaredType: Type): void { return wrapJoinPoint(this._javaObject.setDesugar(desugaredType)); }
+  setDesugar(desugaredType: Type): void { return wrapJoinPoint(this._javaObject.setDesugar(unwrapJoinPoint(desugaredType))); }
   /**
    * Sets the template argument types of a template type
    */
@@ -893,7 +894,7 @@ export class Type extends Joinpoint {
   /**
    * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
    */
-  setUnderlyingType(oldValue: Type, newValue: Type): Type { return wrapJoinPoint(this._javaObject.setUnderlyingType(oldValue, newValue)); }
+  setUnderlyingType(oldValue: Type, newValue: Type): Type { return wrapJoinPoint(this._javaObject.setUnderlyingType(unwrapJoinPoint(oldValue), unwrapJoinPoint(newValue))); }
   def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
 }
 
@@ -923,7 +924,7 @@ export class UnaryExprOrType extends Expression {
   get hasArgExpr(): boolean { return wrapJoinPoint(this._javaObject.getHasArgExpr()) }
   get hasTypeExpr(): boolean { return wrapJoinPoint(this._javaObject.getHasTypeExpr()) }
   get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
-  setArgType(argType: Type): void { return wrapJoinPoint(this._javaObject.setArgType(argType)); }
+  setArgType(argType: Type): void { return wrapJoinPoint(this._javaObject.setArgType(unwrapJoinPoint(argType))); }
 }
 
 export class UnaryOp extends Op {
@@ -1007,15 +1008,15 @@ export class ArrayType extends Type {
   /**
    * Sets the element type of the array
    */
-  setElementType(arrayElementType: Type): void { return wrapJoinPoint(this._javaObject.setElementType(arrayElementType)); }
+  setElementType(arrayElementType: Type): void { return wrapJoinPoint(this._javaObject.setElementType(unwrapJoinPoint(arrayElementType))); }
 }
 
 export class BinaryOp extends Op {
   get isAssignment(): boolean { return wrapJoinPoint(this._javaObject.getIsAssignment()) }
   get left(): Expression { return wrapJoinPoint(this._javaObject.getLeft()) }
   get right(): Expression { return wrapJoinPoint(this._javaObject.getRight()) }
-  setLeft(left: Expression): void { return wrapJoinPoint(this._javaObject.setLeft(left)); }
-  setRight(right: Expression): void { return wrapJoinPoint(this._javaObject.setRight(right)); }
+  setLeft(left: Expression): void { return wrapJoinPoint(this._javaObject.setLeft(unwrapJoinPoint(left))); }
+  setRight(right: Expression): void { return wrapJoinPoint(this._javaObject.setRight(unwrapJoinPoint(right))); }
 }
 
 export class BoolLiteral extends Literal {
@@ -1096,12 +1097,12 @@ export class Call extends Expression {
   /**
    * Adds an argument at the end of the call, creating an expression using the given code and type
    */
-  addArg(argCode: string, type: Type): void { return wrapJoinPoint(this._javaObject.addArg(argCode, type)); }
+  addArg(argCode: string, type: Type): void { return wrapJoinPoint(this._javaObject.addArg(argCode, unwrapJoinPoint(type))); }
   /**
    * Tries to inline this call
    */
   inline(): boolean { return wrapJoinPoint(this._javaObject.inline()); }
-  setArg(index: number, expr: Expression): void { return wrapJoinPoint(this._javaObject.setArg(index, expr)); }
+  setArg(index: number, expr: Expression): void { return wrapJoinPoint(this._javaObject.setArg(index, unwrapJoinPoint(expr))); }
   setArgFromString(index: number, expr: string): void { return wrapJoinPoint(this._javaObject.setArgFromString(index, expr)); }
   /**
    * Changes the name of the call
@@ -1179,7 +1180,7 @@ export class Class extends Record {
   /**
    * Adds a method to a class. If the given method has a definition, creates an equivalent declaration and adds it to the class, otherwise simply added the declaration to the class. In both cases, the declaration is only added to the class if there is no declaration already with the same signature.
    */
-  addMethod(method: Method): void { return wrapJoinPoint(this._javaObject.addMethod(method)); }
+  addMethod(method: Method): void { return wrapJoinPoint(this._javaObject.addMethod(unwrapJoinPoint(method))); }
 }
 
 export class Continue extends Statement {
@@ -1330,7 +1331,7 @@ export class FunctionJp extends Declarator {
   /**
    * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
    */
-  insertReturn(code: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.insertReturn(code)); }
+  insertReturn(code: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.insertReturn(unwrapJoinPoint(code))); }
   /**
    * Creates a new call to this function
    */
@@ -1338,19 +1339,19 @@ export class FunctionJp extends Declarator {
   /**
    * Sets the body of the function
    */
-  setBody(body: Scope): void { return wrapJoinPoint(this._javaObject.setBody(body)); }
+  setBody(body: Scope): void { return wrapJoinPoint(this._javaObject.setBody(unwrapJoinPoint(body))); }
   /**
    * Sets the type of the function
    */
-  setFunctionType(functionType: FunctionType): void { return wrapJoinPoint(this._javaObject.setFunctionType(functionType)); }
+  setFunctionType(functionType: FunctionType): void { return wrapJoinPoint(this._javaObject.setFunctionType(unwrapJoinPoint(functionType))); }
   /**
    * Sets the parameter of the function at the given position
    */
-  setParam(index: number, param: Param): void { return wrapJoinPoint(this._javaObject.setParam(index, param)); }
+  setParam(index: number, param: Param): void { return wrapJoinPoint(this._javaObject.setParam(index, unwrapJoinPoint(param))); }
   /**
    * Sets the type of a parameter of the function
    */
-  setParamType(index: number, newType: Type): void { return wrapJoinPoint(this._javaObject.setParamType(index, newType)); }
+  setParamType(index: number, newType: Type): void { return wrapJoinPoint(this._javaObject.setParamType(index, unwrapJoinPoint(newType))); }
   /**
    * Sets the parameters of the function
    */
@@ -1362,7 +1363,7 @@ export class FunctionJp extends Declarator {
   /**
    * Sets the return type of the function
    */
-  setReturnType(returnType: Type): void { return wrapJoinPoint(this._javaObject.setReturnType(returnType)); }
+  setReturnType(returnType: Type): void { return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(returnType))); }
 }
 
 export class FunctionType extends Type {
@@ -1371,11 +1372,11 @@ export class FunctionType extends Type {
   /**
    * Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType
    */
-  setParamType(index: number, newType: Type): void { return wrapJoinPoint(this._javaObject.setParamType(index, newType)); }
+  setParamType(index: number, newType: Type): void { return wrapJoinPoint(this._javaObject.setParamType(index, unwrapJoinPoint(newType))); }
   /**
    * Sets the return type of the FunctionType
    */
-  setReturnType(newType: Type): void { return wrapJoinPoint(this._javaObject.setReturnType(newType)); }
+  setReturnType(newType: Type): void { return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(newType))); }
 }
 
 export class GotoStmt extends Statement {
@@ -1383,7 +1384,7 @@ export class GotoStmt extends Statement {
   /**
    * Sets the label of the goto
    */
-  setLabel(label: LabelDecl): void { return wrapJoinPoint(this._javaObject.setLabel(label)); }
+  setLabel(label: LabelDecl): void { return wrapJoinPoint(this._javaObject.setLabel(unwrapJoinPoint(label))); }
 }
 
 export class If extends Statement {
@@ -1394,15 +1395,15 @@ export class If extends Statement {
   /**
    * Sets the condition of the if
    */
-  setCond(cond: Expression): void { return wrapJoinPoint(this._javaObject.setCond(cond)); }
+  setCond(cond: Expression): void { return wrapJoinPoint(this._javaObject.setCond(unwrapJoinPoint(cond))); }
   /**
    * Sets the body of the else
    */
-  setElse(elseStatement: Statement): void { return wrapJoinPoint(this._javaObject.setElse(elseStatement)); }
+  setElse(elseStatement: Statement): void { return wrapJoinPoint(this._javaObject.setElse(unwrapJoinPoint(elseStatement))); }
   /**
    * Sets the body of the if
    */
-  setThen(then: Statement): void { return wrapJoinPoint(this._javaObject.setThen(then)); }
+  setThen(then: Statement): void { return wrapJoinPoint(this._javaObject.setThen(unwrapJoinPoint(then))); }
 }
 
 export class IntLiteral extends Literal {
@@ -1417,7 +1418,7 @@ export class LabelStmt extends Statement {
   /**
    * Sets the label of the label statement
    */
-  setDecl(label: LabelDecl): void { return wrapJoinPoint(this._javaObject.setDecl(label)); }
+  setDecl(label: LabelDecl): void { return wrapJoinPoint(this._javaObject.setDecl(unwrapJoinPoint(label))); }
 }
 
 export class Loop extends Statement {
@@ -1467,7 +1468,7 @@ export class Loop extends Statement {
   /**
    * Tests whether the loops are interchangeable. This is a conservative test.
    */
-  getIsInterchangeable(otherLoop: Loop): boolean { return wrapJoinPoint(this._javaObject.getIsInterchangeable(otherLoop)); }
+  getIsInterchangeable(otherLoop: Loop): boolean { return wrapJoinPoint(this._javaObject.getIsInterchangeable(unwrapJoinPoint(otherLoop))); }
   /**
    * @deprecated use 'setKind' instead
    */
@@ -1475,11 +1476,11 @@ export class Loop extends Statement {
   /**
    * Interchanges two for loops, if possible
    */
-  interchange(otherLoop: Loop): void { return wrapJoinPoint(this._javaObject.interchange(otherLoop)); }
+  interchange(otherLoop: Loop): void { return wrapJoinPoint(this._javaObject.interchange(unwrapJoinPoint(otherLoop))); }
   /**
    * Sets the body of the loop
    */
-  setBody(body: Scope): void { return wrapJoinPoint(this._javaObject.setBody(body)); }
+  setBody(body: Scope): void { return wrapJoinPoint(this._javaObject.setBody(unwrapJoinPoint(body))); }
   /**
    * Sets the conditional statement of the loop. Works with loops of kind 'for'
    */
@@ -1515,7 +1516,7 @@ export class Loop extends Statement {
   /**
    * Applies loop tiling to this loop
    */
-  tile(blockSize: string, reference: Statement): Statement { return wrapJoinPoint(this._javaObject.tile(blockSize, reference)); }
+  tile(blockSize: string, reference: Statement): Statement { return wrapJoinPoint(this._javaObject.tile(blockSize, unwrapJoinPoint(reference))); }
 }
 
   /**
@@ -1696,7 +1697,7 @@ export class ParenType extends Type {
   /**
    * Sets the inner type of this paren type
    */
-  setInnerType(innerType: Type): void { return wrapJoinPoint(this._javaObject.setInnerType(innerType)); }
+  setInnerType(innerType: Type): void { return wrapJoinPoint(this._javaObject.setInnerType(unwrapJoinPoint(innerType))); }
 }
 
 export class PointerType extends Type {
@@ -1708,7 +1709,7 @@ export class PointerType extends Type {
   /**
    * Sets the pointee type of this pointer type
    */
-  setPointee(pointeeType: Type): void { return wrapJoinPoint(this._javaObject.setPointee(pointeeType)); }
+  setPointee(pointeeType: Type): void { return wrapJoinPoint(this._javaObject.setPointee(unwrapJoinPoint(pointeeType))); }
 }
 
 export class QualType extends Type {
@@ -1753,7 +1754,7 @@ export class Scope extends Statement {
   /**
    * Adds a new local variable to this scope
    */
-  addLocal(name: string, type: Joinpoint, initValue: string): Joinpoint { return wrapJoinPoint(this._javaObject.addLocal(name, type, initValue)); }
+  addLocal(name: string, type: Joinpoint, initValue: string): Joinpoint { return wrapJoinPoint(this._javaObject.addLocal(name, unwrapJoinPoint(type), initValue)); }
   /**
    * CFG tester
    */
@@ -1766,12 +1767,12 @@ export class Scope extends Statement {
    * DFG tester
    */
   dfg(): string { return wrapJoinPoint(this._javaObject.dfg()); }
-  insertBegin(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.insertBegin(node)); }
-  insertEnd(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.insertEnd(node)); }
+  insertBegin(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(node))); }
+  insertEnd(node: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(node))); }
   /**
    * Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node
    */
-  insertReturn(code: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.insertReturn(code)); }
+  insertReturn(code: Joinpoint): Joinpoint { return wrapJoinPoint(this._javaObject.insertReturn(unwrapJoinPoint(code))); }
   /**
    * Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)
    */
@@ -1838,7 +1839,7 @@ export class Vardecl extends Declarator {
   /**
    * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
    */
-  setInit(init: Expression): void { return wrapJoinPoint(this._javaObject.setInit(init)); }
+  setInit(init: Expression): void { return wrapJoinPoint(this._javaObject.setInit(unwrapJoinPoint(init))); }
   /**
    * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
    */
@@ -1854,7 +1855,7 @@ export class VariableArrayType extends ArrayType {
   /**
    * Sets the size expression of this variable array type
    */
-  setSizeExpr(sizeExpr: Expression): void { return wrapJoinPoint(this._javaObject.setSizeExpr(sizeExpr)); }
+  setSizeExpr(sizeExpr: Expression): void { return wrapJoinPoint(this._javaObject.setSizeExpr(unwrapJoinPoint(sizeExpr))); }
 }
 
 export class Body extends Scope {
@@ -1896,7 +1897,7 @@ const JoinpointMapper: JoinpointMapperType = {
   decl: Decl,
   empty: Empty,
   expression: Expression,
-  file: File,
+  file: FileJp,
   include: Include,
   literal: Literal,
   memberAccess: MemberAccess,
