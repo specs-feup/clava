@@ -4,7 +4,6 @@
   "globalSetup": "../jest/jestGlobalSetup.js",
   "globalTeardown": "../jest/jestGlobalTeardown.js",
   "setupFiles": ["../jest/setupFiles/sharedJavaModule.js"],
-  "collectCoverageFrom": ["./**/*.(t|j)s"],
   "moduleNameMapper": {
     "(.+)\\.js": "$1"
   }
