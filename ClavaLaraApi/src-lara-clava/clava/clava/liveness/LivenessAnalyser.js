@@ -1,6 +1,7 @@
 laraImport("weaver.Query")
 laraImport("clava.graphs.ControlFlowGraph"); 
 laraImport("clava.liveness.LivenessUtils");
+laraImport("clava.graphs.cfg.CfgNodeType");
 laraImport("lara.graphs.Graphs");
 
 
@@ -55,37 +56,86 @@ class LivenessAnalyser {
     }
 
     /**
-     * Computes the def set of each CFG node
+     * 
+     * @param {joinpoint} $jp 
+     * @returns {Set} the def set for the given joinpoint 
+     */
+    #computeDef($jp) {
+        const declaredVars = LivenessUtils.getVarDeclsWithInit($jp);
+        const assignedVars = LivenessUtils.getAssignedVars($jp);
+        return LivenessUtils.unionSets(declaredVars, assignedVars);
+    }
+
+    /**
+     * 
+     * @param {joinpoint} $jp 
+     * @returns {Set} the use set for the given joinpoint 
+     */
+    #computeUse($jp) {
+        return LivenessUtils.getVarRefs($jp);
+    }
+
+    /**
+     * Computes the def set of each CFG node according to its type
      */
     #computeDefs() {
         for (const node of this.#cfg.nodes()) {
             const $nodeStmt = node.data().nodeStmt;
+            const nodeType = node.data().type;
+            
             let def;
-
-            if (node.id() === "start" || node.id() === "end" || $nodeStmt.instanceOf("scope"))
-                def = new Set();
-            else {
-                const declaredVars = LivenessUtils.getVarDeclsWithInit($nodeStmt);
-                const assignedVars = LivenessUtils.getAssignedVars($nodeStmt);
-                def = LivenessUtils.unionSets(declaredVars, assignedVars);
+            switch (nodeType) { 
+                case CfgNodeType.START:
+                case CfgNodeType.END:
+                case CfgNodeType.SCOPE:
+                case CfgNodeType.THEN:   
+                case CfgNodeType.ELSE:
+                case CfgNodeType.LOOP:
+                case CfgNodeType.SWITCH:
+                case CfgNodeType.CASE:
+                    def = new Set();
+                    break;
+                case CfgNodeType.IF:
+                    def = this.#computeDef($nodeStmt.cond);
+                    break;
+                default:
+                    def = this.#computeDef($nodeStmt);
             }
             this.#defs.set(node.id(), def);
         }
     }
 
      /**
-     * Computes the use set of each CFG node
+     * Computes the use set of each CFG node according to its type
      */
     #computeUses() {
         for (const node of this.#cfg.nodes()) {
             const $nodeStmt = node.data().nodeStmt;
+            const nodeType = node.data().type;
+
             let use;
-
-            if (node.id() === "start" || node.id() === "end" || $nodeStmt.instanceOf("scope"))
-                use = new Set();
-            else
-                use = LivenessUtils.getVarRefs($nodeStmt);
-
+            switch (nodeType) { 
+                case CfgNodeType.START:
+                case CfgNodeType.END:
+                case CfgNodeType.SCOPE:
+                case CfgNodeType.THEN:   
+                case CfgNodeType.ELSE:
+                case CfgNodeType.LOOP:
+                    use = new Set();
+                    break;
+                case CfgNodeType.IF:
+                    use = this.#computeUse($nodeStmt.cond);
+                    break;
+                case CfgNodeType.SWITCH:
+                    use = this.#computeUse($nodeStmt.condition);
+                    break;
+                case CfgNodeType.CASE:
+                    const $switchCondition = $nodeStmt.ancestor("switch").condition;
+                    use = $nodeStmt.isDefault ? new Set() : this.#computeUse($switchCondition);
+                    break;
+                default:
+                    use = this.#computeUse($nodeStmt);
+            }
             this.#uses.set(node.id(), use);
         }
     }
