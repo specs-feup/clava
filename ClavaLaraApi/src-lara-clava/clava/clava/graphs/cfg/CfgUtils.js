@@ -3,6 +3,7 @@ laraImport("lara.Check");
 
 class CfgUtils {
   /**
+   * @param {joinpoint} $stmt the statement join point
    * @return {boolean} true if the statement is considered a leader
    */
   static isLeader($stmt) {
@@ -13,6 +14,7 @@ class CfgUtils {
 
   /**
    * Returns the type of graph node based on the type of the leader statement. If this statement is not a leader, returns undefined
+   * @param {joinpoint} $stmt the statement join point
    */
   static getNodeType($stmt) {
     // If stmt
@@ -23,6 +25,26 @@ class CfgUtils {
     // Loop stmt
     if ($stmt.instanceOf("loop")) {
       return CfgNodeType.LOOP;
+    }
+
+    // Break stmt
+    if ($stmt.instanceOf("break")) {
+      return CfgNodeType.BREAK;
+    }
+
+    // Continue stmt
+    if ($stmt.instanceOf("continue")) {
+      return CfgNodeType.CONTINUE;
+    }
+
+    // Switch stmt
+    if ($stmt.instanceOf("switch")) {
+      return CfgNodeType.SWITCH;
+    }
+
+    //Case stmt
+    if ($stmt.instanceOf("case")) {
+      return CfgNodeType.CASE;
     }
 
     // Return stmt
@@ -120,4 +142,5 @@ class CfgUtils {
 
     return target;
   }
+  
 }
