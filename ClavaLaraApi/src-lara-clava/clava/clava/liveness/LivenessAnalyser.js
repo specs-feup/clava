@@ -11,25 +11,29 @@ class LivenessAnalyser {
     #cfg;
 
     /**
-     * 
+     * Maps each CFG node ID to the corresponding def set
      */
     #defs;
 
     /**
-     *
+     * Maps each CFG node ID to the corresponding use set
      */
     #uses;
 
     /**
-     * 
+     * Maps each CFG node ID to the corresponding LiveIn set
      */
     #liveIn;
 
     /**
-     * 
+     * Maps each CFG node ID to the corresponding LiveOut set
      */
     #liveOut;
 
+    /**
+     * Creates a new instance of the LivenessAnalyser class
+     * @param {joinpoint} $jp 
+     */
     constructor($jp) {
         this.#cfg = ControlFlowGraph.build($jp, true, true).graph;
         this.#defs = new Map();
@@ -38,6 +42,10 @@ class LivenessAnalyser {
         this.#liveOut = new Map();
     }
 
+    /**
+     * Computes the def, use, live in and live out sets of each CFG node
+     * @returns {Array<Map>} an array that contains the def, use, live in and live out of each CFG node.
+     */
     analyse() {
         this.#computeDefs();
         this.#computeUses();
@@ -46,6 +54,9 @@ class LivenessAnalyser {
         return [this.#defs, this.#uses, this.#liveIn, this.#liveOut];
     }
 
+    /**
+     * Computes the def set of each CFG node
+     */
     #computeDefs() {
         for (const node of this.#cfg.nodes()) {
             const $nodeStmt = node.data().nodeStmt;
@@ -62,6 +73,9 @@ class LivenessAnalyser {
         }
     }
 
+     /**
+     * Computes the use set of each CFG node
+     */
     #computeUses() {
         for (const node of this.#cfg.nodes()) {
             const $nodeStmt = node.data().nodeStmt;
@@ -76,6 +90,9 @@ class LivenessAnalyser {
         }
     }
 
+     /**
+     * Computes the LiveIn and LiveOut set of each CFG node
+     */
     #computeLiveInOut() {
         for (const node of this.#cfg.nodes()) {
             this.#liveIn.set(node.id(), new Set());
