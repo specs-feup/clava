@@ -50,9 +50,12 @@ class LivenessUtils {
    * @returns {Boolean} 
    */
   static isValidVarRef($varref) {
-    if ($varref.hasParent && $varref.parent.isAssignment && $varref.parent.left.astId === $varref.astId)
-      return false;
-    return $varref.vardecl !== undefined;  // local variable or parameter
+    const $parent = $varref.parent;
+    const $varDecl = $varref.vardecl;
+
+    if ($parent !== undefined && $parent.isAssignment && $parent.left.astId === $varref.astId)
+      return false; 
+    return $varDecl !== undefined && !$varDecl.isGlobal; 
   }
 
   /**
