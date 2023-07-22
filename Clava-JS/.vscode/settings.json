@@ -1,6 +1,7 @@
 {
   "prettier.tabWidth": 2,
   "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
   "search.exclude": {
     "**/node_modules": true,
     "**/bower_components": true,
@@ -8,5 +9,6 @@
     "./api/**": true,
     "./code/**": true
   },
-  "cmake.configureOnOpen": false
+  "cmake.configureOnOpen": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
