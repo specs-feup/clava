@@ -4,6 +4,6 @@ export const weaverConfig: WeaverConfiguration = {
   weaverName: "clava",
   weaverPrettyName: "Clava",
   weaverFileName: "Weaver.js",
-  jarFilePath: "../../../SPeCS/ClavaWeaver.jar",
+  jarFilePath: "../../ClavaWeaver.jar",
   javaWeaverQualifiedName: "pt.up.fe.specs.clava.weaver.CxxWeaver",
 };
