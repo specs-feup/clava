@@ -15,6 +15,7 @@
   "rules": {
     "tsdoc/syntax": "warn"
   },
+  "ignorePatterns": ["**/*.js", "**/*.d.ts"],
   "overrides": [
     {
       "files": ["**/*.spec.ts", "**/*.test.ts"],
@@ -23,6 +24,10 @@
       "env": {
         "jest/globals": true
       }
+    },
+    {
+      "files": ["scripts/**/*.js"],
+      "extends": ["plugin:@typescript-eslint/disable-type-checked"]
     }
   ]
 }
