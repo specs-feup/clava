@@ -14,10 +14,13 @@
 package pt.up.fe.specs.clava.ast.stmt;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
 import pt.up.fe.specs.clava.ClavaNode;
+import pt.up.fe.specs.clava.ast.expr.Expr;
 
 public class DefaultStmt extends SwitchCase {
 
@@ -37,6 +40,11 @@ public class DefaultStmt extends SwitchCase {
         builder.append("default:" + ln());
 
         return builder.toString();
+    }
+
+    @Override
+    public List<Expr> getValues() {
+        return Collections.emptyList();
     }
 
 }

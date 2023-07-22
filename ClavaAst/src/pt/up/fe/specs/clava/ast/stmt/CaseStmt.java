@@ -13,7 +13,9 @@
 
 package pt.up.fe.specs.clava.ast.stmt;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.suikasoft.jOptions.Interfaces.DataStore;
 
@@ -64,6 +66,19 @@ public class CaseStmt extends SwitchCase {
         builder.append(":" + ln());
 
         return builder.toString();
+    }
+
+    @Override
+    public List<Expr> getValues() {
+        var values = new ArrayList<Expr>();
+
+        values.add(getLhs());
+
+        if (hasRhs()) {
+            values.add(getRhs());
+        }
+
+        return values;
     }
 
 }

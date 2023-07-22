@@ -1,10 +1,7 @@
+laraImport("lara.graphs.Graph");
 laraImport("clava.graphs.cfg.CfgBuilder");
 
-class ControlFlowGraph {
-  /**
-   * A Cytoscape graph representing the CFG
-   */
-  #graph;
+class ControlFlowGraph extends Graph {
 
   /**
    * Maps stmts to graph nodes
@@ -22,18 +19,14 @@ class ControlFlowGraph {
   #endNode;
 
   constructor(graph, nodes, startNode, endNode) {
-    this.#graph = graph;
+    super(graph);
     this.#nodes = nodes;
     this.#startNode = startNode;
     this.#endNode = endNode;
   }
 
-  get graph() {
-    return this.#graph;
-  }
-
-  static build($jp, deterministicIds = false) {
-    const builderResult = new CfgBuilder($jp, deterministicIds).build();
+  static build($jp, deterministicIds = false, splitInstList = false) {
+    const builderResult = new CfgBuilder($jp, deterministicIds, splitInstList).build();
     return new ControlFlowGraph(...builderResult);
   }
 

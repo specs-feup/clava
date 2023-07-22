@@ -106,6 +106,29 @@ public abstract class ASwitch extends AStatement {
     }
 
     /**
+     * the condition of this switch statement
+     */
+    public abstract AExpression getConditionImpl();
+
+    /**
+     * the condition of this switch statement
+     */
+    public final Object getCondition() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "condition", Optional.empty());
+        	}
+        	AExpression result = this.getConditionImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "condition", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "condition", e);
+        }
+    }
+
+    /**
      * Get value on attribute isFirst
      * @return the attribute's value
      */
@@ -1237,6 +1260,7 @@ public abstract class ASwitch extends AStatement {
         attributes.add("hasDefaultCase");
         attributes.add("getDefaultCase");
         attributes.add("cases");
+        attributes.add("condition");
     }
 
     /**
@@ -1283,6 +1307,7 @@ public abstract class ASwitch extends AStatement {
         HASDEFAULTCASE("hasDefaultCase"),
         GETDEFAULTCASE("getDefaultCase"),
         CASES("cases"),
+        CONDITION("condition"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),

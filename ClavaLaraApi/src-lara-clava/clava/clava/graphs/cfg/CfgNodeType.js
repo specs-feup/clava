@@ -14,6 +14,10 @@ class CfgNodeType {
   static STEP = new CfgNodeType("STEP");
   static SCOPE = new CfgNodeType("SCOPE");
   static INST_LIST = new CfgNodeType("INST_LIST");
+  static BREAK = new CfgNodeType("BREAK");
+  static CONTINUE = new CfgNodeType("CONTINUE");
+  static SWITCH = new CfgNodeType("SWITCH");
+  static CASE = new CfgNodeType("CASE");
   static RETURN = new CfgNodeType("RETURN");
   // To add: WHILE, DOWHILE?
 
@@ -29,14 +33,25 @@ class CfgNodeType {
 
   #name;
 
+  /**
+   * Creates a new instance of the CfgNodeType class
+   * @param {String} name the name of the CFG node type
+   */
   constructor(name) {
     this.#name = name;
   }
 
+  /**
+   * @returns {String} the name of the CFG node type
+   */
   get name() {
     return this.#name;
   }
 
+  /**
+   * 
+   * @returns {String} string representation of the CFG node type, which corresponds to its name
+   */
   toString() {
     return this.name;
   }

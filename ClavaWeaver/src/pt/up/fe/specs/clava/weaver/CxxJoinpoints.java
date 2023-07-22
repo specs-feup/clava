@@ -386,7 +386,7 @@ public class CxxJoinpoints {
 
     public static ACxxWeaverJoinPoint create(ClavaNode node) {
         if (node == null) {
-            ClavaLog.info("CxxJoinpoints: tried to create join point from null node, returning undefined");
+            ClavaLog.debug("CxxJoinpoints: tried to create join point from null node, returning undefined");
             return null;
         }
 
