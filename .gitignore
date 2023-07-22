@@ -72,3 +72,6 @@ deps/*/*/*
 debug
 debug_
 stderr.txt
+
+# experiments
+/*Experiment/
