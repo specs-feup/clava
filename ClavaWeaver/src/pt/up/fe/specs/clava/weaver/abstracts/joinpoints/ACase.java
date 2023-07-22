@@ -158,7 +158,7 @@ public abstract class ACase extends AStatement {
     public abstract AExpression[] getValuesArrayImpl();
 
     /**
-     * the values that the case statement will match. It can return one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
+     * the values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
      */
     public Object getValuesImpl() {
         AExpression[] aExpressionArrayImpl0 = getValuesArrayImpl();
@@ -167,7 +167,7 @@ public abstract class ACase extends AStatement {
     }
 
     /**
-     * the values that the case statement will match. It can return one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
+     * the values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
      */
     public final Object getValues() {
         try {

@@ -15459,7 +15459,7 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "the values that the case statement will match. It can return one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case",
+						"tooltip": "the values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case",
 						"children": [
 									{
 										"type": "expression[]",
