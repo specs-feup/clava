@@ -36,7 +36,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lm-sousa/Clava-JS.git"
+    "url": "git+https://github.com/specs-feup/clava.git",
+    "directory": "Clava-JS"
   },
   "keywords": [
     "C",
@@ -48,9 +49,9 @@
   "author": "L. Sousa",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/lm-sousa/Clava-JS/issues"
+    "url": "https://github.com/specs-feup/clava/issues"
   },
-  "homepage": "https://github.com/lm-sousa/Clava-JS#readme",
+  "homepage": "https://github.com/specs-feup/clava#readme",
   "dependencies": {
     "lara-js": "^0.0.1",
     "clavaapi": "^0.1.0"
