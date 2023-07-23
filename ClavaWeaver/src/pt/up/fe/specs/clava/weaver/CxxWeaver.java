@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import org.lara.interpreter.profile.WeavingReport;
@@ -24,6 +25,7 @@ import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.interf.WeaverEngine;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import org.lara.interpreter.weaver.options.WeaverOption;
+import org.lara.interpreter.weaver.utils.LaraResourceProvider;
 import org.lara.language.specification.LanguageSpecification;
 import org.lara.language.specification.dsl.LanguageSpecificationV2;
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -2098,6 +2100,14 @@ public class CxxWeaver extends ACxxWeaver {
 
         return new ClavaAstMethods(this, ClavaNode.class, node -> CxxJoinpoints.create(node),
                 node -> ClavaCommonLanguage.getJoinPointName(node), node -> node.getScopeChildren());
+    }
+    
+    @Override
+    public List<LaraResourceProvider> getNpmResources() {
+        return Stream.concat(
+                super.getNpmResources().stream(),
+                Arrays.asList(ClavaApiJsResource.values()).stream())
+            .toList();
     }
 
 }
