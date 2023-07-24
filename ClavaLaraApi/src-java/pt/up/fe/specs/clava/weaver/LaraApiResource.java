@@ -147,6 +147,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     DECOMPOSE_VAR_DECLARATIONS("pass/DecomposeVarDeclarations.js"),
     LOCAL_STATIC_TO_GLOBAL("pass/LocalStaticToGlobal.js"),
     SINGLE_RETURN_FUNCTION("pass/SingleReturnFunction.js"),
+    SWITCH_TO_IF("pass/SwitchToIf.js"),
     PASS_SIMPLIFY_LOOPS("pass/SimplifyLoops.js"),
     PASS_SIMPLIFY_RETURN("pass/SimplifyReturnStmts.js"),
     PASS_SIMPLIFY_SELECTION_STMTS("pass/SimplifySelectionStmts.js"),
