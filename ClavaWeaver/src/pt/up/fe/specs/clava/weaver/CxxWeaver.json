@@ -11331,6 +11331,15 @@
 			"children": [
 					{
 						"type": "attribute",
+						"tooltip": "The enclosing statement related to this break. It should be either a loop or a switch statement.",
+						"children": [
+									{
+										"type": "statement",
+										"name": "enclosingStmt"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "Boolean",
