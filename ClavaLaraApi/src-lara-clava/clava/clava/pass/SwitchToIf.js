@@ -22,12 +22,10 @@ class SwitchToIf extends SimplePass {
         const $switchEndGoTo = ClavaJoinPoints.gotoStmt($switchEndLabel);
         $jp.insertAfter($switchEndLabel);
 
-        // TODO: handle switch with only one case stmt that is the default
-        // TODO: handle intermediate default case
         // TODO: handle case stmts with more that one value
         // Create 'if' statement for each case
         let caseLabels = new Map();
-        let caseIfs = new Array();
+        let switchConditions = new Array();
         for (const $case of $jp.cases) {
             const labelName = $case.isDefault ? "case_" + $case.astId : "case_" + $case.astId;
             const $labelDecl = ClavaJoinPoints.labelDecl(labelName);
@@ -35,7 +33,7 @@ class SwitchToIf extends SimplePass {
             caseLabels.set($case.astId, labelDecl);
             
             if ($case.isDefault) {
-                caseIfs.push($goto);
+                switchConditions.push($goto);
                 continue;
             }
 
@@ -43,13 +41,14 @@ class SwitchToIf extends SimplePass {
             const $binOp = ClavaJoinPoints.binaryOp("==", $switchCondition, $case.values[0], $type);
             const $ifStmt = ClavaJoinPoints.ifStmt($binOp, $goto);
 
-            caseIfs.push($ifStmt);
+            switchConditions.push($ifStmt);
         }
 
-        $jp.insertBefore(caseIfs[0]);
-        for (let i = 0; i < caseIfs.length - 1; i++) {
-            const $ifStmt = caseIfs[i];
-            const $nextIfStmt = caseIfs[i + 1];
+        $jp.insertBefore(switchConditions[0]);
+        this.#moveDefaultToEnd(switchConditions);
+        for (let i = 0; i < switchConditions.length - 1; i++) {
+            const $ifStmt = switchConditions[i];
+            const $nextIfStmt = switchConditions[i + 1];
             $ifStmt.setElse($nextIfStmt);            
         }
 
@@ -70,5 +69,11 @@ class SwitchToIf extends SimplePass {
 
         $jp.detach();
         //return new PassResult(this, $firstDeclStmt);
+    }
+
+    #moveDefaultToEnd(switchConditions) {
+        const index = switchConditions.findIndex($condition => $condition.instanceOf("gotoStmt"));
+        if (index !== -1)
+            switchConditions.push(array.splice(index, 1)[0]);
     }
 }
