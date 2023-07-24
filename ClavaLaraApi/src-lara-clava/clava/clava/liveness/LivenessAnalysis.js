@@ -1,6 +1,5 @@
 laraImport("clava.liveness.LivenessAnalyser");
 
-
 class LivenessAnalysis {
     /**
      * Maps each CFG node ID to the corresponding def set
@@ -38,11 +37,11 @@ class LivenessAnalysis {
 
     /**
      * 
-     * @param {joinpoint} $jp 
+     * @param {ControlFlowGraph|Cytoscape.Core} cfg the control flow graph. Can be either a Cytoscape graph or a ControlFlowGraph object and each instruction list node must contain only one statement
      * @returns {LivenessAnalysis} a new instance of the LivenessAnalysis class
      */
-    static analyse($jp) {
-        const analyser = new LivenessAnalyser($jp).analyse();
+    static analyse(cfg) {
+        const analyser = new LivenessAnalyser(cfg).analyse();
         return new LivenessAnalysis(...analyser);
     }
 
