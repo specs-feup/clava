@@ -1,6 +1,15 @@
 laraImport("weaver.Query");
 
 class LivenessUtils {
+
+  static isCytoscapeGraph(graph) {
+    return (typeof graph === 'object' && 
+            'nodes' in graph && 
+            'edges' in graph &&
+            typeof graph.add === 'function' && 
+            typeof graph.layout === 'function')
+  }
+
   /**
    * Computes the union of two sets
    * @param {Set} set1 

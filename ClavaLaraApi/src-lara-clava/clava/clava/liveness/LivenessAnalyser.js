@@ -1,9 +1,7 @@
-laraImport("weaver.Query")
 laraImport("clava.graphs.ControlFlowGraph"); 
 laraImport("clava.liveness.LivenessUtils");
 laraImport("clava.graphs.cfg.CfgNodeType");
 laraImport("lara.graphs.Graphs");
-
 
 class LivenessAnalyser {
     /**
@@ -33,15 +31,35 @@ class LivenessAnalyser {
 
     /**
      * Creates a new instance of the LivenessAnalyser class
-     * @param {joinpoint} $jp 
+     * @param {ControlFlowGraph|Cytoscape.Core} cfg the control flow graph. Can be either a Cytoscape graph or a ControlFlowGraph object.
      */
-    constructor($jp) {
-        this.#cfg = ControlFlowGraph.build($jp, true, true).graph;
+    constructor(cfg) {
+        this.#cfg = this.#validateCfg(cfg);
         this.#defs = new Map();
         this.#uses = new Map();
         this.#liveIn = new Map();
         this.#liveOut = new Map();
     }
+
+    /**
+     * Checks if the given control flow graph is a Cytoscape graph or a ControlFlowGraph object.
+     * Additionally, verifies if each instruction list node contains only one statement.
+     * @param cfg the control flow graph to be validated
+     * @returns {Boolean}
+     */
+    #validateCfg(cfg) {
+        if (cfg instanceof ControlFlowGraph)
+            cfg = cfg.graph;
+        else if(!LivenessUtils.isCytoscapeGraph(cfg))
+            throw new Error("'cfg' must be a Cytoscape graph or a ControlFlowGraph object.");
+
+        for (const node of cfg.nodes()) {
+            if (node.data().type === CfgNodeType.INST_LIST && node.data().stmts.length > 1) 
+                throw new Error( "Each instruction list node of the control flow graph must contain only one statement.");
+        }
+        return cfg;
+    }
+
 
     /**
      * Computes the def, use, live in and live out sets of each CFG node
