@@ -45,16 +45,25 @@ class LivenessUtils {
   }
 
   /**
-   * Checks if the given joinpoint is a local variable or parameter and does not refer to an assigned variable.
+   * Checks if the given joinpoint does not refer to an assigned variable.
    * @param {joinpoint} $varref the varref join point 
    * @returns {Boolean} 
    */
   static isValidVarRef($varref) {
     const $parent = $varref.parent;
-    const $varDecl = $varref.vardecl;
 
     if ($parent !== undefined && $parent.isAssignment && $parent.left.astId === $varref.astId)
-      return false; 
+      return false;
+    return true;
+  }
+
+  /**
+   * Checks if the given joinpoint is a local variable or parameter
+   * @param {joinpoint} $varref the varref join point 
+   * @returns {Boolean} 
+   */
+  static isLocalOrParam($varref) {
+    const $varDecl = $varref.vardecl;
     return $varDecl !== undefined && !$varDecl.isGlobal; 
   }
 
@@ -77,7 +86,7 @@ class LivenessUtils {
    */
   static getAssignedVars($stmt) {
     const $assignments = Query.searchFromInclusive($stmt, "binaryOp", {isAssignment: true, left: left => left.instanceOf("varref")});
-    const assignedVars = [...$assignments].map(($assign) => $assign.left.name);
+    const assignedVars = [...$assignments].filter($assign => LivenessUtils.isLocalOrParam($assign.left)).map($assign => $assign.left.name)
 
     return new Set(assignedVars);
   }
@@ -89,7 +98,7 @@ class LivenessUtils {
    */
   static getVarRefs($stmt) {
     const $varRefs = Query.searchFromInclusive($stmt, "varref");
-    const varNames = [...$varRefs].filter($ref => LivenessUtils.isValidVarRef($ref)).map($ref => $ref.name)
+    const varNames = [...$varRefs].filter($ref => LivenessUtils.isValidVarRef($ref) && LivenessUtils.isLocalOrParam($ref)).map($ref => $ref.name)
 
     return new Set(varNames);
   }
