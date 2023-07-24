@@ -36,4 +36,21 @@ public class BreakStmt extends Stmt {
         return "break;";
     }
 
+    /**
+     * 
+     * @return the first ancestor that is either a switch or a loop, or throws exception if none is found
+     */
+    public Stmt getEnclosingStmt() {
+        var currentAncestor = getParent();
+        while (currentAncestor != null) {
+            if (currentAncestor instanceof LoopStmt || currentAncestor instanceof SwitchStmt) {
+                return (Stmt) currentAncestor;
+            }
+
+            currentAncestor = currentAncestor.getParent();
+        }
+
+        throw new RuntimeException("Expected to find either a loop or a switch as an ancestor");
+    }
+
 }
