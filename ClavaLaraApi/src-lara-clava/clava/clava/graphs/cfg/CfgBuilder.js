@@ -120,7 +120,7 @@ class CfgBuilder {
 
   /**
    * Builds the control flow graph
-   * @returns {Array} a array that includes the built graph, the nodes, the start and end nodes
+   * @returns {Array} an array that includes the built graph, the nodes, the start and end nodes
    */
   build() {
 
