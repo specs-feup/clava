@@ -199,7 +199,7 @@ aspectdef CovertLoopToPetitForm
 	input $ForStmt, tabOP end
 	output loopPetitForm end
 
-	loopPetitForm = tabOP.join('') + 'for ';
+	this.loopPetitForm = tabOP.join('') + 'for ';
 	var loopindex = GetLoopIndex($ForStmt);
 	//println("DEBUG - Loop Index: " + loopindex); 
 	//println("DEBUG - For Stmt: " + $ForStmt.location); 	
@@ -250,7 +250,7 @@ aspectdef CovertLoopToPetitForm
 
 	var str_init = 	cloneJP.code;
 
-	loopPetitForm +=  loopControlVarname + '  =  ' + str_init + '  to  ';
+	this.loopPetitForm +=  loopControlVarname + '  =  ' + str_init + '  to  ';
 
 	cloneJP = null;
 	var binaryOpleft = null;
@@ -294,7 +294,7 @@ aspectdef CovertLoopToPetitForm
 			str_cond = '9999';
 	}
 
-	loopPetitForm +=  str_cond;
+	this.loopPetitForm +=  str_cond;
 
  	var stepOp = null;
  	cloneJP = null;
@@ -313,15 +313,15 @@ aspectdef CovertLoopToPetitForm
 
  	if (stepOp === 'post_inc' || stepOp === 'pre_inc')
  	{
- 		loopPetitForm += '  do';
+ 		this.loopPetitForm += '  do';
  	}
  	else if (stepOp === 'pre_dec' || stepOp === 'post_dec')
  	{
- 		loopPetitForm += '  by  -1  do';
+ 		this.loopPetitForm += '  by  -1  do';
  	}
  	else if (stepOp === 'assign')
  	{
- 		loopPetitForm += '  do';
+ 		this.loopPetitForm += '  do';
  	}
 
 

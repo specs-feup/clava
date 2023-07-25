@@ -45,15 +45,3 @@ aspectdef SetMemberAccessOpenMPscoping
 	print_obj(varreflist, 'aspectdef SetMemberAccessOpenMPscoping : varAccess for For#' + $ForStmt.line);
 end
 
-/*
-aspectdef getVarrefobj end
-	input stmt, varname end
-	output varrefObj end
-
-	select stmt.varref end
-	apply
-
-	end
-	condition $varref.name 
-end
-*/

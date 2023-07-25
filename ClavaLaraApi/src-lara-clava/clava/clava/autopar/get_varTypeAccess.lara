@@ -10,10 +10,10 @@ aspectdef get_varTypeAccess
 
 	op = (typeof op !== 'undefined') ? op : 'all';
 
-	varTypeAccess = null;
-	varUse = null;
-	varName = null;
-	vardecl = null;
+	this.varTypeAccess = null;
+	this.varUse = null;
+	this.varName = null;
+	this.vardecl = null;
 
 	if (
 			$varJP.joinPointType === 'arrayAccess' && 
@@ -24,11 +24,11 @@ aspectdef get_varTypeAccess
 		{
 			if ($varJP.arrayVar.joinPointType === 'memberAccess')
 			{
-				varTypeAccess = 'memberArrayAccess';
+				this.varTypeAccess = 'memberArrayAccess';
 			}
 			else if ($varJP.arrayVar.joinPointType === 'varref')
 			{
-				varTypeAccess = 'arrayAccess';
+				this.varTypeAccess = 'arrayAccess';
 			}
 		}
 
@@ -38,7 +38,7 @@ aspectdef get_varTypeAccess
 			//$varJP.type.astName === 'BuiltinType'
 		)
 		{
-			varTypeAccess = 'memberAccess';
+			this.varTypeAccess = 'memberAccess';
 		}
 
 	if (
@@ -47,47 +47,47 @@ aspectdef get_varTypeAccess
 			//$varJP.type.astName === 'BuiltinType'
 		)
 		{
-			varTypeAccess = 'varref';
+			this.varTypeAccess = 'varref';
 		}
 
 
 	if (op !== 'all')
 		return;
 
-	if (varTypeAccess === 'memberArrayAccess')
+	if (this.varTypeAccess === 'memberArrayAccess')
 	{
-		varUse = $varJP.use;
+		this.varUse = $varJP.use;
 		//varName = $varJP.arrayVar.name;
-		varName = normalizeVarName($varJP.code);
+		this.varName = normalizeVarName($varJP.code);
 	}
-	else if (varTypeAccess === 'arrayAccess')
+	else if (this.varTypeAccess === 'arrayAccess')
 	{
-		vardecl = $varJP.arrayVar.vardecl;
-		if(vardecl === undefined) {
+		this.vardecl = $varJP.arrayVar.vardecl;
+		if(this.vardecl === undefined) {
 			debug("autopar.get_varTypeAccess: Could not find vardecl of arrayVar@" + $varJP.arrayVar.location);
-			vardecl = null;
+			this.vardecl = null;
 		}
-		varUse = $varJP.use;
+		this.varUse = $varJP.use;
 		//varName = $varJP.arrayVar.name;
-		varName = normalizeVarName($varJP.code);
+		this.varName = normalizeVarName($varJP.code);
 	}
-	else if (varTypeAccess === 'memberAccess')
+	else if (this.varTypeAccess === 'memberAccess')
 	{
-		varUse = $varJP.use;
+		this.varUse = $varJP.use;
 		//varName = $varJP.name;
-		varName = normalizeVarName($varJP.code);
+		this.varName = normalizeVarName($varJP.code);
 	}
-	else if (varTypeAccess === 'varref')
+	else if (this.varTypeAccess === 'varref')
 	{
-		varUse = $varJP.useExpr.use;
-		vardecl = $varJP.vardecl;
-		if(vardecl === undefined) {
+		this.varUse = $varJP.useExpr.use;
+		this.vardecl = $varJP.vardecl;
+		if(this.vardecl === undefined) {
 			debug("autopar.get_varTypeAccess: Could not find vardecl of var@" + $varJP.location);
-			vardecl = null;
+			this.vardecl = null;
 		}
 		
 		//varName = $varJP.name;
-		varName = normalizeVarName($varJP.code);
+		this.varName = normalizeVarName($varJP.code);
 	}
 
 end

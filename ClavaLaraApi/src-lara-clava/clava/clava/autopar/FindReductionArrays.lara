@@ -8,7 +8,7 @@ aspectdef FindReductionArrays
 	output isReductionArrays end
 	var reduction = [];
 
-	isReductionArrays = false;
+	this.isReductionArrays = false;
 	
 	var check1 = (isdependentInnerloop === true) && (isdependentCurrentloop === false) && (isdependentOuterloop === false);
 	var check2 = (isdependentInnerloop === false) && (isdependentCurrentloop === false) && (isdependentOuterloop === true);
@@ -63,7 +63,7 @@ aspectdef FindReductionArrays
 	{
 		LoopOmpAttributes[loopindex].reduction = LoopOmpAttributes[loopindex].reduction.concat(reduction);
 		LoopOmpAttributes[loopindex].Reduction_listVars.push(candidateArrayName);
-		isReductionArrays = true;
+		this.isReductionArrays = true;
 	}
 	return;
 
@@ -82,7 +82,7 @@ aspectdef retReductionOpArray
 	output reduction end
 //println("Heello");
 
-	reduction = [];
+	this.reduction = [];
 	var candidateVarUse = null;
 
 	var exprvarrefset = orderedVarrefs3($expr);
@@ -168,21 +168,21 @@ aspectdef retReductionOpArray
 
 	var findOpflag = true;
 	if ( ['pre_dec', 'post_dec', 'sub', 'sub_assign'].indexOf(op) !== -1 )
-		reduction.push('reduction (-:' +  arraysizeStr + ')');
+		this.reduction.push('reduction (-:' +  arraysizeStr + ')');
 	else if ( ['pre_inc', 'post_inc', 'add', 'add_assign'].indexOf(op) !== -1 )
-		reduction.push('reduction (+:' + arraysizeStr + ')');
+		this.reduction.push('reduction (+:' + arraysizeStr + ')');
 	else if ( ['mul' , 'mul_assign'].indexOf(op) !== -1 )
-		reduction.push('reduction (*:' + arraysizeStr + ')');
+		this.reduction.push('reduction (*:' + arraysizeStr + ')');
 	else if ( ['and' , 'and_assign'].indexOf(op) !== -1 )
-		reduction.push('reduction (&:' + arraysizeStr + ')');
+		this.reduction.push('reduction (&:' + arraysizeStr + ')');
 	else if ( ['xor' , 'xor_assign'].indexOf(op) !== -1 )
-		reduction.push('reduction (^:' + arraysizeStr + ')');
+		this.reduction.push('reduction (^:' + arraysizeStr + ')');
 	else if ( ['or' , 'or_assign'].indexOf(op) !== -1 )
-		reduction.push('reduction (|:' + arraysizeStr + ')');
+		this.reduction.push('reduction (|:' + arraysizeStr + ')');
 	else if ( ['l_and'].indexOf(op) !== -1 )
-		reduction.push('reduction (&&:' + arraysizeStr + ')');
+		this.reduction.push('reduction (&&:' + arraysizeStr + ')');
 	else if ( ['l_or'].indexOf(op) !== -1 )
-		reduction.push('reduction (||:' + arraysizeStr + ')');
+		this.reduction.push('reduction (||:' + arraysizeStr + ')');
 	else
 		findOpflag = false;
 

@@ -249,7 +249,7 @@ aspectdef inlinePreparation
 	input func_name, callStmt, exprStmt end
 	output replacedCallStr, $newStmts end
 
-	replacedCallStr = '';
+	this.replacedCallStr = '';
 
 	this.$newStmts = [];	
 
@@ -480,17 +480,12 @@ aspectdef inlinePreparation
 	select funcJP.body.childStmt end
 	apply
 		this.$newStmts.push($childStmt.copy());
-		replacedCallStr += $childStmt.code + '\n';
+		this.replacedCallStr += $childStmt.code + '\n';
 		//changedReplacedCall = true;
 		//println("ADDING: " + $childStmt.code);
 	end
-	/*
-	if(changedReplacedCall) {
-		println("REPLACE CALL: " + replacedCallStr);
-	}
-	*/
 
-	replacedCallStr = replacedCallStr.allReplace({' const ':' '});
+	this.replacedCallStr = this.replacedCallStr.allReplace({' const ':' '});
 
 	funcJP.detach();
 end	

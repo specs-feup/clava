@@ -111,7 +111,7 @@ aspectdef ret_IF_Clause
 
 	var loopindex = GetLoopIndex($ForStmt);
 	var loopControlVarname = LoopOmpAttributes[loopindex].loopControlVarname;
-	IF_Clause_str = 'if(abs(';
+	this.IF_Clause_str = 'if(abs(';
 
 	var cloneJP = null;
 
@@ -142,7 +142,7 @@ aspectdef ret_IF_Clause
 		$cast.replaceWith(child);
 	}
 
-	IF_Clause_str += cloneJP.code + ' - ';
+	this.IF_Clause_str += cloneJP.code + ' - ';
 
 
 	cloneJP = null;
@@ -180,10 +180,10 @@ aspectdef ret_IF_Clause
 	}
 
 
-	IF_Clause_str += cloneJP.code;
+	this.IF_Clause_str += cloneJP.code;
 
 
-	IF_Clause_str += ')>500)';
+	this.IF_Clause_str += ')>500)';
 end 
 
 
@@ -194,7 +194,7 @@ aspectdef ret_NUM_THREADS_Clause
 
 	var loopindex = GetLoopIndex($ForStmt);
 	var loopControlVarname = LoopOmpAttributes[loopindex].loopControlVarname;
-	NUM_THREADS_Clause_str = 'num_threads((abs(';
+	this.NUM_THREADS_Clause_str = 'num_threads((abs(';
 
 	var cloneJP = null;
 
@@ -225,7 +225,7 @@ aspectdef ret_NUM_THREADS_Clause
 		$cast.replaceWith(child);
 	}
 
-	NUM_THREADS_Clause_str += cloneJP.code + ' - ';
+	this.NUM_THREADS_Clause_str += cloneJP.code + ' - ';
 
 
 	cloneJP = null;
@@ -263,8 +263,8 @@ aspectdef ret_NUM_THREADS_Clause
 	}
 
 
-	NUM_THREADS_Clause_str += cloneJP.code;
+	this.NUM_THREADS_Clause_str += cloneJP.code;
 
 
-	NUM_THREADS_Clause_str += ')<500)?1:omp_get_max_threads())';
+	this.NUM_THREADS_Clause_str += ')<500)?1:omp_get_max_threads())';
 end 
