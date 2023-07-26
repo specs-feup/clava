@@ -196,7 +196,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Returns the 'program' joinpoint
    */
-  get root(): Joinpoint { return wrapJoinPoint(this._javaObject.getRoot()) }
+  get root(): Program { return wrapJoinPoint(this._javaObject.getRoot()) }
   /**
    * The nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array
    */
@@ -214,10 +214,6 @@ export class Joinpoint extends LaraJoinPoint {
    */
   get stmt(): Statement { return wrapJoinPoint(this._javaObject.getStmt()) }
   get type(): Type { return wrapJoinPoint(this._javaObject.getType()) }
-  /**
-   * A String with the type of the join point
-   */
-  get joinPointType(): string { return wrapJoinPoint(this._javaObject.getJoinPointType()) }
   /**
    * Looks for an ancestor joinpoint name, walking back on the AST
    */
@@ -588,12 +584,17 @@ export class Literal extends Expression {
 
 export class MemberAccess extends Expression {
   /**
+   * True if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)
+   */
+  get arrow(): boolean { return wrapJoinPoint(this._javaObject.getArrow()) }
+  /**
    * Expression of the base of this member access
    */
   get base(): Expression { return wrapJoinPoint(this._javaObject.getBase()) }
   get memberChain(): Expression[] { return wrapJoinPoint(this._javaObject.getMemberChain()) }
   get memberChainNames(): string[] { return wrapJoinPoint(this._javaObject.getMemberChainNames()) }
   get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
+  setArrow(isArrow: boolean): void { return wrapJoinPoint(this._javaObject.setArrow(isArrow)); }
 }
 
   /**
@@ -807,6 +808,22 @@ export class Struct extends Record {
 }
 
 export class Switch extends Statement {
+  /**
+   * The case statements inside this switch
+   */
+  get cases(): Case[] { return wrapJoinPoint(this._javaObject.getCases()) }
+  /**
+   * The condition of this switch statement
+   */
+  get condition(): Expression { return wrapJoinPoint(this._javaObject.getCondition()) }
+  /**
+   * The default case statement of this switch statement or undefined if it does not have a default case
+   */
+  get getDefaultCase(): Case { return wrapJoinPoint(this._javaObject.getGetDefaultCase()) }
+  /**
+   * True if there is a default case in this switch statement, false otherwise
+   */
+  get hasDefaultCase(): boolean { return wrapJoinPoint(this._javaObject.getHasDefaultCase()) }
 }
 
   /**
@@ -876,7 +893,7 @@ export class Type extends Joinpoint {
    */
   getBitWidth(reference: Joinpoint): number { return wrapJoinPoint(this._javaObject.getBitWidth(unwrapJoinPoint(reference))); }
   /**
-   * Returns a copy of this type with the qualifier const
+   * Returns a new node based on this type with the qualifier const
    */
   asConst(): Type { return wrapJoinPoint(this._javaObject.asConst()); }
   /**
@@ -1115,6 +1132,30 @@ export class Call extends Expression {
 }
 
 export class Case extends Statement {
+  /**
+   * The instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
+   */
+  get instructions(): Statement[] { return wrapJoinPoint(this._javaObject.getInstructions()) }
+  /**
+   * True if this is a default case, false otherwise
+   */
+  get isDefault(): boolean { return wrapJoinPoint(this._javaObject.getIsDefault()) }
+  /**
+   * True if this case does not contain instructions (i.e., it is directly above another case), false otherwise
+   */
+  get isEmpty(): boolean { return wrapJoinPoint(this._javaObject.getIsEmpty()) }
+  /**
+   * The case statement that comes after this case, or undefined if there are no more case statements
+   */
+  get nextCase(): Case { return wrapJoinPoint(this._javaObject.getNextCase()) }
+  /**
+   * The first statement that is not a case that will be executed by this case statement
+   */
+  get nextInstruction(): Statement { return wrapJoinPoint(this._javaObject.getNextInstruction()) }
+  /**
+   * The values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
+   */
+  get values(): Expression[] { return wrapJoinPoint(this._javaObject.getValues()) }
 }
 
 export class Cast extends Expression {

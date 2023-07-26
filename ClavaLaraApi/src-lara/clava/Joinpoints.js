@@ -9,593 +9,381 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { LaraJoinPoint, registerJoinpointMapper, wrapJoinPoint, unwrapJoinPoint, } from "lara-js/api/LaraJoinPoint.js";
 export class Joinpoint extends LaraJoinPoint {
-    get actions() {
-        return wrapJoinPoint(this._javaObject.getActions());
-    }
+    get actions() { return wrapJoinPoint(this._javaObject.getActions()); }
     /**
      * String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'
      */
-    get ast() {
-        return wrapJoinPoint(this._javaObject.getAst());
-    }
+    get ast() { return wrapJoinPoint(this._javaObject.getAst()); }
     /**
      * Returns an array with the children of the node, considering null nodes
      */
-    get astChildren() {
-        return wrapJoinPoint(this._javaObject.getAstChildren());
-    }
+    get astChildren() { return wrapJoinPoint(this._javaObject.getAstChildren()); }
     /**
      * String that uniquely identifies this node
      */
-    get astId() {
-        return wrapJoinPoint(this._javaObject.getAstId());
-    }
+    get astId() { return wrapJoinPoint(this._javaObject.getAstId()); }
     /**
      * The name of the Java class of this node, which is similar to the equivalent node in Clang AST
      */
-    get astName() {
-        return wrapJoinPoint(this._javaObject.getAstName());
-    }
+    get astName() { return wrapJoinPoint(this._javaObject.getAstName()); }
     /**
      * Returns the number of children of the node, considering null nodes
      */
-    get astNumChildren() {
-        return wrapJoinPoint(this._javaObject.getAstNumChildren());
-    }
+    get astNumChildren() { return wrapJoinPoint(this._javaObject.getAstNumChildren()); }
     /**
      * Returns the parent node in the AST, or undefined if it is the root node
      */
-    get astParent() {
-        return wrapJoinPoint(this._javaObject.getAstParent());
-    }
+    get astParent() { return wrapJoinPoint(this._javaObject.getAstParent()); }
     /**
      * The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit
      */
-    get bitWidth() {
-        return wrapJoinPoint(this._javaObject.getBitWidth());
-    }
+    get bitWidth() { return wrapJoinPoint(this._javaObject.getBitWidth()); }
     /**
      * String list of the names of the join points that form a path from the root to this node
      */
-    get chain() {
-        return wrapJoinPoint(this._javaObject.getChain());
-    }
+    get chain() { return wrapJoinPoint(this._javaObject.getChain()); }
     /**
      * Returns an array with the children of the node, ignoring null nodes
      */
-    get children() {
-        return wrapJoinPoint(this._javaObject.getChildren());
-    }
+    get children() { return wrapJoinPoint(this._javaObject.getChildren()); }
     /**
      * String with the code represented by this node
      */
-    get code() {
-        return wrapJoinPoint(this._javaObject.getCode());
-    }
+    get code() { return wrapJoinPoint(this._javaObject.getCode()); }
     /**
      * The starting column of the current node in the original code
      */
-    get column() {
-        return wrapJoinPoint(this._javaObject.getColumn());
-    }
+    get column() { return wrapJoinPoint(this._javaObject.getColumn()); }
     /**
      * Returns the node that declares the scope of this node
      */
-    get currentRegion() {
-        return wrapJoinPoint(this._javaObject.getCurrentRegion());
-    }
+    get currentRegion() { return wrapJoinPoint(this._javaObject.getCurrentRegion()); }
     /**
      * JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.
      */
-    get data() {
-        return wrapJoinPoint(this._javaObject.getData());
-    }
+    get data() { return wrapJoinPoint(this._javaObject.getData()); }
     /**
      * The depth of this join point in the AST. If it is the root join point returns 0, if it is a child of the root node returns 1, etc.
      */
-    get depth() {
-        return wrapJoinPoint(this._javaObject.getDepth());
-    }
+    get depth() { return wrapJoinPoint(this._javaObject.getDepth()); }
     /**
      * Retrieves all descendants of the join point
      */
-    get descendants() {
-        return wrapJoinPoint(this._javaObject.getDescendants());
-    }
+    get descendants() { return wrapJoinPoint(this._javaObject.getDescendants()); }
     /**
      * The ending column of the current node in the original code
      */
-    get endColumn() {
-        return wrapJoinPoint(this._javaObject.getEndColumn());
-    }
+    get endColumn() { return wrapJoinPoint(this._javaObject.getEndColumn()); }
     /**
      * The ending line of the current node in the original code
      */
-    get endLine() {
-        return wrapJoinPoint(this._javaObject.getEndLine());
-    }
+    get endLine() { return wrapJoinPoint(this._javaObject.getEndLine()); }
     /**
      * The name of the file where the code of this node is located, if available
      */
-    get filename() {
-        return wrapJoinPoint(this._javaObject.getFilename());
-    }
+    get filename() { return wrapJoinPoint(this._javaObject.getFilename()); }
     /**
      * The complete path to the file where the code of this node comes from
      */
-    get filepath() {
-        return wrapJoinPoint(this._javaObject.getFilepath());
-    }
+    get filepath() { return wrapJoinPoint(this._javaObject.getFilepath()); }
     /**
      * Returns the first child of this node, or undefined if it has no child
      */
-    get firstChild() {
-        return wrapJoinPoint(this._javaObject.getFirstChild());
-    }
+    get firstChild() { return wrapJoinPoint(this._javaObject.getFirstChild()); }
     /**
      * @deprecated use hasParent instead
      */
-    get hasAstParent() {
-        return wrapJoinPoint(this._javaObject.getHasAstParent());
-    }
+    get hasAstParent() { return wrapJoinPoint(this._javaObject.getHasAstParent()); }
     /**
      * True if the node has children, false otherwise
      */
-    get hasChildren() {
-        return wrapJoinPoint(this._javaObject.getHasChildren());
-    }
+    get hasChildren() { return wrapJoinPoint(this._javaObject.getHasChildren()); }
     /**
      * True if this node has a parent
      */
-    get hasParent() {
-        return wrapJoinPoint(this._javaObject.getHasParent());
-    }
+    get hasParent() { return wrapJoinPoint(this._javaObject.getHasParent()); }
     /**
      * True, if the join point has a type
      */
-    get hasType() {
-        return wrapJoinPoint(this._javaObject.getHasType());
-    }
+    get hasType() { return wrapJoinPoint(this._javaObject.getHasType()); }
     /**
      * Returns comments that are not explicitly in the AST, but embedded in other nodes
      */
-    get inlineComments() {
-        return wrapJoinPoint(this._javaObject.getInlineComments());
-    }
+    get inlineComments() { return wrapJoinPoint(this._javaObject.getInlineComments()); }
     /**
      * True if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)
      */
-    get isCilk() {
-        return wrapJoinPoint(this._javaObject.getIsCilk());
-    }
+    get isCilk() { return wrapJoinPoint(this._javaObject.getIsCilk()); }
     /**
      * True, if the join point is part of a system header file
      */
-    get isInSystemHeader() {
-        return wrapJoinPoint(this._javaObject.getIsInSystemHeader());
-    }
+    get isInSystemHeader() { return wrapJoinPoint(this._javaObject.getIsInSystemHeader()); }
     /**
      * True, if the join point is inside a header (e.g., if condition, for, while)
      */
-    get isInsideHeader() {
-        return wrapJoinPoint(this._javaObject.getIsInsideHeader());
-    }
+    get isInsideHeader() { return wrapJoinPoint(this._javaObject.getIsInsideHeader()); }
     /**
      * True, if the join point is inside a loop header (e.g., for, while)
      */
-    get isInsideLoopHeader() {
-        return wrapJoinPoint(this._javaObject.getIsInsideLoopHeader());
-    }
+    get isInsideLoopHeader() { return wrapJoinPoint(this._javaObject.getIsInsideLoopHeader()); }
     /**
      * True if any descendant or the node itself was defined as a macro
      */
-    get isMacro() {
-        return wrapJoinPoint(this._javaObject.getIsMacro());
-    }
+    get isMacro() { return wrapJoinPoint(this._javaObject.getIsMacro()); }
     /**
      * The names of the Java fields of this node. Can be used as key of the attribute 'javaValue'
      *
      * @deprecated used attribute 'keys' instead, together with 'getValue'
      */
-    get javaFields() {
-        return wrapJoinPoint(this._javaObject.getJavaFields());
-    }
+    get javaFields() { return wrapJoinPoint(this._javaObject.getJavaFields()); }
     /**
      * @deprecated use joinPointType instead (uppercase P)
      */
-    get joinpointType() {
-        return wrapJoinPoint(this._javaObject.getJoinpointType());
-    }
+    get joinpointType() { return wrapJoinPoint(this._javaObject.getJoinpointType()); }
     /**
      * Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)
      */
-    get jpId() {
-        return wrapJoinPoint(this._javaObject.getJpId());
-    }
+    get jpId() { return wrapJoinPoint(this._javaObject.getJpId()); }
     /**
      * A list of the properties currently supported by this node. Can be used as parameter of the attribute 'getValue'
      */
-    get keys() {
-        return wrapJoinPoint(this._javaObject.getKeys());
-    }
+    get keys() { return wrapJoinPoint(this._javaObject.getKeys()); }
     /**
      * Returns the last child of this node, or undefined if it has no child
      */
-    get lastChild() {
-        return wrapJoinPoint(this._javaObject.getLastChild());
-    }
+    get lastChild() { return wrapJoinPoint(this._javaObject.getLastChild()); }
     /**
      * Returns the node that came before this node, or undefined if there is none
      */
-    get leftJp() {
-        return wrapJoinPoint(this._javaObject.getLeftJp());
-    }
+    get leftJp() { return wrapJoinPoint(this._javaObject.getLeftJp()); }
     /**
      * The starting line of the current node in the original code
      */
-    get line() {
-        return wrapJoinPoint(this._javaObject.getLine());
-    }
+    get line() { return wrapJoinPoint(this._javaObject.getLine()); }
     /**
      * A string with information about the file and code position of this node, if available
      */
-    get location() {
-        return wrapJoinPoint(this._javaObject.getLocation());
-    }
+    get location() { return wrapJoinPoint(this._javaObject.getLocation()); }
     /**
      * Returns the number of children of the node, ignoring null nodes
      */
-    get numChildren() {
-        return wrapJoinPoint(this._javaObject.getNumChildren());
-    }
+    get numChildren() { return wrapJoinPoint(this._javaObject.getNumChildren()); }
     /**
      * Returns the parent node in the AST, or undefined if it is the root node
      */
-    get parent() {
-        return wrapJoinPoint(this._javaObject.getParent());
-    }
+    get parent() { return wrapJoinPoint(this._javaObject.getParent()); }
     /**
      * Returns the node that declares the scope that is a parent of the scope of this node
      */
-    get parentRegion() {
-        return wrapJoinPoint(this._javaObject.getParentRegion());
-    }
+    get parentRegion() { return wrapJoinPoint(this._javaObject.getParentRegion()); }
     /**
      * The pragmas associated with this node
      */
-    get pragmas() {
-        return wrapJoinPoint(this._javaObject.getPragmas());
-    }
+    get pragmas() { return wrapJoinPoint(this._javaObject.getPragmas()); }
     /**
      * Returns the node that comes after this node, or undefined if there is none
      */
-    get rightJp() {
-        return wrapJoinPoint(this._javaObject.getRightJp());
-    }
+    get rightJp() { return wrapJoinPoint(this._javaObject.getRightJp()); }
     /**
      * Returns the 'program' joinpoint
      */
-    get root() {
-        return wrapJoinPoint(this._javaObject.getRoot());
-    }
+    get root() { return wrapJoinPoint(this._javaObject.getRoot()); }
     /**
      * The nodes of the scope of the current join point. If this node has a body (e.g., loop, function) corresponds to the children of the body. Otherwise, returns an empty array
      */
-    get scopeNodes() {
-        return wrapJoinPoint(this._javaObject.getScopeNodes());
-    }
+    get scopeNodes() { return wrapJoinPoint(this._javaObject.getScopeNodes()); }
     /**
      * Returns an array with the siblings that came before this node
      */
-    get siblingsLeft() {
-        return wrapJoinPoint(this._javaObject.getSiblingsLeft());
-    }
+    get siblingsLeft() { return wrapJoinPoint(this._javaObject.getSiblingsLeft()); }
     /**
      * Returns an array with the siblings that come after this node
      */
-    get siblingsRight() {
-        return wrapJoinPoint(this._javaObject.getSiblingsRight());
-    }
+    get siblingsRight() { return wrapJoinPoint(this._javaObject.getSiblingsRight()); }
     /**
      * Converts this join point to a statement, or returns undefined if it was not possible
      */
-    get stmt() {
-        return wrapJoinPoint(this._javaObject.getStmt());
-    }
-    get type() {
-        return wrapJoinPoint(this._javaObject.getType());
-    }
-    /**
-     * A String with the type of the join point
-     */
-    get joinPointType() {
-        return wrapJoinPoint(this._javaObject.getJoinPointType());
-    }
+    get stmt() { return wrapJoinPoint(this._javaObject.getStmt()); }
+    get type() { return wrapJoinPoint(this._javaObject.getType()); }
     /**
      * Looks for an ancestor joinpoint name, walking back on the AST
      */
-    getAncestor(type) {
-        return wrapJoinPoint(this._javaObject.getAncestor(type));
-    }
+    getAncestor(type) { return wrapJoinPoint(this._javaObject.getAncestor(type)); }
     /**
      * Looks for an ancestor AST name, walking back on the AST
      */
-    getAstAncestor(type) {
-        return wrapJoinPoint(this._javaObject.getAstAncestor(type));
-    }
+    getAstAncestor(type) { return wrapJoinPoint(this._javaObject.getAstAncestor(type)); }
     /**
      * Returns the child of the node at the given index, considering null nodes
      */
-    getAstChild(index) {
-        return wrapJoinPoint(this._javaObject.getAstChild(index));
-    }
+    getAstChild(index) { return wrapJoinPoint(this._javaObject.getAstChild(index)); }
     /**
      * True, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'
      */
-    getAstIsInstance(className) {
-        return wrapJoinPoint(this._javaObject.getAstIsInstance(className));
-    }
+    getAstIsInstance(className) { return wrapJoinPoint(this._javaObject.getAstIsInstance(className)); }
     /**
      * Looks for an ancestor joinpoint name, walking back on the joinpoint chain
      */
-    getChainAncestor(type) {
-        return wrapJoinPoint(this._javaObject.getChainAncestor(type));
-    }
+    getChainAncestor(type) { return wrapJoinPoint(this._javaObject.getChainAncestor(type)); }
     /**
      * Returns the child of the node at the given index, ignoring null nodes
      */
-    getChild(index) {
-        return wrapJoinPoint(this._javaObject.getChild(index));
-    }
+    getChild(index) { return wrapJoinPoint(this._javaObject.getChild(index)); }
     /**
      * True if the given node is a descendant of this node
      */
-    getContains(jp) {
-        return wrapJoinPoint(this._javaObject.getContains(unwrapJoinPoint(jp)));
-    }
+    getContains(jp) { return wrapJoinPoint(this._javaObject.getContains(unwrapJoinPoint(jp))); }
     /**
      * Retrieves the descendants of the given type
      */
-    getDescendants(type) {
-        return wrapJoinPoint(this._javaObject.getDescendants(type));
-    }
+    getDescendants(type) { return wrapJoinPoint(this._javaObject.getDescendants(type)); }
     /**
      * Retrieves the descendants of the given type, including the node itself
      */
-    getDescendantsAndSelf(type) {
-        return wrapJoinPoint(this._javaObject.getDescendantsAndSelf(type));
-    }
+    getDescendantsAndSelf(type) { return wrapJoinPoint(this._javaObject.getDescendantsAndSelf(type)); }
     /**
      * Looks in the descendants for the first node of the given type
      */
-    getFirstJp(type) {
-        return wrapJoinPoint(this._javaObject.getFirstJp(type));
-    }
+    getFirstJp(type) { return wrapJoinPoint(this._javaObject.getFirstJp(type)); }
     /**
      * @deprecated use 'userField' instead
      */
-    getGetUserField(fieldName) {
-        return wrapJoinPoint(this._javaObject.getGetUserField(fieldName));
-    }
+    getGetUserField(fieldName) { return wrapJoinPoint(this._javaObject.getGetUserField(fieldName)); }
     /**
      * The value associated with the given property key
      */
-    getGetValue(key) {
-        return wrapJoinPoint(this._javaObject.getGetValue(key));
-    }
+    getGetValue(key) { return wrapJoinPoint(this._javaObject.getGetValue(key)); }
     /**
      * True, if the given join point or AST node is the same (== test) as the current join point AST node
      */
-    getHasNode(nodeOrJp) {
-        return wrapJoinPoint(this._javaObject.getHasNode(nodeOrJp));
-    }
+    getHasNode(nodeOrJp) { return wrapJoinPoint(this._javaObject.getHasNode(nodeOrJp)); }
     /**
      * String with the full Java class name of the type of the Java field with the provided name
      */
-    getJavaFieldType(fieldName) {
-        return wrapJoinPoint(this._javaObject.getJavaFieldType(fieldName));
-    }
+    getJavaFieldType(fieldName) { return wrapJoinPoint(this._javaObject.getJavaFieldType(fieldName)); }
     /**
      * Returns the value associated with the provided Java field name
      *
      * @deprecated used attribute 'getValue' instead, with the names returned by the attribute 'keys'
      */
-    getJavaValue(fieldName) {
-        return wrapJoinPoint(this._javaObject.getJavaValue(fieldName));
-    }
+    getJavaValue(fieldName) { return wrapJoinPoint(this._javaObject.getJavaValue(fieldName)); }
     /**
      * Java Class instance with the type of the given key
      */
-    getKeyType(key) {
-        return wrapJoinPoint(this._javaObject.getKeyType(key));
-    }
+    getKeyType(key) { return wrapJoinPoint(this._javaObject.getKeyType(key)); }
     /**
      * [HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type
      */
-    getLaraDescendants(type) {
-        return wrapJoinPoint(this._javaObject.getLaraDescendants(type));
-    }
+    getLaraDescendants(type) { return wrapJoinPoint(this._javaObject.getLaraDescendants(type)); }
     /**
      * Retrives values that have been associated to nodes of the AST with 'setUserField'
      */
-    getUserField(fieldName) {
-        return wrapJoinPoint(this._javaObject.getUserField(fieldName));
-    }
+    getUserField(fieldName) { return wrapJoinPoint(this._javaObject.getUserField(fieldName)); }
     /**
      * True if the current join point is an instance of the given type
      */
-    getInstanceOf(name) {
-        return wrapJoinPoint(this._javaObject.getInstanceOf(name));
-    }
+    getInstanceOf(name) { return wrapJoinPoint(this._javaObject.getInstanceOf(name)); }
     //insert(position: "before" | "after" | "replace", code: string): void { return wrapJoinPoint(this._javaObject.insert(position, code)); }
     /**
      * Performs a copy of the node and its children, but not of the nodes in its fields
      */
-    copy() {
-        return wrapJoinPoint(this._javaObject.copy());
-    }
+    copy() { return wrapJoinPoint(this._javaObject.copy()); }
     /**
      * Copies all enumerable own properties from the source object to the .data object
      */
-    dataAssign(source) {
-        return wrapJoinPoint(this._javaObject.dataAssign(source));
-    }
+    dataAssign(source) { return wrapJoinPoint(this._javaObject.dataAssign(source)); }
     /**
      * Clears all properties from the .data object
      */
-    dataClear() {
-        return wrapJoinPoint(this._javaObject.dataClear());
-    }
+    dataClear() { return wrapJoinPoint(this._javaObject.dataClear()); }
     /**
      * Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)
      */
-    deepCopy() {
-        return wrapJoinPoint(this._javaObject.deepCopy());
-    }
+    deepCopy() { return wrapJoinPoint(this._javaObject.deepCopy()); }
     /**
      * Removes the node associated to this joinpoint from the AST
      */
-    detach() {
-        return wrapJoinPoint(this._javaObject.detach());
-    }
+    detach() { return wrapJoinPoint(this._javaObject.detach()); }
     /**
      * Inserts the given join point after this join point
      */
-    insertAfter(node) {
-        return wrapJoinPoint(this._javaObject.insertAfter(unwrapJoinPoint(node)));
-    }
+    insertAfter(node) { return wrapJoinPoint(this._javaObject.insertAfter(unwrapJoinPoint(node))); }
     /**
      * Inserts the given join point before this join point
      */
-    insertBefore(node) {
-        return wrapJoinPoint(this._javaObject.insertBefore(unwrapJoinPoint(node)));
-    }
+    insertBefore(node) { return wrapJoinPoint(this._javaObject.insertBefore(unwrapJoinPoint(node))); }
     /**
      * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
      */
-    messageToUser(message) {
-        return wrapJoinPoint(this._javaObject.messageToUser(message));
-    }
+    messageToUser(message) { return wrapJoinPoint(this._javaObject.messageToUser(message)); }
     /**
      * Removes the children of this node
      */
-    removeChildren() {
-        return wrapJoinPoint(this._javaObject.removeChildren());
-    }
+    removeChildren() { return wrapJoinPoint(this._javaObject.removeChildren()); }
     /**
      * Replaces this node with the given node
      */
-    replaceWith(node) {
-        return wrapJoinPoint(this._javaObject.replaceWith(unwrapJoinPoint(node)));
-    }
+    replaceWith(node) { return wrapJoinPoint(this._javaObject.replaceWith(unwrapJoinPoint(node))); }
     /**
      * Overload which accepts a list of strings
      */
-    replaceWithStrings(node) {
-        return wrapJoinPoint(this._javaObject.replaceWithStrings(node));
-    }
+    replaceWithStrings(node) { return wrapJoinPoint(this._javaObject.replaceWithStrings(node)); }
     /**
      * Setting data directly is not supported, this action just emits a warning and does nothing
      */
-    setData(source) {
-        return wrapJoinPoint(this._javaObject.setData(source));
-    }
+    setData(source) { return wrapJoinPoint(this._javaObject.setData(source)); }
     /**
      * Replaces the first child, or inserts the join point if no child is present
      */
-    setFirstChild(node) {
-        return wrapJoinPoint(this._javaObject.setFirstChild(unwrapJoinPoint(node)));
-    }
+    setFirstChild(node) { return wrapJoinPoint(this._javaObject.setFirstChild(unwrapJoinPoint(node))); }
     /**
      * Sets the commented that are embedded in a node
      */
-    setInlineComments(comments) {
-        return wrapJoinPoint(this._javaObject.setInlineComments(comments));
-    }
+    setInlineComments(comments) { return wrapJoinPoint(this._javaObject.setInlineComments(comments)); }
     /**
      * Replaces the last child, or inserts the join point if no child is present
      */
-    setLastChild(node) {
-        return wrapJoinPoint(this._javaObject.setLastChild(unwrapJoinPoint(node)));
-    }
+    setLastChild(node) { return wrapJoinPoint(this._javaObject.setLastChild(unwrapJoinPoint(node))); }
     /**
      * Sets the type of a node, if it has a type
      */
-    setType(type) {
-        return wrapJoinPoint(this._javaObject.setType(unwrapJoinPoint(type)));
-    }
+    setType(type) { return wrapJoinPoint(this._javaObject.setType(unwrapJoinPoint(type))); }
     /**
      * Associates arbitrary values to nodes of the AST
      */
-    setUserField(fieldName, value) {
-        return wrapJoinPoint(this._javaObject.setUserField(fieldName, value));
-    }
+    setUserField(fieldName, value) { return wrapJoinPoint(this._javaObject.setUserField(fieldName, value)); }
     /**
      * Sets the value associated with the given property key
      */
-    setValue(key, value) {
-        return wrapJoinPoint(this._javaObject.setValue(key, value));
-    }
+    setValue(key, value) { return wrapJoinPoint(this._javaObject.setValue(key, value)); }
     /**
      * Replaces this join point with a comment with the same contents as .code
      */
-    toComment() {
-        return wrapJoinPoint(this._javaObject.toComment());
-    }
+    toComment() { return wrapJoinPoint(this._javaObject.toComment()); }
 }
 export class Attribute extends Joinpoint {
-    get kind() {
-        return wrapJoinPoint(this._javaObject.getKind());
-    }
-    get attributes() {
-        return wrapJoinPoint(this._javaObject.getAttributes());
-    }
-    get selects() {
-        return wrapJoinPoint(this._javaObject.getSelects());
-    }
-    def(attribute, value) {
-        return wrapJoinPoint(this._javaObject.def(attribute, value));
-    }
+    get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
+    get attributes() { return wrapJoinPoint(this._javaObject.getAttributes()); }
+    get selects() { return wrapJoinPoint(this._javaObject.getSelects()); }
+    def(attribute, value) { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
 }
 /**
  * Utility joinpoint, to represent certain problems when generating join points
  */
 export class ClavaException extends Joinpoint {
-    get exception() {
-        return wrapJoinPoint(this._javaObject.getException());
-    }
-    get exceptionType() {
-        return wrapJoinPoint(this._javaObject.getExceptionType());
-    }
-    get message() {
-        return wrapJoinPoint(this._javaObject.getMessage());
-    }
-    get attributes() {
-        return wrapJoinPoint(this._javaObject.getAttributes());
-    }
-    get selects() {
-        return wrapJoinPoint(this._javaObject.getSelects());
-    }
-    def(attribute, value) {
-        return wrapJoinPoint(this._javaObject.def(attribute, value));
-    }
+    get exception() { return wrapJoinPoint(this._javaObject.getException()); }
+    get exceptionType() { return wrapJoinPoint(this._javaObject.getExceptionType()); }
+    get message() { return wrapJoinPoint(this._javaObject.getMessage()); }
+    get attributes() { return wrapJoinPoint(this._javaObject.getAttributes()); }
+    get selects() { return wrapJoinPoint(this._javaObject.getSelects()); }
+    def(attribute, value) { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
 }
 export class Comment extends Joinpoint {
-    get text() {
-        return wrapJoinPoint(this._javaObject.getText());
-    }
-    get attributes() {
-        return wrapJoinPoint(this._javaObject.getAttributes());
-    }
-    get selects() {
-        return wrapJoinPoint(this._javaObject.getSelects());
-    }
-    setText(text) {
-        return wrapJoinPoint(this._javaObject.setText(text));
-    }
-    def(attribute, value) {
-        return wrapJoinPoint(this._javaObject.def(attribute, value));
-    }
+    get text() { return wrapJoinPoint(this._javaObject.getText()); }
+    get attributes() { return wrapJoinPoint(this._javaObject.getAttributes()); }
+    get selects() { return wrapJoinPoint(this._javaObject.getSelects()); }
+    setText(text) { return wrapJoinPoint(this._javaObject.setText(text)); }
+    def(attribute, value) { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
 }
 /**
  * Represents one declaration (e.g., int foo(){return 0;}) or definition (e.g., int foo();) in the code
@@ -604,67 +392,37 @@ export class Decl extends Joinpoint {
     /**
      * The attributes (e.g. Pure, CUDAGlobal) associated to this decl
      */
-    get attrs() {
-        return wrapJoinPoint(this._javaObject.getAttrs());
-    }
-    get attributes() {
-        return wrapJoinPoint(this._javaObject.getAttributes());
-    }
-    get selects() {
-        return wrapJoinPoint(this._javaObject.getSelects());
-    }
-    def(attribute, value) {
-        return wrapJoinPoint(this._javaObject.def(attribute, value));
-    }
+    get attrs() { return wrapJoinPoint(this._javaObject.getAttrs()); }
+    get attributes() { return wrapJoinPoint(this._javaObject.getAttributes()); }
+    get selects() { return wrapJoinPoint(this._javaObject.getSelects()); }
+    def(attribute, value) { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
 }
 /**
  * Utility joinpoint, to represent empty nodes when directly accessing the tree
  */
 export class Empty extends Joinpoint {
-    get attributes() {
-        return wrapJoinPoint(this._javaObject.getAttributes());
-    }
-    get selects() {
-        return wrapJoinPoint(this._javaObject.getSelects());
-    }
-    def(attribute, value) {
-        return wrapJoinPoint(this._javaObject.def(attribute, value));
-    }
+    get attributes() { return wrapJoinPoint(this._javaObject.getAttributes()); }
+    get selects() { return wrapJoinPoint(this._javaObject.getSelects()); }
+    def(attribute, value) { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
 }
 export class Expression extends Joinpoint {
     /**
      * A 'decl' join point that represents the declaration associated with this expression, or undefined if there is none
      */
-    get decl() {
-        return wrapJoinPoint(this._javaObject.getDecl());
-    }
+    get decl() { return wrapJoinPoint(this._javaObject.getDecl()); }
     /**
      * Returns a cast joinpoint if this expression has an associated implicit cast, undefined otherwise
      */
-    get implicitCast() {
-        return wrapJoinPoint(this._javaObject.getImplicitCast());
-    }
+    get implicitCast() { return wrapJoinPoint(this._javaObject.getImplicitCast()); }
     /**
      * True if the expression is part of an argument of a function call
      */
-    get isFunctionArgument() {
-        return wrapJoinPoint(this._javaObject.getIsFunctionArgument());
-    }
-    get use() {
-        return wrapJoinPoint(this._javaObject.getUse());
-    }
-    get vardecl() {
-        return wrapJoinPoint(this._javaObject.getVardecl());
-    }
-    get attributes() {
-        return wrapJoinPoint(this._javaObject.getAttributes());
-    }
-    get selects() {
-        return wrapJoinPoint(this._javaObject.getSelects());
-    }
-    def(attribute, value) {
-        return wrapJoinPoint(this._javaObject.def(attribute, value));
-    }
+    get isFunctionArgument() { return wrapJoinPoint(this._javaObject.getIsFunctionArgument()); }
+    get use() { return wrapJoinPoint(this._javaObject.getUse()); }
+    get vardecl() { return wrapJoinPoint(this._javaObject.getVardecl()); }
+    get attributes() { return wrapJoinPoint(this._javaObject.getAttributes()); }
+    get selects() { return wrapJoinPoint(this._javaObject.getSelects()); }
+    def(attribute, value) { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
 }
 /**
  * Represents a source file (.c, .cpp., .cl, etc)
@@ -673,180 +431,118 @@ export class FileJp extends Joinpoint {
     /**
      * The path to the source folder that was given as the base folder of this file
      */
-    get baseSourcePath() {
-        return wrapJoinPoint(this._javaObject.getBaseSourcePath());
-    }
+    get baseSourcePath() { return wrapJoinPoint(this._javaObject.getBaseSourcePath()); }
     /**
      * The complete path to the file that will be generated by the weaver
      */
-    get destinationFilepath() {
-        return wrapJoinPoint(this._javaObject.getDestinationFilepath());
-    }
+    get destinationFilepath() { return wrapJoinPoint(this._javaObject.getDestinationFilepath()); }
     /**
      * The output of the parser if there were errors during parsing
      */
-    get errorOutput() {
-        return wrapJoinPoint(this._javaObject.getErrorOutput());
-    }
+    get errorOutput() { return wrapJoinPoint(this._javaObject.getErrorOutput()); }
     /**
      * A Java file to the file that originated this translation unit
      */
-    get file() {
-        return wrapJoinPoint(this._javaObject.getFile());
-    }
+    get file() { return wrapJoinPoint(this._javaObject.getFile()); }
     /**
      * True if this file contains a 'main' method
      */
-    get hasMain() {
-        return wrapJoinPoint(this._javaObject.getHasMain());
-    }
+    get hasMain() { return wrapJoinPoint(this._javaObject.getHasMain()); }
     /**
      * True if there were errors during parsing
      */
-    get hasParsingErrors() {
-        return wrapJoinPoint(this._javaObject.getHasParsingErrors());
-    }
+    get hasParsingErrors() { return wrapJoinPoint(this._javaObject.getHasParsingErrors()); }
     /**
      * The includes of this file
      */
-    get includes() {
-        return wrapJoinPoint(this._javaObject.getIncludes());
-    }
+    get includes() { return wrapJoinPoint(this._javaObject.getIncludes()); }
     /**
      * True if this file is considered a C++ file
      */
-    get isCxx() {
-        return wrapJoinPoint(this._javaObject.getIsCxx());
-    }
+    get isCxx() { return wrapJoinPoint(this._javaObject.getIsCxx()); }
     /**
      * True if this file is considered a header file
      */
-    get isHeader() {
-        return wrapJoinPoint(this._javaObject.getIsHeader());
-    }
+    get isHeader() { return wrapJoinPoint(this._javaObject.getIsHeader()); }
     /**
      * True if this file is an OpenCL filetype
      */
-    get isOpenCL() {
-        return wrapJoinPoint(this._javaObject.getIsOpenCL());
-    }
+    get isOpenCL() { return wrapJoinPoint(this._javaObject.getIsOpenCL()); }
     /**
      * The name of the file
      */
-    get name() {
-        return wrapJoinPoint(this._javaObject.getName());
-    }
+    get name() { return wrapJoinPoint(this._javaObject.getName()); }
     /**
      * The folder of the source file
      */
-    get path() {
-        return wrapJoinPoint(this._javaObject.getPath());
-    }
+    get path() { return wrapJoinPoint(this._javaObject.getPath()); }
     /**
      * The path to the file relative to the base source path
      */
-    get relativeFilepath() {
-        return wrapJoinPoint(this._javaObject.getRelativeFilepath());
-    }
+    get relativeFilepath() { return wrapJoinPoint(this._javaObject.getRelativeFilepath()); }
     /**
      * The path to the folder of the source file relative to the base source path
      */
-    get relativeFolderpath() {
-        return wrapJoinPoint(this._javaObject.getRelativeFolderpath());
-    }
+    get relativeFolderpath() { return wrapJoinPoint(this._javaObject.getRelativeFolderpath()); }
     /**
      * The name of the source folder of this file, or undefined if it has none
      */
-    get sourceFoldername() {
-        return wrapJoinPoint(this._javaObject.getSourceFoldername());
-    }
-    get attributes() {
-        return wrapJoinPoint(this._javaObject.getAttributes());
-    }
-    get selects() {
-        return wrapJoinPoint(this._javaObject.getSelects());
-    }
+    get sourceFoldername() { return wrapJoinPoint(this._javaObject.getSourceFoldername()); }
+    get attributes() { return wrapJoinPoint(this._javaObject.getAttributes()); }
+    get selects() { return wrapJoinPoint(this._javaObject.getSelects()); }
     /**
      * The complete path to the generated file, given a destination folder
      */
-    getDestinationFilepath(destinationFolderpath) {
-        return wrapJoinPoint(this._javaObject.getDestinationFilepath(destinationFolderpath));
-    }
+    getDestinationFilepath(destinationFolderpath) { return wrapJoinPoint(this._javaObject.getDestinationFilepath(destinationFolderpath)); }
     /**
      * Adds a C include to the current file. If the file already has the include, it does nothing
      */
-    addCInclude(name, isAngled) {
-        return wrapJoinPoint(this._javaObject.addCInclude(name, isAngled));
-    }
+    addCInclude(name, isAngled) { return wrapJoinPoint(this._javaObject.addCInclude(name, isAngled)); }
     /**
      * Adds a function to the file that returns void and has no parameters
      */
-    addFunction(name) {
-        return wrapJoinPoint(this._javaObject.addFunction(name));
-    }
+    addFunction(name) { return wrapJoinPoint(this._javaObject.addFunction(name)); }
     /**
      * Adds a global variable to this file
      */
-    addGlobal(name, type, initValue) {
-        return wrapJoinPoint(this._javaObject.addGlobal(name, unwrapJoinPoint(type), initValue));
-    }
+    addGlobal(name, type, initValue) { return wrapJoinPoint(this._javaObject.addGlobal(name, unwrapJoinPoint(type), initValue)); }
     /**
      * Adds an include to the current file. If the file already has the include, it does nothing
      */
-    addInclude(name, isAngled) {
-        return wrapJoinPoint(this._javaObject.addInclude(name, isAngled));
-    }
+    addInclude(name, isAngled) { return wrapJoinPoint(this._javaObject.addInclude(name, isAngled)); }
     /**
      * Overload of addInclude which accepts a join point
      */
-    addIncludeJp(jp) {
-        return wrapJoinPoint(this._javaObject.addIncludeJp(unwrapJoinPoint(jp)));
-    }
+    addIncludeJp(jp) { return wrapJoinPoint(this._javaObject.addIncludeJp(unwrapJoinPoint(jp))); }
     /**
      * Adds the node in the join point to the start of the file
      */
-    insertBegin(node) {
-        return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(node)));
-    }
+    insertBegin(node) { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(node))); }
     /**
      * Adds the node in the join point to the end of the file
      */
-    insertEnd(node) {
-        return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(node)));
-    }
+    insertEnd(node) { return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(node))); }
     /**
      * Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens
      */
-    rebuild() {
-        return wrapJoinPoint(this._javaObject.rebuild());
-    }
+    rebuild() { return wrapJoinPoint(this._javaObject.rebuild()); }
     /**
      * Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens
      */
-    rebuildTry() {
-        return wrapJoinPoint(this._javaObject.rebuildTry());
-    }
+    rebuildTry() { return wrapJoinPoint(this._javaObject.rebuildTry()); }
     /**
      * Changes the name of the file
      */
-    setName(filename) {
-        return wrapJoinPoint(this._javaObject.setName(filename));
-    }
+    setName(filename) { return wrapJoinPoint(this._javaObject.setName(filename)); }
     /**
      * Sets the path to the folder of the source file relative to the base source path
      */
-    setRelativeFolderpath(path) {
-        return wrapJoinPoint(this._javaObject.setRelativeFolderpath(path));
-    }
+    setRelativeFolderpath(path) { return wrapJoinPoint(this._javaObject.setRelativeFolderpath(path)); }
     /**
      * Writes the code of this file to a given folder
      */
-    write(destinationFoldername) {
-        return wrapJoinPoint(this._javaObject.write(destinationFoldername));
-    }
-    def(attribute, value) {
-        return wrapJoinPoint(this._javaObject.def(attribute, value));
-    }
+    write(destinationFoldername) { return wrapJoinPoint(this._javaObject.write(destinationFoldername)); }
+    def(attribute, value) { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
 }
 /**
  * Represents an include directive (e.g., #include <stdio.h>)
@@ -855,99 +551,68 @@ export class Include extends Decl {
     /**
      * True if this is an angled include (i.e., system include)
      */
-    get isAngled() {
-        return wrapJoinPoint(this._javaObject.getIsAngled());
-    }
+    get isAngled() { return wrapJoinPoint(this._javaObject.getIsAngled()); }
     /**
      * The name of the include
      */
-    get name() {
-        return wrapJoinPoint(this._javaObject.getName());
-    }
+    get name() { return wrapJoinPoint(this._javaObject.getName()); }
     /**
      * The path to the folder of the source file of the include, relative to the name of the include
      */
-    get relativeFolderpath() {
-        return wrapJoinPoint(this._javaObject.getRelativeFolderpath());
-    }
+    get relativeFolderpath() { return wrapJoinPoint(this._javaObject.getRelativeFolderpath()); }
 }
 export class Literal extends Expression {
 }
 export class MemberAccess extends Expression {
     /**
+     * True if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)
+     */
+    get arrow() { return wrapJoinPoint(this._javaObject.getArrow()); }
+    /**
      * Expression of the base of this member access
      */
-    get base() {
-        return wrapJoinPoint(this._javaObject.getBase());
-    }
-    get memberChain() {
-        return wrapJoinPoint(this._javaObject.getMemberChain());
-    }
-    get memberChainNames() {
-        return wrapJoinPoint(this._javaObject.getMemberChainNames());
-    }
-    get name() {
-        return wrapJoinPoint(this._javaObject.getName());
-    }
+    get base() { return wrapJoinPoint(this._javaObject.getBase()); }
+    get memberChain() { return wrapJoinPoint(this._javaObject.getMemberChain()); }
+    get memberChainNames() { return wrapJoinPoint(this._javaObject.getMemberChainNames()); }
+    get name() { return wrapJoinPoint(this._javaObject.getName()); }
+    setArrow(isArrow) { return wrapJoinPoint(this._javaObject.setArrow(isArrow)); }
 }
 /**
  * Represents a decl with a name
  */
 export class NamedDecl extends Decl {
-    get isPublic() {
-        return wrapJoinPoint(this._javaObject.getIsPublic());
-    }
-    get name() {
-        return wrapJoinPoint(this._javaObject.getName());
-    }
-    get qualifiedName() {
-        return wrapJoinPoint(this._javaObject.getQualifiedName());
-    }
-    get qualifiedPrefix() {
-        return wrapJoinPoint(this._javaObject.getQualifiedPrefix());
-    }
+    get isPublic() { return wrapJoinPoint(this._javaObject.getIsPublic()); }
+    get name() { return wrapJoinPoint(this._javaObject.getName()); }
+    get qualifiedName() { return wrapJoinPoint(this._javaObject.getQualifiedName()); }
+    get qualifiedPrefix() { return wrapJoinPoint(this._javaObject.getQualifiedPrefix()); }
     /**
      * Sets the name of this namedDecl
      */
-    setName(name) {
-        return wrapJoinPoint(this._javaObject.setName(name));
-    }
+    setName(name) { return wrapJoinPoint(this._javaObject.setName(name)); }
     /**
      * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
      */
-    setQualifiedName(name) {
-        return wrapJoinPoint(this._javaObject.setQualifiedName(name));
-    }
+    setQualifiedName(name) { return wrapJoinPoint(this._javaObject.setQualifiedName(name)); }
     /**
      * Sets the qualified prefix of this namedDecl
      */
-    setQualifiedPrefix(qualifiedPrefix) {
-        return wrapJoinPoint(this._javaObject.setQualifiedPrefix(qualifiedPrefix));
-    }
+    setQualifiedPrefix(qualifiedPrefix) { return wrapJoinPoint(this._javaObject.setQualifiedPrefix(qualifiedPrefix)); }
 }
 export class NewExpr extends Expression {
 }
 export class Op extends Expression {
-    get isBitwise() {
-        return wrapJoinPoint(this._javaObject.getIsBitwise());
-    }
+    get isBitwise() { return wrapJoinPoint(this._javaObject.getIsBitwise()); }
     /**
      * The kind of the operator. If it is a binary operator, can be one of: ptr_mem_d, ptr_mem_i, mul, div, rem, add, sub, shl, shr, cmp, lt, gt, le, ge, eq, ne, and, xor, or, l_and, l_or, assign, mul_assign, div_assign, rem_assign, add_assign, sub_assign, shl_assign, shr_assign, and_assign, xor_assign, or_assign, comma. If it is a unary operator, can be one of: post_inc, post_dec, pre_inc, pre_dec, addr_of, deref, plus, minus, not, l_not, real, imag, extension, cowait.
      */
-    get kind() {
-        return wrapJoinPoint(this._javaObject.getKind());
-    }
-    get operator() {
-        return wrapJoinPoint(this._javaObject.getOperator());
-    }
+    get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
+    get operator() { return wrapJoinPoint(this._javaObject.getOperator()); }
 }
 export class ParenExpr extends Expression {
     /**
      * Returns the expression inside this parenthesis expression
      */
-    get subExpr() {
-        return wrapJoinPoint(this._javaObject.getSubExpr());
-    }
+    get subExpr() { return wrapJoinPoint(this._javaObject.getSubExpr()); }
 }
 /**
  * Represents a pragma in the code (e.g., #pragma kernel)
@@ -956,261 +621,157 @@ export class Pragma extends Joinpoint {
     /**
      * Everything that is after the name of the pragma
      */
-    get content() {
-        return wrapJoinPoint(this._javaObject.getContent());
-    }
+    get content() { return wrapJoinPoint(this._javaObject.getContent()); }
     /**
      * The name of the pragma. E.g. for #pragma foo bar, returns 'foo'
      */
-    get name() {
-        return wrapJoinPoint(this._javaObject.getName());
-    }
+    get name() { return wrapJoinPoint(this._javaObject.getName()); }
     /**
      * The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations
      */
-    get target() {
-        return wrapJoinPoint(this._javaObject.getTarget());
-    }
+    get target() { return wrapJoinPoint(this._javaObject.getTarget()); }
     /**
      * All the nodes below the target node, including the target node
      */
-    get targetNodes() {
-        return wrapJoinPoint(this._javaObject.getTargetNodes());
-    }
-    get attributes() {
-        return wrapJoinPoint(this._javaObject.getAttributes());
-    }
-    get selects() {
-        return wrapJoinPoint(this._javaObject.getSelects());
-    }
+    get targetNodes() { return wrapJoinPoint(this._javaObject.getTargetNodes()); }
+    get attributes() { return wrapJoinPoint(this._javaObject.getAttributes()); }
+    get selects() { return wrapJoinPoint(this._javaObject.getSelects()); }
     /**
      * All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument
      */
-    getTargetNodes(endPragma) {
-        return wrapJoinPoint(this._javaObject.getTargetNodes(endPragma));
-    }
-    setContent(content) {
-        return wrapJoinPoint(this._javaObject.setContent(content));
-    }
-    setName(name) {
-        return wrapJoinPoint(this._javaObject.setName(name));
-    }
-    def(attribute, value) {
-        return wrapJoinPoint(this._javaObject.def(attribute, value));
-    }
+    getTargetNodes(endPragma) { return wrapJoinPoint(this._javaObject.getTargetNodes(endPragma)); }
+    setContent(content) { return wrapJoinPoint(this._javaObject.setContent(content)); }
+    setName(name) { return wrapJoinPoint(this._javaObject.setName(name)); }
+    def(attribute, value) { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
 }
 /**
  * Represents the complete program and is the top-most joinpoint in the hierarchy
  */
 export class Program extends Joinpoint {
-    get baseFolder() {
-        return wrapJoinPoint(this._javaObject.getBaseFolder());
-    }
-    get defaultFlags() {
-        return wrapJoinPoint(this._javaObject.getDefaultFlags());
-    }
+    get baseFolder() { return wrapJoinPoint(this._javaObject.getBaseFolder()); }
+    get defaultFlags() { return wrapJoinPoint(this._javaObject.getDefaultFlags()); }
     /**
      * Paths to includes that the current program depends on
      */
-    get extraIncludes() {
-        return wrapJoinPoint(this._javaObject.getExtraIncludes());
-    }
+    get extraIncludes() { return wrapJoinPoint(this._javaObject.getExtraIncludes()); }
     /**
      * Link libraries of external projects the current program depends on
      */
-    get extraLibs() {
-        return wrapJoinPoint(this._javaObject.getExtraLibs());
-    }
+    get extraLibs() { return wrapJoinPoint(this._javaObject.getExtraLibs()); }
     /**
      * Paths to folders of projects that the current program depends on
      */
-    get extraProjects() {
-        return wrapJoinPoint(this._javaObject.getExtraProjects());
-    }
+    get extraProjects() { return wrapJoinPoint(this._javaObject.getExtraProjects()); }
     /**
      * Paths to sources that the current program depends on
      */
-    get extraSources() {
-        return wrapJoinPoint(this._javaObject.getExtraSources());
-    }
+    get extraSources() { return wrapJoinPoint(this._javaObject.getExtraSources()); }
     /**
      * The source files in this program
      */
-    get files() {
-        return wrapJoinPoint(this._javaObject.getFiles());
-    }
-    get includeFolders() {
-        return wrapJoinPoint(this._javaObject.getIncludeFolders());
-    }
+    get files() { return wrapJoinPoint(this._javaObject.getFiles()); }
+    get includeFolders() { return wrapJoinPoint(this._javaObject.getIncludeFolders()); }
     /**
      * True if the program was compiled with a C++ standard
      */
-    get isCxx() {
-        return wrapJoinPoint(this._javaObject.getIsCxx());
-    }
+    get isCxx() { return wrapJoinPoint(this._javaObject.getIsCxx()); }
     /**
      * A function join point with the main function of the program, if one is available
      */
-    get main() {
-        return wrapJoinPoint(this._javaObject.getMain());
-    }
-    get name() {
-        return wrapJoinPoint(this._javaObject.getName());
-    }
+    get main() { return wrapJoinPoint(this._javaObject.getMain()); }
+    get name() { return wrapJoinPoint(this._javaObject.getName()); }
     /**
      * The name of the standard (e.g., c99, c++11)
      */
-    get standard() {
-        return wrapJoinPoint(this._javaObject.getStandard());
-    }
+    get standard() { return wrapJoinPoint(this._javaObject.getStandard()); }
     /**
      * The flag of the standard (e.g., -std=c++11)
      */
-    get stdFlag() {
-        return wrapJoinPoint(this._javaObject.getStdFlag());
-    }
-    get userFlags() {
-        return wrapJoinPoint(this._javaObject.getUserFlags());
-    }
-    get weavingFolder() {
-        return wrapJoinPoint(this._javaObject.getWeavingFolder());
-    }
-    get attributes() {
-        return wrapJoinPoint(this._javaObject.getAttributes());
-    }
-    get selects() {
-        return wrapJoinPoint(this._javaObject.getSelects());
-    }
+    get stdFlag() { return wrapJoinPoint(this._javaObject.getStdFlag()); }
+    get userFlags() { return wrapJoinPoint(this._javaObject.getUserFlags()); }
+    get weavingFolder() { return wrapJoinPoint(this._javaObject.getWeavingFolder()); }
+    get attributes() { return wrapJoinPoint(this._javaObject.getAttributes()); }
+    get selects() { return wrapJoinPoint(this._javaObject.getSelects()); }
     /**
      * Adds a path to an include that the current program depends on
      */
-    addExtraInclude(path) {
-        return wrapJoinPoint(this._javaObject.addExtraInclude(path));
-    }
+    addExtraInclude(path) { return wrapJoinPoint(this._javaObject.addExtraInclude(path)); }
     /**
      * Adds a path based on a git repository to an include that the current program depends on
      */
-    addExtraIncludeFromGit(gitRepo) {
-        return wrapJoinPoint(this._javaObject.addExtraIncludeFromGit(gitRepo));
-    }
+    addExtraIncludeFromGit(gitRepo) { return wrapJoinPoint(this._javaObject.addExtraIncludeFromGit(gitRepo)); }
     /**
      * Adds a library (e.g., -pthreads) that the current program depends on
      */
-    addExtraLib(lib) {
-        return wrapJoinPoint(this._javaObject.addExtraLib(lib));
-    }
+    addExtraLib(lib) { return wrapJoinPoint(this._javaObject.addExtraLib(lib)); }
     /**
      * Adds a path to a source that the current program depends on
      */
-    addExtraSource(path) {
-        return wrapJoinPoint(this._javaObject.addExtraSource(path));
-    }
+    addExtraSource(path) { return wrapJoinPoint(this._javaObject.addExtraSource(path)); }
     /**
      * Adds a path based on a git repository to a source that the current program depends on
      */
-    addExtraSourceFromGit(gitRepo) {
-        return wrapJoinPoint(this._javaObject.addExtraSourceFromGit(gitRepo));
-    }
+    addExtraSourceFromGit(gitRepo) { return wrapJoinPoint(this._javaObject.addExtraSourceFromGit(gitRepo)); }
     /**
      * Adds a file join point to the current program
      */
-    addFile(file) {
-        return wrapJoinPoint(this._javaObject.addFile(unwrapJoinPoint(file)));
-    }
+    addFile(file) { return wrapJoinPoint(this._javaObject.addFile(unwrapJoinPoint(file))); }
     /**
      * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
      */
-    addFileFromPath(filepath) {
-        return wrapJoinPoint(this._javaObject.addFileFromPath(filepath));
-    }
+    addFileFromPath(filepath) { return wrapJoinPoint(this._javaObject.addFileFromPath(filepath)); }
     /**
      * Adds a path based on a git repository to a project that the current program depends on
      */
-    addProjectFromGit(gitRepo, libs) {
-        return wrapJoinPoint(this._javaObject.addProjectFromGit(gitRepo, libs));
-    }
+    addProjectFromGit(gitRepo, libs) { return wrapJoinPoint(this._javaObject.addProjectFromGit(gitRepo, libs)); }
     /**
      * Registers a function to be executed when the program exits
      */
-    atexit(func) {
-        return wrapJoinPoint(this._javaObject.atexit(unwrapJoinPoint(func)));
-    }
+    atexit(func) { return wrapJoinPoint(this._javaObject.atexit(unwrapJoinPoint(func))); }
     /**
      * Discards the AST at the top of the ASt stack
      */
-    pop() {
-        return wrapJoinPoint(this._javaObject.pop());
-    }
+    pop() { return wrapJoinPoint(this._javaObject.pop()); }
     /**
      * Creates a copy of the current AST and pushes it to the top of the AST stack
      */
-    push() {
-        return wrapJoinPoint(this._javaObject.push());
-    }
+    push() { return wrapJoinPoint(this._javaObject.push()); }
     /**
      * Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise
      */
-    rebuild() {
-        return wrapJoinPoint(this._javaObject.rebuild());
-    }
+    rebuild() { return wrapJoinPoint(this._javaObject.rebuild()); }
     /**
      * Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality
      */
-    rebuildFuzzy() {
-        return wrapJoinPoint(this._javaObject.rebuildFuzzy());
-    }
-    def(attribute, value) {
-        return wrapJoinPoint(this._javaObject.def(attribute, value));
-    }
+    rebuildFuzzy() { return wrapJoinPoint(this._javaObject.rebuildFuzzy()); }
+    def(attribute, value) { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
 }
 /**
  * Common class of struct, union and class
  */
 export class Record extends NamedDecl {
-    get fields() {
-        return wrapJoinPoint(this._javaObject.getFields());
-    }
-    get functions() {
-        return wrapJoinPoint(this._javaObject.getFunctions());
-    }
+    get fields() { return wrapJoinPoint(this._javaObject.getFields()); }
+    get functions() { return wrapJoinPoint(this._javaObject.getFunctions()); }
     /**
      * True if this particular join point is an implementation (i.e. has its body fully specified), false otherwise
      */
-    get isImplementation() {
-        return wrapJoinPoint(this._javaObject.getIsImplementation());
-    }
+    get isImplementation() { return wrapJoinPoint(this._javaObject.getIsImplementation()); }
     /**
      * True if this particular join point is a prototype (i.e. does not have its body fully specified), false otherwise
      */
-    get isPrototype() {
-        return wrapJoinPoint(this._javaObject.getIsPrototype());
-    }
-    get kind() {
-        return wrapJoinPoint(this._javaObject.getKind());
-    }
+    get isPrototype() { return wrapJoinPoint(this._javaObject.getIsPrototype()); }
+    get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
     /**
      * Adds a field to a record (struct, class).
      */
-    addField(field) {
-        return wrapJoinPoint(this._javaObject.addField(unwrapJoinPoint(field)));
-    }
+    addField(field) { return wrapJoinPoint(this._javaObject.addField(unwrapJoinPoint(field))); }
 }
 export class Statement extends Joinpoint {
-    get isFirst() {
-        return wrapJoinPoint(this._javaObject.getIsFirst());
-    }
-    get isLast() {
-        return wrapJoinPoint(this._javaObject.getIsLast());
-    }
-    get attributes() {
-        return wrapJoinPoint(this._javaObject.getAttributes());
-    }
-    get selects() {
-        return wrapJoinPoint(this._javaObject.getSelects());
-    }
-    def(attribute, value) {
-        return wrapJoinPoint(this._javaObject.def(attribute, value));
-    }
+    get isFirst() { return wrapJoinPoint(this._javaObject.getIsFirst()); }
+    get isLast() { return wrapJoinPoint(this._javaObject.getIsLast()); }
+    get attributes() { return wrapJoinPoint(this._javaObject.getAttributes()); }
+    get selects() { return wrapJoinPoint(this._javaObject.getSelects()); }
+    def(attribute, value) { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
 }
 /**
  * Represets a struct declaration
@@ -1218,6 +779,22 @@ export class Statement extends Joinpoint {
 export class Struct extends Record {
 }
 export class Switch extends Statement {
+    /**
+     * The case statements inside this switch
+     */
+    get cases() { return wrapJoinPoint(this._javaObject.getCases()); }
+    /**
+     * The condition of this switch statement
+     */
+    get condition() { return wrapJoinPoint(this._javaObject.getCondition()); }
+    /**
+     * The default case statement of this switch statement or undefined if it does not have a default case
+     */
+    get getDefaultCase() { return wrapJoinPoint(this._javaObject.getGetDefaultCase()); }
+    /**
+     * True if there is a default case in this switch statement, false otherwise
+     */
+    get hasDefaultCase() { return wrapJoinPoint(this._javaObject.getHasDefaultCase()); }
 }
 /**
  * A pragma that references a point in the code and sticks to it
@@ -1226,147 +803,83 @@ export class Tag extends Pragma {
     /**
      * The ID of the pragma
      */
-    get id() {
-        return wrapJoinPoint(this._javaObject.getId());
-    }
+    get id() { return wrapJoinPoint(this._javaObject.getId()); }
 }
 export class TernaryOp extends Op {
-    get cond() {
-        return wrapJoinPoint(this._javaObject.getCond());
-    }
-    get falseExpr() {
-        return wrapJoinPoint(this._javaObject.getFalseExpr());
-    }
-    get trueExpr() {
-        return wrapJoinPoint(this._javaObject.getTrueExpr());
-    }
+    get cond() { return wrapJoinPoint(this._javaObject.getCond()); }
+    get falseExpr() { return wrapJoinPoint(this._javaObject.getFalseExpr()); }
+    get trueExpr() { return wrapJoinPoint(this._javaObject.getTrueExpr()); }
 }
 export class This extends Expression {
 }
 export class Type extends Joinpoint {
-    get arrayDims() {
-        return wrapJoinPoint(this._javaObject.getArrayDims());
-    }
-    get arraySize() {
-        return wrapJoinPoint(this._javaObject.getArraySize());
-    }
-    get constant() {
-        return wrapJoinPoint(this._javaObject.getConstant());
-    }
+    get arrayDims() { return wrapJoinPoint(this._javaObject.getArrayDims()); }
+    get arraySize() { return wrapJoinPoint(this._javaObject.getArraySize()); }
+    get constant() { return wrapJoinPoint(this._javaObject.getConstant()); }
     /**
      * Single-step desugar. Returns the type itself if it does not have sugar
      */
-    get desugar() {
-        return wrapJoinPoint(this._javaObject.getDesugar());
-    }
+    get desugar() { return wrapJoinPoint(this._javaObject.getDesugar()); }
     /**
      * Completely desugars the type
      */
-    get desugarAll() {
-        return wrapJoinPoint(this._javaObject.getDesugarAll());
-    }
+    get desugarAll() { return wrapJoinPoint(this._javaObject.getDesugarAll()); }
     /**
      * A tree representation of the fields of this type
      */
-    get fieldTree() {
-        return wrapJoinPoint(this._javaObject.getFieldTree());
-    }
-    get hasSugar() {
-        return wrapJoinPoint(this._javaObject.getHasSugar());
-    }
-    get hasTemplateArgs() {
-        return wrapJoinPoint(this._javaObject.getHasTemplateArgs());
-    }
-    get isArray() {
-        return wrapJoinPoint(this._javaObject.getIsArray());
-    }
+    get fieldTree() { return wrapJoinPoint(this._javaObject.getFieldTree()); }
+    get hasSugar() { return wrapJoinPoint(this._javaObject.getHasSugar()); }
+    get hasTemplateArgs() { return wrapJoinPoint(this._javaObject.getHasTemplateArgs()); }
+    get isArray() { return wrapJoinPoint(this._javaObject.getIsArray()); }
     /**
      * True if this is a type declared with the 'auto' keyword
      */
-    get isAuto() {
-        return wrapJoinPoint(this._javaObject.getIsAuto());
-    }
-    get isBuiltin() {
-        return wrapJoinPoint(this._javaObject.getIsBuiltin());
-    }
-    get isPointer() {
-        return wrapJoinPoint(this._javaObject.getIsPointer());
-    }
-    get isTopLevel() {
-        return wrapJoinPoint(this._javaObject.getIsTopLevel());
-    }
-    get kind() {
-        return wrapJoinPoint(this._javaObject.getKind());
-    }
+    get isAuto() { return wrapJoinPoint(this._javaObject.getIsAuto()); }
+    get isBuiltin() { return wrapJoinPoint(this._javaObject.getIsBuiltin()); }
+    get isPointer() { return wrapJoinPoint(this._javaObject.getIsPointer()); }
+    get isTopLevel() { return wrapJoinPoint(this._javaObject.getIsTopLevel()); }
+    get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
     /**
      * Ignores certain types (e.g., DecayedType)
      */
-    get normalize() {
-        return wrapJoinPoint(this._javaObject.getNormalize());
-    }
-    get templateArgsStrings() {
-        return wrapJoinPoint(this._javaObject.getTemplateArgsStrings());
-    }
-    get templateArgsTypes() {
-        return wrapJoinPoint(this._javaObject.getTemplateArgsTypes());
-    }
+    get normalize() { return wrapJoinPoint(this._javaObject.getNormalize()); }
+    get templateArgsStrings() { return wrapJoinPoint(this._javaObject.getTemplateArgsStrings()); }
+    get templateArgsTypes() { return wrapJoinPoint(this._javaObject.getTemplateArgsTypes()); }
     /**
      * Maps names of join point fields that represent type join points, to their respective values
      */
-    get typeFields() {
-        return wrapJoinPoint(this._javaObject.getTypeFields());
-    }
+    get typeFields() { return wrapJoinPoint(this._javaObject.getTypeFields()); }
     /**
      * If the type encapsulates another type, returns the encapsulated type
      */
-    get unwrap() {
-        return wrapJoinPoint(this._javaObject.getUnwrap());
-    }
-    get attributes() {
-        return wrapJoinPoint(this._javaObject.getAttributes());
-    }
-    get selects() {
-        return wrapJoinPoint(this._javaObject.getSelects());
-    }
+    get unwrap() { return wrapJoinPoint(this._javaObject.getUnwrap()); }
+    get attributes() { return wrapJoinPoint(this._javaObject.getAttributes()); }
+    get selects() { return wrapJoinPoint(this._javaObject.getSelects()); }
     /**
      * The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined
      */
-    getBitWidth(reference) {
-        return wrapJoinPoint(this._javaObject.getBitWidth(unwrapJoinPoint(reference)));
-    }
+    getBitWidth(reference) { return wrapJoinPoint(this._javaObject.getBitWidth(unwrapJoinPoint(reference))); }
     /**
-     * Returns a copy of this type with the qualifier const
+     * Returns a new node based on this type with the qualifier const
      */
-    asConst() {
-        return wrapJoinPoint(this._javaObject.asConst());
-    }
+    asConst() { return wrapJoinPoint(this._javaObject.asConst()); }
     /**
      * Sets the desugared type of this type
      */
-    setDesugar(desugaredType) {
-        return wrapJoinPoint(this._javaObject.setDesugar(unwrapJoinPoint(desugaredType)));
-    }
+    setDesugar(desugaredType) { return wrapJoinPoint(this._javaObject.setDesugar(unwrapJoinPoint(desugaredType))); }
     /**
      * Sets the template argument types of a template type
      */
-    setTemplateArgsTypes(templateArgTypes) {
-        return wrapJoinPoint(this._javaObject.setTemplateArgsTypes(templateArgTypes));
-    }
+    setTemplateArgsTypes(templateArgTypes) { return wrapJoinPoint(this._javaObject.setTemplateArgsTypes(templateArgTypes)); }
     /**
      * Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change
      */
-    setTypeFieldByValueRecursive(currentValue, newValue) {
-        return wrapJoinPoint(this._javaObject.setTypeFieldByValueRecursive(currentValue, newValue));
-    }
+    setTypeFieldByValueRecursive(currentValue, newValue) { return wrapJoinPoint(this._javaObject.setTypeFieldByValueRecursive(currentValue, newValue)); }
     /**
      * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
      */
-    setUnderlyingType(oldValue, newValue) {
-        return wrapJoinPoint(this._javaObject.setUnderlyingType(unwrapJoinPoint(oldValue), unwrapJoinPoint(newValue)));
-    }
-    def(attribute, value) {
-        return wrapJoinPoint(this._javaObject.def(attribute, value));
-    }
+    setUnderlyingType(oldValue, newValue) { return wrapJoinPoint(this._javaObject.setUnderlyingType(unwrapJoinPoint(oldValue), unwrapJoinPoint(newValue))); }
+    def(attribute, value) { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
 }
 /**
  * Base node for declarations which introduce a typedef-name
@@ -1380,43 +893,23 @@ export class TypedefType extends Type {
     /**
      * The typedef declaration associated with this typedef type
      */
-    get decl() {
-        return wrapJoinPoint(this._javaObject.getDecl());
-    }
+    get decl() { return wrapJoinPoint(this._javaObject.getDecl()); }
     /**
      * The type that is being typedef'd
      */
-    get underlyingType() {
-        return wrapJoinPoint(this._javaObject.getUnderlyingType());
-    }
+    get underlyingType() { return wrapJoinPoint(this._javaObject.getUnderlyingType()); }
 }
 export class UnaryExprOrType extends Expression {
-    get argExpr() {
-        return wrapJoinPoint(this._javaObject.getArgExpr());
-    }
-    get argType() {
-        return wrapJoinPoint(this._javaObject.getArgType());
-    }
-    get hasArgExpr() {
-        return wrapJoinPoint(this._javaObject.getHasArgExpr());
-    }
-    get hasTypeExpr() {
-        return wrapJoinPoint(this._javaObject.getHasTypeExpr());
-    }
-    get kind() {
-        return wrapJoinPoint(this._javaObject.getKind());
-    }
-    setArgType(argType) {
-        return wrapJoinPoint(this._javaObject.setArgType(unwrapJoinPoint(argType)));
-    }
+    get argExpr() { return wrapJoinPoint(this._javaObject.getArgExpr()); }
+    get argType() { return wrapJoinPoint(this._javaObject.getArgType()); }
+    get hasArgExpr() { return wrapJoinPoint(this._javaObject.getHasArgExpr()); }
+    get hasTypeExpr() { return wrapJoinPoint(this._javaObject.getHasTypeExpr()); }
+    get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
+    setArgType(argType) { return wrapJoinPoint(this._javaObject.setArgType(unwrapJoinPoint(argType))); }
 }
 export class UnaryOp extends Op {
-    get isPointerDeref() {
-        return wrapJoinPoint(this._javaObject.getIsPointerDeref());
-    }
-    get operand() {
-        return wrapJoinPoint(this._javaObject.getOperand());
-    }
+    get isPointerDeref() { return wrapJoinPoint(this._javaObject.getIsPointerDeref()); }
+    get operand() { return wrapJoinPoint(this._javaObject.getOperand()); }
 }
 export class UndefinedType extends Type {
 }
@@ -1424,294 +917,204 @@ export class UndefinedType extends Type {
  * A reference to a variable
  */
 export class Varref extends Expression {
-    get declaration() {
-        return wrapJoinPoint(this._javaObject.getDeclaration());
-    }
+    get declaration() { return wrapJoinPoint(this._javaObject.getDeclaration()); }
     /**
      * True if this variable reference has a MS-style property, false otherwise
      */
-    get hasProperty() {
-        return wrapJoinPoint(this._javaObject.getHasProperty());
-    }
+    get hasProperty() { return wrapJoinPoint(this._javaObject.getHasProperty()); }
     /**
      * True if this varref represents a function call
      */
-    get isFunctionCall() {
-        return wrapJoinPoint(this._javaObject.getIsFunctionCall());
-    }
-    get kind() {
-        return wrapJoinPoint(this._javaObject.getKind());
-    }
-    get name() {
-        return wrapJoinPoint(this._javaObject.getName());
-    }
+    get isFunctionCall() { return wrapJoinPoint(this._javaObject.getIsFunctionCall()); }
+    get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
+    get name() { return wrapJoinPoint(this._javaObject.getName()); }
     /**
      * If this variable reference has a MS-style property, returns the property name. Returns undefined otherwise
      */
-    get property() {
-        return wrapJoinPoint(this._javaObject.getProperty());
-    }
+    get property() { return wrapJoinPoint(this._javaObject.getProperty()); }
     /**
      * Expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node
      */
-    get useExpr() {
-        return wrapJoinPoint(this._javaObject.getUseExpr());
-    }
-    setName(name) {
-        return wrapJoinPoint(this._javaObject.setName(name));
-    }
+    get useExpr() { return wrapJoinPoint(this._javaObject.getUseExpr()); }
+    setName(name) { return wrapJoinPoint(this._javaObject.setName(name)); }
 }
 export class WrapperStmt extends Statement {
-    get content() {
-        return wrapJoinPoint(this._javaObject.getContent());
-    }
-    get kind() {
-        return wrapJoinPoint(this._javaObject.getKind());
-    }
+    get content() { return wrapJoinPoint(this._javaObject.getContent()); }
+    get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
 }
 export class AccessSpecifier extends Decl {
     /**
      * The type of specifier. Can return 'public', 'protected', 'private' or 'none'
      */
-    get kind() {
-        return wrapJoinPoint(this._javaObject.getKind());
-    }
+    get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
 }
 export class AdjustedType extends Type {
     /**
      * The type that is being adjusted
      */
-    get originalType() {
-        return wrapJoinPoint(this._javaObject.getOriginalType());
-    }
+    get originalType() { return wrapJoinPoint(this._javaObject.getOriginalType()); }
 }
 export class ArrayAccess extends Expression {
     /**
      * Expression representing the variable of the array access (can be a varref, memberAccess...)
      */
-    get arrayVar() {
-        return wrapJoinPoint(this._javaObject.getArrayVar());
-    }
+    get arrayVar() { return wrapJoinPoint(this._javaObject.getArrayVar()); }
     /**
      * If the array access is done over a variable, returns the name of the variable. Equivalent to $arrayAccess.arrayVar.name
      */
-    get name() {
-        return wrapJoinPoint(this._javaObject.getName());
-    }
+    get name() { return wrapJoinPoint(this._javaObject.getName()); }
     /**
      * The number of subscripts of this array access
      */
-    get numSubscripts() {
-        return wrapJoinPoint(this._javaObject.getNumSubscripts());
-    }
+    get numSubscripts() { return wrapJoinPoint(this._javaObject.getNumSubscripts()); }
     /**
      * A view of the current arrayAccess without the last subscript, or undefined if this arrayAccess only has one subscript
      */
-    get parentAccess() {
-        return wrapJoinPoint(this._javaObject.getParentAccess());
-    }
+    get parentAccess() { return wrapJoinPoint(this._javaObject.getParentAccess()); }
     /**
      * Expression of the array access subscript
      */
-    get subscript() {
-        return wrapJoinPoint(this._javaObject.getSubscript());
-    }
+    get subscript() { return wrapJoinPoint(this._javaObject.getSubscript()); }
 }
 export class ArrayType extends Type {
-    get elementType() {
-        return wrapJoinPoint(this._javaObject.getElementType());
-    }
+    get elementType() { return wrapJoinPoint(this._javaObject.getElementType()); }
     /**
      * Sets the element type of the array
      */
-    setElementType(arrayElementType) {
-        return wrapJoinPoint(this._javaObject.setElementType(unwrapJoinPoint(arrayElementType)));
-    }
+    setElementType(arrayElementType) { return wrapJoinPoint(this._javaObject.setElementType(unwrapJoinPoint(arrayElementType))); }
 }
 export class BinaryOp extends Op {
-    get isAssignment() {
-        return wrapJoinPoint(this._javaObject.getIsAssignment());
-    }
-    get left() {
-        return wrapJoinPoint(this._javaObject.getLeft());
-    }
-    get right() {
-        return wrapJoinPoint(this._javaObject.getRight());
-    }
-    setLeft(left) {
-        return wrapJoinPoint(this._javaObject.setLeft(unwrapJoinPoint(left)));
-    }
-    setRight(right) {
-        return wrapJoinPoint(this._javaObject.setRight(unwrapJoinPoint(right)));
-    }
+    get isAssignment() { return wrapJoinPoint(this._javaObject.getIsAssignment()); }
+    get left() { return wrapJoinPoint(this._javaObject.getLeft()); }
+    get right() { return wrapJoinPoint(this._javaObject.getRight()); }
+    setLeft(left) { return wrapJoinPoint(this._javaObject.setLeft(unwrapJoinPoint(left))); }
+    setRight(right) { return wrapJoinPoint(this._javaObject.setRight(unwrapJoinPoint(right))); }
 }
 export class BoolLiteral extends Literal {
-    get value() {
-        return wrapJoinPoint(this._javaObject.getValue());
-    }
+    get value() { return wrapJoinPoint(this._javaObject.getValue()); }
 }
 export class Break extends Statement {
 }
 export class BuiltinType extends Type {
-    get builtinKind() {
-        return wrapJoinPoint(this._javaObject.getBuiltinKind());
-    }
+    get builtinKind() { return wrapJoinPoint(this._javaObject.getBuiltinKind()); }
     /**
      * True, if ot is a floating type (e.g., float, double)
      */
-    get isFloat() {
-        return wrapJoinPoint(this._javaObject.getIsFloat());
-    }
+    get isFloat() { return wrapJoinPoint(this._javaObject.getIsFloat()); }
     /**
      * True, if it is an integer type
      */
-    get isInteger() {
-        return wrapJoinPoint(this._javaObject.getIsInteger());
-    }
+    get isInteger() { return wrapJoinPoint(this._javaObject.getIsInteger()); }
     /**
      * True, if it is a signed integer type
      */
-    get isSigned() {
-        return wrapJoinPoint(this._javaObject.getIsSigned());
-    }
+    get isSigned() { return wrapJoinPoint(this._javaObject.getIsSigned()); }
     /**
      * True, if it is an unsigned integer type
      */
-    get isUnsigned() {
-        return wrapJoinPoint(this._javaObject.getIsUnsigned());
-    }
+    get isUnsigned() { return wrapJoinPoint(this._javaObject.getIsUnsigned()); }
     /**
      * True, if it is the type 'void'
      */
-    get isVoid() {
-        return wrapJoinPoint(this._javaObject.getIsVoid());
-    }
+    get isVoid() { return wrapJoinPoint(this._javaObject.getIsVoid()); }
 }
 export class Call extends Expression {
     /**
      * An alias for 'args'
      */
-    get argList() {
-        return wrapJoinPoint(this._javaObject.getArgList());
-    }
+    get argList() { return wrapJoinPoint(this._javaObject.getArgList()); }
     /**
      * An array with the arguments of the call
      */
-    get args() {
-        return wrapJoinPoint(this._javaObject.getArgs());
-    }
+    get args() { return wrapJoinPoint(this._javaObject.getArgs()); }
     /**
      * A 'function' join point that represents the function of the call that was found, it can return either an implementation or a function prototype; 'undefined' if no declaration was found
      */
-    get declaration() {
-        return wrapJoinPoint(this._javaObject.getDeclaration());
-    }
+    get declaration() { return wrapJoinPoint(this._javaObject.getDeclaration()); }
     /**
      * A 'function' join point that represents the function definition of the call; 'undefined' if no definition was found
      */
-    get definition() {
-        return wrapJoinPoint(this._javaObject.getDefinition());
-    }
+    get definition() { return wrapJoinPoint(this._javaObject.getDefinition()); }
     /**
      * A function join point that represents the 'raw' function of the call (e.g. if this is a call to a templated function, returns a declaration representing the template specialization, instead of the original function)
      */
-    get directCallee() {
-        return wrapJoinPoint(this._javaObject.getDirectCallee());
-    }
+    get directCallee() { return wrapJoinPoint(this._javaObject.getDirectCallee()); }
     /**
      * A function join point associated with this call. If a definition is present, it is given priority over returning a declaration. If only declarations are present, returns a declaration
      */
-    get function() {
-        return wrapJoinPoint(this._javaObject.getFunction());
-    }
+    get function() { return wrapJoinPoint(this._javaObject.getFunction()); }
     /**
      * The function type of the call, which includes the return type and the types of the parameters
      */
-    get functionType() {
-        return wrapJoinPoint(this._javaObject.getFunctionType());
-    }
-    get isMemberAccess() {
-        return wrapJoinPoint(this._javaObject.getIsMemberAccess());
-    }
-    get isStmtCall() {
-        return wrapJoinPoint(this._javaObject.getIsStmtCall());
-    }
-    get memberAccess() {
-        return wrapJoinPoint(this._javaObject.getMemberAccess());
-    }
-    get memberNames() {
-        return wrapJoinPoint(this._javaObject.getMemberNames());
-    }
-    get name() {
-        return wrapJoinPoint(this._javaObject.getName());
-    }
-    get numArgs() {
-        return wrapJoinPoint(this._javaObject.getNumArgs());
-    }
+    get functionType() { return wrapJoinPoint(this._javaObject.getFunctionType()); }
+    get isMemberAccess() { return wrapJoinPoint(this._javaObject.getIsMemberAccess()); }
+    get isStmtCall() { return wrapJoinPoint(this._javaObject.getIsStmtCall()); }
+    get memberAccess() { return wrapJoinPoint(this._javaObject.getMemberAccess()); }
+    get memberNames() { return wrapJoinPoint(this._javaObject.getMemberNames()); }
+    get name() { return wrapJoinPoint(this._javaObject.getName()); }
+    get numArgs() { return wrapJoinPoint(this._javaObject.getNumArgs()); }
     /**
      * The return type of the call
      */
-    get returnType() {
-        return wrapJoinPoint(this._javaObject.getReturnType());
-    }
+    get returnType() { return wrapJoinPoint(this._javaObject.getReturnType()); }
     /**
      * Similar to $function.signature, but if no function decl could be found (e.g., function from system include), returns a signature based on just the name of the function
      */
-    get signature() {
-        return wrapJoinPoint(this._javaObject.getSignature());
-    }
-    getArg(index) {
-        return wrapJoinPoint(this._javaObject.getArg(index));
-    }
+    get signature() { return wrapJoinPoint(this._javaObject.getSignature()); }
+    getArg(index) { return wrapJoinPoint(this._javaObject.getArg(index)); }
     /**
      * Adds an argument at the end of the call, creating an expression using the given code and type
      */
-    addArg(argCode, type) {
-        return wrapJoinPoint(this._javaObject.addArg(argCode, unwrapJoinPoint(type)));
-    }
+    addArg(argCode, type) { return wrapJoinPoint(this._javaObject.addArg(argCode, unwrapJoinPoint(type))); }
     /**
      * Tries to inline this call
      */
-    inline() {
-        return wrapJoinPoint(this._javaObject.inline());
-    }
-    setArg(index, expr) {
-        return wrapJoinPoint(this._javaObject.setArg(index, unwrapJoinPoint(expr)));
-    }
-    setArgFromString(index, expr) {
-        return wrapJoinPoint(this._javaObject.setArgFromString(index, expr));
-    }
+    inline() { return wrapJoinPoint(this._javaObject.inline()); }
+    setArg(index, expr) { return wrapJoinPoint(this._javaObject.setArg(index, unwrapJoinPoint(expr))); }
+    setArgFromString(index, expr) { return wrapJoinPoint(this._javaObject.setArgFromString(index, expr)); }
     /**
      * Changes the name of the call
      */
-    setName(name) {
-        return wrapJoinPoint(this._javaObject.setName(name));
-    }
+    setName(name) { return wrapJoinPoint(this._javaObject.setName(name)); }
     /**
      * Wraps this call with a possibly new wrapping function
      */
-    wrap(name) {
-        return wrapJoinPoint(this._javaObject.wrap(name));
-    }
+    wrap(name) { return wrapJoinPoint(this._javaObject.wrap(name)); }
 }
 export class Case extends Statement {
+    /**
+     * The instructions that are associated with this case in the source code. This does not represent what instructions are actually executed (e.g., if a case does not have a break, does not show instructions of the next case)
+     */
+    get instructions() { return wrapJoinPoint(this._javaObject.getInstructions()); }
+    /**
+     * True if this is a default case, false otherwise
+     */
+    get isDefault() { return wrapJoinPoint(this._javaObject.getIsDefault()); }
+    /**
+     * True if this case does not contain instructions (i.e., it is directly above another case), false otherwise
+     */
+    get isEmpty() { return wrapJoinPoint(this._javaObject.getIsEmpty()); }
+    /**
+     * The case statement that comes after this case, or undefined if there are no more case statements
+     */
+    get nextCase() { return wrapJoinPoint(this._javaObject.getNextCase()); }
+    /**
+     * The first statement that is not a case that will be executed by this case statement
+     */
+    get nextInstruction() { return wrapJoinPoint(this._javaObject.getNextInstruction()); }
+    /**
+     * The values that the case statement will match. It can return zero (e.g., 'default:'), one (e.g., 'case 1:') or two (e.g., 'case 2...4:') expressions, depending on the format of the case
+     */
+    get values() { return wrapJoinPoint(this._javaObject.getValues()); }
 }
 export class Cast extends Expression {
-    get fromType() {
-        return wrapJoinPoint(this._javaObject.getFromType());
-    }
+    get fromType() { return wrapJoinPoint(this._javaObject.getFromType()); }
     /**
      * @deprecated Use expr.implicitCast instead
      */
-    get isImplicitCast() {
-        return wrapJoinPoint(this._javaObject.getIsImplicitCast());
-    }
-    get subExpr() {
-        return wrapJoinPoint(this._javaObject.getSubExpr());
-    }
-    get toType() {
-        return wrapJoinPoint(this._javaObject.getToType());
-    }
+    get isImplicitCast() { return wrapJoinPoint(this._javaObject.getIsImplicitCast()); }
+    get subExpr() { return wrapJoinPoint(this._javaObject.getSubExpr()); }
+    get toType() { return wrapJoinPoint(this._javaObject.getToType()); }
 }
 export class CilkSpawn extends Call {
 }
@@ -1724,90 +1127,60 @@ export class Class extends Record {
     /**
      * All the classes this class inherits from
      */
-    get allBases() {
-        return wrapJoinPoint(this._javaObject.getAllBases());
-    }
+    get allBases() { return wrapJoinPoint(this._javaObject.getAllBases()); }
     /**
      * All the methods of this class, including inherited ones
      */
-    get allMethods() {
-        return wrapJoinPoint(this._javaObject.getAllMethods());
-    }
+    get allMethods() { return wrapJoinPoint(this._javaObject.getAllMethods()); }
     /**
      * The classes this class directly inherits from
      */
-    get bases() {
-        return wrapJoinPoint(this._javaObject.getBases());
-    }
+    get bases() { return wrapJoinPoint(this._javaObject.getBases()); }
     /**
      * Class join points can either represent declarations or definitions, returns the definition of this class, if present, or the first declaration, if only declarations are present
      */
-    get canonical() {
-        return wrapJoinPoint(this._javaObject.getCanonical());
-    }
+    get canonical() { return wrapJoinPoint(this._javaObject.getCanonical()); }
     /**
      * The implementation (or definition) of this class present in the AST, or undefined if none is found
      */
-    get implementation() {
-        return wrapJoinPoint(this._javaObject.getImplementation());
-    }
+    get implementation() { return wrapJoinPoint(this._javaObject.getImplementation()); }
     /**
      * True, if contains at least one pure function
      */
-    get isAbstract() {
-        return wrapJoinPoint(this._javaObject.getIsAbstract());
-    }
+    get isAbstract() { return wrapJoinPoint(this._javaObject.getIsAbstract()); }
     /**
      * True if this is the class returned by the 'canonical' attribute
      */
-    get isCanonical() {
-        return wrapJoinPoint(this._javaObject.getIsCanonical());
-    }
+    get isCanonical() { return wrapJoinPoint(this._javaObject.getIsCanonical()); }
     /**
      * True, if all functions are pure
      */
-    get isInterface() {
-        return wrapJoinPoint(this._javaObject.getIsInterface());
-    }
+    get isInterface() { return wrapJoinPoint(this._javaObject.getIsInterface()); }
     /**
      * The methods declared by this class
      */
-    get methods() {
-        return wrapJoinPoint(this._javaObject.getMethods());
-    }
+    get methods() { return wrapJoinPoint(this._javaObject.getMethods()); }
     /**
      * The prototypes (or declarations) of this class present in the AST, if any
      */
-    get prototypes() {
-        return wrapJoinPoint(this._javaObject.getPrototypes());
-    }
+    get prototypes() { return wrapJoinPoint(this._javaObject.getPrototypes()); }
     /**
      * Adds a method to a class. If the given method has a definition, creates an equivalent declaration and adds it to the class, otherwise simply added the declaration to the class. In both cases, the declaration is only added to the class if there is no declaration already with the same signature.
      */
-    addMethod(method) {
-        return wrapJoinPoint(this._javaObject.addMethod(unwrapJoinPoint(method)));
-    }
+    addMethod(method) { return wrapJoinPoint(this._javaObject.addMethod(unwrapJoinPoint(method))); }
 }
 export class Continue extends Statement {
 }
 export class CudaKernelCall extends Call {
-    get config() {
-        return wrapJoinPoint(this._javaObject.getConfig());
-    }
-    setConfig(args) {
-        return wrapJoinPoint(this._javaObject.setConfig(args));
-    }
-    setConfigFromStrings(args) {
-        return wrapJoinPoint(this._javaObject.setConfigFromStrings(args));
-    }
+    get config() { return wrapJoinPoint(this._javaObject.getConfig()); }
+    setConfig(args) { return wrapJoinPoint(this._javaObject.setConfig(args)); }
+    setConfigFromStrings(args) { return wrapJoinPoint(this._javaObject.setConfigFromStrings(args)); }
 }
 export class DeclStmt extends Statement {
     /**
      * The declarations in this statement
      */
-    get decls() {
-        return wrapJoinPoint(this._javaObject.getDecls());
-    }
+    get decls() { return wrapJoinPoint(this._javaObject.getDecls()); }
 }
 /**
  * Represents a decl that comes from a declarator (e.g., function, field, variable)
@@ -1823,21 +1196,15 @@ export class ElaboratedType extends Type {
     /**
      * The keyword of this elaborated type, if present. Can be one of: struct, interface, union, class, enum, typename
      */
-    get keyword() {
-        return wrapJoinPoint(this._javaObject.getKeyword());
-    }
+    get keyword() { return wrapJoinPoint(this._javaObject.getKeyword()); }
     /**
      * The type that is being prefixed with the qualifier
      */
-    get namedType() {
-        return wrapJoinPoint(this._javaObject.getNamedType());
-    }
+    get namedType() { return wrapJoinPoint(this._javaObject.getNamedType()); }
     /**
      * The qualifier of this elaborated type, if present (e.g., A::)
      */
-    get qualifier() {
-        return wrapJoinPoint(this._javaObject.getQualifier());
-    }
+    get qualifier() { return wrapJoinPoint(this._javaObject.getQualifier()); }
 }
 export class EmptyStmt extends Statement {
 }
@@ -1845,9 +1212,7 @@ export class EmptyStmt extends Statement {
  * Represents an enum
  */
 export class EnumDecl extends NamedDecl {
-    get enumerators() {
-        return wrapJoinPoint(this._javaObject.getEnumerators());
-    }
+    get enumerators() { return wrapJoinPoint(this._javaObject.getEnumerators()); }
 }
 export class EnumeratorDecl extends NamedDecl {
 }
@@ -1855,9 +1220,7 @@ export class ExprStmt extends Statement {
     /**
      * The expression join point associated to this exprStmt
      */
-    get expr() {
-        return wrapJoinPoint(this._javaObject.getExpr());
-    }
+    get expr() { return wrapJoinPoint(this._javaObject.getExpr()); }
 }
 /**
  * Represents a member of a struct/union/class
@@ -1865,432 +1228,262 @@ export class ExprStmt extends Statement {
 export class Field extends Declarator {
 }
 export class FloatLiteral extends Literal {
-    get value() {
-        return wrapJoinPoint(this._javaObject.getValue());
-    }
+    get value() { return wrapJoinPoint(this._javaObject.getValue()); }
 }
 /**
  * Represents a function declaration or definition
  */
 export class FunctionJp extends Declarator {
-    get body() {
-        return wrapJoinPoint(this._javaObject.getBody());
-    }
-    get calls() {
-        return wrapJoinPoint(this._javaObject.getCalls());
-    }
+    get body() { return wrapJoinPoint(this._javaObject.getBody()); }
+    get calls() { return wrapJoinPoint(this._javaObject.getCalls()); }
     /**
      * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
      */
-    get canonical() {
-        return wrapJoinPoint(this._javaObject.getCanonical());
-    }
+    get canonical() { return wrapJoinPoint(this._javaObject.getCanonical()); }
     /**
      * Returns the first prototype of this function that could be found, or undefined if there is none
      */
-    get declarationJp() {
-        return wrapJoinPoint(this._javaObject.getDeclarationJp());
-    }
+    get declarationJp() { return wrapJoinPoint(this._javaObject.getDeclarationJp()); }
     /**
      * Returns the prototypes of this function that are present in the code. If there are none, returns an empty array
      */
-    get declarationJps() {
-        return wrapJoinPoint(this._javaObject.getDeclarationJps());
-    }
+    get declarationJps() { return wrapJoinPoint(this._javaObject.getDeclarationJps()); }
     /**
      * Returns the implementation of this function if there is one, or undefined otherwise
      */
-    get definitionJp() {
-        return wrapJoinPoint(this._javaObject.getDefinitionJp());
-    }
+    get definitionJp() { return wrapJoinPoint(this._javaObject.getDefinitionJp()); }
     /**
      * The type of the call, which includes the return type and the types of the parameters
      */
-    get functionType() {
-        return wrapJoinPoint(this._javaObject.getFunctionType());
-    }
+    get functionType() { return wrapJoinPoint(this._javaObject.getFunctionType()); }
     /**
      * True if this particular function join point has a body, false otherwise
      *
      * @deprecated Use .isImplementation instead
      */
-    get hasDefinition() {
-        return wrapJoinPoint(this._javaObject.getHasDefinition());
-    }
-    get id() {
-        return wrapJoinPoint(this._javaObject.getId());
-    }
+    get hasDefinition() { return wrapJoinPoint(this._javaObject.getHasDefinition()); }
+    get id() { return wrapJoinPoint(this._javaObject.getId()); }
     /**
      * True, if this is the function returned by the 'canonical' attribute
      */
-    get isCanonical() {
-        return wrapJoinPoint(this._javaObject.getIsCanonical());
-    }
-    get isCudaKernel() {
-        return wrapJoinPoint(this._javaObject.getIsCudaKernel());
-    }
-    get isDelete() {
-        return wrapJoinPoint(this._javaObject.getIsDelete());
-    }
+    get isCanonical() { return wrapJoinPoint(this._javaObject.getIsCanonical()); }
+    get isCudaKernel() { return wrapJoinPoint(this._javaObject.getIsCudaKernel()); }
+    get isDelete() { return wrapJoinPoint(this._javaObject.getIsDelete()); }
     /**
      * True if this particular function join point is an implementation (i.e. has a body), false otherwise
      */
-    get isImplementation() {
-        return wrapJoinPoint(this._javaObject.getIsImplementation());
-    }
-    get isInline() {
-        return wrapJoinPoint(this._javaObject.getIsInline());
-    }
-    get isModulePrivate() {
-        return wrapJoinPoint(this._javaObject.getIsModulePrivate());
-    }
+    get isImplementation() { return wrapJoinPoint(this._javaObject.getIsImplementation()); }
+    get isInline() { return wrapJoinPoint(this._javaObject.getIsInline()); }
+    get isModulePrivate() { return wrapJoinPoint(this._javaObject.getIsModulePrivate()); }
     /**
      * True if this particular function join point is a prototype (i.e. does not have a body), false otherwise
      */
-    get isPrototype() {
-        return wrapJoinPoint(this._javaObject.getIsPrototype());
-    }
-    get isPure() {
-        return wrapJoinPoint(this._javaObject.getIsPure());
-    }
-    get isVirtual() {
-        return wrapJoinPoint(this._javaObject.getIsVirtual());
-    }
-    get paramNames() {
-        return wrapJoinPoint(this._javaObject.getParamNames());
-    }
-    get params() {
-        return wrapJoinPoint(this._javaObject.getParams());
-    }
-    get returnType() {
-        return wrapJoinPoint(this._javaObject.getReturnType());
-    }
+    get isPrototype() { return wrapJoinPoint(this._javaObject.getIsPrototype()); }
+    get isPure() { return wrapJoinPoint(this._javaObject.getIsPure()); }
+    get isVirtual() { return wrapJoinPoint(this._javaObject.getIsVirtual()); }
+    get paramNames() { return wrapJoinPoint(this._javaObject.getParamNames()); }
+    get params() { return wrapJoinPoint(this._javaObject.getParams()); }
+    get returnType() { return wrapJoinPoint(this._javaObject.getReturnType()); }
     /**
      * A string with the signature of this function (e.g., name of the function, plus the parameters types)
      */
-    get signature() {
-        return wrapJoinPoint(this._javaObject.getSignature());
-    }
-    get storageClass() {
-        return wrapJoinPoint(this._javaObject.getStorageClass());
-    }
-    getDeclaration(withReturnType) {
-        return wrapJoinPoint(this._javaObject.getDeclaration(withReturnType));
-    }
+    get signature() { return wrapJoinPoint(this._javaObject.getSignature()); }
+    get storageClass() { return wrapJoinPoint(this._javaObject.getStorageClass()); }
+    getDeclaration(withReturnType) { return wrapJoinPoint(this._javaObject.getDeclaration(withReturnType)); }
     /**
      * Adds a new parameter to the function
      */
-    addParam(param) {
-        return wrapJoinPoint(this._javaObject.addParam(param));
-    }
+    addParam(param) { return wrapJoinPoint(this._javaObject.addParam(param)); }
     /**
      * Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class
      */
-    clone(newName, insert) {
-        return wrapJoinPoint(this._javaObject.clone(newName, insert));
-    }
+    clone(newName, insert) { return wrapJoinPoint(this._javaObject.clone(newName, insert)); }
     /**
      * Generates a clone of the provided function on a new file (with a weaver-generated name).
      */
-    cloneOnFile(newName) {
-        return wrapJoinPoint(this._javaObject.cloneOnFile(newName));
-    }
+    cloneOnFile(newName) { return wrapJoinPoint(this._javaObject.cloneOnFile(newName)); }
     /**
      * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
      */
-    insertReturn(code) {
-        return wrapJoinPoint(this._javaObject.insertReturn(unwrapJoinPoint(code)));
-    }
+    insertReturn(code) { return wrapJoinPoint(this._javaObject.insertReturn(unwrapJoinPoint(code))); }
     /**
      * Creates a new call to this function
      */
-    newCall(args) {
-        return wrapJoinPoint(this._javaObject.newCall(args));
-    }
+    newCall(args) { return wrapJoinPoint(this._javaObject.newCall(args)); }
     /**
      * Sets the body of the function
      */
-    setBody(body) {
-        return wrapJoinPoint(this._javaObject.setBody(unwrapJoinPoint(body)));
-    }
+    setBody(body) { return wrapJoinPoint(this._javaObject.setBody(unwrapJoinPoint(body))); }
     /**
      * Sets the type of the function
      */
-    setFunctionType(functionType) {
-        return wrapJoinPoint(this._javaObject.setFunctionType(unwrapJoinPoint(functionType)));
-    }
+    setFunctionType(functionType) { return wrapJoinPoint(this._javaObject.setFunctionType(unwrapJoinPoint(functionType))); }
     /**
      * Sets the parameter of the function at the given position
      */
-    setParam(index, param) {
-        return wrapJoinPoint(this._javaObject.setParam(index, unwrapJoinPoint(param)));
-    }
+    setParam(index, param) { return wrapJoinPoint(this._javaObject.setParam(index, unwrapJoinPoint(param))); }
     /**
      * Sets the type of a parameter of the function
      */
-    setParamType(index, newType) {
-        return wrapJoinPoint(this._javaObject.setParamType(index, unwrapJoinPoint(newType)));
-    }
+    setParamType(index, newType) { return wrapJoinPoint(this._javaObject.setParamType(index, unwrapJoinPoint(newType))); }
     /**
      * Sets the parameters of the function
      */
-    setParams(params) {
-        return wrapJoinPoint(this._javaObject.setParams(params));
-    }
+    setParams(params) { return wrapJoinPoint(this._javaObject.setParams(params)); }
     /**
      * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
      */
-    setParamsFromStrings(params) {
-        return wrapJoinPoint(this._javaObject.setParamsFromStrings(params));
-    }
+    setParamsFromStrings(params) { return wrapJoinPoint(this._javaObject.setParamsFromStrings(params)); }
     /**
      * Sets the return type of the function
      */
-    setReturnType(returnType) {
-        return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(returnType)));
-    }
+    setReturnType(returnType) { return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(returnType))); }
 }
 export class FunctionType extends Type {
-    get paramTypes() {
-        return wrapJoinPoint(this._javaObject.getParamTypes());
-    }
-    get returnType() {
-        return wrapJoinPoint(this._javaObject.getReturnType());
-    }
+    get paramTypes() { return wrapJoinPoint(this._javaObject.getParamTypes()); }
+    get returnType() { return wrapJoinPoint(this._javaObject.getReturnType()); }
     /**
      * Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType
      */
-    setParamType(index, newType) {
-        return wrapJoinPoint(this._javaObject.setParamType(index, unwrapJoinPoint(newType)));
-    }
+    setParamType(index, newType) { return wrapJoinPoint(this._javaObject.setParamType(index, unwrapJoinPoint(newType))); }
     /**
      * Sets the return type of the FunctionType
      */
-    setReturnType(newType) {
-        return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(newType)));
-    }
+    setReturnType(newType) { return wrapJoinPoint(this._javaObject.setReturnType(unwrapJoinPoint(newType))); }
 }
 export class GotoStmt extends Statement {
-    get label() {
-        return wrapJoinPoint(this._javaObject.getLabel());
-    }
+    get label() { return wrapJoinPoint(this._javaObject.getLabel()); }
     /**
      * Sets the label of the goto
      */
-    setLabel(label) {
-        return wrapJoinPoint(this._javaObject.setLabel(unwrapJoinPoint(label)));
-    }
+    setLabel(label) { return wrapJoinPoint(this._javaObject.setLabel(unwrapJoinPoint(label))); }
 }
 export class If extends Statement {
-    get cond() {
-        return wrapJoinPoint(this._javaObject.getCond());
-    }
-    get condDecl() {
-        return wrapJoinPoint(this._javaObject.getCondDecl());
-    }
-    get else() {
-        return wrapJoinPoint(this._javaObject.getElse());
-    }
-    get then() {
-        return wrapJoinPoint(this._javaObject.getThen());
-    }
+    get cond() { return wrapJoinPoint(this._javaObject.getCond()); }
+    get condDecl() { return wrapJoinPoint(this._javaObject.getCondDecl()); }
+    get else() { return wrapJoinPoint(this._javaObject.getElse()); }
+    get then() { return wrapJoinPoint(this._javaObject.getThen()); }
     /**
      * Sets the condition of the if
      */
-    setCond(cond) {
-        return wrapJoinPoint(this._javaObject.setCond(unwrapJoinPoint(cond)));
-    }
+    setCond(cond) { return wrapJoinPoint(this._javaObject.setCond(unwrapJoinPoint(cond))); }
     /**
      * Sets the body of the else
      */
-    setElse(elseStatement) {
-        return wrapJoinPoint(this._javaObject.setElse(unwrapJoinPoint(elseStatement)));
-    }
+    setElse(elseStatement) { return wrapJoinPoint(this._javaObject.setElse(unwrapJoinPoint(elseStatement))); }
     /**
      * Sets the body of the if
      */
-    setThen(then) {
-        return wrapJoinPoint(this._javaObject.setThen(unwrapJoinPoint(then)));
-    }
+    setThen(then) { return wrapJoinPoint(this._javaObject.setThen(unwrapJoinPoint(then))); }
 }
 export class IntLiteral extends Literal {
-    get value() {
-        return wrapJoinPoint(this._javaObject.getValue());
-    }
+    get value() { return wrapJoinPoint(this._javaObject.getValue()); }
 }
 export class LabelDecl extends NamedDecl {
 }
 export class LabelStmt extends Statement {
-    get decl() {
-        return wrapJoinPoint(this._javaObject.getDecl());
-    }
+    get decl() { return wrapJoinPoint(this._javaObject.getDecl()); }
     /**
      * Sets the label of the label statement
      */
-    setDecl(label) {
-        return wrapJoinPoint(this._javaObject.setDecl(unwrapJoinPoint(label)));
-    }
+    setDecl(label) { return wrapJoinPoint(this._javaObject.setDecl(unwrapJoinPoint(label))); }
 }
 export class Loop extends Statement {
-    get body() {
-        return wrapJoinPoint(this._javaObject.getBody());
-    }
+    get body() { return wrapJoinPoint(this._javaObject.getBody()); }
     /**
      * The statement of the loop condition
      */
-    get cond() {
-        return wrapJoinPoint(this._javaObject.getCond());
-    }
-    get condRelation() {
-        return wrapJoinPoint(this._javaObject.getCondRelation());
-    }
-    get controlVar() {
-        return wrapJoinPoint(this._javaObject.getControlVar());
-    }
+    get cond() { return wrapJoinPoint(this._javaObject.getCond()); }
+    get condRelation() { return wrapJoinPoint(this._javaObject.getCondRelation()); }
+    get controlVar() { return wrapJoinPoint(this._javaObject.getControlVar()); }
     /**
      * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
      */
-    get endValue() {
-        return wrapJoinPoint(this._javaObject.getEndValue());
-    }
+    get endValue() { return wrapJoinPoint(this._javaObject.getEndValue()); }
     /**
      * True if the condition of the loop in the canonical format, and is one of: <, <=, >, >=
      */
-    get hasCondRelation() {
-        return wrapJoinPoint(this._javaObject.getHasCondRelation());
-    }
+    get hasCondRelation() { return wrapJoinPoint(this._javaObject.getHasCondRelation()); }
     /**
      * Uniquely identifies the loop inside the program
      */
-    get id() {
-        return wrapJoinPoint(this._javaObject.getId());
-    }
+    get id() { return wrapJoinPoint(this._javaObject.getId()); }
     /**
      * The statement of the loop initialization
      */
-    get init() {
-        return wrapJoinPoint(this._javaObject.getInit());
-    }
+    get init() { return wrapJoinPoint(this._javaObject.getInit()); }
     /**
      * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
      */
-    get initValue() {
-        return wrapJoinPoint(this._javaObject.getInitValue());
-    }
-    get isInnermost() {
-        return wrapJoinPoint(this._javaObject.getIsInnermost());
-    }
-    get isOutermost() {
-        return wrapJoinPoint(this._javaObject.getIsOutermost());
-    }
-    get isParallel() {
-        return wrapJoinPoint(this._javaObject.getIsParallel());
-    }
-    get iterations() {
-        return wrapJoinPoint(this._javaObject.getIterations());
-    }
-    get iterationsExpr() {
-        return wrapJoinPoint(this._javaObject.getIterationsExpr());
-    }
-    get kind() {
-        return wrapJoinPoint(this._javaObject.getKind());
-    }
-    get nestedLevel() {
-        return wrapJoinPoint(this._javaObject.getNestedLevel());
-    }
-    get rank() {
-        return wrapJoinPoint(this._javaObject.getRank());
-    }
+    get initValue() { return wrapJoinPoint(this._javaObject.getInitValue()); }
+    get isInnermost() { return wrapJoinPoint(this._javaObject.getIsInnermost()); }
+    get isOutermost() { return wrapJoinPoint(this._javaObject.getIsOutermost()); }
+    get isParallel() { return wrapJoinPoint(this._javaObject.getIsParallel()); }
+    get iterations() { return wrapJoinPoint(this._javaObject.getIterations()); }
+    get iterationsExpr() { return wrapJoinPoint(this._javaObject.getIterationsExpr()); }
+    get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
+    get nestedLevel() { return wrapJoinPoint(this._javaObject.getNestedLevel()); }
+    get rank() { return wrapJoinPoint(this._javaObject.getRank()); }
     /**
      * The statement of the loop step
      */
-    get step() {
-        return wrapJoinPoint(this._javaObject.getStep());
-    }
+    get step() { return wrapJoinPoint(this._javaObject.getStep()); }
     /**
      * The expression of the iteration step
      */
-    get stepValue() {
-        return wrapJoinPoint(this._javaObject.getStepValue());
-    }
+    get stepValue() { return wrapJoinPoint(this._javaObject.getStepValue()); }
     /**
      * Tests whether the loops are interchangeable. This is a conservative test.
      */
-    getIsInterchangeable(otherLoop) {
-        return wrapJoinPoint(this._javaObject.getIsInterchangeable(unwrapJoinPoint(otherLoop)));
-    }
+    getIsInterchangeable(otherLoop) { return wrapJoinPoint(this._javaObject.getIsInterchangeable(unwrapJoinPoint(otherLoop))); }
     /**
      * @deprecated use 'setKind' instead
      */
-    changeKind(kind) {
-        return wrapJoinPoint(this._javaObject.changeKind(kind));
-    }
+    changeKind(kind) { return wrapJoinPoint(this._javaObject.changeKind(kind)); }
     /**
      * Interchanges two for loops, if possible
      */
-    interchange(otherLoop) {
-        return wrapJoinPoint(this._javaObject.interchange(unwrapJoinPoint(otherLoop)));
-    }
+    interchange(otherLoop) { return wrapJoinPoint(this._javaObject.interchange(unwrapJoinPoint(otherLoop))); }
     /**
      * Sets the body of the loop
      */
-    setBody(body) {
-        return wrapJoinPoint(this._javaObject.setBody(unwrapJoinPoint(body)));
-    }
+    setBody(body) { return wrapJoinPoint(this._javaObject.setBody(unwrapJoinPoint(body))); }
     /**
      * Sets the conditional statement of the loop. Works with loops of kind 'for'
      */
-    setCond(condCode) {
-        return wrapJoinPoint(this._javaObject.setCond(condCode));
-    }
+    setCond(condCode) { return wrapJoinPoint(this._javaObject.setCond(condCode)); }
     /**
      * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
      */
-    setCondRelation(operator) {
-        return wrapJoinPoint(this._javaObject.setCondRelation(operator));
-    }
+    setCondRelation(operator) { return wrapJoinPoint(this._javaObject.setCondRelation(operator)); }
     /**
      * Sets the end value of the loop. Works with loops of kind 'for'
      */
-    setEndValue(initCode) {
-        return wrapJoinPoint(this._javaObject.setEndValue(initCode));
-    }
+    setEndValue(initCode) { return wrapJoinPoint(this._javaObject.setEndValue(initCode)); }
     /**
      * Sets the init statement of the loop
      */
-    setInit(initCode) {
-        return wrapJoinPoint(this._javaObject.setInit(initCode));
-    }
+    setInit(initCode) { return wrapJoinPoint(this._javaObject.setInit(initCode)); }
     /**
      * Sets the init value of the loop. Works with loops of kind 'for'
      */
-    setInitValue(initCode) {
-        return wrapJoinPoint(this._javaObject.setInitValue(initCode));
-    }
+    setInitValue(initCode) { return wrapJoinPoint(this._javaObject.setInitValue(initCode)); }
     /**
      * Sets the attribute 'isParallel' of the loop
      */
-    setIsParallel(isParallel) {
-        return wrapJoinPoint(this._javaObject.setIsParallel(isParallel));
-    }
+    setIsParallel(isParallel) { return wrapJoinPoint(this._javaObject.setIsParallel(isParallel)); }
     /**
      * Sets the kind of the loop
      */
-    setKind(kind) {
-        return wrapJoinPoint(this._javaObject.setKind(kind));
-    }
+    setKind(kind) { return wrapJoinPoint(this._javaObject.setKind(kind)); }
     /**
      * Sets the step statement of the loop. Works with loops of kind 'for'
      */
-    setStep(stepCode) {
-        return wrapJoinPoint(this._javaObject.setStep(stepCode));
-    }
+    setStep(stepCode) { return wrapJoinPoint(this._javaObject.setStep(stepCode)); }
     /**
      * Applies loop tiling to this loop
      */
-    tile(blockSize, reference) {
-        return wrapJoinPoint(this._javaObject.tile(blockSize, unwrapJoinPoint(reference)));
-    }
+    tile(blockSize, reference) { return wrapJoinPoint(this._javaObject.tile(blockSize, unwrapJoinPoint(reference))); }
 }
 /**
  * Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)
@@ -2299,34 +1492,22 @@ export class Marker extends Pragma {
     /**
      * A scope, associated with this marker
      */
-    get contents() {
-        return wrapJoinPoint(this._javaObject.getContents());
-    }
-    get id() {
-        return wrapJoinPoint(this._javaObject.getId());
-    }
+    get contents() { return wrapJoinPoint(this._javaObject.getContents()); }
+    get id() { return wrapJoinPoint(this._javaObject.getId()); }
 }
 export class MemberCall extends Call {
-    get base() {
-        return wrapJoinPoint(this._javaObject.getBase());
-    }
-    get rootBase() {
-        return wrapJoinPoint(this._javaObject.getRootBase());
-    }
+    get base() { return wrapJoinPoint(this._javaObject.getBase()); }
+    get rootBase() { return wrapJoinPoint(this._javaObject.getRootBase()); }
 }
 /**
  * Represents a C++ class method declaration or definition
  */
 export class Method extends FunctionJp {
-    get record() {
-        return wrapJoinPoint(this._javaObject.getRecord());
-    }
+    get record() { return wrapJoinPoint(this._javaObject.getRecord()); }
     /**
      * Removes the of the method
      */
-    removeRecord() {
-        return wrapJoinPoint(this._javaObject.removeRecord());
-    }
+    removeRecord() { return wrapJoinPoint(this._javaObject.removeRecord()); }
 }
 /**
  * Represents an OpenMP pragma (e.g., #pragma omp parallel)
@@ -2335,254 +1516,168 @@ export class Omp extends Pragma {
     /**
      * The names of the kinds of all clauses in the pragma, or empty array if no clause is defined
      */
-    get clauseKinds() {
-        return wrapJoinPoint(this._javaObject.getClauseKinds());
-    }
+    get clauseKinds() { return wrapJoinPoint(this._javaObject.getClauseKinds()); }
     /**
      * An integer expression, or undefined if no 'collapse' clause is defined
      */
-    get collapse() {
-        return wrapJoinPoint(this._javaObject.getCollapse());
-    }
+    get collapse() { return wrapJoinPoint(this._javaObject.getCollapse()); }
     /**
      * The variable names of all copyin clauses, or empty array if no copyin clause is defined
      */
-    get copyin() {
-        return wrapJoinPoint(this._javaObject.getCopyin());
-    }
+    get copyin() { return wrapJoinPoint(this._javaObject.getCopyin()); }
     /**
      * One of 'shared' or 'none', or undefined if no 'default' clause is defined
      */
-    get default() {
-        return wrapJoinPoint(this._javaObject.getDefault());
-    }
+    get default() { return wrapJoinPoint(this._javaObject.getDefault()); }
     /**
      * The variable names of all firstprivate clauses, or empty array if no firstprivate clause is defined
      */
-    get firstprivate() {
-        return wrapJoinPoint(this._javaObject.getFirstprivate());
-    }
+    get firstprivate() { return wrapJoinPoint(this._javaObject.getFirstprivate()); }
     /**
      * The kind of the directive
      */
-    get kind() {
-        return wrapJoinPoint(this._javaObject.getKind());
-    }
+    get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
     /**
      * The variable names of all lastprivate clauses, or empty array if no lastprivate clause is defined
      */
-    get lastprivate() {
-        return wrapJoinPoint(this._javaObject.getLastprivate());
-    }
+    get lastprivate() { return wrapJoinPoint(this._javaObject.getLastprivate()); }
     /**
      * An integer expression, or undefined if no 'num_threads' clause is defined
      */
-    get numThreads() {
-        return wrapJoinPoint(this._javaObject.getNumThreads());
-    }
+    get numThreads() { return wrapJoinPoint(this._javaObject.getNumThreads()); }
     /**
      * An integer expression, or undefined if no 'ordered' clause with a parameter is defined
      */
-    get ordered() {
-        return wrapJoinPoint(this._javaObject.getOrdered());
-    }
+    get ordered() { return wrapJoinPoint(this._javaObject.getOrdered()); }
     /**
      * The variable names of all private clauses, or empty array if no private clause is defined
      */
-    get private() {
-        return wrapJoinPoint(this._javaObject.getPrivate());
-    }
+    get private() { return wrapJoinPoint(this._javaObject.getPrivate()); }
     /**
      * One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined
      */
-    get procBind() {
-        return wrapJoinPoint(this._javaObject.getProcBind());
-    }
+    get procBind() { return wrapJoinPoint(this._javaObject.getProcBind()); }
     /**
      * The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined
      */
-    get reductionKinds() {
-        return wrapJoinPoint(this._javaObject.getReductionKinds());
-    }
+    get reductionKinds() { return wrapJoinPoint(this._javaObject.getReductionKinds()); }
     /**
      * An integer expression, or undefined if no 'schedule' clause with chunk size is defined
      */
-    get scheduleChunkSize() {
-        return wrapJoinPoint(this._javaObject.getScheduleChunkSize());
-    }
+    get scheduleChunkSize() { return wrapJoinPoint(this._javaObject.getScheduleChunkSize()); }
     /**
      * One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined
      */
-    get scheduleKind() {
-        return wrapJoinPoint(this._javaObject.getScheduleKind());
-    }
+    get scheduleKind() { return wrapJoinPoint(this._javaObject.getScheduleKind()); }
     /**
      * A list with possible values of 'monotonic', 'nonmonotonic' or 'simd', or undefined if no 'schedule' clause with modifiers is defined
      */
-    get scheduleModifiers() {
-        return wrapJoinPoint(this._javaObject.getScheduleModifiers());
-    }
+    get scheduleModifiers() { return wrapJoinPoint(this._javaObject.getScheduleModifiers()); }
     /**
      * The variable names of all shared clauses, or empty array if no shared clause is defined
      */
-    get shared() {
-        return wrapJoinPoint(this._javaObject.getShared());
-    }
+    get shared() { return wrapJoinPoint(this._javaObject.getShared()); }
     /**
      * True if the directive has at least one clause of the given clause kind, false otherwise
      */
-    getHasClause(clauseName) {
-        return wrapJoinPoint(this._javaObject.getHasClause(clauseName));
-    }
+    getHasClause(clauseName) { return wrapJoinPoint(this._javaObject.getHasClause(clauseName)); }
     /**
      * True if it is legal to use the given clause kind in this directive, false otherwise
      */
-    getIsClauseLegal(clauseName) {
-        return wrapJoinPoint(this._javaObject.getIsClauseLegal(clauseName));
-    }
+    getIsClauseLegal(clauseName) { return wrapJoinPoint(this._javaObject.getIsClauseLegal(clauseName)); }
     /**
      * The variable names for the given reduction kind, or empty array if no reduction of that kind is defined
      */
-    getReduction(kind) {
-        return wrapJoinPoint(this._javaObject.getReduction(kind));
-    }
+    getReduction(kind) { return wrapJoinPoint(this._javaObject.getReduction(kind)); }
     /**
      * Removes any clause of the given kind from the OpenMP pragma
      */
-    removeClause(clauseKind) {
-        return wrapJoinPoint(this._javaObject.removeClause(clauseKind));
-    }
+    removeClause(clauseKind) { return wrapJoinPoint(this._javaObject.removeClause(clauseKind)); }
     /**
      * Sets the value of the collapse clause of an OpenMP pragma
      */
-    setCollapse(newExpr) {
-        return wrapJoinPoint(this._javaObject.setCollapse(newExpr));
-    }
+    setCollapse(newExpr) { return wrapJoinPoint(this._javaObject.setCollapse(newExpr)); }
     /**
      * Sets the variables of a copyin clause of an OpenMP pragma
      */
-    setCopyin(newVariables) {
-        return wrapJoinPoint(this._javaObject.setCopyin(newVariables));
-    }
+    setCopyin(newVariables) { return wrapJoinPoint(this._javaObject.setCopyin(newVariables)); }
     /**
      * Sets the value of the default clause of an OpenMP pragma
      */
-    setDefault(newDefault) {
-        return wrapJoinPoint(this._javaObject.setDefault(newDefault));
-    }
+    setDefault(newDefault) { return wrapJoinPoint(this._javaObject.setDefault(newDefault)); }
     /**
      * Sets the variables of a firstprivate clause of an OpenMP pragma
      */
-    setFirstprivate(newVariables) {
-        return wrapJoinPoint(this._javaObject.setFirstprivate(newVariables));
-    }
+    setFirstprivate(newVariables) { return wrapJoinPoint(this._javaObject.setFirstprivate(newVariables)); }
     /**
      * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
      */
-    setKind(directiveKind) {
-        return wrapJoinPoint(this._javaObject.setKind(directiveKind));
-    }
+    setKind(directiveKind) { return wrapJoinPoint(this._javaObject.setKind(directiveKind)); }
     /**
      * Sets the variables of a lastprivate clause of an OpenMP pragma
      */
-    setLastprivate(newVariables) {
-        return wrapJoinPoint(this._javaObject.setLastprivate(newVariables));
-    }
+    setLastprivate(newVariables) { return wrapJoinPoint(this._javaObject.setLastprivate(newVariables)); }
     /**
      * Sets the value of the num_threads clause of an OpenMP pragma
      */
-    setNumThreads(newExpr) {
-        return wrapJoinPoint(this._javaObject.setNumThreads(newExpr));
-    }
+    setNumThreads(newExpr) { return wrapJoinPoint(this._javaObject.setNumThreads(newExpr)); }
     /**
      * Sets an ordered clause without parameters in the OpenMP pragma
      */
-    setOrdered() {
-        return wrapJoinPoint(this._javaObject.setOrdered());
-    }
+    setOrdered() { return wrapJoinPoint(this._javaObject.setOrdered()); }
     /**
      * Sets the variables of a private clause of an OpenMP pragma
      */
-    setPrivate(newVariables) {
-        return wrapJoinPoint(this._javaObject.setPrivate(newVariables));
-    }
+    setPrivate(newVariables) { return wrapJoinPoint(this._javaObject.setPrivate(newVariables)); }
     /**
      * Sets the value of the proc_bind clause of an OpenMP pragma
      */
-    setProcBind(newBind) {
-        return wrapJoinPoint(this._javaObject.setProcBind(newBind));
-    }
+    setProcBind(newBind) { return wrapJoinPoint(this._javaObject.setProcBind(newBind)); }
     /**
      * Sets the variables for a given kind of a reduction clause of an OpenMP pragma
      */
-    setReduction(kind, newVariables) {
-        return wrapJoinPoint(this._javaObject.setReduction(kind, newVariables));
-    }
+    setReduction(kind, newVariables) { return wrapJoinPoint(this._javaObject.setReduction(kind, newVariables)); }
     /**
      * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
      */
-    setScheduleChunkSize(chunkSize) {
-        return wrapJoinPoint(this._javaObject.setScheduleChunkSize(chunkSize));
-    }
+    setScheduleChunkSize(chunkSize) { return wrapJoinPoint(this._javaObject.setScheduleChunkSize(chunkSize)); }
     /**
      * Sets the value of the schedule clause of an OpenMP pragma
      */
-    setScheduleKind(scheduleKind) {
-        return wrapJoinPoint(this._javaObject.setScheduleKind(scheduleKind));
-    }
+    setScheduleKind(scheduleKind) { return wrapJoinPoint(this._javaObject.setScheduleKind(scheduleKind)); }
     /**
      * Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
      */
-    setScheduleModifiers(modifiers) {
-        return wrapJoinPoint(this._javaObject.setScheduleModifiers(modifiers));
-    }
+    setScheduleModifiers(modifiers) { return wrapJoinPoint(this._javaObject.setScheduleModifiers(modifiers)); }
     /**
      * Sets the variables of a shared clause of an OpenMP pragma
      */
-    setShared(newVariables) {
-        return wrapJoinPoint(this._javaObject.setShared(newVariables));
-    }
+    setShared(newVariables) { return wrapJoinPoint(this._javaObject.setShared(newVariables)); }
 }
 export class ParenType extends Type {
-    get innerType() {
-        return wrapJoinPoint(this._javaObject.getInnerType());
-    }
+    get innerType() { return wrapJoinPoint(this._javaObject.getInnerType()); }
     /**
      * Sets the inner type of this paren type
      */
-    setInnerType(innerType) {
-        return wrapJoinPoint(this._javaObject.setInnerType(unwrapJoinPoint(innerType)));
-    }
+    setInnerType(innerType) { return wrapJoinPoint(this._javaObject.setInnerType(unwrapJoinPoint(innerType))); }
 }
 export class PointerType extends Type {
-    get pointee() {
-        return wrapJoinPoint(this._javaObject.getPointee());
-    }
+    get pointee() { return wrapJoinPoint(this._javaObject.getPointee()); }
     /**
      * Number of pointer levels from this pointer
      */
-    get pointerLevels() {
-        return wrapJoinPoint(this._javaObject.getPointerLevels());
-    }
+    get pointerLevels() { return wrapJoinPoint(this._javaObject.getPointerLevels()); }
     /**
      * Sets the pointee type of this pointer type
      */
-    setPointee(pointeeType) {
-        return wrapJoinPoint(this._javaObject.setPointee(unwrapJoinPoint(pointeeType)));
-    }
+    setPointee(pointeeType) { return wrapJoinPoint(this._javaObject.setPointee(unwrapJoinPoint(pointeeType))); }
 }
 export class QualType extends Type {
-    get qualifiers() {
-        return wrapJoinPoint(this._javaObject.getQualifiers());
-    }
-    get unqualifiedType() {
-        return wrapJoinPoint(this._javaObject.getUnqualifiedType());
-    }
+    get qualifiers() { return wrapJoinPoint(this._javaObject.getQualifiers()); }
+    get unqualifiedType() { return wrapJoinPoint(this._javaObject.getUnqualifiedType()); }
 }
 export class ReturnStmt extends Statement {
-    get returnExpr() {
-        return wrapJoinPoint(this._javaObject.getReturnExpr());
-    }
+    get returnExpr() { return wrapJoinPoint(this._javaObject.getReturnExpr()); }
 }
 /**
  * Represents a group of statements
@@ -2591,112 +1686,68 @@ export class Scope extends Statement {
     /**
      * Returns the descendant statements of this scope, excluding other scopes, loops, ifs and wrapper statements
      */
-    get allStmts() {
-        return wrapJoinPoint(this._javaObject.getAllStmts());
-    }
-    get firstStmt() {
-        return wrapJoinPoint(this._javaObject.getFirstStmt());
-    }
-    get lastStmt() {
-        return wrapJoinPoint(this._javaObject.getLastStmt());
-    }
+    get allStmts() { return wrapJoinPoint(this._javaObject.getAllStmts()); }
+    get firstStmt() { return wrapJoinPoint(this._javaObject.getFirstStmt()); }
+    get lastStmt() { return wrapJoinPoint(this._javaObject.getLastStmt()); }
     /**
      * True if the scope does not have curly braces
      */
-    get naked() {
-        return wrapJoinPoint(this._javaObject.getNaked());
-    }
+    get naked() { return wrapJoinPoint(this._javaObject.getNaked()); }
     /**
      * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas
      */
-    get numStatements() {
-        return wrapJoinPoint(this._javaObject.getNumStatements());
-    }
+    get numStatements() { return wrapJoinPoint(this._javaObject.getNumStatements()); }
     /**
      * The statement that owns the scope (e.g., function, loop...)
      */
-    get owner() {
-        return wrapJoinPoint(this._javaObject.getOwner());
-    }
+    get owner() { return wrapJoinPoint(this._javaObject.getOwner()); }
     /**
      * Returns the direct (children) statements of this scope
      */
-    get stmts() {
-        return wrapJoinPoint(this._javaObject.getStmts());
-    }
+    get stmts() { return wrapJoinPoint(this._javaObject.getStmts()); }
     /**
      * The number of statements in the scope, not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)
      */
-    getNumStatements(flat) {
-        return wrapJoinPoint(this._javaObject.getNumStatements(flat));
-    }
+    getNumStatements(flat) { return wrapJoinPoint(this._javaObject.getNumStatements(flat)); }
     /**
      * Adds a new local variable to this scope
      */
-    addLocal(name, type, initValue) {
-        return wrapJoinPoint(this._javaObject.addLocal(name, unwrapJoinPoint(type), initValue));
-    }
+    addLocal(name, type, initValue) { return wrapJoinPoint(this._javaObject.addLocal(name, unwrapJoinPoint(type), initValue)); }
     /**
      * CFG tester
      */
-    cfg() {
-        return wrapJoinPoint(this._javaObject.cfg());
-    }
+    cfg() { return wrapJoinPoint(this._javaObject.cfg()); }
     /**
      * Clears the contents of this scope (untested)
      */
-    clear() {
-        return wrapJoinPoint(this._javaObject.clear());
-    }
+    clear() { return wrapJoinPoint(this._javaObject.clear()); }
     /**
      * DFG tester
      */
-    dfg() {
-        return wrapJoinPoint(this._javaObject.dfg());
-    }
-    insertBegin(node) {
-        return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(node)));
-    }
-    insertEnd(node) {
-        return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(node)));
-    }
+    dfg() { return wrapJoinPoint(this._javaObject.dfg()); }
+    insertBegin(node) { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(node))); }
+    insertEnd(node) { return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(node))); }
     /**
      * Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node
      */
-    insertReturn(code) {
-        return wrapJoinPoint(this._javaObject.insertReturn(unwrapJoinPoint(code)));
-    }
+    insertReturn(code) { return wrapJoinPoint(this._javaObject.insertReturn(unwrapJoinPoint(code))); }
     /**
      * Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)
      */
-    setNaked(isNaked) {
-        return wrapJoinPoint(this._javaObject.setNaked(isNaked));
-    }
+    setNaked(isNaked) { return wrapJoinPoint(this._javaObject.setNaked(isNaked)); }
 }
 export class TagType extends Type {
     /**
      * A 'decl' join point that represents the declaration of this tag type
      */
-    get decl() {
-        return wrapJoinPoint(this._javaObject.getDecl());
-    }
-    get name() {
-        return wrapJoinPoint(this._javaObject.getName());
-    }
+    get decl() { return wrapJoinPoint(this._javaObject.getDecl()); }
+    get name() { return wrapJoinPoint(this._javaObject.getName()); }
 }
 export class TemplateSpecializationType extends Type {
-    get args() {
-        return wrapJoinPoint(this._javaObject.getArgs());
-    }
-    get firstArgType() {
-        return wrapJoinPoint(this._javaObject.getFirstArgType());
-    }
-    get numArgs() {
-        return wrapJoinPoint(this._javaObject.getNumArgs());
-    }
-    get templateName() {
-        return wrapJoinPoint(this._javaObject.getTemplateName());
-    }
+    get args() { return wrapJoinPoint(this._javaObject.getArgs()); }
+    get firstArgType() { return wrapJoinPoint(this._javaObject.getFirstArgType()); }
+    get numArgs() { return wrapJoinPoint(this._javaObject.getNumArgs()); }
+    get templateName() { return wrapJoinPoint(this._javaObject.getTemplateName()); }
 }
 /**
  * Declaration of a typedef-name via the 'typedef' type specifier
@@ -2710,89 +1761,61 @@ export class Vardecl extends Declarator {
     /**
      * The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)
      */
-    get definition() {
-        return wrapJoinPoint(this._javaObject.getDefinition());
-    }
+    get definition() { return wrapJoinPoint(this._javaObject.getDefinition()); }
     /**
      * True, if vardecl has an initialization value
      */
-    get hasInit() {
-        return wrapJoinPoint(this._javaObject.getHasInit());
-    }
+    get hasInit() { return wrapJoinPoint(this._javaObject.getHasInit()); }
     /**
      * If vardecl has an initialization value, returns an expression with that value
      */
-    get init() {
-        return wrapJoinPoint(this._javaObject.getInit());
-    }
+    get init() { return wrapJoinPoint(this._javaObject.getInit()); }
     /**
      * The initialization style of this vardecl, which can be no_init, cinit, callinit, listinit
      */
-    get initStyle() {
-        return wrapJoinPoint(this._javaObject.getInitStyle());
-    }
+    get initStyle() { return wrapJoinPoint(this._javaObject.getInitStyle()); }
     /**
      * True, if this variable does not have local storage. This includes all global variables as well as static variables declared within a function.
      */
-    get isGlobal() {
-        return wrapJoinPoint(this._javaObject.getIsGlobal());
-    }
+    get isGlobal() { return wrapJoinPoint(this._javaObject.getIsGlobal()); }
     /**
      * True, if vardecl is a function parameter
      */
-    get isParam() {
-        return wrapJoinPoint(this._javaObject.getIsParam());
-    }
+    get isParam() { return wrapJoinPoint(this._javaObject.getIsParam()); }
     /**
      * Storage class specifier, which can be none, extern, static, __private_extern__, auto, register
      */
-    get storageClass() {
-        return wrapJoinPoint(this._javaObject.getStorageClass());
-    }
+    get storageClass() { return wrapJoinPoint(this._javaObject.getStorageClass()); }
     /**
      * If vardecl already has an initialization, removes it (also removes const if present). Otherwise does nothing
      */
-    removeInit() {
-        return wrapJoinPoint(this._javaObject.removeInit());
-    }
+    removeInit() { return wrapJoinPoint(this._javaObject.removeInit()); }
     /**
      * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
      */
-    setInit(init) {
-        return wrapJoinPoint(this._javaObject.setInit(unwrapJoinPoint(init)));
-    }
+    setInit(init) { return wrapJoinPoint(this._javaObject.setInit(unwrapJoinPoint(init))); }
     /**
      * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
      */
-    setStorageClass(storageClass) {
-        return wrapJoinPoint(this._javaObject.setStorageClass(storageClass));
-    }
+    setStorageClass(storageClass) { return wrapJoinPoint(this._javaObject.setStorageClass(storageClass)); }
     /**
      * Creates a new varref based on this vardecl
      */
-    varref() {
-        return wrapJoinPoint(this._javaObject.varref());
-    }
+    varref() { return wrapJoinPoint(this._javaObject.varref()); }
 }
 export class VariableArrayType extends ArrayType {
-    get sizeExpr() {
-        return wrapJoinPoint(this._javaObject.getSizeExpr());
-    }
+    get sizeExpr() { return wrapJoinPoint(this._javaObject.getSizeExpr()); }
     /**
      * Sets the size expression of this variable array type
      */
-    setSizeExpr(sizeExpr) {
-        return wrapJoinPoint(this._javaObject.setSizeExpr(unwrapJoinPoint(sizeExpr)));
-    }
+    setSizeExpr(sizeExpr) { return wrapJoinPoint(this._javaObject.setSizeExpr(unwrapJoinPoint(sizeExpr))); }
 }
 export class Body extends Scope {
 }
 export class CilkFor extends Loop {
 }
 export class EnumType extends TagType {
-    get integerType() {
-        return wrapJoinPoint(this._javaObject.getIntegerType());
-    }
+    get integerType() { return wrapJoinPoint(this._javaObject.getIntegerType()); }
 }
 export class Param extends Vardecl {
 }
