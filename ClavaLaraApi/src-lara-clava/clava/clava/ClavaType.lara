@@ -1,4 +1,4 @@
-import clava._ClavaJavaTypes;
+import clava.ClavaJavaTypes;
 import weaver.JoinPoints;
 
 /**
@@ -115,7 +115,7 @@ ClavaType.asStatement = function(code, isOptional) {
 	Check.isJoinPoint(code);
 
 
-	var newStmtNode = _ClavaJavaTypes.getClavaNodes().toStmt(code.node);
+	var newStmtNode = ClavaJavaTypes.getClavaNodes().toStmt(code.node);
 
 	return JoinPoints.getInstance().toJoinPoint(newStmtNode);
 }
@@ -150,7 +150,7 @@ ClavaType.asScope = function(code) {
 	// Covert code to a statement
 	var $newStmt = ClavaType.asStatement(code);
 	
-	var newScopeNode = _ClavaJavaTypes.getClavaNodes().toCompoundStmt($newStmt.node);
+	var newScopeNode = ClavaJavaTypes.getClavaNodes().toCompoundStmt($newStmt.node);
 
 	return JoinPoints.getInstance().toJoinPoint(newScopeNode);	
 

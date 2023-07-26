@@ -2,7 +2,7 @@ laraImport("clava.Clava");
 laraImport("clava.ClavaType");
 laraImport("weaver.JoinPoints");
 laraImport("lara.Check");
-laraImport("clava._ClavaJavaTypes");
+laraImport("clava.ClavaJavaTypes");
 
 /**
  * Utility methods related with the creation of new join points.
@@ -572,7 +572,7 @@ class ClavaJoinPoints {
   static type(source) {
     if (isString(source)) {
       // Check if BuiltinType
-      if (_ClavaJavaTypes.getBuiltinKind().isBuiltinKind(source)) {
+      if (ClavaJavaTypes.getBuiltinKind().isBuiltinKind(source)) {
         return ClavaJoinPoints.builtinType(source);
       }
 

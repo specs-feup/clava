@@ -1,24 +1,23 @@
-import lara._JavaTypes;
+import JavaTypes from "lara-js/api/lara/util/JavaTypes.js";
 
 /**
  * Static variables with class names of Java classes used in the Clava API.
- * @class
+ *
  */
-var _ClavaJavaTypes = {};
+export default class ClavaJavaTypes {
+  static getClavaNodes() {
+    return JavaTypes.getType("pt.up.fe.specs.clava.ClavaNodes");
+  }
 
+  static getClavaNode() {
+    return JavaTypes.getType("pt.up.fe.specs.clava.ClavaNode");
+  }
 
-_ClavaJavaTypes.getClavaNodes = function() {
-	return _JavaTypes.getType("pt.up.fe.specs.clava.ClavaNodes");
-}
+  static getCxxJoinPoints() {
+    return JavaTypes.getType("pt.up.fe.specs.clava.weaver.CxxJoinpoints");
+  }
 
-_ClavaJavaTypes.getClavaNode = function() {
-	return _JavaTypes.getType("pt.up.fe.specs.clava.ClavaNode");
-}
-
-_ClavaJavaTypes.getCxxJoinPoints = function() {
-	return _JavaTypes.getType("pt.up.fe.specs.clava.weaver.CxxJoinpoints");
-}
-
-_ClavaJavaTypes.getBuiltinKind = function() {
-	return _JavaTypes.getType("pt.up.fe.specs.clava.ast.type.enums.BuiltinKind");
+  static getBuiltinKind() {
+    return JavaTypes.getType("pt.up.fe.specs.clava.ast.type.enums.BuiltinKind");
+  }
 }
