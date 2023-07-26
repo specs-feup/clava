@@ -1,117 +1,97 @@
-import weaver.util.WeaverDataStore;
+import WeaverDataStore from "lara-js/api/weaver/util/WeaverDataStore.js";
+import ClavaJavaTypes from "../ClavaJavaTypes.js";
+import JavaTypes, { JavaClasses } from "lara-js/api/lara/util/JavaTypes.js";
+import Io from "lara-js/api/lara/Io.js";
+import DataStore from "lara-js/api/lara/util/DataStore.js";
+import { arrayFromArgs } from "lara-js/api/lara/core/LaraCore.js";
 
 /**
  * DataStore used in Clava.
- * @constructor
+ *
  */
-function ClavaDataStore(data) {
-    // Parent constructor
-    WeaverDataStore.call(this, data, Java.type("pt.up.fe.specs.clava.weaver.CxxWeaver").getWeaverDefinition());
-	
-	// Add alias
-	this.addAlias("Disable Clava Info", "disable_info");
-	//this.addAlias("config_folder", "joptions_current_folder_path");
-	
-}
-// Inheritance
-ClavaDataStore.prototype = Object.create(WeaverDataStore.prototype);
+export default class ClavaDataStore extends WeaverDataStore {
+  constructor(
+    data: string | DataStore | JavaClasses.DataStore = "LaraI Options",
+    definition: any = ClavaJavaTypes.CxxWeaver.getWeaverDefinition()
+  ) {
+    super(data, definition);
 
+    this.addAlias("Disable Clava Info", "disable_info");
+  }
 
-/*** PRIVATE OVERRIDABLE FUNCTIONS ***/
+  /**
+   * Wraps a Java DataStore around a Lara DataStore.
+   */
+  protected dataStoreWrapper(javaDataStore: JavaClasses.DataStore) {
+    return new ClavaDataStore(javaDataStore, this.definition);
+  }
 
+  /**
+   * @returns A string with the current C/C++ compiler flags.
+   */
+  getFlags(): string {
+    return this.get("Compiler Flags");
+  }
 
-/**
- * Wraps a Java DataStore around a Lara DataStore.
- */
-ClavaDataStore.prototype._dataStoreWrapper = function(javaDataStore) {
-	return new ClavaDataStore(javaDataStore, this.definition);
-}
+  /**
+   * @param flags - A string with C/C++ compiler flags.
+   *
+   */
+  setFlags(flags: string) {
+    this.put("Compiler Flags", flags);
+  }
 
+  /**
+   * @returns {J#java.util.List<String>} A list with the current extra system includes.
+   */
+  getSystemIncludes(): string[] {
+    return this.get("library includes").getFiles();
+  }
 
-/*** NEW CLAVA_DATA_STORE FUNCTIONS ***/
+  /**
+   * @return {J#java.util.List<String>} A list with the current user includes.
+   */
+  getUserIncludes(): string[] {
+    return this.get("header includes").getFiles();
+  }
 
-/**
- * @return {string} a string with the current C/C++ compiler flags.
- */
-ClavaDataStore.prototype.getFlags = function() {
-	return this.get("Compiler Flags");
-}
+  /**
+   * @param arguments - A variable number of strings with the extra system includes.
+   *
+   */
+  setSystemIncludes(...args: string[]) {
+    const filenames = arrayFromArgs(args);
+    const files = filenames.map((filename: string) => Io.getPath(filename));
 
-/**
- * @param {string} flags - A string with C/C++ compiler flags.
- * 
- */
-ClavaDataStore.prototype.setFlags = function(flags) {
-	checkString(flags);
+    this.put("library includes", JavaTypes.FileList.newInstance(files));
+  }
 
-//	if((typeof flags) === "array") {
-//		flags = flags.join(" ");
-//	} else {
-//		checkString(flags);
-//	}
-	
-	this.put("Compiler Flags", flags);	
-}
+  /**
+   * @param arguments - A variable number of strings with the user includes.
+   *
+   */
+  setUserIncludes(...args: string[]) {
+    const filenames = arrayFromArgs(args);
+    const files = filenames.map((filename: string) => Io.getPath(filename));
 
-/**
- * @return {J#java.util.List<String>} A list with the current extra system includes.
- */
-ClavaDataStore.prototype.getSystemIncludes = function() {
-	return this.get("library includes").getFiles();
-}
+    this.put("header includes", JavaTypes.FileList.newInstance(files));
+  }
 
-/**
- * @return {J#java.util.List<String>} A list with the current user includes.
- */
-ClavaDataStore.prototype.getUserIncludes = function() {
-	return this.get("header includes").getFiles();
-}
+  /**
+   * @returns A string with the current compilation standard.
+   */
+  getStandard(): string {
+    return this.get("C/C++ Standard").toString();
+  }
 
-/**
- * @param {string...} arguments - A variable number of strings with the extra system includes.
- * 
- */
-ClavaDataStore.prototype.setSystemIncludes = function() {
-	var filenames = arrayFromArgs(arguments);
-	var files = [];
-	for(filename of filenames) {
-		files.push(Io.getPath(filename));
-	}
-	
-	var fileList = Java.type("org.lara.interpreter.joptions.keys.FileList").newInstance(files);	
-	this.put("library includes", fileList);	
-}
+  /**
+   * @param flags - A string with a C/C++/OpenCL compilation standard.
+   *
+   */
+  setStandard(standard: string) {
+    const stdObject =
+      ClavaJavaTypes.Standard.getEnumHelper().fromValue(standard);
 
-/**
- * @param {string...} arguments - A variable number of strings with the user includes.
- * 
- */
-ClavaDataStore.prototype.setUserIncludes = function() {
-	var filenames = arrayFromArgs(arguments);
-	var files = [];
-	for(filename of filenames) {
-		files.push(Io.getPath(filename));
-	}
-	
-	var fileList = Java.type("org.lara.interpreter.joptions.keys.FileList").newInstance(files);	
-	this.put("header includes", fileList);	
-}
-
-
-/**
- * @return {string} a string with the current compilation standard.
- */
-ClavaDataStore.prototype.getStandard = function() {
-	return this.get("C/C++ Standard").toString();
-}
-
-/**
- * @param {string} flags - A string with a C/C++/OpenCL compilation standard.
- * 
- */
-ClavaDataStore.prototype.setStandard = function(standard) {
-	checkString(standard);
-
-	var stdObject = Java.type("pt.up.fe.specs.clava.language.Standard").getEnumHelper().fromValue(standard);
-	this.put("C/C++ Standard", stdObject);	
+    this.put("C/C++ Standard", stdObject);
+  }
 }

@@ -20,4 +20,12 @@ export default class ClavaJavaTypes {
   static getBuiltinKind() {
     return JavaTypes.getType("pt.up.fe.specs.clava.ast.type.enums.BuiltinKind");
   }
+
+  static get CxxWeaver() {
+    return JavaTypes.getType("pt.up.fe.specs.clava.weaver.CxxWeaver");
+  }
+
+  static get Standard() {
+    return JavaTypes.getType("pt.up.fe.specs.clava.language.Standard");
+  }
 }

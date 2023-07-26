@@ -172,7 +172,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     MEMOI_ANALYSIS("memoi/MemoiAnalysis.lara"),
 
     // Clava utils
-    CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
+    //CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
     CODE_INSERTER("util/CodeInserter.js"),
     FILE_ITERATOR("util/FileIterator.lara"),
 
