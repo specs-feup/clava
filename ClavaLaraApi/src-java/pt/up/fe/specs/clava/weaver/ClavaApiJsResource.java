@@ -25,6 +25,7 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
 public enum ClavaApiJsResource implements LaraResourceProvider {
 
     JOINPOINTS_JS("Joinpoints.js"),
+    CLAVA_JS("clava/Clava.js"),
     CLAVAJAVATYPES_JS("clava/ClavaJavaTypes.js"),
     CLAVADATASTORE_JS("clava/util/ClavaDataStore.js"),
     CORE_JS("core.js");
