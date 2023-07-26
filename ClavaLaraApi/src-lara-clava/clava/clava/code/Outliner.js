@@ -195,7 +195,7 @@ class Outliner {
             const op2 = ClavaJoinPoints.binaryOp("=", derefBoolVarParam, trueVal, boolVarParam.type);
             ret.insertBefore(op2);
         }
-        fun.setType(ClavaType.asType("void"));
+        fun.setType(ClavaJoinPoints.type("void"));
 
 
         // actions on the function call
@@ -289,7 +289,7 @@ class Outliner {
             oldFun = oldFun.parent;
         }
 
-        let retType = ClavaType.asType("void");
+        let retType = ClavaJoinPoints.type("void");
         const returnStmts = this.#findNonvoidReturnStmts(region);
         if (returnStmts.length > 0) {
             retType = returnStmts[0].children[0].type;

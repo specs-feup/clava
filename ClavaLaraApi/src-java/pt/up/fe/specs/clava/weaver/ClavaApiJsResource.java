@@ -27,8 +27,10 @@ public enum ClavaApiJsResource implements LaraResourceProvider {
     JOINPOINTS_JS("Joinpoints.js"),
     CLAVA_JS("clava/Clava.js"),
     CLAVAJAVATYPES_JS("clava/ClavaJavaTypes.js"),
+    CLAVATYPE_JS("clava/ClavaType.js"),
     CLAVADATASTORE_JS("clava/util/ClavaDataStore.js"),
-    CORE_JS("core.js");
+    CORE_JS("core.js"),
+    JOINPOINTS_JS_1("weaver/JoinPoints.js");
 
     private final String resource;
 
