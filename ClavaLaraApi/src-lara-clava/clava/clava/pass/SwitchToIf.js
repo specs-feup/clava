@@ -1,9 +1,64 @@
-laraImport("lara.pass.Pass");
 laraImport("weaver.Query");
 laraImport("clava.ClavaJoinPoints");
-laraImport("lara.Strings");
+laraImport("lara.pass.SimplePass");
+laraImport("lara.pass.results.PassResult");
 
+
+/**
+ * Transforms a switch statment into an if statement.
+ * 
+ * This means that code like this:
+ * 
+ * ```c
+ *	int num = 1, a;
+ *	
+ *	switch (num) {
+ *	    case 1:
+ *          a = 10;
+ *	   default:
+ *	   	    a = 30;
+ *	        break;
+ *	   case 2:
+ *	       a = 20;
+ *	       break;
+ *	}
+ * ```
+ * 
+ * Will be transformed into:
+ * 
+ * ```c
+ *  int num = 1, a;
+ * 
+ *  if (num == 1) 
+ *      goto case_1;
+ *  else if (num == 2) 
+ *      goto case_2;
+ *  else goto case_default;
+ * 
+ *  case_1:
+ *      a = 10;
+ *  case_default:
+ *      a = 30;
+ *      goto switch_exit;
+ *  case_2:
+ *      a = 20;
+ *      goto switch_exit;
+ * 
+ *  switch_exit:
+ *  ;
+ * ```
+ */
 class SwitchToIf extends SimplePass {
+    /**
+     * Maps each case statement id to the corresponding label statement
+     */
+    #caseLabels;
+
+    /**
+     * A list with the corresponding if statement for each case in the switch statement. For the default case, the list keeps its goto statement
+     */
+    #caseIfStmts;
+
     /**
      * @return {string} Name of the pass
      * @override
@@ -16,30 +71,58 @@ class SwitchToIf extends SimplePass {
         return $jp.instanceOf("switch");
     }
 
+    /**
+     * Transformation to be applied to matching joinpoints
+     * @override
+     * @param {JoinPoint} $jp Join point to transform
+     */
     transformJoinpoint($jp) {
-        const $switchCondition = $jp.condition;
-        const $switchEndLabel = ClavaJoinPoints.labelDecl("end_switch_" + $jp.astId);
-        const $switchEndLabelStmt = ClavaJoinPoints.labelStmt($switchEndLabel);
-        const $switchEndGoTo = ClavaJoinPoints.gotoStmt($switchEndLabel);
+        const $switchExitLabel = ClavaJoinPoints.labelDecl("switch_exit" + $jp.astId);
+        const $switchExitLabelStmt = ClavaJoinPoints.labelStmt($switchExitLabel);
+        const $switchExitGoTo = ClavaJoinPoints.gotoStmt($switchExitLabel);
 
-        // Create 'if' statement for each case
-        let caseLabels = new Map();
-        let switchConditions = new Array();
+        // Insert the switch exit label and an empty statement if needed
+        $jp.insertAfter($switchExitLabelStmt);
+        if ($switchExitLabelStmt.isLast)
+            $switchExitLabelStmt.insertAfter(ClavaJoinPoints.emptyStmt());
+
+        this.#computeIfAndLabels($jp);
+        this.#moveDefaultToEnd();
+
+        $jp.insertBefore(this.#caseIfStmts[0]);
+
+        this.#linkIfStmts();
+        this.#replaceBreakWithGoto($jp, $switchExitGoTo);
+        this.#addLabelsAndInstructions($jp);
+
+        $jp.detach();
+        return new PassResult(this, this.#caseIfStmts[0]);
+    }
+
+    /**
+     * Creates if and label statements for each case in the provided switch statement and adds them to the private fields "caseLabels" and "caseIfStmts".
+     * @param {joinpoint} $jp the switch statement
+     */
+    #computeIfAndLabels($jp) {
+        const $switchCondition = $jp.condition;
+        this.#caseLabels = new Map();
+        this.#caseIfStmts = new Array();
+
         for (const $case of $jp.cases) {
-            const labelName = $case.isDefault ? "case_" + $case.astId : "case_" + $case.astId;
+            const labelName = "case_" + $case.astId;
             const $labelDecl = ClavaJoinPoints.labelDecl(labelName);
             const $goto = ClavaJoinPoints.gotoStmt($labelDecl);
 
             const $labelStmt = ClavaJoinPoints.labelStmt($labelDecl);
-            caseLabels.set($case.astId, $labelStmt);
+            this.#caseLabels.set($case.astId, $labelStmt);
             
             if ($case.isDefault) {
-                switchConditions.push($goto);
+                this.#caseIfStmts.push($goto);
                 continue;
             }
 
             let $ifCondition;
-            if($case.values.length == 1)
+            if ($case.values.length == 1)
                 $ifCondition = ClavaJoinPoints.binaryOp("==", $switchCondition, $case.values[0], "boolean");
             else {
                 const $binOpGE = ClavaJoinPoints.binaryOp(">=", $switchCondition, $case.values[0], "boolean");
@@ -47,46 +130,52 @@ class SwitchToIf extends SimplePass {
                 $ifCondition = ClavaJoinPoints.binaryOp("&&", $binOpGE, $binOpLE, "boolean"); 
             }
             const $ifStmt = ClavaJoinPoints.ifStmt($ifCondition, $goto);
-
-            switchConditions.push($ifStmt);
+            this.#caseIfStmts.push($ifStmt);
         }
+    }
 
-        $jp.insertBefore(switchConditions[0]);
+    /**
+     * Reorders the private field "caseIfStmts" by moving the goto statement of the intermediate default case to the end.
+     */
+    #moveDefaultToEnd() {
+        const index = this.#caseIfStmts.findIndex($condition => $condition.instanceOf("gotoStmt"));
+        if (index !== -1)
+            this.#caseIfStmts.push(this.#caseIfStmts.splice(index, 1)[0]);
+    }
 
-        // Move intermediate default to the end
-        this.#moveDefaultToEnd(switchConditions);
-
-        // Connect the switch conditions
-        for (let i = 0; i < switchConditions.length - 1; i++) {
-            const $ifStmt = switchConditions[i];
-            const $nextIfStmt = switchConditions[i + 1];
+    /**
+     * Links the statements stored in the private field "caseIfStmts" by setting the body of their else as the next statement in the list
+     */
+    #linkIfStmts() {
+        for (let i = 0; i < this.#caseIfStmts.length - 1; i++) {
+            const $ifStmt = this.#caseIfStmts[i];
+            const $nextIfStmt = this.#caseIfStmts[i + 1];
             $ifStmt.setElse($nextIfStmt);            
         }
+    }
 
-        // Replace break statements with goto statements
-        const $breakStmts = Query.searchFromInclusive($jp, "break", {enclosingStmt: enclosingStmt => enclosingStmt.instanceOf("switch")});
+    /**
+     * Replaces the break statements that refer to the exit of the provided switch statement with goto statements.
+     * @param {joinpoint} $jp the switch statement
+     * @param {joinpoint} $switchExitGoTo the goto statement that corresponds to the switch exit. This statement will be used to replace the break statements 
+     */
+    #replaceBreakWithGoto($jp, $switchExitGoTo) {
+        const $breakStmts = Query.searchFromInclusive($jp, "break", {enclosingStmt: enclosingStmt => enclosingStmt.astId === $jp.astId});
         for (const $break of $breakStmts)
-            $break.replaceWith($switchEndGoTo);
+            $break.replaceWith($switchExitGoTo);
+    }
 
-        // Insert label and instructions of each case statement
+    /**
+     * Inserts the label and instructions of each case in the provided switch statement
+     * @param {joinpoint} $jp the switch statement
+     */
+    #addLabelsAndInstructions($jp) {
         for (const $case of $jp.cases) { 
-            const $caseLabel = caseLabels.get($case.astId);
+            const $caseLabel = this.#caseLabels.get($case.astId);
             $jp.insertBefore($caseLabel);
 
             for (const $inst of $case.instructions)
                 $jp.insertBefore($inst);
         }
-
-        $jp.insertAfter($switchEndLabelStmt);
-        if ($switchEndLabelStmt.isLast)
-            $switchEndLabelStmt.insertAfter(ClavaJoinPoints.emptyStmt());
-        $jp.detach();
-        return new PassResult(this, switchConditions[0]);
-    }
-
-    #moveDefaultToEnd(switchConditions) {
-        const index = switchConditions.findIndex($condition => $condition.instanceOf("gotoStmt"));
-        if (index !== -1)
-            switchConditions.push(switchConditions.splice(index, 1)[0]);
     }
 }
