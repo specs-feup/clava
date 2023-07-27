@@ -436,6 +436,15 @@ class CfgBuilder {
     this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
   }
 
+  /**
+   * @param {Cytoscape.node} node node whose type is "LABEL"
+   */
+  #connectLabelNode(node) {
+    const $labelStmt = node.data().nodeStmt;
+
+    const afterNode = this.#nextNodes.nextExecutedNode($labelStmt);
+    this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+  }
 
   /**
    * Connects a node associated with a statement that is an instance of a "return" statement.
@@ -525,6 +534,9 @@ class CfgBuilder {
           break;
         case CfgNodeType.GOTO:
           this.#connectGotoNode(node);
+          break;
+        case CfgNodeType.LABEL:
+          this.#connectLabelNode(node);
           break;
         case CfgNodeType.RETURN:
           this.#connectReturnNode(node);

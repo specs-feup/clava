@@ -52,6 +52,11 @@ class CfgUtils {
       return CfgNodeType.GOTO;
     }
 
+    // Label stmt
+    if ($stmt.instanceOf("labelStmt")) {
+      return CfgNodeType.LABEL;
+    }
+
     // Return stmt
     if ($stmt.instanceOf("returnStmt")) {
       return CfgNodeType.RETURN;
