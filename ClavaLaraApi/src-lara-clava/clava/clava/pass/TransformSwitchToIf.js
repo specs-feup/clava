@@ -21,6 +21,8 @@ laraImport("lara.pass.results.PassResult");
  *	   case 2:
  *	       a = 20;
  *	       break;
+ *     case 3 ... 7:
+ *         a = 30;
  *	}
  * ```
  * 
@@ -33,22 +35,27 @@ laraImport("lara.pass.results.PassResult");
  *      goto case_1;
  *  else if (num == 2) 
  *      goto case_2;
- *  else goto case_default;
+ *  else if (num >= 3 && num <= 7) 
+ *       goto case_3_7;
+ *  else 
+ *       goto case_default;
  * 
  *  case_1:
  *      a = 10;
  *  case_default:
- *      a = 30;
+ *      a = 80;
  *      goto switch_exit;
  *  case_2:
  *      a = 20;
  *      goto switch_exit;
+ *  case_3_7:
+ *      a = 30;
  * 
  *  switch_exit:
  *  ;
  * ```
  */
-class SwitchToIf extends SimplePass {
+class TransformSwitchToIf extends SimplePass {
     /**
      * Maps each case statement id to the corresponding label statement
      */
@@ -64,7 +71,7 @@ class SwitchToIf extends SimplePass {
      * @override
      */
     get name() {
-        return "SwitchToIf";
+        return "TransformSwitchToIf";
     }
 
     matchJoinpoint($jp) {
@@ -77,7 +84,7 @@ class SwitchToIf extends SimplePass {
      * @param {JoinPoint} $jp Join point to transform
      */
     transformJoinpoint($jp) {
-        const $switchExitLabel = ClavaJoinPoints.labelDecl("switch_exit" + $jp.astId);
+        const $switchExitLabel = ClavaJoinPoints.labelDecl("switch_exit_" + $jp.astId);
         const $switchExitLabelStmt = ClavaJoinPoints.labelStmt($switchExitLabel);
         const $switchExitGoTo = ClavaJoinPoints.gotoStmt($switchExitLabel);
 
@@ -100,7 +107,7 @@ class SwitchToIf extends SimplePass {
     }
 
     /**
-     * Creates if and label statements for each case in the provided switch statement and adds them to the private fields "caseLabels" and "caseIfStmts".
+     * Creates if and label statements for each case in the provided switch statement and adds them to the private fields "caseIfStmts" and "caseLabels".
      * @param {joinpoint} $jp the switch statement
      */
     #computeIfAndLabels($jp) {
