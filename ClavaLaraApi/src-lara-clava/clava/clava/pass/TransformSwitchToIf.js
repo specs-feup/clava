@@ -94,7 +94,11 @@ class TransformSwitchToIf extends SimplePass {
             $switchExitLabelStmt.insertAfter(ClavaJoinPoints.emptyStmt());
 
         this.#computeIfAndLabels($jp);
-        this.#moveDefaultToEnd();
+        
+        if ($jp.hasDefaultCase)
+            this.#moveDefaultToEnd();
+        else
+            this.#caseIfStmts.push($switchExitGoTo);
 
         $jp.insertBefore(this.#caseIfStmts[0]);
 
