@@ -5,6 +5,7 @@ If you have used Clava, please consider filling the [Clava User Experience Feedb
 
 Clava also supports LARA files (`.lara`), but the LARA DSL is now considered legacy, please use JavaScript instead. 
 
+
 # Compatibility
 
 Currently Clava requires Java 11.

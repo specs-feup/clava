@@ -155,6 +155,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     PASS_SIMPLIFY_LOOPS("pass/SimplifyLoops.js"),
     PASS_SIMPLIFY_RETURN("pass/SimplifyReturnStmts.js"),
     PASS_SIMPLIFY_SELECTION_STMTS("pass/SimplifySelectionStmts.js"),
+    TRANSFORM_SWITCH_TO_IF("pass/TransformSwitchToIf.js"),
 
     // Stats
     OPS_BLOCK("stats/OpsBlock.lara"),
