@@ -425,6 +425,19 @@ class CfgBuilder {
   }
 
   /**
+   * @param {Cytoscape.node} node node whose type is "GOTO"
+   */
+  #connectGotoNode(node) {
+    const $gotoStmt = node.data().nodeStmt;
+    const labelName = $gotoStmt.label.name;
+    const $labelStmt = Query.searchFromInclusive(this.#jp, "labelStmt", {decl: decl => decl.name == labelName}).first();
+
+    const afterNode = this.#nodes.get($labelStmt.astId);
+    this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+  }
+
+
+  /**
    * Connects a node associated with a statement that is an instance of a "return" statement.
    * @param {Cytoscape.node} node node whose type is "RETURN"
    */
@@ -509,6 +522,9 @@ class CfgBuilder {
           break;
         case CfgNodeType.INST_LIST:
           this.#connectInstListNode(node);
+          break;
+        case CfgNodeType.GOTO:
+          this.#connectGotoNode(node);
           break;
         case CfgNodeType.RETURN:
           this.#connectReturnNode(node);

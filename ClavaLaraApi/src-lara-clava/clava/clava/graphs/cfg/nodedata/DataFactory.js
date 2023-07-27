@@ -7,6 +7,7 @@ laraImport("clava.graphs.cfg.nodedata.HeaderData");
 laraImport("clava.graphs.cfg.nodedata.IfData");
 laraImport("clava.graphs.cfg.nodedata.SwitchData");
 laraImport("clava.graphs.cfg.nodedata.CaseData");
+laraImport("clava.graphs.cfg.nodedata.GotoData");
 laraImport("clava.graphs.cfg.nodedata.ReturnData");
 
 class DataFactory {
@@ -38,6 +39,8 @@ class DataFactory {
         return new SwitchData($stmt, id);
       case CfgNodeType.CASE:
         return new CaseData($stmt, id);
+      case CfgNodeType.GOTO:
+        return new GotoData($stmt, id);
       case CfgNodeType.RETURN:
         return new ReturnData($stmt, id);
       default:

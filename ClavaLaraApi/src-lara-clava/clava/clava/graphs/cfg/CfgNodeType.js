@@ -19,6 +19,7 @@ class CfgNodeType {
   static SWITCH = new CfgNodeType("SWITCH");
   static CASE = new CfgNodeType("CASE");
   static RETURN = new CfgNodeType("RETURN");
+  static GOTO = new CfgNodeType("GOTO");
   // To add: WHILE, DOWHILE?
 
   //static SCOPE_DATA = new CfgNodeType("SCOPE_DATA")
