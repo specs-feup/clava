@@ -88,9 +88,6 @@ class CfgBuilder {
   constructor($jp, deterministicIds = false, options = {}) {
     this.#jp = $jp;
     this.#deterministicIds = deterministicIds;
-    println("splitInst: " + options.splitInstList );
-    println ("hideLabelNodes: " + options.removeLabelNodes);
-    println ("hideGotoNodes: " + options.removeGotoNodes );
     this.#splitInstList = options.splitInstList || false;
     this.#removeGotoNodes = options.removeGotoNodes || false;
     this.#removeLabelNodes = options.removeLabelNodes || false;
@@ -296,18 +293,9 @@ class CfgBuilder {
    */
   #connectBreakNode(node) {
     const $breakStmt = node.data().nodeStmt;
-    const $loop = $breakStmt.ancestor("loop");
-    const $switch = $breakStmt.ancestor("switch");
-    const loopDepth = $loop !== undefined ? $loop.depth : -1;
-    const switchDepth = $switch !== undefined ? $switch.depth : -1;
-    let afterNode = undefined;
+    const $enclosingStmt = $breakStmt.enclosingStmt;
 
-    if (loopDepth > switchDepth)
-      // Statement is used to terminate a loop
-      afterNode = this.#nextNodes.nextExecutedNode($loop);
-    // Statement is used to exit a switch block
-    else afterNode = this.#nextNodes.nextExecutedNode($switch);
-
+    const afterNode = this.#nextNodes.nextExecutedNode($enclosingStmt);
     this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
   }
 
