@@ -3,7 +3,7 @@ import lara.Check;
 import lara.System;
 import lara.Strings;
 
-import weaver.WeaverJps;
+import weaver.Query;
 
 import clava.Clava;
 import clava.ClavaJoinPoints;
@@ -59,7 +59,7 @@ BatchParser.prototype.parse = function(sourceFile) {
 /*
 	// Find file in rebuild
 	var $parsedFile = undefined;
-	for(var $file of WeaverJps.search("file").get()) {
+	for(var $file of Query.search("file").get()) {
 		if($file.name === sourceFile.getName()) {
 			$parsedFile = $file;
 			break;

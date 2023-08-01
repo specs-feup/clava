@@ -1,5 +1,5 @@
 import lara.util.JpFilter;
-import weaver.WeaverJps;
+import weaver.Query;
 import weaver.Weaver;
 
 aspectdef JpFilterTest
@@ -26,7 +26,7 @@ aspectdef JpFilterTest
 	var filter5 = new JpFilter({name: /A/, line: function(line){return line > 7;}});
 	println(convert(filter5.filter($records)));
 	
-	var $jps = WeaverJps.search("record", {name: /A/}).search("field", {name: 'x'}).get();
+	var $jps = Query.search("record", {name: /A/}).search("field", {name: 'x'}).get();
 	
 	for(var $selected of $jps) {
 		println("Select function: " + $selected.code);
@@ -37,13 +37,13 @@ aspectdef JpFilterTest
 
 
 	// Test search inclusive
-	var $foo2 = WeaverJps.search("function", {name: "foo2"}).first();
-	var $secondFoo2 = WeaverJps.searchFromInclusive($foo2, "function", {name: "foo2"}).first();
+	var $foo2 = Query.search("function", {name: "foo2"}).first();
+	var $secondFoo2 = Query.searchFromInclusive($foo2, "function", {name: "foo2"}).first();
 	println("Search inclusive: " + $secondFoo2.name);
 
 	// Test retrieving default attribute of join point
 	println("Default attribute of 'function': " + Weaver.getDefaultAttribute("function"));
-	println("Search with default: " + WeaverJps.search("function", "foo2").first().name);
+	println("Search with default: " + Query.search("function", "foo2").first().name);
 
 end
 

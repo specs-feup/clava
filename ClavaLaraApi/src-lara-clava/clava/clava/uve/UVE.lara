@@ -1,4 +1,4 @@
-import weaver.WeaverJps;
+import weaver.Query;
 import clava.uve.DetectStream;
 
 var UVE = {};

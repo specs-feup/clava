@@ -12,7 +12,6 @@ import clava.Clava;
 import clava.util.CodeInserter;    
 import lara.Io;
 
-import weaver.WeaverJps;
 import weaver.Query;
 
 /**
@@ -222,7 +221,7 @@ Parallelize.getForLoopsPragmas = function($loops, insertPragma, useLoopId) {
 		loopIds.push($loop.id);
 	}
 	
-	for(var $loop of WeaverJps.search('loop').get()) {
+	for(var $loop of Query.search('loop').get()) {
 	//select file.function.loop end
 	//apply
 		var loopindex = GetLoopIndex($loop);

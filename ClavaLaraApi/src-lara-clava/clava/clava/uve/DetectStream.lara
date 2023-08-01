@@ -1,4 +1,4 @@
-import weaver.WeaverJps;
+import weaver.Query;
 
 var DetectStream = {};
 

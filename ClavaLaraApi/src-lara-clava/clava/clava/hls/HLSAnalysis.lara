@@ -1,6 +1,6 @@
 import clava.hls.TraceInstrumentation;
 import clava.hls.MathAnalysis;
-import weaver.WeaverJps;
+import weaver.Query;
 
 /**
  * @class

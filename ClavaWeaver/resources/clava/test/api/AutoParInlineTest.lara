@@ -1,10 +1,10 @@
 import clava.autopar.RunInlineFunctionCalls;
-import weaver.WeaverJps;
+import weaver.Query;
 import clava.Clava;
 
 aspectdef AutoParInlineTest
 
-	var $call = WeaverJps.search('call', {name: 'bar'}).first();
+	var $call = Query.search('call', {name: 'bar'}).first();
 	if($call === undefined) {
 		throw "Could not find call to 'bar'";
 	}

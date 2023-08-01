@@ -4,7 +4,6 @@ laraImport("clava.opt.NormalizeToSubset");
 laraImport("clava.code.Inliner");
 laraImport("clava.opt.PrepareForInlining");
 
-laraImport("weaver.WeaverJps");
 laraImport("weaver.Query");
 
 //setDebug(true);

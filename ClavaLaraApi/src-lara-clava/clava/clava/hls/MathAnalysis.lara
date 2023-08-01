@@ -1,4 +1,4 @@
-import weaver.WeaverJps;
+import weaver.Query;
 import clava.ClavaJoinPoints;
 import clava.Clava;
 import lara.Io;
@@ -38,7 +38,7 @@ aspectdef MathReport
 	}
 	
 	//Count occurrences
-	for (var elem of WeaverJps.search('call').chain()) {
+	for (var elem of Query.search('call').chain()) {
 		var fun = elem['call'].name;
 		if (fun in occurrences)
 			occurrences[fun] += 1;
@@ -80,7 +80,7 @@ aspectdef MathCompare
 
 	//Compare, for each call, the type of arguments and the function signature
 	println("Type of arguments being passed to each call to a math.h function:");
-	for (var elem of WeaverJps.search('call').chain()) {
+	for (var elem of Query.search('call').chain()) {
 		var fun = elem['call'].name;
 		if (fun in mathFun) {
 			var args = elem['call'].args;
@@ -114,7 +114,7 @@ aspectdef MathReplace
 
 	var includedSqrt = false;
 
-	for (var elem of WeaverJps.search('call').chain()) {
+	for (var elem of Query.search('call').chain()) {
 		var fun = elem['call'].name;
 		if (fun in mathFun) {
 			var args = elem['call'].args;
