@@ -18,37 +18,37 @@ class CfgUtils {
    */
   static getNodeType($stmt) {
     // If stmt
-    if ($stmt.instanceOf("if")) {
+    if ($stmt.getInstanceOf("if")) {
       return CfgNodeType.IF;
     }
 
     // Loop stmt
-    if ($stmt.instanceOf("loop")) {
+    if ($stmt.getInstanceOf("loop")) {
       return CfgNodeType.LOOP;
     }
 
     // Break stmt
-    if ($stmt.instanceOf("break")) {
+    if ($stmt.getInstanceOf("break")) {
       return CfgNodeType.BREAK;
     }
 
     // Continue stmt
-    if ($stmt.instanceOf("continue")) {
+    if ($stmt.getInstanceOf("continue")) {
       return CfgNodeType.CONTINUE;
     }
 
     // Switch stmt
-    if ($stmt.instanceOf("switch")) {
+    if ($stmt.getInstanceOf("switch")) {
       return CfgNodeType.SWITCH;
     }
 
     //Case stmt
-    if ($stmt.instanceOf("case")) {
+    if ($stmt.getInstanceOf("case")) {
       return CfgNodeType.CASE;
     }
 
     // Return stmt
-    if ($stmt.instanceOf("returnStmt")) {
+    if ($stmt.getInstanceOf("returnStmt")) {
       return CfgNodeType.RETURN;
     }
 
@@ -74,9 +74,9 @@ class CfgUtils {
     }
 
     // Scope stmt
-    if ($stmt.instanceOf("scope")) {
+    if ($stmt.getInstanceOf("scope")) {
       const parent = $stmt.parent;
-      if (parent.instanceOf("if")) {
+      if (parent.getInstanceOf("if")) {
         if ($stmt.equals(parent.then)) {
           return CfgNodeType.THEN;
         } else if ($stmt.equals(parent.else)) {
@@ -91,7 +91,7 @@ class CfgUtils {
     // consider the beginning of an INST_LIST
     const $stmtParent = $stmt.parent;
     if (
-      $stmtParent.instanceOf("scope") &&
+      $stmtParent.getInstanceOf("scope") &&
       $stmt.equals($stmtParent.firstStmt)
     ) {
       return CfgNodeType.INST_LIST;

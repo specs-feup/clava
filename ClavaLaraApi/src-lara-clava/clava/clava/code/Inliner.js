@@ -32,16 +32,16 @@ class Inliner {
       const $expr = $exprStmt.expr;
       if (
         !(
-          $expr.instanceOf("binaryOp") &&
+          $expr.getInstanceOf("binaryOp") &&
           $expr.isAssignment &&
-          $expr.right.instanceOf("call")
+          $expr.right.getInstanceOf("call")
         ) &&
-        !$expr.instanceOf("call")
+        !$expr.getInstanceOf("call")
       ) {
         continue;
       }
 
-      const $call = $expr.instanceOf("call") ? $expr : $expr.right;
+      const $call = $expr.getInstanceOf("call") ? $expr : $expr.right;
       const $callee = $call.definition;
       if ($callee == undefined) {
         continue;
@@ -108,9 +108,9 @@ class Inliner {
    */
   #extractInlineData($exprStmt) {
     if (
-      $exprStmt.expr.instanceOf("binaryOp") &&
+      $exprStmt.expr.getInstanceOf("binaryOp") &&
       $exprStmt.expr.isAssignment &&
-      $exprStmt.expr.right.instanceOf("call")
+      $exprStmt.expr.right.getInstanceOf("call")
     ) {
       return {
         type: "assignment",
@@ -119,7 +119,7 @@ class Inliner {
       };
     }
 
-    if ($exprStmt.expr.instanceOf("call")) {
+    if ($exprStmt.expr.getInstanceOf("call")) {
       return {
         type: "call",
         $target: undefined,
@@ -236,7 +236,7 @@ class Inliner {
 
     for (const stmt of $function.body.descendants("declStmt")) {
       const $varDecl = stmt.decls[0];
-      if (!$varDecl.instanceOf("vardecl")) {
+      if (!$varDecl.getInstanceOf("vardecl")) {
         continue;
       }
 
@@ -250,7 +250,7 @@ class Inliner {
     this.#processBodyToInline($newNodes, newVariableMap, $call);
 
     // Remove/replace return statements
-    if ($exprStmt.expr.instanceOf("binaryOp") && $exprStmt.expr.isAssignment) {
+    if ($exprStmt.expr.getInstanceOf("binaryOp") && $exprStmt.expr.isAssignment) {
       for (const $returnStmt of $newNodes.descendants("returnStmt")) {
         if (
           $returnStmt.returnExpr !== null &&
@@ -265,11 +265,11 @@ class Inliner {
           $returnStmt.detach();
         }
       }
-    } else if ($exprStmt.expr.instanceOf("call")) {
+    } else if ($exprStmt.expr.getInstanceOf("call")) {
       for (const $returnStmt of $newNodes.descendants("returnStmt")) {
         // Replace the return with a nop (i.e. empty statement), in case there is a label before. Otherwise, just remove return
         const left = $returnStmt.siblingsLeft;
-        if (left.length > 0 && left[left.length - 1].instanceOf("labelStmt")) {
+        if (left.length > 0 && left[left.length - 1].getInstanceOf("labelStmt")) {
           $returnStmt.replaceWith(ClavaJoinPoints.emptyStmt());
         } else {
           $returnStmt.detach();
@@ -333,12 +333,12 @@ class Inliner {
 
     // Visit all gotoStmt and labelStmt
     for (const $jp of Query.search("joinpoint", {
-      self: ($jp) => $jp.instanceOf("gotoStmt") || $jp.instanceOf("labelStmt"),
+      self: ($jp) => $jp.getInstanceOf("gotoStmt") || $jp.getInstanceOf("labelStmt"),
     })) {
       //println("Jp: " + $jp.joinPointType);
 
       // Get original label
-      const $labelDecl = $jp.instanceOf("gotoStmt") ? $jp.label : $jp.decl;
+      const $labelDecl = $jp.getInstanceOf("gotoStmt") ? $jp.label : $jp.decl;
       //println("Found label " + $labelDecl.name);
       // Get new label, or create if it does not exist yet
       let $newLabelDecl = newLabels[$labelDecl.name];
@@ -349,7 +349,7 @@ class Inliner {
       }
       //println("Replacing with label " + $newLabelDecl.name);
       // Replace label
-      if ($jp.instanceOf("gotoStmt")) {
+      if ($jp.getInstanceOf("gotoStmt")) {
         $jp.label = $newLabelDecl;
       } else {
         $jp.decl = $newLabelDecl;
@@ -358,12 +358,12 @@ class Inliner {
       //println("Label name: " + labelDecl.name);
 
       /*
-      if ($jp.instanceOf("gotoStmt")) {
+      if ($jp.getInstanceOf("gotoStmt")) {
         gotoStmt.
         continue;
       }
 
-      if ($jp.instanceOf("labelStmt")) {
+      if ($jp.getInstanceOf("labelStmt")) {
         continue;
       }
 
@@ -409,7 +409,7 @@ class Inliner {
       const decls = $declStmt.decls;
 
       for (const $varDecl of decls) {
-        if (!$varDecl.instanceOf("vardecl")) {
+        if (!$varDecl.getInstanceOf("vardecl")) {
           continue;
         }
 
@@ -458,17 +458,17 @@ class Inliner {
       }
 
       // If vardecl, map contains reference to old vardecl, create a varref from the new vardecl
-      if (newVar.instanceOf("vardecl")) {
+      if (newVar.getInstanceOf("vardecl")) {
         $varRef.replaceWith(ClavaJoinPoints.varRef(newVar));
       }
       // If expression, simply replace varref with the expression
-      else if (newVar.instanceOf("expression")) {
+      else if (newVar.getInstanceOf("expression")) {
         const $adaptedVar =
           // If varref, does not need parenthesis
-          newVar.instanceOf("varref")
+          newVar.getInstanceOf("varref")
             ? newVar
             : // For other expressions, if parent is already a parenthesis, does not need to add a new one
-            $varRef.parent.instanceOf("parenExpr")
+            $varRef.parent.getInstanceOf("parenExpr")
             ? newVar
             : // Add parenthesis
               ClavaJoinPoints.parenthesis(newVar);
@@ -505,7 +505,7 @@ class Inliner {
     // Since any type node can be shared, any change must be made in copies
 
     // If pointer type, check pointee
-    if (type.instanceOf("pointerType")) {
+    if (type.getInstanceOf("pointerType")) {
       const original = type.pointee;
       const updated = this.#updateType(original, $call, newVariableMap);
 
@@ -516,7 +516,7 @@ class Inliner {
       }
     }
 
-    if (type.instanceOf("parenType")) {
+    if (type.getInstanceOf("parenType")) {
       const original = type.innerType;
       const updated = this.#updateType(original, $call, newVariableMap);
 
@@ -527,7 +527,7 @@ class Inliner {
       }
     }
 
-    if (type.instanceOf("variableArrayType")) {
+    if (type.getInstanceOf("variableArrayType")) {
       // Has to track changes both for element type and its own array expression
       // Either was, has to update this type
       let hasChanges = false;
@@ -601,12 +601,12 @@ class Inliner {
     }
 
     // If vardecl, create a new varref
-    if (newVar.instanceOf("vardecl")) {
+    if (newVar.getInstanceOf("vardecl")) {
       return ClavaJoinPoints.varRef(newVar);
     }
 
     // If expression, return expression
-    if (newVar.instanceOf("expression")) {
+    if (newVar.getInstanceOf("expression")) {
       return newVar;
     }
 

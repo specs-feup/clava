@@ -71,7 +71,7 @@ ForToWhileStmt._findLocalContinue = function* ($jp) {
     yield $jp;
     return;
   }
-  if ($jp.instanceOf("loop")) {
+  if ($jp.getInstanceOf("loop")) {
     return;
   }
   for (const $child of $jp.children) {

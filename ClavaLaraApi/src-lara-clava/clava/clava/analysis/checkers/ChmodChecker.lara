@@ -14,7 +14,7 @@ var ChmodChecker = function() {
 ChmodChecker.prototype = Object.create(Checker.prototype);
 
 ChmodChecker.prototype.check = function($node) {
-	if ((!$node.instanceOf("call")) || ($node.name !== 'chmod')) {
+	if ((!$node.getInstanceOf("call")) || ($node.name !== 'chmod')) {
       	return;
     }
 	return new CheckResult(this.name, $node, this.advice);

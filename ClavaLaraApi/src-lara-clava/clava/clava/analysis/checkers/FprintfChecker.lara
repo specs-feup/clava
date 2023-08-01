@@ -13,7 +13,7 @@ var FprintfChecker = function() {
 FprintfChecker.prototype = Object.create(Checker.prototype);
 
 FprintfChecker.prototype.check = function($node) {
-	if ((!$node.instanceOf("call")) || ($node.name !== "fprintf") || ($node.args[1].code.match(/\s*".*"\s*/))) {
+	if ((!$node.getInstanceOf("call")) || ($node.name !== "fprintf") || ($node.args[1].code.match(/\s*".*"\s*/))) {
       	return;
 	}
 	return new CheckResult(this.name, $node, this.advice);

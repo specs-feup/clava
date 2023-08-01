@@ -33,12 +33,12 @@ class StatementDecomposer {
   #isValidNode($jp) {
     // If preceeding statement is a CaseStmt or a LabelStmt it might generate invalid code if a declaration is inserted
     // Add empty statement after the label to avoid this situation
-    if ($jp.instanceOf("statement") && !$jp.instanceOf("emptyStmt")) {
+    if ($jp.getInstanceOf("statement") && !$jp.getInstanceOf("emptyStmt")) {
       const $leftStmt = $jp.leftJp;
 
       if (
         $leftStmt !== undefined &&
-        ($leftStmt.instanceOf("case") || $leftStmt.instanceOf("labelStmt"))
+        ($leftStmt.getInstanceOf("case") || $leftStmt.getInstanceOf("labelStmt"))
       ) {
         debug(
           `StatementDecomposer: statement just before label, inserting empty statement after as a precaution`
@@ -93,7 +93,7 @@ class StatementDecomposer {
 
   decomposeStmt($stmt) {
     // Unsupported
-    if ($stmt.instanceOf("scope") || $stmt.joinPointType === "statement") {
+    if ($stmt.getInstanceOf("scope") || $stmt.joinPointType === "statement") {
       debug(
         `StatementDecomposer: skipping scope or generic statement join point`
       );
@@ -104,15 +104,15 @@ class StatementDecomposer {
       return [];
     }
 
-    if ($stmt.instanceOf("exprStmt")) {
+    if ($stmt.getInstanceOf("exprStmt")) {
       return this.decomposeExprStmt($stmt);
     }
 
-    if ($stmt.instanceOf("returnStmt")) {
+    if ($stmt.getInstanceOf("returnStmt")) {
       return this.decomposeReturnStmt($stmt);
     }
 
-    if ($stmt.instanceOf("declStmt")) {
+    if ($stmt.getInstanceOf("declStmt")) {
       return this.decomposeDeclStmt($stmt);
     }
 
@@ -153,7 +153,7 @@ class StatementDecomposer {
   }
 
   #decomposeDecl($decl) {
-    if (!$decl.instanceOf("vardecl")) {
+    if (!$decl.getInstanceOf("vardecl")) {
       debug(
         `StatementDecomposer.decomposeDeclStmt: not implemented for decl of type ${$decl.joinPointType}`
       );
@@ -183,24 +183,24 @@ class StatementDecomposer {
       return new DecomposeResult([], $expr);
     }
 
-    if ($expr.instanceOf("binaryOp")) {
+    if ($expr.getInstanceOf("binaryOp")) {
       return this.decomposeBinaryOp($expr);
     }
 
-    if ($expr.instanceOf("unaryOp")) {
+    if ($expr.getInstanceOf("unaryOp")) {
       return this.decomposeUnaryOp($expr);
     }
 
-    if ($expr.instanceOf("ternaryOp")) {
+    if ($expr.getInstanceOf("ternaryOp")) {
       return this.decomposeTernaryOp($expr);
     }
 
-    if ($expr.instanceOf("call")) {
+    if ($expr.getInstanceOf("call")) {
       return this.decomposeCall($expr);
     }
 
     if ($expr.numChildren === 0) {
-      //if($expr.instanceOf("varref") || $expr.instanceOf("literal")) {
+      //if($expr.getInstanceOf("varref") || $expr.getInstanceOf("literal")) {
       return new DecomposeResult([], $expr);
     }
 
@@ -228,9 +228,9 @@ class StatementDecomposer {
     // The scope test is to avoid wrong code in situations such as loop headers
     if (
       $call.parent !== undefined &&
-      $call.parent.instanceOf("exprStmt") &&
+      $call.parent.getInstanceOf("exprStmt") &&
       $call.parent.parent !== undefined &&
-      $call.parent.parent.instanceOf("scope")
+      $call.parent.parent.getInstanceOf("scope")
     ) {
       // Using .exprStmt() to ensure a new statement is created.
       // .stmt might not create a new statement, and interfere with detaching the previous stmt
@@ -261,7 +261,7 @@ class StatementDecomposer {
 
   #copyCall($call, newArgs) {
     // Instance method
-    if ($call.instanceOf("memberCall")) {
+    if ($call.getInstanceOf("memberCall")) {
       // Copy node
       const $newCall = $call.copy();
 

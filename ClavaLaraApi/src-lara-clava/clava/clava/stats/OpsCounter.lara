@@ -146,7 +146,7 @@ OpsCounter.prototype._getCounterType = function($builtinType) {
 }
 
 OpsCounter.prototype._toBuiltinType = function($type) {
-	if($type.instanceOf("builtinType")) {
+	if($type.getInstanceOf("builtinType")) {
 		return $type;
 	}
 	

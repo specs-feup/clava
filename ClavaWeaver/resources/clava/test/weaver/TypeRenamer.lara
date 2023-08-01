@@ -48,22 +48,22 @@ end
 function renameType($type, renameMap) {
 	println("Type:" + $type.astName);
 
-	if($type.instanceOf("pointerType")) {
+	if($type.getInstanceOf("pointerType")) {
 	//if($type.astName === "PointerType") {
 		var $typeCopy = $type.deepCopy();
-		//$typeCopy.setValue('pointeeType', renameType($typeCopy.getValue('pointeeType'), renameMap));
+		//$typeCopy.setValue('pointeeType', renameType($typeCopy.getGetValue('pointeeType'), renameMap));
 		$typeCopy.pointee = renameType($typeCopy.pointee, renameMap);	
 		return $typeCopy;
 	}
 	
-	if($type.instanceOf("parenType")) {
+	if($type.getInstanceOf("parenType")) {
 	// if ($type.astName === "ParenType") {
 		var $typeCopy = $type.deepCopy();
 		$typeCopy.desugar = renameType($typeCopy.desugar, renameMap);		
 		return $typeCopy;
 	}
 	
-	if($type.instanceOf("variableArrayType")) {
+	if($type.getInstanceOf("variableArrayType")) {
 	 //if ($type.astName === "VariableArrayType") {
 		var $typeCopy = $type.deepCopy();
 		renameVarrefs($typeCopy.sizeExpr, renameMap);
@@ -89,19 +89,19 @@ function renameVarrefs($expr, renameMap) {
 /*
 function visitExprInTypeCopy($type, exprFunction) {
 
-	if($type.instanceOf("pointerType")) {
+	if($type.getInstanceOf("pointerType")) {
 		var $typeCopy = $type.deepCopy();
 		$typeCopy.pointee = visitExprInTypeCopy($typeCopy.pointee, exprFunction);	
 		return $typeCopy;
 	}
 	
-	if($type.instanceOf("parenType")) {
+	if($type.getInstanceOf("parenType")) {
 		var $typeCopy = $type.deepCopy();
 		$typeCopy.desugar = visitExprInTypeCopy($typeCopy.desugar, exprFunction);		
 		return $typeCopy;
 	}
 	
-	if($type.instanceOf("variableArrayType")) {
+	if($type.getInstanceOf("variableArrayType")) {
 		var $typeCopy = $type.deepCopy();
 		exprFunction($typeCopy.sizeExpr);
 		return $typeCopy;

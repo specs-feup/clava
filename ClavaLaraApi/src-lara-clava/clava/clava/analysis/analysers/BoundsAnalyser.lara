@@ -24,11 +24,11 @@ BoundsAnalyser.prototype.analyse = function($startNode) {
         $startNode = Query.root();
     }
     for (var $node of Query.searchFrom($startNode)) {
-        if (!$node.instanceOf("function")) {
+        if (!$node.getInstanceOf("function")) {
             continue;
         }
         for (var $child of $node.descendants) {
-            if (($child.instanceOf("vardecl")) && ($child.type.joinPointType === "arrayType")) {
+            if (($child.getInstanceOf("vardecl")) && ($child.type.joinPointType === "arrayType")) {
                 var lengths = $child.type.arrayDims;
                 if ($child.hasInit) {
                     var message = " The index used to access the array is not valid (CWE-119). Please check the length of the array accessed.\n\n";
@@ -39,7 +39,7 @@ BoundsAnalyser.prototype.analyse = function($startNode) {
                 boundsResultList.push(new BoundsResult("Unsafe array access", $child, message, $node.name, 0, 0, lengths));
                 continue;
             }
-            if ($child.instanceOf("arrayAccess")) {
+            if ($child.getInstanceOf("arrayAccess")) {
                 var arrayName = $child.arrayVar.code;
                 for (var result of boundsResultList) {
                     if (result.arrayName === arrayName) {

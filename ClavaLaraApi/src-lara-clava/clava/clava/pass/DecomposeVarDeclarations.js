@@ -21,18 +21,18 @@ class DecomposeVarDeclarations extends SimplePass {
 
   matchJoinpoint($jp) {
     return (
-      $jp.instanceOf("vardecl") && // Must be a variable declaration
+      $jp.getInstanceOf("vardecl") && // Must be a variable declaration
       $jp.hasInit && // Must have initialization
       $jp.initStyle === "cinit" && // Only C-style initializations
       !$jp.isGlobal && // Ignore global variables
       !$jp.isInsideHeader && // Ignore if inside any header (e.g. if, switch, loop...)
-      !$jp.type.instanceOf("arrayType") && // Ignore if array
+      !$jp.type.getInstanceOf("arrayType") && // Ignore if array
       !this.#isLiteralAuto($jp) // Specific case of vardecl in literal code that uses auto (e.g. as inserted by Timer)
     );
   }
 
   #isLiteralAuto($jp) {
-    return $jp.type.isAuto && $jp.init.type.instanceOf("undefinedType");
+    return $jp.type.isAuto && $jp.init.type.getInstanceOf("undefinedType");
   }
 
   transformJoinpoint($vardecl) {

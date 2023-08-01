@@ -19,7 +19,7 @@ StrcpyChecker.fixAction = function($node) {
 }
 
 StrcpyChecker.prototype.check = function($node) {
-	if ((!$node.instanceOf("call")) || ($node.name !== 'strcpy')) {
+	if ((!$node.getInstanceOf("call")) || ($node.name !== 'strcpy')) {
       	return;
     }
 	return new CheckResult(this.name, $node, this.advice, new Fix($node, StrcpyChecker.fixAction));

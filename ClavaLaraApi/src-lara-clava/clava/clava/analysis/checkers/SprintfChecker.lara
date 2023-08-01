@@ -25,7 +25,7 @@ SprintfChecker.fixAction = function($node) {
 }
 
 SprintfChecker.prototype.check = function($node) {
-	if ((!$node.instanceOf("call")) || ($node.name !== "sprintf")) {
+	if ((!$node.getInstanceOf("call")) || ($node.name !== "sprintf")) {
       	return;
 	}
 	if (!$node.args[1].code.match(/\s*".*"\s*/)) {

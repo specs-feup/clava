@@ -86,7 +86,7 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
 
 	
 	// Check if $start is a scope
-	if($start.instanceOf("scope")) {
+	if($start.getInstanceOf("scope")) {
 		// Insert code
 		$start.insertBegin(codeTic);
 	} else {
@@ -97,7 +97,7 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
 	var afterJp = undefined;
 	
 	// Check if $end is a scope
-	if($end.instanceOf("scope")) {
+	if($end.getInstanceOf("scope")) {
 		// 'insertEnd' insertions must be done in sequential order		
 		$end.insertEnd(codeToc);
 		afterJp = $end.insertEnd($timingResultDecl);
@@ -217,7 +217,7 @@ Timer.prototype._time_c = function($start, prefix, $end) {
     logger.ln();
 
 	// Check if $start is a scope
-	if($start.instanceOf("scope")) {
+	if($start.getInstanceOf("scope")) {
 		// Insert code
 		$start.insertBegin(codeBefore);
 	} else {
@@ -229,7 +229,7 @@ Timer.prototype._time_c = function($start, prefix, $end) {
 	var afterJp = undefined;
 	
 	// Check if $end is a scope
-	if($end.instanceOf("scope")) {
+	if($end.getInstanceOf("scope")) {
 		// 'insertEnd' insertions must be done in sequential order		
 		$end.insertEnd(codeAfter);
 		afterJp = $end.insertEnd($timingResultDecl);

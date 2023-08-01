@@ -14,7 +14,7 @@ var ChgrpChecker = function() {
 ChgrpChecker.prototype = Object.create(Checker.prototype);
 
 ChgrpChecker.prototype.check = function($node) {
-	if ((!$node.instanceOf("call")) || ($node.name !== 'chgrp')) {
+	if ((!$node.getInstanceOf("call")) || ($node.name !== 'chgrp')) {
       	return;
     }
 	return new CheckResult(this.name , $node, this.advice);

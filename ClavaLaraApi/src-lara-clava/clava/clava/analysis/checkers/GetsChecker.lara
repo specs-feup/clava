@@ -19,7 +19,7 @@ GetsChecker.fixAction = function($node) {
 }
 
 GetsChecker.prototype.check = function($node) {
-    if ((!$node.instanceOf("call")) || ($node.name !== 'gets')) {
+    if ((!$node.getInstanceOf("call")) || ($node.name !== 'gets')) {
         return;
     }
     return new CheckResult(this.name, $node, this.advice, new Fix($node, GetsChecker.fixAction));

@@ -19,7 +19,7 @@ StrcatChecker.fixAction = function($node) {
 }
 
 StrcatChecker.prototype.check = function($node) {
-    if ((!$node.instanceOf("call")) || ($node.name !== 'strcat')) {
+    if ((!$node.getInstanceOf("call")) || ($node.name !== 'strcat')) {
         return;
     }
     return new CheckResult(this.name, $node, this.advice, new Fix($node, StrcatChecker.fixAction));

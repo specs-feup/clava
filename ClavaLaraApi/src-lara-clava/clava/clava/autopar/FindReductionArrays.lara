@@ -92,7 +92,7 @@ aspectdef retReductionOpArray
 	{	
 
 		// Fix: Although the array is called exprvarrefset, not all elements are varref (arrayAccess can appear)
-		if (exprvarrefset[j].name === candidateVar.name && exprvarrefset[j].instanceOf("varref"))
+		if (exprvarrefset[j].name === candidateVar.name && exprvarrefset[j].getInstanceOf("varref"))
 		{
 			if (exprvarrefset[j].useExpr.use.indexOf('write') !== -1)
 				candidateVarUse = exprvarrefset[j].useExpr.code;

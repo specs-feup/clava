@@ -30,7 +30,7 @@ class DecomposeDeclStmt extends SimplePass {
   }
 
   matchJoinpoint($jp) {
-    if (!$jp.instanceOf("declStmt")) {
+    if (!$jp.getInstanceOf("declStmt")) {
       return false;
     }
     if ($jp.numChildren <= 1) {

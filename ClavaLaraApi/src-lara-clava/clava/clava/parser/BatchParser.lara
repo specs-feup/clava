@@ -91,7 +91,7 @@ BatchParser.prototype._rebuildFile = function($literalFile) {
 		$parsedFile = $literalFile.rebuildTry();
 
 		// Check if it is a file
-		if($parsedFile.instanceOf('file')) {
+		if($parsedFile.getInstanceOf('file')) {
 			return $parsedFile;
 		}
 		

@@ -49,7 +49,7 @@ class SimplifyLoops extends Pass {
       yield* this._findLoops(child);
     }
     if (
-      $jp.instanceOf("loop") &&
+      $jp.getInstanceOf("loop") &&
       ($jp.kind === "for" || $jp.kind === "dowhile" || $jp.kind === "while")
     ) {
       yield $jp;
@@ -84,7 +84,7 @@ class SimplifyLoops extends Pass {
       $whileLoop.body.insertBegin(stmt);
     }
     for (const stmt of decomposeResult.precedingStmts.filter(
-      ($stmt) => !$stmt.instanceOf("declStmt")
+      ($stmt) => !$stmt.getInstanceOf("declStmt")
     )) {
       $whileLoop.body.insertEnd(stmt);
     }

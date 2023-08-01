@@ -12,7 +12,7 @@ CinChecker.prototype = Object.create(Checker.prototype);
 
 
 CinChecker.prototype.check = function($node) {
-	if ((!$node.instanceOf("call")) || ($node.name !== "operator>>") || (($node.args[0].code !== "cin") && ($node.args[0].code !== "std::cin"))) {
+	if ((!$node.getInstanceOf("call")) || ($node.name !== "operator>>") || (($node.args[0].code !== "cin") && ($node.args[0].code !== "std::cin"))) {
       	return;
 	}
 	return new CheckResult(this.name, $node, this.advice);

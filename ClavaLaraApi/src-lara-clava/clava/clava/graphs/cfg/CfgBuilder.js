@@ -145,7 +145,7 @@ class CfgBuilder {
    */
   _addAuxComments() {
     for (const $currentJp of this.#jp.descendants) {
-      if ($currentJp.instanceOf("scope")) {
+      if ($currentJp.getInstanceOf("scope")) {
         const $scopeStart = $currentJp.insertBegin(
           ClavaJoinPoints.comment("SCOPE_START")
         );
@@ -186,7 +186,7 @@ class CfgBuilder {
     // Special case: if starting node is a statement and a graph node was not created for it (e.g. creating a graph starting from an arbitrary statement),
     // create one with the type INST_LIST
     if (
-      this.#jp.instanceOf("statement") &&
+      this.#jp.getInstanceOf("statement") &&
       this.#nodes.get(this.#jp.astId) === undefined
     ) {
       this._getOrAddNode(this.#jp, true, CfgNodeType.INST_LIST);
@@ -450,11 +450,11 @@ class CfgBuilder {
   _connectNodes() {
     // Connect start
     let startAstNode = this.#jp;
-    if (startAstNode.instanceOf("function")) {
+    if (startAstNode.getInstanceOf("function")) {
       startAstNode = startAstNode.body;
     }
 
-    if (!startAstNode.instanceOf("statement")) {
+    if (!startAstNode.getInstanceOf("statement")) {
       throw new Error(
         "Not defined how to connect the Start node to an AST node of type " +
           this.#jp.joinPointType

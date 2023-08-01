@@ -13,7 +13,7 @@ var FscanfChecker = function() {
 FscanfChecker.prototype = Object.create(Checker.prototype);
 
 FscanfChecker.prototype.check = function($node) {
-	if ((!$node.instanceOf("call")) || ($node.name !== 'fscanf')) {
+	if ((!$node.getInstanceOf("call")) || ($node.name !== 'fscanf')) {
       	return;
     }
 	return new CheckResult(this.name, $node, this.advice);

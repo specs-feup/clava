@@ -18,7 +18,7 @@ for (const $call of Query.search("function", "main").search("call")) {
   const inliner = new Inliner();
   // inline() accepts an exprStmt. All calls must be inside exprStmt now
   const $callParent = $call.getAncestor("exprStmt");
-  if (!$callParent.instanceOf("exprStmt")) {
+  if (!$callParent.getInstanceOf("exprStmt")) {
     println(
       `Could not inline call ${$call.name}@${$call.location}, ancestor is ${$callParent.joinPointType}`
     );

@@ -37,7 +37,7 @@ aspectdef ArrayLinearizerTest
 	select param end
 	apply
 
-//		if(!$param.type.instanceOf('arrayType')) {
+//		if(!$param.type.getInstanceOf('arrayType')) {
 //			continue;
 //		}
 		
@@ -49,7 +49,7 @@ aspectdef ArrayLinearizerTest
 /*
 	select vardecl end
 	apply
-		if(!$vardecl.type.desugarAll.instanceOf('arrayType')) {
+		if(!$vardecl.type.desugarAll.getInstanceOf('arrayType')) {
 			continue;
 		}
 		

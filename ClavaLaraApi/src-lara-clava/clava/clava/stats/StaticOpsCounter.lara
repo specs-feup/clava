@@ -18,7 +18,7 @@ function analyseIterationsExpr($expr, $source) {
         if (result[$varref.name] !== undefined) {
             continue;
         }
-        if ($varref.decl.instanceOf("param")) {
+        if ($varref.decl.getInstanceOf("param")) {
             continue;
         }
         var $lastWrite = getLastWrite($source, $varref.decl);
@@ -56,7 +56,7 @@ function getLastWrite($currentJp, $vardecl) {
             // Check if assignment
             var $refParent = $ref.parent;
             if (
-                !$refParent.instanceOf("binaryOp") &&
+                !$refParent.getInstanceOf("binaryOp") &&
                 $refParent.kind !== "assign"
             ) {
                 println("Not supported when not an assignment");
@@ -140,7 +140,7 @@ StaticOpsCounter.prototype.count = function (
 ) {
     includeOpKind = includeOpKind !== undefined ? includeOpKind : false;
 
-    var $function = $function.instanceOf("function")
+    var $function = $function.getInstanceOf("function")
         ? $function
         : $function.getAncestor("function");
 
@@ -198,7 +198,7 @@ StaticOpsCounter.prototype._countOpStatic = function (
         return;
     }
 
-    if ($stmt.instanceOf("loop")) {
+    if ($stmt.getInstanceOf("loop")) {
         if ($stmt.kind !== "for") {
             println(
                 "Ignoring loops that are not 'fors' (location " +
@@ -302,7 +302,7 @@ StaticOpsCounter.prototype._getCounterType = function ($builtinType) {
 };
 
 StaticOpsCounter.prototype._toBuiltinType = function ($type) {
-    if ($type.instanceOf("builtinType")) {
+    if ($type.getInstanceOf("builtinType")) {
         return $type;
     }
 

@@ -97,7 +97,7 @@ class LivenessUtils {
    * @returns {Set} a set containing the names of the local variables or parameters on the left-hand side (LHS) of each assignment present in the given joinpoint
    */
   static getAssignedVars($stmt) {
-    const $assignments = Query.searchFromInclusive($stmt, "binaryOp", {isAssignment: true, left: left => left.instanceOf("varref")});
+    const $assignments = Query.searchFromInclusive($stmt, "binaryOp", {isAssignment: true, left: left => left.getInstanceOf("varref")});
     const assignedVars = [...$assignments].filter($assign => LivenessUtils.isLocalOrParam($assign.left)).map($assign => $assign.left.name)
 
     return new Set(assignedVars);
