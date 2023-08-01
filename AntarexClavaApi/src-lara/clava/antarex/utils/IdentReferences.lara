@@ -82,7 +82,7 @@ function getStmtToVisitForExternalDecls($statement)
      case 'ForStmt':
      case 'WhileStmt':
      case 'CXXForRangeStmt':  //  for(auto edgeId : Pred[w]) {  }
-	  return $statement.astChild(3);
+	  return $statement.getAstChild(3);
 
      case 'CXXOperatorCallExpr':
      	NYI("getStmtToVisitForExternalDecls,  CXXOperatorCallExpr detected, code = " +  $statement.code);
@@ -108,13 +108,13 @@ function getRefVarsInStmt($statement, $refVars, $FunctionRefs) {
      
      case 'ExprStmt':
      case 'ReturnStmt':
-	  getRefVarsInExpr($statement.astChild(0), $refVars,$FunctionRefs );
+	  getRefVarsInExpr($statement.getAstChild(0), $refVars,$FunctionRefs );
 	  break;
 	  
     case 'VarDecl':
 	for ( var i = 0; i < $statement.astNumChildren; i++)
 	    {
-	       var $e = $statement.astChild(i);
+	       var $e = $statement.getAstChild(i);
 	       TRACE( $astname + ", Decl [ " + i + " ] = " + $e.code + ", joinPointType =" + $e.astName);
 	    }
 	       
@@ -123,7 +123,7 @@ function getRefVarsInStmt($statement, $refVars, $FunctionRefs) {
 	case 'DeclStmt':
 	    for ( var i = 0; i < $statement.astNumChildren; i++)
 	    {
-	       var $e = $statement.astChild(i);
+	       var $e = $statement.getAstChild(i);
 	       TRACE( $astname + ", Decl [ " + i + " ] = " + $e.code + ", joinPointType =" + $e.joinPointType);
 	       getRefVarsInExpr($e, $refVars,$FunctionRefs);
 	    }
@@ -134,7 +134,7 @@ function getRefVarsInStmt($statement, $refVars, $FunctionRefs) {
 	  TRACE( " if  cond = " + $e.code);
   	  getRefVarsInExpr($e, $refVars,$FunctionRefs);
           for ( var i = 2; i < $statement.astNumChildren; i++) {
-	      var $e = $statement.astChild(i);
+	      var $e = $statement.getAstChild(i);
 	      if ($e !== undefined){ // Added 30 Oct 2018
 	      	TRACE( $astname + ", child [ " + i + ' ] = ' + $e.astName + ' ' + $e.code);
 	        getRefVarsInStmt($e, $refVars,$FunctionRefs );
@@ -148,7 +148,7 @@ function getRefVarsInStmt($statement, $refVars, $FunctionRefs) {
      case 'WhileStmt':
      case 'CXXForRangeStmt':  //  for(auto edgeId : Pred[w]) {  }
 	   for ( var i = 0; i < $statement.astNumChildren; i++) {
-	      var $e = $statement.astChild(i);
+	      var $e = $statement.getAstChild(i);
 	      TRACE( $astname + ", child [ " + i + ' ] = ' + $e.astName);
 	      getRefVarsInStmt($e, $refVars, $FunctionRefs);
 	   }
@@ -191,7 +191,7 @@ function getRefVarsInExpr($expr, $refVars,$FunctionRefs) {
 	   case 'arrayAccess':
 	   case 'expression':
           for (var i = 0; i < $expr.astNumChildren; i++){
-            	getRefVarsInExpr($expr.astChild(i), $refVars,$FunctionRefs); 
+            	getRefVarsInExpr($expr.getAstChild(i), $refVars,$FunctionRefs); 
           }
           break;
 	      
@@ -199,7 +199,7 @@ function getRefVarsInExpr($expr, $refVars,$FunctionRefs) {
 	      var funcDecl = $expr.decl;
 	      if ( isaFunction(funcDecl)) insertInUsingLocation($FunctionRefs, funcDecl);
 	      for (var i = 1; i < $expr.astNumChildren; i++) {
-                getRefVarsInExpr($expr.astChild(i), $refVars,$FunctionRefs); 
+                getRefVarsInExpr($expr.getAstChild(i), $refVars,$FunctionRefs); 
           }
           break;
 

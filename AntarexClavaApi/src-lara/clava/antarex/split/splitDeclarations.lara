@@ -141,7 +141,7 @@ function cleanCode($Decls) {
   		  var $DeclStmt = $f.astParent;  // DeclStmt 
   		  var $vloop = $DeclStmt.astParent;  
           if ($vloop.getAstIsInstance('ForStmt'))
-          if ($vloop.astChild(0).location === $DeclStmt.location)
+          if ($vloop.getAstChild(0).location === $DeclStmt.location)
              $vloop.setInit ( $f.name + ' = ' + $f.init.code );
           else
              NYI("cleanCode for " + $f.code + " at " + $f.location);
@@ -177,7 +177,7 @@ function getImportedIncludes($vFile, id)
 {
    var Includes = [];
    for (var x = 0; x <  $vFile.astNumChildren ; x++) {
-	  var $stmt =  $vFile.astChild(x);
+	  var $stmt =  $vFile.getAstChild(x);
 	  if ($stmt.astId === id) break; 
 	  if (($stmt.astName === "IncludeDecl") || ($stmt.astName === "TypeAliasDecl") ) {
 	    TRACE(" ImportIncludes, Include = " + $stmt.code);
@@ -185,7 +185,7 @@ function getImportedIncludes($vFile, id)
 	  }
 	 else
 	   if ($stmt.astName === "DeclStmt") {  // 
-	     var ch = $stmt.astChild(0);
+	     var ch = $stmt.getAstChild(0);
 		 if (ch.astName === "UsingDirectiveDecl") 
 		 	Includes.push($stmt);
 	 	 }

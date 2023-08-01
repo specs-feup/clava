@@ -156,7 +156,7 @@ function getStrClassOf($fm) {
 /** Debugging */
 function printChildrenOf($statement){
   for ( var i = 0; i < $statement.astNumChildren; i++)
-  	 println(" Child " + i +  $statement.astChild(i).code);
+  	 println(" Child " + i +  $statement.getAstChild(i).code);
 }
 
 

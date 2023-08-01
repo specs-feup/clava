@@ -237,13 +237,13 @@ aspectdef CovertLoopToPetitForm
 
 	for($cast of cloneJP.descendantsAndSelf("cast"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
 	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
@@ -277,12 +277,12 @@ aspectdef CovertLoopToPetitForm
 
 	for($cast of cloneJP.descendantsAndSelf("cast"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 	

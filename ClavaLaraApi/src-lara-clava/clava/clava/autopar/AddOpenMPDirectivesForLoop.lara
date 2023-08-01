@@ -80,7 +80,7 @@ aspectdef AddOpenMPDirectivesForLoop
 			continue;
 		}
 
-		if ($body.child(0).code.indexOf('//loopindex') !== -1)
+		if ($body.getChild(0).code.indexOf('//loopindex') !== -1)
 		{
 			var loopindex_org = $body.children[0].code.split(' ')[1].trim();
 			var func_name = $ForStmt.getAstAncestor('FunctionDecl').name;
@@ -132,13 +132,13 @@ aspectdef ret_IF_Clause
 
 	for($cast of cloneJP.descendantsAndSelf("cast"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
 	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
@@ -170,12 +170,12 @@ aspectdef ret_IF_Clause
 
 	for($cast of cloneJP.descendantsAndSelf("cast"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
@@ -215,13 +215,13 @@ aspectdef ret_NUM_THREADS_Clause
 
 	for($cast of cloneJP.descendantsAndSelf("cast"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
 	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
@@ -253,12 +253,12 @@ aspectdef ret_NUM_THREADS_Clause
 
 	for($cast of cloneJP.descendantsAndSelf("cast"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 

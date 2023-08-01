@@ -14,7 +14,7 @@ var orderedVarrefs3 = function($jp)
     
     for(var i=0; i<$jp.numChildren; i++)
 	{
-        var astChild = $jp.child(i);
+        var astChild = $jp.getChild(i);
         if(astChild === undefined) {
             continue;
         }
@@ -44,14 +44,14 @@ var varrefUsageOrder3 = function($jp, currentLevel, varrefTable)
     {
         if($jp.kind === "assign") 
         {
-            var rightLevel = varrefUsageOrder3($jp.child(1), currentLevel+1, varrefTable);
-            var leftLevel = varrefUsageOrder3($jp.child(0), currentLevel+1, varrefTable);
+            var rightLevel = varrefUsageOrder3($jp.getChild(1), currentLevel+1, varrefTable);
+            var leftLevel = varrefUsageOrder3($jp.getChild(0), currentLevel+1, varrefTable);
             return rightLevel > leftLevel ? rightLevel : leftLevel;
         }
         else
         {
-            var leftLevel = varrefUsageOrder3($jp.child(0), currentLevel+1, varrefTable);
-            var rightLevel = varrefUsageOrder3($jp.child(1), currentLevel+1, varrefTable);
+            var leftLevel = varrefUsageOrder3($jp.getChild(0), currentLevel+1, varrefTable);
+            var rightLevel = varrefUsageOrder3($jp.getChild(1), currentLevel+1, varrefTable);
 
             return rightLevel > leftLevel ? rightLevel : leftLevel;
         }
@@ -77,7 +77,7 @@ var varrefUsageOrder3 = function($jp, currentLevel, varrefTable)
             var maxLevel = currentLevel;
             for(var i=0; i<$jp.numChildren; i++)
             {
-                var lastLevel = varrefUsageOrder3($jp.child(i), currentLevel, varrefTable);
+                var lastLevel = varrefUsageOrder3($jp.getChild(i), currentLevel, varrefTable);
                 if(lastLevel > maxLevel)
                 {
                     maxLevel = lastLevel;
@@ -100,7 +100,7 @@ var varrefUsageOrder3 = function($jp, currentLevel, varrefTable)
             var maxLevel = currentLevel;
             for(var i=0; i<$jp.numChildren; i++)
             {
-                var lastLevel = varrefUsageOrder3($jp.child(i), currentLevel+1, varrefTable);
+                var lastLevel = varrefUsageOrder3($jp.getChild(i), currentLevel+1, varrefTable);
                 if(lastLevel > maxLevel)
                 {
                     maxLevel = lastLevel;

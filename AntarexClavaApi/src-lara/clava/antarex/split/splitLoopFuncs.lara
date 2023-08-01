@@ -16,9 +16,9 @@ var $CURRENT_ID_SPLITTEDLOOP="";
 function satisfiesSplitLoopsCriteria(aloop) {
    if (aloop.astName === 'CXXForRangeStmt') return false;
    if (aloop.kind !== "for") return false;
-  var $begin = aloop.astChild(0);
-  var $end = aloop.astChild(1);
-  var $step = aloop.astChild(2);
+  var $begin = aloop.getAstChild(0);
+  var $end = aloop.getAstChild(1);
+  var $step = aloop.getAstChild(2);
   var lbound = aloop.initValue;
   if (lbound === undefined) return false;
   var ubound = aloop.endValue;
