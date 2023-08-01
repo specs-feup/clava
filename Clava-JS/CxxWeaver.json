@@ -11331,6 +11331,15 @@
 			"children": [
 					{
 						"type": "attribute",
+						"tooltip": "The enclosing statement related to this break. It should be either a loop or a switch statement.",
+						"children": [
+									{
+										"type": "statement",
+										"name": "enclosingStmt"
+									}]
+					},
+					{
+						"type": "attribute",
 						"children": [
 									{
 										"type": "Boolean",
@@ -45256,21 +45265,7 @@
 									{
 										"type": "boolean",
 										"name": "isAngled",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Overload which sets 'isAngled' to false",
-						"children": [
-									{
-										"type": "void",
-										"name": "addCInclude"
-									},
-									{
-										"type": "String",
-										"name": "name",
-										"defaultValue": ""
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -45327,21 +45322,7 @@
 									{
 										"type": "boolean",
 										"name": "isAngled",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Overload which sets 'isAngled' to false",
-						"children": [
-									{
-										"type": "void",
-										"name": "addInclude"
-									},
-									{
-										"type": "String",
-										"name": "name",
-										"defaultValue": ""
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -48089,21 +48070,7 @@
 									{
 										"type": "Boolean",
 										"name": "insert",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Overload which inserts the cloned function by default",
-						"children": [
-									{
-										"type": "function",
-										"name": "clone"
-									},
-									{
-										"type": "String",
-										"name": "newName",
-										"defaultValue": ""
+										"defaultValue": "true"
 									}]
 					},
 					{
@@ -65246,21 +65213,7 @@
 									{
 										"type": "Boolean",
 										"name": "insert",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Overload which inserts the cloned function by default",
-						"children": [
-									{
-										"type": "function",
-										"name": "clone"
-									},
-									{
-										"type": "String",
-										"name": "newName",
-										"defaultValue": ""
+										"defaultValue": "true"
 									}]
 					},
 					{

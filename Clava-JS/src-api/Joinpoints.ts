@@ -230,27 +230,27 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Looks for an ancestor joinpoint name, walking back on the AST
    */
-  getAncestor(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getAncestor(type)); }
+  getAncestor(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.ancestor(unwrapJoinPoint(type))); }
   /**
    * Looks for an ancestor AST name, walking back on the AST
    */
-  getAstAncestor(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getAstAncestor(type)); }
+  getAstAncestor(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.astAncestor(unwrapJoinPoint(type))); }
   /**
    * Returns the child of the node at the given index, considering null nodes
    */
-  getAstChild(index: number): Joinpoint { return wrapJoinPoint(this._javaObject.getAstChild(index)); }
+  getAstChild(index: number): Joinpoint { return wrapJoinPoint(this._javaObject.astChild(unwrapJoinPoint(index))); }
   /**
    * True, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'
    */
-  getAstIsInstance(className: string): boolean { return wrapJoinPoint(this._javaObject.getAstIsInstance(className)); }
+  getAstIsInstance(className: string): boolean { return wrapJoinPoint(this._javaObject.astIsInstance(unwrapJoinPoint(className))); }
   /**
    * Looks for an ancestor joinpoint name, walking back on the joinpoint chain
    */
-  getChainAncestor(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getChainAncestor(type)); }
+  getChainAncestor(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getChainAncestor(unwrapJoinPoint(type))); }
   /**
    * Returns the child of the node at the given index, ignoring null nodes
    */
-  getChild(index: number): Joinpoint { return wrapJoinPoint(this._javaObject.getChild(index)); }
+  getChild(index: number): Joinpoint { return wrapJoinPoint(this._javaObject.child(unwrapJoinPoint(index))); }
   /**
    * True if the given node is a descendant of this node
    */
@@ -258,54 +258,54 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Retrieves the descendants of the given type
    */
-  getDescendants(type: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getDescendants(type)); }
+  getDescendants(type: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.descendants(unwrapJoinPoint(type))); }
   /**
    * Retrieves the descendants of the given type, including the node itself
    */
-  getDescendantsAndSelf(type: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getDescendantsAndSelf(type)); }
+  getDescendantsAndSelf(type: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.descendantsAndSelf(unwrapJoinPoint(type))); }
   /**
    * Looks in the descendants for the first node of the given type
    */
-  getFirstJp(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getFirstJp(type)); }
+  getFirstJp(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.firstJp(unwrapJoinPoint(type))); }
   /**
    * @deprecated use 'userField' instead
    */
-  getGetUserField(fieldName: string): object { return wrapJoinPoint(this._javaObject.getGetUserField(fieldName)); }
+  getGetUserField(fieldName: string): object { return wrapJoinPoint(this._javaObject.getUserField(unwrapJoinPoint(fieldName))); }
   /**
    * The value associated with the given property key
    */
-  getGetValue(key: string): object { return wrapJoinPoint(this._javaObject.getGetValue(key)); }
+  getGetValue(key: string): object { return wrapJoinPoint(this._javaObject.getValue(unwrapJoinPoint(key))); }
   /**
    * True, if the given join point or AST node is the same (== test) as the current join point AST node
    */
-  getHasNode(nodeOrJp: object): boolean { return wrapJoinPoint(this._javaObject.getHasNode(nodeOrJp)); }
+  getHasNode(nodeOrJp: object): boolean { return wrapJoinPoint(this._javaObject.hasNode(unwrapJoinPoint(nodeOrJp))); }
   /**
    * String with the full Java class name of the type of the Java field with the provided name
    */
-  getJavaFieldType(fieldName: string): string { return wrapJoinPoint(this._javaObject.getJavaFieldType(fieldName)); }
+  getJavaFieldType(fieldName: string): string { return wrapJoinPoint(this._javaObject.getJavaFieldType(unwrapJoinPoint(fieldName))); }
   /**
    * Returns the value associated with the provided Java field name
    * 
    * @deprecated used attribute 'getValue' instead, with the names returned by the attribute 'keys'
    */
-  getJavaValue(fieldName: string): object { return wrapJoinPoint(this._javaObject.getJavaValue(fieldName)); }
+  getJavaValue(fieldName: string): object { return wrapJoinPoint(this._javaObject.getJavaValue(unwrapJoinPoint(fieldName))); }
   /**
    * Java Class instance with the type of the given key
    */
-  getKeyType(key: string): object { return wrapJoinPoint(this._javaObject.getKeyType(key)); }
+  getKeyType(key: string): object { return wrapJoinPoint(this._javaObject.getKeyType(unwrapJoinPoint(key))); }
   /**
    * [HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type
    */
-  getLaraDescendants(type: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getLaraDescendants(type)); }
+  getLaraDescendants(type: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.laraDescendants(unwrapJoinPoint(type))); }
   /**
    * Retrives values that have been associated to nodes of the AST with 'setUserField'
    */
-  getUserField(fieldName: string): object { return wrapJoinPoint(this._javaObject.getUserField(fieldName)); }
+  getUserField(fieldName: string): object { return wrapJoinPoint(this._javaObject.userField(unwrapJoinPoint(fieldName))); }
   /**
    * True if the current join point is an instance of the given type
    */
-  getInstanceOf(name: string): boolean { return wrapJoinPoint(this._javaObject.getInstanceOf(name)); }
-  //insert(position: "before" | "after" | "replace", code: string): void { return wrapJoinPoint(this._javaObject.insert(position, code)); }
+  getInstanceOf(name: string): boolean { return wrapJoinPoint(this._javaObject.instanceOf(unwrapJoinPoint(name))); }
+  //insert(position: "before" | "after" | "replace", code: string): void { return wrapJoinPoint(this._javaObject.insert(unwrapJoinPoint(position), unwrapJoinPoint(code))); }
   /**
    * Performs a copy of the node and its children, but not of the nodes in its fields
    */
@@ -313,7 +313,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Copies all enumerable own properties from the source object to the .data object
    */
-  dataAssign(source: object): void { return wrapJoinPoint(this._javaObject.dataAssign(source)); }
+  dataAssign(source: object): void { return wrapJoinPoint(this._javaObject.dataAssign(unwrapJoinPoint(source))); }
   /**
    * Clears all properties from the .data object
    */
@@ -337,7 +337,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Adds a message that will be printed to the user after weaving finishes. Identical messages are removed
    */
-  messageToUser(message: string): void { return wrapJoinPoint(this._javaObject.messageToUser(message)); }
+  messageToUser(message: string): void { return wrapJoinPoint(this._javaObject.messageToUser(unwrapJoinPoint(message))); }
   /**
    * Removes the children of this node
    */
@@ -349,11 +349,11 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Overload which accepts a list of strings
    */
-  replaceWithStrings(node: string[]): Joinpoint { return wrapJoinPoint(this._javaObject.replaceWithStrings(node)); }
+  replaceWithStrings(node: string[]): Joinpoint { return wrapJoinPoint(this._javaObject.replaceWithStrings(unwrapJoinPoint(node))); }
   /**
    * Setting data directly is not supported, this action just emits a warning and does nothing
    */
-  setData(source: object): void { return wrapJoinPoint(this._javaObject.setData(source)); }
+  setData(source: object): void { return wrapJoinPoint(this._javaObject.setData(unwrapJoinPoint(source))); }
   /**
    * Replaces the first child, or inserts the join point if no child is present
    */
@@ -361,7 +361,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Sets the commented that are embedded in a node
    */
-  setInlineComments(comments: string[]): void { return wrapJoinPoint(this._javaObject.setInlineComments(comments)); }
+  setInlineComments(comments: string[]): void { return wrapJoinPoint(this._javaObject.setInlineComments(unwrapJoinPoint(comments))); }
   /**
    * Replaces the last child, or inserts the join point if no child is present
    */
@@ -373,11 +373,11 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Associates arbitrary values to nodes of the AST
    */
-  setUserField(fieldName: string, value: object): object { return wrapJoinPoint(this._javaObject.setUserField(fieldName, value)); }
+  setUserField(fieldName: string, value: object): object { return wrapJoinPoint(this._javaObject.setUserField(unwrapJoinPoint(fieldName), unwrapJoinPoint(value))); }
   /**
    * Sets the value associated with the given property key
    */
-  setValue(key: string, value: object): Joinpoint { return wrapJoinPoint(this._javaObject.setValue(key, value)); }
+  setValue(key: string, value: object): Joinpoint { return wrapJoinPoint(this._javaObject.setValue(unwrapJoinPoint(key), unwrapJoinPoint(value))); }
   /**
    * Replaces this join point with a comment with the same contents as .code
    */
@@ -388,7 +388,7 @@ export class Attribute extends Joinpoint {
   get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
   get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
   get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
+  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -400,7 +400,7 @@ export class ClavaException extends Joinpoint {
   get message(): string { return wrapJoinPoint(this._javaObject.getMessage()) }
   get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
   get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
+  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
 export class Comment extends Joinpoint {
@@ -408,8 +408,8 @@ export class Comment extends Joinpoint {
   set text(value: string) { this._javaObject.setText(unwrapJoinPoint(value)); }
   get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
   get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
-  setText(text: string): void { return wrapJoinPoint(this._javaObject.setText(text)); }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
+  setText(text: string): void { return wrapJoinPoint(this._javaObject.setText(unwrapJoinPoint(text))); }
+  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -422,7 +422,7 @@ export class Decl extends Joinpoint {
   get attrs(): Attribute[] { return wrapJoinPoint(this._javaObject.getAttrs()) }
   get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
   get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
+  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -431,7 +431,7 @@ export class Decl extends Joinpoint {
 export class Empty extends Joinpoint {
   get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
   get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
+  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
 export class Expression extends Joinpoint {
@@ -451,7 +451,7 @@ export class Expression extends Joinpoint {
   get vardecl(): Vardecl { return wrapJoinPoint(this._javaObject.getVardecl()) }
   get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
   get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
+  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -531,23 +531,23 @@ export class FileJp extends Joinpoint {
   /**
    * The complete path to the generated file, given a destination folder
    */
-  getDestinationFilepath(destinationFolderpath: string): string { return wrapJoinPoint(this._javaObject.getDestinationFilepath(destinationFolderpath)); }
+  getDestinationFilepath(destinationFolderpath: string): string { return wrapJoinPoint(this._javaObject.destinationFilepath(unwrapJoinPoint(destinationFolderpath))); }
   /**
    * Adds a C include to the current file. If the file already has the include, it does nothing
    */
-  addCInclude(name: string, isAngled: boolean): void { return wrapJoinPoint(this._javaObject.addCInclude(name, isAngled)); }
+  addCInclude(name: string, isAngled: boolean = false): void { return wrapJoinPoint(this._javaObject.addCInclude(unwrapJoinPoint(name), unwrapJoinPoint(isAngled))); }
   /**
    * Adds a function to the file that returns void and has no parameters
    */
-  addFunction(name: string): Joinpoint { return wrapJoinPoint(this._javaObject.addFunction(name)); }
+  addFunction(name: string): Joinpoint { return wrapJoinPoint(this._javaObject.addFunction(unwrapJoinPoint(name))); }
   /**
    * Adds a global variable to this file
    */
-  addGlobal(name: string, type: Joinpoint, initValue: string): Vardecl { return wrapJoinPoint(this._javaObject.addGlobal(name, unwrapJoinPoint(type), initValue)); }
+  addGlobal(name: string, type: Joinpoint, initValue: string): Vardecl { return wrapJoinPoint(this._javaObject.addGlobal(unwrapJoinPoint(name), unwrapJoinPoint(type), unwrapJoinPoint(initValue))); }
   /**
    * Adds an include to the current file. If the file already has the include, it does nothing
    */
-  addInclude(name: string, isAngled: boolean): void { return wrapJoinPoint(this._javaObject.addInclude(name, isAngled)); }
+  addInclude(name: string, isAngled: boolean = false): void { return wrapJoinPoint(this._javaObject.addInclude(unwrapJoinPoint(name), unwrapJoinPoint(isAngled))); }
   /**
    * Overload of addInclude which accepts a join point
    */
@@ -571,16 +571,16 @@ export class FileJp extends Joinpoint {
   /**
    * Changes the name of the file
    */
-  setName(filename: string): void { return wrapJoinPoint(this._javaObject.setName(filename)); }
+  setName(filename: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(filename))); }
   /**
    * Sets the path to the folder of the source file relative to the base source path
    */
-  setRelativeFolderpath(path: string): void { return wrapJoinPoint(this._javaObject.setRelativeFolderpath(path)); }
+  setRelativeFolderpath(path: string): void { return wrapJoinPoint(this._javaObject.setRelativeFolderpath(unwrapJoinPoint(path))); }
   /**
    * Writes the code of this file to a given folder
    */
-  write(destinationFoldername: string): string { return wrapJoinPoint(this._javaObject.write(destinationFoldername)); }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
+  write(destinationFoldername: string): string { return wrapJoinPoint(this._javaObject.write(unwrapJoinPoint(destinationFoldername))); }
+  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -620,7 +620,7 @@ export class MemberAccess extends Expression {
   get memberChain(): Expression[] { return wrapJoinPoint(this._javaObject.getMemberChain()) }
   get memberChainNames(): string[] { return wrapJoinPoint(this._javaObject.getMemberChainNames()) }
   get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
-  setArrow(isArrow: boolean): void { return wrapJoinPoint(this._javaObject.setArrow(isArrow)); }
+  setArrow(isArrow: boolean): void { return wrapJoinPoint(this._javaObject.setArrow(unwrapJoinPoint(isArrow))); }
 }
 
   /**
@@ -637,15 +637,15 @@ export class NamedDecl extends Decl {
   /**
    * Sets the name of this namedDecl
    */
-  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(name)); }
+  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
   /**
    * Sets the qualified name of this namedDecl (changes both the name and qualified prefix)
    */
-  setQualifiedName(name: string): void { return wrapJoinPoint(this._javaObject.setQualifiedName(name)); }
+  setQualifiedName(name: string): void { return wrapJoinPoint(this._javaObject.setQualifiedName(unwrapJoinPoint(name))); }
   /**
    * Sets the qualified prefix of this namedDecl
    */
-  setQualifiedPrefix(qualifiedPrefix: string): void { return wrapJoinPoint(this._javaObject.setQualifiedPrefix(qualifiedPrefix)); }
+  setQualifiedPrefix(qualifiedPrefix: string): void { return wrapJoinPoint(this._javaObject.setQualifiedPrefix(unwrapJoinPoint(qualifiedPrefix))); }
 }
 
 export class NewExpr extends Expression {
@@ -700,10 +700,10 @@ export class Pragma extends Joinpoint {
   /**
    * All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument
    */
-  getTargetNodes(endPragma: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getTargetNodes(endPragma)); }
-  setContent(content: string): void { return wrapJoinPoint(this._javaObject.setContent(content)); }
-  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(name)); }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
+  getTargetNodes(endPragma: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.targetNodes(unwrapJoinPoint(endPragma))); }
+  setContent(content: string): void { return wrapJoinPoint(this._javaObject.setContent(unwrapJoinPoint(content))); }
+  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
+  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -757,23 +757,23 @@ export class Program extends Joinpoint {
   /**
    * Adds a path to an include that the current program depends on
    */
-  addExtraInclude(path: string): void { return wrapJoinPoint(this._javaObject.addExtraInclude(path)); }
+  addExtraInclude(path: string): void { return wrapJoinPoint(this._javaObject.addExtraInclude(unwrapJoinPoint(path))); }
   /**
    * Adds a path based on a git repository to an include that the current program depends on
    */
-  addExtraIncludeFromGit(gitRepo: string): void { return wrapJoinPoint(this._javaObject.addExtraIncludeFromGit(gitRepo)); }
+  addExtraIncludeFromGit(gitRepo: string): void { return wrapJoinPoint(this._javaObject.addExtraIncludeFromGit(unwrapJoinPoint(gitRepo))); }
   /**
    * Adds a library (e.g., -pthreads) that the current program depends on
    */
-  addExtraLib(lib: string): void { return wrapJoinPoint(this._javaObject.addExtraLib(lib)); }
+  addExtraLib(lib: string): void { return wrapJoinPoint(this._javaObject.addExtraLib(unwrapJoinPoint(lib))); }
   /**
    * Adds a path to a source that the current program depends on
    */
-  addExtraSource(path: string): void { return wrapJoinPoint(this._javaObject.addExtraSource(path)); }
+  addExtraSource(path: string): void { return wrapJoinPoint(this._javaObject.addExtraSource(unwrapJoinPoint(path))); }
   /**
    * Adds a path based on a git repository to a source that the current program depends on
    */
-  addExtraSourceFromGit(gitRepo: string): void { return wrapJoinPoint(this._javaObject.addExtraSourceFromGit(gitRepo)); }
+  addExtraSourceFromGit(gitRepo: string): void { return wrapJoinPoint(this._javaObject.addExtraSourceFromGit(unwrapJoinPoint(gitRepo))); }
   /**
    * Adds a file join point to the current program
    */
@@ -781,11 +781,11 @@ export class Program extends Joinpoint {
   /**
    * Adds a file join point to the current program, from the given path, which can be either a Java File or a String
    */
-  addFileFromPath(filepath: object): Joinpoint { return wrapJoinPoint(this._javaObject.addFileFromPath(filepath)); }
+  addFileFromPath(filepath: object): Joinpoint { return wrapJoinPoint(this._javaObject.addFileFromPath(unwrapJoinPoint(filepath))); }
   /**
    * Adds a path based on a git repository to a project that the current program depends on
    */
-  addProjectFromGit(gitRepo: string, libs: string[]): void { return wrapJoinPoint(this._javaObject.addProjectFromGit(gitRepo, libs)); }
+  addProjectFromGit(gitRepo: string, libs: string[]): void { return wrapJoinPoint(this._javaObject.addProjectFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(libs))); }
   /**
    * Registers a function to be executed when the program exits
    */
@@ -806,7 +806,7 @@ export class Program extends Joinpoint {
    * Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality
    */
   rebuildFuzzy(): void { return wrapJoinPoint(this._javaObject.rebuildFuzzy()); }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
+  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -835,7 +835,7 @@ export class Statement extends Joinpoint {
   get isLast(): boolean { return wrapJoinPoint(this._javaObject.getIsLast()) }
   get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
   get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
+  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -945,16 +945,16 @@ export class Type extends Joinpoint {
   /**
    * Sets the template argument types of a template type
    */
-  setTemplateArgsTypes(templateArgTypes: Type[]): void { return wrapJoinPoint(this._javaObject.setTemplateArgsTypes(templateArgTypes)); }
+  setTemplateArgsTypes(templateArgTypes: Type[]): void { return wrapJoinPoint(this._javaObject.setTemplateArgsTypes(unwrapJoinPoint(templateArgTypes))); }
   /**
    * Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change
    */
-  setTypeFieldByValueRecursive(currentValue: object, newValue: object): boolean { return wrapJoinPoint(this._javaObject.setTypeFieldByValueRecursive(currentValue, newValue)); }
+  setTypeFieldByValueRecursive(currentValue: object, newValue: object): boolean { return wrapJoinPoint(this._javaObject.setTypeFieldByValueRecursive(unwrapJoinPoint(currentValue), unwrapJoinPoint(newValue))); }
   /**
    * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
    */
   setUnderlyingType(oldValue: Type, newValue: Type): Type { return wrapJoinPoint(this._javaObject.setUnderlyingType(unwrapJoinPoint(oldValue), unwrapJoinPoint(newValue))); }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(attribute, value)); }
+  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -1019,7 +1019,7 @@ export class Varref extends Expression {
    * Expression from where the attribute 'use' is calculated. In certain cases (e.g., array access, pointer dereference) the 'use' attribute is not calculated on the node itself, but on an ancestor of the node. This attribute returns that node
    */
   get useExpr(): Expression { return wrapJoinPoint(this._javaObject.getUseExpr()) }
-  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(name)); }
+  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
 }
 
 export class WrapperStmt extends Statement {
@@ -1088,6 +1088,10 @@ export class BoolLiteral extends Literal {
 }
 
 export class Break extends Statement {
+  /**
+   * The enclosing statement related to this break. It should be either a loop or a switch statement.
+   */
+  get enclosingStmt(): Statement { return wrapJoinPoint(this._javaObject.getEnclosingStmt()) }
 }
 
 export class BuiltinType extends Type {
@@ -1158,25 +1162,25 @@ export class Call extends Expression {
    * Similar to $function.signature, but if no function decl could be found (e.g., function from system include), returns a signature based on just the name of the function
    */
   get signature(): string { return wrapJoinPoint(this._javaObject.getSignature()) }
-  getArg(index: number): Expression { return wrapJoinPoint(this._javaObject.getArg(index)); }
+  getArg(index: number): Expression { return wrapJoinPoint(this._javaObject.arg(unwrapJoinPoint(index))); }
   /**
    * Adds an argument at the end of the call, creating an expression using the given code and type
    */
-  addArg(argCode: string, type: Type): void { return wrapJoinPoint(this._javaObject.addArg(argCode, unwrapJoinPoint(type))); }
+  addArg(argCode: string, type: Type): void { return wrapJoinPoint(this._javaObject.addArg(unwrapJoinPoint(argCode), unwrapJoinPoint(type))); }
   /**
    * Tries to inline this call
    */
   inline(): boolean { return wrapJoinPoint(this._javaObject.inline()); }
-  setArg(index: number, expr: Expression): void { return wrapJoinPoint(this._javaObject.setArg(index, unwrapJoinPoint(expr))); }
-  setArgFromString(index: number, expr: string): void { return wrapJoinPoint(this._javaObject.setArgFromString(index, expr)); }
+  setArg(index: number, expr: Expression): void { return wrapJoinPoint(this._javaObject.setArg(unwrapJoinPoint(index), unwrapJoinPoint(expr))); }
+  setArgFromString(index: number, expr: string): void { return wrapJoinPoint(this._javaObject.setArgFromString(unwrapJoinPoint(index), unwrapJoinPoint(expr))); }
   /**
    * Changes the name of the call
    */
-  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(name)); }
+  setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
   /**
    * Wraps this call with a possibly new wrapping function
    */
-  wrap(name: string): void { return wrapJoinPoint(this._javaObject.wrap(name)); }
+  wrap(name: string): void { return wrapJoinPoint(this._javaObject.wrap(unwrapJoinPoint(name))); }
 }
 
 export class Case extends Statement {
@@ -1278,8 +1282,8 @@ export class Continue extends Statement {
 export class CudaKernelCall extends Call {
   get config(): Expression[] { return wrapJoinPoint(this._javaObject.getConfig()) }
   set config(value: Expression[]) { this._javaObject.setConfig(unwrapJoinPoint(value)); }
-  setConfig(args: Expression[]): void { return wrapJoinPoint(this._javaObject.setConfig(args)); }
-  setConfigFromStrings(args: string[]): void { return wrapJoinPoint(this._javaObject.setConfigFromStrings(args)); }
+  setConfig(args: Expression[]): void { return wrapJoinPoint(this._javaObject.setConfig(unwrapJoinPoint(args))); }
+  setConfigFromStrings(args: string[]): void { return wrapJoinPoint(this._javaObject.setConfigFromStrings(unwrapJoinPoint(args))); }
 }
 
 export class DeclStmt extends Statement {
@@ -1412,19 +1416,19 @@ export class FunctionJp extends Declarator {
    */
   get signature(): string { return wrapJoinPoint(this._javaObject.getSignature()) }
   get storageClass(): StorageClass { return wrapJoinPoint(this._javaObject.getStorageClass()) }
-  getDeclaration(withReturnType: boolean): string { return wrapJoinPoint(this._javaObject.getDeclaration(withReturnType)); }
+  getDeclaration(withReturnType: boolean): string { return wrapJoinPoint(this._javaObject.declaration(unwrapJoinPoint(withReturnType))); }
   /**
    * Adds a new parameter to the function
    */
-  addParam(param: string): void { return wrapJoinPoint(this._javaObject.addParam(param)); }
+  addParam(param: string): void { return wrapJoinPoint(this._javaObject.addParam(unwrapJoinPoint(param))); }
   /**
    * Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class
    */
-  clone(newName: string, insert: boolean): FunctionJp { return wrapJoinPoint(this._javaObject.clone(newName, insert)); }
+  clone(newName: string, insert: boolean = true): FunctionJp { return wrapJoinPoint(this._javaObject.clone(unwrapJoinPoint(newName), unwrapJoinPoint(insert))); }
   /**
    * Generates a clone of the provided function on a new file (with a weaver-generated name).
    */
-  cloneOnFile(newName: string): FunctionJp { return wrapJoinPoint(this._javaObject.cloneOnFile(newName)); }
+  cloneOnFile(newName: string): FunctionJp { return wrapJoinPoint(this._javaObject.cloneOnFile(unwrapJoinPoint(newName))); }
   /**
    * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
    */
@@ -1432,7 +1436,7 @@ export class FunctionJp extends Declarator {
   /**
    * Creates a new call to this function
    */
-  newCall(args: Joinpoint[]): Call { return wrapJoinPoint(this._javaObject.newCall(args)); }
+  newCall(args: Joinpoint[]): Call { return wrapJoinPoint(this._javaObject.newCall(unwrapJoinPoint(args))); }
   /**
    * Sets the body of the function
    */
@@ -1444,19 +1448,19 @@ export class FunctionJp extends Declarator {
   /**
    * Sets the parameter of the function at the given position
    */
-  setParam(index: number, param: Param): void { return wrapJoinPoint(this._javaObject.setParam(index, unwrapJoinPoint(param))); }
+  setParam(index: number, param: Param): void { return wrapJoinPoint(this._javaObject.setParam(unwrapJoinPoint(index), unwrapJoinPoint(param))); }
   /**
    * Sets the type of a parameter of the function
    */
-  setParamType(index: number, newType: Type): void { return wrapJoinPoint(this._javaObject.setParamType(index, unwrapJoinPoint(newType))); }
+  setParamType(index: number, newType: Type): void { return wrapJoinPoint(this._javaObject.setParamType(unwrapJoinPoint(index), unwrapJoinPoint(newType))); }
   /**
    * Sets the parameters of the function
    */
-  setParams(params: Param[]): void { return wrapJoinPoint(this._javaObject.setParams(params)); }
+  setParams(params: Param[]): void { return wrapJoinPoint(this._javaObject.setParams(unwrapJoinPoint(params))); }
   /**
    * Overload that accepts strings that represent type-varname pairs (e.g., int param1)
    */
-  setParamsFromStrings(params: string[]): void { return wrapJoinPoint(this._javaObject.setParamsFromStrings(params)); }
+  setParamsFromStrings(params: string[]): void { return wrapJoinPoint(this._javaObject.setParamsFromStrings(unwrapJoinPoint(params))); }
   /**
    * Sets the return type of the function
    */
@@ -1470,7 +1474,7 @@ export class FunctionType extends Type {
   /**
    * Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType
    */
-  setParamType(index: number, newType: Type): void { return wrapJoinPoint(this._javaObject.setParamType(index, unwrapJoinPoint(newType))); }
+  setParamType(index: number, newType: Type): void { return wrapJoinPoint(this._javaObject.setParamType(unwrapJoinPoint(index), unwrapJoinPoint(newType))); }
   /**
    * Sets the return type of the FunctionType
    */
@@ -1584,7 +1588,7 @@ export class Loop extends Statement {
   /**
    * @deprecated use 'setKind' instead
    */
-  changeKind(kind: string): void { return wrapJoinPoint(this._javaObject.changeKind(kind)); }
+  changeKind(kind: string): void { return wrapJoinPoint(this._javaObject.changeKind(unwrapJoinPoint(kind))); }
   /**
    * Interchanges two for loops, if possible
    */
@@ -1596,39 +1600,39 @@ export class Loop extends Statement {
   /**
    * Sets the conditional statement of the loop. Works with loops of kind 'for'
    */
-  setCond(condCode: string): void { return wrapJoinPoint(this._javaObject.setCond(condCode)); }
+  setCond(condCode: string): void { return wrapJoinPoint(this._javaObject.setCond(unwrapJoinPoint(condCode))); }
   /**
    * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
    */
-  setCondRelation(operator: Relation): void { return wrapJoinPoint(this._javaObject.setCondRelation(operator)); }
+  setCondRelation(operator: Relation): void { return wrapJoinPoint(this._javaObject.setCondRelation(unwrapJoinPoint(operator))); }
   /**
    * Sets the end value of the loop. Works with loops of kind 'for'
    */
-  setEndValue(initCode: string): void { return wrapJoinPoint(this._javaObject.setEndValue(initCode)); }
+  setEndValue(initCode: string): void { return wrapJoinPoint(this._javaObject.setEndValue(unwrapJoinPoint(initCode))); }
   /**
    * Sets the init statement of the loop
    */
-  setInit(initCode: string): void { return wrapJoinPoint(this._javaObject.setInit(initCode)); }
+  setInit(initCode: string): void { return wrapJoinPoint(this._javaObject.setInit(unwrapJoinPoint(initCode))); }
   /**
    * Sets the init value of the loop. Works with loops of kind 'for'
    */
-  setInitValue(initCode: string): void { return wrapJoinPoint(this._javaObject.setInitValue(initCode)); }
+  setInitValue(initCode: string): void { return wrapJoinPoint(this._javaObject.setInitValue(unwrapJoinPoint(initCode))); }
   /**
    * Sets the attribute 'isParallel' of the loop
    */
-  setIsParallel(isParallel: boolean): void { return wrapJoinPoint(this._javaObject.setIsParallel(isParallel)); }
+  setIsParallel(isParallel: boolean): void { return wrapJoinPoint(this._javaObject.setIsParallel(unwrapJoinPoint(isParallel))); }
   /**
    * Sets the kind of the loop
    */
-  setKind(kind: string): void { return wrapJoinPoint(this._javaObject.setKind(kind)); }
+  setKind(kind: string): void { return wrapJoinPoint(this._javaObject.setKind(unwrapJoinPoint(kind))); }
   /**
    * Sets the step statement of the loop. Works with loops of kind 'for'
    */
-  setStep(stepCode: string): void { return wrapJoinPoint(this._javaObject.setStep(stepCode)); }
+  setStep(stepCode: string): void { return wrapJoinPoint(this._javaObject.setStep(unwrapJoinPoint(stepCode))); }
   /**
    * Applies loop tiling to this loop
    */
-  tile(blockSize: string, reference: Statement): Statement { return wrapJoinPoint(this._javaObject.tile(blockSize, unwrapJoinPoint(reference))); }
+  tile(blockSize: string, reference: Statement): Statement { return wrapJoinPoint(this._javaObject.tile(unwrapJoinPoint(blockSize), unwrapJoinPoint(reference))); }
 }
 
   /**
@@ -1785,47 +1789,47 @@ export class Omp extends Pragma {
   /**
    * True if the directive has at least one clause of the given clause kind, false otherwise
    */
-  getHasClause(clauseName: string): boolean { return wrapJoinPoint(this._javaObject.getHasClause(clauseName)); }
+  getHasClause(clauseName: string): boolean { return wrapJoinPoint(this._javaObject.hasClause(unwrapJoinPoint(clauseName))); }
   /**
    * True if it is legal to use the given clause kind in this directive, false otherwise
    */
-  getIsClauseLegal(clauseName: string): boolean { return wrapJoinPoint(this._javaObject.getIsClauseLegal(clauseName)); }
+  getIsClauseLegal(clauseName: string): boolean { return wrapJoinPoint(this._javaObject.isClauseLegal(unwrapJoinPoint(clauseName))); }
   /**
    * The variable names for the given reduction kind, or empty array if no reduction of that kind is defined
    */
-  getReduction(kind: string): string[] { return wrapJoinPoint(this._javaObject.getReduction(kind)); }
+  getReduction(kind: string): string[] { return wrapJoinPoint(this._javaObject.reduction(unwrapJoinPoint(kind))); }
   /**
    * Removes any clause of the given kind from the OpenMP pragma
    */
-  removeClause(clauseKind: string): void { return wrapJoinPoint(this._javaObject.removeClause(clauseKind)); }
+  removeClause(clauseKind: string): void { return wrapJoinPoint(this._javaObject.removeClause(unwrapJoinPoint(clauseKind))); }
   /**
    * Sets the value of the collapse clause of an OpenMP pragma
    */
-  setCollapse(newExpr: string): void { return wrapJoinPoint(this._javaObject.setCollapse(newExpr)); }
+  setCollapse(newExpr: string): void { return wrapJoinPoint(this._javaObject.setCollapse(unwrapJoinPoint(newExpr))); }
   /**
    * Sets the variables of a copyin clause of an OpenMP pragma
    */
-  setCopyin(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setCopyin(newVariables)); }
+  setCopyin(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setCopyin(unwrapJoinPoint(newVariables))); }
   /**
    * Sets the value of the default clause of an OpenMP pragma
    */
-  setDefault(newDefault: string): void { return wrapJoinPoint(this._javaObject.setDefault(newDefault)); }
+  setDefault(newDefault: string): void { return wrapJoinPoint(this._javaObject.setDefault(unwrapJoinPoint(newDefault))); }
   /**
    * Sets the variables of a firstprivate clause of an OpenMP pragma
    */
-  setFirstprivate(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setFirstprivate(newVariables)); }
+  setFirstprivate(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setFirstprivate(unwrapJoinPoint(newVariables))); }
   /**
    * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
    */
-  setKind(directiveKind: string): void { return wrapJoinPoint(this._javaObject.setKind(directiveKind)); }
+  setKind(directiveKind: string): void { return wrapJoinPoint(this._javaObject.setKind(unwrapJoinPoint(directiveKind))); }
   /**
    * Sets the variables of a lastprivate clause of an OpenMP pragma
    */
-  setLastprivate(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setLastprivate(newVariables)); }
+  setLastprivate(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setLastprivate(unwrapJoinPoint(newVariables))); }
   /**
    * Sets the value of the num_threads clause of an OpenMP pragma
    */
-  setNumThreads(newExpr: string): void { return wrapJoinPoint(this._javaObject.setNumThreads(newExpr)); }
+  setNumThreads(newExpr: string): void { return wrapJoinPoint(this._javaObject.setNumThreads(unwrapJoinPoint(newExpr))); }
   /**
    * Sets an ordered clause without parameters in the OpenMP pragma
    */
@@ -1833,31 +1837,31 @@ export class Omp extends Pragma {
   /**
    * Sets the variables of a private clause of an OpenMP pragma
    */
-  setPrivate(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setPrivate(newVariables)); }
+  setPrivate(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setPrivate(unwrapJoinPoint(newVariables))); }
   /**
    * Sets the value of the proc_bind clause of an OpenMP pragma
    */
-  setProcBind(newBind: string): void { return wrapJoinPoint(this._javaObject.setProcBind(newBind)); }
+  setProcBind(newBind: string): void { return wrapJoinPoint(this._javaObject.setProcBind(unwrapJoinPoint(newBind))); }
   /**
    * Sets the variables for a given kind of a reduction clause of an OpenMP pragma
    */
-  setReduction(kind: string, newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setReduction(kind, newVariables)); }
+  setReduction(kind: string, newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setReduction(unwrapJoinPoint(kind), unwrapJoinPoint(newVariables))); }
   /**
    * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
    */
-  setScheduleChunkSize(chunkSize: string): void { return wrapJoinPoint(this._javaObject.setScheduleChunkSize(chunkSize)); }
+  setScheduleChunkSize(chunkSize: string): void { return wrapJoinPoint(this._javaObject.setScheduleChunkSize(unwrapJoinPoint(chunkSize))); }
   /**
    * Sets the value of the schedule clause of an OpenMP pragma
    */
-  setScheduleKind(scheduleKind: string): void { return wrapJoinPoint(this._javaObject.setScheduleKind(scheduleKind)); }
+  setScheduleKind(scheduleKind: string): void { return wrapJoinPoint(this._javaObject.setScheduleKind(unwrapJoinPoint(scheduleKind))); }
   /**
    * Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
    */
-  setScheduleModifiers(modifiers: string[]): void { return wrapJoinPoint(this._javaObject.setScheduleModifiers(modifiers)); }
+  setScheduleModifiers(modifiers: string[]): void { return wrapJoinPoint(this._javaObject.setScheduleModifiers(unwrapJoinPoint(modifiers))); }
   /**
    * Sets the variables of a shared clause of an OpenMP pragma
    */
-  setShared(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setShared(newVariables)); }
+  setShared(newVariables: string[]): void { return wrapJoinPoint(this._javaObject.setShared(unwrapJoinPoint(newVariables))); }
 }
 
 export class ParenType extends Type {
@@ -1924,11 +1928,11 @@ export class Scope extends Statement {
   /**
    * The number of statements in the scope, not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)
    */
-  getNumStatements(flat: boolean): number { return wrapJoinPoint(this._javaObject.getNumStatements(flat)); }
+  getNumStatements(flat: boolean): number { return wrapJoinPoint(this._javaObject.numStatements(unwrapJoinPoint(flat))); }
   /**
    * Adds a new local variable to this scope
    */
-  addLocal(name: string, type: Joinpoint, initValue: string): Joinpoint { return wrapJoinPoint(this._javaObject.addLocal(name, unwrapJoinPoint(type), initValue)); }
+  addLocal(name: string, type: Joinpoint, initValue: string): Joinpoint { return wrapJoinPoint(this._javaObject.addLocal(unwrapJoinPoint(name), unwrapJoinPoint(type), unwrapJoinPoint(initValue))); }
   /**
    * CFG tester
    */
@@ -1950,7 +1954,7 @@ export class Scope extends Statement {
   /**
    * Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)
    */
-  setNaked(isNaked: boolean): void { return wrapJoinPoint(this._javaObject.setNaked(isNaked)); }
+  setNaked(isNaked: boolean): void { return wrapJoinPoint(this._javaObject.setNaked(unwrapJoinPoint(isNaked))); }
 }
 
 export class TagType extends Type {
@@ -2025,7 +2029,7 @@ export class Vardecl extends Declarator {
   /**
    * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
    */
-  setStorageClass(storageClass: string): void { return wrapJoinPoint(this._javaObject.setStorageClass(storageClass)); }
+  setStorageClass(storageClass: string): void { return wrapJoinPoint(this._javaObject.setStorageClass(unwrapJoinPoint(storageClass))); }
   /**
    * Creates a new varref based on this vardecl
    */
