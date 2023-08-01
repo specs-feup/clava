@@ -266,9 +266,9 @@ function ImportDeclarations($st, $splittedfile)
 	        $splittedfile.insertBegin(refFunc.code);
 	      else {
               if (refFunc.isPublic) 
-                 $vcode = refFunc.declaration(true) + ';';
+                 $vcode = refFunc.getDeclaration(true) + ';';
               else 
-                 $vcode = "extern " + refFunc.declaration(true) + ';';
+                 $vcode = "extern " + refFunc.getDeclaration(true) + ';';
               $splittedfile.insertBegin($vcode);
 	      }
 	    }

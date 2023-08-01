@@ -160,7 +160,7 @@ Logger.prototype._setup_cxx_specslogger = function($file, $function) {
 	//Clava.infoProjectDependency("SpecsLogger", "https://github.com/specs-feup/specs-c-libs");
 	PrintOnce.message("Woven code has dependency to project SpecsLogger, which can be found at https://github.com/specs-feup/specs-c-libs");
 	
-	var declaredName = this._declareName($function.declaration(true), function(){return IdGenerator.next("clava_logger_");});
+	var declaredName = this._declareName($function.getDeclaration(true), function(){return IdGenerator.next("clava_logger_");});
 	var loggerName = declaredName.name;
 	
 	if(declaredName.alreadyDeclared) {
@@ -170,7 +170,7 @@ Logger.prototype._setup_cxx_specslogger = function($file, $function) {
 	
 /*	
     // Check if setup was already called for this function
-    var declaration = $function.declaration(true);
+    var declaration = $function.getDeclaration(true);
     var loggerName = this.functionMap[declaration];
 
     if (loggerName !== undefined) {
@@ -238,7 +238,7 @@ Logger.prototype._setup_cxx_stdcpp_console = function($file, $function) {
 
 Logger.prototype._setup_cxx_stdcpp_file = function($file, $function) {
 
-	var declaredName = this._declareName($function.declaration(true), function(){return IdGenerator.next("log_file_");});
+	var declaredName = this._declareName($function.getDeclaration(true), function(){return IdGenerator.next("log_file_");});
 	var streamName = declaredName.name;
 	
 	if(declaredName.alreadyDeclared) {
@@ -320,7 +320,7 @@ Logger.prototype._log_c_file = function($file, $function) {
 }
 
 Logger.prototype._log_c_file_setup = function($file, $function) {
-	var declaredName = this._declareName($function.declaration(true), function(){return IdGenerator.next("log_file_");});
+	var declaredName = this._declareName($function.getDeclaration(true), function(){return IdGenerator.next("log_file_");});
 	var varname = declaredName.name;
 	
 	if(declaredName.alreadyDeclared) {
