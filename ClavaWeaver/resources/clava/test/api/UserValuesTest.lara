@@ -10,28 +10,28 @@ aspectdef UserValues
 		println("User field: " + $program.getUserField("test"));
 
 		// Now this is also supported
-		$program.userField = {"test": "test string 2"};
-		println("User field: " + $program.userField("test"));
+		$program.setUserField("test", "test string 2");
+		println("User field: " + $program.getUserField("test"));
 		
 		var anArray = ["Hello", "World"];
-		$program.userField = {"anArray": anArray};
+		$program.setUserField("anArray", anArray);
 		
 		var aMap = {"field1" : "field1_value", "field2" : 2};
-		$program.userField = {"aMap": aMap};
+		$program.setUserField("aMap", aMap);
 	end
 	
 	Clava.pushAst();
 
 	select program end
 	apply
-		println("User field after push: " + $program.userField("test"));
+		println("User field after push: " + $program.getUserField("test"));
 		println("Array after push:");
-		printObject($program.userField("anArray"));
+		printObject($program.getUserField("anArray"));
 		println("\nMap after push:");
-		printObject($program.userField("aMap"));
+		printObject($program.getUserField("aMap"));
 		println();
 		// Changes array
-		$program.userField("anArray").push("pushed");
+		$program.getUserField("anArray").push("pushed");
 	end
 	
 	Clava.popAst();
@@ -39,7 +39,7 @@ aspectdef UserValues
 	select program end
 	apply
 		println("Array after pop:");
-		printObject($program.userField("anArray"));
+		printObject($program.getUserField("anArray"));
 	end
 	
 	//println("PROGRAM:" + Clava.getProgram().extraIncludes);
