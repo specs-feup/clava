@@ -202,7 +202,6 @@ public class CxxFunction extends AFunction {
     }
 
     // TODO check if the new name clashes with other symbol?
-    @Override
     public AFunction cloneImpl(String newName) {
         return cloneImpl(newName, true);
     }

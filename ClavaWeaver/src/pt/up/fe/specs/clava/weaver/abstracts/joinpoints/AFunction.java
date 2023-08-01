@@ -741,33 +741,6 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Overload which inserts the cloned function by default
-     * @param newName 
-     */
-    public AFunction cloneImpl(String newName) {
-        throw new UnsupportedOperationException(get_class()+": Action clone not implemented ");
-    }
-
-    /**
-     * Overload which inserts the cloned function by default
-     * @param newName 
-     */
-    public final AFunction clone(String newName) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "clone", this, Optional.empty(), newName);
-        	}
-        	AFunction result = this.cloneImpl(newName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "clone", this, Optional.ofNullable(result), newName);
-        	}
-        	return result;
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "clone", e);
-        }
-    }
-
-    /**
      * Generates a clone of the provided function on a new file (with a weaver-generated name).
      * @param newName 
      */
@@ -2360,7 +2333,6 @@ public abstract class AFunction extends ADeclarator {
     protected void fillWithActions(List<String> actions) {
         this.aDeclarator.fillWithActions(actions);
         actions.add("function clone(String, Boolean)");
-        actions.add("function clone(String)");
         actions.add("function cloneOnFile(String)");
         actions.add("function cloneOnFile(String, String)");
         actions.add("function cloneOnFile(String, file)");

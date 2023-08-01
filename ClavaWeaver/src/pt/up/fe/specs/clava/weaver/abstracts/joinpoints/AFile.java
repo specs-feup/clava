@@ -558,32 +558,6 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Overload which sets 'isAngled' to false
-     * @param name 
-     */
-    public void addIncludeImpl(String name) {
-        throw new UnsupportedOperationException(get_class()+": Action addInclude not implemented ");
-    }
-
-    /**
-     * Overload which sets 'isAngled' to false
-     * @param name 
-     */
-    public final void addInclude(String name) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addInclude", this, Optional.empty(), name);
-        	}
-        	this.addIncludeImpl(name);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addInclude", this, Optional.empty(), name);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addInclude", e);
-        }
-    }
-
-    /**
      * Overload of addInclude which accepts a join point
      * @param jp 
      */
@@ -631,32 +605,6 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         	this.addCIncludeImpl(name, isAngled);
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.END, "addCInclude", this, Optional.empty(), name, isAngled);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addCInclude", e);
-        }
-    }
-
-    /**
-     * Overload which sets 'isAngled' to false
-     * @param name 
-     */
-    public void addCIncludeImpl(String name) {
-        throw new UnsupportedOperationException(get_class()+": Action addCInclude not implemented ");
-    }
-
-    /**
-     * Overload which sets 'isAngled' to false
-     * @param name 
-     */
-    public final void addCInclude(String name) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addCInclude", this, Optional.empty(), name);
-        	}
-        	this.addCIncludeImpl(name);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addCInclude", this, Optional.empty(), name);
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "addCInclude", e);
@@ -1123,10 +1071,8 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
     protected final void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
         actions.add("void addInclude(string, boolean)");
-        actions.add("void addInclude(string)");
         actions.add("void addIncludeJp(joinpoint)");
         actions.add("void addCInclude(string, boolean)");
-        actions.add("void addCInclude(string)");
         actions.add("vardecl addGlobal(String, joinpoint, String)");
         actions.add("String write(String)");
         actions.add("void setName(String)");

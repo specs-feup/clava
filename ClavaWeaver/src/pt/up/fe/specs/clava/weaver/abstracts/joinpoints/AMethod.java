@@ -1267,15 +1267,6 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Overload which inserts the cloned function by default
-     * @param newName 
-     */
-    @Override
-    public AFunction cloneImpl(String newName) {
-        return this.aFunction.cloneImpl(newName);
-    }
-
-    /**
      * Generates a clone of the provided function on a new file (with a weaver-generated name).
      * @param newName 
      */

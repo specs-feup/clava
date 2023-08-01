@@ -191,12 +191,7 @@
 	<!-- Adds an include to the file -->
 	<action name="addInclude" class="file" tooltip="Adds an include to the current file. If the file already has the include, it does nothing">
 		<parameter name="name" type="string" />
-		<parameter name="isAngled" type="boolean" />
-	</action>
-
-	<!-- Overload which sets 'isAngled' to false -->
-	<action name="addInclude" class="file" tooltip="Overload which sets 'isAngled' to false">
-		<parameter name="name" type="string" />
+		<parameter name="isAngled" type="boolean" default="false" />
 	</action>
 
 	<!-- Overload which accepts a join point -->
@@ -204,16 +199,10 @@
 		<parameter name="jp" type="joinpoint" />
 	</action>
 	
-	
 	<!-- Adds a C include to the file, which implies extern "C" linkage with guards for C++ -->
 	<action name="addCInclude" class="file" tooltip="Adds a C include to the current file. If the file already has the include, it does nothing">
 		<parameter name="name" type="string" />
-		<parameter name="isAngled" type="boolean" />
-	</action>
-	
-	<!-- Overload which sets 'isAngled' to false -->
-	<action name="addCInclude" class="file" tooltip="Overload which sets 'isAngled' to false">
-		<parameter name="name" type="string" />
+		<parameter name="isAngled" type="boolean" default="false" />
 	</action>
 
 	<action name="addGlobal" class="file" return="vardecl" tooltip="Adds a global variable to this file">
@@ -381,11 +370,7 @@
 	
 	<action name="clone" class="function" return="function" tooltip="Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class">
 		<parameter name="newName" type="String" />
-		<parameter name="insert" type="Boolean" />		
-	</action>
-
-	<action name="clone" class="function" return="function" tooltip="Overload which inserts the cloned function by default">
-		<parameter name="newName" type="String" />
+		<parameter name="insert" type="Boolean" default="true" />		
 	</action>
 
 	<action name="cloneOnFile" class="function" return="function" tooltip="Generates a clone of the provided function on a new file (with a weaver-generated name).">
