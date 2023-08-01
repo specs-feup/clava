@@ -392,7 +392,7 @@ MemoiGen.prototype.generatePerfectInst = function() {
 		var $function = chain["function"];
 		var $call = chain["call"];
 		
-		var t = new Timer("SECONDS");
+		var t = new Timer(TimerUnit.SECONDS);
 
 		$file.addGlobal(globalName, ClavaJoinPoints.builtinType("double"), '0.0');
 

@@ -41,7 +41,7 @@ Timer.prototype.time = function($start, prefix, $end) {
 
 
 Timer.prototype._time_cpp = function($start, prefix, $end) {
-    if (this.timeUnits.unit == this.timeUnits._timerUnit.DAYS){
+    if (this.timeUnits.unit == TimerUnit.DAYS){
         throw "Timer Exception: Timer metrics not implemented for DAYS in C++";
     }
     var logger = new Logger(false, this.filename);
