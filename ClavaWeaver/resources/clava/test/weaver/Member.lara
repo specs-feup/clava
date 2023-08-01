@@ -4,6 +4,6 @@ aspectdef MemberTest
 
 	var $memberAccess = Query.search("memberAccess").first();
 	println("Member: " + $memberAccess.name);
-	println("Member decl type: " + $memberAccess.getValue("memberDecl").joinPointType);
+	println("Member decl type: " + $memberAccess.getGetValue("memberDecl").joinPointType);
 
 end

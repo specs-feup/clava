@@ -7,7 +7,7 @@ aspectdef GlobalAttributes
 		println("- Testing keys, setValue, getValue -");
 		var $type = $vardecl.type;
 		println("type keys: " + $type.keys);
-		println("type builtin kind: " + $type.getValue('builtinKind'));
+		println("type builtin kind: " + $type.getGetValue('builtinKind'));
 		$vardecl.type = $type.copy().setValue('builtinKind', 'float');
 		println("Changed vardecl: " + $vardecl.code);		
 	end

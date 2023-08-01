@@ -18,17 +18,17 @@ function replaceTypesTemplatesInCall($function) {
       try {  
        var $fc = aCall.children[0];
        println(" === The first child of the call is : " + $fc.code);
-       var targs = $fc.getValue("templateArguments");
+       var targs = $fc.getGetValue("templateArguments");
        for (var x of targs) {
         var $vargTemplate = undefined;
         try { 
-           $vargTemplate = x.getValue("expr");
+           $vargTemplate = x.getGetValue("expr");
            println( " *** expression detected = " + x);
            } catch(e) {  } 
         
         if ( $vargTemplate === undefined) 
          try { 
-           $vargTemplate = x.getValue("type");
+           $vargTemplate = x.getGetValue("type");
            println( " *** type  detected  = " + x);
            try { 
             x.setValue("type", ClavaJoinPoints.typeLiteral("newType" + cpt));
