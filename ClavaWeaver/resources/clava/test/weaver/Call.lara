@@ -9,7 +9,7 @@ aspectdef CallTest
 	select call{"foo"} end
 	apply
 		println("foo original:" + $call.code);
-		var arg1 = $call.arg(1);
+		var arg1 = $call.getArg(1);
 		$call.exec setArg(0, arg1);
 		println("foo new expr arg:" + $call.code);
 		$call.exec setArgFromString(1, '10');

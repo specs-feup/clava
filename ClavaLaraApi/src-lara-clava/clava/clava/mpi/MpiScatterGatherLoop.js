@@ -194,7 +194,7 @@ class MpiScatterGatherLoop {
   _addMpiInit($mainFunction) {
     // Add params to main, if no params
     if ($mainFunction.params.length === 0) {
-      $mainFunction.paramsFromStrings = ["int argc", "char** argv"];
+      $mainFunction.setParamsFromStrings(["int argc", "char** argv"]);
     }
 
     var numMainParams = $mainFunction.params.length;

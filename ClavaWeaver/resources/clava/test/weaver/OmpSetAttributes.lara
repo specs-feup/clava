@@ -77,7 +77,7 @@ aspectdef SetParallelAttributes
 	select omp{'parallel'} end
 	apply
         println("parallel content before:" + $omp.content);
-		var sumReduction = $omp.reduction('+');
+		var sumReduction = $omp.getReduction('+');
 		sumReduction.push('b');
 		$omp.exec setReduction('+', sumReduction);
 		$omp.firstprivate = ['first_a', 'first_b'];

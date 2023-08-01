@@ -49,7 +49,7 @@ class CodeInserter {
       }
 
       // Get path for writing file
-      var outputFilepath = $file.destinationFilepath(outputFolder);
+      var outputFilepath = $file.getDestinationFilepath(outputFolder);
 
       // Write file
       Io.writeFile(outputFilepath, fileCode);
