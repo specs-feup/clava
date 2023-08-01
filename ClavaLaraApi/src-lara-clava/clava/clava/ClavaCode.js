@@ -1,6 +1,7 @@
 laraImport("clava.Clava");
 laraImport("weaver.Query");
 laraImport("lara.util.StringSet");
+laraImport("lara.Io");
 
 /**
  * Utility methods related with the source code.
@@ -133,7 +134,10 @@ class ClavaCode {
       var $scopeOwner = $currentScope.owner;
 
       // If finds a scope that is part of a loop or if/else, return false immediately
-      if ($scopeOwner.getInstanceOf("loop") || $scopeOwner.getInstanceOf("if")) {
+      if (
+        $scopeOwner.getInstanceOf("loop") ||
+        $scopeOwner.getInstanceOf("if")
+      ) {
         debug(
           "ClavaCode.isExecutedOnce: failed because scope is part of loop or if"
         );
