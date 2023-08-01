@@ -72,6 +72,10 @@ export class Joinpoint extends LaraJoinPoint {
    */
   get data(): object { return wrapJoinPoint(this._javaObject.getData()) }
   /**
+   * JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.
+   */
+  set data(value: object) { this._javaObject.setData(unwrapJoinPoint(value)); }
+  /**
    * The depth of this join point in the AST. If it is the root join point returns 0, if it is a child of the root node returns 1, etc.
    */
   get depth(): number { return wrapJoinPoint(this._javaObject.getDepth()) }
@@ -99,6 +103,10 @@ export class Joinpoint extends LaraJoinPoint {
    * Returns the first child of this node, or undefined if it has no child
    */
   get firstChild(): Joinpoint { return wrapJoinPoint(this._javaObject.getFirstChild()) }
+  /**
+   * Returns the first child of this node, or undefined if it has no child
+   */
+  set firstChild(value: Joinpoint) { this._javaObject.setFirstChild(unwrapJoinPoint(value)); }
   /**
    * @deprecated use hasParent instead
    */
@@ -162,6 +170,10 @@ export class Joinpoint extends LaraJoinPoint {
    */
   get lastChild(): Joinpoint { return wrapJoinPoint(this._javaObject.getLastChild()) }
   /**
+   * Returns the last child of this node, or undefined if it has no child
+   */
+  set lastChild(value: Joinpoint) { this._javaObject.setLastChild(unwrapJoinPoint(value)); }
+  /**
    * Returns the node that came before this node, or undefined if there is none
    */
   get leftJp(): Joinpoint { return wrapJoinPoint(this._javaObject.getLeftJp()) }
@@ -214,6 +226,7 @@ export class Joinpoint extends LaraJoinPoint {
    */
   get stmt(): Statement { return wrapJoinPoint(this._javaObject.getStmt()) }
   get type(): Type { return wrapJoinPoint(this._javaObject.getType()) }
+  set type(value: Type) { this._javaObject.setType(unwrapJoinPoint(value)); }
   /**
    * Looks for an ancestor joinpoint name, walking back on the AST
    */
@@ -392,6 +405,7 @@ export class ClavaException extends Joinpoint {
 
 export class Comment extends Joinpoint {
   get text(): string { return wrapJoinPoint(this._javaObject.getText()) }
+  set text(value: string) { this._javaObject.setText(unwrapJoinPoint(value)); }
   get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
   get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
   setText(text: string): void { return wrapJoinPoint(this._javaObject.setText(text)); }
@@ -489,6 +503,10 @@ export class FileJp extends Joinpoint {
    */
   get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
   /**
+   * The name of the file
+   */
+  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
+  /**
    * The folder of the source file
    */
   get path(): string { return wrapJoinPoint(this._javaObject.getPath()) }
@@ -500,6 +518,10 @@ export class FileJp extends Joinpoint {
    * The path to the folder of the source file relative to the base source path
    */
   get relativeFolderpath(): string { return wrapJoinPoint(this._javaObject.getRelativeFolderpath()) }
+  /**
+   * The path to the folder of the source file relative to the base source path
+   */
+  set relativeFolderpath(value: string) { this._javaObject.setRelativeFolderpath(unwrapJoinPoint(value)); }
   /**
    * The name of the source folder of this file, or undefined if it has none
    */
@@ -588,6 +610,10 @@ export class MemberAccess extends Expression {
    */
   get arrow(): boolean { return wrapJoinPoint(this._javaObject.getArrow()) }
   /**
+   * True if this is a member access that uses arrow (i.e., foo->bar), false if uses dot (i.e., foo.bar)
+   */
+  set arrow(value: boolean) { this._javaObject.setArrow(unwrapJoinPoint(value)); }
+  /**
    * Expression of the base of this member access
    */
   get base(): Expression { return wrapJoinPoint(this._javaObject.getBase()) }
@@ -603,8 +629,11 @@ export class MemberAccess extends Expression {
 export class NamedDecl extends Decl {
   get isPublic(): boolean { return wrapJoinPoint(this._javaObject.getIsPublic()) }
   get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
+  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
   get qualifiedName(): string { return wrapJoinPoint(this._javaObject.getQualifiedName()) }
+  set qualifiedName(value: string) { this._javaObject.setQualifiedName(unwrapJoinPoint(value)); }
   get qualifiedPrefix(): string { return wrapJoinPoint(this._javaObject.getQualifiedPrefix()) }
+  set qualifiedPrefix(value: string) { this._javaObject.setQualifiedPrefix(unwrapJoinPoint(value)); }
   /**
    * Sets the name of this namedDecl
    */
@@ -647,9 +676,17 @@ export class Pragma extends Joinpoint {
    */
   get content(): string { return wrapJoinPoint(this._javaObject.getContent()) }
   /**
+   * Everything that is after the name of the pragma
+   */
+  set content(value: string) { this._javaObject.setContent(unwrapJoinPoint(value)); }
+  /**
    * The name of the pragma. E.g. for #pragma foo bar, returns 'foo'
    */
   get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
+  /**
+   * The name of the pragma. E.g. for #pragma foo bar, returns 'foo'
+   */
+  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
   /**
    * The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations
    */
@@ -854,6 +891,10 @@ export class Type extends Joinpoint {
    */
   get desugar(): Type { return wrapJoinPoint(this._javaObject.getDesugar()) }
   /**
+   * Single-step desugar. Returns the type itself if it does not have sugar
+   */
+  set desugar(value: Type) { this._javaObject.setDesugar(unwrapJoinPoint(value)); }
+  /**
    * Completely desugars the type
    */
   get desugarAll(): Type { return wrapJoinPoint(this._javaObject.getDesugarAll()) }
@@ -878,6 +919,7 @@ export class Type extends Joinpoint {
   get normalize(): Type { return wrapJoinPoint(this._javaObject.getNormalize()) }
   get templateArgsStrings(): string[] { return wrapJoinPoint(this._javaObject.getTemplateArgsStrings()) }
   get templateArgsTypes(): Type[] { return wrapJoinPoint(this._javaObject.getTemplateArgsTypes()) }
+  set templateArgsTypes(value: Type[]) { this._javaObject.setTemplateArgsTypes(unwrapJoinPoint(value)); }
   /**
    * Maps names of join point fields that represent type join points, to their respective values
    */
@@ -938,6 +980,7 @@ export class TypedefType extends Type {
 export class UnaryExprOrType extends Expression {
   get argExpr(): Expression { return wrapJoinPoint(this._javaObject.getArgExpr()) }
   get argType(): Type { return wrapJoinPoint(this._javaObject.getArgType()) }
+  set argType(value: Type) { this._javaObject.setArgType(unwrapJoinPoint(value)); }
   get hasArgExpr(): boolean { return wrapJoinPoint(this._javaObject.getHasArgExpr()) }
   get hasTypeExpr(): boolean { return wrapJoinPoint(this._javaObject.getHasTypeExpr()) }
   get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
@@ -967,6 +1010,7 @@ export class Varref extends Expression {
   get isFunctionCall(): boolean { return wrapJoinPoint(this._javaObject.getIsFunctionCall()) }
   get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
   get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
+  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
   /**
    * If this variable reference has a MS-style property, returns the property name. Returns undefined otherwise
    */
@@ -1022,6 +1066,7 @@ export class ArrayAccess extends Expression {
 
 export class ArrayType extends Type {
   get elementType(): Type { return wrapJoinPoint(this._javaObject.getElementType()) }
+  set elementType(value: Type) { this._javaObject.setElementType(unwrapJoinPoint(value)); }
   /**
    * Sets the element type of the array
    */
@@ -1031,7 +1076,9 @@ export class ArrayType extends Type {
 export class BinaryOp extends Op {
   get isAssignment(): boolean { return wrapJoinPoint(this._javaObject.getIsAssignment()) }
   get left(): Expression { return wrapJoinPoint(this._javaObject.getLeft()) }
+  set left(value: Expression) { this._javaObject.setLeft(unwrapJoinPoint(value)); }
   get right(): Expression { return wrapJoinPoint(this._javaObject.getRight()) }
+  set right(value: Expression) { this._javaObject.setRight(unwrapJoinPoint(value)); }
   setLeft(left: Expression): void { return wrapJoinPoint(this._javaObject.setLeft(unwrapJoinPoint(left))); }
   setRight(right: Expression): void { return wrapJoinPoint(this._javaObject.setRight(unwrapJoinPoint(right))); }
 }
@@ -1101,6 +1148,7 @@ export class Call extends Expression {
   get memberAccess(): MemberAccess { return wrapJoinPoint(this._javaObject.getMemberAccess()) }
   get memberNames(): string[] { return wrapJoinPoint(this._javaObject.getMemberNames()) }
   get name(): string { return wrapJoinPoint(this._javaObject.getName()) }
+  set name(value: string) { this._javaObject.setName(unwrapJoinPoint(value)); }
   get numArgs(): number { return wrapJoinPoint(this._javaObject.getNumArgs()) }
   /**
    * The return type of the call
@@ -1229,6 +1277,7 @@ export class Continue extends Statement {
 
 export class CudaKernelCall extends Call {
   get config(): Expression[] { return wrapJoinPoint(this._javaObject.getConfig()) }
+  set config(value: Expression[]) { this._javaObject.setConfig(unwrapJoinPoint(value)); }
   setConfig(args: Expression[]): void { return wrapJoinPoint(this._javaObject.setConfig(args)); }
   setConfigFromStrings(args: string[]): void { return wrapJoinPoint(this._javaObject.setConfigFromStrings(args)); }
 }
@@ -1302,6 +1351,7 @@ export class FloatLiteral extends Literal {
    */
 export class FunctionJp extends Declarator {
   get body(): Scope { return wrapJoinPoint(this._javaObject.getBody()) }
+  set body(value: Scope) { this._javaObject.setBody(unwrapJoinPoint(value)); }
   get calls(): Call[] { return wrapJoinPoint(this._javaObject.getCalls()) }
   /**
    * Function join points can either represent declarations or definitions, returns the definition of this function, if present, or the first declaration, if only declarations are present
@@ -1323,6 +1373,10 @@ export class FunctionJp extends Declarator {
    * The type of the call, which includes the return type and the types of the parameters
    */
   get functionType(): FunctionType { return wrapJoinPoint(this._javaObject.getFunctionType()) }
+  /**
+   * The type of the call, which includes the return type and the types of the parameters
+   */
+  set functionType(value: FunctionType) { this._javaObject.setFunctionType(unwrapJoinPoint(value)); }
   /**
    * True if this particular function join point has a body, false otherwise
    * 
@@ -1350,7 +1404,9 @@ export class FunctionJp extends Declarator {
   get isVirtual(): boolean { return wrapJoinPoint(this._javaObject.getIsVirtual()) }
   get paramNames(): string[] { return wrapJoinPoint(this._javaObject.getParamNames()) }
   get params(): Param[] { return wrapJoinPoint(this._javaObject.getParams()) }
+  set params(value: Param[]) { this._javaObject.setParams(unwrapJoinPoint(value)); }
   get returnType(): Type { return wrapJoinPoint(this._javaObject.getReturnType()) }
+  set returnType(value: Type) { this._javaObject.setReturnType(unwrapJoinPoint(value)); }
   /**
    * A string with the signature of this function (e.g., name of the function, plus the parameters types)
    */
@@ -1410,6 +1466,7 @@ export class FunctionJp extends Declarator {
 export class FunctionType extends Type {
   get paramTypes(): Joinpoint[] { return wrapJoinPoint(this._javaObject.getParamTypes()) }
   get returnType(): Type { return wrapJoinPoint(this._javaObject.getReturnType()) }
+  set returnType(value: Type) { this._javaObject.setReturnType(unwrapJoinPoint(value)); }
   /**
    * Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType
    */
@@ -1422,6 +1479,7 @@ export class FunctionType extends Type {
 
 export class GotoStmt extends Statement {
   get label(): LabelDecl { return wrapJoinPoint(this._javaObject.getLabel()) }
+  set label(value: LabelDecl) { this._javaObject.setLabel(unwrapJoinPoint(value)); }
   /**
    * Sets the label of the goto
    */
@@ -1430,6 +1488,7 @@ export class GotoStmt extends Statement {
 
 export class If extends Statement {
   get cond(): Expression { return wrapJoinPoint(this._javaObject.getCond()) }
+  set cond(value: Expression) { this._javaObject.setCond(unwrapJoinPoint(value)); }
   get condDecl(): Vardecl { return wrapJoinPoint(this._javaObject.getCondDecl()) }
   get else(): Scope { return wrapJoinPoint(this._javaObject.getElse()) }
   get then(): Scope { return wrapJoinPoint(this._javaObject.getThen()) }
@@ -1456,6 +1515,7 @@ export class LabelDecl extends NamedDecl {
 
 export class LabelStmt extends Statement {
   get decl(): LabelDecl { return wrapJoinPoint(this._javaObject.getDecl()) }
+  set decl(value: LabelDecl) { this._javaObject.setDecl(unwrapJoinPoint(value)); }
   /**
    * Sets the label of the label statement
    */
@@ -1464,16 +1524,22 @@ export class LabelStmt extends Statement {
 
 export class Loop extends Statement {
   get body(): Scope { return wrapJoinPoint(this._javaObject.getBody()) }
+  set body(value: Scope) { this._javaObject.setBody(unwrapJoinPoint(value)); }
   /**
    * The statement of the loop condition
    */
   get cond(): Statement { return wrapJoinPoint(this._javaObject.getCond()) }
   get condRelation(): Relation { return wrapJoinPoint(this._javaObject.getCondRelation()) }
+  set condRelation(value: Relation) { this._javaObject.setCondRelation(unwrapJoinPoint(value)); }
   get controlVar(): string { return wrapJoinPoint(this._javaObject.getControlVar()) }
   /**
    * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
    */
   get endValue(): string { return wrapJoinPoint(this._javaObject.getEndValue()) }
+  /**
+   * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
+   */
+  set endValue(value: string) { this._javaObject.setEndValue(unwrapJoinPoint(value)); }
   /**
    * True if the condition of the loop in the canonical format, and is one of: <, <=, >, >=
    */
@@ -1490,9 +1556,14 @@ export class Loop extends Statement {
    * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
    */
   get initValue(): string { return wrapJoinPoint(this._javaObject.getInitValue()) }
+  /**
+   * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
+   */
+  set initValue(value: string) { this._javaObject.setInitValue(unwrapJoinPoint(value)); }
   get isInnermost(): boolean { return wrapJoinPoint(this._javaObject.getIsInnermost()) }
   get isOutermost(): boolean { return wrapJoinPoint(this._javaObject.getIsOutermost()) }
   get isParallel(): boolean { return wrapJoinPoint(this._javaObject.getIsParallel()) }
+  set isParallel(value: boolean) { this._javaObject.setIsParallel(unwrapJoinPoint(value)); }
   get iterations(): number { return wrapJoinPoint(this._javaObject.getIterations()) }
   get iterationsExpr(): Expression { return wrapJoinPoint(this._javaObject.getIterationsExpr()) }
   get kind(): "for" | "while" | "dowhile" | "foreach" { return wrapJoinPoint(this._javaObject.getKind()) }
@@ -1600,41 +1671,81 @@ export class Omp extends Pragma {
    */
   get collapse(): string { return wrapJoinPoint(this._javaObject.getCollapse()) }
   /**
+   * An integer expression, or undefined if no 'collapse' clause is defined
+   */
+  set collapse(value: string) { this._javaObject.setCollapse(unwrapJoinPoint(value)); }
+  /**
    * The variable names of all copyin clauses, or empty array if no copyin clause is defined
    */
   get copyin(): string[] { return wrapJoinPoint(this._javaObject.getCopyin()) }
+  /**
+   * The variable names of all copyin clauses, or empty array if no copyin clause is defined
+   */
+  set copyin(value: string[]) { this._javaObject.setCopyin(unwrapJoinPoint(value)); }
   /**
    * One of 'shared' or 'none', or undefined if no 'default' clause is defined
    */
   get default(): string { return wrapJoinPoint(this._javaObject.getDefault()) }
   /**
+   * One of 'shared' or 'none', or undefined if no 'default' clause is defined
+   */
+  set default(value: string) { this._javaObject.setDefault(unwrapJoinPoint(value)); }
+  /**
    * The variable names of all firstprivate clauses, or empty array if no firstprivate clause is defined
    */
   get firstprivate(): string[] { return wrapJoinPoint(this._javaObject.getFirstprivate()) }
+  /**
+   * The variable names of all firstprivate clauses, or empty array if no firstprivate clause is defined
+   */
+  set firstprivate(value: string[]) { this._javaObject.setFirstprivate(unwrapJoinPoint(value)); }
   /**
    * The kind of the directive
    */
   get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
   /**
+   * The kind of the directive
+   */
+  set kind(value: string) { this._javaObject.setKind(unwrapJoinPoint(value)); }
+  /**
    * The variable names of all lastprivate clauses, or empty array if no lastprivate clause is defined
    */
   get lastprivate(): string[] { return wrapJoinPoint(this._javaObject.getLastprivate()) }
+  /**
+   * The variable names of all lastprivate clauses, or empty array if no lastprivate clause is defined
+   */
+  set lastprivate(value: string[]) { this._javaObject.setLastprivate(unwrapJoinPoint(value)); }
   /**
    * An integer expression, or undefined if no 'num_threads' clause is defined
    */
   get numThreads(): string { return wrapJoinPoint(this._javaObject.getNumThreads()) }
   /**
+   * An integer expression, or undefined if no 'num_threads' clause is defined
+   */
+  set numThreads(value: string) { this._javaObject.setNumThreads(unwrapJoinPoint(value)); }
+  /**
    * An integer expression, or undefined if no 'ordered' clause with a parameter is defined
    */
   get ordered(): string { return wrapJoinPoint(this._javaObject.getOrdered()) }
+  /**
+   * An integer expression, or undefined if no 'ordered' clause with a parameter is defined
+   */
+  set ordered(value: string) { this._javaObject.setOrdered(unwrapJoinPoint(value)); }
   /**
    * The variable names of all private clauses, or empty array if no private clause is defined
    */
   get private(): string[] { return wrapJoinPoint(this._javaObject.getPrivate()) }
   /**
+   * The variable names of all private clauses, or empty array if no private clause is defined
+   */
+  set private(value: string[]) { this._javaObject.setPrivate(unwrapJoinPoint(value)); }
+  /**
    * One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined
    */
   get procBind(): string { return wrapJoinPoint(this._javaObject.getProcBind()) }
+  /**
+   * One of 'master', 'close' or 'spread', or undefined if no 'proc_bind' clause is defined
+   */
+  set procBind(value: string) { this._javaObject.setProcBind(unwrapJoinPoint(value)); }
   /**
    * The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined
    */
@@ -1644,17 +1755,33 @@ export class Omp extends Pragma {
    */
   get scheduleChunkSize(): string { return wrapJoinPoint(this._javaObject.getScheduleChunkSize()) }
   /**
+   * An integer expression, or undefined if no 'schedule' clause with chunk size is defined
+   */
+  set scheduleChunkSize(value: string) { this._javaObject.setScheduleChunkSize(unwrapJoinPoint(value)); }
+  /**
    * One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined
    */
   get scheduleKind(): string { return wrapJoinPoint(this._javaObject.getScheduleKind()) }
+  /**
+   * One of 'static', 'dynamic', 'guided', 'auto' or 'runtime', or undefined if no 'schedule' clause is defined
+   */
+  set scheduleKind(value: string) { this._javaObject.setScheduleKind(unwrapJoinPoint(value)); }
   /**
    * A list with possible values of 'monotonic', 'nonmonotonic' or 'simd', or undefined if no 'schedule' clause with modifiers is defined
    */
   get scheduleModifiers(): string[] { return wrapJoinPoint(this._javaObject.getScheduleModifiers()) }
   /**
+   * A list with possible values of 'monotonic', 'nonmonotonic' or 'simd', or undefined if no 'schedule' clause with modifiers is defined
+   */
+  set scheduleModifiers(value: string[]) { this._javaObject.setScheduleModifiers(unwrapJoinPoint(value)); }
+  /**
    * The variable names of all shared clauses, or empty array if no shared clause is defined
    */
   get shared(): string[] { return wrapJoinPoint(this._javaObject.getShared()) }
+  /**
+   * The variable names of all shared clauses, or empty array if no shared clause is defined
+   */
+  set shared(value: string[]) { this._javaObject.setShared(unwrapJoinPoint(value)); }
   /**
    * True if the directive has at least one clause of the given clause kind, false otherwise
    */
@@ -1735,6 +1862,7 @@ export class Omp extends Pragma {
 
 export class ParenType extends Type {
   get innerType(): Type { return wrapJoinPoint(this._javaObject.getInnerType()) }
+  set innerType(value: Type) { this._javaObject.setInnerType(unwrapJoinPoint(value)); }
   /**
    * Sets the inner type of this paren type
    */
@@ -1743,6 +1871,7 @@ export class ParenType extends Type {
 
 export class PointerType extends Type {
   get pointee(): Type { return wrapJoinPoint(this._javaObject.getPointee()) }
+  set pointee(value: Type) { this._javaObject.setPointee(unwrapJoinPoint(value)); }
   /**
    * Number of pointer levels from this pointer
    */
@@ -1776,6 +1905,10 @@ export class Scope extends Statement {
    * True if the scope does not have curly braces
    */
   get naked(): boolean { return wrapJoinPoint(this._javaObject.getNaked()) }
+  /**
+   * True if the scope does not have curly braces
+   */
+  set naked(value: boolean) { this._javaObject.setNaked(unwrapJoinPoint(value)); }
   /**
    * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas
    */
@@ -1858,6 +1991,10 @@ export class Vardecl extends Declarator {
    */
   get init(): Expression { return wrapJoinPoint(this._javaObject.getInit()) }
   /**
+   * If vardecl has an initialization value, returns an expression with that value
+   */
+  set init(value: Expression) { this._javaObject.setInit(unwrapJoinPoint(value)); }
+  /**
    * The initialization style of this vardecl, which can be no_init, cinit, callinit, listinit
    */
   get initStyle(): string { return wrapJoinPoint(this._javaObject.getInitStyle()) }
@@ -1873,6 +2010,10 @@ export class Vardecl extends Declarator {
    * Storage class specifier, which can be none, extern, static, __private_extern__, auto, register
    */
   get storageClass(): string { return wrapJoinPoint(this._javaObject.getStorageClass()) }
+  /**
+   * Storage class specifier, which can be none, extern, static, __private_extern__, auto, register
+   */
+  set storageClass(value: string) { this._javaObject.setStorageClass(unwrapJoinPoint(value)); }
   /**
    * If vardecl already has an initialization, removes it (also removes const if present). Otherwise does nothing
    */
@@ -1893,6 +2034,7 @@ export class Vardecl extends Declarator {
 
 export class VariableArrayType extends ArrayType {
   get sizeExpr(): Expression { return wrapJoinPoint(this._javaObject.getSizeExpr()) }
+  set sizeExpr(value: Expression) { this._javaObject.setSizeExpr(unwrapJoinPoint(value)); }
   /**
    * Sets the size expression of this variable array type
    */
