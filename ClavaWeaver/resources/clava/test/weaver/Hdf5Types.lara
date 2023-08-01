@@ -1,5 +1,6 @@
 import clava.hdf5.Hdf5;
 import clava.Clava;
+import clava.ClavaJoinPoints;
 
 aspectdef Launcher
 
@@ -49,8 +50,8 @@ aspectdef Hdf5Types
 	var filepath = srcFolder + "/lara-generated";
 	
 	// Create files for generated code
-	var $compTypeC = AstFactory.file("CompType.cpp", filepath);
-	var $compTypeH = AstFactory.file("CompType.h", filepath);
+	var $compTypeC = ClavaJoinPoints.file("CompType.cpp", filepath);
+	var $compTypeH = ClavaJoinPoints.file("CompType.h", filepath);
 
 	// Add files to the program
 	
@@ -91,7 +92,7 @@ aspectdef Hdf5Types
 		call result : RecordToHdf5($record, typeName);
 		var cxxFunction = CImplementation(namespace, className, Format.addPrefix(result.code, "    "));
 
-		$compTypeC.exec insertAfter(AstFactory.declLiteral(cxxFunction));
+		$compTypeC.exec insertAfter(ClavaJoinPoints.declLiteral(cxxFunction));
 	end
 	
 	/* Generate code for .h file */
@@ -103,7 +104,7 @@ aspectdef Hdf5Types
  	hDeclarationsCode = '\nnamespace '+namespace +' {\n\n' + Format.addPrefix(hDeclarationsCode, "    ") + "\n}\n";
 
 	// Insert code inside header file
- 	$compTypeH.exec insertAfter(AstFactory.declLiteral(hDeclarationsCode));
+ 	$compTypeH.exec insertAfter(ClavaJoinPoints.declLiteral(hDeclarationsCode));
 
 end
 

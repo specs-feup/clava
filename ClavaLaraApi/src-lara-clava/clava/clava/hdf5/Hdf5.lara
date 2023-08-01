@@ -1,3 +1,5 @@
+import clava.ClavaJoinPoints;
+
 
 /**
  * Utility methods related to the HDF5 library.
@@ -111,8 +113,8 @@ aspectdef Hdf5Types
 	var filepath = "generated-hdf5";
 	
 	// Create files for generated code
-	var $compTypeC = AstFactory.file("CompType.cpp", filepath);
-	var $compTypeH = AstFactory.file("CompType.h", filepath);
+	var $compTypeC = ClavaJoinPoints.file("CompType.cpp", filepath);
+	var $compTypeH = ClavaJoinPoints.file("CompType.h", filepath);
 
 	// Add files to the program
 	/*
@@ -159,7 +161,7 @@ aspectdef Hdf5Types
 		//var cxxFunction = Hdf5_CImplementation(namespace, className, Format.addPrefix(result.code, "    "));
 		var cxxFunction = Hdf5_CImplementation(namespace, className, Format.addPrefix(recordCode, "    "));
 
-		$compTypeC.exec insertAfter(AstFactory.declLiteral(cxxFunction));
+		$compTypeC.exec insertAfter(ClavaJoinPoints.declLiteral(cxxFunction));
 	}
 	//end
 	
@@ -172,7 +174,7 @@ aspectdef Hdf5Types
  	hDeclarationsCode = '\nnamespace '+namespace +' {\n\n' + Format.addPrefix(hDeclarationsCode, "    ") + "\n}\n";
 
 	// Insert code inside header file
- 	$compTypeH.exec insertAfter(AstFactory.declLiteral(hDeclarationsCode));
+ 	$compTypeH.exec insertAfter(ClavaJoinPoints.declLiteral(hDeclarationsCode));
 	
 	// Write files
 	//$compTypeC.write(".");

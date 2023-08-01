@@ -5,9 +5,9 @@ aspectdef Actions
 	select function.stmt.vardecl end
 	apply
 		if($vardecl.type.code === "double") {
-			$vardecl.exec setType(Types.float());
+			$vardecl.exec setType(ClavaJoinPoints.builtinType("float"));
 		} else if($vardecl.type.code === "int") {
-			$vardecl.exec setType(Types.builtin("unsigned int"));
+			$vardecl.exec setType(ClavaJoinPoints.builtinType("unsigned int"));
 		}
 	end
 	

@@ -32,7 +32,7 @@ HLSAnalysis.applyGenericStrategies = function(func, options) {
 		options = "{}";
 	else
 		options = JSON.stringify(options);
-	HLSAnalysis.getJavaInterface().applyGenericStrategies(func, options);
+	HLSAnalysis.getJavaInterface().applyGenericStrategies(unwrapJoinPoint(func), options);
 }
 
 
@@ -53,7 +53,7 @@ HLSAnalysis.applyGenericStrategies = function(func, options) {
  * @param {number} B - a positive real number to control the heuristic's aggressiveness
  * */
 HLSAnalysis.applyFunctionInlining = function(func, B) {
-	HLSAnalysis.getJavaInterface().applyFunctionInlining(func, B.toString());
+	HLSAnalysis.getJavaInterface().applyFunctionInlining(unwrapJoinPoint(func), B.toString());
 }
 
 /**
@@ -71,7 +71,7 @@ HLSAnalysis.applyFunctionInlining = function(func, B) {
  * @param {Function} func - a JoinPoint of the function to analyze
  * */
 HLSAnalysis.applyArrayStreaming = function(func) {
-	HLSAnalysis.getJavaInterface().applyArrayStreaming(func);
+	HLSAnalysis.getJavaInterface().applyArrayStreaming(unwrapJoinPoint(func));
 }
 
 /**
@@ -90,7 +90,7 @@ HLSAnalysis.applyArrayStreaming = function(func) {
  * @param {number} P - the number of partitions to use. 64 is the default.
  * */
 HLSAnalysis.applyLoopStrategies = function(func, P) {
-	HLSAnalysis.getJavaInterface().applyLoopStrategies(func, P.toString());
+	HLSAnalysis.getJavaInterface().applyLoopStrategies(unwrapJoinPoint(func), P.toString());
 }
 
 /**
@@ -109,7 +109,7 @@ HLSAnalysis.applyLoopStrategies = function(func, P) {
  * @param {number} N - a positive integer value for the load/stores factor
  * */
 HLSAnalysis.applyLoadStoresStrategy = function(func, N) {
-	HLSAnalysis.getJavaInterface().applyLoadStoresStrategy(func, N.toString());
+	HLSAnalysis.getJavaInterface().applyLoadStoresStrategy(unwrapJoinPoint(func), N.toString());
 }
 
 /**
@@ -120,6 +120,6 @@ HLSAnalysis.applyLoadStoresStrategy = function(func, N) {
  * @return {boolean} whether the function can be or not instrumented
  * */
 HLSAnalysis.canBeInstrumented = function(func) {
-	return HLSAnalysis.getJavaInterface().canBeInstrumented(func);
+	return HLSAnalysis.getJavaInterface().canBeInstrumented(unwrapJoinPoint(func));
 }
 
