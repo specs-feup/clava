@@ -46,7 +46,7 @@ Gprofer.prototype._defaultCmaker = function($function) {
 	}
 	
 	// sources
-	for (var $file of this._app.laraDescendants('file')) {
+	for (var $file of this._app.getLaraDescendants('file')) {
 		
 		if($file.isHeader) {
 			continue;

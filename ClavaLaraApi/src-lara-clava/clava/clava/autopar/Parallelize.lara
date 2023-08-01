@@ -126,7 +126,7 @@ Parallelize.getForLoopsPragmas = function($loops, insertPragma, useLoopId) {
 	
 	// Initialize loops if undefined
 	if($loops === undefined) {
-		$loops = Clava.getProgram().laraDescendants('loop');
+		$loops = Clava.getProgram().getLaraDescendants('loop');
 	}
 
 	// Filter any loop that is not a for loop
@@ -194,7 +194,7 @@ Parallelize.getForLoopsPragmas = function($loops, insertPragma, useLoopId) {
 	var parallelLoops = {};
 	var unparallelizableLoops = {};	
 	
-	$pragmas = Clava.getProgram().laraDescendants('pragma');
+	$pragmas = Clava.getProgram().getLaraDescendants('pragma');
 	for(var $pragma of $pragmas) {
 		if($pragma.name !== "parallelize_id") {
 			continue;

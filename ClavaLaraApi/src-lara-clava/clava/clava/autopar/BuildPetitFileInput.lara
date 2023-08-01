@@ -222,12 +222,12 @@ aspectdef CovertLoopToPetitForm
 
 	select $ForStmt.init end
 	apply
-		for($cast of $init.descendantsAndSelf("vardecl")) // if for(int i = ... )
+		for($cast of $init.getDescendantsAndSelf("vardecl")) // if for(int i = ... )
 		{
 			cloneJP=$cast.init.copy();
 			break #$ForStmt;
 		}
-		for($cast of $init.descendantsAndSelf("binaryOp"))// if for(i = ... )
+		for($cast of $init.getDescendantsAndSelf("binaryOp"))// if for(i = ... )
 		{
 			cloneJP=$cast.right.copy();
 			break #$ForStmt;
@@ -235,13 +235,13 @@ aspectdef CovertLoopToPetitForm
 	end
 
 
-	for($cast of cloneJP.descendantsAndSelf("cast"))
+	for($cast of cloneJP.getDescendantsAndSelf("cast"))
 	{
 		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
-	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
+	for($cast of cloneJP.getDescendantsAndSelf("unaryOp"))
 	{
 		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
@@ -263,7 +263,7 @@ aspectdef CovertLoopToPetitForm
 	end
 
 	var foundflag = false;
-	for($cast of binaryOpleft.descendantsAndSelf("varref"))
+	for($cast of binaryOpleft.getDescendantsAndSelf("varref"))
 		if ($cast.name === loopControlVarname)
 		{
 			cloneJP=binaryOpRight;
@@ -275,12 +275,12 @@ aspectdef CovertLoopToPetitForm
 
 
 
-	for($cast of cloneJP.descendantsAndSelf("cast"))
+	for($cast of cloneJP.getDescendantsAndSelf("cast"))
 	{
 		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
-	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
+	for($cast of cloneJP.getDescendantsAndSelf("unaryOp"))
 	{
 		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
@@ -288,7 +288,7 @@ aspectdef CovertLoopToPetitForm
 	
 	var str_cond = 	cloneJP.code;
 
-	for($cast of cloneJP.descendantsAndSelf("binaryOp"))
+	for($cast of cloneJP.getDescendantsAndSelf("binaryOp"))
 	{
 		if (['shr' , 'shl'].indexOf($cast.kind) !==  -1)
 			str_cond = '9999';

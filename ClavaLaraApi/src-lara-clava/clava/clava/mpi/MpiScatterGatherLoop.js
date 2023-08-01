@@ -223,7 +223,7 @@ class MpiScatterGatherLoop {
   _addVariable(varName, accessPattern, namesArray, accessesArray) {
     // Check if loop contains a reference to the variable
     var firstVarref = undefined;
-    for (var $varref of this._$loop.descendants("varref")) {
+    for (var $varref of this._$loop.getDescendants("varref")) {
       if ($varref.name === varName) {
         firstVarref = $varref;
         break;

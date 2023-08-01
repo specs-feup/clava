@@ -26,7 +26,7 @@ aspectdef RunInlineFunctionCalls
 
 	select file.function end
 	apply
-		var innerCalls = $function.laraDescendants('call');
+		var innerCalls = $function.getLaraDescendants('call');
 
 		func_name[$function.name].innerCallNumber = innerCalls.length;
 		for(var obj of innerCalls)
@@ -80,7 +80,7 @@ aspectdef RunInlineFunctionCalls
 
 	select file.function end
 	apply
-		var innerCalls = $function.laraDescendants('call');
+		var innerCalls = $function.getLaraDescendants('call');
 
 		for(var obj of innerCalls)
 			if (safefunctionCallslist.indexOf(obj.name) === -1 && func_name[obj.name] === undefined  )
@@ -193,14 +193,14 @@ aspectdef callInline
 		if (
 					(// funcCall(...)
 					exprStmt.children[0].joinPointType === 'call' && 
-					exprStmt.descendantsAndSelf('call').length ===1 && 
+					exprStmt.getDescendantsAndSelf('call').length ===1 && 
 					exprStmt.children[0].name === func_name
 					) 
 			||
 					(// var op funcCall(...)
 					exprStmt.children[0].joinPointType === 'binaryOp' && 
 					exprStmt.children[0].right.joinPointType === 'call' && 
-					exprStmt.children[0].right.descendantsAndSelf('call').length === 1
+					exprStmt.children[0].right.getDescendantsAndSelf('call').length === 1
 					)
 			)
 			{
@@ -373,7 +373,7 @@ aspectdef inlinePreparation
 				funcJP.detach();
 				return;
 
-				var arrayVarObj = callStmt.argList[param_index].descendantsAndSelf('arrayAccess')[0];
+				var arrayVarObj = callStmt.argList[param_index].getDescendantsAndSelf('arrayAccess')[0];
 
 				param_table[$param.name] = arrayVarObj.arrayVar.code;
 				for(var index = 0 ; index < arrayVarObj.subscript.length - ($param.code.split('[').length-1) ; index++)

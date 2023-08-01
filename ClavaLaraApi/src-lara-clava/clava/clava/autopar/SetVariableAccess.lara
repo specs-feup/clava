@@ -116,7 +116,7 @@ aspectdef SetVariableAccess
 		}
 		
 		var hasDescendantOfArrayAccess = false;
-		if ($varref.descendantsAndSelf('arrayAccess').length > 0)
+		if ($varref.getDescendantsAndSelf('arrayAccess').length > 0)
 			hasDescendantOfArrayAccess = true;					
 
 		var varUsage = null;
@@ -154,7 +154,7 @@ aspectdef SetVariableAccess
 			varUsage.subscriptcurrentloop = o.subscriptstr;
 
 			var subscriptVarNamelist = [];
-			for(var arrayAccessobj of  $varref.descendantsAndSelf('arrayAccess'))
+			for(var arrayAccessobj of  $varref.getDescendantsAndSelf('arrayAccess'))
 			{
 				call retsubscriptVars(arrayAccessobj,subscriptVarNamelist);
 			}
@@ -317,7 +317,7 @@ aspectdef retsubscriptVars
 
 	select $stmt.subscript end
 	apply
-		for($varref of $subscript.descendantsAndSelf("varref"))
+		for($varref of $subscript.getDescendantsAndSelf("varref"))
 			if (varNamelist.indexOf($varref.name) === -1)
 				varNamelist.push($varref.name);
 	end
@@ -333,7 +333,7 @@ aspectdef retsubscriptcurrentloop
 
 	select $varref.subscript  end
 	apply
-		for($varref of $subscript.descendantsAndSelf("varref"))
+		for($varref of $subscript.getDescendantsAndSelf("varref"))
 			if ( $varref.name === loopControlVarname)
 			{
 				this.subscriptstr += '[' + $subscript.code +']';

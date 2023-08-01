@@ -117,12 +117,12 @@ aspectdef ret_IF_Clause
 
 	select $ForStmt.init end
 	apply
-		for($cast of $init.descendantsAndSelf("vardecl")) // if for(int i = ... )
+		for($cast of $init.getDescendantsAndSelf("vardecl")) // if for(int i = ... )
 		{
 			cloneJP=$cast.init.copy();
 			break #$ForStmt;
 		}
-		for($cast of $init.descendantsAndSelf("binaryOp"))// if for(i = ... )
+		for($cast of $init.getDescendantsAndSelf("binaryOp"))// if for(i = ... )
 		{
 			cloneJP=$cast.right.copy();
 			break #$ForStmt;
@@ -130,13 +130,13 @@ aspectdef ret_IF_Clause
 	end
 
 
-	for($cast of cloneJP.descendantsAndSelf("cast"))
+	for($cast of cloneJP.getDescendantsAndSelf("cast"))
 	{
 		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
-	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
+	for($cast of cloneJP.getDescendantsAndSelf("unaryOp"))
 	{
 		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
@@ -156,7 +156,7 @@ aspectdef ret_IF_Clause
 	end
 
 	var foundflag = false;
-	for($cast of binaryOpleft.descendantsAndSelf("varref"))
+	for($cast of binaryOpleft.getDescendantsAndSelf("varref"))
 		if ($cast.name === loopControlVarname)
 		{
 			cloneJP=binaryOpRight;
@@ -168,12 +168,12 @@ aspectdef ret_IF_Clause
 
 
 
-	for($cast of cloneJP.descendantsAndSelf("cast"))
+	for($cast of cloneJP.getDescendantsAndSelf("cast"))
 	{
 		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
-	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
+	for($cast of cloneJP.getDescendantsAndSelf("unaryOp"))
 	{
 		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
@@ -200,12 +200,12 @@ aspectdef ret_NUM_THREADS_Clause
 
 	select $ForStmt.init end
 	apply
-		for($cast of $init.descendantsAndSelf("vardecl")) // if for(int i = ... )
+		for($cast of $init.getDescendantsAndSelf("vardecl")) // if for(int i = ... )
 		{
 			cloneJP=$cast.init.copy();
 			break #$ForStmt;
 		}
-		for($cast of $init.descendantsAndSelf("binaryOp"))// if for(i = ... )
+		for($cast of $init.getDescendantsAndSelf("binaryOp"))// if for(i = ... )
 		{
 			cloneJP=$cast.right.copy();
 			break #$ForStmt;
@@ -213,13 +213,13 @@ aspectdef ret_NUM_THREADS_Clause
 	end
 
 
-	for($cast of cloneJP.descendantsAndSelf("cast"))
+	for($cast of cloneJP.getDescendantsAndSelf("cast"))
 	{
 		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
-	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
+	for($cast of cloneJP.getDescendantsAndSelf("unaryOp"))
 	{
 		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
@@ -239,7 +239,7 @@ aspectdef ret_NUM_THREADS_Clause
 	end
 
 	var foundflag = false;
-	for($cast of binaryOpleft.descendantsAndSelf("varref"))
+	for($cast of binaryOpleft.getDescendantsAndSelf("varref"))
 		if ($cast.name === loopControlVarname)
 		{
 			cloneJP=binaryOpRight;
@@ -251,12 +251,12 @@ aspectdef ret_NUM_THREADS_Clause
 
 
 
-	for($cast of cloneJP.descendantsAndSelf("cast"))
+	for($cast of cloneJP.getDescendantsAndSelf("cast"))
 	{
 		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
-	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
+	for($cast of cloneJP.getDescendantsAndSelf("unaryOp"))
 	{
 		var child = $cast.getChild(0);
 		$cast.replaceWith(child);

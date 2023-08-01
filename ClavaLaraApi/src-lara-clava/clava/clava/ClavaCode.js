@@ -1,5 +1,6 @@
 laraImport("clava.Clava");
 laraImport("weaver.Query");
+laraImport("lara.util.StringSet");
 
 /**
  * Utility methods related with the source code.
@@ -184,7 +185,7 @@ class ClavaCode {
   static getFunctionDefinition(functionName, isSingleFunction) {
     // Locate function
     var functionSearch = Clava.getProgram()
-      .descendants("function")
+      .getDescendants("function")
       //.filter($f => $f.name.equals('main'))[0];
       .filter(function ($f) {
         return $f.name.equals(functionName) && $f.hasDefinition;

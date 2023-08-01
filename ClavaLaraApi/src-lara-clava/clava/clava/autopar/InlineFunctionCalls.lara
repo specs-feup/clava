@@ -18,7 +18,7 @@ aspectdef InlineFunctionCalls
 
 	select file.function end
 	apply
-		var innerCalls = $function.laraDescendants('call');
+		var innerCalls = $function.getLaraDescendants('call');
 		func_name[$function.name].innerCallNumber = innerCalls.length;
 	end
 

@@ -169,7 +169,7 @@ function _defaultMemoiPredRecursive($call, processed, report) {
 	}
 	
 	// 3) It doesn't access global state (unless constants)
-	var varRefs = $def.laraDescendants('varref');
+	var varRefs = $def.getLaraDescendants('varref');
 	for(var $ref of varRefs) {
 	
 		var $varDecl = $ref.declaration;
@@ -187,7 +187,7 @@ function _defaultMemoiPredRecursive($call, processed, report) {
 
 	// 4) It doesn't call non-valid functions
 	var isChildWaiting = false;
-	var $calls = $def.laraDescendants('call');
+	var $calls = $def.getLaraDescendants('call');
 	for(var $childCall of $calls) {
 		
 		var childSig = $childCall.signature;
