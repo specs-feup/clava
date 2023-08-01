@@ -68,7 +68,7 @@ export default class ClavaType {
      * @param code - If a string, returns a literal statement with the code of the string. Otherwise, tries to transform the given node to a $statement
      * @param isOptional - If false and code is undefined, throws an exception. Otherwise, returns undefined if code is undefined.
      */
-    static asStatement = function (code, isOptional = false) {
+    static asStatement(code, isOptional = false) {
         if (code === undefined) {
             if (isOptional) {
                 return undefined;
@@ -79,7 +79,7 @@ export default class ClavaType {
         }
         const newStmtNode = ClavaJavaTypes.getClavaNodes().toStmt(code.node);
         return JoinPoints.toJoinPoint(newStmtNode);
-    };
+    }
     /**
      * Makes sure the given parameter is a type join point.
      *

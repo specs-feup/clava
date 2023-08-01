@@ -29,6 +29,12 @@ export default class ClavaJavaTypes {
     return JavaTypes.getType("pt.up.fe.specs.clava.weaver.CxxWeaverApi");
   }
 
+  static get CxxType() {
+    return JavaTypes.getType(
+      "pt.up.fe.specs.clava.weaver.joinpoints.types.CxxType"
+    );
+  }
+
   static get Standard() {
     return JavaTypes.getType("pt.up.fe.specs.clava.language.Standard");
   }

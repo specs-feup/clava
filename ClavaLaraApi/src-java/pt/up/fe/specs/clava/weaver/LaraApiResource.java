@@ -190,7 +190,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     //_CLAVA_JAVA_TYPES("_ClavaJavaTypes.lara"),
     //CLAVA("Clava.lara"),
     CLAVA_CODE("ClavaCode.js"),
-    CLAVA_JOIN_POINTS("ClavaJoinPoints.js"),
+    //CLAVA_JOIN_POINTS("ClavaJoinPoints.js"),
     CLAVA_NODES("ClavaNodes.js");
     //CLAVA_TYPE("ClavaType.lara");
 

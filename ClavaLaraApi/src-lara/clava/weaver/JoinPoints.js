@@ -1,9 +1,10 @@
 import JoinPointsBase from "lara-js/api/weaver/JoinPointsBase.js";
 import ClavaJavaTypes from "../clava/ClavaJavaTypes.js";
+import { wrapJoinPoint } from "lara-js/api/LaraJoinPoint.js";
 export default class JoinPoints extends JoinPointsBase {
     static toJoinPoint(node) {
         const cxxJps = ClavaJavaTypes.getCxxJoinPoints();
-        return cxxJps.createFromLara(node);
+        return wrapJoinPoint(cxxJps.createFromLara(node));
     }
     /**
      *
