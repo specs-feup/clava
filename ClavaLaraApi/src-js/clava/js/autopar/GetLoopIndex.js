@@ -5,6 +5,6 @@
 **************************************************************/
 var GetLoopIndex = function($loop)
 {
-	return $loop.astAncestor('FunctionDecl').name + '_' + $loop.rank.join('_');
+	return $loop.getAstAncestor('FunctionDecl').name + '_' + $loop.rank.join('_');
 	//return $loop.id;
 }

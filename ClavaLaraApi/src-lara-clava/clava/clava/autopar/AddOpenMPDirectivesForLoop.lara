@@ -83,7 +83,7 @@ aspectdef AddOpenMPDirectivesForLoop
 		if ($body.child(0).code.indexOf('//loopindex') !== -1)
 		{
 			var loopindex_org = $body.children[0].code.split(' ')[1].trim();
-			var func_name = $ForStmt.astAncestor('FunctionDecl').name;
+			var func_name = $ForStmt.getAstAncestor('FunctionDecl').name;
 			if (loopindex_org.indexOf(func_name) !== -1)
 			{
 				if 	(OmpPragmas[loopindex_org] === undefined)

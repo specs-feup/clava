@@ -32,7 +32,7 @@ HeaderEnums.prototype._getEnumName = function($enum) {
 	}
 
 	// Get class
-	var $class = $enum.ancestor("class");
+	var $class = $enum.getAncestor("class");
 
 	return $class.name + "_" + $enum.name;
 }
