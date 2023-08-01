@@ -16,7 +16,7 @@ aspectdef AstNodes
 	
 	println("\n\nAst API:");
 	for(var $if of Query.search("function", "testNodes").search("if")) {
-		var astNode = $if.getNode();
+		var astNode = $if.node;
 		
         println('astNumChildren  = ' +  Ast.getNumChildren(astNode));		
         println('astChildren = ' + Ast.getChildren(astNode).map(node => node.getClass().getSimpleName()));		
