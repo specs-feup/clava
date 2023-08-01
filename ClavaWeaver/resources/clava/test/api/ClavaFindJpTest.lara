@@ -73,11 +73,11 @@ aspectdef JpCreateTest
 	end
 
 	// Check if loop has node
-	println("Has node? " + $loopJp.hasNode(astNode));
+	println("Has node? " + $loopJp.getHasNode(astNode));
 
 	// Create join point
 	//var $newLoopJp = ClavaJoinPoints.create(astNode);
-	var $newLoopJp = JoinPoints.getInstance().toJoinPoint(astNode);	
+	var $newLoopJp = JoinPoints.toJoinPoint(astNode);	
 
 	println("Are JPs equal? " + $newLoopJp.equals($loopJp));
 end
