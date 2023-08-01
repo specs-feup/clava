@@ -1967,21 +1967,21 @@ export class Param extends Vardecl {
 }
 export var StorageClass;
 (function (StorageClass) {
-    StorageClass[StorageClass["AUTO"] = 0] = "AUTO";
-    StorageClass[StorageClass["EXTERN"] = 1] = "EXTERN";
-    StorageClass[StorageClass["NONE"] = 2] = "NONE";
-    StorageClass[StorageClass["PRIVATE_EXTERN"] = 3] = "PRIVATE_EXTERN";
-    StorageClass[StorageClass["REGISTER"] = 4] = "REGISTER";
-    StorageClass[StorageClass["STATIC"] = 5] = "STATIC";
+    StorageClass["AUTO"] = "auto";
+    StorageClass["EXTERN"] = "extern";
+    StorageClass["NONE"] = "none";
+    StorageClass["PRIVATE_EXTERN"] = "private_extern";
+    StorageClass["REGISTER"] = "register";
+    StorageClass["STATIC"] = "static";
 })(StorageClass || (StorageClass = {}));
 export var Relation;
 (function (Relation) {
-    Relation[Relation["EQ"] = 0] = "EQ";
-    Relation[Relation["GE"] = 1] = "GE";
-    Relation[Relation["GT"] = 2] = "GT";
-    Relation[Relation["LE"] = 3] = "LE";
-    Relation[Relation["LT"] = 4] = "LT";
-    Relation[Relation["NE"] = 5] = "NE";
+    Relation["EQ"] = "eq";
+    Relation["GE"] = "ge";
+    Relation["GT"] = "gt";
+    Relation["LE"] = "le";
+    Relation["LT"] = "lt";
+    Relation["NE"] = "ne";
 })(Relation || (Relation = {}));
 const JoinpointMapper = {
     joinpoint: Joinpoint,

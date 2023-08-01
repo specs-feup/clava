@@ -2059,21 +2059,21 @@ export class Param extends Vardecl {
 }
 
 export enum StorageClass {
-  AUTO,
-  EXTERN,
-  NONE,
-  PRIVATE_EXTERN,
-  REGISTER,
-  STATIC,
+  AUTO = "auto",
+  EXTERN = "extern",
+  NONE = "none",
+  PRIVATE_EXTERN = "private_extern",
+  REGISTER = "register",
+  STATIC = "static",
 }
 
 export enum Relation {
-  EQ,
-  GE,
-  GT,
-  LE,
-  LT,
-  NE,
+  EQ = "eq",
+  GE = "ge",
+  GT = "gt",
+  LE = "le",
+  LT = "lt",
+  NE = "ne",
 }
 
 const JoinpointMapper: JoinpointMapperType = {
