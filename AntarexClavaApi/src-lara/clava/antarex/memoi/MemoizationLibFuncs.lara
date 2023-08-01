@@ -41,16 +41,16 @@ function getMemoType($vtype) {
   // var typeKind = $vtype.kind;
   
   // if (typeKind === "BuiltinType") return $vtype.code;
-  if ($vtype.astIsInstance("BuiltinType")) return $vtype.code;
+  if ($vtype.getAstIsInstance("BuiltinType")) return $vtype.code;
   
   //if (typeKind === "TypedefType") {
-  if ($vtype.astIsInstance("TypedefType")) {
+  if ($vtype.getAstIsInstance("TypedefType")) {
     var $unwrappedType = $vtype.unwrap;
     if ($unwrappedType !== undefined) return getMemoType($unwrappedType);
   }
   else
     // if (typeKind === "QualType")
-     if ($vtype.astIsInstance("QualType"))
+     if ($vtype.getAstIsInstance("QualType"))
        return getMemoType($vtype.astChild(0)); // TYPE const
   return "NO";
  }

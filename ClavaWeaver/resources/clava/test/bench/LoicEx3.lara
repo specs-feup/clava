@@ -43,10 +43,10 @@ function duplicate($vclass, idNewClass) {
  function duplicateMethod( $m, $newClass ) {
 
  function setNameConstructorDestructorMethod ($nm) {
-   if ($nm.astIsInstance("CXXConstructorDecl")) 
+   if ($nm.getAstIsInstance("CXXConstructorDecl")) 
      $nm.setName($newClass.name);
    else 
-     if ($nm.astIsInstance("CXXDestructorDecl")) 
+     if ($nm.getAstIsInstance("CXXDestructorDecl")) 
        $nm.setName("~" + $newClass.name);
    }  
     
