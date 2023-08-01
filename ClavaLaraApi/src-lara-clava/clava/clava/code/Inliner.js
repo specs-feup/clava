@@ -280,7 +280,7 @@ class Inliner {
     // For any calls inside $newNodes, add forward declarations before the function, if they have definition
     // TODO: this should be done for calls of functions that are on this file. For other files, the corresponding include
     // should be added
-    const $parentFunction = $call.ancestor("function");
+    const $parentFunction = $call.getAncestor("function");
     const addedDeclarations = new StringSet();
     for (const $newCall of Query.searchFrom($newNodes, "call")) {
       // Ignore functions that are part of the system headers
@@ -441,7 +441,7 @@ class Inliner {
         // Change storage class to extern
         $varDeclNoInit.storageClass = "extern";
 
-        $call.ancestor("function").insertBefore($varDeclNoInit);
+        $call.getAncestor("function").insertBefore($varDeclNoInit);
         continue;
       }
 
@@ -589,7 +589,7 @@ class Inliner {
       // Change storage class to extern
       $varDeclNoInit.storageClass = "extern";
 
-      $call.ancestor("function").insertBefore($varDeclNoInit);
+      $call.getAncestor("function").insertBefore($varDeclNoInit);
       return $varRef;
     }
 

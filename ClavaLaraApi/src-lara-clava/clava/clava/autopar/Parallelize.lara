@@ -46,7 +46,7 @@ Parallelize.forLoops = function($loops) {
 		$loop.insertBefore(ompPragma);
 		
 		// Add include
-		$loop.ancestor("file").addInclude("omp.h",true);
+		$loop.getAncestor("file").addInclude("omp.h",true);
 	}
 	*/
 	
@@ -80,7 +80,7 @@ Parallelize.forLoopsAsText = function($loops, outputFolder) {
 		}
 
 
-		var $file = $loop.ancestor("file");
+		var $file = $loop.getAncestor("file");
 		if($file === undefined)
 		{
 			println("Could not find a file associated with loop@"+$loop.location);

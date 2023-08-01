@@ -54,7 +54,7 @@ class MpiScatterGatherLoop {
    */
   execute() {
     var $mainFunction = ClavaCode.getFunctionDefinition("main", true);
-    var $mainFile = $mainFunction.ancestor("file");
+    var $mainFile = $mainFunction.getAncestor("file");
 
     // Add include
     $mainFile.addInclude("mpi.h");

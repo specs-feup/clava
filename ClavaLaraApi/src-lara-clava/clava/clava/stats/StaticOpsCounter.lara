@@ -142,7 +142,7 @@ StaticOpsCounter.prototype.count = function (
 
     var $function = $function.instanceOf("function")
         ? $function
-        : $function.ancestor("function");
+        : $function.getAncestor("function");
 
     if ($function === undefined) {
         PrintOnce.message(

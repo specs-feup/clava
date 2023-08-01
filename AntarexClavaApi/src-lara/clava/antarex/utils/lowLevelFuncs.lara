@@ -12,14 +12,14 @@ import antarex.utils.sysfile;
   @return the file of an ast object.
 */
 function getFileOf($vtree){
-    return $vtree.ancestor("file");
+    return $vtree.getAncestor("file");
 }
 /**
   @return the function, the method or undefined of a statement ($stmt).
 */
 function getFunctionOrMethod($stmt){
-    var $obj = $stmt.ancestor("function");
-    if ($obj === undefined) $obj = $stmt.ancestor("method");
+    var $obj = $stmt.getAncestor("function");
+    if ($obj === undefined) $obj = $stmt.getAncestor("method");
     return $obj;
 }
 

@@ -126,7 +126,7 @@ class ClavaCode {
     }
 
     // Go back until it finds the function body
-    var $currentScope = $statement.ancestor("scope");
+    var $currentScope = $statement.getAncestor("scope");
 
     while ($currentScope !== undefined) {
       var $scopeOwner = $currentScope.owner;
@@ -164,10 +164,10 @@ class ClavaCode {
         var $singleCall = calls[0];
 
         // Recursively call the function on the call statement
-        return ClavaCode.isExecutedOnce($singleCall.ancestor("statement"));
+        return ClavaCode.isExecutedOnce($singleCall.getAncestor("statement"));
       }
 
-      $currentScope = $currentScope.ancestor("scope");
+      $currentScope = $currentScope.getAncestor("scope");
     }
 
     // Could not find the scope of the statement. Is it outside of a function?

@@ -78,21 +78,21 @@ aspectdef retReductionOpVar
 	{
 		if (exprvarrefset[j].name === candidateVar.name)
 		{
-			if (typeof(exprvarrefset[j].ancestor('expression')) !== 'undefined' && exprvarrefset[j].ancestor('expression').astName === 'ParenExpr')
+			if (typeof(exprvarrefset[j].getAncestor('expression')) !== 'undefined' && exprvarrefset[j].getAncestor('expression').astName === 'ParenExpr')
 			{
 				candidateVarOp = [];
 				break; // candidateVar should not be in any ParenExpr
 			}
 
 			var op = null;
-			if (typeof(exprvarrefset[j].ancestor('unaryOp')) !== 'undefined')
-				op = exprvarrefset[j].ancestor('unaryOp').kind;
-			else if (typeof(exprvarrefset[j].ancestor('binaryOp')) !== 'undefined')
-				op = exprvarrefset[j].ancestor('binaryOp').kind +
-					(( exprvarrefset[j].ancestor('binaryOp').kind !== 'assign' && exprvarrefset[j].ancestor('binaryOp').isAssignment === true) ? '' :'');
+			if (typeof(exprvarrefset[j].getAncestor('unaryOp')) !== 'undefined')
+				op = exprvarrefset[j].getAncestor('unaryOp').kind;
+			else if (typeof(exprvarrefset[j].getAncestor('binaryOp')) !== 'undefined')
+				op = exprvarrefset[j].getAncestor('binaryOp').kind +
+					(( exprvarrefset[j].getAncestor('binaryOp').kind !== 'assign' && exprvarrefset[j].getAncestor('binaryOp').isAssignment === true) ? '' :'');
 			if (op === 'sub' &&
-				typeof(exprvarrefset[j].ancestor('binaryOp').right.vardecl) !== 'undefined' &&
-				exprvarrefset[j].ancestor('binaryOp').right.vardecl.name === candidateVar.name
+				typeof(exprvarrefset[j].getAncestor('binaryOp').right.vardecl) !== 'undefined' &&
+				exprvarrefset[j].getAncestor('binaryOp').right.vardecl.name === candidateVar.name
 				)
 			{
 				candidateVarOp = [];

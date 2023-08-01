@@ -13,7 +13,7 @@ var GlobalVariable = function(varName, $type, initValue) {
  */
 GlobalVariable.prototype.getRef = function($reference) {
 	// Check file for the reference point
-	var $file = $reference.ancestor('file');
+	var $file = $reference.getAncestor('file');
 	if($file === undefined) {
 		println("GlobalVariable.getRef: Could not find the file for the reference point " + $reference.location);
 		return undefined;

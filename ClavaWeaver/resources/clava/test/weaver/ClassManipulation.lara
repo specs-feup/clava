@@ -57,7 +57,7 @@ function testCopyMethodDefinition()  {
 	// If $newMethod.declarationJp is called before adding $newClass to the program, 
 	// it will returned undefined due to Clava caching queries to declarationJp/definitionJp 
 	println("METHOD DECL BEFORE ADDING CLASS: " + $newMethod.declarationJp);		
-	$class.ancestor("file").insertAfter($newClass);
+	$class.getAncestor("file").insertAfter($newClass);
 	println("METHOD DECL AFTER ADDING CLASS: " + $newMethod.declarationJp);	
 
 	

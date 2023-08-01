@@ -136,7 +136,7 @@ aspectdef Hdf5Types
 	//apply
 	
 	for(var $record of $records) {
-		var $file = $record.ancestor("file");
+		var $file = $record.getAncestor("file");
 		
 		//recordCounter++;
 		var className = $record.name + "Type";

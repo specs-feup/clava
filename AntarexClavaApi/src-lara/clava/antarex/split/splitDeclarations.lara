@@ -198,7 +198,7 @@ function getImportedIncludes($vFile, id)
 */
 function ImportIncludes($aStmt, $afile)
 {
-   var Includes = getImportedIncludes( $aStmt.ancestor("file"), $aStmt.astId);
+   var Includes = getImportedIncludes( $aStmt.getAncestor("file"), $aStmt.astId);
    // Adding declaration in the original file.
    for (f= Includes.length; f >0; f--) {
        $afile.insertBefore(Includes[f-1].code);

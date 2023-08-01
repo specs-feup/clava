@@ -24,7 +24,7 @@ Timer.prototype.time = function($start, prefix, $end) {
         return;
     }
 
-    var $file = $start.ancestor('file');
+    var $file = $start.getAncestor('file');
 
     if($file === undefined) {
 		println("Could not find the corresponding file of the given joinpoint: " + $jp);
@@ -55,7 +55,7 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
         $end = $start;
     }
 
-    $file = $start.ancestor("file");
+    $file = $start.getAncestor("file");
 
 
     // Add include
@@ -108,7 +108,7 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
 	}
 	/*
 	// If $start/$end parent do not have a statement ancestor, use insertBegin/End instead
-	if($start.ancestor("statement") === undefined || $end.ancestor("statement") === undefined) {
+	if($start.getAncestor("statement") === undefined || $end.getAncestor("statement") === undefined) {
 
 		// Insert code
 		$start.insertBegin(codeTic);
@@ -154,7 +154,7 @@ Timer.prototype._time_c = function($start, prefix, $end) {
         $end = $start;
     }
 
-    $file = $start.ancestor("file");
+    $file = $start.getAncestor("file");
 
     
     var codeBefore, codeAfter, timeIntervalVar;
@@ -240,7 +240,7 @@ Timer.prototype._time_c = function($start, prefix, $end) {
 	}
 /*	
 	// If $start/$end parent do not have a statement ancestor, use insertBegin/End instead
-	if($start.ancestor("statement") === undefined || $end.ancestor("statement") === undefined) {
+	if($start.getAncestor("statement") === undefined || $end.getAncestor("statement") === undefined) {
 
 		// Insert code
 		$start.insertBegin(codeBefore);

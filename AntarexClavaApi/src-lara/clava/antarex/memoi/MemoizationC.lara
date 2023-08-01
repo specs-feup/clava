@@ -87,7 +87,7 @@ end
     apply
       if ($call.name === cfunc) {	
         $function.exec setName(getFuncWrapperName(cfunc));
-        var $file = $call.ancestor('file');
+        var $file = $call.getAncestor('file');
         $file.exec addInclude(FILENAME_MEMOI_WRAPPERS, false); 
     }
   end

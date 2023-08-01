@@ -32,7 +32,7 @@ aspectdef LoopInductionVariables
 
 			if (
 				$binaryOp.isInsideLoopHeader === false &&
-				$binaryOp.ancestor('if') === undefined && 
+				$binaryOp.getAncestor('if') === undefined && 
 				$binaryOp.descendantsAndSelf("arrayAccess").length === 0 && 
 				$binaryOp.descendantsAndSelf("call").length === 0 && 
 				$binaryOp.descendantsAndSelf("unaryOp").length === 0 &&

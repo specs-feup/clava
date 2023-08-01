@@ -49,7 +49,7 @@ Logger.prototype.log = function($jp, insertBefore) {
         return;
     }
 
-    var $file = $function.ancestor('file');
+    var $file = $function.getAncestor('file');
 
 	this._isCxx = $file.isCxx;
 	
@@ -121,7 +121,7 @@ Logger.prototype._logSetup = function($jp, insertBefore) {
 
     this.insertBefore = (insertBefore === undefined) ? false : insertBefore;
 	// return $function
-    return $jp.ancestor("function");
+    return $jp.getAncestor("function");
 }
 
 Logger.prototype._log_cxx = function($file, $function) {

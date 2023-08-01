@@ -278,8 +278,8 @@ class CfgBuilder {
    */
   #connectBreakNode(node) {
     const $breakStmt = node.data().nodeStmt;
-    const $loop = $breakStmt.ancestor("loop");
-    const $switch = $breakStmt.ancestor("switch");
+    const $loop = $breakStmt.getAncestor("loop");
+    const $switch = $breakStmt.getAncestor("switch");
     const loopDepth = $loop !== undefined ? $loop.depth : -1;
     const switchDepth = $switch !== undefined ? $switch.depth : -1;
     let afterNode = undefined;
@@ -299,7 +299,7 @@ class CfgBuilder {
    */
   #connectContinueNode(node) {
     const $continueStmt = node.data().nodeStmt;
-    const $loop = $continueStmt.ancestor("loop");
+    const $loop = $continueStmt.getAncestor("loop");
 
     const $afterStmt = $loop.kind === "for" ? $loop.step : $loop.cond;
     const afterNode = this.#nodes.get($afterStmt.astId) ?? this.#endNode;
@@ -331,7 +331,7 @@ class CfgBuilder {
    */
   #connectCaseNode(node) {
     const $caseStmt = node.data().case;
-    const $switchStmt = $caseStmt.ancestor("switch");
+    const $switchStmt = $caseStmt.getAncestor("switch");
 
     const numCases = $switchStmt.cases.length;
     const hasIntermediateDefault =

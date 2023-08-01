@@ -92,7 +92,7 @@ aspectdef BuildStaticCallGraph
    if ($def !== undefined) { 
 	  if (! $def.isInline)
 	    {
-	      target = getIdId($def.ancestor("file").name, $def.line);
+	      target = getIdId($def.getAncestor("file").name, $def.line);
 	      callGraph.inc(source, target);
 	    }
     }
