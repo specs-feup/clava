@@ -1,6 +1,7 @@
 import lara.Io;
 import lara.Strings;
 import clava.ClavaJoinPoints;
+import lara.util.IdGenerator;
 
 
 /**
