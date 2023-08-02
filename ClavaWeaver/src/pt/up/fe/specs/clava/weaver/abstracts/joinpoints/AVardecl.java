@@ -258,31 +258,7 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
-     * If vardecl already has an initialization, removes it (also removes const if present). Otherwise does nothing
-     */
-    public void removeInitImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action removeInit not implemented ");
-    }
-
-    /**
-     * If vardecl already has an initialization, removes it (also removes const if present). Otherwise does nothing
-     */
-    public final void removeInit() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "removeInit", this, Optional.empty());
-        	}
-        	this.removeInitImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "removeInit", this, Optional.empty());
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "removeInit", e);
-        }
-    }
-
-    /**
-     * If vardecl already has an initialization, removes it. Otherwise does nothing
+     * If vardecl already has an initialization, removes it.
      * @param removeConst 
      */
     public void removeInitImpl(boolean removeConst) {
@@ -290,7 +266,7 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
-     * If vardecl already has an initialization, removes it. Otherwise does nothing
+     * If vardecl already has an initialization, removes it.
      * @param removeConst 
      */
     public final void removeInit(boolean removeConst) {
@@ -1412,7 +1388,6 @@ public abstract class AVardecl extends ADeclarator {
         this.aDeclarator.fillWithActions(actions);
         actions.add("void setInit(expression)");
         actions.add("void setInit(String)");
-        actions.add("void removeInit()");
         actions.add("void removeInit(boolean)");
         actions.add("varref varref()");
         actions.add("void setStorageClass(String)");

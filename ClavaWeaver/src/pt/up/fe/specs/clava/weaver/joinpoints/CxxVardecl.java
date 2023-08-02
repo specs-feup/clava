@@ -62,7 +62,7 @@ public class CxxVardecl extends AVardecl {
     @Override
     public void setInitImpl(AExpression init) {
         if (init == null) {
-            removeInitImpl();
+            removeInitImpl(true);
         }
 
         // if (init instanceof AExpression) {
@@ -76,15 +76,10 @@ public class CxxVardecl extends AVardecl {
     @Override
     public void setInitImpl(String init) {
         if (init == null) {
-            removeInitImpl();
+            removeInitImpl(true);
         }
 
         varDecl.setInit(CxxWeaver.getFactory().literalExpr(init, varDecl.getType()));
-    }
-
-    @Override
-    public void removeInitImpl() {
-        removeInit(true);
     }
 
     @Override

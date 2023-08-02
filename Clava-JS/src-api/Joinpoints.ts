@@ -2019,9 +2019,9 @@ export class Vardecl extends Declarator {
    */
   set storageClass(value: string) { this._javaObject.setStorageClass(unwrapJoinPoint(value)); }
   /**
-   * If vardecl already has an initialization, removes it (also removes const if present). Otherwise does nothing
+   * If vardecl already has an initialization, removes it.
    */
-  removeInit(): void { return wrapJoinPoint(this._javaObject.removeInit()); }
+  removeInit(removeConst: boolean = true): void { return wrapJoinPoint(this._javaObject.removeInit(unwrapJoinPoint(removeConst))); }
   /**
    * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
    */

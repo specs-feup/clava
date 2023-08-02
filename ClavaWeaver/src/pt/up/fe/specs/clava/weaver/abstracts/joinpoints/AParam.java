@@ -1023,15 +1023,7 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
-     * If vardecl already has an initialization, removes it (also removes const if present). Otherwise does nothing
-     */
-    @Override
-    public void removeInitImpl() {
-        this.aVardecl.removeInitImpl();
-    }
-
-    /**
-     * If vardecl already has an initialization, removes it. Otherwise does nothing
+     * If vardecl already has an initialization, removes it.
      * @param removeConst 
      */
     @Override

@@ -71932,16 +71932,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "If vardecl already has an initialization, removes it (also removes const if present). Otherwise does nothing",
-						"children": [
-									{
-										"type": "void",
-										"name": "removeInit"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "If vardecl already has an initialization, removes it. Otherwise does nothing",
+						"tooltip": "If vardecl already has an initialization, removes it.",
 						"children": [
 									{
 										"type": "void",
@@ -71950,7 +71941,7 @@
 									{
 										"type": "boolean",
 										"name": "removeConst",
-										"defaultValue": ""
+										"defaultValue": "true"
 									}]
 					},
 					{
@@ -104453,16 +104444,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "If vardecl already has an initialization, removes it (also removes const if present). Otherwise does nothing",
-						"children": [
-									{
-										"type": "void",
-										"name": "removeInit"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "If vardecl already has an initialization, removes it. Otherwise does nothing",
+						"tooltip": "If vardecl already has an initialization, removes it.",
 						"children": [
 									{
 										"type": "void",
@@ -104471,7 +104453,7 @@
 									{
 										"type": "boolean",
 										"name": "removeConst",
-										"defaultValue": ""
+										"defaultValue": "true"
 									}]
 					},
 					{
