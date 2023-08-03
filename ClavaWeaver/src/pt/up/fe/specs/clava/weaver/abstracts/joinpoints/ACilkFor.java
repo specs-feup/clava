@@ -1209,23 +1209,6 @@ public abstract class ACilkFor extends ALoop {
 
     /**
      * Replaces this join point with a comment with the same contents as .code
-     */
-    @Override
-    public AJoinPoint toCommentImpl() {
-        return this.aLoop.toCommentImpl();
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return this.aLoop.toCommentImpl(prefix);
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
      */
@@ -1357,16 +1340,6 @@ public abstract class ACilkFor extends ALoop {
     @Override
     public void interchangeImpl(ALoop otherLoop) {
         this.aLoop.interchangeImpl(otherLoop);
-    }
-
-    /**
-     * Applies loop tiling to this loop
-     * @param blockSize 
-     * @param reference 
-     */
-    @Override
-    public AStatement tileImpl(String blockSize, AStatement reference) {
-        return this.aLoop.tileImpl(blockSize, reference);
     }
 
     /**

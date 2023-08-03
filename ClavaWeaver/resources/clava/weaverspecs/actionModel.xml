@@ -87,13 +87,9 @@
 		<parameter name="node" type="Joinpoint" />
 	</action>
 	
-	<action name="toComment" return="joinpoint" tooltip="Replaces this join point with a comment with the same contents as .code"/>	
-	<action name="toComment" return="joinpoint" tooltip="Replaces this join point with a comment with the same contents as .code">
-		<parameter name="prefix" type="String" />
-	</action>	
 	<action name="toComment" return="joinpoint" tooltip="Replaces this join point with a comment with the same contents as .code">	
-		<parameter name="prefix" type="String" />
-		<parameter name="suffix" type="String" />
+		<parameter name="prefix" type="String" default='""' />
+		<parameter name="suffix" type="String" default='""' />
 	</action>	
 	
 	<!-- 
@@ -146,35 +142,22 @@
 
 	<action name="addExtraIncludeFromGit" class="program" tooltip="Adds a path based on a git repository to an include that the current program depends on">
 		<parameter name="gitRepo" type="String" />
-	</action>
-	
-	<action name="addExtraIncludeFromGit" class="program" tooltip="Adds a path based on a git repository to an include that the current program depends on">
-		<parameter name="gitRepo" type="String" />
-		<parameter name="path" type="String" />
+		<parameter name="path" type="String" default="null" />
 	</action>
 
 	<action name="addExtraSource" class="program" tooltip="Adds a path to a source that the current program depends on">
 		<parameter name="path" type="String" />
 	</action>
-	
+
 	<action name="addExtraSourceFromGit" class="program" tooltip="Adds a path based on a git repository to a source that the current program depends on">
 		<parameter name="gitRepo" type="String" />
-	</action>
-	
-	<action name="addExtraSourceFromGit" class="program" tooltip="Adds a path based on a git repository to a source that the current program depends on">
-		<parameter name="gitRepo" type="String" />
-		<parameter name="path" type="String" />
+		<parameter name="path" type="String" default="null" />
 	</action>	
 
 	<action name="addProjectFromGit" class="program" tooltip="Adds a path based on a git repository to a project that the current program depends on">
 		<parameter name="gitRepo" type="String" />
 		<parameter name="libs" type="String[]" />
-	</action>
-
-	<action name="addProjectFromGit" class="program" tooltip="Adds a path based on a git repository to a project that the current program depends on">
-		<parameter name="gitRepo" type="String" />
-		<parameter name="libs" type="String[]" />
-		<parameter name="path" type="String" />
+		<parameter name="path" type="String" default="null"/>
 	</action>
 
 	<action name="addExtraLib" class="program" tooltip="Adds a library (e.g., -pthreads) that the current program depends on">
@@ -348,14 +331,9 @@
 	<action name="addLocal" class="scope" return="joinpoint" tooltip="Adds a new local variable to this scope">
 		<parameter name="name" type="String" />
 		<parameter name="type" type="joinpoint" />
-		<parameter name="initValue" type="String" />
+		<parameter name="initValue" type="String" default="null" />
 	</action>
 	
-	<action name="addLocal" class="scope" return="joinpoint" tooltip="Overload which does not initialize the local variable">
-		<parameter name="name" type="String" />
-		<parameter name="type" type="joinpoint" />
-	</action>
-
 	<action name="setNaked" class="scope" tooltip="Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)">
 		<parameter name="isNaked" type="Boolean" />
 	</action>	
@@ -529,15 +507,10 @@
 		<parameter name="otherLoop" type="loop" />
 	</action>
 	
-	<action name="tile" class="loop" return="statement" tooltip="Applies loop tiling to this loop">
-		<parameter name="blockSize" type="String" />
-		<parameter name="reference" type="statement" />
-	</action>
-	
 	<action name="tile" class="loop" return="statement" tooltip="Applies loop tiling to this loop.">
 		<parameter name="blockSize" type="String" />
 		<parameter name="reference" type="statement" />
-		<parameter name="useTernary" type="Boolean"/>
+		<parameter name="useTernary" type="Boolean" default="true"/>
 	</action>
 	
 	<action name="setCondRelation" class="loop" tooltip="Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge">
@@ -629,9 +602,8 @@
 	<action name="setCollapse" class="omp" tooltip="Sets the value of the collapse clause of an OpenMP pragma">
 		<parameter name="newExpr" type="Integer" />
 	</action>	
-	<action name="setOrdered" class="omp" tooltip="Sets an ordered clause without parameters in the OpenMP pragma"/>
 	<action name="setOrdered" class="omp" tooltip="Sets the value of the ordered clause of an OpenMP pragma">
-		<parameter name="newExpr" type="String" />
+		<parameter name="parameters" type="String" default="null" />
 	</action>
 	
 	<!-- COMMENT -->
@@ -658,11 +630,8 @@
 		<parameter name="init" type="String" />
 	</action>
 
-	<action name="removeInit" class="vardecl" tooltip="If vardecl already has an initialization, removes it (also removes const if present). Otherwise does nothing">
-	</action>	
-
-	<action name="removeInit" class="vardecl" tooltip="If vardecl already has an initialization, removes it. Otherwise does nothing">
-		<parameter name="removeConst" type="boolean" />
+	<action name="removeInit" class="vardecl" tooltip="If vardecl already has an initialization, removes it.">
+		<parameter name="removeConst" type="boolean" default="true" />
 	</action>	
 
 	<action name="varref" class="vardecl" return="varref" tooltip="Creates a new varref based on this vardecl">
@@ -699,7 +668,7 @@
 		<parameter name="templateArgTypes" type="type[]" />
 	</action>
 	
-	<action name="setTemplateArgsTypes" class="type" tooltip="Sets a single template argument type of a template type">
+	<action name="setTemplateArgType" class="type" tooltip="Sets a single template argument type of a template type">
 		<parameter name="index" type="Integer" />
 		<parameter name="templateArgType" type="type" />
 	</action>

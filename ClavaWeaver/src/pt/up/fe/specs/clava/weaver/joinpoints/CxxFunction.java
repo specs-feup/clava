@@ -201,11 +201,6 @@ public class CxxFunction extends AFunction {
         return (ABody) CxxJoinpoints.create(function.getBody().get());
     }
 
-    // TODO check if the new name clashes with other symbol?
-    public AFunction cloneImpl(String newName) {
-        return cloneImpl(newName, true);
-    }
-
     @Override
     public AFunction cloneImpl(String newName, Boolean insert) {
         /* make clone and insert after the function of this join point */

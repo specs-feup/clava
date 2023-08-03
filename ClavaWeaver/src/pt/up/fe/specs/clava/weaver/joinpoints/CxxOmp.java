@@ -276,12 +276,6 @@ public class CxxOmp extends AOmp {
     }
 
     @Override
-    public void setOrderedImpl() {
-        ompPragma.clauses().setOrdered();
-
-    }
-
-    @Override
     public void setOrderedImpl(String newExpr) {
         ompPragma.clauses().setOrdered(newExpr);
     }

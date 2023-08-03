@@ -262,12 +262,6 @@ public class CxxScope extends AScope {
     }
 
     @Override
-    public AJoinPoint addLocalImpl(String name, AJoinPoint type) {
-
-        return addLocalImpl(name, type, null);
-    }
-
-    @Override
     public AJoinPoint addLocalImpl(String name, AJoinPoint type, String initValue) {
 
         // Check if joinpoint is a CxxType

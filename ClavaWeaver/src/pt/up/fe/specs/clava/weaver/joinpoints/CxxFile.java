@@ -132,17 +132,9 @@ public class CxxFile extends AFile {
         tunit.addInclude(name, isAngled);
     }
 
-    public void addIncludeImpl(String name) {
-        addIncludeImpl(name, false);
-    }
-
     @Override
     public void addCIncludeImpl(String name, boolean isAngled) {
         tunit.addCInclude(name, isAngled);
-    }
-
-    public void addCIncludeImpl(String name) {
-        addCIncludeImpl(name, false);
     }
 
     @Override

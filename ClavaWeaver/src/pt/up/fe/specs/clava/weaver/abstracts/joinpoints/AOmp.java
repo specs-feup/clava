@@ -1026,49 +1026,25 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Sets an ordered clause without parameters in the OpenMP pragma
-     */
-    public void setOrderedImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action setOrdered not implemented ");
-    }
-
-    /**
-     * Sets an ordered clause without parameters in the OpenMP pragma
-     */
-    public final void setOrdered() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setOrdered", this, Optional.empty());
-        	}
-        	this.setOrderedImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setOrdered", this, Optional.empty());
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setOrdered", e);
-        }
-    }
-
-    /**
      * Sets the value of the ordered clause of an OpenMP pragma
-     * @param newExpr 
+     * @param parameters 
      */
-    public void setOrderedImpl(String newExpr) {
+    public void setOrderedImpl(String parameters) {
         throw new UnsupportedOperationException(get_class()+": Action setOrdered not implemented ");
     }
 
     /**
      * Sets the value of the ordered clause of an OpenMP pragma
-     * @param newExpr 
+     * @param parameters 
      */
-    public final void setOrdered(String newExpr) {
+    public final void setOrdered(String parameters) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setOrdered", this, Optional.empty(), newExpr);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setOrdered", this, Optional.empty(), parameters);
         	}
-        	this.setOrderedImpl(newExpr);
+        	this.setOrderedImpl(parameters);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setOrdered", this, Optional.empty(), newExpr);
+        		eventTrigger().triggerAction(Stage.END, "setOrdered", this, Optional.empty(), parameters);
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setOrdered", e);
@@ -1894,23 +1870,6 @@ public abstract class AOmp extends APragma {
 
     /**
      * Replaces this join point with a comment with the same contents as .code
-     */
-    @Override
-    public AJoinPoint toCommentImpl() {
-        return this.aPragma.toCommentImpl();
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return this.aPragma.toCommentImpl(prefix);
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
      */
@@ -2147,7 +2106,6 @@ public abstract class AOmp extends APragma {
         actions.add("void setScheduleModifiers(String[])");
         actions.add("void setCollapse(String)");
         actions.add("void setCollapse(Integer)");
-        actions.add("void setOrdered()");
         actions.add("void setOrdered(String)");
     }
 

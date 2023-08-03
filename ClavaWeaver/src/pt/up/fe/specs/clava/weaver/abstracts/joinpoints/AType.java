@@ -583,8 +583,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * @param index 
      * @param templateArgType 
      */
-    public void setTemplateArgsTypesImpl(Integer index, AType templateArgType) {
-        throw new UnsupportedOperationException(get_class()+": Action setTemplateArgsTypes not implemented ");
+    public void setTemplateArgTypeImpl(Integer index, AType templateArgType) {
+        throw new UnsupportedOperationException(get_class()+": Action setTemplateArgType not implemented ");
     }
 
     /**
@@ -592,17 +592,17 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * @param index 
      * @param templateArgType 
      */
-    public final void setTemplateArgsTypes(Integer index, AType templateArgType) {
+    public final void setTemplateArgType(Integer index, AType templateArgType) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgsTypes", this, Optional.empty(), index, templateArgType);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgType", this, Optional.empty(), index, templateArgType);
         	}
-        	this.setTemplateArgsTypesImpl(index, templateArgType);
+        	this.setTemplateArgTypeImpl(index, templateArgType);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setTemplateArgsTypes", this, Optional.empty(), index, templateArgType);
+        		eventTrigger().triggerAction(Stage.END, "setTemplateArgType", this, Optional.empty(), index, templateArgType);
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setTemplateArgsTypes", e);
+        	throw new ActionException(get_class(), "setTemplateArgType", e);
         }
     }
 
@@ -835,7 +835,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     protected void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
         actions.add("void setTemplateArgsTypes(type[])");
-        actions.add("void setTemplateArgsTypes(Integer, type)");
+        actions.add("void setTemplateArgType(Integer, type)");
         actions.add("void setDesugar(type)");
         actions.add("boolean setTypeFieldByValueRecursive(Object, Object)");
         actions.add("type setUnderlyingType(type, type)");

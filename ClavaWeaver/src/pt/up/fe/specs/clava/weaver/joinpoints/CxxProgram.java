@@ -243,21 +243,6 @@ public class CxxProgram extends AProgram {
     }
 
     @Override
-    public void addExtraIncludeFromGitImpl(String gitRepo) {
-        addExtraIncludeFromGitImpl(gitRepo, null);
-    }
-
-    @Override
-    public void addExtraSourceFromGitImpl(String gitRepo) {
-        addExtraSourceFromGitImpl(gitRepo, null);
-    }
-
-    @Override
-    public void addProjectFromGitImpl(String gitRepo, String[] libs) {
-        addProjectFromGitImpl(gitRepo, libs, null);
-    }
-
-    @Override
     public AJoinPoint addFileFromPathImpl(Object filepath) {
         File file = getFile(filepath);
 

@@ -181,7 +181,7 @@ public class CxxType extends AType {
     }
 
     @Override
-    public void setTemplateArgsTypesImpl(Integer index, AType templateArgType) {
+    public void setTemplateArgTypeImpl(Integer index, AType templateArgType) {
         type.setTemplateArgumentType(index, (Type) templateArgType.getNode());
     }
 

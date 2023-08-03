@@ -1044,23 +1044,6 @@ public abstract class AArrayType extends AType {
 
     /**
      * Replaces this join point with a comment with the same contents as .code
-     */
-    @Override
-    public AJoinPoint toCommentImpl() {
-        return this.aType.toCommentImpl();
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return this.aType.toCommentImpl(prefix);
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
      */
@@ -1128,8 +1111,8 @@ public abstract class AArrayType extends AType {
      * @param templateArgType 
      */
     @Override
-    public void setTemplateArgsTypesImpl(Integer index, AType templateArgType) {
-        this.aType.setTemplateArgsTypesImpl(index, templateArgType);
+    public void setTemplateArgTypeImpl(Integer index, AType templateArgType) {
+        this.aType.setTemplateArgTypeImpl(index, templateArgType);
     }
 
     /**

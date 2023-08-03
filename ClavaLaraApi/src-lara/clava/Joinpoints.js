@@ -372,7 +372,7 @@ export class Joinpoint extends LaraJoinPoint {
     /**
      * Replaces this join point with a comment with the same contents as .code
      */
-    toComment() { return wrapJoinPoint(this._javaObject.toComment()); }
+    toComment(prefix = "", suffix = "") { return wrapJoinPoint(this._javaObject.toComment(unwrapJoinPoint(prefix), unwrapJoinPoint(suffix))); }
 }
 export class Attribute extends Joinpoint {
     get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
@@ -736,7 +736,7 @@ export class Program extends Joinpoint {
     /**
      * Adds a path based on a git repository to an include that the current program depends on
      */
-    addExtraIncludeFromGit(gitRepo) { return wrapJoinPoint(this._javaObject.addExtraIncludeFromGit(unwrapJoinPoint(gitRepo))); }
+    addExtraIncludeFromGit(gitRepo, path) { return wrapJoinPoint(this._javaObject.addExtraIncludeFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(path))); }
     /**
      * Adds a library (e.g., -pthreads) that the current program depends on
      */
@@ -748,7 +748,7 @@ export class Program extends Joinpoint {
     /**
      * Adds a path based on a git repository to a source that the current program depends on
      */
-    addExtraSourceFromGit(gitRepo) { return wrapJoinPoint(this._javaObject.addExtraSourceFromGit(unwrapJoinPoint(gitRepo))); }
+    addExtraSourceFromGit(gitRepo, path) { return wrapJoinPoint(this._javaObject.addExtraSourceFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(path))); }
     /**
      * Adds a file join point to the current program
      */
@@ -760,7 +760,7 @@ export class Program extends Joinpoint {
     /**
      * Adds a path based on a git repository to a project that the current program depends on
      */
-    addProjectFromGit(gitRepo, libs) { return wrapJoinPoint(this._javaObject.addProjectFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(libs))); }
+    addProjectFromGit(gitRepo, libs, path) { return wrapJoinPoint(this._javaObject.addProjectFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(libs), unwrapJoinPoint(path))); }
     /**
      * Registers a function to be executed when the program exits
      */
@@ -909,6 +909,10 @@ export class Type extends Joinpoint {
      * Sets the desugared type of this type
      */
     setDesugar(desugaredType) { return wrapJoinPoint(this._javaObject.setDesugar(unwrapJoinPoint(desugaredType))); }
+    /**
+     * Sets a single template argument type of a template type
+     */
+    setTemplateArgType(index, templateArgType) { return wrapJoinPoint(this._javaObject.setTemplateArgType(unwrapJoinPoint(index), unwrapJoinPoint(templateArgType))); }
     /**
      * Sets the template argument types of a template type
      */
@@ -1425,7 +1429,9 @@ export class If extends Statement {
     set cond(value) { this._javaObject.setCond(unwrapJoinPoint(value)); }
     get condDecl() { return wrapJoinPoint(this._javaObject.getCondDecl()); }
     get else() { return wrapJoinPoint(this._javaObject.getElse()); }
+    set else(value) { this._javaObject.setElse(unwrapJoinPoint(value)); }
     get then() { return wrapJoinPoint(this._javaObject.getThen()); }
+    set then(value) { this._javaObject.setThen(unwrapJoinPoint(value)); }
     /**
      * Sets the condition of the if
      */
@@ -1459,6 +1465,10 @@ export class Loop extends Statement {
      * The statement of the loop condition
      */
     get cond() { return wrapJoinPoint(this._javaObject.getCond()); }
+    /**
+     * The statement of the loop condition
+     */
+    set cond(value) { this._javaObject.setCond(unwrapJoinPoint(value)); }
     get condRelation() { return wrapJoinPoint(this._javaObject.getCondRelation()); }
     set condRelation(value) { this._javaObject.setCondRelation(unwrapJoinPoint(value)); }
     get controlVar() { return wrapJoinPoint(this._javaObject.getControlVar()); }
@@ -1483,6 +1493,10 @@ export class Loop extends Statement {
      */
     get init() { return wrapJoinPoint(this._javaObject.getInit()); }
     /**
+     * The statement of the loop initialization
+     */
+    set init(value) { this._javaObject.setInit(unwrapJoinPoint(value)); }
+    /**
      * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
      */
     get initValue() { return wrapJoinPoint(this._javaObject.getInitValue()); }
@@ -1497,12 +1511,17 @@ export class Loop extends Statement {
     get iterations() { return wrapJoinPoint(this._javaObject.getIterations()); }
     get iterationsExpr() { return wrapJoinPoint(this._javaObject.getIterationsExpr()); }
     get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
+    set kind(value) { this._javaObject.setKind(unwrapJoinPoint(value)); }
     get nestedLevel() { return wrapJoinPoint(this._javaObject.getNestedLevel()); }
     get rank() { return wrapJoinPoint(this._javaObject.getRank()); }
     /**
      * The statement of the loop step
      */
     get step() { return wrapJoinPoint(this._javaObject.getStep()); }
+    /**
+     * The statement of the loop step
+     */
+    set step(value) { this._javaObject.setStep(unwrapJoinPoint(value)); }
     /**
      * The expression of the iteration step
      */
@@ -1556,9 +1575,9 @@ export class Loop extends Statement {
      */
     setStep(stepCode) { return wrapJoinPoint(this._javaObject.setStep(unwrapJoinPoint(stepCode))); }
     /**
-     * Applies loop tiling to this loop
+     * Applies loop tiling to this loop.
      */
-    tile(blockSize, reference) { return wrapJoinPoint(this._javaObject.tile(unwrapJoinPoint(blockSize), unwrapJoinPoint(reference))); }
+    tile(blockSize, reference, useTernary = true) { return wrapJoinPoint(this._javaObject.tile(unwrapJoinPoint(blockSize), unwrapJoinPoint(reference), unwrapJoinPoint(useTernary))); }
 }
 /**
  * Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)
@@ -1753,9 +1772,9 @@ export class Omp extends Pragma {
      */
     setNumThreads(newExpr) { return wrapJoinPoint(this._javaObject.setNumThreads(unwrapJoinPoint(newExpr))); }
     /**
-     * Sets an ordered clause without parameters in the OpenMP pragma
+     * Sets the value of the ordered clause of an OpenMP pragma
      */
-    setOrdered() { return wrapJoinPoint(this._javaObject.setOrdered()); }
+    setOrdered(parameters) { return wrapJoinPoint(this._javaObject.setOrdered(unwrapJoinPoint(parameters ?? null))); }
     /**
      * Sets the variables of a private clause of an OpenMP pragma
      */

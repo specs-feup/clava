@@ -119,8 +119,6 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("removeChildren()");
         actions.add("setFirstChild(AJoinPoint node)");
         actions.add("setLastChild(AJoinPoint node)");
-        actions.add("toComment()");
-        actions.add("toComment(String prefix)");
         actions.add("toComment(String prefix, String suffix)");
         actions.add("setInlineComments(String[] comments)");
         actions.add("setInlineComments(String comments)");
@@ -630,58 +628,6 @@ public abstract class AJoinPoint extends JoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setLastChild", e);
-        }
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     */
-    public AJoinPoint toCommentImpl() {
-        throw new UnsupportedOperationException(get_class()+": Action toComment not implemented ");
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     */
-    public final AJoinPoint toComment() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "toComment", this, Optional.empty());
-        	}
-        	AJoinPoint result = this.toCommentImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "toComment", this, Optional.ofNullable(result));
-        	}
-        	return result;
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "toComment", e);
-        }
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    public AJoinPoint toCommentImpl(String prefix) {
-        throw new UnsupportedOperationException(get_class()+": Action toComment not implemented ");
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    public final AJoinPoint toComment(String prefix) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "toComment", this, Optional.empty(), prefix);
-        	}
-        	AJoinPoint result = this.toCommentImpl(prefix);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "toComment", this, Optional.ofNullable(result), prefix);
-        	}
-        	return result;
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "toComment", e);
         }
     }
 

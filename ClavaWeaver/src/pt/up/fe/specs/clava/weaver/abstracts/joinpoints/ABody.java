@@ -1139,23 +1139,6 @@ public abstract class ABody extends AScope {
 
     /**
      * Replaces this join point with a comment with the same contents as .code
-     */
-    @Override
-    public AJoinPoint toCommentImpl() {
-        return this.aScope.toCommentImpl();
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return this.aScope.toCommentImpl(prefix);
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
      */
@@ -1271,16 +1254,6 @@ public abstract class ABody extends AScope {
     @Override
     public AJoinPoint addLocalImpl(String name, AJoinPoint type, String initValue) {
         return this.aScope.addLocalImpl(name, type, initValue);
-    }
-
-    /**
-     * Overload which does not initialize the local variable
-     * @param name 
-     * @param type 
-     */
-    @Override
-    public AJoinPoint addLocalImpl(String name, AJoinPoint type) {
-        return this.aScope.addLocalImpl(name, type);
     }
 
     /**

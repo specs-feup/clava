@@ -545,35 +545,6 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Overload which does not initialize the local variable
-     * @param name 
-     * @param type 
-     */
-    public AJoinPoint addLocalImpl(String name, AJoinPoint type) {
-        throw new UnsupportedOperationException(get_class()+": Action addLocal not implemented ");
-    }
-
-    /**
-     * Overload which does not initialize the local variable
-     * @param name 
-     * @param type 
-     */
-    public final AJoinPoint addLocal(String name, AJoinPoint type) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "addLocal", this, Optional.empty(), name, type);
-        	}
-        	AJoinPoint result = this.addLocalImpl(name, type);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "addLocal", this, Optional.ofNullable(result), name, type);
-        	}
-        	return result;
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "addLocal", e);
-        }
-    }
-
-    /**
      * Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)
      * @param isNaked 
      */
@@ -1591,23 +1562,6 @@ public abstract class AScope extends AStatement {
 
     /**
      * Replaces this join point with a comment with the same contents as .code
-     */
-    @Override
-    public AJoinPoint toCommentImpl() {
-        return this.aStatement.toCommentImpl();
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return this.aStatement.toCommentImpl(prefix);
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
      */
@@ -1892,7 +1846,6 @@ public abstract class AScope extends AStatement {
         actions.add("joinpoint insertReturn(joinpoint)");
         actions.add("joinpoint insertReturn(string)");
         actions.add("joinpoint addLocal(String, joinpoint, String)");
-        actions.add("joinpoint addLocal(String, joinpoint)");
         actions.add("void setNaked(Boolean)");
         actions.add("void clear()");
         actions.add("string cfg()");

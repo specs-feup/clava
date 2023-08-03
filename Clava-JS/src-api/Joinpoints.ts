@@ -381,7 +381,7 @@ export class Joinpoint extends LaraJoinPoint {
   /**
    * Replaces this join point with a comment with the same contents as .code
    */
-  toComment(): Joinpoint { return wrapJoinPoint(this._javaObject.toComment()); }
+  toComment(prefix: string = "", suffix: string = ""): Joinpoint { return wrapJoinPoint(this._javaObject.toComment(unwrapJoinPoint(prefix), unwrapJoinPoint(suffix))); }
 }
 
 export class Attribute extends Joinpoint {
@@ -761,7 +761,7 @@ export class Program extends Joinpoint {
   /**
    * Adds a path based on a git repository to an include that the current program depends on
    */
-  addExtraIncludeFromGit(gitRepo: string): void { return wrapJoinPoint(this._javaObject.addExtraIncludeFromGit(unwrapJoinPoint(gitRepo))); }
+  addExtraIncludeFromGit(gitRepo: string, path?: string): void { return wrapJoinPoint(this._javaObject.addExtraIncludeFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(path))); }
   /**
    * Adds a library (e.g., -pthreads) that the current program depends on
    */
@@ -773,7 +773,7 @@ export class Program extends Joinpoint {
   /**
    * Adds a path based on a git repository to a source that the current program depends on
    */
-  addExtraSourceFromGit(gitRepo: string): void { return wrapJoinPoint(this._javaObject.addExtraSourceFromGit(unwrapJoinPoint(gitRepo))); }
+  addExtraSourceFromGit(gitRepo: string, path?: string): void { return wrapJoinPoint(this._javaObject.addExtraSourceFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(path))); }
   /**
    * Adds a file join point to the current program
    */
@@ -785,7 +785,7 @@ export class Program extends Joinpoint {
   /**
    * Adds a path based on a git repository to a project that the current program depends on
    */
-  addProjectFromGit(gitRepo: string, libs: string[]): void { return wrapJoinPoint(this._javaObject.addProjectFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(libs))); }
+  addProjectFromGit(gitRepo: string, libs: string[], path?: string): void { return wrapJoinPoint(this._javaObject.addProjectFromGit(unwrapJoinPoint(gitRepo), unwrapJoinPoint(libs), unwrapJoinPoint(path))); }
   /**
    * Registers a function to be executed when the program exits
    */
@@ -942,6 +942,10 @@ export class Type extends Joinpoint {
    * Sets the desugared type of this type
    */
   setDesugar(desugaredType: Type): void { return wrapJoinPoint(this._javaObject.setDesugar(unwrapJoinPoint(desugaredType))); }
+  /**
+   * Sets a single template argument type of a template type
+   */
+  setTemplateArgType(index: number, templateArgType: Type): void { return wrapJoinPoint(this._javaObject.setTemplateArgType(unwrapJoinPoint(index), unwrapJoinPoint(templateArgType))); }
   /**
    * Sets the template argument types of a template type
    */
@@ -1495,7 +1499,9 @@ export class If extends Statement {
   set cond(value: Expression) { this._javaObject.setCond(unwrapJoinPoint(value)); }
   get condDecl(): Vardecl { return wrapJoinPoint(this._javaObject.getCondDecl()) }
   get else(): Scope { return wrapJoinPoint(this._javaObject.getElse()) }
+  set else(value: Statement) { this._javaObject.setElse(unwrapJoinPoint(value)); }
   get then(): Scope { return wrapJoinPoint(this._javaObject.getThen()) }
+  set then(value: Statement) { this._javaObject.setThen(unwrapJoinPoint(value)); }
   /**
    * Sets the condition of the if
    */
@@ -1533,6 +1539,10 @@ export class Loop extends Statement {
    * The statement of the loop condition
    */
   get cond(): Statement { return wrapJoinPoint(this._javaObject.getCond()) }
+  /**
+   * The statement of the loop condition
+   */
+  set cond(value: string) { this._javaObject.setCond(unwrapJoinPoint(value)); }
   get condRelation(): Relation { return wrapJoinPoint(this._javaObject.getCondRelation()) }
   set condRelation(value: Relation) { this._javaObject.setCondRelation(unwrapJoinPoint(value)); }
   get controlVar(): string { return wrapJoinPoint(this._javaObject.getControlVar()) }
@@ -1557,6 +1567,10 @@ export class Loop extends Statement {
    */
   get init(): Statement { return wrapJoinPoint(this._javaObject.getInit()) }
   /**
+   * The statement of the loop initialization
+   */
+  set init(value: string) { this._javaObject.setInit(unwrapJoinPoint(value)); }
+  /**
    * The expression of the first value of the control variable (e.g. '0' in 'size_t i = 0;')
    */
   get initValue(): string { return wrapJoinPoint(this._javaObject.getInitValue()) }
@@ -1571,12 +1585,17 @@ export class Loop extends Statement {
   get iterations(): number { return wrapJoinPoint(this._javaObject.getIterations()) }
   get iterationsExpr(): Expression { return wrapJoinPoint(this._javaObject.getIterationsExpr()) }
   get kind(): "for" | "while" | "dowhile" | "foreach" { return wrapJoinPoint(this._javaObject.getKind()) }
+  set kind(value: string) { this._javaObject.setKind(unwrapJoinPoint(value)); }
   get nestedLevel(): number { return wrapJoinPoint(this._javaObject.getNestedLevel()) }
   get rank(): number[] { return wrapJoinPoint(this._javaObject.getRank()) }
   /**
    * The statement of the loop step
    */
   get step(): Statement { return wrapJoinPoint(this._javaObject.getStep()) }
+  /**
+   * The statement of the loop step
+   */
+  set step(value: string) { this._javaObject.setStep(unwrapJoinPoint(value)); }
   /**
    * The expression of the iteration step
    */
@@ -1630,9 +1649,9 @@ export class Loop extends Statement {
    */
   setStep(stepCode: string): void { return wrapJoinPoint(this._javaObject.setStep(unwrapJoinPoint(stepCode))); }
   /**
-   * Applies loop tiling to this loop
+   * Applies loop tiling to this loop.
    */
-  tile(blockSize: string, reference: Statement): Statement { return wrapJoinPoint(this._javaObject.tile(unwrapJoinPoint(blockSize), unwrapJoinPoint(reference))); }
+  tile(blockSize: string, reference: Statement, useTernary: boolean = true): Statement { return wrapJoinPoint(this._javaObject.tile(unwrapJoinPoint(blockSize), unwrapJoinPoint(reference), unwrapJoinPoint(useTernary))); }
 }
 
   /**
@@ -1831,9 +1850,9 @@ export class Omp extends Pragma {
    */
   setNumThreads(newExpr: string): void { return wrapJoinPoint(this._javaObject.setNumThreads(unwrapJoinPoint(newExpr))); }
   /**
-   * Sets an ordered clause without parameters in the OpenMP pragma
+   * Sets the value of the ordered clause of an OpenMP pragma
    */
-  setOrdered(): void { return wrapJoinPoint(this._javaObject.setOrdered()); }
+  setOrdered(parameters?: string): void { return wrapJoinPoint(this._javaObject.setOrdered(unwrapJoinPoint(parameters))); }
   /**
    * Sets the variables of a private clause of an OpenMP pragma
    */
@@ -1932,7 +1951,7 @@ export class Scope extends Statement {
   /**
    * Adds a new local variable to this scope
    */
-  addLocal(name: string, type: Joinpoint, initValue: string): Joinpoint { return wrapJoinPoint(this._javaObject.addLocal(unwrapJoinPoint(name), unwrapJoinPoint(type), unwrapJoinPoint(initValue))); }
+  addLocal(name: string, type: Joinpoint, initValue?: string): Joinpoint { return wrapJoinPoint(this._javaObject.addLocal(unwrapJoinPoint(name), unwrapJoinPoint(type), unwrapJoinPoint(initValue))); }
   /**
    * CFG tester
    */

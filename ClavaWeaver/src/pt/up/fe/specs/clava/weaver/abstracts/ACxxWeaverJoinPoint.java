@@ -1483,16 +1483,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint toCommentImpl() {
-        return toCommentImpl(null);
-    }
-
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return toCommentImpl(prefix, null);
-    }
-
-    @Override
     public AJoinPoint toCommentImpl(String prefix, String suffix) {
         var prefixClean = prefix == null ? "" : prefix;
         var suffixClean = suffix == null ? "" : suffix;

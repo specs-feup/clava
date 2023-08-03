@@ -698,12 +698,6 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public AStatement tileImpl(String blockSize, AStatement reference) {
-
-        return tileImpl(blockSize, reference, true);
-    }
-
-    @Override
     public AStatement tileImpl(String blockSize, AStatement reference, Boolean useTernary) {
 
         LoopTiling loopTiling = new LoopTiling(CxxWeaver.getContex());

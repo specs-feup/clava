@@ -841,35 +841,6 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Applies loop tiling to this loop
-     * @param blockSize 
-     * @param reference 
-     */
-    public AStatement tileImpl(String blockSize, AStatement reference) {
-        throw new UnsupportedOperationException(get_class()+": Action tile not implemented ");
-    }
-
-    /**
-     * Applies loop tiling to this loop
-     * @param blockSize 
-     * @param reference 
-     */
-    public final AStatement tile(String blockSize, AStatement reference) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "tile", this, Optional.empty(), blockSize, reference);
-        	}
-        	AStatement result = this.tileImpl(blockSize, reference);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "tile", this, Optional.ofNullable(result), blockSize, reference);
-        	}
-        	return result;
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "tile", e);
-        }
-    }
-
-    /**
      * Applies loop tiling to this loop.
      * @param blockSize 
      * @param reference 
@@ -1896,23 +1867,6 @@ public abstract class ALoop extends AStatement {
 
     /**
      * Replaces this join point with a comment with the same contents as .code
-     */
-    @Override
-    public AJoinPoint toCommentImpl() {
-        return this.aStatement.toCommentImpl();
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return this.aStatement.toCommentImpl(prefix);
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
      */
@@ -2211,7 +2165,6 @@ public abstract class ALoop extends AStatement {
         actions.add("void setStep(String)");
         actions.add("void setIsParallel(Boolean)");
         actions.add("void interchange(loop)");
-        actions.add("statement tile(String, statement)");
         actions.add("statement tile(String, statement, Boolean)");
         actions.add("void setCondRelation(Relation)");
         actions.add("void setCondRelation(String)");

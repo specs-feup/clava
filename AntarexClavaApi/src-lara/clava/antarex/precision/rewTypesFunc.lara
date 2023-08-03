@@ -105,7 +105,7 @@ function getNewType($vardeclType, oldType, newType) {
                     TRACE("  >>> templateArgTypes = " + $child.code);
                     var $ntype = getNewType($child, oldType, newType);
                     TRACE("  <<< templateArgTypes new =  " + $ntype.code);
-                    $vardeclType.setTemplateArgsTypes(i, $ntype);
+                    $vardeclType.setTemplateArgType(i, $ntype);
                 }
             }
         TRACE( "  <<< TemplateSpecializationType post " + $vardeclType.code);
