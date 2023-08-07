@@ -30,11 +30,11 @@ class ControlFlowGraph extends Graph {
    * 
    * @param {joinpoint} $jp
    * @param {boolean} [deterministicIds = false] If true, uses deterministic ids for the graph ids (e.g. id_0, id_1...). Otherwise, uses $jp.astId whenever possible
-   * @param {Object}  [options = {}] An object containing configuration options for the cfg
+   * @param {Object} [options = {}] An object containing configuration options for the cfg
    * @param {boolean} [options.splitInstList = false] If true, statements of each instruction list must be split
    * @param {boolean} [options.removeGotoNodes = false] If true, the nodes that correspond to goto statements will be excluded from the resulting graph
    * @param {boolean} [options.removeLabelNodes = false] If true, the nodes that correspond to label statements will be excluded from the resulting graph
-   * 
+   * @param {boolean} [options.keepTemporaryScopeStmts = true]  If true, the temporary scope statements will be kept in the resulting graph
    * @returns {ControlFlowGraph} a new instance of the ControlFlowGraph class
   */
   static build($jp, deterministicIds = false, options = {}) {
