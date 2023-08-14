@@ -169,4 +169,10 @@ public class CApiTest {
     public void testToSingleFile() {
         newTester().test("ToSingleFile.js", "to_single_file_1.c", "to_single_file_2.c");
     }
+    
+    @Test
+    public void testLivenessAnalysis() {
+        newTester().test("LivenessAnalysisTest.js", "liveness_analysis.c");
+    }
+
 }
