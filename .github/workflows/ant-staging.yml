@@ -42,7 +42,7 @@ jobs:
 
     - name: Generate build.xml
       run: | 
-        wget -q --show-progress -N http://specs.fe.up.pt/tools/eclipse-build.jar
+        wget -q -N http://specs.fe.up.pt/tools/eclipse-build.jar
         chmod +x eclipse-build.jar
         ls -la
         zipinfo eclipse-build.jar  | wc -l
