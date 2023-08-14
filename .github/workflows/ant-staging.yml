@@ -45,9 +45,9 @@ jobs:
         wget -q -N http://specs.fe.up.pt/tools/eclipse-build.jar
         chmod +x eclipse-build.jar
         ls -la
+        zipinfo eclipse-build.jar
         zipinfo eclipse-build.jar  | wc -l
-        java -jar eclipse-build.jar
-        zipinfo eclipse-build.jar  | wc -l        
+        java -jar eclipse-build.jar --help
         java -jar eclipse-build.jar https://github.com/specs-feup/specs-java-libs https://github.com/specs-feup/lara-framework?commit=staging ./
         wget -N -O /usr/share/ant/lib/ivy-2.5.0.jar specs.fe.up.pt/libs/ivy-2.5.0.jar
     - name: Build with Ant
