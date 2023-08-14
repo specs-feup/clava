@@ -34,7 +34,7 @@ class ControlFlowGraph extends Graph {
    * @param {boolean} [options.splitInstList = false] If true, statements of each instruction list must be split
    * @param {boolean} [options.removeGotoNodes = false] If true, the nodes that correspond to goto statements will be excluded from the resulting graph
    * @param {boolean} [options.removeLabelNodes = false] If true, the nodes that correspond to label statements will be excluded from the resulting graph
-   * @param {boolean} [options.keepTemporaryScopeStmts = true]  If true, the temporary scope statements will be kept in the resulting graph
+   * @param {boolean} [options.keepTemporaryScopeStmts = false]  If true, the temporary scope statements will be kept in the resulting graph
    * @returns {ControlFlowGraph} a new instance of the ControlFlowGraph class
   */
   static build($jp, deterministicIds = false, options = {}) {
