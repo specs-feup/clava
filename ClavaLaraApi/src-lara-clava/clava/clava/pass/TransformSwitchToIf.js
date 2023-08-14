@@ -5,7 +5,7 @@ laraImport("lara.pass.results.PassResult");
 
 
 /**
- * Transforms a switch statment into an if statement.
+ * Transforms a switch statement into an if statement.
  * 
  * This means that code like this:
  * 
@@ -67,6 +67,25 @@ class TransformSwitchToIf extends SimplePass {
     #caseIfStmts;
 
     /**
+     * {boolean} If true, uses deterministic ids for the labels (e.g. switch_exit_0, sw1_case_3...). Otherwise, uses $jp.astId whenever possible.
+     */
+    #deterministicIds;
+
+    /**
+     * Current switch id, in case deterministic ids are used
+     */
+    #currentId;
+
+    /**
+     * @param {boolean} [deterministicIds = false] If true, uses deterministic ids for the labels (e.g. switch_exit_0, sw1_case_3, ...). Otherwise, uses $jp.astId whenever possible.
+     */
+    constructor(deterministicIds = false) {
+        super();
+        this.#deterministicIds = deterministicIds;
+        this.#currentId = 0;
+    }
+
+    /**
      * @return {string} Name of the pass
      * @override
      */
@@ -84,7 +103,10 @@ class TransformSwitchToIf extends SimplePass {
      * @param {JoinPoint} $jp Join point to transform
      */
     transformJoinpoint($jp) {
-        const $switchExitLabel = ClavaJoinPoints.labelDecl("switch_exit_" + $jp.astId);
+        this.#currentId++;
+
+        const exitName = "switch_exit_" + (this.#deterministicIds ? this.#currentId : $jp.astId);
+        const $switchExitLabel = ClavaJoinPoints.labelDecl(exitName);
         const $switchExitLabelStmt = ClavaJoinPoints.labelStmt($switchExitLabel);
         const $switchExitGoTo = ClavaJoinPoints.gotoStmt($switchExitLabel);
 
@@ -111,6 +133,26 @@ class TransformSwitchToIf extends SimplePass {
     }
 
     /**
+     * Generates the label based on the switch ID and the values of the provided case statement.
+     * If no switch ID is provided, a generic label based on the case statement's AST ID is returned.
+     * @param {joinpoint} $caseStmt the case statement
+     * @returns {string} the generated label name for the provided case statement
+     */
+    #computeLabelName($caseStmt) {
+        if (!this.#deterministicIds)
+            return "case_" + $caseStmt.astId;
+
+        let labelName = "sw" + this.#currentId;
+        if ($caseStmt.isDefault)
+           labelName += "_default";
+        else if ($caseStmt.values.length == 1)
+            labelName += `_case_${$caseStmt.values[0].code}`;
+        else
+           labelName += `_case_${$caseStmt.values[0].code}_to_${$caseStmt.values[1].code}`;
+        return labelName;
+    }
+
+    /**
      * Creates if and label statements for each case in the provided switch statement and adds them to the private fields "caseIfStmts" and "caseLabels".
      * @param {joinpoint} $jp the switch statement
      */
@@ -120,7 +162,7 @@ class TransformSwitchToIf extends SimplePass {
         this.#caseIfStmts = new Array();
 
         for (const $case of $jp.cases) {
-            const labelName = "case_" + $case.astId;
+            const labelName = this.#computeLabelName($case);
             const $labelDecl = ClavaJoinPoints.labelDecl(labelName);
             const $goto = ClavaJoinPoints.gotoStmt($labelDecl);
 
