@@ -3,12 +3,17 @@ laraImport("clava.graphs.cfg.CfgUtils");
 laraImport("clava.graphs.cfg.CfgEdgeType");
 laraImport("weaver.Query");
 
-const $fooFunction = Query.search("function", "foo").first();
-const cfg = ControlFlowGraph.build($fooFunction, true);
-println("Graph for foo:");
-println(Graphs.toDot(cfg.graph));
-verifyGraph(cfg)
-println("Verification done")
+const $functions = Query.search("function");
+for (const $function of $functions) {
+	buildAndVerifyCfg($function);
+}
+
+const $gotoLabelFunction = Query.search("function", "gotoAndLabelExample").first();
+const cfgOptions = {splitInstList: true, 
+					removeLabelNodes: true, 
+					removeGotoNodes: true, 
+					keepTemporaryScopeStmts: true};
+buildAndVerifyCfg($gotoLabelFunction, cfgOptions);
 
 // Stress test
 for(const $stmt of Query.search("function", "foo").search("statement")) {
@@ -18,7 +23,20 @@ for(const $stmt of Query.search("function", "foo").search("statement")) {
 //	println(Graphs.toDot(smallCfg.graph));
 }
 
+function buildAndVerifyCfg($function, options) {
+	const cfg = ControlFlowGraph.build($function, true, options);
 
+	if (options !== undefined) {
+		println(`Options used and Graph for ${$function.name}:`)
+		println(`${JSON.stringify(options, null, 2)}`);
+	}
+	else	
+		println(`Graph for ${$function.name}:`)
+
+	println(Graphs.toDot(cfg.graph));
+	verifyGraph(cfg)
+	println(`Verification completed for ${$function.name}\n`)
+}
 
 function verifyGraph(cfg) {
 	for(const node of cfg.graph.nodes()) {

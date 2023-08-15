@@ -77,20 +77,27 @@ class CfgBuilder {
   #removeLabelNodes;
 
   /**
+   * {boolean} If true, the temporary scope statements should not be removed from the graph
+   */
+  #keepTemporaryScopeStmts;
+
+  /**
    * Creates a new instance of the CfgBuilder class
    * @param {joinpoint} $jp
    * @param {boolean} [deterministicIds = false] If true, uses deterministic ids for the graph ids (e.g. id_0, id_1...). Otherwise, uses $jp.astId whenever possible
-   * @param {Object}  [options = {}] An object containing configuration options for the cfg
+   * @param {Object} [options = {}] An object containing configuration options for the cfg
    * @param {boolean} [options.splitInstList = false] If true, statements of each instruction list must be split
    * @param {boolean} [options.removeGotoNodes = false] If true, the nodes that correspond to goto statements will be excluded from the resulting graph
    * @param {boolean} [options.removeLabelNodes = false] If true, the nodes that correspond to label statements will be excluded from the resulting graph
+   * @param {boolean} [options.keepTemporaryScopeStmts = false] If true, the temporary scope statements will be kept in the resulting graph
   */
   constructor($jp, deterministicIds = false, options = {}) {
     this.#jp = $jp;
     this.#deterministicIds = deterministicIds;
-    this.#splitInstList = options.splitInstList || false;
-    this.#removeGotoNodes = options.removeGotoNodes || false;
-    this.#removeLabelNodes = options.removeLabelNodes || false;
+    this.#splitInstList = options.splitInstList ?? false;
+    this.#removeGotoNodes = options.removeGotoNodes ?? false;
+    this.#removeLabelNodes = options.removeLabelNodes ?? false;
+    this.#keepTemporaryScopeStmts = options.keepTemporaryScopeStmts ?? false;
     this.#currentId = 0;
     this.#dataFactory = new DataFactory(this.#jp);
     this.#graph = Graphs.newGraph();
@@ -558,10 +565,12 @@ class CfgBuilder {
 
   _cleanCfg() {
     // Remove temporary instructions from the code
-    for (const stmtId in this.#temporaryStmts) {
-      this.#temporaryStmts[stmtId].detach();
+    if (!this.#keepTemporaryScopeStmts) {
+      for (const stmtId in this.#temporaryStmts) {
+        this.#temporaryStmts[stmtId].detach();
+      }
     }
-
+    
     // Remove temporary instructions from the instList nodes and this.#nodes
     for (const node of this.#nodes.values()) {
       // Only inst lists need to be cleaned
@@ -580,6 +589,9 @@ class CfgBuilder {
       }
 
       // Filter stmts that are temporary statements
+
+      if (this.#keepTemporaryScopeStmts)
+        continue;
 
       const filteredStmts = [];
       for (const $stmt of node.data().stmts) {
