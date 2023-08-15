@@ -1,0 +1,169 @@
+void foo() {
+    int a = 10;
+    int switch1, result1;
+    int defaultOnly;
+    goto sw1_default;
+
+    sw1_default:
+    result1 = 20;
+    int switch1DefaultInst1;
+    int switch1DefaultInst2;
+    goto switch_exit_1;
+
+    switch_exit_1:
+    switch1 = 0;
+    int afterDefaultOnly;
+    int afterSwitch1;
+
+    int switch2, result2;
+    int noDefault;
+    if(a == 1) goto sw2_case_1;
+    else if(a == 3) goto sw2_case_3;
+    else if(a >= 4 && a <= 8) goto sw2_case_4_to_8;
+    else goto switch_exit_2;
+
+    sw2_case_1:
+    result2 = 1;
+    int switch2Case1Inst1;
+    int switch2Case1Inst2;
+    goto switch_exit_2;
+
+    sw2_case_3:
+    result2 = 3;
+    int switch2Case3Inst1;
+    int switch2Case3Inst2;
+    goto switch_exit_2;
+
+    sw2_case_4_to_8:
+    result2 = 48;
+    int switch2RangeCaseInst1;
+    int switch2RangeCaseInst2;
+    goto switch_exit_2;
+
+    switch_exit_2:
+    switch2 = 0;
+    int afterNoDefault;
+    int afterSwitch2;
+
+    int switch3, result3;
+    int withDefault;
+    if(a == 1) goto sw3_case_1;
+    else if(a == 3) goto sw3_case_3;
+    else if(a >= 4 && a <= 8) goto sw3_case_4_to_8;
+    else goto sw3_default;
+
+    sw3_case_1:
+    result3 = 1;
+    int switch3Case1Inst1;
+    int switch3Case1Inst2;
+    goto switch_exit_3;
+
+    sw3_case_3:
+    result3 = 3;
+    int switch3Case3Inst1;
+    int switch3Case3Inst2;
+    goto switch_exit_3;
+
+    sw3_case_4_to_8:
+    result3 = 48;
+    int switch3RangeCaseInst1;
+    int switch3RangeCaseInst2;
+    goto switch_exit_3;
+
+    sw3_default:
+    result3 = 20;
+    int switch3DefaultInst1;
+    int switch3DefaultInst2;
+    goto switch_exit_3;
+
+    switch_exit_3:
+    switch3 = 0;
+    int afterWithDefault;
+    int afterSwitch3;
+
+    int switch4, result4;
+    int intermediateDefault;
+    if(a == 1) goto sw4_case_1;
+    else if(a == 3) goto sw4_case_3;
+    else goto sw4_default;
+
+    sw4_case_1:
+    result4 = 1;
+    int switch4Case1Inst1;
+    int switch4Case1Inst2;
+    goto switch_exit_4;
+
+    sw4_default:
+    result4 = 20;
+    int switch4DefaultInst1;
+    int switch4DefaultInst2;
+    goto switch_exit_4;
+
+    sw4_case_3:
+    result4 = 3;
+    int switch4Case3Inst1;
+    int switch4Case3Inst2;
+    goto switch_exit_4;
+
+    switch_exit_4:
+    switch4 = 0;
+    int afterIntermediateDefault;
+    int afterSwitch4;
+
+    int switch5, result5;
+    int noBreak;
+    if(a == 1) goto sw5_case_1;
+    else if(a == 2) goto sw5_case_2;
+    else if(a == 3) goto sw5_case_3;
+    else goto sw5_default;
+
+    sw5_case_1:
+    result5 = 1;
+    int switch5Case1Inst1;
+    int switch5Case1Inst2;
+    if(1) {
+        int ifBody;
+        goto switch_exit_5;
+    }
+
+    sw5_case_2:
+    result5 = 2;
+    int switch5Case2Inst1;
+    int switch5Case2Inst2;
+
+    sw5_default:
+    result5 = 20;
+    int switch5DefaultInst1;
+    int switch5DefaultInst2;
+
+    sw5_case_3:
+    result5 = 3;
+    int switch5Case3Inst1;
+    int switch5Case3Inst2;
+
+    switch_exit_5:
+    switch5 = 0;
+    int afterNoBreak;
+    int afterSwitch5;
+
+    int switch6, result6;
+    int lastSwitch;
+    if(a == 1) goto sw6_case_1;
+    else if(a == 3) goto sw6_case_3;
+    else goto switch_exit_6;
+
+    sw6_case_1:
+    result6 = 1;
+    int switch6Case1Inst1;
+    int switch6Case1Inst2;
+    goto switch_exit_6;
+
+    sw6_case_3:
+    result6 = 3;
+    int switch6Case3Inst1;
+    int switch6Case3Inst2;
+    goto switch_exit_6;
+    
+    switch_exit_6:
+    ;
+}
