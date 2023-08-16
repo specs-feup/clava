@@ -170,8 +170,16 @@ public class CApiTest {
         newTester().test("ToSingleFile.js", "to_single_file_1.c", "to_single_file_2.c");
     }
 
+    
+    @Test
+    public void testLivenessAnalysis() {
+        newTester().test("LivenessAnalysisTest.js", "liveness_analysis.c");
+    }
+
+
     @Test
     public void testSwitchToIf() {
         newTester().test("SwitchToIfTransformationTest.js", "switch_to_if.c");
     }
+
 }
