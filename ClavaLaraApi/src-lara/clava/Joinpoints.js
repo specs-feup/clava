@@ -786,7 +786,7 @@ export class Program extends Joinpoint {
 /**
  * Common class of struct, union and class
  */
-export class Record extends NamedDecl {
+export class RecordJp extends NamedDecl {
     get fields() { return wrapJoinPoint(this._javaObject.getFields()); }
     get functions() { return wrapJoinPoint(this._javaObject.getFunctions()); }
     /**
@@ -813,7 +813,7 @@ export class Statement extends Joinpoint {
 /**
  * Represets a struct declaration
  */
-export class Struct extends Record {
+export class Struct extends RecordJp {
 }
 export class Switch extends Statement {
     /**
@@ -1179,7 +1179,7 @@ export class CilkSync extends Statement {
 /**
  * Represents a C++ class
  */
-export class Class extends Record {
+export class Class extends RecordJp {
     /**
      * All the classes this class inherits from
      */
@@ -1774,7 +1774,7 @@ export class Omp extends Pragma {
     /**
      * Sets the value of the ordered clause of an OpenMP pragma
      */
-    setOrdered(parameters) { return wrapJoinPoint(this._javaObject.setOrdered(unwrapJoinPoint(parameters ?? null))); }
+    setOrdered(parameters) { return wrapJoinPoint(this._javaObject.setOrdered(unwrapJoinPoint(parameters))); }
     /**
      * Sets the variables of a private clause of an OpenMP pragma
      */
@@ -2020,7 +2020,7 @@ const JoinpointMapper = {
     parenExpr: ParenExpr,
     pragma: Pragma,
     program: Program,
-    record: Record,
+    record: RecordJp,
     statement: Statement,
     struct: Struct,
     switch: Switch,

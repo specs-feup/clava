@@ -812,7 +812,7 @@ export class Program extends Joinpoint {
   /**
    * Common class of struct, union and class
    */
-export class Record extends NamedDecl {
+export class RecordJp extends NamedDecl {
   get fields(): Joinpoint[] { return wrapJoinPoint(this._javaObject.getFields()) }
   get functions(): FunctionJp[] { return wrapJoinPoint(this._javaObject.getFunctions()) }
   /**
@@ -841,7 +841,7 @@ export class Statement extends Joinpoint {
   /**
    * Represets a struct declaration
    */
-export class Struct extends Record {
+export class Struct extends RecordJp {
 }
 
 export class Switch extends Statement {
@@ -923,7 +923,7 @@ export class Type extends Joinpoint {
   /**
    * Maps names of join point fields that represent type join points, to their respective values
    */
-  get typeFields(): Map<string, any> { return wrapJoinPoint(this._javaObject.getTypeFields()) }
+  get typeFields(): Record<string, any> { return wrapJoinPoint(this._javaObject.getTypeFields()) }
   /**
    * If the type encapsulates another type, returns the encapsulated type
    */
@@ -1233,7 +1233,7 @@ export class CilkSync extends Statement {
   /**
    * Represents a C++ class
    */
-export class Class extends Record {
+export class Class extends RecordJp {
   /**
    * All the classes this class inherits from
    */
@@ -2113,7 +2113,7 @@ const JoinpointMapper: JoinpointMapperType = {
   parenExpr: ParenExpr,
   pragma: Pragma,
   program: Program,
-  record: Record,
+  record: RecordJp,
   statement: Statement,
   struct: Struct,
   switch: Switch,
