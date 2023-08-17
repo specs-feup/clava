@@ -1168,9 +1168,9 @@ export class Call extends Expression {
   get signature(): string { return wrapJoinPoint(this._javaObject.getSignature()) }
   getArg(index: number): Expression { return wrapJoinPoint(this._javaObject.arg(unwrapJoinPoint(index))); }
   /**
-   * Adds an argument at the end of the call, creating an expression using the given code and type
+   * Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used
    */
-  addArg(argCode: string, type: Type): void { return wrapJoinPoint(this._javaObject.addArg(unwrapJoinPoint(argCode), unwrapJoinPoint(type))); }
+  addArg(argCode: string, type?: Type): void { return wrapJoinPoint(this._javaObject.addArg(unwrapJoinPoint(argCode), unwrapJoinPoint(type))); }
   /**
    * Tries to inline this call
    */
@@ -1424,15 +1424,15 @@ export class FunctionJp extends Declarator {
   /**
    * Adds a new parameter to the function
    */
-  addParam(param: string): void { return wrapJoinPoint(this._javaObject.addParam(unwrapJoinPoint(param))); }
+  addParam(param: Param): void { return wrapJoinPoint(this._javaObject.addParam(unwrapJoinPoint(param))); }
   /**
    * Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class
    */
   clone(newName: string, insert: boolean = true): FunctionJp { return wrapJoinPoint(this._javaObject.clone(unwrapJoinPoint(newName), unwrapJoinPoint(insert))); }
   /**
-   * Generates a clone of the provided function on a new file (with a weaver-generated name).
+   * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).
    */
-  cloneOnFile(newName: string): FunctionJp { return wrapJoinPoint(this._javaObject.cloneOnFile(unwrapJoinPoint(newName))); }
+  cloneOnFile(newName: string, fileName?: string): FunctionJp { return wrapJoinPoint(this._javaObject.cloneOnFile(unwrapJoinPoint(newName), unwrapJoinPoint(fileName))); }
   /**
    * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
    */

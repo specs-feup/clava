@@ -278,18 +278,14 @@
 		<parameter name="expr" type="expression" />
 	</action>
 	
-	<action name="addArg" class="call" tooltip="Adds an argument at the end of the call, creating an expression using the given code and type">
+	<action name="addArg" class="call" tooltip="Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used">
 		<parameter name="argCode" type="String" />
-		<parameter name="type" type="type" />
+		<parameter name="type" type="type" default="null" />
 	</action>
 	
 	<action name="addArg" class="call"  tooltip="Adds an argument at the end of the call, creating a literal 'type' from the type string">
 		<parameter name="arg" type="String" />
 		<parameter name="type" type="String" />
-	</action>
-	
-	<action name="addArg" class="call" tooltip="Adds an argument at the end of the call, creating an expression using a dummy type">
-		<parameter name="argCode" type="String" />
 	</action>
 	
 	<!-- CUDA KERNEL CALL -->
@@ -351,13 +347,9 @@
 		<parameter name="insert" type="Boolean" default="true" />		
 	</action>
 
-	<action name="cloneOnFile" class="function" return="function" tooltip="Generates a clone of the provided function on a new file (with a weaver-generated name).">
+	<action name="cloneOnFile" class="function" return="function" tooltip="Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).">
 		<parameter name="newName" type="String" />
-	</action>
-	
-	<action name="cloneOnFile" class="function" return="function" tooltip="Generates a clone of the provided function on a new file (with the provided name).">
-		<parameter name="newName" type="String" />
-		<parameter name="fileName" type="String" />
+		<parameter name="fileName" type="String" default="null" />
 	</action>
 
 	<action name="cloneOnFile" class="function" return="function" tooltip="Generates a clone of the provided function on a new file (with the provided join point).">
@@ -390,19 +382,13 @@
 	<action name="setParam" class="function" tooltip="Sets the parameter of the function at the given position">
 		<parameter name="index" type="Integer" />
 		<parameter name="param" type="param" />
-	</action>	
-	
-	<action name="setParam" class="function" tooltip="Sets the parameter of the function at the given position (overload that accepts a String)">
-		<parameter name="index" type="Integer" />
-		<parameter name="param" type="String" />
-	</action>		
-	
-	<action name="setParam" class="function" tooltip="Sets the parameter of the function at the given position (overload that accepts a String and a Type)">
+	</action>
+
+	<action name="setParam" class="function" tooltip="Sets the parameter of the function at the given position">
 		<parameter name="index" type="Integer" />
 		<parameter name="name" type="String" />
-		<parameter name="type" type="type" />	
+		<parameter name="type" type="type" default="null" />	
 	</action>			
-
 
 	<action name="setBody" class="function" tooltip="Sets the body of the function">
 		<parameter name="body" type="scope" />
@@ -424,10 +410,6 @@
 		<parameter name="index" type="Integer" />
 		<parameter name="newType" type="type" />
 	</action>	
-
-	<action name="addParam" class="function" tooltip="Adds a new parameter to the function">
-		<parameter name="param" type="String" />
-	</action>
 	
 	<action name="addParam" class="function" tooltip="Adds a new parameter to the function">
 		<parameter name="param" type="param" />
@@ -435,7 +417,7 @@
 
 	<action name="addParam" class="function" tooltip="Adds a new parameter to the function">
 		<parameter name="name" type="String" />
-		<parameter name="type" type="type" />		
+		<parameter name="type" type="type" default="null" />		
 	</action>
 
 

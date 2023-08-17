@@ -1119,7 +1119,7 @@ export class Call extends Expression {
     get signature() { return wrapJoinPoint(this._javaObject.getSignature()); }
     getArg(index) { return wrapJoinPoint(this._javaObject.arg(unwrapJoinPoint(index))); }
     /**
-     * Adds an argument at the end of the call, creating an expression using the given code and type
+     * Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used
      */
     addArg(argCode, type) { return wrapJoinPoint(this._javaObject.addArg(unwrapJoinPoint(argCode), unwrapJoinPoint(type))); }
     /**
@@ -1363,9 +1363,9 @@ export class FunctionJp extends Declarator {
      */
     clone(newName, insert = true) { return wrapJoinPoint(this._javaObject.clone(unwrapJoinPoint(newName), unwrapJoinPoint(insert))); }
     /**
-     * Generates a clone of the provided function on a new file (with a weaver-generated name).
+     * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).
      */
-    cloneOnFile(newName) { return wrapJoinPoint(this._javaObject.cloneOnFile(unwrapJoinPoint(newName))); }
+    cloneOnFile(newName, fileName) { return wrapJoinPoint(this._javaObject.cloneOnFile(unwrapJoinPoint(newName), unwrapJoinPoint(fileName))); }
     /**
      * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
      */

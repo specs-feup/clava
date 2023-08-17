@@ -1209,7 +1209,7 @@ public abstract class ACudaKernelCall extends ACall {
     }
 
     /**
-     * Adds an argument at the end of the call, creating an expression using the given code and type
+     * Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used
      * @param argCode 
      * @param type 
      */
@@ -1226,15 +1226,6 @@ public abstract class ACudaKernelCall extends ACall {
     @Override
     public void addArgImpl(String arg, String type) {
         this.aCall.addArgImpl(arg, type);
-    }
-
-    /**
-     * Adds an argument at the end of the call, creating an expression using a dummy type
-     * @param argCode 
-     */
-    @Override
-    public void addArgImpl(String argCode) {
-        this.aCall.addArgImpl(argCode);
     }
 
     /**

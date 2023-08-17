@@ -223,24 +223,17 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public AFunction cloneOnFileImpl(String newName) {
-
-        boolean isCxx = function.getAncestor(TranslationUnit.class).isCXXUnit();
-        String extension = getIsPrototypeImpl() ? ".h" : isCxx ? ".cpp" : ".c";
-
-        String prefix = newName;
-
-        String fileName = prefix + extension;
-
-        // var newFile = AstFactory.file(fileName, null);
-
-        return cloneOnFileImpl(newName, fileName);
-        // return cloneOnFileImpl(newName, fileName);
-
-    }
-
-    @Override
     public AFunction cloneOnFileImpl(String newName, String fileName) {
+        if (fileName == null) {
+            boolean isCxx = function.getAncestor(TranslationUnit.class).isCXXUnit();
+            String extension = getIsPrototypeImpl() ? ".h" : isCxx ? ".cpp" : ".c";
+
+            String prefix = newName;
+
+            fileName = prefix + extension;
+        }
+        
+        
         // First, check if the given filename is the same as a file in the AST
         App app = (App) getRootImpl().getNode();
         var currentFile = new File(fileName);
@@ -625,14 +618,13 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void addParamImpl(String param) {
-        var paramNode = ClavaNodes.toParam(param, function);
-        addParamImpl(CxxJoinpoints.create(paramNode, AParam.class));
-    }
-
-    @Override
     public void addParamImpl(String name, AType type) {
-        var paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());
+        ClavaNode paramNode;
+        if (type == null) {
+            paramNode = ClavaNodes.toParam(name, function);
+        } else {
+            paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());            
+        }
         addParamImpl(CxxJoinpoints.create(paramNode, AParam.class));
     }
 
@@ -653,13 +645,14 @@ public class CxxFunction extends AFunction {
 
     @Override
     public void setParamImpl(Integer index, String name, AType type) {
-        var paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());
-        setParamImpl(index, CxxJoinpoints.create(paramNode, AParam.class));
-    }
-
-    @Override
-    public void setParamImpl(Integer index, String param) {
-        var paramNode = ClavaNodes.toParam(param, function);
+        ClavaNode paramNode;
+        
+        if (type == null) {
+            paramNode = ClavaNodes.toParam(name, function);
+        } else {
+            paramNode = getFactory().parmVarDecl(name, (Type) type.getNode());            
+        }
+        
         setParamImpl(index, CxxJoinpoints.create(paramNode, AParam.class));
     }
 

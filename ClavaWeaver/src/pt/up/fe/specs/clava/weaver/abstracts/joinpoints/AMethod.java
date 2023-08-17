@@ -1250,16 +1250,7 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Generates a clone of the provided function on a new file (with a weaver-generated name).
-     * @param newName 
-     */
-    @Override
-    public AFunction cloneOnFileImpl(String newName) {
-        return this.aFunction.cloneOnFileImpl(newName);
-    }
-
-    /**
-     * Generates a clone of the provided function on a new file (with the provided name).
+     * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).
      * @param newName 
      * @param fileName 
      */
@@ -1325,17 +1316,7 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Sets the parameter of the function at the given position (overload that accepts a String)
-     * @param index 
-     * @param param 
-     */
-    @Override
-    public void setParamImpl(Integer index, String param) {
-        this.aFunction.setParamImpl(index, param);
-    }
-
-    /**
-     * Sets the parameter of the function at the given position (overload that accepts a String and a Type)
+     * Sets the parameter of the function at the given position
      * @param index 
      * @param name 
      * @param type 
@@ -1389,15 +1370,6 @@ public abstract class AMethod extends AFunction {
     @Override
     public void setParamTypeImpl(Integer index, AType newType) {
         this.aFunction.setParamTypeImpl(index, newType);
-    }
-
-    /**
-     * Adds a new parameter to the function
-     * @param param 
-     */
-    @Override
-    public void addParamImpl(String param) {
-        this.aFunction.addParamImpl(param);
     }
 
     /**

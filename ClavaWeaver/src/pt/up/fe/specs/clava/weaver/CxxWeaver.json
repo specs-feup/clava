@@ -14621,7 +14621,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Adds an argument at the end of the call, creating an expression using the given code and type",
+						"tooltip": "Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used",
 						"children": [
 									{
 										"type": "void",
@@ -14635,7 +14635,7 @@
 									{
 										"type": "type",
 										"name": "type",
-										"defaultValue": ""
+										"defaultValue": "null"
 									}]
 					},
 					{
@@ -14654,20 +14654,6 @@
 									{
 										"type": "String",
 										"name": "type",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Adds an argument at the end of the call, creating an expression using a dummy type",
-						"children": [
-									{
-										"type": "void",
-										"name": "addArg"
-									},
-									{
-										"type": "String",
-										"name": "argCode",
 										"defaultValue": ""
 									}]
 					},
@@ -20021,7 +20007,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Adds an argument at the end of the call, creating an expression using the given code and type",
+						"tooltip": "Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used",
 						"children": [
 									{
 										"type": "void",
@@ -20035,7 +20021,7 @@
 									{
 										"type": "type",
 										"name": "type",
-										"defaultValue": ""
+										"defaultValue": "null"
 									}]
 					},
 					{
@@ -20054,20 +20040,6 @@
 									{
 										"type": "String",
 										"name": "type",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Adds an argument at the end of the call, creating an expression using a dummy type",
-						"children": [
-									{
-										"type": "void",
-										"name": "addArg"
-									},
-									{
-										"type": "String",
-										"name": "argCode",
 										"defaultValue": ""
 									}]
 					},
@@ -27421,7 +27393,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Adds an argument at the end of the call, creating an expression using the given code and type",
+						"tooltip": "Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used",
 						"children": [
 									{
 										"type": "void",
@@ -27435,7 +27407,7 @@
 									{
 										"type": "type",
 										"name": "type",
-										"defaultValue": ""
+										"defaultValue": "null"
 									}]
 					},
 					{
@@ -27454,20 +27426,6 @@
 									{
 										"type": "String",
 										"name": "type",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Adds an argument at the end of the call, creating an expression using a dummy type",
-						"children": [
-									{
-										"type": "void",
-										"name": "addArg"
-									},
-									{
-										"type": "String",
-										"name": "argCode",
 										"defaultValue": ""
 									}]
 					},
@@ -47127,20 +47085,6 @@
 										"name": "addParam"
 									},
 									{
-										"type": "String",
-										"name": "param",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Adds a new parameter to the function",
-						"children": [
-									{
-										"type": "void",
-										"name": "addParam"
-									},
-									{
 										"type": "param",
 										"name": "param",
 										"defaultValue": ""
@@ -47162,7 +47106,7 @@
 									{
 										"type": "type",
 										"name": "type",
-										"defaultValue": ""
+										"defaultValue": "null"
 									}]
 					},
 					{
@@ -47186,21 +47130,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Generates a clone of the provided function on a new file (with a weaver-generated name).",
-						"children": [
-									{
-										"type": "function",
-										"name": "cloneOnFile"
-									},
-									{
-										"type": "String",
-										"name": "newName",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Generates a clone of the provided function on a new file (with the provided name).",
+						"tooltip": "Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).",
 						"children": [
 									{
 										"type": "function",
@@ -47214,7 +47144,7 @@
 									{
 										"type": "String",
 										"name": "fileName",
-										"defaultValue": ""
+										"defaultValue": "null"
 									}]
 					},
 					{
@@ -47327,26 +47257,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Sets the parameter of the function at the given position (overload that accepts a String)",
-						"children": [
-									{
-										"type": "void",
-										"name": "setParam"
-									},
-									{
-										"type": "Integer",
-										"name": "index",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "param",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Sets the parameter of the function at the given position (overload that accepts a String and a Type)",
+						"tooltip": "Sets the parameter of the function at the given position",
 						"children": [
 									{
 										"type": "void",
@@ -47365,7 +47276,7 @@
 									{
 										"type": "type",
 										"name": "type",
-										"defaultValue": ""
+										"defaultValue": "null"
 									}]
 					},
 					{
@@ -62446,7 +62357,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Adds an argument at the end of the call, creating an expression using the given code and type",
+						"tooltip": "Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used",
 						"children": [
 									{
 										"type": "void",
@@ -62460,7 +62371,7 @@
 									{
 										"type": "type",
 										"name": "type",
-										"defaultValue": ""
+										"defaultValue": "null"
 									}]
 					},
 					{
@@ -62479,20 +62390,6 @@
 									{
 										"type": "String",
 										"name": "type",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Adds an argument at the end of the call, creating an expression using a dummy type",
-						"children": [
-									{
-										"type": "void",
-										"name": "addArg"
-									},
-									{
-										"type": "String",
-										"name": "argCode",
 										"defaultValue": ""
 									}]
 					},
@@ -63952,20 +63849,6 @@
 										"name": "addParam"
 									},
 									{
-										"type": "String",
-										"name": "param",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Adds a new parameter to the function",
-						"children": [
-									{
-										"type": "void",
-										"name": "addParam"
-									},
-									{
 										"type": "param",
 										"name": "param",
 										"defaultValue": ""
@@ -63987,7 +63870,7 @@
 									{
 										"type": "type",
 										"name": "type",
-										"defaultValue": ""
+										"defaultValue": "null"
 									}]
 					},
 					{
@@ -64011,21 +63894,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Generates a clone of the provided function on a new file (with a weaver-generated name).",
-						"children": [
-									{
-										"type": "function",
-										"name": "cloneOnFile"
-									},
-									{
-										"type": "String",
-										"name": "newName",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Generates a clone of the provided function on a new file (with the provided name).",
+						"tooltip": "Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).",
 						"children": [
 									{
 										"type": "function",
@@ -64039,7 +63908,7 @@
 									{
 										"type": "String",
 										"name": "fileName",
-										"defaultValue": ""
+										"defaultValue": "null"
 									}]
 					},
 					{
@@ -64152,26 +64021,7 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Sets the parameter of the function at the given position (overload that accepts a String)",
-						"children": [
-									{
-										"type": "void",
-										"name": "setParam"
-									},
-									{
-										"type": "Integer",
-										"name": "index",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "param",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Sets the parameter of the function at the given position (overload that accepts a String and a Type)",
+						"tooltip": "Sets the parameter of the function at the given position",
 						"children": [
 									{
 										"type": "void",
@@ -64190,7 +64040,7 @@
 									{
 										"type": "type",
 										"name": "type",
-										"defaultValue": ""
+										"defaultValue": "null"
 									}]
 					},
 					{
