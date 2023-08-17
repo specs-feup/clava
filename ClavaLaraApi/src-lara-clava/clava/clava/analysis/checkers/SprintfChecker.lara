@@ -1,6 +1,6 @@
-import lara.analysis.Checker;
-import lara.analysis.CheckResult;
-import lara.analysis.Fix;
+import clava.analysis.Checker;
+import clava.analysis.CheckResult;
+import clava.analysis.Fix;
 
 /*Check for the presence of sprintf functions*/
 
