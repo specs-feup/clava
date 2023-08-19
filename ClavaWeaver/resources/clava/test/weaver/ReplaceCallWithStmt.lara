@@ -6,7 +6,7 @@ aspectdef ReplaceCallWithStmt
 	apply
 		var varName = $stmtCall.name + "Result";
 	
-		var $varDecl = wrapJoinPoint(ClavaJoinPoints.varDecl(varName, unwrapJoinPoint($stmtCall)));
+		var $varDecl = ClavaJoinPoints.varDecl(varName, $stmtCall);
 		$stmt.exec replaceWith($varDecl);
 	end
 	
