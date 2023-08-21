@@ -8,7 +8,7 @@ function SimplifyAssignment($complexAssignment) {
   // early return if current node is not suitable for this transform
   if (
     !$complexAssignment ||
-    !$complexAssignment.getInstanceOf("binaryOp") ||
+    !$complexAssignment.instanceOf("binaryOp") ||
     !SimplifyAssignment._ops.has($complexAssignment.operator)
   ) {
     return;

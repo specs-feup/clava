@@ -117,7 +117,7 @@ class StaticCallGraphBuilder {
 
       // Check if any of the jps to search is a call
       for (const $jp of jpsToSearch) {
-        if ($jp.getInstanceOf("call")) {
+        if ($jp.instanceOf("call")) {
           seenCalls.push($jp);
         }
       }

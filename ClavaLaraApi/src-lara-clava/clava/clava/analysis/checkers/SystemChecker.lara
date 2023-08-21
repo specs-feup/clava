@@ -14,7 +14,7 @@ var SystemChecker = function() {
 SystemChecker.prototype = Object.create(Checker.prototype);
 
 SystemChecker.prototype.check = function($node) {
-	if ((!$node.getInstanceOf("call")) || ($node.name !== "system")) {
+	if ((!$node.instanceOf("call")) || ($node.name !== "system")) {
       	return;
 	}
 	return new CheckResult(this.name, $node, this.advice);

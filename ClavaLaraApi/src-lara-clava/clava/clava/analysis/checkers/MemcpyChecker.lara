@@ -14,7 +14,7 @@ var MemcpyChecker = function() {
 MemcpyChecker.prototype = Object.create(Checker.prototype);
 
 MemcpyChecker.prototype.check = function($node) {
-	if ((!$node.getInstanceOf("call")) || ($node.name !== 'memcpy')) {
+	if ((!$node.instanceOf("call")) || ($node.name !== 'memcpy')) {
       	return;
     }
 	return new CheckResult(this.name, $node, this.advice);

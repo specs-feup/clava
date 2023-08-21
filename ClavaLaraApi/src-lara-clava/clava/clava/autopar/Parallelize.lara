@@ -318,9 +318,9 @@ Parallelize.isNestedOpenMP = function($omp) {
         
     var $ancestor = $loop.parent;
     while($ancestor !== undefined) {
-        if($ancestor.getInstanceOf("loop")) {
+        if($ancestor.instanceOf("loop")) {
             for(var $pragma of $ancestor.pragmas) {
-                if($pragma.getInstanceOf("omp")) {
+                if($pragma.instanceOf("omp")) {
                     return true;
                 }                
             }

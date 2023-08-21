@@ -14,7 +14,7 @@ var LambdaChecker = function() {
 LambdaChecker.prototype = Object.create(Checker.prototype);
 
 LambdaChecker.prototype.check = function($node) {
-	if ((!$node.code.match(/.*\[&\]\s*\(.*\)\s*\{.*\}.*/)) || (!$node.getInstanceOf("vardecl"))) {
+	if ((!$node.code.match(/.*\[&\]\s*\(.*\)\s*\{.*\}.*/)) || (!$node.instanceOf("vardecl"))) {
       	return;
    	}
 	return new CheckResult(this.name, $node, this.advice);

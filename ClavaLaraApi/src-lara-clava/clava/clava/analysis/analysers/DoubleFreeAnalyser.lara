@@ -31,23 +31,23 @@ DoubleFreeAnalyser.prototype.analyse = function($startNode) {
         $startNode = Query.root();
     }
     for (var $node of Query.searchFrom($startNode)) {
-        if (!$node.getInstanceOf("function")) {
+        if (!$node.instanceOf("function")) {
 	        continue;
 	   	}
 
         for (var $child of $node.descendants) {
             //Check for dynamic pointer declaration
-	        if ((($child.getInstanceOf("vardecl")) || ($child.getInstanceOf( "binaryOp"))) && DoubleFreeAnalyser.isDynamicAlloc($child)){
-				var ptrName = ($child.getInstanceOf("vardecl")) ? $child.name : $child.left.code;
+	        if ((($child.instanceOf("vardecl")) || ($child.instanceOf( "binaryOp"))) && DoubleFreeAnalyser.isDynamicAlloc($child)){
+				var ptrName = ($child.instanceOf("vardecl")) ? $child.name : $child.left.code;
 	            for (var $grandChild of $child.descendants ){
-	                if (($grandChild.getInstanceOf("call")) && DoubleFreeAnalyser.isDynamicAlloc($grandChild)){
+	                if (($grandChild.instanceOf("call")) && DoubleFreeAnalyser.isDynamicAlloc($grandChild)){
                       	var message = " Unfreed pointer in this scope. This can lead to a memory leak and a potential vunerability (CWE-401)."
                       			+ " Make sure it is freed somewhere in your program.\n\n";
         	          	doubleFreeResultList.push(new DoubleFreeResult("Unfreed array", $child, message, ptrName, $node.name));
 	                }
 	            }
 	        }
-			if (($child.getInstanceOf("call")) && ($child.name === "free")){
+			if (($child.instanceOf("call")) && ($child.name === "free")){
 	            for (var result of doubleFreeResultList) {
 			      	if (($child.args[0].code === result.ptrName) && ($node.name === result.scopeName)) {
 		            	if (result.freedFlag === 0){

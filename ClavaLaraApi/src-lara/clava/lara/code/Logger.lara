@@ -352,7 +352,7 @@ Logger.prototype._insertCode = function($jp, insertBefore, code) {
 		this.afterJp = $jp;
 	} else {
 		// If $jp is a 'scope' with a 'function' parent, insert before return instead
-		if($jp.getInstanceOf("scope") && $jp.parent !== undefined && $jp.parent.getInstanceOf("function")) {
+		if($jp.instanceOf("scope") && $jp.parent !== undefined && $jp.parent.instanceOf("function")) {
 			this.afterJp = $jp.parent.insertReturn(code);
 		} 
 		else {

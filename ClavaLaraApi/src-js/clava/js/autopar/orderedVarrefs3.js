@@ -7,7 +7,7 @@ var orderedVarrefs3 = function($jp)
 {
 
     var varrefs = [];
-    if($jp.getInstanceOf("expression") || $jp.joinPointType === "statement")
+    if($jp.instanceOf("expression") || $jp.joinPointType === "statement")
     {
         return orderedVarrefsBase3($jp);
     }

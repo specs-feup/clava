@@ -28,10 +28,10 @@ laraImport("clava.ClavaJoinPoints");
 function SimplifyTernaryOp($assignmentStmt) {
   // early return if current node is not suitable
   const applicable =
-    $assignmentStmt.getInstanceOf("exprStmt") &&
-    $assignmentStmt.expr.getInstanceOf("binaryOp") &&
+    $assignmentStmt.instanceOf("exprStmt") &&
+    $assignmentStmt.expr.instanceOf("binaryOp") &&
     $assignmentStmt.expr.isAssignment &&
-    $assignmentStmt.expr.right.getInstanceOf("ternaryOp");
+    $assignmentStmt.expr.right.instanceOf("ternaryOp");
   if (!applicable) {
     return;
   }

@@ -37,7 +37,7 @@ class LocalStaticToGlobal extends SimplePass {
 
   matchJoinpoint($jp) {
     // Only vardecls
-    if (!$jp.getInstanceOf("vardecl")) {
+    if (!$jp.instanceOf("vardecl")) {
       return false;
     }
 
@@ -62,7 +62,7 @@ class LocalStaticToGlobal extends SimplePass {
     $jp.storageClass = "none";
 
     const $declStmt = $jp.parent;
-    if (!$declStmt.getInstanceOf("declStmt")) {
+    if (!$declStmt.instanceOf("declStmt")) {
       throw new PassTransformationError(
         "Expected declStmt, found '" + $declStmt.joinPointType + "'"
       );

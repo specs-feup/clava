@@ -13,7 +13,7 @@ aspectdef VardeclV2Test
 	println(globalRef.decl.definition.location);
 	
 	var $vardeclToVarref = Query.search("function", "varref").search("vardecl").first();
-	println("Is varref: " + $vardeclToVarref.varref().getInstanceOf("varref"));
+	println("Is varref: " + $vardeclToVarref.varref().instanceOf("varref"));
 /*
 	for(var $vardecl of Query.search("vardecl", "GRAD_FILTER")) {
 		println($vardecl.node);

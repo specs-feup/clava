@@ -223,8 +223,8 @@ class Outliner {
     }
 
     #findParentFunction(jp) {
-        while (!jp.getInstanceOf("function")) {
-            if (jp.getInstanceOf("file")) {
+        while (!jp.instanceOf("function")) {
+            if (jp.instanceOf("file")) {
                 return null;
             }
             jp = jp.parent;
@@ -268,7 +268,7 @@ class Outliner {
                 if (decl.name === param.name) {
                     const ref = ClavaJoinPoints.varRef(decl);
 
-                    if (param.type.getInstanceOf("pointerType") && ref.type.getInstanceOf("builtinType")) {
+                    if (param.type.instanceOf("pointerType") && ref.type.instanceOf("builtinType")) {
                         const addressOfScalar = ClavaJoinPoints.unaryOp("&", ref);
                         args.push(addressOfScalar);
                     }
@@ -285,7 +285,7 @@ class Outliner {
 
     #createFunction(name, region, params) {
         let oldFun = region[0];
-        while (!oldFun.getInstanceOf("function")) {
+        while (!oldFun.instanceOf("function")) {
             oldFun = oldFun.parent;
         }
 
@@ -327,7 +327,7 @@ class Outliner {
         for (const stmt of region) {
             for (const varref of Query.searchFrom(stmt, "varref")) {
                 for (const param of params) {
-                    if (param.name === varref.name && varref.type.getInstanceOf("builtinType")) {
+                    if (param.name === varref.name && varref.type.instanceOf("builtinType")) {
                         const newVarref = ClavaJoinPoints.varRef(param);
                         const op = ClavaJoinPoints.unaryOp("*", newVarref);
                         varref.replaceWith(op);
@@ -344,11 +344,11 @@ class Outliner {
             const name = ref.name;
             const varType = ref.type;
 
-            if (varType.getInstanceOf(["arrayType", "adjustedType", "pointerType"])) {
+            if (varType.instanceOf(["arrayType", "adjustedType", "pointerType"])) {
                 const param = ClavaJoinPoints.param(name, varType);
                 params.push(param);
             }
-            else if (varType.getInstanceOf("builtinType")) {
+            else if (varType.instanceOf("builtinType")) {
                 const newType = ClavaJoinPoints.pointer(varType);
                 const param = ClavaJoinPoints.param(name, newType);
                 params.push(param);
@@ -392,7 +392,7 @@ class Outliner {
         const regionDecls = [];
         const regionDeclsNames = [];
         for (const stmt of region) {
-            if (stmt.getInstanceOf("declStmt")) {
+            if (stmt.instanceOf("declStmt")) {
                 regionDecls.push(stmt);
                 regionDeclsNames.push(stmt.children[0].name);
             }

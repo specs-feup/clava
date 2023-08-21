@@ -60,7 +60,7 @@ class NextCfgNode {
     Check.isJoinPoint($stmt, "statement");
 
     // If stmt is a scope, there are several special cases
-    if ($stmt.getInstanceOf("scope")) {
+    if ($stmt.instanceOf("scope")) {
       return this.#nextExecutedStmtAfterScope($stmt);
     }
 
@@ -69,7 +69,7 @@ class NextCfgNode {
     // If there are statements to the right, the rightmost non-case statement is the next to be executed
     if (rightStmts.length > 0) {
       for (const sibling of rightStmts) {
-        if (!sibling.getInstanceOf("case"))
+        if (!sibling.instanceOf("case"))
           return sibling;
       }
     }
@@ -77,11 +77,11 @@ class NextCfgNode {
     // When there are no more statements, return what's next for the parent
     const $parent = $stmt.parent;
 
-    if ($parent.getInstanceOf("statement")) {
+    if ($parent.instanceOf("statement")) {
       return this.nextExecutedStmt($parent);
     }
     // There are no more statements
-    else if ($parent.getInstanceOf("function")) {
+    else if ($parent.instanceOf("function")) {
       return undefined;
     } else {
       throw new Error(
@@ -99,13 +99,13 @@ class NextCfgNode {
 
     // Check if scope is a then/else of an if
     const $scopeParent = $scope.parent;
-    if ($scopeParent.getInstanceOf("if")) {
+    if ($scopeParent.instanceOf("if")) {
       // Next stmt is what comes next of if
       return this.nextExecutedStmt($scopeParent);
     }
 
     // Check if scope is the body of a loop
-    if ($scopeParent.getInstanceOf("loop")) {
+    if ($scopeParent.instanceOf("loop")) {
       // Next stmt is what comes next of if
 
       switch ($scopeParent.kind) {
@@ -141,7 +141,7 @@ class NextCfgNode {
     const scopeParent = $scope.parent;
 
     // If scope parent is not a statement, there is no next statement
-    if (!$scopeParent.getInstanceOf("statement")) {
+    if (!$scopeParent.instanceOf("statement")) {
       return undefined;
     }
 

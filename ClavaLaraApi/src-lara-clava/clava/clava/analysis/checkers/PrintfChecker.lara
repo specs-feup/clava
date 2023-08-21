@@ -13,7 +13,7 @@ var PrintfChecker = function() {
 PrintfChecker.prototype = Object.create(Checker.prototype);
 
 PrintfChecker.prototype.check = function($node) {
-	if ((!$node.getInstanceOf("call")) || ($node.name !== "printf") || ($node.args[0].code.match(/\s*".*"\s*/))) {
+	if ((!$node.instanceOf("call")) || ($node.name !== "printf") || ($node.args[0].code.match(/\s*".*"\s*/))) {
       	return;
 	}
 	return new CheckResult(this.name, $node, this.advice);

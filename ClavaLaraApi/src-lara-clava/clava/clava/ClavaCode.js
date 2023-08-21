@@ -119,7 +119,7 @@ class ClavaCode {
    * @return true if it could be detected, within the restrictions, that the statement is only executed once.
    */
   static isExecutedOnce($statement) {
-    if (!$statement.getInstanceOf("statement")) {
+    if (!$statement.instanceOf("statement")) {
       throw (
         "isExecutedOnce(): function expects a statement, received '" +
         $statement.joinPointType +
@@ -135,8 +135,8 @@ class ClavaCode {
 
       // If finds a scope that is part of a loop or if/else, return false immediately
       if (
-        $scopeOwner.getInstanceOf("loop") ||
-        $scopeOwner.getInstanceOf("if")
+        $scopeOwner.instanceOf("loop") ||
+        $scopeOwner.instanceOf("if")
       ) {
         debug(
           "ClavaCode.isExecutedOnce: failed because scope is part of loop or if"
@@ -145,7 +145,7 @@ class ClavaCode {
       }
 
       // If function, check if main function
-      if ($scopeOwner.getInstanceOf("function")) {
+      if ($scopeOwner.instanceOf("function")) {
         var $function = $scopeOwner;
 
         // If main, passes check

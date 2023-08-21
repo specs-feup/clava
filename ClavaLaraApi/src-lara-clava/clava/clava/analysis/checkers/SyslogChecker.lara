@@ -13,7 +13,7 @@ var SyslogChecker = function() {
 SyslogChecker.prototype = Object.create(Checker.prototype);
 
 SyslogChecker.prototype.check = function($node) {
-	if ((!$node.getInstanceOf("call")) || ($node.name !== "syslog") || ($node.args[1].code.match(/\s*".*"\s*/))) {
+	if ((!$node.instanceOf("call")) || ($node.name !== "syslog") || ($node.args[1].code.match(/\s*".*"\s*/))) {
       	return;
 	}
 	return new CheckResult(this.name, $node, this.advice);

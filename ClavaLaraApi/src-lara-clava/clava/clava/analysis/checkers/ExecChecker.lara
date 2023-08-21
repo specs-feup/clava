@@ -15,7 +15,7 @@ ExecChecker.prototype = Object.create(Checker.prototype);
 
 
 ExecChecker.prototype.check = function($node) {
-	if ((!$node.getInstanceOf("call")) || !($node.name.match(/execl|execlp|execle|execv|execvp|execvpe/))) {
+	if ((!$node.instanceOf("call")) || !($node.name.match(/execl|execlp|execle|execv|execvp|execvpe/))) {
       	return;
 	}
 	return new CheckResult(this.name, $node, this.advice);

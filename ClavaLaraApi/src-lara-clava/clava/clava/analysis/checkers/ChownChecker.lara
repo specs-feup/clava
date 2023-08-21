@@ -14,7 +14,7 @@ var ChownChecker = function() {
 ChownChecker.prototype = Object.create(Checker.prototype);
 
 ChownChecker.prototype.check = function($node) {
-	if ((!$node.getInstanceOf("call")) || ($node.name !== 'chown')) {
+	if ((!$node.instanceOf("call")) || ($node.name !== 'chown')) {
       	return;
     }
 	return new CheckResult(this.name, $node, this.advice);
