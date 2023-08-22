@@ -31,7 +31,9 @@ aspectdef UserValues
 		printObject($program.getUserField("aMap"));
 		println();
 		// Changes array
-		$program.getUserField("anArray").push("pushed");
+		var anArray = $program.getUserField("anArray");
+		anArray.push("pushed");
+		$program.setUserField("anArray", anArray);
 	end
 	
 	Clava.popAst();
