@@ -581,15 +581,6 @@ public abstract class AClass extends ARecord {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aRecord.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
@@ -837,8 +828,8 @@ public abstract class AClass extends ARecord {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aRecord.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aRecord.getDescendantsArrayImpl();
     }
 
     /**
@@ -1055,6 +1046,15 @@ public abstract class AClass extends ARecord {
     @Override
     public AJoinPoint getAncestorImpl(String type) {
         return this.aRecord.getAncestorImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsImpl(String type) {
+        return this.aRecord.getDescendantsImpl(type);
     }
 
     /**
@@ -1501,7 +1501,6 @@ public abstract class AClass extends ARecord {
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

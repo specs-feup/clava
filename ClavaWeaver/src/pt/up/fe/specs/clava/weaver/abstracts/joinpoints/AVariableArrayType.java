@@ -414,15 +414,6 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aArrayType.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
@@ -670,8 +661,8 @@ public abstract class AVariableArrayType extends AArrayType {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aArrayType.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aArrayType.getDescendantsArrayImpl();
     }
 
     /**
@@ -888,6 +879,15 @@ public abstract class AVariableArrayType extends AArrayType {
     @Override
     public AJoinPoint getAncestorImpl(String type) {
         return this.aArrayType.getAncestorImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsImpl(String type) {
+        return this.aArrayType.getDescendantsImpl(type);
     }
 
     /**
@@ -1327,7 +1327,6 @@ public abstract class AVariableArrayType extends AArrayType {
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

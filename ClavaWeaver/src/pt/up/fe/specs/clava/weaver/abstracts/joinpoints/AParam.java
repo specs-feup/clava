@@ -288,15 +288,6 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aVardecl.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
@@ -544,8 +535,8 @@ public abstract class AParam extends AVardecl {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aVardecl.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aVardecl.getDescendantsArrayImpl();
     }
 
     /**
@@ -762,6 +753,15 @@ public abstract class AParam extends AVardecl {
     @Override
     public AJoinPoint getAncestorImpl(String type) {
         return this.aVardecl.getAncestorImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsImpl(String type) {
+        return this.aVardecl.getDescendantsImpl(type);
     }
 
     /**
@@ -1227,7 +1227,6 @@ public abstract class AParam extends AVardecl {
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

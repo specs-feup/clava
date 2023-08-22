@@ -15,14 +15,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="descendants" type="joinpoint[]"
             tooltip="Retrieves all descendants of the join point">
         </attribute>
-        <attribute name="descendants" type="joinpoint[]"
-            tooltip="Retrieves the descendants of the given type">
-            <parameter name="type" type="String" />
-        </attribute>
-        <attribute name="laraDescendants" type="joinpoint[]"
-            tooltip="[HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type">
-            <parameter name="type" type="String" />
-        </attribute>
 
         <attribute name="descendantsAndSelf" type="joinpoint[]"
             tooltip="Retrieves the descendants of the given type, including the node itself">

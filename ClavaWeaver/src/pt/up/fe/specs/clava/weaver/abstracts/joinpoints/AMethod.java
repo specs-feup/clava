@@ -540,15 +540,6 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aFunction.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
@@ -796,8 +787,8 @@ public abstract class AMethod extends AFunction {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aFunction.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aFunction.getDescendantsArrayImpl();
     }
 
     /**
@@ -1014,6 +1005,15 @@ public abstract class AMethod extends AFunction {
     @Override
     public AJoinPoint getAncestorImpl(String type) {
         return this.aFunction.getAncestorImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsImpl(String type) {
+        return this.aFunction.getDescendantsImpl(type);
     }
 
     /**
@@ -1638,7 +1638,6 @@ public abstract class AMethod extends AFunction {
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

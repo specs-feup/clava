@@ -492,15 +492,6 @@ public abstract class ABody extends AScope {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aScope.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
@@ -748,8 +739,8 @@ public abstract class ABody extends AScope {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aScope.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aScope.getDescendantsArrayImpl();
     }
 
     /**
@@ -966,6 +957,15 @@ public abstract class ABody extends AScope {
     @Override
     public AJoinPoint getAncestorImpl(String type) {
         return this.aScope.getAncestorImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsImpl(String type) {
+        return this.aScope.getDescendantsImpl(type);
     }
 
     /**
@@ -1542,7 +1542,6 @@ public abstract class ABody extends AScope {
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

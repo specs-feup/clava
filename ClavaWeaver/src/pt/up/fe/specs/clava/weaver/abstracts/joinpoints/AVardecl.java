@@ -518,15 +518,6 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aDeclarator.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
@@ -774,8 +765,8 @@ public abstract class AVardecl extends ADeclarator {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aDeclarator.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aDeclarator.getDescendantsArrayImpl();
     }
 
     /**
@@ -992,6 +983,15 @@ public abstract class AVardecl extends ADeclarator {
     @Override
     public AJoinPoint getAncestorImpl(String type) {
         return this.aDeclarator.getAncestorImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsImpl(String type) {
+        return this.aDeclarator.getDescendantsImpl(type);
     }
 
     /**
@@ -1426,7 +1426,6 @@ public abstract class AVardecl extends ADeclarator {
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

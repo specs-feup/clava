@@ -209,15 +209,6 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aTypedefNameDecl.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
@@ -465,8 +456,8 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aTypedefNameDecl.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aTypedefNameDecl.getDescendantsArrayImpl();
     }
 
     /**
@@ -683,6 +674,15 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
     @Override
     public AJoinPoint getAncestorImpl(String type) {
         return this.aTypedefNameDecl.getAncestorImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsImpl(String type) {
+        return this.aTypedefNameDecl.getDescendantsImpl(type);
     }
 
     /**
@@ -1087,7 +1087,6 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

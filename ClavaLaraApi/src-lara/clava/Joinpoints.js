@@ -248,10 +248,6 @@ export class Joinpoint extends LaraJoinPoint {
      */
     getContains(jp) { return wrapJoinPoint(this._javaObject.getContains(unwrapJoinPoint(jp))); }
     /**
-     * Retrieves the descendants of the given type
-     */
-    getDescendants(type) { return wrapJoinPoint(this._javaObject.descendants(unwrapJoinPoint(type))); }
-    /**
      * Retrieves the descendants of the given type, including the node itself
      */
     getDescendantsAndSelf(type) { return wrapJoinPoint(this._javaObject.descendantsAndSelf(unwrapJoinPoint(type))); }
@@ -286,10 +282,6 @@ export class Joinpoint extends LaraJoinPoint {
      */
     getKeyType(key) { return wrapJoinPoint(this._javaObject.getKeyType(unwrapJoinPoint(key))); }
     /**
-     * [HACK: .descendants(type) does not work in .lara files, after GraalVM update] Retrieves the descendants of the given type
-     */
-    getLaraDescendants(type) { return wrapJoinPoint(this._javaObject.laraDescendants(unwrapJoinPoint(type))); }
-    /**
      * Retrives values that have been associated to nodes of the AST with 'setUserField'
      */
     getUserField(fieldName) { return wrapJoinPoint(this._javaObject.userField(unwrapJoinPoint(fieldName))); }
@@ -322,6 +314,10 @@ export class Joinpoint extends LaraJoinPoint {
      * Looks for an ancestor joinpoint name, walking back on the AST
      */
     getAncestor(type) { return wrapJoinPoint(this._javaObject.getAncestor(unwrapJoinPoint(type))); }
+    /**
+     * Retrieves the descendants of the given type
+     */
+    getDescendants(type) { return wrapJoinPoint(this._javaObject.getDescendants(unwrapJoinPoint(type))); }
     /**
      * Inserts the given join point after this join point
      */

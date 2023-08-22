@@ -340,15 +340,6 @@ public abstract class AArrayAccess extends AExpression {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aExpression.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
@@ -596,8 +587,8 @@ public abstract class AArrayAccess extends AExpression {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aExpression.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aExpression.getDescendantsArrayImpl();
     }
 
     /**
@@ -814,6 +805,15 @@ public abstract class AArrayAccess extends AExpression {
     @Override
     public AJoinPoint getAncestorImpl(String type) {
         return this.aExpression.getAncestorImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsImpl(String type) {
+        return this.aExpression.getDescendantsImpl(type);
     }
 
     /**
@@ -1218,7 +1218,6 @@ public abstract class AArrayAccess extends AExpression {
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

@@ -26,7 +26,7 @@ aspectdef RunInlineFunctionCalls
 
 	select file.function end
 	apply
-		var innerCalls = $function.getLaraDescendants('call');
+		var innerCalls = $function.getDescendants('call');
 
 		func_name[$function.name].innerCallNumber = innerCalls.length;
 		for(var obj of innerCalls)
@@ -80,7 +80,7 @@ aspectdef RunInlineFunctionCalls
 
 	select file.function end
 	apply
-		var innerCalls = $function.getLaraDescendants('call');
+		var innerCalls = $function.getDescendants('call');
 
 		for(var obj of innerCalls)
 			if (safefunctionCallslist.indexOf(obj.name) === -1 && func_name[obj.name] === undefined  )

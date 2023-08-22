@@ -382,15 +382,6 @@ public abstract class AEnumType extends ATagType {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aTagType.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
@@ -638,8 +629,8 @@ public abstract class AEnumType extends ATagType {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aTagType.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aTagType.getDescendantsArrayImpl();
     }
 
     /**
@@ -856,6 +847,15 @@ public abstract class AEnumType extends ATagType {
     @Override
     public AJoinPoint getAncestorImpl(String type) {
         return this.aTagType.getAncestorImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsImpl(String type) {
+        return this.aTagType.getDescendantsImpl(type);
     }
 
     /**
@@ -1272,7 +1272,6 @@ public abstract class AEnumType extends ATagType {
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

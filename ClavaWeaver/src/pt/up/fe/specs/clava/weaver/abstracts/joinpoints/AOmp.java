@@ -1223,15 +1223,6 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aPragma.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
@@ -1479,8 +1470,8 @@ public abstract class AOmp extends APragma {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aPragma.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aPragma.getDescendantsArrayImpl();
     }
 
     /**
@@ -1697,6 +1688,15 @@ public abstract class AOmp extends APragma {
     @Override
     public AJoinPoint getAncestorImpl(String type) {
         return this.aPragma.getAncestorImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsImpl(String type) {
+        return this.aPragma.getDescendantsImpl(type);
     }
 
     /**
@@ -2170,7 +2170,6 @@ public abstract class AOmp extends APragma {
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

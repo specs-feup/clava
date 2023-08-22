@@ -101,6 +101,7 @@ public abstract class AJoinPoint extends JoinPoint {
     @Override
     protected void fillWithActions(List<String> actions) {
         actions.add("getAncestor(String type)");
+        actions.add("getDescendants(String type)");
         actions.add("replaceWith(AJoinPoint node)");
         actions.add("replaceWith(String node)");
         actions.add("replaceWith(AJoinPoint[] node)");
@@ -152,6 +153,33 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "getAncestor", e);
+        }
+    }
+
+    /**
+     * Retrieves the descendants of the given type
+     * @param type 
+     */
+    public AJoinPoint[] getDescendantsImpl(String type) {
+        throw new UnsupportedOperationException(get_class()+": Action getDescendants not implemented ");
+    }
+
+    /**
+     * Retrieves the descendants of the given type
+     * @param type 
+     */
+    public final AJoinPoint[] getDescendants(String type) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "getDescendants", this, Optional.empty(), type);
+        	}
+        	AJoinPoint[] result = this.getDescendantsImpl(type);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "getDescendants", this, Optional.ofNullable(result), type);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "getDescendants", e);
         }
     }
 
@@ -828,8 +856,6 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("root");
         attributes.add("parent");
         attributes.add("descendants");
-        attributes.add("descendants(String type)");
-        attributes.add("laraDescendants(String type)");
         attributes.add("descendantsAndSelf(String type)");
         attributes.add("chainAncestor(String type)");
         attributes.add("astParent");
@@ -969,82 +995,6 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "descendants", e);
-        }
-    }
-
-    /**
-     * 
-     * @param type
-     * @return 
-     */
-    public abstract AJoinPoint[] descendantsArrayImpl(String type);
-
-    /**
-     * 
-     * @param type
-     * @return 
-     */
-    public Object descendantsImpl(String type) {
-        AJoinPoint[] aJoinPointArrayImpl0 = descendantsArrayImpl(type);
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * 
-     * @param type
-     * @return 
-     */
-    public final Object descendants(String type) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "descendants", Optional.empty(), type);
-        	}
-        	Object result = this.descendantsImpl(type);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "descendants", Optional.ofNullable(result), type);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "descendants", e);
-        }
-    }
-
-    /**
-     * 
-     * @param type
-     * @return 
-     */
-    public abstract AJoinPoint[] laraDescendantsArrayImpl(String type);
-
-    /**
-     * 
-     * @param type
-     * @return 
-     */
-    public Object laraDescendantsImpl(String type) {
-        AJoinPoint[] aJoinPointArrayImpl0 = laraDescendantsArrayImpl(type);
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * 
-     * @param type
-     * @return 
-     */
-    public final Object laraDescendants(String type) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "laraDescendants", Optional.empty(), type);
-        	}
-        	Object result = this.laraDescendantsImpl(type);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "laraDescendants", Optional.ofNullable(result), type);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "laraDescendants", e);
         }
     }
 

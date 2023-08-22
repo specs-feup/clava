@@ -353,15 +353,6 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aDecl.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
@@ -609,8 +600,8 @@ public abstract class ANamedDecl extends ADecl {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aDecl.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aDecl.getDescendantsArrayImpl();
     }
 
     /**
@@ -827,6 +818,15 @@ public abstract class ANamedDecl extends ADecl {
     @Override
     public AJoinPoint getAncestorImpl(String type) {
         return this.aDecl.getAncestorImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsImpl(String type) {
+        return this.aDecl.getDescendantsImpl(type);
     }
 
     /**
@@ -1238,7 +1238,6 @@ public abstract class ANamedDecl extends ADecl {
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),

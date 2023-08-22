@@ -418,15 +418,6 @@ public abstract class AMemberCall extends ACall {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aCall.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
@@ -674,8 +665,8 @@ public abstract class AMemberCall extends ACall {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aCall.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aCall.getDescendantsArrayImpl();
     }
 
     /**
@@ -892,6 +883,15 @@ public abstract class AMemberCall extends ACall {
     @Override
     public AJoinPoint getAncestorImpl(String type) {
         return this.aCall.getAncestorImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsImpl(String type) {
+        return this.aCall.getDescendantsImpl(type);
     }
 
     /**
@@ -1377,7 +1377,6 @@ public abstract class AMemberCall extends ACall {
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
