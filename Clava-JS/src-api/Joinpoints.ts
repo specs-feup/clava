@@ -2036,10 +2036,6 @@ export class Scope extends Statement {
    */
   set naked(value: boolean) { this._javaObject.setNaked(unwrapJoinPoint(value)); }
   /**
-   * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas
-   */
-  get numStatements(): number { return wrapJoinPoint(this._javaObject.getNumStatements()) }
-  /**
    * The statement that owns the scope (e.g., function, loop...)
    */
   get owner(): Joinpoint { return wrapJoinPoint(this._javaObject.getOwner()) }
@@ -2047,10 +2043,6 @@ export class Scope extends Statement {
    * Returns the direct (children) statements of this scope
    */
   get stmts(): Statement[] { return wrapJoinPoint(this._javaObject.getStmts()) }
-  /**
-   * The number of statements in the scope, not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)
-   */
-  getNumStatements(flat: boolean): number { return wrapJoinPoint(this._javaObject.numStatements(unwrapJoinPoint(flat))); }
   /**
    * Adds a new local variable to this scope
    */
@@ -2067,6 +2059,10 @@ export class Scope extends Statement {
    * DFG tester
    */
   dfg(): string { return wrapJoinPoint(this._javaObject.dfg()); }
+  /**
+   * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)
+   */
+  getNumStatements(flat: boolean = false): number { return wrapJoinPoint(this._javaObject.getNumStatements(unwrapJoinPoint(flat))); }
   insertBegin(node: Joinpoint): Joinpoint;
   insertBegin(code: string): Joinpoint;
   insertBegin(p1: Joinpoint | string): Joinpoint | Joinpoint { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(p1))); }

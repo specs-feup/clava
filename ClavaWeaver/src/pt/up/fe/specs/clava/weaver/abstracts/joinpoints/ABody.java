@@ -26,24 +26,6 @@ public abstract class ABody extends AScope {
         this.aScope = aScope;
     }
     /**
-     * Get value on attribute numStatements
-     * @return the attribute's value
-     */
-    @Override
-    public Long getNumStatementsImpl() {
-        return this.aScope.getNumStatementsImpl();
-    }
-
-    /**
-     * Get value on attribute numStatements
-     * @return the attribute's value
-     */
-    @Override
-    public Long numStatementsImpl(Boolean flat) {
-        return this.aScope.numStatementsImpl(flat);
-    }
-
-    /**
      * Get value on attribute naked
      * @return the attribute's value
      */
@@ -1218,6 +1200,15 @@ public abstract class ABody extends AScope {
     }
 
     /**
+     * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)
+     * @param flat 
+     */
+    @Override
+    public Long getNumStatementsImpl(Boolean flat) {
+        return this.aScope.getNumStatementsImpl(flat);
+    }
+
+    /**
      * The value associated with the given property key
      * @param key 
      */
@@ -1475,7 +1466,6 @@ public abstract class ABody extends AScope {
      * 
      */
     protected enum BodyAttributes {
-        NUMSTATEMENTS("numStatements"),
         NAKED("naked"),
         STMTS("stmts"),
         ALLSTMTS("allStmts"),

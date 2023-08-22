@@ -424,6 +424,11 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <action name="dfg" class="scope" return="string" tooltip="DFG tester" />
 
+    <action name="getNumStatements" class="scope" return="Long"
+        tooltip="The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)">
+        <parameter name="flat" type="Boolean" default="false" />
+    </action>
+
     <!-- FUNCTION -->
 
     <action name="clone" class="function" return="function"

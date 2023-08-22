@@ -8102,28 +8102,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas",
-						"children": [
-									{
-										"type": "Long",
-										"name": "numStatements"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "The number of statements in the scope, not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)",
-						"children": [
-									{
-										"type": "Long",
-										"name": "numStatements"
-									},
-									{
-										"type": "Boolean",
-										"name": "flat"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "The statement that owns the scope (e.g., function, loop...)",
 						"children": [
 									{
@@ -8856,6 +8834,20 @@
 									{
 										"type": "String",
 										"name": "dfg"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)",
+						"children": [
+									{
+										"type": "Long",
+										"name": "getNumStatements"
+									},
+									{
+										"type": "Boolean",
+										"name": "flat",
+										"defaultValue": "false"
 									}]
 					},
 					{
@@ -77460,28 +77452,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas",
-						"children": [
-									{
-										"type": "Long",
-										"name": "numStatements"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "The number of statements in the scope, not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)",
-						"children": [
-									{
-										"type": "Long",
-										"name": "numStatements"
-									},
-									{
-										"type": "Boolean",
-										"name": "flat"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "The statement that owns the scope (e.g., function, loop...)",
 						"children": [
 									{
@@ -78214,6 +78184,20 @@
 									{
 										"type": "String",
 										"name": "dfg"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)",
+						"children": [
+									{
+										"type": "Long",
+										"name": "getNumStatements"
+									},
+									{
+										"type": "Boolean",
+										"name": "flat",
+										"defaultValue": "false"
 									}]
 					},
 					{

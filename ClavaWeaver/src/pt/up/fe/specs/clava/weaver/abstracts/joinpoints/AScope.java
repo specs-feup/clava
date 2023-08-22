@@ -29,56 +29,6 @@ public abstract class AScope extends AStatement {
         this.aStatement = aStatement;
     }
     /**
-     * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas
-     */
-    public abstract Long getNumStatementsImpl();
-
-    /**
-     * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas
-     */
-    public final Object getNumStatements() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numStatements", Optional.empty());
-        	}
-        	Long result = this.getNumStatementsImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "numStatements", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "numStatements", e);
-        }
-    }
-
-    /**
-     * 
-     * @param flat
-     * @return 
-     */
-    public abstract Long numStatementsImpl(Boolean flat);
-
-    /**
-     * 
-     * @param flat
-     * @return 
-     */
-    public final Object numStatements(Boolean flat) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "numStatements", Optional.empty(), flat);
-        	}
-        	Long result = this.numStatementsImpl(flat);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "numStatements", Optional.ofNullable(result), flat);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "numStatements", e);
-        }
-    }
-
-    /**
      * true if the scope does not have curly braces
      */
     public abstract Boolean getNakedImpl();
@@ -641,6 +591,33 @@ public abstract class AScope extends AStatement {
         	return result;
         } catch(Exception e) {
         	throw new ActionException(get_class(), "dfg", e);
+        }
+    }
+
+    /**
+     * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)
+     * @param flat 
+     */
+    public Long getNumStatementsImpl(Boolean flat) {
+        throw new UnsupportedOperationException(get_class()+": Action getNumStatements not implemented ");
+    }
+
+    /**
+     * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)
+     * @param flat 
+     */
+    public final Long getNumStatements(Boolean flat) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "getNumStatements", this, Optional.empty(), flat);
+        	}
+        	Long result = this.getNumStatementsImpl(flat);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "getNumStatements", this, Optional.ofNullable(result), flat);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "getNumStatements", e);
         }
     }
 
@@ -1757,8 +1734,6 @@ public abstract class AScope extends AStatement {
     @Override
     protected void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
-        attributes.add("numStatements");
-        attributes.add("numStatements");
         attributes.add("naked");
         attributes.add("stmts");
         attributes.add("allStmts");
@@ -1805,6 +1780,7 @@ public abstract class AScope extends AStatement {
         actions.add("void clear()");
         actions.add("string cfg()");
         actions.add("string dfg()");
+        actions.add("Long getNumStatements(Boolean)");
     }
 
     /**
@@ -1832,7 +1808,6 @@ public abstract class AScope extends AStatement {
      * 
      */
     protected enum ScopeAttributes {
-        NUMSTATEMENTS("numStatements"),
         NAKED("naked"),
         STMTS("stmts"),
         ALLSTMTS("allStmts"),

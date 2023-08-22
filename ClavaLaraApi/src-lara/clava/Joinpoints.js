@@ -1829,10 +1829,6 @@ export class Scope extends Statement {
      */
     set naked(value) { this._javaObject.setNaked(unwrapJoinPoint(value)); }
     /**
-     * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas
-     */
-    get numStatements() { return wrapJoinPoint(this._javaObject.getNumStatements()); }
-    /**
      * The statement that owns the scope (e.g., function, loop...)
      */
     get owner() { return wrapJoinPoint(this._javaObject.getOwner()); }
@@ -1840,10 +1836,6 @@ export class Scope extends Statement {
      * Returns the direct (children) statements of this scope
      */
     get stmts() { return wrapJoinPoint(this._javaObject.getStmts()); }
-    /**
-     * The number of statements in the scope, not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)
-     */
-    getNumStatements(flat) { return wrapJoinPoint(this._javaObject.numStatements(unwrapJoinPoint(flat))); }
     /**
      * Adds a new local variable to this scope
      */
@@ -1860,6 +1852,10 @@ export class Scope extends Statement {
      * DFG tester
      */
     dfg() { return wrapJoinPoint(this._javaObject.dfg()); }
+    /**
+     * The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)
+     */
+    getNumStatements(flat = false) { return wrapJoinPoint(this._javaObject.getNumStatements(unwrapJoinPoint(flat))); }
     insertBegin(p1) { return wrapJoinPoint(this._javaObject.insertBegin(unwrapJoinPoint(p1))); }
     insertEnd(p1) { return wrapJoinPoint(this._javaObject.insertEnd(unwrapJoinPoint(p1))); }
     /**

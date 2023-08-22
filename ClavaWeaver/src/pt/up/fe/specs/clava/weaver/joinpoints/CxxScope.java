@@ -168,12 +168,7 @@ public class CxxScope extends AScope {
     }
 
     @Override
-    public Long getNumStatementsImpl() {
-        return numStatementsImpl(false);
-    }
-
-    @Override
-    public Long numStatementsImpl(Boolean flat) {
+    public Long getNumStatementsImpl(Boolean flat) {
         var nodesStream = flat ? scope.getChildrenStream() : scope.getDescendantsStream();
 
         return nodesStream.filter(Stmt.class::isInstance)
