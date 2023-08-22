@@ -661,13 +661,21 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         tooltip="True if the directive has at least one clause of the given clause kind, false otherwise">
         <parameter name="clauseName" type="String" />
     </action>
-    <action name="setKind" class="omp"
-        tooltip="Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded">
-        <parameter name="directiveKind" type="String" />
+    <action name="isClauseLegal" class="omp" return="Boolean"
+        tooltip="True if it is legal to use the given clause kind in this directive, false otherwise">
+        <parameter name="clauseName" type="String" />
+    </action>
+    <action name="getReduction" class="omp" return="String[]"
+        tooltip="The variable names for the given reduction kind, or empty array if no reduction of that kind is defined">
+        <parameter name="kind" type="String" />
     </action>
     <action name="removeClause" class="omp"
         tooltip="Removes any clause of the given kind from the OpenMP pragma">
         <parameter name="clauseKind" type="String" />
+    </action>
+    <action name="setKind" class="omp"
+        tooltip="Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded">
+        <parameter name="directiveKind" type="String" />
     </action>
     <action name="setNumThreads" class="omp"
         tooltip="Sets the value of the num_threads clause of an OpenMP pragma">

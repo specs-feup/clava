@@ -144,33 +144,6 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * 
-     * @param clauseName
-     * @return 
-     */
-    public abstract Boolean isClauseLegalImpl(String clauseName);
-
-    /**
-     * 
-     * @param clauseName
-     * @return 
-     */
-    public final Object isClauseLegal(String clauseName) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isClauseLegal", Optional.empty(), clauseName);
-        	}
-        	Boolean result = this.isClauseLegalImpl(clauseName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isClauseLegal", Optional.ofNullable(result), clauseName);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isClauseLegal", e);
-        }
-    }
-
-    /**
      * Get value on attribute clauseKinds
      * @return the attribute's value
      */
@@ -200,44 +173,6 @@ public abstract class AOmp extends APragma {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "clauseKinds", e);
-        }
-    }
-
-    /**
-     * 
-     * @param kind
-     * @return 
-     */
-    public abstract String[] reductionArrayImpl(String kind);
-
-    /**
-     * 
-     * @param kind
-     * @return 
-     */
-    public Object reductionImpl(String kind) {
-        String[] stringArrayImpl0 = reductionArrayImpl(kind);
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * 
-     * @param kind
-     * @return 
-     */
-    public final Object reduction(String kind) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "reduction", Optional.empty(), kind);
-        	}
-        	Object result = this.reductionImpl(kind);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "reduction", Optional.ofNullable(result), kind);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "reduction", e);
         }
     }
 
@@ -582,28 +517,56 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
-     * @param directiveKind 
+     * True if it is legal to use the given clause kind in this directive, false otherwise
+     * @param clauseName 
      */
-    public void setKindImpl(String directiveKind) {
-        throw new UnsupportedOperationException(get_class()+": Action setKind not implemented ");
+    public Boolean isClauseLegalImpl(String clauseName) {
+        throw new UnsupportedOperationException(get_class()+": Action isClauseLegal not implemented ");
     }
 
     /**
-     * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
-     * @param directiveKind 
+     * True if it is legal to use the given clause kind in this directive, false otherwise
+     * @param clauseName 
      */
-    public final void setKind(String directiveKind) {
+    public final Boolean isClauseLegal(String clauseName) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setKind", this, Optional.empty(), directiveKind);
+        		eventTrigger().triggerAction(Stage.BEGIN, "isClauseLegal", this, Optional.empty(), clauseName);
         	}
-        	this.setKindImpl(directiveKind);
+        	Boolean result = this.isClauseLegalImpl(clauseName);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setKind", this, Optional.empty(), directiveKind);
+        		eventTrigger().triggerAction(Stage.END, "isClauseLegal", this, Optional.ofNullable(result), clauseName);
         	}
+        	return result;
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setKind", e);
+        	throw new ActionException(get_class(), "isClauseLegal", e);
+        }
+    }
+
+    /**
+     * The variable names for the given reduction kind, or empty array if no reduction of that kind is defined
+     * @param kind 
+     */
+    public String[] getReductionImpl(String kind) {
+        throw new UnsupportedOperationException(get_class()+": Action getReduction not implemented ");
+    }
+
+    /**
+     * The variable names for the given reduction kind, or empty array if no reduction of that kind is defined
+     * @param kind 
+     */
+    public final String[] getReduction(String kind) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "getReduction", this, Optional.empty(), kind);
+        	}
+        	String[] result = this.getReductionImpl(kind);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "getReduction", this, Optional.ofNullable(result), kind);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "getReduction", e);
         }
     }
 
@@ -630,6 +593,32 @@ public abstract class AOmp extends APragma {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "removeClause", e);
+        }
+    }
+
+    /**
+     * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
+     * @param directiveKind 
+     */
+    public void setKindImpl(String directiveKind) {
+        throw new UnsupportedOperationException(get_class()+": Action setKind not implemented ");
+    }
+
+    /**
+     * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
+     * @param directiveKind 
+     */
+    public final void setKind(String directiveKind) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "setKind", this, Optional.empty(), directiveKind);
+        	}
+        	this.setKindImpl(directiveKind);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "setKind", this, Optional.empty(), directiveKind);
+        	}
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "setKind", e);
         }
     }
 
@@ -2013,9 +2002,7 @@ public abstract class AOmp extends APragma {
         attributes.add("numThreads");
         attributes.add("procBind");
         attributes.add("private");
-        attributes.add("isClauseLegal");
         attributes.add("clauseKinds");
-        attributes.add("reduction");
         attributes.add("reductionKinds");
         attributes.add("default");
         attributes.add("firstprivate");
@@ -2044,8 +2031,10 @@ public abstract class AOmp extends APragma {
     protected final void fillWithActions(List<String> actions) {
         this.aPragma.fillWithActions(actions);
         actions.add("Boolean hasClause(String)");
-        actions.add("void setKind(String)");
+        actions.add("Boolean isClauseLegal(String)");
+        actions.add("String[] getReduction(String)");
         actions.add("void removeClause(String)");
+        actions.add("void setKind(String)");
         actions.add("void setNumThreads(String)");
         actions.add("void setProcBind(String)");
         actions.add("void setPrivate(String[])");
@@ -2093,9 +2082,7 @@ public abstract class AOmp extends APragma {
         NUMTHREADS("numThreads"),
         PROCBIND("procBind"),
         PRIVATE("private"),
-        ISCLAUSELEGAL("isClauseLegal"),
         CLAUSEKINDS("clauseKinds"),
-        REDUCTION("reduction"),
         REDUCTIONKINDS("reductionKinds"),
         DEFAULT("default"),
         FIRSTPRIVATE("firstprivate"),

@@ -138,7 +138,7 @@ public class CxxOmp extends AOmp {
     }
 
     @Override
-    public String[] reductionArrayImpl(String kind) {
+    public String[] getReductionImpl(String kind) {
         return ompPragma.clauses().getReduction(kind).toArray(new String[0]);
     }
 

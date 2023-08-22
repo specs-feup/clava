@@ -1707,17 +1707,17 @@ export class Omp extends Pragma {
      */
     set shared(value) { this._javaObject.setShared(unwrapJoinPoint(value)); }
     /**
-     * True if it is legal to use the given clause kind in this directive, false otherwise
-     */
-    getIsClauseLegal(clauseName) { return wrapJoinPoint(this._javaObject.isClauseLegal(unwrapJoinPoint(clauseName))); }
-    /**
      * The variable names for the given reduction kind, or empty array if no reduction of that kind is defined
      */
-    getReduction(kind) { return wrapJoinPoint(this._javaObject.reduction(unwrapJoinPoint(kind))); }
+    getReduction(kind) { return wrapJoinPoint(this._javaObject.getReduction(unwrapJoinPoint(kind))); }
     /**
      * True if the directive has at least one clause of the given clause kind, false otherwise
      */
     hasClause(clauseName) { return wrapJoinPoint(this._javaObject.hasClause(unwrapJoinPoint(clauseName))); }
+    /**
+     * True if it is legal to use the given clause kind in this directive, false otherwise
+     */
+    isClauseLegal(clauseName) { return wrapJoinPoint(this._javaObject.isClauseLegal(unwrapJoinPoint(clauseName))); }
     /**
      * Removes any clause of the given kind from the OpenMP pragma
      */

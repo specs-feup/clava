@@ -918,16 +918,8 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         </attribute>
         <attribute name="private" type="String[]"
             tooltip="The variable names of all private clauses, or empty array if no private clause is defined" />
-        <attribute name="isClauseLegal" type="Boolean"
-            tooltip="True if it is legal to use the given clause kind in this directive, false otherwise">
-            <parameter name="clauseName" type="String" />
-        </attribute>
         <attribute name="clauseKinds" type="String[]"
             tooltip="The names of the kinds of all clauses in the pragma, or empty array if no clause is defined" />
-        <attribute name="reduction" type="String[]"
-            tooltip="The variable names for the given reduction kind, or empty array if no reduction of that kind is defined">
-            <parameter name="kind" type="String" />
-        </attribute>
         <attribute name="reductionKinds" type="String[]"
             tooltip="The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined" />
         <attribute name="default" type="String"

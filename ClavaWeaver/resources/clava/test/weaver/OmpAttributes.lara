@@ -7,7 +7,7 @@ aspectdef test
         println("kind: " + $omp.kind);
 		println("clause kinds:" + $omp.clauseKinds);
         println("has shared:" + $omp.hasClause("shared"));
-        println("nowait legal:" + $omp.getIsClauseLegal("nowait"));
+        println("nowait legal:" + $omp.isClauseLegal("nowait"));
         println("num_threads:" + $omp.numThreads);
         println("proc_bind:" + $omp.procBind);
 		println("private:" + $omp.private);

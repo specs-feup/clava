@@ -63714,19 +63714,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "True if it is legal to use the given clause kind in this directive, false otherwise",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "isClauseLegal"
-									},
-									{
-										"type": "String",
-										"name": "clauseName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "The kind of the directive",
 						"children": [
 									{
@@ -63777,19 +63764,6 @@
 									{
 										"type": "String",
 										"name": "procBind"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "The variable names for the given reduction kind, or empty array if no reduction of that kind is defined",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "reduction"
-									},
-									{
-										"type": "String",
-										"name": "kind"
 									}]
 					},
 					{
@@ -64404,11 +64378,39 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "The variable names for the given reduction kind, or empty array if no reduction of that kind is defined",
+						"children": [
+									{
+										"type": "String[]",
+										"name": "getReduction"
+									},
+									{
+										"type": "String",
+										"name": "kind",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "True if the directive has at least one clause of the given clause kind, false otherwise",
 						"children": [
 									{
 										"type": "Boolean",
 										"name": "hasClause"
+									},
+									{
+										"type": "String",
+										"name": "clauseName",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "True if it is legal to use the given clause kind in this directive, false otherwise",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isClauseLegal"
 									},
 									{
 										"type": "String",
