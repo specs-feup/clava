@@ -285,15 +285,6 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * Get value on attribute descendantsAndSelfArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
-        return this.aExpression.descendantsAndSelfArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute type
      * @return the attribute's value
      */
@@ -393,15 +384,6 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * Get value on attribute astChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astChildImpl(Integer index) {
-        return this.aExpression.astChildImpl(index);
-    }
-
-    /**
      * Get value on attribute astName
      * @return the attribute's value
      */
@@ -435,15 +417,6 @@ public abstract class AUnaryExprOrType extends AExpression {
     @Override
     public Boolean containsImpl(AJoinPoint jp) {
         return this.aExpression.containsImpl(jp);
-    }
-
-    /**
-     * Get value on attribute astIsInstance
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean astIsInstanceImpl(String className) {
-        return this.aExpression.astIsInstanceImpl(className);
     }
 
     /**
@@ -498,15 +471,6 @@ public abstract class AUnaryExprOrType extends AExpression {
     @Override
     public Boolean hasNodeImpl(Object nodeOrJp) {
         return this.aExpression.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute child
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint childImpl(Integer index) {
-        return this.aExpression.childImpl(index);
     }
 
     /**
@@ -708,15 +672,6 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
-     * Get value on attribute firstJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint firstJpImpl(String type) {
-        return this.aExpression.firstJpImpl(type);
-    }
-
-    /**
      * Get value on attribute depth
      * @return the attribute's value
      */
@@ -789,6 +744,42 @@ public abstract class AUnaryExprOrType extends AExpression {
     }
 
     /**
+     * true, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'
+     * @param className 
+     */
+    @Override
+    public Boolean astIsInstanceImpl(String className) {
+        return this.aExpression.astIsInstanceImpl(className);
+    }
+
+    /**
+     * Looks in the descendants for the first node of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aExpression.getFirstJpImpl(type);
+    }
+
+    /**
+     * Returns the child of the node at the given index, ignoring null nodes
+     * @param index 
+     */
+    @Override
+    public AJoinPoint getChildImpl(Integer index) {
+        return this.aExpression.getChildImpl(index);
+    }
+
+    /**
+     * Returns the child of the node at the given index, considering null nodes
+     * @param index 
+     */
+    @Override
+    public AJoinPoint getAstChildImpl(Integer index) {
+        return this.aExpression.getAstChildImpl(index);
+    }
+
+    /**
      * Looks for an ancestor joinpoint name, walking back on the AST
      * @param type 
      */
@@ -804,6 +795,15 @@ public abstract class AUnaryExprOrType extends AExpression {
     @Override
     public AJoinPoint[] getDescendantsImpl(String type) {
         return this.aExpression.getDescendantsImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type, including the node itself
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsAndSelfImpl(String type) {
+        return this.aExpression.getDescendantsAndSelfImpl(type);
     }
 
     /**
@@ -1200,7 +1200,6 @@ public abstract class AUnaryExprOrType extends AExpression {
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
         HASCHILDREN("hasChildren"),
-        DESCENDANTSANDSELF("descendantsAndSelf"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
         RIGHTJP("rightJp"),
@@ -1212,19 +1211,16 @@ public abstract class AUnaryExprOrType extends AExpression {
         NUMCHILDREN("numChildren"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
-        ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
         CONTAINS("contains"),
-        ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
-        CHILD("child"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -1247,7 +1243,6 @@ public abstract class AUnaryExprOrType extends AExpression {
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
-        FIRSTJP("firstJp"),
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),

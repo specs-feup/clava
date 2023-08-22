@@ -79,7 +79,7 @@ end
 aspectdef ExtractDoubleFloatConstants
   select expr end
   apply
-    if (! $expr.getAstIsInstance("NullExpr")) {
+    if (! $expr.astIsInstance("NullExpr")) {
       var $jpt = $expr.joinPointType;
       if (($jpt  === 'expression') && ($expr.astNumChildren === 0))
         dclConstantDoubleFloat($expr);

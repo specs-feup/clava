@@ -63,7 +63,7 @@ function isAConstantDecl($vstmt)
 {
   if ($vstmt.astName !== 'VarDecl') return false;
   $vardeclType = $vstmt.type;
-  return $vardeclType.getAstIsInstance("QualType");
+  return $vardeclType.astIsInstance("QualType");
 }
 
 /**

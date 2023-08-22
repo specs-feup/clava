@@ -186,15 +186,6 @@ public abstract class ACudaKernelCall extends ACall {
     }
 
     /**
-     * Get value on attribute arg
-     * @return the attribute's value
-     */
-    @Override
-    public AExpression argImpl(int index) {
-        return this.aCall.argImpl(index);
-    }
-
-    /**
      * Get value on attribute returnType
      * @return the attribute's value
      */
@@ -391,15 +382,6 @@ public abstract class ACudaKernelCall extends ACall {
     }
 
     /**
-     * Get value on attribute descendantsAndSelfArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
-        return this.aCall.descendantsAndSelfArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute type
      * @return the attribute's value
      */
@@ -499,15 +481,6 @@ public abstract class ACudaKernelCall extends ACall {
     }
 
     /**
-     * Get value on attribute astChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astChildImpl(Integer index) {
-        return this.aCall.astChildImpl(index);
-    }
-
-    /**
      * Get value on attribute astName
      * @return the attribute's value
      */
@@ -541,15 +514,6 @@ public abstract class ACudaKernelCall extends ACall {
     @Override
     public Boolean containsImpl(AJoinPoint jp) {
         return this.aCall.containsImpl(jp);
-    }
-
-    /**
-     * Get value on attribute astIsInstance
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean astIsInstanceImpl(String className) {
-        return this.aCall.astIsInstanceImpl(className);
     }
 
     /**
@@ -604,15 +568,6 @@ public abstract class ACudaKernelCall extends ACall {
     @Override
     public Boolean hasNodeImpl(Object nodeOrJp) {
         return this.aCall.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute child
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint childImpl(Integer index) {
-        return this.aCall.childImpl(index);
     }
 
     /**
@@ -814,15 +769,6 @@ public abstract class ACudaKernelCall extends ACall {
     }
 
     /**
-     * Get value on attribute firstJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint firstJpImpl(String type) {
-        return this.aCall.firstJpImpl(type);
-    }
-
-    /**
      * Get value on attribute depth
      * @return the attribute's value
      */
@@ -895,6 +841,42 @@ public abstract class ACudaKernelCall extends ACall {
     }
 
     /**
+     * true, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'
+     * @param className 
+     */
+    @Override
+    public Boolean astIsInstanceImpl(String className) {
+        return this.aCall.astIsInstanceImpl(className);
+    }
+
+    /**
+     * Looks in the descendants for the first node of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aCall.getFirstJpImpl(type);
+    }
+
+    /**
+     * Returns the child of the node at the given index, ignoring null nodes
+     * @param index 
+     */
+    @Override
+    public AJoinPoint getChildImpl(Integer index) {
+        return this.aCall.getChildImpl(index);
+    }
+
+    /**
+     * Returns the child of the node at the given index, considering null nodes
+     * @param index 
+     */
+    @Override
+    public AJoinPoint getAstChildImpl(Integer index) {
+        return this.aCall.getAstChildImpl(index);
+    }
+
+    /**
      * Looks for an ancestor joinpoint name, walking back on the AST
      * @param type 
      */
@@ -910,6 +892,15 @@ public abstract class ACudaKernelCall extends ACall {
     @Override
     public AJoinPoint[] getDescendantsImpl(String type) {
         return this.aCall.getDescendantsImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type, including the node itself
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsAndSelfImpl(String type) {
+        return this.aCall.getDescendantsAndSelfImpl(type);
     }
 
     /**
@@ -1133,6 +1124,15 @@ public abstract class ACudaKernelCall extends ACall {
     @Override
     public void dataClearImpl() {
         this.aCall.dataClearImpl();
+    }
+
+    /**
+     * 
+     * @param index 
+     */
+    @Override
+    public AExpression getArgImpl(int index) {
+        return this.aCall.getArgImpl(index);
     }
 
     /**
@@ -1375,7 +1375,6 @@ public abstract class ACudaKernelCall extends ACall {
         DEFINITION("definition"),
         ARGLIST("argList"),
         ARGS("args"),
-        ARG("arg"),
         RETURNTYPE("returnType"),
         FUNCTIONTYPE("functionType"),
         ISMEMBERACCESS("isMemberAccess"),
@@ -1394,7 +1393,6 @@ public abstract class ACudaKernelCall extends ACall {
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
         HASCHILDREN("hasChildren"),
-        DESCENDANTSANDSELF("descendantsAndSelf"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
         RIGHTJP("rightJp"),
@@ -1406,19 +1404,16 @@ public abstract class ACudaKernelCall extends ACall {
         NUMCHILDREN("numChildren"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
-        ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
         CONTAINS("contains"),
-        ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
-        CHILD("child"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -1441,7 +1436,6 @@ public abstract class ACudaKernelCall extends ACall {
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
-        FIRSTJP("firstJp"),
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),

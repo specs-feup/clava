@@ -209,33 +209,6 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * 
-     * @param withReturnType
-     * @return 
-     */
-    public abstract String declarationImpl(Boolean withReturnType);
-
-    /**
-     * 
-     * @param withReturnType
-     * @return 
-     */
-    public final Object declaration(Boolean withReturnType) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "declaration", Optional.empty(), withReturnType);
-        	}
-        	String result = this.declarationImpl(withReturnType);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "declaration", Optional.ofNullable(result), withReturnType);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "declaration", e);
-        }
-    }
-
-    /**
      * Get value on attribute body
      * @return the attribute's value
      */
@@ -799,6 +772,33 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * 
+     * @param withReturnType 
+     */
+    public String getDeclarationImpl(Boolean withReturnType) {
+        throw new UnsupportedOperationException(get_class()+": Action getDeclaration not implemented ");
+    }
+
+    /**
+     * 
+     * @param withReturnType 
+     */
+    public final String getDeclaration(Boolean withReturnType) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "getDeclaration", this, Optional.empty(), withReturnType);
+        	}
+        	String result = this.getDeclarationImpl(withReturnType);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "getDeclaration", this, Optional.ofNullable(result), withReturnType);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "getDeclaration", e);
+        }
+    }
+
+    /**
      * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
      * @param code 
      */
@@ -1261,15 +1261,6 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute descendantsAndSelfArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
-        return this.aDeclarator.descendantsAndSelfArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute type
      * @return the attribute's value
      */
@@ -1369,15 +1360,6 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute astChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astChildImpl(Integer index) {
-        return this.aDeclarator.astChildImpl(index);
-    }
-
-    /**
      * Get value on attribute astName
      * @return the attribute's value
      */
@@ -1411,15 +1393,6 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public Boolean containsImpl(AJoinPoint jp) {
         return this.aDeclarator.containsImpl(jp);
-    }
-
-    /**
-     * Get value on attribute astIsInstance
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean astIsInstanceImpl(String className) {
-        return this.aDeclarator.astIsInstanceImpl(className);
     }
 
     /**
@@ -1474,15 +1447,6 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public Boolean hasNodeImpl(Object nodeOrJp) {
         return this.aDeclarator.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute child
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint childImpl(Integer index) {
-        return this.aDeclarator.childImpl(index);
     }
 
     /**
@@ -1684,15 +1648,6 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute firstJp
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint firstJpImpl(String type) {
-        return this.aDeclarator.firstJpImpl(type);
-    }
-
-    /**
      * Get value on attribute depth
      * @return the attribute's value
      */
@@ -1765,6 +1720,42 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * true, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'
+     * @param className 
+     */
+    @Override
+    public Boolean astIsInstanceImpl(String className) {
+        return this.aDeclarator.astIsInstanceImpl(className);
+    }
+
+    /**
+     * Looks in the descendants for the first node of the given type
+     * @param type 
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aDeclarator.getFirstJpImpl(type);
+    }
+
+    /**
+     * Returns the child of the node at the given index, ignoring null nodes
+     * @param index 
+     */
+    @Override
+    public AJoinPoint getChildImpl(Integer index) {
+        return this.aDeclarator.getChildImpl(index);
+    }
+
+    /**
+     * Returns the child of the node at the given index, considering null nodes
+     * @param index 
+     */
+    @Override
+    public AJoinPoint getAstChildImpl(Integer index) {
+        return this.aDeclarator.getAstChildImpl(index);
+    }
+
+    /**
      * Looks for an ancestor joinpoint name, walking back on the AST
      * @param type 
      */
@@ -1780,6 +1771,15 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public AJoinPoint[] getDescendantsImpl(String type) {
         return this.aDeclarator.getDescendantsImpl(type);
+    }
+
+    /**
+     * Retrieves the descendants of the given type, including the node itself
+     * @param type 
+     */
+    @Override
+    public AJoinPoint[] getDescendantsAndSelfImpl(String type) {
+        return this.aDeclarator.getDescendantsAndSelfImpl(type);
     }
 
     /**
@@ -2171,7 +2171,6 @@ public abstract class AFunction extends ADeclarator {
         attributes.add("declarationJp");
         attributes.add("declarationJps");
         attributes.add("definitionJp");
-        attributes.add("declaration");
         attributes.add("body");
         attributes.add("paramNames");
         attributes.add("params");
@@ -2210,6 +2209,7 @@ public abstract class AFunction extends ADeclarator {
         actions.add("function clone(String, Boolean)");
         actions.add("function cloneOnFile(String, String)");
         actions.add("function cloneOnFile(String, file)");
+        actions.add("String getDeclaration(Boolean)");
         actions.add("joinpoint insertReturn(joinpoint)");
         actions.add("joinpoint insertReturn(String)");
         actions.add("void setParams(param[])");
@@ -2257,7 +2257,6 @@ public abstract class AFunction extends ADeclarator {
         DECLARATIONJP("declarationJp"),
         DECLARATIONJPS("declarationJps"),
         DEFINITIONJP("definitionJp"),
-        DECLARATION("declaration"),
         BODY("body"),
         PARAMNAMES("paramNames"),
         PARAMS("params"),
@@ -2284,7 +2283,6 @@ public abstract class AFunction extends ADeclarator {
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
         HASCHILDREN("hasChildren"),
-        DESCENDANTSANDSELF("descendantsAndSelf"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
         RIGHTJP("rightJp"),
@@ -2296,19 +2294,16 @@ public abstract class AFunction extends ADeclarator {
         NUMCHILDREN("numChildren"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
-        ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
         CONTAINS("contains"),
-        ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
-        CHILD("child"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -2331,7 +2326,6 @@ public abstract class AFunction extends ADeclarator {
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
-        FIRSTJP("firstJp"),
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),

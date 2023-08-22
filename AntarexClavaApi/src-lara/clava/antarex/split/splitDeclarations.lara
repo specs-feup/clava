@@ -140,7 +140,7 @@ function cleanCode($Decls) {
 	    else {  		         
   		  var $DeclStmt = $f.parent;  // DeclStmt 
   		  var $vloop = $DeclStmt.parent;  
-          if ($vloop.getAstIsInstance('ForStmt'))
+          if ($vloop.astIsInstance('ForStmt'))
           if ($vloop.getAstChild(0).location === $DeclStmt.location)
              $vloop.setInit ( $f.name + ' = ' + $f.init.code );
           else

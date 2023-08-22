@@ -94,7 +94,7 @@ end
  select function{fname} end
   apply
     var tf = $function.type;
-    if (tf.getAstIsInstance("FunctionProtoType")) tf = tf.returnType;
+    if (tf.astIsInstance("FunctionProtoType")) tf = tf.returnType;
 	var $xx = getNewType( tf, oldType, newType);
 	if ($xx !== tf) $function.setType($xx); 
   end

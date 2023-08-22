@@ -240,28 +240,11 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
+    public AJoinPoint[] getDescendantsAndSelfImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
 
         return CxxSelects.selectedNodesToJps(getNode().getDescendantsAndSelfStream(), jp -> jp.instanceOf(type),
                 getWeaverEngine());
-
-        /*
-        AJoinPoint[] descendants = getNode().getDescendantsAndSelfStream()
-                .map(descendant -> CxxJoinpoints.create(descendant))
-                .filter(jp -> jp.instanceOf(type))
-                // .filter(jp -> jp.getJoinpointType().equals(type))
-                .toArray(AJoinPoint[]::new);
-        
-        // Count as selected nodes
-        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS, descendants.length);
-        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, descendants.length);
-        
-        // Count as a select
-        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
-        
-        return descendants;
-        */
     }
 
     @Override
@@ -713,7 +696,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint astChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(Integer index) {
         ClavaNode node = getNode();
         if (node == null) {
             return null;
@@ -844,7 +827,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint childImpl(Integer index) {
+    public AJoinPoint getChildImpl(Integer index) {
         return getNode().getChildren().stream()
                 // return getChildrenPrivate().stream()
                 .filter(node -> !(node instanceof NullNode))
@@ -1291,7 +1274,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint firstJpImpl(String type) {
+    public AJoinPoint getFirstJpImpl(String type) {
         AJoinPoint firstJp = getNode().getDescendantsStream()
                 .map(descendant -> CxxJoinpoints.create(descendant))
                 .filter(jp -> jp != null && jp.getJoinpointTypeImpl().equals(type))

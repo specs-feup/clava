@@ -13,13 +13,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="parent" type="joinpoint"
             tooltip="Returns the parent node in the AST, or undefined if it is the root node" />
         <attribute name="descendants" type="joinpoint[]"
-            tooltip="Retrieves all descendants of the join point">
-        </attribute>
-
-        <attribute name="descendantsAndSelf" type="joinpoint[]"
-            tooltip="Retrieves the descendants of the given type, including the node itself">
-            <parameter name="type" type="String" />
-        </attribute>
+            tooltip="Retrieves all descendants of the join point" />
         <attribute name="chainAncestor" type="joinpoint"
             tooltip="Looks for an ancestor joinpoint name, walking back on the joinpoint chain">
             <parameter name="type" type="String" />
@@ -29,10 +23,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             <parameter name="jp" type="joinpoint" />
         </attribute>
         <attribute name="hasParent" type="boolean" tooltip="true if this node has a parent" />
-        <attribute name="firstJp" type="joinpoint"
-            tooltip="Looks in the descendants for the first node of the given type">
-            <parameter name="type" type="String" />
-        </attribute>
         <attribute name="line" type="Integer"
             tooltip="The starting line of the current node in the original code" />
         <attribute name="column" type="Integer"
@@ -66,18 +56,10 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="Returns the number of children of the node, considering null nodes" />
         <attribute name="astChildren" type="joinpoint[]"
             tooltip="Returns an array with the children of the node, considering null nodes" />
-        <attribute name="astChild" type="joinpoint"
-            tooltip="Returns the child of the node at the given index, considering null nodes">
-            <parameter name="index" type="Integer" />
-        </attribute>
         <attribute name="numChildren" type="Integer"
             tooltip="Returns the number of children of the node, ignoring null nodes" />
         <attribute name="children" type="joinpoint[]"
             tooltip="Returns an array with the children of the node, ignoring null nodes" />
-        <attribute name="child" type="joinpoint"
-            tooltip="Returns the child of the node at the given index, ignoring null nodes">
-            <parameter name="index" type="Integer" />
-        </attribute>
         <attribute name="siblingsLeft" type="joinpoint[]"
             tooltip="Returns an array with the siblings that came before this node" />
         <attribute name="siblingsRight" type="joinpoint[]"
@@ -86,10 +68,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="Returns the node that came before this node, or undefined if there is none" />
         <attribute name="rightJp" type="joinpoint"
             tooltip="Returns the node that comes after this node, or undefined if there is none" />
-        <attribute name="astIsInstance" type="boolean"
-            tooltip="true, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'">
-            <parameter name="className" type="String" />
-        </attribute>
         <attribute name="hasNode" type="Boolean"
             tooltip="true, if the given join point or AST node is the same (== test) as the current join point AST node">
             <parameter name="nodeOrJp" type="object" />
@@ -451,9 +429,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found" />
         <attribute name="argList" type="expression[]" tooltip="an alias for 'args'" />
         <attribute name="args" type="expression[]" tooltip="an array with the arguments of the call" />
-        <attribute name="arg" type="expression">
-            <parameter name="index" type="int" />
-        </attribute>
         <attribute name="returnType" type="type" tooltip="the return type of the call" />
         <attribute name="functionType" type="functionType"
             tooltip="the function type of the call, which includes the return type and the types of the parameters" />
@@ -542,9 +517,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="Returns the prototypes of this function that are present in the code. If there are none, returns an empty array" />
         <attribute name="definitionJp" type="function"
             tooltip="Returns the implementation of this function if there is one, or undefined otherwise" />
-        <attribute name="declaration" type="String">
-            <parameter name="withReturnType" type="Boolean" />
-        </attribute>
         <attribute name="body" type="scope">
             <def />
         </attribute>

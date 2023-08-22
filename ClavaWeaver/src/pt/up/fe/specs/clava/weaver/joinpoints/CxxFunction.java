@@ -188,7 +188,7 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public String declarationImpl(Boolean withReturnType) {
+    public String getDeclarationImpl(Boolean withReturnType) {
         return function.getDeclarationId(withReturnType);
     }
 
@@ -425,7 +425,7 @@ public class CxxFunction extends AFunction {
      */
     @Override
     public String getIdImpl() {
-        return declarationImpl(false);
+        return getDeclarationImpl(false);
     }
 
     @Override

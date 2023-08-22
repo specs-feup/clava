@@ -285,7 +285,7 @@ public class CxxCall extends ACall {
     }
 
     @Override
-    public AExpression argImpl(int index) {
+    public AExpression getArgImpl(int index) {
         call.checkIndex(index);
         Expr arg = call.getArgs().get(index);
         return (AExpression) CxxJoinpoints.create(arg);

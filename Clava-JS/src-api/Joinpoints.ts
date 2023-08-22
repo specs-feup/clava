@@ -225,33 +225,13 @@ export class Joinpoint extends LaraJoinPoint {
   get type(): Type { return wrapJoinPoint(this._javaObject.getType()) }
   set type(value: Type) { this._javaObject.setType(unwrapJoinPoint(value)); }
   /**
-   * Returns the child of the node at the given index, considering null nodes
-   */
-  getAstChild(index: number): Joinpoint { return wrapJoinPoint(this._javaObject.astChild(unwrapJoinPoint(index))); }
-  /**
-   * True, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'
-   */
-  getAstIsInstance(className: string): boolean { return wrapJoinPoint(this._javaObject.astIsInstance(unwrapJoinPoint(className))); }
-  /**
    * Looks for an ancestor joinpoint name, walking back on the joinpoint chain
    */
   getChainAncestor(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getChainAncestor(unwrapJoinPoint(type))); }
   /**
-   * Returns the child of the node at the given index, ignoring null nodes
-   */
-  getChild(index: number): Joinpoint { return wrapJoinPoint(this._javaObject.child(unwrapJoinPoint(index))); }
-  /**
    * True if the given node is a descendant of this node
    */
   getContains(jp: Joinpoint): boolean { return wrapJoinPoint(this._javaObject.getContains(unwrapJoinPoint(jp))); }
-  /**
-   * Retrieves the descendants of the given type, including the node itself
-   */
-  getDescendantsAndSelf(type: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.descendantsAndSelf(unwrapJoinPoint(type))); }
-  /**
-   * Looks in the descendants for the first node of the given type
-   */
-  getFirstJp(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.firstJp(unwrapJoinPoint(type))); }
   /**
    * @deprecated use 'userField' instead
    */
@@ -288,6 +268,10 @@ export class Joinpoint extends LaraJoinPoint {
   getInstanceOf(name: string): boolean { return wrapJoinPoint(this._javaObject.instanceOf(unwrapJoinPoint(name))); }
   //insert(position: "before" | "after" | "replace", code: string): void { return wrapJoinPoint(this._javaObject.insert(unwrapJoinPoint(position), unwrapJoinPoint(code))); }
   /**
+   * True, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'
+   */
+  astIsInstance(className: string): boolean { return wrapJoinPoint(this._javaObject.astIsInstance(unwrapJoinPoint(className))); }
+  /**
    * Performs a copy of the node and its children, but not of the nodes in its fields
    */
   copy(): Joinpoint { return wrapJoinPoint(this._javaObject.copy()); }
@@ -312,9 +296,25 @@ export class Joinpoint extends LaraJoinPoint {
    */
   getAncestor(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getAncestor(unwrapJoinPoint(type))); }
   /**
+   * Returns the child of the node at the given index, considering null nodes
+   */
+  getAstChild(index: number): Joinpoint { return wrapJoinPoint(this._javaObject.getAstChild(unwrapJoinPoint(index))); }
+  /**
+   * Returns the child of the node at the given index, ignoring null nodes
+   */
+  getChild(index: number): Joinpoint { return wrapJoinPoint(this._javaObject.getChild(unwrapJoinPoint(index))); }
+  /**
    * Retrieves the descendants of the given type
    */
   getDescendants(type: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getDescendants(unwrapJoinPoint(type))); }
+  /**
+   * Retrieves the descendants of the given type, including the node itself
+   */
+  getDescendantsAndSelf(type: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getDescendantsAndSelf(unwrapJoinPoint(type))); }
+  /**
+   * Looks in the descendants for the first node of the given type
+   */
+  getFirstJp(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getFirstJp(unwrapJoinPoint(type))); }
   /**
    * Inserts the given join point after this join point
    */
@@ -1215,7 +1215,6 @@ export class Call extends Expression {
    * Similar to $function.signature, but if no function decl could be found (e.g., function from system include), returns a signature based on just the name of the function
    */
   get signature(): string { return wrapJoinPoint(this._javaObject.getSignature()) }
-  getArg(index: number): Expression { return wrapJoinPoint(this._javaObject.arg(unwrapJoinPoint(index))); }
   /**
    * Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used
    */
@@ -1228,6 +1227,7 @@ export class Call extends Expression {
    * Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used
    */
   addArg(p1: string, p2?: Type | string): void | void { return wrapJoinPoint(this._javaObject.addArg(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
+  getArg(index: number): Expression { return wrapJoinPoint(this._javaObject.getArg(unwrapJoinPoint(index))); }
   /**
    * Tries to inline this call
    */
@@ -1477,7 +1477,6 @@ export class FunctionJp extends Declarator {
    */
   get signature(): string { return wrapJoinPoint(this._javaObject.getSignature()) }
   get storageClass(): StorageClass { return wrapJoinPoint(this._javaObject.getStorageClass()) }
-  getDeclaration(withReturnType: boolean): string { return wrapJoinPoint(this._javaObject.declaration(unwrapJoinPoint(withReturnType))); }
   /**
    * Adds a new parameter to the function
    */
@@ -1506,6 +1505,7 @@ export class FunctionJp extends Declarator {
    * Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).
    */
   cloneOnFile(p1: string, p2?: string | FileJp): FunctionJp | FunctionJp { return wrapJoinPoint(this._javaObject.cloneOnFile(unwrapJoinPoint(p1), unwrapJoinPoint(p2))); }
+  getDeclaration(withReturnType: boolean): string { return wrapJoinPoint(this._javaObject.getDeclaration(unwrapJoinPoint(withReturnType))); }
   /**
    * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
    */

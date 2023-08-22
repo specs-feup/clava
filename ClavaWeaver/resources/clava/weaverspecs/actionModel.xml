@@ -5,6 +5,26 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 <actions>
 
     <!-- GENERIC ACTIONS FOR ALL JOINPOINTS -->
+    <action name="astIsInstance" return="Boolean"
+        tooltip="true, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'">
+        <parameter name="className" type="String" />
+    </action>
+
+    <action name="getFirstJp" return="joinpoint"
+        tooltip="Looks in the descendants for the first node of the given type">
+        <parameter name="type" type="String" />
+    </action>
+
+    <action name="getChild" return="joinpoint"
+        tooltip="Returns the child of the node at the given index, ignoring null nodes">
+        <parameter name="index" type="Integer" />
+    </action>
+
+    <action name="getAstChild" return="joinpoint"
+        tooltip="Returns the child of the node at the given index, considering null nodes">
+        <parameter name="index" type="Integer" />
+    </action>
+
     <action name="getAncestor" return="joinpoint"
         tooltip="Looks for an ancestor joinpoint name, walking back on the AST">
         <parameter name="type" type="String" />
@@ -12,6 +32,11 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <action name="getDescendants" return="joinpoint[]"
         tooltip="Retrieves the descendants of the given type">
+        <parameter name="type" type="String" />
+    </action>
+
+    <action name="getDescendantsAndSelf" return="joinpoint[]"
+        tooltip="Retrieves the descendants of the given type, including the node itself">
         <parameter name="type" type="String" />
     </action>
 
@@ -306,6 +331,10 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
 
     <!-- CALL -->
+    <action name="getArg" class="call" return="expression">
+        <parameter name="index" type="int" />
+    </action>
+
     <!-- Changes the name of the call -->
     <action name="setName" class="call" tooltip="Changes the name of the call">
         <parameter name="name" type="string" />
@@ -413,6 +442,10 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         tooltip="Generates a clone of the provided function on a new file (with the provided join point).">
         <parameter name="newName" type="String" />
         <parameter name="fileName" type="file" />
+    </action>
+
+    <action name="getDeclaration" class="function" return="String">
+        <parameter name="withReturnType" type="Boolean" />
     </action>
 
     <!-- 
