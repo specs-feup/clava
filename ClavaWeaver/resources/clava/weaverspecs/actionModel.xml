@@ -763,6 +763,11 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <parameter name="content" type="String" />
     </action>
 
+    <action name="getTargetNodes" class="pragma" return="joinpoint[]"
+        tooltip="All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument">
+        <parameter name="endPragma" type="String" default="null" />
+    </action>
+
     <!-- VARDECL -->
     <action name="setInit" class="vardecl"
         tooltip="Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization">

@@ -90,77 +90,6 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * Get value on attribute targetNodes
-     * @return the attribute's value
-     */
-    public abstract AJoinPoint[] getTargetNodesArrayImpl();
-
-    /**
-     * All the nodes below the target node, including the target node
-     */
-    public Object getTargetNodesImpl() {
-        AJoinPoint[] aJoinPointArrayImpl0 = getTargetNodesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * All the nodes below the target node, including the target node
-     */
-    public final Object getTargetNodes() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "targetNodes", Optional.empty());
-        	}
-        	Object result = this.getTargetNodesImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "targetNodes", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "targetNodes", e);
-        }
-    }
-
-    /**
-     * 
-     * @param endPragma
-     * @return 
-     */
-    public abstract AJoinPoint[] targetNodesArrayImpl(String endPragma);
-
-    /**
-     * 
-     * @param endPragma
-     * @return 
-     */
-    public Object targetNodesImpl(String endPragma) {
-        AJoinPoint[] aJoinPointArrayImpl0 = targetNodesArrayImpl(endPragma);
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
-        return nativeArray0;
-    }
-
-    /**
-     * 
-     * @param endPragma
-     * @return 
-     */
-    public final Object targetNodes(String endPragma) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "targetNodes", Optional.empty(), endPragma);
-        	}
-        	Object result = this.targetNodesImpl(endPragma);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "targetNodes", Optional.ofNullable(result), endPragma);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "targetNodes", e);
-        }
-    }
-
-    /**
      * Default implementation of the method used by the lara interpreter to select targets
      * @return 
      */
@@ -217,6 +146,33 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setContent", e);
+        }
+    }
+
+    /**
+     * All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument
+     * @param endPragma 
+     */
+    public AJoinPoint[] getTargetNodesImpl(String endPragma) {
+        throw new UnsupportedOperationException(get_class()+": Action getTargetNodes not implemented ");
+    }
+
+    /**
+     * All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument
+     * @param endPragma 
+     */
+    public final AJoinPoint[] getTargetNodes(String endPragma) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "getTargetNodes", this, Optional.empty(), endPragma);
+        	}
+        	AJoinPoint[] result = this.getTargetNodesImpl(endPragma);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "getTargetNodes", this, Optional.ofNullable(result), endPragma);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "getTargetNodes", e);
         }
     }
 
@@ -295,8 +251,6 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         attributes.add("name");
         attributes.add("target");
         attributes.add("content");
-        attributes.add("targetNodes");
-        attributes.add("targetNodes");
     }
 
     /**
@@ -316,6 +270,7 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         super.fillWithActions(actions);
         actions.add("void setName(String)");
         actions.add("void setContent(String)");
+        actions.add("joinpoint[] getTargetNodes(String)");
     }
 
     /**
@@ -333,7 +288,6 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         NAME("name"),
         TARGET("target"),
         CONTENT("content"),
-        TARGETNODES("targetNodes"),
         PARENT("parent"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),

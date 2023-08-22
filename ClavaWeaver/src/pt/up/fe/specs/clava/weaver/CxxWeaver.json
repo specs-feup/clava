@@ -56251,28 +56251,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "All the nodes below the target node, including the target node",
-						"children": [
-									{
-										"type": "joinpoint[]",
-										"name": "targetNodes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument",
-						"children": [
-									{
-										"type": "joinpoint[]",
-										"name": "targetNodes"
-									},
-									{
-										"type": "String",
-										"name": "endPragma"
-									}]
-					},
-					{
-						"type": "attribute",
 						"children": [
 									{
 										"type": "String[]",
@@ -56791,6 +56769,20 @@
 						"type": "select",
 						"clazz": "joinpoint",
 						"alias": "target"
+					},
+					{
+						"type": "action",
+						"tooltip": "All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "getTargetNodes"
+									},
+									{
+										"type": "String",
+										"name": "endPragma",
+										"defaultValue": "null"
+									}]
 					},
 					{
 						"type": "action",
@@ -63832,28 +63824,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "All the nodes below the target node, including the target node",
-						"children": [
-									{
-										"type": "joinpoint[]",
-										"name": "targetNodes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument",
-						"children": [
-									{
-										"type": "joinpoint[]",
-										"name": "targetNodes"
-									},
-									{
-										"type": "String",
-										"name": "endPragma"
-									}]
-					},
-					{
-						"type": "attribute",
 						"children": [
 									{
 										"type": "String[]",
@@ -64665,6 +64635,20 @@
 										"type": "String[]",
 										"name": "newVariables",
 										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "getTargetNodes"
+									},
+									{
+										"type": "String",
+										"name": "endPragma",
+										"defaultValue": "null"
 									}]
 					},
 					{
@@ -71343,28 +71327,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "All the nodes below the target node, including the target node",
-						"children": [
-									{
-										"type": "joinpoint[]",
-										"name": "targetNodes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument",
-						"children": [
-									{
-										"type": "joinpoint[]",
-										"name": "targetNodes"
-									},
-									{
-										"type": "String",
-										"name": "endPragma"
-									}]
-					},
-					{
-						"type": "attribute",
 						"children": [
 									{
 										"type": "String[]",
@@ -71878,6 +71840,20 @@
 						"type": "select",
 						"clazz": "joinpoint",
 						"alias": "target"
+					},
+					{
+						"type": "action",
+						"tooltip": "All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "getTargetNodes"
+									},
+									{
+										"type": "String",
+										"name": "endPragma",
+										"defaultValue": "null"
+									}]
 					},
 					{
 						"type": "action",
@@ -82313,28 +82289,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "All the nodes below the target node, including the target node",
-						"children": [
-									{
-										"type": "joinpoint[]",
-										"name": "targetNodes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument",
-						"children": [
-									{
-										"type": "joinpoint[]",
-										"name": "targetNodes"
-									},
-									{
-										"type": "String",
-										"name": "endPragma"
-									}]
-					},
-					{
-						"type": "attribute",
 						"children": [
 									{
 										"type": "String[]",
@@ -82848,6 +82802,20 @@
 						"type": "select",
 						"clazz": "joinpoint",
 						"alias": "target"
+					},
+					{
+						"type": "action",
+						"tooltip": "All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument",
+						"children": [
+									{
+										"type": "joinpoint[]",
+										"name": "getTargetNodes"
+									},
+									{
+										"type": "String",
+										"name": "endPragma",
+										"defaultValue": "null"
+									}]
 					},
 					{
 						"type": "action",

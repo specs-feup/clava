@@ -77,24 +77,6 @@ public abstract class ATag extends APragma {
     }
 
     /**
-     * Get value on attribute targetNodesArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getTargetNodesArrayImpl() {
-        return this.aPragma.getTargetNodesArrayImpl();
-    }
-
-    /**
-     * Get value on attribute targetNodesArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] targetNodesArrayImpl(String endPragma) {
-        return this.aPragma.targetNodesArrayImpl(endPragma);
-    }
-
-    /**
      * Method used by the lara interpreter to select targets
      * @return 
      */
@@ -894,6 +876,15 @@ public abstract class ATag extends APragma {
     }
 
     /**
+     * All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument
+     * @param endPragma 
+     */
+    @Override
+    public AJoinPoint[] getTargetNodesImpl(String endPragma) {
+        return this.aPragma.getTargetNodesImpl(endPragma);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -1041,7 +1032,6 @@ public abstract class ATag extends APragma {
         NAME("name"),
         TARGET("target"),
         CONTENT("content"),
-        TARGETNODES("targetNodes"),
         PARENT("parent"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),

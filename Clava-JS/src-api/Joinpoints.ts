@@ -726,16 +726,12 @@ export class Pragma extends Joinpoint {
    * The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations
    */
   get target(): Joinpoint { return wrapJoinPoint(this._javaObject.getTarget()) }
-  /**
-   * All the nodes below the target node, including the target node
-   */
-  get targetNodes(): Joinpoint[] { return wrapJoinPoint(this._javaObject.getTargetNodes()) }
   get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
   get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
   /**
    * All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument
    */
-  getTargetNodes(endPragma: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.targetNodes(unwrapJoinPoint(endPragma))); }
+  getTargetNodes(endPragma?: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getTargetNodes(unwrapJoinPoint(endPragma))); }
   setContent(content: string): void { return wrapJoinPoint(this._javaObject.setContent(unwrapJoinPoint(content))); }
   setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
   def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }

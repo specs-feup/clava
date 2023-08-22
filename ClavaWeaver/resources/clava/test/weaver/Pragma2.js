@@ -4,7 +4,7 @@ const $pragmaStartEnd = Query.search("function", "targetNodesStartEnd").search("
 $pragmaStartEnd.getTargetNodes("end").forEach(node => println(node.line))
 
 const $pragmaStart = Query.search("function", "targetNodesStart").search("pragma").first()
-$pragmaStart.targetNodes.forEach(node => println(node.line))
+$pragmaStart.getTargetNodes().forEach(node => println(node.line))
 
 const $pragmaStartEndWithoutEnd = Query.search("function", "targetNodesStartEndWithoutEnd").search("pragma").first()
 $pragmaStartEndWithoutEnd.getTargetNodes("end").forEach(node => println(node.line))
