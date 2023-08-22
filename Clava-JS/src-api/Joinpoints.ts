@@ -151,10 +151,6 @@ export class Joinpoint extends LaraJoinPoint {
    */
   get javaFields(): string[] { return wrapJoinPoint(this._javaObject.getJavaFields()) }
   /**
-   * @deprecated use joinPointType instead (uppercase P)
-   */
-  get joinpointType(): string { return wrapJoinPoint(this._javaObject.getJoinpointType()) }
-  /**
    * Id that is based on the position of the node in the code, and should remain stable between compilations (warning: only a few nodes - file, function, loop - currently support it)
    */
   get jpId(): string { return wrapJoinPoint(this._javaObject.getJpId()) }
@@ -225,22 +221,6 @@ export class Joinpoint extends LaraJoinPoint {
   get type(): Type { return wrapJoinPoint(this._javaObject.getType()) }
   set type(value: Type) { this._javaObject.setType(unwrapJoinPoint(value)); }
   /**
-   * Looks for an ancestor joinpoint name, walking back on the joinpoint chain
-   */
-  getChainAncestor(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getChainAncestor(unwrapJoinPoint(type))); }
-  /**
-   * True if the given node is a descendant of this node
-   */
-  getContains(jp: Joinpoint): boolean { return wrapJoinPoint(this._javaObject.getContains(unwrapJoinPoint(jp))); }
-  /**
-   * String with the full Java class name of the type of the Java field with the provided name
-   */
-  getJavaFieldType(fieldName: string): string { return wrapJoinPoint(this._javaObject.getJavaFieldType(unwrapJoinPoint(fieldName))); }
-  /**
-   * Java Class instance with the type of the given key
-   */
-  getKeyType(key: string): object { return wrapJoinPoint(this._javaObject.getKeyType(unwrapJoinPoint(key))); }
-  /**
    * True if the current join point is an instance of the given type
    */
   getInstanceOf(name: string): boolean { return wrapJoinPoint(this._javaObject.instanceOf(unwrapJoinPoint(name))); }
@@ -249,6 +229,10 @@ export class Joinpoint extends LaraJoinPoint {
    * True, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'
    */
   astIsInstance(className: string): boolean { return wrapJoinPoint(this._javaObject.astIsInstance(unwrapJoinPoint(className))); }
+  /**
+   * True if the given node is a descendant of this node
+   */
+  contains(jp: Joinpoint): boolean { return wrapJoinPoint(this._javaObject.contains(unwrapJoinPoint(jp))); }
   /**
    * Performs a copy of the node and its children, but not of the nodes in its fields
    */
@@ -278,6 +262,10 @@ export class Joinpoint extends LaraJoinPoint {
    */
   getAstChild(index: number): Joinpoint { return wrapJoinPoint(this._javaObject.getAstChild(unwrapJoinPoint(index))); }
   /**
+   * Looks for an ancestor joinpoint name, walking back on the joinpoint chain
+   */
+  getChainAncestor(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getChainAncestor(unwrapJoinPoint(type))); }
+  /**
    * Returns the child of the node at the given index, ignoring null nodes
    */
   getChild(index: number): Joinpoint { return wrapJoinPoint(this._javaObject.getChild(unwrapJoinPoint(index))); }
@@ -293,6 +281,14 @@ export class Joinpoint extends LaraJoinPoint {
    * Looks in the descendants for the first node of the given type
    */
   getFirstJp(type: string): Joinpoint { return wrapJoinPoint(this._javaObject.getFirstJp(unwrapJoinPoint(type))); }
+  /**
+   * String with the full Java class name of the type of the Java field with the provided name
+   */
+  getJavaFieldType(fieldName: string): string { return wrapJoinPoint(this._javaObject.getJavaFieldType(unwrapJoinPoint(fieldName))); }
+  /**
+   * Java Class instance with the type of the given key
+   */
+  getKeyType(key: string): object { return wrapJoinPoint(this._javaObject.getKeyType(unwrapJoinPoint(key))); }
   /**
    * Retrives values that have been associated to nodes of the AST with 'setUserField'
    */

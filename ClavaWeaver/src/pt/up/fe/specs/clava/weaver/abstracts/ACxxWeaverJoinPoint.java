@@ -248,7 +248,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint chainAncestorImpl(String type) {
+    public AJoinPoint getChainAncestorImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'chainAncestor'");
 
         if (type.equals("program")) {
@@ -324,24 +324,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public String getFilepathImpl() {
         SourceRange location = getNode().getLocation();
         return location.isValid() ? location.getFilepath() : null;
-    }
-
-    @Override
-    public String getJoinpointTypeImpl() {
-        ClavaLog.deprecated("joinpointType is deprecated, please use joinPointType");
-        // return getNode().getClass().getSimpleName();
-        return getJoinPointType();
-        // String joinpointName = getClass().getSimpleName();
-        //
-        // // Remove 'CXX' prefix
-        // if (joinpointName.startsWith("Cxx")) {
-        // joinpointName = joinpointName.substring("Cxx".length());
-        // }
-        //
-        // // Make first character lowercase
-        // char lowerFirstChar = Character.toLowerCase(joinpointName.charAt(0));
-        //
-        // return lowerFirstChar + joinpointName.substring(1);
     }
 
     @Override
@@ -854,7 +836,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         AJoinPoint currentJoinpoint = this;
         while (currentJoinpoint != null) {
             // Add joinpoint to chain
-            chain.add(currentJoinpoint.getJoinpointTypeImpl());
+            chain.add(currentJoinpoint.getJoinPointType());
 
             // Update current joinpoint
             if (currentJoinpoint.getHasParentImpl()) {
@@ -887,7 +869,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public String javaFieldTypeImpl(String fieldName) {
+    public String getJavaFieldTypeImpl(String fieldName) {
         return LowLevelApi.getFieldClass(getNode(), fieldName).getName();
     }
 
@@ -1250,7 +1232,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public Object keyTypeImpl(String key) {
+    public Object getKeyTypeImpl(String key) {
         StoreDefinition def = getNode().getStoreDefinition();
 
         if (!def.hasKey(key)) {
@@ -1265,7 +1247,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public AJoinPoint getFirstJpImpl(String type) {
         AJoinPoint firstJp = getNode().getDescendantsStream()
                 .map(descendant -> CxxJoinpoints.create(descendant))
-                .filter(jp -> jp != null && jp.getJoinpointTypeImpl().equals(type))
+                .filter(jp -> jp != null && jp.getJoinPointType().equals(type))
                 .findFirst()
                 .orElse(null);
 

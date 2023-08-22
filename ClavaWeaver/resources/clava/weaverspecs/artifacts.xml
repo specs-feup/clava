@@ -14,14 +14,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="Returns the parent node in the AST, or undefined if it is the root node" />
         <attribute name="descendants" type="joinpoint[]"
             tooltip="Retrieves all descendants of the join point" />
-        <attribute name="chainAncestor" type="joinpoint"
-            tooltip="Looks for an ancestor joinpoint name, walking back on the joinpoint chain">
-            <parameter name="type" type="String" />
-        </attribute>
-        <attribute name="contains" type="Boolean"
-            tooltip="true if the given node is a descendant of this node">
-            <parameter name="jp" type="joinpoint" />
-        </attribute>
         <attribute name="hasParent" type="boolean" tooltip="true if this node has a parent" />
         <attribute name="line" type="Integer"
             tooltip="The starting line of the current node in the original code" />
@@ -41,8 +33,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="ast" type="String"
             tooltip="String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'" />
         <attribute name="code" type="String" tooltip="String with the code represented by this node" />
-        <attribute name="joinpointType" type="String"
-            tooltip="[DEPRECATED: use joinPointType instead (uppercase P)]" />
         <attribute name="type" type="type">
             <def />
         </attribute>
@@ -72,10 +62,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="String list of the names of the join points that form a path from the root to this node" />
         <attribute name="javaFields" type="String[]"
             tooltip="[DEPRECATED: used attribute 'keys' instead, together with 'getValue'] The names of the Java fields of this node. Can be used as key of the attribute 'javaValue'" />
-        <attribute name="javaFieldType" type="String"
-            tooltip="String with the full Java class name of the type of the Java field with the provided name">
-            <parameter name="fieldName" type="String" />
-        </attribute>
         <attribute name="isInsideLoopHeader" type="Boolean"
             tooltip="true, if the join point is inside a loop header (e.g., for, while)" />
         <attribute name="isInsideHeader" type="Boolean"
@@ -93,10 +79,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         </attribute>
         <attribute name="keys" type="String[]"
             tooltip="A list of the properties currently supported by this node. Can be used as parameter of the attribute 'getValue'" />
-        <attribute name="keyType" type="Object"
-            tooltip="Java Class instance with the type of the given key">
-            <parameter name="key" type="String" />
-        </attribute>
         <attribute name="isMacro" type="Boolean"
             tooltip="true if any descendant or the node itself was defined as a macro">
         </attribute>
