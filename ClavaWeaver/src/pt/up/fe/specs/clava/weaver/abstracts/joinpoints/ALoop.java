@@ -302,33 +302,6 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * 
-     * @param otherLoop
-     * @return 
-     */
-    public abstract Boolean isInterchangeableImpl(ALoop otherLoop);
-
-    /**
-     * 
-     * @param otherLoop
-     * @return 
-     */
-    public final Object isInterchangeable(ALoop otherLoop) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isInterchangeable", Optional.empty(), otherLoop);
-        	}
-        	Boolean result = this.isInterchangeableImpl(otherLoop);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "isInterchangeable", Optional.ofNullable(result), otherLoop);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "isInterchangeable", e);
-        }
-    }
-
-    /**
      * The statement of the loop initialization
      */
     public abstract AStatement getInitImpl();
@@ -607,28 +580,29 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * DEPRECATED: use 'setKind' instead
-     * @param kind 
+     * Tests whether the loops are interchangeable. This is a conservative test.
+     * @param otherLoop 
      */
-    public void changeKindImpl(String kind) {
-        throw new UnsupportedOperationException(get_class()+": Action changeKind not implemented ");
+    public Boolean isInterchangeableImpl(ALoop otherLoop) {
+        throw new UnsupportedOperationException(get_class()+": Action isInterchangeable not implemented ");
     }
 
     /**
-     * DEPRECATED: use 'setKind' instead
-     * @param kind 
+     * Tests whether the loops are interchangeable. This is a conservative test.
+     * @param otherLoop 
      */
-    public final void changeKind(String kind) {
+    public final Boolean isInterchangeable(ALoop otherLoop) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "changeKind", this, Optional.empty(), kind);
+        		eventTrigger().triggerAction(Stage.BEGIN, "isInterchangeable", this, Optional.empty(), otherLoop);
         	}
-        	this.changeKindImpl(kind);
+        	Boolean result = this.isInterchangeableImpl(otherLoop);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "changeKind", this, Optional.empty(), kind);
+        		eventTrigger().triggerAction(Stage.END, "isInterchangeable", this, Optional.ofNullable(result), otherLoop);
         	}
+        	return result;
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "changeKind", e);
+        	throw new ActionException(get_class(), "isInterchangeable", e);
         }
     }
 
@@ -2072,7 +2046,6 @@ public abstract class ALoop extends AStatement {
         attributes.add("isParallel");
         attributes.add("iterations");
         attributes.add("iterationsExpr");
-        attributes.add("isInterchangeable");
         attributes.add("init");
         attributes.add("initValue");
         attributes.add("cond");
@@ -2102,7 +2075,7 @@ public abstract class ALoop extends AStatement {
     @Override
     protected void fillWithActions(List<String> actions) {
         this.aStatement.fillWithActions(actions);
-        actions.add("void changeKind(String)");
+        actions.add("Boolean isInterchangeable(loop)");
         actions.add("void setKind(String)");
         actions.add("void setInit(String)");
         actions.add("void setInitValue(String)");
@@ -2152,7 +2125,6 @@ public abstract class ALoop extends AStatement {
         ISPARALLEL("isParallel"),
         ITERATIONS("iterations"),
         ITERATIONSEXPR("iterationsExpr"),
-        ISINTERCHANGEABLE("isInterchangeable"),
         INIT("init"),
         INITVALUE("initValue"),
         COND("cond"),

@@ -16696,19 +16696,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Tests whether the loops are interchangeable. This is a conservative test.",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "isInterchangeable"
-									},
-									{
-										"type": "loop",
-										"name": "otherLoop"
-									}]
-					},
-					{
-						"type": "attribute",
 						"children": [
 									{
 										"type": "Boolean",
@@ -17344,25 +17331,25 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "DEPRECATED: use 'setKind' instead",
-						"children": [
-									{
-										"type": "void",
-										"name": "changeKind"
-									},
-									{
-										"type": "String",
-										"name": "kind",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Interchanges two for loops, if possible",
 						"children": [
 									{
 										"type": "void",
 										"name": "interchange"
+									},
+									{
+										"type": "loop",
+										"name": "otherLoop",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Tests whether the loops are interchangeable. This is a conservative test.",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInterchangeable"
 									},
 									{
 										"type": "loop",
@@ -54552,19 +54539,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Tests whether the loops are interchangeable. This is a conservative test.",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "isInterchangeable"
-									},
-									{
-										"type": "loop",
-										"name": "otherLoop"
-									}]
-					},
-					{
-						"type": "attribute",
 						"children": [
 									{
 										"type": "Boolean",
@@ -55200,25 +55174,25 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "DEPRECATED: use 'setKind' instead",
-						"children": [
-									{
-										"type": "void",
-										"name": "changeKind"
-									},
-									{
-										"type": "String",
-										"name": "kind",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Interchanges two for loops, if possible",
 						"children": [
 									{
 										"type": "void",
 										"name": "interchange"
+									},
+									{
+										"type": "loop",
+										"name": "otherLoop",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Tests whether the loops are interchangeable. This is a conservative test.",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "isInterchangeable"
 									},
 									{
 										"type": "loop",

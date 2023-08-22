@@ -338,11 +338,6 @@ public class CxxLoop extends ALoop {
 
     }
 
-    @Override
-    public void changeKindImpl(String kind) {
-        setKindImpl(kind);
-    }
-
     private void convertToWhile() {
         if (loop instanceof WhileStmt) {
             return;

@@ -1668,17 +1668,13 @@ export class Loop extends Statement {
    */
   get stepValue(): string { return wrapJoinPoint(this._javaObject.getStepValue()) }
   /**
-   * Tests whether the loops are interchangeable. This is a conservative test.
-   */
-  getIsInterchangeable(otherLoop: Loop): boolean { return wrapJoinPoint(this._javaObject.getIsInterchangeable(unwrapJoinPoint(otherLoop))); }
-  /**
-   * @deprecated use 'setKind' instead
-   */
-  changeKind(kind: string): void { return wrapJoinPoint(this._javaObject.changeKind(unwrapJoinPoint(kind))); }
-  /**
    * Interchanges two for loops, if possible
    */
   interchange(otherLoop: Loop): void { return wrapJoinPoint(this._javaObject.interchange(unwrapJoinPoint(otherLoop))); }
+  /**
+   * Tests whether the loops are interchangeable. This is a conservative test.
+   */
+  isInterchangeable(otherLoop: Loop): boolean { return wrapJoinPoint(this._javaObject.isInterchangeable(unwrapJoinPoint(otherLoop))); }
   /**
    * Sets the body of the loop
    */

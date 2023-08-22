@@ -117,15 +117,6 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute isInterchangeable
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean isInterchangeableImpl(ALoop otherLoop) {
-        return this.aLoop.isInterchangeableImpl(otherLoop);
-    }
-
-    /**
      * Get value on attribute init
      * @return the attribute's value
      */
@@ -1208,12 +1199,12 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * DEPRECATED: use 'setKind' instead
-     * @param kind 
+     * Tests whether the loops are interchangeable. This is a conservative test.
+     * @param otherLoop 
      */
     @Override
-    public void changeKindImpl(String kind) {
-        this.aLoop.changeKindImpl(kind);
+    public Boolean isInterchangeableImpl(ALoop otherLoop) {
+        return this.aLoop.isInterchangeableImpl(otherLoop);
     }
 
     /**
@@ -1576,7 +1567,6 @@ public abstract class ACilkFor extends ALoop {
         ISPARALLEL("isParallel"),
         ITERATIONS("iterations"),
         ITERATIONSEXPR("iterationsExpr"),
-        ISINTERCHANGEABLE("isInterchangeable"),
         INIT("init"),
         INITVALUE("initValue"),
         COND("cond"),
