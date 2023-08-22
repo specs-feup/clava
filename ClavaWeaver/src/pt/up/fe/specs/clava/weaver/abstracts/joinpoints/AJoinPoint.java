@@ -132,6 +132,7 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("setData(Object source)");
         actions.add("dataAssign(Object source)");
         actions.add("dataClear()");
+        actions.add("getValue(String key)");
     }
 
     /**
@@ -985,6 +986,33 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
+     * The value associated with the given property key
+     * @param key 
+     */
+    public Object getValueImpl(String key) {
+        throw new UnsupportedOperationException(get_class()+": Action getValue not implemented ");
+    }
+
+    /**
+     * The value associated with the given property key
+     * @param key 
+     */
+    public final Object getValue(String key) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "getValue", this, Optional.empty(), key);
+        	}
+        	Object result = this.getValueImpl(key);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "getValue", this, Optional.ofNullable(result), key);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "getValue", e);
+        }
+    }
+
+    /**
      * 
      */
     @Override
@@ -1025,7 +1053,6 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("hasNode(Object nodeOrJp)");
         attributes.add("chain");
         attributes.add("javaFields");
-        attributes.add("javaValue(String fieldName)");
         attributes.add("javaFieldType(String fieldName)");
         attributes.add("isInsideLoopHeader");
         attributes.add("isInsideHeader");
@@ -1037,7 +1064,6 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("pragmas");
         attributes.add("data");
         attributes.add("keys");
-        attributes.add("getValue(String key)");
         attributes.add("keyType(String key)");
         attributes.add("isMacro");
         attributes.add("firstChild");
@@ -1883,33 +1909,6 @@ public abstract class AJoinPoint extends JoinPoint {
      * @param fieldName
      * @return 
      */
-    public abstract Object javaValueImpl(String fieldName);
-
-    /**
-     * 
-     * @param fieldName
-     * @return 
-     */
-    public final Object javaValue(String fieldName) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "javaValue", Optional.empty(), fieldName);
-        	}
-        	Object result = this.javaValueImpl(fieldName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "javaValue", Optional.ofNullable(result), fieldName);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "javaValue", e);
-        }
-    }
-
-    /**
-     * 
-     * @param fieldName
-     * @return 
-     */
     public abstract String javaFieldTypeImpl(String fieldName);
 
     /**
@@ -2194,33 +2193,6 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "keys", e);
-        }
-    }
-
-    /**
-     * 
-     * @param key
-     * @return 
-     */
-    public abstract Object getValueImpl(String key);
-
-    /**
-     * 
-     * @param key
-     * @return 
-     */
-    public final Object getValue(String key) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getValue", Optional.empty(), key);
-        	}
-        	Object result = this.getValueImpl(key);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "getValue", Optional.ofNullable(result), key);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "getValue", e);
         }
     }
 

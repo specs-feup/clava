@@ -648,15 +648,6 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute javaValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aArrayType.javaValueImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute keyType
      * @return the attribute's value
      */
@@ -717,15 +708,6 @@ public abstract class AVariableArrayType extends AArrayType {
     @Override
     public AJoinPoint getParentRegionImpl() {
         return this.aArrayType.getParentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute getValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object getValueImpl(String key) {
-        return this.aArrayType.getValueImpl(key);
     }
 
     /**
@@ -1087,6 +1069,15 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
+     * The value associated with the given property key
+     * @param key 
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aArrayType.getValueImpl(key);
+    }
+
+    /**
      * Sets the element type of the array
      * @param arrayElementType 
      */
@@ -1325,7 +1316,6 @@ public abstract class AVariableArrayType extends AArrayType {
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
@@ -1333,7 +1323,6 @@ public abstract class AVariableArrayType extends AArrayType {
         CURRENTREGION("currentRegion"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),

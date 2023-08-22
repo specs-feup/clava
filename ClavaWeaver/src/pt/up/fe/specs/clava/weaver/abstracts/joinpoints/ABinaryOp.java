@@ -619,15 +619,6 @@ public abstract class ABinaryOp extends AOp {
     }
 
     /**
-     * Get value on attribute javaValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aOp.javaValueImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute keyType
      * @return the attribute's value
      */
@@ -688,15 +679,6 @@ public abstract class ABinaryOp extends AOp {
     @Override
     public AJoinPoint getParentRegionImpl() {
         return this.aOp.getParentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute getValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object getValueImpl(String key) {
-        return this.aOp.getValueImpl(key);
     }
 
     /**
@@ -1058,6 +1040,15 @@ public abstract class ABinaryOp extends AOp {
     }
 
     /**
+     * The value associated with the given property key
+     * @param key 
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aOp.getValueImpl(key);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -1277,7 +1268,6 @@ public abstract class ABinaryOp extends AOp {
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
@@ -1285,7 +1275,6 @@ public abstract class ABinaryOp extends AOp {
         CURRENTREGION("currentRegion"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),

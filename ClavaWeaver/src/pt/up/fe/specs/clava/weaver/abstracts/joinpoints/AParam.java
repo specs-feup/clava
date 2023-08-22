@@ -522,15 +522,6 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
-     * Get value on attribute javaValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aVardecl.javaValueImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute keyType
      * @return the attribute's value
      */
@@ -591,15 +582,6 @@ public abstract class AParam extends AVardecl {
     @Override
     public AJoinPoint getParentRegionImpl() {
         return this.aVardecl.getParentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute getValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object getValueImpl(String key) {
-        return this.aVardecl.getValueImpl(key);
     }
 
     /**
@@ -961,6 +943,15 @@ public abstract class AParam extends AVardecl {
     }
 
     /**
+     * The value associated with the given property key
+     * @param key 
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aVardecl.getValueImpl(key);
+    }
+
+    /**
      * Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization
      * @param init 
      */
@@ -1226,7 +1217,6 @@ public abstract class AParam extends AVardecl {
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
@@ -1234,7 +1224,6 @@ public abstract class AParam extends AVardecl {
         CURRENTREGION("currentRegion"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),

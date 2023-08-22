@@ -622,15 +622,6 @@ public abstract class ARecord extends ANamedDecl {
     }
 
     /**
-     * Get value on attribute javaValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aNamedDecl.javaValueImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute keyType
      * @return the attribute's value
      */
@@ -691,15 +682,6 @@ public abstract class ARecord extends ANamedDecl {
     @Override
     public AJoinPoint getParentRegionImpl() {
         return this.aNamedDecl.getParentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute getValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object getValueImpl(String key) {
-        return this.aNamedDecl.getValueImpl(key);
     }
 
     /**
@@ -1061,6 +1043,15 @@ public abstract class ARecord extends ANamedDecl {
     }
 
     /**
+     * The value associated with the given property key
+     * @param key 
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aNamedDecl.getValueImpl(key);
+    }
+
+    /**
      * Sets the name of this namedDecl
      * @param name 
      */
@@ -1307,7 +1298,6 @@ public abstract class ARecord extends ANamedDecl {
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
@@ -1315,7 +1305,6 @@ public abstract class ARecord extends ANamedDecl {
         CURRENTREGION("currentRegion"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),

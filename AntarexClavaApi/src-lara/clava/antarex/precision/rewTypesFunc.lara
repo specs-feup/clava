@@ -65,7 +65,7 @@ function getNewType($vardeclType, oldType, newType) {
         // TYPE & 
         //   unqualifiedDesugaredType and pointeeTypeAsWritten fields
         TRACE(" LValueReferenceType pre = " + $vardeclType.code);
-        var $child= $vardeclType.getGetValue("pointeeTypeAsWritten");
+        var $child= $vardeclType.getValue("pointeeTypeAsWritten");
         var $ntype = getNewType($child, oldType, newType);
         if ( $ntype !==  $child) $vardeclType.setValue("pointeeTypeAsWritten", $ntype);
         TRACE(" LValueReferenceType post = " + $vardeclType.code);
@@ -77,7 +77,7 @@ function getNewType($vardeclType, oldType, newType) {
         //  unqualifiedDesugaredType and pointeeTypeAsWritten fields
         TRACE(" RValueReferenceType pre = " + $vardeclType.code);
         // TRACE(" RValueReferenceType pre keys = " + $vardeclType.keys);
-        var $child= $vardeclType.getGetValue("pointeeTypeAsWritten");
+        var $child= $vardeclType.getValue("pointeeTypeAsWritten");
         var $ntype = getNewType($child, oldType, newType);
         if ( $ntype !==  $child) $vardeclType.setValue("pointeeTypeAsWritten", $ntype);
         TRACE(" LValueReferenceType post = " + $vardeclType.code);
@@ -87,7 +87,7 @@ function getNewType($vardeclType, oldType, newType) {
     if ( $vardeclType.astIsInstance("QualType")) {
         // TYPE const
         TRACE(" +++> QualType pre = " + $vardeclType.code);
-	    var $child= $vardeclType.getGetValue("unqualifiedType");
+	    var $child= $vardeclType.getValue("unqualifiedType");
         var $ntype = getNewType($child, oldType, newType);
         if ($ntype !== $child) $vardeclType.setValue("unqualifiedType", $ntype);
         return $vardeclType;
@@ -129,7 +129,7 @@ function getNewType($vardeclType, oldType, newType) {
 
     if ($vardeclType.astIsInstance("PointerType")) {
     	TRACE( " PointerType " + $vardeclType.code);
-    	var $child= $vardeclType.getGetValue("pointeeType");
+    	var $child= $vardeclType.getValue("pointeeType");
         var $ntype = getNewType($child, oldType, newType);
         if ($ntype !== $child) $vardeclType.setValue("pointeeType", $ntype);
         return $vardeclType;
@@ -138,7 +138,7 @@ function getNewType($vardeclType, oldType, newType) {
      if ( $vardeclType.astIsInstance("ArrayType")) {
          TRACE(" ArrayType element type  = " + $vardeclType.elementType.code);
          TRACE(" ArrayType array size  = " + $vardeclType.arraySize);
-          var $child= $vardeclType.getGetValue("elementType");
+          var $child= $vardeclType.getValue("elementType");
           var $ntype = getNewType($child, oldType, newType);
           if ($ntype !== $child) $vardeclType.setValue("elementType", $ntype);
           return $vardeclType; 

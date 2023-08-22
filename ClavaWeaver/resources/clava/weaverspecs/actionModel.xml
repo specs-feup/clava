@@ -448,6 +448,11 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <parameter name="withReturnType" type="Boolean" />
     </action>
 
+    <action name="getValue" return="Object"
+        tooltip="The value associated with the given property key">
+        <parameter name="key" type="String" />
+    </action>
+
     <!-- 
     <action name="setName" class="function">
         <parameter name="name" type="String" />

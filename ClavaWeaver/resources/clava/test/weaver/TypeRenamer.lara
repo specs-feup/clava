@@ -51,7 +51,7 @@ function renameType($type, renameMap) {
 	if($type.instanceOf("pointerType")) {
 	//if($type.astName === "PointerType") {
 		var $typeCopy = $type.deepCopy();
-		//$typeCopy.setValue('pointeeType', renameType($typeCopy.getGetValue('pointeeType'), renameMap));
+		//$typeCopy.setValue('pointeeType', renameType($typeCopy.getValue('pointeeType'), renameMap));
 		$typeCopy.pointee = renameType($typeCopy.pointee, renameMap);	
 		return $typeCopy;
 	}

@@ -1567,15 +1567,6 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
-     * Get value on attribute javaValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aDeclarator.javaValueImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute keyType
      * @return the attribute's value
      */
@@ -1636,15 +1627,6 @@ public abstract class AFunction extends ADeclarator {
     @Override
     public AJoinPoint getParentRegionImpl() {
         return this.aDeclarator.getParentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute getValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object getValueImpl(String key) {
-        return this.aDeclarator.getValueImpl(key);
     }
 
     /**
@@ -2006,6 +1988,15 @@ public abstract class AFunction extends ADeclarator {
     }
 
     /**
+     * The value associated with the given property key
+     * @param key 
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aDeclarator.getValueImpl(key);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -2317,7 +2308,6 @@ public abstract class AFunction extends ADeclarator {
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
@@ -2325,7 +2315,6 @@ public abstract class AFunction extends ADeclarator {
         CURRENTREGION("currentRegion"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),

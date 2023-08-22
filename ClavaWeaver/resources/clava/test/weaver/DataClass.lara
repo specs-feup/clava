@@ -2,7 +2,7 @@ aspectdef DataClass
 
 	select method end
     apply
-       var tinits = $method.getGetValue("constructorInits"); 
+       var tinits = $method.getValue("constructorInits"); 
        //println("TINITS CLASS: " + tinits.getClass());
        for(var tinit of tinits) {
         

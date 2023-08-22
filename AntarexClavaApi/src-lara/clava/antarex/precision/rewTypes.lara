@@ -41,7 +41,7 @@ aspectdef rewTypedefs
    select typedefDecl end
     apply
        if ( ! isDeclareddDontModify( $typedefDecl.name )) {
-	     var $ptype = $typedefDecl.getGetValue("underlyingType");
+	     var $ptype = $typedefDecl.getValue("underlyingType");
          TRACE(" === typedefDecl code pre = " + $ptype.code) ;
 		 var $ntype = getNewType( $ptype, oldType, newType);
      	 if ( $ptype !== $ntype) $typedefDecl.setValue("underlyingType", $ntype);

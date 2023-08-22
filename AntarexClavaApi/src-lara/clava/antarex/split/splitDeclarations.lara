@@ -19,8 +19,8 @@ var $SPLIT_NEW_ID = "FOO";
        - reference to a member of a class.
 */
 function isfilteredDeclaration($decl) {
-   if ($decl.getGetValue("hasGlobalStorage")) return true;
-   if ($decl.getGetValue("isCXXClassMember")) return true;
+   if ($decl.getValue("hasGlobalStorage")) return true;
+   if ($decl.getValue("isCXXClassMember")) return true;
   // if (isAConstantDecl($decl)) return  true;
    return false;
 }
@@ -119,7 +119,7 @@ function keepInitDeclarations($Decls)
   @return true if a declaration ($decl) is initialized with the default class constructor, false otherwise.
 */
 function isInitClassWithoutParameters($f) {
-  if ($f.getGetValue("initStyle").name() !== "CALL_INIT") return false;
+  if ($f.getValue("initStyle").name() !== "CALL_INIT") return false;
   var $vinit = $f.init;
   if ($vinit.astName !== 'CXXConstructExpr') return false; 
   return ($vinit.astNumChildren === 0);

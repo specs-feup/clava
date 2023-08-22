@@ -765,15 +765,6 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute javaValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aFunction.javaValueImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute keyType
      * @return the attribute's value
      */
@@ -834,15 +825,6 @@ public abstract class AMethod extends AFunction {
     @Override
     public AJoinPoint getParentRegionImpl() {
         return this.aFunction.getParentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute getValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object getValueImpl(String key) {
-        return this.aFunction.getValueImpl(key);
     }
 
     /**
@@ -1243,6 +1225,15 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
+     * The value associated with the given property key
+     * @param key 
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aFunction.getValueImpl(key);
+    }
+
+    /**
      * Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node
      * @param code 
      */
@@ -1636,7 +1627,6 @@ public abstract class AMethod extends AFunction {
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
@@ -1644,7 +1634,6 @@ public abstract class AMethod extends AFunction {
         CURRENTREGION("currentRegion"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),

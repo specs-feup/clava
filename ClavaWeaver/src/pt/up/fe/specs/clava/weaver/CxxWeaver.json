@@ -243,19 +243,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -368,19 +355,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -764,6 +738,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -1318,19 +1306,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -1443,19 +1418,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -1839,6 +1801,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -2555,19 +2531,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -2680,19 +2643,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -3170,6 +3120,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -3793,19 +3757,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -3918,19 +3869,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -4331,6 +4269,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -5046,19 +4998,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -5171,19 +5110,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -5675,6 +5601,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -6218,19 +6158,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -6343,19 +6270,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -6739,6 +6653,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -7366,19 +7294,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -7491,19 +7406,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -7928,6 +7830,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -8553,19 +8469,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -8678,19 +8581,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -9364,6 +9254,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -9945,19 +9849,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -10070,19 +9961,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -10471,6 +10349,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -11031,19 +10923,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -11156,19 +11035,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -11627,6 +11493,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -12387,19 +12267,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -12512,19 +12379,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -13002,6 +12856,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -13710,19 +13578,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -13835,19 +13690,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -14370,6 +14212,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -14975,19 +14831,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -15100,19 +14943,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -15571,6 +15401,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -16182,19 +16026,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -16307,19 +16138,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -16708,6 +16526,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -17433,19 +17265,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -17558,19 +17377,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -18241,6 +18047,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -18949,19 +18769,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -19074,19 +18881,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -19609,6 +19403,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -20160,19 +19968,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -20285,19 +20080,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -20756,6 +20538,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -21466,19 +21262,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -21591,19 +21374,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -22067,6 +21837,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -22627,19 +22411,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -22752,19 +22523,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -23148,6 +22906,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -23691,19 +23463,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -23816,19 +23575,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -24225,6 +23971,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -24776,19 +24536,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -24901,19 +24648,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -25372,6 +25106,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -26088,19 +25836,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -26213,19 +25948,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -26779,6 +26501,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -27319,19 +27055,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -27444,19 +27167,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -27840,6 +27550,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -28400,19 +28124,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -28525,19 +28236,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -28996,6 +28694,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -29574,19 +29286,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -29699,19 +29398,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -30137,6 +29823,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -30715,19 +30415,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -30840,19 +30527,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -31241,6 +30915,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -31976,19 +31664,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -32101,19 +31776,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -32591,6 +32253,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -33127,19 +32803,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -33252,19 +32915,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -33648,6 +33298,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -34199,19 +33863,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -34324,19 +33975,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -34795,6 +34433,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -35381,19 +35033,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -35506,19 +35145,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -35949,6 +35575,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -36681,19 +36321,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -36806,19 +36433,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -37296,6 +36910,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -37873,19 +37501,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -37998,19 +37613,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -38436,6 +38038,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -38996,19 +38612,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -39121,19 +38724,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -39592,6 +39182,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -40170,19 +39774,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -40295,19 +39886,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -40696,6 +40274,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -41274,19 +40866,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -41399,19 +40978,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -41837,6 +41403,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -42522,19 +42102,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -42647,19 +42214,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -43329,6 +42883,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -43910,19 +43478,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -44035,19 +43590,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -44436,6 +43978,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -45208,19 +44764,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -45333,19 +44876,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -46063,6 +45593,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -46786,19 +46330,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -46911,19 +46442,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -47434,6 +46952,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -47993,19 +47525,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -48118,19 +47637,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -48603,6 +48109,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -49186,19 +48706,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -49311,19 +48818,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -49849,6 +49343,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -50422,19 +49930,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -50547,19 +50042,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -50943,6 +50425,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -51529,19 +51025,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -51654,19 +51137,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -52055,6 +51525,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -52632,19 +52116,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -52757,19 +52228,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -53195,6 +52653,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -53754,19 +53226,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -53879,19 +53338,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -54364,6 +53810,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -54942,19 +54402,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -55067,19 +54514,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -55468,6 +54902,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -56193,19 +55641,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -56318,19 +55753,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -57006,6 +56428,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -57604,19 +57040,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -57729,19 +57152,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -58161,6 +57571,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -58781,19 +58205,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -58906,19 +58317,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -59320,6 +58718,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -60044,19 +59456,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -60169,19 +59568,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -60704,6 +60090,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -61484,19 +60884,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -61609,19 +60996,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -62353,6 +61727,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -62926,19 +62314,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -63051,19 +62426,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -63489,6 +62851,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -64067,19 +63443,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -64192,19 +63555,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -64593,6 +63943,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -65362,19 +64726,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -65487,19 +64838,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -66176,6 +65514,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -66774,19 +66126,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -66899,19 +66238,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -67300,6 +66626,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -67940,19 +67280,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -68065,19 +67392,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -68573,6 +67887,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -69160,19 +68488,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -69285,19 +68600,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -69686,6 +68988,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -70401,19 +69717,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -70526,19 +69829,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -71030,6 +70320,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -71754,19 +71058,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -71879,19 +71170,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -72383,6 +71661,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -72969,19 +72261,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -73094,19 +72373,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -73521,6 +72787,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -74187,19 +73467,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -74312,19 +73579,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -74895,6 +74149,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -75618,19 +74886,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -75743,19 +74998,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -76233,6 +75475,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -76853,19 +76109,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -76978,19 +76221,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -77435,6 +76665,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -77994,19 +77238,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -78119,19 +77350,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -78595,6 +77813,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -79221,19 +78453,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -79346,19 +78565,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -80032,6 +79238,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -80578,19 +79798,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -80703,19 +79910,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -81174,6 +80368,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -81794,19 +81002,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -81919,19 +81114,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -82376,6 +81558,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -82963,19 +82159,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -83088,19 +82271,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -83559,6 +82729,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -84154,19 +83338,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -84279,19 +83450,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -84706,6 +83864,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -85430,19 +84602,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -85555,19 +84714,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -86045,6 +85191,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -86784,19 +85944,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -86909,19 +86056,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -87399,6 +86533,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -88026,19 +87174,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -88151,19 +87286,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -88567,6 +87689,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -89145,19 +88281,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -89270,19 +88393,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -89671,6 +88781,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -90378,19 +89502,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -90503,19 +89614,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -90993,6 +90091,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -91571,19 +90683,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -91696,19 +90795,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -92134,6 +91220,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -92712,19 +91812,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -92837,19 +91924,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -93275,6 +92349,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -94001,19 +93089,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -94126,19 +93201,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -94616,6 +93678,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -95234,19 +94310,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -95359,19 +94422,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -95773,6 +94823,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -96392,19 +95456,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -96517,19 +95568,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -96923,6 +95961,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -97630,19 +96682,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -97755,19 +96794,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -98245,6 +97271,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -98886,19 +97926,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -99011,19 +98038,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -99519,6 +98533,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -100242,19 +99270,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -100367,19 +99382,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -100885,6 +99887,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -101525,19 +100541,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -101650,19 +100653,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -102064,6 +101054,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},
@@ -102631,19 +101635,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "The value associated with the given property key",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getValue"
-									},
-									{
-										"type": "String",
-										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -102756,19 +101747,6 @@
 									{
 										"type": "String[]",
 										"name": "javaFields"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: used attribute 'getValue' instead, with the names returned by the attribute 'keys'] Returns the value associated with the provided Java field name",
-						"children": [
-									{
-										"type": "Object",
-										"name": "javaValue"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -103227,6 +102205,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "The value associated with the given property key",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getValue"
+									},
+									{
+										"type": "String",
+										"name": "key",
 										"defaultValue": ""
 									}]
 					},

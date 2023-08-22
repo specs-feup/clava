@@ -892,11 +892,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public Object javaValueImpl(String fieldName) {
-        return LowLevelApi.getValue(getNode(), fieldName);
-    }
-
-    @Override
     public String getAstIdImpl() {
         // return getNode().getExtendedId().orElse("<NO_ID>");
         return getNode().getExtendedId().orElseThrow(() -> new RuntimeException("No ID found in node " + getNode()));

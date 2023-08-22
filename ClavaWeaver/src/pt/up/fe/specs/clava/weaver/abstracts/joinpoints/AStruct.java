@@ -497,15 +497,6 @@ public abstract class AStruct extends ARecord {
     }
 
     /**
-     * Get value on attribute javaValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aRecord.javaValueImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute keyType
      * @return the attribute's value
      */
@@ -566,15 +557,6 @@ public abstract class AStruct extends ARecord {
     @Override
     public AJoinPoint getParentRegionImpl() {
         return this.aRecord.getParentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute getValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object getValueImpl(String key) {
-        return this.aRecord.getValueImpl(key);
     }
 
     /**
@@ -945,6 +927,15 @@ public abstract class AStruct extends ARecord {
     }
 
     /**
+     * The value associated with the given property key
+     * @param key 
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aRecord.getValueImpl(key);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -1157,7 +1148,6 @@ public abstract class AStruct extends ARecord {
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
@@ -1165,7 +1155,6 @@ public abstract class AStruct extends ARecord {
         CURRENTREGION("currentRegion"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),

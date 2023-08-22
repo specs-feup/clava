@@ -228,10 +228,6 @@ export class Joinpoint extends LaraJoinPoint {
      */
     getGetUserField(fieldName) { return wrapJoinPoint(this._javaObject.getUserField(unwrapJoinPoint(fieldName))); }
     /**
-     * The value associated with the given property key
-     */
-    getGetValue(key) { return wrapJoinPoint(this._javaObject.getValue(unwrapJoinPoint(key))); }
-    /**
      * True, if the given join point or AST node is the same (== test) as the current join point AST node
      */
     getHasNode(nodeOrJp) { return wrapJoinPoint(this._javaObject.hasNode(unwrapJoinPoint(nodeOrJp))); }
@@ -239,12 +235,6 @@ export class Joinpoint extends LaraJoinPoint {
      * String with the full Java class name of the type of the Java field with the provided name
      */
     getJavaFieldType(fieldName) { return wrapJoinPoint(this._javaObject.getJavaFieldType(unwrapJoinPoint(fieldName))); }
-    /**
-     * Returns the value associated with the provided Java field name
-     *
-     * @deprecated used attribute 'getValue' instead, with the names returned by the attribute 'keys'
-     */
-    getJavaValue(fieldName) { return wrapJoinPoint(this._javaObject.getJavaValue(unwrapJoinPoint(fieldName))); }
     /**
      * Java Class instance with the type of the given key
      */
@@ -306,6 +296,10 @@ export class Joinpoint extends LaraJoinPoint {
      * Looks in the descendants for the first node of the given type
      */
     getFirstJp(type) { return wrapJoinPoint(this._javaObject.getFirstJp(unwrapJoinPoint(type))); }
+    /**
+     * The value associated with the given property key
+     */
+    getValue(key) { return wrapJoinPoint(this._javaObject.getValue(unwrapJoinPoint(key))); }
     /**
      * Inserts the given join point after this join point
      */

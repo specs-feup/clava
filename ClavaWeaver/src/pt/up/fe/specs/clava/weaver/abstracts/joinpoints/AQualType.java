@@ -632,15 +632,6 @@ public abstract class AQualType extends AType {
     }
 
     /**
-     * Get value on attribute javaValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aType.javaValueImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute keyType
      * @return the attribute's value
      */
@@ -701,15 +692,6 @@ public abstract class AQualType extends AType {
     @Override
     public AJoinPoint getParentRegionImpl() {
         return this.aType.getParentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute getValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object getValueImpl(String key) {
-        return this.aType.getValueImpl(key);
     }
 
     /**
@@ -1071,6 +1053,15 @@ public abstract class AQualType extends AType {
     }
 
     /**
+     * The value associated with the given property key
+     * @param key 
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aType.getValueImpl(key);
+    }
+
+    /**
      * Sets the template argument types of a template type
      * @param templateArgTypes 
      */
@@ -1342,7 +1333,6 @@ public abstract class AQualType extends AType {
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
@@ -1350,7 +1340,6 @@ public abstract class AQualType extends AType {
         CURRENTREGION("currentRegion"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),

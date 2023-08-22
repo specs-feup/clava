@@ -1454,15 +1454,6 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
-     * Get value on attribute javaValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aStatement.javaValueImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute keyType
      * @return the attribute's value
      */
@@ -1523,15 +1514,6 @@ public abstract class ALoop extends AStatement {
     @Override
     public AJoinPoint getParentRegionImpl() {
         return this.aStatement.getParentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute getValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object getValueImpl(String key) {
-        return this.aStatement.getValueImpl(key);
     }
 
     /**
@@ -1893,6 +1875,15 @@ public abstract class ALoop extends AStatement {
     }
 
     /**
+     * The value associated with the given property key
+     * @param key 
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aStatement.getValueImpl(key);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -2230,7 +2221,6 @@ public abstract class ALoop extends AStatement {
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
@@ -2238,7 +2228,6 @@ public abstract class ALoop extends AStatement {
         CURRENTREGION("currentRegion"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),

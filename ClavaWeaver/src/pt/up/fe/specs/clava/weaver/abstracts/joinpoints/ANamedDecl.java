@@ -587,15 +587,6 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
-     * Get value on attribute javaValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aDecl.javaValueImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute keyType
      * @return the attribute's value
      */
@@ -656,15 +647,6 @@ public abstract class ANamedDecl extends ADecl {
     @Override
     public AJoinPoint getParentRegionImpl() {
         return this.aDecl.getParentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute getValue
-     * @return the attribute's value
-     */
-    @Override
-    public Object getValueImpl(String key) {
-        return this.aDecl.getValueImpl(key);
     }
 
     /**
@@ -1026,6 +1008,15 @@ public abstract class ANamedDecl extends ADecl {
     }
 
     /**
+     * The value associated with the given property key
+     * @param key 
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aDecl.getValueImpl(key);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -1237,7 +1228,6 @@ public abstract class ANamedDecl extends ADecl {
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
         KEYTYPE("keyType"),
         CHAINANCESTOR("chainAncestor"),
         CHAIN("chain"),
@@ -1245,7 +1235,6 @@ public abstract class ANamedDecl extends ADecl {
         CURRENTREGION("currentRegion"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
-        GETVALUE("getValue"),
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
