@@ -909,13 +909,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public Object getUserFieldImpl(String fieldName) {
-        ClavaLog.deprecated("attribute 'getUserField' is deprecated, please use 'userField' instead");
-        return userFieldImpl(fieldName);
-        // return getWeaverEngine().getUserField(getNodeNormalized(), fieldName);
-    }
-
-    @Override
-    public Object userFieldImpl(String fieldName) {
         return getWeaverEngine().getUserField(getNodeNormalized(), fieldName);
     }
 

@@ -680,15 +680,6 @@ public abstract class AClass extends ARecord {
     }
 
     /**
-     * Get value on attribute userField
-     * @return the attribute's value
-     */
-    @Override
-    public Object userFieldImpl(String fieldName) {
-        return this.aRecord.userFieldImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute endLine
      * @return the attribute's value
      */
@@ -893,15 +884,6 @@ public abstract class AClass extends ARecord {
     @Override
     public String getLocationImpl() {
         return this.aRecord.getLocationImpl();
-    }
-
-    /**
-     * Get value on attribute getUserField
-     * @return the attribute's value
-     */
-    @Override
-    public Object getUserFieldImpl(String fieldName) {
-        return this.aRecord.getUserFieldImpl(fieldName);
     }
 
     /**
@@ -1245,6 +1227,15 @@ public abstract class AClass extends ARecord {
     }
 
     /**
+     * Retrives values that have been associated to nodes of the AST with 'setUserField'
+     * @param fieldName 
+     */
+    @Override
+    public Object getUserFieldImpl(String fieldName) {
+        return this.aRecord.getUserFieldImpl(fieldName);
+    }
+
+    /**
      * true, if the given join point or AST node is the same (== test) as the current join point AST node
      * @param nodeOrJp 
      */
@@ -1476,7 +1467,6 @@ public abstract class AClass extends ARecord {
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         BITWIDTH("bitWidth"),
-        USERFIELD("userField"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -1500,7 +1490,6 @@ public abstract class AClass extends ARecord {
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
-        GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),

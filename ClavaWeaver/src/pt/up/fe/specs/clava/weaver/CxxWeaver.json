@@ -230,19 +230,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -520,19 +507,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -725,6 +699,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -1294,19 +1282,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -1584,19 +1559,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -1789,6 +1751,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -2520,19 +2496,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -2806,19 +2769,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -3109,6 +3059,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -3747,19 +3711,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -4037,19 +3988,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -4259,6 +4197,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -4989,19 +4941,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -5275,19 +5214,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -5592,6 +5518,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -6150,19 +6090,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -6440,19 +6367,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -6645,6 +6559,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -7287,19 +7215,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -7577,19 +7492,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -7823,6 +7725,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -8463,19 +8379,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -8749,19 +8652,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -9243,6 +9133,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -9844,19 +9748,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -10134,19 +10025,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -10344,6 +10222,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -10919,19 +10811,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -11209,19 +11088,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -11489,6 +11355,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -12264,19 +12144,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -12550,19 +12417,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -12853,6 +12707,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -13576,19 +13444,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -13862,19 +13717,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -14210,6 +14052,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -14830,19 +14686,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -15120,19 +14963,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -15400,6 +15230,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -16026,19 +15870,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -16316,19 +16147,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -16526,6 +16344,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -17266,19 +17098,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -17552,19 +17371,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -18048,6 +17854,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -18771,19 +18591,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -19057,19 +18864,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -19405,6 +19199,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -19971,19 +19779,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -20261,19 +20056,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -20541,6 +20323,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -21266,19 +21062,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -21556,19 +21339,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -21841,6 +21611,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -22416,19 +22200,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -22706,19 +22477,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -22911,6 +22669,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -23469,19 +23241,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -23759,19 +23518,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -23977,6 +23723,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -24543,19 +24303,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -24833,19 +24580,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -25113,6 +24847,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -25844,19 +25592,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -26130,19 +25865,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -26504,6 +26226,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -27064,19 +26800,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -27354,19 +27077,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -27559,6 +27269,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -28134,19 +27858,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -28424,19 +28135,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -28704,6 +28402,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -29297,19 +29009,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -29587,19 +29286,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -29834,6 +29520,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -30427,19 +30127,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -30717,19 +30404,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -30927,6 +30601,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -31677,19 +31365,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -31963,19 +31638,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -32266,6 +31928,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -32817,19 +32493,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -33107,19 +32770,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -33312,6 +32962,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -33878,19 +33542,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -34168,19 +33819,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -34448,6 +34086,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -35049,19 +34701,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -35339,19 +34978,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -35591,6 +35217,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -36338,19 +35978,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -36624,19 +36251,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -36927,6 +36541,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -37519,19 +37147,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -37809,19 +37424,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -38056,6 +37658,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -38631,19 +38247,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -38921,19 +38524,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -39201,6 +38791,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -39794,19 +39398,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -40084,19 +39675,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -40294,6 +39872,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -40887,19 +40479,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -41177,19 +40756,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -41424,6 +40990,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -42124,19 +41704,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -42410,19 +41977,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -42900,6 +42454,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -43501,19 +43069,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -43791,19 +43346,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -44001,6 +43543,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -44788,19 +44344,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -45074,19 +44617,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -45617,6 +45147,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -46355,19 +45899,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -46641,19 +46172,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -46977,6 +46495,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -47551,19 +47083,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -47837,19 +47356,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -48135,6 +47641,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -48733,19 +48253,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -49019,19 +48526,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -49370,6 +48864,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -49958,19 +49466,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -50248,19 +49743,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -50453,6 +49935,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -51054,19 +50550,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -51344,19 +50827,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -51554,6 +51024,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -52146,19 +51630,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -52436,19 +51907,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -52683,6 +52141,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -53257,19 +52729,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -53543,19 +53002,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -53841,6 +53287,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -54434,19 +53894,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -54724,19 +54171,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -54934,6 +54368,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -55674,19 +55122,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -55960,19 +55395,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -56456,6 +55878,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -57074,19 +56510,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -57364,19 +56787,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -57605,6 +57015,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -58240,19 +57664,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -58530,19 +57941,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -58753,6 +58151,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -59492,19 +58904,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -59778,19 +59177,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -60126,6 +59512,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -60921,19 +60321,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -61207,19 +60594,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -61759,6 +61133,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -62352,19 +61740,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -62642,19 +62017,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -62889,6 +62251,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -63482,19 +62858,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -63772,19 +63135,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -63982,6 +63332,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -64753,19 +64117,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -65039,19 +64390,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -65550,6 +64888,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -66168,19 +65520,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -66458,19 +65797,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -66668,6 +65994,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -67323,19 +66663,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -67609,19 +66936,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -67930,6 +67244,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -68532,19 +67860,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -68822,19 +68137,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -69032,6 +68334,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -69762,19 +69078,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -70048,19 +69351,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -70365,6 +69655,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -71104,19 +70408,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -71390,19 +70681,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -71707,6 +70985,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -72308,19 +71600,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -72598,19 +71877,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -72834,6 +72100,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -73515,19 +72795,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -73801,19 +73068,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -74197,6 +73451,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -74935,19 +74203,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -75221,19 +74476,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -75524,6 +74766,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -76159,19 +75415,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -76449,19 +75692,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -76715,6 +75945,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -77289,19 +76533,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -77579,19 +76810,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -77864,6 +77082,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -78505,19 +77737,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -78791,19 +78010,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -79285,6 +78491,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -79851,19 +79071,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -80141,19 +79348,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -80421,6 +79615,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -81056,19 +80264,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -81346,19 +80541,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -81612,6 +80794,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -82214,19 +81410,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -82504,19 +81687,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -82784,6 +81954,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -83394,19 +82578,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -83684,19 +82855,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -83920,6 +83078,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -84659,19 +83831,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -84945,19 +84104,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -85248,6 +84394,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -86002,19 +85162,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -86288,19 +85435,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -86591,6 +85725,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -87233,19 +86381,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -87523,19 +86658,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -87748,6 +86870,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -88341,19 +87477,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -88631,19 +87754,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -88841,6 +87951,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -89563,19 +88687,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -89849,19 +88960,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -90152,6 +89250,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -90745,19 +89857,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -91035,19 +90134,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -91282,6 +90368,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -91875,19 +90975,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -92165,19 +91252,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -92412,6 +91486,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -93153,19 +92241,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -93439,19 +92514,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -93742,6 +92804,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -94375,19 +93451,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -94665,19 +93728,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -94888,6 +93938,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -95522,19 +94586,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -95812,19 +94863,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -96027,6 +95065,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -96749,19 +95801,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -97035,19 +96074,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -97338,6 +96364,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -97994,19 +97034,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -98280,19 +97307,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -98601,6 +97615,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -99339,19 +98367,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -99625,19 +98640,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
 									}]
 					},
 					{
@@ -99956,6 +98958,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -100611,19 +99627,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -100901,19 +99904,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -101124,6 +100114,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},
@@ -101706,19 +100710,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "[DEPRECATED: use 'userField' instead]",
-						"children": [
-									{
-										"type": "Object",
-										"name": "getUserField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the node has children, false otherwise",
 						"children": [
 									{
@@ -101996,19 +100987,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
-						"children": [
-									{
-										"type": "Object",
-										"name": "userField"
-									},
-									{
-										"type": "String",
-										"name": "fieldName"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if the current join point is an instance of the given type",
 						"children": [
 									{
@@ -102276,6 +101254,20 @@
 									{
 										"type": "String",
 										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Retrives values that have been associated to nodes of the AST with 'setUserField'",
+						"children": [
+									{
+										"type": "Object",
+										"name": "getUserField"
+									},
+									{
+										"type": "String",
+										"name": "fieldName",
 										"defaultValue": ""
 									}]
 					},

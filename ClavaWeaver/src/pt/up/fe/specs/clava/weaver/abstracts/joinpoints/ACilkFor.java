@@ -661,15 +661,6 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute userField
-     * @return the attribute's value
-     */
-    @Override
-    public Object userFieldImpl(String fieldName) {
-        return this.aLoop.userFieldImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute endLine
      * @return the attribute's value
      */
@@ -874,15 +865,6 @@ public abstract class ACilkFor extends ALoop {
     @Override
     public String getLocationImpl() {
         return this.aLoop.getLocationImpl();
-    }
-
-    /**
-     * Get value on attribute getUserField
-     * @return the attribute's value
-     */
-    @Override
-    public Object getUserFieldImpl(String fieldName) {
-        return this.aLoop.getUserFieldImpl(fieldName);
     }
 
     /**
@@ -1214,6 +1196,15 @@ public abstract class ACilkFor extends ALoop {
     @Override
     public Object getValueImpl(String key) {
         return this.aLoop.getValueImpl(key);
+    }
+
+    /**
+     * Retrives values that have been associated to nodes of the AST with 'setUserField'
+     * @param fieldName 
+     */
+    @Override
+    public Object getUserFieldImpl(String fieldName) {
+        return this.aLoop.getUserFieldImpl(fieldName);
     }
 
     /**
@@ -1630,7 +1621,6 @@ public abstract class ACilkFor extends ALoop {
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         BITWIDTH("bitWidth"),
-        USERFIELD("userField"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -1654,7 +1644,6 @@ public abstract class ACilkFor extends ALoop {
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
-        GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),

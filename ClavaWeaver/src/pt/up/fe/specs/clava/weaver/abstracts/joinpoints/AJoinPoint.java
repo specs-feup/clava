@@ -133,6 +133,7 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("dataAssign(Object source)");
         actions.add("dataClear()");
         actions.add("getValue(String key)");
+        actions.add("getUserField(String fieldName)");
         actions.add("hasNode(Object nodeOrJp)");
     }
 
@@ -1014,6 +1015,33 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
+     * Retrives values that have been associated to nodes of the AST with 'setUserField'
+     * @param fieldName 
+     */
+    public Object getUserFieldImpl(String fieldName) {
+        throw new UnsupportedOperationException(get_class()+": Action getUserField not implemented ");
+    }
+
+    /**
+     * Retrives values that have been associated to nodes of the AST with 'setUserField'
+     * @param fieldName 
+     */
+    public final Object getUserField(String fieldName) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "getUserField", this, Optional.empty(), fieldName);
+        	}
+        	Object result = this.getUserFieldImpl(fieldName);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "getUserField", this, Optional.ofNullable(result), fieldName);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "getUserField", e);
+        }
+    }
+
+    /**
      * true, if the given join point or AST node is the same (== test) as the current join point AST node
      * @param nodeOrJp 
      */
@@ -1084,8 +1112,6 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("isInsideLoopHeader");
         attributes.add("isInsideHeader");
         attributes.add("isInSystemHeader");
-        attributes.add("getUserField(String fieldName)");
-        attributes.add("userField(String fieldName)");
         attributes.add("parentRegion");
         attributes.add("currentRegion");
         attributes.add("pragmas");
@@ -1997,60 +2023,6 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "isInSystemHeader", e);
-        }
-    }
-
-    /**
-     * 
-     * @param fieldName
-     * @return 
-     */
-    public abstract Object getUserFieldImpl(String fieldName);
-
-    /**
-     * 
-     * @param fieldName
-     * @return 
-     */
-    public final Object getUserField(String fieldName) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getUserField", Optional.empty(), fieldName);
-        	}
-        	Object result = this.getUserFieldImpl(fieldName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "getUserField", Optional.ofNullable(result), fieldName);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "getUserField", e);
-        }
-    }
-
-    /**
-     * 
-     * @param fieldName
-     * @return 
-     */
-    public abstract Object userFieldImpl(String fieldName);
-
-    /**
-     * 
-     * @param fieldName
-     * @return 
-     */
-    public final Object userField(String fieldName) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "userField", Optional.empty(), fieldName);
-        	}
-        	Object result = this.userFieldImpl(fieldName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "userField", Optional.ofNullable(result), fieldName);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "userField", e);
         }
     }
 

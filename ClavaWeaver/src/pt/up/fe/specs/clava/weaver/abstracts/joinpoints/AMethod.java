@@ -630,15 +630,6 @@ public abstract class AMethod extends AFunction {
     }
 
     /**
-     * Get value on attribute userField
-     * @return the attribute's value
-     */
-    @Override
-    public Object userFieldImpl(String fieldName) {
-        return this.aFunction.userFieldImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute endLine
      * @return the attribute's value
      */
@@ -843,15 +834,6 @@ public abstract class AMethod extends AFunction {
     @Override
     public String getLocationImpl() {
         return this.aFunction.getLocationImpl();
-    }
-
-    /**
-     * Get value on attribute getUserField
-     * @return the attribute's value
-     */
-    @Override
-    public Object getUserFieldImpl(String fieldName) {
-        return this.aFunction.getUserFieldImpl(fieldName);
     }
 
     /**
@@ -1222,6 +1204,15 @@ public abstract class AMethod extends AFunction {
     @Override
     public Object getValueImpl(String key) {
         return this.aFunction.getValueImpl(key);
+    }
+
+    /**
+     * Retrives values that have been associated to nodes of the AST with 'setUserField'
+     * @param fieldName 
+     */
+    @Override
+    public Object getUserFieldImpl(String fieldName) {
+        return this.aFunction.getUserFieldImpl(fieldName);
     }
 
     /**
@@ -1612,7 +1603,6 @@ public abstract class AMethod extends AFunction {
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         BITWIDTH("bitWidth"),
-        USERFIELD("userField"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -1636,7 +1626,6 @@ public abstract class AMethod extends AFunction {
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
-        GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),

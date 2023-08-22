@@ -453,6 +453,11 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <parameter name="key" type="String" />
     </action>
 
+    <action name="getUserField" return="Object"
+        tooltip="Retrives values that have been associated to nodes of the AST with 'setUserField'">
+        <parameter name="fieldName" type="String" />
+    </action>
+
     <action name="hasNode" return="Boolean"
         tooltip="true, if the given join point or AST node is the same (== test) as the current join point AST node">
         <parameter name="nodeOrJp" type="object" />

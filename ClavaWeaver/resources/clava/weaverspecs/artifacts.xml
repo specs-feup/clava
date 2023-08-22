@@ -82,13 +82,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="true, if the join point is inside a header (e.g., if condition, for, while)" />
         <attribute name="isInSystemHeader" type="Boolean"
             tooltip="true, if the join point is part of a system header file" />
-        <attribute name="getUserField" type="Object" tooltip="[DEPRECATED: use 'userField' instead]">
-            <parameter name="fieldName" type="String" />
-        </attribute>
-        <attribute name="userField" type="Object"
-            tooltip="Retrives values that have been associated to nodes of the AST with 'setUserField'">
-            <parameter name="fieldName" type="String" />
-        </attribute>
         <attribute name="parentRegion" type="joinpoint"
             tooltip="Returns the node that declares the scope that is a parent of the scope of this node" />
         <attribute name="currentRegion" type="joinpoint"

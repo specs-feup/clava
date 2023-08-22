@@ -455,15 +455,6 @@ public abstract class AGotoStmt extends AStatement {
     }
 
     /**
-     * Get value on attribute userField
-     * @return the attribute's value
-     */
-    @Override
-    public Object userFieldImpl(String fieldName) {
-        return this.aStatement.userFieldImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute endLine
      * @return the attribute's value
      */
@@ -668,15 +659,6 @@ public abstract class AGotoStmt extends AStatement {
     @Override
     public String getLocationImpl() {
         return this.aStatement.getLocationImpl();
-    }
-
-    /**
-     * Get value on attribute getUserField
-     * @return the attribute's value
-     */
-    @Override
-    public Object getUserFieldImpl(String fieldName) {
-        return this.aStatement.getUserFieldImpl(fieldName);
     }
 
     /**
@@ -1011,6 +993,15 @@ public abstract class AGotoStmt extends AStatement {
     }
 
     /**
+     * Retrives values that have been associated to nodes of the AST with 'setUserField'
+     * @param fieldName 
+     */
+    @Override
+    public Object getUserFieldImpl(String fieldName) {
+        return this.aStatement.getUserFieldImpl(fieldName);
+    }
+
+    /**
      * true, if the given join point or AST node is the same (== test) as the current join point AST node
      * @param nodeOrJp 
      */
@@ -1240,7 +1231,6 @@ public abstract class AGotoStmt extends AStatement {
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         BITWIDTH("bitWidth"),
-        USERFIELD("userField"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -1264,7 +1254,6 @@ public abstract class AGotoStmt extends AStatement {
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
-        GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),

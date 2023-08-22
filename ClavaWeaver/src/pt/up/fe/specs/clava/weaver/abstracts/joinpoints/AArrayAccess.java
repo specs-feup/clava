@@ -439,15 +439,6 @@ public abstract class AArrayAccess extends AExpression {
     }
 
     /**
-     * Get value on attribute userField
-     * @return the attribute's value
-     */
-    @Override
-    public Object userFieldImpl(String fieldName) {
-        return this.aExpression.userFieldImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute endLine
      * @return the attribute's value
      */
@@ -652,15 +643,6 @@ public abstract class AArrayAccess extends AExpression {
     @Override
     public String getLocationImpl() {
         return this.aExpression.getLocationImpl();
-    }
-
-    /**
-     * Get value on attribute getUserField
-     * @return the attribute's value
-     */
-    @Override
-    public Object getUserFieldImpl(String fieldName) {
-        return this.aExpression.getUserFieldImpl(fieldName);
     }
 
     /**
@@ -995,6 +977,15 @@ public abstract class AArrayAccess extends AExpression {
     }
 
     /**
+     * Retrives values that have been associated to nodes of the AST with 'setUserField'
+     * @param fieldName 
+     */
+    @Override
+    public Object getUserFieldImpl(String fieldName) {
+        return this.aExpression.getUserFieldImpl(fieldName);
+    }
+
+    /**
      * true, if the given join point or AST node is the same (== test) as the current join point AST node
      * @param nodeOrJp 
      */
@@ -1193,7 +1184,6 @@ public abstract class AArrayAccess extends AExpression {
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         BITWIDTH("bitWidth"),
-        USERFIELD("userField"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -1217,7 +1207,6 @@ public abstract class AArrayAccess extends AExpression {
         DEPTH("depth"),
         JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
-        GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),
