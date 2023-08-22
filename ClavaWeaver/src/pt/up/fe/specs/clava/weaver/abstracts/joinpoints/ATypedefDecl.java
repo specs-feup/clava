@@ -101,15 +101,6 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
     }
 
     /**
-     * Get value on attribute astAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        return this.aTypedefNameDecl.astAncestorImpl(type);
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
@@ -335,15 +326,6 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstParentImpl() {
-        return this.aTypedefNameDecl.getAstParentImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -548,15 +530,6 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
     @Override
     public AJoinPoint getCurrentRegionImpl() {
         return this.aTypedefNameDecl.getCurrentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute hasAstParent
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasAstParentImpl() {
-        return this.aTypedefNameDecl.getHasAstParentImpl();
     }
 
     /**
@@ -1075,7 +1048,6 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
         QUALIFIEDNAME("qualifiedName"),
         ATTRS("attrs"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
@@ -1101,7 +1073,6 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
@@ -1125,7 +1096,6 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),

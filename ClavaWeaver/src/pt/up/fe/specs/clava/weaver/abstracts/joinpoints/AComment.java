@@ -187,7 +187,6 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
     protected enum CommentAttributes {
         TEXT("text"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
@@ -213,7 +212,6 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
@@ -237,7 +235,6 @@ public abstract class AComment extends ACxxWeaverJoinPoint {
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),

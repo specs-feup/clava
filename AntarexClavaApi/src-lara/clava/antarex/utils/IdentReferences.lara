@@ -48,7 +48,7 @@ function getReferencedParameters($statement) {
 */
 function isOutsideDeclaration($aDecl, $statement) {
   if ( isParameterDeclaration($aDecl)) return false;
-  var $father = $aDecl.astParent;
+  var $father = $aDecl.parent;
   TRACE(" +++  $aDecl = " + $aDecl.code + " astName = " + $aDecl.astName);
   var idStatement = $statement.astId;
   do {
@@ -56,7 +56,7 @@ function isOutsideDeclaration($aDecl, $statement) {
       if ($father.astId === idStatement ) return false;
       if ($father.astName === 'FunctionDecl') return true;
       if ($father.astName === 'TranslationUnit') return true;
-      $father = $father.astParent;
+      $father = $father.parent;
      } while (true);
   return false;
 }

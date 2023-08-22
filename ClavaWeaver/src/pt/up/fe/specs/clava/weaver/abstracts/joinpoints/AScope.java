@@ -807,15 +807,6 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Get value on attribute astAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        return this.aStatement.astAncestorImpl(type);
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
@@ -1041,15 +1032,6 @@ public abstract class AScope extends AStatement {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstParentImpl() {
-        return this.aStatement.getAstParentImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -1254,15 +1236,6 @@ public abstract class AScope extends AStatement {
     @Override
     public AJoinPoint getCurrentRegionImpl() {
         return this.aStatement.getCurrentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute hasAstParent
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasAstParentImpl() {
-        return this.aStatement.getHasAstParentImpl();
     }
 
     /**
@@ -1887,7 +1860,6 @@ public abstract class AScope extends AStatement {
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
@@ -1913,7 +1885,6 @@ public abstract class AScope extends AStatement {
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
@@ -1937,7 +1908,6 @@ public abstract class AScope extends AStatement {
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),

@@ -32,7 +32,7 @@ aspectdef RemoveOpenMPfromInnerloop
 
 	select program.file.function.body.omp end
 	apply
-		func_name = $omp.getAstAncestor('FunctionDecl').name;
+		func_name = $omp.getAncestor('function').name;
 		if (exclude_func_from_Omp.indexOf(func_name) !== -1)
 			
 			$omp.insert replace('// #pragma omp ' + $omp.content + '   remove due to be part of parallel section for function call');

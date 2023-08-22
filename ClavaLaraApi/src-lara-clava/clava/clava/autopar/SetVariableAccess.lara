@@ -22,17 +22,17 @@ aspectdef SetVariableAccess
 
 	LoopOmpAttributes[loopindex].varAccess = [];
 
-	var $forFunction = $ForStmt.getAstAncestor('FunctionDecl');
-	if($forFunction === undefined)
+	var $forFunction = $ForStmt.getAncestor('function');
+	if($forFunction == undefined)
 	{
-		var $forRoot = $ForStmt.astParent;
-		while($forRoot.astParent !== undefined)
+		var $forRoot = $ForStmt.parent;
+		while($forRoot.parent !== undefined)
 		{
-			$forRoot = $forRoot.astParent;
+			$forRoot = $forRoot.parent;
 		}
 	}
 
-	var functionvarrefset = orderedVarrefs3($ForStmt.getAstAncestor('FunctionDecl'));
+	var functionvarrefset = orderedVarrefs3($ForStmt.getAncestor('function'));
 	var loopvarrefset = orderedVarrefs3($ForStmt);
 
 
@@ -88,7 +88,7 @@ aspectdef SetVariableAccess
 				declpos = 'outside';
 			else if (vardeclRegion === 'scope')
 				declpos = 'inside';
-			else if (vardecl.getAstAncestor('FunctionDecl').name === $ForStmt.getAstAncestor('FunctionDecl').name)
+			else if (vardecl.getAncestor('function').name === $ForStmt.getAncestor('FunctionDecl').name)
 				declpos = 'outside';			
 			else
 				{
@@ -127,7 +127,7 @@ aspectdef SetVariableAccess
 					use : useExpr, 
 					code : $varref.code, 
 					isInsideLoopHeader : $varref.isInsideLoopHeader,
-					parentlooprank : $varref.getAstAncestor('ForStmt').rank
+					parentlooprank : $varref.getAncestor('forStmt').rank
 					};		
 
 		if (varTypeAccess === 'memberArrayAccess' || varTypeAccess === 'arrayAccess')

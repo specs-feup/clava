@@ -104,7 +104,7 @@ function keepInitDeclarations($Decls)
 	   if (initMustBeKept($f))
 	     {
 		  TRACE_HERE(" Declaration = " + $f.code + " at " + $f.location);
-		  var $father = $f.astParent;  // DeclStmt
+		  var $father = $f.parent;  // DeclStmt
 		  var $vinit = $f.init;
 		  var code = $vinit.code;
 		  // For aClass obj; and aClass a class, the added statement will be obj=aClass();
@@ -133,13 +133,13 @@ function cleanCode($Decls) {
     TRACE_HERE( "  cleanCode BEGIN");
     for (var $f of $Decls)  {
 	  if (! isfilteredDeclaration($f)) {
-       var $DeclStmt = $f.astParent; 
+       var $DeclStmt = $f.parent; 
        if ( ! $f.isInsideLoopHeader) {
           if ($DeclStmt.astNumChildren === 1) $DeclStmt.detach(); else $f.detach();
         }
 	    else {  		         
-  		  var $DeclStmt = $f.astParent;  // DeclStmt 
-  		  var $vloop = $DeclStmt.astParent;  
+  		  var $DeclStmt = $f.parent;  // DeclStmt 
+  		  var $vloop = $DeclStmt.parent;  
           if ($vloop.getAstIsInstance('ForStmt'))
           if ($vloop.getAstChild(0).location === $DeclStmt.location)
              $vloop.setInit ( $f.name + ' = ' + $f.init.code );

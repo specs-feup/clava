@@ -253,15 +253,6 @@ public abstract class AAdjustedType extends AType {
     }
 
     /**
-     * Get value on attribute astAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        return this.aType.astAncestorImpl(type);
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
@@ -487,15 +478,6 @@ public abstract class AAdjustedType extends AType {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstParentImpl() {
-        return this.aType.getAstParentImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -700,15 +682,6 @@ public abstract class AAdjustedType extends AType {
     @Override
     public AJoinPoint getCurrentRegionImpl() {
         return this.aType.getCurrentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute hasAstParent
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasAstParentImpl() {
-        return this.aType.getHasAstParentImpl();
     }
 
     /**
@@ -1293,7 +1266,6 @@ public abstract class AAdjustedType extends AType {
         FIELDTREE("fieldTree"),
         BITWIDTH("bitWidth"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
@@ -1319,7 +1291,6 @@ public abstract class AAdjustedType extends AType {
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
         CHILD("child"),
@@ -1342,7 +1313,6 @@ public abstract class AAdjustedType extends AType {
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),

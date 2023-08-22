@@ -24,18 +24,11 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="Looks for an ancestor joinpoint name, walking back on the joinpoint chain">
             <parameter name="type" type="String" />
         </attribute>
-        <attribute name="astParent" type="joinpoint"
-            tooltip="Returns the parent node in the AST, or undefined if it is the root node" />
-        <attribute name="astAncestor" type="joinpoint"
-            tooltip="Looks for an ancestor AST name, walking back on the AST">
-            <parameter name="type" type="String" />
-        </attribute>
         <attribute name="contains" type="Boolean"
             tooltip="true if the given node is a descendant of this node">
             <parameter name="jp" type="joinpoint" />
         </attribute>
         <attribute name="hasParent" type="boolean" tooltip="true if this node has a parent" />
-        <attribute name="hasAstParent" type="boolean" tooltip="[DEPRECATED: use hasParent instead]" />
         <attribute name="firstJp" type="joinpoint"
             tooltip="Looks in the descendants for the first node of the given type">
             <parameter name="type" type="String" />

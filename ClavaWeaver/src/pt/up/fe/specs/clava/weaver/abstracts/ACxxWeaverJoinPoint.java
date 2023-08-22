@@ -157,29 +157,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint getAstParentImpl() {
-        ClavaLog.deprecated("attribute 'astParent' is deprecated, please use 'parent' instead");
-        return getParentImpl();
-        // ClavaNode node = getNode();
-        // if (!node.hasParent()) {
-        // return null;
-        // }
-        //
-        // ClavaNode currentParent = node.getParent();
-        // // if (currentParent instanceof WrapperStmt) {
-        // // currentParent = currentParent.getParent();
-        // // }
-        //
-        // return CxxJoinpoints.create(currentParent, this);
-    }
-
-    @Override
-    public Boolean getHasAstParentImpl() {
-        ClavaLog.deprecated("attribute 'hasAstParent' is deprecated, please use 'hasParent' instead");
-        return getNode().hasParent();
-    }
-
-    @Override
     public AJoinPoint getAncestorImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'ancestor'");
 
@@ -304,27 +281,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             }
 
             currentJp = parentJp;
-        }
-
-        return null;
-    }
-
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'astAncestor'");
-
-        // Obtain ClavaNode class from type
-        Class<? extends ClavaNode> nodeClass = ClassesService.getClavaClass(type);
-
-        ClavaNode currentNode = getNode();
-        while (currentNode.hasParent()) {
-            ClavaNode parentNode = currentNode.getParent();
-
-            if (nodeClass.isInstance(parentNode)) {
-                return CxxJoinpoints.create(parentNode);
-            }
-
-            currentNode = parentNode;
         }
 
         return null;

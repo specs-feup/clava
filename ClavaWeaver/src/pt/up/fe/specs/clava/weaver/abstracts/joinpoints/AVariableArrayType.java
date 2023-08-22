@@ -306,15 +306,6 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute astAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        return this.aArrayType.astAncestorImpl(type);
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
@@ -540,15 +531,6 @@ public abstract class AVariableArrayType extends AArrayType {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstParentImpl() {
-        return this.aArrayType.getAstParentImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -753,15 +735,6 @@ public abstract class AVariableArrayType extends AArrayType {
     @Override
     public AJoinPoint getCurrentRegionImpl() {
         return this.aArrayType.getCurrentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute hasAstParent
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasAstParentImpl() {
-        return this.aArrayType.getHasAstParentImpl();
     }
 
     /**
@@ -1315,7 +1288,6 @@ public abstract class AVariableArrayType extends AArrayType {
         FIELDTREE("fieldTree"),
         BITWIDTH("bitWidth"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
@@ -1341,7 +1313,6 @@ public abstract class AVariableArrayType extends AArrayType {
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
         CHILD("child"),
@@ -1364,7 +1335,6 @@ public abstract class AVariableArrayType extends AArrayType {
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),

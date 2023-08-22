@@ -454,15 +454,6 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute astAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        return this.aLoop.astAncestorImpl(type);
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
@@ -688,15 +679,6 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstParentImpl() {
-        return this.aLoop.getAstParentImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -901,15 +883,6 @@ public abstract class ACilkFor extends ALoop {
     @Override
     public AJoinPoint getCurrentRegionImpl() {
         return this.aLoop.getCurrentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute hasAstParent
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasAstParentImpl() {
-        return this.aLoop.getHasAstParentImpl();
     }
 
     /**
@@ -1643,7 +1616,6 @@ public abstract class ACilkFor extends ALoop {
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
@@ -1669,7 +1641,6 @@ public abstract class ACilkFor extends ALoop {
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
@@ -1693,7 +1664,6 @@ public abstract class ACilkFor extends ALoop {
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),

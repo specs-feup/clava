@@ -53,7 +53,7 @@ function getClassNameMethod(m)
 */
 function isGlobalVariable($vardecl) {
     if ($vardecl.isParam) return false;
-    return ( $vardecl.astParent.astParent.astName === "TranslationUnit");  // global ?
+    return ( $vardecl.parent.parent.astName === "TranslationUnit");  // global ?
    }
    
 /**

@@ -113,15 +113,6 @@ public abstract class ATag extends APragma {
     }
 
     /**
-     * Get value on attribute astAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        return this.aPragma.astAncestorImpl(type);
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
@@ -347,15 +338,6 @@ public abstract class ATag extends APragma {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstParentImpl() {
-        return this.aPragma.getAstParentImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -560,15 +542,6 @@ public abstract class ATag extends APragma {
     @Override
     public AJoinPoint getCurrentRegionImpl() {
         return this.aPragma.getCurrentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute hasAstParent
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasAstParentImpl() {
-        return this.aPragma.getHasAstParentImpl();
     }
 
     /**
@@ -1088,7 +1061,6 @@ public abstract class ATag extends APragma {
         CONTENT("content"),
         TARGETNODES("targetNodes"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
@@ -1114,7 +1086,6 @@ public abstract class ATag extends APragma {
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
@@ -1138,7 +1109,6 @@ public abstract class ATag extends APragma {
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),

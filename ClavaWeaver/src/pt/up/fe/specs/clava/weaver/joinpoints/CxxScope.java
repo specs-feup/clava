@@ -328,7 +328,7 @@ public class CxxScope extends AScope {
     @Override
     public AJoinPoint getOwnerImpl() {
         // TODO: This should generically work, but corner cases have not been checked
-        return getAstParentImpl();
+        return getParentImpl();
     }
 
     @Override

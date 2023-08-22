@@ -116,7 +116,6 @@ public abstract class AEmpty extends ACxxWeaverJoinPoint {
      */
     protected enum EmptyAttributes {
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
@@ -142,7 +141,6 @@ public abstract class AEmpty extends ACxxWeaverJoinPoint {
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
@@ -166,7 +164,6 @@ public abstract class AEmpty extends ACxxWeaverJoinPoint {
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),

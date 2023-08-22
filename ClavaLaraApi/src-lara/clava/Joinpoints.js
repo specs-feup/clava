@@ -32,10 +32,6 @@ export class Joinpoint extends LaraJoinPoint {
      */
     get astNumChildren() { return wrapJoinPoint(this._javaObject.getAstNumChildren()); }
     /**
-     * Returns the parent node in the AST, or undefined if it is the root node
-     */
-    get astParent() { return wrapJoinPoint(this._javaObject.getAstParent()); }
-    /**
      * The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit
      */
     get bitWidth() { return wrapJoinPoint(this._javaObject.getBitWidth()); }
@@ -99,10 +95,6 @@ export class Joinpoint extends LaraJoinPoint {
      * Returns the first child of this node, or undefined if it has no child
      */
     set firstChild(value) { this._javaObject.setFirstChild(unwrapJoinPoint(value)); }
-    /**
-     * @deprecated use hasParent instead
-     */
-    get hasAstParent() { return wrapJoinPoint(this._javaObject.getHasAstParent()); }
     /**
      * True if the node has children, false otherwise
      */
@@ -223,10 +215,6 @@ export class Joinpoint extends LaraJoinPoint {
     get stmt() { return wrapJoinPoint(this._javaObject.getStmt()); }
     get type() { return wrapJoinPoint(this._javaObject.getType()); }
     set type(value) { this._javaObject.setType(unwrapJoinPoint(value)); }
-    /**
-     * Looks for an ancestor AST name, walking back on the AST
-     */
-    getAstAncestor(type) { return wrapJoinPoint(this._javaObject.astAncestor(unwrapJoinPoint(type))); }
     /**
      * Returns the child of the node at the given index, considering null nodes
      */

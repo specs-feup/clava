@@ -42,19 +42,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -113,15 +100,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -339,15 +317,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -1143,19 +1112,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -1214,15 +1170,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -1440,15 +1387,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -2406,19 +2344,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -2477,15 +2402,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -2703,15 +2619,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -3670,19 +3577,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -3741,15 +3635,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -3967,15 +3852,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -4949,19 +4825,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -5020,15 +4883,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -5246,15 +5100,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -6147,19 +5992,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -6218,15 +6050,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -6444,15 +6267,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -7321,19 +7135,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -7392,15 +7193,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -7618,15 +7410,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -8534,19 +8317,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -8605,15 +8375,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -8831,15 +8592,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -9952,19 +9704,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -10023,15 +9762,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -10249,15 +9979,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -11064,19 +10785,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -11135,15 +10843,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -11361,15 +11060,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -12446,19 +12136,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -12517,15 +12194,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -12743,15 +12411,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -13807,19 +13466,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -13878,15 +13524,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -14104,15 +13741,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -15085,19 +14713,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -15156,15 +14771,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -15382,15 +14988,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -16318,19 +15915,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -16389,15 +15973,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -16615,15 +16190,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -17595,19 +17161,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -17666,15 +17219,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -17892,15 +17436,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -19149,19 +18684,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -19220,15 +18742,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -19446,15 +18959,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -20373,19 +19877,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -20444,15 +19935,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -20670,15 +20152,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -21705,19 +21178,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -21776,15 +21236,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -22002,15 +21453,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -22892,19 +22334,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -22963,15 +22392,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -23189,15 +22609,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -23982,19 +23393,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -24053,15 +23451,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -24279,15 +23668,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -25093,19 +24473,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -25164,15 +24531,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -25390,15 +24748,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -26443,19 +25792,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -26514,15 +25850,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -26740,15 +26067,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -27687,19 +27005,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -27758,15 +27063,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -27984,15 +27280,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -28794,19 +28081,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -28865,15 +28139,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -29091,15 +28356,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -29994,19 +29250,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -30065,15 +29308,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -30291,15 +29525,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -31161,19 +30386,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -31232,15 +30444,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -31458,15 +30661,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -32448,19 +31642,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -32519,15 +31700,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -32745,15 +31917,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -33625,19 +32788,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -33696,15 +32846,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -33922,15 +33063,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -34723,19 +33855,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -34794,15 +33913,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -35020,15 +34130,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -35931,19 +35032,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -36002,15 +35090,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -36228,15 +35307,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -37257,19 +36327,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -37328,15 +36385,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -37554,15 +36602,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -38475,19 +37514,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -38546,15 +37572,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -38772,15 +37789,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -39624,19 +38632,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -39695,15 +38690,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -39921,15 +38907,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -40824,19 +39801,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -40895,15 +39859,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -41121,15 +40076,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -41954,19 +40900,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -42025,15 +40958,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -42251,15 +41175,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -43228,19 +42143,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -43299,15 +42201,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -43525,15 +42418,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -44642,19 +43526,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -44713,15 +43584,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -44939,15 +43801,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -45978,19 +44831,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -46049,15 +44889,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -46275,15 +45106,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -47569,19 +46391,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -47640,15 +46449,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -47866,15 +46666,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -48802,19 +47593,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -48873,15 +47651,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -49099,15 +47868,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -50021,19 +48781,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -50092,15 +48839,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -50318,15 +49056,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -51283,19 +50012,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -51354,15 +50070,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -51580,15 +50287,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -52416,19 +51114,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -52487,15 +51172,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -52713,15 +51389,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -53545,19 +52212,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -53616,15 +52270,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -53842,15 +52487,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -54693,19 +53329,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -54764,15 +53387,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -54990,15 +53604,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -55907,19 +54512,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -55978,15 +54570,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -56204,15 +54787,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -57184,19 +55758,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -57255,15 +55816,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -57481,15 +56033,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -58621,19 +57164,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -58692,15 +57222,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -58918,15 +57439,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -59824,19 +58336,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -59895,15 +58394,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -60121,15 +58611,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -61125,19 +59606,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -61196,15 +59664,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -61422,15 +59881,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -62590,19 +61040,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -62661,15 +61098,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -62887,15 +61315,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -64045,19 +62464,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -64116,15 +62522,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -64342,15 +62739,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -65212,19 +63600,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -65283,15 +63658,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -65509,15 +63875,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -66533,19 +64890,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -66604,15 +64948,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -66830,15 +65165,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -67971,19 +66297,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -68042,15 +66355,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -68268,15 +66572,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -69163,19 +67458,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -69234,15 +67516,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -69460,15 +67733,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -70409,19 +68673,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -70480,15 +68731,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -70706,15 +68948,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -71676,19 +69909,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -71747,15 +69967,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -71973,15 +70184,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -73055,19 +71257,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -73126,15 +71315,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -73352,15 +71532,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -74296,19 +72467,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -74367,15 +72525,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -74593,15 +72742,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -75540,19 +73680,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -75611,15 +73738,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -75837,15 +73955,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -76997,19 +75106,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -77068,15 +75164,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -77294,15 +75381,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -78258,19 +76336,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -78329,15 +76394,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -78555,15 +76611,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -79425,19 +77472,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -79496,15 +77530,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -79722,15 +77747,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -80678,19 +78694,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -80749,15 +78752,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -80975,15 +78969,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -82061,19 +80046,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -82132,15 +80104,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -82358,15 +80321,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -83303,19 +81257,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -83374,15 +81315,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -83600,15 +81532,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -84498,19 +82421,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -84569,15 +82479,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -84795,15 +82696,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -85715,19 +83607,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -85786,15 +83665,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -86012,15 +83882,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -87017,19 +84878,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -87088,15 +84936,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -87314,15 +85153,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -88397,19 +86227,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -88468,15 +86285,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -88694,15 +86502,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -89665,19 +87464,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -89736,15 +87522,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -89962,15 +87739,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -90810,19 +88578,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -90881,15 +88636,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -91107,15 +88853,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -92069,19 +89806,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -92140,15 +89864,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -92366,15 +90081,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -93288,19 +90994,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -93359,15 +91052,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -93585,15 +91269,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -94455,19 +92130,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -94526,15 +92188,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -94752,15 +92405,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -95770,19 +93414,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -95841,15 +93472,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -96067,15 +93689,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -97029,19 +94642,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -97100,15 +94700,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -97326,15 +94917,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -98213,19 +95795,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -98284,15 +95853,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -98510,15 +96070,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -99477,19 +97028,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -99548,15 +97086,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -99774,15 +97303,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -100759,19 +98279,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -100830,15 +98337,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -101056,15 +98554,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -102141,19 +99630,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -102212,15 +99688,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -102438,15 +99905,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -103450,19 +100908,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -103521,15 +100966,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -103747,15 +101183,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{
@@ -104582,19 +102009,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor AST name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astAncestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "Returns the child of the node at the given index, considering null nodes",
 						"children": [
 									{
@@ -104653,15 +102067,6 @@
 									{
 										"type": "Integer",
 										"name": "astNumChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Returns the parent node in the AST, or undefined if it is the root node",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "astParent"
 									}]
 					},
 					{
@@ -104879,15 +102284,6 @@
 									{
 										"type": "String",
 										"name": "key"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "[DEPRECATED: use hasParent instead]",
-						"children": [
-									{
-										"type": "boolean",
-										"name": "hasAstParent"
 									}]
 					},
 					{

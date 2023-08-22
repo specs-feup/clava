@@ -182,9 +182,9 @@ aspectdef callInline
 	select file.function.call end
 	apply
 
-		var exprStmt = $call.getAstAncestor('ExprStmt');
+		var exprStmt = $call.getAncestor('exprStmt');
 
-		if (exprStmt === undefined)
+		if (exprStmt == undefined)
 		{
 			continue;
 		}
@@ -227,7 +227,7 @@ aspectdef callInline
 			}
 
 	end
-	condition $call.name === func_name && $call.getAstAncestor('ForStmt') !== undefined end
+	condition $call.name === func_name && $call.getAncestor('forStmt') != undefined end
 
 	//call aspec_rebuild;
 end	

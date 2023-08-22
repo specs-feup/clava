@@ -258,15 +258,6 @@ public abstract class ACilkSpawn extends ACall {
     }
 
     /**
-     * Get value on attribute astAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        return this.aCall.astAncestorImpl(type);
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
@@ -492,15 +483,6 @@ public abstract class ACilkSpawn extends ACall {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstParentImpl() {
-        return this.aCall.getAstParentImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -705,15 +687,6 @@ public abstract class ACilkSpawn extends ACall {
     @Override
     public AJoinPoint getCurrentRegionImpl() {
         return this.aCall.getCurrentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute hasAstParent
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasAstParentImpl() {
-        return this.aCall.getHasAstParentImpl();
     }
 
     /**
@@ -1309,7 +1282,6 @@ public abstract class ACilkSpawn extends ACall {
         ISFUNCTIONARGUMENT("isFunctionArgument"),
         IMPLICITCAST("implicitCast"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
@@ -1335,7 +1307,6 @@ public abstract class ACilkSpawn extends ACall {
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
         HASNODE("hasNode"),
@@ -1359,7 +1330,6 @@ public abstract class ACilkSpawn extends ACall {
         CHAIN("chain"),
         JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),

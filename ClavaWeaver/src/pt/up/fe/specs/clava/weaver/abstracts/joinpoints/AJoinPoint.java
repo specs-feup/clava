@@ -858,11 +858,8 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("descendants");
         attributes.add("descendantsAndSelf(String type)");
         attributes.add("chainAncestor(String type)");
-        attributes.add("astParent");
-        attributes.add("astAncestor(String type)");
         attributes.add("contains(AJoinPoint jp)");
         attributes.add("hasParent");
-        attributes.add("hasAstParent");
         attributes.add("firstJp(String type)");
         attributes.add("line");
         attributes.add("column");
@@ -1064,56 +1061,6 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
-     * Returns the parent node in the AST, or undefined if it is the root node
-     */
-    public abstract AJoinPoint getAstParentImpl();
-
-    /**
-     * Returns the parent node in the AST, or undefined if it is the root node
-     */
-    public final Object getAstParent() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "astParent", Optional.empty());
-        	}
-        	AJoinPoint result = this.getAstParentImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "astParent", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "astParent", e);
-        }
-    }
-
-    /**
-     * 
-     * @param type
-     * @return 
-     */
-    public abstract AJoinPoint astAncestorImpl(String type);
-
-    /**
-     * 
-     * @param type
-     * @return 
-     */
-    public final Object astAncestor(String type) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "astAncestor", Optional.empty(), type);
-        	}
-        	AJoinPoint result = this.astAncestorImpl(type);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "astAncestor", Optional.ofNullable(result), type);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "astAncestor", e);
-        }
-    }
-
-    /**
      * 
      * @param jp
      * @return 
@@ -1160,29 +1107,6 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "hasParent", e);
-        }
-    }
-
-    /**
-     * [DEPRECATED: use hasParent instead]
-     */
-    public abstract Boolean getHasAstParentImpl();
-
-    /**
-     * [DEPRECATED: use hasParent instead]
-     */
-    public final Object getHasAstParent() {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasAstParent", Optional.empty());
-        	}
-        	Boolean result = this.getHasAstParentImpl();
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasAstParent", Optional.ofNullable(result));
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "hasAstParent", e);
         }
     }
 

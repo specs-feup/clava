@@ -15,10 +15,10 @@ aspectdef ExecPetitDependencyTest
 		return;
 
 	LoopOmpAttributes[loopindex].petitInputFileAddress = Clava.getWeavingFolder() + 
-		'/Petitdeploop#' + $ForStmt.line + '[' + $ForStmt.getAstAncestor('FunctionDecl').name + ']' + '.t';
+		'/Petitdeploop#' + $ForStmt.line + '[' + $ForStmt.getAncestor('function').name + ']' + '.t';
 
 	LoopOmpAttributes[loopindex].petitOutputFileAddress = Clava.getWeavingFolder() + 
-		'/Petitdeploop#' + $ForStmt.line + '[' + $ForStmt.getAstAncestor('FunctionDecl').name + ']' +'_output.t';
+		'/Petitdeploop#' + $ForStmt.line + '[' + $ForStmt.getAncestor('function').name + ']' +'_output.t';
 
 	var petit_input_file = [];
 	for(var i=0; i < LoopOmpAttributes[loopindex].ForStmtToPetit.length ; i++)
