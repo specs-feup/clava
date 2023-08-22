@@ -100,6 +100,7 @@ public abstract class AJoinPoint extends JoinPoint {
      */
     @Override
     protected void fillWithActions(List<String> actions) {
+        actions.add("getAncestor(String type)");
         actions.add("replaceWith(AJoinPoint node)");
         actions.add("replaceWith(String node)");
         actions.add("replaceWith(AJoinPoint[] node)");
@@ -125,6 +126,33 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("setData(Object source)");
         actions.add("dataAssign(Object source)");
         actions.add("dataClear()");
+    }
+
+    /**
+     * Looks for an ancestor joinpoint name, walking back on the AST
+     * @param type 
+     */
+    public AJoinPoint getAncestorImpl(String type) {
+        throw new UnsupportedOperationException(get_class()+": Action getAncestor not implemented ");
+    }
+
+    /**
+     * Looks for an ancestor joinpoint name, walking back on the AST
+     * @param type 
+     */
+    public final AJoinPoint getAncestor(String type) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "getAncestor", this, Optional.empty(), type);
+        	}
+        	AJoinPoint result = this.getAncestorImpl(type);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "getAncestor", this, Optional.ofNullable(result), type);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "getAncestor", e);
+        }
     }
 
     /**
@@ -799,7 +827,6 @@ public abstract class AJoinPoint extends JoinPoint {
         //Attributes available for all join points
         attributes.add("root");
         attributes.add("parent");
-        attributes.add("ancestor(String type)");
         attributes.add("descendants");
         attributes.add("descendants(String type)");
         attributes.add("laraDescendants(String type)");
@@ -909,33 +936,6 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "parent", e);
-        }
-    }
-
-    /**
-     * 
-     * @param type
-     * @return 
-     */
-    public abstract AJoinPoint ancestorImpl(String type);
-
-    /**
-     * 
-     * @param type
-     * @return 
-     */
-    public final Object ancestor(String type) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "ancestor", Optional.empty(), type);
-        	}
-        	AJoinPoint result = this.ancestorImpl(type);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "ancestor", Optional.ofNullable(result), type);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "ancestor", e);
         }
     }
 

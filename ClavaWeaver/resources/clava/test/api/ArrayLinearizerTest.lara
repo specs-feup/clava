@@ -95,7 +95,7 @@ function getVardeclUses($vardecl, $vardeclScope) {
 		$vardeclScope = $vardecl.getAncestor('scope');
 	
 		// If scope is still undefined, return
-		if($vardeclScope === undefined) {
+		if($vardeclScope === null) {
 			println("Could not find a local scope for $vardecl at '"+$vardecl.location+"', global scope not supported");
 			return [];
 		}
@@ -119,7 +119,7 @@ function getVardeclInfo($vardecl) {
 	
 	var $function = $vardecl.getAncestor('function');
 	
-	if($function === undefined) {
+	if($function === null) {
 		println("Could not find function of $vardecl '"+$vardecl.location+"', global variables not supported");
 		return;
 	}

@@ -224,10 +224,6 @@ export class Joinpoint extends LaraJoinPoint {
     get type() { return wrapJoinPoint(this._javaObject.getType()); }
     set type(value) { this._javaObject.setType(unwrapJoinPoint(value)); }
     /**
-     * Looks for an ancestor joinpoint name, walking back on the AST
-     */
-    getAncestor(type) { return wrapJoinPoint(this._javaObject.ancestor(unwrapJoinPoint(type))); }
-    /**
      * Looks for an ancestor AST name, walking back on the AST
      */
     getAstAncestor(type) { return wrapJoinPoint(this._javaObject.astAncestor(unwrapJoinPoint(type))); }
@@ -322,6 +318,10 @@ export class Joinpoint extends LaraJoinPoint {
      * Removes the node associated to this joinpoint from the AST
      */
     detach() { return wrapJoinPoint(this._javaObject.detach()); }
+    /**
+     * Looks for an ancestor joinpoint name, walking back on the AST
+     */
+    getAncestor(type) { return wrapJoinPoint(this._javaObject.getAncestor(unwrapJoinPoint(type))); }
     /**
      * Inserts the given join point after this join point
      */

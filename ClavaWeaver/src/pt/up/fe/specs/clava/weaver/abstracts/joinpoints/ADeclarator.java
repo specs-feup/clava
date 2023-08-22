@@ -245,15 +245,6 @@ public abstract class ADeclarator extends ANamedDecl {
     }
 
     /**
-     * Get value on attribute ancestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint ancestorImpl(String type) {
-        return this.aNamedDecl.ancestorImpl(type);
-    }
-
-    /**
      * Get value on attribute leftJp
      * @return the attribute's value
      */
@@ -683,6 +674,15 @@ public abstract class ADeclarator extends ANamedDecl {
     @Override
     public Boolean getHasParentImpl() {
         return this.aNamedDecl.getHasParentImpl();
+    }
+
+    /**
+     * Looks for an ancestor joinpoint name, walking back on the AST
+     * @param type 
+     */
+    @Override
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aNamedDecl.getAncestorImpl(type);
     }
 
     /**
@@ -1118,7 +1118,6 @@ public abstract class ADeclarator extends ANamedDecl {
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
         ASTCHILD("astChild"),

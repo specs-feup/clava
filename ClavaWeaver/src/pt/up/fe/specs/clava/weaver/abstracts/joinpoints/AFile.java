@@ -1130,7 +1130,6 @@ public abstract class AFile extends ACxxWeaverJoinPoint {
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
         ASTCHILD("astChild"),

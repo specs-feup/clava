@@ -78,16 +78,16 @@ aspectdef retReductionOpVar
 	{
 		if (exprvarrefset[j].name === candidateVar.name)
 		{
-			if (typeof(exprvarrefset[j].getAncestor('expression')) !== 'undefined' && exprvarrefset[j].getAncestor('expression').astName === 'ParenExpr')
+			if (exprvarrefset[j].getAncestor('expression') !== null && exprvarrefset[j].getAncestor('expression').astName === 'ParenExpr')
 			{
 				candidateVarOp = [];
 				break; // candidateVar should not be in any ParenExpr
 			}
 
 			var op = null;
-			if (typeof(exprvarrefset[j].getAncestor('unaryOp')) !== 'undefined')
+			if (exprvarrefset[j].getAncestor('unaryOp') !== null)
 				op = exprvarrefset[j].getAncestor('unaryOp').kind;
-			else if (typeof(exprvarrefset[j].getAncestor('binaryOp')) !== 'undefined')
+			else if (exprvarrefset[j].getAncestor('binaryOp') !== null)
 				op = exprvarrefset[j].getAncestor('binaryOp').kind +
 					(( exprvarrefset[j].getAncestor('binaryOp').kind !== 'assign' && exprvarrefset[j].getAncestor('binaryOp').isAssignment === true) ? '' :'');
 			if (op === 'sub' &&

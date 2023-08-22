@@ -5,6 +5,10 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 <actions>
 
     <!-- GENERIC ACTIONS FOR ALL JOINPOINTS -->
+    <action name="getAncestor" return="joinpoint"
+        tooltip="Looks for an ancestor joinpoint name, walking back on the AST">
+        <parameter name="type" type="String" />
+    </action>
 
     <!-- Replaces the current node with the given node -->
     <action name="replaceWith" return="joinpoint" tooltip="Replaces this node with the given node">

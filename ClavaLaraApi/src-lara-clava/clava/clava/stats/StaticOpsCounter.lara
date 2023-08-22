@@ -144,7 +144,7 @@ StaticOpsCounter.prototype.count = function (
         ? $function
         : $function.getAncestor("function");
 
-    if ($function === undefined) {
+    if ($function == null) {
         PrintOnce.message(
             "StaticOpsCounter.count: Could not find function corresponding to the join point " +
                 $function.location

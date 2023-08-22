@@ -33,19 +33,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -802,6 +789,20 @@
 									{
 										"type": "joinpoint",
 										"name": "detach"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
 									}]
 					},
 					{
@@ -1145,19 +1146,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -1914,6 +1902,20 @@
 									{
 										"type": "joinpoint",
 										"name": "detach"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
 									}]
 					},
 					{
@@ -2415,19 +2417,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -3286,6 +3275,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -3690,19 +3693,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -4484,6 +4474,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -4980,19 +4984,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -5865,6 +5856,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -6189,19 +6194,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -6966,6 +6958,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -7374,19 +7380,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -8192,6 +8185,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -8598,19 +8605,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -9660,6 +9654,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -10027,19 +10035,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -10809,6 +10804,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -11150,19 +11159,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -12002,6 +11998,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -12543,19 +12553,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -13414,6 +13411,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -13915,19 +13926,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -14818,6 +14816,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -15204,19 +15216,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -16056,6 +16055,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -16448,19 +16461,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -17230,6 +17230,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -17736,19 +17750,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -18800,6 +18801,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -19301,19 +19316,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -20204,6 +20206,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -20536,19 +20552,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -21388,6 +21391,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -21879,19 +21896,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -22736,6 +22740,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -23077,19 +23095,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -23854,6 +23859,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -24178,19 +24197,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -24968,6 +24974,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -25300,19 +25320,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -26152,6 +26159,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -26661,19 +26682,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -27590,6 +27598,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -27916,19 +27938,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -28693,6 +28702,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -29034,19 +29057,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -29886,6 +29896,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -30245,19 +30269,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -31064,6 +31075,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -31423,19 +31448,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -32205,6 +32217,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -32721,19 +32747,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -33592,6 +33605,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -33909,19 +33936,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -34686,6 +34700,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -35018,19 +35046,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -35870,6 +35885,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -36237,19 +36266,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -37061,6 +37077,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -37574,19 +37604,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -38445,6 +38462,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -38803,19 +38834,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -39622,6 +39640,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -39963,19 +39995,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -40815,6 +40834,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -41174,19 +41207,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -41956,6 +41976,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -42315,19 +42349,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -43134,6 +43155,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -43600,19 +43635,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -44658,6 +44680,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -45025,19 +45061,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -45807,6 +45830,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -46372,19 +46409,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -47470,6 +47494,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -47974,19 +48012,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -48878,6 +48903,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -49218,19 +49257,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -50084,6 +50110,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -50448,19 +50488,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -51367,6 +51394,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -51721,19 +51762,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -52498,6 +52526,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -52865,19 +52907,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -53647,6 +53676,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -54005,19 +54048,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -54824,6 +54854,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -55164,19 +55208,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -56030,6 +56061,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -56389,19 +56434,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -57171,6 +57203,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -57677,19 +57723,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -58741,6 +58774,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -59125,19 +59172,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -59938,6 +59972,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -60339,19 +60387,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -61134,6 +61169,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -61651,19 +61700,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -62554,6 +62590,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -63127,19 +63177,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -64234,6 +64271,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -64593,19 +64644,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -65412,6 +65450,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -65771,19 +65823,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -66553,6 +66592,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -67103,19 +67156,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -68168,6 +68208,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -68552,19 +68606,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -69334,6 +69375,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -69755,19 +69810,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -70644,6 +70686,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -71012,19 +71068,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -71794,6 +71837,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -72290,19 +72347,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -73175,6 +73219,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -73680,19 +73738,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -74565,6 +74610,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -74932,19 +74991,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -75740,6 +75786,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -76187,19 +76247,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -77151,6 +77198,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -77655,19 +77716,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -78526,6 +78574,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -78927,19 +78989,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -79765,6 +79814,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -80105,19 +80168,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -80962,6 +81012,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -81369,19 +81433,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -82431,6 +82482,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -82763,19 +82828,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -83615,6 +83667,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -84016,19 +84082,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -84854,6 +84907,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -85222,19 +85289,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -86074,6 +86128,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -86450,19 +86518,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -87258,6 +87313,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -87763,19 +87832,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -88630,6 +88686,20 @@
 									{
 										"type": "joinpoint",
 										"name": "detach"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
 									}]
 					},
 					{
@@ -89158,19 +89228,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -90025,6 +90082,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -90433,19 +90504,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -91230,6 +91288,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -91589,19 +91661,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -92371,6 +92430,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -92859,19 +92932,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -93730,6 +93790,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -94089,19 +94163,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -94904,6 +94965,20 @@
 									{
 										"type": "joinpoint",
 										"name": "detach"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
 									}]
 					},
 					{
@@ -95271,19 +95346,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -96082,6 +96144,20 @@
 									{
 										"type": "joinpoint",
 										"name": "detach"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
 									}]
 					},
 					{
@@ -96597,19 +96673,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -97464,6 +97527,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -97863,19 +97940,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -98658,6 +98722,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -99058,19 +99136,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -99845,6 +99910,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -100333,19 +100412,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -101204,6 +101270,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -101626,19 +101706,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -102515,6 +102582,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -103019,19 +103100,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -103918,6 +103986,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -104339,19 +104421,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -105134,6 +105203,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -105482,19 +105565,6 @@
 									{
 										"type": "String[]",
 										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
-						"children": [
-									{
-										"type": "joinpoint",
-										"name": "ancestor"
-									},
-									{
-										"type": "String",
-										"name": "type"
 									}]
 					},
 					{
@@ -106330,6 +106400,20 @@
 									{
 										"type": "joinpoint",
 										"name": "detach"
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "Looks for an ancestor joinpoint name, walking back on the AST",
+						"children": [
+									{
+										"type": "joinpoint",
+										"name": "getAncestor"
+									},
+									{
+										"type": "String",
+										"name": "type",
+										"defaultValue": ""
 									}]
 					},
 					{

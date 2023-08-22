@@ -128,7 +128,7 @@ extern "C" {
     static findJp($jp) {
         // Get file
         const $file = $jp.getAncestor("file");
-        if ($file === undefined) {
+        if ($file == undefined) {
             console.error("Could not find a file for '" + $jp.joinPointType + "'", "Clava.findJp");
             return undefined;
         }

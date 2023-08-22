@@ -57,7 +57,7 @@ public class ModifiedFilesGear extends AGear {
         }
 
         // Store file of this join point
-        CxxFile fileJp = (CxxFile) jp.ancestorImpl("file");
+        CxxFile fileJp = (CxxFile) jp.getAncestorImpl("file");
         if (fileJp == null) {
             return;
         }

@@ -402,15 +402,6 @@ public abstract class ACilkSpawn extends ACall {
     }
 
     /**
-     * Get value on attribute ancestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint ancestorImpl(String type) {
-        return this.aCall.ancestorImpl(type);
-    }
-
-    /**
      * Get value on attribute leftJp
      * @return the attribute's value
      */
@@ -840,6 +831,15 @@ public abstract class ACilkSpawn extends ACall {
     @Override
     public Boolean getHasParentImpl() {
         return this.aCall.getHasParentImpl();
+    }
+
+    /**
+     * Looks for an ancestor joinpoint name, walking back on the AST
+     * @param type 
+     */
+    @Override
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aCall.getAncestorImpl(type);
     }
 
     /**
@@ -1325,7 +1325,6 @@ public abstract class ACilkSpawn extends ACall {
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
         ASTCHILD("astChild"),

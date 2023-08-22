@@ -12,10 +12,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="Returns the 'program' joinpoint" />
         <attribute name="parent" type="joinpoint"
             tooltip="Returns the parent node in the AST, or undefined if it is the root node" />
-        <attribute name="ancestor" type="joinpoint"
-            tooltip="Looks for an ancestor joinpoint name, walking back on the AST">
-            <parameter name="type" type="String" />
-        </attribute>
         <attribute name="descendants" type="joinpoint[]"
             tooltip="Retrieves all descendants of the join point">
         </attribute>

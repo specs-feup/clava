@@ -383,15 +383,6 @@ public abstract class AWrapperStmt extends AStatement {
     }
 
     /**
-     * Get value on attribute ancestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint ancestorImpl(String type) {
-        return this.aStatement.ancestorImpl(type);
-    }
-
-    /**
      * Get value on attribute leftJp
      * @return the attribute's value
      */
@@ -821,6 +812,15 @@ public abstract class AWrapperStmt extends AStatement {
     @Override
     public Boolean getHasParentImpl() {
         return this.aStatement.getHasParentImpl();
+    }
+
+    /**
+     * Looks for an ancestor joinpoint name, walking back on the AST
+     * @param type 
+     */
+    @Override
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aStatement.getAncestorImpl(type);
     }
 
     /**
@@ -1254,7 +1254,6 @@ public abstract class AWrapperStmt extends AStatement {
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
         ASTCHILD("astChild"),

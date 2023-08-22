@@ -554,15 +554,6 @@ public abstract class AVardecl extends ADeclarator {
     }
 
     /**
-     * Get value on attribute ancestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint ancestorImpl(String type) {
-        return this.aDeclarator.ancestorImpl(type);
-    }
-
-    /**
      * Get value on attribute leftJp
      * @return the attribute's value
      */
@@ -992,6 +983,15 @@ public abstract class AVardecl extends ADeclarator {
     @Override
     public Boolean getHasParentImpl() {
         return this.aDeclarator.getHasParentImpl();
+    }
+
+    /**
+     * Looks for an ancestor joinpoint name, walking back on the AST
+     * @param type 
+     */
+    @Override
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aDeclarator.getAncestorImpl(type);
     }
 
     /**
@@ -1430,7 +1430,6 @@ public abstract class AVardecl extends ADeclarator {
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
         ASTCHILD("astChild"),

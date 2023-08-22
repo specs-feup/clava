@@ -32,7 +32,7 @@
     "test:cov": "npm run test -- --coverage",
     "test:watch": "npm run test -- --watch",
     "java-dist": "npx lara-java-dist --jsSourceFolder api --jsDestinationFolder ../ClavaLaraApi/src-lara/clava/ --javaClassname ClavaApiJsResource --javaPackageName pt.up.fe.specs.clava.weaver --javaDestinationFolder ../ClavaLaraApi/src-java/pt/up/fe/specs/clava/weaver/ --javaResourceNamespace clava",
-    "build-interfaces": "npx lara-build-interfaces --input CxxWeaver.json --lara lara-js/LaraJoinPointSpecification.json --output src-api/Joinpoints.ts"
+    "build-interfaces": "npx lara-build-interfaces --input ../ClavaWeaver/src/pt/up/fe/specs/clava/weaver/CxxWeaver.json --lara lara-js/LaraJoinPointSpecification.json --output src-api/Joinpoints.ts"
   },
   "repository": {
     "type": "git",

@@ -332,7 +332,7 @@ public class CxxProgram extends AProgram {
 
         // Add include for atexit
         // ClavaLog.debug("Getting file ancestor");
-        AFile file = (AFile) mainFunction.ancestorImpl("file");
+        AFile file = (AFile) mainFunction.getAncestorImpl("file");
         SpecsCheck.checkNotNull(file, () -> "Expected main function to be inside a file: " + mainFunction.getNode());
         // ClavaLog.debug("Adding stdlib.h include");
         file.addInclude("stdlib.h", true);

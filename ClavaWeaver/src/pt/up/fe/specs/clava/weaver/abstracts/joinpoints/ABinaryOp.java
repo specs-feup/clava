@@ -421,15 +421,6 @@ public abstract class ABinaryOp extends AOp {
     }
 
     /**
-     * Get value on attribute ancestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint ancestorImpl(String type) {
-        return this.aOp.ancestorImpl(type);
-    }
-
-    /**
      * Get value on attribute leftJp
      * @return the attribute's value
      */
@@ -862,6 +853,15 @@ public abstract class ABinaryOp extends AOp {
     }
 
     /**
+     * Looks for an ancestor joinpoint name, walking back on the AST
+     * @param type 
+     */
+    @Override
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aOp.getAncestorImpl(type);
+    }
+
+    /**
      * Replaces this node with the given node
      * @param node 
      */
@@ -1282,7 +1282,6 @@ public abstract class ABinaryOp extends AOp {
         CHILDREN("children"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
         ASTCHILD("astChild"),

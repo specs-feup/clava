@@ -19,7 +19,7 @@ function getFileOf($vtree){
 */
 function getFunctionOrMethod($stmt){
     var $obj = $stmt.getAncestor("function");
-    if ($obj === undefined) $obj = $stmt.getAncestor("method");
+    if ($obj == undefined) $obj = $stmt.getAncestor("method");
     return $obj;
 }
 

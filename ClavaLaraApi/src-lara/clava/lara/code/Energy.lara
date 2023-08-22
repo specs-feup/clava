@@ -46,7 +46,7 @@ Energy.prototype.measure = function($start, prefix, $end){
 	
 	// Add include
 	$file = $start.getAncestor("file");
-	if($file === undefined) {
+	if($file == undefined) {
 		println("Could not find the corresponding file of the given joinpoint: " + $jp);
 		return;
 	}
