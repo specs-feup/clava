@@ -670,15 +670,6 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
-     * Get value on attribute hasNode
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aLoop.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
      * Get value on attribute endLine
      * @return the attribute's value
      */
@@ -1226,6 +1217,15 @@ public abstract class ACilkFor extends ALoop {
     }
 
     /**
+     * true, if the given join point or AST node is the same (== test) as the current join point AST node
+     * @param nodeOrJp 
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aLoop.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
      * DEPRECATED: use 'setKind' instead
      * @param kind 
      */
@@ -1631,7 +1631,6 @@ public abstract class ACilkFor extends ALoop {
         ISINSYSTEMHEADER("isInSystemHeader"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
-        HASNODE("hasNode"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),

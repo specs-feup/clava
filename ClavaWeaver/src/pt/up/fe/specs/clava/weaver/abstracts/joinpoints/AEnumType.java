@@ -490,15 +490,6 @@ public abstract class AEnumType extends ATagType {
     }
 
     /**
-     * Get value on attribute hasNode
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aTagType.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
      * Get value on attribute endLine
      * @return the attribute's value
      */
@@ -1046,6 +1037,15 @@ public abstract class AEnumType extends ATagType {
     }
 
     /**
+     * true, if the given join point or AST node is the same (== test) as the current join point AST node
+     * @param nodeOrJp 
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aTagType.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -1247,7 +1247,6 @@ public abstract class AEnumType extends ATagType {
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         USERFIELD("userField"),
-        HASNODE("hasNode"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),

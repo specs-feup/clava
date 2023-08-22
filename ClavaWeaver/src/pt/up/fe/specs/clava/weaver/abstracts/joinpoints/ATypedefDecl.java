@@ -317,15 +317,6 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
     }
 
     /**
-     * Get value on attribute hasNode
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aTypedefNameDecl.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
      * Get value on attribute endLine
      * @return the attribute's value
      */
@@ -873,6 +864,15 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
     }
 
     /**
+     * true, if the given join point or AST node is the same (== test) as the current join point AST node
+     * @param nodeOrJp 
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aTypedefNameDecl.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -1063,7 +1063,6 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
         ISINSYSTEMHEADER("isInSystemHeader"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
-        HASNODE("hasNode"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),

@@ -252,19 +252,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -752,6 +739,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -1315,19 +1316,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -1815,6 +1803,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -2540,19 +2542,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -3134,6 +3123,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -3766,19 +3769,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -4283,6 +4273,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -5007,19 +5011,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -5620,6 +5611,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -6167,19 +6172,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -6667,6 +6659,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -7303,19 +7309,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -7844,6 +7837,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -8474,19 +8481,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -9268,6 +9262,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -9858,19 +9866,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -10363,6 +10358,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -10932,19 +10941,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -11507,6 +11503,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -12276,19 +12286,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -12870,6 +12867,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -13587,19 +13598,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -14231,6 +14229,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -14840,19 +14852,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -15415,6 +15414,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -16035,19 +16048,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -16540,6 +16540,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -17270,19 +17284,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -18066,6 +18067,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -18778,19 +18793,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -19422,6 +19424,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -19973,19 +19989,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -20552,6 +20555,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -21271,19 +21288,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -21856,6 +21860,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -22420,19 +22438,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -22920,6 +22925,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -23472,19 +23491,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -23985,6 +23991,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -24541,19 +24561,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -25120,6 +25127,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -25845,19 +25866,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -26515,6 +26523,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -27064,19 +27086,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -27564,6 +27573,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -28133,19 +28156,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -28708,6 +28718,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -29295,19 +29319,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -29837,6 +29848,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -30424,19 +30449,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -30929,6 +30941,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -31673,19 +31699,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -32272,6 +32285,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -32812,19 +32839,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -33312,6 +33326,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -33868,19 +33896,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -34447,6 +34462,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -35042,19 +35071,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -35589,6 +35605,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -36330,19 +36360,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -36929,6 +36946,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -37510,19 +37541,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -38052,6 +38070,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -38621,19 +38653,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -39196,6 +39215,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -39783,19 +39816,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -40288,6 +40308,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -40875,19 +40909,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -41417,6 +41438,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -42107,19 +42142,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -42897,6 +42919,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -43487,19 +43523,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -43992,6 +44015,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -44769,19 +44806,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -45612,6 +45636,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -46339,19 +46377,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -46971,6 +46996,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -47530,19 +47569,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -48123,6 +48149,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -48711,19 +48751,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -49362,6 +49389,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -49939,19 +49980,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -50439,6 +50467,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -51034,19 +51076,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -51539,6 +51568,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -52125,19 +52168,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -52667,6 +52697,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -53231,19 +53275,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -53824,6 +53855,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -54411,19 +54456,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -54916,6 +54948,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -55646,19 +55692,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -56442,6 +56475,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -57049,19 +57096,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -57585,6 +57619,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -58214,19 +58262,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -58732,6 +58767,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -59465,19 +59514,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -60104,6 +60140,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -60889,19 +60939,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -61741,6 +61778,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -62323,19 +62374,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -62865,6 +62903,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -63452,19 +63504,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -63962,6 +64001,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -64301,19 +64354,6 @@
 									{
 										"type": "String[]",
 										"name": "firstprivate"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "True if the directive has at least one clause of the given clause kind, false otherwise",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasClause"
-									},
-									{
-										"type": "String",
-										"name": "clauseName"
 									}]
 					},
 					{
@@ -64735,19 +64775,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -65044,6 +65071,20 @@
 						"type": "select",
 						"clazz": "joinpoint",
 						"alias": "target"
+					},
+					{
+						"type": "action",
+						"tooltip": "True if the directive has at least one clause of the given clause kind, false otherwise",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasClause"
+									},
+									{
+										"type": "String",
+										"name": "clauseName",
+										"defaultValue": ""
+									}]
 					},
 					{
 						"type": "action",
@@ -65523,6 +65564,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -66135,19 +66190,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -66640,6 +66682,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -67289,19 +67345,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -67906,6 +67949,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -68497,19 +68554,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -69002,6 +69046,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -69726,19 +69784,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -70334,6 +70379,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -71067,19 +71126,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -71680,6 +71726,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -72270,19 +72330,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -72801,6 +72848,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -73472,19 +73533,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -74163,6 +74211,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -74895,19 +74957,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -75489,6 +75538,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -76118,19 +76181,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -76679,6 +76729,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -77243,19 +77307,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -77827,6 +77878,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -78458,19 +78523,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -79252,6 +79304,20 @@
 					},
 					{
 						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
 						"tooltip": "Inserts the given join point after this join point",
 						"children": [
 									{
@@ -79803,19 +79869,6 @@
 									{
 										"type": "Boolean",
 										"name": "hasChildren"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
 									}]
 					},
 					{
@@ -80382,6 +80435,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -81011,19 +81078,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -81572,6 +81626,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -82168,19 +82236,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -82743,6 +82798,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -83347,19 +83416,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -83878,6 +83934,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -84611,19 +84681,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -85205,6 +85262,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -85953,19 +86024,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -86547,6 +86605,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -87183,19 +87255,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -87703,6 +87762,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -88290,19 +88363,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -88795,6 +88855,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -89511,19 +89585,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -90105,6 +90166,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -90692,19 +90767,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -91234,6 +91296,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -91821,19 +91897,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -92363,6 +92426,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -93098,19 +93175,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -93692,6 +93756,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -94319,19 +94397,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -94837,6 +94902,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -95465,19 +95544,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -95975,6 +96041,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -96691,19 +96771,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -97285,6 +97352,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -97935,19 +98016,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -98547,6 +98615,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -99279,19 +99361,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -99901,6 +99970,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -100550,19 +100633,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -101068,6 +101138,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},
@@ -101644,19 +101728,6 @@
 					},
 					{
 						"type": "attribute",
-						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "hasNode"
-									},
-									{
-										"type": "Object",
-										"name": "nodeOrJp"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "true if this node has a parent",
 						"children": [
 									{
@@ -102219,6 +102290,20 @@
 									{
 										"type": "String",
 										"name": "key",
+										"defaultValue": ""
+									}]
+					},
+					{
+						"type": "action",
+						"tooltip": "true, if the given join point or AST node is the same (== test) as the current join point AST node",
+						"children": [
+									{
+										"type": "Boolean",
+										"name": "hasNode"
+									},
+									{
+										"type": "Object",
+										"name": "nodeOrJp",
 										"defaultValue": ""
 									}]
 					},

@@ -228,10 +228,6 @@ export class Joinpoint extends LaraJoinPoint {
      */
     getGetUserField(fieldName) { return wrapJoinPoint(this._javaObject.getUserField(unwrapJoinPoint(fieldName))); }
     /**
-     * True, if the given join point or AST node is the same (== test) as the current join point AST node
-     */
-    getHasNode(nodeOrJp) { return wrapJoinPoint(this._javaObject.hasNode(unwrapJoinPoint(nodeOrJp))); }
-    /**
      * String with the full Java class name of the type of the Java field with the provided name
      */
     getJavaFieldType(fieldName) { return wrapJoinPoint(this._javaObject.getJavaFieldType(unwrapJoinPoint(fieldName))); }
@@ -300,6 +296,10 @@ export class Joinpoint extends LaraJoinPoint {
      * The value associated with the given property key
      */
     getValue(key) { return wrapJoinPoint(this._javaObject.getValue(unwrapJoinPoint(key))); }
+    /**
+     * True, if the given join point or AST node is the same (== test) as the current join point AST node
+     */
+    hasNode(nodeOrJp) { return wrapJoinPoint(this._javaObject.hasNode(unwrapJoinPoint(nodeOrJp))); }
     /**
      * Inserts the given join point after this join point
      */
@@ -1711,10 +1711,6 @@ export class Omp extends Pragma {
      */
     set shared(value) { this._javaObject.setShared(unwrapJoinPoint(value)); }
     /**
-     * True if the directive has at least one clause of the given clause kind, false otherwise
-     */
-    getHasClause(clauseName) { return wrapJoinPoint(this._javaObject.hasClause(unwrapJoinPoint(clauseName))); }
-    /**
      * True if it is legal to use the given clause kind in this directive, false otherwise
      */
     getIsClauseLegal(clauseName) { return wrapJoinPoint(this._javaObject.isClauseLegal(unwrapJoinPoint(clauseName))); }
@@ -1722,6 +1718,10 @@ export class Omp extends Pragma {
      * The variable names for the given reduction kind, or empty array if no reduction of that kind is defined
      */
     getReduction(kind) { return wrapJoinPoint(this._javaObject.reduction(unwrapJoinPoint(kind))); }
+    /**
+     * True if the directive has at least one clause of the given clause kind, false otherwise
+     */
+    hasClause(clauseName) { return wrapJoinPoint(this._javaObject.hasClause(unwrapJoinPoint(clauseName))); }
     /**
      * Removes any clause of the given kind from the OpenMP pragma
      */

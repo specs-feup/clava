@@ -6,7 +6,7 @@ aspectdef test
     apply
         println("kind: " + $omp.kind);
 		println("clause kinds:" + $omp.clauseKinds);
-        println("has shared:" + $omp.getHasClause("shared"));
+        println("has shared:" + $omp.hasClause("shared"));
         println("nowait legal:" + $omp.getIsClauseLegal("nowait"));
         println("num_threads:" + $omp.numThreads);
         println("proc_bind:" + $omp.procBind);
@@ -22,7 +22,7 @@ aspectdef test
 		println("schedule chunk size:" + $omp.scheduleChunkSize);
 		println("schedule modifiers:" + $omp.scheduleModifiers);
 		println("collapse:" + $omp.collapse);
-		println("ordered:" + $omp.getHasClause('ordered'));
+		println("ordered:" + $omp.hasClause('ordered'));
 		println("ordered value:" + $omp.ordered);
     end
 	

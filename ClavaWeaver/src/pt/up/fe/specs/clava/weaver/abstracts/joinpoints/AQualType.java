@@ -506,15 +506,6 @@ public abstract class AQualType extends AType {
     }
 
     /**
-     * Get value on attribute hasNode
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aType.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
      * Get value on attribute endLine
      * @return the attribute's value
      */
@@ -1062,6 +1053,15 @@ public abstract class AQualType extends AType {
     }
 
     /**
+     * true, if the given join point or AST node is the same (== test) as the current join point AST node
+     * @param nodeOrJp 
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aType.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
      * Sets the template argument types of a template type
      * @param templateArgTypes 
      */
@@ -1319,7 +1319,6 @@ public abstract class AQualType extends AType {
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
         USERFIELD("userField"),
-        HASNODE("hasNode"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),

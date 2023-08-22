@@ -330,15 +330,6 @@ public abstract class AInclude extends ADecl {
     }
 
     /**
-     * Get value on attribute hasNode
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aDecl.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
      * Get value on attribute endLine
      * @return the attribute's value
      */
@@ -886,6 +877,15 @@ public abstract class AInclude extends ADecl {
     }
 
     /**
+     * true, if the given join point or AST node is the same (== test) as the current join point AST node
+     * @param nodeOrJp 
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aDecl.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -1057,7 +1057,6 @@ public abstract class AInclude extends ADecl {
         ISINSYSTEMHEADER("isInSystemHeader"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
-        HASNODE("hasNode"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),

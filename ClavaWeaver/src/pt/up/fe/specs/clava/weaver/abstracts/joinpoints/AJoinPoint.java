@@ -133,6 +133,7 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("dataAssign(Object source)");
         actions.add("dataClear()");
         actions.add("getValue(String key)");
+        actions.add("hasNode(Object nodeOrJp)");
     }
 
     /**
@@ -1013,6 +1014,33 @@ public abstract class AJoinPoint extends JoinPoint {
     }
 
     /**
+     * true, if the given join point or AST node is the same (== test) as the current join point AST node
+     * @param nodeOrJp 
+     */
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        throw new UnsupportedOperationException(get_class()+": Action hasNode not implemented ");
+    }
+
+    /**
+     * true, if the given join point or AST node is the same (== test) as the current join point AST node
+     * @param nodeOrJp 
+     */
+    public final Boolean hasNode(Object nodeOrJp) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "hasNode", this, Optional.empty(), nodeOrJp);
+        	}
+        	Boolean result = this.hasNodeImpl(nodeOrJp);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "hasNode", this, Optional.ofNullable(result), nodeOrJp);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "hasNode", e);
+        }
+    }
+
+    /**
      * 
      */
     @Override
@@ -1050,7 +1078,6 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("siblingsRight");
         attributes.add("leftJp");
         attributes.add("rightJp");
-        attributes.add("hasNode(Object nodeOrJp)");
         attributes.add("chain");
         attributes.add("javaFields");
         attributes.add("javaFieldType(String fieldName)");
@@ -1808,33 +1835,6 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "rightJp", e);
-        }
-    }
-
-    /**
-     * 
-     * @param nodeOrJp
-     * @return 
-     */
-    public abstract Boolean hasNodeImpl(Object nodeOrJp);
-
-    /**
-     * 
-     * @param nodeOrJp
-     * @return 
-     */
-    public final Object hasNode(Object nodeOrJp) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasNode", Optional.empty(), nodeOrJp);
-        	}
-        	Boolean result = this.hasNodeImpl(nodeOrJp);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasNode", Optional.ofNullable(result), nodeOrJp);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "hasNode", e);
         }
     }
 

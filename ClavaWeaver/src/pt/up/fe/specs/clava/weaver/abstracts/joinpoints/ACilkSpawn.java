@@ -465,15 +465,6 @@ public abstract class ACilkSpawn extends ACall {
     }
 
     /**
-     * Get value on attribute hasNode
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aCall.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
      * Get value on attribute endLine
      * @return the attribute's value
      */
@@ -1096,6 +1087,15 @@ public abstract class ACilkSpawn extends ACall {
     }
 
     /**
+     * true, if the given join point or AST node is the same (== test) as the current join point AST node
+     * @param nodeOrJp 
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aCall.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
      * 
      * @param position 
      * @param code 
@@ -1296,7 +1296,6 @@ public abstract class ACilkSpawn extends ACall {
         ISINSYSTEMHEADER("isInSystemHeader"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
-        HASNODE("hasNode"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),

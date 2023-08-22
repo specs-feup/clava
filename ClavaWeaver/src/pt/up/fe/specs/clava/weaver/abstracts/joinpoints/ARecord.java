@@ -496,15 +496,6 @@ public abstract class ARecord extends ANamedDecl {
     }
 
     /**
-     * Get value on attribute hasNode
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aNamedDecl.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
      * Get value on attribute endLine
      * @return the attribute's value
      */
@@ -1052,6 +1043,15 @@ public abstract class ARecord extends ANamedDecl {
     }
 
     /**
+     * true, if the given join point or AST node is the same (== test) as the current join point AST node
+     * @param nodeOrJp 
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aNamedDecl.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
      * Sets the name of this namedDecl
      * @param name 
      */
@@ -1284,7 +1284,6 @@ public abstract class ARecord extends ANamedDecl {
         ISINSYSTEMHEADER("isInSystemHeader"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
-        HASNODE("hasNode"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),

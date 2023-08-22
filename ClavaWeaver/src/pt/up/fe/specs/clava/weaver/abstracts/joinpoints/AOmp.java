@@ -148,33 +148,6 @@ public abstract class AOmp extends APragma {
      * @param clauseName
      * @return 
      */
-    public abstract Boolean hasClauseImpl(String clauseName);
-
-    /**
-     * 
-     * @param clauseName
-     * @return 
-     */
-    public final Object hasClause(String clauseName) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasClause", Optional.empty(), clauseName);
-        	}
-        	Boolean result = this.hasClauseImpl(clauseName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "hasClause", Optional.ofNullable(result), clauseName);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "hasClause", e);
-        }
-    }
-
-    /**
-     * 
-     * @param clauseName
-     * @return 
-     */
     public abstract Boolean isClauseLegalImpl(String clauseName);
 
     /**
@@ -578,6 +551,33 @@ public abstract class AOmp extends APragma {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "ordered", e);
+        }
+    }
+
+    /**
+     * True if the directive has at least one clause of the given clause kind, false otherwise
+     * @param clauseName 
+     */
+    public Boolean hasClauseImpl(String clauseName) {
+        throw new UnsupportedOperationException(get_class()+": Action hasClause not implemented ");
+    }
+
+    /**
+     * True if the directive has at least one clause of the given clause kind, false otherwise
+     * @param clauseName 
+     */
+    public final Boolean hasClause(String clauseName) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.BEGIN, "hasClause", this, Optional.empty(), clauseName);
+        	}
+        	Boolean result = this.hasClauseImpl(clauseName);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAction(Stage.END, "hasClause", this, Optional.ofNullable(result), clauseName);
+        	}
+        	return result;
+        } catch(Exception e) {
+        	throw new ActionException(get_class(), "hasClause", e);
         }
     }
 
@@ -1331,15 +1331,6 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute hasNode
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aPragma.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
      * Get value on attribute endLine
      * @return the attribute's value
      */
@@ -1887,6 +1878,15 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * true, if the given join point or AST node is the same (== test) as the current join point AST node
+     * @param nodeOrJp 
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aPragma.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
      * 
      * @param name 
      */
@@ -2022,7 +2022,6 @@ public abstract class AOmp extends APragma {
         attributes.add("numThreads");
         attributes.add("procBind");
         attributes.add("private");
-        attributes.add("hasClause");
         attributes.add("isClauseLegal");
         attributes.add("clauseKinds");
         attributes.add("reduction");
@@ -2053,6 +2052,7 @@ public abstract class AOmp extends APragma {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aPragma.fillWithActions(actions);
+        actions.add("Boolean hasClause(String)");
         actions.add("void setKind(String)");
         actions.add("void removeClause(String)");
         actions.add("void setNumThreads(String)");
@@ -2102,7 +2102,6 @@ public abstract class AOmp extends APragma {
         NUMTHREADS("numThreads"),
         PROCBIND("procBind"),
         PRIVATE("private"),
-        HASCLAUSE("hasClause"),
         ISCLAUSELEGAL("isClauseLegal"),
         CLAUSEKINDS("clauseKinds"),
         REDUCTION("reduction"),
@@ -2146,7 +2145,6 @@ public abstract class AOmp extends APragma {
         ISINSYSTEMHEADER("isInSystemHeader"),
         BITWIDTH("bitWidth"),
         USERFIELD("userField"),
-        HASNODE("hasNode"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
