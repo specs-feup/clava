@@ -9,30 +9,6 @@
 			"children": [
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -442,55 +418,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -1056,30 +983,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -1489,55 +1392,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -2265,30 +2119,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -2701,19 +2531,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
@@ -2804,42 +2621,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -3475,30 +3256,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -3911,19 +3668,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "arrayVar",
@@ -3939,42 +3683,6 @@
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -4700,30 +4408,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -5136,19 +4820,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Sets the element type of the array",
 						"children": [
@@ -5253,42 +4924,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -5844,30 +5479,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -6277,55 +5888,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -6964,30 +6526,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -7400,19 +6938,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "left"
@@ -7450,42 +6975,6 @@
 									{
 										"type": "expression",
 										"name": "right",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -8101,30 +7590,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -8537,19 +8002,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "statement",
 						"alias": "stmt"
@@ -8845,42 +8297,6 @@
 									{
 										"type": "Boolean",
 										"name": "isNaked",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -9479,30 +8895,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -9915,58 +9307,9 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -10537,30 +9880,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -10973,19 +10292,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "expr"
@@ -11059,42 +10365,6 @@
 						"type": "select",
 						"clazz": "cilkSpawn",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -11865,30 +11135,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -12301,19 +11547,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
@@ -12404,42 +11637,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -13160,30 +12357,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -13596,19 +12769,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "callee"
@@ -13744,42 +12904,6 @@
 									{
 										"type": "String",
 										"name": "name",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -14397,30 +13521,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -14833,19 +13933,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "expr"
@@ -14919,42 +14006,6 @@
 						"type": "select",
 						"clazz": "cilkSpawn",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -15576,30 +14627,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -16012,58 +15039,9 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -16786,30 +15764,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -17222,19 +16176,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "statement",
 						"alias": "init"
@@ -17519,42 +16460,6 @@
 										"type": "Boolean",
 										"name": "useTernary",
 										"defaultValue": "true"
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -18274,30 +17179,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -18710,19 +17591,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "callee"
@@ -18858,42 +17726,6 @@
 									{
 										"type": "String",
 										"name": "name",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -19457,30 +18289,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -19893,19 +18701,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "expr"
@@ -19979,42 +18774,6 @@
 						"type": "select",
 						"clazz": "cilkSpawn",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -20735,30 +19494,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -21171,19 +19906,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "method",
 						"alias": ""
@@ -21260,42 +19982,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -21868,30 +20554,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -22301,55 +20963,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -22904,30 +21517,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -23340,19 +21929,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"children": [
 									{
@@ -23362,42 +21938,6 @@
 									{
 										"type": "String",
 										"name": "text",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -23961,30 +22501,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -24397,19 +22913,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "expr"
@@ -24483,42 +22986,6 @@
 						"type": "select",
 						"clazz": "cilkSpawn",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -25245,30 +23712,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -25681,19 +24124,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "callee"
@@ -25855,42 +24285,6 @@
 									{
 										"type": "String",
 										"name": "name",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -26448,30 +24842,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -26881,55 +25251,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -27501,30 +25822,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -27937,19 +26234,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "expr"
@@ -28023,42 +26307,6 @@
 						"type": "select",
 						"clazz": "cilkSpawn",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -28647,30 +26895,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -29083,19 +27307,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Sets the name of this namedDecl",
 						"children": [
@@ -29134,42 +27345,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -29760,30 +27935,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -30196,58 +28347,9 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -30993,30 +29095,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -31429,19 +29507,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
@@ -31532,42 +29597,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -32116,30 +30145,6 @@
 			"children": [
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -32549,55 +30554,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -33160,30 +31116,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -33596,19 +31528,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "expr"
@@ -33682,42 +31601,6 @@
 						"type": "select",
 						"clazz": "cilkSpawn",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -34314,30 +32197,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -34750,19 +32609,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "enumeratorDecl",
 						"alias": "enumerator"
@@ -34806,42 +32652,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -35586,30 +33396,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -36022,19 +33808,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
@@ -36125,42 +33898,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -36750,30 +34487,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -37186,19 +34899,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Sets the name of this namedDecl",
 						"children": [
@@ -37237,42 +34937,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -37845,30 +35509,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -38281,19 +35921,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "expr"
@@ -38367,42 +35994,6 @@
 						"type": "select",
 						"clazz": "cilkSpawn",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -38991,30 +36582,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -39427,58 +36994,9 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -40067,30 +37585,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -40503,19 +37997,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Sets the name of this namedDecl",
 						"children": [
@@ -40554,42 +38035,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -41265,30 +38710,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -41701,19 +39122,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "statement",
 						"alias": "stmt"
@@ -42005,42 +39413,6 @@
 									{
 										"type": "String",
 										"name": "destinationFoldername",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -42639,30 +40011,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -43075,58 +40423,9 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -43909,30 +41208,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -44345,19 +41620,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "body",
 						"alias": ""
@@ -44688,42 +41950,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -45459,30 +42685,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -45895,19 +43097,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType",
 						"children": [
@@ -46031,42 +43220,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -46638,30 +43791,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -47074,19 +44203,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "expr"
@@ -47172,42 +44288,6 @@
 									{
 										"type": "labelDecl",
 										"name": "label",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -47803,30 +44883,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -48239,19 +45295,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "cond"
@@ -48390,42 +45433,6 @@
 									{
 										"type": "statement",
 										"name": "then",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -49011,30 +46018,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -49444,55 +46427,6 @@
 									{
 										"type": "type",
 										"name": "type"
-									}]
-					},
-					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -50090,30 +47024,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -50526,58 +47436,9 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -51165,30 +48026,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -51601,19 +48438,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Sets the name of this namedDecl",
 						"children": [
@@ -51652,42 +48476,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -52259,30 +49047,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -52695,19 +49459,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "expr"
@@ -52793,42 +49544,6 @@
 									{
 										"type": "labelDecl",
 										"name": "label",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -53419,30 +50134,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -53855,58 +50546,9 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -54629,30 +51271,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -55065,19 +51683,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "statement",
 						"alias": "init"
@@ -55362,42 +51967,6 @@
 										"type": "Boolean",
 										"name": "useTernary",
 										"defaultValue": "true"
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -55990,30 +52559,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -56426,19 +52971,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "scope",
 						"alias": "contents"
@@ -56485,42 +53017,6 @@
 									{
 										"type": "String",
 										"name": "name",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -57153,30 +53649,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -57589,19 +54061,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
@@ -57616,42 +54075,6 @@
 									{
 										"type": "Boolean",
 										"name": "isArrow",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -58388,30 +54811,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -58824,19 +55223,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "callee"
@@ -58972,42 +55358,6 @@
 									{
 										"type": "String",
 										"name": "name",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -59800,30 +56150,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -60236,19 +56562,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "body",
 						"alias": ""
@@ -60588,42 +56901,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -61214,30 +57491,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -61650,19 +57903,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Sets the name of this namedDecl",
 						"children": [
@@ -61701,42 +57941,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -62327,30 +58531,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -62763,58 +58943,9 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -63533,30 +59664,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -63969,19 +60076,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "joinpoint",
 						"alias": "target"
@@ -64322,42 +60416,6 @@
 									{
 										"type": "String",
 										"name": "name",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -64973,30 +61031,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -65409,58 +61443,9 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -66111,30 +62096,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -66547,19 +62508,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "init"
@@ -66668,42 +62616,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -67303,30 +63215,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -67739,58 +63627,9 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -68516,30 +64355,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -68952,19 +64767,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Sets the inner type of this paren type",
 						"children": [
@@ -69069,42 +64871,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -69841,30 +65607,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -70277,19 +66019,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Sets the pointee type of this pointer type",
 						"children": [
@@ -70394,42 +66123,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -71006,30 +66699,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -71442,19 +67111,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "joinpoint",
 						"alias": "target"
@@ -71496,42 +67152,6 @@
 									{
 										"type": "String",
 										"name": "name",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -72210,30 +67830,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -72646,19 +68242,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "file",
 						"alias": ""
@@ -72843,42 +68426,6 @@
 									{
 										"type": "void",
 										"name": "rebuildFuzzy"
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -73613,30 +69160,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -74049,19 +69572,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
@@ -74152,42 +69662,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -74820,30 +70294,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -75256,19 +70706,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "field",
 						"alias": ""
@@ -75326,42 +70763,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -75933,30 +71334,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -76369,19 +71746,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "returnExpr"
@@ -76460,42 +71824,6 @@
 						"type": "select",
 						"clazz": "cilkSpawn",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -77110,30 +72438,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -77546,19 +72850,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "statement",
 						"alias": "stmt"
@@ -77854,42 +73145,6 @@
 									{
 										"type": "Boolean",
 										"name": "isNaked",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -78453,30 +73708,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -78889,19 +74120,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "expr"
@@ -78975,42 +74193,6 @@
 						"type": "select",
 						"clazz": "cilkSpawn",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -79641,30 +74823,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -80077,19 +75235,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "field",
 						"alias": ""
@@ -80147,42 +75292,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -80782,30 +75891,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -81218,19 +76303,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "expr"
@@ -81304,42 +76376,6 @@
 						"type": "select",
 						"clazz": "cilkSpawn",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -81923,30 +76959,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -82359,19 +77371,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "joinpoint",
 						"alias": "target"
@@ -82413,42 +77412,6 @@
 									{
 										"type": "String",
 										"name": "name",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -83185,30 +78148,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -83621,19 +78560,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
@@ -83724,42 +78650,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -84511,30 +79401,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -84947,19 +79813,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
@@ -85050,42 +79903,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -85725,30 +80542,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -86161,19 +80954,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "cond"
@@ -86192,42 +80972,6 @@
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -86816,30 +81560,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -87252,58 +81972,9 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -88021,30 +82692,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -88457,19 +83104,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
@@ -88560,42 +83194,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -89186,30 +83784,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -89622,19 +84196,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Sets the name of this namedDecl",
 						"children": [
@@ -89673,42 +84234,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -90299,30 +84824,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -90735,19 +85236,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Sets the name of this namedDecl",
 						"children": [
@@ -90786,42 +85274,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -91560,30 +86012,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -91996,19 +86424,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
@@ -92099,42 +86514,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -92765,30 +87144,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -93201,19 +87556,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
@@ -93228,42 +87570,6 @@
 									{
 										"type": "type",
 										"name": "argType",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -93895,30 +88201,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -94331,19 +88613,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "operand"
@@ -94352,42 +88621,6 @@
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",
@@ -95105,30 +89338,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -95541,19 +89750,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Returns a new node based on this type with the qualifier const",
 						"children": [
@@ -95644,42 +89840,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -96333,30 +90493,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -96769,19 +90905,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "init"
@@ -96890,42 +91013,6 @@
 									{
 										"type": "String",
 										"name": "qualifiedPrefix",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -97661,30 +91748,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -98097,19 +92160,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "action",
 						"tooltip": "Sets the size expression of this variable array type",
 						"children": [
@@ -98228,42 +92278,6 @@
 									{
 										"type": "type",
 										"name": "newValue",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -98916,30 +92930,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -99352,19 +93342,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "vardecl",
 						"alias": ""
@@ -99379,42 +93356,6 @@
 									{
 										"type": "String",
 										"name": "name",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
 										"defaultValue": ""
 									}]
 					},
@@ -99994,30 +93935,6 @@
 					},
 					{
 						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "attributes"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "selects"
-									}]
-					},
-					{
-						"type": "attribute",
-						"children": [
-									{
-										"type": "String[]",
-										"name": "actions"
-									}]
-					},
-					{
-						"type": "attribute",
 						"tooltip": "String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'",
 						"children": [
 									{
@@ -100430,19 +94347,6 @@
 									}]
 					},
 					{
-						"type": "attribute",
-						"tooltip": "true if the current join point is an instance of the given type",
-						"children": [
-									{
-										"type": "Boolean",
-										"name": "instanceOf"
-									},
-									{
-										"type": "String",
-										"name": "name"
-									}]
-					},
-					{
 						"type": "select",
 						"clazz": "expression",
 						"alias": "expr"
@@ -100516,42 +94420,6 @@
 						"type": "select",
 						"clazz": "cilkSpawn",
 						"alias": ""
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "insert"
-									},
-									{
-										"type": "[before| after| replace]",
-										"name": "position",
-										"defaultValue": ""
-									},
-									{
-										"type": "String",
-										"name": "code",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
-						"children": [
-									{
-										"type": "void",
-										"name": "def"
-									},
-									{
-										"type": "String",
-										"name": "attribute",
-										"defaultValue": ""
-									},
-									{
-										"type": "Object",
-										"name": "value",
-										"defaultValue": ""
-									}]
 					},
 					{
 						"type": "action",

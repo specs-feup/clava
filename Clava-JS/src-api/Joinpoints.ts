@@ -19,7 +19,6 @@ import {
 } from "lara-js/api/LaraJoinPoint.js";
 
 export class Joinpoint extends LaraJoinPoint {
-  get actions(): string[] { return wrapJoinPoint(this._javaObject.getActions()) }
   /**
    * String with a dump of the AST representation starting from this node. This representation corresponds to the internal Java representation of the ClavaAst, where the node names correspond to Java classes. To get an equivalent representation with join point names, use the attribute 'dump'
    */
@@ -221,11 +220,6 @@ export class Joinpoint extends LaraJoinPoint {
   get type(): Type { return wrapJoinPoint(this._javaObject.getType()) }
   set type(value: Type) { this._javaObject.setType(unwrapJoinPoint(value)); }
   /**
-   * True if the current join point is an instance of the given type
-   */
-  getInstanceOf(name: string): boolean { return wrapJoinPoint(this._javaObject.instanceOf(unwrapJoinPoint(name))); }
-  //insert(position: "before" | "after" | "replace", code: string): void { return wrapJoinPoint(this._javaObject.insert(unwrapJoinPoint(position), unwrapJoinPoint(code))); }
-  /**
    * True, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'
    */
   astIsInstance(className: string): boolean { return wrapJoinPoint(this._javaObject.astIsInstance(unwrapJoinPoint(className))); }
@@ -405,9 +399,6 @@ export class Joinpoint extends LaraJoinPoint {
 
 export class Attribute extends Joinpoint {
   get kind(): string { return wrapJoinPoint(this._javaObject.getKind()) }
-  get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
-  get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -417,18 +408,12 @@ export class ClavaException extends Joinpoint {
   get exception(): object { return wrapJoinPoint(this._javaObject.getException()) }
   get exceptionType(): string { return wrapJoinPoint(this._javaObject.getExceptionType()) }
   get message(): string { return wrapJoinPoint(this._javaObject.getMessage()) }
-  get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
-  get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
 export class Comment extends Joinpoint {
   get text(): string { return wrapJoinPoint(this._javaObject.getText()) }
   set text(value: string) { this._javaObject.setText(unwrapJoinPoint(value)); }
-  get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
-  get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
   setText(text: string): void { return wrapJoinPoint(this._javaObject.setText(unwrapJoinPoint(text))); }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -439,18 +424,12 @@ export class Decl extends Joinpoint {
    * The attributes (e.g. Pure, CUDAGlobal) associated to this decl
    */
   get attrs(): Attribute[] { return wrapJoinPoint(this._javaObject.getAttrs()) }
-  get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
-  get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
    * Utility joinpoint, to represent empty nodes when directly accessing the tree
    */
 export class Empty extends Joinpoint {
-  get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
-  get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
 export class Expression extends Joinpoint {
@@ -468,9 +447,6 @@ export class Expression extends Joinpoint {
   get isFunctionArgument(): boolean { return wrapJoinPoint(this._javaObject.getIsFunctionArgument()) }
   get use(): "read" | "write" | "readwrite" { return wrapJoinPoint(this._javaObject.getUse()) }
   get vardecl(): Vardecl { return wrapJoinPoint(this._javaObject.getVardecl()) }
-  get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
-  get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -541,8 +517,6 @@ export class FileJp extends Joinpoint {
    * The name of the source folder of this file, or undefined if it has none
    */
   get sourceFoldername(): string { return wrapJoinPoint(this._javaObject.getSourceFoldername()) }
-  get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
-  get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
   /**
    * Adds a C include to the current file. If the file already has the include, it does nothing
    */
@@ -611,7 +585,6 @@ export class FileJp extends Joinpoint {
    * Writes the code of this file to a given folder
    */
   write(destinationFoldername: string): string { return wrapJoinPoint(this._javaObject.write(unwrapJoinPoint(destinationFoldername))); }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -722,15 +695,12 @@ export class Pragma extends Joinpoint {
    * The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations
    */
   get target(): Joinpoint { return wrapJoinPoint(this._javaObject.getTarget()) }
-  get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
-  get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
   /**
    * All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument
    */
   getTargetNodes(endPragma?: string): Joinpoint[] { return wrapJoinPoint(this._javaObject.getTargetNodes(unwrapJoinPoint(endPragma))); }
   setContent(content: string): void { return wrapJoinPoint(this._javaObject.setContent(unwrapJoinPoint(content))); }
   setName(name: string): void { return wrapJoinPoint(this._javaObject.setName(unwrapJoinPoint(name))); }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -779,8 +749,6 @@ export class Program extends Joinpoint {
   get stdFlag(): string { return wrapJoinPoint(this._javaObject.getStdFlag()) }
   get userFlags(): string[] { return wrapJoinPoint(this._javaObject.getUserFlags()) }
   get weavingFolder(): string { return wrapJoinPoint(this._javaObject.getWeavingFolder()) }
-  get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
-  get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
   /**
    * Adds a path to an include that the current program depends on
    */
@@ -833,7 +801,6 @@ export class Program extends Joinpoint {
    * Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality
    */
   rebuildFuzzy(): void { return wrapJoinPoint(this._javaObject.rebuildFuzzy()); }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -860,9 +827,6 @@ export class RecordJp extends NamedDecl {
 export class Statement extends Joinpoint {
   get isFirst(): boolean { return wrapJoinPoint(this._javaObject.getIsFirst()) }
   get isLast(): boolean { return wrapJoinPoint(this._javaObject.getIsLast()) }
-  get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
-  get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
@@ -955,8 +919,6 @@ export class Type extends Joinpoint {
    * If the type encapsulates another type, returns the encapsulated type
    */
   get unwrap(): Type { return wrapJoinPoint(this._javaObject.getUnwrap()) }
-  get attributes(): string[] { return wrapJoinPoint(this._javaObject.getAttributes()) }
-  get selects(): string[] { return wrapJoinPoint(this._javaObject.getSelects()) }
   /**
    * The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined
    */
@@ -985,7 +947,6 @@ export class Type extends Joinpoint {
    * Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes
    */
   setUnderlyingType(oldValue: Type, newValue: Type): Type { return wrapJoinPoint(this._javaObject.setUnderlyingType(unwrapJoinPoint(oldValue), unwrapJoinPoint(newValue))); }
-  def(attribute: string, value: object): void { return wrapJoinPoint(this._javaObject.def(unwrapJoinPoint(attribute), unwrapJoinPoint(value))); }
 }
 
   /**
