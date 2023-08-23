@@ -526,33 +526,6 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
-     * @param reference
-     * @return 
-     */
-    public abstract Integer bitWidthImpl(AJoinPoint reference);
-
-    /**
-     * 
-     * @param reference
-     * @return 
-     */
-    public final Object bitWidth(AJoinPoint reference) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "bitWidth", Optional.empty(), reference);
-        	}
-        	Integer result = this.bitWidthImpl(reference);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "bitWidth", Optional.ofNullable(result), reference);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "bitWidth", e);
-        }
-    }
-
-    /**
      * Sets the template argument types of a template type
      * @param templateArgTypes 
      */
@@ -756,13 +729,6 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "inlineComments": {
         	if(value instanceof String[]){
         		this.defInlineCommentsImpl((String[])value);
@@ -770,6 +736,13 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         	}
         	if(value instanceof String){
         		this.defInlineCommentsImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "lastChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defLastChildImpl((AJoinPoint)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -817,7 +790,6 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         attributes.add("normalize");
         attributes.add("typeFields");
         attributes.add("fieldTree");
-        attributes.add("bitWidth");
     }
 
     /**
@@ -873,48 +845,63 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         NORMALIZE("normalize"),
         TYPEFIELDS("typeFields"),
         FIELDTREE("fieldTree"),
-        BITWIDTH("bitWidth"),
-        ENDLINE("endLine"),
         PARENT("parent"),
-        ENDCOLUMN("endColumn"),
         AST("ast"),
-        CODE("code"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
-        ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        LINE("line"),
-        KEYS("keys"),
         HASCHILDREN("hasChildren"),
-        ISINSIDEHEADER("isInsideHeader"),
-        ASTNUMCHILDREN("astNumChildren"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
-        DESCENDANTS("descendants"),
-        ASTCHILDREN("astChildren"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
-        ISMACRO("isMacro"),
         SCOPENODES("scopeNodes"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
-        LASTCHILD("lastChild"),
-        ROOT("root"),
         NUMCHILDREN("numChildren"),
-        CHAIN("chain"),
-        CURRENTREGION("currentRegion"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
-        COLUMN("column"),
         INLINECOMMENTS("inlineComments"),
-        PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
+        CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
+        BITWIDTH("bitWidth"),
+        HASNODE("hasNode"),
+        ENDLINE("endLine"),
+        ENDCOLUMN("endColumn"),
+        CODE("code"),
+        ISINSIDELOOPHEADER("isInsideLoopHeader"),
+        LINE("line"),
+        KEYS("keys"),
+        ISINSIDEHEADER("isInsideHeader"),
+        ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
+        DESCENDANTS("descendants"),
+        ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
+        ISMACRO("isMacro"),
+        LASTCHILD("lastChild"),
+        ROOT("root"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        CHAIN("chain"),
+        CURRENTREGION("currentRegion"),
+        COLUMN("column"),
+        PARENTREGION("parentRegion"),
+        GETVALUE("getValue"),
+        GETASTANCESTOR("getAstAncestor"),
         DEPTH("depth"),
         LOCATION("location"),
+        GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),

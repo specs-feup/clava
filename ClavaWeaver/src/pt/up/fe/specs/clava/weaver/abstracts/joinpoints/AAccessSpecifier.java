@@ -59,15 +59,6 @@ public abstract class AAccessSpecifier extends ADecl {
     }
 
     /**
-     * Get value on attribute endLine
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getEndLineImpl() {
-        return this.aDecl.getEndLineImpl();
-    }
-
-    /**
      * Get value on attribute parent
      * @return the attribute's value
      */
@@ -77,30 +68,12 @@ public abstract class AAccessSpecifier extends ADecl {
     }
 
     /**
-     * Get value on attribute endColumn
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getEndColumnImpl() {
-        return this.aDecl.getEndColumnImpl();
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
     @Override
     public String getAstImpl() {
         return this.aDecl.getAstImpl();
-    }
-
-    /**
-     * Get value on attribute code
-     * @return the attribute's value
-     */
-    @Override
-    public String getCodeImpl() {
-        return this.aDecl.getCodeImpl();
     }
 
     /**
@@ -122,33 +95,6 @@ public abstract class AAccessSpecifier extends ADecl {
     }
 
     /**
-     * Get value on attribute isInsideLoopHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInsideLoopHeaderImpl() {
-        return this.aDecl.getIsInsideLoopHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute line
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getLineImpl() {
-        return this.aDecl.getLineImpl();
-    }
-
-    /**
-     * Get value on attribute keysArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public String[] getKeysArrayImpl() {
-        return this.aDecl.getKeysArrayImpl();
-    }
-
-    /**
      * Get value on attribute hasChildren
      * @return the attribute's value
      */
@@ -158,21 +104,12 @@ public abstract class AAccessSpecifier extends ADecl {
     }
 
     /**
-     * Get value on attribute isInsideHeader
+     * Get value on attribute getAncestor
      * @return the attribute's value
      */
     @Override
-    public Boolean getIsInsideHeaderImpl() {
-        return this.aDecl.getIsInsideHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute astNumChildren
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getAstNumChildrenImpl() {
-        return this.aDecl.getAstNumChildrenImpl();
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aDecl.getAncestorImpl(type);
     }
 
     /**
@@ -191,24 +128,6 @@ public abstract class AAccessSpecifier extends ADecl {
     @Override
     public AJoinPoint[] getSiblingsRightArrayImpl() {
         return this.aDecl.getSiblingsRightArrayImpl();
-    }
-
-    /**
-     * Get value on attribute descendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsArrayImpl() {
-        return this.aDecl.getDescendantsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astChildrenArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getAstChildrenArrayImpl() {
-        return this.aDecl.getAstChildrenArrayImpl();
     }
 
     /**
@@ -239,15 +158,6 @@ public abstract class AAccessSpecifier extends ADecl {
     }
 
     /**
-     * Get value on attribute isMacro
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsMacroImpl() {
-        return this.aDecl.getIsMacroImpl();
-    }
-
-    /**
      * Get value on attribute scopeNodesArrayImpl
      * @return the attribute's value
      */
@@ -266,30 +176,21 @@ public abstract class AAccessSpecifier extends ADecl {
     }
 
     /**
+     * Get value on attribute getJavaFieldType
+     * @return the attribute's value
+     */
+    @Override
+    public String getJavaFieldTypeImpl(String fieldName) {
+        return this.aDecl.getJavaFieldTypeImpl(fieldName);
+    }
+
+    /**
      * Get value on attribute firstChild
      * @return the attribute's value
      */
     @Override
     public AJoinPoint getFirstChildImpl() {
         return this.aDecl.getFirstChildImpl();
-    }
-
-    /**
-     * Get value on attribute lastChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getLastChildImpl() {
-        return this.aDecl.getLastChildImpl();
-    }
-
-    /**
-     * Get value on attribute root
-     * @return the attribute's value
-     */
-    @Override
-    public AProgram getRootImpl() {
-        return this.aDecl.getRootImpl();
     }
 
     /**
@@ -302,21 +203,12 @@ public abstract class AAccessSpecifier extends ADecl {
     }
 
     /**
-     * Get value on attribute chainArrayImpl
+     * Get value on attribute getChild
      * @return the attribute's value
      */
     @Override
-    public String[] getChainArrayImpl() {
-        return this.aDecl.getChainArrayImpl();
-    }
-
-    /**
-     * Get value on attribute currentRegion
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getCurrentRegionImpl() {
-        return this.aDecl.getCurrentRegionImpl();
+    public AJoinPoint getChildImpl(Integer index) {
+        return this.aDecl.getChildImpl(index);
     }
 
     /**
@@ -329,30 +221,12 @@ public abstract class AAccessSpecifier extends ADecl {
     }
 
     /**
-     * Get value on attribute column
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getColumnImpl() {
-        return this.aDecl.getColumnImpl();
-    }
-
-    /**
      * Get value on attribute inlineCommentsArrayImpl
      * @return the attribute's value
      */
     @Override
     public AComment[] getInlineCommentsArrayImpl() {
         return this.aDecl.getInlineCommentsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute parentRegion
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getParentRegionImpl() {
-        return this.aDecl.getParentRegionImpl();
     }
 
     /**
@@ -383,6 +257,33 @@ public abstract class AAccessSpecifier extends ADecl {
     }
 
     /**
+     * Get value on attribute getKeyType
+     * @return the attribute's value
+     */
+    @Override
+    public Object getKeyTypeImpl(String key) {
+        return this.aDecl.getKeyTypeImpl(key);
+    }
+
+    /**
+     * Get value on attribute contains
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean containsImpl(AJoinPoint jp) {
+        return this.aDecl.containsImpl(jp);
+    }
+
+    /**
+     * Get value on attribute astIsInstance
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean astIsInstanceImpl(String className) {
+        return this.aDecl.astIsInstanceImpl(className);
+    }
+
+    /**
      * Get value on attribute filename
      * @return the attribute's value
      */
@@ -410,15 +311,6 @@ public abstract class AAccessSpecifier extends ADecl {
     }
 
     /**
-     * Get value on attribute depth
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getDepthImpl() {
-        return this.aDecl.getDepthImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -428,12 +320,255 @@ public abstract class AAccessSpecifier extends ADecl {
     }
 
     /**
+     * Get value on attribute hasNode
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aDecl.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
+     * Get value on attribute endLine
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getEndLineImpl() {
+        return this.aDecl.getEndLineImpl();
+    }
+
+    /**
+     * Get value on attribute endColumn
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getEndColumnImpl() {
+        return this.aDecl.getEndColumnImpl();
+    }
+
+    /**
+     * Get value on attribute code
+     * @return the attribute's value
+     */
+    @Override
+    public String getCodeImpl() {
+        return this.aDecl.getCodeImpl();
+    }
+
+    /**
+     * Get value on attribute isInsideLoopHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInsideLoopHeaderImpl() {
+        return this.aDecl.getIsInsideLoopHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute line
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getLineImpl() {
+        return this.aDecl.getLineImpl();
+    }
+
+    /**
+     * Get value on attribute keysArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getKeysArrayImpl() {
+        return this.aDecl.getKeysArrayImpl();
+    }
+
+    /**
+     * Get value on attribute isInsideHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInsideHeaderImpl() {
+        return this.aDecl.getIsInsideHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute astNumChildren
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getAstNumChildrenImpl() {
+        return this.aDecl.getAstNumChildrenImpl();
+    }
+
+    /**
+     * Get value on attribute getChainAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChainAncestorImpl(String type) {
+        return this.aDecl.getChainAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute descendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aDecl.getDescendantsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute astChildrenArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getAstChildrenArrayImpl() {
+        return this.aDecl.getAstChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getDescendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
+        return this.aDecl.getDescendantsArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getFirstJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aDecl.getFirstJpImpl(type);
+    }
+
+    /**
+     * Get value on attribute isMacro
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsMacroImpl() {
+        return this.aDecl.getIsMacroImpl();
+    }
+
+    /**
+     * Get value on attribute lastChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getLastChildImpl() {
+        return this.aDecl.getLastChildImpl();
+    }
+
+    /**
+     * Get value on attribute root
+     * @return the attribute's value
+     */
+    @Override
+    public AProgram getRootImpl() {
+        return this.aDecl.getRootImpl();
+    }
+
+    /**
+     * Get value on attribute getAstChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAstChildImpl(Integer index) {
+        return this.aDecl.getAstChildImpl(index);
+    }
+
+    /**
+     * Get value on attribute getDescendantsAndSelfArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
+        return this.aDecl.getDescendantsAndSelfArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute chainArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getChainArrayImpl() {
+        return this.aDecl.getChainArrayImpl();
+    }
+
+    /**
+     * Get value on attribute currentRegion
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getCurrentRegionImpl() {
+        return this.aDecl.getCurrentRegionImpl();
+    }
+
+    /**
+     * Get value on attribute column
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getColumnImpl() {
+        return this.aDecl.getColumnImpl();
+    }
+
+    /**
+     * Get value on attribute parentRegion
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getParentRegionImpl() {
+        return this.aDecl.getParentRegionImpl();
+    }
+
+    /**
+     * Get value on attribute getValue
+     * @return the attribute's value
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aDecl.getValueImpl(key);
+    }
+
+    /**
+     * Get value on attribute getAstAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAstAncestorImpl(String type) {
+        return this.aDecl.getAstAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute depth
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getDepthImpl() {
+        return this.aDecl.getDepthImpl();
+    }
+
+    /**
      * Get value on attribute location
      * @return the attribute's value
      */
     @Override
     public String getLocationImpl() {
         return this.aDecl.getLocationImpl();
+    }
+
+    /**
+     * Get value on attribute getUserField
+     * @return the attribute's value
+     */
+    @Override
+    public Object getUserFieldImpl(String fieldName) {
+        return this.aDecl.getUserFieldImpl(fieldName);
     }
 
     /**
@@ -470,105 +605,6 @@ public abstract class AAccessSpecifier extends ADecl {
     @Override
     public Boolean getHasParentImpl() {
         return this.aDecl.getHasParentImpl();
-    }
-
-    /**
-     * true, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'
-     * @param className 
-     */
-    @Override
-    public Boolean astIsInstanceImpl(String className) {
-        return this.aDecl.astIsInstanceImpl(className);
-    }
-
-    /**
-     * Looks for an ancestor joinpoint name, walking back on the joinpoint chain
-     * @param type 
-     */
-    @Override
-    public AJoinPoint getChainAncestorImpl(String type) {
-        return this.aDecl.getChainAncestorImpl(type);
-    }
-
-    /**
-     * true if the given node is a descendant of this node
-     * @param jp 
-     */
-    @Override
-    public Boolean containsImpl(AJoinPoint jp) {
-        return this.aDecl.containsImpl(jp);
-    }
-
-    /**
-     * Looks in the descendants for the first node of the given type
-     * @param type 
-     */
-    @Override
-    public AJoinPoint getFirstJpImpl(String type) {
-        return this.aDecl.getFirstJpImpl(type);
-    }
-
-    /**
-     * Returns the child of the node at the given index, ignoring null nodes
-     * @param index 
-     */
-    @Override
-    public AJoinPoint getChildImpl(Integer index) {
-        return this.aDecl.getChildImpl(index);
-    }
-
-    /**
-     * Returns the child of the node at the given index, considering null nodes
-     * @param index 
-     */
-    @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
-        return this.aDecl.getAstChildImpl(index);
-    }
-
-    /**
-     * Looks for an ancestor joinpoint name, walking back on the AST
-     * @param type 
-     */
-    @Override
-    public AJoinPoint getAncestorImpl(String type) {
-        return this.aDecl.getAncestorImpl(type);
-    }
-
-    /**
-     * Retrieves the descendants of the given type
-     * @param type 
-     */
-    @Override
-    public AJoinPoint[] getDescendantsImpl(String type) {
-        return this.aDecl.getDescendantsImpl(type);
-    }
-
-    /**
-     * Retrieves the descendants of the given type, including the node itself
-     * @param type 
-     */
-    @Override
-    public AJoinPoint[] getDescendantsAndSelfImpl(String type) {
-        return this.aDecl.getDescendantsAndSelfImpl(type);
-    }
-
-    /**
-     * String with the full Java class name of the type of the Java field with the provided name
-     * @param fieldName 
-     */
-    @Override
-    public String getJavaFieldTypeImpl(String fieldName) {
-        return this.aDecl.getJavaFieldTypeImpl(fieldName);
-    }
-
-    /**
-     * Java Class instance with the type of the given key
-     * @param key 
-     */
-    @Override
-    public Object getKeyTypeImpl(String key) {
-        return this.aDecl.getKeyTypeImpl(key);
     }
 
     /**
@@ -795,33 +831,6 @@ public abstract class AAccessSpecifier extends ADecl {
     }
 
     /**
-     * The value associated with the given property key
-     * @param key 
-     */
-    @Override
-    public Object getValueImpl(String key) {
-        return this.aDecl.getValueImpl(key);
-    }
-
-    /**
-     * Retrives values that have been associated to nodes of the AST with 'setUserField'
-     * @param fieldName 
-     */
-    @Override
-    public Object getUserFieldImpl(String fieldName) {
-        return this.aDecl.getUserFieldImpl(fieldName);
-    }
-
-    /**
-     * true, if the given join point or AST node is the same (== test) as the current join point AST node
-     * @param nodeOrJp 
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aDecl.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
      * 
      * @param position 
      * @param code 
@@ -890,13 +899,6 @@ public abstract class AAccessSpecifier extends ADecl {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "inlineComments": {
         	if(value instanceof String[]){
         		this.defInlineCommentsImpl((String[])value);
@@ -904,6 +906,13 @@ public abstract class AAccessSpecifier extends ADecl {
         	}
         	if(value instanceof String){
         		this.defInlineCommentsImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "lastChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defLastChildImpl((AJoinPoint)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -964,48 +973,63 @@ public abstract class AAccessSpecifier extends ADecl {
     protected enum AccessSpecifierAttributes {
         KIND("kind"),
         ATTRS("attrs"),
-        ENDLINE("endLine"),
         PARENT("parent"),
-        ENDCOLUMN("endColumn"),
         AST("ast"),
-        CODE("code"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
-        ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        LINE("line"),
-        KEYS("keys"),
         HASCHILDREN("hasChildren"),
-        ISINSIDEHEADER("isInsideHeader"),
-        ASTNUMCHILDREN("astNumChildren"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
-        DESCENDANTS("descendants"),
-        ASTCHILDREN("astChildren"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
-        ISMACRO("isMacro"),
         SCOPENODES("scopeNodes"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
-        LASTCHILD("lastChild"),
-        ROOT("root"),
         NUMCHILDREN("numChildren"),
-        CHAIN("chain"),
-        CURRENTREGION("currentRegion"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
-        COLUMN("column"),
         INLINECOMMENTS("inlineComments"),
-        PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
+        CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        DEPTH("depth"),
         BITWIDTH("bitWidth"),
+        HASNODE("hasNode"),
+        ENDLINE("endLine"),
+        ENDCOLUMN("endColumn"),
+        CODE("code"),
+        ISINSIDELOOPHEADER("isInsideLoopHeader"),
+        LINE("line"),
+        KEYS("keys"),
+        ISINSIDEHEADER("isInsideHeader"),
+        ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
+        DESCENDANTS("descendants"),
+        ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
+        ISMACRO("isMacro"),
+        LASTCHILD("lastChild"),
+        ROOT("root"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        CHAIN("chain"),
+        CURRENTREGION("currentRegion"),
+        COLUMN("column"),
+        PARENTREGION("parentRegion"),
+        GETVALUE("getValue"),
+        GETASTANCESTOR("getAstAncestor"),
+        DEPTH("depth"),
         LOCATION("location"),
+        GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),

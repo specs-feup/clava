@@ -144,6 +144,60 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * 
+     * @param clauseName
+     * @return 
+     */
+    public abstract Boolean hasClauseImpl(String clauseName);
+
+    /**
+     * 
+     * @param clauseName
+     * @return 
+     */
+    public final Object hasClause(String clauseName) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "hasClause", Optional.empty(), clauseName);
+        	}
+        	Boolean result = this.hasClauseImpl(clauseName);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "hasClause", Optional.ofNullable(result), clauseName);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "hasClause", e);
+        }
+    }
+
+    /**
+     * 
+     * @param clauseName
+     * @return 
+     */
+    public abstract Boolean isClauseLegalImpl(String clauseName);
+
+    /**
+     * 
+     * @param clauseName
+     * @return 
+     */
+    public final Object isClauseLegal(String clauseName) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "isClauseLegal", Optional.empty(), clauseName);
+        	}
+        	Boolean result = this.isClauseLegalImpl(clauseName);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "isClauseLegal", Optional.ofNullable(result), clauseName);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "isClauseLegal", e);
+        }
+    }
+
+    /**
      * Get value on attribute clauseKinds
      * @return the attribute's value
      */
@@ -173,6 +227,44 @@ public abstract class AOmp extends APragma {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "clauseKinds", e);
+        }
+    }
+
+    /**
+     * 
+     * @param kind
+     * @return 
+     */
+    public abstract String[] getReductionArrayImpl(String kind);
+
+    /**
+     * 
+     * @param kind
+     * @return 
+     */
+    public Object getReductionImpl(String kind) {
+        String[] stringArrayImpl0 = getReductionArrayImpl(kind);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(stringArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * 
+     * @param kind
+     * @return 
+     */
+    public final Object getReduction(String kind) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getReduction", Optional.empty(), kind);
+        	}
+        	Object result = this.getReductionImpl(kind);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "getReduction", Optional.ofNullable(result), kind);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "getReduction", e);
         }
     }
 
@@ -490,83 +582,28 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * True if the directive has at least one clause of the given clause kind, false otherwise
-     * @param clauseName 
+     * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
+     * @param directiveKind 
      */
-    public Boolean hasClauseImpl(String clauseName) {
-        throw new UnsupportedOperationException(get_class()+": Action hasClause not implemented ");
+    public void setKindImpl(String directiveKind) {
+        throw new UnsupportedOperationException(get_class()+": Action setKind not implemented ");
     }
 
     /**
-     * True if the directive has at least one clause of the given clause kind, false otherwise
-     * @param clauseName 
+     * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
+     * @param directiveKind 
      */
-    public final Boolean hasClause(String clauseName) {
+    public final void setKind(String directiveKind) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "hasClause", this, Optional.empty(), clauseName);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setKind", this, Optional.empty(), directiveKind);
         	}
-        	Boolean result = this.hasClauseImpl(clauseName);
+        	this.setKindImpl(directiveKind);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "hasClause", this, Optional.ofNullable(result), clauseName);
+        		eventTrigger().triggerAction(Stage.END, "setKind", this, Optional.empty(), directiveKind);
         	}
-        	return result;
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "hasClause", e);
-        }
-    }
-
-    /**
-     * True if it is legal to use the given clause kind in this directive, false otherwise
-     * @param clauseName 
-     */
-    public Boolean isClauseLegalImpl(String clauseName) {
-        throw new UnsupportedOperationException(get_class()+": Action isClauseLegal not implemented ");
-    }
-
-    /**
-     * True if it is legal to use the given clause kind in this directive, false otherwise
-     * @param clauseName 
-     */
-    public final Boolean isClauseLegal(String clauseName) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "isClauseLegal", this, Optional.empty(), clauseName);
-        	}
-        	Boolean result = this.isClauseLegalImpl(clauseName);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "isClauseLegal", this, Optional.ofNullable(result), clauseName);
-        	}
-        	return result;
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "isClauseLegal", e);
-        }
-    }
-
-    /**
-     * The variable names for the given reduction kind, or empty array if no reduction of that kind is defined
-     * @param kind 
-     */
-    public String[] getReductionImpl(String kind) {
-        throw new UnsupportedOperationException(get_class()+": Action getReduction not implemented ");
-    }
-
-    /**
-     * The variable names for the given reduction kind, or empty array if no reduction of that kind is defined
-     * @param kind 
-     */
-    public final String[] getReduction(String kind) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "getReduction", this, Optional.empty(), kind);
-        	}
-        	String[] result = this.getReductionImpl(kind);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "getReduction", this, Optional.ofNullable(result), kind);
-        	}
-        	return result;
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "getReduction", e);
+        	throw new ActionException(get_class(), "setKind", e);
         }
     }
 
@@ -593,32 +630,6 @@ public abstract class AOmp extends APragma {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "removeClause", e);
-        }
-    }
-
-    /**
-     * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
-     * @param directiveKind 
-     */
-    public void setKindImpl(String directiveKind) {
-        throw new UnsupportedOperationException(get_class()+": Action setKind not implemented ");
-    }
-
-    /**
-     * Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded
-     * @param directiveKind 
-     */
-    public final void setKind(String directiveKind) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setKind", this, Optional.empty(), directiveKind);
-        	}
-        	this.setKindImpl(directiveKind);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setKind", this, Optional.empty(), directiveKind);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setKind", e);
         }
     }
 
@@ -1068,21 +1079,21 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * Get value on attribute getTargetNodesArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getTargetNodesArrayImpl(String endPragma) {
+        return this.aPragma.getTargetNodesArrayImpl(endPragma);
+    }
+
+    /**
      * Method used by the lara interpreter to select targets
      * @return 
      */
     @Override
     public List<? extends AJoinPoint> selectTarget() {
         return this.aPragma.selectTarget();
-    }
-
-    /**
-     * Get value on attribute endLine
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getEndLineImpl() {
-        return this.aPragma.getEndLineImpl();
     }
 
     /**
@@ -1095,30 +1106,12 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute endColumn
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getEndColumnImpl() {
-        return this.aPragma.getEndColumnImpl();
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
     @Override
     public String getAstImpl() {
         return this.aPragma.getAstImpl();
-    }
-
-    /**
-     * Get value on attribute code
-     * @return the attribute's value
-     */
-    @Override
-    public String getCodeImpl() {
-        return this.aPragma.getCodeImpl();
     }
 
     /**
@@ -1140,33 +1133,6 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute isInsideLoopHeader
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsInsideLoopHeaderImpl() {
-        return this.aPragma.getIsInsideLoopHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute line
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getLineImpl() {
-        return this.aPragma.getLineImpl();
-    }
-
-    /**
-     * Get value on attribute keysArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public String[] getKeysArrayImpl() {
-        return this.aPragma.getKeysArrayImpl();
-    }
-
-    /**
      * Get value on attribute hasChildren
      * @return the attribute's value
      */
@@ -1176,21 +1142,12 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute isInsideHeader
+     * Get value on attribute getAncestor
      * @return the attribute's value
      */
     @Override
-    public Boolean getIsInsideHeaderImpl() {
-        return this.aPragma.getIsInsideHeaderImpl();
-    }
-
-    /**
-     * Get value on attribute astNumChildren
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getAstNumChildrenImpl() {
-        return this.aPragma.getAstNumChildrenImpl();
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aPragma.getAncestorImpl(type);
     }
 
     /**
@@ -1209,24 +1166,6 @@ public abstract class AOmp extends APragma {
     @Override
     public AJoinPoint[] getSiblingsRightArrayImpl() {
         return this.aPragma.getSiblingsRightArrayImpl();
-    }
-
-    /**
-     * Get value on attribute descendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getDescendantsArrayImpl() {
-        return this.aPragma.getDescendantsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astChildrenArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] getAstChildrenArrayImpl() {
-        return this.aPragma.getAstChildrenArrayImpl();
     }
 
     /**
@@ -1257,15 +1196,6 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute isMacro
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getIsMacroImpl() {
-        return this.aPragma.getIsMacroImpl();
-    }
-
-    /**
      * Get value on attribute scopeNodesArrayImpl
      * @return the attribute's value
      */
@@ -1284,30 +1214,21 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * Get value on attribute getJavaFieldType
+     * @return the attribute's value
+     */
+    @Override
+    public String getJavaFieldTypeImpl(String fieldName) {
+        return this.aPragma.getJavaFieldTypeImpl(fieldName);
+    }
+
+    /**
      * Get value on attribute firstChild
      * @return the attribute's value
      */
     @Override
     public AJoinPoint getFirstChildImpl() {
         return this.aPragma.getFirstChildImpl();
-    }
-
-    /**
-     * Get value on attribute lastChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getLastChildImpl() {
-        return this.aPragma.getLastChildImpl();
-    }
-
-    /**
-     * Get value on attribute root
-     * @return the attribute's value
-     */
-    @Override
-    public AProgram getRootImpl() {
-        return this.aPragma.getRootImpl();
     }
 
     /**
@@ -1320,21 +1241,12 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute chainArrayImpl
+     * Get value on attribute getChild
      * @return the attribute's value
      */
     @Override
-    public String[] getChainArrayImpl() {
-        return this.aPragma.getChainArrayImpl();
-    }
-
-    /**
-     * Get value on attribute currentRegion
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getCurrentRegionImpl() {
-        return this.aPragma.getCurrentRegionImpl();
+    public AJoinPoint getChildImpl(Integer index) {
+        return this.aPragma.getChildImpl(index);
     }
 
     /**
@@ -1347,30 +1259,12 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute column
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getColumnImpl() {
-        return this.aPragma.getColumnImpl();
-    }
-
-    /**
      * Get value on attribute inlineCommentsArrayImpl
      * @return the attribute's value
      */
     @Override
     public AComment[] getInlineCommentsArrayImpl() {
         return this.aPragma.getInlineCommentsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute parentRegion
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getParentRegionImpl() {
-        return this.aPragma.getParentRegionImpl();
     }
 
     /**
@@ -1401,6 +1295,33 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * Get value on attribute getKeyType
+     * @return the attribute's value
+     */
+    @Override
+    public Object getKeyTypeImpl(String key) {
+        return this.aPragma.getKeyTypeImpl(key);
+    }
+
+    /**
+     * Get value on attribute contains
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean containsImpl(AJoinPoint jp) {
+        return this.aPragma.containsImpl(jp);
+    }
+
+    /**
+     * Get value on attribute astIsInstance
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean astIsInstanceImpl(String className) {
+        return this.aPragma.astIsInstanceImpl(className);
+    }
+
+    /**
      * Get value on attribute filename
      * @return the attribute's value
      */
@@ -1428,15 +1349,6 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * Get value on attribute depth
-     * @return the attribute's value
-     */
-    @Override
-    public Integer getDepthImpl() {
-        return this.aPragma.getDepthImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -1446,12 +1358,255 @@ public abstract class AOmp extends APragma {
     }
 
     /**
+     * Get value on attribute hasNode
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean hasNodeImpl(Object nodeOrJp) {
+        return this.aPragma.hasNodeImpl(nodeOrJp);
+    }
+
+    /**
+     * Get value on attribute endLine
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getEndLineImpl() {
+        return this.aPragma.getEndLineImpl();
+    }
+
+    /**
+     * Get value on attribute endColumn
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getEndColumnImpl() {
+        return this.aPragma.getEndColumnImpl();
+    }
+
+    /**
+     * Get value on attribute code
+     * @return the attribute's value
+     */
+    @Override
+    public String getCodeImpl() {
+        return this.aPragma.getCodeImpl();
+    }
+
+    /**
+     * Get value on attribute isInsideLoopHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInsideLoopHeaderImpl() {
+        return this.aPragma.getIsInsideLoopHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute line
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getLineImpl() {
+        return this.aPragma.getLineImpl();
+    }
+
+    /**
+     * Get value on attribute keysArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getKeysArrayImpl() {
+        return this.aPragma.getKeysArrayImpl();
+    }
+
+    /**
+     * Get value on attribute isInsideHeader
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsInsideHeaderImpl() {
+        return this.aPragma.getIsInsideHeaderImpl();
+    }
+
+    /**
+     * Get value on attribute astNumChildren
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getAstNumChildrenImpl() {
+        return this.aPragma.getAstNumChildrenImpl();
+    }
+
+    /**
+     * Get value on attribute getChainAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChainAncestorImpl(String type) {
+        return this.aPragma.getChainAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute descendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aPragma.getDescendantsArrayImpl();
+    }
+
+    /**
+     * Get value on attribute astChildrenArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getAstChildrenArrayImpl() {
+        return this.aPragma.getAstChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getDescendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
+        return this.aPragma.getDescendantsArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getFirstJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aPragma.getFirstJpImpl(type);
+    }
+
+    /**
+     * Get value on attribute isMacro
+     * @return the attribute's value
+     */
+    @Override
+    public Boolean getIsMacroImpl() {
+        return this.aPragma.getIsMacroImpl();
+    }
+
+    /**
+     * Get value on attribute lastChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getLastChildImpl() {
+        return this.aPragma.getLastChildImpl();
+    }
+
+    /**
+     * Get value on attribute root
+     * @return the attribute's value
+     */
+    @Override
+    public AProgram getRootImpl() {
+        return this.aPragma.getRootImpl();
+    }
+
+    /**
+     * Get value on attribute getAstChild
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAstChildImpl(Integer index) {
+        return this.aPragma.getAstChildImpl(index);
+    }
+
+    /**
+     * Get value on attribute getDescendantsAndSelfArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
+        return this.aPragma.getDescendantsAndSelfArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute chainArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public String[] getChainArrayImpl() {
+        return this.aPragma.getChainArrayImpl();
+    }
+
+    /**
+     * Get value on attribute currentRegion
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getCurrentRegionImpl() {
+        return this.aPragma.getCurrentRegionImpl();
+    }
+
+    /**
+     * Get value on attribute column
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getColumnImpl() {
+        return this.aPragma.getColumnImpl();
+    }
+
+    /**
+     * Get value on attribute parentRegion
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getParentRegionImpl() {
+        return this.aPragma.getParentRegionImpl();
+    }
+
+    /**
+     * Get value on attribute getValue
+     * @return the attribute's value
+     */
+    @Override
+    public Object getValueImpl(String key) {
+        return this.aPragma.getValueImpl(key);
+    }
+
+    /**
+     * Get value on attribute getAstAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getAstAncestorImpl(String type) {
+        return this.aPragma.getAstAncestorImpl(type);
+    }
+
+    /**
+     * Get value on attribute depth
+     * @return the attribute's value
+     */
+    @Override
+    public Integer getDepthImpl() {
+        return this.aPragma.getDepthImpl();
+    }
+
+    /**
      * Get value on attribute location
      * @return the attribute's value
      */
     @Override
     public String getLocationImpl() {
         return this.aPragma.getLocationImpl();
+    }
+
+    /**
+     * Get value on attribute getUserField
+     * @return the attribute's value
+     */
+    @Override
+    public Object getUserFieldImpl(String fieldName) {
+        return this.aPragma.getUserFieldImpl(fieldName);
     }
 
     /**
@@ -1488,105 +1643,6 @@ public abstract class AOmp extends APragma {
     @Override
     public Boolean getHasParentImpl() {
         return this.aPragma.getHasParentImpl();
-    }
-
-    /**
-     * true, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'
-     * @param className 
-     */
-    @Override
-    public Boolean astIsInstanceImpl(String className) {
-        return this.aPragma.astIsInstanceImpl(className);
-    }
-
-    /**
-     * Looks for an ancestor joinpoint name, walking back on the joinpoint chain
-     * @param type 
-     */
-    @Override
-    public AJoinPoint getChainAncestorImpl(String type) {
-        return this.aPragma.getChainAncestorImpl(type);
-    }
-
-    /**
-     * true if the given node is a descendant of this node
-     * @param jp 
-     */
-    @Override
-    public Boolean containsImpl(AJoinPoint jp) {
-        return this.aPragma.containsImpl(jp);
-    }
-
-    /**
-     * Looks in the descendants for the first node of the given type
-     * @param type 
-     */
-    @Override
-    public AJoinPoint getFirstJpImpl(String type) {
-        return this.aPragma.getFirstJpImpl(type);
-    }
-
-    /**
-     * Returns the child of the node at the given index, ignoring null nodes
-     * @param index 
-     */
-    @Override
-    public AJoinPoint getChildImpl(Integer index) {
-        return this.aPragma.getChildImpl(index);
-    }
-
-    /**
-     * Returns the child of the node at the given index, considering null nodes
-     * @param index 
-     */
-    @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
-        return this.aPragma.getAstChildImpl(index);
-    }
-
-    /**
-     * Looks for an ancestor joinpoint name, walking back on the AST
-     * @param type 
-     */
-    @Override
-    public AJoinPoint getAncestorImpl(String type) {
-        return this.aPragma.getAncestorImpl(type);
-    }
-
-    /**
-     * Retrieves the descendants of the given type
-     * @param type 
-     */
-    @Override
-    public AJoinPoint[] getDescendantsImpl(String type) {
-        return this.aPragma.getDescendantsImpl(type);
-    }
-
-    /**
-     * Retrieves the descendants of the given type, including the node itself
-     * @param type 
-     */
-    @Override
-    public AJoinPoint[] getDescendantsAndSelfImpl(String type) {
-        return this.aPragma.getDescendantsAndSelfImpl(type);
-    }
-
-    /**
-     * String with the full Java class name of the type of the Java field with the provided name
-     * @param fieldName 
-     */
-    @Override
-    public String getJavaFieldTypeImpl(String fieldName) {
-        return this.aPragma.getJavaFieldTypeImpl(fieldName);
-    }
-
-    /**
-     * Java Class instance with the type of the given key
-     * @param key 
-     */
-    @Override
-    public Object getKeyTypeImpl(String key) {
-        return this.aPragma.getKeyTypeImpl(key);
     }
 
     /**
@@ -1813,33 +1869,6 @@ public abstract class AOmp extends APragma {
     }
 
     /**
-     * The value associated with the given property key
-     * @param key 
-     */
-    @Override
-    public Object getValueImpl(String key) {
-        return this.aPragma.getValueImpl(key);
-    }
-
-    /**
-     * Retrives values that have been associated to nodes of the AST with 'setUserField'
-     * @param fieldName 
-     */
-    @Override
-    public Object getUserFieldImpl(String fieldName) {
-        return this.aPragma.getUserFieldImpl(fieldName);
-    }
-
-    /**
-     * true, if the given join point or AST node is the same (== test) as the current join point AST node
-     * @param nodeOrJp 
-     */
-    @Override
-    public Boolean hasNodeImpl(Object nodeOrJp) {
-        return this.aPragma.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
      * 
      * @param name 
      */
@@ -1855,15 +1884,6 @@ public abstract class AOmp extends APragma {
     @Override
     public void setContentImpl(String content) {
         this.aPragma.setContentImpl(content);
-    }
-
-    /**
-     * All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument
-     * @param endPragma 
-     */
-    @Override
-    public AJoinPoint[] getTargetNodesImpl(String endPragma) {
-        return this.aPragma.getTargetNodesImpl(endPragma);
     }
 
     /**
@@ -1938,13 +1958,6 @@ public abstract class AOmp extends APragma {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "inlineComments": {
         	if(value instanceof String[]){
         		this.defInlineCommentsImpl((String[])value);
@@ -1952,6 +1965,13 @@ public abstract class AOmp extends APragma {
         	}
         	if(value instanceof String){
         		this.defInlineCommentsImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "lastChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defLastChildImpl((AJoinPoint)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -1984,7 +2004,10 @@ public abstract class AOmp extends APragma {
         attributes.add("numThreads");
         attributes.add("procBind");
         attributes.add("private");
+        attributes.add("hasClause");
+        attributes.add("isClauseLegal");
         attributes.add("clauseKinds");
+        attributes.add("getReduction");
         attributes.add("reductionKinds");
         attributes.add("default");
         attributes.add("firstprivate");
@@ -2012,11 +2035,8 @@ public abstract class AOmp extends APragma {
     @Override
     protected final void fillWithActions(List<String> actions) {
         this.aPragma.fillWithActions(actions);
-        actions.add("Boolean hasClause(String)");
-        actions.add("Boolean isClauseLegal(String)");
-        actions.add("String[] getReduction(String)");
-        actions.add("void removeClause(String)");
         actions.add("void setKind(String)");
+        actions.add("void removeClause(String)");
         actions.add("void setNumThreads(String)");
         actions.add("void setProcBind(String)");
         actions.add("void setPrivate(String[])");
@@ -2064,7 +2084,10 @@ public abstract class AOmp extends APragma {
         NUMTHREADS("numThreads"),
         PROCBIND("procBind"),
         PRIVATE("private"),
+        HASCLAUSE("hasClause"),
+        ISCLAUSELEGAL("isClauseLegal"),
         CLAUSEKINDS("clauseKinds"),
+        GETREDUCTION("getReduction"),
         REDUCTIONKINDS("reductionKinds"),
         DEFAULT("default"),
         FIRSTPRIVATE("firstprivate"),
@@ -2079,48 +2102,64 @@ public abstract class AOmp extends APragma {
         NAME("name"),
         TARGET("target"),
         CONTENT("content"),
-        ENDLINE("endLine"),
+        GETTARGETNODES("getTargetNodes"),
         PARENT("parent"),
-        ENDCOLUMN("endColumn"),
         AST("ast"),
-        CODE("code"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
-        ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        LINE("line"),
-        KEYS("keys"),
         HASCHILDREN("hasChildren"),
-        ISINSIDEHEADER("isInsideHeader"),
-        ASTNUMCHILDREN("astNumChildren"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
-        DESCENDANTS("descendants"),
-        ASTCHILDREN("astChildren"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
-        ISMACRO("isMacro"),
         SCOPENODES("scopeNodes"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
-        LASTCHILD("lastChild"),
-        ROOT("root"),
         NUMCHILDREN("numChildren"),
-        CHAIN("chain"),
-        CURRENTREGION("currentRegion"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
-        COLUMN("column"),
         INLINECOMMENTS("inlineComments"),
-        PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
+        CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        DEPTH("depth"),
         BITWIDTH("bitWidth"),
+        HASNODE("hasNode"),
+        ENDLINE("endLine"),
+        ENDCOLUMN("endColumn"),
+        CODE("code"),
+        ISINSIDELOOPHEADER("isInsideLoopHeader"),
+        LINE("line"),
+        KEYS("keys"),
+        ISINSIDEHEADER("isInsideHeader"),
+        ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
+        DESCENDANTS("descendants"),
+        ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
+        ISMACRO("isMacro"),
+        LASTCHILD("lastChild"),
+        ROOT("root"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        CHAIN("chain"),
+        CURRENTREGION("currentRegion"),
+        COLUMN("column"),
+        PARENTREGION("parentRegion"),
+        GETVALUE("getValue"),
+        GETASTANCESTOR("getAstAncestor"),
+        DEPTH("depth"),
         LOCATION("location"),
+        GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),

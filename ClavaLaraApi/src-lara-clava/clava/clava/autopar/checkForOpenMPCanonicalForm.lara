@@ -30,7 +30,7 @@ aspectdef checkForOpenMPCanonicalForm
 			throw "Not a for stmt: " + $loop.astName;
 		}
 
-		var innerloopindex = $loop.getAncestor('function').name + '_' + $loop.rank.join('_');
+		var innerloopindex = $loop.getAstAncestor('FunctionDecl').name + '_' + $loop.rank.join('_');
 		if (LoopOmpAttributes[innerloopindex] === undefined)
 			call checkForOpenMPCanonicalForm($loop);
 

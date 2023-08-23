@@ -74,11 +74,11 @@ aspectdef _LVC_GET_VALUE_DECL_
 	
 	var $file = $joinpoint.getAncestor('file');
 	var $scope = $joinpoint.getAncestor('scope');
-	if($scope == undefined) {
+	if($scope === undefined) {
 		throw "The insert location for option building must be inside a function. Could not find an ancestor of type 'scope'.";
 	}
 	
-	while($scope != undefined) {
+	while($scope !== undefined) {
 		
 		call lfdis : _LVC_FIND_DECL_IN_SCOPE_(declName, $scope);
 		if(lfdis.$found !== undefined) {

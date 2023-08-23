@@ -290,13 +290,6 @@ public class CxxType extends AType {
     }
 
     @Override
-    public Integer bitWidthImpl(AJoinPoint reference) {
-        var bitwidth = type.getBitwidth(reference.getNode());
-
-        return bitwidth != -1 ? bitwidth : null;
-    }
-
-    @Override
     public Boolean getIsAutoImpl() {
         return type.isAuto();
     }

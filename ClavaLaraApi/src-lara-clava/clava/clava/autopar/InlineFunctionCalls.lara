@@ -52,8 +52,8 @@ aspectdef inlineFunction
 	select file.function.loop.call end
 	apply
 			if (
-				$call.getAncestor('forStmt') == undefined ||  
-				$call.getAncestor('forStmt').rank.join('_') === $loop.rank.join('_')
+				$call.getAstAncestor('ForStmt') === undefined ||  
+				$call.getAstAncestor('ForStmt').rank.join('_') === $loop.rank.join('_')
 				)
 			{
 				$call.exec inline;

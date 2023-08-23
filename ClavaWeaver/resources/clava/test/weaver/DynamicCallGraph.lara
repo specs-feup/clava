@@ -142,7 +142,7 @@ function insertIncrement($call, code) {
 /*
 	// If inside return stmt, insert increment before
 	var $return = $call.getAncestor('return');
-	if($return !== null) {
+	if($return !== undefined) {
 		$return.insert before code;
 		return;
 	}

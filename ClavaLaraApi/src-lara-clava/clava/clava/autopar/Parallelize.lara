@@ -80,7 +80,7 @@ Parallelize.forLoopsAsText = function($loops, outputFolder) {
 
 
 		var $file = $loop.getAncestor("file");
-		if($file == null)
+		if($file === undefined)
 		{
 			println("Could not find a file associated with loop@"+$loop.location);
 			continue;

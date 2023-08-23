@@ -26,7 +26,7 @@ Timer.prototype.time = function($start, prefix, $end) {
 
     var $file = $start.getAncestor('file');
 
-    if($file == undefined) {
+    if($file === undefined) {
 		println("Could not find the corresponding file of the given joinpoint: " + $jp);
 		return;
 	}else if ($file.isCxx) {
@@ -108,7 +108,7 @@ Timer.prototype._time_cpp = function($start, prefix, $end) {
 	}
 	/*
 	// If $start/$end parent do not have a statement ancestor, use insertBegin/End instead
-	if($start.getAncestor("statement") == undefined || $end.getAncestor("statement") == undefined) {
+	if($start.getAncestor("statement") === undefined || $end.getAncestor("statement") === undefined) {
 
 		// Insert code
 		$start.insertBegin(codeTic);
@@ -240,7 +240,7 @@ Timer.prototype._time_c = function($start, prefix, $end) {
 	}
 /*	
 	// If $start/$end parent do not have a statement ancestor, use insertBegin/End instead
-	if($start.getAncestor("statement") == undefined || $end.getAncestor("statement") == undefined) {
+	if($start.getAncestor("statement") === undefined || $end.getAncestor("statement") === undefined) {
 
 		// Insert code
 		$start.insertBegin(codeBefore);

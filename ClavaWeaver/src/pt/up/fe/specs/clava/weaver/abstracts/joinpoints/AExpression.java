@@ -190,13 +190,6 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "inlineComments": {
         	if(value instanceof String[]){
         		this.defInlineCommentsImpl((String[])value);
@@ -204,6 +197,13 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
         	}
         	if(value instanceof String){
         		this.defInlineCommentsImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "lastChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defLastChildImpl((AJoinPoint)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -259,48 +259,63 @@ public abstract class AExpression extends ACxxWeaverJoinPoint {
         USE("use"),
         ISFUNCTIONARGUMENT("isFunctionArgument"),
         IMPLICITCAST("implicitCast"),
-        ENDLINE("endLine"),
         PARENT("parent"),
-        ENDCOLUMN("endColumn"),
         AST("ast"),
-        CODE("code"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
-        ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        LINE("line"),
-        KEYS("keys"),
         HASCHILDREN("hasChildren"),
-        ISINSIDEHEADER("isInsideHeader"),
-        ASTNUMCHILDREN("astNumChildren"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
-        DESCENDANTS("descendants"),
-        ASTCHILDREN("astChildren"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
-        ISMACRO("isMacro"),
         SCOPENODES("scopeNodes"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
-        LASTCHILD("lastChild"),
-        ROOT("root"),
         NUMCHILDREN("numChildren"),
-        CHAIN("chain"),
-        CURRENTREGION("currentRegion"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
-        COLUMN("column"),
         INLINECOMMENTS("inlineComments"),
-        PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
+        CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        DEPTH("depth"),
         BITWIDTH("bitWidth"),
+        HASNODE("hasNode"),
+        ENDLINE("endLine"),
+        ENDCOLUMN("endColumn"),
+        CODE("code"),
+        ISINSIDELOOPHEADER("isInsideLoopHeader"),
+        LINE("line"),
+        KEYS("keys"),
+        ISINSIDEHEADER("isInsideHeader"),
+        ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
+        DESCENDANTS("descendants"),
+        ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
+        ISMACRO("isMacro"),
+        LASTCHILD("lastChild"),
+        ROOT("root"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        CHAIN("chain"),
+        CURRENTREGION("currentRegion"),
+        COLUMN("column"),
+        PARENTREGION("parentRegion"),
+        GETVALUE("getValue"),
+        GETASTANCESTOR("getAstAncestor"),
+        DEPTH("depth"),
         LOCATION("location"),
+        GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),

@@ -9,12 +9,40 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
     <!-- These properties are shared by all joinpoints -->
     <global>
         <attribute name="root" type="program"
-            tooltip="Returns the 'program' joinpoint" />
+        tooltip="Returns the 'program' joinpoint" />
         <attribute name="parent" type="joinpoint"
-            tooltip="Returns the parent node in the AST, or undefined if it is the root node" />
+        tooltip="Returns the parent node in the AST, or undefined if it is the root node" />
+        <attribute name="getAncestor" type="joinpoint"
+            tooltip="Looks for an ancestor joinpoint name, walking back on the AST">
+            <parameter name="type" type="String" />
+        </attribute>
         <attribute name="descendants" type="joinpoint[]"
             tooltip="Retrieves all descendants of the join point" />
+        <attribute name="getDescendants" type="joinpoint[]"
+            tooltip="Retrieves the descendants of the given type">
+            <parameter name="type" type="String" />
+        </attribute>
+        <attribute name="getDescendantsAndSelf" type="joinpoint[]"
+            tooltip="Retrieves the descendants of the given type, including the node itself">
+            <parameter name="type" type="String" />
+        </attribute>
+        <attribute name="getChainAncestor" type="joinpoint"
+            tooltip="Looks for an ancestor joinpoint name, walking back on the joinpoint chain">
+            <parameter name="type" type="String" />
+        </attribute>
+        <attribute name="getAstAncestor" type="joinpoint"
+            tooltip="[DEPRECATED: Looks for an ancestor AST name, walking back on the AST]">
+            <parameter name="type" type="String" />
+        </attribute>
+        <attribute name="contains" type="Boolean"
+            tooltip="true if the given node is a descendant of this node">
+            <parameter name="jp" type="joinpoint" />
+        </attribute>
         <attribute name="hasParent" type="boolean" tooltip="true if this node has a parent" />
+        <attribute name="getFirstJp" type="joinpoint"
+            tooltip="Looks in the descendants for the first node of the given type">
+            <parameter name="type" type="String" />
+        </attribute>
         <attribute name="line" type="Integer"
             tooltip="The starting line of the current node in the original code" />
         <attribute name="column" type="Integer"
@@ -46,10 +74,18 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="Returns the number of children of the node, considering null nodes" />
         <attribute name="astChildren" type="joinpoint[]"
             tooltip="Returns an array with the children of the node, considering null nodes" />
+        <attribute name="getAstChild" type="joinpoint"
+            tooltip="Returns the child of the node at the given index, considering null nodes">
+            <parameter name="index" type="Integer" />
+        </attribute>
         <attribute name="numChildren" type="Integer"
             tooltip="Returns the number of children of the node, ignoring null nodes" />
         <attribute name="children" type="joinpoint[]"
             tooltip="Returns an array with the children of the node, ignoring null nodes" />
+        <attribute name="getChild" type="joinpoint"
+            tooltip="Returns the child of the node at the given index, ignoring null nodes">
+            <parameter name="index" type="Integer" />
+        </attribute>
         <attribute name="siblingsLeft" type="joinpoint[]"
             tooltip="Returns an array with the siblings that came before this node" />
         <attribute name="siblingsRight" type="joinpoint[]"
@@ -58,16 +94,32 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="Returns the node that came before this node, or undefined if there is none" />
         <attribute name="rightJp" type="joinpoint"
             tooltip="Returns the node that comes after this node, or undefined if there is none" />
+        <attribute name="astIsInstance" type="Boolean"
+            tooltip="true, if this node is a Java instance of the given name, which corresponds to a simple Java class name of an AST node. For an equivalent function for join point names, use 'instanceOf(joinPointName)'">
+            <parameter name="className" type="String" />
+        </attribute>
+        <attribute name="hasNode" type="Boolean"
+            tooltip="true, if the given join point or AST node is the same (== test) as the current join point AST node">
+            <parameter name="nodeOrJp" type="object" />
+        </attribute>
         <attribute name="chain" type="String[]"
             tooltip="String list of the names of the join points that form a path from the root to this node" />
         <attribute name="javaFields" type="String[]"
             tooltip="[DEPRECATED: used attribute 'keys' instead, together with 'getValue'] The names of the Java fields of this node. Can be used as key of the attribute 'javaValue'" />
+        <attribute name="getJavaFieldType" type="String"
+            tooltip="String with the full Java class name of the type of the Java field with the provided name">
+            <parameter name="fieldName" type="String" />
+        </attribute>
         <attribute name="isInsideLoopHeader" type="Boolean"
             tooltip="true, if the join point is inside a loop header (e.g., for, while)" />
         <attribute name="isInsideHeader" type="Boolean"
             tooltip="true, if the join point is inside a header (e.g., if condition, for, while)" />
         <attribute name="isInSystemHeader" type="Boolean"
             tooltip="true, if the join point is part of a system header file" />
+        <attribute name="getUserField" type="Object"
+            tooltip="Retrives values that have been associated to nodes of the AST with 'setUserField'">
+            <parameter name="fieldName" type="String" />
+        </attribute>
         <attribute name="parentRegion" type="joinpoint"
             tooltip="Returns the node that declares the scope that is a parent of the scope of this node" />
         <attribute name="currentRegion" type="joinpoint"
@@ -79,6 +131,14 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         </attribute>
         <attribute name="keys" type="String[]"
             tooltip="A list of the properties currently supported by this node. Can be used as parameter of the attribute 'getValue'" />
+            <attribute name="getValue" type="Object"
+            tooltip="The value associated with the given property key">
+            <parameter name="key" type="String" />
+        </attribute>
+        <attribute name="getKeyType" type="Object"
+            tooltip="Java Class instance with the type of the given key">
+            <parameter name="key" type="String" />
+        </attribute>
         <attribute name="isMacro" type="Boolean"
             tooltip="true if any descendant or the node itself was defined as a macro">
         </attribute>
@@ -173,6 +233,10 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="isHeader" type="Boolean"
             tooltip="true if this file is considered a header file" />
         <attribute name="isOpenCL" type="Boolean" tooltip="true if this file is an OpenCL filetype" />
+        <attribute name="getDestinationFilepath" type="String"
+            tooltip="the complete path to the file that will be generated by the weaver, given a destination folder">
+            <parameter name="destinationFolderpath" type="String" default="null" />
+        </attribute>
         <attribute name="sourceFoldername" type="String"
             tooltip="the name of the source folder of this file, or undefined if it has none" />
         <attribute name="hasParsingErrors" type="Boolean"
@@ -289,6 +353,10 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         </attribute>
         <attribute name="iterations" type="Integer" />
         <attribute name="iterationsExpr" type="expression" />
+        <attribute name="isInterchangeable" type="Boolean"
+            tooltip="Tests whether the loops are interchangeable. This is a conservative test.">
+            <parameter name="otherLoop" type="loop" />
+        </attribute>
         <attribute name="init" type="statement" tooltip="The statement of the loop initialization">
             <def type="string" />
         </attribute>
@@ -315,6 +383,10 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <!-- SCOPE -->
     <artifact class="scope">
+        <attribute name="getNumStatements" type="Long"
+            tooltip="The number of statements in the scope, including the statements inside the declaration and bodies of structures such as ifs and loops, and not considering comments and pragmas. If flat is true, does not consider the statements inside structures such as ifs and loops (e.g., a loop counts as one statement)">
+            <parameter name="flat" type="Boolean" default="false" />
+        </attribute>
         <attribute name="naked" type="Boolean"
             tooltip="true if the scope does not have curly braces">
             <def />
@@ -376,6 +448,9 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="a 'function' join point that represents the function definition of the call; 'undefined' if no definition was found" />
         <attribute name="argList" type="expression[]" tooltip="an alias for 'args'" />
         <attribute name="args" type="expression[]" tooltip="an array with the arguments of the call" />
+        <attribute name="getArg" type="expression">
+            <parameter name="index" type="int" />
+        </attribute>
         <attribute name="returnType" type="type" tooltip="the return type of the call" />
         <attribute name="functionType" type="functionType"
             tooltip="the function type of the call, which includes the return type and the types of the parameters" />
@@ -464,6 +539,9 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="Returns the prototypes of this function that are present in the code. If there are none, returns an empty array" />
         <attribute name="definitionJp" type="function"
             tooltip="Returns the implementation of this function if there is one, or undefined otherwise" />
+        <attribute name="getDeclaration" type="String">
+            <parameter name="withReturnType" type="Boolean" />
+        </attribute>
         <attribute name="body" type="scope">
             <def />
         </attribute>
@@ -576,6 +654,10 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="The first node below the pragma that is not a comment or another pragma. Example of pragma targets are statements and declarations" />
         <attribute name="content" type="String"
             tooltip="Everything that is after the name of the pragma" />
+        <attribute name="getTargetNodes" type="joinpoint[]"
+            tooltip="All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument">
+            <parameter name="endPragma" type="String" default="null" />
+        </attribute>
     </artifact>
 
     <artifact class="returnStmt">
@@ -760,10 +842,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="Maps names of join point fields that represent type join points, to their respective values" />
         <attribute name="fieldTree" type="String"
             tooltip="A tree representation of the fields of this type" />
-        <attribute name="bitWidth" type="Integer"
-            tooltip="The bit width of this type in the Translation Unit of the given join point, or undefined if there is no bitwidth defined">
-            <parameter name="reference" type="Joinpoint" />
-        </attribute>
     </artifact>
 
 
@@ -884,8 +962,20 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         </attribute>
         <attribute name="private" type="String[]"
             tooltip="The variable names of all private clauses, or empty array if no private clause is defined" />
+        <attribute name="hasClause" type="Boolean"
+            tooltip="True if the directive has at least one clause of the given clause kind, false otherwise">
+            <parameter name="clauseName" type="String" />
+        </attribute>
+        <attribute name="isClauseLegal" type="Boolean"
+            tooltip="True if it is legal to use the given clause kind in this directive, false otherwise">
+            <parameter name="clauseName" type="String" />
+        </attribute>
         <attribute name="clauseKinds" type="String[]"
             tooltip="The names of the kinds of all clauses in the pragma, or empty array if no clause is defined" />
+        <attribute name="getReduction" type="String[]"
+            tooltip="The variable names for the given reduction kind, or empty array if no reduction of that kind is defined">
+            <parameter name="kind" type="String" />
+        </attribute>
         <attribute name="reductionKinds" type="String[]"
             tooltip="The reduction kinds in the reductions clauses of the this pragma, or empty array if no reduction is defined" />
         <attribute name="default" type="String"

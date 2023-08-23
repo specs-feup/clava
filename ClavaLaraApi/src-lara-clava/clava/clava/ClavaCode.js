@@ -130,7 +130,7 @@ class ClavaCode {
     // Go back until it finds the function body
     var $currentScope = $statement.getAncestor("scope");
 
-    while ($currentScope != undefined) {
+    while ($currentScope !== undefined) {
       var $scopeOwner = $currentScope.owner;
 
       // If finds a scope that is part of a loop or if/else, return false immediately

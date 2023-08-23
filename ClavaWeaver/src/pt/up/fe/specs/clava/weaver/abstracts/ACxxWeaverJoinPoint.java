@@ -180,67 +180,20 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint[] getDescendantsImpl(String type) {
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
 
         return CxxSelects.selectedNodesToJps(getNode().getDescendantsStream(), jp -> jp.instanceOf(type),
                 getWeaverEngine());
-        /*
-        Incrementer nullJoinpoints = new Incrementer();
-        Incrementer excludedJoinpoints = new Incrementer();
-        AJoinPoint[] descendants = getNode().getDescendantsStream()
-                .map(descendant -> CxxJoinpoints.create(descendant))
-                .filter(jp -> {
-                    // Count null join points separately
-                    if (jp == null) {
-                        nullJoinpoints.increment();
-                        return false;
-                    }
-        
-                    boolean accepted = jp.instanceOf(type);
-                    if (!accepted) {
-                        excludedJoinpoints.increment();
-                    }
-                    return accepted;
-                })
-                // .filter(jp -> jp.getJoinpointType().equals(type))
-                .toArray(AJoinPoint[]::new);
-        
-        // Count as selected nodes
-        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS,
-                descendants.length + excludedJoinpoints.getCurrent());
-        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, descendants.length);
-        
-        // Count as a select
-        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
-        
-        return descendants;
-        */
     }
 
     @Override
     public AJoinPoint[] getDescendantsArrayImpl() {
         return CxxSelects.selectedNodesToJps(getNode().getDescendantsStream(), getWeaverEngine());
-
-        /*
-        AJoinPoint[] descendants = getNode().getDescendantsStream()
-                .map(descendant -> CxxJoinpoints.create(descendant))
-                .filter(jp -> jp != null)
-                .toArray(AJoinPoint[]::new);
-        
-        // Count as selected nodes
-        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS, descendants.length);
-        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, descendants.length);
-        
-        // Count as a select
-        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
-        
-        return descendants;
-        */
     }
 
     @Override
-    public AJoinPoint[] getDescendantsAndSelfImpl(String type) {
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
 
         return CxxSelects.selectedNodesToJps(getNode().getDescendantsAndSelfStream(), jp -> jp.instanceOf(type),
@@ -264,6 +217,27 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             }
 
             currentJp = parentJp;
+        }
+
+        return null;
+    }
+
+    @Override
+    public AJoinPoint getAstAncestorImpl(String type) {
+        Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'astAncestor'");
+
+        // Obtain ClavaNode class from type
+        Class<? extends ClavaNode> nodeClass = ClassesService.getClavaClass(type);
+
+        ClavaNode currentNode = getNode();
+        while (currentNode.hasParent()) {
+            ClavaNode parentNode = currentNode.getParent();
+
+            if (nodeClass.isInstance(parentNode)) {
+                return CxxJoinpoints.create(parentNode);
+            }
+
+            currentNode = parentNode;
         }
 
         return null;
@@ -1403,13 +1377,16 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public Integer getBitWidthImpl() {
-        var type = getTypeImpl();
-
+        AType type = getTypeImpl();
         if (type == null) {
             return null;
         }
+        
+        Type typeNode = (Type) type.getNode();
+        
+        Integer bitwidth = typeNode.getBitwidth(this.getNode());
 
-        return type.bitWidthImpl(this);
+        return bitwidth != -1 ? bitwidth : null;
     }
 
     @Override

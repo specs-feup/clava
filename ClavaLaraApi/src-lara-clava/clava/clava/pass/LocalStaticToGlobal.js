@@ -47,7 +47,7 @@ class LocalStaticToGlobal extends SimplePass {
     }
 
     // Inside functions - not sure if this is needed
-    if ($jp.getAncestor("function") == null) {
+    if ($jp.getAncestor("function") === undefined) {
       return false;
     }
 

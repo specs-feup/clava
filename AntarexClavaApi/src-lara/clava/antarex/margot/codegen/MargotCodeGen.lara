@@ -338,7 +338,7 @@ MargotCodeGen.prototype.init = function($joinpoint) {
 	checkJoinPoint($joinpoint, 'init ($joinpoint)');
 	
 	var scope = $joinpoint.getAncestor('scope');
-	if(scope == undefined) {
+	if(scope === undefined) {
 		
 		throw 'Could not find a suitable scope to insert the initialization code from the join point provided: \n' + $joinpoint.code;
 	}

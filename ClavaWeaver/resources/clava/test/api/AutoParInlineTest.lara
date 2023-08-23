@@ -9,7 +9,7 @@ aspectdef AutoParInlineTest
 		throw "Could not find call to 'bar'";
 	}
 	
-	var exprStmt = $call.getAncestor('exprStmt');
+	var exprStmt = $call.getAstAncestor('ExprStmt');
 
 
 	var o = undefined;

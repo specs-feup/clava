@@ -71,7 +71,7 @@ public class CxxPragma extends APragma {
     }
 
     @Override
-    public AJoinPoint[] getTargetNodesImpl(String endPragma) {
+    public AJoinPoint[] getTargetNodesArrayImpl(String endPragma) {
         var pragmaNodes = pragma.getPragmaNodes(endPragma);
         return CxxSelects.selectedNodesToJps(pragmaNodes.stream(), getWeaverEngine());
     }

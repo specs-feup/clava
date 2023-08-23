@@ -90,6 +90,44 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
     }
 
     /**
+     * 
+     * @param endPragma
+     * @return 
+     */
+    public abstract AJoinPoint[] getTargetNodesArrayImpl(String endPragma);
+
+    /**
+     * 
+     * @param endPragma
+     * @return 
+     */
+    public Object getTargetNodesImpl(String endPragma) {
+        AJoinPoint[] aJoinPointArrayImpl0 = getTargetNodesArrayImpl(endPragma);
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        return nativeArray0;
+    }
+
+    /**
+     * 
+     * @param endPragma
+     * @return 
+     */
+    public final Object getTargetNodes(String endPragma) {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getTargetNodes", Optional.empty(), endPragma);
+        	}
+        	Object result = this.getTargetNodesImpl(endPragma);
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "getTargetNodes", Optional.ofNullable(result), endPragma);
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "getTargetNodes", e);
+        }
+    }
+
+    /**
      * Default implementation of the method used by the lara interpreter to select targets
      * @return 
      */
@@ -150,33 +188,6 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument
-     * @param endPragma 
-     */
-    public AJoinPoint[] getTargetNodesImpl(String endPragma) {
-        throw new UnsupportedOperationException(get_class()+": Action getTargetNodes not implemented ");
-    }
-
-    /**
-     * All the nodes below the target node, including the target node, up until a pragma with the name given by argument 'endPragma'. If no end pragma is found, returns the same result as if not providing the argument
-     * @param endPragma 
-     */
-    public final AJoinPoint[] getTargetNodes(String endPragma) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "getTargetNodes", this, Optional.empty(), endPragma);
-        	}
-        	AJoinPoint[] result = this.getTargetNodesImpl(endPragma);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "getTargetNodes", this, Optional.ofNullable(result), endPragma);
-        	}
-        	return result;
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "getTargetNodes", e);
-        }
-    }
-
-    /**
      * 
      */
     @Override
@@ -220,13 +231,6 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         	}
         	this.unsupportedTypeForDef(attribute, value);
         }
-        case "lastChild": {
-        	if(value instanceof AJoinPoint){
-        		this.defLastChildImpl((AJoinPoint)value);
-        		return;
-        	}
-        	this.unsupportedTypeForDef(attribute, value);
-        }
         case "inlineComments": {
         	if(value instanceof String[]){
         		this.defInlineCommentsImpl((String[])value);
@@ -234,6 +238,13 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         	}
         	if(value instanceof String){
         		this.defInlineCommentsImpl((String)value);
+        		return;
+        	}
+        	this.unsupportedTypeForDef(attribute, value);
+        }
+        case "lastChild": {
+        	if(value instanceof AJoinPoint){
+        		this.defLastChildImpl((AJoinPoint)value);
         		return;
         	}
         	this.unsupportedTypeForDef(attribute, value);
@@ -251,6 +262,7 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         attributes.add("name");
         attributes.add("target");
         attributes.add("content");
+        attributes.add("getTargetNodes");
     }
 
     /**
@@ -270,7 +282,6 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         super.fillWithActions(actions);
         actions.add("void setName(String)");
         actions.add("void setContent(String)");
-        actions.add("joinpoint[] getTargetNodes(String)");
     }
 
     /**
@@ -288,48 +299,64 @@ public abstract class APragma extends ACxxWeaverJoinPoint {
         NAME("name"),
         TARGET("target"),
         CONTENT("content"),
-        ENDLINE("endLine"),
+        GETTARGETNODES("getTargetNodes"),
         PARENT("parent"),
-        ENDCOLUMN("endColumn"),
         AST("ast"),
-        CODE("code"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
-        ISINSIDELOOPHEADER("isInsideLoopHeader"),
-        LINE("line"),
-        KEYS("keys"),
         HASCHILDREN("hasChildren"),
-        ISINSIDEHEADER("isInsideHeader"),
-        ASTNUMCHILDREN("astNumChildren"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
-        DESCENDANTS("descendants"),
-        ASTCHILDREN("astChildren"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
-        ISMACRO("isMacro"),
         SCOPENODES("scopeNodes"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
-        LASTCHILD("lastChild"),
-        ROOT("root"),
         NUMCHILDREN("numChildren"),
-        CHAIN("chain"),
-        CURRENTREGION("currentRegion"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
-        COLUMN("column"),
         INLINECOMMENTS("inlineComments"),
-        PARENTREGION("parentRegion"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
+        CONTAINS("contains"),
+        ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        DEPTH("depth"),
         BITWIDTH("bitWidth"),
+        HASNODE("hasNode"),
+        ENDLINE("endLine"),
+        ENDCOLUMN("endColumn"),
+        CODE("code"),
+        ISINSIDELOOPHEADER("isInsideLoopHeader"),
+        LINE("line"),
+        KEYS("keys"),
+        ISINSIDEHEADER("isInsideHeader"),
+        ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
+        DESCENDANTS("descendants"),
+        ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
+        ISMACRO("isMacro"),
+        LASTCHILD("lastChild"),
+        ROOT("root"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
+        CHAIN("chain"),
+        CURRENTREGION("currentRegion"),
+        COLUMN("column"),
+        PARENTREGION("parentRegion"),
+        GETVALUE("getValue"),
+        GETASTANCESTOR("getAstAncestor"),
+        DEPTH("depth"),
         LOCATION("location"),
+        GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),
         PRAGMAS("pragmas"),
         STMT("stmt"),

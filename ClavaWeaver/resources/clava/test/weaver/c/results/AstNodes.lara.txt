@@ -1,6 +1,6 @@
 astNumChildren  = 4
 astChildren = ,Joinpoint 'binaryOp',Joinpoint 'body',
-astChild(0) = null
+astChild(0) = undefined
 numChildren  = 2
 children = Joinpoint 'binaryOp',Joinpoint 'body'
 child(0) = Joinpoint 'binaryOp'
