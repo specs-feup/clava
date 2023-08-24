@@ -27,7 +27,7 @@ import pt.up.fe.specs.util.providers.ResourceProvider;
 public class ClavaLaraApis {
 
     private static final List<ResourceProvider> CLAVA_LARA_API = ResourceProvider
-            .getResourcesFromEnum(ClavaApiJsResource.class, LaraCoreApiResource.class, LaraWeaverApiResource.class, LaraApiResource.class);
+            .getResourcesFromEnum(ClavaApiJsResource.class, LaraWeaverApiResource.class, LaraApiResource.class);
 
     private static final List<Class<?>> CLAVA_IMPORTABLE_CLASSES = Arrays.asList(Standard.class, OpenCLTemplates.class,
             ClavaPetit.class, MemoiReport.class, MemoiReportsMap.class, MergedMemoiReport.class,
