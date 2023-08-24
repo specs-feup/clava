@@ -77,7 +77,7 @@ aspectdef JpCreateTest
 
 	// Create join point
 	//var $newLoopJp = ClavaJoinPoints.create(astNode);
-	var $newLoopJp = JoinPoints.toJoinPoint(astNode);	
+	var $newLoopJp = ClavaJoinPoints.toJoinPoint(astNode);	
 
 	println("Are JPs equal? " + $newLoopJp.equals($loopJp));
 end

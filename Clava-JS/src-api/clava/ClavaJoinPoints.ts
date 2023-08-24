@@ -1,5 +1,4 @@
 import {
-  LaraJoinPoint,
   unwrapJoinPoint,
   wrapJoinPoint,
 } from "lara-js/api/LaraJoinPoint.js";
@@ -17,6 +16,11 @@ import ClavaJavaTypes from "./ClavaJavaTypes.js";
  *
  */
 export default class ClavaJoinPoints {
+  static toJoinPoint(node: any): Joinpoint {
+    const cxxJps = ClavaJavaTypes.getCxxJoinPoints();
+    return wrapJoinPoint(cxxJps.createFromLara(node));
+  }
+
   /**
    * @returns True, if the two AST nodes are equal (internal representation. Not actual Joinpoint types), in the sense that the underlying AST nodes are also equal, according to their .equals() method (might return true for different AST nodes).
    * @internal

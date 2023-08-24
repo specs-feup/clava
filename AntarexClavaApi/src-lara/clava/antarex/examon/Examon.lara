@@ -204,7 +204,7 @@ ExamonCollector.prototype._includeHeaders = function($jp) {
 	//$parentFile.exec addInclude(code2, true);
 	
 	// Adds Examon include
-	Compilation.addExtraIncludeFromGit("https://github.com/fbeneventi/examon.git", "");
+	Clava.getProgram().addExtraIncludeFromGit("https://github.com/fbeneventi/examon.git", "");
 	
 }
 

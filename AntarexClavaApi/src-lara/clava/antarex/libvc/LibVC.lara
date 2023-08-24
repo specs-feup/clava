@@ -12,10 +12,10 @@ function LibVC ($func, compilerSetup, name) {
 	checkDefined($func.getAncestor('file'), "$func.getAncestor('file')", 'LibVC');
 	
 	// Adds LibVC include
-	Compilation.addExtraIncludeFromGit("https://github.com/skeru/libVersioningCompiler.git", "include/");
+	Clava.getProgram().addExtraIncludeFromGit("https://github.com/skeru/libVersioningCompiler.git", "include/");
 	
 	// Adds LibVC source
-	Compilation.addExtraSourceFromGit("https://github.com/skeru/libVersioningCompiler.git", "lib/");
+	Clava.getProgram().addExtraSourceFromGit("https://github.com/skeru/libVersioningCompiler.git", "lib/");
 
 	
 	/* TODO: make name if undefined */
