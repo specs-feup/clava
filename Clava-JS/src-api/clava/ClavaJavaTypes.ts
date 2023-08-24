@@ -54,4 +54,9 @@ export default class ClavaJavaTypes {
   static get ClavaWeaverLauncher() {
     return JavaTypes.getType("pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher");
   }
+
+  static get MathExtraApiTools() {
+    return JavaTypes.getType("pt.up.fe.specs.clava.weaver.MathExtraApiTools");
+  }
+
 }

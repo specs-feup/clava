@@ -17,7 +17,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/LaraUnit"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/XStreamPlus"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/LaraDoc"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/LaraExtraApi"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/AntarexClavaApi"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CommonsLangPlus"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ClavaLaraApi"/>

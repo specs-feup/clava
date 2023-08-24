@@ -31,7 +31,7 @@ public class ClavaLaraApis {
 
     private static final List<Class<?>> CLAVA_IMPORTABLE_CLASSES = Arrays.asList(Standard.class, OpenCLTemplates.class,
             ClavaPetit.class, MemoiReport.class, MemoiReportsMap.class, MergedMemoiReport.class,
-            MemoiCodeGen.class);
+            MemoiCodeGen.class, MathExtraApiTools.class);
 
     public static List<ResourceProvider> getApis() {
         return CLAVA_LARA_API;

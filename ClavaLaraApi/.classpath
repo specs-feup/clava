@@ -16,5 +16,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ClavaAst"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CommonsLangPlus"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JacksonPlus"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/SymjaPlus" />
 	<classpathentry kind="output" path="bin"/>
 </classpath>
