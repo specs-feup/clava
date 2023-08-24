@@ -1,76 +1,75 @@
-import clava.Clava;
+import EnergyBase from "lara-js/api/lara/code/EnergyBase.js";
 
-import lara.Compilation;
-import lara.code.EnergyBase;
-import lara.code.Logger;
-import lara.util.IdGenerator;
-import lara.util.PrintOnce;
+import Clava from "../../clava/Clava.js";
+import Logger from "./Logger.js";
 
-/**
- * Current SpecsRapl library measures uJ.
- */
-Energy.prototype.getPrintUnit = function() {
+import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
+import PrintOnce from "lara-js/api/lara/util/PrintOnce.js";
+import { FileJp, Joinpoint } from "../../Joinpoints.js";
+
+export default class Energy extends EnergyBase<Joinpoint> {
+  /**
+   * Current SpecsRapl library measures uJ.
+   */
+  getPrintUnit() {
     return "uJ";
-}
+  }
 
-Energy.prototype.measure = function($start, prefix, $end){
-	//Check for valid joinpoints and additional conditions
+  measure($start: Joinpoint, prefix: string = "", $end: Joinpoint = $start) {
+    //Check for valid joinpoints and additional conditions
 
-	if(!this._measureValidate($start, $end, 'function')){
-		return;
-	}
-
-	
-	$end = $end === undefined ? $start : $end;
-
-	// Message about dependency
-	PrintOnce.message("Woven code has dependency to project SpecsRapl, which can be found at https://github.com/specs-feup/specs-c-libs");
-
-	// Adds SpecsRapl include
-	Compilation.addExtraIncludeFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/include/");
-	//Clava.getProgram().addExtraIncludeFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/include/");
-	
-	// Adds SpecsRapl source
-	Compilation.addExtraSourceFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/src/");
-	//Clava.getProgram().addExtraSourceFromGit("https://github.com/specs-feup/specs-c-libs.git", "SpecsRapl/src/");
-	
-	Compilation.addExtraLib('-pthread');
-	
-	var logger = new Logger(false, this.filename);
-
-	// Build prefix
-	if(prefix === undefined) {
-		prefix = "";
-	}
-
-	
-	// Add include
-	$file = $start.getAncestor("file");
-	if($file === undefined) {
-		println("Could not find the corresponding file of the given joinpoint: " + $jp);
-		return;
-	}
-	$file.addInclude("rapl.h", false);
-	var energyVar = IdGenerator.next("clava_energy_output_");
-	var energyVarStart = energyVar + "_start";
-	var energyVarEnd = energyVar + "_end";
-
-
-	var codeBefore = _energy_rapl_measure(energyVarStart);
-	var codeAfter = _energy_rapl_measure(energyVarEnd);
-	$start.insert("before", codeBefore);
-	
-	logger.append(prefix).appendLongLong(energyVarEnd + " - " + energyVarStart);
-	if (this.printUnit) {
-        logger.append(this.getPrintUnit());
+    if (!this.measureValidate($start, $end, "function")) {
+      return;
     }
-	logger.ln();
-	logger.log($end);
-	$end.insert("after",codeAfter);
 
+    // Message about dependency
+    PrintOnce.message(
+      "Woven code has dependency to project SpecsRapl, which can be found at https://github.com/specs-feup/specs-c-libs"
+    );
+
+    // Adds SpecsRapl include
+    Clava.getProgram().addExtraIncludeFromGit(
+      "https://github.com/specs-feup/specs-c-libs.git",
+      "SpecsRapl/include/"
+    );
+
+    // Adds SpecsRapl source
+    Clava.getProgram().addExtraSourceFromGit(
+      "https://github.com/specs-feup/specs-c-libs.git",
+      "SpecsRapl/src/"
+    );
+
+    Clava.getProgram().addExtraLib("-pthread");
+
+    const logger = new Logger(false, this.filename);
+
+    // Add include
+    const $file = $start.getAncestor("file") as FileJp | undefined;
+    if ($file === undefined) {
+      console.log(
+        "Could not find the corresponding file of the given joinpoint: " + $jp
+      );
+      return;
+    }
+    $file.addInclude("rapl.h", false);
+    const energyVar = IdGenerator.next("clava_energy_output_");
+    const energyVarStart = energyVar + "_start";
+    const energyVarEnd = energyVar + "_end";
+
+    const codeBefore = Energy.energy_rapl_measure(energyVarStart);
+    const codeAfter = Energy.energy_rapl_measure(energyVarEnd);
+    $start.insert("before", codeBefore);
+
+    logger.append(prefix).appendLongLong(energyVarEnd + " - " + energyVarStart);
+    if (this.printUnit) {
+      logger.append(this.getPrintUnit());
+    }
+    logger.ln();
+    logger.log($end);
+    $end.insert("after", codeAfter);
+  }
+
+  private static energy_rapl_measure(energyVar: string): string {
+    return `long long ${energyVar} = rapl_energy();`;
+  }
 }
-
-
-codedef _energy_rapl_measure(energyVar)%{
-long long [[energyVar]] = rapl_energy();
-}%end

@@ -15,7 +15,7 @@ export default class Clava {
    * <p>
    * By default, is disabled.
    */
-  useSpecsLogger = false;
+  static useSpecsLogger = false;
 
   /**
    * Returns the standard being used for compilation.
