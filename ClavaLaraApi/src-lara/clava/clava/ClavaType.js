@@ -1,5 +1,5 @@
 import { ParenType, PointerType, VariableArrayType, } from "../Joinpoints.js";
-import JoinPoints from "../weaver/JoinPoints.js";
+import ClavaJoinPoints from "./ClavaJoinPoints.js";
 import ClavaJavaTypes from "./ClavaJavaTypes.js";
 /**
  * Utility methods related with the type join points.
@@ -78,7 +78,7 @@ export default class ClavaType {
             }
         }
         const newStmtNode = ClavaJavaTypes.getClavaNodes().toStmt(code.node);
-        return JoinPoints.toJoinPoint(newStmtNode);
+        return ClavaJoinPoints.toJoinPoint(newStmtNode);
     }
     /**
      * Makes sure the given parameter is a type join point.
@@ -98,7 +98,7 @@ export default class ClavaType {
     static asScope(code) {
         const $newStmt = ClavaType.asStatement(code);
         const newScopeNode = ClavaJavaTypes.getClavaNodes().toCompoundStmt($newStmt?.node);
-        return JoinPoints.toJoinPoint(newScopeNode);
+        return ClavaJoinPoints.toJoinPoint(newScopeNode);
     }
 }
 //# sourceMappingURL=ClavaType.js.map

@@ -9,7 +9,7 @@ import {
   VariableArrayType,
   Varref,
 } from "../Joinpoints.js";
-import JoinPoints from "../weaver/JoinPoints.js";
+import ClavaJoinPoints from "./ClavaJoinPoints.js";
 import ClavaJavaTypes from "./ClavaJavaTypes.js";
 
 /**
@@ -110,7 +110,7 @@ export default class ClavaType {
 
     const newStmtNode = ClavaJavaTypes.getClavaNodes().toStmt(code.node);
 
-    return JoinPoints.toJoinPoint(newStmtNode) as Statement;
+    return ClavaJoinPoints.toJoinPoint(newStmtNode) as Statement;
   }
 
   /**
@@ -136,6 +136,6 @@ export default class ClavaType {
       $newStmt?.node
     );
 
-    return JoinPoints.toJoinPoint(newScopeNode) as Scope;
+    return ClavaJoinPoints.toJoinPoint(newScopeNode) as Scope;
   }
 }
