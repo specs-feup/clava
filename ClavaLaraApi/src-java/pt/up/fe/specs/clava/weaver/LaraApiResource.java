@@ -183,13 +183,13 @@ public enum LaraApiResource implements LaraResourceProvider {
     // OPT
     OPT_NORMALIZE_TO_SUBSET("opt/NormalizeToSubset.js"),
     OPT_PREPARE_FOR_INLINING("opt/PrepareForInlining.js"),
-    OPT_INLINING("opt/Inlining.js"),
+    OPT_INLINING("opt/Inlining.js");
 
     // Static objects
 
     //_CLAVA_JAVA_TYPES("_ClavaJavaTypes.lara"),
     //CLAVA("Clava.lara"),
-    CLAVA_CODE("ClavaCode.js");
+    //CLAVA_CODE("ClavaCode.js"),
     //CLAVA_JOIN_POINTS("ClavaJoinPoints.js"),
     //CLAVA_NODES("ClavaNodes.js"),
     //CLAVA_TYPE("ClavaType.lara");
