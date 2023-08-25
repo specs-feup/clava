@@ -16,7 +16,7 @@ import ClavaJavaTypes from "./ClavaJavaTypes.js";
  *
  */
 export default class ClavaJoinPoints {
-  static toJoinPoint(node: any): Joinpoint {
+  static toJoinPoint(node: any): Joinpoints.Joinpoint {
     const cxxJps = ClavaJavaTypes.getCxxJoinPoints();
     return wrapJoinPoint(cxxJps.createFromLara(node));
   }

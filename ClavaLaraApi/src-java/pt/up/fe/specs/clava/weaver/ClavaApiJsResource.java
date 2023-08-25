@@ -42,7 +42,9 @@ public enum ClavaApiJsResource implements LaraResourceProvider {
     STRCPYCHECKER_JS("clava/analysis/checkers/StrcpyChecker.js"),
     CLAVADATASTORE_JS("clava/util/ClavaDataStore.js"),
     CORE_JS("core.js"),
-    JOINPOINTS_JS_1("weaver/JoinPoints.js");
+    ENERGY_JS("lara/code/Energy.js"),
+    LOGGER_JS("lara/code/Logger.js"),
+    TIMER_JS("lara/code/Timer.js");
 
     private final String resource;
 

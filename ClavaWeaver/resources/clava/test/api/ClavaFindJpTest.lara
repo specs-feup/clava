@@ -1,6 +1,6 @@
 import clava.Clava;
 import lara.Io;
-//import clava.ClavaJoinPoints;
+import clava.ClavaJoinPoints;
 import weaver.JoinPoints;
 
 aspectdef ClavaTest

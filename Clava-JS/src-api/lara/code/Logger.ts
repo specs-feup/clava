@@ -7,17 +7,14 @@ import { Expression, FileJp, FunctionJp, Joinpoint } from "../../Joinpoints.js";
 export default class Logger extends LoggerBase<Joinpoint> {
   private _isCxx: boolean = false;
 
-  // Adds C/C++ specific types
-  Type = {
-    ...super.Type,
-    LONGLONG: 100,
-  };
-
   constructor(isGlobal = false, filename?: string) {
     super(isGlobal, filename);
-
+    
+    // Adds C/C++ specific types
+    this.Type.set("LONGLONG", 100);
+    
     // 64-bit int
-    this.printfFormat[this.Type.LONGLONG] = "%I64lld";
+    this.printfFormat[this.Type.get("LONGLONG")!] = "%I64lld";
   }
 
   /**
@@ -62,7 +59,7 @@ export default class Logger extends LoggerBase<Joinpoint> {
    * @returns The current logger instance
    */
   appendLongLong(expr: Expression | string) {
-    return this._append_private(expr, this.Type.LONGLONG);
+    return this._append_private(expr, this.Type.get("LONGLONG"));
   }
 
   /**
@@ -179,7 +176,7 @@ export default class Logger extends LoggerBase<Joinpoint> {
       " << " +
       this.currentElements
         .map((element) => {
-          if (element.type === this.Type.NORMAL) {
+          if (element.type === this.Type.get("NORMAL")) {
             return '"' + element.content + '"';
           }
 
@@ -242,7 +239,7 @@ export default class Logger extends LoggerBase<Joinpoint> {
   _log_c_file($file: FileJp, $function: FunctionJp) {
     const fileVar = this._log_c_file_setup($file, $function);
 
-    return this._printfFormat("fprintf", "(" + fileVar + ', "');
+    return this._printfFormat("fprintf", "(" + fileVar + ", ");
   }
 
   _log_c_file_setup($file: FileJp, $function: FunctionJp) {
@@ -302,7 +299,7 @@ export default class Logger extends LoggerBase<Joinpoint> {
 FILE *${varname} = fopen("${filename}", "w+");
 if (${varname} == NULL)
 {
-    printf("Error opening file ${filename}\n");
+    printf("Error opening file ${filename}\\n");
     exit(1);
 } 
 `;

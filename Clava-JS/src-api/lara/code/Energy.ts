@@ -47,7 +47,7 @@ export default class Energy extends EnergyBase<Joinpoint> {
     const $file = $start.getAncestor("file") as FileJp | undefined;
     if ($file === undefined) {
       console.log(
-        "Could not find the corresponding file of the given joinpoint: " + $jp
+        "Could not find the corresponding file of the given joinpoint: " + $start.joinPointType
       );
       return;
     }

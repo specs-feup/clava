@@ -19,10 +19,11 @@ double foo() {
    double a = 0;
    for(int i = 0; i < 1000; i++) {
       struct timespec clava_timing_start_0, clava_timing_end_0;
+      double clava_timing_duration_0;
       clock_gettime(CLOCK_MONOTONIC, &clava_timing_start_0);
       a += bar();
       clock_gettime(CLOCK_MONOTONIC, &clava_timing_end_0);
-      double clava_timing_duration_0 = ((clava_timing_end_0.tv_sec + ((double) clava_timing_end_0.tv_nsec / 1000000000)) - (clava_timing_start_0.tv_sec + ((double) clava_timing_start_0.tv_nsec / 1000000000))) * (1000);
+      clava_timing_duration_0 = ((clava_timing_end_0.tv_sec + ((double) clava_timing_end_0.tv_nsec / 1000000000)) - (clava_timing_start_0.tv_sec + ((double) clava_timing_start_0.tv_nsec / 1000000000))) * (1000);
       printf("Time:%fms\n", clava_timing_duration_0);
    }
    
@@ -32,24 +33,26 @@ double foo() {
 
 int main() {
    struct timespec clava_timing_start_1, clava_timing_end_1;
+   double clava_timing_duration_1;
    clock_gettime(CLOCK_MONOTONIC, &clava_timing_start_1);
    foo();
    clock_gettime(CLOCK_MONOTONIC, &clava_timing_end_1);
-   double clava_timing_duration_1 = ((clava_timing_end_1.tv_sec + ((double) clava_timing_end_1.tv_nsec / 1000000000)) - (clava_timing_start_1.tv_sec + ((double) clava_timing_start_1.tv_nsec / 1000000000))) * (1000);
+   clava_timing_duration_1 = ((clava_timing_end_1.tv_sec + ((double) clava_timing_end_1.tv_nsec / 1000000000)) - (clava_timing_start_1.tv_sec + ((double) clava_timing_start_1.tv_nsec / 1000000000))) * (1000);
    printf("Time:%fms\n", clava_timing_duration_1);
    
    struct timespec clava_timing_start_2, clava_timing_end_2;
+   double clava_timing_duration_2;
    clock_gettime(CLOCK_MONOTONIC, &clava_timing_start_2);
    bar2();
    clock_gettime(CLOCK_MONOTONIC, &clava_timing_end_2);
-   double clava_timing_duration_2 = ((clava_timing_end_2.tv_sec + ((double) clava_timing_end_2.tv_nsec / 1000000000)) - (clava_timing_start_2.tv_sec + ((double) clava_timing_start_2.tv_nsec / 1000000000))) * (1000);
-   printf("I want to print the value of the elapsed time (%f), which is in the unit 'ms' and put other stuff after it\n", clava_timing_duration_2);
+   clava_timing_duration_2 = ((clava_timing_end_2.tv_sec + ((double) clava_timing_end_2.tv_nsec / 1000000000)) - (clava_timing_start_2.tv_sec + ((double) clava_timing_start_2.tv_nsec / 1000000000))) * (1000);
 
    struct timespec clava_timing_start_3, clava_timing_end_3;
+   double clava_timing_duration_3;
    clock_gettime(CLOCK_MONOTONIC, &clava_timing_start_3);
    bar3();
    clock_gettime(CLOCK_MONOTONIC, &clava_timing_end_3);
-   double clava_timing_duration_3 = ((clava_timing_end_3.tv_sec + ((double) clava_timing_end_3.tv_nsec / 1000000000)) - (clava_timing_start_3.tv_sec + ((double) clava_timing_start_3.tv_nsec / 1000000000))) * (1000);
+   clava_timing_duration_3 = ((clava_timing_end_3.tv_sec + ((double) clava_timing_end_3.tv_nsec / 1000000000)) - (clava_timing_start_3.tv_sec + ((double) clava_timing_start_3.tv_nsec / 1000000000))) * (1000);
    printf("%fms\n", clava_timing_duration_3);
    printf("This should appear after the timer print\n");
 }

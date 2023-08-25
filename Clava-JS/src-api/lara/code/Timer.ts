@@ -112,6 +112,7 @@ export default class Timer extends TimerBase<Joinpoint> {
     // Log time information
     if (this.print) {
       logger.log($timingResult);
+      afterJp = logger.getAfterJp();
     }
 
     this.setAfterJp(afterJp);
@@ -293,7 +294,7 @@ QueryPerformanceFrequency(&${timeFrequencyVar});`;
     timeDiffenceVar: string,
     factorConversion: string
   ) {
-    return `${timeDiffenceVar} = ((${timeEndVar}.tv_sec + ((double)${timeEndVar}.tv_nsec / 1000000000)) - (${timeStartVar}.tv_sec + ((double)${timeStartVar}.tv_nsec / 1000000000))) * (${factorConversion});`;
+    return `${timeDiffenceVar} = ((${timeEndVar}.tv_sec + ((double) ${timeEndVar}.tv_nsec / 1000000000)) - (${timeStartVar}.tv_sec + ((double) ${timeStartVar}.tv_nsec / 1000000000))) * (${factorConversion})`;
   }
 
   //Cpp codedefs
@@ -315,6 +316,6 @@ QueryPerformanceFrequency(&${timeFrequencyVar});`;
   }
 
   private _timer_cpp_print_interval(unit: string, differentialVar: string) {
-    return `std::chrono::duration_cast<std::chrono::${unit}> (${differentialVar}).count()`;
+    return `std::chrono::duration_cast<std::chrono::${unit}>(${differentialVar}).count()`;
   }
 }
