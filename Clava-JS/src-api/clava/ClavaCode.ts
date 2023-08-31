@@ -1,35 +1,45 @@
-laraImport("clava.Clava");
-laraImport("weaver.Query");
-laraImport("lara.util.StringSet");
-laraImport("lara.Io");
+import Io from "lara-js/api/lara/Io.js";
+import { debug } from "lara-js/api/lara/core/LaraCore.js";
+import { JavaClasses } from "lara-js/api/lara/util/JavaTypes.js";
+import Query from "lara-js/api/weaver/Query.js";
+import {
+  FileJp,
+  FunctionJp,
+  If,
+  Loop,
+  Scope,
+  Statement,
+  StorageClass,
+  Vardecl,
+} from "../Joinpoints.js";
+import Clava from "./Clava.js";
 
 /**
  * Utility methods related with the source code.
  *
- * @class
  */
-class ClavaCode {
+export default class ClavaCode {
   /**
    * Writes the code corresponding to the current AST as a single file.
    *
    */
-  static toSingleFile(fileOrBaseFolder, optionalFile) {
+  static toSingleFile(fileOrBaseFolder?: string | JavaClasses.File, optionalFile?: string | JavaClasses.File) {
     if (fileOrBaseFolder === undefined) {
       fileOrBaseFolder = Clava.getWeavingFolder();
-      var extension = Clava.isCxx() ? "cpp" : "c";
+      const extension = Clava.isCxx() ? "cpp" : "c";
       optionalFile = "main." + extension;
     }
 
     const singleFileCode = ClavaCode.toSingleFileCode();
 
-    var outputFile = Io.getPath(fileOrBaseFolder, optionalFile);
+    let outputFile = Io.getPath(fileOrBaseFolder, optionalFile);
 
     Io.writeFile(outputFile, singleFileCode);
 
     // Copy includes
-    var baseFolder = outputFile.getParentFile();
-    for (var $include of Clava.getAvailableIncludes()) {
-      var outputFile = Io.getPath(baseFolder, $include.name);
+    const baseFolder = outputFile.getParentFile();
+    for (const $include of Clava.getAvailableIncludes()) {
+      outputFile = Io.getPath(baseFolder, $include.name);
       Io.writeFile(outputFile, Io.readFile($include.filepath));
     }
   }
@@ -37,30 +47,29 @@ class ClavaCode {
   /**
    * Generates code for a single fime corresponding to the current AST.
    *
-   * @return {String} the code of the current AST as a single file.
+   * @returns The code of the current AST as a single file.
    */
-  static toSingleFileCode() {
+  static toSingleFileCode(): string {
     const staticVerification = true;
 
-    var includes = new StringSet();
-    var bodyCode = "";
+    const includes = new Set<string>();
+    let bodyCode = "";
 
-    for (const $file of Query.search("file")) {
+    for (const $f of Query.search("file")) {
+      const $file = $f as FileJp;
+
       if ($file.isHeader) {
         continue;
       }
 
-      // Copy includes
-      //copyIncludes($file);
-
       // Deal with static declarations
-      var codeChanged = ClavaCode._renameStaticDeclarations(
+      const codeChanged = ClavaCode.renameStaticDeclarations(
         $file,
         staticVerification
       );
       if (codeChanged) {
         bodyCode += $file.code + "\n";
-        println(
+        console.log(
           "Generated file '" +
             $file.filepath +
             "' from AST, macros have disappeared"
@@ -68,8 +77,6 @@ class ClavaCode {
       } else {
         bodyCode += Io.readFile($file.filepath) + "\n";
       }
-
-      //bodyCode += Io.readFile($file.filepath);
 
       // Collects all includes from input files, in order to put them at the beginning of the file
       for (const $child of $file.astChildren) {
@@ -79,29 +86,28 @@ class ClavaCode {
       }
     }
 
-    var singleFileCode = includes.values().join("\n") + "\n" + bodyCode;
+    const singleFileCode = Array.from(includes).join("\n") + "\n" + bodyCode;
 
     return singleFileCode;
   }
 
-  static _renameStaticDeclarations($file, staticVerification) {
+  private static renameStaticDeclarations($file: FileJp, staticVerification: boolean) {
     if (!staticVerification) {
       return false;
     }
 
-    var changedCode = false;
+    let changedCode = false;
 
     // Look for static declarations
-    for (var child of $file.astChildren) {
-      //println("Storage class:" + child.storageClass);
-      if (child.astName === "FunctionDecl" && child.storageClass === "static") {
-        var newName = child.name + "_static_rename";
+    for (const child of $file.children) {
+      if (child instanceof FunctionJp && child.storageClass === StorageClass.STATIC) {
+        const newName = child.name + "_static_rename";
         child.name = newName;
         changedCode = true;
       }
 
-      if (child.astName === "DeclStmt" && child.storageClass === "static") {
-        println(child.code);
+      if (child instanceof Vardecl && child.storageClass === StorageClass.STATIC) {
+        console.log(child.code);
         throw "Not yet supported for static variable declarations";
       }
     }
@@ -116,28 +122,21 @@ class ClavaCode {
    * - Does not take into account runtime execution problems, such as exceptions;
    * - Does not detect if the function is called indirectly through a function pointer;
    *
-   * @return true if it could be detected, within the restrictions, that the statement is only executed once.
+   * @returns True if it could be detected, within the restrictions, that the statement is only executed once.
    */
-  static isExecutedOnce($statement) {
-    if (!$statement.instanceOf("statement")) {
-      throw (
-        "isExecutedOnce(): function expects a statement, received '" +
-        $statement.joinPointType +
-        "'"
-      );
+  static isExecutedOnce($statement: Statement | undefined): boolean {
+    // Go back until it finds the function body
+    let $currentScope: Scope | undefined = undefined;
+
+    if ($statement !== undefined) {
+      $currentScope = $statement.getAncestor("scope") as Scope | undefined;
     }
 
-    // Go back until it finds the function body
-    var $currentScope = $statement.getAncestor("scope");
-
     while ($currentScope !== undefined) {
-      var $scopeOwner = $currentScope.owner;
+      const $scopeOwner = $currentScope.owner;
 
       // If finds a scope that is part of a loop or if/else, return false immediately
-      if (
-        $scopeOwner.instanceOf("loop") ||
-        $scopeOwner.instanceOf("if")
-      ) {
+      if ($scopeOwner instanceof Loop || $scopeOwner instanceof If) {
         debug(
           "ClavaCode.isExecutedOnce: failed because scope is part of loop or if"
         );
@@ -145,8 +144,8 @@ class ClavaCode {
       }
 
       // If function, check if main function
-      if ($scopeOwner.instanceOf("function")) {
-        var $function = $scopeOwner;
+      if ($scopeOwner instanceof FunctionJp) {
+        const $function = $scopeOwner;
 
         // If main, passes check
         if ($function.name === "main") {
@@ -154,7 +153,7 @@ class ClavaCode {
         }
 
         // Verify if function is called only once
-        var calls = $function.calls;
+        const calls = $function.calls;
         if (calls.length !== 1) {
           debug(
             "ClavaCode.isExecutedOnce: failed because function '" +
@@ -166,13 +165,15 @@ class ClavaCode {
           return false;
         }
 
-        var $singleCall = calls[0];
+        const $singleCall = calls[0];
 
         // Recursively call the function on the call statement
-        return ClavaCode.isExecutedOnce($singleCall.getAncestor("statement"));
+        return ClavaCode.isExecutedOnce(
+          $singleCall.getAncestor("statement") as Statement | undefined
+        );
       }
 
-      $currentScope = $currentScope.getAncestor("scope");
+      $currentScope = $currentScope.getAncestor("scope") as Scope | undefined;
     }
 
     // Could not find the scope of the statement. Is it outside of a function?
@@ -182,18 +183,22 @@ class ClavaCode {
 
   /**
    * Returns the function definitions in the program with the given name.
-   * @param {string} functionName - The name of the function to find
-   * @param {boolean} isSingleFunction -  If true, ensures there is a single definition with the given name
-   * @return {$function[]|$function} An array of function definitions, or a single function is 'isSingleFunction' is true
+   *
+   * @param functionName - The name of the function to find
+   * @param isSingleFunction -  If true, ensures there is a single definition with the given name
+   * @returns An array of function definitions, or a single function is 'isSingleFunction' is true
    */
-  static getFunctionDefinition(functionName, isSingleFunction) {
+  static getFunctionDefinition(
+    functionName: string,
+    isSingleFunction: boolean
+  ): FunctionJp | FunctionJp[] {
     // Locate function
-    var functionSearch = Clava.getProgram()
+    const functionSearch = Clava.getProgram()
       .getDescendants("function")
-      //.filter($f => $f.name.equals('main'))[0];
-      .filter(function ($f) {
-        return $f.name.equals(functionName) && $f.hasDefinition;
-      });
+      .filter(($f) => {
+        const $function = $f as FunctionJp;
+        return $function.name === functionName && $function.hasDefinition;
+      }) as FunctionJp[];
 
     // If single function false, return search results
     if (!isSingleFunction) {
@@ -201,15 +206,11 @@ class ClavaCode {
     }
 
     if (functionSearch.length === 0) {
-      throw "Could not find main function";
+      throw `Could not find function with name '${functionName}'`;
     }
 
     if (functionSearch.length > 1) {
-      throw (
-        "Found more than one definition for function with name '" +
-        functionName +
-        "'"
-      );
+      throw `Found more than one definition for function with name '${functionName}'`;
     }
 
     return functionSearch[0];
