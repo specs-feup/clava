@@ -1473,7 +1473,7 @@ export class Loop extends Statement {
     /**
      * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
      */
-    setCondRelation(p1) { return wrapJoinPoint(this._javaObject.setCondRelation(unwrapJoinPoint(p1))); }
+    setCondRelation(operator) { return wrapJoinPoint(this._javaObject.setCondRelation(unwrapJoinPoint(operator))); }
     /**
      * Sets the end value of the loop. Works with loops of kind 'for'
      */

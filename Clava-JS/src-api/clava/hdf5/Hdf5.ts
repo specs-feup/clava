@@ -1,238 +1,226 @@
-import clava.ClavaJoinPoints;
+import {
+  ArrayType,
+  EnumType,
+  FileJp,
+  RecordJp,
+  TemplateSpecializationType,
+  Type,
+} from "../../Joinpoints.js";
+import ClavaJoinPoints from "../ClavaJoinPoints.js";
+import Format from "../Format.js";
 
+enum HDF5Types {
+  "char" = "C_S1",
+  "signed char" = "NATIVE_SCHAR",
+  "unsigned char" = "NATIVE_UCHAR",
+  "short" = "NATIVE_SHORT",
+  "unsigned short" = "NATIVE_USHORT",
+  "int" = "NATIVE_INT",
+  "unsigned int" = "NATIVE_UINT",
+  "long" = "NATIVE_LONG",
+  "unsigned long" = "NATIVE_ULONG",
+  "long long" = "NATIVE_LLONG",
+  "unsigned long long" = "NATIVE_ULLONG",
+  "float" = "NATIVE_FLOAT",
+  "double" = "NATIVE_DOUBLE",
+  "long double" = "NATIVE_LDOUBLE",
+
+  "int8_t" = "NATIVE_INT8",
+  "uint8_t" = "NATIVE_UINT8",
+  "int16_t" = "NATIVE_INT16",
+  "uint16_t" = "NATIVE_UINT16",
+  "int32_t" = "NATIVE_INT32",
+  "uin32_t" = "NATIVE_UINT32",
+  "int64_t" = "NATIVE_INT64",
+  "uint64_t" = "NATIVE_UINT64",
+}
 
 /**
  * Utility methods related to the HDF5 library.
  *
- * @class
  */
-var Hdf5 = {};
+export default class Hdf5 {
+  /**
+   * @returns A String with the HDF5 code that represents the given type.
+   */
+  static convert($type: Type): string | undefined {
+    // Desugar type
+    $type = $type.desugarAll;
 
-Hdf5._HDF5Types = {};
-Hdf5._HDF5Types["char"] = "C_S1";
-Hdf5._HDF5Types["signed char"] = "NATIVE_SCHAR";
-Hdf5._HDF5Types["unsigned char"] = "NATIVE_UCHAR";
-Hdf5._HDF5Types["short"] = "NATIVE_SHORT";
-Hdf5._HDF5Types["unsigned short"] = "NATIVE_USHORT";
-Hdf5._HDF5Types["int"] = "NATIVE_INT";
-Hdf5._HDF5Types["unsigned int"] = "NATIVE_UINT";
-Hdf5._HDF5Types["long"] = "NATIVE_LONG";
-Hdf5._HDF5Types["unsigned long"] = "NATIVE_ULONG";
-Hdf5._HDF5Types["long long"] = "NATIVE_LLONG";
-Hdf5._HDF5Types["unsigned long long"] = "NATIVE_ULLONG";
-Hdf5._HDF5Types["float"] = "NATIVE_FLOAT";
-Hdf5._HDF5Types["double"] = "NATIVE_DOUBLE";
-Hdf5._HDF5Types["long double"] = "NATIVE_LDOUBLE";
+    // Special case: char[size]
+    if ($type instanceof ArrayType) {
+      const $elementType = $type.elementType;
 
-//Hdf5._HDF5Types["bool"] = "H5T_NATIVE_HBOOL";
-//Hdf5._HDF5Types["_Bool"] = "H5T_NATIVE_HBOOL";
+      if ($elementType.code === "char") {
+        return `H5::StrType(H5::PredType::C_S1, ${$type.arraySize})`;
+      }
 
-Hdf5._HDF5Types["int8_t"] = "NATIVE_INT8";
-Hdf5._HDF5Types["uint8_t"] = "NATIVE_UINT8";
-Hdf5._HDF5Types["int16_t"] = "NATIVE_INT16";
-Hdf5._HDF5Types["uint16_t"] = "NATIVE_UINT16";
-Hdf5._HDF5Types["int32_t"] = "NATIVE_INT32";
-Hdf5._HDF5Types["uin32_t"] = "NATIVE_UINT32";
-Hdf5._HDF5Types["int64_t"] = "NATIVE_INT64";
-Hdf5._HDF5Types["uint64_t"] = "NATIVE_UINT64";
+      console.log(
+        ` -> Warning! HDF5 type not defined for C/C++ arrays of type: ${$elementType.toString()}`
+      );
+      return undefined;
+    }
 
-/**
- * @return a String with the HDF5 code that represents the given type.
- */
-Hdf5.convert = function($type) {
+    // Special case: enum
+    if ($type instanceof EnumType) {
+      return Hdf5.convert($type.integerType);
+    }
 
-		//println("ORIGINAL TYPE:"+$type.ast);
+    // Special case: unique_ptr
+    if (
+      $type instanceof TemplateSpecializationType &&
+      $type.templateName === "unique_ptr"
+    ) {
+      // Generate code for the parameter
+      return Hdf5.convert($type.firstArgType);
+    }
 
-		// Desugar type
-		$type = $type.desugarAll;
-		
-		
-		// Special case: char[size]
-		if($type.isArray) {
-			var $elementType = $type.elementType;
-			
-			if($elementType.code === 'char') {
-				var arraySize = $type.arraySize;
-				return 'H5::StrType(H5::PredType::C_S1, ' + arraySize + ')';
-			}
+    // Special case: vector
+    if (
+      $type instanceof TemplateSpecializationType &&
+      $type.templateName === "vector"
+    ) {
+      // Convert template type
+      return `H5::VarLenType('&${Hdf5.convert($type.firstArgType)}')`;
+    }
 
-			println(" -> Warning! HDF5 type not defined for C/C++ arrays of type: " + $elementType);
-			return undefined;
-		}
-	
-		// Special case: enum
-		if($type.kind === "EnumType") {
-			return Hdf5.convert($type.integerType);
-			//$type = $type.integerType.desugar;
-		}
-	
-		// Special case: unique_ptr
-		if($type.kind === "TemplateSpecializationType" && $type.templateName === "unique_ptr") {
-			// Generate code for the parameter
-			return Hdf5.convert($type.firstArgType);
-		}
-		
-		// Special case: vector
-		if($type.kind === "TemplateSpecializationType" && $type.templateName === "vector") {
-			// Convert template type
-			var templateType = '&' + Hdf5.convert($type.firstArgType);
-			return 'H5::VarLenType('+templateType+')';
-		}
-	
-		var cType = $type.code;
-		var HDF5Type  = Hdf5._HDF5Types[cType];
+    const cType = $type.code;
+    const HDF5Type = HDF5Types[cType as keyof typeof HDF5Types];
 
-		if(HDF5Type === undefined) {
-						println("TYPE NAME -> "+$type.kind);
-						println("TYPE -> "+$type.ast);
-			println(" -> Warning! HDF5 type not defined for C/C++ type: " + cType);
-			return undefined;
-		}
+    if (HDF5Type === undefined) {
+      console.log(`TYPE NAME -> ${$type.kind}`);
+      console.log(`TYPE -> ${$type.ast}`);
+      console.log(
+        ` -> Warning! HDF5 type not defined for C/C++ type: ${cType}`
+      );
+      return undefined;
+    }
 
-		// Common HDF5Type
-		return 'H5::PredType::' + HDF5Type;
-}
+    // Common HDF5Type
+    return "H5::PredType::" + HDF5Type;
+  }
 
+  /**
+   * @param $records - An array of $record join points which will be used to generate a library with HDF5 conversors for those records.
+   * @returns An array with $file join points, representing the files of the newly created library.
+   */
+  static toLibrary($records: RecordJp[]): FileJp[] {
+    const namespace = "hdf5type";
 
-/**
- * @param $records an array of $record join points which will be used to generate a library with HDF5 conversors for those records.
- * @return an array with $file join points, representing the files of the newly created library.
- */
-Hdf5.toLibrary = function($records) {
-/*
-aspectdef Hdf5Types
-	input 
-		//srcFolder,
-		//namespace
-		$records
-	end
-*/	
-	var namespace = "hdf5type";
+    // Folder for the generated files
+    const filepath = "generated-hdf5";
 
-	// Folder for the generated files
-	var filepath = "generated-hdf5";
-	
-	// Create files for generated code
-	var $compTypeC = ClavaJoinPoints.file("CompType.cpp", filepath);
-	var $compTypeH = ClavaJoinPoints.file("CompType.h", filepath);
+    // Create files for generated code
+    const $compTypeC = ClavaJoinPoints.file("CompType.cpp", filepath);
+    const $compTypeH = ClavaJoinPoints.file("CompType.h", filepath);
 
-	// Add files to the program
-	/*
-	select program end
-	apply
-		$program.exec addFile($compTypeC);
-		$program.exec addFile($compTypeH);
-	end
-	*/
+    let hDeclarationsCode = "";
 
-	var hDeclarationsCode = "";
+    // Add include for CompTypes
+    $compTypeC.addInclude("CompType.h", false);
+    $compTypeC.addInclude("H5CompType.h", true);
 
-	// Add include for CompTypes
-	$compTypeC.exec addInclude("CompType.h", false);
-	$compTypeC.exec addInclude("H5CompType.h", true);
+    for (const $record of $records) {
+      const $file = $record.getAncestor("file") as FileJp | undefined;
 
-	
-	// For each record, create code
-	//var recordCounter = 0;
-	//select file.record{kind === "class", kind === "struct"} end
-	//apply
-	
-	for(var $record of $records) {
-		var $file = $record.getAncestor("file");
-		
-		//recordCounter++;
-		var className = $record.name + "Type";
-		var typeName = "itype";
-		
-		/* Generate code for .h file */
+      if ($file === undefined) {
+        console.log(` -> Warning! Record '${$record.name}' has no file`);
+        continue;
+      }
 
-		// Create declaration
-		hDeclarationsCode += Hdf5_HDeclaration($file.name, className);
-		
-		/* Generate code for .cpp file */
-	
-		// Add include to the file where record is
-		$compTypeC.exec addIncludeJp($record);
+      const className = $record.name + "Type";
+      const typeName = "itype";
 
-		// Create code for translating C/C++ type to HDF5 type
-		
-		//call result : RecordToHdf5($record, typeName);
-		var recordCode = Hdf5.convertRecord($record, typeName);
-		//var cxxFunction = Hdf5_CImplementation(namespace, className, Format.addPrefix(result.code, "    "));
-		var cxxFunction = Hdf5_CImplementation(namespace, className, Format.addPrefix(recordCode, "    "));
+      /* Generate code for .h file */
 
-		$compTypeC.exec insertAfter(ClavaJoinPoints.declLiteral(cxxFunction));
-	}
-	//end
-	
-	/* Generate code for .h file */
-	
-	// Add include to HDF5 CPP library
-	$compTypeH.exec addInclude("H5Cpp.h", true);
+      // Create declaration
+      hDeclarationsCode += Hdf5.Hdf5_HDeclaration($file.name, className);
 
-	// Create header code inside the target namespace
- 	hDeclarationsCode = '\nnamespace '+namespace +' {\n\n' + Format.addPrefix(hDeclarationsCode, "    ") + "\n}\n";
+      /* Generate code for .cpp file */
 
-	// Insert code inside header file
- 	$compTypeH.exec insertAfter(ClavaJoinPoints.declLiteral(hDeclarationsCode));
-	
-	// Write files
-	//$compTypeC.write(".");
-	//$compTypeH.write(".");
-	
-	// Create return array
-	var $files = [$compTypeH, $compTypeC];
-	
-	return $files;
-//end
-}
+      // Add include to the file where record is
+      $compTypeC.addIncludeJp($record);
 
-codedef Hdf5_HDeclaration(filename, className) %{
-//  [[filename]]
-class [[className]] {
-	public:
-	static H5::CompType GetCompType();
+      // Create code for translating C/C++ type to HDF5 type
+      const recordCode = Hdf5.convertRecord($record, typeName);
+      const cxxFunction = Hdf5.Hdf5_CImplementation(
+        namespace,
+        className,
+        Format.addPrefix(recordCode, "    ")
+      );
+
+      $compTypeC.insertAfter(ClavaJoinPoints.declLiteral(cxxFunction));
+    }
+
+    /* Generate code for .h file */
+
+    // Add include to HDF5 CPP library
+    $compTypeH.addInclude("H5Cpp.h", true);
+
+    // Create header code inside the target namespace
+    hDeclarationsCode =
+      "\nnamespace " +
+      namespace +
+      " {\n\n" +
+      Format.addPrefix(hDeclarationsCode, "    ") +
+      "\n}\n";
+
+    // Insert code inside header file
+    $compTypeH.insertAfter(ClavaJoinPoints.declLiteral(hDeclarationsCode));
+
+    // Create return array
+    const $files = [$compTypeH, $compTypeC];
+
+    return $files;
+  }
+
+  private static Hdf5_HDeclaration(
+    filename: string,
+    className: string
+  ): string {
+    return `
+//  ${filename}
+class ${className} {
+  public:
+  static H5::CompType GetCompType();
 };
 
-}% end
+`;
+  }
 
-
-codedef Hdf5_CImplementation(namespace, className, body) %{
-H5::CompType [[namespace]]::[[className]]::GetCompType() {
-[[body]]
+  private static Hdf5_CImplementation(
+    namespace: string,
+    className: string,
+    body: string
+  ): string {
+    return `
+H5::CompType ${namespace}::${className}::GetCompType() {
+${body}
 
     return itype;
 }
 
-}% end
+`;
+  }
 
-/**
- * @return String representing the HDF5 conversion code for the given record
- */
-Hdf5.convertRecord = function($record, typeName) {
-//aspectdef RecordToHdf5
-//	input $record, typeName end
-//	output code end
+  /**
+   * @returns String representing the HDF5 conversion code for the given record
+   */
+  static convertRecord($record: RecordJp, typeName: string): string {
+    const recordName = $record.qualifiedName;
+    let code = `H5::CompType ${typeName}(sizeof(${recordName}));\n`;
 
-	//var recordName = $record.type.code;
-	//var recordName = $record.getValue("qualifiedName");
-	var recordName = $record.qualifiedName;
-	code = "H5::CompType "+ typeName +"(sizeof("+recordName+"));\n";
+    for (const $field of $record.fields) {
+      if ($field.type.constant) continue; // Ignore constant fields
+      if (!$field.isPublic) continue; // Ignore private fields
 
-//	select $record.field end
-//	apply
-	for(var $field of $record.fields) {
-		if($field.type.constant) continue; // Ignore constant fields
-		if(!$field.isPublic) continue; // Ignore private fields
-	
-		fieldName = $field.name;
-		var HDF5Type = Hdf5.convert($field.type);
-		if(HDF5Type === undefined) continue; // Warning message omitted for the example
-		var params = %{"[[fieldName]]",offsetof([[recordName]], [[fieldName]]), [[HDF5Type]]}%;
-		code += %{[[typeName]].insertMember([[params]]);}% + "\n";
-	}
-	//end
-	
-	return code;
+      const fieldName = $field.name;
+      const HDF5Type = Hdf5.convert($field.type);
+      if (HDF5Type === undefined) continue; // Warning message omitted for the example
+
+      code += `${typeName}.insertMember("${fieldName}",offsetof(${recordName}, ${fieldName}), ${HDF5Type});\n`;
+    }
+
+    return code;
+  }
 }
-//end

@@ -19598,7 +19598,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "joinpoint[]",
+										"type": "field[]",
 										"name": "fields"
 									}]
 					},
@@ -70936,7 +70936,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "joinpoint[]",
+										"type": "field[]",
 										"name": "fields"
 									}]
 					},
@@ -75521,7 +75521,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "joinpoint[]",
+										"type": "field[]",
 										"name": "fields"
 									}]
 					},
