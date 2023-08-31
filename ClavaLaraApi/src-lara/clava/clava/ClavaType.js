@@ -77,7 +77,7 @@ export default class ClavaType {
                 throw "ClavaType.asStatement: code is undefined. If this is allowed, set 'isOptional' to true.";
             }
         }
-        const newStmtNode = ClavaJavaTypes.getClavaNodes().toStmt(code.node);
+        const newStmtNode = ClavaJavaTypes.ClavaNodes.toStmt(code.node);
         return ClavaJoinPoints.toJoinPoint(newStmtNode);
     }
     /**
@@ -97,7 +97,7 @@ export default class ClavaType {
      */
     static asScope(code) {
         const $newStmt = ClavaType.asStatement(code);
-        const newScopeNode = ClavaJavaTypes.getClavaNodes().toCompoundStmt($newStmt?.node);
+        const newScopeNode = ClavaJavaTypes.ClavaNodes.toCompoundStmt($newStmt?.node);
         return ClavaJoinPoints.toJoinPoint(newScopeNode);
     }
 }

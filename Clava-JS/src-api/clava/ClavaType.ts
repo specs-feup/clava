@@ -108,7 +108,7 @@ export default class ClavaType {
       }
     }
 
-    const newStmtNode = ClavaJavaTypes.getClavaNodes().toStmt(code.node);
+    const newStmtNode = ClavaJavaTypes.ClavaNodes.toStmt(code.node);
 
     return ClavaJoinPoints.toJoinPoint(newStmtNode) as Statement;
   }
@@ -132,7 +132,7 @@ export default class ClavaType {
   static asScope(code: Joinpoint | undefined): Scope {
     const $newStmt = ClavaType.asStatement(code);
 
-    const newScopeNode = ClavaJavaTypes.getClavaNodes().toCompoundStmt(
+    const newScopeNode = ClavaJavaTypes.ClavaNodes.toCompoundStmt(
       $newStmt?.node
     );
 
