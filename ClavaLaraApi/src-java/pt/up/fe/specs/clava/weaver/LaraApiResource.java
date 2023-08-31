@@ -115,7 +115,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     SCG_EDGE_DATA("graphs/scg/ScgEdgeData.js"),
 
     // Hdf5
-    HDF5("hdf5/Hdf5.lara"),
+    //HDF5("hdf5/Hdf5.lara"),
 
     // HLS
     HLS("hls/HLSAnalysis.lara"),
