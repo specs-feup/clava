@@ -4,7 +4,6 @@ import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
 import org.lara.interpreter.exception.ActionException;
-import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -236,7 +235,7 @@ public abstract class AMethod extends AFunction {
      * @return the attribute's value
      */
     @Override
-    public StorageClass getStorageClassImpl() {
+    public String getStorageClassImpl() {
         return this.aFunction.getStorageClassImpl();
     }
 

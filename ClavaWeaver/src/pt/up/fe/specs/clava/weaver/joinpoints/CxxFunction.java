@@ -485,8 +485,8 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public StorageClass getStorageClassImpl() {
-        return STORAGE_CLASS.get().fromValue(function.get(FunctionDecl.STORAGE_CLASS).name().toLowerCase());
+    public String getStorageClassImpl() {
+        return function.get(FunctionDecl.STORAGE_CLASS).getString();
     }
 
     @Override

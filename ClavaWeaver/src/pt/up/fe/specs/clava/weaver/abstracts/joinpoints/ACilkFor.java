@@ -1,6 +1,5 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
-import pt.up.fe.specs.clava.weaver.enums.Relation;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
@@ -193,7 +192,7 @@ public abstract class ACilkFor extends ALoop {
      * @return the attribute's value
      */
     @Override
-    public Relation getCondRelationImpl() {
+    public String getCondRelationImpl() {
         return this.aLoop.getCondRelationImpl();
     }
 
@@ -421,13 +420,6 @@ public abstract class ACilkFor extends ALoop {
      */
     public void defInitValueImpl(String value) {
         this.aLoop.defInitValueImpl(value);
-    }
-
-    /**
-     * 
-     */
-    public void defCondRelationImpl(Relation value) {
-        this.aLoop.defCondRelationImpl(value);
     }
 
     /**
@@ -1304,15 +1296,6 @@ public abstract class ACilkFor extends ALoop {
      * @param operator 
      */
     @Override
-    public void setCondRelationImpl(Relation operator) {
-        this.aLoop.setCondRelationImpl(operator);
-    }
-
-    /**
-     * Changes the operator of a canonical condition, if possible. Supported operators: <, <=, >, >=
-     * @param operator 
-     */
-    @Override
     public void setCondRelationImpl(String operator) {
         this.aLoop.setCondRelationImpl(operator);
     }
@@ -1496,10 +1479,6 @@ public abstract class ACilkFor extends ALoop {
         	this.unsupportedTypeForDef(attribute, value);
         }
         case "condRelation": {
-        	if(value instanceof Relation){
-        		this.defCondRelationImpl((Relation)value);
-        		return;
-        	}
         	if(value instanceof String){
         		this.defCondRelationImpl((String)value);
         		return;

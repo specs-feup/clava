@@ -555,14 +555,14 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public Relation getCondRelationImpl() {
+    public String getCondRelationImpl() {
 
         BinaryOperator condOp = getConditionOp();
         if (condOp == null) {
             return null;
         }
 
-        return Relation.getHelper().fromNameTry(condOp.getOp().name()).orElse(null);
+        return Relation.getHelper().fromNameTry(condOp.getOp().name()).orElse(null).getString();
     }
 
     @Override
@@ -598,23 +598,6 @@ public class CxxLoop extends ALoop {
         }
 
         return binOp;
-    }
-
-    @Override
-    public void defCondRelationImpl(Relation value) {
-        if (value == Relation.EQ || value == Relation.NE) {
-            ClavaLog.info(
-                    "Relation not supported for 'def' of 'condRelation': " + value);
-            return;
-        }
-
-        BinaryOperator condOp = getConditionOp();
-        if (condOp == null) {
-            return;
-        }
-
-        condOp.set(BinaryOperator.OP, getOpKind(value));
-
     }
 
     @Override
@@ -663,11 +646,6 @@ public class CxxLoop extends ALoop {
         default:
             throw new NotImplementedException(relation);
         }
-    }
-
-    @Override
-    public void setCondRelationImpl(Relation operator) {
-        defCondRelationImpl(operator);
     }
 
     @Override

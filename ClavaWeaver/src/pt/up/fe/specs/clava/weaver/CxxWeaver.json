@@ -16709,20 +16709,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Changes the operator of a canonical condition, if possible. Supported operators: <, <=, >, >=",
-						"children": [
-									{
-										"type": "void",
-										"name": "setCondRelation"
-									},
-									{
-										"type": "String",
-										"name": "operator",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Sets the end value of the loop. Works with loops of kind 'for'",
 						"children": [
 									{
@@ -52625,20 +52611,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Changes the operator of a canonical condition, if possible. Supported operators: <, <=, >, >=",
-						"children": [
-									{
-										"type": "void",
-										"name": "setCondRelation"
-									},
-									{
-										"type": "String",
-										"name": "operator",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Sets the end value of the loop. Works with loops of kind 'for'",
 						"children": [
 									{
@@ -62741,7 +62713,7 @@
 						"tooltip": "Storage class specifier, which can be none, extern, static, __private_extern__, auto, register",
 						"children": [
 									{
-										"type": "String",
+										"type": "StorageClass",
 										"name": "storageClass"
 									}]
 					},
@@ -63465,7 +63437,7 @@
 										"name": "setStorageClass"
 									},
 									{
-										"type": "String",
+										"type": "StorageClass",
 										"name": "storageClass",
 										"defaultValue": ""
 									}]
@@ -91384,7 +91356,7 @@
 						"tooltip": "Storage class specifier, which can be none, extern, static, __private_extern__, auto, register",
 						"children": [
 									{
-										"type": "String",
+										"type": "StorageClass",
 										"name": "storageClass"
 									}]
 					},
@@ -92108,7 +92080,7 @@
 										"name": "setStorageClass"
 									},
 									{
-										"type": "String",
+										"type": "StorageClass",
 										"name": "storageClass",
 										"defaultValue": ""
 									}]

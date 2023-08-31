@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import pt.up.fe.specs.clava.weaver.enums.Relation;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
@@ -507,7 +506,7 @@ public abstract class ALoop extends AStatement {
      * Get value on attribute condRelation
      * @return the attribute's value
      */
-    public abstract Relation getCondRelationImpl();
+    public abstract String getCondRelationImpl();
 
     /**
      * Get value on attribute condRelation
@@ -518,7 +517,7 @@ public abstract class ALoop extends AStatement {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "condRelation", Optional.empty());
         	}
-        	Relation result = this.getCondRelationImpl();
+        	String result = this.getCondRelationImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "condRelation", Optional.ofNullable(result));
         	}
@@ -526,13 +525,6 @@ public abstract class ALoop extends AStatement {
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "condRelation", e);
         }
-    }
-
-    /**
-     * 
-     */
-    public void defCondRelationImpl(Relation value) {
-        throw new UnsupportedOperationException("Join point "+get_class()+": Action def condRelation with type Relation not implemented ");
     }
 
     /**
@@ -849,38 +841,12 @@ public abstract class ALoop extends AStatement {
      * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
      * @param operator 
      */
-    public void setCondRelationImpl(Relation operator) {
-        throw new UnsupportedOperationException(get_class()+": Action setCondRelation not implemented ");
-    }
-
-    /**
-     * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
-     * @param operator 
-     */
-    public final void setCondRelation(Relation operator) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setCondRelation", this, Optional.empty(), operator);
-        	}
-        	this.setCondRelationImpl(operator);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setCondRelation", this, Optional.empty(), operator);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "setCondRelation", e);
-        }
-    }
-
-    /**
-     * Changes the operator of a canonical condition, if possible. Supported operators: <, <=, >, >=
-     * @param operator 
-     */
     public void setCondRelationImpl(String operator) {
         throw new UnsupportedOperationException(get_class()+": Action setCondRelation not implemented ");
     }
 
     /**
-     * Changes the operator of a canonical condition, if possible. Supported operators: <, <=, >, >=
+     * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
      * @param operator 
      */
     public final void setCondRelation(String operator) {
@@ -2018,10 +1984,6 @@ public abstract class ALoop extends AStatement {
         	this.unsupportedTypeForDef(attribute, value);
         }
         case "condRelation": {
-        	if(value instanceof Relation){
-        		this.defCondRelationImpl((Relation)value);
-        		return;
-        	}
         	if(value instanceof String){
         		this.defCondRelationImpl((String)value);
         		return;
@@ -2095,7 +2057,6 @@ public abstract class ALoop extends AStatement {
         actions.add("void interchange(loop)");
         actions.add("statement tile(String, statement, Boolean)");
         actions.add("void setCondRelation(Relation)");
-        actions.add("void setCondRelation(String)");
         actions.add("void setBody(scope)");
     }
 

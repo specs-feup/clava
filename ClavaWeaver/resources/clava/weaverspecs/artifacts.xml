@@ -373,7 +373,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="True if the condition of the loop in the canonical format, and is one of: &lt;, &lt;=, >, >=" />
         <attribute name="condRelation" type="Relation">
             <def />
-            <def type="string" />
         </attribute>
         <attribute name="body" type="scope">
             <def />
@@ -487,7 +486,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="initStyle" type="String"
             tooltip="The initialization style of this vardecl, which can be no_init, cinit, callinit, listinit" />
         <attribute name="isParam" type="Boolean" tooltip="true, if vardecl is a function parameter" />
-        <attribute name="storageClass" type="String"
+        <attribute name="storageClass" type="StorageClass"
             tooltip="Storage class specifier, which can be none, extern, static, __private_extern__, auto, register">
             <def />
         </attribute>

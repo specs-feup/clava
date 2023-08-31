@@ -2088,11 +2088,11 @@ export class Vardecl extends Declarator {
   /**
    * Storage class specifier, which can be none, extern, static, __private_extern__, auto, register
    */
-  get storageClass(): string { return wrapJoinPoint(this._javaObject.getStorageClass()) }
+  get storageClass(): StorageClass { return wrapJoinPoint(this._javaObject.getStorageClass()) }
   /**
    * Storage class specifier, which can be none, extern, static, __private_extern__, auto, register
    */
-  set storageClass(value: string) { this._javaObject.setStorageClass(unwrapJoinPoint(value)); }
+  set storageClass(value: StorageClass) { this._javaObject.setStorageClass(unwrapJoinPoint(value)); }
   /**
    * If vardecl already has an initialization, removes it.
    */
@@ -2112,7 +2112,7 @@ export class Vardecl extends Declarator {
   /**
    * Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl
    */
-  setStorageClass(storageClass: string): void { return wrapJoinPoint(this._javaObject.setStorageClass(unwrapJoinPoint(storageClass))); }
+  setStorageClass(storageClass: StorageClass): void { return wrapJoinPoint(this._javaObject.setStorageClass(unwrapJoinPoint(storageClass))); }
   /**
    * Creates a new varref based on this vardecl
    */

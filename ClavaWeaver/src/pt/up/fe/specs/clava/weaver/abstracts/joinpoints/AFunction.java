@@ -3,7 +3,6 @@ package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import java.util.Optional;
 import org.lara.interpreter.exception.AttributeException;
-import pt.up.fe.specs.clava.weaver.enums.StorageClass;
 import java.util.List;
 import org.lara.interpreter.weaver.interf.SelectOp;
 import org.lara.interpreter.exception.ActionException;
@@ -505,7 +504,7 @@ public abstract class AFunction extends ADeclarator {
      * Get value on attribute storageClass
      * @return the attribute's value
      */
-    public abstract StorageClass getStorageClassImpl();
+    public abstract String getStorageClassImpl();
 
     /**
      * Get value on attribute storageClass
@@ -516,7 +515,7 @@ public abstract class AFunction extends ADeclarator {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "storageClass", Optional.empty());
         	}
-        	StorageClass result = this.getStorageClassImpl();
+        	String result = this.getStorageClassImpl();
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.END, this, "storageClass", Optional.ofNullable(result));
         	}

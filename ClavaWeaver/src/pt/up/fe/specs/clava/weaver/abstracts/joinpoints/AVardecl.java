@@ -1328,7 +1328,7 @@ public abstract class AVardecl extends ADeclarator {
         actions.add("void setInit(String)");
         actions.add("void removeInit(boolean)");
         actions.add("varref varref()");
-        actions.add("void setStorageClass(String)");
+        actions.add("void setStorageClass(StorageClass)");
     }
 
     /**
