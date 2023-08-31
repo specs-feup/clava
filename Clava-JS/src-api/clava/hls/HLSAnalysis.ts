@@ -1,18 +1,11 @@
-import clava.hls.TraceInstrumentation;
-import clava.hls.MathAnalysis;
-import weaver.Query;
+import { unwrapJoinPoint } from "lara-js/api/LaraJoinPoint.js";
+import { FunctionJp } from "../../Joinpoints.js";
+import ClavaJavaTypes from "../ClavaJavaTypes.js";
+
+export default class HLSAnalysis {
 
 /**
- * @class
- */
-var HLSAnalysis = {};
-
-HLSAnalysis.getJavaInterface = function() {
-	return Java.type("pt.up.fe.specs.clava.weaver.hls.HighLevelSynthesisAPI");
-}
-
-/**
- * 		Applies a set of Vivado HLS directives to a provided function using a set
+ * Applies a set of Vivado HLS directives to a provided function using a set
  * of strategies to select and configure those directives. This function applies the
  * main optimization flow, which is comprised of the following strategies, by this order:
  * - Function Inlining
@@ -21,43 +14,45 @@ HLSAnalysis.getJavaInterface = function() {
  * For a description of how each strategy works, as well as for a standalone version of 
  * each of these strategies, please consult the other methods of this class.
  * 
- * @param {Function} func - a JoinPoint of the function to analyze
- * @param {JSON} options - an optional argument to specify the HLS options. The format
- * is the following: {"B": 2, "N": 32, "P": 64}
+ * @param func - A JoinPoint of the function to analyze
+ * @param options - An optional argument to specify the HLS options. The format
+ * is the following: \{"B": 2, "N": 32, "P": 64\}
  * If not specified, the compiler will use the values provided in the example above.
  * 
  */
-HLSAnalysis.applyGenericStrategies = function(func, options) {
-	if (options == null)
-		options = "{}";
-	else
-		options = JSON.stringify(options);
-	HLSAnalysis.getJavaInterface().applyGenericStrategies(unwrapJoinPoint(func), options);
+static applyGenericStrategies(func: FunctionJp, options: {B?: number, N?: number, P?: number} = {}) {
+    ClavaJavaTypes.HighLevelSynthesisAPI.applyGenericStrategies(
+      unwrapJoinPoint(func),
+      JSON.stringify(options)
+    );
 }
 
 
 /**
- * 		Applies the function inlining directive to every called function.
+ * Applies the function inlining directive to every called function.
  * It works by calculating the cost of both the called function and the callee,
  * in which cost is defined as the total number of array loads on the total lifetime
  * of the function. This is then fed to the formula:
  *
- *                calleeCost > (callFrequency * calledCost) / B
+ *                calleeCost \> (callFrequency * calledCost) / B
  *
  * If this function is true, the function is inlined. Factor B is configurable, and allows
  * for this formula to be more restrictive/permissive, based on the user's needs. The 
  * default value is 2.
  * 
  * 
- * @param {Function} func - a JoinPoint of the function to analyze
- * @param {number} B - a positive real number to control the heuristic's aggressiveness
+ * @param func - A JoinPoint of the function to analyze
+ * @param B - A positive real number to control the heuristic's aggressiveness
  * */
-HLSAnalysis.applyFunctionInlining = function(func, B) {
-	HLSAnalysis.getJavaInterface().applyFunctionInlining(unwrapJoinPoint(func), B.toString());
+static applyFunctionInlining(func: FunctionJp, B: number): void {
+    ClavaJavaTypes.HighLevelSynthesisAPI.applyFunctionInlining(
+      unwrapJoinPoint(func),
+      B.toString()
+    );
 }
 
 /**
- * 		This strategy analyzes every input/output array of the function, and
+ * This strategy analyzes every input/output array of the function, and
  * tries to see if they can be implemented as a FIFO. To do this, the strategy
  * makes a series of checks to see whether the array can be implemented as such.
  * These checks are:
@@ -68,14 +63,14 @@ HLSAnalysis.applyFunctionInlining = function(func, B) {
  * lifetime
  * If all these checks apply, the array is implemented as a FIFO using a Vivado HLS directive.
  * 
- * @param {Function} func - a JoinPoint of the function to analyze
+ * @param func - A JoinPoint of the function to analyze
  * */
-HLSAnalysis.applyArrayStreaming = function(func) {
-	HLSAnalysis.getJavaInterface().applyArrayStreaming(unwrapJoinPoint(func));
+static applyArrayStreaming(func: FunctionJp): void {
+    ClavaJavaTypes.HighLevelSynthesisAPI.applyArrayStreaming(unwrapJoinPoint(func));
 }
 
 /**
- * 		Analyzes every loop nest of a function and applies loop optimizations. These
+ * Analyzes every loop nest of a function and applies loop optimizations. These
  * optimizations are a combination of loop unrolling and loop pipelining. For the latter
  * to be efficient, array partitioning is also applied. This strategy works by always
  * unrolling the innermost loop of every nest, with a resource limitation directive to
@@ -86,15 +81,15 @@ HLSAnalysis.applyArrayStreaming = function(func) {
  * it is partitioned into P partitions using a cyclic strategy.
  * 
  * 
- * @param {Function} func - a JoinPoint of the function to analyze
- * @param {number} P - the number of partitions to use. 64 is the default.
+ * @param func - A JoinPoint of the function to analyze
+ * @param P - The number of partitions to use. 64 is the default.
  * */
-HLSAnalysis.applyLoopStrategies = function(func, P) {
-	HLSAnalysis.getJavaInterface().applyLoopStrategies(unwrapJoinPoint(func), P.toString());
+static applyLoopStrategies(func: FunctionJp, P: number): void {
+    ClavaJavaTypes.HighLevelSynthesisAPI.applyLoopStrategies(unwrapJoinPoint(func), P.toString());
 }
 
 /**
- * 		Applies the load/stores strategy to simple loops. A simple loop is defined as
+ * Applies the load/stores strategy to simple loops. A simple loop is defined as
  * a function with only one loop with no nests, and in which every array is either only
  * loaded from or stored to in each iteration. This method can validate whether the provided
  * function is a simple loop or not. If it is one, then it applies three HLS directives in tandem:
@@ -105,21 +100,23 @@ HLSAnalysis.applyLoopStrategies = function(func, P) {
  * experiment with different values if results are unsatisfactory (the default value is 32).
  * 
  * 
- * @param {Function} func - a JoinPoint of the function to analyze
- * @param {number} N - a positive integer value for the load/stores factor
+ * @param func - A JoinPoint of the function to analyze
+ * @param N - A positive integer value for the load/stores factor
  * */
-HLSAnalysis.applyLoadStoresStrategy = function(func, N) {
-	HLSAnalysis.getJavaInterface().applyLoadStoresStrategy(unwrapJoinPoint(func), N.toString());
+static applyLoadStoresStrategy(func: FunctionJp, N: number): void {
+    ClavaJavaTypes.HighLevelSynthesisAPI.applyLoadStoresStrategy(unwrapJoinPoint(func), N.toString());
 }
 
 /**
- * 		Checks whether a function can be instrumented. Only workds for old versions
+ * Checks whether a function can be instrumented. Only workds for old versions
  * of the trace2c tool.
  * 
- * @param {Function} func - a JoinPoint of the function to analyze
- * @return {boolean} whether the function can be or not instrumented
+ * @param func - A JoinPoint of the function to analyze
+ * @returns Whether the function can be or not instrumented
  * */
-HLSAnalysis.canBeInstrumented = function(func) {
-	return HLSAnalysis.getJavaInterface().canBeInstrumented(unwrapJoinPoint(func));
+static canBeInstrumented(func: FunctionJp): boolean {
+    return ClavaJavaTypes.HighLevelSynthesisAPI.canBeInstrumented(unwrapJoinPoint(func));
+}
+
 }
 

@@ -118,10 +118,10 @@ public enum LaraApiResource implements LaraResourceProvider {
     //HDF5("hdf5/Hdf5.lara"),
 
     // HLS
-    HLS("hls/HLSAnalysis.lara"),
-    HLS_TRACE("hls/TraceInstrumentation.lara"),
-    HLS_MATH("hls/MathAnalysis.lara"),
-    HLS_MATH_H("hls/MathHInfo.lara"),
+    //HLS("hls/HLSAnalysis.lara"),
+    //HLS_TRACE("hls/TraceInstrumentation.lara"),
+    //HLS_MATH("hls/MathAnalysis.lara"),
+    //HLS_MATH_H("hls/MathHInfo.lara"),
 
     // LIVENESS
     LIVENESS_ANALYSIS("liveness/LivenessAnalysis.js"),

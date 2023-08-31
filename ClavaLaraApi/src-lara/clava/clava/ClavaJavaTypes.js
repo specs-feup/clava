@@ -40,5 +40,8 @@ export default class ClavaJavaTypes {
     static get MathExtraApiTools() {
         return JavaTypes.getType("pt.up.fe.specs.clava.weaver.MathExtraApiTools");
     }
+    static get HighLevelSynthesisAPI() {
+        return JavaTypes.getType("pt.up.fe.specs.clava.weaver.hls.HighLevelSynthesisAPI");
+    }
 }
 //# sourceMappingURL=ClavaJavaTypes.js.map

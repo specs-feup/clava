@@ -83,4 +83,10 @@ export default class ClavaJavaTypes {
     return JavaTypes.getType("pt.up.fe.specs.clava.weaver.MathExtraApiTools") as ClavaJavaClasses.MathExtraApiTools;
   }
 
+  static get HighLevelSynthesisAPI() {
+    return JavaTypes.getType(
+      "pt.up.fe.specs.clava.weaver.hls.HighLevelSynthesisAPI"
+    ) as ClavaJavaClasses.HighLevelSynthesisAPI;
+  }
+
 }
