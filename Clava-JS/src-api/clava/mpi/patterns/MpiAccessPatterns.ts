@@ -1,20 +1,21 @@
-import clava.mpi.patterns.ScalarPattern;
-import clava.mpi.patterns.IterationVariablePattern;
+import ScalarPattern from "./ScalarPattern.js";
+import IterationVariablePattern from "./IterationVariablePattern.js";
 
 
 /**
  * Available MPI access patterns.
  *
- * @class
  */
-var MpiAccessPatterns = {};
+export default class MpiAccessPatterns {
 
 /**
  * Access to a scalar variable.
  */
-MpiAccessPatterns.SCALAR_PATTERN = new ScalarPattern();
+static SCALAR_PATTERN = new ScalarPattern();
 
 /**
  * Array that is accessed using only the iteration variable directly, without modifications.
  */
-MpiAccessPatterns.ITERATION_VARIABLE = new IterationVariablePattern();
+static ITERATION_VARIABLE = new IterationVariablePattern();
+
+}

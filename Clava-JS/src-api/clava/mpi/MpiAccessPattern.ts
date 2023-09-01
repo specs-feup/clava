@@ -1,31 +1,17 @@
+import { Varref } from "../../Joinpoints.js";
+
 /**
  * Represents an MPI access pattern.
  *
- * @class
  */
-function MpiAccessPattern() {
-//	checkDefined(name, "Metric::name");
-//	this.name = name;
+export default abstract class MpiAccessPattern {
+  abstract sendMaster($varJp: Varref, totalIterations: string): string;
+
+  abstract receiveMaster($varJp: Varref, totalIterations: string): string;
+
+  abstract sendWorker($varJp: Varref, totalIterations: string): string;
+
+  abstract receiveWorker($varJp: Varref, totalIterations: string): string;
+
+  abstract outputDeclWorker($varJp: Varref, totalIterations: string): string;
 }
-
-MpiAccessPattern.prototype.sendMaster = function($varJp, totalIterations) {
-	throw "Not yet implemented";
-}
-
-MpiAccessPattern.prototype.receiveMaster = function($varJp, totalIterations) {
-	throw "Not yet implemented";
-}
-
-MpiAccessPattern.prototype.sendWorker = function($varJp, totalIterations) {
-	throw "Not yet implemented";
-}
-
-MpiAccessPattern.prototype.receiveWorker = function($varJp, totalIterations) {
-	throw "Not yet implemented";
-} 
-
-MpiAccessPattern.prototype.outputDeclWorker = function($varJp, totalIterations) {
-	throw "Not yet implemented";
-}
-
-

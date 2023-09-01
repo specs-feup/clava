@@ -1,51 +1,39 @@
-laraImport("clava.mpi.MpiUtils");
-laraImport("clava.mpi.patterns.MpiAccessPatterns");
-
-laraImport("clava.Clava");
-laraImport("clava.ClavaJoinPoints");
-laraImport("clava.ClavaCode");
+import { FileJp, FunctionJp, Loop, Varref } from "../../Joinpoints.js";
+import ClavaCode from "../ClavaCode.js";
+import ClavaJoinPoints from "../ClavaJoinPoints.js";
+import MpiAccessPattern from "./MpiAccessPattern.js";
+import MpiUtils from "./MpiUtils.js";
+import MpiAccessPatterns from "./patterns/MpiAccessPatterns.js";
 
 /**
  * Applies an MPI scatter-gather strategy to loops.
- * @class
  */
-class MpiScatterGatherLoop {
-  _$loop;
-  _inputJps;
-  _inputAccesses;
-  _outputJps;
-  _outputAccesses;
+export default class MpiScatterGatherLoop {
+  private $loop: Loop;
+  private inputJps: Varref[] = [];
+  private inputAccesses: MpiAccessPattern[] = [];
+  private outputJps: Varref[] = [];
+  private outputAccesses: MpiAccessPattern[] = [];
 
-  constructor($loop) {
-    this._$loop = $loop;
-    this._inputJps = [];
-    this._inputAccesses = [];
-    this._outputJps = [];
-    this._outputAccesses = [];
+  constructor($loop: Loop) {
+    this.$loop = $loop;
 
     // Check if loop can be parallelize
-    if (this._$loop.iterationsExpr === undefined) {
+    if (this.$loop.iterationsExpr === undefined) {
       throw "Could not determine expression with number of iterations of the loop. Check if the loop is in the Canonical Loop Form, according to the OpenMP standard.";
     }
-    // Inputs + access pattern
-    // Outputs + access pattern
   }
 
-  addInput(varName, accessPattern) {
-    this._addVariable(
-      varName,
-      accessPattern,
-      this._inputJps,
-      this._inputAccesses
-    );
+  addInput(varName: string, accessPattern: MpiAccessPattern) {
+    this.addVariable(varName, accessPattern, this.inputJps, this.inputAccesses);
   }
 
-  addOutput(varName, accessPattern) {
-    this._addVariable(
+  addOutput(varName: string, accessPattern: MpiAccessPattern) {
+    this.addVariable(
       varName,
       accessPattern,
-      this._outputJps,
-      this._outputAccesses
+      this.outputJps,
+      this.outputAccesses
     );
   }
 
@@ -53,8 +41,15 @@ class MpiScatterGatherLoop {
    * Adapts code to use the MPI strategy.
    */
   execute() {
-    var $mainFunction = ClavaCode.getFunctionDefinition("main", true);
-    var $mainFile = $mainFunction.getAncestor("file");
+    const $mainFunction = ClavaCode.getFunctionDefinition(
+      "main",
+      true
+    ) as FunctionJp;
+    const $mainFile = $mainFunction.getAncestor("file") as FileJp | undefined;
+
+    if ($mainFile == undefined) {
+      throw "Could not find file of main function";
+    }
 
     // Add include
     $mainFile.addInclude("mpi.h");
@@ -64,61 +59,60 @@ class MpiScatterGatherLoop {
     const $intType = ClavaJoinPoints.builtinType("int");
     $mainFile.addGlobal(MpiUtils.VAR_NUM_TASKS, $intType, "0");
     $mainFile.addGlobal(MpiUtils.VAR_NUM_WORKERS, $intType, "0");
-    var $rankDecl = $mainFile.addGlobal(MpiUtils.VAR_RANK, $intType, "0");
+    const $rankDecl = $mainFile.addGlobal(MpiUtils.VAR_RANK, $intType, "0");
 
     // Create decl
-    var mpiWorkerFunction = ClavaJoinPoints.declLiteral(this._buildMpiWorker());
+    const mpiWorkerFunction = ClavaJoinPoints.declLiteral(
+      this.buildMpiWorker()
+    );
 
     // Add MPI Worker
     $rankDecl.insertAfter(mpiWorkerFunction);
 
     // Replace loop with MPI Master routine
-    this._replaceLoop();
+    this.replaceLoop();
 
     // Add MPI initialization
-    this._addMpiInit($mainFunction);
+    this.addMpiInit($mainFunction);
   }
 
   /** PRIVATE SECTION **/
 
-  static _FUNCTION_MPI_WORKER = "mpi_worker";
-  static _VAR_WORKER_NUM_ELEMS = "mpi_loop_num_elems";
-  static _VAR_MASTER_TOTAL_ITER = "clava_mpi_total_iter";
+  private static FUNCTION_MPI_WORKER = "mpi_worker";
+  private static VAR_WORKER_NUM_ELEMS = "mpi_loop_num_elems";
+  private static VAR_MASTER_TOTAL_ITER = "clava_mpi_total_iter";
 
-  _replaceLoop() {
-    //	println("Cond relation:" + this._$loop.condRelation);
-    //	println("Iterations expr:" + this._$loop.iterationsExpr.code);
+  private replaceLoop() {
+    let masterSend = "";
 
-    var masterSend = "";
-
-    for (var i = 0; i < this._inputJps.length; i++) {
-      var $inputJp = this._inputJps[i];
-      var accessPattern = this._inputAccesses[i];
+    for (let i = 0; i < this.inputJps.length; i++) {
+      const $inputJp = this.inputJps[i];
+      const accessPattern = this.inputAccesses[i];
 
       masterSend += accessPattern.sendMaster(
         $inputJp,
-        MpiScatterGatherLoop._VAR_MASTER_TOTAL_ITER
+        MpiScatterGatherLoop.VAR_MASTER_TOTAL_ITER
       );
       masterSend += "\n";
     }
 
-    var masterReceive = "";
+    let masterReceive = "";
 
-    for (var i = 0; i < this._outputJps.length; i++) {
-      var $inputJp = this._outputJps[i];
-      var accessPattern = this._outputAccesses[i];
+    for (let i = 0; i < this.outputJps.length; i++) {
+      const $inputJp = this.outputJps[i];
+      const accessPattern = this.outputAccesses[i];
 
       masterReceive += accessPattern.receiveMaster(
         $inputJp,
-        MpiScatterGatherLoop._VAR_MASTER_TOTAL_ITER
+        MpiScatterGatherLoop.VAR_MASTER_TOTAL_ITER
       );
       masterReceive += "\n";
     }
 
-    this._$loop.replaceWith(
-      MpiScatterGatherLoop._MpiMaster(
+    this.$loop.replaceWith(
+      MpiScatterGatherLoop.MpiMaster(
         MpiUtils.VAR_NUM_WORKERS,
-        this._$loop.iterationsExpr.code,
+        this.$loop.iterationsExpr.code,
         masterSend,
         masterReceive,
         MpiUtils._VAR_MPI_STATUS
@@ -126,51 +120,51 @@ class MpiScatterGatherLoop {
     );
   }
 
-  _buildMpiWorker() {
-    var workerLoopCode = this._getWorkerLoopCode();
+  private buildMpiWorker() {
+    const workerLoopCode = this.getWorkerLoopCode();
 
-    var workerReceive = "";
+    let workerReceive = "";
 
-    for (var i = 0; i < this._inputJps.length; i++) {
-      var $inputJp = this._inputJps[i];
-      var accessPattern = this._inputAccesses[i];
+    for (let i = 0; i < this.inputJps.length; i++) {
+      const $inputJp = this.inputJps[i];
+      const accessPattern = this.inputAccesses[i];
 
       workerReceive += accessPattern.receiveWorker(
         $inputJp,
-        MpiScatterGatherLoop._VAR_WORKER_NUM_ELEMS
+        MpiScatterGatherLoop.VAR_WORKER_NUM_ELEMS
       );
       workerReceive += "\n";
     }
 
-    var outputDecl = "";
-    for (var i = 0; i < this._outputJps.length; i++) {
-      var $outputJp = this._outputJps[i];
-      var accessPattern = this._outputAccesses[i];
+    let outputDecl = "";
+    for (let i = 0; i < this.outputJps.length; i++) {
+      const $outputJp = this.outputJps[i];
+      const accessPattern = this.outputAccesses[i];
 
       outputDecl += accessPattern.outputDeclWorker(
         $outputJp,
-        MpiScatterGatherLoop._VAR_WORKER_NUM_ELEMS
+        MpiScatterGatherLoop.VAR_WORKER_NUM_ELEMS
       );
       outputDecl += "\n";
     }
 
-    var workerSend = "";
+    let workerSend = "";
 
-    for (var i = 0; i < this._outputJps.length; i++) {
-      var $outputJp = this._outputJps[i];
-      var accessPattern = this._outputAccesses[i];
+    for (let i = 0; i < this.outputJps.length; i++) {
+      const $outputJp = this.outputJps[i];
+      const accessPattern = this.outputAccesses[i];
 
       workerSend += accessPattern.sendWorker(
         $outputJp,
-        MpiScatterGatherLoop._VAR_WORKER_NUM_ELEMS
+        MpiScatterGatherLoop.VAR_WORKER_NUM_ELEMS
       );
       workerSend += "\n";
     }
 
-    return MpiScatterGatherLoop._MpiWorker(
-      MpiScatterGatherLoop._FUNCTION_MPI_WORKER,
+    return MpiScatterGatherLoop.MpiWorker(
+      MpiScatterGatherLoop.FUNCTION_MPI_WORKER,
       MpiUtils._VAR_MPI_STATUS,
-      MpiScatterGatherLoop._VAR_WORKER_NUM_ELEMS,
+      MpiScatterGatherLoop.VAR_WORKER_NUM_ELEMS,
       workerReceive,
       outputDecl,
       workerLoopCode,
@@ -178,52 +172,55 @@ class MpiScatterGatherLoop {
     );
   }
 
-  _getWorkerLoopCode() {
+  private getWorkerLoopCode() {
     // Copy loop
-    var $workerLoop = this._$loop.copy();
+    const $workerLoop = this.$loop.copy() as Loop;
 
     // Adjust start and end of loop
     $workerLoop.initValue = "0";
-    $workerLoop.endValue = MpiScatterGatherLoop._VAR_WORKER_NUM_ELEMS;
+    $workerLoop.endValue = MpiScatterGatherLoop.VAR_WORKER_NUM_ELEMS;
 
     // TODO: Adapt loop body, if needed
 
     return $workerLoop.code;
   }
 
-  _addMpiInit($mainFunction) {
+  private addMpiInit($mainFunction: FunctionJp) {
     // Add params to main, if no params
     if ($mainFunction.params.length === 0) {
       $mainFunction.setParamsFromStrings(["int argc", "char** argv"]);
     }
 
-    var numMainParams = $mainFunction.params.length;
-    checkTrue(
-      numMainParams === 2,
-      "Expected main() function to have 2 paramters, has '" +
-        numMainParams +
-        "'"
-    );
+    const numMainParams = $mainFunction.params.length;
+    if (numMainParams !== 2) {
+      throw `Expected main() function to have 2 paramters, has '${numMainParams}'`;
+    }
 
-    var argc = $mainFunction.params[0].name;
-    var argv = $mainFunction.params[1].name;
+    const argc = $mainFunction.params[0].name;
+    const argv = $mainFunction.params[1].name;
 
     $mainFunction.body.insertBegin(
-      MpiScatterGatherLoop._MpiInit(
+      MpiScatterGatherLoop.MpiInit(
         argc,
         argv,
         MpiUtils.VAR_RANK,
         MpiUtils.VAR_NUM_TASKS,
         MpiUtils.VAR_NUM_WORKERS,
-        MpiScatterGatherLoop._FUNCTION_MPI_WORKER
+        MpiScatterGatherLoop.FUNCTION_MPI_WORKER
       )
     );
   }
 
-  _addVariable(varName, accessPattern, namesArray, accessesArray) {
+  private addVariable(
+    varName: string,
+    accessPattern: MpiAccessPattern | undefined = MpiAccessPatterns.SCALAR_PATTERN,
+    namesArray: Varref[],
+    accessesArray: MpiAccessPattern[]
+  ) {
     // Check if loop contains a reference to the variable
-    var firstVarref = undefined;
-    for (var $varref of this._$loop.getDescendants("varref")) {
+    let firstVarref = undefined;
+    for (const $v of this.$loop.getDescendants("varref")) {
+      const $varref = $v as Varref;
       if ($varref.name === varName) {
         firstVarref = $varref;
         break;
@@ -231,19 +228,7 @@ class MpiScatterGatherLoop {
     }
 
     if (firstVarref === undefined) {
-      throw (
-        "Could not find a reference to the variable '" +
-        varName +
-        "' in the loop located at " +
-        this._$loop.location
-      );
-    }
-
-    //println("Varref type: " + $varref.type.code);
-
-    if (accessPattern === undefined) {
-      accessPattern = MpiAccessPatterns.SCALAR_PATTERN;
-      // TODO: Verify varref type is a scalar
+      throw `Could not find a reference to the variable '${varName}' in the loop located at ${this.$loop.location}`;
     }
 
     namesArray.push(firstVarref);
@@ -253,7 +238,14 @@ class MpiScatterGatherLoop {
   /** CODEDEFS **/
 
   // TODO: std::cerr should not be hardcoded, lara.code.Logger should be used instead
-  static _MpiInit(argc, argv, rank, numTasks, numWorkers, mpiWorker) {
+  private static MpiInit(
+    argc: string,
+    argv: string,
+    rank: string,
+    numTasks: string,
+    numWorkers: string,
+    mpiWorker: string
+  ) {
     return `
     MPI_Init(&${argc}, &${argv});
     MPI_Comm_rank(MPI_COMM_WORLD, &${rank});
@@ -273,14 +265,14 @@ class MpiScatterGatherLoop {
 `;
   }
 
-  static _MpiWorker(
-    functionName,
-    status,
-    numElems,
-    receiveData,
-    outputDecl,
-    loop,
-    sendData
+  private static MpiWorker(
+    functionName: string,
+    status: string,
+    numElems: string,
+    receiveData: string,
+    outputDecl: string,
+    loop: string,
+    sendData: string
   ) {
     return `
 void ${functionName}() {
@@ -302,12 +294,12 @@ void ${functionName}() {
 `;
   }
 
-  static _MpiMaster(
-    numWorkers,
-    numIterations,
-    masterSend,
-    masterReceive,
-    status
+  private static MpiMaster(
+    numWorkers: string,
+    numIterations: string,
+    masterSend: string,
+    masterReceive: string,
+    status: string
   ) {
     return `
 	// Master routine
