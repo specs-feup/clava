@@ -177,8 +177,8 @@ public enum LaraApiResource implements LaraResourceProvider {
     FILE_ITERATOR("util/FileIterator.lara"),
 
     // UVE
-    UVE("uve/UVE.lara"),
-    UVE_DETECT("uve/DetectStream.lara"),
+    //UVE("uve/UVE.lara"),
+    //UVE_DETECT("uve/DetectStream.lara"),
 
     // OPT
     OPT_NORMALIZE_TO_SUBSET("opt/NormalizeToSubset.js"),
