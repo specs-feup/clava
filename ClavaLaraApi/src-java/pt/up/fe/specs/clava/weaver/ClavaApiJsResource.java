@@ -42,6 +42,7 @@ public enum ClavaApiJsResource implements LaraResourceProvider {
     RESULTFORMATMANAGER_JS("clava/analysis/ResultFormatManager.js"),
     RESULTLIST_JS("clava/analysis/ResultList.js"),
     STRCPYCHECKER_JS("clava/analysis/checkers/StrcpyChecker.js"),
+    GLOBALVARIABLE_JS("clava/code/GlobalVariable.js"),
     HDF5_JS("clava/hdf5/Hdf5.js"),
     HLSANALYSIS_JS("clava/hls/HLSAnalysis.js"),
     MATHANALYSIS_JS("clava/hls/MathAnalysis.js"),
