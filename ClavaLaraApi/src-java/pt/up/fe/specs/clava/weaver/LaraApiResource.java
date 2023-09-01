@@ -157,10 +157,10 @@ public enum LaraApiResource implements LaraResourceProvider {
     PASS_SIMPLIFY_SELECTION_STMTS("pass/SimplifySelectionStmts.js"),
 
     // Stats
-    OPS_BLOCK("stats/OpsBlock.lara"),
-    OPS_COST("stats/OpsCost.lara"),
-    OPS_COUNTER("stats/OpsCounter.lara"),
-    STATIC_OPS_COUNTER("stats/StaticOpsCounter.lara"),
+    //OPS_BLOCK("stats/OpsBlock.lara"),
+    //OPS_COST("stats/OpsCost.lara"),
+    //OPS_COUNTER("stats/OpsCounter.lara"),
+    //STATIC_OPS_COUNTER("stats/StaticOpsCounter.lara"),
 
     // Memoization
     MEMOI_PROF("memoi/MemoiProf.lara"),
