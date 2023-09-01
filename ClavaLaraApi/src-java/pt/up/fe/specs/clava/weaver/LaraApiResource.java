@@ -139,10 +139,10 @@ public enum LaraApiResource implements LaraResourceProvider {
     //SCALAR_PATTERN("mpi/patterns/ScalarPattern.lara"),
 
     // OpenCL
-    OPENCL_CALL("opencl/OpenCLCall.lara"),
-    OPENCL_CALL_VARIABLES("opencl/OpenCLCallVariables.lara"),
-    OPENCL_KERNEL_REPLACER("opencl/KernelReplacer.lara"),
-    OPENCL_KERNEL_REPLACER_AUTO("opencl/KernelReplacerAuto.lara"),
+    //OPENCL_CALL("opencl/OpenCLCall.lara"),
+    //OPENCL_CALL_VARIABLES("opencl/OpenCLCallVariables.lara"),
+    //OPENCL_KERNEL_REPLACER("opencl/KernelReplacer.lara"),
+    //OPENCL_KERNEL_REPLACER_AUTO("opencl/KernelReplacerAuto.lara"),
 
     // Parser
     //BATCH_PARSER("parser/BatchParser.lara"),
