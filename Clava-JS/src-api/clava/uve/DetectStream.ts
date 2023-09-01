@@ -1,7 +1,5 @@
-import weaver.Query;
+import { FunctionJp, Param } from "../../Joinpoints.js";
 
-var DetectStream = {};
-
-DetectStream.detectLinear = function(func, arr) {
-	
+export default class DetectStream {
+  static detectLinear(func: FunctionJp, arr: Param) {}
 }
