@@ -47,6 +47,7 @@ public enum ClavaApiJsResource implements LaraResourceProvider {
     MATHANALYSIS_JS("clava/hls/MathAnalysis.js"),
     MATHHINFO_JS("clava/hls/MathHInfo.js"),
     TRACEINSTRUMENTATION_JS("clava/hls/TraceInstrumentation.js"),
+    BATCHPARSER_JS("clava/parser/BatchParser.js"),
     CLAVADATASTORE_JS("clava/util/ClavaDataStore.js"),
     DETECTSTREAM_JS("clava/uve/DetectStream.js"),
     UVE_JS("clava/uve/UVE.js"),
