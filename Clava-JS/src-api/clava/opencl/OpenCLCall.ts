@@ -1,103 +1,115 @@
-//import clava.opencl.OpenCLTemplates;
-import clava.opencl.OpenCLCallVariables;
+import Io from "lara-js/api/lara/Io.js";
+import Platforms from "lara-js/api/lara/Platforms.js";
+import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
+import { Call, FileJp, FunctionJp } from "../../Joinpoints.js";
+import OpenCLCallVariables from "./OpenCLCallVariables.js";
 
-import lara.util.IdGenerator;
-import lara.util.Replacer;
+export default class OpenCLCall {
+  $kernel: FunctionJp | undefined = undefined;
+  deviceId: number = 1;
 
-import lara.Platforms;
+  setKernel($function: FunctionJp) {
+    if (!($function.getAncestor("file") as FileJp).isOpenCL) {
+      throw new Error(
+        "OpenCLCall.setKernel: expected a function in an OpenCL file"
+      );
+    }
 
-/**
- *
- */
-function OpenCLCall() {
-	this.$kernel = undefined;
-	this.deviceId = 1;
+    this.$kernel = $function;
+  }
+
+  setDeviceId(deviceId: number) {
+    this.deviceId = deviceId;
+  }
+
+  replaceCall($call: Call) {
+    this.replaceCallPreconditions();
+
+    // Add include
+    this.addOpenCLInclude($call);
+
+    // Generate id
+    const id = IdGenerator.next("opencl_call_");
+    const variables = new OpenCLCallVariables(id);
+
+    this.loadKernelFile($call, variables);
+    this.clInit($call, variables);
+  }
+
+  private replaceCallPreconditions() {
+    if (this.$kernel == undefined) {
+      throw new Error(
+        "OpenCLCall._replaceCallPreconditions: Expected kernel to be set"
+      );
+    }
+  }
+
+  private addOpenCLInclude($call: Call) {
+    const $file = $call.getAncestor("file") as FileJp;
+
+    // If MacOS, add include <OpenCL/opencl.h>
+    if (Platforms.isMac()) {
+      $file.addInclude("OpenCL/opencl.h", true);
+      return;
+    }
+
+    // Otherwise, <CL/cl.h>
+    $file.addInclude("CL/cl.h", true);
+  }
+
+  private loadKernelFile($call: Call, variables: OpenCLCallVariables) {
+    // Get necessary data
+    const $kernelFile = $call.getAncestor("file") as FileJp;
+    const kernelPath = $kernelFile.relativeFilepath;
+    const kernelFileBytes: number = Io.getPath($kernelFile.filepath).length;
+
+    // Insert before the call
+    $call.insertBefore(
+      `// Load the kernel source code into the array
+FILE *${variables.getKernelFile()} = fopen("${kernelPath}", "r");
+if (!${variables.getKernelFile()}) {
+	fprintf(stdout, "Failed to load kernel.\n");
+	exit(1);
+}
+char *${variables.getKernelString()} = (char*)malloc(${kernelFileBytes});
+size_t ${variables.getKernelStringSize()} = fread(${variables.getKernelString()}, 1, ${kernelFileBytes}, ${variables.getKernelFile()});
+fclose(${variables.getKernelFile()});`
+    );
+  }
+
+  /**
+   * This only needs to be done once per function
+   */
+  private clInit($call: Call, variables: OpenCLCallVariables) {
+    // TODO: Set of functions where this has been called
+
+    // Insert before the call
+    $call.insertBefore(
+      `cl_int ${variables.getErrorCode()};
+cl_uint ${variables.getNumPlatforms()};
+cl_platform_id ${variables.getPlatformId()};
+
+// Check the number of platforms
+${variables.getErrorCode()} = clGetPlatformIDs(0, NULL, &${variables.getNumPlatforms()});
+if(${variables.getErrorCode()} != CL_SUCCESS) {
+	fprintf(stderr, "[OpenCL] Error getting number of platforms\n");
+	exit(1);
+} else if(${variables.getNumPlatforms()} == 0) {
+	fprintf(stderr, "[OpenCL] No platforms found.\n");
+	exit(1);
+} else {
+	printf("[OpenCL] Number of platforms is %d\n",${variables.getNumPlatforms()});
 }
 
-
-OpenCLCall.prototype.setKernel = function($function) {
-	// Verification (should be isOpenCLKernel)
-	checkTrue($function.getAncestor("file").isOpenCL, "OpenCLCall.setKernel: expected an OpenCL kernel");
-	this.$kernel = $function;
+${variables.getErrorCode()} = clGetPlatformIDs(${
+        this.deviceId
+      }, &${variables.getPlatformId()}, NULL);
+if(${variables.getErrorCode()} != CL_SUCCESS) {
+	fprintf(stderr, "[OpenCL] Error getting platform ID for device ${
+    this.deviceId
+  }.\n");
+	exit(1);
+}`
+    );
+  }
 }
-
-OpenCLCall.prototype.setDeviceId = function(deviceId) {
-	checkNumber(deviceId, "OpenCLCall.setDevideId");
-	this.deviceId = deviceId;
-}
-
-OpenCLCall.prototype.replaceCall = function($call) {
-	this._replaceCallPreconditions();
-
-	// Add include
-	this._addOpenCLInclude($call);
-	
-	// Generate id
-	var id = IdGenerator.next("opencl_call_");
-	var variables = new OpenCLCallVariables(id);
-	
-	this._loadKernelFile($call, variables);
-	this._clInit($call, variables);
-}
-
-OpenCLCall.prototype._replaceCallPreconditions = function() {
-	checkDefined(this.$kernel, "OpenCLCall._replaceCallPreconditions: Expected kernel to be set");
-}
-
-OpenCLCall.prototype._addOpenCLInclude = function($call) {
-
-	var $file = $call.getAncestor("file");
-
-	// If MacOS, add include <OpenCL/opencl.h>
-	if(Platforms.isMac()) {
-		$file.exec addInclude("OpenCL/opencl.h", true);
-		return;
-	}
-
-	// Otherwise, <CL/cl.h>
-	$file.exec addInclude("CL/cl.h", true);
-}
-
-
-OpenCLCall.prototype._loadKernelFile = function($call, variables) {
-
-	// Get necessary data
-	var $kernelFile = $call.getAncestor("file");
-	var kernelPath = $kernelFile.relativeFilepath;
-	var kernelFileBytes = Io.getPath($kernelFile.filepath).length();
-
-	// Get template and replace values	
-	//var replacer = new Replacer(OpenCLTemplates.getString("load_file.c"));
-	var replacer = new Replacer(OpenCLTemplates.LOAD_FILE.read());
-	
-	replacer.replaceAll("<VAR_FILE>", variables.getKernelFile()); 
-	replacer.replaceAll("<VAR_SOURCE_STR>", variables.getKernelString()); 
-	replacer.replaceAll("<VAR_SOURCE_SIZE>", variables.getKernelStringSize()); 
-	
-	replacer.replaceAll("<KERNEL_FILE>", kernelPath); 
-	replacer.replaceAll("<SOURCE_SIZE_BYTES>", kernelFileBytes); 
-
-	// Insert before the call
-	$call.insert before replacer.getString();
-}
-
-OpenCLCall.prototype._clInit = function($call, variables) {
-	// This only needs to be done once per function
-	// TODO: Set of functions where this has been called
-	
-	// Get template and replace values	
-	var replacer = new Replacer(OpenCLTemplates.CL_INIT.read());
-	
-	replacer.replaceAll("<DEVICE_ID>", this.deviceId);
-	replacer.replaceAll("<VAR_ERROR_CODE>", variables.getErrorCode()); 
-	replacer.replaceAll("<VAR_NUM_PLATFORMS>", variables.getNumPlatforms()); 
-	replacer.replaceAll("<VAR_PLATFORM_ID>", variables.getPlatformId()); 
-	
-	// Insert before the call
-	$call.insert before replacer.getString();
-}
-
-
-
-
-	

@@ -1,381 +1,505 @@
-import clava.ClavaJoinPoints;
-import lara.Io;
-import lara.Strings;
+import Io from "lara-js/api/lara/Io.js";
+import Strings from "lara-js/api/lara/Strings.js";
+import {
+  BuiltinType,
+  Call,
+  FileJp,
+  FunctionJp,
+  Statement,
+  Type,
+} from "../../Joinpoints.js";
+import ClavaJoinPoints from "../ClavaJoinPoints.js";
 
-function KernelReplacer($call, kernelName, kernelCodePath, bufferSizes, localSize, numIters) {
-
-	// TODO: verify all parameters
-
-	// join points
-	this._call = $call;
-	this._function = $call.definition;
-	this._stmt = $call.getAncestor('statement');
-	this._file = $call.getAncestor('file');
-
-	// buffer information
-	this._bufferSizes = bufferSizes; // maps param index to buffer information TODO: improve how this is stored and used
-	this._inBuffers = this._makeInBuffers();
-	this._outBuffers = {};
-	this._inOutBuffers = {};
-
-	// kernel name and source
-	var kernelFile = Io.getPath(this._file.path, kernelCodePath);
-	if(!Io.isFile(kernelFile)) {
-		throw "[KernelReplacer] Cannot read OpenCL file in location " + kernelFile + " (" + kernelCodePath + ")";
-	}
-	this._kernelCode = readFile(kernelFile);
-	this._sourceStringName = undefined;
-	this._kernelName = kernelName;
-
-	// device type
-	this._deviceType = DeviceType.CL_DEVICE_TYPE_ALL; // TODO: make a setter for this
-
-	// error handling
-	this._errorHandling = ErrorHandling.EXIT; // TODO: make setter for this
-
-	// local size and number of iterations (global size)
-	if(isArray(localSize)) {
-		this._localSize = localSize;
-	} else {
-		this._localSize = [localSize];
-	}
-	
-	if(isArray(numIters)) {
-		this._iter = numIters;
-	} else {
-		this._iter = [numIters];
-	}
-	
-	checkTrue(this._localSize.length === this._iter.length, 'localSize and numIters must have the same number of dimensions', 'KernelReplacer()');
+export interface OpenClKernelReplacerConfiguration {
+  kernelName: string;
+  kernelFile: string;
+  bufferSizes: Record<string, string>;
+  localSize: string[] | string;
+  iterNumbers: string[] | string;
+  outputBuffers: string[];
 }
 
-/* ------------------------- PUBLIC METHODS ------------------------- */
+export default class KernelReplacer {
+  private call: Call;
+  private function: FunctionJp;
+  private stmt: Statement;
+  private file: FileJp;
+  private bufferSizes: Map<string, string> = new Map();
+  private inBuffers: Map<string, Buffer>;
+  private outBuffers: Map<string, Buffer> = new Map();
+  private inOutBuffers: Map<string, Buffer> = new Map();
+  private kernelCode: string;
+  private kernelName: string;
+  private deviceType: DeviceType;
+  private errorHandling: ErrorHandling;
+  private localSize: string[];
+  private iter: string[];
 
-KernelReplacer.prototype.setOutput = function(paramName) {
-	// TODO: check it exists
-	this._outBuffers[paramName] = this._inBuffers[paramName];
-	this._outBuffers[paramName]._kind = BufferKind.OUTPUT;
-	delete this._inBuffers[paramName];
-};
+  constructor(
+    $call: Call,
+    kernelName: string,
+    kernelCodePath: string,
+    bufferSizes: Record<string, string>,
+    localSize: string[] | string,
+    numIters: string[] | string
+  ) {
+    // TODO: verify all parameters
 
-KernelReplacer.prototype.replaceCall = function() {
+    // join points
+    this.call = $call;
+    this.function = $call.definition;
+    this.stmt = $call.getAncestor("statement") as Statement;
+    this.file = $call.getAncestor("file") as FileJp;
 
-	var $parentFile = this._file;
-	
-	$parentFile.exec addInclude("CL/cl.hpp", true);
-	$parentFile.exec insertBegin('#define __CL_ENABLE_EXCEPTIONS');
-	
-	var type = ClavaJoinPoints.typeLiteral('const char *');
-	this._sourceStringName = this._kernelName + '_source_code';
-	$parentFile.exec addGlobal(this._sourceStringName, type, this._makeKernelCode());
+    // buffer information
+    for (const key of Object.keys(bufferSizes)) {
+      this.bufferSizes.set(key, bufferSizes[key]);
+    }
 
-	var code = this._makeCode();
-	var $codeStmt = ClavaJoinPoints.stmtLiteral(code);
-	this._stmt.replaceWith($codeStmt);
-};
+    this.inBuffers = this.makeInBuffers();
 
-/* ------------------------- PRIVATE METHODS ------------------------ */
+    // kernel name and source
+    const kernelFile = Io.getPath(this.file.path, kernelCodePath);
+    if (!Io.isFile(kernelFile)) {
+      throw (
+        "[KernelReplacer] Cannot read OpenCL file in location " +
+        kernelFile.toString() +
+        " (" +
+        kernelCodePath +
+        ")"
+      );
+    }
+    this.kernelCode = Io.readFile(kernelFile);
+    this.kernelName = kernelName;
 
-KernelReplacer.prototype._makeKernelCode = function() {
-	
-	return '"' + Strings.escapeJson(this._kernelCode) + '"';
-};
+    // device type
+    this.deviceType = DeviceType.CL_DEVICE_TYPE_ALL; // TODO: make a setter for this
 
-KernelReplacer.prototype._makeCode = function() {
-	
-	var code = '// start of OpenCL code\n';
-	
-	code += 'cl::Program program;\n';
-	code += 'std::vector<cl::Device> devices;\n';
-	code += 'try {\n';
-	
-	code += SetupCode(this._deviceType, this._makeErrorHandlingCode());
-	code += this._makeBuffersCode();
-	code += KernelCreation(this._sourceStringName, this._kernelName);
-	code += this._makeArgBindCode();
-	code += SizesDecl(this._localSize.join(', '), this._makeGlobalSizeCode());
-	code += EnqueueKernel();
-	code += this._makeOutputBuffersCode();
-	code += ExceptionCode();
+    // error handling
+    this.errorHandling = ErrorHandling.EXIT; // TODO: make setter for this
 
-	code += '\n// end of OpenCL code\n\n';
-	
-	return code;
-};
+    // local size and number of iterations (global size)
+    if (localSize instanceof Array) {
+      this.localSize = localSize;
+    } else {
+      this.localSize = [localSize];
+    }
 
-KernelReplacer.prototype._makeGlobalSizeCode = function() {
+    if (numIters instanceof Array) {
+      this.iter = numIters;
+    } else {
+      this.iter = [numIters];
+    }
 
-	var codes = [];
-	var code = 'cl::NDRange globalSize(';
-	for(var i in this._localSize) {
-		var local = this._localSize[i];
-		var global = this._iter[i];
-		codes.push('(int)(ceil(' + global + '/(float)' + local + ')*' + local + ')');
-	}
-	code += codes.join(', ');
-	code += ');';
-	return code;
-};
+    if (this.localSize.length !== this.iter.length) {
+      throw new Error(
+        "KernelReplacer(): localSize and numIters must have the same number of dimensions"
+      );
+    }
+  }
 
-KernelReplacer.prototype._makeOutputBuffersCode = function() {
+  /* ------------------------- PUBLIC METHODS ------------------------- */
 
-	var code = '\n// Read back buffers\n';
-	for (inOutBuf of getValues(this._inOutBuffers)) {
-		code += BufferCopyOut(inOutBuf._bufferName, inOutBuf._size, inOutBuf._argName);
-	}
-	for (outBuf of getValues(this._outBuffers)) {
-		code += BufferCopyOut(outBuf._bufferName, outBuf._size, outBuf._argName);
-	}
+  setOutput(paramName: string) {
+    const inBuf = this.inBuffers.get(paramName);
 
-	return code;
-};
+    if (inBuf == undefined) {
+      throw new Error(`No input buffer found for parameter '${paramName}'`);
+    }
 
-KernelReplacer.prototype._makeArgBindCode = function() {
+    this.outBuffers.set(paramName, inBuf);
+    this.outBuffers.get(paramName)!._kind = BufferKind.OUTPUT;
+    this.inBuffers.delete(paramName);
+  }
 
-	var code = '';
+  replaceCall() {
+    const $parentFile = this.file;
 
-	for(var index in this._call.args) {
-		var $arg = this._call.args[index];
-	
-		var paramName = this._function.params[index].name;
+    $parentFile.addInclude("CL/cl.hpp", true);
+    $parentFile.insertBegin("#define __CL_ENABLE_EXCEPTIONS");
 
-		var inTry = this._inBuffers[paramName];
-		if(inTry !== undefined) {
-			code += ArgBind(index, inTry._bufferName);
-		} else {
-			var inOutTry = this._inOutBuffers[paramName];
-			if(inOutTry !== undefined) {
-				code += ArgBind(index, inOutTry._bufferName);
-			} else {
-				var outTry = this._outBuffers[paramName];
-				if(outTry !== undefined) {
-					code += ArgBind(index, outTry._bufferName);
-				} else {
-					code += ArgBind(index, $arg.name);
-				}
-			}
-		}
-	}
+    const type = ClavaJoinPoints.typeLiteral("const char *");
+    const sourceStringName = this.kernelName + "_source_code";
+    $parentFile.addGlobal(sourceStringName, type, this.makeKernelCode());
 
-	return '\n// Bind kernel arguments to kernel\n' + code;
-};
+    const code = this.makeCode(sourceStringName);
+    const $codeStmt = ClavaJoinPoints.stmtLiteral(code);
+    this.stmt.replaceWith($codeStmt);
+  }
 
-KernelReplacer.prototype._makeBuffersCode = function() {
-	var code = '\n// Create device memory buffers\n';
+  /* ------------------------- PRIVATE METHODS ------------------------ */
 
-	for (inBuf of getValues(this._inBuffers)) {
-		code += BufferDecl(inBuf._bufferName, inBuf._kind, inBuf._size);
-	}
+  private makeKernelCode() {
+    return '"' + Strings.escapeJson(this.kernelCode) + '"';
+  }
 
-	for (outBuf of getValues(this._outBuffers)) {
-		code += BufferDecl(outBuf._bufferName, outBuf._kind, outBuf._size);
-	}
+  private makeCode(sourceStringName: string) {
+    let code = "// start of OpenCL code\n";
 
-	for (inOutBuf of getValues(this._inOutBuffers)) {
-		code += BufferDecl(inOutBuf._bufferName, inOutBuf._kind, inOutBuf._size);
-	}
+    code += "cl::Program program;\n";
+    code += "std::vector<cl::Device> devices;\n";
+    code += "try {\n";
 
-	code += '\n// Bind memory buffers\n';
-	for (inBuf of getValues(this._inBuffers)) {
-		code += BufferCopyIn(inBuf._bufferName, inBuf._size, inBuf._argName);
-	}
-	for (inOutBuf of getValues(this._inOutBuffers)) {
-		code += BufferCopyIn(inOutBuf._bufferName, inOutBuf._size, inOutBuf._argName);
-	}
+    code += KernelReplacer.SetupCode(
+      this.deviceType,
+      this.makeErrorHandlingCode()
+    );
+    code += this.makeBuffersCode();
+    code += KernelReplacer.KernelCreation(sourceStringName, this.kernelName);
+    code += this.makeArgBindCode();
+    code += KernelReplacer.SizesDecl(
+      this.localSize.join(", "),
+      this.makeGlobalSizeCode()
+    );
+    code += KernelReplacer.EnqueueKernel();
+    code += this.makeOutputBuffersCode();
+    code += KernelReplacer.ExceptionCode();
 
-	return code;
-};
+    code += "\n// end of OpenCL code\n\n";
 
-KernelReplacer.prototype._makeErrorHandlingCode = function() {
+    return code;
+  }
 
-	switch (this._errorHandling) {
+  private makeGlobalSizeCode() {
+    const codes = [];
+    let code = "cl::NDRange globalSize(";
+    for (let i = 0; i < this.localSize.length; i++) {
+      const local = this.localSize[i];
+      const global = this.iter[i];
+      codes.push(
+        "(int)(ceil(" + global + "/(float)" + local + ")*" + local + ")"
+      );
+    }
+    code += codes.join(", ");
+    code += ");";
+    return code;
+  }
 
-		case ErrorHandling.EXIT:
-			return 'exit(EXIT_FAILURE);';
-		default:
-			return 'exit(EXIT_FAILURE);';
-	}
-};
+  private makeOutputBuffersCode() {
+    let code = "\n// Read back buffers\n";
+    this.inOutBuffers.forEach((inOutBuf) => {
+      code += KernelReplacer.BufferCopyOut(
+        inOutBuf._bufferName,
+        inOutBuf._size,
+        inOutBuf._argName
+      );
+    });
+    this.outBuffers.forEach((outBuf) => {
+      code += KernelReplacer.BufferCopyOut(
+        outBuf._bufferName,
+        outBuf._size,
+        outBuf._argName
+      );
+    });
 
-KernelReplacer.prototype._makeInBuffers = function() {
+    return code;
+  }
 
-	var buffers = {};
-	
-	// iterate over function parameters
-	var params = this._function.params;
-	for(var i in params) {
-		var $param = params[i];
-		// pick arrays/pointers
-		if($param.type.isArray || $param.type.isPointer) {
+  private makeArgBindCode() {
+    let code = "";
 
-			var bufferSize = this._getBufferSize($param.name);
-			var $baseType = this._getBaseType($param.type);
-			var argName = this._call.args[i].code;
-			var info = new Buffer(BufferKind.INPUT, $param.name, $baseType, i, bufferSize, argName, $param.name + '_buffer');
-			buffers[$param.name] = info;
-		}
-	}
-	
-	return buffers;
-};
+    for (let index = 0; index < this.call.args.length; index++) {
+      const $arg = this.call.args[index];
 
-KernelReplacer.prototype._getBufferSize = function(paramName) {
-	if(this._bufferSizes[paramName] !== undefined) {
-		return this._bufferSizes[paramName];
-	} else {
-		return this._bufferSizes;
-	}
-};
+      const paramName = this.function.params[index].name;
 
-KernelReplacer.prototype._getBaseType = function($type) {
+      const inTry = this.inBuffers.get(paramName);
+      if (inTry !== undefined) {
+        code += KernelReplacer.ArgBind(String(index), inTry._bufferName);
+      } else {
+        const inOutTry = this.inOutBuffers.get(paramName);
+        if (inOutTry !== undefined) {
+          code += KernelReplacer.ArgBind(String(index), inOutTry._bufferName);
+        } else {
+          const outTry = this.outBuffers.get(paramName);
+          if (outTry !== undefined) {
+            code += KernelReplacer.ArgBind(String(index), outTry._bufferName);
+          } else {
+            code += KernelReplacer.ArgBind(String(index), $arg.code);
+          }
+        }
+      }
+    }
 
-	var $newType = $type;
-	while(!$newType.isBuiltin) {
-		$newType = $newType.unwrap;
-	}
-	
-	return $newType;
-}
+    return "\n// Bind kernel arguments to kernel\n" + code;
+  }
 
-/* ------------------------- PRIVATE CLASSES ------------------------ */
+  private makeBuffersCode() {
+    let code = "\n// Create device memory buffers\n";
 
-function Buffer(kind, paramName, baseType, index, size, argName, bufferName) {
-	this._kind = kind;
-	this._paramName = paramName;
-	this._baseType = baseType;
-	this._index = index;
-	this._size = size;
-	this._argName = argName;
-	this._bufferName = bufferName;
-}
+    this.inBuffers.forEach((inBuf) => {
+      code += KernelReplacer.BufferDecl(
+        inBuf._bufferName,
+        inBuf._kind,
+        inBuf._size
+      );
+    });
 
-/* ------------------------------ ENUMS ----------------------------- */
+    this.outBuffers.forEach((outBuf) => {
+      code += KernelReplacer.BufferDecl(
+        outBuf._bufferName,
+        outBuf._kind,
+        outBuf._size
+      );
+    });
 
-var BufferKind = {
-	INPUT: "CL_MEM_READ_ONLY",
-	OUTPUT: "CL_MEM_WRITE_ONLY",
-	INPUT_OUTPUT: "CL_MEM_READ_WRITE"
-};
+    this.inOutBuffers.forEach((inOutBuf) => {
+      code += KernelReplacer.BufferDecl(
+        inOutBuf._bufferName,
+        inOutBuf._kind,
+        inOutBuf._size
+      );
+    });
 
-var DeviceType = {
-	CL_DEVICE_TYPE_ALL: "CL_DEVICE_TYPE_ALL",
-	CL_DEVICE_TYPE_CPU: "CL_DEVICE_TYPE_CPU",
-	CL_DEVICE_TYPE_GPU: "CL_DEVICE_TYPE_GPU",
-	CL_DEVICE_TYPE_ACCELERATOR: "CL_DEVICE_TYPE_ACCELERATOR",
-	CL_DEVICE_TYPE_DEFAULT: "CL_DEVICE_TYPE_DEFAULT"
-};
+    code += "\n// Bind memory buffers\n";
+    this.inBuffers.forEach((inBuf) => {
+      code += KernelReplacer.BufferCopyIn(
+        inBuf._bufferName,
+        inBuf._size,
+        inBuf._argName
+      );
+    });
 
-var ErrorHandling = {
-	EXIT: 0,
-	RETURN: 1,
-	USER: 2
-};
+    this.inOutBuffers.forEach((inOutBuf) => {
+      code += KernelReplacer.BufferCopyIn(
+        inOutBuf._bufferName,
+        inOutBuf._size,
+        inOutBuf._argName
+      );
+    });
 
-/* ---------------------------- CODEDEFS ---------------------------- */
+    return code;
+  }
 
-codedef SetupCode(deviceType, errorHandling) %{
-// Query platforms
+  private makeErrorHandlingCode() {
+    switch (this.errorHandling) {
+      case ErrorHandling.EXIT:
+        return "exit(EXIT_FAILURE);";
+      default:
+        return "exit(EXIT_FAILURE);";
+    }
+  }
+
+  private makeInBuffers() {
+    const buffers: Map<string, Buffer> = new Map();
+
+    // iterate over function parameters
+    const params = this.function.params;
+    for (let i = 0; i < params.length; i++) {
+      const $param = params[i];
+      // pick arrays/pointers
+      if ($param.type.isArray || $param.type.isPointer) {
+        const bufferSize = this.getBufferSize($param.name);
+        const $baseType = this.getBaseType($param.type);
+        const argName = this.call.args[i].code;
+        const info = new Buffer(
+          BufferKind.INPUT,
+          $param.name,
+          $baseType,
+          i,
+          bufferSize,
+          argName,
+          $param.name + "_buffer"
+        );
+        buffers.set($param.name, info);
+      }
+    }
+
+    return buffers;
+  }
+
+  private getBufferSize(paramName: string): string {
+    const bufferSize = this.bufferSizes.get(paramName);
+
+    if (bufferSize == undefined) {
+      throw new Error(`Ǹo buffer size found for parameter '${paramName}'`);
+    }
+
+    return bufferSize;
+  }
+
+  private getBaseType($type: Type) {
+    let $newType = $type;
+    while (!($newType instanceof BuiltinType)) {
+      $newType = $newType.unwrap;
+    }
+
+    return $newType;
+  }
+
+  /* ---------------------------- CODEDEFS ---------------------------- */
+
+  private static SetupCode(deviceType: string, errorHandling: string): string {
+    return `// Query platforms
 std::vector<cl::Platform> platforms;
 cl::Platform::get(&platforms);
 if (platforms.size() == 0) {
   std::cout << "Platform size 0\n";
-  [[errorHandling]]
+  ${errorHandling}
 }
 
 // Get list of devices on default platform and create context
 cl_context_properties properties[] =
  { CL_CONTEXT_PLATFORM, (cl_context_properties)(platforms[0])(),
-	   0};
-cl::Context context([[deviceType]], properties);
+       0};
+cl::Context context(${deviceType}, properties);
 devices = context.getInfo<CL_CONTEXT_DEVICES>();
 
 // Create command queue for first device
 cl::CommandQueue queue(context, devices[0], 0);
 
-}%
-end
+`;
+  }
 
-codedef ExceptionCode () %{
-} catch (cl::Error err) {
-	std::cerr << "ERROR: "<<err.what()<<"("<<err.err()<<")"<<std::endl;
-	if (err.err() == CL_BUILD_PROGRAM_FAILURE) {
-		for (cl::Device dev : devices) {
-			// Check the build status
-			cl_build_status status = program.getBuildInfo<CL_PROGRAM_BUILD_STATUS>(dev);
-			if (status != CL_BUILD_ERROR)
-				continue;
-			
-			// Get the build log
-			std::string name = dev.getInfo<CL_DEVICE_NAME>();
-			std::string buildlog = program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(dev);
-			std::cerr << "Build log for " << name << ":" << std::endl << buildlog << std::endl;
-		}
-	} else {
-		throw err;
-	}
+  private static ExceptionCode(): string {
+    return `} catch (cl::Error err) {
+    std::cerr << "ERROR: "<<err.what()<<"("<<err.err()<<")"<<std::endl;
+    if (err.err() == CL_BUILD_PROGRAM_FAILURE) {
+        for (cl::Device dev : devices) {
+            // Check the build status
+            cl_build_status status = program.getBuildInfo<CL_PROGRAM_BUILD_STATUS>(dev);
+            if (status != CL_BUILD_ERROR)
+                continue;
+            
+            // Get the build log
+            std::string name = dev.getInfo<CL_DEVICE_NAME>();
+            std::string buildlog = program.getBuildInfo<CL_PROGRAM_BUILD_LOG>(dev);
+            std::cerr << "Build log for " << name << ":" << std::endl << buildlog << std::endl;
+        }
+    } else {
+        throw err;
+    }
 }
-}%
-end
+`;
+  }
 
-codedef BufferCopyOut(bufferName, bufferSize, argName) %{
-queue.enqueueReadBuffer([[bufferName]], CL_TRUE, 0, [[bufferSize]], [[argName]]);
+  private static BufferCopyOut(
+    bufferName: string,
+    bufferSize: string,
+    argName: string
+  ): string {
+    return `queue.enqueueReadBuffer(${bufferName}, CL_TRUE, 0, ${bufferSize}, ${argName});
 
-}%
-end
+`;
+  }
 
-codedef EnqueueKernel () %{
-// Enqueue kernel
+  private static EnqueueKernel(): string {
+    return `// Enqueue kernel
 cl::Event event;
 queue.enqueueNDRangeKernel(
-	kernel,
-	cl::NullRange,
-	globalSize,
-	localSize,
-	NULL,
-	&event);
+    kernel,
+    cl::NullRange,
+    globalSize,
+    localSize,
+    NULL,
+    &event);
 
 // Block until kernel completion
 event.wait();
 
-}%
-end
+`;
+  }
 
-codedef SizesDecl(localsize, globalsizeCode) %{
-// Number of work items in each local work group
-cl::NDRange localSize([[localsize]]);
+  private static SizesDecl(localsize: string, globalsizeCode: string): string {
+    return `// Number of work items in each local work group
+cl::NDRange localSize(${localsize});
 // Number of total work items - localSize must be devisor
-[[globalsizeCode]]
-        
-}%
-end
+${globalsizeCode}
 
-codedef ArgBind (index, arg) %{
-kernel.setArg([[index]], [[arg]]);
+`;
+  }
 
-}%
-end
+  private static ArgBind(index: string, arg: string): string {
+    return `kernel.setArg(${index}, ${arg});
 
-codedef KernelCreation (sourceString, kernelName) %{
-//Build kernel from source string
+`;
+  }
+
+  private static KernelCreation(
+    sourceString: string,
+    kernelName: string
+  ): string {
+    return `//Build kernel from source string
 cl::Program::Sources source(1,
-  std::make_pair([[sourceString]],strlen([[sourceString]])));
+  std::make_pair(${sourceString},strlen(${sourceString})));
 program = cl::Program(context, source);
 program.build(devices);
 
 // Create kernel object
-cl::Kernel kernel(program, "[[kernelName]]");
+cl::Kernel kernel(program, "${kernelName}");
 
-}%
-end
+`;
+  }
 
-codedef BufferDecl(bufferName, bufferKind, bufferSize) %{
-cl::Buffer [[bufferName]] = cl::Buffer(context, [[bufferKind]], [[bufferSize]]);
+  private static BufferDecl(
+    bufferName: string,
+    bufferKind: string,
+    bufferSize: string
+  ): string {
+    return `cl::Buffer ${bufferName} = cl::Buffer(context, ${bufferKind}, ${bufferSize});
 
-}%
-end
+`;
+  }
 
-codedef BufferCopyIn(bufferName, bufferSize, argName) %{
-queue.enqueueWriteBuffer([[bufferName]], CL_TRUE, 0, [[bufferSize]], [[argName]]);
+  private static BufferCopyIn(
+    bufferName: string,
+    bufferSize: string,
+    argName: string
+  ): string {
+    return `queue.enqueueWriteBuffer(${bufferName}, CL_TRUE, 0, ${bufferSize}, ${argName});
 
-}%
-end
+`;
+  }
+}
+
+/* ------------------------- PRIVATE CLASSES ------------------------ */
+
+class Buffer {
+  _kind: BufferKind;
+  _paramName: string;
+  _baseType: BuiltinType;
+  _index: number;
+  _size: string;
+  _argName: string;
+  _bufferName: string;
+
+  constructor(
+    kind: BufferKind,
+    paramName: string,
+    baseType: BuiltinType,
+    index: number,
+    size: string,
+    argName: string,
+    bufferName: string
+  ) {
+    this._kind = kind;
+    this._paramName = paramName;
+    this._baseType = baseType;
+    this._index = index;
+    this._size = size;
+    this._argName = argName;
+    this._bufferName = bufferName;
+  }
+}
+
+/* ------------------------------ ENUMS ----------------------------- */
+
+enum BufferKind {
+  INPUT = "CL_MEM_READ_ONLY",
+  OUTPUT = "CL_MEM_WRITE_ONLY",
+  INPUT_OUTPUT = "CL_MEM_READ_WRITE",
+}
+
+enum DeviceType {
+  CL_DEVICE_TYPE_ALL = "CL_DEVICE_TYPE_ALL",
+  CL_DEVICE_TYPE_CPU = "CL_DEVICE_TYPE_CPU",
+  CL_DEVICE_TYPE_GPU = "CL_DEVICE_TYPE_GPU",
+  CL_DEVICE_TYPE_ACCELERATOR = "CL_DEVICE_TYPE_ACCELERATOR",
+  CL_DEVICE_TYPE_DEFAULT = "CL_DEVICE_TYPE_DEFAULT",
+}
+
+enum ErrorHandling {
+  EXIT = 0,
+  RETURN = 1,
+  USER = 2,
+}
