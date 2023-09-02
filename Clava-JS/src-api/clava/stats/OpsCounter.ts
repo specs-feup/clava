@@ -1,209 +1,225 @@
-import clava.ClavaJoinPoints;
-import clava.code.GlobalVariable;
-
-import weaver.Query;
-
-import lara.util.StringSet;
-import lara.util.PrintOnce;
-import lara.code.Logger;
-
-import lara.Strings;
-
+import ClavaJoinPoints from "../ClavaJoinPoints.js";
+import GlobalVariable from "../code/GlobalVariable.js";
+import Query from "lara-js/api/weaver/Query.js";
+import PrintOnce from "lara-js/api/lara/util/PrintOnce.js";
+import Logger from "../../lara/code/Logger.js";
+import {
+  BuiltinType,
+  Call,
+  FunctionJp,
+  Joinpoint,
+  Op,
+  Type,
+} from "../../Joinpoints.js";
 
 /**
  * Instruments an application so that it counts total operations in a region of code.
  *
- * @param {function} [filterFunction=undefined] - Function that receives an $op. If returns false, $op will not be counted.
+ * @param filterFunction - Function that receives an $op. If returns false, $op will not be counted.
  */
-var OpsCounter = function(filterFunction) {
-	this._counters = {};
-	this._$counterType = ClavaJoinPoints.builtinType("long long");
-	//this._$counterType = ClavaJoinPoints.builtinType("unsigned long long");
-	this._instrumentedFunctions = new StringSet();
-	this._filterFunction = filterFunction;
-	if(filterFunction !== undefined) {
-		println("OpsCounter: filter function set");
-	}
-};
+export default class OpsCounter {
+  // Whitelist of ops
+  private static validOps: Set<string> = new Set([
+    "mul",
+    "div",
+    "rem",
+    "add",
+    "sub",
+    "shl",
+    "shr",
+    "cmp",
+    "and",
+    "xor",
+    "or",
+    "l_and",
+    "l_or",
+    "mul_assign",
+    "div_assign",
+    "rem_assign",
+    "add_assign",
+    "sub_assign",
+    "shl_assign",
+    "shr_assign",
+    "and_assign",
+    "xor_assign",
+    "or_assign",
+    "post_inc",
+    "post_dec",
+    "pre_inc",
+    "pre_dec",
+  ]);
 
-// Whitelist of ops
-OpsCounter._validOps = new StringSet("mul", "div", "rem", "add", "sub", "shl", "shr", "cmp", "and", "xor", "or", "l_and", "l_or", "mul_assign", "div_assign", "rem_assign", "add_assign", "sub_assign", "shl_assign", "shr_assign", "and_assign", "xor_assign", "or_assign", "post_inc", "post_dec", "pre_inc", "pre_dec");
+  private counters: Map<string, GlobalVariable> = new Map();
+  private $counterType = ClavaJoinPoints.builtinType("long long");
+  private instrumentedFunctions: Set<string> = new Set();
+  private filterFunction: (op: Op) => boolean;
 
+  constructor(
+    filterFunction: (op: Op) => boolean = ($op: Op) => !$op.isInsideLoopHeader
+  ) {
+    this.filterFunction = filterFunction;
+  }
 
-OpsCounter.prototype.instrument = function($region) {
-	var $function = $region.instanceOf('function') ?  $region : $region.getAncestor('function');
-	
-	if($function === undefined) {
-		PrintOnce.message("OpsCounter.instrument: Could not find function corresponding to the region " + $region.location);
-		return;
-	}
-	
-	// Check if it is already instrumented
-	if(this._instrumentedFunctions.has($function.jpId)) {
-		return;
-	}
+  instrument($region: Joinpoint) {
+    const $function =
+      $region instanceof FunctionJp
+        ? $region
+        : ($region.getAncestor("function") as FunctionJp | undefined);
 
-	this._instrumentedFunctions.add($function.jpId);
-	
-	println("OpsCounter.instrument: Instrumenting  function "+$function.jpId);
+    if ($function === undefined) {
+      PrintOnce.message(
+        `OpsCounter.instrument: Could not find function corresponding to the region ${$region.location}`
+      );
+      return;
+    }
 
-	
-	// Apply to all ops found in the region
-	for(var $op of Query.searchFrom($region, 'op')) {
-		this._countOp($op);
-	}
+    // Check if it is already instrumented
+    if (this.instrumentedFunctions.has($function.jpId)) {
+      return;
+    }
 
-	// Call function recursively when function calls are found
-	for(var $call of Query.searchFrom($region, 'call')) {			
-		var $funcDef = $call.definition;
-		
-		if($funcDef === undefined) {
-			continue;
-		}
-		
-		this.instrument($funcDef);
-	}
+    this.instrumentedFunctions.add($function.jpId);
 
-};
+    console.log(
+      `OpsCounter.instrument: Instrumenting  function ${$function.jpId}`
+    );
 
+    // Apply to all ops found in the region
+    for (const $op of Query.searchFrom($region, "op")) {
+      this.countOp($op as Op);
+    }
 
-OpsCounter.prototype._countOp = function($op) {
+    // Call function recursively when function calls are found
+    for (const $call of Query.searchFrom($region, "call")) {
+      const $funcDef = ($call as Call).definition;
 
-	// If not a valid op, return
-	if(!this._isValidOp($op)) {
-		return;
-	}
-	
-	println("Op ("+$op.kind+"): " + $op.code);
+      if ($funcDef === undefined) {
+        continue;
+      }
 
-	// Always add to ops counter
-	var opsCounter = this._getCounter("ops", "");
-	var opsCounterStmt = ClavaJoinPoints.stmtLiteral(opsCounter.getRef($op).code + "++;");
-	$op.insertBefore(opsCounterStmt);			
-		
-	// Calculate type and bitwidth
-	var $builtinType = this._toBuiltinType($op.type);
-	var counterType = this._getCounterType($builtinType);
-	var bitwidth = $builtinType !== undefined ? $builtinType.bitWidth($op) : undefined;
+      this.instrument($funcDef);
+    }
+  }
 
-	// Get counter
-	var counter = this._getCounter(counterType, bitwidth);		
-		
-	// Add to corresponding counter type	
-	var counterStmt = ClavaJoinPoints.stmtLiteral(counter.getRef($op).code + "++;");
-	$op.insertBefore(counterStmt);
-}
+  private countOp($op: Op) {
+    // If not a valid op, return
+    if (!this.isValidOp($op)) {
+      return;
+    }
 
+    console.log(`Op (${$op.kind}): ${$op.code}`);
 
-OpsCounter.prototype._getCounter = function(counterType, bitwidth) {
-	var counterName = this._getCounterPrefix(counterType, bitwidth) + "_counter";
-	
-	// Check if counter exists 
-	var counter = this._counters[counterName];
-	
-	if(counter === undefined) {
-		counter = new GlobalVariable(counterName, this._$counterType, "0");
-		this._counters[counterName] = counter;
-	}
-	
-	return counter;
-}
+    // Always add to ops counter
+    const opsCounter = this.getCounter("ops", "");
+    const opsCounterStmt = ClavaJoinPoints.stmtLiteral(
+      opsCounter.getRef($op).code + "++;"
+    );
+    $op.insertBefore(opsCounterStmt);
 
-OpsCounter.prototype._getCounterPrefix = function(counterType, bitwidth) {
+    // Calculate type and bitwidth
+    const $builtinType = this.toBuiltinType($op.type);
+    const counterType = this.getCounterType($builtinType);
+    const bitwidth: string | undefined =
+      $builtinType !== undefined ? String($op.bitWidth) : undefined;
 
-	// If counterType is undefined, return unknown, without looking at the bitwidth
-	if(counterType === undefined) {
-		return "unknown";
-	}
-	
-	var counterPrefix = counterType;
+    // Get counter
+    const counter = this.getCounter(counterType, bitwidth);
 
-	var bitwidthString = bitwidth !== undefined ? bitwidth.toString() : "unknown";
-	
-	if(!Strings.isEmpty(bitwidthString)) {
-	counterPrefix += "_";
-	}
-	
-	counterPrefix += bitwidthString;
+    // Add to corresponding counter type
+    const counterStmt = ClavaJoinPoints.stmtLiteral(
+      counter.getRef($op).code + "++;"
+    );
+    $op.insertBefore(counterStmt);
+  }
 
-	return counterPrefix;
-}
+  private getCounter(counterType?: string, bitwidth?: string) {
+    const counterName =
+      this.getCounterPrefix(counterType, bitwidth) + "_counter";
 
-OpsCounter.prototype._getCounterType = function($builtinType) {
-	
-	if($builtinType === undefined) {
-		return undefined;
-	}
-	
-	if($builtinType.isFloat) {
-		return "flops";
-	} else if($builtinType.isInteger) {
-		return "iops";
-	} else {
-		PrintOnce.message("OpsCounter: could not determine if builtinType " + $type.kind + " is integer or float");
-		return undefined;	
-	}
-}
+    // Check if counter exists
+    let counter = this.counters.get(counterName);
 
-OpsCounter.prototype._toBuiltinType = function($type) {
-	if($type.instanceOf("builtinType")) {
-		return $type;
-	}
-	
-	PrintOnce.message("OpsCounter: could not determine builtinType of " + $type.joinPointType);
-	return undefined;
-}
+    if (counter === undefined) {
+      counter = new GlobalVariable(counterName, this.$counterType, "0");
+      this.counters.set(counterName, counter);
+    }
 
-/**
- * Adds code that prints the operation counting report.
- */
-OpsCounter.prototype.log = function($insertionPoint) {
+    return counter;
+  }
 
-		var logger = new Logger();		
-		for(counterName in this._counters) {	
-			var counter = this._counters[counterName];
-			logger.text(counterName + ": ").longLong(counter.getRef($insertionPoint).code).ln();
-		}
+  private getCounterPrefix(counterType?: string, bitwidth: string = "unknown") {
+    // If counterType is undefined, return unknown, without looking at the bitwidth
+    if (counterType === undefined) {
+      return "unknown";
+    }
 
-		logger.log($insertionPoint);
-};
+    let counterPrefix: string = counterType;
 
-/**
- * @return {$function} Creates a function that prints the operation counting report and returns its definition.
- */
- /*
-OpsCounter.prototype.buildLogFunction = function($insertionPoint) {
+    if (bitwidth !== "") {
+      counterPrefix += "_";
+    }
 
-		var logger = new Logger();		
-		for(counterName in this._counters) {	
-			var counter = this._counters[counterName];
-			logger.text(counterName + ": ").longLong(counter.getRef($insertionPoint).code).ln();
-		}
+    counterPrefix += bitwidth;
 
-		logger.log($insertionPoint);
-};
-*/
+    return counterPrefix;
+  }
 
+  private getCounterType($builtinType?: BuiltinType) {
+    if ($builtinType === undefined) {
+      return undefined;
+    }
 
-OpsCounter.prototype._isValidOp = function($op) {
-	var isValid = OpsCounter._validOps.has($op.kind);
-	
-	if(!isValid) {
-		return false;
-	}
-	
-	// Ignore operations inside loop headers
-	if($op.isInsideLoopHeader) {
-		return false;
-	}
+    if ($builtinType.isFloat) {
+      return "flops";
+    } else if ($builtinType.isInteger) {
+      return "iops";
+    } else {
+      PrintOnce.message(
+        `OpsCounter: could not determine if builtinType ${$builtinType.kind} is integer or float`
+      );
+      return undefined;
+    }
+  }
 
-	//println("FILTER FUNCTION DEFINED? " + (this._filterFunction !== undefined));
-	if(this._filterFunction !== undefined) {
-		//println("Calling filter function");
-		if(!this._filterFunction($op)) {
-			return false;
-		}
-	}
-		
-	return true;
+  private toBuiltinType($type: Type) {
+    if ($type instanceof BuiltinType) {
+      return $type;
+    }
+
+    PrintOnce.message(
+      `OpsCounter: could not determine builtinType of ${$type.joinPointType}`
+    );
+    return undefined;
+  }
+
+  /**
+   * Adds code that prints the operation counting report.
+   */
+  log($insertionPoint: Joinpoint) {
+    const logger = new Logger();
+    for (const entry of this.counters.entries()) {
+      const counterName = entry[0];
+      const counter = entry[1];
+      logger
+        .text(counterName + ": ")
+        .longLong(counter.getRef($insertionPoint).code)
+        .ln();
+    }
+
+    logger.log($insertionPoint);
+  }
+
+  private isValidOp($op: Op) {
+    const isValid = OpsCounter.validOps.has($op.kind);
+
+    if (!isValid) {
+      return false;
+    }
+
+    if (!this.filterFunction($op)) {
+      return false;
+    }
+
+    return true;
+  }
 }

@@ -1,109 +1,25 @@
-import clava.ClavaJoinPoints;
-import clava.code.GlobalVariable;
-import clava.stats.OpsBlock;
+import PrintOnce from "lara-js/api/lara/util/PrintOnce.js";
+import Query from "lara-js/api/weaver/Query.js";
+import {
+  BinaryOp,
+  BuiltinType,
+  Call,
+  Expression,
+  FunctionJp,
+  Joinpoint,
+  Loop,
+  Op,
+  Param,
+  Statement,
+  Type,
+  Vardecl,
+  Varref,
+} from "../../Joinpoints.js";
+import OpsBlock from "./OpsBlock.js";
 
-import weaver.Query;
-
-import lara.util.StringSet;
-import lara.util.PrintOnce;
-import lara.code.Logger;
-
-import lara.Strings;
-
-
-function analyseIterationsExpr($expr, $source) {
-    var result = {};
-
-    for (var $varref of Query.searchFromInclusive($expr, "varref")) {
-        if (result[$varref.name] !== undefined) {
-            continue;
-        }
-        if ($varref.decl.instanceOf("param")) {
-            continue;
-        }
-        var $lastWrite = getLastWrite($source, $varref.decl);
-        result[$varref.name] = $lastWrite;
-    }
-    return result;
-}
-
-function getLastWrite($currentJp, $vardecl) {
-    if ($currentJp === undefined) {
-        println("Could not find declaration");
-        return undefined;
-    }
-    // println("getVarrefUses: " + $currentJp.code);
-    //println("Type: " + $currentJp.joinPointType);
-    // Get siblings on the left
-    var siblLeft = $currentJp.siblingsLeft;
-    // Go back until the variable declaration/parameter is found
-    for (var i = siblLeft.length - 1; i >= 0; i--) {
-        var sibl = siblLeft[i];
-        // For each sibling, find write references to the variable
-        var refs = sibl
-            .getDescendantsAndSelf("varref")
-            .filter((varref) => varref.name === $vardecl.name);
-        for (var $ref of refs) {
-            // Ignore
-            if ($ref.use === "read") {
-                continue;
-            }
-            // Not supported yet
-            if ($ref.use === "readwrite") {
-                println("Readwrite not supported yet");
-                return undefined;
-            }
-            // Check if assignment
-            var $refParent = $ref.parent;
-            if (
-                !$refParent.instanceOf("binaryOp") &&
-                $refParent.kind !== "assign"
-            ) {
-                println("Not supported when not an assignment");
-                return undefined;
-            }
-            return $refParent.right;
-        }
-        // Check vardecl
-        var decls = sibl
-            .getDescendantsAndSelf("vardecl")
-            .filter((vardecl) => vardecl.equals($vardecl));
-        for (var $decl of decls) {
-            // Found decl
-            if (!$decl.hasInit) {
-                println(
-                    "Variable declaration for " +
-                        $decl.name +
-                        " has no initialization"
-                );
-                return undefined;
-            }
-
-            return $decl.init;
-        }
-    }
-    // Did not find declaration yet, call on parent
-    return getLastWrite($currentJp.parent, $vardecl);
-}
-
-/**
- * Instruments an application so that it counts total operations in a region of code.
- *
- * @param {function} [filterFunction=undefined] - Function that receives an $op. If returns false, $op will not be counted.
- */
-var StaticOpsCounter = function (filterFunction) {
-    this._counters = {}; // TODO: To remove
-    this._$counterType = ClavaJoinPoints.builtinType("long long"); // TODO: To remove
-    // this._$counterType = ClavaJoinPoints.builtinType("unsigned long long");
-    this._instrumentedFunctions = new StringSet();
-    this._filterFunction = filterFunction;
-    if (filterFunction !== undefined) {
-        println("StaticOpsCounter: filter function set");
-    }
-};
-
-// Whitelist of ops
-StaticOpsCounter._validOps = new StringSet(
+export default class StaticOpsCounter {
+  // Whitelist of ops
+  private static validOps = new Set<string>([
     "mul",
     "div",
     "rem",
@@ -130,201 +46,281 @@ StaticOpsCounter._validOps = new StringSet(
     "post_inc",
     "post_dec",
     "pre_inc",
-    "pre_dec"
-);
+    "pre_dec",
+  ]);
 
-StaticOpsCounter.prototype.count = function (
-    $function,
-    opsBlock,
-    includeOpKind
-) {
-    includeOpKind = includeOpKind !== undefined ? includeOpKind : false;
+  private instrumentedFunctions = new Set<string>();
+  private filterFunction: (op: Op) => boolean;
 
-    var $function = $function.instanceOf("function")
-        ? $function
-        : $function.getAncestor("function");
+  constructor(filterFunction: (op: Op) => boolean = ($op: Op) => true) {
+    this.filterFunction = filterFunction;
+  }
+
+  count($fn: Joinpoint, opsBlock: OpsBlock, includeOpKind: boolean = false) {
+    const $function =
+      $fn instanceof FunctionJp
+        ? $fn
+        : ($fn.getAncestor("function") as FunctionJp | undefined);
 
     if ($function === undefined) {
-        PrintOnce.message(
-            "StaticOpsCounter.count: Could not find function corresponding to the join point " +
-                $function.location
-        );
-        return;
+      PrintOnce.message(
+        `StaticOpsCounter.count: Could not find function corresponding to the join point ${$fn.location}`
+      );
+      return;
     }
 
-    var functionId = $function.name + "@" + $function.location;
+    const functionId = `${$function.name}@${$function.location}`;
 
     // Check if it is already instrumented
-    // println("ID: " + $function.location);
-    if (this._instrumentedFunctions.has(functionId)) {
-        // if(this._instrumentedFunctions.has($function.jpId)) {
-        // Not working yet
-        /*
-        if(opsBlock === undefined) {
-            println("Expected opsBlock to be defined!");
-        } else {
-            opsBlock.isRecursive = true;
-        }
-        */
-
-        return;
+    if (this.instrumentedFunctions.has(functionId)) {
+      // TODO: Support recursive function calls
+      return;
     }
 
-    this._instrumentedFunctions.add(functionId);
+    this.instrumentedFunctions.add(functionId);
 
-    println("StaticOpsCounter.count: Estimating ops of function " + functionId);
+    console.log(
+      "StaticOpsCounter.count: Estimating ops of function " + functionId
+    );
 
-    // var opsBlock = new OpsBlock(functionId);
-    opsBlock = opsBlock !== undefined ? opsBlock : new OpsBlock(functionId);
+    opsBlock ??= new OpsBlock(functionId);
 
     // Go statement-by-statement
-    var stmts = $function.body.children;
-
-    for (var $stmt of stmts) {
-        this._countOpStatic($stmt, opsBlock, includeOpKind);
-    }
+    $function.body.children.forEach(($stmt) => {
+      this.countOpStatic($stmt as Statement, opsBlock, includeOpKind);
+    });
 
     return opsBlock;
-};
+  }
 
-StaticOpsCounter.prototype._countOpStatic = function (
-    $stmt,
-    opsBlock,
-    includeOpKind
-) {
+  private countOpStatic(
+    $stmt: Statement,
+    opsBlock: OpsBlock,
+    includeOpKind: boolean
+  ) {
     // If stmt is a loop, count new block, recursively
 
     if ($stmt == undefined) {
-        return;
+      return;
     }
 
-    if ($stmt.instanceOf("loop")) {
-        if ($stmt.kind !== "for") {
-            println(
-                "Ignoring loops that are not 'fors' (location " +
-                    $stmt.location +
-                    ") for now"
-            );
-            return;
-        }
-
-        var rank = $stmt.rank;
-        var nestedId = opsBlock.id + " => " + rank[rank.length - 1];
-
-        // Create block for loop
-        var nestedOpsBlock = new OpsBlock(nestedId);
-
-        this._countOpStatic($stmt.init, opsBlock, includeOpKind);
-        this._countOpStatic($stmt.cond, nestedOpsBlock, includeOpKind);
-        this._countOpStatic($stmt.step, nestedOpsBlock, includeOpKind);
-
-        // Extract iterations
-        var iter = $stmt.iterationsExpr;
-        do {
-            var replacementsMap = analyseIterationsExpr(iter, $stmt);
-
-            for (rep in replacementsMap) {
-                for (var $jp of iter.descendants) {
-                    if ($jp.code === rep) {
-                        $jp.replaceWith(replacementsMap[rep]);
-                    }
-                }
-            }
-        } while (Object.keys(replacementsMap).length > 0);
-        nestedOpsBlock.repetitions = iter.code;
-
-        // Add to nested blocks
-        opsBlock.nestedOpsBlocks.push(nestedOpsBlock);
-
-        // Go statement-by-statement
-        var nestedStmts = $stmt.body.children;
-
-        for (var $stmt of nestedStmts) {
-            this._countOpStatic($stmt, nestedOpsBlock, includeOpKind);
-        }
-
+    if ($stmt instanceof Loop) {
+      if ($stmt.kind !== "for") {
+        console.log(
+          `Ignoring loops that are not 'fors' (location ${$stmt.location}) for now`
+        );
         return;
+      }
+
+      const rank = $stmt.rank;
+      const nestedId = `${opsBlock.id} => ${rank[rank.length - 1]}`;
+
+      // Create block for loop
+      const nestedOpsBlock = new OpsBlock(nestedId);
+
+      this.countOpStatic($stmt.init, opsBlock, includeOpKind);
+      this.countOpStatic($stmt.cond, nestedOpsBlock, includeOpKind);
+      this.countOpStatic($stmt.step, nestedOpsBlock, includeOpKind);
+
+      // Extract iterations
+      const iter = $stmt.iterationsExpr;
+      let replacementsMap: Record<string, Expression> = {};
+      do {
+        replacementsMap = this.analyseIterationsExpr(iter, $stmt);
+
+        for (const rep in replacementsMap) {
+          for (const $jp of iter.descendants) {
+            if ($jp.code === rep) {
+              $jp.replaceWith(replacementsMap[rep]); // TODO: Do calculation without altering the source code.
+            }
+          }
+        }
+      } while (Object.keys(replacementsMap).length > 0);
+      nestedOpsBlock.repetitions = iter.code;
+
+      // Add to nested blocks
+      opsBlock.nestedOpsBlocks.push(nestedOpsBlock);
+
+      // Go statement-by-statement
+      $stmt.body.children.forEach(($nestedStmt) => {
+        this.countOpStatic(
+          $nestedStmt as Statement,
+          nestedOpsBlock,
+          includeOpKind
+        );
+      });
+
+      return;
     }
 
     // If stmt is not a loop, count ops
     // Apply to all ops found in the stmt
-    for (var $op of Query.searchFrom($stmt, "op")) {
-        // If not a valid op, continue
-        if (!this._isValidOp($op)) {
-            continue;
-        }
+    for (const $jp of Query.searchFrom($stmt, "op")) {
+      const $op = $jp as Op;
+      // If not a valid op, continue
+      if (!this.isValidOp($op)) {
+        continue;
+      }
 
-        // println("Op ("+$op.kind+"): " + $op.code);
+      // Calculate type and bitwidth
+      const $builtinType = this.toBuiltinType($op.type);
+      const counterType = this.getCounterType($builtinType);
+      const bitwidth =
+        $builtinType !== undefined ? String($op.bitWidth) : undefined;
 
-        // Calculate type and bitwidth
-        var $builtinType = this._toBuiltinType($op.type);
-        var counterType = this._getCounterType($builtinType);
-        var bitwidth =
-            $builtinType !== undefined ? $builtinType.bitWidth($op) : undefined;
-
-        // Increment counter
-        var opsId = counterType + "-" + bitwidth;
-        if (includeOpKind) {
-            opsId += "-" + $op.kind;
-        }
-        opsBlock.add(opsId);
+      // Increment counter
+      let opsId = `${counterType}-${bitwidth}`;
+      if (includeOpKind) {
+        opsId += `-${$op.kind}`;
+      }
+      opsBlock.add(opsId);
     }
 
     // Call function recursively when function calls are found
-    for (var $call of Query.searchFrom($stmt, "call")) {
-        var $funcDef = $call.definition;
+    for (const $jp of Query.searchFrom($stmt, "call")) {
+      const $call = $jp as Call;
+      const $funcDef = $call.definition;
 
-        if ($funcDef === undefined) {
-            continue;
-        }
-        // println("FUNC DEF: " + $funcDef.joinPointType);
-        this.count($funcDef, opsBlock, includeOpKind);
+      if ($funcDef === undefined) {
+        continue;
+      }
+
+      this.count($funcDef, opsBlock, includeOpKind);
     }
-};
+  }
 
-StaticOpsCounter.prototype._getCounterType = function ($builtinType) {
+  private getCounterType($builtinType?: BuiltinType) {
     if ($builtinType === undefined) {
-        return undefined;
+      return undefined;
     }
 
     if ($builtinType.isFloat) {
-        return "flops";
+      return "flops";
     } else if ($builtinType.isInteger) {
-        return "iops";
+      return "iops";
     } else {
-        PrintOnce.message(
-            "StaticOpsCounter: could not determine if builtinType " +
-                $type.kind +
-                " is integer or float"
-        );
-        return undefined;
+      PrintOnce.message(
+        `StaticOpsCounter: could not determine if builtinType ${$builtinType.kind} is integer or float`
+      );
+      return undefined;
     }
-};
+  }
 
-StaticOpsCounter.prototype._toBuiltinType = function ($type) {
-    if ($type.instanceOf("builtinType")) {
-        return $type;
+  private toBuiltinType($type: Type) {
+    if ($type instanceof BuiltinType) {
+      return $type;
     }
 
     PrintOnce.message(
-        "StaticOpsCounter: could not determine builtinType of " +
-            $type.joinPointType
+      `StaticOpsCounter: could not determine builtinType of ${$type.joinPointType}`
     );
     return undefined;
-};
+  }
 
-StaticOpsCounter.prototype._isValidOp = function ($op) {
-    var isValid = StaticOpsCounter._validOps.has($op.kind);
+  private isValidOp($op: Op) {
+    const isValid = StaticOpsCounter.validOps.has($op.kind);
 
     if (!isValid) {
-        return false;
+      return false;
     }
 
-    if (this._filterFunction !== undefined) {
-        if (!this._filterFunction($op)) {
-            return false;
-        }
+    if (!this.filterFunction($op)) {
+      return false;
     }
 
     return true;
-};
+  }
+
+  private analyseIterationsExpr(
+    $expr: Expression,
+    $source: Loop
+  ): Record<string, Expression> {
+    const result: Record<string, Expression> = {};
+
+    for (const $jp of Query.searchFromInclusive($expr, "varref")) {
+      const $varref = $jp as Varref;
+      if (result[$varref.name] !== undefined) {
+        continue;
+      }
+      if ($varref.decl instanceof Param) {
+        console.log(`Var ${$varref.name} is a parameter`);
+        continue;
+      }
+      console.log(`REFS of ${$varref.name}`);
+      const $lastWrite = this.getLastWrite($source, $varref.vardecl);
+
+      if ($lastWrite === undefined) {
+        console.log("Could not find last write");
+        continue;
+      }
+
+      console.log(`Last write of ${$varref.vardecl.name}: ${$lastWrite.code}`);
+      result[$varref.name] = $lastWrite;
+    }
+    return result;
+  }
+
+  private getLastWrite(
+    $currentJp: Joinpoint | undefined,
+    $vardecl: Vardecl
+  ): Expression | undefined {
+    if ($currentJp === undefined) {
+      console.log("Could not find declaration");
+      return undefined;
+    }
+
+    // Get siblings on the left
+    const siblLeft = $currentJp.siblingsLeft;
+
+    // Go back until the variable declaration/parameter is found
+    for (let i = siblLeft.length - 1; i >= 0; i--) {
+      const sibl = siblLeft[i];
+
+      // For each sibling, find write references to the variable
+      const refs = (sibl.getDescendantsAndSelf("varref") as Varref[]).filter(
+        (varref) => varref.name === $vardecl.name
+      );
+
+      for (const $ref of refs) {
+        // Ignore
+        if ($ref.use === "read") {
+          continue;
+        }
+
+        // Not supported yet
+        if ($ref.use === "readwrite") {
+          console.log("Readwrite not supported yet");
+          return undefined;
+        }
+
+        // Check if assignment
+        const $refParent = $ref.parent as Op;
+        if ($refParent.kind !== "assign") {
+          console.log("Not supported when not an assignment");
+          return undefined;
+        }
+
+        if ($refParent instanceof BinaryOp) {
+          return $refParent.right;
+        }
+      }
+      // Check vardecl
+      const decls = (sibl.getDescendantsAndSelf("vardecl") as Vardecl[]).filter(
+        (vardecl) => vardecl.equals($vardecl)
+      );
+      for (const $decl of decls) {
+        // Found decl
+        if (!$decl.hasInit) {
+          console.log(
+            `Variable declaration for ${$decl.name} has no initialization`
+          );
+          return undefined;
+        }
+
+        return $decl.init;
+      }
+    }
+    // Did not find declaration yet, call on parent
+    return this.getLastWrite($currentJp.parent, $vardecl);
+  }
+}

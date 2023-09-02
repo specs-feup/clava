@@ -5,38 +5,38 @@ import ClavaJoinPoints from "../ClavaJoinPoints.js";
  * Adds and manages global variables.
  */
 export default class GlobalVariable {
-  private _filesWithGlobal: Set<string> = new Set<string>();
-  private _varName: string;
-  private _$type: Type;
-  private _initValue: string;
+  private filesWithGlobal: Set<string> = new Set<string>();
+  private varName: string;
+  private $type: Type;
+  private initValue: string;
   
   constructor(varName: string, $type: Type, initValue: string) {
-    this._varName = varName;
-    this._$type = $type;
-    this._initValue = initValue;
+    this.varName = varName;
+    this.$type = $type;
+    this.initValue = initValue;
   }
 
   /**
    * @returns A reference to the global variable defined by this object.
    */
-  getRef($reference: Joinpoint): Varref | undefined {
+  getRef($reference: Joinpoint): Varref {
     // Check file for the reference point
     const $file = $reference.getAncestor("file") as FileJp | undefined;
     if ($file === undefined) {
       console.log(
         `GlobalVariable.getRef: Could not find the file for the reference point ${$reference.location}`
       );
-      return undefined;
+    } else {
+      // Check if file already has this global variable declared
+      const fileId = $file.jpId;
+      if (!this.filesWithGlobal.has(fileId)) {
+        this.filesWithGlobal.add(fileId);
+        $file.addGlobal(this.varName, this.$type, this.initValue);
+      }
     }
 
-    // Check if file already has this global variable declared
-    const fileId = $file.jpId;
-    if (!this._filesWithGlobal.has(fileId)) {
-      this._filesWithGlobal.add(fileId);
-      $file.addGlobal(this._varName, this._$type, this._initValue);
-    }
 
     // Create varref
-    return ClavaJoinPoints.varRef(this._varName, this._$type);
+    return ClavaJoinPoints.varRef(this.varName, this.$type);
   }
 }
