@@ -1,367 +1,382 @@
-import clava.memoi.MemoiUtils;
-import clava.memoi.MemoiTarget;
-
-import weaver.Query;
-
-var MemoiAnalysis = {};
+import { JSONtoFile } from "lara-js/api/core/output.js";
+import { debug } from "lara-js/api/lara/core/LaraCore.js";
+import Query from "lara-js/api/weaver/Query.js";
+import { Call, FunctionJp, Type, Varref } from "../../Joinpoints.js";
+import MemoiTarget from "./MemoiTarget.js";
+import MemoiUtils from "./MemoiUtils.js";
 
 /**
  * 		Enum with the results of the predicate test.
- * */
-var _PRED = {VALID:1, INVALID:-1, WAITING:0};
-
-/**
- * Returns array of MemoiTarget.
- * */
-MemoiAnalysis.findTargets = function(pred) {
-	
-	return MemoiAnalysis.findTargetsReport(pred).targets;
+ */
+export enum PRED {
+  VALID = 1,
+  INVALID = -1,
+  WAITING = 0,
 }
 
-/**
- * Returns MemoiTargetReport.
- * */
-MemoiAnalysis.findTargetsReport = function(pred) {
-	
-	var targets = [];
-	var report = new FailReport();
-	
-	// use default predicate if user doesn't provide one
-	if(pred === undefined) {
-		pred = _defaultMemoiPred;
-	}
-	
-	var processed = {};
-	
-	for(var $call of Query.search("call")) {
-		
-		// find function or skip
-		var $func = $call.function;
-		if($func === undefined) {
-			continue;
-		}
-		
-		var sig = MemoiUtils.normalizeSig($func.signature);
-		
-		// if we've processed this one before (valid or not), skip
-		if(_isProcessed(sig, processed)) {
-			continue;
-		}
-		
-		// test if valid
-		var valid = pred($call, processed, report);
-		if(valid === _PRED.VALID) {
-			
-			
-			targets.push(MemoiTarget.fromFunction($func));
-		}
-	}
+type MemoiPred = (
+  $call: Call,
+  processed: Record<string, PRED | undefined>,
+  report: FailReport
+) => PRED | undefined;
 
-	return new MemoiTargetReport(targets, report);
+export default class MemoiAnalysis {
+  /**
+   * Returns array of MemoiTarget.
+   */
+  static findTargets(pred: MemoiPred) {
+    return MemoiAnalysis.findTargetsReport(pred).targets;
+  }
+
+  /**
+   * Returns MemoiTargetReport.
+   */
+  static findTargetsReport(pred: MemoiPred = defaultMemoiPred) {
+    const targets = [];
+    const report = new FailReport();
+
+    const processed = {};
+
+    for (const $jp of Query.search("call")) {
+      const $call = $jp as Call;
+
+      // find function or skip
+      const $func = $call.function;
+      if ($func === undefined) {
+        continue;
+      }
+
+      const sig = MemoiUtils.normalizeSig($func.signature);
+
+      // if we've processed this one before (valid or not), skip
+      if (isProcessed(sig, processed)) {
+        continue;
+      }
+
+      // test if valid
+      const valid = pred($call, processed, report);
+      if (valid === PRED.VALID) {
+        targets.push(MemoiTarget.fromFunction($func));
+      }
+    }
+
+    return new MemoiTargetReport(targets, report);
+  }
 }
 
-function _isProcessed(sig, processed) {
-	
-	return processed[sig] === _PRED.VALID 
-		|| processed[sig] === _PRED.INVALID;
+function isProcessed(
+  sig: string,
+  processed: Parameters<MemoiPred>[1]
+): boolean {
+  return processed[sig] === PRED.VALID || processed[sig] === PRED.INVALID;
 }
 
-function _isWaiting(sig, processed) {
-	
-	return processed[sig] === _PRED.WAITING;
+function isWaiting(sig: string, processed: Parameters<MemoiPred>[1]): boolean {
+  return processed[sig] === PRED.WAITING;
 }
 
 /**
  * This is the default predicate.
- * */
-function _defaultMemoiPred($call, processed, report) {
-	
-	var test = _defaultMemoiPredRecursive($call, processed, report);
-	
-	if(test === _PRED.WAITING) {
-		
-		var sig = $call.signature;
-		
-		processed[sig] = _PRED.VALID;
-		return _PRED.VALID;
-	}
-	
-	return test;
+ */
+function defaultMemoiPred(
+  $call: Call,
+  processed: Parameters<MemoiPred>[1],
+  report: FailReport
+) {
+  const test = defaultMemoiPredRecursive($call, processed, report);
+
+  if (test === PRED.WAITING) {
+    const sig = $call.signature;
+
+    processed[sig] = PRED.VALID;
+    return PRED.VALID;
+  }
+
+  return test;
 }
 
 /**
- * 		Checks if the target function is valid.
+ *  Checks if the target function is valid.
  *
  *	The constraints are:
  *	1) has between 1 and 3 parameters
- *	2) type of inputs and outputs is one of {int, float, double}
+ *	2) type of inputs and outputs is one of \{int, float, double\}
  * 	3) It doesn't access global state;
  *	4) It doesn't call non-valid functions.
- **/
-function _defaultMemoiPredRecursive($call, processed, report) {
+ */
+function defaultMemoiPredRecursive(
+  $call: Call,
+  processed: Parameters<MemoiPred>[1],
+  report: FailReport
+) {
+  const sig = MemoiUtils.normalizeSig($call.signature);
 
-	var sig = MemoiUtils.normalizeSig($call.signature);
-	
-	// 0) check if this function was processed before
-	if(_isProcessed(sig, processed)) {
-		
-		return processed[sig];
-	}
-	
-	// mark this as being processed
-	processed[sig] = _PRED.WAITING;
-	
-	var $func = $call.function;
-	var $functionType = $func.functionType;
-	var $returnType = $functionType.returnType;
-	var paramTypes = $functionType.paramTypes;
+  // 0) check if this function was processed before
+  if (isProcessed(sig, processed)) {
+    return processed[sig];
+  }
 
-	// 1) has between 1 and 3 parameters
-	if(paramTypes.length < 1 || paramTypes.length > 3) {
-		
-		debug(sig + ' - wrong number of parameters: ' + paramTypes.length);
-		
-		report.incNumParams($func.signature, paramTypes.length);
-		
-		processed[sig] = _PRED.INVALID;
-		return _PRED.INVALID;
-	}
-	
-	
-	// 2) type of return and params is one of {int, float, double}
-	if(!_testType($returnType, ['int', 'float', 'double'])) {
-		
-		debug(sig + ' - return type is not supported: ' + $returnType.code);
-		
-		report.incTypeReturn($func.signature, $returnType.code);
+  // mark this as being processed
+  processed[sig] = PRED.WAITING;
 
-		processed[sig] = _PRED.INVALID;
-		return _PRED.INVALID;
-	}
-	
-	for(var $type of paramTypes) {
-		if(!_testType($type, ['int', 'float', 'double'])) {
-		
-		debug(sig + ' - param type is not supported: ' + $type.code);
-		
-		report.incTypeParams($func.signature, $type.code);
-		
-		processed[sig] = _PRED.INVALID;
-		return _PRED.INVALID;
-	}	
-	}
-	
-	// Try to get the definition
-	var $def = $call.definition;
-	if($def === undefined) {
-		
-		if(!MemoiUtils.isWhiteListed(sig)) {
-			
-			debug(sig + ' - definition not found, not whitelisted');
-			
-			processed[sig] = _PRED.INVALID;
-			return _PRED.INVALID;
-		} else {
+  const $func = $call.function;
+  const $functionType = $func.functionType;
+  const $returnType = $functionType.returnType;
+  const paramTypes = $functionType.paramTypes;
 
-			processed[sig] = _PRED.VALID;
-			return _PRED.VALID;
-		}
-	}
-	
-	// 3) It doesn't access global state (unless constants)
-	var varRefs = $def.getDescendants('varref');
-	for(var $ref of varRefs) {
-	
-		var $varDecl = $ref.declaration;
-		
-		if($varDecl.isGlobal && (!$ref.type.constant || $ref.type.isPointer)) {
-			
-			debug(sig + ' - accesses non-const global storage variable ' + $ref.code);
-			
-			report.incGlobalAccess($func.signature);
-	
-			processed[sig] = _PRED.INVALID;
-			return _PRED.INVALID;
-		}
-	}
+  // 1) has between 1 and 3 parameters
+  if (paramTypes.length < 1 || paramTypes.length > 3) {
+    debug(sig + " - wrong number of parameters: " + paramTypes.length);
 
-	// 4) It doesn't call non-valid functions
-	var isChildWaiting = false;
-	var $calls = $def.getDescendants('call');
-	for(var $childCall of $calls) {
-		
-		var childSig = $childCall.signature;
-		
-		if(_isWaiting(childSig, processed)) {
-			isChildWaiting = true;
-			continue;
-		}
-		
-		var test = _defaultMemoiPredRecursive($childCall, processed, report);
-		if(test === _PRED.INVALID) {
-			debug(sig + ' - calls invalid function ' + childSig);
-			
-			report.incInvalidCalls();
-			
-			processed[sig] = _PRED.INVALID;
-			return _PRED.INVALID;
-		} else if (test === _PRED.WAITING) {
-			
-			isChildWaiting = true;
-		}
-	}
-	
-	if(isChildWaiting) {
+    report.incNumParams($func.signature, paramTypes.length);
 
-		processed[sig] = undefined;
-		return _PRED.WAITING;
-	}
-	
-	// Everything checked OK
-	processed[sig] = _PRED.VALID;
-	return _PRED.VALID;
+    processed[sig] = PRED.INVALID;
+    return PRED.INVALID;
+  }
+
+  // 2) type of return and params is one of {int, float, double}
+  if (!testType($returnType, ["int", "float", "double"])) {
+    debug(sig + " - return type is not supported: " + $returnType.code);
+
+    report.incTypeReturn($func.signature, $returnType.code);
+
+    processed[sig] = PRED.INVALID;
+    return PRED.INVALID;
+  }
+
+  for (const $type of paramTypes) {
+    if (!testType($type, ["int", "float", "double"])) {
+      debug(sig + " - param type is not supported: " + $type.code);
+
+      report.incTypeParams($func.signature, $type.code);
+
+      processed[sig] = PRED.INVALID;
+      return PRED.INVALID;
+    }
+  }
+
+  // Try to get the definition
+  const $def = $call.definition;
+  if ($def === undefined) {
+    if (!MemoiUtils.isWhiteListed(sig)) {
+      debug(sig + " - definition not found, not whitelisted");
+
+      processed[sig] = PRED.INVALID;
+      return PRED.INVALID;
+    } else {
+      processed[sig] = PRED.VALID;
+      return PRED.VALID;
+    }
+  }
+
+  // 3) It doesn't access global state (unless constants)
+  const varRefs = $def.getDescendants("varref") as Varref[];
+  for (const $ref of varRefs) {
+    const $varDecl = $ref.vardecl;
+
+    if ($varDecl.isGlobal && (!$ref.type.constant || $ref.type.isPointer)) {
+      debug(sig + " - accesses non-const global storage variable " + $ref.code);
+
+      report.incGlobalAccess($func.signature);
+
+      processed[sig] = PRED.INVALID;
+      return PRED.INVALID;
+    }
+  }
+
+  // 4) It doesn't call non-valid functions
+  let isChildWaiting = false;
+  const $calls = $def.getDescendants("call") as Call[];
+  for (const $childCall of $calls) {
+    const childSig = $childCall.signature;
+
+    if (isWaiting(childSig, processed)) {
+      isChildWaiting = true;
+      continue;
+    }
+
+    const test = defaultMemoiPredRecursive($childCall, processed, report);
+    if (test === PRED.INVALID) {
+      debug(sig + " - calls invalid function " + childSig);
+
+      report.incInvalidCalls();
+
+      processed[sig] = PRED.INVALID;
+      return PRED.INVALID;
+    } else if (test === PRED.WAITING) {
+      isChildWaiting = true;
+    }
+  }
+
+  if (isChildWaiting) {
+    processed[sig] = undefined;
+    return PRED.WAITING;
+  }
+
+  // Everything checked OK
+  processed[sig] = PRED.VALID;
+  return PRED.VALID;
 }
 
 /**
  * 		Tests if the type is one of the provided types.
- * */
-function _testType($type, typesToTest) {
-	
-	var code = $type.code;
-	return typesToTest.indexOf(code) !== -1;
+ */
+function testType($type: Type, typesToTest: string[]) {
+  const code = $type.code;
+  return typesToTest.includes(code);
 }
 
 /**
  * Class to hold info about target finding (targets and reports).
- * */
-function MemoiTargetReport(targets, failReport) {
-	
-	this.targets = targets;
-	this.failReport = failReport;
-}
+ */
+export class MemoiTargetReport {
+  targets: MemoiTarget[];
+  failReport: FailReport;
 
-MemoiTargetReport.prototype.isTarget = function($func) {
-	
-	var sig = MemoiUtils.normalizeSig($func.signature);
-	
-	for(var t of this.targets) {
-		if(t.sig === sig) {
-			return true;
-		}
-	}
-	
-	return false;
-}
+  constructor(targets: MemoiTarget[], failReport: FailReport) {
+    this.targets = targets;
+    this.failReport = failReport;
+  }
 
-MemoiTargetReport.prototype.toJson = function(jsonPath) {
-	Io.writeJson(jsonPath, this);
-}
+  isTarget($func: FunctionJp) {
+    const sig = MemoiUtils.normalizeSig($func.signature);
 
-MemoiTargetReport.prototype.printFailReport = function() {
+    for (const t of this.targets) {
+      if (t.sig === sig) {
+        return true;
+      }
+    }
 
-	println("Reasons to fail:");
-	
-	if(this.failReport._numParams > 0) {
-		println("\tWrong number of params: " + this.failReport._numParams);
-		print("\t\t{");
-		var arr = [];
-		for(var i in this.failReport._unsupportedNumParams) {
-			arr.push(i + ': ' + this.failReport._unsupportedNumParams[i]);
-		}
-		print(arr.join(', '));
-		println("}");
-	}
-	
-	if(this.failReport._typeParams > 0)
-		println("\tWrong type of params: " + this.failReport._typeParams);
-		
-	if(this.failReport._typeReturn > 0)
-		println("\tWrong type of return: " + this.failReport._typeReturn);
-		
-	if(this.failReport._typeParams > 0 || this.failReport._typeReturn > 0) {
-		print("\t\t{");
-		var arr = [];
-		for(var i in this.failReport._unsupportedTypes) {
-			arr.push(i + ': ' + this.failReport._unsupportedTypes[i]);
-		}
-		print(arr.join(', '));
-		println("}");
-	}
-	
-	if(this.failReport._globalAccess > 0)
-		println("\tGlobal accesses: " + this.failReport._globalAccess);
-		
-	if(this.failReport._invalidCalls > 0)
-		println("\tCalls to invalid functions: " + this.failReport._invalidCalls);
+    return false;
+  }
+
+  toJson(jsonPath: string) {
+    JSONtoFile(jsonPath, this);
+  }
+
+  printFailReport() {
+    console.log("Reasons to fail:");
+
+    if (this.failReport.numParams > 0) {
+      console.log(`\tWrong number of params: ${this.failReport.numParams}`);
+      console.log(
+        "\t\t{" +
+          Object.keys(this.failReport.unsupportedNumParams)
+            .map(
+              (key) => `${key}: ${this.failReport.unsupportedNumParams[key]}`
+            )
+            .join(", ") +
+          "}"
+      );
+    }
+
+    if (this.failReport.typeParams > 0)
+      console.log(`\tWrong type of params: ${this.failReport.typeParams}`);
+
+    if (this.failReport.typeReturn > 0)
+      console.log(`\tWrong type of return: ${this.failReport.typeReturn}`);
+
+    if (this.failReport.typeParams > 0 || this.failReport.typeReturn > 0) {
+      console.log(
+        "\t\t{" +
+          Object.keys(this.failReport.unsupportedTypes)
+            .map((key) => `${key}: ${this.failReport.unsupportedTypes[key]}`)
+            .join(", ") +
+          "}"
+      );
+    }
+
+    if (this.failReport.globalAccess > 0)
+      console.log(`\tGlobal accesses: ${this.failReport.globalAccess}`);
+
+    if (this.failReport.invalidCalls > 0)
+      console.log(
+        `\tCalls to invalid functions: ${this.failReport.invalidCalls}`
+      );
+  }
 }
 
 /**
  * Class to hold info about failed targets.
- * */
-function FailReport() {
-	
-	this._failMap = {};
-	
-	this._numParams = 0;
-	this._unsupportedNumParams = {};
-	this._typeParams = 0;
-	this._typeReturn = 0;
-	this._unsupportedTypes = {},
-	this._globalAccess = 0;
-	this._invalidCalls = 0;
-}
+ */
+export class FailReport {
+  private _failMap: Record<string, string> = {};
+  private _numParams: number = 0;
+  private _unsupportedNumParams: Record<string, number> = {};
+  private _typeParams: number = 0;
+  private _typeReturn: number = 0;
+  private _unsupportedTypes: Record<string, number> = {};
+  private _globalAccess: number = 0;
+  private _invalidCalls: number = 0;
 
-FailReport.prototype.incNumParams = function(sig, num) {
-	
-	this._failMap[sig] = "Wrong number of params";
-	
-	this._numParams++;
-	
-	this._addUnsupportedNumParams(num);
-}
+  get numParams() {
+    return this._numParams;
+  }
 
-FailReport.prototype._addUnsupportedNumParams = function(num) {
-	
-	this._unsupportedNumParams[num] ? 
-		this._unsupportedNumParams[num]++ :
-		this._unsupportedNumParams[num] = 1;
-}
+  get typeParams() {
+    return this._typeParams;
+  }
 
-FailReport.prototype.incTypeParams = function(sig, type) {
-	
-	this._failMap[sig] = "Wrong type of params";
-	
-	this._typeParams++;
-	
-	this._addUnsupportedTypes(type);
-}
+  get typeReturn() {
+    return this._typeReturn;
+  }
 
-FailReport.prototype.incTypeReturn = function(sig, type) {
-	
-	this._failMap[sig] = "Wrong type of return";
-	
-	this._typeReturn++;
-	
-	this._addUnsupportedTypes(type);
-}
+  get globalAccess() {
+    return this._globalAccess;
+  }
 
-FailReport.prototype._addUnsupportedTypes = function(type) {
-	
-	this._unsupportedTypes[type] ? 
-		this._unsupportedTypes[type]++ :
-		this._unsupportedTypes[type] = 1;
-}
+  get invalidCalls() {
+    return this._invalidCalls;
+  }
 
-FailReport.prototype.incGlobalAccess = function(sig) {
-	
-	this._failMap[sig] = "Global accesses";
-	
-	this._globalAccess++;
-}
+  get unsupportedNumParams() {
+    return this._unsupportedNumParams;
+  }
 
-FailReport.prototype.incInvalidCalls = function(sig) {
-	
-	this._failMap[sig] = "Calls to invalid functions";
-	
-	this._invalidCalls++;
+  get unsupportedTypes() {
+    return this._unsupportedTypes;
+  }
+
+  incNumParams(sig: string, num: number | string) {
+    this._failMap[sig] = "Wrong number of params";
+    this._numParams++;
+    this._addUnsupportedNumParams(String(num));
+  }
+
+  private _addUnsupportedNumParams(num: string) {
+    this._unsupportedNumParams[num]
+      ? this._unsupportedNumParams[num]++
+      : (this._unsupportedNumParams[num] = 1);
+  }
+
+  incTypeParams(sig: string, type: string) {
+    this._failMap[sig] = "Wrong type of params";
+    this._typeParams++;
+    this._addUnsupportedTypes(type);
+  }
+
+  incTypeReturn(sig: string, type: string) {
+    this._failMap[sig] = "Wrong type of return";
+    this._typeReturn++;
+    this._addUnsupportedTypes(type);
+  }
+
+  private _addUnsupportedTypes(type: string) {
+    this._unsupportedTypes[type]
+      ? this._unsupportedTypes[type]++
+      : (this._unsupportedTypes[type] = 1);
+  }
+
+  incGlobalAccess(sig: string) {
+    this._failMap[sig] = "Global accesses";
+    this._globalAccess++;
+  }
+
+  incInvalidCalls(sig?: string) {
+    if (sig) {
+      this._failMap[sig] = "Calls to invalid functions";
+    }
+
+    this._invalidCalls++;
+  }
 }

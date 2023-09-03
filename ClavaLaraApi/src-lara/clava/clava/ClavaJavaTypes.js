@@ -43,5 +43,14 @@ export default class ClavaJavaTypes {
     static get HighLevelSynthesisAPI() {
         return JavaTypes.getType("pt.up.fe.specs.clava.weaver.hls.HighLevelSynthesisAPI");
     }
+    static get MemoiReport() {
+        return JavaTypes.getType("pt.up.fe.specs.clava.weaver.memoi.MemoiReport");
+    }
+    static get MemoiReportsMap() {
+        return JavaTypes.getType("pt.up.fe.specs.clava.weaver.memoi.MemoiReportsMap");
+    }
+    static get MemoiCodeGen() {
+        return JavaTypes.getType("pt.up.fe.specs.clava.weaver.memoi.MemoiCodeGen");
+    }
 }
 //# sourceMappingURL=ClavaJavaTypes.js.map

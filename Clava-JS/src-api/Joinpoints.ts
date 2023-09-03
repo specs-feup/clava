@@ -1500,7 +1500,7 @@ export class FunctionJp extends Declarator {
 }
 
 export class FunctionType extends Type {
-  get paramTypes(): Joinpoint[] { return wrapJoinPoint(this._javaObject.getParamTypes()) }
+  get paramTypes(): Type[] { return wrapJoinPoint(this._javaObject.getParamTypes()) }
   get returnType(): Type { return wrapJoinPoint(this._javaObject.getReturnType()) }
   set returnType(value: Type) { this._javaObject.setReturnType(unwrapJoinPoint(value)); }
   /**

@@ -42952,7 +42952,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "joinpoint[]",
+										"type": "type[]",
 										"name": "paramTypes"
 									}]
 					},

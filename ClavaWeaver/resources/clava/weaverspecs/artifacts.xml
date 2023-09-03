@@ -894,7 +894,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="returnType" type="type">
             <def />
         </attribute>
-        <attribute name="paramTypes" type="joinpoint[]" />
+        <attribute name="paramTypes" type="type[]" />
     </artifact>
 
 

@@ -1,131 +1,156 @@
-import clava.memoi.MemoiUtils;
+import Query from "lara-js/api/weaver/Query.js";
+import { Call, FunctionJp } from "../../Joinpoints.js";
+import MemoiUtils from "./MemoiUtils.js";
 
-import weaver.Query;
+export default class MemoiTarget {
+  sig: string;
+  private $func: FunctionJp;
+  private isUser: boolean;
+  numInputs: number;
+  numOutputs: number;
+  inputTypes: string[];
+  outputTypes: string[];
+  private numCallSites: number;
 
-function MemoiTarget(sig, $func, isUser, numInputs, numOuputs, inputTypes, outputTypes, numCallSites) {
-	
-	this._sig = MemoiUtils.normalizeSig(sig);
-	this._$func = $func;
-	this._isUser = isUser;
-	this._numInputs = numInputs === undefined ? $func.params.length : numInputs;
-	this._numOutputs = numOuputs === undefined? 1 : numOuputs;
-	
-	if(inputTypes === undefined || outputTypes === undefined) {
-		
-		this._findDataTypes();
-	} else {
-		this._inputTypes = inputTypes;
-		this._outputTypes = outputTypes;
-	}
-	
-	if(numCallSites === undefined) {
-		this._findNumCallSites();
-	} else {
-		this._numCallSites = numCallSites;
-	}
-	
-	this._checkDataTypes();
-}
+  constructor(
+    sig: string,
+    $func: FunctionJp,
+    isUser: boolean,
+    numInputs: number = $func.params.length,
+    numOuputs: number = 1,
+    inputTypes?: string[],
+    outputTypes?: string[],
+    numCallSites?: number
+  ) {
+    this.sig = MemoiUtils.normalizeSig(sig);
+    this.$func = $func;
+    this.isUser = isUser;
+    this.numInputs = numInputs;
+    this.numOutputs = numOuputs;
 
-MemoiTarget.fromFunction = function($func) {
-	
-	var sig = MemoiUtils.normalizeSig($func.signature);
-	var isUser = !MemoiUtils.isWhiteListed(sig);
-	var numInputs = $func.params.length;
-	var numOutputs = 1;
-	
-	// input types, output types, and num of call sites are found in the constructor
-	return new MemoiTarget(sig, $func, isUser, numInputs, numOutputs, undefined, undefined);
-}
+    if (inputTypes === undefined || outputTypes === undefined) {
+      [this.inputTypes, this.outputTypes] = this.findDataTypes();
+    } else {
+      this.inputTypes = inputTypes;
+      this.outputTypes = outputTypes;
+    }
 
-MemoiTarget.fromCall = function($call) {
-	
-	var $func = $call.function;
-	if($func === undefined) {
-		throw "Could not find function of call '" + $call.code + "'";
-	}
-	
-	return MemoiTarget.fromFunction($func);
-}
+    this.numCallSites = numCallSites ?? this.findNumCallSites();
 
-MemoiTarget.fromSig = function(sig) {
-	
-	sig = MemoiUtils.normalizeSig(sig);
-	
-	var $func = Query.search("function",{"signature": signature => sig === MemoiUtils.normalizeSig(signature)}).first();
-	if($func === undefined) {
-		
-		var $call = Query.search("call",{"signature": signature => sig === MemoiUtils.normalizeSig(signature)}).first();
-		if($call === undefined) {
-		
-			throw "Could not find function of sig '" + sig + "'";	
-		}
-		
-		return MemoiTarget.fromCall($call);
-	}
+    this.checkDataTypes();
+  }
 
-	return MemoiTarget.fromFunction($func);
-}
+  static fromFunction($func: FunctionJp) {
+    const sig = MemoiUtils.normalizeSig($func.signature);
+    const isUser = !MemoiUtils.isWhiteListed(sig);
+    const numInputs = $func.params.length;
+    const numOutputs = 1;
 
-MemoiTarget.prototype._findNumCallSites = function() {
-	
-	var numCallSites = 0;
-	
-	for(var $call of Query.search("call", {"signature": signature => this._sig === MemoiUtils.normalizeSig(signature)})) {
-		numCallSites++;
-	}
-	
-	this._numCallSites = numCallSites;
-}
+    // input types, output types, and num of call sites are found in the constructor
+    return new MemoiTarget(
+      sig,
+      $func,
+      isUser,
+      numInputs,
+      numOutputs,
+      undefined,
+      undefined
+    );
+  }
 
-MemoiTarget.prototype._findDataTypes = function() {
-	
-	inputTypes = [];
-	outputTypes = [];
-	
-	var $functionType = this._$func.functionType;
-	
-	if(this._numOutputs == 1) {
-		
-		outputTypes.push($functionType.returnType.code);
-		$functionType.paramTypes.forEach(function(e){inputTypes.push(e.code);});
+  static fromCall($call: Call) {
+    const $func = $call.function;
+    if ($func === undefined) {
+      throw `Could not find function of call '${$call.code}'`;
+    }
 
-	} else {
+    return MemoiTarget.fromFunction($func);
+  }
 
-		var typeCodes = $functionType.paramTypes.map(function(e){return e.code;});
-		
-		typeCodes.forEach(function(e, i){
-			if(i < this._numInputs) {
-				inputTypes.push(e);
-			} else {
-				outputTypes.push(e);
-			}
-		});
-	}
-	
-	this._inputTypes = inputTypes;
-	this._outputTypes = outputTypes;
-}
+  static fromSig(sig: string) {
+    sig = MemoiUtils.normalizeSig(sig);
 
-MemoiTarget.prototype._checkDataTypes = function() {
-	
-	var normalTypes = ["double", "float", "int"];
-	var pointerTypes = ["double *", "float *", "int *"];
-	var outputTestArray;
-	
-	var inputsInvalid = this._inputTypes.some(function(e){return !MemoiUtils.arrayContains(normalTypes, e);});
+    const $func = Query.search("function", {
+      signature: (signature) => sig === MemoiUtils.normalizeSig(signature),
+    }).first() as FunctionJp | undefined;
 
-	if(inputsInvalid) {
-		throw "The inputs of the target function '" + this._sig + "' are not supported.";
-	}
+    if ($func === undefined) {
+      const $call = Query.search("call", {
+        signature: (signature) => sig === MemoiUtils.normalizeSig(signature),
+      }).first() as Call | undefined;
 
-	outputTestArray = this._numOutputs == 1 ? normalTypes : pointerTypes;
-	var outputsInvalid = this._outputTypes.some(function(e){return !MemoiUtils.arrayContains(outputTestArray, e);});
-	
-	if(outputsInvalid) {
-		throw "The outputs of the target function '" + this._sig + "' are not supported.";
-	}	
+      if ($call === undefined) {
+        throw `Could not find function of sig '${sig}'`;
+      }
 
-	// if the output are valid, drop the pointer from the type
-	this._outputTypes = this._outputTypes.map(function(e){return Strings.replacer(e, /\*/, '').trim();});
+      return MemoiTarget.fromCall($call);
+    }
+
+    return MemoiTarget.fromFunction($func);
+  }
+
+  private findNumCallSites(): number {
+    return Query.search("call", {
+      signature: (signature) => this.sig === MemoiUtils.normalizeSig(signature),
+    }).get().length;
+  }
+
+  private findDataTypes() {
+    const inputTypes: string[] = [];
+    const outputTypes: string[] = [];
+
+    const $functionType = this.$func.functionType;
+
+    if (this.numOutputs == 1) {
+      outputTypes.push($functionType.returnType.code);
+      $functionType.paramTypes.forEach(function (e) {
+        inputTypes.push(e.code);
+      });
+    } else {
+      const typeCodes = $functionType.paramTypes.map(function (e) {
+        return e.code;
+      });
+
+      typeCodes.forEach((e, i) => {
+        if (i < this.numInputs) {
+          inputTypes.push(e);
+        } else {
+          outputTypes.push(e);
+        }
+      });
+    }
+
+    return [inputTypes, outputTypes];
+  }
+
+  private checkDataTypes() {
+    const normalTypes = ["double", "float", "int"];
+    const pointerTypes = ["double *", "float *", "int *"];
+
+    const inputsInvalid = this.inputTypes.some(function (e) {
+      return !normalTypes.includes(e);
+    });
+
+    if (inputsInvalid) {
+      throw (
+        `The inputs of the target function '${this.sig}' are not supported.`
+      );
+    }
+
+    const outputTestArray = this.numOutputs == 1 ? normalTypes : pointerTypes;
+    const outputsInvalid = this.outputTypes.some(function (e) {
+      return !outputTestArray.includes(e);
+    });
+
+    if (outputsInvalid) {
+      throw (
+        `The outputs of the target function '${this.sig}' are not supported.`
+      );
+    }
+
+    // if the output are valid, drop the pointer from the type
+    this.outputTypes = this.outputTypes.map(function (e) {
+      return e.replace(/\*/, "").trim();
+    });
+  }
 }

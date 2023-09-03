@@ -63,15 +63,15 @@ public abstract class AFunctionType extends AType {
      * Get value on attribute paramTypes
      * @return the attribute's value
      */
-    public abstract AJoinPoint[] getParamTypesArrayImpl();
+    public abstract AType[] getParamTypesArrayImpl();
 
     /**
      * Get value on attribute paramTypes
      * @return the attribute's value
      */
     public Object getParamTypesImpl() {
-        AJoinPoint[] aJoinPointArrayImpl0 = getParamTypesArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        AType[] aTypeArrayImpl0 = getParamTypesArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aTypeArrayImpl0);
         return nativeArray0;
     }
 
