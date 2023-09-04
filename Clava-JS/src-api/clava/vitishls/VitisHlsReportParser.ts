@@ -1,79 +1,91 @@
-"use strict";
+import Io from "lara-js/api/lara/Io.js";
 
-class VitisHlsReportParser {
-    reportPath;
+export default class VitisHlsReportParser {
+  private reportPath: string;
 
-    constructor(reportPath) {
-        this.reportPath = reportPath;
+  constructor(reportPath: string) {
+    this.reportPath = reportPath;
+  }
+
+  private xmlToJson(xml: string) {
+    //parses only the "leaves" of the XML string, which is enough for us. For now.
+    const regex =
+      /(?:<([a-zA-Z'-\d_]*)(?:\s[^>]*)*>)((?:(?!<\1).)*)(?:<\/\1>)|<([a-zA-Z'-]*)(?:\s*)*\/>/gm;
+
+    const json: Record<string, any> = {};
+    for (const match of xml.matchAll(regex)) {
+      const key = match[1] || match[3];
+      const val = match[2] && this.xmlToJson(match[2]);
+      json[key] = (val && Object.keys(val).length ? val : match[2]) || null;
     }
+    return json;
+  }
 
-    #xmlToJson(xml) {
-        //parses only the "leaves" of the XML string, which is enough for us. For now.
-        const regex = /(?:<([a-zA-Z'-\d_]*)(?:\s[^>]*)*>)((?:(?!<\1).)*)(?:<\/\1>)|<([a-zA-Z'-]*)(?:\s*)*\/>/gm;
+  getSanitizedJSON() {
+    const raw = this.getRawJSON();
 
-        const json = {};
-        for (const match of xml.matchAll(regex)) {
-            const key = match[1] || match[3];
-            const val = match[2] && this.#xmlToJson(match[2]);
-            json[key] = ((val && Object.keys(val).length) ? val : match[2]) || null;
-        }
-        return json;
-    }
+    const fmax = this.calculateMaxFrequency(
+      raw["EstimatedClockPeriod"] as number
+    );
+    const execTimeWorst = this.calculateExecutionTime(
+      raw["Worst-caseLatency"] as number,
+      fmax
+    );
+    const execTimeAvg = this.calculateExecutionTime(
+      raw["Average-caseLatency"] as number,
+      fmax
+    );
+    const execTimeBest = this.calculateExecutionTime(
+      raw["Best-caseLatency"] as number,
+      fmax
+    );
+    const hasFixedLatency: boolean =
+      raw["Best-caseLatency"] === raw["Worst-caseLatency"];
 
-    getSanitizedJSON() {
-        const raw = this.#getRawJSON();
+    return {
+      platform: raw["Part"] as string,
+      topFun: raw["TopModelName"] as string,
 
-        const fmax = this.calculateMaxFrequency(raw["EstimatedClockPeriod"]);
-        const execTimeWorst = this.calculateExecutionTime(raw["Worst-caseLatency"], fmax);
-        const execTimeAvg = this.calculateExecutionTime(raw["Average-caseLatency"], fmax);
-        const execTimeBest = this.calculateExecutionTime(raw["Best-caseLatency"], fmax);
-        const hasFixedLatency = raw["Best-caseLatency"] === raw["Worst-caseLatency"];
+      clockTarget: raw["TargetClockPeriod"] as number,
+      clockEstim: raw["EstimatedClockPeriod"] as number,
+      fmax: fmax,
 
-        var json = {
-            "platform": raw["Part"],
-            "topFun": raw["TopModelName"],
+      latencyWorst: raw["Worst-caseLatency"] as number,
+      latencyAvg: raw["Average-caseLatency"] as number,
+      latencyBest: raw["Best-caseLatency"] as number,
+      hasFixedLatency: hasFixedLatency,
+      execTimeWorst: execTimeWorst,
+      execTimeAvg: execTimeAvg,
+      execTimeBest: execTimeBest,
 
-            "clockTarget": raw["TargetClockPeriod"],
-            "clockEstim": raw["EstimatedClockPeriod"],
-            "fmax": fmax,
+      FF: raw["FF"] as number,
+      LUT: raw["LUT"] as number,
+      BRAM: raw["BRAM_18K"] as number,
+      DSP: raw["DSP"] as number,
 
-            "latencyWorst": raw["Worst-caseLatency"],
-            "latencyAvg": raw["Average-caseLatency"],
-            "latencyBest": raw["Best-caseLatency"],
-            "hasFixedLatency": hasFixedLatency,
-            "execTimeWorst": execTimeWorst,
-            "execTimeAvg": execTimeAvg,
-            "execTimeBest": execTimeBest,
+      availFF: raw["AVAIL_FF"] as number,
+      availLUT: raw["AVAIL_LUT"] as number,
+      availBRAM: raw["AVAIL_BRAM"] as number,
+      availDSP: raw["AVAIL_DSP"] as number,
 
-            "FF": raw["FF"],
-            "LUT": raw["LUT"],
-            "BRAM": raw["BRAM_18K"],
-            "DSP": raw["DSP"],
+      perFF: (raw["FF"] as number) / (raw["AVAIL_FF"] as number),
+      perLUT: (raw["LUT"] as number) / (raw["AVAIL_LUT"] as number),
+      perBRAM: (raw["BRAM_18K"] as number) / (raw["AVAIL_BRAM"] as number),
+      perDSP: (raw["DSP"] as number) / (raw["AVAIL_DSP"] as number),
+    };
+  }
 
-            "availFF": raw["AVAIL_FF"],
-            "availLUT": raw["AVAIL_LUT"],
-            "availBRAM": raw["AVAIL_BRAM"],
-            "availDSP": raw["AVAIL_DSP"],
+  private getRawJSON() {
+    const xml = Io.readFile(this.reportPath);
+    return this.xmlToJson(xml);
+  }
 
-            "perFF": raw["FF"] / raw["AVAIL_FF"],
-            "perLUT": raw["LUT"] / raw["AVAIL_LUT"],
-            "perBRAM": raw["BRAM_18K"] / raw["AVAIL_BRAM"],
-            "perDSP": raw["DSP"] / raw["AVAIL_DSP"]
-        };
-        return json;
-    }
+  calculateMaxFrequency(clockEstim: number): number {
+    return (1 / clockEstim) * 1000;
+  }
 
-    #getRawJSON() {
-        const xml = Io.readFile(this.reportPath);
-        return this.#xmlToJson(xml);
-    }
-
-    calculateMaxFrequency(clockEstim) {
-        return (1 / clockEstim) * 1000;
-    }
-
-    calculateExecutionTime(latency, freqMHz) {
-        const freqHz = freqMHz * 1e6;
-        return latency / freqHz;
-    }
+  calculateExecutionTime(latency: number, freqMHz: number): number {
+    const freqHz = freqMHz * 1e6;
+    return latency / freqHz;
+  }
 }
