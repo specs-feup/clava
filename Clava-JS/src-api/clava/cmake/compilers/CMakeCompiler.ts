@@ -1,28 +1,16 @@
 /**
  * Interface that provides information about a CMake-supported compiler.
  *
- * @class
  */
-function CMakeCompiler() {
-}
+export default abstract class CMakeCompiler {
+  abstract getCxxCommand(): string;
 
-/*** METHODS TO IMPLEMENT ***/
+  abstract getCCommand(): string;
 
-CMakeCompiler.prototype.getCxxCommand = function() {
-	notImplemented("CMakeCompiler.getCxxCommand");
-}
-
-CMakeCompiler.prototype.getCCommand = function() {
-	notImplemented("CMakeCompiler.getCCommand");
-}
-
-
-
-/*** IMPLEMENTED METHODS ***/
-
-/**
- * Generates the compiler-related arguments that are required when calling the CMake command.
- */
-CMakeCompiler.prototype.getCommandArgs = function() {
-	return "-DCMAKE_CXX_COMPILER=" + this.getCxxCommand() + " -DCMAKE_C_COMPILER=" + this.getCCommand();
+  /**
+   * Generates the compiler-related arguments that are required when calling the CMake command.
+   */
+  getCommandArgs() {
+    return `-DCMAKE_CXX_COMPILER=${this.getCxxCommand()} -DCMAKE_C_COMPILER=${this.getCCommand()}`;
+  }
 }
