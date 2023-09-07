@@ -1,6 +1,6 @@
 laraImport("lara.Io");
 laraImport("lara.Platforms");
-laraImport("lara.cmake.CMaker");
+laraImport("clava.cmake.CMaker");
 laraImport("clava.Clava");
 
 var cmaker = new CMaker("testapp")
