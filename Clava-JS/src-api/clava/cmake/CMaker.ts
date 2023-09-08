@@ -288,13 +288,12 @@ export default class CMaker extends BenchmarkCompilationEngine {
     // Execute CMake
     let cmakeCmd =
       'cmake "' + cmakeFile.getParentFile().getAbsolutePath() + '"';
-    //var cmakeCmd = "cmake \"" + cmakelistsFolder + "\"";
     if (cmakeFlags !== undefined) {
       cmakeCmd += " " + cmakeFlags;
     }
 
     if (this.generator !== undefined) {
-      cmakeCmd += ' -G "' + this.generator + '"';
+      cmakeCmd += ` -G "${this.generator}"`;
     }
 
     if (this.compiler !== undefined) {
