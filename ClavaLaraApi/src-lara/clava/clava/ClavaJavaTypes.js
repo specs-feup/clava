@@ -52,5 +52,11 @@ export default class ClavaJavaTypes {
     static get MemoiCodeGen() {
         return JavaTypes.getType("pt.up.fe.specs.clava.weaver.memoi.MemoiCodeGen");
     }
+    static get ClavaPetit() {
+        return JavaTypes.getType("pt.up.fe.specs.clava.weaver.util.ClavaPetit");
+    }
+    static get ClavaPlatforms() {
+        return JavaTypes.getType("pt.up.fe.specs.clava.weaver.importable.ClavaPlatforms");
+    }
 }
 //# sourceMappingURL=ClavaJavaTypes.js.map

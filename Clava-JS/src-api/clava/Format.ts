@@ -14,6 +14,6 @@ export default class Format {
     }
 
     static escape(str: string): string {
-        return JavaTypes.SpecsStrings.escape(str);
+        return JavaTypes.SpecsStrings.escapeJson(str);
     }
 }

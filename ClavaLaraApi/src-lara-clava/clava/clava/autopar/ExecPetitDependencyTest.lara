@@ -5,6 +5,7 @@
 **************************************************************/
 import clava.autopar.AutoParUtils;
 import lara.util.ProcessExecutor;
+import clava.ClavaJavaTypes;
 
 
 aspectdef ExecPetitDependencyTest
@@ -33,7 +34,7 @@ aspectdef ExecPetitDependencyTest
 	// RUN petit dependency test 
 	var printToConsole = false;
 	var timeoutSeconds = 60;
-	var consoleOutput = ClavaPetit.execute(petitArgs, Clava.getWeavingFolder() + '/', printToConsole, timeoutSeconds);
+	var consoleOutput = ClavaJavaTypes.ClavaPetit.execute(petitArgs, Clava.getWeavingFolder() + '/', printToConsole, timeoutSeconds);
 		
 
 	if (consoleOutput.length === 0)

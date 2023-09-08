@@ -54,15 +54,10 @@ import pt.up.fe.specs.clava.weaver.abstracts.weaver.ACxxWeaver;
 import pt.up.fe.specs.clava.weaver.gears.CacheHandlerGear;
 import pt.up.fe.specs.clava.weaver.gears.InsideApplyGear;
 import pt.up.fe.specs.clava.weaver.gears.ModifiedFilesGear;
-import pt.up.fe.specs.clava.weaver.importable.AstFactory;
-import pt.up.fe.specs.clava.weaver.importable.ClavaPlatforms;
-import pt.up.fe.specs.clava.weaver.importable.Format;
-import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
 import pt.up.fe.specs.clava.weaver.joinpoints.CxxProgram;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
 import pt.up.fe.specs.clava.weaver.utils.ClavaAstMethods;
-import pt.up.fe.specs.lang.SpecsPlatforms;
 import pt.up.fe.specs.lara.langspec.LangSpecsXmlParser;
 import pt.up.fe.specs.lara.lcl.LaraCommonLanguageApis;
 import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
@@ -72,14 +67,10 @@ import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
 import pt.up.fe.specs.util.collections.AccumulatorMap;
-import pt.up.fe.specs.util.csv.CsvField;
-import pt.up.fe.specs.util.csv.CsvWriter;
 import pt.up.fe.specs.util.lazy.Lazy;
-import pt.up.fe.specs.util.parsing.arguments.ArgumentsParser;
 import pt.up.fe.specs.util.providers.ResourceProvider;
 import pt.up.fe.specs.util.utilities.Buffer;
 import pt.up.fe.specs.util.utilities.LineStream;
-import pt.up.fe.specs.util.utilities.ProgressCounter;
 import pt.up.fe.specs.util.utilities.StringLines;
 
 /**
@@ -188,16 +179,6 @@ public class CxxWeaver extends ACxxWeaver {
         CLAVA_LARA_API.addAll(LaraCommonLanguageApis.getApis());
         CLAVA_LARA_API.addAll(ClavaLaraApis.getApis());
         CLAVA_LARA_API.addAll(AntarexClavaLaraApis.getApis());
-    }
-
-    private static final List<Class<?>> CLAVA_IMPORTABLE_CLASSES = new ArrayList<>();
-    static {
-        CLAVA_IMPORTABLE_CLASSES.addAll(ClavaLaraApis.getImportableClasses());
-        CLAVA_IMPORTABLE_CLASSES.addAll(
-                Arrays.asList(SpecsPlatforms.class, AstFactory.class, Format.class, LowLevelApi.class, CsvWriter.class,
-                        CsvField.class, ProgressCounter.class, ClavaPlatforms.class, ClavaWeaverLauncher.class,
-                        ArgumentsParser.class, CxxWeaverApi.class));
-
     }
 
     /**
@@ -1763,12 +1744,6 @@ public class CxxWeaver extends ACxxWeaver {
         SpecsIo.deleteOnExit(tempFolder);
 
         return tempFolder.getAbsoluteFile();
-    }
-
-    @Override
-    public List<Class<?>> getImportableClasses() {
-        return CLAVA_IMPORTABLE_CLASSES;
-
     }
 
     @Override

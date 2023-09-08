@@ -1,6 +1,7 @@
 import clava.hdf5.Hdf5;
 import clava.Clava;
 import clava.ClavaJoinPoints;
+import clava.Format;
 
 aspectdef Launcher
 

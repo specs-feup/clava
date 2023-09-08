@@ -13,33 +13,18 @@
 
 package pt.up.fe.specs.clava.weaver;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
-import pt.up.fe.specs.clava.language.Standard;
-import pt.up.fe.specs.clava.weaver.memoi.MemoiCodeGen;
-import pt.up.fe.specs.clava.weaver.memoi.MemoiReport;
-import pt.up.fe.specs.clava.weaver.memoi.MemoiReportsMap;
-import pt.up.fe.specs.clava.weaver.memoi.MergedMemoiReport;
-import pt.up.fe.specs.clava.weaver.util.ClavaPetit;
 import pt.up.fe.specs.util.providers.ResourceProvider;
 
 public class ClavaLaraApis {
 
     private static final List<ResourceProvider> CLAVA_LARA_API = ResourceProvider
-            .getResourcesFromEnum(ClavaApiJsResource.class, LaraWeaverApiResource.class,
-                    LaraApiResource.class);
-
-    private static final List<Class<?>> CLAVA_IMPORTABLE_CLASSES = Arrays.asList(Standard.class, ClavaPetit.class,
-            MemoiReport.class, MemoiReportsMap.class, MergedMemoiReport.class, MemoiCodeGen.class,
-            MathExtraApiTools.class);
+            .getResourcesFromEnum(ClavaApiJsResource.class, LaraWeaverApiResource.class, LaraApiResource.class);
 
     public static List<ResourceProvider> getApis() {
         return CLAVA_LARA_API;
-    }
-
-    public static List<Class<?>> getImportableClasses() {
-        return CLAVA_IMPORTABLE_CLASSES;
     }
 
 }

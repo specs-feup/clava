@@ -1,3 +1,6 @@
+import clava.ClavaJavaTypes;
+import clava.Format;
+
 aspectdef _LVC_INIT_
 	input name, compilerInit, lvc end
 	
@@ -36,7 +39,7 @@ aspectdef _LVC_C_LINKAGE_
 			//~ }
 		//~ }
 		
-		var $linkage = AstFactory.externC($function);
+		var $linkage = ClavaJavaTypes.AstFactory.externC($function);
 		
 		// Replace original function declaration with new linkage node, if created
 		if($linkage !== null) {
@@ -157,7 +160,7 @@ aspectdef LibVersioningCompiler
 		}
 
 		// Build linkage node
-		var $linkage = AstFactory.externC($function);
+		var $linkage = ClavaJavaTypes.AstFactory.externC($function);
 		
 		// Replace original function declaration with new linkage node, if created
 		if($linkage !== null) {
