@@ -8,6 +8,7 @@
 import antarex.utils.messages;
 import antarex.memoi.Memoization;
 import antarex.memoi.MemoizationAutoFuncs;
+import antarex.memoi.LaraObject;
 
 var stackCall=[];
 var callGraph=new LaraObject();
