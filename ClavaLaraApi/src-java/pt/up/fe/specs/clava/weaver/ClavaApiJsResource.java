@@ -75,6 +75,8 @@ public enum ClavaApiJsResource implements LaraResourceProvider {
     OPSCOUNTER_JS("clava/stats/OpsCounter.js"),
     STATICOPSCOUNTER_JS("clava/stats/StaticOpsCounter.js"),
     CLAVADATASTORE_JS("clava/util/ClavaDataStore.js"),
+    CODEINSERTER_JS("clava/util/CodeInserter.js"),
+    FILEITERATOR_JS("clava/util/FileIterator.js"),
     DETECTSTREAM_JS("clava/uve/DetectStream.js"),
     UVE_JS("clava/uve/UVE.js"),
     VITISHLS_JS("clava/vitishls/VitisHls.js"),

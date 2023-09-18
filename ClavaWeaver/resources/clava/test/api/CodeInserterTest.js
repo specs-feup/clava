@@ -1,6 +1,7 @@
 laraImport("clava.util.CodeInserter");
 laraImport("clava.Clava");
 laraImport("weaver.Query");
+laraImport("lara.Io");
 
 var codeInserter = new CodeInserter();
 

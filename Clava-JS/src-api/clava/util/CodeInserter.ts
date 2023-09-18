@@ -1,37 +1,39 @@
-laraImport("clava.Clava");
-
-laraImport("lara.util.LineInserter");
-laraImport("lara.Io");
+import Io from "lara-js/api/lara/Io.js";
+import LineInserter from "lara-js/api/lara/util/LineInserter.js";
+import { FileJp } from "../../Joinpoints.js";
+import Clava from "../Clava.js";
 
 /**
  * Writes the original code of the application, with the possibility of inserting new lines of code.
- *
- * @class
  */
-class CodeInserter {
-  // Maps $file AST ids to an object that maps line numbers to strings to insert.
-  _linesToInserts;
+export default class CodeInserter {
+  /**
+   * Maps $file AST ids to an object that maps line numbers to strings to insert.
+   */
+  protected linesToInserts: Record<string, Record<number, string[]>>;
 
   constructor() {
-    this._linesToInserts = {};
+    this.linesToInserts = {};
   }
 
-  add($file, line, content) {
-    var astId = $file.astId;
-    var fileLines = this._getFileLines(astId);
-    this._addContent(fileLines, line, content);
+  add($file: FileJp, line: number, content: string) {
+    const astId = $file.astId;
+    const fileLines = this.getFileLines(astId);
+    this.addContent(fileLines, line, content);
   }
 
   /**
    * Writes the code of the current tree, plus the lines to insert, to the given folder.
    */
-  write(outputFolder) {
-    var lineInserter = new LineInserter();
+  write(outputFolder: string) {
+    const lineInserter = new LineInserter();
 
     // Write each file, inserting lines if needed
-    for (var $file of Clava.getProgram().getDescendants("file")) {
+    for (const $jp of Clava.getProgram().getDescendants("file")) {
+      const $file = $jp as FileJp;
+
       if (!Io.isFile($file.filepath)) {
-        println(
+        console.log(
           "CodeInserter.write: skipping file, could not find path '" +
             $file.filepath +
             "'"
@@ -40,42 +42,42 @@ class CodeInserter {
       }
 
       // Original code
-      var fileCode = Io.readFile($file.filepath);
+      let fileCode = Io.readFile($file.filepath);
 
       // Intrument code, if needed
-      var fileLines = this._linesToInserts[$file.astId];
+      const fileLines = this.linesToInserts[$file.astId];
       if (fileLines !== undefined) {
         fileCode = lineInserter.add(fileCode, fileLines);
       }
 
       // Get path for writing file
-      var outputFilepath = $file.getDestinationFilepath(outputFolder);
+      const outputFilepath = $file.getDestinationFilepath(outputFolder);
 
-      // Write file
       Io.writeFile(outputFilepath, fileCode);
     }
   }
 
-  /*** PRIVATE FUNCTIONS ***/
-
-  _getFileLines(astId) {
-    var fileLines = this._linesToInserts[astId];
+  private getFileLines(astId: string): Record<number, string[]> {
+    let fileLines = this.linesToInserts[astId];
 
     if (fileLines === undefined) {
       fileLines = {};
-      this._linesToInserts[astId] = fileLines;
+      this.linesToInserts[astId] = fileLines;
     }
 
     return fileLines;
   }
 
-  _addContent(fileLines, line, content) {
-    var lineStrings = fileLines[line];
+  private addContent(
+    fileLines: Record<number, string[]>,
+    line: number,
+    content: string
+  ) {
+    const lineStrings = fileLines[line];
     if (lineStrings === undefined) {
-      lineStrings = [];
-      fileLines[line] = lineStrings;
+      fileLines[line] = [];
     }
 
-    lineStrings.push(content);
+    fileLines[line].push(content);
   }
 }
