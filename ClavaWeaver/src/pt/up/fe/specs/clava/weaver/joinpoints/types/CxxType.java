@@ -64,12 +64,12 @@ public class CxxType extends AType {
     }
 
     @Override
-    public Integer[] getArrayDimsArrayImpl() {
+    public int[] getArrayDimsArrayImpl() {
         if (!(type instanceof ArrayType)) {
-            return new Integer[0];
+            return new int[0];
         }
 
-        return ((ArrayType) type).getArrayDims().toArray(new Integer[0]);
+        return ((ArrayType) type).getArrayDims().stream().mapToInt(Integer::intValue).toArray();
     }
     /*
     @Override
@@ -181,7 +181,7 @@ public class CxxType extends AType {
     }
 
     @Override
-    public void setTemplateArgTypeImpl(Integer index, AType templateArgType) {
+    public void setTemplateArgTypeImpl(int index, AType templateArgType) {
         type.setTemplateArgumentType(index, (Type) templateArgType.getNode());
     }
 

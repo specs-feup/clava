@@ -286,7 +286,7 @@ public abstract class AEnumDecl extends ANamedDecl {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aNamedDecl.getChildImpl(index);
     }
 
@@ -556,7 +556,7 @@ public abstract class AEnumDecl extends ANamedDecl {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aNamedDecl.getAstChildImpl(index);
     }
 

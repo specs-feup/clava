@@ -154,7 +154,7 @@ public abstract class AVariableArrayType extends AArrayType {
      * @return the attribute's value
      */
     @Override
-    public Integer[] getArrayDimsArrayImpl() {
+    public int[] getArrayDimsArrayImpl() {
         return this.aArrayType.getArrayDimsArrayImpl();
     }
 
@@ -436,7 +436,7 @@ public abstract class AVariableArrayType extends AArrayType {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aArrayType.getChildImpl(index);
     }
 
@@ -706,7 +706,7 @@ public abstract class AVariableArrayType extends AArrayType {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aArrayType.getAstChildImpl(index);
     }
 

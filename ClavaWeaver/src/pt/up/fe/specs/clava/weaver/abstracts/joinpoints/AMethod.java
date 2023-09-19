@@ -570,7 +570,7 @@ public abstract class AMethod extends AFunction {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aFunction.getChildImpl(index);
     }
 
@@ -840,7 +840,7 @@ public abstract class AMethod extends AFunction {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aFunction.getAstChildImpl(index);
     }
 
@@ -1265,7 +1265,7 @@ public abstract class AMethod extends AFunction {
      * @param param 
      */
     @Override
-    public void setParamImpl(Integer index, AParam param) {
+    public void setParamImpl(int index, AParam param) {
         this.aFunction.setParamImpl(index, param);
     }
 
@@ -1276,7 +1276,7 @@ public abstract class AMethod extends AFunction {
      * @param type 
      */
     @Override
-    public void setParamImpl(Integer index, String name, AType type) {
+    public void setParamImpl(int index, String name, AType type) {
         this.aFunction.setParamImpl(index, name, type);
     }
 
@@ -1322,7 +1322,7 @@ public abstract class AMethod extends AFunction {
      * @param newType 
      */
     @Override
-    public void setParamTypeImpl(Integer index, AType newType) {
+    public void setParamTypeImpl(int index, AType newType) {
         this.aFunction.setParamTypeImpl(index, newType);
     }
 

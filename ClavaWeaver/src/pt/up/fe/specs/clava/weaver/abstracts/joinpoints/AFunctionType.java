@@ -125,7 +125,7 @@ public abstract class AFunctionType extends AType {
      * @param index 
      * @param newType 
      */
-    public void setParamTypeImpl(Integer index, AType newType) {
+    public void setParamTypeImpl(int index, AType newType) {
         throw new UnsupportedOperationException(get_class()+": Action setParamType not implemented ");
     }
 
@@ -134,7 +134,7 @@ public abstract class AFunctionType extends AType {
      * @param index 
      * @param newType 
      */
-    public final void setParamType(Integer index, AType newType) {
+    public final void setParamType(int index, AType newType) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setParamType", this, Optional.empty(), index, newType);
@@ -207,7 +207,7 @@ public abstract class AFunctionType extends AType {
      * @return the attribute's value
      */
     @Override
-    public Integer[] getArrayDimsArrayImpl() {
+    public int[] getArrayDimsArrayImpl() {
         return this.aType.getArrayDimsArrayImpl();
     }
 
@@ -482,7 +482,7 @@ public abstract class AFunctionType extends AType {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aType.getChildImpl(index);
     }
 
@@ -752,7 +752,7 @@ public abstract class AFunctionType extends AType {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aType.getAstChildImpl(index);
     }
 
@@ -1120,7 +1120,7 @@ public abstract class AFunctionType extends AType {
      * @param templateArgType 
      */
     @Override
-    public void setTemplateArgTypeImpl(Integer index, AType templateArgType) {
+    public void setTemplateArgTypeImpl(int index, AType templateArgType) {
         this.aType.setTemplateArgTypeImpl(index, templateArgType);
     }
 
@@ -1298,7 +1298,7 @@ public abstract class AFunctionType extends AType {
     protected final void fillWithActions(List<String> actions) {
         this.aType.fillWithActions(actions);
         actions.add("void setReturnType(type)");
-        actions.add("void setParamType(Integer, type)");
+        actions.add("void setParamType(int, type)");
     }
 
     /**

@@ -514,7 +514,7 @@ public abstract class ABody extends AScope {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aScope.getChildImpl(index);
     }
 
@@ -784,7 +784,7 @@ public abstract class ABody extends AScope {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aScope.getAstChildImpl(index);
     }
 

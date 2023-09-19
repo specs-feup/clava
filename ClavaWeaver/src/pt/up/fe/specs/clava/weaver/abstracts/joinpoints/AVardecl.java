@@ -549,7 +549,7 @@ public abstract class AVardecl extends ADeclarator {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aDeclarator.getChildImpl(index);
     }
 
@@ -819,7 +819,7 @@ public abstract class AVardecl extends ADeclarator {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aDeclarator.getAstChildImpl(index);
     }
 

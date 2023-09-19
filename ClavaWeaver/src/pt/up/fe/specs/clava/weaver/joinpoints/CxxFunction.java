@@ -603,7 +603,7 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void setParamTypeImpl(Integer index, AType newType) {
+    public void setParamTypeImpl(int index, AType newType) {
         function.setParamType(index, (Type) newType.getNode());
     }
 
@@ -629,7 +629,7 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void setParamImpl(Integer index, AParam param) {
+    public void setParamImpl(int index, AParam param) {
         var params = getParamsArrayImpl();
 
         if (index >= params.length) {
@@ -644,7 +644,7 @@ public class CxxFunction extends AFunction {
     }
 
     @Override
-    public void setParamImpl(Integer index, String name, AType type) {
+    public void setParamImpl(int index, String name, AType type) {
         ClavaNode paramNode;
         
         if (type == null) {

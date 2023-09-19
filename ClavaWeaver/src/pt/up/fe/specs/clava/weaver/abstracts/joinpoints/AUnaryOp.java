@@ -316,7 +316,7 @@ public abstract class AUnaryOp extends AOp {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aOp.getChildImpl(index);
     }
 
@@ -586,7 +586,7 @@ public abstract class AUnaryOp extends AOp {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aOp.getAstChildImpl(index);
     }
 

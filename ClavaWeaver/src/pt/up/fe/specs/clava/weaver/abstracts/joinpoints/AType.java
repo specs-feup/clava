@@ -172,15 +172,15 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * Get value on attribute arrayDims
      * @return the attribute's value
      */
-    public abstract Integer[] getArrayDimsArrayImpl();
+    public abstract int[] getArrayDimsArrayImpl();
 
     /**
      * Get value on attribute arrayDims
      * @return the attribute's value
      */
     public Object getArrayDimsImpl() {
-        Integer[] integerArrayImpl0 = getArrayDimsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(integerArrayImpl0);
+        int[] intArrayImpl0 = getArrayDimsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(intArrayImpl0);
         return nativeArray0;
     }
 
@@ -556,7 +556,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * @param index 
      * @param templateArgType 
      */
-    public void setTemplateArgTypeImpl(Integer index, AType templateArgType) {
+    public void setTemplateArgTypeImpl(int index, AType templateArgType) {
         throw new UnsupportedOperationException(get_class()+": Action setTemplateArgType not implemented ");
     }
 
@@ -565,7 +565,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * @param index 
      * @param templateArgType 
      */
-    public final void setTemplateArgType(Integer index, AType templateArgType) {
+    public final void setTemplateArgType(int index, AType templateArgType) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgType", this, Optional.empty(), index, templateArgType);
@@ -807,7 +807,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     protected void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
         actions.add("void setTemplateArgsTypes(type[])");
-        actions.add("void setTemplateArgType(Integer, type)");
+        actions.add("void setTemplateArgType(int, type)");
         actions.add("void setDesugar(type)");
         actions.add("boolean setTypeFieldByValueRecursive(Object, Object)");
         actions.add("type setUnderlyingType(type, type)");

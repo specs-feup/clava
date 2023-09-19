@@ -319,7 +319,7 @@ public abstract class AParam extends AVardecl {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aVardecl.getChildImpl(index);
     }
 
@@ -589,7 +589,7 @@ public abstract class AParam extends AVardecl {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aVardecl.getAstChildImpl(index);
     }
 

@@ -272,7 +272,7 @@ public class CxxCall extends ACall {
     }
 
     @Override
-    public void setArgImpl(Integer index, AExpression expr) {
+    public void setArgImpl(int index, AExpression expr) {
         // Check num args
         // int numArgs = getArgListArrayImpl().length;
         // if (index >= 0 && index < numArgs) {

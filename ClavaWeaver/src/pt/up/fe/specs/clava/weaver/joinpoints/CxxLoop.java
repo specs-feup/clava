@@ -286,8 +286,9 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public Integer[] getRankArrayImpl() {
-        return loop.getRank().toArray(new Integer[0]);
+    public int[] getRankArrayImpl() {
+        var rank = loop.getRank();
+        return rank.stream().mapToInt(Integer::intValue).toArray();
     }
 
     @Override

@@ -652,7 +652,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         ClavaNode node = getNode();
         if (node == null) {
             return null;
@@ -783,7 +783,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return getNode().getChildren().stream()
                 // return getChildrenPrivate().stream()
                 .filter(node -> !(node instanceof NullNode))
