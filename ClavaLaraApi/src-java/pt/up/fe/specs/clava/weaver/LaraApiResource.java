@@ -85,8 +85,8 @@ public enum LaraApiResource implements LaraResourceProvider {
     CODE_REMOVE_SHADOWING("code/RemoveShadowing.js"),
 
     // Gprofer
-    GPROFER("gprofer/Gprofer.lara"),
-    GPROFER_ASPECTS("gprofer/_GproferAspects.lara"),
+    //GPROFER("gprofer/Gprofer.lara"),
+    //GPROFER_ASPECTS("gprofer/_GproferAspects.lara"),
 
     // Graphs
     STATIC_CALL_GRAPH("graphs/StaticCallGraph.js"),

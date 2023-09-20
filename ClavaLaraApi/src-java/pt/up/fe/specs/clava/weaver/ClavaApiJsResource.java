@@ -48,6 +48,7 @@ public enum ClavaApiJsResource implements LaraResourceProvider {
     CMAKECOMPILER_JS("clava/cmake/compilers/CMakeCompiler.js"),
     GENERICCMAKECOMPILER_JS("clava/cmake/compilers/GenericCMakeCompiler.js"),
     GLOBALVARIABLE_JS("clava/code/GlobalVariable.js"),
+    GPROFER_JS("clava/gprofer/Gprofer.js"),
     HDF5_JS("clava/hdf5/Hdf5.js"),
     HLSANALYSIS_JS("clava/hls/HLSAnalysis.js"),
     MATHANALYSIS_JS("clava/hls/MathAnalysis.js"),

@@ -1,310 +1,275 @@
-import clava.gprofer._GproferAspects;
-import clava.Clava;
-import lara.cmake.CMaker;
-import lara.Io;
-import lara.Strings;
-import lara.util.JavaTypes;
+import Io from "lara-js/api/lara/Io.js";
+import Strings from "lara-js/api/lara/Strings.js";
+import JavaTypes, { JavaClasses } from "lara-js/api/lara/util/JavaTypes.js";
+import Query from "lara-js/api/weaver/Query.js";
+import { FileJp, FunctionJp } from "../../Joinpoints.js";
+import Clava from "../Clava.js";
+import CMaker from "../cmake/CMaker.js";
+import { debug } from "lara-js/api/lara/core/LaraCore.js";
 
-function Gprofer(runs, args) {
-	
-	this._app = Clava.getProgram();
-	
-	this._runs = defaultValue(runs, 1);
-	checkNumber(this._runs, "Gprofer(runs, ...)");
-	
-	this._args = defaultValue(args, []);
-	checkArray(this._args, "Gprofer(..., args)");
-	
-	this._workingDir = undefined;
-	this._deleteWorkingDir = false;
-	
-	this._checkReturn = true;
-	
-	this._data = {};
-	this._hotSpots = {};
-	
-	this._cmaker = this._defaultCmaker();
-	
-	this._gProfer = JavaTypes.Gprofer;
+function GproferGetCxxFunction(signature: string) {
+  return Query.search("function", {
+    signature: signature,
+    hasDefinition: true,
+  }).first() as FunctionJp | undefined;
 }
 
-Gprofer.prototype.getCmaker = function() {
-	
-	return this._cmaker;
+function GproferGetCFunction(signature: string) {
+  return Query.search("function", {
+    name: signature,
+    hasDefinition: true,
+  }).first() as FunctionJp | undefined;
 }
 
-Gprofer._EXE_NAME = "gprofer_bin";
-
-Gprofer.prototype._defaultCmaker = function($function) {
-	
-	var cmaker = new CMaker(Gprofer._EXE_NAME, false);
-	
-	if(Clava.isCxx()) {
-		cmaker.addCxxFlags("-no-pie", "-pg");
-	} else {
-		cmaker.addFlags("-no-pie", "-pg");
-	}
-	
-	// sources
-	for (var $file of this._app.getDescendants('file')) {
-		
-		if($file.isHeader) {
-			continue;
-		}
-		
-		cmaker.getSources().addSource($file.filepath);
-	}
-	
-	// includes
-	for(var userInclude of Clava.getIncludeFolders()) {
-		debug("Adding include: " + userInclude);
-		cmaker.addIncludeFolder(userInclude);
-	}
-	
-	//~ // external includes
-	//~ var extraIncludes = Clava.getProgram().extraIncludes;
-	//~ for(var extraInclude of extraIncludes) {
-		//~ if(Io.isFolder(extraInclude)) {
-			//~ debug("Adding external include '" + extraInclude + "'");
-			//~ variantCmaker.addIncludeFolder(extraInclude);
-		//~ } else {
-			//~ debug("Extra include ' " + extraIncludes +  " ' is not a folder");
-		//~ }
-		
-	//~ }
-	
-	return cmaker;
+interface GproferProfileFileContents {
+  data: Record<string, Record<string, number>>;
+  hotspots: Record<number, string>;
 };
 
-Gprofer._buildName = function($function) {
-	
-	if(Clava.isCxx()) {
-		/* signature or qualified name */
-		
-		return $function.signature;	
-	}
-	
-	return $function.name;
-};
+export default class Gprofer {
+  private _runs: number;
+  private _args: string[];
 
-Gprofer.prototype.setArgs = function(args) {
-	
-	checkArray(args, "Gprofer.setArgs(args)");
-	this._args = args;
-	
-	return this;
+  private _app = Clava.getProgram();
+  private _workingDir: JavaClasses.File | undefined = undefined;
+  private _deleteWorkingDir: boolean = false;
+  private _checkReturn: boolean = true;
+  private _data: Record<string, Record<string, number>> = {};
+  private _hotSpots: Record<number, string> = {};
+  private _cmaker: CMaker = this.defaultCmaker();
+  private _gProfer = JavaTypes.Gprofer;
+
+  constructor(runs: number = 1, args: string[] = []) {
+    this._runs = runs;
+    this._args = args;
+  }
+
+  getCmaker(): CMaker {
+    return this._cmaker;
+  }
+
+  static _EXE_NAME = "gprofer_bin";
+
+  protected defaultCmaker(): CMaker {
+    const cmaker = new CMaker(Gprofer._EXE_NAME, false);
+
+    if (Clava.isCxx()) {
+      cmaker.addCxxFlags("-no-pie", "-pg");
+    } else {
+      cmaker.addFlags("-no-pie", "-pg");
+    }
+
+    // sources
+    for (const $jp of this._app.getDescendants("file")) {
+      const $file = $jp as FileJp;
+      if ($file.isHeader) {
+        continue;
+      }
+
+      cmaker.getSources().addSource($file.filepath);
+    }
+
+    // includes
+    for (const obj of Clava.getIncludeFolders()) {
+      const userInclude = obj as string;
+      debug("Adding include: " + userInclude);
+      cmaker.addIncludeFolder(userInclude);
+    }
+
+    return cmaker;
+  }
+
+  protected static _buildName($function: FunctionJp): string {
+    if (Clava.isCxx()) {
+      /* signature or qualified name */
+      return $function.signature;
+    }
+
+    return $function.name;
+  }
+
+  setArgs(args: string[]) {
+    this._args = args;
+    return this;
+  }
+
+  setRuns(runs: number) {
+    this._runs = runs;
+    return this;
+  }
+
+  setCheckReturn(checkReturn: boolean) {
+    this._checkReturn = checkReturn;
+    return this;
+  }
+
+  setWorkingDir(workingDir: string, deleteWorkingDir: boolean) {
+    this._workingDir = Io.getPath(workingDir);
+    this._deleteWorkingDir = deleteWorkingDir;
+    return this;
+  }
+
+  profile() {
+    if (this._workingDir === undefined) {
+      this._workingDir = Io.getTempFolder("gprofer_" + Strings.uuid());
+      this._deleteWorkingDir = true;
+    }
+
+    // compile the application
+    const binary = this._cmaker.build(
+      this._workingDir,
+      Io.getPath(this._workingDir, "build")
+    );
+
+    // call java gprofer
+    const data = this._gProfer.profile(
+      binary,
+      this._args,
+      this._runs,
+      this._workingDir,
+      this._deleteWorkingDir,
+      this._checkReturn
+    );
+    const json = this._gProfer.getJsonData(data) as string;
+
+    // fill this._data and this._hotSpots
+    const obj = JSON.parse(json);
+    this._hotSpots = obj.hotspots;
+    this._data = obj.table;
+
+    return this;
+  }
+
+  getHotspotNames() {
+    return this._hotSpots;
+  }
+
+  writeProfile(path: JavaClasses.File = Io.getPath("./gprofer.json")) {
+    const profile: GproferProfileFileContents = {
+      data: this._data,
+      hotspots: this._hotSpots,
+    };
+    Io.writeJson(path.getAbsolutePath(), profile);
+  }
+
+  readProfile(path: JavaClasses.File = Io.getPath("./gprofer.json")) {
+    const obj = Io.readJson(path.getAbsolutePath()) as GproferProfileFileContents;
+    this._data = obj.data;
+    this._hotSpots = obj.hotspots;
+  }
+
+  /**
+   *
+   * May return undefined if the desired function is a system or library function and not available in the source code.
+   * */
+  getHotspot(rank: number = 0) {
+    const _rank = rank;
+
+    const signature = this._hotSpots[_rank];
+
+    const f = this._getHotspot(signature);
+
+    if (f === undefined) {
+      console.log(
+        `Could not find hotspot with rank ${rank} and signature ${signature}. It may be a system function.\n`
+      );
+    }
+
+    return f;
+  }
+
+  /**
+   * Internal method that uses the signature to identify a function.
+   * */
+  protected _getHotspot(signature: string): FunctionJp | undefined {
+    let f = undefined;
+    if (Clava.isCxx()) {
+      debug("finding Cxx function with signature " + signature);
+      f = GproferGetCxxFunction(signature);
+    } else {
+      debug("finding C function with signature " + signature);
+      f = GproferGetCFunction(signature);
+    }
+
+    return f;
+  }
+
+  getPercentage($function: FunctionJp) {
+    return this.get("percentage", $function);
+  }
+
+  getCalls($function: FunctionJp) {
+    return this.get("calls", $function);
+  }
+
+  getSelfSeconds($function: FunctionJp) {
+    return this.get("selfSeconds", $function);
+  }
+
+  getSelfMsCall($function: FunctionJp) {
+    return this.get("selfMsCall", $function);
+  }
+
+  getTotalMsCall($function: FunctionJp) {
+    return this.get("totalMsCall", $function);
+  }
+
+  protected get(type: string, $function: FunctionJp) {
+    const name = Gprofer._buildName($function);
+    return this._data[name][type];
+  }
+
+  print($function: FunctionJp) {
+    const perc = this.getPercentage($function);
+    const calls = this.getCalls($function);
+    const self = this.getSelfSeconds($function);
+    const selfCall = this.getSelfMsCall($function);
+    const totalCall = this.getTotalMsCall($function);
+
+    console.log($function.signature);
+
+    if (perc !== undefined) {
+      console.log(`\tPercentage: ${perc}%`);
+    }
+
+    if (calls !== undefined) {
+      console.log(`\tCalls: ${calls}`);
+    }
+
+    if (self !== undefined) {
+      console.log(`\tSelf seconds: ${self}s`);
+    }
+
+    if (selfCall !== undefined) {
+      console.log(`\tSelf ms/call: ${selfCall}ms`);
+    }
+
+    if (totalCall !== undefined) {
+      console.log(`\tTotal ms/call: ${totalCall}ms`);
+    }
+  }
+
+  removeSystemFunctions() {
+    const toRemove: number[] = [];
+
+    for (const index in this._hotSpots) {
+      const sigIndex: number = Number(index);
+
+      const sig = this._hotSpots[sigIndex];
+      const $hs = this._getHotspot(sig);
+
+      if ($hs === undefined) {
+        // mark to remove from array
+        toRemove.push(sigIndex);
+
+        // remove from map
+        delete this._data[sig];
+      }
+    }
+
+    // remove from array
+    for (const sigIndex of toRemove) {
+      delete this._hotSpots[sigIndex];
+    }
+  }
 }
-
-Gprofer.prototype.setRuns = function(runs) {
-	
-	checkNumber(runs, "Gprofer.setRuns(runs)");
-	this._runs = runs;
-	
-	return this;
-}
-
-Gprofer.prototype.setCheckReturn = function(checkReturn) {
-	
-	checkBoolean(checkReturn, "Gprofer.setCheckReturn(checkReturn)");
-	this._checkReturn = checkReturn;
-	
-	return this;
-}
-
-Gprofer.prototype.setWorkingDir = function(workingDir, deleteWorkingDir) {
-	
-	checkString(workingDir, "Gprofer.setWorkingDir(workingDir, ...)");
-	this._workingDir = Io.getPath(workingDir);
-	
-	checkBoolean(deleteWorkingDir, "Gprofer.setWorkingDir(..., deleteWorkingDir)");
-	this._deleteWorkingDir = deleteWorkingDir;
-	
-	return this;
-}
-
-Gprofer.prototype.profile = function() {
-	
-	if(this._workingDir === undefined) {
-		
-		this._workingDir = Io.getTempFolder('gprofer_' + Strings.uuid());
-		this._deleteWorkingDir = true;
-	}
-	
-	// compile the application
-	var binary = this._cmaker.build(this._workingDir,  Io.getPath(this._workingDir, "build"));
-	
-	// call java gprofer
-	var data = this._gProfer.profile(binary, this._args, this._runs, this._workingDir, this._deleteWorkingDir, this._checkReturn);
-	var json = this._gProfer.getJsonData(data);
-	
-	// fill this._data and this._hotSpots
-	var obj = JSON.parse(json);
-	this._hotSpots = obj.hotspots;
-	this._data= obj.table;
-	
-	return this;
-};
-
-Gprofer.prototype.getHotspotNames = function() {
-	
-	return this._hotSpots;
-};
-
-Gprofer.prototype.writeProfile = function(path) {
-	
-	if(path === undefined) {
-		path = Io.getPath("./gprofer.json");
-	}
-	
-	Io.writeJson(path, {data: this._data, hotspots: this._hotSpots});
-}
-
-Gprofer.prototype.readProfile = function(path) {
-
-	if(path === undefined) {
-		path = Io.getPath("./gprofer.json");
-	}
-	
-	var obj = Io.readJson(path);
-	this._data = obj.data;
-	this._hotSpots = obj.hotspots;
-}
-
-/**
- * 
- * May return undefined if the desired function is a system or library function and not available in the source code.
- * */
-Gprofer.prototype.getHotspot = function(rank) {
-	
-	var _rank = defaultValue(rank, 0);
-	checkNumber(_rank, "Gprofer.getHotspot(rank)");
-	
-	var signature = this._hotSpots[_rank];
-	
-	var f = this._getHotspot(signature);
-	
-	if(f === undefined) {
-		println('Could not find hotspot with rank ' + rank + ' and signature ' + signature + '. It may be a system function.\n');
-	}
-	
-	return f;
-};
-
-/**
- * Internal method that uses the signature to identify a function.
- * */
-Gprofer.prototype._getHotspot = function(signature) {
-	
-	var f = undefined;
-	if(Clava.isCxx()) {
-		
-		debug('finding Cxx function with signature ' + signature);
-		f = call GproferGetCxxFunction(signature);
-	} else {
-		
-		debug('finding C function with signature ' + signature);
-		f = call GproferGetCFunction(signature);
-	}
-		
-	return f.$func;
-};
-
-Gprofer.prototype.getPercentage = function($function) {
-
-	checkJoinPointType($function, 'function', 'Gprofer.getPercentage($function)');
-	
-	return this._get('percentage', $function);
-};
-
-Gprofer.prototype.getCalls = function($function) {
-
-	checkJoinPointType($function, 'function', 'Gprofer.getCalls($function)');
-	
-	return this._get('calls', $function);
-};
-
-Gprofer.prototype.getSelfSeconds = function($function) {
-
-	checkJoinPointType($function, 'function', 'Gprofer.getSelfSeconds($function)');
-	
-	return this._get('selfSeconds', $function);
-};
-
-Gprofer.prototype.getSelfMsCall = function($function) {
-
-	checkJoinPointType($function, 'function', 'Gprofer.getSelfMsCall($function)');
-	
-	return this._get('selfMsCall', $function);
-};
-
-Gprofer.prototype.getTotalMsCall = function($function) {
-
-	checkJoinPointType($function, 'function', 'Gprofer.getTotalMsCall($function)');
-	
-	return this._get('totalMsCall', $function);
-};
-
-Gprofer.prototype._get = function(type, $function) {
-	
-	var name = Gprofer._buildName($function);	
-	return this._data[name][type];
-};
-
-Gprofer.prototype.print = function($function) {
-
-	checkJoinPointType($function, 'function', 'Gprofer.print($function)');
-	
-	var perc = this.getPercentage($function);
-	var calls = this.getCalls($function);
-	var self = this.getSelfSeconds($function);
-	var selfCall = this.getSelfMsCall($function);
-	var totalCall = this.getTotalMsCall($function);
-	
-	println($function.signature);
-	
-	if(perc !== undefined) {
-		println('\tPercentage: ' + perc + '%');
-	}
-
-	if(calls !== undefined) {
-		println('\tCalls: ' + calls);
-	}
-
-	if(self !== undefined) {
-		println('\tSelf seconds: ' + self + 's');
-	}
-	
-	if(selfCall !== undefined) {
-		println('\tSelf ms/call: ' + selfCall + 'ms');
-	}
-	
-	if(totalCall !== undefined) {
-		println('\tTotal ms/call: ' + totalCall + 'ms');
-	}
-};
-
-Gprofer.prototype.removeSystemFunctions = function() {
-
-	var toRemove = [];
-
-	for(var sigIndex in this._hotSpots) {
-		
-		var sig = this._hotSpots[sigIndex];
-		var $hs = this._getHotspot(sig);
-		
-		if($hs === undefined) {
-			
-			// mark to remove from array
-			toRemove.push(sigIndex);
-			
-			// remove from map
-			delete this._data[sig];
-		}
-	}
-	
-	// remove from array
-	for(var sigIndex of toRemove) {
-		this._hotSpots.splice(sigIndex, 1);
-	}
-	
-};
