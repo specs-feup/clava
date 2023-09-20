@@ -1,3 +1,4 @@
+Warning: using laraImport() for file 'JoinPointsCommonPath.js', however it does not define a variable or class 'JoinPointsCommonPath'
 decl (up) file (down) decl 
 __________________________________
 decl (up) file (down) function (down) param 
