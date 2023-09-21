@@ -1,6 +1,7 @@
-laraImport("lara.pass.SimplePass");
-laraImport("clava.ClavaJoinPoints");
-laraImport("lara.pass.results.PassResult");
+import SimplePass from "lara-js/api/lara/pass/SimplePass.js";
+import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
+import { DeclStmt, Joinpoint } from "../../Joinpoints.js";
+import ClavaJoinPoints from "../ClavaJoinPoints.js";
 
 /**
  * Decomposes composite declaration statements into separate statements for each variable.
@@ -19,18 +20,11 @@ laraImport("lara.pass.results.PassResult");
  * int c;
  * ```
  */
-class DecomposeDeclStmt extends SimplePass {
+export default class DecomposeDeclStmt extends SimplePass {
+  protected _name = "DecomposeDeclStmt";
 
-  /**
-   * @return {string} Name of the pass
-   * @override
-   */
-  get name() {
-    return "DecomposeDeclStmt";
-  }
-
-  matchJoinpoint($jp) {
-    if (!$jp.instanceOf("declStmt")) {
+  matchJoinpoint($jp: Joinpoint) {
+    if (!($jp instanceof DeclStmt)) {
       return false;
     }
     if ($jp.numChildren <= 1) {
@@ -39,8 +33,8 @@ class DecomposeDeclStmt extends SimplePass {
     return true;
   }
 
-  transformJoinpoint($jp) {
-    let $firstDeclStmt;
+  transformJoinpoint($jp: DeclStmt) {
+    let $firstDeclStmt: DeclStmt | undefined = undefined;
     for (const $decl of $jp.decls) {
       const $singleDeclStmt = ClavaJoinPoints.declStmt($decl);
       if (!$firstDeclStmt) {
@@ -49,6 +43,6 @@ class DecomposeDeclStmt extends SimplePass {
       $jp.insertBefore($singleDeclStmt);
     }
     $jp.detach();
-    return new PassResult(this, $firstDeclStmt);
+    return new PassResult(this, $firstDeclStmt!);
   }
 }
