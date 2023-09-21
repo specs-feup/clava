@@ -75,14 +75,14 @@ public enum LaraApiResource implements LaraResourceProvider {
 
     // Code
     //GLOBAL_VARIABLE("code/GlobalVariable.lara"),
-    STATEMENT_DECOMPOSER_JS("code/StatementDecomposer.js"),
-    DECOMPOSE_RESULT_JS("code/DecomposeResult.js"),
-    CODE_SIMPLIFY_ASSIGNMENT("code/SimplifyAssignment.js"),
-    CODE_SIMPLIFY_TERNARY_OP("code/SimplifyTernaryOp.js"),
-    CODE_FOR_TO_WHILE_STMT("code/ForToWhileStmt.js"),
-    CODE_DO_TO_WHILE_STMT("code/DoToWhileStmt.js"),
-    CODE_INLINER("code/Inliner.js"),
-    CODE_REMOVE_SHADOWING("code/RemoveShadowing.js"),
+    //STATEMENT_DECOMPOSER_JS("code/StatementDecomposer.js"),
+    //DECOMPOSE_RESULT_JS("code/DecomposeResult.js"),
+    //CODE_SIMPLIFY_ASSIGNMENT("code/SimplifyAssignment.js"),
+    //CODE_SIMPLIFY_TERNARY_OP("code/SimplifyTernaryOp.js"),
+    //CODE_FOR_TO_WHILE_STMT("code/ForToWhileStmt.js"),
+    //CODE_DO_TO_WHILE_STMT("code/DoToWhileStmt.js"),
+    //CODE_INLINER("code/Inliner.js"),
+    //CODE_REMOVE_SHADOWING("code/RemoveShadowing.js"),
 
     // Gprofer
     //GPROFER("gprofer/Gprofer.lara"),
