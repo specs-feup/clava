@@ -1,4 +1,6 @@
-function RemoveShadowing($function) {
+import { FunctionJp, Vardecl } from "../../Joinpoints.js";
+
+export default function RemoveShadowing($function: FunctionJp): void {
   const usedNames = new Set();
   let aliasIndex = 0;
 
@@ -6,7 +8,9 @@ function RemoveShadowing($function) {
     usedNames.add($param.name);
   }
 
-  for (const $vardecl of $function.body.getDescendants("vardecl")) {
+  for (const $jp of $function.body.getDescendants("vardecl")) {
+    const $vardecl = $jp as Vardecl;
+
     if (usedNames.has($vardecl.name)) {
       // TODO: ensure the new name is not part of the usedNames
       const newName = `${$vardecl.name}_${aliasIndex++}`;

@@ -2,6 +2,7 @@ import LoggerBase from "lara-js/api/lara/code/LoggerBase.js";
 import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
 import PrintOnce from "lara-js/api/lara/util/PrintOnce.js";
 import Clava from "../../clava/Clava.js";
+import { FunctionJp, Scope, } from "../../Joinpoints.js";
 export default class Logger extends LoggerBase {
     _isCxx = false;
     constructor(isGlobal = false, filename) {
@@ -212,9 +213,9 @@ export default class Logger extends LoggerBase {
         }
         else {
             // If $jp is a 'scope' with a 'function' parent, insert before return instead
-            if ($jp.instanceOf("scope") &&
+            if ($jp instanceof Scope &&
                 $jp.parent !== undefined &&
-                $jp.parent.instanceOf("function")) {
+                $jp.parent instanceof FunctionJp) {
                 this.afterJp = $jp.parent.insertReturn(code);
             }
             else {

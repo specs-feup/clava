@@ -1,4 +1,5 @@
-laraImport("clava.ClavaJoinPoints");
+import { BinaryOp, ExprStmt, TernaryOp } from "../../Joinpoints.js";
+import ClavaJoinPoints from "../ClavaJoinPoints.js";
 
 /**
  * Simplifies a statement like:
@@ -23,31 +24,29 @@ laraImport("clava.ClavaJoinPoints");
  *
  * Otherwise the function will immediately return.
  *
- * @param {$exprStmt} $assignmentStmt Expression statement containing an assignment where the right hand side is a ternary operator
+ * @param $assignmentStmt - Expression statement containing an assignment where the right hand side is a ternary operator
  */
-function SimplifyTernaryOp($assignmentStmt) {
+export default function SimplifyTernaryOp($assignmentStmt: ExprStmt): void {
   // early return if current node is not suitable
-  const applicable =
-    $assignmentStmt.instanceOf("exprStmt") &&
-    $assignmentStmt.expr.instanceOf("binaryOp") &&
+  if (!($assignmentStmt.expr instanceof BinaryOp &&
     $assignmentStmt.expr.isAssignment &&
-    $assignmentStmt.expr.right.instanceOf("ternaryOp");
-  if (!applicable) {
+    $assignmentStmt.expr.right instanceof TernaryOp)) {
     return;
   }
+
   const $assignment = $assignmentStmt.expr;
-  const $ternaryOp = $assignment.right;
+  const $ternaryOp = $assignment.right as TernaryOp;
 
-  const $trueStmt = $assignmentStmt.copy();
-  $trueStmt.expr.right = $ternaryOp.trueExpr;
+  const $trueStmt = $assignmentStmt.copy() as ExprStmt;
+  ($trueStmt.expr as BinaryOp).right = $ternaryOp.trueExpr;
 
-  const $falseStmt = $assignmentStmt.copy();
-  $falseStmt.expr.right = $ternaryOp.falseExpr;
+  const $falseStmt = $assignmentStmt.copy() as ExprStmt;
+  ($falseStmt.expr as BinaryOp).right = $ternaryOp.falseExpr;
 
   const $ifStmt = ClavaJoinPoints.ifStmt(
     $ternaryOp.cond,
-    ClavaJoinPoints.scope([$trueStmt]),
-    ClavaJoinPoints.scope([$falseStmt])
+    ClavaJoinPoints.scope($trueStmt),
+    ClavaJoinPoints.scope($falseStmt)
   );
 
   $assignmentStmt.replaceWith($ifStmt);

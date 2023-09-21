@@ -1,15 +1,18 @@
-class DecomposeResult {
+import { Expression, Statement } from "../../Joinpoints.js";
+
+export default class DecomposeResult {
+  precedingStmts: Statement[];
+  $resultExpr: Expression;
+  succeedingStmts: Statement[];
+
   constructor(
-    precedingStmts,
-    $resultExpr,
-    succeedingStmts = []
-    //    declaresVar = false
+    precedingStmts: Statement[],
+    $resultExpr: Expression,
+    succeedingStmts: Statement[] = []
   ) {
     this.precedingStmts = precedingStmts;
     this.$resultExpr = $resultExpr;
     this.succeedingStmts = succeedingStmts;
-    // True if any of the statement declares a new variable
-    //  this.declaresVar = declaresVar;
   }
 
   /**
@@ -20,7 +23,7 @@ class DecomposeResult {
     return this.precedingStmts;
   }
 
-  toString() {
+  toString(): string {
     const precedingCode = this.precedingStmts
       .map((stmt) => stmt.code)
       .join(" ");

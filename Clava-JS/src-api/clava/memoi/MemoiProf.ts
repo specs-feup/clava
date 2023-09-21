@@ -74,7 +74,7 @@ export default class MemoiProf {
 
     // make the wrapper
     for (const $jp of Query.search("call", {
-      signature: (s) => this.target.sig === MemoiUtils.normalizeSig(s),
+      signature: (s: string) => this.target.sig === MemoiUtils.normalizeSig(s),
     })) {
       const $call = $jp as Call;
       $call.wrap(wrapperName);
@@ -99,7 +99,7 @@ export default class MemoiProf {
     const monitorType = ClavaJoinPoints.typeLiteral("MemoiProf*");
 
     for (const $jp of Query.search("call", {
-      signature: (s) => this.target.sig === MemoiUtils.normalizeSig(s),
+      signature: (s: string) => this.target.sig === MemoiUtils.normalizeSig(s),
     })) {
       const $call = $jp as Call;
 

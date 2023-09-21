@@ -1,44 +1,53 @@
-laraImport("clava.code.DecomposeResult");
-laraImport("clava.ClavaJoinPoints");
-laraImport("lara.Check");
+import { debug } from "lara-js/api/lara/core/LaraCore.js";
+import {
+  BinaryOp,
+  Call,
+  Case,
+  Decl,
+  DeclStmt,
+  EmptyStmt,
+  ExprStmt,
+  Expression,
+  Joinpoint,
+  LabelStmt,
+  MemberCall,
+  ReturnStmt,
+  Scope,
+  Statement,
+  TernaryOp,
+  UnaryOp,
+  Vardecl,
+} from "../../Joinpoints.js";
+import ClavaJoinPoints from "../ClavaJoinPoints.js";
+import DecomposeResult from "./DecomposeResult.js";
 
 /**
  * Decomposes complex statements into several simpler ones.
  */
-class StatementDecomposer {
-  /**
-   * @param {string} [tempPrefix="decomp_"]
-   * @param {number} [startIndex=0]
-   */
-  constructor(tempPrefix = "decomp_", startIndex = 0) {
-    this.tempPrefix = tempPrefix ?? "decomp_";
-    this.startIndex = startIndex ?? 0;
+export default class StatementDecomposer {
+  tempPrefix;
+  startIndex;
 
-    Check.isString(this.tempPrefix);
-    Check.isNumber(this.startIndex);
+  constructor(tempPrefix: string = "decomp_", startIndex: number = 0) {
+    this.tempPrefix = tempPrefix;
+    this.startIndex = startIndex;
   }
 
-  #throwNotImplemented(generalType, specificType) {
-    throw new Error(
-      `StatementDecomposer not implemented for ${generalType} of type '${specificType}'`
-    );
-  }
-
-  #newTempVarname() {
+  private newTempVarname() {
     const varName = `${this.tempPrefix}${this.startIndex}`;
     this.startIndex++;
     return varName;
   }
 
-  #isValidNode($jp) {
+  private isValidNode($jp: Joinpoint): boolean {
     // If preceeding statement is a CaseStmt or a LabelStmt it might generate invalid code if a declaration is inserted
     // Add empty statement after the label to avoid this situation
-    if ($jp.instanceOf("statement") && !$jp.instanceOf("emptyStmt")) {
+    if ($jp instanceof Statement && !($jp instanceof EmptyStmt)) {
       const $leftStmt = $jp.leftJp;
 
       if (
         $leftStmt !== undefined &&
-        ($leftStmt.instanceOf("case") || $leftStmt.instanceOf("labelStmt"))
+        ($leftStmt instanceof Case || $leftStmt instanceof LabelStmt)
       ) {
         debug(
           `StatementDecomposer: statement just before label, inserting empty statement after as a precaution`
@@ -52,10 +61,10 @@ class StatementDecomposer {
       return true;
     }
 
-    const parentStmt = $jp.getAncestor("statement");
+    const parentStmt = $jp.getAncestor("statement") as Statement | undefined;
 
     if (parentStmt !== undefined) {
-      return this.#isValidNode(parentStmt);
+      return this.isValidNode(parentStmt);
     }
 
     return true;
@@ -64,9 +73,9 @@ class StatementDecomposer {
   /**
    * If the given statement can be decomposed in two or more statements, replaces the statement with the decomposition.
    *
-   * @param {$statement} $stmt - A statement that will be decomposed.
+   * @param $stmt - A statement that will be decomposed.
    */
-  decomposeAndReplace($stmt) {
+  decomposeAndReplace($stmt: Statement): void {
     const stmts = this.decompose($stmt);
 
     // No statements to replace
@@ -79,40 +88,40 @@ class StatementDecomposer {
   }
 
   /**
-   * @param {$statement} $stmt - A statement that will be decomposed.
-   * @return {$statement[]} An array with the new statements, or an empty array if no decomposition could be made
+   * @param $stmt - A statement that will be decomposed.
+   * @returns An array with the new statements, or an empty array if no decomposition could be made
    */
-  decompose($stmt) {
+  decompose($stmt: Statement): Statement[] {
     try {
       return this.decomposeStmt($stmt);
     } catch (e) {
-      println(`StatementDecomposer: ${e}`);
+      console.log(`StatementDecomposer: ${String(e)}`);
       return [];
     }
   }
 
-  decomposeStmt($stmt) {
+  decomposeStmt($stmt: Statement): Statement[] {
     // Unsupported
-    if ($stmt.instanceOf("scope") || $stmt.joinPointType === "statement") {
+    if ($stmt instanceof Scope || $stmt.joinPointType === "statement") {
       debug(
         `StatementDecomposer: skipping scope or generic statement join point`
       );
       return [];
     }
 
-    if (!this.#isValidNode($stmt)) {
+    if (!this.isValidNode($stmt)) {
       return [];
     }
 
-    if ($stmt.instanceOf("exprStmt")) {
+    if ($stmt instanceof ExprStmt) {
       return this.decomposeExprStmt($stmt);
     }
 
-    if ($stmt.instanceOf("returnStmt")) {
+    if ($stmt instanceof ReturnStmt) {
       return this.decomposeReturnStmt($stmt);
     }
 
-    if ($stmt.instanceOf("declStmt")) {
+    if ($stmt instanceof DeclStmt) {
       return this.decomposeDeclStmt($stmt);
     }
 
@@ -122,7 +131,7 @@ class StatementDecomposer {
     return [];
   }
 
-  decomposeExprStmt($stmt) {
+  decomposeExprStmt($stmt: ExprStmt): Statement[] {
     // Statement represents an expression
     const $expr = $stmt.expr;
 
@@ -131,7 +140,7 @@ class StatementDecomposer {
     return [...precedingStmts, ...succeedingStmts];
   }
 
-  decomposeReturnStmt($stmt) {
+  decomposeReturnStmt($stmt: ReturnStmt): Statement[] {
     // Return may contain an expression
     const $expr = $stmt.returnExpr;
 
@@ -145,15 +154,15 @@ class StatementDecomposer {
     return [...precedingStmts, $newReturnStmt];
   }
 
-  decomposeDeclStmt($stmt) {
+  decomposeDeclStmt($stmt: DeclStmt): Statement[] {
     // declStmt can have one or more declarations
     const $decls = $stmt.decls;
 
-    return $decls.flatMap(($decl) => this.#decomposeDecl($decl));
+    return $decls.flatMap(($decl) => this.decomposeDecl($decl));
   }
 
-  #decomposeDecl($decl) {
-    if (!$decl.instanceOf("vardecl")) {
+  private decomposeDecl($decl: Decl): Statement[] {
+    if (!($decl instanceof Vardecl)) {
       debug(
         `StatementDecomposer.decomposeDeclStmt: not implemented for decl of type ${$decl.joinPointType}`
       );
@@ -175,32 +184,28 @@ class StatementDecomposer {
     return [ClavaJoinPoints.declStmt($decl)];
   }
 
-  /**
-   * @return {DecomposeResult}
-   */
-  decomposeExpr($expr) {
-    if (!this.#isValidNode($expr)) {
+  decomposeExpr($expr: Expression): DecomposeResult {
+    if (!this.isValidNode($expr)) {
       return new DecomposeResult([], $expr);
     }
 
-    if ($expr.instanceOf("binaryOp")) {
+    if ($expr instanceof BinaryOp) {
       return this.decomposeBinaryOp($expr);
     }
 
-    if ($expr.instanceOf("unaryOp")) {
+    if ($expr instanceof UnaryOp) {
       return this.decomposeUnaryOp($expr);
     }
 
-    if ($expr.instanceOf("ternaryOp")) {
+    if ($expr instanceof TernaryOp) {
       return this.decomposeTernaryOp($expr);
     }
 
-    if ($expr.instanceOf("call")) {
+    if ($expr instanceof Call) {
       return this.decomposeCall($expr);
     }
 
     if ($expr.numChildren === 0) {
-      //if($expr.instanceOf("varref") || $expr.instanceOf("literal")) {
       return new DecomposeResult([], $expr);
     }
 
@@ -210,14 +215,14 @@ class StatementDecomposer {
     return new DecomposeResult([], $expr);
   }
 
-  decomposeCall($call) {
+  decomposeCall($call: Call): DecomposeResult {
     const argResults = $call.args.map(($arg) => this.decomposeExpr($arg));
 
     const precedingStmts = argResults.flatMap((res) => res.precedingStmts);
     const succeedingStmts = argResults.flatMap((res) => res.succeedingStmts);
 
     const newArgs = argResults.map((res) => res.$resultExpr);
-    const $newCall = this.#copyCall($call, newArgs);
+    const $newCall = this.copyCall($call, newArgs);
     //const $newCall = ClavaJoinPoints.call($call.function, ...newArgs);
 
     // Desugaring type, to avoid possible problems of code generation of more complex types
@@ -228,9 +233,9 @@ class StatementDecomposer {
     // The scope test is to avoid wrong code in situations such as loop headers
     if (
       $call.parent !== undefined &&
-      $call.parent.instanceOf("exprStmt") &&
+      $call.parent instanceof ExprStmt &&
       $call.parent.parent !== undefined &&
-      $call.parent.parent.instanceOf("scope")
+      $call.parent.parent instanceof Scope
     ) {
       // Using .exprStmt() to ensure a new statement is created.
       // .stmt might not create a new statement, and interfere with detaching the previous stmt
@@ -240,7 +245,7 @@ class StatementDecomposer {
 
     // Otherwise, create a variable to store the result of the call
     // and return the variable as the value expression
-    const tempVarname = this.#newTempVarname();
+    const tempVarname = this.newTempVarname();
 
     const tempVarDecl = ClavaJoinPoints.varDeclNoInit(
       tempVarname,
@@ -259,11 +264,11 @@ class StatementDecomposer {
     );
   }
 
-  #copyCall($call, newArgs) {
+  private copyCall($call: Call, newArgs: Expression[]): Call {
     // Instance method
-    if ($call.instanceOf("memberCall")) {
+    if ($call instanceof MemberCall) {
       // Copy node
-      const $newCall = $call.copy();
+      const $newCall = $call.copy() as MemberCall;
 
       // Update args
       // TODO: use a kind of .setArgs that replaces all
@@ -278,7 +283,7 @@ class StatementDecomposer {
     return ClavaJoinPoints.call($call.function, ...newArgs);
   }
 
-  decomposeBinaryOp($binaryOp) {
+  decomposeBinaryOp($binaryOp: BinaryOp): DecomposeResult {
     if ($binaryOp.isAssignment) {
       return this.decomposeAssignment($binaryOp);
     }
@@ -296,7 +301,7 @@ class StatementDecomposer {
     );
 
     // Create declaration statement with result to new temporary variable
-    const tempVarname = this.#newTempVarname();
+    const tempVarname = this.newTempVarname();
     const tempVarDecl = ClavaJoinPoints.varDeclNoInit(
       tempVarname,
       $binaryOp.type
@@ -322,11 +327,9 @@ class StatementDecomposer {
       ClavaJoinPoints.varRef(tempVarDecl),
       succeedingStmts
     );
-
-    //this.#throwNotImplemented("binary operators", kind);
   }
 
-  decomposeAssignment($assign) {
+  decomposeAssignment($assign: BinaryOp): DecomposeResult {
     // Get statements of right hand-side
     const rightResult = this.decomposeExpr($assign.right);
 
@@ -347,12 +350,12 @@ class StatementDecomposer {
     );
   }
 
-  decomposeTernaryOp($ternaryOp) {
+  decomposeTernaryOp($ternaryOp: TernaryOp): DecomposeResult {
     const condResult = this.decomposeExpr($ternaryOp.cond);
     const trueResult = this.decomposeExpr($ternaryOp.trueExpr);
     const falseResult = this.decomposeExpr($ternaryOp.falseExpr);
 
-    const tempVarname = this.#newTempVarname();
+    const tempVarname = this.newTempVarname();
     const tempVarDecl = ClavaJoinPoints.varDeclNoInit(
       tempVarname,
       $ternaryOp.type
@@ -363,25 +366,25 @@ class StatementDecomposer {
     // falls on the right side of the ternary.
     // we do not want side-effects to be executed without regard to the branch
     // taken
-    const $thenBody = ClavaJoinPoints.scope([
+    const $thenBody = ClavaJoinPoints.scope(
       ...condResult.succeedingStmts,
       ...trueResult.precedingStmts,
       ClavaJoinPoints.assign(
         ClavaJoinPoints.varRef(tempVarDecl),
         trueResult.$resultExpr
       ),
-      ...trueResult.succeedingStmts,
-    ]);
+      ...trueResult.succeedingStmts
+    );
 
-    const $elseBody = ClavaJoinPoints.scope([
+    const $elseBody = ClavaJoinPoints.scope(
       ...condResult.succeedingStmts,
       ...falseResult.precedingStmts,
       ClavaJoinPoints.assign(
         ClavaJoinPoints.varRef(tempVarDecl),
         falseResult.$resultExpr
       ),
-      ...falseResult.succeedingStmts,
-    ]);
+      ...falseResult.succeedingStmts
+    );
 
     const $ifStmt = ClavaJoinPoints.ifStmt(
       condResult.$resultExpr,
@@ -401,7 +404,7 @@ class StatementDecomposer {
     );
   }
 
-  decomposeUnaryOp($unaryOp) {
+  decomposeUnaryOp($unaryOp: UnaryOp): DecomposeResult {
     const kind = $unaryOp.kind;
     // only decompose increment / decrement operations, separating the change
     // from the result of the change
@@ -414,16 +417,19 @@ class StatementDecomposer {
       return new DecomposeResult([], $unaryOp, []);
     }
 
-    if (kind === "post_dec" || kind === "post_inc") {
-      const $innerExpr = $unaryOp.operand.copy();
-      const succeedingStmts = [ClavaJoinPoints.exprStmt($unaryOp)];
-      return new DecomposeResult([], $innerExpr, succeedingStmts);
-    }
-
-    if (kind === "pre_dec" || kind === "pre_inc") {
-      const $innerExpr = $unaryOp.operand.copy();
-      const precedingStmts = [ClavaJoinPoints.exprStmt($unaryOp)];
-      return new DecomposeResult(precedingStmts, $innerExpr, []);
+    switch (kind) {
+      case "post_dec":
+      case "post_inc": {
+        const $innerExpr = $unaryOp.operand.copy() as Expression;
+        const succeedingStmts = [ClavaJoinPoints.exprStmt($unaryOp)];
+        return new DecomposeResult([], $innerExpr, succeedingStmts);
+      }
+      case "pre_dec":
+      case "pre_inc": {
+        const $innerExpr = $unaryOp.operand.copy() as Expression;
+        const precedingStmts = [ClavaJoinPoints.exprStmt($unaryOp)];
+        return new DecomposeResult(precedingStmts, $innerExpr, []);
+      }
     }
   }
 }

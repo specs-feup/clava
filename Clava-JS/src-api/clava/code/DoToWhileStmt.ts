@@ -1,14 +1,15 @@
-laraImport("clava.ClavaJoinPoints");
+import { Joinpoint, Loop } from "../../Joinpoints.js";
+import ClavaJoinPoints from "../ClavaJoinPoints.js";
 
-function DoToWhileStmt($doStmt, labelSuffix) {
+export default function DoToWhileStmt($doStmt: Loop, labelSuffix: number | string) {
   // do statements have an unconditional first iteration
   const firstIterStmts = $doStmt.scopeNodes.map(($stmt) => $stmt.copy());
-  const firstIterScope = ClavaJoinPoints.scope(firstIterStmts);
+  const firstIterScope = ClavaJoinPoints.scope(...firstIterStmts);
 
   $doStmt.insertBefore(firstIterScope);
 
   // convert continues in first iteration to jumps to beginning of loop
-  const localContinues = [...DoToWhileStmt._findLocalContinue(firstIterScope)];
+  const localContinues = [...findLocalContinue(firstIterScope)];
   if (localContinues.length > 0) {
     const $labelDecl = ClavaJoinPoints.labelDecl(
       `__do_loop_head_${labelSuffix}`
@@ -21,7 +22,7 @@ function DoToWhileStmt($doStmt, labelSuffix) {
   }
 
   // convert breaks in first iteration to jumps to after loop
-  const localBreaks = [...DoToWhileStmt._findLocalBreak(firstIterScope)];
+  const localBreaks = [...findLocalBreak(firstIterScope)];
   if (localBreaks.length > 0) {
     const $labelDecl = ClavaJoinPoints.labelDecl(
       `__do_loop_end_${labelSuffix}`
@@ -39,28 +40,28 @@ function DoToWhileStmt($doStmt, labelSuffix) {
   return $while;
 }
 
-DoToWhileStmt._findLocalBreak = function* ($jp) {
+function* findLocalBreak($jp: Joinpoint): Generator<Joinpoint> {
   if ($jp.astName === "BreakStmt") {
     yield $jp;
     return;
   }
-  if ($jp.instanceOf("loop")) {
+  if ($jp instanceof Loop) {
     return;
   }
   for (const $child of $jp.children) {
-    yield* DoToWhileStmt._findLocalBreak($child);
+    yield* findLocalBreak($child);
   }
-};
+}
 
-DoToWhileStmt._findLocalContinue = function* ($jp) {
+function* findLocalContinue($jp: Joinpoint): Generator<Joinpoint> {
   if ($jp.astName === "ContinueStmt") {
     yield $jp;
     return;
   }
-  if ($jp.instanceOf("loop")) {
+  if ($jp instanceof Loop) {
     return;
   }
   for (const $child of $jp.children) {
-    yield* DoToWhileStmt._findLocalContinue($child);
+    yield* findLocalContinue($child);
   }
-};
+}

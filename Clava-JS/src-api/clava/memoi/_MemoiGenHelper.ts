@@ -56,7 +56,9 @@ export function _Memoi_WrapGlobalTarget(signature: string) {
   const wrapperName = `mw_${MemoiUtils.normalizeSig(signature)}`;
 
   for (const chain of Query.search("stmt")
-    .search("call", { signature: (sig) => sig.replace(/ /g, "") == signature })
+    .search("call", {
+      signature: (sig: string) => sig.replace(/ /g, "") == signature,
+    })
     .chain()) {
     const $call = chain["call"] as Call;
     $call.wrap(wrapperName);
@@ -68,7 +70,9 @@ export function _Memoi_WrapGlobalTarget(signature: string) {
 
 export function _Memoi_WrapSingleTarget(signature: string, location: string) {
   for (const chain of Query.search("stmt")
-    .search("call", { signature: (sig) => sig.replace(/ /g, "") == signature })
+    .search("call", {
+      signature: (sig: string) => sig.replace(/ /g, "") == signature,
+    })
     .chain()) {
     const $call = chain["call"] as Call;
 

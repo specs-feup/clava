@@ -1,16 +1,13 @@
-laraImport("clava.ClavaJoinPoints");
+import { BinaryOp, Expression } from "../../Joinpoints.js";
+import ClavaJoinPoints from "../ClavaJoinPoints.js";
 
 /**
  * Simplifies assignments of the type `a += b` into the equivalent expression `a = a + b`
- * @param {$binaryOp} $complexAssignment The expression to simplify
+ * @param $complexAssignment - The expression to simplify
  */
-function SimplifyAssignment($complexAssignment) {
+export default function SimplifyAssignment($complexAssignment: BinaryOp): void {
   // early return if current node is not suitable for this transform
-  if (
-    !$complexAssignment ||
-    !$complexAssignment.instanceOf("binaryOp") ||
-    !SimplifyAssignment._ops.has($complexAssignment.operator)
-  ) {
+  if (!ops.has($complexAssignment.operator)) {
     return;
   }
 
@@ -18,8 +15,8 @@ function SimplifyAssignment($complexAssignment) {
   const $rValue = $complexAssignment.right;
 
   const $binaryOp = ClavaJoinPoints.binaryOp(
-    SimplifyAssignment._ops.get($complexAssignment.operator),
-    $lValue.copy(),
+    ops.get($complexAssignment.operator)!,
+    $lValue.copy() as Expression,
     $rValue,
     $complexAssignment.type
   );
@@ -29,7 +26,7 @@ function SimplifyAssignment($complexAssignment) {
 /**
  * Non-assignment counterparts of complex assignment operators (lookup table)
  */
-SimplifyAssignment._ops = new Map([
+const ops = new Map([
   ["*=", "*"],
   ["/=", "/"],
   ["%=", "%"],

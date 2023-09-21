@@ -2,6 +2,7 @@ import Platforms from "lara-js/api/lara/Platforms.js";
 import TimerBase from "lara-js/api/lara/code/TimerBase.js";
 import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
 import { TimerUnit } from "lara-js/api/lara/util/TimeUnits.js";
+import { Scope } from "../../Joinpoints.js";
 import Clava from "../../clava/Clava.js";
 import ClavaJoinPoints from "../../clava/ClavaJoinPoints.js";
 import Logger from "./Logger.js";
@@ -59,7 +60,7 @@ export default class Timer extends TimerBase {
         }
         logger.ln();
         // Check if $start is a scope
-        if ($start.instanceOf("scope")) {
+        if ($start instanceof Scope) {
             $start.insertBegin($insertionTic);
         }
         else {
@@ -73,7 +74,7 @@ export default class Timer extends TimerBase {
         $insertionTic.insertBefore($timingResultDecl);
         let afterJp = undefined;
         // Check if $end is a scope
-        if ($end.instanceOf("scope")) {
+        if ($end instanceof Scope) {
             $end.insertEnd($insertionToc);
         }
         else {
@@ -142,7 +143,7 @@ export default class Timer extends TimerBase {
         const $insertionTic = $codeBefore;
         const $insertionToc = $codeAfter;
         // Check if $start is a scope
-        if ($start.instanceOf("scope")) {
+        if ($start instanceof Scope) {
             // Insert code
             $start.insertBegin($insertionTic);
         }
@@ -154,7 +155,7 @@ export default class Timer extends TimerBase {
         $insertionTic.insertBefore($timingResultDecl);
         let afterJp = undefined;
         // Check if $end is a scope
-        if ($end.instanceOf("scope")) {
+        if ($end instanceof Scope) {
             $end.insertEnd($insertionToc);
         }
         else {

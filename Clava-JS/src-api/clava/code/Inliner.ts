@@ -1,52 +1,97 @@
-laraImport("clava.ClavaJoinPoints");
-laraImport("lara.util.StringSet");
+import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
+import { debug } from "lara-js/api/lara/core/LaraCore.js";
+import Query from "lara-js/api/weaver/Query.js";
+import {
+  BinaryOp,
+  Call,
+  DeclStmt,
+  ExprStmt,
+  Expression,
+  FunctionJp,
+  GotoStmt,
+  Joinpoint,
+  LabelDecl,
+  LabelStmt,
+  ParenExpr,
+  ParenType,
+  PointerType,
+  ReturnStmt,
+  Scope,
+  Statement,
+  StorageClass,
+  Type,
+  Vardecl,
+  VariableArrayType,
+  Varref,
+} from "../../Joinpoints.js";
+import ClavaJoinPoints from "../ClavaJoinPoints.js";
 
-class Inliner {
-  #options;
-  #variableIndex;
+export interface InlinerOptions {
+  prefix?: string;
+}
+
+type InlineData =
+  | {
+      type: "assignment";
+      $target: Expression;
+      $call: Call;
+    }
+  | {
+      type: "call";
+      $target: undefined;
+      $call: Call;
+    };
+
+export default class Inliner {
+  private options: InlinerOptions;
+  private variableIndex: number = 0;
+  private labelNumber: number = 0;
 
   /**
    *
-   * @param  {object} options - Object with options. Supported options: 'prefix' (default: "__inline"), the prefix that will be used in the name of variables inserted by the Inliner
+   * @param  options - Object with options. Supported options: 'prefix' (default: "__inline"), the prefix that will be used in the name of variables inserted by the Inliner
    */
-  constructor(options) {
-    this.#options = options ?? {};
-    this.#options["prefix"] ??= "__inline";
-    this.#variableIndex = 0;
-
-    this.labelNumber = 0;
+  constructor(options: InlinerOptions = { prefix: "__inline" }) {
+    this.options = options;
   }
 
-  #getInlinedVarName(originalVarName) {
-    const prefix = this.#options["prefix"];
-    return `${prefix}_${this.#variableIndex}_${originalVarName}`;
+  private getInlinedVarName(originalVarName: string): string {
+    const prefix = this.options["prefix"];
+    return `${prefix}_${this.variableIndex}_${originalVarName}`;
   }
 
-  #hasCycle($function, _path = new Set()) {
+  private hasCycle(
+    $function: FunctionJp,
+    _path: Set<string> = new Set<string>()
+  ): boolean {
     if (_path.has($function.name)) {
       return true;
     }
 
     _path.add($function.name);
-    for (const $exprStmt of $function.getDescendants("exprStmt")) {
+    for (const $jp of $function.getDescendants("exprStmt")) {
+      const $exprStmt = $jp as ExprStmt;
+
       const $expr = $exprStmt.expr;
       if (
         !(
-          $expr.instanceOf("binaryOp") &&
+          $expr instanceof BinaryOp &&
           $expr.isAssignment &&
-          $expr.right.instanceOf("call")
+          $expr.right instanceof Call
         ) &&
-        !$expr.instanceOf("call")
+        !($expr instanceof Call)
       ) {
         continue;
       }
 
-      const $call = $expr.instanceOf("call") ? $expr : $expr.right;
-      const $callee = $call.definition;
-      if ($callee == undefined) {
+      const $call = $expr instanceof Call ? $expr : $expr.right;
+      if (
+        !($call instanceof Call) ||
+        ($call instanceof Call && $call.definition == undefined)
+      ) {
         continue;
       }
-      if (this.#hasCycle($callee, _path)) {
+      if (this.hasCycle($call.definition, _path)) {
         return true;
       }
     }
@@ -55,9 +100,16 @@ class Inliner {
     return false;
   }
 
-  inlineFunctionTree($function, _visited = new Set()) {
+  inlineFunctionTree(
+    $function: FunctionJp,
+    _visited: Set<string> = new Set<string>()
+  ) {
+    if ($function === undefined) {
+      return false;
+    }
+
     debug("InlineFunctionTree called on " + $function.signature);
-    if (this.#hasCycle($function)) {
+    if (this.hasCycle($function)) {
       return false;
     }
 
@@ -66,7 +118,8 @@ class Inliner {
     }
     _visited.add($function.name);
 
-    for (const $exprStmt of $function.getDescendants("exprStmt")) {
+    for (const $jp of $function.getDescendants("exprStmt")) {
+      const $exprStmt = $jp as ExprStmt;
       const inlineData = this.checkInline($exprStmt);
 
       if (inlineData === undefined) {
@@ -76,15 +129,13 @@ class Inliner {
       const $callee = inlineData.$call.definition;
 
       this.inlineFunctionTree($callee, _visited);
-      this.#inlinePrivate($exprStmt, inlineData);
+      this.inlinePrivate($exprStmt, inlineData);
     }
 
     return true;
   }
 
-  #getInitStmts($varDecl, $expr) {
-    const type = $varDecl.type;
-
+  private getInitStmts($varDecl: Vardecl, $expr: Expression): ExprStmt[] {
     const $assign = ClavaJoinPoints.assign(
       ClavaJoinPoints.varRef($varDecl),
       $expr
@@ -95,8 +146,8 @@ class Inliner {
 
   /**
    *
-   * @param {$exprStmt} $exprStmt
-   * @return {object} an object with the properties below or undefined if this exprStmt cannot be inlined.
+   * @param $exprStmt -
+   * @returns An object with the properties below or undefined if this exprStmt cannot be inlined.
    * Only exprStmt that are an isolated call, or that are an assignment with a single call
    * in the right-hand side can be inlined.
    *
@@ -106,11 +157,11 @@ class Inliner {
    * - $call: the call to be inlined
    *
    */
-  #extractInlineData($exprStmt) {
+  private extractInlineData($exprStmt: ExprStmt): InlineData | undefined {
     if (
-      $exprStmt.expr.instanceOf("binaryOp") &&
+      $exprStmt.expr instanceof BinaryOp &&
       $exprStmt.expr.isAssignment &&
-      $exprStmt.expr.right.instanceOf("call")
+      $exprStmt.expr.right instanceof Call
     ) {
       return {
         type: "assignment",
@@ -119,7 +170,7 @@ class Inliner {
       };
     }
 
-    if ($exprStmt.expr.instanceOf("call")) {
+    if ($exprStmt.expr instanceof Call) {
       return {
         type: "call",
         $target: undefined,
@@ -139,8 +190,8 @@ class Inliner {
    * - The call has a definition/implementation available.
    * - The call is not a function that is part of the system headers.
    *
-   * @param {$exprStmt} $exprStmt
-   * @return {object} an object with the properties below or undefined if this exprStmt cannot be inlined.
+   * @param $exprStmt -
+   * @returns An object with the properties below or undefined if this exprStmt cannot be inlined.
    *
    * - type: a string with either the value 'call' or 'assign', indicating the type of inlining
    * that can be applied to the given exprStmt.
@@ -148,9 +199,9 @@ class Inliner {
    * - $call: the call to be inlined
    *
    */
-  checkInline($exprStmt) {
+  checkInline($exprStmt: ExprStmt): InlineData | undefined {
     // Extract inline information
-    const inlineData = this.#extractInlineData($exprStmt);
+    const inlineData = this.extractInlineData($exprStmt);
 
     if (inlineData === undefined) {
       return undefined;
@@ -159,7 +210,7 @@ class Inliner {
     // Check if call has an implementation
     if (!inlineData.$call.function.isImplementation) {
       debug(
-        `Inliner: call '${inlineData.$call}' not inlined because implementation was not found`
+        `Inliner: call '${inlineData.$call.toString()}' not inlined because implementation was not found`
       );
       return undefined;
     }
@@ -167,7 +218,7 @@ class Inliner {
     // Ignore functions that are part of the system headers
     if (inlineData.$call.function.isInSystemHeader) {
       debug(
-        `Inliner: call '${inlineData.$call}' not inlined function belongs to a system header`
+        `Inliner: call '${inlineData.$call.toString()}' not inlined function belongs to a system header`
       );
       return undefined;
     }
@@ -175,23 +226,23 @@ class Inliner {
     return inlineData;
   }
 
-  inline($exprStmt) {
+  inline($exprStmt: ExprStmt): boolean {
     const inlineData = this.checkInline($exprStmt);
 
     if (inlineData === undefined) {
       return false;
     }
 
-    this.#inlinePrivate($exprStmt, inlineData);
+    this.inlinePrivate($exprStmt, inlineData);
     return true;
   }
 
-  #inlinePrivate($exprStmt, inlineData) {
+  private inlinePrivate($exprStmt: ExprStmt, inlineData: InlineData): void {
     debug(
       "InlinePrivate called on " + $exprStmt.code + "@" + $exprStmt.location
     );
-    let $target = inlineData.$target;
-    let $call = inlineData.$call;
+    const $target = inlineData.$target;
+    const $call = inlineData.$call;
 
     let args = $call.args;
     if (!Array.isArray(args)) {
@@ -208,8 +259,8 @@ class Inliner {
 
     const params = $function.params;
 
-    const newVariableMap = new Map();
-    const paramDeclStmts = [];
+    const newVariableMap = new Map<string, Vardecl | Expression>();
+    const paramDeclStmts: Statement[] = [];
 
     // TODO: args can be greater than params, if varargs. How to deal with this?
     for (let i = 0; i < params.length; i++) {
@@ -223,36 +274,44 @@ class Inliner {
       if ($param.type.isArray) {
         newVariableMap.set($param.name, $arg);
       } else {
-        const newName = this.#getInlinedVarName($param.name);
+        const newName = this.getInlinedVarName($param.name);
         const $varDecl = ClavaJoinPoints.varDeclNoInit(newName, $param.type);
         const $varDeclStmt = ClavaJoinPoints.declStmt($varDecl);
 
-        const $initStmts = this.#getInitStmts($varDecl, $arg);
+        const $initStmts = this.getInitStmts($varDecl, $arg);
 
         newVariableMap.set($param.name, $varDecl);
         paramDeclStmts.push($varDeclStmt, ...$initStmts);
       }
     }
 
-    for (const stmt of $function.body.getDescendants("declStmt")) {
+    for (const jp of $function.body.getDescendants("declStmt")) {
+      const stmt = jp as DeclStmt;
+
       const $varDecl = stmt.decls[0];
-      if (!$varDecl.instanceOf("vardecl")) {
+      if (!($varDecl instanceof Vardecl)) {
         continue;
       }
 
-      const newName = this.#getInlinedVarName($varDecl.name);
+      const newName = this.getInlinedVarName($varDecl.name);
       const $newDecl = ClavaJoinPoints.varDeclNoInit(newName, $varDecl.type);
       newVariableMap.set($varDecl.name, $newDecl);
     }
 
-    const $newNodes = $function.body.copy();
+    const $newNodes = $function.body.copy() as Scope;
 
-    this.#processBodyToInline($newNodes, newVariableMap, $call);
+    this.processBodyToInline($newNodes, newVariableMap, $call);
 
     // Remove/replace return statements
-    if ($exprStmt.expr.instanceOf("binaryOp") && $exprStmt.expr.isAssignment) {
-      for (const $returnStmt of $newNodes.getDescendants("returnStmt")) {
-        if (
+    if ($exprStmt.expr instanceof BinaryOp && $exprStmt.expr.isAssignment) {
+      for (const $jp of $newNodes.getDescendants("returnStmt")) {
+        const $returnStmt = $jp as ReturnStmt;
+
+        if ($target === undefined) {
+          throw new Error(
+            "Expected $target to be defined when exprStmt is an assignment"
+          );
+        } else if (
           $returnStmt.returnExpr !== null &&
           $returnStmt.returnExpr !== undefined
         ) {
@@ -265,11 +324,11 @@ class Inliner {
           $returnStmt.detach();
         }
       }
-    } else if ($exprStmt.expr.instanceOf("call")) {
+    } else if ($exprStmt.expr instanceof Call) {
       for (const $returnStmt of $newNodes.getDescendants("returnStmt")) {
         // Replace the return with a nop (i.e. empty statement), in case there is a label before. Otherwise, just remove return
         const left = $returnStmt.siblingsLeft;
-        if (left.length > 0 && left[left.length - 1].instanceOf("labelStmt")) {
+        if (left.length > 0 && left[left.length - 1] instanceof LabelStmt) {
           $returnStmt.replaceWith(ClavaJoinPoints.emptyStmt());
         } else {
           $returnStmt.detach();
@@ -280,9 +339,10 @@ class Inliner {
     // For any calls inside $newNodes, add forward declarations before the function, if they have definition
     // TODO: this should be done for calls of functions that are on this file. For other files, the corresponding include
     // should be added
-    const $parentFunction = $call.getAncestor("function");
-    const addedDeclarations = new StringSet();
-    for (const $newCall of Query.searchFrom($newNodes, "call")) {
+    const $parentFunction = $call.getAncestor("function") as FunctionJp;
+    const addedDeclarations = new Set<string>();
+    for (const $jp of Query.searchFrom($newNodes, "call")) {
+      const $newCall = $jp as Call;
       // Ignore functions that are part of the system headers
       if ($newCall.function.isInSystemHeader) {
         continue;
@@ -307,73 +367,59 @@ class Inliner {
     const inlinedScope =
       paramDeclStmts.length === 0
         ? $newNodes
-        : ClavaJoinPoints.scope([...paramDeclStmts, $newNodes]);
+        : ClavaJoinPoints.scope(...paramDeclStmts, $newNodes);
 
     $exprStmt.replaceWith(inlinedScope);
 
-    this.#variableIndex++;
+    this.variableIndex++;
   }
 
-  #processBodyToInline($newNodes, newVariableMap, $call) {
-    this.#updateVarDecls($newNodes, newVariableMap);
-    this.#updateVarrefs($newNodes, newVariableMap, $call);
-    this.#updateVarrefsInTypes($newNodes, newVariableMap, $call);
-    this.#renameLabels($newNodes);
+  private processBodyToInline(
+    $newNodes: Scope,
+    newVariableMap: Map<string, Vardecl | Expression>,
+    $call: Call
+  ) {
+    this.updateVarDecls($newNodes, newVariableMap);
+    this.updateVarrefs($newNodes, newVariableMap, $call);
+    this.updateVarrefsInTypes($newNodes, newVariableMap, $call);
+    this.renameLabels();
   }
 
   /**
    * Labels need to be renamed, to avoid duplicated labels.
-   * @param {$scope} $newNodes
    */
-  #renameLabels($newNodes) {
-    //println("New nodes: " + $newNodes.code);
-
+  private renameLabels(): void {
     // Maps label names to new LabelDecl
-    const newLabels = {};
+    const newLabels: Record<string, LabelDecl> = {};
 
     // Visit all gotoStmt and labelStmt
-    for (const $jp of Query.search("joinpoint", {
-      self: ($jp) => $jp.instanceOf("gotoStmt") || $jp.instanceOf("labelStmt"),
+    for (const jp of Query.search("joinpoint", {
+      self: ($jp: LaraJoinPoint) =>
+        $jp instanceof GotoStmt || $jp instanceof LabelStmt,
     })) {
-      //println("Jp: " + $jp.joinPointType);
+      const $jp = jp as GotoStmt | LabelStmt;
 
       // Get original label
-      const $labelDecl = $jp.instanceOf("gotoStmt") ? $jp.label : $jp.decl;
-      //println("Found label " + $labelDecl.name);
+      const $labelDecl = $jp instanceof GotoStmt ? $jp.label : $jp.decl;
+
       // Get new label, or create if it does not exist yet
-      let $newLabelDecl = newLabels[$labelDecl.name];
+      let $newLabelDecl: LabelDecl | undefined = newLabels[$labelDecl.name];
       if ($newLabelDecl === undefined) {
-        const newLabelName = this.#createNewLabelName($labelDecl.name);
+        const newLabelName = this.createNewLabelName($labelDecl.name);
         $newLabelDecl = ClavaJoinPoints.labelDecl(newLabelName);
         newLabels[$labelDecl.name] = $newLabelDecl;
       }
-      //println("Replacing with label " + $newLabelDecl.name);
       // Replace label
-      if ($jp.instanceOf("gotoStmt")) {
+      if ($jp instanceof GotoStmt) {
         $jp.label = $newLabelDecl;
       } else {
         $jp.decl = $newLabelDecl;
       }
-
-      //println("Label name: " + labelDecl.name);
-
-      /*
-      if ($jp.instanceOf("gotoStmt")) {
-        gotoStmt.
-        continue;
-      }
-
-      if ($jp.instanceOf("labelStmt")) {
-        continue;
-      }
-
-      throw new Error("Join point not expected: " + $jp.joinPointType);
-      */
     }
 
     // If there are any label decls, rename them
-    for (const $labelDecl of Query.search("labelDecl")) {
-      //println("Found label decl: " + $labelDecl.code);
+    for (const $jp of Query.search("labelDecl")) {
+      const $labelDecl = $jp as LabelDecl;
       const $newLabelDecl = newLabels[$labelDecl.name];
       $labelDecl.replaceWith($newLabelDecl);
     }
@@ -381,7 +427,7 @@ class Inliner {
 
   static LABEL_PREFIX_REGEX = /^inliner_\d+_.+$/;
 
-  #createNewLabelName(previousName) {
+  private createNewLabelName(previousName: string): string {
     // Check if has inliner prefix
     if (!Inliner.LABEL_PREFIX_REGEX.test(previousName)) {
       //println("Did not pass regex: " + previousName);
@@ -389,9 +435,9 @@ class Inliner {
       this.labelNumber += 1;
       return "inliner_" + labelNumber + "_" + previousName;
     }
-    //println("Pass regex: " + previousName);
+
     // Label has already been generated by this function, update number
-    let newName = previousName.substring("inliner_".length);
+    const newName = previousName.substring("inliner_".length);
 
     // Get number
     const underscoreIndex = newName.indexOf("_");
@@ -403,45 +449,68 @@ class Inliner {
     );
   }
 
-  #updateVarDecls($newNodes, newVariableMap) {
+  private updateVarDecls(
+    $newNodes: Scope,
+    newVariableMap: Map<string, Vardecl | Expression>
+  ): void {
     // Replace decl stmts of old vardecls with vardecls of new names (params are not included)
-    for (const $declStmt of $newNodes.getDescendants("declStmt")) {
+    for (const $jp of $newNodes.getDescendants("declStmt")) {
+      const $declStmt = $jp as DeclStmt;
+
       const decls = $declStmt.decls;
 
       for (const $varDecl of decls) {
-        if (!$varDecl.instanceOf("vardecl")) {
+        if (!($varDecl instanceof Vardecl)) {
           continue;
         }
 
+        const newVar = newVariableMap.get($varDecl.name);
+
+        // If not found, just continue
+        if (newVar === undefined) {
+          debug(`Could not find variable ${$varDecl.name} in variable map`);
+          continue;
+        } else if (!(newVar instanceof Vardecl)) {
+          throw new Error(
+            `Expected newVar to be a Vardecl, but it is a ${newVar.joinPointType}`
+          );
+        }
+
         // Replace decl
-        $declStmt.replaceWith(
-          ClavaJoinPoints.declStmt(newVariableMap.get($varDecl.name))
-        );
+        $declStmt.replaceWith(ClavaJoinPoints.declStmt(newVar));
       }
     }
   }
 
-  #updateVarrefs($newNodes, newVariableMap, $call) {
+  private updateVarrefs(
+    $newNodes: Scope,
+    newVariableMap: Map<string, Vardecl | Expression>,
+    $call: Call
+  ): void {
     // Update varrefs
-    for (const $varRef of $newNodes.getDescendants("varref")) {
+    for (const $jp of $newNodes.getDescendants("varref")) {
+      const $varRef = $jp as Varref;
+
       if ($varRef.kind === "function_call") {
         continue;
       }
 
-      const $varDecl = $varRef.decl;
+      const $varDecl = $varRef.decl as Vardecl;
 
       // If global variable, will not be in the variable map
       if ($varDecl !== undefined && $varDecl.isGlobal) {
         // Copy vardecl to work over it
-        const $varDeclNoInit = $varDecl.copy();
+        const $varDeclNoInit = $varDecl.copy() as Vardecl;
 
         // Remove initialization
         $varDeclNoInit.removeInit(false);
 
         // Change storage class to extern
-        $varDeclNoInit.storageClass = "extern";
+        $varDeclNoInit.storageClass = StorageClass.EXTERN;
 
-        $call.getAncestor("function").insertBefore($varDeclNoInit);
+        ($call.getAncestor("function") as FunctionJp).insertBefore(
+          $varDeclNoInit
+        );
         continue;
       }
 
@@ -458,17 +527,17 @@ class Inliner {
       }
 
       // If vardecl, map contains reference to old vardecl, create a varref from the new vardecl
-      if (newVar.instanceOf("vardecl")) {
+      if (newVar instanceof Vardecl) {
         $varRef.replaceWith(ClavaJoinPoints.varRef(newVar));
       }
       // If expression, simply replace varref with the expression
-      else if (newVar.instanceOf("expression")) {
+      else if (newVar instanceof Expression) {
         const $adaptedVar =
           // If varref, does not need parenthesis
-          newVar.instanceOf("varref")
+          newVar instanceof Varref
             ? newVar
             : // For other expressions, if parent is already a parenthesis, does not need to add a new one
-            $varRef.parent.instanceOf("parenExpr")
+            $varRef.parent instanceof ParenExpr
             ? newVar
             : // Add parenthesis
               ClavaJoinPoints.parenthesis(newVar);
@@ -476,15 +545,21 @@ class Inliner {
         $varRef.replaceWith($adaptedVar);
       } else {
         throw new Error(
-          "Not defined when newVar is of type '" + newVar.joinPointType + "'"
+          "Not defined when newVar is of type '" +
+            (newVar as Joinpoint).joinPointType +
+            "'"
         );
       }
     }
   }
 
-  #updateVarrefsInTypes($newNodes, newVariableMap, $call) {
+  private updateVarrefsInTypes(
+    $newNodes: Scope,
+    newVariableMap: Map<string, Vardecl | Expression>,
+    $call: Call
+  ): void {
     // Update varrefs inside types
-    for (const $jp of $newNodes.getDescendants("joinpoint")) {
+    for (const $jp of $newNodes.descendants) {
       // If no type, ignore
 
       if (!$jp.hasType) {
@@ -493,7 +568,7 @@ class Inliner {
 
       const type = $jp.type;
 
-      const updatedType = this.#updateType(type, $call, newVariableMap);
+      const updatedType = this.updateType(type, $call, newVariableMap);
 
       if (updatedType !== type) {
         $jp.type = updatedType;
@@ -501,50 +576,57 @@ class Inliner {
     }
   }
 
-  #updateType(type, $call, newVariableMap) {
+  private updateType(
+    type: Type,
+    $call: Call,
+    newVariableMap: Map<string, Vardecl | Expression>
+  ): Type {
     // Since any type node can be shared, any change must be made in copies
 
     // If pointer type, check pointee
-    if (type.instanceOf("pointerType")) {
+    if (type instanceof PointerType) {
       const original = type.pointee;
-      const updated = this.#updateType(original, $call, newVariableMap);
+      const updated = this.updateType(original, $call, newVariableMap);
 
       if (original !== updated) {
-        const newType = type.copy();
+        const newType = type.copy() as PointerType;
         newType.pointee = updated;
         return newType;
       }
     }
 
-    if (type.instanceOf("parenType")) {
+    if (type instanceof ParenType) {
       const original = type.innerType;
-      const updated = this.#updateType(original, $call, newVariableMap);
+      const updated = this.updateType(original, $call, newVariableMap);
 
       if (original !== updated) {
-        const newType = type.copy();
+        const newType = type.copy() as ParenType;
         newType.innerType = updated;
         return newType;
       }
     }
 
-    if (type.instanceOf("variableArrayType")) {
+    if (type instanceof VariableArrayType) {
       // Has to track changes both for element type and its own array expression
       // Either was, has to update this type
       let hasChanges = false;
 
       // Element type
       const original = type.elementType;
-      const updated = this.#updateType(original, $call, newVariableMap);
+      const updated = this.updateType(original, $call, newVariableMap);
 
       if (original !== updated) {
         hasChanges = true;
       }
 
-      let $sizeExprCopy = type.sizeExpr.copy();
+      // TODO: I have no idea if this type cast is correct.
+      const $sizeExprCopy = type.sizeExpr.copy() as Varref;
 
       // Update any children of sizeExpr
-      for (const $varRef of Query.searchFrom($sizeExprCopy, "varref")) {
-        const $newVarref = this.#updateVarRef($varRef, $call, newVariableMap);
+      for (const $jp of Query.searchFrom($sizeExprCopy, "varref")) {
+        const $varRef = $jp as Varref;
+
+        const $newVarref = this.updateVarRef($varRef, $call, newVariableMap);
         if ($newVarref !== $varRef) {
           hasChanges = true;
           $varRef.replaceWith($newVarref);
@@ -552,7 +634,7 @@ class Inliner {
       }
 
       // Update top expr, if needed
-      const $newVarref = this.#updateVarRef(
+      const $newVarref = this.updateVarRef(
         $sizeExprCopy,
         $call,
         newVariableMap
@@ -563,7 +645,7 @@ class Inliner {
       }
 
       if (hasChanges) {
-        const newType = type.copy();
+        const newType = type.copy() as VariableArrayType;
         newType.elementType = updated;
         newType.sizeExpr = $newVarref;
 
@@ -575,21 +657,27 @@ class Inliner {
     return type;
   }
 
-  #updateVarRef($varRef, $call, newVariableMap) {
-    const $varDecl = $varRef.decl;
+  private updateVarRef(
+    $varRef: Varref,
+    $call: Call,
+    newVariableMap: Map<string, Vardecl | Expression>
+  ) {
+    const $varDecl = $varRef.decl as Vardecl;
 
     // If global variable, will not be in the variable map
     if ($varDecl !== undefined && $varDecl.isGlobal) {
       // Copy vardecl to work over it
-      const $varDeclNoInit = $varDecl.copy();
+      const $varDeclNoInit = $varDecl.copy() as Vardecl;
 
       // Remove initialization
       $varDeclNoInit.removeInit(false);
 
       // Change storage class to extern
-      $varDeclNoInit.storageClass = "extern";
+      $varDeclNoInit.storageClass = StorageClass.EXTERN;
 
-      $call.getAncestor("function").insertBefore($varDeclNoInit);
+      ($call.getAncestor("function") as FunctionJp).insertBefore(
+        $varDeclNoInit
+      );
       return $varRef;
     }
 
@@ -601,17 +689,19 @@ class Inliner {
     }
 
     // If vardecl, create a new varref
-    if (newVar.instanceOf("vardecl")) {
+    if (newVar instanceof Vardecl) {
       return ClavaJoinPoints.varRef(newVar);
     }
 
     // If expression, return expression
-    if (newVar.instanceOf("expression")) {
+    if (newVar instanceof Expression) {
       return newVar;
     }
 
     throw new Error(
-      "Case not supported, newVar of type '" + newVar.joinPointType + "'"
+      "Case not supported, newVar of type '" +
+        (newVar as Joinpoint).joinPointType +
+        "'"
     );
   }
 }

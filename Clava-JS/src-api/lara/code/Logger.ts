@@ -2,17 +2,23 @@ import LoggerBase from "lara-js/api/lara/code/LoggerBase.js";
 import IdGenerator from "lara-js/api/lara/util/IdGenerator.js";
 import PrintOnce from "lara-js/api/lara/util/PrintOnce.js";
 import Clava from "../../clava/Clava.js";
-import { Expression, FileJp, FunctionJp, Joinpoint } from "../../Joinpoints.js";
+import {
+  Expression,
+  FileJp,
+  FunctionJp,
+  Joinpoint,
+  Scope,
+} from "../../Joinpoints.js";
 
 export default class Logger extends LoggerBase<Joinpoint> {
   private _isCxx: boolean = false;
 
   constructor(isGlobal = false, filename?: string) {
     super(isGlobal, filename);
-    
+
     // Adds C/C++ specific types
     this.Type.set("LONGLONG", 100);
-    
+
     // 64-bit int
     this.printfFormat[this.Type.get("LONGLONG")!] = "%I64lld";
   }
@@ -283,11 +289,11 @@ export default class Logger extends LoggerBase<Joinpoint> {
     } else {
       // If $jp is a 'scope' with a 'function' parent, insert before return instead
       if (
-        $jp.instanceOf("scope") &&
+        $jp instanceof Scope &&
         $jp.parent !== undefined &&
-        $jp.parent.instanceOf("function")
+        $jp.parent instanceof FunctionJp
       ) {
-        this.afterJp = ($jp.parent as FunctionJp).insertReturn(code);
+        this.afterJp = $jp.parent.insertReturn(code);
       } else {
         this.afterJp = $jp.insertAfter(code);
       }
