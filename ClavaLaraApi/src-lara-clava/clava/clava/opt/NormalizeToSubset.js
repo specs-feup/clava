@@ -15,7 +15,7 @@ laraImport("clava.code.SimplifyAssignment");
  */
 function NormalizeToSubset($startJp, options) {
   const _options = options ?? {};
-  _options["simplifyLoops"] ??= {};
+  _options["simplifyLoops"] ??= { forToWhile: true };
 
   const declStmt = new DecomposeDeclStmt();
   const varDecls = new DecomposeVarDeclarations();

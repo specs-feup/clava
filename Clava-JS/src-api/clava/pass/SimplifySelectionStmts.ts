@@ -1,40 +1,34 @@
-laraImport("lara.pass.Pass");
-laraImport("clava.code.StatementDecomposer");
-laraImport("weaver.Query");
-laraImport("lara.pass.results.PassResult");
+import Pass from "lara-js/api/lara/pass/Pass.js";
+import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
+import Query from "lara-js/api/weaver/Query.js";
+import { If, Joinpoint } from "../../Joinpoints.js";
+import StatementDecomposer from "../code/StatementDecomposer.js";
 
 // TODO: Refactor to use the SimplePass pattern
-class SimplifySelectionStmts extends Pass {
-  #statementDecomposer;
+export default class SimplifySelectionStmts extends Pass {
+  protected _name = "SimplifySelectionStmts";
+  #statementDecomposer: StatementDecomposer;
 
-  constructor(statementDecomposer) {
+  constructor(statementDecomposer: StatementDecomposer) {
     super();
     this.#statementDecomposer = statementDecomposer;
   }
 
-  /**
-   * @return {string} Name of the pass
-   * @override
-   */
-  get name() {
-    return "SimplifySelectionStmts";
-  }
-
-  _apply_impl($jp) {
+  protected _apply_impl($jp: Joinpoint): PassResult {
     let appliedPass = false;
-    for (const $if of this.#findStmts($jp)) {
+    for (const jp of Query.searchFromInclusive($jp, "if")) {
+      const $if = jp as If;
       appliedPass = true;
-      this.#transform($if);
+      this.transform($if);
     }
 
-    return new PassResult(this, $jp, { appliedPass: appliedPass });
+    return new PassResult(this, $jp, {
+      appliedPass: appliedPass,
+      insertedLiteralCode: false,
+    });
   }
 
-  #findStmts($jp) {
-    return Query.searchFromInclusive($jp, "if");
-  }
-
-  #transform($ifStmt) {
+  private transform($ifStmt: If): void {
     const $ifCond = $ifStmt.cond;
     const decomposeResult = this.#statementDecomposer.decomposeExpr($ifCond);
 

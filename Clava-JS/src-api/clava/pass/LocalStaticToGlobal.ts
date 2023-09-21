@@ -1,7 +1,14 @@
-laraImport("lara.pass.SimplePass");
-laraImport("clava.ClavaJoinPoints");
-laraImport("lara.pass.results.PassResult");
-laraImport("lara.pass.PassTransformationError");
+import PassTransformationError from "lara-js/api/lara/pass/PassTransformationError.js";
+import SimplePass from "lara-js/api/lara/pass/SimplePass.js";
+import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
+import {
+  DeclStmt,
+  FunctionJp,
+  Joinpoint,
+  StorageClass,
+  Vardecl,
+} from "../../Joinpoints.js";
+import ClavaJoinPoints from "../ClavaJoinPoints.js";
 
 /**
  * Transforms local static variables into global variables.
@@ -25,24 +32,17 @@ laraImport("lara.pass.PassTransformationError");
  * }
  * ```
  */
-class LocalStaticToGlobal extends SimplePass {
+export default class LocalStaticToGlobal extends SimplePass {
+  protected _name = "LocalStaticToGlobal";
 
-  /**
-   * @return {string} Name of the pass
-   * @override
-   */
-  get name() {
-    return "LocalStaticToGlobal";
-  }
-
-  matchJoinpoint($jp) {
+  matchJoinpoint($jp: Joinpoint): boolean {
     // Only vardecls
-    if (!$jp.instanceOf("vardecl")) {
+    if (!($jp instanceof Vardecl)) {
       return false;
     }
 
     // With static storage
-    if ($jp.storageClass !== "static") {
+    if ($jp.storageClass !== StorageClass.STATIC) {
       return false;
     }
 
@@ -54,16 +54,26 @@ class LocalStaticToGlobal extends SimplePass {
     return true;
   }
 
-  transformJoinpoint($jp) {
-    const $function = $jp.getAncestor("function");
+  transformJoinpoint($jp: Vardecl): PassResult {
+    const $function = $jp.getAncestor("function") as FunctionJp | undefined;
+    if (!$function) {
+      throw new PassTransformationError(
+        this,
+        $jp,
+        "Expected ancestor of type function, found 'undefined'"
+      );
+    }
+
     const newName = $function.name + "_static_" + $jp.name;
 
     $jp.name = newName;
-    $jp.storageClass = "none";
+    $jp.storageClass = StorageClass.NONE;
 
     const $declStmt = $jp.parent;
-    if (!$declStmt.instanceOf("declStmt")) {
+    if (!($declStmt instanceof DeclStmt)) {
       throw new PassTransformationError(
+        this,
+        $jp,
         "Expected declStmt, found '" + $declStmt.joinPointType + "'"
       );
     }
@@ -75,19 +85,6 @@ class LocalStaticToGlobal extends SimplePass {
     if ($declStmt.decls.length === 0) {
       $declStmt.detach();
     }
-
-    /*
-    let $firstDeclStmt;
-    for (const $decl of $jp.decls) {
-      const $singleDeclStmt = ClavaJoinPoints.declStmt($decl);
-      if (!$firstDeclStmt) {
-        $firstDeclStmt = $singleDeclStmt;
-      }
-      $jp.insertBefore($singleDeclStmt);
-    }
-    $jp.detach();
-
-    */
 
     return new PassResult(this, ClavaJoinPoints.emptyStmt());
   }

@@ -23,7 +23,7 @@ import ClavaJoinPoints from "../ClavaJoinPoints.js";
 export default class DecomposeDeclStmt extends SimplePass {
   protected _name = "DecomposeDeclStmt";
 
-  matchJoinpoint($jp: Joinpoint) {
+  matchJoinpoint($jp: Joinpoint): boolean {
     if (!($jp instanceof DeclStmt)) {
       return false;
     }
@@ -33,7 +33,7 @@ export default class DecomposeDeclStmt extends SimplePass {
     return true;
   }
 
-  transformJoinpoint($jp: DeclStmt) {
+  transformJoinpoint($jp: DeclStmt): PassResult {
     let $firstDeclStmt: DeclStmt | undefined = undefined;
     for (const $decl of $jp.decls) {
       const $singleDeclStmt = ClavaJoinPoints.declStmt($decl);

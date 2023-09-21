@@ -1,6 +1,12 @@
-laraImport("lara.pass.SimplePass");
-laraImport("clava.ClavaJoinPoints");
-laraImport("lara.pass.results.PassResult");
+import SimplePass from "lara-js/api/lara/pass/SimplePass.js";
+import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
+import {
+  ArrayType,
+  Joinpoint,
+  UndefinedType,
+  Vardecl,
+} from "../../Joinpoints.js";
+import ClavaJoinPoints from "../ClavaJoinPoints.js";
 
 /**
  * Decomposes the vardecl nodes that are reachable from the given join point.
@@ -9,33 +15,26 @@ laraImport("lara.pass.results.PassResult");
  *
  * Does not support decomposition for variables that are arrays, in those cases the code stays unchanged.
  */
-class DecomposeVarDeclarations extends SimplePass {
+export default class DecomposeVarDeclarations extends SimplePass {
+  protected _name = "DecomposeVarDeclarations";
 
-  /**
-   * @return {string} Name of the pass
-   * @override
-   */
-  get name() {
-    return "DecomposeVarDeclarations";
-  }
-
-  matchJoinpoint($jp) {
+  matchJoinpoint($jp: Joinpoint): boolean {
     return (
-      $jp.instanceOf("vardecl") && // Must be a variable declaration
+      $jp instanceof Vardecl && // Must be a variable declaration
       $jp.hasInit && // Must have initialization
       $jp.initStyle === "cinit" && // Only C-style initializations
       !$jp.isGlobal && // Ignore global variables
       !$jp.isInsideHeader && // Ignore if inside any header (e.g. if, switch, loop...)
-      !$jp.type.instanceOf("arrayType") && // Ignore if array
-      !this.#isLiteralAuto($jp) // Specific case of vardecl in literal code that uses auto (e.g. as inserted by Timer)
+      !($jp.type instanceof ArrayType) && // Ignore if array
+      !this.isLiteralAuto($jp) // Specific case of vardecl in literal code that uses auto (e.g. as inserted by Timer)
     );
   }
 
-  #isLiteralAuto($jp) {
-    return $jp.type.isAuto && $jp.init.type.instanceOf("undefinedType");
+  private isLiteralAuto($jp: Vardecl): boolean {
+    return $jp.type.isAuto && $jp.init.type instanceof UndefinedType;
   }
 
-  transformJoinpoint($vardecl) {
+  transformJoinpoint($vardecl: Vardecl): PassResult {
     // store init expression for later
     const $init = $vardecl.init;
 
@@ -45,8 +44,9 @@ class DecomposeVarDeclarations extends SimplePass {
       $vardecl.type = $init.type;
     }
 
-    const { assign, varRef, exprStmt } = ClavaJoinPoints;
-    const $newInitStmt = exprStmt(assign(varRef($vardecl), $init));
+    const $newInitStmt = ClavaJoinPoints.exprStmt(
+      ClavaJoinPoints.assign(ClavaJoinPoints.varRef($vardecl), $init)
+    );
 
     $vardecl.insertAfter($newInitStmt);
 

@@ -1,10 +1,12 @@
-laraImport("lara.pass.Pass");
-laraImport("weaver.Query");
-laraImport("clava.pass.DecomposeVarDeclarations");
-laraImport("clava.ClavaJoinPoints");
-laraImport("lara.Strings");
+import Pass from "lara-js/api/lara/pass/Pass.js";
+import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
+import Query from "lara-js/api/weaver/Query.js";
+import { BuiltinType, FunctionJp, Joinpoint, ReturnStmt, Vardecl } from "../../Joinpoints.js";
+import ClavaJoinPoints from "../ClavaJoinPoints.js";
+import DecomposeVarDeclarations from "./DecomposeVarDeclarations.js";
 
-class SingleReturnFunction extends Pass {
+export default class SingleReturnFunction extends Pass {
+  protected _name = "SingleReturnFunctions";
   #useLocalLabel;
 
   constructor(useLocalLabel = false) {
@@ -12,36 +14,19 @@ class SingleReturnFunction extends Pass {
     this.#useLocalLabel = useLocalLabel;
   }
 
-  /**
-   * @return {string} Name of the pass
-   * @override
-   */
-  get name() {
-    return "SingleReturnFunctions";
-  }
 
-  _apply_impl($jp) {
-    // destructure joinpoint factories to prevent excessive verbosity
-    const {
-      labelDecl,
-      labelStmt,
-      returnStmt,
-      varRef,
-      assign,
-      gotoStmt,
-      declStmt,
-    } = ClavaJoinPoints;
+  protected _apply_impl($jp: Joinpoint): PassResult {
 
-    if (!$jp.instanceOf("function") || !$jp.isImplementation) {
-      return this.#new_result($jp, false);
+    if (!($jp instanceof FunctionJp) || !$jp.isImplementation) {
+      return this.new_result($jp, false);
     }
     const $body = $jp.body;
-    const $returnStmts = Query.searchFrom($body, "returnStmt").get();
+    const $returnStmts = Query.searchFrom($body, "returnStmt").get() as ReturnStmt[];
     if (
       $returnStmts.length === 0 ||
       ($returnStmts.length === 1 && $body.lastChild.instanceOf("returnStmt"))
     ) {
-      return this.#new_result($jp, false);
+      return this.new_result($jp, false);
     }
 
     // C++ spec has some restrictions about jumping over initialized values that
@@ -49,28 +34,28 @@ class SingleReturnFunction extends Pass {
     // declarations first
     new DecomposeVarDeclarations().apply($body);
 
-    const $label = labelDecl("__return_label");
-    $body.insertEnd(labelStmt($label));
+    const $label = ClavaJoinPoints.labelDecl("__return_label");
+    $body.insertEnd(ClavaJoinPoints.labelStmt($label));
 
     const returnType = $jp.returnType;
     const returnIsVoid =
-      returnType.isBuiltin && returnType.builtinKind === "Void";
-    let $local;
+      returnType instanceof BuiltinType && returnType.builtinKind === "Void";
+    let $local: Vardecl | undefined = undefined;
     if (returnIsVoid) {
-      $body.insertEnd(returnStmt());
+      $body.insertEnd(ClavaJoinPoints.returnStmt());
     } else {
-      $local = $body.addLocal("__return_value", returnType);
-      $body.insertEnd(returnStmt(varRef($local)));
+      $local = $body.addLocal("__return_value", returnType) as Vardecl;
+      $body.insertEnd(ClavaJoinPoints.returnStmt(ClavaJoinPoints.varRef($local)));
     }
 
     for (const $returnStmt of $returnStmts) {
       if (!returnIsVoid) {
         $returnStmt.insertBefore(
           // null safety: $local is initialized whenever return is not void
-          assign(varRef($local), $returnStmt.returnExpr)
+          ClavaJoinPoints.assign(ClavaJoinPoints.varRef($local!), $returnStmt.returnExpr)
         );
       }
-      $returnStmt.insertBefore(gotoStmt($label));
+      $returnStmt.insertBefore(ClavaJoinPoints.gotoStmt($label));
       $returnStmt.detach();
     }
 
@@ -79,10 +64,10 @@ class SingleReturnFunction extends Pass {
       $body.insertBegin($label);
     }
 
-    return this.#new_result($jp, true);
+    return this.new_result($jp, true);
   }
 
-  #new_result($jp, appliedPass) {
-    return new PassResult(this, $jp, { appliedPass: appliedPass });
+  private new_result($jp: Joinpoint, appliedPass: boolean) {
+    return new PassResult(this, $jp, { appliedPass: appliedPass, insertedLiteralCode: false });
   }
 }
