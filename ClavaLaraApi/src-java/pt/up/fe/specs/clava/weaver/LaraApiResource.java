@@ -126,7 +126,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     // LIVENESS
     LIVENESS_ANALYSIS("liveness/LivenessAnalysis.js"),
     LIVENESS_ANALYSER("liveness/LivenessAnalyser.js"),
-    LIVENESS_UTILS("liveness/LivenessUtils.js"),
+    LIVENESS_UTILS("liveness/LivenessUtils.js");
 
     // MPI
     //MPI_ACCESS_PATTERN("mpi/MpiAccessPattern.lara"),
@@ -181,9 +181,9 @@ public enum LaraApiResource implements LaraResourceProvider {
     //UVE_DETECT("uve/DetectStream.lara"),
 
     // OPT
-    OPT_NORMALIZE_TO_SUBSET("opt/NormalizeToSubset.js"),
-    OPT_PREPARE_FOR_INLINING("opt/PrepareForInlining.js"),
-    OPT_INLINING("opt/Inlining.js");
+    //OPT_NORMALIZE_TO_SUBSET("opt/NormalizeToSubset.js"),
+    //OPT_PREPARE_FOR_INLINING("opt/PrepareForInlining.js"),
+    //OPT_INLINING("opt/Inlining.js"),
 
     // Static objects
 
