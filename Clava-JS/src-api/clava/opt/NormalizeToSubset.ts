@@ -1,19 +1,24 @@
-laraImport("weaver.Query");
-laraImport("clava.code.StatementDecomposer");
-laraImport("clava.pass.SimplifyLoops");
-laraImport("clava.pass.DecomposeVarDeclarations");
-laraImport("clava.pass.DecomposeDeclStmt");
-laraImport("clava.pass.LocalStaticToGlobal");
-laraImport("clava.pass.SimplifySelectionStmts");
-laraImport("clava.pass.SimplifyReturnStmts");
-laraImport("clava.code.SimplifyAssignment");
+import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
+import Query from "lara-js/api/weaver/Query.js";
+import { BinaryOp, Joinpoint } from "../../Joinpoints.js";
+import SimplifyAssignment from "../code/SimplifyAssignment.js";
+import StatementDecomposer from "../code/StatementDecomposer.js";
+import DecomposeDeclStmt from "../pass/DecomposeDeclStmt.js";
+import DecomposeVarDeclarations from "../pass/DecomposeVarDeclarations.js";
+import LocalStaticToGlobal from "../pass/LocalStaticToGlobal.js";
+import SimplifyLoops from "../pass/SimplifyLoops.js";
+import SimplifyReturnStmts from "../pass/SimplifyReturnStmts.js";
+import SimplifySelectionStmts from "../pass/SimplifySelectionStmts.js";
 
 /**
  *
- * @param {$jp} $startJp
- * @param {object} options - Object with options. Supported options: 'simplifyLoops' (default: {}), options for pass SimplifyLoops
+ * @param $startJp -
+ * @param options - Object with options. See default value for supported options.
  */
-function NormalizeToSubset($startJp, options) {
+export default function NormalizeToSubset(
+  $startJp: Joinpoint,
+  options = { simplifyLoops: { forToWhile: true } }
+) {
   const _options = options ?? {};
   _options["simplifyLoops"] ??= { forToWhile: true };
 
@@ -36,9 +41,11 @@ function NormalizeToSubset($startJp, options) {
   varDecls.apply($startJp);
   localStaticToGlobal.apply($startJp);
 
-  for (const $assign of Query.searchFrom($startJp, "binaryOp", {
-    self: (self) => self.isAssignment && self.operator !== "=",
+  for (const $jp of Query.searchFrom($startJp, "binaryOp", {
+    self: (self: LaraJoinPoint) =>
+      self instanceof BinaryOp && self.isAssignment && self.operator !== "=",
   })) {
+    const $assign = $jp as BinaryOp;
     SimplifyAssignment($assign);
   }
 }

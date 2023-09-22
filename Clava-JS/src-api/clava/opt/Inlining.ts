@@ -1,32 +1,34 @@
-laraImport("weaver.Query");
-laraImport("clava.opt.NormalizeToSubset");
-laraImport("clava.opt.PrepareForInlining");
-laraImport("clava.code.Inliner");
+import Query from "lara-js/api/weaver/Query.js";
+import { FunctionJp, Joinpoint } from "../../Joinpoints.js";
+import Inliner from "../code/Inliner.js";
+import NormalizeToSubset from "./NormalizeToSubset.js";
+import PrepareForInlining from "./PrepareForInlining.js";
 
 /**
  *
- * @param  {object} options - Object with options. Supported options: 'normalizeToSubset' (default: {}), options for function NormalizeToSubset; 'inliner' (default: {}), options for class Inliner
+ * @param options - Object with options. See default value for supported options
  */
-function Inlining(options) {
-  _options = options ?? {};
-  _options["normalizeToSubset"] ??= {};
-  _options["inliner"] ??= {};
-
+export default function Inlining(
+  options = {
+    normalizeToSubset: { simplifyLoops: { forToWhile: true } },
+    inliner: {},
+  }
+) {
   // TODO: Maybe passing a NormalizeToSubset instance is preferrable, but that means making NormalizeToSubset a class instead of a function
-  NormalizeToSubset(Query.root(), _options["normalizeToSubset"]);
+  NormalizeToSubset(Query.root() as Joinpoint, options.normalizeToSubset);
 
-  // println("Code after: " + Query.root().code);
+  const inliner = new Inliner(options.inliner);
 
-  const inliner = new Inliner(_options["inliner"]);
-
-  for (const $function of Query.search("function", {
-    name: (name) => name !== "main",
+  for (const $jp of Query.search("function", {
+    name: (name: string) => name !== "main",
     isImplementation: true, // Only inline if function has a body
   })) {
+    const $function = $jp as FunctionJp;
     PrepareForInlining($function);
   }
 
-  for (const $function of Query.search("function", "main")) {
+  for (const $jp of Query.search("function", "main")) {
+    const $function = $jp as FunctionJp;
     inliner.inlineFunctionTree($function);
   }
 }
