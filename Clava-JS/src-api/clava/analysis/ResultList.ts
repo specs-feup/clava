@@ -1,15 +1,14 @@
-import { Joinpoint } from "../../Joinpoints.js";
 import AnalyserResult from "./AnalyserResult.js";
 
-export default class ResultList<T extends Joinpoint> {
+export default class ResultList {
   fileName: string;
-  list: AnalyserResult<T>[] = [];
+  list: AnalyserResult[] = [];
 
   constructor(fileName: string) {
     this.fileName = fileName;
   }
 
-  append(result: AnalyserResult<T>) {
+  append(result: AnalyserResult) {
     this.list.push(result);
   }
 }

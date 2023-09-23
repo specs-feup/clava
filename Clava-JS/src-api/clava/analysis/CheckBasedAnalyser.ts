@@ -2,8 +2,7 @@ import Analyser from "./Analyser.js";
 import Checker from "./Checker.js";
 import ResultFormatManager from "./ResultFormatManager.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { FileJp, Program } from "../../Joinpoints.js";
-import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
+import { FileJp, Joinpoint, Program } from "../../Joinpoints.js";
 import AnalyserResult from "./AnalyserResult.js";
 
 type T = Program | FileJp;
@@ -11,7 +10,7 @@ type T = Program | FileJp;
 /**
  * Analyser that scan code to detect unsafe functions
  */
-export default class CheckBasedAnalyser extends Analyser<T> {
+export default class CheckBasedAnalyser extends Analyser {
   private checkers: Checker[] = [];
   private resultFormatManager: ResultFormatManager<T> =
     new ResultFormatManager();
@@ -40,10 +39,12 @@ export default class CheckBasedAnalyser extends Analyser<T> {
    * @returns fileResult
    */
   analyse($startNode: T = Query.root() as Program) {
-    const checkResultList: AnalyserResult<LaraJoinPoint>[] = [];
-    for (const $node of Query.searchFrom($startNode)) {
+    const checkResultList: AnalyserResult[] = [];
+    for (const a of Query.searchFrom($startNode)) {
+      const $jp = a as Joinpoint;
+
       for (const checker of this.checkers) {
-        const checkResult = checker.check($node);
+        const checkResult = checker.check($jp);
         if (checkResult === undefined) {
           continue;
         }

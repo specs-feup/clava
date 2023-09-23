@@ -1,13 +1,12 @@
 import Io from "lara-js/api/lara/Io.js";
-import ResultList from "./ResultList.js";
 import Clava from "../Clava.js";
-import { Joinpoint } from "../../Joinpoints.js";
 import AnalyserResult from "./AnalyserResult.js";
+import ResultList from "./ResultList.js";
 
 // Class sorting resultLists and generating an analysis report
 
 export default class MessageGenerator {
-  globalFileResultList: Record<string, AnalyserResult<Joinpoint>[]> = {};
+  globalFileResultList: Record<string, AnalyserResult[]> = {};
   printMessage: boolean;
   writeFile: boolean;
 
@@ -20,7 +19,7 @@ export default class MessageGenerator {
     this.writeFile = true;
   }
 
-  append(resultList?: ResultList<Joinpoint>) {
+  append(resultList?: ResultList) {
     if (resultList === undefined) {
       return;
     }

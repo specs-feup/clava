@@ -1,10 +1,22 @@
-import clava.analysis.AnalyserResult;
+import { Joinpoint } from "../../../Joinpoints.js";
+import AnalyserResult from "../AnalyserResult.js";
+import Fix from "../Fix.js";
 
-var DoubleFreeResult = function(name, node, message, ptrName, scopeName, fix) {
-    AnalyserResult.call(this, name, node, message, fix);
+export default class DoubleFreeResult extends AnalyserResult {
+  ptrName: string;
+  scopeName: string;
+  freedFlag: number = 0;
+
+  constructor(
+    name: string,
+    node: Joinpoint,
+    message: string,
+    ptrName: string,
+    scopeName: string,
+    fix?: Fix
+  ) {
+    super(name, node, message, fix);
     this.ptrName = ptrName;
     this.scopeName = scopeName;
-    this.freedFlag = 0;
-};
-
-DoubleFreeResult.prototype = Object.create(AnalyserResult.prototype);
+  }
+}

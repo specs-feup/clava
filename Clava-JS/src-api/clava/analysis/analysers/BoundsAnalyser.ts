@@ -1,79 +1,114 @@
-import clava.analysis.Analyser;
-import clava.analysis.Checker;
-import clava.analysis.ResultFormatManager;
-import clava.analysis.analysers.BoundsResult;
-import weaver.Query;
+import Query from "lara-js/api/weaver/Query.js";
+import {
+  ArrayAccess,
+  ArrayType,
+  FileJp,
+  FunctionJp,
+  Program,
+  Vardecl,
+} from "../../../Joinpoints.js";
+import Analyser from "../Analyser.js";
+import ResultFormatManager from "../ResultFormatManager.js";
+import BoundsResult from "./BoundsResult.js";
 
-// Analyser that scan code to detect unsafe array accesses
-
-var BoundsAnalyser = function() {
-    Analyser.call(this);
-    this.resultFormatManager = new ResultFormatManager();
-};
-
-BoundsAnalyser.prototype = Object.create(Analyser.prototype);
+type T = Program | FileJp;
 
 /**
-* Check file for illegal access of an array with an invalid index
-* @param {JoinPoint} $startNode
-* @return fileResult
-*/
-BoundsAnalyser.prototype.analyse = function($startNode) {
-    var boundsResultList = [];
-    if ($startNode === undefined) {
-        $startNode = Query.root();
-    }
-    for (var $node of Query.searchFrom($startNode)) {
-        if (!$node.instanceOf("function")) {
+ * Analyser that scan code to detect unsafe array accesses
+ */
+export default class BoundsAnalyser extends Analyser {
+  resultFormatManager = new ResultFormatManager();
+
+  /**
+   * Check file for illegal access of an array with an invalid index
+   * @param $startNode -
+   * @returns fileResult
+   */
+  analyse($startNode: T = Query.root() as Program) {
+    let boundsResultList: BoundsResult[] = [];
+
+    for (const $node of Query.searchFrom($startNode)) {
+      if (!($node instanceof FunctionJp)) {
+        continue;
+      }
+      for (const $child of $node.descendants) {
+        if ($child instanceof Vardecl && $child.type instanceof ArrayType) {
+          const lengths = $child.type.arrayDims;
+          if ($child.hasInit) {
+            boundsResultList.push(
+              new BoundsResult(
+                "Unsafe array access",
+                $child,
+                " The index used to access the array is not valid (CWE-119). Please check the length of the array accessed.\n\n",
+                $node.name,
+                true,
+                false,
+                lengths
+              )
+            );
             continue;
+          }
+          boundsResultList.push(
+            new BoundsResult(
+              "Unsafe array access",
+              $child,
+              " The array being accessed has not been initialized (CWE-457).\n\n",
+              $node.name,
+              false,
+              false,
+              lengths
+            )
+          );
+          continue;
         }
-        for (var $child of $node.descendants) {
-            if (($child.instanceOf("vardecl")) && ($child.type.joinPointType === "arrayType")) {
-                var lengths = $child.type.arrayDims;
-                if ($child.hasInit) {
-                    var message = " The index used to access the array is not valid (CWE-119). Please check the length of the array accessed.\n\n";
-                    boundsResultList.push(new BoundsResult("Unsafe array access", $child, message, $node.name, 1, 0, lengths));
-                    continue;
-                }
-                var message = " The array being accessed has not been initialized (CWE-457).\n\n";
-                boundsResultList.push(new BoundsResult("Unsafe array access", $child, message, $node.name, 0, 0, lengths));
+        if ($child instanceof ArrayAccess) {
+          const arrayName = $child.arrayVar.code;
+          for (const result of boundsResultList) {
+            if (result.arrayName === arrayName) {
+              // list of indexes in square brackets
+              const indexes = $child.code.match(/\[[0-9]+\]/g);
+
+              if (indexes == null) {
                 continue;
-            }
-            if ($child.instanceOf("arrayAccess")) {
-                var arrayName = $child.arrayVar.code;
-                for (var result of boundsResultList) {
-                    if (result.arrayName === arrayName) {
-                        var indexes = $child.code.match(/\[[0-9]+\]/g);     // list of indexes in square brackets
-                        for (var i = 0; i < indexes.length; i++) {
-                            if (indexes[i].length > 1) {        // formats list of indexes
-                                indexes[i] = indexes[i].substring(1, indexes[i].length-1);
-                            }
-                            if (result.initializedFlag === 0) {
-                                result.unsafeAccessFlag = 1;
-                                result.line = $child.line;
-                                continue;
-                            }
-                            if ((indexes[i] > result.lengths[i] - 1) || (indexes[i] < 0)) {     // access out of bounds
-                                result.unsafeAccessFlag = 1;
-                                result.line = $child.line;
-                                continue;
-                            }
-                        }
-                    }
+              }
+
+              for (let i = 0; i < indexes.length; i++) {
+                if (indexes[i].length > 1) {
+                  // formats list of indexes
+                  indexes.forEach((index) =>
+                    index.substring(1, index.length - 1)
+                  );
                 }
+                if (result.initializedFlag === false) {
+                  result.unsafeAccessFlag = true;
+                  result.line = $child.line;
+                  continue;
+                }
+                if (
+                  Number(indexes[i]) > result.lengths[i] - 1 ||
+                  Number(indexes[i]) < 0
+                ) {
+                  // access out of bounds
+                  result.unsafeAccessFlag = true;
+                  result.line = $child.line;
+                  continue;
+                }
+              }
             }
+          }
         }
-    }
-    for (var res of boundsResultList) {      // disabling unharmful results
-        if (res.unsafeAccessFlag === 0) {
-            delete res.name;
-        }
+      }
     }
 
+    boundsResultList = boundsResultList.filter(
+      (result) => result.unsafeAccessFlag === true
+    );
+
     this.resultFormatManager.setAnalyserResultList(boundsResultList);
-    var fileResult = this.resultFormatManager.formatResultList($startNode);
+    const fileResult = this.resultFormatManager.formatResultList($startNode);
     if (fileResult === undefined) {
-        return;
+      return;
     }
     return fileResult;
+  }
 }

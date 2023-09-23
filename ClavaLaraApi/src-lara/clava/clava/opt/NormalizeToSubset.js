@@ -11,7 +11,7 @@ import SimplifySelectionStmts from "../pass/SimplifySelectionStmts.js";
 /**
  *
  * @param $startJp -
- * @param options - Object with options. Supported options: 'simplifyLoops' (default: {forToWhile: true}), options for pass SimplifyLoops
+ * @param options - Object with options. See default value for supported options.
  */
 export default function NormalizeToSubset($startJp, options = { simplifyLoops: { forToWhile: true } }) {
     const _options = options ?? {};

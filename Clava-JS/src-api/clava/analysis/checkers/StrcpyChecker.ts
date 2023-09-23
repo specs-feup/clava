@@ -27,7 +27,7 @@ export default class StrcpyChecker extends Checker {
     $jp.replaceWith(newFunction);
   }
 
-  check(node: Joinpoint): AnalyserResult<Call> | undefined {
+  check(node: Joinpoint): AnalyserResult | undefined {
     if (!(node instanceof Call)) {
       return;
     }
@@ -40,8 +40,12 @@ export default class StrcpyChecker extends Checker {
       this.name,
       node,
       this.advice,
-      new Fix(node, ($jp: Call) => {
-        StrcpyChecker.fixAction($jp);
+      new Fix(node, ($jp: Joinpoint) => {
+        if ($jp instanceof Call) {
+          StrcpyChecker.fixAction($jp);
+        } else {
+          throw new Error("Invalid joinpoint type");
+        }
       })
     );
   }
