@@ -51,10 +51,10 @@ public enum LaraApiResource implements LaraResourceProvider {
     AUTOPAR_16("autopar/SetVarrefOpenMPscoping.lara"),
 
     // Analysis
-    ANALYSIS_ANALYSERS_BOUNDS_ANALYSER("analysis/analysers/BoundsAnalyser.lara"),
-    ANALYSIS_ANALYSERS_BOUNDS_RESULT("analysis/analysers/BoundsResult.lara"),
-    ANALYSIS_ANALYSERS_DOUBLE_FREE_ANALYSER("analysis/analysers/DoubleFreeAnalyser.lara"),
-    ANALYSIS_ANALYSERS_DOUBLE_FREE_RESULT("analysis/analysers/DoubleFreeResult.lara"),
+    //ANALYSIS_ANALYSERS_BOUNDS_ANALYSER("analysis/analysers/BoundsAnalyser.lara"),
+    //ANALYSIS_ANALYSERS_BOUNDS_RESULT("analysis/analysers/BoundsResult.lara"),
+    //ANALYSIS_ANALYSERS_DOUBLE_FREE_ANALYSER("analysis/analysers/DoubleFreeAnalyser.lara"),
+    //ANALYSIS_ANALYSERS_DOUBLE_FREE_RESULT("analysis/analysers/DoubleFreeResult.lara"),
     ANALYSIS_CHECKERS_CHGRP_CHECKER("analysis/checkers/ChgrpChecker.lara"),
     ANALYSIS_CHECKERS_CHMOD_CHECKER("analysis/checkers/ChmodChecker.lara"),
     ANALYSIS_CHECKERS_CHOWN_CHECKER("analysis/checkers/ChownChecker.lara"),
