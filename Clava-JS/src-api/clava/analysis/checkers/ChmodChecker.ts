@@ -1,21 +1,23 @@
-import clava.analysis.Checker;
-import clava.analysis.CheckResult;
-import clava.analysis.Fix;
+import { Call, Joinpoint } from "../../../Joinpoints.js";
+import Checker from "../Checker.js";
+import CheckResult from "../CheckResult.js";
 
-/*Check for the presence of chmod functions*/
+/**
+ * Check for the presence of chmod functions
+ */
+export default class ChmodChecker extends Checker {
+  private advice =
+    " This function uses paths to files, if an attacker can modify or move these files " +
+    " he can redirect the execution flow or create a race condition. Consider using fchmod() instead (CWE-362).\n\n";
 
-var ChmodChecker = function() {
-      // Parent constructor
-    Checker.call(this, "chmod");
-    this.advice = " This function uses paths to files, if an attacker can modify or move these files "
-            +" he can redirect the execution flow or create a race condition. Consider using fchmod() instead (CWE-362).\n\n";
-};
+  constructor() {
+    super("chmod");
+  }
 
-ChmodChecker.prototype = Object.create(Checker.prototype);
-
-ChmodChecker.prototype.check = function($node) {
-	if ((!$node.instanceOf("call")) || ($node.name !== 'chmod')) {
-      	return;
+  check($node: Joinpoint): CheckResult | undefined {
+    if (!($node instanceof Call) || $node.name !== "chmod") {
+      return;
     }
-	return new CheckResult(this.name, $node, this.advice);
+    return new CheckResult(this.name, $node, this.advice);
+  }
 }

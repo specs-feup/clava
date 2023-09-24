@@ -1,21 +1,27 @@
-import clava.analysis.Checker;
-import clava.analysis.CheckResult;
-import clava.analysis.Fix;
+import { Joinpoint, Vardecl } from "../../../Joinpoints.js";
+import Checker from "../Checker.js";
+import CheckResult from "../CheckResult.js";
 
-/*Check for the presence of lambda objects using capture by reference*/
+/**
+ * Check for the presence of lambda objects using capture by reference
+ */
+export default class LambdaChecker extends Checker {
+  private advice =
+    " A lambda object must not outlive any of its reference captured objects." +
+    "Make sure that variables contained in the lambda expression will not use an obsolete pointer.(CWE-416).\n\n";
 
-var LambdaChecker = function() {
-      // Parent constructor
-    Checker.call(this, "lambda");
-    this.advice = " A lambda object must not outlive any of its reference captured objects."
-    + "Make sure that variables contained in the lambda expression will not use an obsolete pointer.(CWE-416).\n\n";
-};
+  constructor() {
+    super("lambda");
+  }
 
-LambdaChecker.prototype = Object.create(Checker.prototype);
+  check($node: Joinpoint) {
+    if (
+      !$node.code.match(/.*\[&\]\s*\(.*\)\s*\{.*\}.*/) ||
+      !($node instanceof Vardecl)
+    ) {
+      return;
+    }
 
-LambdaChecker.prototype.check = function($node) {
-	if ((!$node.code.match(/.*\[&\]\s*\(.*\)\s*\{.*\}.*/)) || (!$node.instanceOf("vardecl"))) {
-      	return;
-   	}
-	return new CheckResult(this.name, $node, this.advice);
+    return new CheckResult(this.name, $node, this.advice);
+  }
 }

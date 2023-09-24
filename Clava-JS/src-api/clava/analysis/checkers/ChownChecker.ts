@@ -1,21 +1,23 @@
-import clava.analysis.Checker;
-import clava.analysis.CheckResult;
-import clava.analysis.Fix;
+import { Call, Joinpoint } from "../../../Joinpoints.js";
+import Checker from "../Checker.js";
+import CheckResult from "../CheckResult.js";
 
-/*Check for the presence of chown functions*/
+/**
+ * Check for the presence of chown functions
+ */
+export default class ChownChecker extends Checker {
+  private advice =
+    " This function uses paths to files, if an attacker can modify or move these files " +
+    " he can redirect the execution flow or create a race condition. Consider using fchown() instead (CWE-362).\n\n";
 
-var ChownChecker = function() {
-      // Parent constructor
-    Checker.call(this, "chown");
-    this.advice = " This function uses paths to files, if an attacker can modify or move these files "
-            +" he can redirect the execution flow or create a race condition. Consider using fchown() instead (CWE-362).\n\n";
-};
+  constructor() {
+    super("chown");
+  }
 
-ChownChecker.prototype = Object.create(Checker.prototype);
-
-ChownChecker.prototype.check = function($node) {
-	if ((!$node.instanceOf("call")) || ($node.name !== 'chown')) {
-      	return;
+  check($node: Joinpoint): CheckResult | undefined {
+    if (!($node instanceof Call) || $node.name !== "chown") {
+      return;
     }
-	return new CheckResult(this.name, $node, this.advice);
+    return new CheckResult(this.name, $node, this.advice);
+  }
 }

@@ -1,26 +1,36 @@
-import clava.analysis.Checker;
-import clava.analysis.CheckResult;
-import clava.analysis.Fix;
+import { Call, Joinpoint } from "../../../Joinpoints.js";
+import Checker from "../Checker.js";
+import CheckResult from "../CheckResult.js";
+import Fix from "../Fix.js";
 
-/*Check for the presence of strcat functions*/
+/**
+ * Check for the presence of strcat functions
+ */
+export default class StrcatChecker extends Checker {
+  private advice =
+    " Unsafe function strcat() can be replaced by safer strncat()(Possible Fix). Be careful though because strncat() doesn't null-terminate. strcat() doesn't check the length of the buffer: risk of buffer overflow (CWE-120).\n\n";
 
-var StrcatChecker = function() {
-    // Parent constructor
-    Checker.call(this, "strcat");
-    this.advice = " Unsafe function strcat() can be replaced by safer strncat()(Possible Fix). Be careful though because strncat() doesn't null-terminate. strcat() doesn\'t check the length of the buffer: risk of buffer overflow (CWE-120).\n\n";
-};
+  constructor() {
+    super("strcat");
+  }
 
-StrcatChecker.prototype = Object.create(Checker.prototype);
+  static fixAction($node: Call) {
+    const newFunction = `strncat(${$node.args[0].code}, ${$node.args[1].code}, sizeof(${$node.args[0].code}))`;
+    $node.replaceWith(newFunction);
+  }
 
-StrcatChecker.fixAction = function($node) {
-	var newFunction = "strncat(" + $node.args[0].code + ", " + $node.args[1].code
-	     		+ ", sizeof(" + $node.args[0].code + "))";
-	$node.replaceWith(newFunction);
-}
-
-StrcatChecker.prototype.check = function($node) {
-    if ((!$node.instanceOf("call")) || ($node.name !== 'strcat')) {
-        return;
+  check($node: Joinpoint) {
+    if (!($node instanceof Call) || $node.name !== "strcat") {
+      return;
     }
-    return new CheckResult(this.name, $node, this.advice, new Fix($node, StrcatChecker.fixAction));
+
+    return new CheckResult(
+      this.name,
+      $node,
+      this.advice,
+      new Fix($node, () => {
+        StrcatChecker.fixAction($node);
+      })
+    );
+  }
 }

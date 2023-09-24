@@ -1,22 +1,26 @@
-import clava.analysis.Checker;
-import clava.analysis.CheckResult;
-import clava.analysis.Fix;
+import { Call, Joinpoint } from "../../../Joinpoints.js";
+import Checker from "../Checker.js";
+import CheckResult from "../CheckResult.js";
 
-/*Check for the presence of exec family functions*/
+/**
+ * Check for the presence of exec family functions
+ */
+export default class ExecChecker extends Checker {
+  private advice =
+    " This function executes another program used as parameter and can allow an attacker to execute his own code. " +
+    "Be extremely cautious when using this function and check inputs for a better security (CWE-78).\n\n";
 
-var ExecChecker = function() {
-      // Parent constructor
-    Checker.call(this, "exec");
-    this.advice = " This function executes another program used as parameter and can allow an attacker to execute his own code. "
-            + "Be extremely cautious when using this function and check inputs for a better security (CWE-78).\n\n";
-};
+  constructor() {
+    super("exec");
+  }
 
-ExecChecker.prototype = Object.create(Checker.prototype);
-
-
-ExecChecker.prototype.check = function($node) {
-	if ((!$node.instanceOf("call")) || !($node.name.match(/execl|execlp|execle|execv|execvp|execvpe/))) {
-      	return;
-	}
-	return new CheckResult(this.name, $node, this.advice);
+  check($node: Joinpoint): CheckResult | undefined {
+    if (
+      !($node instanceof Call) ||
+      !$node.name.match(/execl|execlp|execle|execv|execvp|execvpe/)
+    ) {
+      return;
+    }
+    return new CheckResult(this.name, $node, this.advice);
+  }
 }

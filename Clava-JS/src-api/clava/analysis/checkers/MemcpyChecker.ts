@@ -1,21 +1,23 @@
-import clava.analysis.Checker;
-import clava.analysis.CheckResult;
-import clava.analysis.Fix;
+import { Call, Joinpoint } from "../../../Joinpoints.js";
+import Checker from "../Checker.js";
+import CheckResult from "../CheckResult.js";
 
-/*Check for the presence of memcpy functions*/
+/**
+ * Check for the presence of memcpy functions
+ */
+export default class MemcpyChecker extends Checker {
+  private advice =
+    " memcpy() doesn't check the length of the destination when copying: risk of buffer overflow. " +
+    "Check if the length of the destination is sufficient (CWE-120).\n\n";
 
-var MemcpyChecker = function() {
-      // Parent constructor
-    Checker.call(this, "memcpy");
-    this.advice = " memcpy() doesn\'t check the length of the destination when copying: risk of buffer overflow. "
-                    + "Check if the length of the destination is sufficient (CWE-120).\n\n";
-};
+  constructor() {
+    super("memcpy");
+  }
 
-MemcpyChecker.prototype = Object.create(Checker.prototype);
-
-MemcpyChecker.prototype.check = function($node) {
-	if ((!$node.instanceOf("call")) || ($node.name !== 'memcpy')) {
-      	return;
+  check($node: Joinpoint) {
+    if (!($node instanceof Call) || $node.name !== "memcpy") {
+      return;
     }
-	return new CheckResult(this.name, $node, this.advice);
+    return new CheckResult(this.name, $node, this.advice);
+  }
 }

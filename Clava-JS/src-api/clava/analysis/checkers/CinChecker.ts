@@ -1,19 +1,23 @@
-import clava.analysis.Checker;
-import clava.analysis.CheckResult;
-import clava.analysis.Fix;
+import { Call, Joinpoint } from "../../../Joinpoints.js";
+import Checker from "../Checker.js";
+import CheckResult from "../CheckResult.js";
 
-var CinChecker = function() {
-      // Parent constructor
-    Checker.call(this, "cin");
-    this.advice = " Using std::cin with operator>> is risky because there is no verification for buffer overflow. Consider using a safer way to retrieve user input (CWE-20).\n\n";
-};
+export default class CinChecker extends Checker {
+  private advice =
+    " Using std::cin with operator>> is risky because there is no verification for buffer overflow. Consider using a safer way to retrieve user input (CWE-20).\n\n";
 
-CinChecker.prototype = Object.create(Checker.prototype);
+  constructor() {
+    super("cin");
+  }
 
-
-CinChecker.prototype.check = function($node) {
-	if ((!$node.instanceOf("call")) || ($node.name !== "operator>>") || (($node.args[0].code !== "cin") && ($node.args[0].code !== "std::cin"))) {
-      	return;
-	}
-	return new CheckResult(this.name, $node, this.advice);
+  check($node: Joinpoint): CheckResult | undefined {
+    if (
+      !($node instanceof Call) ||
+      $node.name !== "operator>>" ||
+      ($node.args[0].code !== "cin" && $node.args[0].code !== "std::cin")
+    ) {
+      return;
+    }
+    return new CheckResult(this.name, $node, this.advice);
+  }
 }
