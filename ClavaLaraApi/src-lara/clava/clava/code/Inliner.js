@@ -293,7 +293,6 @@ export default class Inliner {
     createNewLabelName(previousName) {
         // Check if has inliner prefix
         if (!Inliner.LABEL_PREFIX_REGEX.test(previousName)) {
-            //println("Did not pass regex: " + previousName);
             const labelNumber = this.labelNumber;
             this.labelNumber += 1;
             return "inliner_" + labelNumber + "_" + previousName;
@@ -479,9 +478,7 @@ export default class Inliner {
         if (newVar instanceof Expression) {
             return newVar;
         }
-        throw new Error("Case not supported, newVar of type '" +
-            newVar.joinPointType +
-            "'");
+        throw new Error(`Case not supported, newVar of type '${newVar.joinPointType}'`);
     }
 }
 //# sourceMappingURL=Inliner.js.map
