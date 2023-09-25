@@ -14,8 +14,7 @@ import SimplifySelectionStmts from "../pass/SimplifySelectionStmts.js";
  * @param options - Object with options. See default value for supported options.
  */
 export default function NormalizeToSubset($startJp, options = { simplifyLoops: { forToWhile: true } }) {
-    const _options = options ?? {};
-    _options["simplifyLoops"] ??= { forToWhile: true };
+    const _options = options;
     const declStmt = new DecomposeDeclStmt();
     const varDecls = new DecomposeVarDeclarations();
     const statementDecomposer = new StatementDecomposer();

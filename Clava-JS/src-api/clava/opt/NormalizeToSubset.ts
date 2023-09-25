@@ -19,8 +19,7 @@ export default function NormalizeToSubset(
   $startJp: Joinpoint,
   options = { simplifyLoops: { forToWhile: true } }
 ) {
-  const _options = options ?? {};
-  _options["simplifyLoops"] ??= { forToWhile: true };
+  const _options = options;
 
   const declStmt = new DecomposeDeclStmt();
   const varDecls = new DecomposeVarDeclarations();
