@@ -36,7 +36,7 @@ AutoParStats.reset = function() {
 
 AutoParStats.save = function() {
 	if(AutoParStats._STATS === undefined) {
-		println("AutoParStats.saveStats: stats have not been initialized, use AutoParStats.resetStats()");
+		console.log("AutoParStats.saveStats: stats have not been initialized, use AutoParStats.resetStats()");
 		return;
 	}
 	
@@ -70,7 +70,7 @@ AutoParStats.prototype.incInlineCalls = function() {
 
 AutoParStats.prototype.incInlineAnalysis = function(field, functionName) {
 	if(field === undefined) {
-		println("AutoParStats.incInlineAnalysis: field is undefined");
+		console.log("AutoParStats.incInlineAnalysis: field is undefined");
 		return;
 	}
 	

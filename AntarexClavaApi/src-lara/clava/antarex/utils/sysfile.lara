@@ -53,7 +53,7 @@ function rebuildModifiedFiles()
 function rebuildFiles(varray)
 {
   for (var afile of varray) { 
-  	println( " **** rebuild = " + afile.filepath);
+  	console.log( " **** rebuild = " + afile.filepath);
   	afile.rebuild();
   }	
 }

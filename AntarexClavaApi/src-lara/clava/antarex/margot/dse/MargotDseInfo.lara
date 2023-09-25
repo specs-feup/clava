@@ -351,7 +351,7 @@ MargotDseInfo.prototype.execute = function (filePath) {
 	var opList = this._createOpList(results);
 	
 	if(filePath !== undefined) {
-        println('Writing oplist to ' + filePath);
+        console.log('Writing oplist to ' + filePath);
         Io.writeFile(filePath, opList);
     }
 }
@@ -384,25 +384,25 @@ MargotDseInfo.prototype._createLaraMetrics = function () {
 
 
 	for(var margotMetricName in this._metrics) {
-//		println("Metric name: " + margotMetricName);
+//		console.log("Metric name: " + margotMetricName);
 		var margotMetric = this._metrics[margotMetricName];
-	//	println("SWITCH ARG:" + margotMetric.getName());
-	//	println("TIME CASE VALUE:" + MargotMetricName.TIME);
-	//	println("ENERGY CASE VALUE:" + MargotMetricName.ENERGY);
+	//	console.log("SWITCH ARG:" + margotMetric.getName());
+	//	console.log("TIME CASE VALUE:" + MargotMetricName.TIME);
+	//	console.log("ENERGY CASE VALUE:" + MargotMetricName.ENERGY);
 		switch(margotMetric.getName()) {
 			case MargotMetricName.TIME:
-	//			println("TIME CASE");
+	//			console.log("TIME CASE");
 				this._newSingleMetric(new ExecutionTimeMetric(), laraMetrics, margotMetricName);
 				break;
 			case MargotMetricName.ENERGY:
-	//		println("ENERGY CASE");
+	//		console.log("ENERGY CASE");
 				this._newSingleMetric(new EnergyMetric(), laraMetrics, margotMetricName);
 				break;
 			default:
 				throw "Margot  metric not implemented yet: " + margotMetric.getName();
 		}
 	}
-//	println("Lara metrics");
+//	console.log("Lara metrics");
 //	printObject(laraMetrics);
 	return laraMetrics;
 }

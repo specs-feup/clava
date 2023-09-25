@@ -171,7 +171,7 @@ ClangEnums.buildHeaderMap = function() {
 	for(var header of ClangEnums._HEADERS) {
 		map[header.getName()] = header;
 	}
-	//println("Header map");
+	//console.log("Header map");
 	//printlnObject(map);
 	return map;
 }
@@ -200,12 +200,12 @@ ClangEnums._removeSuffix = function(enumValue, suffix) {
  
 /*
 ClangEnums._refQualMapper = function(enumValue) {
-//println("MAPPER FOR " + enumValue);
+//console.log("MAPPER FOR " + enumValue);
 	if(enumValue.startsWith("RQ_")) {
-//	println("Starts with RQ_");
+//	console.log("Starts with RQ_");
 		enumValue = enumValue.substring(3);
 	}
-//	println("RETURNING: " + enumValue);
+//	console.log("RETURNING: " + enumValue);
 	return enumValue;
 }
 */

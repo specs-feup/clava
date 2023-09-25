@@ -93,7 +93,7 @@ class StaticCallGraphBuilder {
 
   #addEdge(sourceNode, targetNode, $call) {
     const edgeId = StaticCallGraphBuilder.getEdgeId(sourceNode, targetNode);
-    //println("Source->Target Id: " + sourceTargetId);
+    //console.log("Source->Target Id: " + sourceTargetId);
 
     let edge = this.#edges[edgeId];
     if (edge === undefined) {
@@ -157,7 +157,7 @@ class StaticCallGraphBuilder {
 
           // Add function
           jpsToSearch.push($functionDef);
-          //println("Adding function " + $functionDef.signature)
+          //console.log("Adding function " + $functionDef.signature)
         }
       }
     }

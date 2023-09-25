@@ -37,8 +37,8 @@ Parallelize.forLoops = function($loops) {
 	for(var $loop of $loops) {
 		var ompPragma = parallelLoops[$loop.astId];
 		if(ompPragma === undefined) {
-			println("Could not parallelize loop@"+$loop.location);
-			//println("Could not parallelize loop@"+$loop.location+":\n -> " + unparallelizableLoops[$loop.astId]);
+			console.log("Could not parallelize loop@"+$loop.location);
+			//console.log("Could not parallelize loop@"+$loop.location+":\n -> " + unparallelizableLoops[$loop.astId]);
 			continue;
 		}
 
@@ -49,7 +49,7 @@ Parallelize.forLoops = function($loops) {
 	}
 	*/
 	
-    println('Parallelization finished');    
+    console.log('Parallelization finished');    
 }
 
 /**
@@ -74,7 +74,7 @@ Parallelize.forLoopsAsText = function($loops, outputFolder) {
 		var ompPragma = parallelLoops[$loop.astId];
 		if(ompPragma === undefined)
 		{
-			//println("Could not parallelize loop@"+$loop.location+":\n -> " + unparallelizableLoops[$loop.astId]);
+			//console.log("Could not parallelize loop@"+$loop.location+":\n -> " + unparallelizableLoops[$loop.astId]);
 			continue;
 		}
 
@@ -82,7 +82,7 @@ Parallelize.forLoopsAsText = function($loops, outputFolder) {
 		var $file = $loop.getAncestor("file");
 		if($file === undefined)
 		{
-			println("Could not find a file associated with loop@"+$loop.location);
+			console.log("Could not find a file associated with loop@"+$loop.location);
 			continue;
 		}
 		
@@ -99,7 +99,7 @@ Parallelize.forLoopsAsText = function($loops, outputFolder) {
 	
 	codeInserter.write(outputFolder);
 	
-    println('Parallelization finished');    	
+    console.log('Parallelization finished');    	
 }
 
 
@@ -186,7 +186,7 @@ Parallelize.getForLoopsPragmas = function($loops, insertPragma, useLoopId) {
 	// Write stats before attempting parallelization
 	AutoParStats.save();
 	
-    println('Parallelizing ' + $forLoops.length + ' for loops...');
+    console.log('Parallelizing ' + $forLoops.length + ' for loops...');
 
 	// Find all loops marked for parallelization
 	//var loopPragmas = {};

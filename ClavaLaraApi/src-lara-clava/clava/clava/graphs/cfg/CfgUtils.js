@@ -98,7 +98,7 @@ class CfgUtils {
     }
 
     const left = $stmt.siblingsLeft;
-    //println("NODE TYPE "+left)
+    //console.log("NODE TYPE "+left)
 
     if (left.length > 0) {
       const lastLeft = left[left.length - 1];

@@ -538,7 +538,7 @@ class CfgBuilder {
             ($stmt) => this.#temporaryStmts[$stmt.astId] !== undefined
           );
         if (tempStmts.length > 0) {
-          println(
+          console.log(
             "Node '" + node.data().type + "' has temporary stmts: " + tempStmts
           );
         }

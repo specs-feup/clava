@@ -201,9 +201,9 @@ aspectdef CovertLoopToPetitForm
 
 	this.loopPetitForm = tabOP.join('') + 'for ';
 	var loopindex = GetLoopIndex($ForStmt);
-	//println("DEBUG - Loop Index: " + loopindex); 
-	//println("DEBUG - For Stmt: " + $ForStmt.location); 	
-	//println("DEBUG - LoopOmpAttributes[loopindex]: " + LoopOmpAttributes[loopindex]);
+	//console.log("DEBUG - Loop Index: " + loopindex); 
+	//console.log("DEBUG - For Stmt: " + $ForStmt.location); 	
+	//console.log("DEBUG - LoopOmpAttributes[loopindex]: " + LoopOmpAttributes[loopindex]);
 	var loopAttributes = LoopOmpAttributes[loopindex];
 	if(loopAttributes === undefined) {
 		var message = "";
