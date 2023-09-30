@@ -1,33 +1,36 @@
-laraImport("weaver.Query");
-laraImport("lara.graphs.NodeData");
+import NodeData from "lara-js/api/lara/graphs/NodeData.js";
+import Query from "lara-js/api/weaver/Query.js";
+import { FunctionJp } from "../../../Joinpoints.js";
 
-class ScgNodeData extends NodeData {
-  // The function represented by this node
-  #function;
+export default class ScgNodeData extends NodeData {
+  /**
+   * The function represented by this node
+   */
+  private $function: FunctionJp;
 
-  constructor($function) {
+  constructor($function: FunctionJp) {
     super();
 
     // Should use only canonical functions
-    this.#function = $function.canonical;
+    this.$function = $function.canonical;
   }
 
-  get function() {
-    return this.#function;
+  get function(): FunctionJp {
+    return this.$function;
   }
 
-  toString() {
-    return this.#function.signature;
+  toString(): string {
+    return this.$function.signature;
   }
 
   /**
    * @returns true, if the function represented by this node has an available implementation, false otherwise
    */
-  hasImplementation() {
-    return this.#function.isImplementation;
+  hasImplementation(): boolean {
+    return this.$function.isImplementation;
   }
 
-  hasCalls() {
-    return Query.searchFrom(this.#function, "call").get().length > 0;
+  hasCalls(): boolean {
+    return Query.searchFrom(this.$function, "call").get().length > 0;
   }
 }

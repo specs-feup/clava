@@ -1,24 +1,21 @@
-laraImport("lara.graphs.EdgeData");
+import EdgeData from "lara-js/api/lara/graphs/EdgeData.js";
+import { Call } from "../../../Joinpoints.js";
 
-class ScgEdgeData extends EdgeData {
-	
-	// The calls that contributed to this edge
-	#calls;
+export default class ScgEdgeData extends EdgeData {
+  /**
+   * The calls that contributed to this edge
+   */
+  private $calls: Call[] = [];
 
-	constructor() {
-		super();
-		this.#calls = [];
-	}	
+  get calls(): Call[] {
+    return this.$calls;
+  }
 
-	get calls() {
-		return this.#calls;
-	}	
-	
-	inc($call) {
-		this.#calls.push($call);
-	}
-	
-	toString() {
-		return this.#calls.length.toString();
-	}
+  inc($call: Call) {
+    this.$calls.push($call);
+  }
+
+  toString(): string {
+    return this.$calls.length.toString();
+  }
 }

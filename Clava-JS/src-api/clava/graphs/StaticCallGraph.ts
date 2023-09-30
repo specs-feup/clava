@@ -1,30 +1,32 @@
-laraImport("lara.graphs.Graphs");
-laraImport("lara.graphs.DotFormatter");
-laraImport("lara.util.StringSet");
-laraImport("lara.graphs.Graph");
+import DotFormatter from "lara-js/api/lara/graphs/DotFormatter.js";
+import Graph from "lara-js/api/lara/graphs/Graph.js";
+import Graphs from "lara-js/api/lara/graphs/Graphs.js";
+import cytoscape from "lara-js/api/libs/cytoscape-3.26.0.js";
+import { FunctionJp, Joinpoint } from "../../Joinpoints.js";
+import ScgNodeData from "./scg/ScgNodeData.js";
+import StaticCallGraphBuilder from "./scg/StaticCallGraphBuilder.js";
 
-laraImport("weaver.Query");
-
-laraImport("clava.graphs.scg.StaticCallGraphBuilder");
-
-class StaticCallGraph extends Graph {
-  static #dotFormatter = undefined;
+export default class StaticCallGraph extends Graph {
+  private static dotFormatterInstance: DotFormatter | undefined = undefined;
 
   // Maps functions to graph nodes
-  #functions;
+  private functionMap: Record<string, cytoscape.CollectionReturnValue>;
 
-  constructor(graph, functions) {
+  constructor(
+    graph: cytoscape.Core,
+    functions: Record<string, cytoscape.CollectionReturnValue>
+  ) {
     super(graph);
-    this.#functions = functions;
+    this.functionMap = functions;
   }
 
   /**
    *
-   * @param {$jp} $jp
-   * @param {boolean} [visitCalls = true] - If true, recursively visits the functions of each call, building a call graph of the available code
+   * @param $jp -
+   * @param visitCalls - If true, recursively visits the functions of each call, building a call graph of the available code
    * @returns
    */
-  static build($jp, visitCalls = true) {
+  static build($jp: Joinpoint, visitCalls: boolean = true) {
     const builder = new StaticCallGraphBuilder();
 
     const graph = builder.build($jp, visitCalls);
@@ -33,28 +35,30 @@ class StaticCallGraph extends Graph {
   }
 
   get functions() {
-    return this.#functions;
+    return this.functionMap;
   }
 
-  getNode($function) {
+  getNode($function: FunctionJp) {
     // Normalize function
-    return this.#functions[$function.canonical.astId];
+    return this.functionMap[$function.canonical.astId];
   }
 
   static get dotFormatter() {
-    if (StaticCallGraph.#dotFormatter === undefined) {
-      StaticCallGraph.#dotFormatter = new DotFormatter();
-      StaticCallGraph.#dotFormatter.addNodeAttribute(
+    if (StaticCallGraph.dotFormatterInstance === undefined) {
+      StaticCallGraph.dotFormatterInstance = new DotFormatter();
+      StaticCallGraph.dotFormatterInstance.addNodeAttribute(
         "style=dashed",
-        (node) => Graphs.isLeaf(node) && !node.data().hasImplementation()
+        (node) =>
+          Graphs.isLeaf(node) &&
+          !(node.data() as ScgNodeData).hasImplementation()
       );
-      StaticCallGraph.#dotFormatter.addNodeAttribute(
+      StaticCallGraph.dotFormatterInstance.addNodeAttribute(
         "style=filled",
-        (node) => Graphs.isLeaf(node) && node.data().hasCalls()
+        (node) => Graphs.isLeaf(node) && (node.data() as ScgNodeData).hasCalls()
       );
     }
 
-    return StaticCallGraph.#dotFormatter;
+    return StaticCallGraph.dotFormatterInstance;
   }
 
   toDot() {

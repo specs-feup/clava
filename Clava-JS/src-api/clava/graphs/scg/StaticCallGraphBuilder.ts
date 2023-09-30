@@ -1,72 +1,67 @@
-laraImport("lara.graphs.Graphs");
-laraImport("lara.util.StringSet");
-laraImport("lara.Check");
+import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
+import Graphs from "lara-js/api/lara/graphs/Graphs.js";
+import cytoscape from "lara-js/api/libs/cytoscape-3.26.0.js";
+import Query from "lara-js/api/weaver/Query.js";
+import { Call, FunctionJp, Joinpoint, Program } from "../../../Joinpoints.js";
+import ScgEdgeData from "./ScgEdgeData.js";
+import ScgNodeData from "./ScgNodeData.js";
 
-laraImport("weaver.Query");
+export default class StaticCallGraphBuilder {
+  /**
+   * The static call graph
+   */
+  private graph = Graphs.newGraph();
 
-laraImport("clava.graphs.scg.ScgNodeData");
-laraImport("clava.graphs.scg.ScgEdgeData");
+  /**
+   * Maps AST nodes to graph nodes
+   */
+  private nodesMap: Record<string, cytoscape.CollectionReturnValue> = {};
 
-class StaticCallGraphBuilder {
-  // The static call graph
-  #graph;
+  /**
+   * Maps function-\>function relations to edges
+   */
+  private edgesMap: Record<string, cytoscape.CollectionReturnValue> = {};
 
-  // Maps AST nodes to graph nodes
-  #nodes;
-
-  // Maps function->function relations to edges
-  #edges;
-
-  #nodeCounter;
-
-  constructor() {
-    this.#graph = Graphs.newGraph();
-    this.#nodes = {};
-    this.#edges = {};
-    this.#nodeCounter = 0;
-  }
+  private nodeCounter: number = 0;
 
   get nodes() {
-    return this.#nodes;
+    return this.nodesMap;
   }
 
-  #addOrGetNode($function) {
-    // Only functions can be nodes
-    Check.isJoinPoint($function, "function");
-
-    let graphNode = this.#nodes[$function.astId];
+  private addOrGetNode($function: FunctionJp): cytoscape.CollectionReturnValue {
+    let graphNode = this.nodesMap[$function.astId];
 
     // If not found, create and add it
     if (graphNode === undefined) {
       const nodeData = new ScgNodeData($function);
-      nodeData.id = this.#newNodeId();
-      graphNode = Graphs.addNode(this.#graph, nodeData);
-      this.#nodes[$function.astId] = graphNode;
+      nodeData.id = this.newNodeId();
+      graphNode = Graphs.addNode(this.graph, nodeData);
+      this.nodesMap[$function.astId] = graphNode;
     }
 
     return graphNode;
   }
 
-  #newNodeId() {
-    const id = "node_" + this.#nodeCounter;
-    this.#nodeCounter++;
+  private newNodeId(): string {
+    const id = "node_" + this.nodeCounter;
+    this.nodeCounter++;
     return id;
   }
 
   /**
    *
-   * @param {$jp} $jp
-   * @param {boolean} [visitCalls = true] - If true, recursively visits the functions of each call, building a call graph of the available code
+   * @param $jp -
+   * @param visitCalls - If true, recursively visits the functions of each call, building a call graph of the available code
    * @returns
    */
-  build($jp, visitCalls = true) {
+  build($jp?: Joinpoint, visitCalls: boolean = true): cytoscape.Core {
     // If undefined, assume root
     if ($jp === undefined) {
-      $jp = Query.root();
+      $jp = Query.root() as Program;
     }
 
     // Get function->call relations
-    let pairs = this.#getFunctionCallPairs($jp, visitCalls);
+    const pairs = this.getFunctionCallPairs($jp, visitCalls);
 
     // Add nodes and edges
     for (const pair of pairs) {
@@ -74,68 +69,78 @@ class StaticCallGraphBuilder {
       const $call = pair["call"];
       const $targetFunction = $call.function; // Already canonical function
 
-      const sourceNode = this.#addOrGetNode($sourceFunction);
-      const targetNode = this.#addOrGetNode($targetFunction);
+      const sourceNode = this.addOrGetNode($sourceFunction);
+      const targetNode = this.addOrGetNode($targetFunction);
 
-      this.#addEdge(sourceNode, targetNode, $call);
+      this.addEdge(sourceNode, targetNode, $call);
     }
 
-    return this.#graph;
+    return this.graph;
   }
 
-  static getEdgeId(sourceNode, targetNode) {
+  static getEdgeId(
+    sourceNode: cytoscape.NodeSingular,
+    targetNode: cytoscape.NodeSingular
+  ): string {
     return (
-      sourceNode.data().function.signature +
+      (sourceNode.data() as ScgNodeData).function.signature +
       "$" +
-      targetNode.data().function.signature
+      (targetNode.data() as ScgNodeData).function.signature
     );
   }
 
-  #addEdge(sourceNode, targetNode, $call) {
+  private addEdge(
+    sourceNode: cytoscape.NodeSingular,
+    targetNode: cytoscape.NodeSingular,
+    $call: Call
+  ): void {
     const edgeId = StaticCallGraphBuilder.getEdgeId(sourceNode, targetNode);
-    //console.log("Source->Target Id: " + sourceTargetId);
 
-    let edge = this.#edges[edgeId];
+    let edge = this.edgesMap[edgeId];
     if (edge === undefined) {
       const edgeData = new ScgEdgeData();
       edgeData.id = edgeId;
-      edge = Graphs.addEdge(this.#graph, sourceNode, targetNode, edgeData);
-      this.#edges[edgeId] = edge;
+      edge = Graphs.addEdge(this.graph, sourceNode, targetNode, edgeData);
+      this.edgesMap[edgeId] = edge;
     }
 
     // Increment edge value
-    edge.data().inc($call);
+    (edge.data() as ScgEdgeData).inc($call);
   }
 
-  #getFunctionCallPairs($jp, visitCalls) {
-    let pairs = [];
-    let seenFunctions = new StringSet();
+  private getFunctionCallPairs($jp: Joinpoint, visitCalls: boolean) {
+    const pairs = [];
+    const seenFunctions: Set<string> = new Set<string>();
     let jpsToSearch = [$jp];
 
     while (jpsToSearch.length > 0) {
-      let seenCalls = [];
+      const seenCalls: Call[] = [];
 
       // Check if any of the jps to search is a call
       for (const $jp of jpsToSearch) {
-        if ($jp.instanceOf("call")) {
+        if ($jp instanceof Call) {
           seenCalls.push($jp);
         }
       }
 
       for (const $jpToSearch of jpsToSearch) {
         // Get all function/call pairs for functions that are not yet in the seen functions
-        let functionCall = Query.searchFromInclusive(
+        const functionCall = Query.searchFromInclusive(
           $jpToSearch,
           "function",
-          (self) => !seenFunctions.has(self.signature)
+          (self: LaraJoinPoint) =>
+            !seenFunctions.has((self as FunctionJp).signature)
         )
           .search("call")
           .chain();
 
         for (const pair of functionCall) {
-          seenFunctions.add(pair["function"].signature);
-          pairs.push({ function: pair["function"], call: pair["call"] });
-          seenCalls.push(pair["call"]);
+          const $function = pair["function"] as FunctionJp;
+          const $call = pair["call"] as Call;
+
+          seenFunctions.add($function.signature);
+          pairs.push({ function: $function, call: $call });
+          seenCalls.push($call);
         }
       }
 
@@ -157,7 +162,6 @@ class StaticCallGraphBuilder {
 
           // Add function
           jpsToSearch.push($functionDef);
-          //console.log("Adding function " + $functionDef.signature)
         }
       }
     }
