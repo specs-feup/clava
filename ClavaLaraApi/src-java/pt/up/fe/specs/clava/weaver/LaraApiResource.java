@@ -89,7 +89,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     //GPROFER_ASPECTS("gprofer/_GproferAspects.lara"),
 
     // Graphs
-    STATIC_CALL_GRAPH("graphs/StaticCallGraph.js"),
+    //STATIC_CALL_GRAPH("graphs/StaticCallGraph.js"),
     CONTROL_FLOW_GRAPH("graphs/ControlFlowGraph.js"),
 
     CFG_BUILDER("graphs/cfg/CfgBuilder.js"),
@@ -110,9 +110,9 @@ public enum LaraApiResource implements LaraResourceProvider {
     CFG_SWITCH_DATA("graphs/cfg/nodedata/SwitchData.js"),
     CFG_RETURN_DATA("graphs/cfg/nodedata/ReturnData.js"),
 
-    STATIC_CALL_GRAPH_BUILDER("graphs/scg/StaticCallGraphBuilder.js"),
-    SCG_NODE_DATA("graphs/scg/ScgNodeData.js"),
-    SCG_EDGE_DATA("graphs/scg/ScgEdgeData.js"),
+    //STATIC_CALL_GRAPH_BUILDER("graphs/scg/StaticCallGraphBuilder.js"),
+    //SCG_NODE_DATA("graphs/scg/ScgNodeData.js"),
+    //SCG_EDGE_DATA("graphs/scg/ScgEdgeData.js"),
 
     // Hdf5
     //HDF5("hdf5/Hdf5.lara"),
