@@ -29,7 +29,7 @@ class ScopeNodeData extends CfgNodeData {
 
   /*
     toString() {
-		return this.name;
+    return this.name;
     }
     */
 }
