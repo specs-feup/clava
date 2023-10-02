@@ -48,7 +48,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     AUTOPAR_13("autopar/SetArrayAccessOpenMPscoping.lara"),
     AUTOPAR_14("autopar/SetMemberAccessOpenMPscoping.lara"),
     AUTOPAR_15("autopar/SetVariableAccess.lara"),
-    AUTOPAR_16("autopar/SetVarrefOpenMPscoping.lara"),
+    AUTOPAR_16("autopar/SetVarrefOpenMPscoping.lara");
 
     // Analysis
     //ANALYSIS_ANALYSERS_BOUNDS_ANALYSER("analysis/analysers/BoundsAnalyser.lara"),
@@ -124,9 +124,9 @@ public enum LaraApiResource implements LaraResourceProvider {
     //HLS_MATH_H("hls/MathHInfo.lara"),
 
     // LIVENESS
-    LIVENESS_ANALYSIS("liveness/LivenessAnalysis.js"),
-    LIVENESS_ANALYSER("liveness/LivenessAnalyser.js"),
-    LIVENESS_UTILS("liveness/LivenessUtils.js");
+    //LIVENESS_ANALYSIS("liveness/LivenessAnalysis.js"),
+    //LIVENESS_ANALYSER("liveness/LivenessAnalyser.js"),
+    //LIVENESS_UTILS("liveness/LivenessUtils.js"),
 
     // MPI
     //MPI_ACCESS_PATTERN("mpi/MpiAccessPattern.lara"),
