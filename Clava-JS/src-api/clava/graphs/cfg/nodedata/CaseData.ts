@@ -1,27 +1,29 @@
-laraImport("clava.graphs.cfg.CfgNodeData");
-laraImport("clava.graphs.cfg.CfgNodeType");
+import { Case } from "../../../../Joinpoints.js";
+import CfgNodeData from "../CfgNodeData.js";
+import CfgNodeType from "../CfgNodeType.js";
 
-class CaseData extends CfgNodeData {
-  //#stmt
-
-  constructor($stmt, id) {
+export default class CaseData extends CfgNodeData<Case> {
+  constructor($stmt?: Case, id?: string) {
     super(CfgNodeType.CASE, $stmt, id);
-
-    //this.#stmt = $stmt
   }
 
   get case() {
     return this.nodeStmt;
-    //return this.#stmt;
   }
 
-  toString() {
-    if (this.case.isDefault)
+  toString(): string {
+    if (this.case === undefined) {
+      return super.toString();
+    }
+
+    if (this.case.isDefault) {
       return "default";
-    return "case " + this.case.values.map(value => value.code).join(" || ");
+    }
+
+    return "case " + this.case.values.map((value) => value.code).join(" || ");
   }
 
-  isBranch() {
+  isBranch(): true {
     return true;
   }
 }

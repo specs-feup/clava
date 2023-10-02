@@ -1,8 +1,9 @@
-laraImport("clava.graphs.cfg.CfgNodeData");
-laraImport("clava.graphs.cfg.CfgNodeType");
+import { ReturnStmt } from "../../../../Joinpoints.js";
+import CfgNodeData from "../CfgNodeData.js";
+import CfgNodeType from "../CfgNodeType.js";
 
-class ReturnData extends CfgNodeData {
-  constructor($stmt, id) {
+export default class ReturnData extends CfgNodeData<ReturnStmt> {
+  constructor($stmt?: ReturnStmt, id?: string) {
     super(CfgNodeType.RETURN, $stmt, id);
   }
 
@@ -11,7 +12,7 @@ class ReturnData extends CfgNodeData {
   }
 
   toString() {
-    const returnExpr = this.returnStmt.returnExpr;
+    const returnExpr = this.returnStmt?.returnExpr;
     return (
       "return" + (returnExpr === undefined ? "" : " " + returnExpr.code) + ";"
     );

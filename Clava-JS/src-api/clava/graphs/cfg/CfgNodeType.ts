@@ -1,13 +1,12 @@
 /**
  * Enumeration of CFG node types.
  */
-class CfgNodeType {
+export default class CfgNodeType {
   static START = new CfgNodeType("START");
   static END = new CfgNodeType("END");
   static IF = new CfgNodeType("IF");
   static THEN = new CfgNodeType("THEN");
   static ELSE = new CfgNodeType("ELSE");
-  //static FOR = new CfgNodeType("FOR")
   static LOOP = new CfgNodeType("LOOP");
   static COND = new CfgNodeType("COND");
   static INIT = new CfgNodeType("INIT");
@@ -19,40 +18,29 @@ class CfgNodeType {
   static SWITCH = new CfgNodeType("SWITCH");
   static CASE = new CfgNodeType("CASE");
   static RETURN = new CfgNodeType("RETURN");
-  // To add: WHILE, DOWHILE?
 
-  //static SCOPE_DATA = new CfgNodeType("SCOPE_DATA")
-  //static BODY = new CfgNodeType("BODY")
-  //static SCOPE_START = new CfgNodeType("SCOPE_START")
-  //static SCOPE_END = new CfgNodeType("SCOPE_END")
-  //static FOR_END = new CfgNodeType("FOR_END")
-  //static FOR_START = new CfgNodeType("FOR_START")
-  //static IF_END = new CfgNodeType("IF_END")
-  //static IF_START = new CfgNodeType("IF_START")
-  //static UNDEFINED = new CfgNodeType("UNDEFINED")
-
-  #name;
+  private nameStr: string;
 
   /**
    * Creates a new instance of the CfgNodeType class
-   * @param {String} name the name of the CFG node type
+   * @param name - The name of the CFG node type
    */
-  constructor(name) {
-    this.#name = name;
+  constructor(name: string) {
+    this.nameStr = name;
   }
 
   /**
-   * @returns {String} the name of the CFG node type
+   * @returns The name of the CFG node type
    */
-  get name() {
-    return this.#name;
+  get name(): string {
+    return this.nameStr;
   }
 
   /**
-   * 
-   * @returns {String} string representation of the CFG node type, which corresponds to its name
+   *
+   * @returns String representation of the CFG node type, which corresponds to its name
    */
-  toString() {
+  toString(): string {
     return this.name;
   }
 }

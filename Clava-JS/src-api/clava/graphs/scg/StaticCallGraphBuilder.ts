@@ -15,12 +15,12 @@ export default class StaticCallGraphBuilder {
   /**
    * Maps AST nodes to graph nodes
    */
-  private nodesMap: Record<string, cytoscape.CollectionReturnValue> = {};
+  private nodesMap: Record<string, cytoscape.NodeSingular> = {};
 
   /**
    * Maps function-\>function relations to edges
    */
-  private edgesMap: Record<string, cytoscape.CollectionReturnValue> = {};
+  private edgesMap: Record<string, cytoscape.EdgeSingular> = {};
 
   private nodeCounter: number = 0;
 
@@ -28,7 +28,7 @@ export default class StaticCallGraphBuilder {
     return this.nodesMap;
   }
 
-  private addOrGetNode($function: FunctionJp): cytoscape.CollectionReturnValue {
+  private addOrGetNode($function: FunctionJp): cytoscape.NodeSingular {
     let graphNode = this.nodesMap[$function.astId];
 
     // If not found, create and add it

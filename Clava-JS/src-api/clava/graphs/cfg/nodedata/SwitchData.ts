@@ -1,21 +1,21 @@
-laraImport("clava.graphs.cfg.CfgNodeData");
-laraImport("clava.graphs.cfg.CfgNodeType");
+import { Switch } from "../../../../Joinpoints.js";
+import CfgNodeData from "../CfgNodeData.js";
+import CfgNodeType from "../CfgNodeType.js";
 
-class SwitchData extends CfgNodeData {
-  //#stmt
-
-  constructor($stmt, id) {
+export default class SwitchData extends CfgNodeData<Switch> {
+  constructor($stmt?: Switch, id?: string) {
     super(CfgNodeType.SWITCH, $stmt, id);
-
-    //this.#stmt = $stmt
   }
 
   get switch() {
     return this.nodeStmt;
-    //return this.#stmt;
   }
 
   toString() {
+    if (this.switch === undefined) {
+      return super.toString();
+    }
+
     return "switch(" + this.switch.condition.code + ")";
   }
 

@@ -1,27 +1,38 @@
-laraImport("clava.graphs.cfg.CfgNodeData");
-laraImport("clava.graphs.cfg.CfgNodeType");
-laraImport("clava.graphs.cfg.CfgUtils");
+import { Statement } from "../../../../Joinpoints.js";
+import CfgNodeData from "../CfgNodeData.js";
+import CfgNodeType from "../CfgNodeType.js";
+import CfgUtils from "../CfgUtils.js";
 
-class InstListNodeData extends CfgNodeData {
-  #stmts;
+type T = Statement;
 
-  constructor($stmt, id, $entryPoint, splitInstList) {
+export default class InstListNodeData extends CfgNodeData<T> {
+  private stmtArray: T[] = [];
+
+  constructor(
+    $stmt: T | undefined,
+    id: string | undefined,
+    $entryPoint: T,
+    splitInstList: boolean
+  ) {
     super(CfgNodeType.INST_LIST, $stmt, id);
 
-    this.#stmts = [];
-
     // Given statement is start of the list
-    this.#stmts.push($stmt);
+    if ($stmt !== undefined) {
+      this.stmtArray.push($stmt);
 
-    if (!splitInstList) {
-      // Add non-leader statements corresponding to this list, unless this node is the starting point
-      const rightNodes = !$stmt.equals($entryPoint) ? $stmt.siblingsRight : [];
+      if (!splitInstList) {
+        // Add non-leader statements corresponding to this list, unless this node is the starting point
+        const rightNodes = !$stmt.equals($entryPoint)
+          ? $stmt.siblingsRight
+          : [];
 
-      for (const $right of rightNodes) {
-        if (!CfgUtils.isLeader($right)) {
-          this.#stmts.push($right);
-        } else {
-          break;
+        for (const $jp of rightNodes) {
+          const $right = $jp as Statement;
+          if (!CfgUtils.isLeader($right)) {
+            this.stmtArray.push($right);
+          } else {
+            break;
+          }
         }
       }
     }
@@ -31,28 +42,28 @@ class InstListNodeData extends CfgNodeData {
    * Returns all the statements of this instruction list.
    */
   get stmts() {
-    return this.#stmts;
+    return this.stmtArray;
   }
 
   set stmts(stmts) {
-    this.#stmts = stmts;
+    this.stmtArray = stmts;
 
     // When setting statements, the base statement changes to the first of the new list
-    this.nodeStmt = this.#stmts.length > 0 ? this.#stmts[0] : undefined;
+    this.nodeStmt = this.stmtArray.length > 0 ? this.stmtArray[0] : undefined;
   }
 
   getLastStmt() {
-    if (this.#stmts.length === 0) {
+    if (this.stmtArray.length === 0) {
       return undefined;
     }
 
-    return this.#stmts[this.#stmts.length - 1];
+    return this.stmtArray[this.stmtArray.length - 1];
   }
 
   toString() {
     let code = "";
 
-    for (const $stmt of this.#stmts) {
+    for (const $stmt of this.stmtArray) {
       code += $stmt.code + "\n";
     }
 

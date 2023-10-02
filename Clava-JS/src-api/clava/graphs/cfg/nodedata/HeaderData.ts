@@ -1,26 +1,21 @@
-laraImport("clava.graphs.cfg.CfgNodeData");
-laraImport("clava.graphs.cfg.CfgNodeType");
+import { Statement } from "../../../../Joinpoints.js";
+import CfgNodeData from "../CfgNodeData.js";
+import CfgNodeType from "../CfgNodeType.js";
 
-class HeaderData extends CfgNodeData {
-  //#stmt
-
-  constructor($stmt, nodeType, id) {
+export default class HeaderData extends CfgNodeData<Statement> {
+  constructor($stmt: Statement | undefined, nodeType: CfgNodeType, id: string | undefined) {
     super(nodeType, $stmt, id);
-
-    //this.#stmt = $stmt
   }
 
-  /*
-  getStmt() {
-    return this.#stmt;
-  }
-    */
+  toString(): string {
+    if (this.nodeStmt === undefined) {
+      return super.toString();
+    }
 
-  toString() {
     return this.name + ": " + this.nodeStmt.code;
   }
 
-  isBranch() {
+  isBranch(): boolean {
     if (this.type === CfgNodeType.COND) {
       return true;
     }

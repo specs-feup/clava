@@ -1,35 +1,17 @@
-laraImport("clava.graphs.cfg.CfgNodeData");
-laraImport("clava.graphs.cfg.CfgNodeType");
+import { Scope } from "../../../../Joinpoints.js";
+import CfgNodeData from "../CfgNodeData.js";
+import CfgNodeType from "../CfgNodeType.js";
 
-class ScopeNodeData extends CfgNodeData {
-  #scope;
+export default class ScopeNodeData extends CfgNodeData<Scope> {
+  private scopeStmt;
 
-  constructor($scope, nodeType = CfgNodeType.SCOPE, id) {
+  constructor($scope: Scope, nodeType = CfgNodeType.SCOPE, id?: string) {
     super(nodeType, $scope, id);
 
-    isJoinPoint($scope, "scope");
-
-    this.#scope = $scope;
-
-    // This is just a marker node, so it has no statements
-    /*
-        for(const $stmt of $scope.stmts) {
-            if(!CfgUtils.isLeader($stmt)) {
-                this.addStmt($stmt);
-            } else {
-                break;
-            }            
-        }
-        */
+    this.scopeStmt = $scope;
   }
 
   get scope() {
-    return this.#scope;
+    return this.scopeStmt;
   }
-
-  /*
-    toString() {
-    return this.name;
-    }
-    */
 }

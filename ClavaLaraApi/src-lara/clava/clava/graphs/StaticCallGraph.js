@@ -4,7 +4,9 @@ import Graphs from "lara-js/api/lara/graphs/Graphs.js";
 import StaticCallGraphBuilder from "./scg/StaticCallGraphBuilder.js";
 export default class StaticCallGraph extends Graph {
     static dotFormatterInstance = undefined;
-    // Maps functions to graph nodes
+    /**
+     * Maps functions to graph nodes
+     */
     functionMap;
     constructor(graph, functions) {
         super(graph);

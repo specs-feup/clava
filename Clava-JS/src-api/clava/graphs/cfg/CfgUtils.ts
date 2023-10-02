@@ -1,12 +1,25 @@
-laraImport("clava.graphs.cfg.CfgNodeType");
-laraImport("lara.Check");
+import cytoscape from "lara-js/api/libs/cytoscape-3.26.0.js";
+import {
+  Break,
+  Case,
+  Continue,
+  If,
+  Loop,
+  ReturnStmt,
+  Scope,
+  Statement,
+  Switch,
+} from "../../../Joinpoints.js";
+import CfgEdge from "./CfgEdge.js";
+import CfgEdgeType from "./CfgEdgeType.js";
+import CfgNodeType from "./CfgNodeType.js";
 
-class CfgUtils {
+export default class CfgUtils {
   /**
-   * @param {joinpoint} $stmt the statement join point
-   * @return {boolean} true if the statement is considered a leader
+   * @param $stmt - The statement join point
+   * @returns True if the statement is considered a leader
    */
-  static isLeader($stmt) {
+  static isLeader($stmt: Statement): boolean {
     const graphNodeType = CfgUtils.getNodeType($stmt);
 
     return graphNodeType !== undefined;
@@ -14,48 +27,52 @@ class CfgUtils {
 
   /**
    * Returns the type of graph node based on the type of the leader statement. If this statement is not a leader, returns undefined
-   * @param {joinpoint} $stmt the statement join point
+   * @param $stmt - The statement join point
    */
-  static getNodeType($stmt) {
-    // If stmt
-    if ($stmt.instanceOf("if")) {
+  static getNodeType($stmt: Statement): CfgNodeType | undefined {
+    if ($stmt instanceof If) {
       return CfgNodeType.IF;
     }
 
     // Loop stmt
-    if ($stmt.instanceOf("loop")) {
+    if ($stmt instanceof Loop) {
       return CfgNodeType.LOOP;
     }
 
     // Break stmt
-    if ($stmt.instanceOf("break")) {
+    if ($stmt instanceof Break) {
       return CfgNodeType.BREAK;
     }
 
     // Continue stmt
-    if ($stmt.instanceOf("continue")) {
+    if ($stmt instanceof Continue) {
       return CfgNodeType.CONTINUE;
     }
 
     // Switch stmt
-    if ($stmt.instanceOf("switch")) {
+    if ($stmt instanceof Switch) {
       return CfgNodeType.SWITCH;
     }
 
     //Case stmt
-    if ($stmt.instanceOf("case")) {
+    if ($stmt instanceof Case) {
       return CfgNodeType.CASE;
     }
 
     // Return stmt
-    if ($stmt.instanceOf("returnStmt")) {
+    if ($stmt instanceof ReturnStmt) {
       return CfgNodeType.RETURN;
     }
 
     // Stmt is part of loop header
     if ($stmt.isInsideLoopHeader) {
       const $loop = $stmt.parent;
-      isJoinPoint($loop, "loop");
+      if (!($loop instanceof Loop)) {
+        throw new Error(
+          "Statement is inside loop header but parent is not a loop: " +
+            $stmt.code
+        );
+      }
 
       if ($stmt.equals($loop.init)) {
         return CfgNodeType.INIT;
@@ -74,9 +91,9 @@ class CfgUtils {
     }
 
     // Scope stmt
-    if ($stmt.instanceOf("scope")) {
+    if ($stmt instanceof Scope) {
       const parent = $stmt.parent;
-      if (parent.instanceOf("if")) {
+      if (parent instanceof If) {
         if ($stmt.equals(parent.then)) {
           return CfgNodeType.THEN;
         } else if ($stmt.equals(parent.else)) {
@@ -90,15 +107,11 @@ class CfgUtils {
     // If is the first statement of a scope and is not any of the other type of statements,
     // consider the beginning of an INST_LIST
     const $stmtParent = $stmt.parent;
-    if (
-      $stmtParent.instanceOf("scope") &&
-      $stmt.equals($stmtParent.firstStmt)
-    ) {
+    if ($stmtParent instanceof Scope && $stmt.equals($stmtParent.firstStmt)) {
       return CfgNodeType.INST_LIST;
     }
 
-    const left = $stmt.siblingsLeft;
-    //console.log("NODE TYPE "+left)
+    const left = $stmt.siblingsLeft as Statement[];
 
     if (left.length > 0) {
       const lastLeft = left[left.length - 1];
@@ -113,11 +126,9 @@ class CfgUtils {
     }
 
     return undefined;
-    //return CfgNodeType.UNDEFINED;
-    //throw new Error(`_getNodeType() not defined for statements of type '${$stmt.joinPointType}'`);
   }
 
-  static getTarget(node, edgeType) {
+  static getTarget(node: cytoscape.NodeSingular, edgeType: CfgEdgeType) {
     let target = undefined;
 
     for (const edge of node.connectedEdges()) {
@@ -126,13 +137,10 @@ class CfgUtils {
         continue;
       }
 
-      if (edge.data().type === edgeType) {
+      if ((edge.data() as CfgEdge).type === edgeType) {
         if (target !== undefined) {
           throw new Error(
-            "Found duplicated edge of type '" +
-              edgeType +
-              "' in node " +
-              node.data()
+            `Found duplicated edge of type '${edgeType.toString()}' in node ${node.data()}`
           );
         }
 
@@ -142,5 +150,4 @@ class CfgUtils {
 
     return target;
   }
-  
 }

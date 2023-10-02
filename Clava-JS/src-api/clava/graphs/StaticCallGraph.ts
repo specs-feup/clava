@@ -9,12 +9,14 @@ import StaticCallGraphBuilder from "./scg/StaticCallGraphBuilder.js";
 export default class StaticCallGraph extends Graph {
   private static dotFormatterInstance: DotFormatter | undefined = undefined;
 
-  // Maps functions to graph nodes
-  private functionMap: Record<string, cytoscape.CollectionReturnValue>;
+  /**
+   * Maps functions to graph nodes
+   */
+  private functionMap: Record<string, cytoscape.NodeSingular>;
 
   constructor(
     graph: cytoscape.Core,
-    functions: Record<string, cytoscape.CollectionReturnValue>
+    functions: Record<string, cytoscape.NodeSingular>
   ) {
     super(graph);
     this.functionMap = functions;

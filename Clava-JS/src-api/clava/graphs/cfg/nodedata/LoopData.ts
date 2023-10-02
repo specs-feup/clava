@@ -1,20 +1,21 @@
-laraImport("clava.graphs.cfg.CfgNodeData");
-laraImport("clava.graphs.cfg.CfgNodeType");
+import { Loop } from "../../../../Joinpoints.js";
+import CfgNodeData from "../CfgNodeData.js";
+import CfgNodeType from "../CfgNodeType.js";
 
-class LoopData extends CfgNodeData {
-  //#stmt
-
-  constructor($stmt, id) {
+export default class LoopData extends CfgNodeData<Loop> {
+  constructor($stmt?: Loop, id?: string) {
     super(CfgNodeType.LOOP, $stmt, id);
-
-    //this.#stmt = $stmt
   }
 
   get loop() {
     return this.nodeStmt;
   }
 
-  toString() {
-    return "Loop: " + this.loop.kind;
+  toString(): string {
+    if (this.loop === undefined) {
+      return super.toString();
+    }
+
+    return `Loop: ${this.loop.kind}`;
   }
 }

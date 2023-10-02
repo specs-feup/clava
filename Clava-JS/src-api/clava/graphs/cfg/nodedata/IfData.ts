@@ -1,21 +1,21 @@
-laraImport("clava.graphs.cfg.CfgNodeData");
-laraImport("clava.graphs.cfg.CfgNodeType");
+import { If } from "../../../../Joinpoints.js";
+import CfgNodeData from "../CfgNodeData.js";
+import CfgNodeType from "../CfgNodeType.js";
 
-class IfData extends CfgNodeData {
-  //#stmt
-
-  constructor($stmt, id) {
+export default class IfData extends CfgNodeData<If> {
+  constructor($stmt?: If, id?: string) {
     super(CfgNodeType.IF, $stmt, id);
-
-    //this.#stmt = $stmt
   }
 
   get if() {
     return this.nodeStmt;
-    //return this.#stmt;
   }
 
   toString() {
+    if (this.if === undefined) {
+      return super.toString();
+    }
+
     return "if(" + this.if.cond.code + ")";
   }
 

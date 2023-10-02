@@ -2,6 +2,7 @@ laraImport("clava.graphs.ControlFlowGraph");
 laraImport("clava.graphs.cfg.CfgUtils");
 laraImport("clava.graphs.cfg.CfgEdgeType");
 laraImport("weaver.Query");
+laraImport("lara.graphs.Graphs");
 
 const $fooFunction = Query.search("function", "foo").first();
 const cfg = ControlFlowGraph.build($fooFunction, true);
