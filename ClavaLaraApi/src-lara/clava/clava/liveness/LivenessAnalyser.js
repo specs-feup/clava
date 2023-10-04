@@ -66,6 +66,9 @@ export default class LivenessAnalyser {
      * @returns The def set for the given joinpoint
      */
     computeDef($jp) {
+        if ($jp === undefined) {
+            throw new Error("Joinpoint is undefined");
+        }
         const declaredVars = LivenessUtils.getVarDeclsWithInit($jp);
         const assignedVars = LivenessUtils.getAssignedVars($jp);
         return LivenessUtils.unionSets(declaredVars, assignedVars);
@@ -76,6 +79,9 @@ export default class LivenessAnalyser {
      * @returns The use set for the given joinpoint
      */
     computeUse($jp) {
+        if ($jp === undefined) {
+            throw new Error("Joinpoint is undefined");
+        }
         return LivenessUtils.getVarRefs($jp);
     }
     /**
@@ -86,9 +92,6 @@ export default class LivenessAnalyser {
             const nodeData = node.data();
             const $nodeStmt = nodeData.nodeStmt;
             const nodeType = nodeData.type;
-            if ($nodeStmt === undefined) {
-                throw new Error("Node statement is undefined");
-            }
             let def;
             switch (nodeType) {
                 case CfgNodeType.START:
@@ -102,7 +105,7 @@ export default class LivenessAnalyser {
                     def = new Set();
                     break;
                 case CfgNodeType.IF:
-                    def = this.computeDef($nodeStmt.cond);
+                    def = this.computeDef($nodeStmt?.cond);
                     break;
                 default:
                     def = this.computeDef($nodeStmt);
@@ -118,9 +121,6 @@ export default class LivenessAnalyser {
             const nodeData = node.data();
             const $nodeStmt = nodeData.nodeStmt;
             const nodeType = nodeData.type;
-            if ($nodeStmt === undefined) {
-                throw new Error("Node statement is undefined");
-            }
             let use;
             switch (nodeType) {
                 case CfgNodeType.START:
@@ -132,14 +132,14 @@ export default class LivenessAnalyser {
                     use = new Set();
                     break;
                 case CfgNodeType.IF:
-                    use = this.computeUse($nodeStmt.cond);
+                    use = this.computeUse($nodeStmt?.cond);
                     break;
                 case CfgNodeType.SWITCH:
-                    use = this.computeUse($nodeStmt.condition);
+                    use = this.computeUse($nodeStmt?.condition);
                     break;
                 case CfgNodeType.CASE: {
-                    const $switchCondition = $nodeStmt.getAncestor("switch").condition;
-                    use = $nodeStmt.isDefault
+                    const $switchCondition = ($nodeStmt?.getAncestor("switch")).condition;
+                    use = $nodeStmt?.isDefault
                         ? new Set()
                         : this.computeUse($switchCondition);
                     break;

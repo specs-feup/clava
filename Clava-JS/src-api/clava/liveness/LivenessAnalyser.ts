@@ -87,7 +87,11 @@ export default class LivenessAnalyser {
    * @param $jp -
    * @returns The def set for the given joinpoint
    */
-  private computeDef($jp: Statement | Expression): Set<string> {
+  private computeDef($jp: Statement | Expression | undefined): Set<string> {
+    if ($jp === undefined) {
+      throw new Error("Joinpoint is undefined");
+    }
+
     const declaredVars = LivenessUtils.getVarDeclsWithInit($jp);
     const assignedVars = LivenessUtils.getAssignedVars($jp);
     return LivenessUtils.unionSets(declaredVars, assignedVars);
@@ -98,7 +102,11 @@ export default class LivenessAnalyser {
    * @param $jp -
    * @returns The use set for the given joinpoint
    */
-  private computeUse($jp: Statement | Expression): Set<string> {
+  private computeUse($jp: Statement | Expression | undefined): Set<string> {
+    if ($jp === undefined) {
+      throw new Error("Joinpoint is undefined");
+    }
+
     return LivenessUtils.getVarRefs($jp);
   }
 
@@ -110,10 +118,6 @@ export default class LivenessAnalyser {
       const nodeData: CfgNodeData = node.data() as CfgNodeData;
       const $nodeStmt = nodeData.nodeStmt;
       const nodeType = nodeData.type;
-
-      if ($nodeStmt === undefined) {
-        throw new Error("Node statement is undefined");
-      }
 
       let def: Set<string>;
       switch (nodeType) {
@@ -128,7 +132,7 @@ export default class LivenessAnalyser {
           def = new Set<string>();
           break;
         case CfgNodeType.IF:
-          def = this.computeDef(($nodeStmt as If).cond);
+          def = this.computeDef(($nodeStmt as If | undefined)?.cond);
           break;
         default:
           def = this.computeDef($nodeStmt);
@@ -146,10 +150,6 @@ export default class LivenessAnalyser {
       const $nodeStmt = nodeData.nodeStmt;
       const nodeType = nodeData.type;
 
-      if ($nodeStmt === undefined) {
-        throw new Error("Node statement is undefined");
-      }
-
       let use: Set<string>;
       switch (nodeType) {
         case CfgNodeType.START:
@@ -161,16 +161,16 @@ export default class LivenessAnalyser {
           use = new Set<string>();
           break;
         case CfgNodeType.IF:
-          use = this.computeUse(($nodeStmt as If).cond);
+          use = this.computeUse(($nodeStmt as If | undefined)?.cond);
           break;
         case CfgNodeType.SWITCH:
-          use = this.computeUse(($nodeStmt as Switch).condition);
+          use = this.computeUse(($nodeStmt as Switch | undefined)?.condition);
           break;
         case CfgNodeType.CASE: {
           const $switchCondition = (
-            ($nodeStmt as Case).getAncestor("switch") as Switch
+            ($nodeStmt as Case | undefined)?.getAncestor("switch") as Switch
           ).condition;
-          use = ($nodeStmt as Case).isDefault
+          use = ($nodeStmt as Case | undefined)?.isDefault
             ? new Set<string>()
             : this.computeUse($switchCondition);
           break;
