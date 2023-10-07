@@ -22,7 +22,6 @@ import org.lara.interpreter.profile.WeavingReport;
 import org.lara.interpreter.weaver.ast.AstMethods;
 import org.lara.interpreter.weaver.interf.AGear;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import org.lara.interpreter.weaver.interf.WeaverEngine;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import org.lara.interpreter.weaver.options.WeaverOption;
 import org.lara.interpreter.weaver.utils.LaraResourceProvider;
@@ -45,6 +44,7 @@ import pt.up.fe.specs.clava.ClavaOptions;
 import pt.up.fe.specs.clava.Include;
 import pt.up.fe.specs.clava.ast.extra.App;
 import pt.up.fe.specs.clava.ast.extra.TranslationUnit;
+import pt.up.fe.specs.clava.ast.pragma.ClavaData;
 import pt.up.fe.specs.clava.context.ClavaContext;
 import pt.up.fe.specs.clava.context.ClavaFactory;
 import pt.up.fe.specs.clava.language.Standard;
@@ -1409,9 +1409,8 @@ public class CxxWeaver extends ACxxWeaver {
     public TranslationUnit rebuildFile(TranslationUnit tUnit) {
 
         // Clear data object for the ids of this file
-        var ids = tUnit.getDescendantsAndSelfStream().map(node -> node.getId())
-                .collect(Collectors.joining("', '", "'", "'"));
-        WeaverEngine.getThreadLocalWeaver().getScriptEngine().eval("_clearClavaDataCache([" + ids + "]);");
+        var nodes = tUnit.getDescendantsAndSelfStream().collect(Collectors.toList());
+        ClavaData.clearAllCaches(nodes);
 
         // Write current tree to a temporary folder
         File tempFolder = REBUILD_WEAVING_FOLDERS.get().next();
@@ -1656,7 +1655,7 @@ public class CxxWeaver extends ACxxWeaver {
         context.popApp();
 
         // Clear data
-        WeaverEngine.getThreadLocalWeaver().getScriptEngine().eval("_clearClavaDataCache();");
+        ClavaData.clearAllCaches();
 
         // if (update) {
         // // Top app is the one we want, pop the app before that one

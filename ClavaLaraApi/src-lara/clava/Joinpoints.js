@@ -57,11 +57,11 @@ export class Joinpoint extends LaraJoinPoint {
     /**
      * JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.
      */
-    get data() { return wrapJoinPoint(this._javaObject.getData()); }
+    get data() { const data = this._javaObject.getData(); return data ? JSON.parse(data) : data; }
     /**
      * JS object associated with this node, containing parsed data of #pragma clava data when the node can be a target of pragmas. This is a special object, managed internally, and cannot be reassigned, to change its contents requires using key-value pairs. If the node can be the target of a pragma, the information stored in this object is persisted between rebuilds.
      */
-    set data(value) { this._javaObject.setData(unwrapJoinPoint(value)); }
+    set data(value) { this._javaObject.setData(JSON.stringify(value)); }
     /**
      * The depth of this join point in the AST. If it is the root join point returns 0, if it is a child of the root node returns 1, etc.
      */
@@ -317,7 +317,7 @@ export class Joinpoint extends LaraJoinPoint {
     /**
      * Setting data directly is not supported, this action just emits a warning and does nothing
      */
-    setData(source) { return wrapJoinPoint(this._javaObject.setData(unwrapJoinPoint(source))); }
+    setData(source) { return wrapJoinPoint(this._javaObject.setData(JSON.stringify(source))); }
     /**
      * Replaces the first child, or inserts the join point if no child is present
      */
