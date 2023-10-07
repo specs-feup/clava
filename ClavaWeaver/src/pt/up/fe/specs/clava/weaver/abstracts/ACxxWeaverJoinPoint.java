@@ -1109,13 +1109,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public void dataAssignImpl(Object source) {
-        ClavaLog.info(
-                "Warning: this method has been deprecated. Use .setData instead (e.g. $jp.setData({attr1: value1}) ).");
-        setDataImpl(source);
-    }
-
-    @Override
     public void dataClearImpl() {
         // TODO: Remove pragma entirely
         ClavaData.clearData(getNode());

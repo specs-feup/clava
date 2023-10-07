@@ -1107,15 +1107,6 @@ public abstract class ABuiltinType extends AType {
     }
 
     /**
-     * Copies all enumerable own properties from the source object to the .data object
-     * @param source 
-     */
-    @Override
-    public void dataAssignImpl(Object source) {
-        this.aType.dataAssignImpl(source);
-    }
-
-    /**
      * Clears all properties from the .data object
      */
     @Override
