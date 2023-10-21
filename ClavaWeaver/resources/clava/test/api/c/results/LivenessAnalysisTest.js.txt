@@ -1,0 +1,189 @@
+Liveness results for foo:
+Node id: start
+Node stmt: Start
+Def: 
+Use: 
+Live in: c
+Live out: c
+
+Node id: end
+Node stmt: End
+Def: 
+Use: 
+Live in: 
+Live out: 
+
+Node id: id_0
+Node stmt: Scope
+Def: 
+Use: 
+Live in: c
+Live out: c
+
+Node id: id_2
+Node stmt: int switch_condition = 1;
+Def: switch_condition
+Use: 
+Live in: c
+Live out: c,switch_condition
+
+Node id: id_3
+Node stmt: int result;
+Def: 
+Use: 
+Live in: c,switch_condition
+Live out: c,switch_condition
+
+Node id: id_4
+Node stmt: switch(switch_condition)
+Def: 
+Use: switch_condition
+Live in: c,switch_condition
+Live out: c,switch_condition
+
+Node id: id_7
+Node stmt: case 1:
+Def: 
+Use: switch_condition
+Live in: c,switch_condition
+Live out: c,switch_condition
+
+Node id: id_8
+Node stmt: result = 10;
+Def: result
+Use: 
+Live in: c
+Live out: c
+
+Node id: id_9
+Node stmt: Break
+Def: 
+Use: 
+Live in: c
+Live out: c
+
+Node id: id_10
+Node stmt: case 2:
+Def: 
+Use: switch_condition
+Live in: c,switch_condition
+Live out: c
+
+Node id: id_11
+Node stmt: if(c > 10)
+Def: 
+Use: c
+Live in: c
+Live out: c
+
+Node id: id_12
+Node stmt: Then
+Def: 
+Use: 
+Live in: c
+Live out: c
+
+Node id: id_14
+Node stmt: result = 20;
+Def: result
+Use: 
+Live in: c
+Live out: c
+
+Node id: id_16
+Node stmt: Else
+Def: 
+Use: 
+Live in: c
+Live out: c
+
+Node id: id_18
+Node stmt: result = 2;
+Def: result
+Use: 
+Live in: c
+Live out: c
+
+Node id: id_20
+Node stmt: Break
+Def: 
+Use: 
+Live in: c
+Live out: c
+
+Node id: id_21
+Node stmt: default:
+Def: 
+Use: 
+Live in: c
+Live out: c
+
+Node id: id_22
+Node stmt: result = 30;
+Def: result
+Use: 
+Live in: c
+Live out: c
+
+Node id: id_24
+Node stmt: int a = 0;
+Def: a
+Use: 
+Live in: c
+Live out: a,c
+
+Node id: id_25
+Node stmt: int b;
+Def: 
+Use: 
+Live in: a,c
+Live out: a,c
+
+Node id: id_26
+Node stmt: Loop: dowhile
+Def: 
+Use: 
+Live in: a,c
+Live out: a,c
+
+Node id: id_27
+Node stmt: Scope
+Def: 
+Use: 
+Live in: a,c
+Live out: a,c
+
+Node id: id_29
+Node stmt: b = a + 1;
+Def: b
+Use: a
+Live in: a,c
+Live out: b,c
+
+Node id: id_30
+Node stmt: c = c + b;
+Def: c
+Use: b,c
+Live in: b,c
+Live out: b,c
+
+Node id: id_31
+Node stmt: a = b * 2;
+Def: a
+Use: b
+Live in: b,c
+Live out: a,c
+
+Node id: id_33
+Node stmt: Cond: a < 9;
+Def: 
+Use: a
+Live in: a,c
+Live out: a,c
+
+Node id: id_34
+Node stmt: return c;
+Def: 
+Use: c
+Live in: c
+Live out:

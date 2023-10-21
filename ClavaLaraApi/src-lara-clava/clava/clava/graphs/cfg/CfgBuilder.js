@@ -62,20 +62,42 @@ class CfgBuilder {
   #nextNodes;
 
   /**
-  * Indicates whether an instruction list should be split
+  * {boolean} If true, each instruction list should be split
   */
   #splitInstList;
 
   /**
+   * {boolean} If true, the goto nodes should be excluded from the graph
+   */
+  #removeGotoNodes;
+
+  /**
+   * {boolean} If true, the label nodes should be excluded from the graph
+   */
+  #removeLabelNodes;
+
+  /**
+   * {boolean} If true, the temporary scope statements should not be removed from the graph
+   */
+  #keepTemporaryScopeStmts;
+
+  /**
    * Creates a new instance of the CfgBuilder class
    * @param {joinpoint} $jp
-   * @param {boolean} [splitInstList = false] If true, statements of each instruction list must be split
    * @param {boolean} [deterministicIds = false] If true, uses deterministic ids for the graph ids (e.g. id_0, id_1...). Otherwise, uses $jp.astId whenever possible
-   */
-  constructor($jp, deterministicIds = false, splitInstList = false) {
+   * @param {Object} [options = {}] An object containing configuration options for the cfg
+   * @param {boolean} [options.splitInstList = false] If true, statements of each instruction list must be split
+   * @param {boolean} [options.removeGotoNodes = false] If true, the nodes that correspond to goto statements will be excluded from the resulting graph
+   * @param {boolean} [options.removeLabelNodes = false] If true, the nodes that correspond to label statements will be excluded from the resulting graph
+   * @param {boolean} [options.keepTemporaryScopeStmts = false] If true, the temporary scope statements will be kept in the resulting graph
+  */
+  constructor($jp, deterministicIds = false, options = {}) {
     this.#jp = $jp;
-    this.#splitInstList = splitInstList;
     this.#deterministicIds = deterministicIds;
+    this.#splitInstList = options.splitInstList ?? false;
+    this.#removeGotoNodes = options.removeGotoNodes ?? false;
+    this.#removeLabelNodes = options.removeLabelNodes ?? false;
+    this.#keepTemporaryScopeStmts = options.keepTemporaryScopeStmts ?? false;
     this.#currentId = 0;
     this.#dataFactory = new DataFactory(this.#jp);
     this.#graph = Graphs.newGraph();
@@ -120,7 +142,7 @@ class CfgBuilder {
 
   /**
    * Builds the control flow graph
-   * @returns {Array} a array that includes the built graph, the nodes, the start and end nodes
+   * @returns {Array} an array that includes the built graph, the nodes, the start and end nodes
    */
   build() {
 
@@ -278,18 +300,9 @@ class CfgBuilder {
    */
   #connectBreakNode(node) {
     const $breakStmt = node.data().nodeStmt;
-    const $loop = $breakStmt.ancestor("loop");
-    const $switch = $breakStmt.ancestor("switch");
-    const loopDepth = $loop !== undefined ? $loop.depth : -1;
-    const switchDepth = $switch !== undefined ? $switch.depth : -1;
-    let afterNode = undefined;
+    const $enclosingStmt = $breakStmt.enclosingStmt;
 
-    if (loopDepth > switchDepth)
-      // Statement is used to terminate a loop
-      afterNode = this.#nextNodes.nextExecutedNode($loop);
-    // Statement is used to exit a switch block
-    else afterNode = this.#nextNodes.nextExecutedNode($switch);
-
+    const afterNode = this.#nextNodes.nextExecutedNode($enclosingStmt);
     this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
   }
 
@@ -425,6 +438,28 @@ class CfgBuilder {
   }
 
   /**
+   * @param {Cytoscape.node} node node whose type is "GOTO"
+   */
+  #connectGotoNode(node) {
+    const $gotoStmt = node.data().nodeStmt;
+    const labelName = $gotoStmt.label.name;
+    const $labelStmt = Query.searchFromInclusive(this.#jp, "labelStmt", {decl: decl => decl.name == labelName}).first();
+
+    const afterNode = this.#nodes.get($labelStmt.astId);
+    this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+  }
+
+  /**
+   * @param {Cytoscape.node} node node whose type is "LABEL"
+   */
+  #connectLabelNode(node) {
+    const $labelStmt = node.data().nodeStmt;
+
+    const afterNode = this.#nextNodes.nextExecutedNode($labelStmt);
+    this.#addEdge(node, afterNode, CfgEdgeType.UNCONDITIONAL);
+  }
+
+  /**
    * Connects a node associated with a statement that is an instance of a "return" statement.
    * @param {Cytoscape.node} node node whose type is "RETURN"
    */
@@ -510,6 +545,12 @@ class CfgBuilder {
         case CfgNodeType.INST_LIST:
           this.#connectInstListNode(node);
           break;
+        case CfgNodeType.GOTO:
+          this.#connectGotoNode(node);
+          break;
+        case CfgNodeType.LABEL:
+          this.#connectLabelNode(node);
+          break;
         case CfgNodeType.RETURN:
           this.#connectReturnNode(node);
           break;
@@ -524,10 +565,12 @@ class CfgBuilder {
 
   _cleanCfg() {
     // Remove temporary instructions from the code
-    for (const stmtId in this.#temporaryStmts) {
-      this.#temporaryStmts[stmtId].detach();
+    if (!this.#keepTemporaryScopeStmts) {
+      for (const stmtId in this.#temporaryStmts) {
+        this.#temporaryStmts[stmtId].detach();
+      }
     }
-
+    
     // Remove temporary instructions from the instList nodes and this.#nodes
     for (const node of this.#nodes.values()) {
       // Only inst lists need to be cleaned
@@ -546,6 +589,9 @@ class CfgBuilder {
       }
 
       // Filter stmts that are temporary statements
+
+      if (this.#keepTemporaryScopeStmts)
+        continue;
 
       const filteredStmts = [];
       for (const $stmt of node.data().stmts) {
@@ -583,6 +629,38 @@ class CfgBuilder {
         node,
         (incoming, outgoing) => new CfgEdge(incoming.data().type)
       );
+    }
+
+    // Remove label nodes
+    if (this.#removeLabelNodes) {
+      for (const node of this.#graph.nodes()) {
+        // Only nodes whose type is "LABEL" 
+        if (node.data().type !== CfgNodeType.LABEL) 
+          continue;
+        
+        Graphs.removeNode(
+          this.#graph,
+          node,
+          (incoming, outgoing) => new CfgEdge(incoming.data().type)
+        );
+        this.#nodes.delete(node.data().nodeStmt.astId);
+      }
+    }
+
+    // Remove goto nodes
+    if (this.#removeGotoNodes) {
+      for (const node of this.#graph.nodes()) {
+        // Only nodes whose type is "GOTO" 
+        if (node.data().type !== CfgNodeType.GOTO) 
+          continue;
+        
+        Graphs.removeNode(
+          this.#graph,
+          node,
+          (incoming, outgoing) => new CfgEdge(incoming.data().type)
+        );
+        this.#nodes.delete(node.data().nodeStmt.astId);
+      }
     }
 
     // Remove nodes that have no incoming edge and are not start

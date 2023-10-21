@@ -6,7 +6,8 @@
 aspectdef checkForFunctionCalls
  	input $ForStmt end
  	output FunctionCalls end
- 	FunctionCalls = [];
+ 	
+ 	this.FunctionCalls = [];
  		
 	// check for calling functions
 
@@ -18,26 +19,8 @@ aspectdef checkForFunctionCalls
 					  (userSafeFunctions !== undefined && userSafeFunctions.indexOf($call.name) !== -1);
 
 		if (!isSafe)	
-			FunctionCalls.push($call.name + '#' + $call.line + '{' + $call.code +'}');
+			this.FunctionCalls.push($call.name + '#' + $call.line + '{' + $call.code +'}');
 	end
 	condition $call.astName === 'CallExpr' end
 	
 end
-
-/*
-aspectdef checkForFunctionCalls
- 	input $ForStmt end
- 	output FunctionCalls end
- 	FunctionCalls = [];
- 		
-	// check for calling functions
-
-	select $ForStmt.call end
-	apply				
-		if (safefunctionCallslist.indexOf($call.name) === -1)
-			FunctionCalls.push($call.name + '#' + $call.line + '{' + $call.code +'}');
-	end
-	condition $call.astName === 'CallExpr' end
-	
-end
-*/

@@ -42,9 +42,19 @@ class CfgUtils {
       return CfgNodeType.SWITCH;
     }
 
-    //Case stmt
+    // Case stmt
     if ($stmt.instanceOf("case")) {
       return CfgNodeType.CASE;
+    }
+
+    // Goto stmt
+    if ($stmt.instanceOf("gotoStmt")) {
+      return CfgNodeType.GOTO;
+    }
+
+    // Label stmt
+    if ($stmt.instanceOf("labelStmt")) {
+      return CfgNodeType.LABEL;
     }
 
     // Return stmt

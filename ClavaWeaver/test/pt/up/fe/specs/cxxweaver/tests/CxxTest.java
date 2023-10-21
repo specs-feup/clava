@@ -351,4 +351,8 @@ public class CxxTest {
         newTester().test("CanonicalTest.js", "canonical.cpp");
     }
 
+    @Test
+    public void testBreak() {
+        newTester().test("Break.js", "break.cpp");
+    }
 }

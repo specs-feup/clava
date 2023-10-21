@@ -105,7 +105,6 @@ aspectdef SetVariableAccess
 			(varTypeAccess === 'varref' && (innerloopsControlVarname.indexOf($varref.name) !== -1 || loopControlVarname === $varref.name)) // is loop control variable
 			)
 			continue;
-
 		if ($varref.isFunctionArgument === true)
 		{
 			var callJP = $varref.ancestor('call');
@@ -330,14 +329,14 @@ aspectdef retsubscriptcurrentloop
 	input $varref, loopControlVarname end
 	output subscriptstr end
 
-	subscriptstr = '';
+	this.subscriptstr = '';
 
 	select $varref.subscript  end
 	apply
 		for($varref of $subscript.descendantsAndSelf("varref"))
 			if ( $varref.name === loopControlVarname)
 			{
-				subscriptstr += '[' + $subscript.code +']';
+				this.subscriptstr += '[' + $subscript.code +']';
 				break;
 			}
 	end

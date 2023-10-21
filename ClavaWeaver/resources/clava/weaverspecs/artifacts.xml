@@ -510,11 +510,17 @@
 			<def/>
 		</attribute>
 	</artifact>
-	
+
+	<!-- LABEL -->	
 	<artifact class="labelStmt">
 		<attribute name="decl" type="labelDecl">
 			<def/>
 		</attribute>
+	</artifact>
+
+	<!-- BREAK -->	
+	<artifact class="break">
+		<attribute name="enclosingStmt" type="statement" tooltip="The enclosing statement related to this break. It should be either a loop or a switch statement."/>
 	</artifact>
 
 	<!-- SWITCH -->

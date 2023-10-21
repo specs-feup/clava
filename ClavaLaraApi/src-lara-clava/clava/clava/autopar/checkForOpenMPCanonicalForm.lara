@@ -23,7 +23,6 @@ aspectdef checkForOpenMPCanonicalForm
 	LoopOmpAttributes[loopindex].loopindex = loopindex;
 
 
-
 	// check if all inner loops are in OpenMP Canonical Form or not
 	select $ForStmt.body.loop end
 	apply
@@ -244,6 +243,7 @@ aspectdef checkForOpenMPCanonicalForm
 	}
 
 	call o : checkForInvalidStmts($ForStmt);
+
 	if (o.InvalidStmts.length > 0)
 	{
 		LoopOmpAttributes[loopindex].hasOpenMPCanonicalForm = false;
@@ -326,11 +326,11 @@ end
 aspectdef checkForControlVarChanged
  	input $ForStmt, VarAstId end
  	output ControlVarChanged end
- 	ControlVarChanged = false;
+ 	this.ControlVarChanged = false;
 
 	select $ForStmt.body.stmt.varref  end
 	apply
-		ControlVarChanged = true;
+		this.ControlVarChanged = true;
 		return;
 	end
 	condition $varref.vardecl.astId == VarAstId && $varref.useExpr.use.indexOf('write') !== -1  end

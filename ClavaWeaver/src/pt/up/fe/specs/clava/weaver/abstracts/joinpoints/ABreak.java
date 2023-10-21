@@ -1,9 +1,11 @@
 package pt.up.fe.specs.clava.weaver.abstracts.joinpoints;
 
+import org.lara.interpreter.weaver.interf.events.Stage;
+import java.util.Optional;
+import org.lara.interpreter.exception.AttributeException;
 import java.util.List;
 import java.util.Map;
 import org.lara.interpreter.weaver.interf.JoinPoint;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 
@@ -24,6 +26,29 @@ public abstract class ABreak extends AStatement {
     public ABreak(AStatement aStatement){
         this.aStatement = aStatement;
     }
+    /**
+     * The enclosing statement related to this break. It should be either a loop or a switch statement.
+     */
+    public abstract AStatement getEnclosingStmtImpl();
+
+    /**
+     * The enclosing statement related to this break. It should be either a loop or a switch statement.
+     */
+    public final Object getEnclosingStmt() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "enclosingStmt", Optional.empty());
+        	}
+        	AStatement result = this.getEnclosingStmtImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "enclosingStmt", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "enclosingStmt", e);
+        }
+    }
+
     /**
      * Get value on attribute isFirst
      * @return the attribute's value
@@ -1153,6 +1178,7 @@ public abstract class ABreak extends AStatement {
     @Override
     protected final void fillWithAttributes(List<String> attributes) {
         this.aStatement.fillWithAttributes(attributes);
+        attributes.add("enclosingStmt");
     }
 
     /**
@@ -1196,6 +1222,7 @@ public abstract class ABreak extends AStatement {
      * 
      */
     protected enum BreakAttributes {
+        ENCLOSINGSTMT("enclosingStmt"),
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),

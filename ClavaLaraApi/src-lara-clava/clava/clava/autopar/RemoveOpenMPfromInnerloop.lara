@@ -61,11 +61,11 @@ end
 aspectdef find_func_call
 	input $loop end
 	output func_names end
-	func_names = [];
+	this.func_names = [];
 
 	select $loop.body.call end
 	apply
-		func_names.push($call.name);
+		this.func_names.push($call.name);
 	end
 	condition $call.astName === 'CallExpr' end
 

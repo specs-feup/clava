@@ -102,9 +102,11 @@ public enum LaraApiResource implements LaraResourceProvider {
 
     CFG_CASE_DATA("graphs/cfg/nodedata/CaseData.js"),
     CFG_DATA_FACTORY("graphs/cfg/nodedata/DataFactory.js"),
+    CFG_GOTO_DATA("graphs/cfg/nodedata/GotoData.js"),
     CFG_HEADER_DATA("graphs/cfg/nodedata/HeaderData.js"),
     CFG_IF_DATA("graphs/cfg/nodedata/IfData.js"),
     CFG_INST_LIST_NODE_DATA("graphs/cfg/nodedata/InstListNodeData.js"),
+    CFG_LABEL_DATA("graphs/cfg/nodedata/LabelData.js"),
     CFG_LOOP_DATA("graphs/cfg/nodedata/LoopData.js"),
     CFG_SCOPE_NODE_DATA("graphs/cfg/nodedata/ScopeNodeData.js"),
     CFG_SWITCH_DATA("graphs/cfg/nodedata/SwitchData.js"),
@@ -122,6 +124,11 @@ public enum LaraApiResource implements LaraResourceProvider {
     HLS_TRACE("hls/TraceInstrumentation.lara"),
     HLS_MATH("hls/MathAnalysis.lara"),
     HLS_MATH_H("hls/MathHInfo.lara"),
+
+    // LIVENESS
+    LIVENESS_ANALYSIS("liveness/LivenessAnalysis.js"),
+    LIVENESS_ANALYSER("liveness/LivenessAnalyser.js"),
+    LIVENESS_UTILS("liveness/LivenessUtils.js"),
 
     // MPI
     MPI_ACCESS_PATTERN("mpi/MpiAccessPattern.lara"),
@@ -150,6 +157,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     PASS_SIMPLIFY_LOOPS("pass/SimplifyLoops.js"),
     PASS_SIMPLIFY_RETURN("pass/SimplifyReturnStmts.js"),
     PASS_SIMPLIFY_SELECTION_STMTS("pass/SimplifySelectionStmts.js"),
+    TRANSFORM_SWITCH_TO_IF("pass/TransformSwitchToIf.js"),
 
     // Stats
     OPS_BLOCK("stats/OpsBlock.lara"),

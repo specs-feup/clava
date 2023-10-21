@@ -63,9 +63,7 @@ class LocalStaticToGlobal extends SimplePass {
 
     const $declStmt = $jp.parent;
     if (!$declStmt.instanceOf("declStmt")) {
-      throw new PassTransformationError(
-        "Expected declStmt, found '" + $declStmt.joinPointType + "'"
-      );
+      throw new PassTransformationError( this, $jp, "Expected declStmt, found '" + $declStmt.joinPointType + "'");
     }
 
     $jp.detach();

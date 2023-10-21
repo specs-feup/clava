@@ -15,7 +15,9 @@ package pt.up.fe.specs.clava.weaver.joinpoints;
 
 import pt.up.fe.specs.clava.ClavaNode;
 import pt.up.fe.specs.clava.ast.stmt.BreakStmt;
+import pt.up.fe.specs.clava.weaver.CxxJoinpoints;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.ABreak;
+import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 
 public class CxxBreak extends ABreak {
 
@@ -30,6 +32,11 @@ public class CxxBreak extends ABreak {
     @Override
     public ClavaNode getNode() {
         return breakStmt;
+    }
+
+    @Override
+    public AStatement getEnclosingStmtImpl() {
+        return CxxJoinpoints.create(breakStmt.getEnclosingStmt(), AStatement.class);
     }
 
 }

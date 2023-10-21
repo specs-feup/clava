@@ -373,7 +373,8 @@ public class CxxLoop extends ALoop {
             return; // TODO: warn user?
         }
 
-        LiteralStmt literalStmt = getFactory().literalStmt(value + ";");
+        var suffix = value.strip().endsWith(";") ? "" : ";";
+        LiteralStmt literalStmt = getFactory().literalStmt(value + suffix);
 
         ((ForStmt) loop).setInit(literalStmt);
     }
@@ -454,7 +455,8 @@ public class CxxLoop extends ALoop {
             return; // TODO: warn user?
         }
 
-        LiteralStmt literalStmt = getFactory().literalStmt(condCode + ";");
+        var suffix = condCode.strip().endsWith(";") ? "" : ";";
+        LiteralStmt literalStmt = getFactory().literalStmt(condCode + suffix);
 
         ((ForStmt) loop).setCond(literalStmt);
     }

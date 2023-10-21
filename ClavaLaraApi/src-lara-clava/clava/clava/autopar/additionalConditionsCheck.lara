@@ -35,6 +35,7 @@ aspectdef additionalConditionsCheck
 	}		
 
 	call o : checkForFunctionCalls($ForStmt);
+
 	if (o.FunctionCalls.length > 0)
 	{
 		Add_msgError(LoopOmpAttributes, $ForStmt, 'Variables Access as passed arguments Can not be traced inside of function calls : \n' + o.FunctionCalls.join('\n'));
