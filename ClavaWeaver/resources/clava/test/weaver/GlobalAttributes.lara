@@ -1,4 +1,4 @@
-import weaver.WeaverJps;
+import weaver.Query;
 
 aspectdef GlobalAttributes
 
@@ -14,7 +14,7 @@ aspectdef GlobalAttributes
 
 
 	println("Inside header:");
-	for(var $function of WeaverJps.search('function', 'insideHeader')) {
+	for(var $function of Query.search('function', 'insideHeader')) {
 		for(var $jp of $function.descendants) {
 			if($jp.isInsideHeader) {
 				println($jp.joinPointType + " -> " + $jp.code);
@@ -23,6 +23,6 @@ aspectdef GlobalAttributes
 
 	}
 	
-	//println(WeaverJps.root().ast);
+	//println(Query.root().ast);
 
 end

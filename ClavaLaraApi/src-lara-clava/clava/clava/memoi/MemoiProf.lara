@@ -33,7 +33,7 @@ function MemoiProf(target, id, reportDir) {
 	
 	// deal with dependecy to memoiprof
 	PrintOnce.message("Woven code has dependency to project memoiprof, which can be found at https://github.com/cc187/memoiprof");
-	Compilation.addProjectFromGit('https://github.com/cc187/memoiprof.git', ['mp']);
+	Clava.getProgram().addProjectFromGit('https://github.com/cc187/memoiprof.git', ['mp']);
 }
 
 MemoiProf.prototype.setSampling = function(samplingKind, samplingRate) {

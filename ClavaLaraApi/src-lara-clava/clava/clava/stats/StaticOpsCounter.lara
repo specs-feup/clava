@@ -41,7 +41,7 @@ function getLastWrite($currentJp, $vardecl) {
         var sibl = siblLeft[i];
         // For each sibling, find write references to the variable
         var refs = sibl
-            .descendantsAndSelf("varref")
+            .getDescendantsAndSelf("varref")
             .filter((varref) => varref.name === $vardecl.name);
         for (var $ref of refs) {
             // Ignore
@@ -66,7 +66,7 @@ function getLastWrite($currentJp, $vardecl) {
         }
         // Check vardecl
         var decls = sibl
-            .descendantsAndSelf("vardecl")
+            .getDescendantsAndSelf("vardecl")
             .filter((vardecl) => vardecl.equals($vardecl));
         for (var $decl of decls) {
             // Found decl
@@ -142,7 +142,7 @@ StaticOpsCounter.prototype.count = function (
 
     var $function = $function.instanceOf("function")
         ? $function
-        : $function.ancestor("function");
+        : $function.getAncestor("function");
 
     if ($function === undefined) {
         PrintOnce.message(

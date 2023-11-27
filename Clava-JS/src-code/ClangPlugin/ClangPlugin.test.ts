@@ -9,8 +9,9 @@ describe("ClangPlugin", () => {
     it("should return the clang executable name when given a valid command", async () => {
       const executableName = "clang -o main main.c";
 
-      await expect(ClangPlugin.validateClangExecutable(executableName))
-        .resolves;
+      await expect(
+        ClangPlugin.validateClangExecutable(executableName)
+      ).resolves.toBeUndefined();
     });
 
     it("should throw an error when given an invalid command", async () => {
@@ -18,7 +19,7 @@ describe("ClangPlugin", () => {
 
       await expect(
         ClangPlugin.validateClangExecutable(executableName)
-      ).rejects.toThrowError("Could not find clang executable");
+      ).rejects.toThrow("Could not find clang executable");
     });
   });
 
@@ -38,7 +39,7 @@ describe("ClangPlugin", () => {
 
       await expect(
         ClangPlugin.getClangVersionNumberFromExecutable(clangExecutable)
-      ).rejects.toThrowError("Invalid executable");
+      ).rejects.toThrow("Invalid executable");
     });
   });
 
@@ -54,7 +55,7 @@ describe("ClangPlugin", () => {
       const clangExecutable = "gcc";
       await expect(
         ClangPlugin.getClangVersion(clangExecutable)
-      ).rejects.toThrowError("Could not find clang executable");
+      ).rejects.toThrow("Could not find clang executable");
     });
   });
 
@@ -80,7 +81,7 @@ describe("ClangPlugin", () => {
     it("should throw an error when the clang-plugin-binaries directory does not exist", async () => {
       jest.spyOn(fs, "existsSync").mockClear().mockReturnValue(false);
 
-      await expect(ClangPlugin.getAvailablePlugins()).rejects.toThrowError(
+      await expect(ClangPlugin.getAvailablePlugins()).rejects.toThrow(
         "Could not find 'clang-plugin-binaries' directory"
       );
 

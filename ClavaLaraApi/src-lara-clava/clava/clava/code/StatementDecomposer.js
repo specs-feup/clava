@@ -52,7 +52,7 @@ class StatementDecomposer {
       return true;
     }
 
-    const parentStmt = $jp.ancestor("statement");
+    const parentStmt = $jp.getAncestor("statement");
 
     if (parentStmt !== undefined) {
       return this.#isValidNode(parentStmt);

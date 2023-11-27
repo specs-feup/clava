@@ -1,4 +1,4 @@
-import lara.analysis.AnalyserResult;
+import clava.analysis.AnalyserResult;
 
 var DoubleFreeResult = function(name, node, message, ptrName, scopeName, fix) {
     AnalyserResult.call(this, name, node, message, fix);
@@ -8,10 +8,3 @@ var DoubleFreeResult = function(name, node, message, ptrName, scopeName, fix) {
 };
 
 DoubleFreeResult.prototype = Object.create(AnalyserResult.prototype);
-
-DoubleFreeResult.prototype.performFix = function() {
-    if (this.fix === undefined) {
-        return;
-    }
-	this.fix.execute();
-}

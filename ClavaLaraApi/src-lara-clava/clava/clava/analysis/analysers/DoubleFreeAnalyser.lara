@@ -1,7 +1,7 @@
-import lara.analysis.Analyser;
-import lara.analysis.Checker;
-import lara.analysis.CheckResult;
-import lara.analysis.ResultFormatManager;
+import clava.analysis.Analyser;
+import clava.analysis.Checker;
+import clava.analysis.CheckResult;
+import clava.analysis.ResultFormatManager;
 import clava.analysis.analysers.DoubleFreeResult;
 import weaver.Query;
 

@@ -48,7 +48,7 @@ aspectdef additionalConditionsCheck
 	//------------------------------------------------------------
 	select $ForStmt.arrayAccess.subscript end
 	apply
-		if ($subscript.descendantsAndSelf('arrayAccess').length > 0)
+		if ($subscript.getDescendantsAndSelf('arrayAccess').length > 0)
 		{
 			Add_msgError(LoopOmpAttributes, $ForStmt,' Array access ' + $arrayAccess.code + ' which is used for writing has subscript of arrayType ' + $subscript.code);
 			return;

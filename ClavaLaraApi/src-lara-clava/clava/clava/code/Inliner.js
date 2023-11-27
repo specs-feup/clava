@@ -28,7 +28,7 @@ class Inliner {
     }
 
     _path.add($function.name);
-    for (const $exprStmt of $function.descendants("exprStmt")) {
+    for (const $exprStmt of $function.getDescendants("exprStmt")) {
       const $expr = $exprStmt.expr;
       if (
         !(
@@ -66,7 +66,7 @@ class Inliner {
     }
     _visited.add($function.name);
 
-    for (const $exprStmt of $function.descendants("exprStmt")) {
+    for (const $exprStmt of $function.getDescendants("exprStmt")) {
       const inlineData = this.checkInline($exprStmt);
 
       if (inlineData === undefined) {
@@ -200,7 +200,7 @@ class Inliner {
 
     const $function = $call.function;
 
-    if ($function.descendants("returnStmt").length > 1) {
+    if ($function.getDescendants("returnStmt").length > 1) {
       throw new Error(
         `'${$function.name}' cannot be inlined: more than one return statement`
       );
@@ -234,7 +234,7 @@ class Inliner {
       }
     }
 
-    for (const stmt of $function.body.descendants("declStmt")) {
+    for (const stmt of $function.body.getDescendants("declStmt")) {
       const $varDecl = stmt.decls[0];
       if (!$varDecl.instanceOf("vardecl")) {
         continue;
@@ -251,7 +251,7 @@ class Inliner {
 
     // Remove/replace return statements
     if ($exprStmt.expr.instanceOf("binaryOp") && $exprStmt.expr.isAssignment) {
-      for (const $returnStmt of $newNodes.descendants("returnStmt")) {
+      for (const $returnStmt of $newNodes.getDescendants("returnStmt")) {
         if (
           $returnStmt.returnExpr !== null &&
           $returnStmt.returnExpr !== undefined
@@ -266,7 +266,7 @@ class Inliner {
         }
       }
     } else if ($exprStmt.expr.instanceOf("call")) {
-      for (const $returnStmt of $newNodes.descendants("returnStmt")) {
+      for (const $returnStmt of $newNodes.getDescendants("returnStmt")) {
         // Replace the return with a nop (i.e. empty statement), in case there is a label before. Otherwise, just remove return
         const left = $returnStmt.siblingsLeft;
         if (left.length > 0 && left[left.length - 1].instanceOf("labelStmt")) {
@@ -280,7 +280,7 @@ class Inliner {
     // For any calls inside $newNodes, add forward declarations before the function, if they have definition
     // TODO: this should be done for calls of functions that are on this file. For other files, the corresponding include
     // should be added
-    const $parentFunction = $call.ancestor("function");
+    const $parentFunction = $call.getAncestor("function");
     const addedDeclarations = new StringSet();
     for (const $newCall of Query.searchFrom($newNodes, "call")) {
       // Ignore functions that are part of the system headers
@@ -405,7 +405,7 @@ class Inliner {
 
   #updateVarDecls($newNodes, newVariableMap) {
     // Replace decl stmts of old vardecls with vardecls of new names (params are not included)
-    for (const $declStmt of $newNodes.descendants("declStmt")) {
+    for (const $declStmt of $newNodes.getDescendants("declStmt")) {
       const decls = $declStmt.decls;
 
       for (const $varDecl of decls) {
@@ -423,7 +423,7 @@ class Inliner {
 
   #updateVarrefs($newNodes, newVariableMap, $call) {
     // Update varrefs
-    for (const $varRef of $newNodes.descendants("varref")) {
+    for (const $varRef of $newNodes.getDescendants("varref")) {
       if ($varRef.kind === "function_call") {
         continue;
       }
@@ -441,7 +441,7 @@ class Inliner {
         // Change storage class to extern
         $varDeclNoInit.storageClass = "extern";
 
-        $call.ancestor("function").insertBefore($varDeclNoInit);
+        $call.getAncestor("function").insertBefore($varDeclNoInit);
         continue;
       }
 
@@ -484,7 +484,7 @@ class Inliner {
 
   #updateVarrefsInTypes($newNodes, newVariableMap, $call) {
     // Update varrefs inside types
-    for (const $jp of $newNodes.descendants("joinpoint")) {
+    for (const $jp of $newNodes.getDescendants("joinpoint")) {
       // If no type, ignore
 
       if (!$jp.hasType) {
@@ -589,7 +589,7 @@ class Inliner {
       // Change storage class to extern
       $varDeclNoInit.storageClass = "extern";
 
-      $call.ancestor("function").insertBefore($varDeclNoInit);
+      $call.getAncestor("function").insertBefore($varDeclNoInit);
       return $varRef;
     }
 

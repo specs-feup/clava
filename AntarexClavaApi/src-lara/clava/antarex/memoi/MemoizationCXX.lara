@@ -62,7 +62,7 @@ end
           WARNING("Several methods called " + aMethod + " in the class " + aClass );
           WARNING("Details: -------------------------  ");
           for (var i=0; i< nb; i++) {
-            println ( "\t \t" + tmethods[i].declaration(true) ); // functionType.code);
+            println ( "\t \t" + tmethods[i].getDeclaration(true) ); // functionType.code);
           }
           WARNING(" *** Please use the Memoize_Method_overloading aspect to be more precise");
           return;

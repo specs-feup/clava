@@ -29,7 +29,7 @@ class CodeInserter {
     var lineInserter = new LineInserter();
 
     // Write each file, inserting lines if needed
-    for (var $file of Clava.getProgram().descendants("file")) {
+    for (var $file of Clava.getProgram().getDescendants("file")) {
       if (!Io.isFile($file.filepath)) {
         println(
           "CodeInserter.write: skipping file, could not find path '" +
@@ -49,7 +49,7 @@ class CodeInserter {
       }
 
       // Get path for writing file
-      var outputFilepath = $file.destinationFilepath(outputFolder);
+      var outputFilepath = $file.getDestinationFilepath(outputFolder);
 
       // Write file
       Io.writeFile(outputFilepath, fileCode);

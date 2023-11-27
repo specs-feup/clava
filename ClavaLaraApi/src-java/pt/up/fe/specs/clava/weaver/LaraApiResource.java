@@ -69,7 +69,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     ANALYSIS_CHECKERS_SCANF_CHECKER("analysis/checkers/ScanfChecker.lara"),
     ANALYSIS_CHECKERS_SPRINTF_CHECKER("analysis/checkers/SprintfChecker.lara"),
     ANALYSIS_CHECKERS_STRCAT_CHECKER("analysis/checkers/StrcatChecker.lara"),
-    ANALYSIS_CHECKERS_STRCPY_CHECKER("analysis/checkers/StrcpyChecker.lara"),
+    //ANALYSIS_CHECKERS_STRCPY_CHECKER("analysis/checkers/StrcpyChecker.lara"),
     ANALYSIS_CHECKERS_SYSLOG_CHECKER("analysis/checkers/SyslogChecker.lara"),
     ANALYSIS_CHECKERS_SYSTEM_CHECKER("analysis/checkers/SystemChecker.lara"),
 
@@ -175,7 +175,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     MEMOI_ANALYSIS("memoi/MemoiAnalysis.lara"),
 
     // Clava utils
-    CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
+    //CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
     CODE_INSERTER("util/CodeInserter.js"),
     FILE_ITERATOR("util/FileIterator.lara"),
 
@@ -186,16 +186,16 @@ public enum LaraApiResource implements LaraResourceProvider {
     // OPT
     OPT_NORMALIZE_TO_SUBSET("opt/NormalizeToSubset.js"),
     OPT_PREPARE_FOR_INLINING("opt/PrepareForInlining.js"),
-    OPT_INLINING("opt/Inlining.js"),
+    OPT_INLINING("opt/Inlining.js");
 
     // Static objects
 
-    _CLAVA_JAVA_TYPES("_ClavaJavaTypes.lara"),
-    CLAVA("Clava.lara"),
-    CLAVA_CODE("ClavaCode.js"),
-    CLAVA_JOIN_POINTS("ClavaJoinPoints.js"),
-    CLAVA_NODES("ClavaNodes.js"),
-    CLAVA_TYPE("ClavaType.lara");
+    //_CLAVA_JAVA_TYPES("_ClavaJavaTypes.lara"),
+    //CLAVA("Clava.lara"),
+    //CLAVA_CODE("ClavaCode.js"),
+    //CLAVA_JOIN_POINTS("ClavaJoinPoints.js"),
+    //CLAVA_NODES("ClavaNodes.js"),
+    //CLAVA_TYPE("ClavaType.lara");
 
     private final String resource;
 

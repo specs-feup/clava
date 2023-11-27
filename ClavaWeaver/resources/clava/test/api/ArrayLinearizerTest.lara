@@ -92,7 +92,7 @@ function getArrayVardecls($jp) {
 function getVardeclUses($vardecl, $vardeclScope) {
 	// Get all varrefs in the vardecl scope
 	if($vardeclScope === undefined) {
-		$vardeclScope = $vardecl.ancestor('scope');
+		$vardeclScope = $vardecl.getAncestor('scope');
 	
 		// If scope is still undefined, return
 		if($vardeclScope === undefined) {
@@ -117,7 +117,7 @@ function getVardeclUses($vardecl, $vardeclScope) {
 function getVardeclInfo($vardecl) {
 	var vardeclInfo = {};
 	
-	var $function = $vardecl.ancestor('function');
+	var $function = $vardecl.getAncestor('function');
 	
 	if($function === undefined) {
 		println("Could not find function of $vardecl '"+$vardecl.location+"', global variables not supported");

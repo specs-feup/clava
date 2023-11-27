@@ -72,8 +72,8 @@ aspectdef _LVC_GET_VALUE_DECL_
 	input declName, $joinpoint end
 	output $found end
 	
-	var $file = $joinpoint.ancestor('file');
-	var $scope = $joinpoint.ancestor('scope');
+	var $file = $joinpoint.getAncestor('file');
+	var $scope = $joinpoint.getAncestor('scope');
 	if($scope === undefined) {
 		throw "The insert location for option building must be inside a function. Could not find an ancestor of type 'scope'.";
 	}
@@ -86,7 +86,7 @@ aspectdef _LVC_GET_VALUE_DECL_
 			return;
 		}
 		
-		$scope = $scope.ancestor('scope');
+		$scope = $scope.getAncestor('scope');
 	}
 	
 	/* if we have no more scopes, we've reached a function already, look at the file for declarations */
@@ -225,7 +225,7 @@ aspectdef LibVersioningCompiler
 
 
 	// Insert version creation at the beginning of the function of the function call
-	var $fcallFunction = $fcall.ancestor("function");
+	var $fcallFunction = $fcall.getAncestor("function");
 	select $fcallFunction.body end
 	apply
 		$body.insert before createVersion;

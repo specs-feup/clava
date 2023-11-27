@@ -31,7 +31,7 @@ OpsCounter._validOps = new StringSet("mul", "div", "rem", "add", "sub", "shl", "
 
 
 OpsCounter.prototype.instrument = function($region) {
-	var $function = $region.instanceOf('function') ?  $region : $region.ancestor('function');
+	var $function = $region.instanceOf('function') ?  $region : $region.getAncestor('function');
 	
 	if($function === undefined) {
 		PrintOnce.message("OpsCounter.instrument: Could not find function corresponding to the region " + $region.location);

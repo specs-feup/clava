@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.lara.interpreter.joptions.config.interpreter.LaraiKeys;
 import org.lara.interpreter.profile.WeavingReport;
@@ -24,6 +25,7 @@ import org.lara.interpreter.weaver.interf.JoinPoint;
 import org.lara.interpreter.weaver.interf.WeaverEngine;
 import org.lara.interpreter.weaver.interf.events.Stage;
 import org.lara.interpreter.weaver.options.WeaverOption;
+import org.lara.interpreter.weaver.utils.LaraResourceProvider;
 import org.lara.language.specification.LanguageSpecification;
 import org.lara.language.specification.dsl.LanguageSpecificationV2;
 import org.suikasoft.jOptions.Interfaces.DataStore;
@@ -61,7 +63,6 @@ import pt.up.fe.specs.clava.weaver.options.CxxWeaverOption;
 import pt.up.fe.specs.clava.weaver.options.CxxWeaverOptions;
 import pt.up.fe.specs.clava.weaver.utils.ClavaAstMethods;
 import pt.up.fe.specs.lang.SpecsPlatforms;
-import pt.up.fe.specs.lara.LaraExtraApis;
 import pt.up.fe.specs.lara.langspec.LangSpecsXmlParser;
 import pt.up.fe.specs.lara.lcl.LaraCommonLanguageApis;
 import pt.up.fe.specs.lara.unit.LaraUnitLauncher;
@@ -184,7 +185,6 @@ public class CxxWeaver extends ACxxWeaver {
 
     private static final List<ResourceProvider> CLAVA_LARA_API = new ArrayList<>();
     static {
-        CLAVA_LARA_API.addAll(LaraExtraApis.getApis());
         CLAVA_LARA_API.addAll(LaraCommonLanguageApis.getApis());
         CLAVA_LARA_API.addAll(ClavaLaraApis.getApis());
         CLAVA_LARA_API.addAll(AntarexClavaLaraApis.getApis());
@@ -192,7 +192,6 @@ public class CxxWeaver extends ACxxWeaver {
 
     private static final List<Class<?>> CLAVA_IMPORTABLE_CLASSES = new ArrayList<>();
     static {
-        CLAVA_IMPORTABLE_CLASSES.addAll(LaraExtraApis.getImportableClasses());
         CLAVA_IMPORTABLE_CLASSES.addAll(ClavaLaraApis.getImportableClasses());
         CLAVA_IMPORTABLE_CLASSES.addAll(
                 Arrays.asList(SpecsPlatforms.class, AstFactory.class, Format.class, LowLevelApi.class, CsvWriter.class,
@@ -2098,6 +2097,14 @@ public class CxxWeaver extends ACxxWeaver {
 
         return new ClavaAstMethods(this, ClavaNode.class, node -> CxxJoinpoints.create(node),
                 node -> ClavaCommonLanguage.getJoinPointName(node), node -> node.getScopeChildren());
+    }
+    
+    @Override
+    public List<LaraResourceProvider> getNpmResources() {
+        return Stream.concat(
+                super.getNpmResources().stream(),
+                Arrays.asList(ClavaApiJsResource.values()).stream())
+            .toList();
     }
 
 }

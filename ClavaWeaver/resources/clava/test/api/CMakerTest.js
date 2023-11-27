@@ -18,7 +18,7 @@ if (Platforms.isWindows()) {
 	apply
 		//println("Relative filepath: " + $file.relativeFilepath);
 		//println("Basesourcepath: " + $file.baseSourcePath);
-		//println("Destination filepath: " + $file.destinationFilepath(Clava.getWeavingFolder()));
+		//println("Destination filepath: " + $file.getDestinationFilepath(Clava.getWeavingFolder()));
 		cmaker.sources.addSource($file.relativeFilepath);
 		
 		if($file.isHeader) {

@@ -148,7 +148,7 @@ class LivenessAnalyser {
                     use = this.#computeUse($nodeStmt.condition);
                     break;
                 case CfgNodeType.CASE:
-                    const $switchCondition = $nodeStmt.ancestor("switch").condition;
+                    const $switchCondition = $nodeStmt.getAncestor("switch").condition;
                     use = $nodeStmt.isDefault ? new Set() : this.#computeUse($switchCondition);
                     break;
                 default:

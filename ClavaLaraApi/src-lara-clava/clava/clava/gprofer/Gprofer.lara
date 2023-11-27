@@ -3,7 +3,7 @@ import clava.Clava;
 import lara.cmake.CMaker;
 import lara.Io;
 import lara.Strings;
-import lara._JavaTypes;
+import lara.util.JavaTypes;
 
 function Gprofer(runs, args) {
 	
@@ -25,7 +25,7 @@ function Gprofer(runs, args) {
 	
 	this._cmaker = this._defaultCmaker();
 	
-	this._gProfer = _JavaTypes.getGprofer();
+	this._gProfer = JavaTypes.Gprofer;
 }
 
 Gprofer.prototype.getCmaker = function() {
@@ -46,7 +46,7 @@ Gprofer.prototype._defaultCmaker = function($function) {
 	}
 	
 	// sources
-	for (var $file of this._app.laraDescendants('file')) {
+	for (var $file of this._app.getDescendants('file')) {
 		
 		if($file.isHeader) {
 			continue;

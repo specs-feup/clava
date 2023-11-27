@@ -1,7 +1,7 @@
 ##### User-added #####
 woven_code/
-api/
-code/
+/api
+/code
 package-lock.json
 
 # Extensions

@@ -72,7 +72,7 @@ aspectdef AddOpenMPDirectivesForLoop
 	$ForStmt.insert before InsertBeforeStr;
 
 	// Add include - not working...
-	//$ForStmt.ancestor('file').addInclude("omp", true);
+	//$ForStmt.getAncestor('file').addInclude("omp", true);
 	
 	select $ForStmt.body end
 	apply
@@ -80,10 +80,10 @@ aspectdef AddOpenMPDirectivesForLoop
 			continue;
 		}
 
-		if ($body.child(0).code.indexOf('//loopindex') !== -1)
+		if ($body.getChild(0).code.indexOf('//loopindex') !== -1)
 		{
 			var loopindex_org = $body.children[0].code.split(' ')[1].trim();
-			var func_name = $ForStmt.astAncestor('FunctionDecl').name;
+			var func_name = $ForStmt.getAstAncestor('FunctionDecl').name;
 			if (loopindex_org.indexOf(func_name) !== -1)
 			{
 				if 	(OmpPragmas[loopindex_org] === undefined)
@@ -117,12 +117,12 @@ aspectdef ret_IF_Clause
 
 	select $ForStmt.init end
 	apply
-		for($cast of $init.descendantsAndSelf("vardecl")) // if for(int i = ... )
+		for($cast of $init.getDescendantsAndSelf("vardecl")) // if for(int i = ... )
 		{
 			cloneJP=$cast.init.copy();
 			break #$ForStmt;
 		}
-		for($cast of $init.descendantsAndSelf("binaryOp"))// if for(i = ... )
+		for($cast of $init.getDescendantsAndSelf("binaryOp"))// if for(i = ... )
 		{
 			cloneJP=$cast.right.copy();
 			break #$ForStmt;
@@ -130,15 +130,15 @@ aspectdef ret_IF_Clause
 	end
 
 
-	for($cast of cloneJP.descendantsAndSelf("cast"))
+	for($cast of cloneJP.getDescendantsAndSelf("cast"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
-	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
+	for($cast of cloneJP.getDescendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
@@ -156,7 +156,7 @@ aspectdef ret_IF_Clause
 	end
 
 	var foundflag = false;
-	for($cast of binaryOpleft.descendantsAndSelf("varref"))
+	for($cast of binaryOpleft.getDescendantsAndSelf("varref"))
 		if ($cast.name === loopControlVarname)
 		{
 			cloneJP=binaryOpRight;
@@ -168,14 +168,14 @@ aspectdef ret_IF_Clause
 
 
 
-	for($cast of cloneJP.descendantsAndSelf("cast"))
+	for($cast of cloneJP.getDescendantsAndSelf("cast"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
-	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
+	for($cast of cloneJP.getDescendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
@@ -200,12 +200,12 @@ aspectdef ret_NUM_THREADS_Clause
 
 	select $ForStmt.init end
 	apply
-		for($cast of $init.descendantsAndSelf("vardecl")) // if for(int i = ... )
+		for($cast of $init.getDescendantsAndSelf("vardecl")) // if for(int i = ... )
 		{
 			cloneJP=$cast.init.copy();
 			break #$ForStmt;
 		}
-		for($cast of $init.descendantsAndSelf("binaryOp"))// if for(i = ... )
+		for($cast of $init.getDescendantsAndSelf("binaryOp"))// if for(i = ... )
 		{
 			cloneJP=$cast.right.copy();
 			break #$ForStmt;
@@ -213,15 +213,15 @@ aspectdef ret_NUM_THREADS_Clause
 	end
 
 
-	for($cast of cloneJP.descendantsAndSelf("cast"))
+	for($cast of cloneJP.getDescendantsAndSelf("cast"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
-	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
+	for($cast of cloneJP.getDescendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 
@@ -239,7 +239,7 @@ aspectdef ret_NUM_THREADS_Clause
 	end
 
 	var foundflag = false;
-	for($cast of binaryOpleft.descendantsAndSelf("varref"))
+	for($cast of binaryOpleft.getDescendantsAndSelf("varref"))
 		if ($cast.name === loopControlVarname)
 		{
 			cloneJP=binaryOpRight;
@@ -251,14 +251,14 @@ aspectdef ret_NUM_THREADS_Clause
 
 
 
-	for($cast of cloneJP.descendantsAndSelf("cast"))
+	for($cast of cloneJP.getDescendantsAndSelf("cast"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
-	for($cast of cloneJP.descendantsAndSelf("unaryOp"))
+	for($cast of cloneJP.getDescendantsAndSelf("unaryOp"))
 	{
-		var child = $cast.child(0);
+		var child = $cast.getChild(0);
 		$cast.replaceWith(child);
 	}
 

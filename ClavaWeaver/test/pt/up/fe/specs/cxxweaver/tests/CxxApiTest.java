@@ -148,6 +148,12 @@ public class CxxApiTest {
     public void testQuery() {
         newTester().test("QueryTest.lara", "query.cpp");
     }
+    
+    @Test
+    public void testQueryJs() {
+        newTester().test("QueryTest.js", "query.cpp");
+    }
+
 
     @Test
     public void testLaraCommonLanguage() {

@@ -99,7 +99,7 @@ MargotCodeGen.prototype.setFeatures = function(features) {
 MargotCodeGen.prototype._includeHeader = function($joinpoint) {
 	
 	var includeCode = this._stringsGen.inc();
-	var $parentFile = $joinpoint.ancestor('file');
+	var $parentFile = $joinpoint.getAncestor('file');
 	$parentFile.exec addInclude(includeCode, true);
 }
 
@@ -337,7 +337,7 @@ MargotCodeGen.prototype.init = function($joinpoint) {
 	
 	checkJoinPoint($joinpoint, 'init ($joinpoint)');
 	
-	var scope = $joinpoint.ancestor('scope');
+	var scope = $joinpoint.getAncestor('scope');
 	if(scope === undefined) {
 		
 		throw 'Could not find a suitable scope to insert the initialization code from the join point provided: \n' + $joinpoint.code;

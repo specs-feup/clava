@@ -17,7 +17,7 @@ function OpenCLCall() {
 
 OpenCLCall.prototype.setKernel = function($function) {
 	// Verification (should be isOpenCLKernel)
-	checkTrue($function.ancestor("file").isOpenCL, "OpenCLCall.setKernel: expected an OpenCL kernel");
+	checkTrue($function.getAncestor("file").isOpenCL, "OpenCLCall.setKernel: expected an OpenCL kernel");
 	this.$kernel = $function;
 }
 
@@ -46,7 +46,7 @@ OpenCLCall.prototype._replaceCallPreconditions = function() {
 
 OpenCLCall.prototype._addOpenCLInclude = function($call) {
 
-	var $file = $call.ancestor("file");
+	var $file = $call.getAncestor("file");
 
 	// If MacOS, add include <OpenCL/opencl.h>
 	if(Platforms.isMac()) {
@@ -62,7 +62,7 @@ OpenCLCall.prototype._addOpenCLInclude = function($call) {
 OpenCLCall.prototype._loadKernelFile = function($call, variables) {
 
 	// Get necessary data
-	var $kernelFile = $call.ancestor("file");
+	var $kernelFile = $call.getAncestor("file");
 	var kernelPath = $kernelFile.relativeFilepath;
 	var kernelFileBytes = Io.getPath($kernelFile.filepath).length();
 

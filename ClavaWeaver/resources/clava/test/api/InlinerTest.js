@@ -4,7 +4,6 @@ laraImport("clava.opt.NormalizeToSubset");
 laraImport("clava.code.Inliner");
 laraImport("clava.opt.PrepareForInlining");
 
-laraImport("weaver.WeaverJps");
 laraImport("weaver.Query");
 
 //setDebug(true);
@@ -17,7 +16,7 @@ NormalizeToSubset(Query.root());
 for (const $call of Query.search("function", "main").search("call")) {
   const inliner = new Inliner();
   // inline() accepts an exprStmt. All calls must be inside exprStmt now
-  const $callParent = $call.ancestor("exprStmt");
+  const $callParent = $call.getAncestor("exprStmt");
   if (!$callParent.instanceOf("exprStmt")) {
     println(
       `Could not inline call ${$call.name}@${$call.location}, ancestor is ${$callParent.joinPointType}`
@@ -89,7 +88,7 @@ new Inliner().inline(
   Query.search("function", "functionWhichCallIsNotDeclared")
     .search("call")
     .first()
-    .ancestor("exprStmt")
+    .getAncestor("exprStmt")
 );
 
 println(
@@ -168,7 +167,7 @@ println("Bef:\n" + callFiltezL1.function.code);
 PrepareForInlining(callFiltezL1.function);
 println("Aft:\n" + callFiltezL1.function.code);
 
-const stmtFiltezL1 = callFiltezL1.ancestor("exprStmt");
+const stmtFiltezL1 = callFiltezL1.getAncestor("exprStmt");
 
 inliner.inline(stmtFiltezL1);
 

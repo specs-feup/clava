@@ -1,777 +1,802 @@
 <?xml version="1.0"?>
 <!-- When changing the joinpoint model, do not forget to update the Clava 
-	document. https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/edit#heading=h.hii8b3kunout -->
+    document.
+https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/edit#heading=h.hii8b3kunout -->
 <actions>
 
-	<!-- GENERIC ACTIONS FOR ALL JOINPOINTS -->
-
-	<!-- Replaces the current node with the given node -->
-	<action name="replaceWith" return="joinpoint" tooltip="Replaces this node with the given node">
-		<parameter name="node" type="joinpoint" />
-	</action>
-	
-	<action name="replaceWith" return="joinpoint" tooltip="Overload which accepts a string">
-		<parameter name="node" type="String" />
-	</action>
-
-	<!-- Replaces the current node with a list of nodes -->
-	<action name="replaceWith" return="joinpoint" tooltip="Overload which accepts a list of join points">
-		<parameter name="node" type="joinpoint[]" />
-	</action>
-	
-	<action name="replaceWithStrings" return="joinpoint" tooltip="Overload which accepts a list of strings">
-		<parameter name="node" type="String[]" />
-	</action>	
-
-	<!-- Inserts node before the given node -->
-	<action name="insertBefore" return="joinpoint" tooltip="Inserts the given join point before this join point">
-		<parameter name="node" type="joinpoint" />
-	</action>
-
-	<!-- Overload which accepts String -->
-	<action name="insertBefore" return="joinpoint" tooltip="Overload which accepts a string">
-		<parameter name="node" type="String" />
-	</action>
-
-	<!-- Inserts node after the given node -->
-	<action name="insertAfter" return="joinpoint" tooltip="Inserts the given join point after this join point">
-		<parameter name="node" type="joinpoint"/>
-	</action>
-
-	<!-- Overload which accepts String -->
-	<action name="insertAfter" return="joinpoint" tooltip="Overload which accepts a string">
-		<parameter name="code" type="String" />
-	</action>
-
-
-	<!-- Removes node associated to the joinpoint from the AST -->
-	<action name="detach" return="joinpoint" tooltip="Removes the node associated to this joinpoint from the AST"/>
-
-	<!-- Sets the type of a node, if it has a type -->
-	<action name="setType" tooltip="Sets the type of a node, if it has a type">
-		<parameter name="type" type="type" />
-	</action>
-
-	<!-- Performs a copy of the node and its children, but not of the nodes in its fields -->
-	<action name="copy" return="joinpoint" tooltip="Performs a copy of the node and its children, but not of the nodes in its fields"/>
-	
-	<action name="deepCopy" return="joinpoint" tooltip="Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)"/>
-
-	<action name="setUserField" return="Object" tooltip="Associates arbitrary values to nodes of the AST">
-		<parameter name="fieldName" type="String" />
-		<parameter name="value" type="Object" />	
-	</action>
-	
-	<action name="setUserField" return="Object" tooltip="Overload which accepts a map">
-		<parameter name="fieldNameAndValue" type="Map" />
-		<!--  <parameter name="value" type="Object" /> -->	
-	</action>
-
-	<action name="setValue" return="joinpoint" tooltip="Sets the value associated with the given property key">	
-		<parameter name="key" type="String" />	
-		<parameter name="value" type="Object" />				
-	</action>
-	
-	<!-- Adds a message that will be communicated to the user after weaving ends -->
-	<action name="messageToUser" tooltip="Adds a message that will be printed to the user after weaving finishes. Identical messages are removed">
-		<parameter name="message" type="String" />
-	</action>
-	
-
-	<action name="removeChildren" tooltip="Removes the children of this node"/>
-
-	<action name="setFirstChild" tooltip="Replaces the first child, or inserts the join point if no child is present">
-		<parameter name="node" type="Joinpoint" />
-	</action>
-	<action name="setLastChild" tooltip="Replaces the last child, or inserts the join point if no child is present">	
-		<parameter name="node" type="Joinpoint" />
-	</action>
-	
-	<action name="toComment" return="joinpoint" tooltip="Replaces this join point with a comment with the same contents as .code"/>	
-	<action name="toComment" return="joinpoint" tooltip="Replaces this join point with a comment with the same contents as .code">
-		<parameter name="prefix" type="String" />
-	</action>	
-	<action name="toComment" return="joinpoint" tooltip="Replaces this join point with a comment with the same contents as .code">	
-		<parameter name="prefix" type="String" />
-		<parameter name="suffix" type="String" />
-	</action>	
-	
-	<!-- 
-	<action name="setInlineComments" tooltip="Sets the commented that are embedded in a node">
-		<parameter name="comments" type="comment[]" />
-	</action>
-	-->
-	 
-	<action name="setInlineComments" tooltip="Sets the commented that are embedded in a node">
-		<parameter name="comments" type="string[]" />
-	</action>
-
-	<action name="setInlineComments" tooltip="Sets the commented that are embedded in a node">
-		<parameter name="comments" type="string" />
-	</action>
-
-	<action name="setData" tooltip="Setting data directly is not supported, this action just emits a warning and does nothing">
-		<parameter name="source" type="Object" />
-	</action>
-	
-	<action name="dataAssign" tooltip="Copies all enumerable own properties from the source object to the .data object">
-		<parameter name="source" type="Object" />
-	</action>
-
-	<action name="dataClear" tooltip="Clears all properties from the .data object"/>
-	
-	<!-- PROGRAM -->
-
-	<!-- Internally generates the code for the current program and rebuilds 
-		the AST -->
-	<action name="rebuild" class="program" return="boolean" tooltip="Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise"/>
-
-	<action name="rebuildFuzzy" class="program" tooltip="Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality"/>
-
-	<action name="addFile" class="program" return="joinpoint" tooltip="Adds a file join point to the current program">
-		<parameter name="file" type="file" />
-	</action>
-		
-	<action name="addFileFromPath" class="program" return="joinpoint" tooltip="Adds a file join point to the current program, from the given path, which can be either a Java File or a String">
-		<parameter name="filepath" type="Object" />
-	</action>
-	
-	<action name="push" class="program" tooltip="Creates a copy of the current AST and pushes it to the top of the AST stack"/>
-	
-	<action name="pop" class="program" tooltip="Discards the AST at the top of the ASt stack"/>
-	
-	<action name="addExtraInclude" class="program" tooltip="Adds a path to an include that the current program depends on">
-		<parameter name="path" type="String" />
-	</action>
-
-	<action name="addExtraIncludeFromGit" class="program" tooltip="Adds a path based on a git repository to an include that the current program depends on">
-		<parameter name="gitRepo" type="String" />
-	</action>
-	
-	<action name="addExtraIncludeFromGit" class="program" tooltip="Adds a path based on a git repository to an include that the current program depends on">
-		<parameter name="gitRepo" type="String" />
-		<parameter name="path" type="String" />
-	</action>
-
-	<action name="addExtraSource" class="program" tooltip="Adds a path to a source that the current program depends on">
-		<parameter name="path" type="String" />
-	</action>
-	
-	<action name="addExtraSourceFromGit" class="program" tooltip="Adds a path based on a git repository to a source that the current program depends on">
-		<parameter name="gitRepo" type="String" />
-	</action>
-	
-	<action name="addExtraSourceFromGit" class="program" tooltip="Adds a path based on a git repository to a source that the current program depends on">
-		<parameter name="gitRepo" type="String" />
-		<parameter name="path" type="String" />
-	</action>	
-
-	<action name="addProjectFromGit" class="program" tooltip="Adds a path based on a git repository to a project that the current program depends on">
-		<parameter name="gitRepo" type="String" />
-		<parameter name="libs" type="String[]" />
-	</action>
-
-	<action name="addProjectFromGit" class="program" tooltip="Adds a path based on a git repository to a project that the current program depends on">
-		<parameter name="gitRepo" type="String" />
-		<parameter name="libs" type="String[]" />
-		<parameter name="path" type="String" />
-	</action>
-
-	<action name="addExtraLib" class="program" tooltip="Adds a library (e.g., -pthreads) that the current program depends on">
-		<parameter name="lib" type="String" />
-	</action>
-
-	<action name="atexit" class="program" tooltip="Registers a function to be executed when the program exits">
-		<parameter name="function" type="function" />
-	</action>
-	
-
-	<!-- FILE -->
-
-	<!-- Adds an include to the file -->
-	<action name="addInclude" class="file" tooltip="Adds an include to the current file. If the file already has the include, it does nothing">
-		<parameter name="name" type="string" />
-		<parameter name="isAngled" type="boolean" />
-	</action>
-
-	<!-- Overload which sets 'isAngled' to false -->
-	<action name="addInclude" class="file" tooltip="Overload which sets 'isAngled' to false">
-		<parameter name="name" type="string" />
-	</action>
-
-	<!-- Overload which accepts a join point -->
-	<action name="addIncludeJp" class="file" tooltip="Overload of addInclude which accepts a join point">
-		<parameter name="jp" type="joinpoint" />
-	</action>
-	
-	
-	<!-- Adds a C include to the file, which implies extern "C" linkage with guards for C++ -->
-	<action name="addCInclude" class="file" tooltip="Adds a C include to the current file. If the file already has the include, it does nothing">
-		<parameter name="name" type="string" />
-		<parameter name="isAngled" type="boolean" />
-	</action>
-	
-	<!-- Overload which sets 'isAngled' to false -->
-	<action name="addCInclude" class="file" tooltip="Overload which sets 'isAngled' to false">
-		<parameter name="name" type="string" />
-	</action>
-
-	<action name="addGlobal" class="file" return="vardecl" tooltip="Adds a global variable to this file">
-		<parameter name="name" type="String" />
-		<parameter name="type" type="joinpoint" />
-		<parameter name="initValue" type="String" />
-	</action>
-
-	<action name="write" class="file" return="String" tooltip="Writes the code of this file to a given folder">
-		<parameter name="destinationFoldername" type="String" />
-	</action>
-
-	<action name="setName" class="file" return="void" tooltip="Changes the name of the file">
-		<parameter name="filename" type="String" />
-	</action>
-
-	<action name="rebuild" class="file" return="file" tooltip="Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens"/>
-	
-	<action name="rebuildTry" class="file" return="joinpoint" tooltip="Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens"/>
-
-	<action name="insertBegin" class="file" tooltip="Adds the node in the join point to the start of the file">
-		<parameter name="node" type="joinpoint" />
-	</action>
-	<action name="insertBegin" class="file" tooltip="Adds the String as a Decl to the end of the file">
-		<parameter name="code" type="String" />
-	</action>
-
-	<action name="insertEnd" class="file" tooltip="Adds the node in the join point to the end of the file">
-		<parameter name="node" type="joinpoint" />
-	</action>
-	<action name="insertEnd" class="file" tooltip="Adds the String as a Decl to the end of the file">
-		<parameter name="code" type="String" />
-	</action>
-	
-	<action name="addFunction" class="file" return="joinpoint" tooltip="Adds a function to the file that returns void and has no parameters">
-		<parameter name="name" type="String" />
-<!-- 		<parameter name="returnType" type="joinpoint" />
-		<parameter name="parameters" type="joinpoint[]" />  -->
-	</action>
-	
-	<action name="setRelativeFolderpath" class="file" tooltip="Sets the path to the folder of the source file relative to the base source path">
-		<parameter name="path" type="String" />
-	</action>
-	
-
-	<!-- RECORD -->
-
-	<action name="addField" class="record" tooltip="Adds a field to a record (struct, class).">
-		<parameter name="field" type="field" />
-	</action>
-
-	<!-- Adds an include to the file -->
-	<!--  
-	<action name="setName" class="record">
-		<parameter name="name" type="string" />
-	</action>
- 	-->
- 	<!-- 
- 	<action name="addFunction" class="record">
-		<parameter name="function" type="function" />
-	</action>
- 	-->
-
-	<!-- CLASS -->
-	<action name="addMethod" class="class" tooltip="Adds a method to a class. If the given method has a definition, creates an equivalent declaration and adds it to the class, otherwise simply added the declaration to the class. In both cases, the declaration is only added to the class if there is no declaration already with the same signature.">
-		<parameter name="method" type="method" />
-	</action>
-	
-
-
-	<!-- CALL -->
-	<!-- Changes the name of the call -->
-	<action name="setName" class="call" tooltip="Changes the name of the call">
-		<parameter name="name" type="string" />
-	</action>
-	
-	<action name="wrap" class="call" tooltip="Wraps this call with a possibly new wrapping function">
-		<parameter name="name" type="string" />
-	</action>
-	
-	<action name="inline" class="call" return="boolean" tooltip="Tries to inline this call"/>
-	
-	<action name="setArgFromString" class="call">
-		<parameter name="index" type="int" />
-		<parameter name="expr" type="string" />
-	</action>
-	
-	<action name="setArg" class="call">
-		<parameter name="index" type="Integer" />
-		<parameter name="expr" type="expression" />
-	</action>
-	
-	<action name="addArg" class="call" tooltip="Adds an argument at the end of the call, creating an expression using the given code and type">
-		<parameter name="argCode" type="String" />
-		<parameter name="type" type="type" />
-	</action>
-	
-	<action name="addArg" class="call"  tooltip="Adds an argument at the end of the call, creating a literal 'type' from the type string">
-		<parameter name="arg" type="String" />
-		<parameter name="type" type="String" />
-	</action>
-	
-	<action name="addArg" class="call" tooltip="Adds an argument at the end of the call, creating an expression using a dummy type">
-		<parameter name="argCode" type="String" />
-	</action>
-	
-	<!-- CUDA KERNEL CALL -->
-	<action name="setConfig" class="cudaKernelCall">
-		<parameter name="args" type="expression[]" />
-	</action>	
- 
-	<action name="setConfigFromStrings" class="cudaKernelCall">
-		<parameter name="args" type="String[]" />
-	</action>		
-	
-
-	<!-- SCOPE -->
-
-	<action name="insertBegin" class="scope" return="joinpoint">
-		<parameter name="node" type="joinpoint" />
-	</action>
-	<action name="insertBegin" class="scope" return="joinpoint">
-		<parameter name="code" type="String" />
-	</action>
-
-	<action name="insertEnd" class="scope" return="joinpoint">
-		<parameter name="node" type="joinpoint" />
-	</action>
-
-	<action name="insertEnd" class="scope" return="joinpoint">
-		<parameter name="code" type="string" />
-	</action>
-
-
-	<action name="insertReturn" class="scope" return="joinpoint" tooltip="Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node">
-		<parameter name="code" type="joinpoint" />
-	</action>
-
-	<action name="insertReturn" class="scope" return="joinpoint" tooltip="Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node">
-		<parameter name="code" type="string" />
-	</action>
-	 
-	<action name="addLocal" class="scope" return="joinpoint" tooltip="Adds a new local variable to this scope">
-		<parameter name="name" type="String" />
-		<parameter name="type" type="joinpoint" />
-		<parameter name="initValue" type="String" />
-	</action>
-	
-	<action name="addLocal" class="scope" return="joinpoint" tooltip="Overload which does not initialize the local variable">
-		<parameter name="name" type="String" />
-		<parameter name="type" type="joinpoint" />
-	</action>
-
-	<action name="setNaked" class="scope" tooltip="Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)">
-		<parameter name="isNaked" type="Boolean" />
-	</action>	
-
-	<action name="clear" class="scope"	tooltip="Clears the contents of this scope (untested)" />
-	
-	<action name="cfg" class="scope" return="string" tooltip="CFG tester" />
-	
-	<action name="dfg" class="scope" return="string" tooltip="DFG tester" />
-
-	<!-- FUNCTION -->
-	
-	<action name="clone" class="function" return="function" tooltip="Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class">
-		<parameter name="newName" type="String" />
-		<parameter name="insert" type="Boolean" />		
-	</action>
-
-	<action name="clone" class="function" return="function" tooltip="Overload which inserts the cloned function by default">
-		<parameter name="newName" type="String" />
-	</action>
-
-	<action name="cloneOnFile" class="function" return="function" tooltip="Generates a clone of the provided function on a new file (with a weaver-generated name).">
-		<parameter name="newName" type="String" />
-	</action>
-	
-	<action name="cloneOnFile" class="function" return="function" tooltip="Generates a clone of the provided function on a new file (with the provided name).">
-		<parameter name="newName" type="String" />
-		<parameter name="fileName" type="String" />
-	</action>
-
-	<action name="cloneOnFile" class="function" return="function" tooltip="Generates a clone of the provided function on a new file (with the provided join point).">
-		<parameter name="newName" type="String" />
-		<parameter name="fileName" type="file" />
-	</action>	
-
-	<!-- 
-	<action name="setName" class="function">
-		<parameter name="name" type="String" />
-	</action>
-	 -->
-	
-	<action name="insertReturn" class="function" return="joinpoint" tooltip="Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node">
-		<parameter name="code" type="joinpoint" />
-	</action>
-
-	<action name="insertReturn" class="function" return="joinpoint" tooltip="Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node">
-		<parameter name="code" type="String" />
-	</action>
-	
-	<action name="setParams" class="function" tooltip="Sets the parameters of the function">
-		<parameter name="params" type="param[]" />
-	</action>	
-	
-	<action name="setParamsFromStrings" class="function" tooltip="Overload that accepts strings that represent type-varname pairs (e.g., int param1)">
-		<parameter name="params" type="String[]" />
-	</action>	
-
-	<action name="setParam" class="function" tooltip="Sets the parameter of the function at the given position">
-		<parameter name="index" type="Integer" />
-		<parameter name="param" type="param" />
-	</action>	
-	
-	<action name="setParam" class="function" tooltip="Sets the parameter of the function at the given position (overload that accepts a String)">
-		<parameter name="index" type="Integer" />
-		<parameter name="param" type="String" />
-	</action>		
-	
-	<action name="setParam" class="function" tooltip="Sets the parameter of the function at the given position (overload that accepts a String and a Type)">
-		<parameter name="index" type="Integer" />
-		<parameter name="name" type="String" />
-		<parameter name="type" type="type" />	
-	</action>			
-
-
-	<action name="setBody" class="function" tooltip="Sets the body of the function">
-		<parameter name="body" type="scope" />
-	</action>	
-	
-	<action name="newCall" class="function" return="call" tooltip="Creates a new call to this function">
-		<parameter name="args" type="joinpoint[]" />
-	</action>
-
-	<action name="setFunctionType" class="function" tooltip="Sets the type of the function">
-		<parameter name="functionType" type="functionType" />
-	</action>	 
-
-	<action name="setReturnType" class="function" tooltip="Sets the return type of the function">
-		<parameter name="returnType" type="type" />
-	</action>	
-	
-	<action name="setParamType" class="function" tooltip="Sets the type of a parameter of the function">
-		<parameter name="index" type="Integer" />
-		<parameter name="newType" type="type" />
-	</action>	
-
-	<action name="addParam" class="function" tooltip="Adds a new parameter to the function">
-		<parameter name="param" type="String" />
-	</action>
-	
-	<action name="addParam" class="function" tooltip="Adds a new parameter to the function">
-		<parameter name="param" type="param" />
-	</action>
-
-	<action name="addParam" class="function" tooltip="Adds a new parameter to the function">
-		<parameter name="name" type="String" />
-		<parameter name="type" type="type" />		
-	</action>
-
-
-
-	<!-- METHOD -->
-	<!-- 
-	<action name="setRecord" class="method" tooltip="Sets the class of the method">
-		<parameter name="classJp" type="class" />
-	</action>
-	 -->	
-	<action name="removeRecord" class="method" tooltip="Removes the of the method"/>
-
-	<!-- NAMED DECL -->
-	<action name="setName" class="namedDecl" tooltip="Sets the name of this namedDecl">
-		<parameter name="name" type="String" />
-	</action>
-
-	<action name="setQualifiedPrefix" class="namedDecl" tooltip="Sets the qualified prefix of this namedDecl">
-		<parameter name="qualifiedPrefix" type="String" />
-	</action>
-	
-	<action name="setQualifiedName" class="namedDecl" tooltip="Sets the qualified name of this namedDecl (changes both the name and qualified prefix)">
-		<parameter name="name" type="String" />
-	</action>
-	
-
-	<!-- RETURN STMT -->
-	<!-- 
-	<action name="setReturnExpr" class="returnStmt" tooltip="Sets the expression of the return">
-		<parameter name="returnExpr" type="expression" />
-	</action>
-	 -->
-
-
-	<!-- LOOP -->
-	<action name="changeKind" class="loop" tooltip="DEPRECATED: use 'setKind' instead">
-		<parameter name="kind" type="String" />
-	</action>
-	
-	<action name="setKind" class="loop" tooltip="Sets the kind of the loop">
-		<parameter name="kind" type="String" />
-	</action>
-	
-	<action name="setInit" class="loop" tooltip="Sets the init statement of the loop">
-		<parameter name="initCode" type="String"/>
-	</action>
-	
-	<action name="setInitValue" class="loop" tooltip="Sets the init value of the loop. Works with loops of kind 'for'">
-		<parameter name="initCode" type="String"/>
-	</action>
-
-	<action name="setEndValue" class="loop" tooltip="Sets the end value of the loop. Works with loops of kind 'for'">
-		<parameter name="initCode" type="String"/>
-	</action>
-	
-	<action name="setCond" class="loop" tooltip="Sets the conditional statement of the loop. Works with loops of kind 'for'">
-		<parameter name="condCode" type="String"/>
-	</action>
-	
-	<action name="setStep" class="loop" tooltip="Sets the step statement of the loop. Works with loops of kind 'for'">
-		<parameter name="stepCode" type="String"/>
-	</action>
-
-	<action name="setIsParallel" class="loop" tooltip="Sets the attribute 'isParallel' of the loop">
-		<parameter name="isParallel" type="Boolean"/>
-	</action>
-
-	<action name="interchange" class="loop" tooltip="Interchanges two for loops, if possible">
-		<parameter name="otherLoop" type="loop" />
-	</action>
-	
-	<action name="tile" class="loop" return="statement" tooltip="Applies loop tiling to this loop">
-		<parameter name="blockSize" type="String" />
-		<parameter name="reference" type="statement" />
-	</action>
-	
-	<action name="tile" class="loop" return="statement" tooltip="Applies loop tiling to this loop.">
-		<parameter name="blockSize" type="String" />
-		<parameter name="reference" type="statement" />
-		<parameter name="useTernary" type="Boolean"/>
-	</action>
-	
-	<action name="setCondRelation" class="loop" tooltip="Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge">
-		<parameter name="operator" type="Relation" />
-	</action>
-
-	<action name="setCondRelation" class="loop" tooltip="Changes the operator of a canonical condition, if possible. Supported operators: &lt;, &lt;=, >, >=">
-		<parameter name="operator" type="String" />
-	</action>
-	
-	<action name="setBody" class="loop" tooltip="Sets the body of the loop">
-		<parameter name="body" type="scope" />
-	</action>	
-
-
-	<!-- IF -->
-	<action name="setCond" class="if" tooltip="sets the condition of the if">
-		<parameter name="cond" type="expression" />
-	</action>
-
-	<action name="setThen" class="if" tooltip="sets the body of the if">
-		<parameter name="then" type="statement" />
-	</action>
-
-	<action name="setElse" class="if" tooltip="sets the body of the else">
-		<parameter name="else" type="statement" />
-	</action>	
-
-	<!-- GOTO -->
-	<action name="setLabel" class="gotoStmt" tooltip="sets the label of the goto">
-		<parameter name="label" type="labelDecl" />
-	</action>
-
-	<!-- LABEL STMT -->
-	<action name="setDecl" class="labelStmt" tooltip="sets the label of the label statement">
-		<parameter name="label" type="labelDecl" />
-	</action>
-	
-	<!-- OMP -->
-	<action name="setKind" class="omp" tooltip="Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded">
-		<parameter name="directiveKind" type="String" />
-	</action>
-	<action name="removeClause" class="omp" tooltip="Removes any clause of the given kind from the OpenMP pragma">
-		<parameter name="clauseKind" type="String" />
-	</action>
-	<action name="setNumThreads" class="omp" tooltip="Sets the value of the num_threads clause of an OpenMP pragma">
-		<parameter name="newExpr" type="String" />
-	</action>
-	<action name="setProcBind" class="omp" tooltip="Sets the value of the proc_bind clause of an OpenMP pragma">
-		<parameter name="newBind" type="String" />
-	</action>
-	<action name="setPrivate" class="omp" tooltip="Sets the variables of a private clause of an OpenMP pragma">
-		<parameter name="newVariables" type="String[]" />
-	</action>
-	<action name="setReduction" class="omp" tooltip="Sets the variables for a given kind of a reduction clause of an OpenMP pragma">
-		<parameter name="kind" type="String" />
-		<parameter name="newVariables" type="String[]" />
-	</action>
-	<action name="setDefault" class="omp" tooltip="Sets the value of the default clause of an OpenMP pragma">
-		<parameter name="newDefault" type="String" />
-	</action>
-	<action name="setFirstprivate" class="omp" tooltip="Sets the variables of a firstprivate clause of an OpenMP pragma">
-		<parameter name="newVariables" type="String[]" />
-	</action>
-	<action name="setLastprivate" class="omp" tooltip="Sets the variables of a lastprivate clause of an OpenMP pragma">
-		<parameter name="newVariables" type="String[]" />
-	</action>
-	<action name="setShared" class="omp" tooltip="Sets the variables of a shared clause of an OpenMP pragma">
-		<parameter name="newVariables" type="String[]" />
-	</action>
-	<action name="setCopyin" class="omp" tooltip="Sets the variables of a copyin clause of an OpenMP pragma">
-		<parameter name="newVariables" type="String[]" />
-	</action>
-	<action name="setScheduleKind" class="omp" tooltip="Sets the value of the schedule clause of an OpenMP pragma">
-		<parameter name="scheduleKind" type="String" />
-	</action>
-	<action name="setScheduleChunkSize" class="omp" tooltip="Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception">
-		<parameter name="chunkSize" type="String" />
-	</action>
-	<action name="setScheduleChunkSize" class="omp" tooltip="Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception">
-		<parameter name="chunkSize" type="Integer" />
-	</action>	
-	<action name="setScheduleModifiers" class="omp" tooltip="Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception">
-		<parameter name="modifiers" type="String[]" />
-	</action>
-	<action name="setCollapse" class="omp" tooltip="Sets the value of the collapse clause of an OpenMP pragma">
-		<parameter name="newExpr" type="String" />
-	</action>
-	<action name="setCollapse" class="omp" tooltip="Sets the value of the collapse clause of an OpenMP pragma">
-		<parameter name="newExpr" type="Integer" />
-	</action>	
-	<action name="setOrdered" class="omp" tooltip="Sets an ordered clause without parameters in the OpenMP pragma"/>
-	<action name="setOrdered" class="omp" tooltip="Sets the value of the ordered clause of an OpenMP pragma">
-		<parameter name="newExpr" type="String" />
-	</action>
-	
-	<!-- COMMENT -->
-	<action name="setText" class="comment">
-		<parameter name="text" type="String" />
-	</action>
-	
-	
-	<!-- PRAGMA -->
-	<action name="setName" class="pragma">
-		<parameter name="name" type="String" />
-	</action>
-	
-	<action name="setContent" class="pragma">
-		<parameter name="content" type="String" />
-	</action>
-	
-	<!-- VARDECL -->
-	<action name="setInit" class="vardecl" tooltip="Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization">
-		<parameter name="init" type="expression" />
-	</action>
-	
-	<action name="setInit" class="vardecl" tooltip="Converts the given string to a literal expression and sets it as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization">
-		<parameter name="init" type="String" />
-	</action>
-
-	<action name="removeInit" class="vardecl" tooltip="If vardecl already has an initialization, removes it (also removes const if present). Otherwise does nothing">
-	</action>	
-
-	<action name="removeInit" class="vardecl" tooltip="If vardecl already has an initialization, removes it. Otherwise does nothing">
-		<parameter name="removeConst" type="boolean" />
-	</action>	
-
-	<action name="varref" class="vardecl" return="varref" tooltip="Creates a new varref based on this vardecl">
-	</action>
-	
-	<action name="setStorageClass" class="vardecl" tooltip="Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl">
-		<parameter name="storageClass" type="String" />
-	</action>
-
-	
-	<!-- VARREF -->
-	<action name="setName" class="varref">
-		<parameter name="name" type="String" />
-	</action>
-	
-	
-	<!-- BINARY_OP-->
-	<action name="setLeft" class="binaryOp">
-		<parameter name="left" type="expression" />
-	</action>
-	
-	<action name="setRight" class="binaryOp">
-		<parameter name="right" type="expression" />
-	</action>
-	
-	<!-- MEMBER ACCESS -->
-	<action name="setArrow" class="memberAccess">
-		<parameter name="isArrow" type="Boolean" />
-	</action>	
-
-	 
-	<!-- TYPE -->
-	<action name="setTemplateArgsTypes" class="type" tooltip="Sets the template argument types of a template type">
-		<parameter name="templateArgTypes" type="type[]" />
-	</action>
-	
-	<action name="setTemplateArgsTypes" class="type" tooltip="Sets a single template argument type of a template type">
-		<parameter name="index" type="Integer" />
-		<parameter name="templateArgType" type="type" />
-	</action>
-	
-	<action name="setDesugar" class="type" tooltip="Sets the desugared type of this type">
-		<parameter name="desugaredType" type="type" />
-	</action>
-
-	<action name="setTypeFieldByValueRecursive" return="boolean" class="type" tooltip="Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change">
-		<parameter name="currentValue" type="Object" />
-		<parameter name="newValue" type="Object" />
-	</action>
-	
-	<action name="setUnderlyingType" return="type" class="type" tooltip="Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes">
-		<parameter name="oldValue" type="type" />
-		<parameter name="newValue" type="type" />
-	</action>
-	
-	<action name="asConst" return="type" class="type" tooltip="Returns a new node based on this type with the qualifier const">
-	</action>
-
-	
-	<!-- FUNCTION TYPE -->
-	<action name="setReturnType" class="functionType" tooltip="Sets the return type of the FunctionType">
-		<parameter name="newType" type="type" />
-	</action>
-
-	<!-- Functions derive signature from params, not from functionType. Also, there is not a 1-to-1 correspondence between FunctionType and Function (several functions can share the same FunctionType  -->		
-	<action name="setParamType" class="functionType" tooltip="Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType">
-		<parameter name="index" type="Integer" />
-		<parameter name="newType" type="type" />
-	</action>	 
-
-	
-	<!-- UnaryExprOrType -->
-	<action name="setArgType" class="unaryExprOrType" >
-		<parameter name="argType" type="type" />
-	</action>
-	
-	<!-- POINTER TYPE -->
-	<action name="setPointee" class="pointerType" tooltip="Sets the pointee type of this pointer type">
-		<parameter name="pointeeType" type="type" />
-	</action>
-
-	<!-- ARRAY TYPE -->
-	<action name="setElementType" class="arrayType" tooltip="Sets the element type of the array">
-		<parameter name="arrayElementType" type="type" />
-	</action>
-
-	<!-- VARIABLE ARRAY TYPE -->
-	<action name="setSizeExpr" class="variableArrayType" tooltip="Sets the size expression of this variable array type">
-		<parameter name="sizeExpr" type="expression" />
-	</action>
-	
-	<!-- PAREN TYPE -->
-	<action name="setInnerType" class="parenType" tooltip="Sets the inner type of this paren type">
-		<parameter name="innerType" type="type" />
-	</action>	
-	
+    <!-- GENERIC ACTIONS FOR ALL JOINPOINTS -->
+
+    <!-- Replaces the current node with the given node -->
+    <action name="replaceWith" return="joinpoint" tooltip="Replaces this node with the given node">
+        <parameter name="node" type="joinpoint" />
+    </action>
+
+    <action name="replaceWith" return="joinpoint" tooltip="Overload which accepts a string">
+        <parameter name="node" type="String" />
+    </action>
+
+    <!-- Replaces the current node with a list of nodes -->
+    <action name="replaceWith" return="joinpoint"
+        tooltip="Overload which accepts a list of join points">
+        <parameter name="node" type="joinpoint[]" />
+    </action>
+
+    <action name="replaceWithStrings" return="joinpoint"
+        tooltip="Overload which accepts a list of strings">
+        <parameter name="node" type="String[]" />
+    </action>
+
+    <!-- Inserts node before the given node -->
+    <action name="insertBefore" return="joinpoint"
+        tooltip="Inserts the given join point before this join point">
+        <parameter name="node" type="joinpoint" />
+    </action>
+
+    <!-- Overload which accepts String -->
+    <action name="insertBefore" return="joinpoint" tooltip="Overload which accepts a string">
+        <parameter name="node" type="String" />
+    </action>
+
+    <!-- Inserts node after the given node -->
+    <action name="insertAfter" return="joinpoint"
+        tooltip="Inserts the given join point after this join point">
+        <parameter name="node" type="joinpoint" />
+    </action>
+
+    <!-- Overload which accepts String -->
+    <action name="insertAfter" return="joinpoint" tooltip="Overload which accepts a string">
+        <parameter name="code" type="String" />
+    </action>
+
+
+    <!-- Removes node associated to the joinpoint from the AST -->
+    <action name="detach" return="joinpoint"
+        tooltip="Removes the node associated to this joinpoint from the AST" />
+
+    <!-- Sets the type of a node, if it has a type -->
+    <action name="setType" tooltip="Sets the type of a node, if it has a type">
+        <parameter name="type" type="type" />
+    </action>
+
+    <!-- Performs a copy of the node and its children, but not of the nodes in its fields -->
+    <action name="copy" return="joinpoint"
+        tooltip="Performs a copy of the node and its children, but not of the nodes in its fields" />
+
+    <action name="deepCopy" return="joinpoint"
+        tooltip="Performs a copy of the node and its children, including the nodes in their fields (only the first level of field nodes, this function is not recursive)" />
+
+    <action name="setUserField" return="Object"
+        tooltip="Associates arbitrary values to nodes of the AST">
+        <parameter name="fieldName" type="String" />
+        <parameter name="value" type="Object" />
+    </action>
+
+    <action name="setUserField" return="Object" tooltip="Overload which accepts a map">
+        <parameter name="fieldNameAndValue" type="Map" />
+        <!--  <parameter name="value" type="Object" /> -->
+    </action>
+
+    <action name="setValue" return="joinpoint"
+        tooltip="Sets the value associated with the given property key">
+        <parameter name="key" type="String" />
+        <parameter name="value" type="Object" />
+    </action>
+
+    <!-- Adds a message that will be communicated to the user after weaving ends -->
+    <action name="messageToUser"
+        tooltip="Adds a message that will be printed to the user after weaving finishes. Identical messages are removed">
+        <parameter name="message" type="String" />
+    </action>
+
+
+    <action name="removeChildren" tooltip="Removes the children of this node" />
+
+    <action name="setFirstChild"
+        tooltip="Replaces the first child, or inserts the join point if no child is present">
+        <parameter name="node" type="Joinpoint" />
+    </action>
+    <action name="setLastChild"
+        tooltip="Replaces the last child, or inserts the join point if no child is present">
+        <parameter name="node" type="Joinpoint" />
+    </action>
+
+    <action name="toComment" return="joinpoint"
+        tooltip="Replaces this join point with a comment with the same contents as .code">
+        <parameter name="prefix" type="String" default='""' />
+        <parameter name="suffix" type="String" default='""' />
+    </action>
+
+    <!-- 
+    <action name="setInlineComments" tooltip="Sets the commented that are embedded in a node">
+        <parameter name="comments" type="comment[]" />
+    </action>
+    -->
+
+    <action name="setInlineComments" tooltip="Sets the commented that are embedded in a node">
+        <parameter name="comments" type="string[]" />
+    </action>
+
+    <action name="setInlineComments" tooltip="Sets the commented that are embedded in a node">
+        <parameter name="comments" type="string" />
+    </action>
+
+    <action name="setData"
+        tooltip="Setting data directly is not supported, this action just emits a warning and does nothing">
+        <parameter name="source" type="Object" />
+    </action>
+
+    <action name="dataAssign"
+        tooltip="Copies all enumerable own properties from the source object to the .data object">
+        <parameter name="source" type="Object" />
+    </action>
+
+    <action name="dataClear" tooltip="Clears all properties from the .data object" />
+
+    <!-- PROGRAM -->
+
+    <!-- Internally generates the code for the current program and rebuilds 
+        the AST -->
+    <action name="rebuild" class="program" return="boolean"
+        tooltip="Recompiles the program currently represented by the AST, transforming literal code into AST nodes. Returns true if all files could be parsed correctly, or false otherwise" />
+
+    <action name="rebuildFuzzy" class="program"
+        tooltip="Similar to rebuild, but tries to fix compilation errors. Resulting program may not represent the originally intended functionality" />
+
+    <action name="addFile" class="program" return="joinpoint"
+        tooltip="Adds a file join point to the current program">
+        <parameter name="file" type="file" />
+    </action>
+
+    <action name="addFileFromPath" class="program" return="joinpoint"
+        tooltip="Adds a file join point to the current program, from the given path, which can be either a Java File or a String">
+        <parameter name="filepath" type="Object" />
+    </action>
+
+    <action name="push" class="program"
+        tooltip="Creates a copy of the current AST and pushes it to the top of the AST stack" />
+
+    <action name="pop" class="program" tooltip="Discards the AST at the top of the ASt stack" />
+
+    <action name="addExtraInclude" class="program"
+        tooltip="Adds a path to an include that the current program depends on">
+        <parameter name="path" type="String" />
+    </action>
+
+    <action name="addExtraIncludeFromGit" class="program"
+        tooltip="Adds a path based on a git repository to an include that the current program depends on">
+        <parameter name="gitRepo" type="String" />
+        <parameter name="path" type="String" default="null" />
+    </action>
+
+    <action name="addExtraSource" class="program"
+        tooltip="Adds a path to a source that the current program depends on">
+        <parameter name="path" type="String" />
+    </action>
+
+    <action name="addExtraSourceFromGit" class="program"
+        tooltip="Adds a path based on a git repository to a source that the current program depends on">
+        <parameter name="gitRepo" type="String" />
+        <parameter name="path" type="String" default="null" />
+    </action>
+
+    <action name="addProjectFromGit" class="program"
+        tooltip="Adds a path based on a git repository to a project that the current program depends on">
+        <parameter name="gitRepo" type="String" />
+        <parameter name="libs" type="String[]" />
+        <parameter name="path" type="String" default="null" />
+    </action>
+
+    <action name="addExtraLib" class="program"
+        tooltip="Adds a library (e.g., -pthreads) that the current program depends on">
+        <parameter name="lib" type="String" />
+    </action>
+
+    <action name="atexit" class="program"
+        tooltip="Registers a function to be executed when the program exits">
+        <parameter name="function" type="function" />
+    </action>
+
+
+    <!-- FILE -->
+
+    <!-- Adds an include to the file -->
+    <action name="addInclude" class="file"
+        tooltip="Adds an include to the current file. If the file already has the include, it does nothing">
+        <parameter name="name" type="string" />
+        <parameter name="isAngled" type="boolean" default="false" />
+    </action>
+
+    <!-- Overload which accepts a join point -->
+    <action name="addIncludeJp" class="file"
+        tooltip="Overload of addInclude which accepts a join point">
+        <parameter name="jp" type="joinpoint" />
+    </action>
+
+    <!-- Adds a C include to the file, which implies extern "C" linkage with guards for C++ -->
+    <action name="addCInclude" class="file"
+        tooltip="Adds a C include to the current file. If the file already has the include, it does nothing">
+        <parameter name="name" type="string" />
+        <parameter name="isAngled" type="boolean" default="false" />
+    </action>
+
+    <action name="addGlobal" class="file" return="vardecl"
+        tooltip="Adds a global variable to this file">
+        <parameter name="name" type="String" />
+        <parameter name="type" type="joinpoint" />
+        <parameter name="initValue" type="String" />
+    </action>
+
+    <action name="write" class="file" return="String"
+        tooltip="Writes the code of this file to a given folder">
+        <parameter name="destinationFoldername" type="String" />
+    </action>
+
+    <action name="setName" class="file" return="void" tooltip="Changes the name of the file">
+        <parameter name="filename" type="String" />
+    </action>
+
+    <action name="rebuild" class="file" return="file"
+        tooltip="Recompiles only this file, returns a join point to the new recompiled file, or throws an exception if a problem happens" />
+
+    <action name="rebuildTry" class="file" return="joinpoint"
+        tooltip="Recompiles only this file, returns a join point to the new recompiled file, or returns a clavaException join point if a problem happens" />
+
+    <action name="insertBegin" class="file"
+        tooltip="Adds the node in the join point to the start of the file">
+        <parameter name="node" type="joinpoint" />
+    </action>
+    <action name="insertBegin" class="file"
+        tooltip="Adds the String as a Decl to the end of the file">
+        <parameter name="code" type="String" />
+    </action>
+
+    <action name="insertEnd" class="file"
+        tooltip="Adds the node in the join point to the end of the file">
+        <parameter name="node" type="joinpoint" />
+    </action>
+    <action name="insertEnd" class="file" tooltip="Adds the String as a Decl to the end of the file">
+        <parameter name="code" type="String" />
+    </action>
+
+    <action name="addFunction" class="file" return="joinpoint"
+        tooltip="Adds a function to the file that returns void and has no parameters">
+        <parameter name="name" type="String" />
+        <!-- 		<parameter name="returnType" type="joinpoint" />
+        <parameter name="parameters" type="joinpoint[]" />  -->
+    </action>
+
+    <action name="setRelativeFolderpath" class="file"
+        tooltip="Sets the path to the folder of the source file relative to the base source path">
+        <parameter name="path" type="String" />
+    </action>
+
+
+    <!-- RECORD -->
+
+    <action name="addField" class="record" tooltip="Adds a field to a record (struct, class).">
+        <parameter name="field" type="field" />
+    </action>
+
+    <!-- Adds an include to the file -->
+    <!--  
+    <action name="setName" class="record">
+        <parameter name="name" type="string" />
+    </action>
+     -->
+    <!-- 
+     <action name="addFunction" class="record">
+        <parameter name="function" type="function" />
+    </action>
+     -->
+
+    <!-- CLASS -->
+    <action name="addMethod" class="class"
+        tooltip="Adds a method to a class. If the given method has a definition, creates an equivalent declaration and adds it to the class, otherwise simply added the declaration to the class. In both cases, the declaration is only added to the class if there is no declaration already with the same signature.">
+        <parameter name="method" type="method" />
+    </action>
+
+
+    <!-- CALL -->
+    <!-- Changes the name of the call -->
+    <action name="setName" class="call" tooltip="Changes the name of the call">
+        <parameter name="name" type="string" />
+    </action>
+
+    <action name="wrap" class="call" tooltip="Wraps this call with a possibly new wrapping function">
+        <parameter name="name" type="string" />
+    </action>
+
+    <action name="inline" class="call" return="boolean" tooltip="Tries to inline this call" />
+
+    <action name="setArgFromString" class="call">
+        <parameter name="index" type="int" />
+        <parameter name="expr" type="string" />
+    </action>
+
+    <action name="setArg" class="call">
+        <parameter name="index" type="Integer" />
+        <parameter name="expr" type="expression" />
+    </action>
+
+    <action name="addArg" class="call"
+        tooltip="Adds an argument at the end of the call, creating an expression using the given code and type. If a type is not provided, a dummy type is used">
+        <parameter name="argCode" type="String" />
+        <parameter name="type" type="type" default="null" />
+    </action>
+
+    <action name="addArg" class="call"
+        tooltip="Adds an argument at the end of the call, creating a literal 'type' from the type string">
+        <parameter name="arg" type="String" />
+        <parameter name="type" type="String" />
+    </action>
+
+    <!-- CUDA KERNEL CALL -->
+    <action name="setConfig" class="cudaKernelCall">
+        <parameter name="args" type="expression[]" />
+    </action>
+
+    <action name="setConfigFromStrings" class="cudaKernelCall">
+        <parameter name="args" type="String[]" />
+    </action>
+
+
+    <!-- SCOPE -->
+
+    <action name="insertBegin" class="scope" return="joinpoint">
+        <parameter name="node" type="joinpoint" />
+    </action>
+    <action name="insertBegin" class="scope" return="joinpoint">
+        <parameter name="code" type="String" />
+    </action>
+
+    <action name="insertEnd" class="scope" return="joinpoint">
+        <parameter name="node" type="joinpoint" />
+    </action>
+
+    <action name="insertEnd" class="scope" return="joinpoint">
+        <parameter name="code" type="string" />
+    </action>
+
+
+    <action name="insertReturn" class="scope" return="joinpoint"
+        tooltip="Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node">
+        <parameter name="code" type="joinpoint" />
+    </action>
+
+    <action name="insertReturn" class="scope" return="joinpoint"
+        tooltip="Inserts the joinpoint before the return points of the scope (return statements and implicitly, at the end of the scope). Returns the last inserted node">
+        <parameter name="code" type="string" />
+    </action>
+
+    <action name="addLocal" class="scope" return="joinpoint"
+        tooltip="Adds a new local variable to this scope">
+        <parameter name="name" type="String" />
+        <parameter name="type" type="joinpoint" />
+        <parameter name="initValue" type="String" default="null" />
+    </action>
+
+    <action name="setNaked" class="scope"
+        tooltip="Sets the 'naked' status of a scope (a scope is naked if it does not have curly braces)">
+        <parameter name="isNaked" type="Boolean" />
+    </action>
+
+    <action name="clear" class="scope" tooltip="Clears the contents of this scope (untested)" />
+
+    <action name="cfg" class="scope" return="string" tooltip="CFG tester" />
+
+    <action name="dfg" class="scope" return="string" tooltip="DFG tester" />
+
+    <!-- FUNCTION -->
+
+    <action name="clone" class="function" return="function"
+        tooltip="Clones this function assigning it a new name, inserts the cloned function after the original function. If the name is the same and the original method, automatically removes the cloned method from the class">
+        <parameter name="newName" type="String" />
+        <parameter name="insert" type="Boolean" default="true" />
+    </action>
+
+    <action name="cloneOnFile" class="function" return="function"
+        tooltip="Generates a clone of the provided function on a new file with the provided name (or with a weaver-generated name if one is not provided).">
+        <parameter name="newName" type="String" />
+        <parameter name="fileName" type="String" default="null" />
+    </action>
+
+    <action name="cloneOnFile" class="function" return="function"
+        tooltip="Generates a clone of the provided function on a new file (with the provided join point).">
+        <parameter name="newName" type="String" />
+        <parameter name="fileName" type="file" />
+    </action>
+
+    <!-- 
+    <action name="setName" class="function">
+        <parameter name="name" type="String" />
+    </action>
+     -->
+
+    <action name="insertReturn" class="function" return="joinpoint"
+        tooltip="Inserts the joinpoint before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node">
+        <parameter name="code" type="joinpoint" />
+    </action>
+
+    <action name="insertReturn" class="function" return="joinpoint"
+        tooltip="Inserts code as a literal statement before the return points of the function (return statements and implicitly, at the end of the function). Returns the last inserted node">
+        <parameter name="code" type="String" />
+    </action>
+
+    <action name="setParams" class="function" tooltip="Sets the parameters of the function">
+        <parameter name="params" type="param[]" />
+    </action>
+
+    <action name="setParamsFromStrings" class="function"
+        tooltip="Overload that accepts strings that represent type-varname pairs (e.g., int param1)">
+        <parameter name="params" type="String[]" />
+    </action>
+
+    <action name="setParam" class="function"
+        tooltip="Sets the parameter of the function at the given position">
+        <parameter name="index" type="Integer" />
+        <parameter name="param" type="param" />
+    </action>
+
+    <action name="setParam" class="function"
+        tooltip="Sets the parameter of the function at the given position">
+        <parameter name="index" type="Integer" />
+        <parameter name="name" type="String" />
+        <parameter name="type" type="type" default="null" />
+    </action>
+
+    <action name="setBody" class="function" tooltip="Sets the body of the function">
+        <parameter name="body" type="scope" />
+    </action>
+
+    <action name="newCall" class="function" return="call"
+        tooltip="Creates a new call to this function">
+        <parameter name="args" type="joinpoint[]" />
+    </action>
+
+    <action name="setFunctionType" class="function" tooltip="Sets the type of the function">
+        <parameter name="functionType" type="functionType" />
+    </action>
+
+    <action name="setReturnType" class="function" tooltip="Sets the return type of the function">
+        <parameter name="returnType" type="type" />
+    </action>
+
+    <action name="setParamType" class="function"
+        tooltip="Sets the type of a parameter of the function">
+        <parameter name="index" type="Integer" />
+        <parameter name="newType" type="type" />
+    </action>
+
+    <action name="addParam" class="function" tooltip="Adds a new parameter to the function">
+        <parameter name="param" type="param" />
+    </action>
+
+    <action name="addParam" class="function" tooltip="Adds a new parameter to the function">
+        <parameter name="name" type="String" />
+        <parameter name="type" type="type" default="null" />
+    </action>
+
+
+    <!-- METHOD -->
+    <!-- 
+    <action name="setRecord" class="method" tooltip="Sets the class of the method">
+        <parameter name="classJp" type="class" />
+    </action>
+     -->
+    <action name="removeRecord" class="method" tooltip="Removes the of the method" />
+
+    <!-- NAMED DECL -->
+    <action name="setName" class="namedDecl" tooltip="Sets the name of this namedDecl">
+        <parameter name="name" type="String" />
+    </action>
+
+    <action name="setQualifiedPrefix" class="namedDecl"
+        tooltip="Sets the qualified prefix of this namedDecl">
+        <parameter name="qualifiedPrefix" type="String" />
+    </action>
+
+    <action name="setQualifiedName" class="namedDecl"
+        tooltip="Sets the qualified name of this namedDecl (changes both the name and qualified prefix)">
+        <parameter name="name" type="String" />
+    </action>
+
+
+    <!-- RETURN STMT -->
+    <!-- 
+    <action name="setReturnExpr" class="returnStmt" tooltip="Sets the expression of the return">
+        <parameter name="returnExpr" type="expression" />
+    </action>
+     -->
+
+
+    <!-- LOOP -->
+
+    <action name="setKind" class="loop" tooltip="Sets the kind of the loop">
+        <parameter name="kind" type="String" />
+    </action>
+
+    <action name="setInit" class="loop" tooltip="Sets the init statement of the loop">
+        <parameter name="initCode" type="String" />
+    </action>
+
+    <action name="setInitValue" class="loop"
+        tooltip="Sets the init value of the loop. Works with loops of kind 'for'">
+        <parameter name="initCode" type="String" />
+    </action>
+
+    <action name="setEndValue" class="loop"
+        tooltip="Sets the end value of the loop. Works with loops of kind 'for'">
+        <parameter name="initCode" type="String" />
+    </action>
+
+    <action name="setCond" class="loop"
+        tooltip="Sets the conditional statement of the loop. Works with loops of kind 'for'">
+        <parameter name="condCode" type="String" />
+    </action>
+
+    <action name="setStep" class="loop"
+        tooltip="Sets the step statement of the loop. Works with loops of kind 'for'">
+        <parameter name="stepCode" type="String" />
+    </action>
+
+    <action name="setIsParallel" class="loop" tooltip="Sets the attribute 'isParallel' of the loop">
+        <parameter name="isParallel" type="Boolean" />
+    </action>
+
+    <action name="interchange" class="loop" tooltip="Interchanges two for loops, if possible">
+        <parameter name="otherLoop" type="loop" />
+    </action>
+
+    <action name="tile" class="loop" return="statement" tooltip="Applies loop tiling to this loop.">
+        <parameter name="blockSize" type="String" />
+        <parameter name="reference" type="statement" />
+        <parameter name="useTernary" type="Boolean" default="true" />
+    </action>
+
+    <action name="setCondRelation" class="loop"
+        tooltip="Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge">
+        <parameter name="operator" type="Relation" />
+    </action>
+
+    <action name="setBody" class="loop" tooltip="Sets the body of the loop">
+        <parameter name="body" type="scope" />
+    </action>
+
+
+    <!-- IF -->
+    <action name="setCond" class="if" tooltip="sets the condition of the if">
+        <parameter name="cond" type="expression" />
+    </action>
+
+    <action name="setThen" class="if" tooltip="sets the body of the if">
+        <parameter name="then" type="statement" />
+    </action>
+
+    <action name="setElse" class="if" tooltip="sets the body of the else">
+        <parameter name="else" type="statement" />
+    </action>
+
+    <!-- GOTO -->
+    <action name="setLabel" class="gotoStmt" tooltip="sets the label of the goto">
+        <parameter name="label" type="labelDecl" />
+    </action>
+
+    <!-- LABEL STMT -->
+    <action name="setDecl" class="labelStmt" tooltip="sets the label of the label statement">
+        <parameter name="label" type="labelDecl" />
+    </action>
+
+    <!-- OMP -->
+    <action name="setKind" class="omp"
+        tooltip="Sets the directive kind of the OpenMP pragma. Any unsupported clauses will be discarded">
+        <parameter name="directiveKind" type="String" />
+    </action>
+    <action name="removeClause" class="omp"
+        tooltip="Removes any clause of the given kind from the OpenMP pragma">
+        <parameter name="clauseKind" type="String" />
+    </action>
+    <action name="setNumThreads" class="omp"
+        tooltip="Sets the value of the num_threads clause of an OpenMP pragma">
+        <parameter name="newExpr" type="String" />
+    </action>
+    <action name="setProcBind" class="omp"
+        tooltip="Sets the value of the proc_bind clause of an OpenMP pragma">
+        <parameter name="newBind" type="String" />
+    </action>
+    <action name="setPrivate" class="omp"
+        tooltip="Sets the variables of a private clause of an OpenMP pragma">
+        <parameter name="newVariables" type="String[]" />
+    </action>
+    <action name="setReduction" class="omp"
+        tooltip="Sets the variables for a given kind of a reduction clause of an OpenMP pragma">
+        <parameter name="kind" type="String" />
+        <parameter name="newVariables" type="String[]" />
+    </action>
+    <action name="setDefault" class="omp"
+        tooltip="Sets the value of the default clause of an OpenMP pragma">
+        <parameter name="newDefault" type="String" />
+    </action>
+    <action name="setFirstprivate" class="omp"
+        tooltip="Sets the variables of a firstprivate clause of an OpenMP pragma">
+        <parameter name="newVariables" type="String[]" />
+    </action>
+    <action name="setLastprivate" class="omp"
+        tooltip="Sets the variables of a lastprivate clause of an OpenMP pragma">
+        <parameter name="newVariables" type="String[]" />
+    </action>
+    <action name="setShared" class="omp"
+        tooltip="Sets the variables of a shared clause of an OpenMP pragma">
+        <parameter name="newVariables" type="String[]" />
+    </action>
+    <action name="setCopyin" class="omp"
+        tooltip="Sets the variables of a copyin clause of an OpenMP pragma">
+        <parameter name="newVariables" type="String[]" />
+    </action>
+    <action name="setScheduleKind" class="omp"
+        tooltip="Sets the value of the schedule clause of an OpenMP pragma">
+        <parameter name="scheduleKind" type="String" />
+    </action>
+    <action name="setScheduleChunkSize" class="omp"
+        tooltip="Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception">
+        <parameter name="chunkSize" type="String" />
+    </action>
+    <action name="setScheduleChunkSize" class="omp"
+        tooltip="Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception">
+        <parameter name="chunkSize" type="Integer" />
+    </action>
+    <action name="setScheduleModifiers" class="omp"
+        tooltip="Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception">
+        <parameter name="modifiers" type="String[]" />
+    </action>
+    <action name="setCollapse" class="omp"
+        tooltip="Sets the value of the collapse clause of an OpenMP pragma">
+        <parameter name="newExpr" type="String" />
+    </action>
+    <action name="setCollapse" class="omp"
+        tooltip="Sets the value of the collapse clause of an OpenMP pragma">
+        <parameter name="newExpr" type="Integer" />
+    </action>
+    <action name="setOrdered" class="omp"
+        tooltip="Sets the value of the ordered clause of an OpenMP pragma">
+        <parameter name="parameters" type="String" default="null" />
+    </action>
+
+    <!-- COMMENT -->
+    <action name="setText" class="comment">
+        <parameter name="text" type="String" />
+    </action>
+
+
+    <!-- PRAGMA -->
+    <action name="setName" class="pragma">
+        <parameter name="name" type="String" />
+    </action>
+
+    <action name="setContent" class="pragma">
+        <parameter name="content" type="String" />
+    </action>
+
+    <!-- VARDECL -->
+    <action name="setInit" class="vardecl"
+        tooltip="Sets the given expression as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization">
+        <parameter name="init" type="expression" />
+    </action>
+
+    <action name="setInit" class="vardecl"
+        tooltip="Converts the given string to a literal expression and sets it as the initialization of this vardecl. If undefined is passed and vardecl already has an initialization, removes that initialization">
+        <parameter name="init" type="String" />
+    </action>
+
+    <action name="removeInit" class="vardecl"
+        tooltip="If vardecl already has an initialization, removes it.">
+        <parameter name="removeConst" type="boolean" default="true" />
+    </action>
+
+    <action name="varref" class="vardecl" return="varref"
+        tooltip="Creates a new varref based on this vardecl">
+    </action>
+
+    <action name="setStorageClass" class="vardecl"
+        tooltip="Sets the storage class specifier, which can be none, extern, static, __private_extern__, autovardecl">
+        <parameter name="storageClass" type="StorageClass" />
+    </action>
+
+
+    <!-- VARREF -->
+    <action name="setName" class="varref">
+        <parameter name="name" type="String" />
+    </action>
+
+
+    <!-- BINARY_OP-->
+    <action name="setLeft" class="binaryOp">
+        <parameter name="left" type="expression" />
+    </action>
+
+    <action name="setRight" class="binaryOp">
+        <parameter name="right" type="expression" />
+    </action>
+
+    <!-- MEMBER ACCESS -->
+    <action name="setArrow" class="memberAccess">
+        <parameter name="isArrow" type="Boolean" />
+    </action>
+
+
+    <!-- TYPE -->
+    <action name="setTemplateArgsTypes" class="type"
+        tooltip="Sets the template argument types of a template type">
+        <parameter name="templateArgTypes" type="type[]" />
+    </action>
+
+    <action name="setTemplateArgType" class="type"
+        tooltip="Sets a single template argument type of a template type">
+        <parameter name="index" type="Integer" />
+        <parameter name="templateArgType" type="type" />
+    </action>
+
+    <action name="setDesugar" class="type" tooltip="Sets the desugared type of this type">
+        <parameter name="desugaredType" type="type" />
+    </action>
+
+    <action name="setTypeFieldByValueRecursive" return="boolean" class="type"
+        tooltip="Changes a single occurence of a type field that has the current value with new value. Returns true if there was a change">
+        <parameter name="currentValue" type="Object" />
+        <parameter name="newValue" type="Object" />
+    </action>
+
+    <action name="setUnderlyingType" return="type" class="type"
+        tooltip="Replaces an underlying type of this instance with new type, if it matches the old type. Returns true if there were changes">
+        <parameter name="oldValue" type="type" />
+        <parameter name="newValue" type="type" />
+    </action>
+
+    <action name="asConst" return="type" class="type"
+        tooltip="Returns a new node based on this type with the qualifier const">
+    </action>
+
+
+    <!-- FUNCTION TYPE -->
+    <action name="setReturnType" class="functionType"
+        tooltip="Sets the return type of the FunctionType">
+        <parameter name="newType" type="type" />
+    </action>
+
+    <!-- Functions derive signature from params, not from functionType. Also, there is not a 1-to-1
+    correspondence between FunctionType and Function (several functions can share the same
+    FunctionType  -->
+    <action name="setParamType" class="functionType"
+        tooltip="Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType">
+        <parameter name="index" type="Integer" />
+        <parameter name="newType" type="type" />
+    </action>
+
+
+    <!-- UnaryExprOrType -->
+    <action name="setArgType" class="unaryExprOrType">
+        <parameter name="argType" type="type" />
+    </action>
+
+    <!-- POINTER TYPE -->
+    <action name="setPointee" class="pointerType"
+        tooltip="Sets the pointee type of this pointer type">
+        <parameter name="pointeeType" type="type" />
+    </action>
+
+    <!-- ARRAY TYPE -->
+    <action name="setElementType" class="arrayType" tooltip="Sets the element type of the array">
+        <parameter name="arrayElementType" type="type" />
+    </action>
+
+    <!-- VARIABLE ARRAY TYPE -->
+    <action name="setSizeExpr" class="variableArrayType"
+        tooltip="Sets the size expression of this variable array type">
+        <parameter name="sizeExpr" type="expression" />
+    </action>
+
+    <!-- PAREN TYPE -->
+    <action name="setInnerType" class="parenType" tooltip="Sets the inner type of this paren type">
+        <parameter name="innerType" type="type" />
+    </action>
+
 </actions>

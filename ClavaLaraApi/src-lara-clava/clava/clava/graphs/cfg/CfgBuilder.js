@@ -312,7 +312,7 @@ class CfgBuilder {
    */
   #connectContinueNode(node) {
     const $continueStmt = node.data().nodeStmt;
-    const $loop = $continueStmt.ancestor("loop");
+    const $loop = $continueStmt.getAncestor("loop");
 
     const $afterStmt = $loop.kind === "for" ? $loop.step : $loop.cond;
     const afterNode = this.#nodes.get($afterStmt.astId) ?? this.#endNode;
@@ -344,7 +344,7 @@ class CfgBuilder {
    */
   #connectCaseNode(node) {
     const $caseStmt = node.data().case;
-    const $switchStmt = $caseStmt.ancestor("switch");
+    const $switchStmt = $caseStmt.getAncestor("switch");
 
     const numCases = $switchStmt.cases.length;
     const hasIntermediateDefault =

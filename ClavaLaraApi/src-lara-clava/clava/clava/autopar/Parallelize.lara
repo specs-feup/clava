@@ -12,7 +12,6 @@ import clava.Clava;
 import clava.util.CodeInserter;    
 import lara.Io;
 
-import weaver.WeaverJps;
 import weaver.Query;
 
 /**
@@ -46,7 +45,7 @@ Parallelize.forLoops = function($loops) {
 		$loop.insertBefore(ompPragma);
 		
 		// Add include
-		$loop.ancestor("file").addInclude("omp.h",true);
+		$loop.getAncestor("file").addInclude("omp.h",true);
 	}
 	*/
 	
@@ -80,7 +79,7 @@ Parallelize.forLoopsAsText = function($loops, outputFolder) {
 		}
 
 
-		var $file = $loop.ancestor("file");
+		var $file = $loop.getAncestor("file");
 		if($file === undefined)
 		{
 			println("Could not find a file associated with loop@"+$loop.location);
@@ -126,7 +125,7 @@ Parallelize.getForLoopsPragmas = function($loops, insertPragma, useLoopId) {
 	
 	// Initialize loops if undefined
 	if($loops === undefined) {
-		$loops = Clava.getProgram().laraDescendants('loop');
+		$loops = Clava.getProgram().getDescendants('loop');
 	}
 
 	// Filter any loop that is not a for loop
@@ -194,7 +193,7 @@ Parallelize.getForLoopsPragmas = function($loops, insertPragma, useLoopId) {
 	var parallelLoops = {};
 	var unparallelizableLoops = {};	
 	
-	$pragmas = Clava.getProgram().laraDescendants('pragma');
+	$pragmas = Clava.getProgram().getDescendants('pragma');
 	for(var $pragma of $pragmas) {
 		if($pragma.name !== "parallelize_id") {
 			continue;
@@ -222,7 +221,7 @@ Parallelize.getForLoopsPragmas = function($loops, insertPragma, useLoopId) {
 		loopIds.push($loop.id);
 	}
 	
-	for(var $loop of WeaverJps.search('loop').get()) {
+	for(var $loop of Query.search('loop').get()) {
 	//select file.function.loop end
 	//apply
 		var loopindex = GetLoopIndex($loop);

@@ -1,7 +1,7 @@
 import weaver.Query;
 import clava.analysis.checkers.StrcpyChecker;
-import lara.analysis.CheckBasedAnalyser;
-import lara.analysis.MessageGenerator;
+import clava.analysis.CheckBasedAnalyser;
+import clava.analysis.MessageGenerator;
 
 aspectdef StrcpyCheckerTest
 

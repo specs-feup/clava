@@ -1,5 +1,5 @@
 import weaver.Query;
-import lara.MathExtra;
+import clava.MathExtra;
 
 /**
  * Based on the challenges in https://github.com/trailofbits/cb-multios/

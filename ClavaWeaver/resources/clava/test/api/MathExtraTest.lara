@@ -1,4 +1,4 @@
-import lara.MathExtra;
+import clava.MathExtra;
 
 aspectdef MathExtraTest
 

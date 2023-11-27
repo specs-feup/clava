@@ -133,18 +133,8 @@ public class CxxFile extends AFile {
     }
 
     @Override
-    public void addIncludeImpl(String name) {
-        addIncludeImpl(name, false);
-    }
-
-    @Override
     public void addCIncludeImpl(String name, boolean isAngled) {
         tunit.addCInclude(name, isAngled);
-    }
-
-    @Override
-    public void addCIncludeImpl(String name) {
-        addCIncludeImpl(name, false);
     }
 
     @Override
@@ -426,13 +416,16 @@ public class CxxFile extends AFile {
     }
 
     @Override
-    public String getDestinationFilepathImpl() {
-        return destinationFilepathImpl(getWeaverEngine().getWeavingFolder().getAbsolutePath());
-    }
+    public String getDestinationFilepathImpl(String destinationFolderpath) {
+        File file;
 
-    @Override
-    public String destinationFilepathImpl(String destinationFolderpath) {
-        return tunit.getDestinationFile(new File(destinationFolderpath)).getAbsolutePath();
+        if (destinationFolderpath == "" ) {
+            file = getWeaverEngine().getWeavingFolder();
+        } else {
+            file = new File(destinationFolderpath);
+        }
+        
+        return tunit.getDestinationFile(file).getAbsolutePath();
     }
 
     @Override

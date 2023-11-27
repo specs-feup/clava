@@ -6,6 +6,7 @@
    It is provided under the MIT license (https://opensource.org/licenses/MIT).
 */
 
+import clava.ClavaJoinPoints;
 import antarex.utils.messages;
 
 var wrapperSuffix = '_wrapper';
@@ -19,10 +20,10 @@ var wrapperSuffix = '_wrapper';
 function initFileMemoization(){ 
    if (FIRST_MEMOIZATION) {
      // Declaration of the file for the INRIA memoization library.
-     $newFileJp_MEMOI_DEFS = AstFactory.file(FILENAME_MEMOI_DEFS, filepath);
+     $newFileJp_MEMOI_DEFS = ClavaJoinPoints.file(FILENAME_MEMOI_DEFS, filepath);
      Clava.addFile($newFileJp_MEMOI_DEFS);
      // Declaration of the exposed variables.
-     $newFileJp_MEMOI_MARGOT = AstFactory.file(FILENAME_EXPOSED_VARS, filepath);
+     $newFileJp_MEMOI_MARGOT = ClavaJoinPoints.file(FILENAME_EXPOSED_VARS, filepath);
      Clava.addFile($newFileJp_MEMOI_MARGOT);
     // GenCodeForMargot("toto");
      FIRST_MEMOIZATION = false;
@@ -51,7 +52,7 @@ function getMemoType($vtype) {
   else
     // if (typeKind === "QualType")
      if ($vtype.astIsInstance("QualType"))
-       return getMemoType($vtype.astChild(0)); // TYPE const
+       return getMemoType($vtype.getAstChild(0)); // TYPE const
   return "NO";
  }
 
@@ -273,7 +274,7 @@ function getWrapperDeclMathFunc(aFunc) {
   * */
 function initFileWrappers(){
     if (FIRST_MEMOI_C) {
-	  $newFileJp_MEMOI_wrappers = AstFactory.file(FILENAME_MEMOI_WRAPPERS, filepath);
+	  $newFileJp_MEMOI_wrappers = ClavaJoinPoints.file(FILENAME_MEMOI_WRAPPERS, filepath);
 	  Clava.addFile($newFileJp_MEMOI_wrappers);
 	  FIRST_MEMOI_C = false; 
     }

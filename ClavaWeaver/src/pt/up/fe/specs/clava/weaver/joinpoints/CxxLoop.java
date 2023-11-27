@@ -338,11 +338,6 @@ public class CxxLoop extends ALoop {
 
     }
 
-    @Override
-    public void changeKindImpl(String kind) {
-        setKindImpl(kind);
-    }
-
     private void convertToWhile() {
         if (loop instanceof WhileStmt) {
             return;
@@ -562,14 +557,14 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public Relation getCondRelationImpl() {
+    public String getCondRelationImpl() {
 
         BinaryOperator condOp = getConditionOp();
         if (condOp == null) {
             return null;
         }
 
-        return Relation.getHelper().fromNameTry(condOp.getOp().name()).orElse(null);
+        return Relation.getHelper().fromNameTry(condOp.getOp().name()).orElse(null).getString();
     }
 
     @Override
@@ -605,23 +600,6 @@ public class CxxLoop extends ALoop {
         }
 
         return binOp;
-    }
-
-    @Override
-    public void defCondRelationImpl(Relation value) {
-        if (value == Relation.EQ || value == Relation.NE) {
-            ClavaLog.info(
-                    "Relation not supported for 'def' of 'condRelation': " + value);
-            return;
-        }
-
-        BinaryOperator condOp = getConditionOp();
-        if (condOp == null) {
-            return;
-        }
-
-        condOp.set(BinaryOperator.OP, getOpKind(value));
-
     }
 
     @Override
@@ -673,11 +651,6 @@ public class CxxLoop extends ALoop {
     }
 
     @Override
-    public void setCondRelationImpl(Relation operator) {
-        defCondRelationImpl(operator);
-    }
-
-    @Override
     public String getIdImpl() {
         return loop.getLoopId();
     }
@@ -697,12 +670,6 @@ public class CxxLoop extends ALoop {
     @Override
     public Boolean isInterchangeableImpl(ALoop otherLoop) {
         return LoopInterchange.test(loop, (LoopStmt) otherLoop.getNode());
-    }
-
-    @Override
-    public AStatement tileImpl(String blockSize, AStatement reference) {
-
-        return tileImpl(blockSize, reference, true);
     }
 
     @Override

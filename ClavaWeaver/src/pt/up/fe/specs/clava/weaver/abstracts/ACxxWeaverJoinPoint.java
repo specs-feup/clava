@@ -157,30 +157,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint getAstParentImpl() {
-        ClavaLog.deprecated("attribute 'astParent' is deprecated, please use 'parent' instead");
-        return getParentImpl();
-        // ClavaNode node = getNode();
-        // if (!node.hasParent()) {
-        // return null;
-        // }
-        //
-        // ClavaNode currentParent = node.getParent();
-        // // if (currentParent instanceof WrapperStmt) {
-        // // currentParent = currentParent.getParent();
-        // // }
-        //
-        // return CxxJoinpoints.create(currentParent, this);
-    }
-
-    @Override
-    public Boolean getHasAstParentImpl() {
-        ClavaLog.deprecated("attribute 'hasAstParent' is deprecated, please use 'hasParent' instead");
-        return getNode().hasParent();
-    }
-
-    @Override
-    public AJoinPoint ancestorImpl(String type) {
+    public AJoinPoint getAncestorImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'ancestor'");
 
         if (type.equals("program")) {
@@ -203,97 +180,28 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return descendantsArrayImpl(type);
-    }
-
-    @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
 
         return CxxSelects.selectedNodesToJps(getNode().getDescendantsStream(), jp -> jp.instanceOf(type),
                 getWeaverEngine());
-        /*
-        Incrementer nullJoinpoints = new Incrementer();
-        Incrementer excludedJoinpoints = new Incrementer();
-        AJoinPoint[] descendants = getNode().getDescendantsStream()
-                .map(descendant -> CxxJoinpoints.create(descendant))
-                .filter(jp -> {
-                    // Count null join points separately
-                    if (jp == null) {
-                        nullJoinpoints.increment();
-                        return false;
-                    }
-        
-                    boolean accepted = jp.instanceOf(type);
-                    if (!accepted) {
-                        excludedJoinpoints.increment();
-                    }
-                    return accepted;
-                })
-                // .filter(jp -> jp.getJoinpointType().equals(type))
-                .toArray(AJoinPoint[]::new);
-        
-        // Count as selected nodes
-        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS,
-                descendants.length + excludedJoinpoints.getCurrent());
-        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, descendants.length);
-        
-        // Count as a select
-        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
-        
-        return descendants;
-        */
     }
 
     @Override
     public AJoinPoint[] getDescendantsArrayImpl() {
         return CxxSelects.selectedNodesToJps(getNode().getDescendantsStream(), getWeaverEngine());
-
-        /*
-        AJoinPoint[] descendants = getNode().getDescendantsStream()
-                .map(descendant -> CxxJoinpoints.create(descendant))
-                .filter(jp -> jp != null)
-                .toArray(AJoinPoint[]::new);
-        
-        // Count as selected nodes
-        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS, descendants.length);
-        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, descendants.length);
-        
-        // Count as a select
-        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
-        
-        return descendants;
-        */
     }
 
     @Override
-    public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of descendants in attribute 'descendants'");
 
         return CxxSelects.selectedNodesToJps(getNode().getDescendantsAndSelfStream(), jp -> jp.instanceOf(type),
                 getWeaverEngine());
-
-        /*
-        AJoinPoint[] descendants = getNode().getDescendantsAndSelfStream()
-                .map(descendant -> CxxJoinpoints.create(descendant))
-                .filter(jp -> jp.instanceOf(type))
-                // .filter(jp -> jp.getJoinpointType().equals(type))
-                .toArray(AJoinPoint[]::new);
-        
-        // Count as selected nodes
-        getWeaverEngine().getWeavingReport().inc(ReportField.JOIN_POINTS, descendants.length);
-        getWeaverEngine().getWeavingReport().inc(ReportField.FILTERED_JOIN_POINTS, descendants.length);
-        
-        // Count as a select
-        getWeaverEngine().getWeavingReport().inc(ReportField.SELECTS);
-        
-        return descendants;
-        */
     }
 
     @Override
-    public AJoinPoint chainAncestorImpl(String type) {
+    public AJoinPoint getChainAncestorImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'chainAncestor'");
 
         if (type.equals("program")) {
@@ -315,7 +223,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint astAncestorImpl(String type) {
+    public AJoinPoint getAstAncestorImpl(String type) {
         Preconditions.checkNotNull(type, "Missing type of ancestor in attribute 'astAncestor'");
 
         // Obtain ClavaNode class from type
@@ -390,24 +298,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     public String getFilepathImpl() {
         SourceRange location = getNode().getLocation();
         return location.isValid() ? location.getFilepath() : null;
-    }
-
-    @Override
-    public String getJoinpointTypeImpl() {
-        ClavaLog.deprecated("joinpointType is deprecated, please use joinPointType");
-        // return getNode().getClass().getSimpleName();
-        return getJoinPointType();
-        // String joinpointName = getClass().getSimpleName();
-        //
-        // // Remove 'CXX' prefix
-        // if (joinpointName.startsWith("Cxx")) {
-        // joinpointName = joinpointName.substring("Cxx".length());
-        // }
-        //
-        // // Make first character lowercase
-        // char lowerFirstChar = Character.toLowerCase(joinpointName.charAt(0));
-        //
-        // return lowerFirstChar + joinpointName.substring(1);
     }
 
     @Override
@@ -762,7 +652,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint astChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(Integer index) {
         ClavaNode node = getNode();
         if (node == null) {
             return null;
@@ -893,7 +783,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint childImpl(Integer index) {
+    public AJoinPoint getChildImpl(Integer index) {
         return getNode().getChildren().stream()
                 // return getChildrenPrivate().stream()
                 .filter(node -> !(node instanceof NullNode))
@@ -920,7 +810,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         AJoinPoint currentJoinpoint = this;
         while (currentJoinpoint != null) {
             // Add joinpoint to chain
-            chain.add(currentJoinpoint.getJoinpointTypeImpl());
+            chain.add(currentJoinpoint.getJoinPointType());
 
             // Update current joinpoint
             if (currentJoinpoint.getHasParentImpl()) {
@@ -953,13 +843,8 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public String javaFieldTypeImpl(String fieldName) {
+    public String getJavaFieldTypeImpl(String fieldName) {
         return LowLevelApi.getFieldClass(getNode(), fieldName).getName();
-    }
-
-    @Override
-    public Object javaValueImpl(String fieldName) {
-        return LowLevelApi.getValue(getNode(), fieldName);
     }
 
     @Override
@@ -980,13 +865,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public Object getUserFieldImpl(String fieldName) {
-        ClavaLog.deprecated("attribute 'getUserField' is deprecated, please use 'userField' instead");
-        return userFieldImpl(fieldName);
-        // return getWeaverEngine().getUserField(getNodeNormalized(), fieldName);
-    }
-
-    @Override
-    public Object userFieldImpl(String fieldName) {
         return getWeaverEngine().getUserField(getNodeNormalized(), fieldName);
     }
 
@@ -1328,7 +1206,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public Object keyTypeImpl(String key) {
+    public Object getKeyTypeImpl(String key) {
         StoreDefinition def = getNode().getStoreDefinition();
 
         if (!def.hasKey(key)) {
@@ -1340,10 +1218,10 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint firstJpImpl(String type) {
+    public AJoinPoint getFirstJpImpl(String type) {
         AJoinPoint firstJp = getNode().getDescendantsStream()
                 .map(descendant -> CxxJoinpoints.create(descendant))
-                .filter(jp -> jp != null && jp.getJoinpointTypeImpl().equals(type))
+                .filter(jp -> jp != null && jp.getJoinPointType().equals(type))
                 .findFirst()
                 .orElse(null);
 
@@ -1483,16 +1361,6 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     }
 
     @Override
-    public AJoinPoint toCommentImpl() {
-        return toCommentImpl(null);
-    }
-
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return toCommentImpl(prefix, null);
-    }
-
-    @Override
     public AJoinPoint toCommentImpl(String prefix, String suffix) {
         var prefixClean = prefix == null ? "" : prefix;
         var suffixClean = suffix == null ? "" : suffix;
@@ -1509,13 +1377,16 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
 
     @Override
     public Integer getBitWidthImpl() {
-        var type = getTypeImpl();
-
+        AType type = getTypeImpl();
         if (type == null) {
             return null;
         }
+        
+        Type typeNode = (Type) type.getNode();
+        
+        Integer bitwidth = typeNode.getBitwidth(this.getNode());
 
-        return type.bitWidthImpl(this);
+        return bitwidth != -1 ? bitwidth : null;
     }
 
     @Override

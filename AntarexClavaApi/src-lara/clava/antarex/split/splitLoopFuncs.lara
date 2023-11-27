@@ -16,9 +16,9 @@ var $CURRENT_ID_SPLITTEDLOOP="";
 function satisfiesSplitLoopsCriteria(aloop) {
    if (aloop.astName === 'CXXForRangeStmt') return false;
    if (aloop.kind !== "for") return false;
-  var $begin = aloop.astChild(0);
-  var $end = aloop.astChild(1);
-  var $step = aloop.astChild(2);
+  var $begin = aloop.getAstChild(0);
+  var $end = aloop.getAstChild(1);
+  var $step = aloop.getAstChild(2);
   var lbound = aloop.initValue;
   if (lbound === undefined) return false;
   var ubound = aloop.endValue;
@@ -47,7 +47,7 @@ function getSplitLoopMangleNameOf($vFunction, $ident, $refParams) {
  	
  var srcFile = Io.getTempFolder()+ getFileSeparator() + "INRIA_IRISA_MANGLING.cpp";
  Io.writeFile(srcFile, "// generated " + line);
- var Includes = getImportedIncludes( $vFunction.ancestor("file"), $vFunction.astId);
+ var Includes = getImportedIncludes( $vFunction.getAncestor("file"), $vFunction.astId);
  // Adding declaration in the original file.
  for (f= 0; f < Includes.length; f++) {
     Io.appendFile(srcFile,Includes[f].code + line);
@@ -126,7 +126,7 @@ function genLoaderLib($vFunction, $nbLibs, $refParams)
 	
 	// the loader is imported as include.
 	$vFunction.insert before '#include "'+ $currentFunction.name + '"';
-	var $vfile = $vFunction.ancestor("file");
+	var $vfile = $vFunction.getAncestor("file");
 	$vfile.exec addInclude( $INRIA_SPLIT_LOOP_BEST_CODE_FILE, false); 
 }
 
@@ -135,7 +135,7 @@ function AddGlobalDecls($theLoop, $nbLibs, $refParams)
    var $currentFunction = getFunctionOrMethod($theLoop);
    
    genLoaderLib($currentFunction, $nbLibs, $refParams);
-   var $currentFile = $theLoop.ancestor("file");
+   var $currentFile = $theLoop.getAncestor("file");
    $currentFile.insert before '#define LB_TRACE(S)';
 
    $currentFunction.insert before 'int ' + getLearning() + '= 1,'  + getSelectedId() + '= 0;';

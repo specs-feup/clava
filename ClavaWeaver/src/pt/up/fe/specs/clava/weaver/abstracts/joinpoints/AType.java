@@ -526,33 +526,6 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     }
 
     /**
-     * 
-     * @param reference
-     * @return 
-     */
-    public abstract Integer bitWidthImpl(AJoinPoint reference);
-
-    /**
-     * 
-     * @param reference
-     * @return 
-     */
-    public final Object bitWidth(AJoinPoint reference) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "bitWidth", Optional.empty(), reference);
-        	}
-        	Integer result = this.bitWidthImpl(reference);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAttribute(Stage.END, this, "bitWidth", Optional.ofNullable(result), reference);
-        	}
-        	return result!=null?result:getUndefinedValue();
-        } catch(Exception e) {
-        	throw new AttributeException(get_class(), "bitWidth", e);
-        }
-    }
-
-    /**
      * Sets the template argument types of a template type
      * @param templateArgTypes 
      */
@@ -583,8 +556,8 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * @param index 
      * @param templateArgType 
      */
-    public void setTemplateArgsTypesImpl(Integer index, AType templateArgType) {
-        throw new UnsupportedOperationException(get_class()+": Action setTemplateArgsTypes not implemented ");
+    public void setTemplateArgTypeImpl(Integer index, AType templateArgType) {
+        throw new UnsupportedOperationException(get_class()+": Action setTemplateArgType not implemented ");
     }
 
     /**
@@ -592,17 +565,17 @@ public abstract class AType extends ACxxWeaverJoinPoint {
      * @param index 
      * @param templateArgType 
      */
-    public final void setTemplateArgsTypes(Integer index, AType templateArgType) {
+    public final void setTemplateArgType(Integer index, AType templateArgType) {
         try {
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgsTypes", this, Optional.empty(), index, templateArgType);
+        		eventTrigger().triggerAction(Stage.BEGIN, "setTemplateArgType", this, Optional.empty(), index, templateArgType);
         	}
-        	this.setTemplateArgsTypesImpl(index, templateArgType);
+        	this.setTemplateArgTypeImpl(index, templateArgType);
         	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "setTemplateArgsTypes", this, Optional.empty(), index, templateArgType);
+        		eventTrigger().triggerAction(Stage.END, "setTemplateArgType", this, Optional.empty(), index, templateArgType);
         	}
         } catch(Exception e) {
-        	throw new ActionException(get_class(), "setTemplateArgsTypes", e);
+        	throw new ActionException(get_class(), "setTemplateArgType", e);
         }
     }
 
@@ -817,7 +790,6 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         attributes.add("normalize");
         attributes.add("typeFields");
         attributes.add("fieldTree");
-        attributes.add("bitWidth");
     }
 
     /**
@@ -835,7 +807,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
     protected void fillWithActions(List<String> actions) {
         super.fillWithActions(actions);
         actions.add("void setTemplateArgsTypes(type[])");
-        actions.add("void setTemplateArgsTypes(Integer, type)");
+        actions.add("void setTemplateArgType(Integer, type)");
         actions.add("void setDesugar(type)");
         actions.add("boolean setTypeFieldByValueRecursive(Object, Object)");
         actions.add("type setUnderlyingType(type, type)");
@@ -873,40 +845,36 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         NORMALIZE("normalize"),
         TYPEFIELDS("typeFields"),
         FIELDTREE("fieldTree"),
-        BITWIDTH("bitWidth"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
         HASCHILDREN("hasChildren"),
-        DESCENDANTSANDSELF("descendantsAndSelf"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
-        ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
-        USERFIELD("userField"),
+        BITWIDTH("bitWidth"),
         HASNODE("hasNode"),
-        CHILD("child"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -915,24 +883,23 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         KEYS("keys"),
         ISINSIDEHEADER("isInsideHeader"),
         ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
-        KEYTYPE("keyType"),
-        CHAINANCESTOR("chainAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
-        JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
-        FIRSTJP("firstJp"),
+        GETASTANCESTOR("getAstAncestor"),
         DEPTH("depth"),
-        JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),

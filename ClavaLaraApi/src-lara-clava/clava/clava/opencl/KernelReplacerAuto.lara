@@ -26,7 +26,7 @@ aspectdef KernelReplacerAuto
 		
 		var config = Io.readJson(configFile);
 	
-		var $call = $pragma.target.laraDescendants('call')[0];
+		var $call = $pragma.target.getDescendants('call')[0];
 		var kernel = new KernelReplacer($call,
 			config.kernelName, config.kernelFile,
 			config.bufferSizes,

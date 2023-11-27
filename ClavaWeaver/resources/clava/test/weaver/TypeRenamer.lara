@@ -74,7 +74,7 @@ function renameType($type, renameMap) {
 }
 
 function renameVarrefs($expr, renameMap) {
-	for(var $varref of $expr.descendantsAndSelf("varref")) {
+	for(var $varref of $expr.getDescendantsAndSelf("varref")) {
 		var newName = renameMap[$varref.name];
 		
 		if(newName === undefined) {
@@ -125,7 +125,7 @@ function getVarrefsInTypeCopy($type, varrefs) {
 	
 	var exprFunction = function($expr) {
 
-		for(var $varref of $expr.descendantsAndSelf("varref")) {
+		for(var $varref of $expr.getDescendantsAndSelf("varref")) {
 			varrefs.push($varref);
 		}
 	};

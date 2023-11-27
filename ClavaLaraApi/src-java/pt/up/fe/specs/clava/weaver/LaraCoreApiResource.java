@@ -22,15 +22,15 @@ import org.lara.interpreter.weaver.utils.LaraResourceProvider;
 public enum LaraCoreApiResource implements LaraResourceProvider {
 
     // Benchmark
-    CLAVA_BENCHMARK_INSTANCE("benchmark/ClavaBenchmarkInstance.lara"),
+    CLAVA_BENCHMARK_INSTANCE("benchmark/ClavaBenchmarkInstance.lara");
 
     // Code
-    LOGGER("code/Logger.lara"),
-    ENERGY("code/Energy.lara"),
-    TIMER("code/Timer.lara"),
+    //LOGGER("code/Logger.lara"),
+    //ENERGY("code/Energy.lara"),
+    //TIMER("code/Timer.lara"),
 
     // Lara
-    COMPILATION("Compilation.lara");
+    //COMPILATION("Compilation.lara");
 
     private final String resource;
 

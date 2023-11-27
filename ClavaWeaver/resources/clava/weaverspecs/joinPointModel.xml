@@ -1,438 +1,460 @@
 <?xml version="1.0"?>
 <!-- 
-	When changing the joinpoint model, do not forget to update the Clava document.
-	
-	https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/edit#heading=h.hii8b3kunout
+    When changing the joinpoint model, do not forget to update the Clava document.
+https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/edit#heading=h.hii8b3kunout
  -->
 <joinpoints root_class="program">
 
-	<!-- 
-	<global>
-		<select alias="descendant"		class="joinpoint" />
-	</global>
-	 -->
-	 
-	<!-- EMPTY -->
-	<joinpoint class="empty" tooltip="Utility joinpoint, to represent empty nodes when directly accessing the tree"/>
-	
-	<!--  CLAVA EXCEPTION -->
-	<joinpoint class="clavaException" tooltip="Utility joinpoint, to represent certain problems when generating join points"/>
-	
-	<!-- PROGRAM -->
-	<joinpoint class="program" tooltip="Represents the complete program and is the top-most joinpoint in the hierarchy">
-		<select class="file"/>
-	</joinpoint>
-	
-	<!-- FILE-->
-	<joinpoint class="file" tooltip="Represents a source file (.c, .cpp., .cl, etc)">
-		<select alias="stmt"			class="statement"/>
-		<select alias="childStmt"		class="statement"/>
-		<select 						class="function"/>
-		<select 						class="method"/>
-		<select 						class="record"/>
-		<select 						class="struct"/>
-		<select 						class="class"/>
-		<select							class="pragma"/>
-		<select							class="marker"/>
-		<select							class="tag"/>		
-		<select 						class="vardecl"/>
-		<select 						class="comment"/>
-		<select 						class="include"/>	
-		<select 						class="typedefDecl"/>			
-		<select 						class="decl"/>		
-	</joinpoint>
-	
-	<joinpoint class="include" extends="decl" tooltip="Represents an include directive (e.g., #include &lt;stdio.h&gt;)">
-	</joinpoint>
-	
-	<!-- RECORD -->
-	<joinpoint class="record" extends="namedDecl" tooltip="Common class of struct, union and class">
-		<select 	class="field"/>		
-	</joinpoint>
-	
-	<!-- FIELD -->
-	<joinpoint class="field" extends="declarator" tooltip="Represents a member of a struct/union/class">
-	</joinpoint>
-	
-	<!-- STRUCT -->
-	<joinpoint class="struct" extends="record" tooltip="Represets a struct declaration">
-<!--		<select alias="field"	class="namedDecl"/> -->
-	</joinpoint>
+    <!-- 
+    <global>
+        <select alias="descendant"		class="joinpoint" />
+    </global>
+     -->
+
+    <!-- EMPTY -->
+    <joinpoint class="empty"
+        tooltip="Utility joinpoint, to represent empty nodes when directly accessing the tree" />
+
+    <!--  CLAVA EXCEPTION -->
+    <joinpoint class="clavaException"
+        tooltip="Utility joinpoint, to represent certain problems when generating join points" />
+
+    <!-- PROGRAM -->
+    <joinpoint class="program"
+        tooltip="Represents the complete program and is the top-most joinpoint in the hierarchy">
+        <select class="file" />
+    </joinpoint>
+
+    <!-- FILE-->
+    <joinpoint class="file" tooltip="Represents a source file (.c, .cpp., .cl, etc)">
+        <select alias="stmt" class="statement" />
+        <select alias="childStmt" class="statement" />
+        <select class="function" />
+        <select class="method" />
+        <select class="record" />
+        <select class="struct" />
+        <select class="class" />
+        <select class="pragma" />
+        <select class="marker" />
+        <select class="tag" />
+        <select class="vardecl" />
+        <select class="comment" />
+        <select class="include" />
+        <select class="typedefDecl" />
+        <select class="decl" />
+    </joinpoint>
+
+    <joinpoint class="include" extends="decl"
+        tooltip="Represents an include directive (e.g., #include &lt;stdio.h&gt;)">
+    </joinpoint>
+
+    <!-- RECORD -->
+    <joinpoint class="record" extends="namedDecl" tooltip="Common class of struct, union and class">
+        <select class="field" />
+    </joinpoint>
+
+    <!-- FIELD -->
+    <joinpoint class="field" extends="declarator"
+        tooltip="Represents a member of a struct/union/class">
+    </joinpoint>
+
+    <!-- STRUCT -->
+    <joinpoint class="struct" extends="record" tooltip="Represets a struct declaration">
+        <!--		<select alias="field"	class="namedDecl"/> -->
+    </joinpoint>
 
 
-	<!-- CLASS -->
-	<joinpoint class="class" extends="record" tooltip="Represents a C++ class">
-		<select class="method"/>
-	</joinpoint>	
-	
-	<!-- PRAGMA -->
-	<joinpoint class="pragma" tooltip="Represents a pragma in the code (e.g., #pragma kernel)">
-		<select alias="target" class="joinpoint"/>
-	</joinpoint>
-	
-	
-	<!-- MARKER -->
-	<joinpoint class="marker" extends="pragma" tooltip="Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)">
-		<select alias="contents"			class="scope"/>
-	</joinpoint>
-	
-	<!-- TAG -->
-	<joinpoint class="tag" extends="pragma" tooltip="A pragma that references a point in the code and sticks to it">
-	</joinpoint>
-	
-	<!-- OMP PRAGMA -->
-	<joinpoint class="omp" extends="pragma" tooltip="Represents an OpenMP pragma (e.g., #pragma omp parallel)">
-	</joinpoint>
-	
-	
-	<!-- DECL -->
-	<joinpoint class="decl" tooltip="Represents one declaration (e.g., int foo(){return 0;}) or definition (e.g., int foo();) in the code"/>
-	
-	<!-- NAMED DECL -->
-	<joinpoint class="namedDecl" extends="decl" tooltip="Represents a decl with a name"/>
-	
-	<!-- DECLARATOR DECL -->
-	<joinpoint class="declarator" extends="namedDecl" tooltip="Represents a decl that comes from a declarator (e.g., function, field, variable)"/>
-	
-	
-	<!-- VAR DECLARATION -->
- 	<joinpoint class="vardecl" extends="declarator" tooltip="Represents a variable declaration or definition">
- 		<select alias="init"			class="expression"/>
- 	</joinpoint>  		
-	
-	
-	<!-- TYPEDEF NAME DECL -->
-	<joinpoint class="typedefNameDecl" extends="namedDecl" tooltip="Base node for declarations which introduce a typedef-name">
- 	</joinpoint>  		
-	
-	<!-- TYPEDEF DECL -->
-	<joinpoint class="typedefDecl" extends="typedefNameDecl" tooltip="Declaration of a typedef-name via the 'typedef' type specifier">
- 	</joinpoint>  		
-	
-	<!-- ENUM DECL -->
-	<joinpoint class="enumDecl" extends="namedDecl" tooltip="Represents an enum">
-		<select alias="enumerator" 		class="enumeratorDecl"/>		
- 	</joinpoint>  
- 	
- 	<!-- ENUMERATOR DECL -->
-	<joinpoint class="enumeratorDecl" extends="namedDecl">
- 	</joinpoint>  
- 	
- 	<!-- LABEL DECL -->
- 	<joinpoint class="labelDecl" extends="namedDecl">
- 	</joinpoint>
- 	
- 	<!-- ACCESS SPECIFIER -->
-	<joinpoint class="accessSpecifier" extends="decl">
- 	</joinpoint>  	
-	
-	<!--  FUNCTION PARAMETER -->
-	<joinpoint class="param" extends="vardecl">
-	</joinpoint>
+    <!-- CLASS -->
+    <joinpoint class="class" extends="record" tooltip="Represents a C++ class">
+        <select class="method" />
+    </joinpoint>
+
+    <!-- PRAGMA -->
+    <joinpoint class="pragma" tooltip="Represents a pragma in the code (e.g., #pragma kernel)">
+        <select alias="target" class="joinpoint" />
+    </joinpoint>
 
 
-	<!-- FUNCTION -->
-	<joinpoint class="function" extends="declarator" tooltip="Represents a function declaration or definition">
-		<select 						class="body"/> 
-	 	<!--  <select alias="body" 			class="scope"/> -->
-		<select 						class="param"/>
-		<select 						class="decl"/>
-	</joinpoint>
-		
-	<!-- METHOD -->
-	<joinpoint class="method" extends="function" tooltip="Represents a C++ class method declaration or definition">
-	</joinpoint>			
+    <!-- MARKER -->
+    <joinpoint class="marker" extends="pragma"
+        tooltip="Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)">
+        <select alias="contents" class="scope" />
+    </joinpoint>
 
-	<!-- CUDA KERNEL -->
-	<!-- 
-	<joinpoint class="cudaKernel" extends="function" tooltip="Represents a CUDA kernel function">
-	</joinpoint>			
-	 -->
-	 	
-		
-	<!-- SCOPE-->
-	<joinpoint class="scope" extends="statement" tooltip="Represents a group of statements">
-		<select alias="stmt"			class="statement"/> 
-		<select alias="childStmt"		class="statement"/>
-		
-		<select							class="scope"/>
-		<select							class="if"/>
-		<select							class="loop"/>
-		<select							class="pragma"/>
-		<select							class="marker"/>
-		<select							class="tag"/>	
-		<select							class="omp"/>	
-		<select 						class="comment"/>
-		<select 						class="returnStmt"/>		
-		<select 						class="cilkFor"/>
-		<select 						class="cilkSync"/>
-	</joinpoint>
-	
-	<!-- BODY -->
-	<joinpoint class="body" extends="scope">
-	</joinpoint> 
-	
-	
-	<!-- STATEMENT -->
-	<joinpoint class="statement">
-		<select alias="expr"			class="expression"/>
-		<select alias="childExpr"		class="expression"/>
-		<select 						class="call"/>
- 		<select alias="stmtCall"		class="call"/>
- 		<select 						class="memberCall"/>
-		<select							class="memberAccess"/>
- 		<select							class="arrayAccess"/>
- 		<select 						class="vardecl"/>
-		<select 						class="varref"/>
-		<select							class="op"/>		
-		<select							class="binaryOp"/>
-		<select							class="unaryOp"/>
-		<select							class="newExpr"/>
-		<select							class="deleteExpr"/>		
-		<select							class="cilkSpawn"/>				
-	</joinpoint>
-	
+    <!-- TAG -->
+    <joinpoint class="tag" extends="pragma"
+        tooltip="A pragma that references a point in the code and sticks to it">
+    </joinpoint>
 
-	<!-- LOOP -->
-	<joinpoint class="loop" extends="statement">
-		<select alias="init"			class="statement"/>	
-		<select alias="cond"			class="statement"/>
-		<select alias="step"			class="statement"/>
-		<select alias="body" 			class="scope"/> 
-		<!-- <select 			 			class="body"/>  -->
-	</joinpoint>	
-
-	 
-	<!-- IF -->
-	<joinpoint class="if" extends="statement">
-		<select alias="cond"			class="expression"/>
-		<select alias="condDecl"		class="vardecl"/>
-		<select alias="then"			class="scope"/>	
-		<select alias="else"			class="scope"/>	
-		<select	alias="body"			class="scope"/>
-		<!-- <select 			 			class="body"/> -->
-	</joinpoint>
-
-	<!-- WRAPPER STMT -->
-	<joinpoint class="wrapperStmt" extends="statement">
-	</joinpoint>
-
-	<!-- RETURN STMT -->
-	<joinpoint class="returnStmt" extends="statement">
-		<select	alias="returnExpr"			class="expression"/>	
-	</joinpoint>
-
-	<!-- SWITCH -->
-	<joinpoint class="switch" extends="statement"/>
-	
-	<!-- CASE -->
-	<joinpoint class="case" extends="statement"/>	
-	
-	<!-- DECL STMT-->
-	<joinpoint class="declStmt" extends="statement"/>		
-
-	<!-- EXPR STMT -->
-	<joinpoint class="exprStmt" extends="statement"/>
-
-	<!-- GOTO STMT -->
-	<joinpoint class="gotoStmt" extends="statement"/>
-	
-	<!-- LABEL STMT -->
-	<joinpoint class="labelStmt" extends="statement"/>
-	
-	<!-- EMPTY STMT -->
-	<joinpoint class="emptyStmt" extends="statement"/>	
-
-	<!-- CONTINUE STMT -->
-	<joinpoint class="continue" extends="statement"/>	
-	
-	<!-- BREAK STMT -->
-	<joinpoint class="break" extends="statement"/>		
-	
-	<!-- CALL -->	
-	<joinpoint class="call" 	extends="expression">
-		<select alias="callee"		class="expression"/>
-		<select alias="arg"			class="expression"/>
-	</joinpoint>
-	
-	<!-- MEMBER CALL -->	
-	<joinpoint class="memberCall" 	extends="call">
-	</joinpoint>
-		
-	<!-- CUDA KERNEL CALL -->	
-	<joinpoint class="cudaKernelCall" 	extends="call">
-	</joinpoint>
-
-	<!-- OPERATOR -->	
-	<joinpoint class="op" 	extends="expression">
-	</joinpoint>
-	
-	<!-- BINARY OPERATOR -->	
-	<joinpoint class="binaryOp" 	extends="op">
-		<select alias="left"			class="expression"/>
-		<select alias="right"			class="expression"/>
-	</joinpoint>
-
-	<!-- UNARY OPERATOR -->		
-	<joinpoint class="unaryOp" 	extends="op">
-		<select alias="operand"			class="expression"/>
-	</joinpoint>	
-
-	<!-- TERNARY OPERATOR -->		
-	<joinpoint class="ternaryOp" 	extends="op">
-		<select alias="cond"			class="expression"/>
-		<select alias="trueExpr"			class="expression"/>
-		<select alias="falseExpr"			class="expression"/>	
-	</joinpoint>	
-	
-	<!-- NEW EXPR -->	
-	<joinpoint class="newExpr" 	extends="expression">
-	</joinpoint>	
-
-	<!-- DELETE EXPR -->	
-	<joinpoint class="deleteExpr" 	extends="expression">
-	</joinpoint>	
-	
-
-	<!-- EXPRESSION -->
-	<joinpoint class="expression">
-			<select class="vardecl"/>
-	</joinpoint>
-
-	<!-- VAR REFERENCE -->
-	<joinpoint class="varref"	extends="expression" tooltip="A reference to a variable">
-	</joinpoint>
-
-	<!-- CAST -->
-	<joinpoint class="cast" extends="expression"/>	
-	
-	
-	<!-- PAREN EXPR -->
-	<joinpoint class="parenExpr" extends="expression"/>	
-
-	<!-- ArrayAccess -->
-	<joinpoint class="arrayAccess" extends="expression">	
-		<select alias="arrayVar" class="expression" tooltip="varref to the variable of the array access"/>
-		<select alias="subscript" class="expression" tooltip="expression of the array access subscript"/>
-	</joinpoint>
-
-	<!-- MemberAccess -->
-	<joinpoint class="memberAccess" extends="expression"/>	
-
-	<!-- UnaryExprOrType -->
-	<joinpoint class="unaryExprOrType" extends="expression"/>	
+    <!-- OMP PRAGMA -->
+    <joinpoint class="omp" extends="pragma"
+        tooltip="Represents an OpenMP pragma (e.g., #pragma omp parallel)">
+    </joinpoint>
 
 
-	<!-- THIS -->
-	<joinpoint class="this" extends="expression"/>
+    <!-- DECL -->
+    <joinpoint class="decl"
+        tooltip="Represents one declaration (e.g., int foo(){return 0;}) or definition (e.g., int foo();) in the code" />
 
-	<!-- LITERAL -->
-	<joinpoint class="literal" extends="expression"/>
+    <!-- NAMED DECL -->
+    <joinpoint class="namedDecl" extends="decl" tooltip="Represents a decl with a name" />
 
-	<!-- INTEGER_LITERAL -->
-	<joinpoint class="intLiteral" extends="literal"/>
-
-	<!-- FLOAT_LITERAL -->
-	<joinpoint class="floatLiteral" extends="literal"/>
-
-	<!-- BOOL_LITERAL -->
-	<joinpoint class="boolLiteral" extends="literal"/>
-
-	<!-- COMMENT -->
-	<joinpoint class="comment"/>
+    <!-- DECLARATOR DECL -->
+    <joinpoint class="declarator" extends="namedDecl"
+        tooltip="Represents a decl that comes from a declarator (e.g., function, field, variable)" />
 
 
-	<!-- CILK_FOR -->
-	<joinpoint class="cilkFor" extends="loop"/>	
-
-	<!-- CILK_SYNC -->
-	<joinpoint class="cilkSync" extends="statement"/>		
-
-	<!-- CILK_SPAWN -->
-	<joinpoint class="cilkSpawn" extends="call"/>		
+    <!-- VAR DECLARATION -->
+    <joinpoint class="vardecl" extends="declarator"
+        tooltip="Represents a variable declaration or definition">
+        <select alias="init" class="expression" />
+    </joinpoint>
 
 
-	<!-- ATTRIBUTE -->
-	<joinpoint class="attribute"/>		
+    <!-- TYPEDEF NAME DECL -->
+    <joinpoint class="typedefNameDecl" extends="namedDecl"
+        tooltip="Base node for declarations which introduce a typedef-name">
+    </joinpoint>
 
-	<!-- TYPE -->
-	<joinpoint class="type">
-	</joinpoint>
-		
-	<!--  POINTER TYPE -->
-	<joinpoint class="pointerType" extends="type">
-	</joinpoint>
-	
-	<!--  ARRAY TYPE -->
-	<joinpoint class="arrayType" extends="type">
-	</joinpoint>
+    <!-- TYPEDEF DECL -->
+    <joinpoint class="typedefDecl" extends="typedefNameDecl"
+        tooltip="Declaration of a typedef-name via the 'typedef' type specifier">
+    </joinpoint>
 
-	<!--  ADJUSTED TYPE -->
-	<joinpoint class="adjustedType" extends="type">
-	</joinpoint>
-			
-	<!--  VARIABLE ARRAY TYPE -->
-	<joinpoint class="variableArrayType" extends="arrayType">
-	</joinpoint>		
-		
-	<!--  ENUM TYPE -->
-	<joinpoint class="enumType" extends="tagType">
-	</joinpoint>
-	
-	
-	<!--  TEMPLATE SPECIALIZATION TYPE -->
-	<joinpoint class="templateSpecializationType" extends="type">
-	</joinpoint>	
-	
+    <!-- ENUM DECL -->
+    <joinpoint class="enumDecl" extends="namedDecl" tooltip="Represents an enum">
+        <select alias="enumerator" class="enumeratorDecl" />
+    </joinpoint>
 
-	<!--  FUNCTION TYPE -->
-	<joinpoint class="functionType" extends="type">
-	</joinpoint>	
-	
-	<!--  TAG TYPE -->
-	<joinpoint class="tagType" extends="type">
-	</joinpoint>
-		
-	<!--  QUAL TYPE -->
-	<joinpoint class="qualType" extends="type">
-	</joinpoint>
+    <!-- ENUMERATOR DECL -->
+    <joinpoint class="enumeratorDecl" extends="namedDecl">
+    </joinpoint>
 
-	<!--  BUILTIN TYPE -->
-	<joinpoint class="builtinType" extends="type">
-	</joinpoint>
+    <!-- LABEL DECL -->
+    <joinpoint class="labelDecl" extends="namedDecl">
+    </joinpoint>
 
-	<!--  PAREN TYPE -->
-	<joinpoint class="parenType" extends="type">
-	</joinpoint>
-	
-	<!--  UNDEFINED TYPE -->
-	<joinpoint class="undefinedType" extends="type">
-	</joinpoint>
-	
-	<!-- ELABORATED TYPE -->
-	<joinpoint class="elaboratedType" extends="type" tooltip="Represents a type that was referred to using an elaborated type keyword, e.g., struct S, or via a qualified name, e.g., N::M::type, or both. This type is used to keep track of a type name as written in the source code, including tag keywords and any nested-name-specifiers. The type itself is always 'sugar', used to express what was written in the source code but containing no additional semantic information.">
-	</joinpoint>
+    <!-- ACCESS SPECIFIER -->
+    <joinpoint class="accessSpecifier" extends="decl">
+    </joinpoint>
 
-	<!-- TYPEDEF TYPE -->
-	<joinpoint class="typedefType" extends="type" tooltip="Represents the type of a typedef.">
-	</joinpoint>	
-	
-	
-	<!-- TEMPLATE ARGUMENT -->
-	<!--  <joinpoint class="templateArgument" tooltip="Represents a template argument."/>  -->
-	
-	<!-- TEMPLATE ARGUMENT EXPR -->
-	<!-- <joinpoint class="templateArgumentExpr" extends="templateArgument" tooltip="A template argument based on an expression that has not been resolved to one of the other forms yet, either because it's dependent or because it's representing a non-canonical template argument."/> -->
-
-	<!-- TEMPLATE ARGUMENT INTEGRAL -->
-	<!-- <joinpoint class="templateArgumentIntegral" extends="templateArgument" tooltip="A template argument based on an integral value that was provided for an integral non-type template parameter."/> -->
-
-	<!-- TEMPLATE ARGUMENT PACK -->
-	<!-- <joinpoint class="templateArgumentPack" extends="templateArgument" tooltip="A template argument based on a parameter pack."/> -->
-
-	<!-- TEMPLATE ARGUMENT TYPE -->
-	<!-- <joinpoint class="templateArgumentType" extends="templateArgument" tooltip="A template argument based on a type."/> -->
+    <!--  FUNCTION PARAMETER -->
+    <joinpoint class="param" extends="vardecl">
+    </joinpoint>
 
 
-		 	
+    <!-- FUNCTION -->
+    <joinpoint class="function" extends="declarator"
+        tooltip="Represents a function declaration or definition">
+        <select class="body" />
+        <!--  <select alias="body" 			class="scope"/> -->
+        <select class="param" />
+        <select class="decl" />
+    </joinpoint>
+
+    <!-- METHOD -->
+    <joinpoint class="method" extends="function"
+        tooltip="Represents a C++ class method declaration or definition">
+    </joinpoint>
+
+    <!-- CUDA KERNEL -->
+    <!-- 
+    <joinpoint class="cudaKernel" extends="function" tooltip="Represents a CUDA kernel function">
+    </joinpoint>			
+     -->
+
+
+    <!-- SCOPE-->
+    <joinpoint class="scope" extends="statement" tooltip="Represents a group of statements">
+        <select alias="stmt" class="statement" />
+        <select alias="childStmt" class="statement" />
+
+        <select class="scope" />
+        <select class="if" />
+        <select class="loop" />
+        <select class="pragma" />
+        <select class="marker" />
+        <select class="tag" />
+        <select class="omp" />
+        <select class="comment" />
+        <select class="returnStmt" />
+        <select class="cilkFor" />
+        <select class="cilkSync" />
+    </joinpoint>
+
+    <!-- BODY -->
+    <joinpoint class="body" extends="scope">
+    </joinpoint>
+
+
+    <!-- STATEMENT -->
+    <joinpoint class="statement">
+        <select alias="expr" class="expression" />
+        <select alias="childExpr" class="expression" />
+        <select class="call" />
+        <select alias="stmtCall" class="call" />
+        <select class="memberCall" />
+        <select class="memberAccess" />
+        <select class="arrayAccess" />
+        <select class="vardecl" />
+        <select class="varref" />
+        <select class="op" />
+        <select class="binaryOp" />
+        <select class="unaryOp" />
+        <select class="newExpr" />
+        <select class="deleteExpr" />
+        <select class="cilkSpawn" />
+    </joinpoint>
+
+
+    <!-- LOOP -->
+    <joinpoint class="loop" extends="statement">
+        <select alias="init" class="statement" />
+        <select alias="cond" class="statement" />
+        <select alias="step" class="statement" />
+        <select alias="body" class="scope" />
+        <!-- <select 			 			class="body"/>  -->
+    </joinpoint>
+
+
+    <!-- IF -->
+    <joinpoint class="if" extends="statement">
+        <select alias="cond" class="expression" />
+        <select alias="condDecl" class="vardecl" />
+        <select alias="then" class="scope" />
+        <select alias="else" class="scope" />
+        <select alias="body" class="scope" />
+        <!-- <select 			 			class="body"/> -->
+    </joinpoint>
+
+    <!-- WRAPPER STMT -->
+    <joinpoint class="wrapperStmt" extends="statement">
+    </joinpoint>
+
+    <!-- RETURN STMT -->
+    <joinpoint class="returnStmt" extends="statement">
+        <select alias="returnExpr" class="expression" />
+    </joinpoint>
+
+    <!-- SWITCH -->
+    <joinpoint class="switch" extends="statement" />
+
+    <!-- CASE -->
+    <joinpoint class="case" extends="statement" />
+
+    <!-- DECL STMT-->
+    <joinpoint class="declStmt" extends="statement" />
+
+    <!-- EXPR STMT -->
+    <joinpoint class="exprStmt" extends="statement" />
+
+    <!-- GOTO STMT -->
+    <joinpoint class="gotoStmt" extends="statement" />
+
+    <!-- LABEL STMT -->
+    <joinpoint class="labelStmt" extends="statement" />
+
+    <!-- EMPTY STMT -->
+    <joinpoint class="emptyStmt" extends="statement" />
+
+    <!-- CONTINUE STMT -->
+    <joinpoint class="continue" extends="statement" />
+
+    <!-- BREAK STMT -->
+    <joinpoint class="break" extends="statement" />
+
+    <!-- CALL -->
+    <joinpoint class="call" extends="expression">
+        <select alias="callee" class="expression" />
+        <select alias="arg" class="expression" />
+    </joinpoint>
+
+    <!-- MEMBER CALL -->
+    <joinpoint class="memberCall" extends="call">
+    </joinpoint>
+
+    <!-- CUDA KERNEL CALL -->
+    <joinpoint class="cudaKernelCall" extends="call">
+    </joinpoint>
+
+    <!-- OPERATOR -->
+    <joinpoint class="op" extends="expression">
+    </joinpoint>
+
+    <!-- BINARY OPERATOR -->
+    <joinpoint class="binaryOp" extends="op">
+        <select alias="left" class="expression" />
+        <select alias="right" class="expression" />
+    </joinpoint>
+
+    <!-- UNARY OPERATOR -->
+    <joinpoint class="unaryOp" extends="op">
+        <select alias="operand" class="expression" />
+    </joinpoint>
+
+    <!-- TERNARY OPERATOR -->
+    <joinpoint class="ternaryOp" extends="op">
+        <select alias="cond" class="expression" />
+        <select alias="trueExpr" class="expression" />
+        <select alias="falseExpr" class="expression" />
+    </joinpoint>
+
+    <!-- NEW EXPR -->
+    <joinpoint class="newExpr" extends="expression">
+    </joinpoint>
+
+    <!-- DELETE EXPR -->
+    <joinpoint class="deleteExpr" extends="expression">
+    </joinpoint>
+
+
+    <!-- EXPRESSION -->
+    <joinpoint class="expression">
+        <select class="vardecl" />
+    </joinpoint>
+
+    <!-- VAR REFERENCE -->
+    <joinpoint class="varref" extends="expression" tooltip="A reference to a variable">
+    </joinpoint>
+
+    <!-- CAST -->
+    <joinpoint class="cast" extends="expression" />
+
+
+    <!-- PAREN EXPR -->
+    <joinpoint class="parenExpr" extends="expression" />
+
+    <!-- ArrayAccess -->
+    <joinpoint class="arrayAccess" extends="expression">
+        <select alias="arrayVar" class="expression"
+            tooltip="varref to the variable of the array access" />
+        <select alias="subscript" class="expression"
+            tooltip="expression of the array access subscript" />
+    </joinpoint>
+
+    <!-- MemberAccess -->
+    <joinpoint class="memberAccess" extends="expression" />
+
+    <!-- UnaryExprOrType -->
+    <joinpoint class="unaryExprOrType" extends="expression" />
+
+
+    <!-- THIS -->
+    <joinpoint class="this" extends="expression" />
+
+    <!-- LITERAL -->
+    <joinpoint class="literal" extends="expression" />
+
+    <!-- INTEGER_LITERAL -->
+    <joinpoint class="intLiteral" extends="literal" />
+
+    <!-- FLOAT_LITERAL -->
+    <joinpoint class="floatLiteral" extends="literal" />
+
+    <!-- BOOL_LITERAL -->
+    <joinpoint class="boolLiteral" extends="literal" />
+
+    <!-- COMMENT -->
+    <joinpoint class="comment" />
+
+
+    <!-- CILK_FOR -->
+    <joinpoint class="cilkFor" extends="loop" />
+
+    <!-- CILK_SYNC -->
+    <joinpoint class="cilkSync" extends="statement" />
+
+    <!-- CILK_SPAWN -->
+    <joinpoint class="cilkSpawn" extends="call" />
+
+
+    <!-- ATTRIBUTE -->
+    <joinpoint class="attribute" />
+
+    <!-- TYPE -->
+    <joinpoint class="type">
+    </joinpoint>
+
+    <!--  POINTER TYPE -->
+    <joinpoint class="pointerType" extends="type">
+    </joinpoint>
+
+    <!--  ARRAY TYPE -->
+    <joinpoint class="arrayType" extends="type">
+    </joinpoint>
+
+    <!--  ADJUSTED TYPE -->
+    <joinpoint class="adjustedType" extends="type">
+    </joinpoint>
+
+    <!--  VARIABLE ARRAY TYPE -->
+    <joinpoint class="variableArrayType" extends="arrayType">
+    </joinpoint>
+
+    <!--  ENUM TYPE -->
+    <joinpoint class="enumType" extends="tagType">
+    </joinpoint>
+
+
+    <!--  TEMPLATE SPECIALIZATION TYPE -->
+    <joinpoint class="templateSpecializationType" extends="type">
+    </joinpoint>
+
+
+    <!--  FUNCTION TYPE -->
+    <joinpoint class="functionType" extends="type">
+    </joinpoint>
+
+    <!--  TAG TYPE -->
+    <joinpoint class="tagType" extends="type">
+    </joinpoint>
+
+    <!--  QUAL TYPE -->
+    <joinpoint class="qualType" extends="type">
+    </joinpoint>
+
+    <!--  BUILTIN TYPE -->
+    <joinpoint class="builtinType" extends="type">
+    </joinpoint>
+
+    <!--  PAREN TYPE -->
+    <joinpoint class="parenType" extends="type">
+    </joinpoint>
+
+    <!--  UNDEFINED TYPE -->
+    <joinpoint class="undefinedType" extends="type">
+    </joinpoint>
+
+    <!-- ELABORATED TYPE -->
+    <joinpoint class="elaboratedType" extends="type"
+        tooltip="Represents a type that was referred to using an elaborated type keyword, e.g., struct S, or via a qualified name, e.g., N::M::type, or both. This type is used to keep track of a type name as written in the source code, including tag keywords and any nested-name-specifiers. The type itself is always 'sugar', used to express what was written in the source code but containing no additional semantic information.">
+    </joinpoint>
+
+    <!-- TYPEDEF TYPE -->
+    <joinpoint class="typedefType" extends="type" tooltip="Represents the type of a typedef.">
+    </joinpoint>
+
+
+    <!-- TEMPLATE ARGUMENT -->
+    <!--  <joinpoint class="templateArgument" tooltip="Represents a template argument."/>  -->
+
+    <!-- TEMPLATE ARGUMENT EXPR -->
+    <!-- <joinpoint class="templateArgumentExpr" extends="templateArgument" tooltip="A template
+    argument based on an expression that has not been resolved to one of the other forms yet, either
+    because it's dependent or because it's representing a non-canonical template argument."/> -->
+
+    <!-- TEMPLATE ARGUMENT INTEGRAL -->
+    <!-- <joinpoint class="templateArgumentIntegral" extends="templateArgument" tooltip="A template
+    argument based on an integral value that was provided for an integral non-type template
+    parameter."/> -->
+
+    <!-- TEMPLATE ARGUMENT PACK -->
+    <!-- <joinpoint class="templateArgumentPack" extends="templateArgument" tooltip="A template
+    argument based on a parameter pack."/> -->
+
+    <!-- TEMPLATE ARGUMENT TYPE -->
+    <!-- <joinpoint class="templateArgumentType" extends="templateArgument" tooltip="A template
+    argument based on a type."/> -->
+
+
 </joinpoints>

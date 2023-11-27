@@ -9,13 +9,13 @@ function LibVC ($func, compilerSetup, name) {
 	checkDefined($func, '$func', 'LibVC');
 	checkJoinPointType($func, 'function', 'LibVC ($func)');
 	checkTrue($func.hasDefinition, '$func should be a function definition', 'LibVC');
-	checkDefined($func.ancestor('file'), "$func.ancestor('file')", 'LibVC');
+	checkDefined($func.getAncestor('file'), "$func.getAncestor('file')", 'LibVC');
 	
 	// Adds LibVC include
-	Compilation.addExtraIncludeFromGit("https://github.com/skeru/libVersioningCompiler.git", "include/");
+	Clava.getProgram().addExtraIncludeFromGit("https://github.com/skeru/libVersioningCompiler.git", "include/");
 	
 	// Adds LibVC source
-	Compilation.addExtraSourceFromGit("https://github.com/skeru/libVersioningCompiler.git", "lib/");
+	Clava.getProgram().addExtraSourceFromGit("https://github.com/skeru/libVersioningCompiler.git", "lib/");
 
 	
 	/* TODO: make name if undefined */
@@ -34,7 +34,7 @@ function LibVC ($func, compilerSetup, name) {
 	
 	/* function data */
 	this._funcName = $func.name;
-	this._funcPath =  Io.getAbsolutePath(Clava.getWeavingFolder(), $func.ancestor('file').relativeFilepath);
+	this._funcPath =  Io.getAbsolutePath(Clava.getWeavingFolder(), $func.getAncestor('file').relativeFilepath);
 	this._type = '';
 	this._typedef = '';
 	this._makeType($func);
@@ -196,7 +196,7 @@ LibVC.prototype._makeType = function($func) {
  * */
 LibVC.prototype._includeHeader = function($jp) {
 	
-	$file = $jp.ancestor('file');
+	$file = $jp.getAncestor('file');
 	
 	if(this._filesWithHeader[$file.filepath] === undefined) {
 		
@@ -210,7 +210,7 @@ LibVC.prototype._includeHeader = function($jp) {
  * */
 LibVC.prototype._includeIostream = function($jp) {
 	
-	$file = $jp.ancestor('file');
+	$file = $jp.getAncestor('file');
 	
 	if(this._filesWithIostream[$file.filepath] === undefined) {
 		
@@ -224,7 +224,7 @@ LibVC.prototype._includeIostream = function($jp) {
  * */
 LibVC.prototype._includeErrorDecl = function($jp) {
 	
-	$file = $jp.ancestor('file');
+	$file = $jp.getAncestor('file');
 	
 	if(this._filesWithErrorDecl[$file.filepath] === undefined) {
 		

@@ -34,7 +34,7 @@ aspectdef Test
 	// Set a single template argument
 	select file.vardecl{"W"} end
 	apply
-		$vardecl.type.setTemplateArgsTypes(0, floatType);
+		$vardecl.type.setTemplateArgType(0, floatType);
 		println("After setting float: " + $vardecl.type.templateArgsStrings);		
 	end
 
@@ -58,7 +58,7 @@ aspectdef Test
 	// Set a single template argument
 	select file.vardecl{"map"} end
 	apply
-		$vardecl.type.setTemplateArgsTypes(1, doubleType);
+		$vardecl.type.setTemplateArgType(1, doubleType);
 		println("After second arg to double: " + $vardecl.type.templateArgsStrings);		
 	end
 

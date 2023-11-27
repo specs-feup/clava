@@ -54,7 +54,7 @@ class MpiScatterGatherLoop {
    */
   execute() {
     var $mainFunction = ClavaCode.getFunctionDefinition("main", true);
-    var $mainFile = $mainFunction.ancestor("file");
+    var $mainFile = $mainFunction.getAncestor("file");
 
     // Add include
     $mainFile.addInclude("mpi.h");
@@ -194,7 +194,7 @@ class MpiScatterGatherLoop {
   _addMpiInit($mainFunction) {
     // Add params to main, if no params
     if ($mainFunction.params.length === 0) {
-      $mainFunction.paramsFromStrings = ["int argc", "char** argv"];
+      $mainFunction.setParamsFromStrings(["int argc", "char** argv"]);
     }
 
     var numMainParams = $mainFunction.params.length;
@@ -223,7 +223,7 @@ class MpiScatterGatherLoop {
   _addVariable(varName, accessPattern, namesArray, accessesArray) {
     // Check if loop contains a reference to the variable
     var firstVarref = undefined;
-    for (var $varref of this._$loop.descendants("varref")) {
+    for (var $varref of this._$loop.getDescendants("varref")) {
       if ($varref.name === varName) {
         firstVarref = $varref;
         break;

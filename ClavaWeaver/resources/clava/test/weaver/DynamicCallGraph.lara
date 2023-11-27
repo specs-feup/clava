@@ -133,7 +133,7 @@ function insertIncrement($call, code) {
 	// If call is inside a loop header (e.g., for, while), 
 	// insert increment at the beginning of the loop body
 	if($call.isInsideLoopHeader) {
-		var $loop = $call.ancestor('loop');
+		var $loop = $call.getAncestor('loop');
 		checkDefined($loop);
 		$loop.body.insertBegin(code);
 		return;
@@ -141,7 +141,7 @@ function insertIncrement($call, code) {
 
 /*
 	// If inside return stmt, insert increment before
-	var $return = $call.ancestor('return');
+	var $return = $call.getAncestor('return');
 	if($return !== undefined) {
 		$return.insert before code;
 		return;

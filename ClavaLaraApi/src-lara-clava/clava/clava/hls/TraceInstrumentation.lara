@@ -1,4 +1,4 @@
-import weaver.WeaverJps;
+import weaver.Query;
 import clava.ClavaJoinPoints;
 import clava.Clava;
 import lara.code.Logger;
@@ -26,7 +26,7 @@ TraceInstrumentation.instrument = function(funName) {
 	var filename = funName + ".dot";
 	logger = new Logger(undefined, filename);
 
-	for (var elem of WeaverJps.search("function").chain()){
+	for (var elem of Query.search("function").chain()){
 		if (elem["function"].name == funName)
 			root = elem["function"];
 	}
@@ -46,13 +46,13 @@ TraceInstrumentation.instrument = function(funName) {
 	var children = scope.children.slice();
 
 	//Get global vars as interfaces
-	for (var elem of WeaverJps.search("vardecl")) {
+	for (var elem of Query.search("vardecl")) {
 		if (elem.isGlobal)
 			registerInterface(elem);
 	}
 
 	//Get local vars
-	for (var elem of WeaverJps.search("function", {name: funName}).search("vardecl")){
+	for (var elem of Query.search("function", {name: funName}).search("vardecl")){
 		registerLocal(elem);
 	}
 

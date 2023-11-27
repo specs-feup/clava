@@ -47,7 +47,7 @@ class LocalStaticToGlobal extends SimplePass {
     }
 
     // Inside functions - not sure if this is needed
-    if ($jp.ancestor("function") === undefined) {
+    if ($jp.getAncestor("function") === undefined) {
       return false;
     }
 
@@ -55,7 +55,7 @@ class LocalStaticToGlobal extends SimplePass {
   }
 
   transformJoinpoint($jp) {
-    const $function = $jp.ancestor("function");
+    const $function = $jp.getAncestor("function");
     const newName = $function.name + "_static_" + $jp.name;
 
     $jp.name = newName;

@@ -26,21 +26,12 @@ public abstract class ABody extends AScope {
         this.aScope = aScope;
     }
     /**
-     * Get value on attribute numStatements
+     * Get value on attribute getNumStatements
      * @return the attribute's value
      */
     @Override
-    public Long getNumStatementsImpl() {
-        return this.aScope.getNumStatementsImpl();
-    }
-
-    /**
-     * Get value on attribute numStatements
-     * @return the attribute's value
-     */
-    @Override
-    public Long numStatementsImpl(Boolean flat) {
-        return this.aScope.numStatementsImpl(flat);
+    public Long getNumStatementsImpl(Boolean flat) {
+        return this.aScope.getNumStatementsImpl(flat);
     }
 
     /**
@@ -384,15 +375,6 @@ public abstract class ABody extends AScope {
     }
 
     /**
-     * Get value on attribute astAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astAncestorImpl(String type) {
-        return this.aScope.astAncestorImpl(type);
-    }
-
-    /**
      * Get value on attribute ast
      * @return the attribute's value
      */
@@ -429,12 +411,12 @@ public abstract class ABody extends AScope {
     }
 
     /**
-     * Get value on attribute descendantsAndSelfArrayImpl
+     * Get value on attribute getAncestor
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsAndSelfArrayImpl(String type) {
-        return this.aScope.descendantsAndSelfArrayImpl(type);
+    public AJoinPoint getAncestorImpl(String type) {
+        return this.aScope.getAncestorImpl(type);
     }
 
     /**
@@ -492,21 +474,21 @@ public abstract class ABody extends AScope {
     }
 
     /**
-     * Get value on attribute laraDescendantsArrayImpl
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint[] laraDescendantsArrayImpl(String type) {
-        return this.aScope.laraDescendantsArrayImpl(type);
-    }
-
-    /**
      * Get value on attribute childrenArrayImpl
      * @return the attribute's value
      */
     @Override
     public AJoinPoint[] getChildrenArrayImpl() {
         return this.aScope.getChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getJavaFieldType
+     * @return the attribute's value
+     */
+    @Override
+    public String getJavaFieldTypeImpl(String fieldName) {
+        return this.aScope.getJavaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -528,12 +510,12 @@ public abstract class ABody extends AScope {
     }
 
     /**
-     * Get value on attribute ancestor
+     * Get value on attribute getChild
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint ancestorImpl(String type) {
-        return this.aScope.ancestorImpl(type);
+    public AJoinPoint getChildImpl(Integer index) {
+        return this.aScope.getChildImpl(index);
     }
 
     /**
@@ -552,15 +534,6 @@ public abstract class ABody extends AScope {
     @Override
     public AComment[] getInlineCommentsArrayImpl() {
         return this.aScope.getInlineCommentsArrayImpl();
-    }
-
-    /**
-     * Get value on attribute astChild
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint astChildImpl(Integer index) {
-        return this.aScope.astChildImpl(index);
     }
 
     /**
@@ -588,6 +561,15 @@ public abstract class ABody extends AScope {
     @Override
     public String getAstIdImpl() {
         return this.aScope.getAstIdImpl();
+    }
+
+    /**
+     * Get value on attribute getKeyType
+     * @return the attribute's value
+     */
+    @Override
+    public Object getKeyTypeImpl(String key) {
+        return this.aScope.getKeyTypeImpl(key);
     }
 
     /**
@@ -636,15 +618,6 @@ public abstract class ABody extends AScope {
     }
 
     /**
-     * Get value on attribute astParent
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint getAstParentImpl() {
-        return this.aScope.getAstParentImpl();
-    }
-
-    /**
      * Get value on attribute bitWidth
      * @return the attribute's value
      */
@@ -654,30 +627,12 @@ public abstract class ABody extends AScope {
     }
 
     /**
-     * Get value on attribute userField
-     * @return the attribute's value
-     */
-    @Override
-    public Object userFieldImpl(String fieldName) {
-        return this.aScope.userFieldImpl(fieldName);
-    }
-
-    /**
      * Get value on attribute hasNode
      * @return the attribute's value
      */
     @Override
     public Boolean hasNodeImpl(Object nodeOrJp) {
         return this.aScope.hasNodeImpl(nodeOrJp);
-    }
-
-    /**
-     * Get value on attribute child
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint childImpl(Integer index) {
-        return this.aScope.childImpl(index);
     }
 
     /**
@@ -753,12 +708,21 @@ public abstract class ABody extends AScope {
     }
 
     /**
+     * Get value on attribute getChainAncestor
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getChainAncestorImpl(String type) {
+        return this.aScope.getChainAncestorImpl(type);
+    }
+
+    /**
      * Get value on attribute descendantsArrayImpl
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] descendantsArrayImpl(String type) {
-        return this.aScope.descendantsArrayImpl(type);
+    public AJoinPoint[] getDescendantsArrayImpl() {
+        return this.aScope.getDescendantsArrayImpl();
     }
 
     /**
@@ -768,6 +732,24 @@ public abstract class ABody extends AScope {
     @Override
     public AJoinPoint[] getAstChildrenArrayImpl() {
         return this.aScope.getAstChildrenArrayImpl();
+    }
+
+    /**
+     * Get value on attribute getDescendantsArrayImpl
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint[] getDescendantsArrayImpl(String type) {
+        return this.aScope.getDescendantsArrayImpl(type);
+    }
+
+    /**
+     * Get value on attribute getFirstJp
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getFirstJpImpl(String type) {
+        return this.aScope.getFirstJpImpl(type);
     }
 
     /**
@@ -798,30 +780,21 @@ public abstract class ABody extends AScope {
     }
 
     /**
-     * Get value on attribute javaValue
+     * Get value on attribute getAstChild
      * @return the attribute's value
      */
     @Override
-    public Object javaValueImpl(String fieldName) {
-        return this.aScope.javaValueImpl(fieldName);
+    public AJoinPoint getAstChildImpl(Integer index) {
+        return this.aScope.getAstChildImpl(index);
     }
 
     /**
-     * Get value on attribute keyType
+     * Get value on attribute getDescendantsAndSelfArrayImpl
      * @return the attribute's value
      */
     @Override
-    public Object keyTypeImpl(String key) {
-        return this.aScope.keyTypeImpl(key);
-    }
-
-    /**
-     * Get value on attribute chainAncestor
-     * @return the attribute's value
-     */
-    @Override
-    public AJoinPoint chainAncestorImpl(String type) {
-        return this.aScope.chainAncestorImpl(type);
+    public AJoinPoint[] getDescendantsAndSelfArrayImpl(String type) {
+        return this.aScope.getDescendantsAndSelfArrayImpl(type);
     }
 
     /**
@@ -834,30 +807,12 @@ public abstract class ABody extends AScope {
     }
 
     /**
-     * Get value on attribute joinpointType
-     * @return the attribute's value
-     */
-    @Override
-    public String getJoinpointTypeImpl() {
-        return this.aScope.getJoinpointTypeImpl();
-    }
-
-    /**
      * Get value on attribute currentRegion
      * @return the attribute's value
      */
     @Override
     public AJoinPoint getCurrentRegionImpl() {
         return this.aScope.getCurrentRegionImpl();
-    }
-
-    /**
-     * Get value on attribute hasAstParent
-     * @return the attribute's value
-     */
-    @Override
-    public Boolean getHasAstParentImpl() {
-        return this.aScope.getHasAstParentImpl();
     }
 
     /**
@@ -888,12 +843,12 @@ public abstract class ABody extends AScope {
     }
 
     /**
-     * Get value on attribute firstJp
+     * Get value on attribute getAstAncestor
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint firstJpImpl(String type) {
-        return this.aScope.firstJpImpl(type);
+    public AJoinPoint getAstAncestorImpl(String type) {
+        return this.aScope.getAstAncestorImpl(type);
     }
 
     /**
@@ -903,15 +858,6 @@ public abstract class ABody extends AScope {
     @Override
     public Integer getDepthImpl() {
         return this.aScope.getDepthImpl();
-    }
-
-    /**
-     * Get value on attribute javaFieldType
-     * @return the attribute's value
-     */
-    @Override
-    public String javaFieldTypeImpl(String fieldName) {
-        return this.aScope.javaFieldTypeImpl(fieldName);
     }
 
     /**
@@ -1139,23 +1085,6 @@ public abstract class ABody extends AScope {
 
     /**
      * Replaces this join point with a comment with the same contents as .code
-     */
-    @Override
-    public AJoinPoint toCommentImpl() {
-        return this.aScope.toCommentImpl();
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
-     * @param prefix 
-     */
-    @Override
-    public AJoinPoint toCommentImpl(String prefix) {
-        return this.aScope.toCommentImpl(prefix);
-    }
-
-    /**
-     * Replaces this join point with a comment with the same contents as .code
      * @param prefix 
      * @param suffix 
      */
@@ -1271,16 +1200,6 @@ public abstract class ABody extends AScope {
     @Override
     public AJoinPoint addLocalImpl(String name, AJoinPoint type, String initValue) {
         return this.aScope.addLocalImpl(name, type, initValue);
-    }
-
-    /**
-     * Overload which does not initialize the local variable
-     * @param name 
-     * @param type 
-     */
-    @Override
-    public AJoinPoint addLocalImpl(String name, AJoinPoint type) {
-        return this.aScope.addLocalImpl(name, type);
     }
 
     /**
@@ -1547,7 +1466,7 @@ public abstract class ABody extends AScope {
      * 
      */
     protected enum BodyAttributes {
-        NUMSTATEMENTS("numStatements"),
+        GETNUMSTATEMENTS("getNumStatements"),
         NAKED("naked"),
         STMTS("stmts"),
         ALLSTMTS("allStmts"),
@@ -1557,39 +1476,35 @@ public abstract class ABody extends AScope {
         ISFIRST("isFirst"),
         ISLAST("isLast"),
         PARENT("parent"),
-        ASTANCESTOR("astAncestor"),
         AST("ast"),
         SIBLINGSLEFT("siblingsLeft"),
         DATA("data"),
         HASCHILDREN("hasChildren"),
-        DESCENDANTSANDSELF("descendantsAndSelf"),
+        GETANCESTOR("getAncestor"),
         TYPE("type"),
         SIBLINGSRIGHT("siblingsRight"),
         RIGHTJP("rightJp"),
         ISCILK("isCilk"),
         FILEPATH("filepath"),
         SCOPENODES("scopeNodes"),
-        LARADESCENDANTS("laraDescendants"),
         CHILDREN("children"),
+        GETJAVAFIELDTYPE("getJavaFieldType"),
         FIRSTCHILD("firstChild"),
         NUMCHILDREN("numChildren"),
-        ANCESTOR("ancestor"),
+        GETCHILD("getChild"),
         LEFTJP("leftJp"),
         INLINECOMMENTS("inlineComments"),
-        ASTCHILD("astChild"),
         ASTNAME("astName"),
         JPID("jpId"),
         ASTID("astId"),
+        GETKEYTYPE("getKeyType"),
         CONTAINS("contains"),
         ASTISINSTANCE("astIsInstance"),
         FILENAME("filename"),
         JAVAFIELDS("javaFields"),
         ISINSYSTEMHEADER("isInSystemHeader"),
-        ASTPARENT("astParent"),
         BITWIDTH("bitWidth"),
-        USERFIELD("userField"),
         HASNODE("hasNode"),
-        CHILD("child"),
         ENDLINE("endLine"),
         ENDCOLUMN("endColumn"),
         CODE("code"),
@@ -1598,24 +1513,23 @@ public abstract class ABody extends AScope {
         KEYS("keys"),
         ISINSIDEHEADER("isInsideHeader"),
         ASTNUMCHILDREN("astNumChildren"),
+        GETCHAINANCESTOR("getChainAncestor"),
         DESCENDANTS("descendants"),
         ASTCHILDREN("astChildren"),
+        GETDESCENDANTS("getDescendants"),
+        GETFIRSTJP("getFirstJp"),
         ISMACRO("isMacro"),
         LASTCHILD("lastChild"),
         ROOT("root"),
-        JAVAVALUE("javaValue"),
-        KEYTYPE("keyType"),
-        CHAINANCESTOR("chainAncestor"),
+        GETASTCHILD("getAstChild"),
+        GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
-        JOINPOINTTYPE("joinpointType"),
         CURRENTREGION("currentRegion"),
-        HASASTPARENT("hasAstParent"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
-        FIRSTJP("firstJp"),
+        GETASTANCESTOR("getAstAncestor"),
         DEPTH("depth"),
-        JAVAFIELDTYPE("javaFieldType"),
         LOCATION("location"),
         GETUSERFIELD("getUserField"),
         HASTYPE("hasType"),

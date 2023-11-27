@@ -243,21 +243,6 @@ public class CxxProgram extends AProgram {
     }
 
     @Override
-    public void addExtraIncludeFromGitImpl(String gitRepo) {
-        addExtraIncludeFromGitImpl(gitRepo, null);
-    }
-
-    @Override
-    public void addExtraSourceFromGitImpl(String gitRepo) {
-        addExtraSourceFromGitImpl(gitRepo, null);
-    }
-
-    @Override
-    public void addProjectFromGitImpl(String gitRepo, String[] libs) {
-        addProjectFromGitImpl(gitRepo, libs, null);
-    }
-
-    @Override
     public AJoinPoint addFileFromPathImpl(Object filepath) {
         File file = getFile(filepath);
 
@@ -347,7 +332,7 @@ public class CxxProgram extends AProgram {
 
         // Add include for atexit
         // ClavaLog.debug("Getting file ancestor");
-        AFile file = (AFile) mainFunction.ancestorImpl("file");
+        AFile file = (AFile) mainFunction.getAncestorImpl("file");
         SpecsCheck.checkNotNull(file, () -> "Expected main function to be inside a file: " + mainFunction.getNode());
         // ClavaLog.debug("Adding stdlib.h include");
         file.addInclude("stdlib.h", true);

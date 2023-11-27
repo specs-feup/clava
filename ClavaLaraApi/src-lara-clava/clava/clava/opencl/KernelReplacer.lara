@@ -9,8 +9,8 @@ function KernelReplacer($call, kernelName, kernelCodePath, bufferSizes, localSiz
 	// join points
 	this._call = $call;
 	this._function = $call.definition;
-	this._stmt = $call.ancestor('statement');
-	this._file = $call.ancestor('file');
+	this._stmt = $call.getAncestor('statement');
+	this._file = $call.getAncestor('file');
 
 	// buffer information
 	this._bufferSizes = bufferSizes; // maps param index to buffer information TODO: improve how this is stored and used
