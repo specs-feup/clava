@@ -9,8 +9,7 @@ import ClavaJavaTypes from "./ClavaJavaTypes.js";
  */
 export default class ClavaJoinPoints {
     static toJoinPoint(node) {
-        const cxxJps = ClavaJavaTypes.getCxxJoinPoints();
-        return wrapJoinPoint(cxxJps.createFromLara(node));
+        return wrapJoinPoint(ClavaJavaTypes.CxxJoinPoints.createFromLara(node));
     }
     /**
      * @returns True, if the two AST nodes are equal (internal representation. Not actual Joinpoint types), in the sense that the underlying AST nodes are also equal, according to their .equals() method (might return true for different AST nodes).
@@ -413,7 +412,7 @@ export default class ClavaJoinPoints {
      */
     static type(source) {
         if (typeof source === "string") {
-            if (ClavaJavaTypes.getBuiltinKind().isBuiltinKind(source)) {
+            if (ClavaJavaTypes.BuiltinKind.isBuiltinKind(source)) {
                 return ClavaJoinPoints.builtinType(source);
             }
             return ClavaJoinPoints.typeLiteral(source);

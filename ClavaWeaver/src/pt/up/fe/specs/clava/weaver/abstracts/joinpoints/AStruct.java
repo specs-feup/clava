@@ -39,7 +39,7 @@ public abstract class AStruct extends ARecord {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint[] getFieldsArrayImpl() {
+    public AField[] getFieldsArrayImpl() {
         return this.aRecord.getFieldsArrayImpl();
     }
 

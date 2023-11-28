@@ -811,7 +811,7 @@ export class Program extends Joinpoint {
    * Common class of struct, union and class
    */
 export class RecordJp extends NamedDecl {
-  get fields(): Joinpoint[] { return wrapJoinPoint(this._javaObject.getFields()) }
+  get fields(): Field[] { return wrapJoinPoint(this._javaObject.getFields()) }
   get functions(): FunctionJp[] { return wrapJoinPoint(this._javaObject.getFunctions()) }
   /**
    * True if this particular join point is an implementation (i.e. has its body fully specified), false otherwise
@@ -1500,7 +1500,7 @@ export class FunctionJp extends Declarator {
 }
 
 export class FunctionType extends Type {
-  get paramTypes(): Joinpoint[] { return wrapJoinPoint(this._javaObject.getParamTypes()) }
+  get paramTypes(): Type[] { return wrapJoinPoint(this._javaObject.getParamTypes()) }
   get returnType(): Type { return wrapJoinPoint(this._javaObject.getReturnType()) }
   set returnType(value: Type) { this._javaObject.setReturnType(unwrapJoinPoint(value)); }
   /**
@@ -1572,7 +1572,7 @@ export class Loop extends Statement {
    */
   set cond(value: string) { this._javaObject.setCond(unwrapJoinPoint(value)); }
   get condRelation(): Relation { return wrapJoinPoint(this._javaObject.getCondRelation()) }
-  set condRelation(value: Relation | string) { this._javaObject.setCondRelation(unwrapJoinPoint(value)); }
+  set condRelation(value: Relation) { this._javaObject.setCondRelation(unwrapJoinPoint(value)); }
   get controlVar(): string { return wrapJoinPoint(this._javaObject.getControlVar()) }
   /**
    * The expression of the last value of the control variable (e.g. 'length' in 'i < length;')
@@ -1647,15 +1647,7 @@ export class Loop extends Statement {
   /**
    * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
    */
-  setCondRelation(operator: Relation): void;
-  /**
-   * Changes the operator of a canonical condition, if possible. Supported operators: <, <=, >, >=
-   */
-  setCondRelation(operator: string): void;
-  /**
-   * Changes the operator of a canonical condition, if possible. Supported operators: lt, le, gt, ge
-   */
-  setCondRelation(p1: Relation | string): void | void { return wrapJoinPoint(this._javaObject.setCondRelation(unwrapJoinPoint(p1))); }
+  setCondRelation(operator: Relation): void { return wrapJoinPoint(this._javaObject.setCondRelation(unwrapJoinPoint(operator))); }
   /**
    * Sets the end value of the loop. Works with loops of kind 'for'
    */

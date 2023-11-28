@@ -17,8 +17,7 @@ import ClavaJavaTypes from "./ClavaJavaTypes.js";
  */
 export default class ClavaJoinPoints {
   static toJoinPoint(node: any): Joinpoints.Joinpoint {
-    const cxxJps = ClavaJavaTypes.getCxxJoinPoints();
-    return wrapJoinPoint(cxxJps.createFromLara(node));
+    return wrapJoinPoint(ClavaJavaTypes.CxxJoinPoints.createFromLara(node));
   }
 
   /**
@@ -780,7 +779,7 @@ export default class ClavaJoinPoints {
     source: Joinpoints.Type | Joinpoints.Joinpoint | string
   ): Joinpoints.BuiltinType | Joinpoints.Type {
     if (typeof source === "string") {
-      if (ClavaJavaTypes.getBuiltinKind().isBuiltinKind(source)) {
+      if (ClavaJavaTypes.BuiltinKind.isBuiltinKind(source)) {
         return ClavaJoinPoints.builtinType(source);
       }
       return ClavaJoinPoints.typeLiteral(source);

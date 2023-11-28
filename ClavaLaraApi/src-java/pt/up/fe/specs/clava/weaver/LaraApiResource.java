@@ -74,7 +74,7 @@ public enum LaraApiResource implements LaraResourceProvider {
     ANALYSIS_CHECKERS_SYSTEM_CHECKER("analysis/checkers/SystemChecker.lara"),
 
     // Code
-    GLOBAL_VARIABLE("code/GlobalVariable.lara"),
+    //GLOBAL_VARIABLE("code/GlobalVariable.lara"),
     STATEMENT_DECOMPOSER_JS("code/StatementDecomposer.js"),
     DECOMPOSE_RESULT_JS("code/DecomposeResult.js"),
     CODE_SIMPLIFY_ASSIGNMENT("code/SimplifyAssignment.js"),
@@ -117,13 +117,13 @@ public enum LaraApiResource implements LaraResourceProvider {
     SCG_EDGE_DATA("graphs/scg/ScgEdgeData.js"),
 
     // Hdf5
-    HDF5("hdf5/Hdf5.lara"),
+    //HDF5("hdf5/Hdf5.lara"),
 
     // HLS
-    HLS("hls/HLSAnalysis.lara"),
-    HLS_TRACE("hls/TraceInstrumentation.lara"),
-    HLS_MATH("hls/MathAnalysis.lara"),
-    HLS_MATH_H("hls/MathHInfo.lara"),
+    //HLS("hls/HLSAnalysis.lara"),
+    //HLS_TRACE("hls/TraceInstrumentation.lara"),
+    //HLS_MATH("hls/MathAnalysis.lara"),
+    //HLS_MATH_H("hls/MathHInfo.lara"),
 
     // LIVENESS
     LIVENESS_ANALYSIS("liveness/LivenessAnalysis.js"),
@@ -131,23 +131,23 @@ public enum LaraApiResource implements LaraResourceProvider {
     LIVENESS_UTILS("liveness/LivenessUtils.js"),
 
     // MPI
-    MPI_ACCESS_PATTERN("mpi/MpiAccessPattern.lara"),
-    MPI_SCATTER_GATHER_LOOP("mpi/MpiScatterGatherLoop.js"),
-    MPI_UTILS("mpi/MpiUtils.lara"),
+    //MPI_ACCESS_PATTERN("mpi/MpiAccessPattern.lara"),
+    //MPI_SCATTER_GATHER_LOOP("mpi/MpiScatterGatherLoop.js"),
+    //MPI_UTILS("mpi/MpiUtils.lara"),
 
     // MPI Patterns
-    ITERATION_VARIABLE_PATTERN("mpi/patterns/IterationVariablePattern.lara"),
-    MPI_ACCESS_PATTERNS("mpi/patterns/MpiAccessPatterns.lara"),
-    SCALAR_PATTERN("mpi/patterns/ScalarPattern.lara"),
+    //ITERATION_VARIABLE_PATTERN("mpi/patterns/IterationVariablePattern.lara"),
+    //MPI_ACCESS_PATTERNS("mpi/patterns/MpiAccessPatterns.lara"),
+    //SCALAR_PATTERN("mpi/patterns/ScalarPattern.lara"),
 
     // OpenCL
-    OPENCL_CALL("opencl/OpenCLCall.lara"),
-    OPENCL_CALL_VARIABLES("opencl/OpenCLCallVariables.lara"),
-    OPENCL_KERNEL_REPLACER("opencl/KernelReplacer.lara"),
-    OPENCL_KERNEL_REPLACER_AUTO("opencl/KernelReplacerAuto.lara"),
+    //OPENCL_CALL("opencl/OpenCLCall.lara"),
+    //OPENCL_CALL_VARIABLES("opencl/OpenCLCallVariables.lara"),
+    //OPENCL_KERNEL_REPLACER("opencl/KernelReplacer.lara"),
+    //OPENCL_KERNEL_REPLACER_AUTO("opencl/KernelReplacerAuto.lara"),
 
     // Parser
-    BATCH_PARSER("parser/BatchParser.lara"),
+    //BATCH_PARSER("parser/BatchParser.lara"),
 
     // Pass
     DECOMPOSE_DECL_STMT("pass/DecomposeDeclStmt.js"),
@@ -160,19 +160,19 @@ public enum LaraApiResource implements LaraResourceProvider {
     TRANSFORM_SWITCH_TO_IF("pass/TransformSwitchToIf.js"),
 
     // Stats
-    OPS_BLOCK("stats/OpsBlock.lara"),
-    OPS_COST("stats/OpsCost.lara"),
-    OPS_COUNTER("stats/OpsCounter.lara"),
-    STATIC_OPS_COUNTER("stats/StaticOpsCounter.lara"),
+    //OPS_BLOCK("stats/OpsBlock.lara"),
+    //OPS_COST("stats/OpsCost.lara"),
+    //OPS_COUNTER("stats/OpsCounter.lara"),
+    //STATIC_OPS_COUNTER("stats/StaticOpsCounter.lara"),
 
     // Memoization
-    MEMOI_PROF("memoi/MemoiProf.lara"),
+    //MEMOI_PROF("memoi/MemoiProf.lara"),
     // MEMOI_PROF_HELPER("memoi/_MemoiProfHelper.lara"),
-    MEMOI_GEN("memoi/MemoiGen.lara"),
-    MEMOI_GEN_HELPER("memoi/_MemoiGenHelper.lara"),
-    MEMOI_TARGET("memoi/MemoiTarget.lara"),
-    MEMOI_UTILS("memoi/MemoiUtils.lara"),
-    MEMOI_ANALYSIS("memoi/MemoiAnalysis.lara"),
+    //MEMOI_GEN("memoi/MemoiGen.lara"),
+    //MEMOI_GEN_HELPER("memoi/_MemoiGenHelper.lara"),
+    //MEMOI_TARGET("memoi/MemoiTarget.lara"),
+    //MEMOI_UTILS("memoi/MemoiUtils.lara"),
+    //MEMOI_ANALYSIS("memoi/MemoiAnalysis.lara"),
 
     // Clava utils
     //CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
@@ -180,8 +180,8 @@ public enum LaraApiResource implements LaraResourceProvider {
     FILE_ITERATOR("util/FileIterator.lara"),
 
     // UVE
-    UVE("uve/UVE.lara"),
-    UVE_DETECT("uve/DetectStream.lara"),
+    //UVE("uve/UVE.lara"),
+    //UVE_DETECT("uve/DetectStream.lara"),
 
     // OPT
     OPT_NORMALIZE_TO_SUBSET("opt/NormalizeToSubset.js"),

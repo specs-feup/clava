@@ -56,7 +56,7 @@ public class ArraySubscriptExpr extends Expr {
     }
 
     public Expr getArrayExpr() {
-        ClavaNode currentNode = getChild(0);
+        ClavaNode currentNode = getLhs();
 
         while (!VALID_ARRAY_VARS.contains(currentNode)) {
             Preconditions.checkArgument(currentNode.hasChildren(), "Expected to find DeclRefExpr:" + this);

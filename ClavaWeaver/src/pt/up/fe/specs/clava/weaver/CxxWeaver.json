@@ -19598,7 +19598,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "joinpoint[]",
+										"type": "field[]",
 										"name": "fields"
 									}]
 					},
@@ -42952,7 +42952,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "joinpoint[]",
+										"type": "type[]",
 										"name": "paramTypes"
 									}]
 					},
@@ -70936,7 +70936,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "joinpoint[]",
+										"type": "field[]",
 										"name": "fields"
 									}]
 					},
@@ -75521,7 +75521,7 @@
 						"type": "attribute",
 						"children": [
 									{
-										"type": "joinpoint[]",
+										"type": "field[]",
 										"name": "fields"
 									}]
 					},

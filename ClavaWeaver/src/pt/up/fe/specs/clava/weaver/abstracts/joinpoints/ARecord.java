@@ -58,15 +58,15 @@ public abstract class ARecord extends ANamedDecl {
      * Get value on attribute fields
      * @return the attribute's value
      */
-    public abstract AJoinPoint[] getFieldsArrayImpl();
+    public abstract AField[] getFieldsArrayImpl();
 
     /**
      * Get value on attribute fields
      * @return the attribute's value
      */
     public Object getFieldsImpl() {
-        AJoinPoint[] aJoinPointArrayImpl0 = getFieldsArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aJoinPointArrayImpl0);
+        AField[] aFieldArrayImpl0 = getFieldsArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(aFieldArrayImpl0);
         return nativeArray0;
     }
 

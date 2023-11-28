@@ -4,16 +4,16 @@ import JavaTypes from "lara-js/api/lara/util/JavaTypes.js";
  *
  */
 export default class ClavaJavaTypes {
-    static getClavaNodes() {
+    static get ClavaNodes() {
         return JavaTypes.getType("pt.up.fe.specs.clava.ClavaNodes");
     }
-    static getClavaNode() {
+    static get ClavaNode() {
         return JavaTypes.getType("pt.up.fe.specs.clava.ClavaNode");
     }
-    static getCxxJoinPoints() {
+    static get CxxJoinPoints() {
         return JavaTypes.getType("pt.up.fe.specs.clava.weaver.CxxJoinpoints");
     }
-    static getBuiltinKind() {
+    static get BuiltinKind() {
         return JavaTypes.getType("pt.up.fe.specs.clava.ast.type.enums.BuiltinKind");
     }
     static get CxxWeaver() {
@@ -39,6 +39,18 @@ export default class ClavaJavaTypes {
     }
     static get MathExtraApiTools() {
         return JavaTypes.getType("pt.up.fe.specs.clava.weaver.MathExtraApiTools");
+    }
+    static get HighLevelSynthesisAPI() {
+        return JavaTypes.getType("pt.up.fe.specs.clava.weaver.hls.HighLevelSynthesisAPI");
+    }
+    static get MemoiReport() {
+        return JavaTypes.getType("pt.up.fe.specs.clava.weaver.memoi.MemoiReport");
+    }
+    static get MemoiReportsMap() {
+        return JavaTypes.getType("pt.up.fe.specs.clava.weaver.memoi.MemoiReportsMap");
+    }
+    static get MemoiCodeGen() {
+        return JavaTypes.getType("pt.up.fe.specs.clava.weaver.memoi.MemoiCodeGen");
     }
 }
 //# sourceMappingURL=ClavaJavaTypes.js.map
