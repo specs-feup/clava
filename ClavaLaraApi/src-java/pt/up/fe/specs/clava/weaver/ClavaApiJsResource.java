@@ -84,7 +84,10 @@ public enum ClavaApiJsResource implements LaraResourceProvider {
     CLAVABENCHMARKINSTANCE_JS("lara/benchmark/ClavaBenchmarkInstance.js"),
     ENERGY_JS("lara/code/Energy.js"),
     LOGGER_JS("lara/code/Logger.js"),
-    TIMER_JS("lara/code/Timer.js");
+    TIMER_JS("lara/code/Timer.js"),
+    ENERGYMETRIC_JS("lara/metrics/EnergyMetric.js"),
+    EXECUTIONTIMEMETRIC_JS("lara/metrics/ExecutionTimeMetric.js"),
+    WEAVERLAUNCHER_JS("weaver/WeaverLauncher.js");
 
     private final String resource;
 

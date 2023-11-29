@@ -1,4 +1,5 @@
 import antarex.margot.dse.metric.MargotMetric;
+import antarex.margot.Enum;
 
 /**
  * This class represents the base monitor that is 'extended' by all monitors.

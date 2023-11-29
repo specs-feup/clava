@@ -1,3 +1,5 @@
+import clava.Format;
+
 var Nodes = [];
 var curr_node_ID = -1;
 

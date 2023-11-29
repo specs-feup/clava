@@ -10,7 +10,7 @@ export default class Format {
         return Format.addSuffix(Format.addPrefix(str, prefix), suffix);
     }
     static escape(str) {
-        return JavaTypes.SpecsStrings.escape(str);
+        return JavaTypes.SpecsStrings.escapeJson(str);
     }
 }
 //# sourceMappingURL=Format.js.map

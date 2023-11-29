@@ -42,9 +42,9 @@ public enum LaraWeaverApiResource implements LaraResourceProvider {
     CLAVA_CLASS_TYPE_JP("jp/ClavaClassTypeJp.lara"),
     CLAVA_INTERFACE_JP("jp/ClavaInterfaceJp.lara"),
     CLAVA_JOIN_POINT("jp/ClavaJoinPoint.lara"),
-    COMMON_JOIN_POINTS("jp/CommonJoinPoints.lara"),
+    COMMON_JOIN_POINTS("jp/CommonJoinPoints.lara");
     //JOIN_POINTS("JoinPoints.lara"),
-    WEAVER_LAUNCHER("WeaverLauncher.lara");
+    //WEAVER_LAUNCHER("WeaverLauncher.lara");
 
     private final String resource;
 

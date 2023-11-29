@@ -8,11 +8,6 @@ aspectdef ApplyHdf5
 	input filter end
 	
 	var jpFilter = new JpFilter(filter);
-/*
-	println("Filter");
-	printObject(jpFilter);
-	println();
-	*/
 	
 	// Get all classes and structs
 	var $records = [];
@@ -31,10 +26,5 @@ aspectdef ApplyHdf5
 	for(var $file of $files) {
 		$file.write(".");
 	}
-	//call Hdf5Types($filteredRecords);
-	//var $hFile = ClavaJoinPoints.file("test.h");
-	//$hFile.write(".");
-	//var $cppFile = ClavaJoinPoints.file("test.cpp");
-	//$cppFile.write(".");
 	
 end

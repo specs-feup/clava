@@ -57,6 +57,9 @@ public enum LaraAntarexApiResource implements LaraResourceProvider {
     MARGOT_DSE_INFO("margot/dse/MargotDseInfo.lara"),
     MARGOT_DSE_METRIC("margot/dse/metric/MargotMetric.lara"),
 
+    // mARGOt Helpers
+    ENUM("margot/Enum.js"),
+
     // Memoi
     MEMOIZATION("memoi/Memoization.lara"),
     MEMOIZATION_AUTO_ASPECTS("memoi/MemoizationAutoAspects.lara"),
@@ -65,6 +68,9 @@ public enum LaraAntarexApiResource implements LaraResourceProvider {
     MEMOIZATION_CXX("memoi/MemoizationCXX.lara"),
     MEMOIZATION_LIB_FUNCS("memoi/MemoizationLibFuncs.lara"),
     MEMOIZATION_MATH("memoi/MemoizationMath.lara"),
+
+    // Memoi Helpers
+    LARA_OBJECT("memoi/LaraObject.js"),
 
     // MultiVersioning
     MULTI_POINTERS("multi/MultiVersionPointers.lara"),
