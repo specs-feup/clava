@@ -131,7 +131,7 @@ class MemoiGen {
     this._isProf = true;
     this._isEmpty = false;
     this._profReportFiles = Io.getFiles(dir, "*.json", false).map(
-      (f) => f.getAbsolutePath() as string
+      (f) => f.getAbsolutePath()
     );
   }
 
