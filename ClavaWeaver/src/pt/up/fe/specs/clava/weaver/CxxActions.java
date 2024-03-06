@@ -153,6 +153,12 @@ public class CxxActions {
 
     public static ClavaNode replace(ClavaNode target, ClavaNode newNode, CxxWeaver weaver) {
         weaver.clearUserField(target);
+
+        // Copy location from target to newNode if locations are invalid
+        newNode.getDescendantsAndSelfStream()
+                .filter(node -> !node.get(ClavaNode.LOCATION).isValid())
+                .forEach(node -> node.set(ClavaNode.LOCATION, target.get(ClavaNode.LOCATION)));
+
         return NodeInsertUtils.replace(target, newNode);
     }
 
