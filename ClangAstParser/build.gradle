@@ -1,0 +1,57 @@
+plugins {
+ 	id 'distribution'
+}
+
+// Java project
+apply plugin: 'java'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+
+// Repositories providers
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	testImplementation "junit:junit:4.11"     
+
+	implementation ":ClavaAst"
+	implementation ":CommonsLangPlus"
+	implementation ":jOptions"
+	implementation ":SpecsUtils"
+
+	implementation group: 'com.google.guava', name: 'guava', version: '19.0'	
+}
+
+java {
+	withSourcesJar()
+}
+
+// Project sources
+sourceSets {
+   main {
+      java {
+         srcDir 'src'
+      }
+
+	  resources {
+		srcDir 'resources'
+	  }      
+   }
+	
+   
+   test {
+      java {
+         srcDir 'test'
+      }
+	  
+	  resources {
+		srcDir 'resources'
+	  }
+   }
+   
+}

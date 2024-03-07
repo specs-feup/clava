@@ -64,4 +64,9 @@ public class CudaTest {
     public void testCudaQuery() {
         newTester().test("CudaQuery.lara", "sample.cu");
     }
+
+    @Test
+    public void testCudaWscad2023() {
+        newTester().test("CudaWSCAD2023.js", "wscad2023.cu");
+    }
 }
