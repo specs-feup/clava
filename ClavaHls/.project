@@ -14,7 +14,6 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.apache.ivyde.eclipse.ivynature</nature>
 	</natures>
 	<filteredResources>
 		<filter>
