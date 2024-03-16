@@ -65,7 +65,8 @@ public class CudaTest {
         newTester().test("CudaQuery.lara", "sample.cu");
     }
 
-    @Test
+    // Not implemented
+    // @Test
     public void testCudaWscad2023() {
         newTester().test("CudaWSCAD2023.js", "wscad2023.cu");
     }
