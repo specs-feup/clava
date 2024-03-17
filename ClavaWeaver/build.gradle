@@ -1,0 +1,84 @@
+plugins {
+ 	id 'distribution'
+}
+
+// Java project
+apply plugin: 'java'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+
+// Repositories providers
+repositories {
+	// Gearman
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots"}
+
+    mavenCentral()
+}
+
+dependencies {
+	implementation "junit:junit:4.12"     
+
+
+	implementation ":CommonsLangPlus"
+	implementation ":GsonPlus"
+	implementation ":jOptions"
+	implementation ":JsEngine"
+	implementation ":SpecsUtils"
+	implementation ":XStreamPlus"
+	implementation ":tdrcLibrary"
+
+	implementation ":LanguageSpecification"
+	implementation ":LaraCommonLanguageApi"
+	implementation ":LaraDoc"
+	implementation ":LaraExtraApi"
+	implementation ":LaraFramework"
+	implementation ":LARAI"
+	implementation ":LaraLoc"
+	implementation ":LaraUnit"
+	implementation ":LaraUtils"
+	implementation ":WeaverGenerator"
+	implementation ":WeaverInterface"
+	
+	implementation ":AntarexClavaApi"
+	implementation ":ClangAstParser"
+	implementation ":ClavaAst"
+	implementation ":ClavaHls"
+	implementation ":ClavaLaraApi"
+
+	implementation group: 'com.google.guava', name: 'guava', version: '19.0'	
+	implementation group: 'com.google.code.gson', name: 'gson', version: '2.4'		
+}
+
+java {
+	withSourcesJar()
+}
+
+// Project sources
+sourceSets {
+   main {
+      java {
+         srcDir 'src'
+         srcDir 'test'		 
+      }
+
+	  resources {
+		srcDir 'resources'
+	  }      
+   }
+	
+   
+   test {
+      java {
+         srcDir 'test'
+      }
+	  
+	  resources {
+		srcDir 'resources'
+	  }
+   }
+   
+}
