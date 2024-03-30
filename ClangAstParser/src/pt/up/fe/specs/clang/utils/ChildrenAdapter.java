@@ -313,7 +313,11 @@ public class ChildrenAdapter {
 
         // NullNode is a valid value for CompoundStmt
         if (clavaNode instanceof NullNode) {
-            if (isOptional) {
+
+            // If NullNode has a valid location, it represents an empty statement, in this case always create a naked
+            // scope
+
+            if (isOptional && !clavaNode.getLocation().isValid()) {
                 return clavaNode;
             }
 
