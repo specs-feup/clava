@@ -5,6 +5,9 @@ plugins {
 // Java project
 apply plugin: 'java'
 
+// Executable
+apply plugin: 'application'
+
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
@@ -81,4 +84,8 @@ sourceSets {
 	  }
    }
    
+}
+
+application {
+    mainClass.set("pt.up.fe.specs.clava.weaver.ClavaWeaverLauncher")
 }
