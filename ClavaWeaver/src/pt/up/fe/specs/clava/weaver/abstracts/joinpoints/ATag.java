@@ -243,7 +243,7 @@ public abstract class ATag extends APragma {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aPragma.getChildImpl(index);
     }
 
@@ -513,7 +513,7 @@ public abstract class ATag extends APragma {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aPragma.getAstChildImpl(index);
     }
 

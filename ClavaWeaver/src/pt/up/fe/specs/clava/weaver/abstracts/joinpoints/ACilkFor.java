@@ -84,7 +84,7 @@ public abstract class ACilkFor extends ALoop {
      * @return the attribute's value
      */
     @Override
-    public Integer[] getRankArrayImpl() {
+    public int[] getRankArrayImpl() {
         return this.aLoop.getRankArrayImpl();
     }
 
@@ -585,7 +585,7 @@ public abstract class ACilkFor extends ALoop {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aLoop.getChildImpl(index);
     }
 
@@ -855,7 +855,7 @@ public abstract class ACilkFor extends ALoop {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aLoop.getAstChildImpl(index);
     }
 

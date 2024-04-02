@@ -60,7 +60,7 @@ public class CxxFunctionType extends AFunctionType {
     }
 
     @Override
-    public void setParamTypeImpl(Integer index, AType newType) {
+    public void setParamTypeImpl(int index, AType newType) {
         type.setParamType(index, (Type) newType.getNode());
     }
 

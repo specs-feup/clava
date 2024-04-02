@@ -240,7 +240,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aTypedefNameDecl.getChildImpl(index);
     }
 
@@ -510,7 +510,7 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aTypedefNameDecl.getAstChildImpl(index);
     }
 

@@ -6,24 +6,24 @@ import lara.Io;
 aspectdef ClangEnumsGenerator
 	input header="Type.h", outputFolder="./" end
 
-	println("Calling generator for header '"+header+"', generating files in folder " + Io.getPath(outputFolder).getAbsolutePath());
+	console.log("Calling generator for header '"+header+"', generating files in folder " + Io.getPath(outputFolder).getAbsolutePath());
 
 	// Get corresponding ClangEnum
 	var headerEnums = ClangEnums.getHeader(header);
 	
 	if(headerEnums === undefined) {
-		println("Could not find ClangEnum for header file '"+header+"'");
+		console.log("Could not find ClangEnum for header file '"+header+"'");
 		return;
 	}
 	
 
-	println("Searching for enums in header '"+header+"'...");
+	console.log("Searching for enums in header '"+header+"'...");
 				
 	for(var $enum of Query.search("enumDecl")) {
 			headerEnums.process($enum);
 	/*
 		if(typeEnums.has($enum.name)) {
-			println("Saving Enum: " + $enum.name);
+			console.log("Saving Enum: " + $enum.name);
 			// Save enum values
 			var enumFile = Io.getPath($enum.name + "_type.h.txt");
 			var enumValues = $enum.enumerators.map($enumValue => $enumValue.name).join("\n");
@@ -32,12 +32,12 @@ aspectdef ClangEnumsGenerator
 */
 	}
 
-	println("Finished searching, generating code");
+	console.log("Finished searching, generating code");
 	
 	headerEnums.generateCode(outputFolder);
 	
-//	println($app.ast);
+//	console.log($app.ast);
 	
 
-//	println("hello");	
+//	console.log("hello");	
 end

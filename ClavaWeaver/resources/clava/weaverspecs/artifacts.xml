@@ -43,13 +43,13 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             tooltip="Looks in the descendants for the first node of the given type">
             <parameter name="type" type="String" />
         </attribute>
-        <attribute name="line" type="Integer"
+        <attribute name="line" type="int"
             tooltip="The starting line of the current node in the original code" />
-        <attribute name="column" type="Integer"
+        <attribute name="column" type="int"
             tooltip="The starting column of the current node in the original code" />
-        <attribute name="endLine" type="Integer"
+        <attribute name="endLine" type="int"
             tooltip="The ending line of the current node in the original code" />
-        <attribute name="endColumn" type="Integer"
+        <attribute name="endColumn" type="int"
             tooltip="The ending column of the current node in the original code" />
         <attribute name="location" type="String"
             tooltip="A string with information about the file and code position of this node, if available" />
@@ -65,26 +65,26 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
             <def />
         </attribute>
         <attribute name="hasType" type="Boolean" tooltip="true, if the join point has a type" />
-        <attribute name="bitWidth" type="Integer"
+        <attribute name="bitWidth" type="int"
             tooltip="The bit width of the type returned by this join point, in relation to the definitions of its Translation Unit, or undefined if there is no type or bitwidth defined, or if the join point is not in a TranslationUnit" />
 
         <attribute name="astName" type="String"
             tooltip="The name of the Java class of this node, which is similar to the equivalent node in Clang AST" />
-        <attribute name="astNumChildren" type="Integer"
+        <attribute name="astNumChildren" type="int"
             tooltip="Returns the number of children of the node, considering null nodes" />
         <attribute name="astChildren" type="joinpoint[]"
             tooltip="Returns an array with the children of the node, considering null nodes" />
         <attribute name="getAstChild" type="joinpoint"
             tooltip="Returns the child of the node at the given index, considering null nodes">
-            <parameter name="index" type="Integer" />
+            <parameter name="index" type="int" />
         </attribute>
-        <attribute name="numChildren" type="Integer"
+        <attribute name="numChildren" type="int"
             tooltip="Returns the number of children of the node, ignoring null nodes" />
         <attribute name="children" type="joinpoint[]"
             tooltip="Returns an array with the children of the node, ignoring null nodes" />
         <attribute name="getChild" type="joinpoint"
             tooltip="Returns the child of the node at the given index, ignoring null nodes">
-            <parameter name="index" type="Integer" />
+            <parameter name="index" type="int" />
         </attribute>
         <attribute name="siblingsLeft" type="joinpoint[]"
             tooltip="Returns an array with the siblings that came before this node" />
@@ -156,7 +156,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="isCilk" type="Boolean"
             tooltip="true if this is a Cilk node (i.e., cilk_spawn, cilk_sync or cilk_for)">
         </attribute>
-        <attribute name="depth" type="Integer"
+        <attribute name="depth" type="int"
             tooltip="the depth of this join point in the AST. If it is the root join point returns 0, if it is a child of the root node returns 1, etc.">
         </attribute>
         <attribute name="jpId" type="String"
@@ -344,14 +344,14 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="id" type="String" tooltip="Uniquely identifies the loop inside the program" />
         <attribute name="isInnermost" type="Boolean" />
         <attribute name="isOutermost" type="Boolean" />
-        <attribute name="nestedLevel" type="Integer" />
+        <attribute name="nestedLevel" type="int" />
         <attribute name="controlVar" type="String" />
-        <attribute name="rank" type="Integer[]" />
+        <attribute name="rank" type="int[]" />
         <attribute name="isParallel" type="Boolean">
             <def />
             <def type="string" />
         </attribute>
-        <attribute name="iterations" type="Integer" />
+        <attribute name="iterations" type="int" />
         <attribute name="iterationsExpr" type="expression" />
         <attribute name="isInterchangeable" type="Boolean"
             tooltip="Tests whether the loops are interchangeable. This is a conservative test.">
@@ -434,7 +434,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="name" type="String">
             <def />
         </attribute>
-        <attribute name="numArgs" type="Integer" />
+        <attribute name="numArgs" type="int" />
         <attribute name="memberNames" type="String[]" />
         <!-- 		<attribute name="decl" type="function"
             tooltip="a 'function' join point that represents the function declaration or definition of the
@@ -817,8 +817,8 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="isPointer" type="Boolean" />
         <attribute name="isAuto" type="Boolean"
             tooltip="True if this is a type declared with the 'auto' keyword" />
-        <attribute name="arraySize" type="Integer" />
-        <attribute name="arrayDims" type="Integer[]" />
+        <attribute name="arraySize" type="int" />
+        <attribute name="arrayDims" type="int[]" />
         <!-- <attribute name="elementType" type="joinpoint" />  -->
         <attribute name="hasTemplateArgs" type="Boolean" />
         <attribute name="templateArgsStrings" type="String[]" />
@@ -849,7 +849,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="pointee" type="type">
             <def />
         </attribute>
-        <attribute name="pointerLevels" type="Integer"
+        <attribute name="pointerLevels" type="int"
             tooltip="Number of pointer levels from this pointer" />
     </artifact>
 
@@ -884,7 +884,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
     <!-- TEMPLATE SPECIALIZATION TYPE -->
     <artifact class="templateSpecializationType">
         <attribute name="templateName" type="String" />
-        <attribute name="numArgs" type="Integer" />
+        <attribute name="numArgs" type="int" />
         <attribute name="args" type="String[]" />
         <attribute name="firstArgType" type="type" />
     </artifact>

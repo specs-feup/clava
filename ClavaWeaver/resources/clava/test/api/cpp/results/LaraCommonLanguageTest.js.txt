@@ -1,3 +1,4 @@
+Warning: using laraImport() for file 'JoinPointsCommonPath.js', however it does not define a variable or class 'JoinPointsCommonPath'
 line: 1
 is FileJP? : true
 # A classes: 1

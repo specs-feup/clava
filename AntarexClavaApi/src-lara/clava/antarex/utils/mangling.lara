@@ -47,7 +47,7 @@ function getMangledName(vfile, includes , name, ccompiler) {
  var TMPFILE= Io.getTempFolder()+ getFileSeparator() + TMPFILENAME;
  var scriptFile= TMPFILE +".sh";
  if (! Io.isFile(scriptFile)) {
-   // println(" CREATION DU SCRIPT MANGLING");
+   // console.log(" CREATION DU SCRIPT MANGLING");
    Io.writeFile(scriptFile, codesh+line);
    Io.appendFile(scriptFile, 'VTMPFILE=' + TMPFILE + line);
    Io.appendFile(scriptFile, 'rm -f ${VTMPFILE}.s' + line);

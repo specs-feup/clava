@@ -275,7 +275,7 @@ class MemoiGen {
 
     // wrap every call to the target
     for (const $jp of Query.search("call", {
-      signature: (s) => this._target.sig === MemoiUtils.normalizeSig(s),
+      signature: (s: string) => this._target.sig === MemoiUtils.normalizeSig(s),
     })) {
       const $call = $jp as Call;
       $call.wrap(wrapperName);

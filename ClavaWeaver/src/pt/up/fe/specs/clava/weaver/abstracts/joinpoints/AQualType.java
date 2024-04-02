@@ -145,7 +145,7 @@ public abstract class AQualType extends AType {
      * @return the attribute's value
      */
     @Override
-    public Integer[] getArrayDimsArrayImpl() {
+    public int[] getArrayDimsArrayImpl() {
         return this.aType.getArrayDimsArrayImpl();
     }
 
@@ -420,7 +420,7 @@ public abstract class AQualType extends AType {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aType.getChildImpl(index);
     }
 
@@ -690,7 +690,7 @@ public abstract class AQualType extends AType {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aType.getAstChildImpl(index);
     }
 
@@ -1058,7 +1058,7 @@ public abstract class AQualType extends AType {
      * @param templateArgType 
      */
     @Override
-    public void setTemplateArgTypeImpl(Integer index, AType templateArgType) {
+    public void setTemplateArgTypeImpl(int index, AType templateArgType) {
         this.aType.setTemplateArgTypeImpl(index, templateArgType);
     }
 

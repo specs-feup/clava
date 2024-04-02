@@ -29,8 +29,8 @@ public enum JsApiResource implements ResourceProvider {
 
     // OTHER
 
-    DATA_HANDLER("DataHandler.js"),
-    HDF5("HDF5.js");
+    DATA_HANDLER("DataHandler.js");
+    //HDF5("HDF5.js"),
     //TYPES("Types.js");
 
     private final static String BASE_PACKAGE = "clava/js/";

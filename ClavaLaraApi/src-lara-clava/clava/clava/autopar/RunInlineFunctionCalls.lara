@@ -97,9 +97,9 @@ aspectdef RunInlineFunctionCalls
 	apply
 		/*
 		if($vardecl.isGlobal !== ($vardecl.storageClass === 'static')) {
-			println("DIFF!!!");
-			println("isGlobal: " + $vardecl.isGlobal);
-			println("Storage class: " + $vardecl.storageClass);
+			console.log("DIFF!!!");
+			console.log("isGlobal: " + $vardecl.isGlobal);
+			console.log("Storage class: " + $vardecl.storageClass);
 		}
 		*/
 
@@ -451,10 +451,10 @@ aspectdef inlinePreparation
 		
 		for(retJP of retJPs)
 		{
-			//println("ret_str_repl: " + ret_str_replacement);
-			//println("retJP original: " + retJP.code);
-			//println("retJP after: " + ret_str_replacement + retJP.children[0].code + ';');
-			//println("retJp child: " + retJP.children[0]);
+			//console.log("ret_str_repl: " + ret_str_replacement);
+			//console.log("retJP original: " + retJP.code);
+			//console.log("retJP after: " + ret_str_replacement + retJP.children[0].code + ';');
+			//console.log("retJp child: " + retJP.children[0]);
 			//retJP.insert replace ret_str_replacement + retJP.children[0].code + ';';
 			
 			// Copy binary operation stmt
@@ -463,8 +463,8 @@ aspectdef inlinePreparation
 			// Replace right hand with return expression
 			binaryOpCopy.right = retJP.children[0];
 
-			//println("PREVIOUS CODE: " + ret_str_replacement + retJP.children[0].code + ';');
-			//println("CURRENT CODE: " + exprStmtCopy.code);
+			//console.log("PREVIOUS CODE: " + ret_str_replacement + retJP.children[0].code + ';');
+			//console.log("CURRENT CODE: " + exprStmtCopy.code);
 			// Replace return with copy of expr stmt
 			retJP.replaceWith(exprStmtCopy);
 		}
@@ -482,7 +482,7 @@ aspectdef inlinePreparation
 		this.$newStmts.push($childStmt.copy());
 		this.replacedCallStr += $childStmt.code + '\n';
 		//changedReplacedCall = true;
-		//println("ADDING: " + $childStmt.code);
+		//console.log("ADDING: " + $childStmt.code);
 	end
 
 	this.replacedCallStr = this.replacedCallStr.allReplace({' const ':' '});
@@ -517,7 +517,7 @@ function updateVarrefName(varrefName, param_table) {
 }
 
 function updateSubscripts(subscripts, param_table) {
-	//println("Original subscripts: '" + subscripts + "'");
+	//console.log("Original subscripts: '" + subscripts + "'");
 
 	var idRegex = /[a-zA-Z_][a-zA-Z_0-9]*/g;
 	var match = idRegex['exec'](subscripts);
@@ -530,8 +530,8 @@ function updateSubscripts(subscripts, param_table) {
 		// capturing group n: match[n]
 		var matched = match[0];
 		var matchedIndex = match.index;
-		//println(matched);
-		//println(matchedIndex);
+		//console.log(matched);
+		//console.log(matchedIndex);
 		match = idRegex['exec'](subscripts);
 			
 		var newMatched = updateVarrefName(matched, param_table);
@@ -541,12 +541,12 @@ function updateSubscripts(subscripts, param_table) {
 		
 		startIndex = matchedIndex + matched.length;
 		
-		//println("Current String: '" + updatedSubscripts + "'");
+		//console.log("Current String: '" + updatedSubscripts + "'");
 	}
 	
 	// Complete string
 	updatedSubscripts += subscripts.substring(startIndex, subscripts.length);
-	//println("Updated subscripts: '" + updatedSubscripts + "'");
+	//console.log("Updated subscripts: '" + updatedSubscripts + "'");
 	
 	return updatedSubscripts;
 }

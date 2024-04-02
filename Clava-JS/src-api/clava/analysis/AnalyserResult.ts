@@ -1,25 +1,21 @@
-import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
+import { Joinpoint } from "../../Joinpoints.js";
 import Fix from "./Fix.js";
 
 /**
  * Abstract class created as a model for every result of analyser
  */
 
-export default class AnalyserResult<T extends LaraJoinPoint> {
-  private name: string;
-  private node: T;
-  private message: string;
-  private fix: Fix<T> | undefined;
+export default class AnalyserResult {
+  private node: Joinpoint;
+  private fix: Fix | undefined;
+  name: string;
+  message: string;
 
-  constructor(name: string, node: T, message: string, fix?: Fix<T>) {
+  constructor(name: string, node: Joinpoint, message: string, fix?: Fix) {
     this.name = name;
     this.node = node;
     this.message = message;
     this.fix = fix;
-  }
-
-  analyse(startNode: T) {
-    throw "Not implemented";
   }
 
   getName() {

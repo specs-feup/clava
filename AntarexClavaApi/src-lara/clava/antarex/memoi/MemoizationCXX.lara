@@ -215,11 +215,11 @@ aspectdef CPP_UpdateCallMemoization
   select call{aMethod} end
      apply
         if ($call.isMemberAccess) {
-         // println("MemberAccess is = " + $call.code + "   $call.definition=" + $call.definition + " --- Call declaration:" + $call.declaration);
+         // console.log("MemberAccess is = " + $call.code + "   $call.definition=" + $call.definition + " --- Call declaration:" + $call.declaration);
 	 // not a reference to a _wrapper
          if ($call.definition !== undefined)
        	  { 
-	    println("Call definition:" + $call.definition.location);
+	    console.log("Call definition:" + $call.definition.location);
             if ($call.declaration.location === locationOfTheselectedMethod )
                          $call.exec setName(getFuncWrapperName(aMethod));
          }

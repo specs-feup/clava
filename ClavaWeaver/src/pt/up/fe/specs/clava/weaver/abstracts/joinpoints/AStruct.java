@@ -294,7 +294,7 @@ public abstract class AStruct extends ARecord {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aRecord.getChildImpl(index);
     }
 
@@ -564,7 +564,7 @@ public abstract class AStruct extends ARecord {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aRecord.getAstChildImpl(index);
     }
 

@@ -2,18 +2,15 @@
  * Abstract class created as a model for every result of analyser
  */
 export default class AnalyserResult {
-    name;
     node;
-    message;
     fix;
+    name;
+    message;
     constructor(name, node, message, fix) {
         this.name = name;
         this.node = node;
         this.message = message;
         this.fix = fix;
-    }
-    analyse(startNode) {
-        throw "Not implemented";
     }
     getName() {
         return this.name;

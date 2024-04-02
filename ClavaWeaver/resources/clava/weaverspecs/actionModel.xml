@@ -314,7 +314,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
     </action>
 
     <action name="setArg" class="call">
-        <parameter name="index" type="Integer" />
+        <parameter name="index" type="int" />
         <parameter name="expr" type="expression" />
     </action>
 
@@ -433,13 +433,13 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <action name="setParam" class="function"
         tooltip="Sets the parameter of the function at the given position">
-        <parameter name="index" type="Integer" />
+        <parameter name="index" type="int" />
         <parameter name="param" type="param" />
     </action>
 
     <action name="setParam" class="function"
         tooltip="Sets the parameter of the function at the given position">
-        <parameter name="index" type="Integer" />
+        <parameter name="index" type="int" />
         <parameter name="name" type="String" />
         <parameter name="type" type="type" default="null" />
     </action>
@@ -463,7 +463,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <action name="setParamType" class="function"
         tooltip="Sets the type of a parameter of the function">
-        <parameter name="index" type="Integer" />
+        <parameter name="index" type="int" />
         <parameter name="newType" type="type" />
     </action>
 
@@ -642,7 +642,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
     </action>
     <action name="setScheduleChunkSize" class="omp"
         tooltip="Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception">
-        <parameter name="chunkSize" type="Integer" />
+        <parameter name="chunkSize" type="int" />
     </action>
     <action name="setScheduleModifiers" class="omp"
         tooltip="Sets the value of the modifiers in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception">
@@ -654,7 +654,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
     </action>
     <action name="setCollapse" class="omp"
         tooltip="Sets the value of the collapse clause of an OpenMP pragma">
-        <parameter name="newExpr" type="Integer" />
+        <parameter name="newExpr" type="int" />
     </action>
     <action name="setOrdered" class="omp"
         tooltip="Sets the value of the ordered clause of an OpenMP pragma">
@@ -731,7 +731,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
 
     <action name="setTemplateArgType" class="type"
         tooltip="Sets a single template argument type of a template type">
-        <parameter name="index" type="Integer" />
+        <parameter name="index" type="int" />
         <parameter name="templateArgType" type="type" />
     </action>
 
@@ -767,7 +767,7 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
     FunctionType  -->
     <action name="setParamType" class="functionType"
         tooltip="Sets the type of a parameter of the FunctionType. Be careful that if you directly change the type of a paramemter and the function type is associated with a function declaration, this change will not be reflected in the function. If you want to change the type of a parameter of a function declaration, use $function.setParaType">
-        <parameter name="index" type="Integer" />
+        <parameter name="index" type="int" />
         <parameter name="newType" type="type" />
     </action>
 

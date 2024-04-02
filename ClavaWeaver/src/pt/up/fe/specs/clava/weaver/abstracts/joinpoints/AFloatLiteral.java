@@ -255,7 +255,7 @@ public abstract class AFloatLiteral extends ALiteral {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aLiteral.getChildImpl(index);
     }
 
@@ -525,7 +525,7 @@ public abstract class AFloatLiteral extends ALiteral {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aLiteral.getAstChildImpl(index);
     }
 

@@ -29,9 +29,10 @@ export default class CheckBasedAnalyser extends Analyser {
      */
     analyse($startNode = Query.root()) {
         const checkResultList = [];
-        for (const $node of Query.searchFrom($startNode)) {
+        for (const a of Query.searchFrom($startNode)) {
+            const $jp = a;
             for (const checker of this.checkers) {
-                const checkResult = checker.check($node);
+                const checkResult = checker.check($jp);
                 if (checkResult === undefined) {
                     continue;
                 }

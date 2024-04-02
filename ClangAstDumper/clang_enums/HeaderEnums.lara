@@ -48,8 +48,8 @@ HeaderEnums.prototype.process = function($enum) {
 		return;
 	}
 
-	//println("Adding enum '"+$enum.name+"'");
-	println("Adding enum '"+enumName+"'");	
+	//console.log("Adding enum '"+$enum.name+"'");
+	console.log("Adding enum '"+enumName+"'");	
 
 	// Set enums
 	var enumValues = $enum.enumerators.map($enumValue => $enumValue.name);	
@@ -60,7 +60,7 @@ HeaderEnums.prototype.process = function($enum) {
 	//var filename = this.headerFilename.replace(".", "_") + "_" + $enum.name +  ".txt";
 	var filename = this.headerFilename.replace(".", "_") + "_" + enumName +  ".txt";
 	var file = Io.getPath(filename);
-	println("Saving enum values to file '"+file.getAbsolutePath()+"'");
+	console.log("Saving enum values to file '"+file.getAbsolutePath()+"'");
 	Io.writeFile(filename, enumValues.join("\n"));
 }
 	
@@ -75,7 +75,7 @@ HeaderEnums.prototype.generateCode = function(outputFolder) {
 		var enumCode = this.enumMap[enumName].getCode();
 		
 		if(enumCode === undefined) {
-			println("Skipped code generation for " + this.headerFilename + "::" + enumName);
+			console.log("Skipped code generation for " + this.headerFilename + "::" + enumName);
 			continue;
 		}
 		

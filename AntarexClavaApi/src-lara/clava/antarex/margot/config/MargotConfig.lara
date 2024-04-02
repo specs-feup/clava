@@ -53,7 +53,7 @@ MargotConfig.prototype.build = function(filePath) {
     code += '</margot>';
 
     if(filePath !== undefined) {
-        println('Writing configuration to ' + filePath);
+        console.log('Writing configuration to ' + filePath);
         Io.writeFile(filePath, code);
     }
 

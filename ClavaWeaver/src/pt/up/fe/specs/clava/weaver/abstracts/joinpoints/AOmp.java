@@ -925,7 +925,7 @@ public abstract class AOmp extends APragma {
      * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
      * @param chunkSize 
      */
-    public void setScheduleChunkSizeImpl(Integer chunkSize) {
+    public void setScheduleChunkSizeImpl(int chunkSize) {
         throw new UnsupportedOperationException(get_class()+": Action setScheduleChunkSize not implemented ");
     }
 
@@ -933,7 +933,7 @@ public abstract class AOmp extends APragma {
      * Sets the value of the chunck size in the schedule clause of an OpenMP pragma. Can only be called if there is already a schedule clause in the directive, otherwise throws an exception
      * @param chunkSize 
      */
-    public final void setScheduleChunkSize(Integer chunkSize) {
+    public final void setScheduleChunkSize(int chunkSize) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setScheduleChunkSize", this, Optional.empty(), chunkSize);
@@ -1003,7 +1003,7 @@ public abstract class AOmp extends APragma {
      * Sets the value of the collapse clause of an OpenMP pragma
      * @param newExpr 
      */
-    public void setCollapseImpl(Integer newExpr) {
+    public void setCollapseImpl(int newExpr) {
         throw new UnsupportedOperationException(get_class()+": Action setCollapse not implemented ");
     }
 
@@ -1011,7 +1011,7 @@ public abstract class AOmp extends APragma {
      * Sets the value of the collapse clause of an OpenMP pragma
      * @param newExpr 
      */
-    public final void setCollapse(Integer newExpr) {
+    public final void setCollapse(int newExpr) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setCollapse", this, Optional.empty(), newExpr);
@@ -1245,7 +1245,7 @@ public abstract class AOmp extends APragma {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aPragma.getChildImpl(index);
     }
 
@@ -1515,7 +1515,7 @@ public abstract class AOmp extends APragma {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aPragma.getAstChildImpl(index);
     }
 
@@ -2048,10 +2048,10 @@ public abstract class AOmp extends APragma {
         actions.add("void setCopyin(String[])");
         actions.add("void setScheduleKind(String)");
         actions.add("void setScheduleChunkSize(String)");
-        actions.add("void setScheduleChunkSize(Integer)");
+        actions.add("void setScheduleChunkSize(int)");
         actions.add("void setScheduleModifiers(String[])");
         actions.add("void setCollapse(String)");
-        actions.add("void setCollapse(Integer)");
+        actions.add("void setCollapse(int)");
         actions.add("void setOrdered(String)");
     }
 

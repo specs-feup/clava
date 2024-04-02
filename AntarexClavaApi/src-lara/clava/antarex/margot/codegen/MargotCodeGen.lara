@@ -331,7 +331,7 @@ MargotCodeGen.prototype.setGoal = function($joinpoint, goalName, goalValue) {
 MargotCodeGen.prototype.init = function($joinpoint) {
 	
 	if(this._initDone) {
-		println("\n[WARN] Initialization called multiple times. Make sure that if 'init' is being called explicitly, it is called before any other function and not called twice.\n");
+		console.log("\n[WARN] Initialization called multiple times. Make sure that if 'init' is being called explicitly, it is called before any other function and not called twice.\n");
 		return;
 	}
 	

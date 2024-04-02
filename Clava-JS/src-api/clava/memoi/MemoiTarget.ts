@@ -71,12 +71,13 @@ export default class MemoiTarget {
     sig = MemoiUtils.normalizeSig(sig);
 
     const $func = Query.search("function", {
-      signature: (signature) => sig === MemoiUtils.normalizeSig(signature),
+      signature: (signature: string) => sig === MemoiUtils.normalizeSig(signature),
     }).first() as FunctionJp | undefined;
 
     if ($func === undefined) {
       const $call = Query.search("call", {
-        signature: (signature) => sig === MemoiUtils.normalizeSig(signature),
+        signature: (signature: string) =>
+          sig === MemoiUtils.normalizeSig(signature),
       }).first() as Call | undefined;
 
       if ($call === undefined) {
@@ -91,7 +92,8 @@ export default class MemoiTarget {
 
   private findNumCallSites(): number {
     return Query.search("call", {
-      signature: (signature) => this.sig === MemoiUtils.normalizeSig(signature),
+      signature: (signature: string) =>
+        this.sig === MemoiUtils.normalizeSig(signature),
     }).get().length;
   }
 

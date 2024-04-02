@@ -129,7 +129,7 @@ public abstract class AEnumType extends ATagType {
      * @return the attribute's value
      */
     @Override
-    public Integer[] getArrayDimsArrayImpl() {
+    public int[] getArrayDimsArrayImpl() {
         return this.aTagType.getArrayDimsArrayImpl();
     }
 
@@ -404,7 +404,7 @@ public abstract class AEnumType extends ATagType {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aTagType.getChildImpl(index);
     }
 
@@ -674,7 +674,7 @@ public abstract class AEnumType extends ATagType {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aTagType.getAstChildImpl(index);
     }
 

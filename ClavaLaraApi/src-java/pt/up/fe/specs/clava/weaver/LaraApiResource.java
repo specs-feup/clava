@@ -51,42 +51,42 @@ public enum LaraApiResource implements LaraResourceProvider {
     AUTOPAR_16("autopar/SetVarrefOpenMPscoping.lara"),
 
     // Analysis
-    ANALYSIS_ANALYSERS_BOUNDS_ANALYSER("analysis/analysers/BoundsAnalyser.lara"),
-    ANALYSIS_ANALYSERS_BOUNDS_RESULT("analysis/analysers/BoundsResult.lara"),
-    ANALYSIS_ANALYSERS_DOUBLE_FREE_ANALYSER("analysis/analysers/DoubleFreeAnalyser.lara"),
-    ANALYSIS_ANALYSERS_DOUBLE_FREE_RESULT("analysis/analysers/DoubleFreeResult.lara"),
-    ANALYSIS_CHECKERS_CHGRP_CHECKER("analysis/checkers/ChgrpChecker.lara"),
-    ANALYSIS_CHECKERS_CHMOD_CHECKER("analysis/checkers/ChmodChecker.lara"),
-    ANALYSIS_CHECKERS_CHOWN_CHECKER("analysis/checkers/ChownChecker.lara"),
-    ANALYSIS_CHECKERS_CIN_CHECKER("analysis/checkers/CinChecker.lara"),
-    ANALYSIS_CHECKERS_EXEC_CHECKER("analysis/checkers/ExecChecker.lara"),
-    ANALYSIS_CHECKERS_FPRINTF_CHECKER("analysis/checkers/FprintfChecker.lara"),
-    ANALYSIS_CHECKERS_FSCANF_CHECKER("analysis/checkers/FscanfChecker.lara"),
-    ANALYSIS_CHECKERS_GETS_CHECKER("analysis/checkers/GetsChecker.lara"),
-    ANALYSIS_CHECKERS_LAMBDA_CHECKER("analysis/checkers/LambdaChecker.lara"),
-    ANALYSIS_CHECKERS_MEMCPY_CHECKER("analysis/checkers/MemcpyChecker.lara"),
-    ANALYSIS_CHECKERS_PRINTF_CHECKER("analysis/checkers/PrintfChecker.lara"),
-    ANALYSIS_CHECKERS_SCANF_CHECKER("analysis/checkers/ScanfChecker.lara"),
-    ANALYSIS_CHECKERS_SPRINTF_CHECKER("analysis/checkers/SprintfChecker.lara"),
-    ANALYSIS_CHECKERS_STRCAT_CHECKER("analysis/checkers/StrcatChecker.lara"),
+    //ANALYSIS_ANALYSERS_BOUNDS_ANALYSER("analysis/analysers/BoundsAnalyser.lara"),
+    //ANALYSIS_ANALYSERS_BOUNDS_RESULT("analysis/analysers/BoundsResult.lara"),
+    //ANALYSIS_ANALYSERS_DOUBLE_FREE_ANALYSER("analysis/analysers/DoubleFreeAnalyser.lara"),
+    //ANALYSIS_ANALYSERS_DOUBLE_FREE_RESULT("analysis/analysers/DoubleFreeResult.lara"),
+    //ANALYSIS_CHECKERS_CHGRP_CHECKER("analysis/checkers/ChgrpChecker.lara"),
+    //ANALYSIS_CHECKERS_CHMOD_CHECKER("analysis/checkers/ChmodChecker.lara"),
+    //ANALYSIS_CHECKERS_CHOWN_CHECKER("analysis/checkers/ChownChecker.lara"),
+    //ANALYSIS_CHECKERS_CIN_CHECKER("analysis/checkers/CinChecker.lara"),
+    //ANALYSIS_CHECKERS_EXEC_CHECKER("analysis/checkers/ExecChecker.lara"),
+    //ANALYSIS_CHECKERS_FPRINTF_CHECKER("analysis/checkers/FprintfChecker.lara"),
+    //ANALYSIS_CHECKERS_FSCANF_CHECKER("analysis/checkers/FscanfChecker.lara"),
+    //ANALYSIS_CHECKERS_GETS_CHECKER("analysis/checkers/GetsChecker.lara"),
+    //ANALYSIS_CHECKERS_LAMBDA_CHECKER("analysis/checkers/LambdaChecker.lara"),
+    //ANALYSIS_CHECKERS_MEMCPY_CHECKER("analysis/checkers/MemcpyChecker.lara"),
+    //ANALYSIS_CHECKERS_PRINTF_CHECKER("analysis/checkers/PrintfChecker.lara"),
+    //ANALYSIS_CHECKERS_SCANF_CHECKER("analysis/checkers/ScanfChecker.lara"),
+    //ANALYSIS_CHECKERS_SPRINTF_CHECKER("analysis/checkers/SprintfChecker.lara"),
+    //ANALYSIS_CHECKERS_STRCAT_CHECKER("analysis/checkers/StrcatChecker.lara"),
     //ANALYSIS_CHECKERS_STRCPY_CHECKER("analysis/checkers/StrcpyChecker.lara"),
-    ANALYSIS_CHECKERS_SYSLOG_CHECKER("analysis/checkers/SyslogChecker.lara"),
-    ANALYSIS_CHECKERS_SYSTEM_CHECKER("analysis/checkers/SystemChecker.lara"),
+    //ANALYSIS_CHECKERS_SYSLOG_CHECKER("analysis/checkers/SyslogChecker.lara"),
+    //ANALYSIS_CHECKERS_SYSTEM_CHECKER("analysis/checkers/SystemChecker.lara"),
 
     // Code
     //GLOBAL_VARIABLE("code/GlobalVariable.lara"),
-    STATEMENT_DECOMPOSER_JS("code/StatementDecomposer.js"),
-    DECOMPOSE_RESULT_JS("code/DecomposeResult.js"),
-    CODE_SIMPLIFY_ASSIGNMENT("code/SimplifyAssignment.js"),
-    CODE_SIMPLIFY_TERNARY_OP("code/SimplifyTernaryOp.js"),
-    CODE_FOR_TO_WHILE_STMT("code/ForToWhileStmt.js"),
-    CODE_DO_TO_WHILE_STMT("code/DoToWhileStmt.js"),
-    CODE_INLINER("code/Inliner.js"),
-    CODE_REMOVE_SHADOWING("code/RemoveShadowing.js"),
+    //STATEMENT_DECOMPOSER_JS("code/StatementDecomposer.js"),
+    //DECOMPOSE_RESULT_JS("code/DecomposeResult.js"),
+    //CODE_SIMPLIFY_ASSIGNMENT("code/SimplifyAssignment.js"),
+    //CODE_SIMPLIFY_TERNARY_OP("code/SimplifyTernaryOp.js"),
+    //CODE_FOR_TO_WHILE_STMT("code/ForToWhileStmt.js"),
+    //CODE_DO_TO_WHILE_STMT("code/DoToWhileStmt.js"),
+    //CODE_INLINER("code/Inliner.js"),
+    //CODE_REMOVE_SHADOWING("code/RemoveShadowing.js"),
 
     // Gprofer
-    GPROFER("gprofer/Gprofer.lara"),
-    GPROFER_ASPECTS("gprofer/_GproferAspects.lara"),
+    //GPROFER("gprofer/Gprofer.lara"),
+    //GPROFER_ASPECTS("gprofer/_GproferAspects.lara"),
 
     // Graphs
     STATIC_CALL_GRAPH("graphs/StaticCallGraph.js"),
@@ -150,14 +150,14 @@ public enum LaraApiResource implements LaraResourceProvider {
     //BATCH_PARSER("parser/BatchParser.lara"),
 
     // Pass
-    DECOMPOSE_DECL_STMT("pass/DecomposeDeclStmt.js"),
-    DECOMPOSE_VAR_DECLARATIONS("pass/DecomposeVarDeclarations.js"),
-    LOCAL_STATIC_TO_GLOBAL("pass/LocalStaticToGlobal.js"),
-    SINGLE_RETURN_FUNCTION("pass/SingleReturnFunction.js"),
-    PASS_SIMPLIFY_LOOPS("pass/SimplifyLoops.js"),
-    PASS_SIMPLIFY_RETURN("pass/SimplifyReturnStmts.js"),
-    PASS_SIMPLIFY_SELECTION_STMTS("pass/SimplifySelectionStmts.js"),
-    TRANSFORM_SWITCH_TO_IF("pass/TransformSwitchToIf.js"),
+    //DECOMPOSE_DECL_STMT("pass/DecomposeDeclStmt.js"),
+    //DECOMPOSE_VAR_DECLARATIONS("pass/DecomposeVarDeclarations.js"),
+    //LOCAL_STATIC_TO_GLOBAL("pass/LocalStaticToGlobal.js"),
+    //SINGLE_RETURN_FUNCTION("pass/SingleReturnFunction.js"),
+    //PASS_SIMPLIFY_LOOPS("pass/SimplifyLoops.js"),
+    //PASS_SIMPLIFY_RETURN("pass/SimplifyReturnStmts.js"),
+    //PASS_SIMPLIFY_SELECTION_STMTS("pass/SimplifySelectionStmts.js"),
+    TRANSFORM_SWITCH_TO_IF("pass/TransformSwitchToIf.js");
 
     // Stats
     //OPS_BLOCK("stats/OpsBlock.lara"),
@@ -176,17 +176,17 @@ public enum LaraApiResource implements LaraResourceProvider {
 
     // Clava utils
     //CLAVA_DATA_STORE("util/ClavaDataStore.lara"),
-    CODE_INSERTER("util/CodeInserter.js"),
-    FILE_ITERATOR("util/FileIterator.lara"),
+    //CODE_INSERTER("util/CodeInserter.js"),
+    //FILE_ITERATOR("util/FileIterator.lara"),
 
     // UVE
     //UVE("uve/UVE.lara"),
     //UVE_DETECT("uve/DetectStream.lara"),
 
     // OPT
-    OPT_NORMALIZE_TO_SUBSET("opt/NormalizeToSubset.js"),
-    OPT_PREPARE_FOR_INLINING("opt/PrepareForInlining.js"),
-    OPT_INLINING("opt/Inlining.js");
+    //OPT_NORMALIZE_TO_SUBSET("opt/NormalizeToSubset.js"),
+    //OPT_PREPARE_FOR_INLINING("opt/PrepareForInlining.js"),
+    //OPT_INLINING("opt/Inlining.js"),
 
     // Static objects
 

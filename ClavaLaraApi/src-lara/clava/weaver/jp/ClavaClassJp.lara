@@ -9,7 +9,7 @@ ClassJp = function(astNode, getDefinition) {
 	// By default, it gets the definition
 	getDefinition = typeof getDefinition !== 'undefined' ? getDefinition : true;
 	
-	//println("getDefinition:" + astNode.getDefinition().isPresent() && getDefinition);
+	//console.log("getDefinition:" + astNode.getDefinition().isPresent() && getDefinition);
 	// check for definition
 	//this.originalAstNode = astNode;
 	//if(astNode.getDefinition().isPresent() && getDefinition)

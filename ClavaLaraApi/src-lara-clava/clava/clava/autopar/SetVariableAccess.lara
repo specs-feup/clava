@@ -61,8 +61,8 @@ aspectdef SetVariableAccess
 		var useExpr = (varUse === 'read') ? 'R' : (varUse === 'write') ? 'W' : 'RW';
 
 //		if(vardecl !== null && vardecl.currentRegion === undefined) {
-//			println("UNDEFINED REGION IN VARDECL " + vardecl.name +"@" + vardecl.location);
-//			println("VARDECL ROOT: " + vardecl.root.ast);
+//			console.log("UNDEFINED REGION IN VARDECL " + vardecl.name +"@" + vardecl.location);
+//			console.log("VARDECL ROOT: " + vardecl.root.ast);
 //		}
 		
 //		if (vardecl !== null || vardecl === undefined)

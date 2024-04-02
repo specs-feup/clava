@@ -42,7 +42,7 @@ export default class Timer extends TimerBase<Joinpoint> {
       throw "Timer Exception: Timer metrics not implemented for DAYS in C++";
     }
     const cppUnit = this.timeUnits.getCppTimeUnit()!;
-    
+
     const logger = new Logger(false, this.filename);
 
     const $file = $start.getAncestor("file") as FileJp;
@@ -75,8 +75,8 @@ export default class Timer extends TimerBase<Joinpoint> {
     logger.ln();
 
     // Check if $start is a scope
-    if ($start.instanceOf("scope")) {
-      ($start as Scope).insertBegin($insertionTic);
+    if ($start instanceof Scope) {
+      $start.insertBegin($insertionTic);
     } else {
       $start.insertBefore($insertionTic);
     }
@@ -100,8 +100,8 @@ export default class Timer extends TimerBase<Joinpoint> {
     let afterJp = undefined;
 
     // Check if $end is a scope
-    if ($end.instanceOf("scope")) {
-      ($end as Scope).insertEnd($insertionToc);
+    if ($end instanceof Scope) {
+      $end.insertEnd($insertionToc);
     } else {
       $end.insertAfter($insertionToc);
     }
@@ -218,9 +218,9 @@ export default class Timer extends TimerBase<Joinpoint> {
     const $insertionToc = $codeAfter;
 
     // Check if $start is a scope
-    if ($start.instanceOf("scope")) {
+    if ($start instanceof Scope) {
       // Insert code
-      ($start as Scope).insertBegin($insertionTic);
+      $start.insertBegin($insertionTic);
     } else {
       // Insert code
       $start.insertBefore($insertionTic);
@@ -231,8 +231,8 @@ export default class Timer extends TimerBase<Joinpoint> {
     let afterJp = undefined;
 
     // Check if $end is a scope
-    if ($end.instanceOf("scope")) {
-      ($end as Scope).insertEnd($insertionToc);
+    if ($end instanceof Scope) {
+      $end.insertEnd($insertionToc);
     } else {
       $end.insertAfter($insertionToc);
     }

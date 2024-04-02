@@ -824,10 +824,10 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("astName");
         attributes.add("astNumChildren");
         attributes.add("astChildren");
-        attributes.add("getAstChild(Integer index)");
+        attributes.add("getAstChild(int index)");
         attributes.add("numChildren");
         attributes.add("children");
-        attributes.add("getChild(Integer index)");
+        attributes.add("getChild(int index)");
         attributes.add("siblingsLeft");
         attributes.add("siblingsRight");
         attributes.add("leftJp");
@@ -1565,14 +1565,14 @@ public abstract class AJoinPoint extends JoinPoint {
      * @param index
      * @return 
      */
-    public abstract AJoinPoint getAstChildImpl(Integer index);
+    public abstract AJoinPoint getAstChildImpl(int index);
 
     /**
      * 
      * @param index
      * @return 
      */
-    public final Object getAstChild(Integer index) {
+    public final Object getAstChild(int index) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getAstChild", Optional.empty(), index);
@@ -1648,14 +1648,14 @@ public abstract class AJoinPoint extends JoinPoint {
      * @param index
      * @return 
      */
-    public abstract AJoinPoint getChildImpl(Integer index);
+    public abstract AJoinPoint getChildImpl(int index);
 
     /**
      * 
      * @param index
      * @return 
      */
-    public final Object getChild(Integer index) {
+    public final Object getChild(int index) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAttribute(Stage.BEGIN, this, "getChild", Optional.empty(), index);

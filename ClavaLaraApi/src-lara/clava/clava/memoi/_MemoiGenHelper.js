@@ -28,7 +28,9 @@ export function _generate(insertPred, countComparator, report, isMemoiDebug, isM
 export function _Memoi_WrapGlobalTarget(signature) {
     const wrapperName = `mw_${MemoiUtils.normalizeSig(signature)}`;
     for (const chain of Query.search("stmt")
-        .search("call", { signature: (sig) => sig.replace(/ /g, "") == signature })
+        .search("call", {
+        signature: (sig) => sig.replace(/ /g, "") == signature,
+    })
         .chain()) {
         const $call = chain["call"];
         $call.wrap(wrapperName);
@@ -38,7 +40,9 @@ export function _Memoi_WrapGlobalTarget(signature) {
 }
 export function _Memoi_WrapSingleTarget(signature, location) {
     for (const chain of Query.search("stmt")
-        .search("call", { signature: (sig) => sig.replace(/ /g, "") == signature })
+        .search("call", {
+        signature: (sig) => sig.replace(/ /g, "") == signature,
+    })
         .chain()) {
         const $call = chain["call"];
         const wrapperName = IdGenerator.next(`mw_${MemoiUtils.normalizeSig(signature)}`);

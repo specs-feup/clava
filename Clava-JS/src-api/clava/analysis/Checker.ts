@@ -1,4 +1,4 @@
-import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
+import { Joinpoint } from "../../Joinpoints.js";
 import AnalyserResult from "./AnalyserResult.js";
 
 export default abstract class Checker {
@@ -8,7 +8,7 @@ export default abstract class Checker {
     this.name = name;
   }
 
-  abstract check(node: LaraJoinPoint): AnalyserResult<any> | undefined;
+  abstract check<T extends Joinpoint>(node: T): AnalyserResult | undefined;
 
   getName() {
     return this.name;

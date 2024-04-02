@@ -156,7 +156,7 @@ function getStrClassOf($fm) {
 /** Debugging */
 function printChildrenOf($statement){
   for ( var i = 0; i < $statement.astNumChildren; i++)
-  	 println(" Child " + i +  $statement.getAstChild(i).code);
+  	 console.log(" Child " + i +  $statement.getAstChild(i).code);
 }
 
 
@@ -196,7 +196,7 @@ function printArray(varray, message)
     if (first) { first= false; } else print(',');
     print(f.code);
   }
- println(')'); 
+ console.log(')'); 
 }
 
 function getFileSeparator() {

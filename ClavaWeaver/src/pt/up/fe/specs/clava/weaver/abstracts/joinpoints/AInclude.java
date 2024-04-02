@@ -253,7 +253,7 @@ public abstract class AInclude extends ADecl {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aDecl.getChildImpl(index);
     }
 
@@ -523,7 +523,7 @@ public abstract class AInclude extends ADecl {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aDecl.getAstChildImpl(index);
     }
 

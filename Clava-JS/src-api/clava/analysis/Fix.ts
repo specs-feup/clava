@@ -1,10 +1,10 @@
-import { LaraJoinPoint } from "lara-js/api/LaraJoinPoint.js";
+import { Joinpoint } from "../../Joinpoints.js";
 
-export default class Fix<T extends LaraJoinPoint> {
-  private node: T;
-  private fixAction: ($jp: T) => void;
+export default class Fix {
+  private node: Joinpoint;
+  private fixAction: ($jp: Joinpoint) => void;
 
-  constructor(node: T, fixAction: ($jp: T) => void) {
+  constructor(node: Joinpoint, fixAction: ($jp: Joinpoint) => void) {
     this.node = node;
     this.fixAction = fixAction;
   }

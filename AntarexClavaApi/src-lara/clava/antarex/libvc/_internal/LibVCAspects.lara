@@ -170,7 +170,7 @@ aspectdef LibVersioningCompiler
 
 	// Check if function definition was found
 	if(functionDefFile === undefined) {
-		println("ERROR: Could not find file were function call " + $fcall.name + " is defined");
+		console.log("ERROR: Could not find file were function call " + $fcall.name + " is defined");
 		return;
 	}
 

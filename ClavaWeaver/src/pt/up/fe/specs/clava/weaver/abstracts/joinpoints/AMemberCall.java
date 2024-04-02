@@ -449,7 +449,7 @@ public abstract class AMemberCall extends ACall {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aCall.getChildImpl(index);
     }
 
@@ -719,7 +719,7 @@ public abstract class AMemberCall extends ACall {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aCall.getAstChildImpl(index);
     }
 
@@ -1114,7 +1114,7 @@ public abstract class AMemberCall extends ACall {
      * @param expr 
      */
     @Override
-    public void setArgImpl(Integer index, AExpression expr) {
+    public void setArgImpl(int index, AExpression expr) {
         this.aCall.setArgImpl(index, expr);
     }
 

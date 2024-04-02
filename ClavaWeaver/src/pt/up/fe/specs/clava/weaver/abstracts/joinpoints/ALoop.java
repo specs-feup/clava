@@ -180,15 +180,15 @@ public abstract class ALoop extends AStatement {
      * Get value on attribute rank
      * @return the attribute's value
      */
-    public abstract Integer[] getRankArrayImpl();
+    public abstract int[] getRankArrayImpl();
 
     /**
      * Get value on attribute rank
      * @return the attribute's value
      */
     public Object getRankImpl() {
-        Integer[] integerArrayImpl0 = getRankArrayImpl();
-        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(integerArrayImpl0);
+        int[] intArrayImpl0 = getRankArrayImpl();
+        Object nativeArray0 = getWeaverEngine().getScriptEngine().toNativeArray(intArrayImpl0);
         return nativeArray0;
     }
 
@@ -1191,7 +1191,7 @@ public abstract class ALoop extends AStatement {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aStatement.getChildImpl(index);
     }
 
@@ -1461,7 +1461,7 @@ public abstract class ALoop extends AStatement {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aStatement.getAstChildImpl(index);
     }
 

@@ -21,7 +21,12 @@ export default class StrcpyChecker extends Checker {
             return;
         }
         return new CheckResult(this.name, node, this.advice, new Fix(node, ($jp) => {
-            StrcpyChecker.fixAction($jp);
+            if ($jp instanceof Call) {
+                StrcpyChecker.fixAction($jp);
+            }
+            else {
+                throw new Error("Invalid joinpoint type");
+            }
         }));
     }
 }

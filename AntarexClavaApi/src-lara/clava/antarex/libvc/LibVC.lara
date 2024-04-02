@@ -311,7 +311,7 @@ LibVC.prototype.buildOptionListBefore = function($joinpoint) {
 LibVC.prototype._makeOptionsCode = function($joinpoint) {
 	
 	if(this._options._options.length === 0) {
-		println('no compilation options were provided to LibVC');
+		console.log('no compilation options were provided to LibVC');
 		return;
 	}
 	

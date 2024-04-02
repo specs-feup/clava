@@ -2079,7 +2079,7 @@ public class CxxWeaver extends ACxxWeaver {
         return Stream.concat(
                 super.getNpmResources().stream(),
                 Arrays.asList(ClavaApiJsResource.values()).stream())
-            .toList();
+            .collect(Collectors.toList());
     }
 
 }

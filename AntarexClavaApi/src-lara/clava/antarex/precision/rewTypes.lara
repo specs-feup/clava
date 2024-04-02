@@ -149,7 +149,7 @@ end
    apply
 	 if ( $expr.joinPointType === 'cast') {
 	 	TRACE( " CAST expression = " + $expr.code );
-	 	// println(" keys = " + $expr.keys);
+	 	// console.log(" keys = " + $expr.keys);
 	 	var $vtype = $expr.type;
 	 	var $ntype = getNewType($vtype, oldType, newType);
 	    if ($vtype !== $ntype) $expr.setType($ntype);

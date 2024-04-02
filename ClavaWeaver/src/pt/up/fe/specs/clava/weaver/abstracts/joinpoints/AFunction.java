@@ -908,7 +908,7 @@ public abstract class AFunction extends ADeclarator {
      * @param index 
      * @param param 
      */
-    public void setParamImpl(Integer index, AParam param) {
+    public void setParamImpl(int index, AParam param) {
         throw new UnsupportedOperationException(get_class()+": Action setParam not implemented ");
     }
 
@@ -917,7 +917,7 @@ public abstract class AFunction extends ADeclarator {
      * @param index 
      * @param param 
      */
-    public final void setParam(Integer index, AParam param) {
+    public final void setParam(int index, AParam param) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setParam", this, Optional.empty(), index, param);
@@ -937,7 +937,7 @@ public abstract class AFunction extends ADeclarator {
      * @param name 
      * @param type 
      */
-    public void setParamImpl(Integer index, String name, AType type) {
+    public void setParamImpl(int index, String name, AType type) {
         throw new UnsupportedOperationException(get_class()+": Action setParam not implemented ");
     }
 
@@ -947,7 +947,7 @@ public abstract class AFunction extends ADeclarator {
      * @param name 
      * @param type 
      */
-    public final void setParam(Integer index, String name, AType type) {
+    public final void setParam(int index, String name, AType type) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setParam", this, Optional.empty(), index, name, type);
@@ -1071,7 +1071,7 @@ public abstract class AFunction extends ADeclarator {
      * @param index 
      * @param newType 
      */
-    public void setParamTypeImpl(Integer index, AType newType) {
+    public void setParamTypeImpl(int index, AType newType) {
         throw new UnsupportedOperationException(get_class()+": Action setParamType not implemented ");
     }
 
@@ -1080,7 +1080,7 @@ public abstract class AFunction extends ADeclarator {
      * @param index 
      * @param newType 
      */
-    public final void setParamType(Integer index, AType newType) {
+    public final void setParamType(int index, AType newType) {
         try {
         	if(hasListeners()) {
         		eventTrigger().triggerAction(Stage.BEGIN, "setParamType", this, Optional.empty(), index, newType);
@@ -1363,7 +1363,7 @@ public abstract class AFunction extends ADeclarator {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getChildImpl(Integer index) {
+    public AJoinPoint getChildImpl(int index) {
         return this.aDeclarator.getChildImpl(index);
     }
 
@@ -1633,7 +1633,7 @@ public abstract class AFunction extends ADeclarator {
      * @return the attribute's value
      */
     @Override
-    public AJoinPoint getAstChildImpl(Integer index) {
+    public AJoinPoint getAstChildImpl(int index) {
         return this.aDeclarator.getAstChildImpl(index);
     }
 
@@ -2195,13 +2195,13 @@ public abstract class AFunction extends ADeclarator {
         actions.add("joinpoint insertReturn(String)");
         actions.add("void setParams(param[])");
         actions.add("void setParamsFromStrings(String[])");
-        actions.add("void setParam(Integer, param)");
-        actions.add("void setParam(Integer, String, type)");
+        actions.add("void setParam(int, param)");
+        actions.add("void setParam(int, String, type)");
         actions.add("void setBody(scope)");
         actions.add("call newCall(joinpoint[])");
         actions.add("void setFunctionType(functionType)");
         actions.add("void setReturnType(type)");
-        actions.add("void setParamType(Integer, type)");
+        actions.add("void setParamType(int, type)");
         actions.add("void addParam(param)");
         actions.add("void addParam(String, type)");
     }

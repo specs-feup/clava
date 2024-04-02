@@ -286,7 +286,7 @@ function getNewId(name)
 
 function TRACE_HERE(mess)
 {
-  if (LOC_DEBUG_MODE)  println(mess); else TRACE(mess);
+  if (LOC_DEBUG_MODE)  console.log(mess); else TRACE(mess);
 
 }
 

@@ -72,7 +72,7 @@ function inlineMethod($target) {
   var vattr="";
   if ($target.functionType.constant) vattr = " const ";
   var codeDecl = "inline " + returnType + ' '+  $decl.getName() + ' ' + codeParams + vattr + $body.code + ';';
-  // println(" functionType = " + $target.functionType.constant);
+  // console.log(" functionType = " + $target.functionType.constant);
   $decl.insert before "#ifndef " + $CURRENT_ID_INLINE ;      
   $decl.insert after "#endif";
   $decl.insert after codeDecl;

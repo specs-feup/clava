@@ -12,7 +12,7 @@
  function set_mode_trace(v) {
      if (v === 'ON') BTRACE = true;
      else if (v === 'OFF') BTRACE = false;
-     else println(' ERROR : set_mode_trace parameter is \"ON\" or "OFF" ');
+     else console.log(' ERROR : set_mode_trace parameter is \"ON\" or "OFF" ');
  }
  
 function is_mode_trace_on() {
@@ -20,7 +20,7 @@ function is_mode_trace_on() {
  }
 
  function MESSAGE(pre, mess, post) {
-     println(pre + mess + post);
+     console.log(pre + mess + post);
  }
 
  function ERROR(mess) {
@@ -51,8 +51,8 @@ function is_mode_trace_on() {
              if (i != 0) print(", ");
              print(varray[i].code);
          }
-         println("]");
-         if (postmess !== "") println(postmess);
+         console.log("]");
+         if (postmess !== "") console.log(postmess);
      }
  }
 
@@ -68,8 +68,8 @@ function is_mode_trace_on() {
              if (i != 0) print(", ");
              print(varray[i]);
          }
-         println("]");
-         if (postmess !== "") println(postmess);
+         console.log("]");
+         if (postmess !== "") console.log(postmess);
      }
  }
 
