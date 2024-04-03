@@ -1,6 +1,6 @@
 
 /**
- * Copyright 2023 SPeCS.
+ * Copyright 2024 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -78,11 +78,37 @@ public enum ClavaApiJsResource implements LaraResourceProvider {
     SIMPLIFYTERNARYOP_JS("clava/code/SimplifyTernaryOp.js"),
     STATEMENTDECOMPOSER_JS("clava/code/StatementDecomposer.js"),
     GPROFER_JS("clava/gprofer/Gprofer.js"),
+    CONTROLFLOWGRAPH_JS("clava/graphs/ControlFlowGraph.js"),
+    STATICCALLGRAPH_JS("clava/graphs/StaticCallGraph.js"),
+    CFGBUILDER_JS("clava/graphs/cfg/CfgBuilder.js"),
+    CFGEDGE_JS("clava/graphs/cfg/CfgEdge.js"),
+    CFGEDGETYPE_JS("clava/graphs/cfg/CfgEdgeType.js"),
+    CFGNODEDATA_JS("clava/graphs/cfg/CfgNodeData.js"),
+    CFGNODETYPE_JS("clava/graphs/cfg/CfgNodeType.js"),
+    CFGUTILS_JS("clava/graphs/cfg/CfgUtils.js"),
+    NEXTCFGNODE_JS("clava/graphs/cfg/NextCfgNode.js"),
+    CASEDATA_JS("clava/graphs/cfg/nodedata/CaseData.js"),
+    DATAFACTORY_JS("clava/graphs/cfg/nodedata/DataFactory.js"),
+    GOTODATA_JS("clava/graphs/cfg/nodedata/GotoData.js"),
+    HEADERDATA_JS("clava/graphs/cfg/nodedata/HeaderData.js"),
+    IFDATA_JS("clava/graphs/cfg/nodedata/IfData.js"),
+    INSTLISTNODEDATA_JS("clava/graphs/cfg/nodedata/InstListNodeData.js"),
+    LABELDATA_JS("clava/graphs/cfg/nodedata/LabelData.js"),
+    LOOPDATA_JS("clava/graphs/cfg/nodedata/LoopData.js"),
+    RETURNDATA_JS("clava/graphs/cfg/nodedata/ReturnData.js"),
+    SCOPENODEDATA_JS("clava/graphs/cfg/nodedata/ScopeNodeData.js"),
+    SWITCHDATA_JS("clava/graphs/cfg/nodedata/SwitchData.js"),
+    SCGEDGEDATA_JS("clava/graphs/scg/ScgEdgeData.js"),
+    SCGNODEDATA_JS("clava/graphs/scg/ScgNodeData.js"),
+    STATICCALLGRAPHBUILDER_JS("clava/graphs/scg/StaticCallGraphBuilder.js"),
     HDF5_JS("clava/hdf5/Hdf5.js"),
     HLSANALYSIS_JS("clava/hls/HLSAnalysis.js"),
     MATHANALYSIS_JS("clava/hls/MathAnalysis.js"),
     MATHHINFO_JS("clava/hls/MathHInfo.js"),
     TRACEINSTRUMENTATION_JS("clava/hls/TraceInstrumentation.js"),
+    LIVENESSANALYSER_JS("clava/liveness/LivenessAnalyser.js"),
+    LIVENESSANALYSIS_JS("clava/liveness/LivenessAnalysis.js"),
+    LIVENESSUTILS_JS("clava/liveness/LivenessUtils.js"),
     MEMOIANALYSIS_JS("clava/memoi/MemoiAnalysis.js"),
     MEMOIGEN_JS("clava/memoi/MemoiGen.js"),
     MEMOIPROF_JS("clava/memoi/MemoiProf.js"),
@@ -110,6 +136,7 @@ public enum ClavaApiJsResource implements LaraResourceProvider {
     SIMPLIFYRETURNSTMTS_JS("clava/pass/SimplifyReturnStmts.js"),
     SIMPLIFYSELECTIONSTMTS_JS("clava/pass/SimplifySelectionStmts.js"),
     SINGLERETURNFUNCTION_JS("clava/pass/SingleReturnFunction.js"),
+    TRANSFORMSWITCHTOIF_JS("clava/pass/TransformSwitchToIf.js"),
     OPSBLOCK_JS("clava/stats/OpsBlock.js"),
     OPSCOST_JS("clava/stats/OpsCost.js"),
     OPSCOUNTER_JS("clava/stats/OpsCounter.js"),

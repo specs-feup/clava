@@ -13,7 +13,6 @@
 
 package pt.up.fe.specs.clava.weaver;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import pt.up.fe.specs.util.providers.ResourceProvider;

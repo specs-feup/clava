@@ -1,5 +1,6 @@
 laraImport("clava.graphs.StaticCallGraph");
 laraImport("lara.graphs.Graphs");
+laraImport("weaver.Query");
  
 
 var fullGraph = StaticCallGraph.build();

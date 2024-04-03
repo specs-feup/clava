@@ -42,7 +42,7 @@ Live in: c,switch_condition
 Live out: c,switch_condition
 
 Node id: id_7
-Node stmt: case 1:
+Node stmt: case 1
 Def: 
 Use: switch_condition
 Live in: c,switch_condition
@@ -63,7 +63,7 @@ Live in: c
 Live out: c
 
 Node id: id_10
-Node stmt: case 2:
+Node stmt: case 2
 Def: 
 Use: switch_condition
 Live in: c,switch_condition
@@ -112,7 +112,7 @@ Live in: c
 Live out: c
 
 Node id: id_21
-Node stmt: default:
+Node stmt: default
 Def: 
 Use: 
 Live in: c
