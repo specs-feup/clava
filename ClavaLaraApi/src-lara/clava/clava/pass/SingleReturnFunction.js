@@ -1,15 +1,15 @@
 import Pass from "lara-js/api/lara/pass/Pass.js";
 import PassResult from "lara-js/api/lara/pass/results/PassResult.js";
 import Query from "lara-js/api/weaver/Query.js";
-import { BuiltinType, FunctionJp } from "../../Joinpoints.js";
+import { BuiltinType, FunctionJp, ReturnStmt } from "../../Joinpoints.js";
 import ClavaJoinPoints from "../ClavaJoinPoints.js";
 import DecomposeVarDeclarations from "./DecomposeVarDeclarations.js";
 export default class SingleReturnFunction extends Pass {
     _name = "SingleReturnFunctions";
-    #useLocalLabel;
+    useLocalLabel;
     constructor(useLocalLabel = false) {
         super();
-        this.#useLocalLabel = useLocalLabel;
+        this.useLocalLabel = useLocalLabel;
     }
     _apply_impl($jp) {
         if (!($jp instanceof FunctionJp) || !$jp.isImplementation) {
@@ -18,7 +18,7 @@ export default class SingleReturnFunction extends Pass {
         const $body = $jp.body;
         const $returnStmts = Query.searchFrom($body, "returnStmt").get();
         if ($returnStmts.length === 0 ||
-            ($returnStmts.length === 1 && $body.lastChild.instanceOf("returnStmt"))) {
+            ($returnStmts.length === 1 && $body instanceof ReturnStmt)) {
             return this.new_result($jp, false);
         }
         // C++ spec has some restrictions about jumping over initialized values that
@@ -47,7 +47,7 @@ export default class SingleReturnFunction extends Pass {
             $returnStmt.detach();
         }
         // Local label declaration must appear at the beginning of the block
-        if (this.#useLocalLabel) {
+        if (this.useLocalLabel) {
             $body.insertBegin($label);
         }
         return this.new_result($jp, true);

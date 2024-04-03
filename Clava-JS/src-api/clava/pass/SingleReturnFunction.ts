@@ -7,11 +7,11 @@ import DecomposeVarDeclarations from "./DecomposeVarDeclarations.js";
 
 export default class SingleReturnFunction extends Pass {
   protected _name = "SingleReturnFunctions";
-  #useLocalLabel;
+  private useLocalLabel;
 
   constructor(useLocalLabel = false) {
     super();
-    this.#useLocalLabel = useLocalLabel;
+    this.useLocalLabel = useLocalLabel;
   }
 
 
@@ -24,7 +24,7 @@ export default class SingleReturnFunction extends Pass {
     const $returnStmts = Query.searchFrom($body, "returnStmt").get() as ReturnStmt[];
     if (
       $returnStmts.length === 0 ||
-      ($returnStmts.length === 1 && $body.lastChild.instanceOf("returnStmt"))
+      ($returnStmts.length === 1 && $body instanceof ReturnStmt)
     ) {
       return this.new_result($jp, false);
     }
@@ -60,7 +60,7 @@ export default class SingleReturnFunction extends Pass {
     }
 
     // Local label declaration must appear at the beginning of the block
-    if (this.#useLocalLabel) {
+    if (this.useLocalLabel) {
       $body.insertBegin($label);
     }
 

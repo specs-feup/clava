@@ -3,6 +3,7 @@ woven_code/
 /api
 /code
 package-lock.json
+java-binaries/
 
 # Extensions
 ltex.dictionary.*

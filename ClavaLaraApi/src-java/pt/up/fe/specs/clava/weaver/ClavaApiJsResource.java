@@ -1,6 +1,6 @@
 
 /**
- * Copyright 2023 SPeCS.
+ * Copyright 2024 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -89,9 +89,11 @@ public enum ClavaApiJsResource implements LaraResourceProvider {
     NEXTCFGNODE_JS("clava/graphs/cfg/NextCfgNode.js"),
     CASEDATA_JS("clava/graphs/cfg/nodedata/CaseData.js"),
     DATAFACTORY_JS("clava/graphs/cfg/nodedata/DataFactory.js"),
+    GOTODATA_JS("clava/graphs/cfg/nodedata/GotoData.js"),
     HEADERDATA_JS("clava/graphs/cfg/nodedata/HeaderData.js"),
     IFDATA_JS("clava/graphs/cfg/nodedata/IfData.js"),
     INSTLISTNODEDATA_JS("clava/graphs/cfg/nodedata/InstListNodeData.js"),
+    LABELDATA_JS("clava/graphs/cfg/nodedata/LabelData.js"),
     LOOPDATA_JS("clava/graphs/cfg/nodedata/LoopData.js"),
     RETURNDATA_JS("clava/graphs/cfg/nodedata/ReturnData.js"),
     SCOPENODEDATA_JS("clava/graphs/cfg/nodedata/ScopeNodeData.js"),
@@ -134,6 +136,7 @@ public enum ClavaApiJsResource implements LaraResourceProvider {
     SIMPLIFYRETURNSTMTS_JS("clava/pass/SimplifyReturnStmts.js"),
     SIMPLIFYSELECTIONSTMTS_JS("clava/pass/SimplifySelectionStmts.js"),
     SINGLERETURNFUNCTION_JS("clava/pass/SingleReturnFunction.js"),
+    TRANSFORMSWITCHTOIF_JS("clava/pass/TransformSwitchToIf.js"),
     OPSBLOCK_JS("clava/stats/OpsBlock.js"),
     OPSCOST_JS("clava/stats/OpsCost.js"),
     OPSCOUNTER_JS("clava/stats/OpsCounter.js"),

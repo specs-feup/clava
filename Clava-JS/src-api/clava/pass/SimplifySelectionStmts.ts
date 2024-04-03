@@ -7,11 +7,11 @@ import StatementDecomposer from "../code/StatementDecomposer.js";
 // TODO: Refactor to use the SimplePass pattern
 export default class SimplifySelectionStmts extends Pass {
   protected _name = "SimplifySelectionStmts";
-  #statementDecomposer: StatementDecomposer;
+  private statementDecomposer: StatementDecomposer;
 
   constructor(statementDecomposer: StatementDecomposer) {
     super();
-    this.#statementDecomposer = statementDecomposer;
+    this.statementDecomposer = statementDecomposer;
   }
 
   protected _apply_impl($jp: Joinpoint): PassResult {
@@ -30,7 +30,7 @@ export default class SimplifySelectionStmts extends Pass {
 
   private transform($ifStmt: If): void {
     const $ifCond = $ifStmt.cond;
-    const decomposeResult = this.#statementDecomposer.decomposeExpr($ifCond);
+    const decomposeResult = this.statementDecomposer.decomposeExpr($ifCond);
 
     for (const stmt of decomposeResult.precedingStmts) {
       $ifStmt.insertBefore(stmt);

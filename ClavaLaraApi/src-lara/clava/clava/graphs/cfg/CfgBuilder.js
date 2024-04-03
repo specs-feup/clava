@@ -518,7 +518,7 @@ export default class CfgBuilder {
         for (const stmtId in this.temporaryStmts) {
             this.temporaryStmts[stmtId].detach();
         }
-        // Remove temporary instructions from the instList nodes and this.#nodes
+        // Remove temporary instructions from the instList nodes and this.nodes
         for (const node of this.nodes.values()) {
             const nodeData = node.data();
             // Only inst lists need to be cleaned
@@ -539,7 +539,7 @@ export default class CfgBuilder {
                 if (this.temporaryStmts[$stmt.astId] === undefined) {
                     filteredStmts.push($stmt);
                 }
-                // Otherwise, remove from this.#nodes
+                // Otherwise, remove from this.nodes
                 else {
                     this.nodes.delete($stmt.astId);
                 }
