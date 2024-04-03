@@ -24,7 +24,7 @@ export default class SingleReturnFunction extends Pass {
     const $returnStmts = Query.searchFrom($body, "returnStmt").get() as ReturnStmt[];
     if (
       $returnStmts.length === 0 ||
-      ($returnStmts.length === 1 && $body instanceof ReturnStmt)
+      ($returnStmts.length === 1 && $body.lastChild instanceof ReturnStmt)
     ) {
       return this.new_result($jp, false);
     }

@@ -18,7 +18,7 @@ export default class SingleReturnFunction extends Pass {
         const $body = $jp.body;
         const $returnStmts = Query.searchFrom($body, "returnStmt").get();
         if ($returnStmts.length === 0 ||
-            ($returnStmts.length === 1 && $body instanceof ReturnStmt)) {
+            ($returnStmts.length === 1 && $body.lastChild instanceof ReturnStmt)) {
             return this.new_result($jp, false);
         }
         // C++ spec has some restrictions about jumping over initialized values that
