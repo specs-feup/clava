@@ -221,8 +221,8 @@ public class TUPatcherLauncher {
             SpecsLogs.info("Processing file '" + sourceFile + "' " + counter.next());
 
             String fileContent = SpecsIo.read(sourceFile);
-            if (!(fileContent.substring(0, 4).equals("void")
-                    || fileContent.substring(0, 13).equals("TYPE_PATCH_00"))) {
+            if (!(fileContent.startsWith("void")
+                    || fileContent.startsWith("TYPE_PATCH_00"))) {
                 // assure the function declaration has a return type
                 // File cppFile = new File(path + "/" + arg);
                 if (fileContent.contains("return;") || !fileContent.contains("return")) {
@@ -240,7 +240,6 @@ public class TUPatcherLauncher {
             } catch (Exception e) {
                 numErrors++;
                 errorMessages.add(e + "\n\n" + e.getLocalizedMessage() + "\n" + e.getMessage());
-                continue;
             }
 
             // if (patchData == null) {

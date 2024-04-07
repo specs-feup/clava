@@ -388,7 +388,7 @@ public class TUPatcherUtils {
             toTypeName = types.get(0);
             fromTypeName = types.get(2);
         } else {
-            if (nthIndexOf(message, "\'", 3) > message.indexOf("aka")) {
+            if (nthIndexOf(message, "'", 3) > message.indexOf("aka")) {
                 toTypeName = types.get(0);
                 fromTypeName = types.get(2);
             } else {

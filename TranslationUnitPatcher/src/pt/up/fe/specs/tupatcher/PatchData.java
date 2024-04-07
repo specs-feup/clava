@@ -70,7 +70,6 @@ public class PatchData {
     public void addType(String typeName) {
         if (typeName != null) {
             if (typeName.contains("::")) {
-                return;
             } else {
                 missingTypes.put(typeName, new TypeInfo(typeName));
             }

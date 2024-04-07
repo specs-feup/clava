@@ -175,11 +175,9 @@ public class ErrorPatcher {
         String location = data.get(TUErrorData.MAP).get("location");
         if (TUPatcherUtils.isFunctionCall(location)) {
             patchData.getType(structOrClass).addFunction(field, patchData);
-            return;
         }
         else {
             patchData.getType(structOrClass).addField(field, patchData);
-            return;
         }
 
     }
