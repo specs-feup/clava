@@ -270,7 +270,7 @@ public class ErrorPatcher {
                 toType.setAs(fromTypeName);                
             }
             else if (toType.getKind().equals("int")) {
-                if (aka2.equals("")) {
+                if (aka2.isEmpty()) {
                     toType.setAs(fromTypeName);
                 }
                 else {
@@ -278,7 +278,7 @@ public class ErrorPatcher {
                 }
             }
             else if ( fromType.getKind().equals("int")){
-                if (aka1.equals("")) {
+                if (aka1.isEmpty()) {
                     fromType.setAs(toTypeName);                    
                 }
                 else {
@@ -293,7 +293,7 @@ public class ErrorPatcher {
             if (fromTypeName.contains("*") && toTypeName.contains("*")) {
                 fromTypeName = fromTypeName.replace("*", "");
             }
-            if (aka2.equals("")) {
+            if (aka2.isEmpty()) {
                 toType.setAs(fromTypeName);                    
             }
             else {
@@ -304,7 +304,7 @@ public class ErrorPatcher {
             if (fromTypeName.contains("*") && toTypeName.contains("*")) {
                 toTypeName = toTypeName.replace("*", "");
             }
-            if (aka1.equals("")) {
+            if (aka1.isEmpty()) {
                 fromType.setAs(toTypeName);                 
             }
             else {

@@ -251,9 +251,7 @@ public class PatchData {
                 notSorted.add(type);
             }
         }
-        for (FunctionInfo function : missingFunctions.values()) {
-            notSorted.add(function);
-        }
+        notSorted.addAll(missingFunctions.values());
         while (!notSorted.isEmpty()) {
             boolean cyclic = true;
             for (Definition def : notSorted) {

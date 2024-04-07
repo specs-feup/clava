@@ -182,17 +182,13 @@ public class TypeInfo implements Definition {
         if (!TUPatcherUtils.isPrimitiveType(kind2)) {
             result.add(new TypeInfo(kind2));
         }
-        for (Definition def : fields.values()) {
-            result.add(def);
-        }
+        result.addAll(fields.values());
         for (FunctionInfo def : functions.values()) {
             result.add(def.getReturnType());
             result.add(def);
         }
         for (TypeInfo type : nestedTypes.values()) {
-            for (Definition def : type.getDependencies()) {
-                result.add(def);
-            }
+            result.addAll(type.getDependencies());
         }
 
         return result;

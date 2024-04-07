@@ -580,7 +580,7 @@ public class TUPatcherUtils {
                 return c == ' ';
             }, true);
             result = readWhile(source, result.number, isNotTokenChar, true);
-            if (result.str.replace(")", "").equals("")) {
+            if (result.str.replace(")", "").isEmpty()) {
                 return true;
             } else {
                 return false;
