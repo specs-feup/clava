@@ -34,7 +34,7 @@ public class FunctionInfo implements Definition {
 
     public FunctionInfo(String name, TypeInfo returnType) {
         this.name = name;
-        numArgs = new ArrayList<Integer>();
+        numArgs = new ArrayList<>();
         numArgs.add(0);
         this.returnType = returnType;
     }
@@ -73,7 +73,7 @@ public class FunctionInfo implements Definition {
 
     @Override
     public ArrayList<Definition> getDependencies() {
-        ArrayList<Definition> result = new ArrayList<Definition>();
+        ArrayList<Definition> result = new ArrayList<>();
         result.add(returnType);
         return result;
     }

@@ -25,12 +25,12 @@ public class TypeInfo implements Definition {
 
     String kind;// int, char, struct, union, class, etc
     String name;
-    HashMap<String, TypeInfo> fields = new HashMap<String, TypeInfo>();
-    HashMap<String, TypeInfo> nestedTypes = new HashMap<String, TypeInfo>();
-    HashMap<String, FunctionInfo> functions = new HashMap<String, FunctionInfo>();
+    HashMap<String, TypeInfo> fields = new HashMap<>();
+    HashMap<String, TypeInfo> nestedTypes = new HashMap<>();
+    HashMap<String, FunctionInfo> functions = new HashMap<>();
     ArrayList<Integer> constructors = new ArrayList<>();
     boolean useTypedefStruct = true;
-    HashMap<String, Boolean> isStatic = new HashMap<String, Boolean>();
+    HashMap<String, Boolean> isStatic = new HashMap<>();
     ArrayList<String> operators = new ArrayList<>();
     boolean nested = false;
 
@@ -177,7 +177,7 @@ public class TypeInfo implements Definition {
      */
     @Override
     public ArrayList<Definition> getDependencies() {
-        ArrayList<Definition> result = new ArrayList<Definition>();
+        ArrayList<Definition> result = new ArrayList<>();
         String kind2 = TUPatcherUtils.getTypeName(kind);
         if (!TUPatcherUtils.isPrimitiveType(kind2)) {
             result.add(new TypeInfo(kind2));

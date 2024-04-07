@@ -28,5 +28,5 @@ public class TUErrorsData extends ADataClass<TUErrorsData> {
 
     public final static DataKey<ArrayList<TUErrorData>> ERRORS = 
             KeyFactory.generic("errors", () -> new ArrayList<TUErrorData>())
-            .setDefault(() ->new ArrayList<TUErrorData>()).setDefault(() -> new ArrayList<TUErrorData>());
+            .setDefault(() -> new ArrayList<>()).setDefault(() -> new ArrayList<>());
 }

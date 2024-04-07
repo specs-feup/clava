@@ -270,7 +270,7 @@ public class TUPatcherUtils {
         si = readWhile(source, si.number, (char c) -> {
             return c != ')';
         }, true);
-        return new ArrayList<String>(
+        return new ArrayList<>(
                 Arrays.asList(si.str.replace("(", "").replace(" ", "").split(",")));
     }
 
@@ -335,7 +335,7 @@ public class TUPatcherUtils {
      * Extract substrings between parenthesis from error messages
      */
     public static ArrayList<String> extractFromParenthesis(String message) {
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
         int index1 = nthIndexOf(message, '(', 1);
         int index2 = nthIndexOf(message, ')', 2);
         int n = 0;
@@ -352,7 +352,7 @@ public class TUPatcherUtils {
      * Extract substrings between single quotes from error messages
      */
     public static ArrayList<String> extractFromSingleQuotes(String message) {
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
         message = " " + message;
         int index1 = nthIndexOf(message, '\'', 1);
         int index2 = nthIndexOf(message, '\'', 2);

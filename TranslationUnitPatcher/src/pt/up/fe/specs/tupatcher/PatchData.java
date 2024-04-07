@@ -39,11 +39,11 @@ public class PatchData {
     private final ArrayList<ErrorKind> errors;
 
     public PatchData() {
-        this.missingTypes = new HashMap<String, TypeInfo>();
-        this.missingFunctions = new HashMap<String, FunctionInfo>();
-        this.missingVariables = new HashMap<String, TypeInfo>();
-        this.missingConstVariables = new HashMap<String, TypeInfo>();
-        this.errors = new ArrayList<ErrorKind>();
+        this.missingTypes = new HashMap<>();
+        this.missingFunctions = new HashMap<>();
+        this.missingVariables = new HashMap<>();
+        this.missingConstVariables = new HashMap<>();
+        this.errors = new ArrayList<>();
         this.allErrorsPatched = false;
     }
 
@@ -243,8 +243,8 @@ public class PatchData {
      * declared (but not defined) in the beginning of patch.h
      */
     public ArrayList<Definition> orderedDefinitions() {
-        ArrayList<Definition> notSorted = new ArrayList<Definition>();
-        ArrayList<Definition> result = new ArrayList<Definition>();
+        ArrayList<Definition> notSorted = new ArrayList<>();
+        ArrayList<Definition> result = new ArrayList<>();
         for (TypeInfo type : missingTypes.values()) {
             if (!type.isNested()) {
                 notSorted.add(type);
