@@ -251,8 +251,7 @@ public class TUPatcherUtils {
         si = readWhile(source, si.number, (char c) -> {
             return c != ')';
         }, true);
-        int numArgs = si.str.split(",").length;
-        return numArgs;
+        return si.str.split(",").length;
     }
 
     /**
@@ -271,9 +270,8 @@ public class TUPatcherUtils {
         si = readWhile(source, si.number, (char c) -> {
             return c != ')';
         }, true);
-        ArrayList<String> result = new ArrayList<String>(
+        return new ArrayList<String>(
                 Arrays.asList(si.str.replace("(", "").replace(" ", "").split(",")));
-        return result;
     }
 
     /**
