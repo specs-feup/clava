@@ -232,11 +232,7 @@ public class TUPatcherUtils {
             return (Character.isLetterOrDigit(ch) || ch == '_' || ch == ' ' || ch == ':');
         }, true);
         char ch = source.charAt(result.number);
-        if (ch == '(') {
-            return true;
-        } else {
-            return false;
-        }
+        return ch == '(';
     }
 
     /**
@@ -426,7 +422,6 @@ public class TUPatcherUtils {
                 String aka2 = extractFromSingleQuotes(message.substring(indexAka2)).get(0);
                 result.add(aka1);
                 result.add(aka2);
-                return result;
             } else {
                 if (nthIndexOf(message, '\'', 3) < indexAka1) {
                     result.add("");
@@ -437,8 +432,8 @@ public class TUPatcherUtils {
                     result.add(aka);
                     result.add("");
                 }
-                return result;
             }
+            return result;
         }
     }
 
@@ -504,11 +499,7 @@ public class TUPatcherUtils {
         StringInt si = readWhile(source, n, isTokenChar, true);
         si.number++;
         ch = source.charAt(si.number);
-        if (ch == '.' || (ch == '-' && source.charAt(n + 1) == '>')) {
-            return true;
-        } else {
-            return false;
-        }
+        return ch == '.' || (ch == '-' && source.charAt(n + 1) == '>');
     }
 
     /**
@@ -536,11 +527,7 @@ public class TUPatcherUtils {
 
         if (operators.contains(op) && ch != '*' && ch != '&') {
             return true;
-        } else if (operators.contains(op + source.charAt(n + 2))) {
-            return true;
-        } else {
-            return false;
-        }
+        } else return operators.contains(op + source.charAt(n + 2));
     }
 
     /**
@@ -580,11 +567,7 @@ public class TUPatcherUtils {
                 return c == ' ';
             }, true);
             result = readWhile(source, result.number, isNotTokenChar, true);
-            if (result.str.replace(")", "").isEmpty()) {
-                return true;
-            } else {
-                return false;
-            }
+            return result.str.replace(")", "").isEmpty();
         }
 
     }
