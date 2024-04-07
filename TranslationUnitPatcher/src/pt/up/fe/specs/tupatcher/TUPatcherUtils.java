@@ -29,11 +29,11 @@ public class TUPatcherUtils {
 
     private static final String PATCHED_SUFFIX = "_patched";
 
-    interface CharFunction {
+    public interface CharFunction {
         boolean run(char ch);
     }
 
-    static class StringInt {
+    public static class StringInt {
         public String str;
         public int number;
     }
