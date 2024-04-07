@@ -479,7 +479,7 @@ public class TUPatcherUtils {
             return source.substring(0, 3);
         } else if (source.length() >= 2 && operators.contains(source.substring(0, 2))) {
             return source.substring(0, 2);
-        } else if (source.length() >= 1 && operators.contains(source.substring(0, 1))) {
+        } else if (!source.isEmpty() && operators.contains(source.substring(0, 1))) {
             return source.substring(0, 1);
         } else {
             throw new RuntimeException("Could not identify operator: " + source);

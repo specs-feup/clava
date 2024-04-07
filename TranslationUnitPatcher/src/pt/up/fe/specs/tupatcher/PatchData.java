@@ -36,7 +36,7 @@ public class PatchData {
     /**
      * List of all the errors fixed by the patch.
      */
-    private ArrayList<ErrorKind> errors;
+    private final ArrayList<ErrorKind> errors;
 
     public PatchData() {
         this.missingTypes = new HashMap<String, TypeInfo>();

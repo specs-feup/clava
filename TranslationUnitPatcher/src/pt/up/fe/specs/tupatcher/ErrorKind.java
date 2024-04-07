@@ -71,7 +71,7 @@ public enum ErrorKind {
 
     private final int id;
 
-    private ErrorKind(int code) {
+    ErrorKind(int code) {
         this.id = code;
     }
 

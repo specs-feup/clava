@@ -27,7 +27,7 @@ public enum PatcherTestResource implements ResourceProvider {
 
     private static final String BASE_PATH = "pt/up/fe/specs/tupatcher/";
 
-    private PatcherTestResource(String resource) {
+    PatcherTestResource(String resource) {
         this.resource = BASE_PATH + resource;
     }
 

@@ -26,15 +26,15 @@ import java.util.ArrayList;
  */
 public interface Definition {
 
-    public String getName();
+    String getName();
     /**
      * @return String with definition of the function or type.
      */
-    public String str();
+    String str();
     /**
      * @return List of all the types and functions that must be defined/declared before this one.
      */
-    public ArrayList<Definition> getDependencies();
-    public boolean equals(Definition f);
+    ArrayList<Definition> getDependencies();
+    boolean equals(Definition f);
     
 }

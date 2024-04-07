@@ -239,7 +239,7 @@ public class TUPatcherLauncher {
                 numSuccess++;
             } catch (Exception e) {
                 numErrors++;
-                errorMessages.add(e.toString() + "\n\n" + e.getLocalizedMessage() + "\n" + e.getMessage());
+                errorMessages.add(e + "\n\n" + e.getLocalizedMessage() + "\n" + e.getMessage());
                 continue;
             }
 
@@ -471,7 +471,7 @@ public class TUPatcherLauncher {
     }
     */
     public static Boolean outputProcessor(InputStream stream) {
-        try (var lines = LineStream.newInstance(stream, "Input Stream");) {
+        try (var lines = LineStream.newInstance(stream, "Input Stream")) {
             while (lines.hasNextLine()) {
                 lines.nextLine();
                 // var line = lines.nextLine();
@@ -483,7 +483,7 @@ public class TUPatcherLauncher {
     }
 
     public static String errorProcessor(InputStream stream) {
-        try (var lines = LineStream.newInstance(stream, "Input Stream");) {
+        try (var lines = LineStream.newInstance(stream, "Input Stream")) {
             while (lines.hasNextLine()) {
                 var line = lines.nextLine();
                 System.out.println("StdErr: " + line);
