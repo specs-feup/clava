@@ -23,23 +23,44 @@ import java.util.HashMap;
  */
 public class TypeInfo implements Definition {
 
-    String kind;// int, char, struct, union, class, etc
-    String name;
-    final HashMap<String, TypeInfo> fields = new HashMap<>();
-    final HashMap<String, TypeInfo> nestedTypes = new HashMap<>();
-    final HashMap<String, FunctionInfo> functions = new HashMap<>();
-    final ArrayList<Integer> constructors = new ArrayList<>();
-    boolean useTypedefStruct = true;
-    final HashMap<String, Boolean> isStatic = new HashMap<>();
-    final ArrayList<String> operators = new ArrayList<>();
-    boolean nested = false;
+    private String kind;// int, char, struct, union, class, etc
+    private String name;
+    private final HashMap<String, TypeInfo> fields;
+    private final HashMap<String, TypeInfo> nestedTypes;
+    private final HashMap<String, FunctionInfo> functions;
+    private final ArrayList<Integer> constructors;
+    private boolean useTypedefStruct;
+    private final HashMap<String, Boolean> isStatic;
+    private final ArrayList<String> operators;
+    private boolean nested;
 
-    static int counter = 0;
+    private static int counter = 0;
 
     public TypeInfo() {
-        kind = "int";
+        this.kind = "int";
         this.name = "TYPE_PATCH_" + counter;
+        this.fields = new HashMap<>();
+        this.nestedTypes = new HashMap<>();
+        this.functions = new HashMap<>();
+        this.constructors = new ArrayList<>();
+        this.useTypedefStruct = true;
+        this.isStatic = new HashMap<>();
+        this.operators = new ArrayList<>();
+        this.nested = false;
         counter++;
+    }
+
+    public TypeInfo(String name) {
+        this.kind = "int";
+        this.name = name;
+        this.fields = new HashMap<>();
+        this.nestedTypes = new HashMap<>();
+        this.functions = new HashMap<>();
+        this.constructors = new ArrayList<>();
+        this.useTypedefStruct = true;
+        this.isStatic = new HashMap<>();
+        this.operators = new ArrayList<>();
+        this.nested = false;
     }
 
     public void addOperator(String operator) {
@@ -66,11 +87,6 @@ public class TypeInfo implements Definition {
 
     public boolean getTypedefStruct() {
         return useTypedefStruct;
-    }
-
-    public TypeInfo(String name) {
-        kind = "int";
-        this.name = name;
     }
 
     public void addField(String name, PatchData patchData) {
