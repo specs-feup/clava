@@ -325,7 +325,7 @@ public class ErrorPatcher {
             throw new RuntimeException("Unable to solve incomplete type error for "+typeName);
         }
         TypeInfo type = new TypeInfo(typeName);
-        type.setAsStructWithoutTipedef();
+        type.setAsStructWithoutTypedef();
         patchData.addType(type);
     }
     

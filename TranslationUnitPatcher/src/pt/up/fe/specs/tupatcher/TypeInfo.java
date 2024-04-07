@@ -116,7 +116,7 @@ public class TypeInfo implements Definition {
         kind = "struct";
     }
 
-    public void setAsStructWithoutTipedef() {
+    public void setAsStructWithoutTypedef() {
         kind = "struct";
         useTypedefStruct = false;
     }
