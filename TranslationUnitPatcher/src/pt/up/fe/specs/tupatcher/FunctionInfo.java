@@ -14,6 +14,7 @@
 package pt.up.fe.specs.tupatcher;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -27,15 +28,15 @@ public class FunctionInfo implements Definition {
      * List of numbers of arguments to use in different definitions of the same function. Currently, this field is
      * unused.
      */
-    final ArrayList<Integer> numArgs;
+    final List<Integer> numArgs;
     final TypeInfo returnType;
     boolean isStatic = false;
     boolean isConst = false;
 
     public FunctionInfo(String name, TypeInfo returnType) {
         this.name = name;
-        numArgs = new ArrayList<>();
-        numArgs.add(0);
+        this.numArgs = new ArrayList<>();
+        this.numArgs.add(0);
         this.returnType = returnType;
     }
 
@@ -63,7 +64,7 @@ public class FunctionInfo implements Definition {
         return returnType;
     }
 
-    public ArrayList<Integer> getNumArgs() {
+    public List<Integer> getNumArgs() {
         return numArgs;
     }
 
@@ -72,8 +73,8 @@ public class FunctionInfo implements Definition {
     }
 
     @Override
-    public ArrayList<Definition> getDependencies() {
-        ArrayList<Definition> result = new ArrayList<>();
+    public List<Definition> getDependencies() {
+        List<Definition> result = new ArrayList<>();
         result.add(returnType);
         return result;
     }

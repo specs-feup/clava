@@ -246,11 +246,10 @@ public class TUPatcherUtils {
 
     /**
      * Get names of variables used as arguments in a function call.
-     * 
-     * @param location
-     *            - location in source code in the format <filepath>:<line-number>:<column-number>
+     *
+     * @param location - location in source code in the format <filepath>:<line-number>:<column-number>
      */
-    public static ArrayList<String> getArguments(String location) {
+    public static List<String> getArguments(String location) {
         String filepath = locationFilepath(location);
         String source = removeComments(SpecsIo.read(filepath));
         int n = locationIndex(location, source);
@@ -312,8 +311,8 @@ public class TUPatcherUtils {
     /**
      * Extract substrings between parenthesis from error messages
      */
-    public static ArrayList<String> extractFromParenthesis(String message) {
-        ArrayList<String> result = new ArrayList<>();
+    public static List<String> extractFromParenthesis(String message) {
+        List<String> result = new ArrayList<>();
         int index1 = nthIndexOf(message, '(', 1);
         int index2 = nthIndexOf(message, ')', 2);
         int n = 0;
@@ -329,8 +328,8 @@ public class TUPatcherUtils {
     /**
      * Extract substrings between single quotes from error messages
      */
-    public static ArrayList<String> extractFromSingleQuotes(String message) {
-        ArrayList<String> result = new ArrayList<>();
+    public static List<String> extractFromSingleQuotes(String message) {
+        List<String> result = new ArrayList<>();
         message = " " + message;
         int index1 = nthIndexOf(message, '\'', 1);
         int index2 = nthIndexOf(message, '\'', 2);
@@ -347,8 +346,8 @@ public class TUPatcherUtils {
     /**
      * Extract type names from error messages
      */
-    public static ArrayList<String> getTypesFromMessage(String message) {
-        ArrayList<String> types = extractFromSingleQuotes(message);
+    public static List<String> getTypesFromMessage(String message) {
+        List<String> types = extractFromSingleQuotes(message);
         if (message.contains("did you mean")) {
             types.remove(types.size() - 1);
         }
@@ -372,7 +371,7 @@ public class TUPatcherUtils {
                 fromTypeName = types.get(1);
             }
         }
-        ArrayList<String> result = new ArrayList<>();
+        List<String> result = new ArrayList<>();
         result.add(toTypeName);
         result.add(fromTypeName);
         return result;
@@ -382,10 +381,10 @@ public class TUPatcherUtils {
      * Extract "aka" from error messages (if there is any)
      * <p>
      * Example: "member reference base type 'TYPE_PATCH_1872' (aka 'int') is not a structure or union" -> "int" When no
-     * "aka" is found for the type, it returns an empty string. The result is always an ArrayList with size=2.
+     * "aka" is found for the type, it returns an empty string. The result is always a List with size=2.
      */
-    public static ArrayList<String> getAkaFromMessage(String message) {
-        ArrayList<String> result = new ArrayList<>();
+    public static List<String> getAkaFromMessage(String message) {
+        List<String> result = new ArrayList<>();
         int indexAka1 = message.indexOf("aka");
         int indexAka2 = message.indexOf("aka", indexAka1 + 1);
         if (indexAka1 < 0) {

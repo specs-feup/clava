@@ -18,6 +18,7 @@
 package pt.up.fe.specs.tupatcher;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -34,7 +35,7 @@ public interface Definition {
     /**
      * @return List of all the types and functions that must be defined/declared before this one.
      */
-    ArrayList<Definition> getDependencies();
+    List<Definition> getDependencies();
     boolean equals(Definition f);
     
 }

@@ -157,7 +157,7 @@ public class TUPatcherLauncher {
 
         var sourcePaths = config.get(TUPatcherConfig.SOURCE_PATHS).getStringList();
 
-        ArrayList<PatchData> data = new ArrayList<>();
+        List<PatchData> data = new ArrayList<>();
         // Get list of all the files in form of String Array
         for (String arg : sourcePaths) {
             File file = new File(arg);
@@ -190,9 +190,9 @@ public class TUPatcherLauncher {
      * Create patches for all .c and .cpp files in a directory
      * 
      * @param dir
-     * @return ArrayList with a PatchData for each file
+     * @return List with a PatchData for each file
      */
-    public ArrayList<PatchData> patchDirectory(File dir) {
+    public List<PatchData> patchDirectory(File dir) {
         SpecsLogs.info("Processing folder '" + dir + "'...");
         var sourceFiles = SpecsIo.getFilesRecursive(dir, Arrays.asList("c", "cpp"));
         SpecsLogs.info("Found '" + sourceFiles.size() + " files to process");
@@ -206,8 +206,8 @@ public class TUPatcherLauncher {
         int maxNumFiles = config.get(TUPatcherConfig.MAX_FILES), n = 0;
         // List<String> fileNamesList = Arrays.asList(fileNames);
         // Collections.shuffle(fileNamesList);
-        ArrayList<String> errorMessages = new ArrayList<>();
-        ArrayList<PatchData> patchesData = new ArrayList<>();
+        List<String> errorMessages = new ArrayList<>();
+        List<PatchData> patchesData = new ArrayList<>();
 
         var counter = new ProgressCounter(sourceFiles.size());
         for (var sourceFile : sourceFiles) {

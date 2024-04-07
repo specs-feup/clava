@@ -16,6 +16,8 @@ package pt.up.fe.specs.tupatcher;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import pt.up.fe.specs.util.SpecsIo;
 
@@ -26,17 +28,17 @@ import pt.up.fe.specs.util.SpecsIo;
  */
 public class PatchData {
 
-    private final HashMap<String, TypeInfo> missingTypes;
-    private final HashMap<String, FunctionInfo> missingFunctions;
-    private final HashMap<String, TypeInfo> missingVariables;
-    private final HashMap<String, TypeInfo> missingConstVariables;
+    private final Map<String, TypeInfo> missingTypes;
+    private final Map<String, FunctionInfo> missingFunctions;
+    private final Map<String, TypeInfo> missingVariables;
+    private final Map<String, TypeInfo> missingConstVariables;
 
     private boolean allErrorsPatched;
 
     /**
      * List of all the errors fixed by the patch.
      */
-    private final ArrayList<ErrorKind> errors;
+    private final List<ErrorKind> errors;
 
     public PatchData() {
         this.missingTypes = new HashMap<>();
@@ -63,7 +65,7 @@ public class PatchData {
         errors.add(errorKind);
     }
 
-    public ArrayList<ErrorKind> getErrors() {
+    public List<ErrorKind> getErrors() {
         return errors;
     }
 
@@ -150,7 +152,7 @@ public class PatchData {
         missingTypes.put(typeName, type);
     }
 
-    public HashMap<String, TypeInfo> getTypes() {
+    public Map<String, TypeInfo> getTypes() {
         return missingTypes;
     }
 
@@ -190,7 +192,7 @@ public class PatchData {
     /**
      * @return String with the definitions of all the functions.
      */
-    public String functionPatches(HashMap<String, FunctionInfo> functions) {
+    public String functionPatches(Map<String, FunctionInfo> functions) {
         StringBuilder result = new StringBuilder();
         for (String functionName : functions.keySet()) {
             FunctionInfo function = functions.get(functionName);
@@ -214,7 +216,7 @@ public class PatchData {
             }
         }
 
-        ArrayList<Definition> defs = orderedDefinitions();
+        List<Definition> defs = orderedDefinitions();
         for (Definition def : defs) {
             result.append(def.str());
         }
@@ -242,9 +244,9 @@ public class PatchData {
      * partially ordered. When it happens this problem may be solved by the fact that all structs and classes are
      * declared (but not defined) in the beginning of patch.h
      */
-    public ArrayList<Definition> orderedDefinitions() {
-        ArrayList<Definition> notSorted = new ArrayList<>();
-        ArrayList<Definition> result = new ArrayList<>();
+    public List<Definition> orderedDefinitions() {
+        List<Definition> notSorted = new ArrayList<>();
+        List<Definition> result = new ArrayList<>();
         for (TypeInfo type : missingTypes.values()) {
             if (!type.isNested()) {
                 notSorted.add(type);

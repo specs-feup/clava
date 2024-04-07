@@ -13,10 +13,7 @@
 
 package pt.up.fe.specs.tupatcher;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 import pt.up.fe.specs.tupatcher.parser.TUErrorData;
@@ -94,6 +91,8 @@ public class ErrorPatcher {
 
         // Try to correct only the first error
         var data = errors.get(0);
+
+        //System.out.println(data);
 
         // for (TUErrorData data : errorsData.get(TUErrorsData.ERRORS)) {
         int errorNumber = (int) data.getValue("errorNumber");
@@ -238,8 +237,8 @@ public class ErrorPatcher {
         
         String message = data.get(TUErrorData.MAP).get("message");
         String fromTypeName = data.get(TUErrorData.MAP).get("qualtype");
-        ArrayList<String> types = TUPatcherUtils.getTypesFromMessage(message);
-        ArrayList<String> akas = TUPatcherUtils.getAkaFromMessage(message);
+        List<String> types = TUPatcherUtils.getTypesFromMessage(message);
+        List<String> akas = TUPatcherUtils.getAkaFromMessage(message);
         String aka1 = akas.get(0);
         String aka2 = akas.get(1);
         String toTypeName = types.get(0);
@@ -339,7 +338,7 @@ public class ErrorPatcher {
         //the problem is solved declaring these variables
         String location = data.get(TUErrorData.MAP).get("location");
         String typeName = TUPatcherUtils.getTypeFromDeclaration(location);
-        ArrayList<String> args = TUPatcherUtils.getArguments(location);
+        List<String> args = TUPatcherUtils.getArguments(location);
         TypeInfo type = patchData.getType(typeName);
         for (String arg : args) {
             if (patchData.getType(arg)==null && patchData.getVariable(arg)==null && patchData.getFunction(arg)==null) {

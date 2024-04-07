@@ -15,6 +15,8 @@ package pt.up.fe.specs.tupatcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -25,13 +27,13 @@ public class TypeInfo implements Definition {
 
     private String kind;// int, char, struct, union, class, etc
     private String name;
-    private final HashMap<String, TypeInfo> fields;
-    private final HashMap<String, TypeInfo> nestedTypes;
-    private final HashMap<String, FunctionInfo> functions;
-    private final ArrayList<Integer> constructors;
+    private final Map<String, TypeInfo> fields;
+    private final Map<String, TypeInfo> nestedTypes;
+    private final Map<String, FunctionInfo> functions;
+    private final List<Integer> constructors;
     private boolean useTypedefStruct;
-    private final HashMap<String, Boolean> isStatic;
-    private final ArrayList<String> operators;
+    private final Map<String, Boolean> isStatic;
+    private final List<String> operators;
     private boolean nested;
 
     private static int counter = 0;
@@ -120,7 +122,7 @@ public class TypeInfo implements Definition {
         patchData.addType(type);
     }
 
-    public HashMap<String, TypeInfo> getFields() {
+    public Map<String, TypeInfo> getFields() {
         return fields;
     }
 
@@ -168,7 +170,7 @@ public class TypeInfo implements Definition {
         patchData.addType(returnType);
     }
 
-    public HashMap<String, FunctionInfo> getFunctions() {
+    public Map<String, FunctionInfo> getFunctions() {
         return functions;
     }
 
@@ -192,8 +194,8 @@ public class TypeInfo implements Definition {
      * @return List of the types and functions.
      */
     @Override
-    public ArrayList<Definition> getDependencies() {
-        ArrayList<Definition> result = new ArrayList<>();
+    public List<Definition> getDependencies() {
+        List<Definition> result = new ArrayList<>();
         String kind2 = TUPatcherUtils.getTypeName(kind);
         if (!TUPatcherUtils.isPrimitiveType(kind2)) {
             result.add(new TypeInfo(kind2));
