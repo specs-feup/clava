@@ -16,6 +16,7 @@ package pt.up.fe.specs.tupatcher;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 import pt.up.fe.specs.tupatcher.parser.TUErrorData;
@@ -103,12 +104,7 @@ public class ErrorPatcher {
 
         var errorPatcher = ERROR_PATCHERS.get(error);
         if (errorPatcher == null) {
-            if (error == null) {
-                throw new RuntimeException("Error kind not supported yet: " + errorNumber);
-            }
-            else {
-                throw new RuntimeException("Error kind not supported yet: " + error);                
-            }
+            throw new RuntimeException("Error kind not supported yet: " + Objects.requireNonNullElse(error, errorNumber));
         }
 
         
