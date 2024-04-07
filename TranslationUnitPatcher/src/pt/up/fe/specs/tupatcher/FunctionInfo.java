@@ -22,13 +22,13 @@ import java.util.ArrayList;
  */
 public class FunctionInfo implements Definition {
 
-    String name;
+    final String name;
     /**
      * List of numbers of arguments to use in different definitions of the same function. Currently, this field is
      * unused.
      */
-    ArrayList<Integer> numArgs;
-    TypeInfo returnType;
+    final ArrayList<Integer> numArgs;
+    final TypeInfo returnType;
     boolean isStatic = false;
     boolean isConst = false;
 

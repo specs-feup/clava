@@ -25,13 +25,13 @@ public class TypeInfo implements Definition {
 
     String kind;// int, char, struct, union, class, etc
     String name;
-    HashMap<String, TypeInfo> fields = new HashMap<>();
-    HashMap<String, TypeInfo> nestedTypes = new HashMap<>();
-    HashMap<String, FunctionInfo> functions = new HashMap<>();
-    ArrayList<Integer> constructors = new ArrayList<>();
+    final HashMap<String, TypeInfo> fields = new HashMap<>();
+    final HashMap<String, TypeInfo> nestedTypes = new HashMap<>();
+    final HashMap<String, FunctionInfo> functions = new HashMap<>();
+    final ArrayList<Integer> constructors = new ArrayList<>();
     boolean useTypedefStruct = true;
-    HashMap<String, Boolean> isStatic = new HashMap<>();
-    ArrayList<String> operators = new ArrayList<>();
+    final HashMap<String, Boolean> isStatic = new HashMap<>();
+    final ArrayList<String> operators = new ArrayList<>();
     boolean nested = false;
 
     static int counter = 0;
