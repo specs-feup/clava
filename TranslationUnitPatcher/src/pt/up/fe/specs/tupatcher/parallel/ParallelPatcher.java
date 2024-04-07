@@ -66,14 +66,14 @@ public class ParallelPatcher {
         for (var subSourceFiles : partitionedSourceFiles) {
             var producer = new PatcherProducer(subSourceFiles, channel.createProducer(), config);
             var executor = Executors.newSingleThreadExecutor();
-            futures.add(executor.submit(() -> producer.execute()));
+            futures.add(executor.submit(producer::execute));
             executor.shutdown();
         }
 
         // Create consumer
         var consumer = new ResultsConsumer(numThreads, channel.createConsumer());
         var executor = Executors.newSingleThreadExecutor();
-        var consumerFuture = executor.submit(() -> consumer.execute());
+        var consumerFuture = executor.submit(consumer::execute);
         executor.shutdown();
 
         // Obtain values of futures, to synchronize execution
@@ -91,7 +91,7 @@ public class ParallelPatcher {
         long endTime = System.nanoTime();
 
         // Sum times of all producers
-        var producersTime = results.stream().mapToLong(patcherResult -> patcherResult.getExecutionTime())
+        var producersTime = results.stream().mapToLong(PatcherResult::getExecutionTime)
                 .sum();
         var programTime = endTime - startTime;
         var producersProgramRatio = (double) producersTime / (double) programTime;
@@ -158,7 +158,7 @@ public class ParallelPatcher {
         long endTime = System.nanoTime();
 
         // Sum times of all producers
-        var producersTime = results.stream().mapToLong(patcherResult -> patcherResult.getExecutionTime())
+        var producersTime = results.stream().mapToLong(PatcherResult::getExecutionTime)
                 .sum();
         var programTime = endTime - startTime;
         var producersProgramRatio = (double) producersTime / programTime;

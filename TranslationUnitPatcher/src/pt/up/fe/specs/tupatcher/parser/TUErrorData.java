@@ -33,5 +33,5 @@ public class TUErrorData extends ADataClass<TUErrorData> {
      */
     public final static DataKey<Map<String, String>> MAP = KeyFactory.generic("map",
             () -> (Map<String, String>) new HashMap<String, String>())
-            .setDefault(() -> new HashMap<>());
+            .setDefault(HashMap::new);
 }

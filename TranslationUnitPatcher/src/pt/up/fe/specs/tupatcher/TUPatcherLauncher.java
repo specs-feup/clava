@@ -62,7 +62,7 @@ public class TUPatcherLauncher {
     // public TUPatcherLauncher(SpecsProperties properties) {
     public TUPatcherLauncher(TUPatcherConfig config) {
         this.config = config;
-        this.dumper = Lazy.newInstance(() -> TUPatcherLauncher.getDumper());
+        this.dumper = Lazy.newInstance(TUPatcherLauncher::getDumper);
 
         this.stats = new CsvWriter("File", "Success", "Iterations", "Execution Time (ns)");
         // this.properties = properties;

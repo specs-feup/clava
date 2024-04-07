@@ -45,7 +45,7 @@ public class PatcherProducer {
         this.sourceFiles = sourceFiles;
         this.producer = producer;
         this.config = config;
-        this.dumper = Lazy.newInstance(() -> TUPatcherLauncher.getDumper());
+        this.dumper = Lazy.newInstance(TUPatcherLauncher::getDumper);
     }
 
     public static Callable<PatcherResult> createCall(File sourceFile, File baseFolder, TUPatcherConfig config) {

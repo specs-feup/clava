@@ -38,12 +38,8 @@ public class TUPatcherUtils {
         public int number;
     }
 
-    static final CharFunction isTokenChar = (char ch) -> {
-        return Character.isLetterOrDigit(ch) || ch == '_';
-    };
-    static final CharFunction isNotTokenChar = (char ch) -> {
-        return !isTokenChar.run(ch);
-    };
+    static final CharFunction isTokenChar = (char ch) -> Character.isLetterOrDigit(ch) || ch == '_';
+    static final CharFunction isNotTokenChar = (char ch) -> !isTokenChar.run(ch);
 
     /**
      * List of primitive types in c/c++
@@ -228,9 +224,7 @@ public class TUPatcherUtils {
         String source = removeComments(SpecsIo.read(filepath));
         int n = locationIndex(location, source);
         StringInt result = readWhile(source, n, isNotTokenChar, true);
-        result = readWhile(source, result.number, (char ch) -> {
-            return (Character.isLetterOrDigit(ch) || ch == '_' || ch == ' ' || ch == ':');
-        }, true);
+        result = readWhile(source, result.number, (char ch) -> (Character.isLetterOrDigit(ch) || ch == '_' || ch == ' ' || ch == ':'), true);
         char ch = source.charAt(result.number);
         return ch == '(';
     }
@@ -245,12 +239,8 @@ public class TUPatcherUtils {
         String filepath = locationFilepath(location);
         String source = removeComments(SpecsIo.read(filepath));
         int n = locationIndex(location, source);
-        StringInt si = readWhile(source, n, (char c) -> {
-            return c != '(';
-        }, false);
-        si = readWhile(source, si.number, (char c) -> {
-            return c != ')';
-        }, true);
+        StringInt si = readWhile(source, n, (char c) -> c != '(', false);
+        si = readWhile(source, si.number, (char c) -> c != ')', true);
         return si.str.split(",").length;
     }
 
@@ -264,12 +254,8 @@ public class TUPatcherUtils {
         String filepath = locationFilepath(location);
         String source = removeComments(SpecsIo.read(filepath));
         int n = locationIndex(location, source);
-        StringInt si = readWhile(source, n, (char c) -> {
-            return c != '(';
-        }, false);
-        si = readWhile(source, si.number, (char c) -> {
-            return c != ')';
-        }, true);
+        StringInt si = readWhile(source, n, (char c) -> c != '(', false);
+        si = readWhile(source, si.number, (char c) -> c != ')', true);
         return new ArrayList<>(
                 Arrays.asList(si.str.replace("(", "").replace(" ", "").split(",")));
     }
@@ -285,9 +271,7 @@ public class TUPatcherUtils {
         String filepath = locationFilepath(location);
         String source = removeComments(SpecsIo.read(filepath));
         int n = locationIndex(location, source);
-        StringInt si = readWhile(source, n, (char c) -> {
-            return !(c == ';' || c == '{');
-        }, false);
+        StringInt si = readWhile(source, n, (char c) -> !(c == ';' || c == '{'), false);
         si = readWhile(source, si.number, isNotTokenChar, true);
         if (si.str.matches("^[^a-zA-Z]*[&\\*)]+.*")) {
             // no declaration in this location
@@ -310,18 +294,12 @@ public class TUPatcherUtils {
         String filepath = locationFilepath(location);
         String source = removeComments(SpecsIo.read(filepath));
         int n = locationIndex(location, source);
-        StringInt si = readWhile(source, n, (char c) -> {
-            return c != '}' && c != ';';
-        }, true);
+        StringInt si = readWhile(source, n, (char c) -> c != '}' && c != ';', true);
         if (source.charAt(si.number) == ';') {
             return "";
         }
-        si = readWhile(source, si.number - 1, (char c) -> {
-            return c != '{';
-        }, false);
-        si = readWhile(source, si.number - 1, (char c) -> {
-            return !(c == ';' || c == '{');
-        }, false);
+        si = readWhile(source, si.number - 1, (char c) -> c != '{', false);
+        si = readWhile(source, si.number - 1, (char c) -> !(c == ';' || c == '{'), false);
         si = readWhile(source, si.number + 1, isNotTokenChar, true);
         si = readWhile(source, si.number, isTokenChar, true);
         if (si.str.equals("struct")) {
@@ -517,9 +495,7 @@ public class TUPatcherUtils {
             n++;
         }
         StringInt si = readWhile(source, n, isTokenChar, true);
-        si = readWhile(source, si.number, (char c) -> {
-            return c == ' ';
-        }, true);
+        si = readWhile(source, si.number, (char c) -> c == ' ', true);
         ch = source.charAt(si.number);
         String op = String.valueOf(ch);
 
@@ -545,15 +521,11 @@ public class TUPatcherUtils {
         if (!(Character.isLetterOrDigit(ch) || ch == '_' || ch == ' ' || ch == '(')) {
             return false;
         }
-        StringInt result = readWhile(source, n, (char c) -> {
-            return c != '(';
-        }, false);
+        StringInt result = readWhile(source, n, (char c) -> c != '(', false);
         if (result.str.contains(")")) {
             return false;
         }
-        result = readWhile(source, result.number + 1, (char c) -> {
-            return c != ')';
-        }, true);
+        result = readWhile(source, result.number + 1, (char c) -> c != ')', true);
         if (result.str.matches("^.*[&\\*]+[^a-zA-Z0-9]*")) {
             // if there is char '*' or '&' before the char ')'
             return true;
@@ -561,9 +533,7 @@ public class TUPatcherUtils {
             // operation with a variable
             return false;
         } else {
-            result = readWhile(source, result.number + 1, (char c) -> {
-                return c == ' ';
-            }, true);
+            result = readWhile(source, result.number + 1, (char c) -> c == ' ', true);
             result = readWhile(source, result.number, isNotTokenChar, true);
             return result.str.replace(")", "").isEmpty();
         }
