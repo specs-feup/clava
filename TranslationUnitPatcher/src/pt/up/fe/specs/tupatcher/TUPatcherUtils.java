@@ -154,14 +154,14 @@ public class TUPatcherUtils {
      */
     public static StringInt readWhile(String source, int startIndex, CharFunction condition, boolean forward) {
         int n = startIndex;
-        String token = "";
+        StringBuilder token = new StringBuilder();
         StringInt result = new StringInt();
         if (n >= source.length() || n < 0) {
             return result;
         }
         char ch = source.charAt(n);
         while (condition.run(ch)) {
-            token += ch;
+            token.append(ch);
             if (forward) {
                 n++;
             } else {
@@ -177,7 +177,7 @@ public class TUPatcherUtils {
                 break;
             ch = source.charAt(n);
         }
-        result.str = token;
+        result.str = token.toString();
         result.number = n;
         return result;
     }
@@ -625,31 +625,31 @@ public class TUPatcherUtils {
             }
         }
         source = String.join("\n", lines);
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < source.length(); i++) {
             char ch = source.charAt(i);
             if (ch == '/') {
                 i++;
-                result += ' ';
+                result.append(' ');
                 ch = source.charAt(i);
                 if (ch == '*') {
                     i++;
-                    result += ' ';
+                    result.append(' ');
                     while (!(source.charAt(i) == '*' && source.charAt(i + 1) == '/')) {
                         i++;
                         if (source.charAt(i) == '\n')
-                            result += '\n';
+                            result.append('\n');
                         else
-                            result += ' ';
+                            result.append(' ');
                     }
                 }
                 i++;
-                result += " ";
+                result.append(" ");
             } else {
-                result += ch;
+                result.append(ch);
             }
         }
-        return result;
+        return result.toString();
     }
 
     public static String getPatchedFilename(String originalFilename) {

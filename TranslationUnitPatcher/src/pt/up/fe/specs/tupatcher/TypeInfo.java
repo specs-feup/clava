@@ -205,54 +205,54 @@ public class TypeInfo implements Definition {
 
     @Override
     public String str() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         if (kind.equals("struct")) {
             if (useTypedefStruct) {
-                result += "typedef struct {\n";
+                result.append("typedef struct {\n");
             } else {
-                result += "struct " + name + " {\n";
+                result.append("struct ").append(name).append(" {\n");
             }
             for (String field : fields.keySet()) {
-                result += "\t" + fields.get(field).getName() + " ";
-                result += field + ";\n";
+                result.append("\t").append(fields.get(field).getName()).append(" ");
+                result.append(field).append(";\n");
             }
-            result += "} ";
+            result.append("} ");
             if (useTypedefStruct) {
-                result += name;
+                result.append(name);
             }
-            result += ";\n";
+            result.append(";\n");
         } else if (kind.equals("class")) {
 
-            result += "class " + name + "{\npublic:\n";
+            result.append("class ").append(name).append("{\npublic:\n");
             for (String field : fields.keySet()) {
-                result += "\t";
+                result.append("\t");
                 if (isStatic.get(field)) {
-                    result += "static ";
+                    result.append("static ");
                 }
-                result += fields.get(field).getName() + " ";
-                result += field + ";\n";
+                result.append(fields.get(field).getName()).append(" ");
+                result.append(field).append(";\n");
             }
             for (FunctionInfo function : functions.values()) {
-                result += "\t";
+                result.append("\t");
                 if (isStatic.get(function.getName())) {
-                    result += "static ";
+                    result.append("static ");
                 }
-                result += function.str();
+                result.append(function.str());
             }
             for (String operator : operators) {
-                result += "\ttemplate <class T>\n";
-                result += "\tfriend bool operator" + operator + "(const " + name + "& t1, T& t2) { return 0;}\n";
+                result.append("\ttemplate <class T>\n");
+                result.append("\tfriend bool operator").append(operator).append("(const ").append(name).append("& t1, T& t2) { return 0;}\n");
             }
             for (TypeInfo type : nestedTypes.values()) {
-                result += type.str();
+                result.append(type.str());
             }
             // constructor
-            result += "\t" + name + "(...) {}\n";
-            result += "};" + "\n";
+            result.append("\t").append(name).append("(...) {}\n");
+            result.append("};" + "\n");
         } else {
-            result += "typedef " + kind + " " + name + ";\n";
+            result.append("typedef ").append(kind).append(" ").append(name).append(";\n");
         }
-        return result;
+        return result.toString();
     }
 
     /* (non-Javadoc)

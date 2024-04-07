@@ -95,15 +95,15 @@ public class FunctionInfo implements Definition {
      * arguments.
      */
     public String template(int numArgs) {
-        String result = "template<";
+        StringBuilder result = new StringBuilder("template<");
         for (int i = 0; i < numArgs; i++) {
-            result += "class TemplateClass" + i;
+            result.append("class TemplateClass").append(i);
             if (i + 1 < numArgs) {
-                result += ", ";
+                result.append(", ");
             }
         }
-        result += ">\n";
-        return result;
+        result.append(">\n");
+        return result.toString();
     }
 
     /**
@@ -113,15 +113,15 @@ public class FunctionInfo implements Definition {
      * arguments.
      */
     public String arguments(int numArgs) {
-        String result = "(";
+        StringBuilder result = new StringBuilder("(");
         for (int i = 0; i < numArgs; i++) {
-            result += "TemplateClass" + i + " arg" + i;
+            result.append("TemplateClass").append(i).append(" arg").append(i);
             if (i + 1 < numArgs) {
-                result += ", ";
+                result.append(", ");
             }
         }
-        result += ")";
-        return result;
+        result.append(")");
+        return result.toString();
     }
 
     @Override
@@ -175,10 +175,9 @@ public class FunctionInfo implements Definition {
         */
 
         if (returnTypeName.contains("struct ")) {
-            result.append(" " + returnTypeName + " x = {};");
+            result.append(" ").append(returnTypeName).append(" x = {};");
         } else {
-            result.append(" " + returnTypeName + " x = "
-                    + returnTypeName.replace("const ", "") + "();");
+            result.append(" ").append(returnTypeName).append(" x = ").append(returnTypeName.replace("const ", "")).append("();");
 
         }
 

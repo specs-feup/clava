@@ -168,60 +168,60 @@ public class PatchData {
      * @return String with all the variables declarations.
      */
     public String variablesPatches() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (String varName : missingVariables.keySet()) {
             String type = missingVariables.get(varName).getName();
-            result += type + " " + varName + ";\n";
+            result.append(type).append(" ").append(varName).append(";\n");
         }
         int i = 0;
         for (String varName : missingConstVariables.keySet()) {
             TypeInfo type = missingConstVariables.get(varName);
             String typeName = type.getName();
-            result += "const " + typeName + " " + varName;
+            result.append("const ").append(typeName).append(" ").append(varName);
             if (TUPatcherUtils.isPrimitiveType(type.getKind())) {
-                result += " = " + i + ";\n";
+                result.append(" = ").append(i).append(";\n");
             } else {
-                result += " = " + typeName + "();\n";
+                result.append(" = ").append(typeName).append("();\n");
             }
             i++;
         }
-        return result;
+        return result.toString();
     }
 
     /**
      * @return String with the definitions of all the functions.
      */
     public String functionPatches(HashMap<String, FunctionInfo> functions) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (String functionName : functions.keySet()) {
             FunctionInfo function = functions.get(functionName);
-            result += function.str();
+            result.append(function.str());
         }
-        return result;
+        return result.toString();
     }
 
     /**
      * @return String with the content to write to the file patch.h
      */
     public String str() {
-        String result = "#define NULL 0\n";
+        StringBuilder result = new StringBuilder("#define NULL 0\n");
         for (TypeInfo type : missingTypes.values()) {
             if (type.getKind().equals("class")) {
-                result += "class " + type.getName() + ";\n";
+                result.append("class ").append(type.getName()).append(";\n");
             } else if (type.getKind().equals("struct")) {
                 if (!type.getTypedefStruct()) {
-                    result += "struct " + type.getName() + ";\n";
+                    result.append("struct ").append(type.getName()).append(";\n");
                 }
             }
         }
 
         ArrayList<Definition> defs = orderedDefinitions();
         for (Definition def : defs) {
-            result += def.str();
+            result.append(def.str());
         }
-        result += variablesPatches();
+        result.append(variablesPatches());
 
-        return result;
+        return result.toString();
     }
 
     /**
