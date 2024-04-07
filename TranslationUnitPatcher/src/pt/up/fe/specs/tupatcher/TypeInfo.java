@@ -74,7 +74,7 @@ public class TypeInfo implements Definition {
     }
 
     public void addField(String name, PatchData patchData) {
-        if (!(kind == "struct" || kind == "union" || kind == "class"))
+        if (!(kind.equals("struct") || kind.equals("union") || kind.equals("class")))
             kind = "struct";
         TypeInfo type = new TypeInfo("TYPE_PATCH_" + counter);
         fields.put(name, type);
@@ -84,7 +84,7 @@ public class TypeInfo implements Definition {
     }
 
     public void addNestedType(String name, PatchData patchData) {
-        if (!(kind == "struct" || kind == "union" || kind == "class"))
+        if (!(kind.equals("struct") || kind.equals("union") || kind.equals("class")))
             kind = "class";
         TypeInfo type = new TypeInfo(name);
         nestedTypes.put(name, type);
@@ -97,7 +97,7 @@ public class TypeInfo implements Definition {
     }
 
     public void addField(String name, TypeInfo type, PatchData patchData) {
-        if (!(kind == "struct" || kind == "union" || kind == "class"))
+        if (!(kind.equals("struct") || kind.equals("union") || kind.equals("class")))
             kind = "struct";
         fields.put(name, type);
         isStatic.put(name, false);
@@ -144,7 +144,7 @@ public class TypeInfo implements Definition {
     }
 
     public void addFunction(String name, PatchData patchData) {
-        if (!(kind == "class"))
+        if (!(kind.equals("class")))
             kind = "class";
         TypeInfo returnType = new TypeInfo();
         functions.put(name, new FunctionInfo(name, returnType));
@@ -157,7 +157,7 @@ public class TypeInfo implements Definition {
     }
 
     public void addConstructor(int numArgs) {
-        if (!(kind == "class"))
+        if (!(kind.equals("class")))
             kind = "class";
         constructors.add(numArgs);
     }
@@ -206,7 +206,7 @@ public class TypeInfo implements Definition {
     @Override
     public String str() {
         String result = "";
-        if (kind == "struct") {
+        if (kind.equals("struct")) {
             if (useTypedefStruct) {
                 result += "typedef struct {\n";
             } else {
@@ -221,7 +221,7 @@ public class TypeInfo implements Definition {
                 result += name;
             }
             result += ";\n";
-        } else if (kind == "class") {
+        } else if (kind.equals("class")) {
 
             result += "class " + name + "{\npublic:\n";
             for (String field : fields.keySet()) {

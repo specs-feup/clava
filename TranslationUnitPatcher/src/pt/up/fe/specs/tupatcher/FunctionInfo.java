@@ -147,7 +147,7 @@ public class FunctionInfo implements Definition {
 
     private String getFunctionBody() {
 
-        if (returnType.getKind() == "struct" || returnType.getKind() == "class") {
+        if (returnType.getKind().equals("struct") || returnType.getKind().equals("class")) {
             return "return " + returnType.getName() + "()";
         }
 
