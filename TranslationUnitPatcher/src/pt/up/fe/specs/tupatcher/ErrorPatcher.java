@@ -418,20 +418,16 @@ public class ErrorPatcher {
         }
         else {
             TypeInfo type = patchData.getType(TUPatcherUtils.getTypeName(typeName));
-            if (type != null) {
-                type.setAsClass();
-                type.addOperator(operator);
-            }
-            else {
+            if (type == null) {
                 typeName = TUPatcherUtils.getTypesFromMessage(data.get(TUErrorData.MAP).get("message")).get(0);
                 type = patchData.getType(TUPatcherUtils.getTypeName(typeName));
                 if (type == null) {
                     typeName = TUPatcherUtils.getTypesFromMessage(data.get(TUErrorData.MAP).get("message")).get(1);
                     type = patchData.getType(TUPatcherUtils.getTypeName(typeName));
                 }
-                type.setAsClass();
-                type.addOperator(operator);
             }
+            type.setAsClass();
+            type.addOperator(operator);
         }
     }
 

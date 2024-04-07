@@ -391,7 +391,6 @@ public class TUPatcherUtils {
         if (indexAka1 < 0) {
             result.add("");
             result.add("");
-            return result;
         } else {
             if (indexAka2 > 0) {
                 String aka1 = extractFromSingleQuotes(message.substring(indexAka1)).get(0);
@@ -409,8 +408,8 @@ public class TUPatcherUtils {
                     result.add("");
                 }
             }
-            return result;
         }
+        return result;
     }
 
     /**
