@@ -11,7 +11,9 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.tupatcher;
+package pt.up.fe.specs.tupatcher.definition;
+
+import pt.up.fe.specs.tupatcher.TUPatcherUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,20 +23,19 @@ import java.util.List;
  * @author Pedro Galvao
  *
  */
-public class FunctionInfo implements Definition {
+public class FunctionDefinition extends SymbolDefinition {
 
-    final String name;
     /**
      * List of numbers of arguments to use in different definitions of the same function. Currently, this field is
      * unused.
      */
     final List<Integer> numArgs;
-    final TypeInfo returnType;
+    final TypeDefinition returnType;
     boolean isStatic = false;
     boolean isConst = false;
 
-    public FunctionInfo(String name, TypeInfo returnType) {
-        this.name = name;
+    public FunctionDefinition(String name, TypeDefinition returnType) {
+        super(name);
         this.numArgs = new ArrayList<>();
         this.numArgs.add(0);
         this.returnType = returnType;
@@ -56,11 +57,7 @@ public class FunctionInfo implements Definition {
         return isConst;
     }
 
-    public void setReturnType(String typeName) {
-        returnType.setName(typeName);
-    }
-
-    public TypeInfo getReturnType() {
+    public TypeDefinition getReturnType() {
         return returnType;
     }
 
@@ -73,19 +70,14 @@ public class FunctionInfo implements Definition {
     }
 
     @Override
-    public List<Definition> getDependencies() {
-        List<Definition> result = new ArrayList<>();
+    public List<SymbolDefinition> getSymbolDependencies() {
+        List<SymbolDefinition> result = new ArrayList<>();
         result.add(returnType);
         return result;
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public boolean equals(Definition def) {
+    public boolean equals(SymbolDefinition def) {
         return this.name.equals(def.getName());
     }
 
@@ -126,7 +118,7 @@ public class FunctionInfo implements Definition {
     }
 
     @Override
-    public String str() {
+    public String toDefinitionString() {
         String result = "";
         // using "..."
         if (isStatic) {
@@ -144,6 +136,11 @@ public class FunctionInfo implements Definition {
 
         return result;
 
+    }
+
+    @Override
+    public String toDeclarationString() {
+        return null;
     }
 
     private String getFunctionBody() {

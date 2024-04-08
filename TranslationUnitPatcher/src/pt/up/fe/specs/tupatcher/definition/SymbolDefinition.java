@@ -15,9 +15,8 @@
  *  under the License.
  */
 
-package pt.up.fe.specs.tupatcher;
+package pt.up.fe.specs.tupatcher.definition;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,17 +24,33 @@ import java.util.List;
  * @author Pedro Galvao
  *
  */
-public interface Definition {
+public abstract class SymbolDefinition {
 
-    String getName();
+    protected final String name;
+
+    public SymbolDefinition(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     /**
-     * @return String with definition of the function or type.
+     * @return String with definition of the symbol.
      */
-    String str();
+    public abstract String toDefinitionString();
+
+
     /**
-     * @return List of all the types and functions that must be defined/declared before this one.
+     * @return String with declaration of the symbol.
      */
-    List<Definition> getDependencies();
-    boolean equals(Definition f);
-    
+    public abstract String toDeclarationString();
+
+    /**
+     * @return List of all symbols that must be defined/declared before this one.
+     */
+    public abstract List<SymbolDefinition> getSymbolDependencies();
+
+    public abstract boolean equals(SymbolDefinition f);
 }

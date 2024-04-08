@@ -11,7 +11,10 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
-package pt.up.fe.specs.tupatcher;
+package pt.up.fe.specs.tupatcher.definition;
+
+import pt.up.fe.specs.tupatcher.PatchData;
+import pt.up.fe.specs.tupatcher.TUPatcherUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,13 +26,12 @@ import java.util.Map;
  * @author Pedro Galvao
  *
  */
-public class TypeInfo implements Definition {
+public class TypeDefinition extends SymbolDefinition {
 
     private String kind;// int, char, struct, union, class, etc
-    private String name;
-    private final Map<String, TypeInfo> fields;
-    private final Map<String, TypeInfo> nestedTypes;
-    private final Map<String, FunctionInfo> functions;
+    private final Map<String, TypeDefinition> fields;
+    private final Map<String, TypeDefinition> nestedTypes;
+    private final Map<String, FunctionDefinition> functions;
     private final List<Integer> constructors;
     private boolean useTypedefStruct;
     private final Map<String, Boolean> isStatic;
@@ -38,9 +40,9 @@ public class TypeInfo implements Definition {
 
     private static int counter = 0;
 
-    public TypeInfo() {
+    public TypeDefinition() {
+        super("TYPE_PATCH_" + counter);
         this.kind = "int";
-        this.name = "TYPE_PATCH_" + counter;
         this.fields = new HashMap<>();
         this.nestedTypes = new HashMap<>();
         this.functions = new HashMap<>();
@@ -52,9 +54,9 @@ public class TypeInfo implements Definition {
         counter++;
     }
 
-    public TypeInfo(String name) {
+    public TypeDefinition(String name) {
+        super(name);
         this.kind = "int";
-        this.name = name;
         this.fields = new HashMap<>();
         this.nestedTypes = new HashMap<>();
         this.functions = new HashMap<>();
@@ -94,7 +96,7 @@ public class TypeInfo implements Definition {
     public void addField(String name, PatchData patchData) {
         if (!(kind.equals("struct") || kind.equals("union") || kind.equals("class")))
             kind = "struct";
-        TypeInfo type = new TypeInfo("TYPE_PATCH_" + counter);
+        TypeDefinition type = new TypeDefinition("TYPE_PATCH_" + counter);
         fields.put(name, type);
         isStatic.put(name, false);
         patchData.addType(type);
@@ -104,17 +106,17 @@ public class TypeInfo implements Definition {
     public void addNestedType(String name, PatchData patchData) {
         if (!(kind.equals("struct") || kind.equals("union") || kind.equals("class")))
             kind = "class";
-        TypeInfo type = new TypeInfo(name);
+        TypeDefinition type = new TypeDefinition(name);
         nestedTypes.put(name, type);
         isStatic.put(name, false);
         patchData.addType(type);
     }
 
-    public TypeInfo getNestedType(String name) {
+    public TypeDefinition getNestedType(String name) {
         return nestedTypes.get(name);
     }
 
-    public void addField(String name, TypeInfo type, PatchData patchData) {
+    public void addField(String name, TypeDefinition type, PatchData patchData) {
         if (!(kind.equals("struct") || kind.equals("union") || kind.equals("class")))
             kind = "struct";
         fields.put(name, type);
@@ -122,7 +124,7 @@ public class TypeInfo implements Definition {
         patchData.addType(type);
     }
 
-    public Map<String, TypeInfo> getFields() {
+    public Map<String, TypeDefinition> getFields() {
         return fields;
     }
 
@@ -148,29 +150,20 @@ public class TypeInfo implements Definition {
     }
 
     public void incNumFields(PatchData patchData) {
-        addField("field" + counter, new TypeInfo("TYPE_PATCH_" + counter), patchData);
+        addField("field" + counter, new TypeDefinition("TYPE_PATCH_" + counter), patchData);
         counter++;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     public void addFunction(String name, PatchData patchData) {
         if (!(kind.equals("class")))
             kind = "class";
-        TypeInfo returnType = new TypeInfo();
-        functions.put(name, new FunctionInfo(name, returnType));
+        TypeDefinition returnType = new TypeDefinition();
+        functions.put(name, new FunctionDefinition(name, returnType));
         isStatic.put(name, false);
         patchData.addType(returnType);
     }
 
-    public Map<String, FunctionInfo> getFunctions() {
+    public Map<String, FunctionDefinition> getFunctions() {
         return functions;
     }
 
@@ -194,31 +187,31 @@ public class TypeInfo implements Definition {
      * @return List of the types and functions.
      */
     @Override
-    public List<Definition> getDependencies() {
-        List<Definition> result = new ArrayList<>();
+    public List<SymbolDefinition> getSymbolDependencies() {
+        List<SymbolDefinition> result = new ArrayList<>();
         String kind2 = TUPatcherUtils.getTypeName(kind);
         if (!TUPatcherUtils.isPrimitiveType(kind2)) {
-            result.add(new TypeInfo(kind2));
+            result.add(new TypeDefinition(kind2));
         }
         result.addAll(fields.values());
-        for (FunctionInfo def : functions.values()) {
+        for (FunctionDefinition def : functions.values()) {
             result.add(def.getReturnType());
             result.add(def);
         }
-        for (TypeInfo type : nestedTypes.values()) {
-            result.addAll(type.getDependencies());
+        for (TypeDefinition type : nestedTypes.values()) {
+            result.addAll(type.getSymbolDependencies());
         }
 
         return result;
     }
 
     @Override
-    public boolean equals(Definition def) {
+    public boolean equals(SymbolDefinition def) {
         return this.name.equals(def.getName());
     }
 
     @Override
-    public String str() {
+    public String toDefinitionString() {
         StringBuilder result = new StringBuilder();
         if (kind.equals("struct")) {
             if (useTypedefStruct) {
@@ -246,19 +239,19 @@ public class TypeInfo implements Definition {
                 result.append(fields.get(field).getName()).append(" ");
                 result.append(field).append(";\n");
             }
-            for (FunctionInfo function : functions.values()) {
+            for (FunctionDefinition function : functions.values()) {
                 result.append("\t");
                 if (isStatic.get(function.getName())) {
                     result.append("static ");
                 }
-                result.append(function.str());
+                result.append(function.toDefinitionString());
             }
             for (String operator : operators) {
                 result.append("\ttemplate <class T>\n");
                 result.append("\tfriend bool operator").append(operator).append("(const ").append(name).append("& t1, T& t2) { return 0;}\n");
             }
-            for (TypeInfo type : nestedTypes.values()) {
-                result.append(type.str());
+            for (TypeDefinition type : nestedTypes.values()) {
+                result.append(type.toDefinitionString());
             }
             // constructor
             result.append("\t").append(name).append("(...) {}\n");
@@ -267,6 +260,11 @@ public class TypeInfo implements Definition {
             result.append("typedef ").append(kind).append(" ").append(name).append(";\n");
         }
         return result.toString();
+    }
+
+    @Override
+    public String toDeclarationString() {
+        return null;
     }
 
     /* (non-Javadoc)

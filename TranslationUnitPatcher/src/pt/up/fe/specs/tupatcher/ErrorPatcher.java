@@ -16,6 +16,8 @@ package pt.up.fe.specs.tupatcher;
 import java.util.*;
 import java.util.function.BiConsumer;
 
+import pt.up.fe.specs.tupatcher.definition.FunctionDefinition;
+import pt.up.fe.specs.tupatcher.definition.TypeDefinition;
 import pt.up.fe.specs.tupatcher.parser.TUErrorData;
 import pt.up.fe.specs.tupatcher.parser.TUErrorsData;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -202,7 +204,7 @@ public class ErrorPatcher {
         //int sint = Integer.parseInt(data.get(TUErrorData.MAP).get("sint"));
         String location = data.get(TUErrorData.MAP).get("location");
         String typeName = TUPatcherUtils.getTypeFromStructDeclaration(location);
-        TypeInfo type = patchData.getType(typeName);
+        TypeDefinition type = patchData.getType(typeName);
         if (type != null) {
             type.incNumFields(patchData);
         }
@@ -224,7 +226,7 @@ public class ErrorPatcher {
     public static void noMatchingConstructor(TUErrorData data, PatchData patchData) {
         //int numArgs = TUPatcherUtils.extractFromParenthesis(call).get(0).split(",").length;
         String typeName = data.get(TUErrorData.MAP).get("qualtype");
-        TypeInfo type = patchData.getType(typeName);
+        TypeDefinition type = patchData.getType(typeName);
         type.setAsClass();
     }
 
@@ -250,8 +252,8 @@ public class ErrorPatcher {
         }
         fromTypeName = TUPatcherUtils.removeBracketsFromType(fromTypeName);
         toTypeName = TUPatcherUtils.removeBracketsFromType(toTypeName);
-        TypeInfo fromType;
-        TypeInfo toType;
+        TypeDefinition fromType;
+        TypeDefinition toType;
         fromType = patchData.getType(TUPatcherUtils.getTypeName(fromTypeName));
         toType = patchData.getType(TUPatcherUtils.getTypeName(toTypeName));
         
@@ -319,7 +321,7 @@ public class ErrorPatcher {
         if (typeName.contains("class ")) {
             throw new RuntimeException("Unable to solve incomplete type error for "+typeName);
         }
-        TypeInfo type = new TypeInfo(typeName);
+        TypeDefinition type = new TypeDefinition(typeName);
         type.setAsStructWithoutTypedef();
         patchData.addType(type);
     }
@@ -327,7 +329,7 @@ public class ErrorPatcher {
     
     public static void typeIsNotPointer(TUErrorData data, PatchData patchData) {
         String typeName = data.get(TUErrorData.MAP).get("qualtype");
-        TypeInfo type = new TypeInfo();
+        TypeDefinition type = new TypeDefinition();
         type.setAsStruct();
         patchData.addType(typeName);
         patchData.getType(typeName).setAs(type.getName()+" *");
@@ -339,7 +341,7 @@ public class ErrorPatcher {
         String location = data.get(TUErrorData.MAP).get("location");
         String typeName = TUPatcherUtils.getTypeFromDeclaration(location);
         List<String> args = TUPatcherUtils.getArguments(location);
-        TypeInfo type = patchData.getType(typeName);
+        TypeDefinition type = patchData.getType(typeName);
         for (String arg : args) {
             if (patchData.getType(arg)==null && patchData.getVariable(arg)==null && patchData.getFunction(arg)==null) {
                 patchData.addVariable(arg);
@@ -359,7 +361,7 @@ public class ErrorPatcher {
         if (typeName == null) {
             typeName = data.get(TUErrorData.MAP).get("qualtype");
         }
-        TypeInfo type = patchData.getType(typeName);
+        TypeDefinition type = patchData.getType(typeName);
         if (type == null) {
             patchData.addType(typeName);
             patchData.getType(typeName).setAsClass();
@@ -377,7 +379,7 @@ public class ErrorPatcher {
         String source = data.get(TUErrorData.MAP).get("source");
         String identifier = TUPatcherUtils.extractFromSingleQuotes(message).get(0);
         String className = source.split("::")[0];
-        TypeInfo type = patchData.getType(className);
+        TypeDefinition type = patchData.getType(className);
         type.setStatic(identifier);
     }
 
@@ -388,7 +390,7 @@ public class ErrorPatcher {
         String location = data.get(TUErrorData.MAP).get("location");
         String functionName = TUPatcherUtils.getTokenFromLocation(location);
         String className = TUPatcherUtils.getTokenBeforeLocation(location);
-        TypeInfo type = patchData.getType(className);
+        TypeDefinition type = patchData.getType(className);
         type.setStatic(functionName);
     }
 
@@ -412,11 +414,11 @@ public class ErrorPatcher {
         String operator = TUPatcherUtils.extractOperator(source);
         String typeName = data.get(TUErrorData.MAP).get("qualtype");
         if (typeName.contains("class ")) {
-            TypeInfo type = patchData.getType(TUPatcherUtils.getTypeName(typeName));
+            TypeDefinition type = patchData.getType(TUPatcherUtils.getTypeName(typeName));
             type.addOperator(operator);            
         }
         else {
-            TypeInfo type = patchData.getType(TUPatcherUtils.getTypeName(typeName));
+            TypeDefinition type = patchData.getType(TUPatcherUtils.getTypeName(typeName));
             if (type == null) {
                 typeName = TUPatcherUtils.getTypesFromMessage(data.get(TUErrorData.MAP).get("message")).get(0);
                 type = patchData.getType(TUPatcherUtils.getTypeName(typeName));
@@ -437,7 +439,7 @@ public class ErrorPatcher {
      */
     public static void noViableOverloaded(TUErrorData data, PatchData patchData) {
         String operator = data.get(TUErrorData.MAP).get("string");
-        for (TypeInfo type : patchData.getTypes().values()) {
+        for (TypeDefinition type : patchData.getTypes().values()) {
             if (type.getKind().equals("class")) {
                 type.addOperator(operator);
             }
@@ -451,16 +453,16 @@ public class ErrorPatcher {
         String location = data.get(TUErrorData.MAP).get("location");
         String variableName = TUPatcherUtils.getTokenBeforeLocation(location);
         variableName = TUPatcherUtils.removeBracketsFromType(variableName).replace("*","");
-        TypeInfo type = patchData.getVariable(variableName);
+        TypeDefinition type = patchData.getVariable(variableName);
         if (type != null) {
-            TypeInfo type2 = new TypeInfo();
+            TypeDefinition type2 = new TypeDefinition();
             patchData.addType(type2);
             type.setAs(type2.getName()+" *");
         }
         else {
             //the variable may be a field in a struct or class
-            TypeInfo fieldType = null;
-            for (TypeInfo type2 : patchData.getTypes().values()) {
+            TypeDefinition fieldType = null;
+            for (TypeDefinition type2 : patchData.getTypes().values()) {
                 for (String fieldName : type2.getFields().keySet()) {
                     if (fieldName.equals(variableName)) {
                         fieldType = type2.getFields().get(fieldName);
@@ -469,7 +471,7 @@ public class ErrorPatcher {
                 }
             }
             if (fieldType != null) {
-                TypeInfo type3 = new TypeInfo();
+                TypeDefinition type3 = new TypeDefinition();
                 patchData.addType(type3);
                 fieldType.setAs(type3.getName()+" *");
             }
@@ -486,7 +488,7 @@ public class ErrorPatcher {
         String typeName = data.get(TUErrorData.MAP).get("identifier_name");
         String message = data.get(TUErrorData.MAP).get("message");
         String className = TUPatcherUtils.getTypesFromMessage(message).get(1);
-        TypeInfo classInfo = patchData.getType(className);
+        TypeDefinition classInfo = patchData.getType(className);
         classInfo.addNestedType(typeName, patchData);
     }
 
@@ -496,16 +498,16 @@ public class ErrorPatcher {
     public static void functionIsNotMarkedConst(TUErrorData data, PatchData patchData) {
         String message = data.get(TUErrorData.MAP).get("message");
         String functionName = TUPatcherUtils.extractFromSingleQuotes(message).get(1);
-        FunctionInfo function = patchData.getFunction(functionName);
+        FunctionDefinition function = patchData.getFunction(functionName);
         if (function == null) {
-            for (TypeInfo type : patchData.getTypes().values()) {
+            for (TypeDefinition type : patchData.getTypes().values()) {
                 function = type.getFunctions().get(functionName);
                 if (function!=null) {
                     break;
                 }
             }
         }
-        TypeInfo returnType = function.getReturnType();
+        TypeDefinition returnType = function.getReturnType();
         returnType.setAs("const " + returnType.getKind().replace("const ", ""));
         function.setConst();
     }

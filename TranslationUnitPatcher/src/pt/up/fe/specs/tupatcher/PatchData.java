@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import pt.up.fe.specs.tupatcher.definition.SymbolDefinition;
+import pt.up.fe.specs.tupatcher.definition.FunctionDefinition;
+import pt.up.fe.specs.tupatcher.definition.TypeDefinition;
 import pt.up.fe.specs.util.SpecsIo;
 
 /**
@@ -28,10 +31,10 @@ import pt.up.fe.specs.util.SpecsIo;
  */
 public class PatchData {
 
-    private final Map<String, TypeInfo> missingTypes;
-    private final Map<String, FunctionInfo> missingFunctions;
-    private final Map<String, TypeInfo> missingVariables;
-    private final Map<String, TypeInfo> missingConstVariables;
+    private final Map<String, TypeDefinition> missingTypes;
+    private final Map<String, FunctionDefinition> missingFunctions;
+    private final Map<String, TypeDefinition> missingVariables;
+    private final Map<String, TypeDefinition> missingConstVariables;
 
     private boolean allErrorsPatched;
 
@@ -73,12 +76,12 @@ public class PatchData {
         if (typeName != null) {
             if (typeName.contains("::")) {
             } else {
-                missingTypes.put(typeName, new TypeInfo(typeName));
+                missingTypes.put(typeName, new TypeDefinition(typeName));
             }
         }
     }
 
-    public void addType(TypeInfo type) {
+    public void addType(TypeDefinition type) {
         if (type.getName().contains("::")) {
             return;
         }
@@ -87,7 +90,7 @@ public class PatchData {
 
     public void addVariable(String varName) {
         if (varName != null) {
-            TypeInfo type = new TypeInfo();
+            TypeDefinition type = new TypeDefinition();
             missingVariables.put(varName, type);
             missingTypes.put(type.getName(), type);
         }
@@ -95,16 +98,16 @@ public class PatchData {
 
     public void addConstVariable(String varName) {
         if (varName != null) {
-            TypeInfo type = new TypeInfo();
+            TypeDefinition type = new TypeDefinition();
             missingConstVariables.put(varName, type);
             missingTypes.put(type.getName(), type);
         }
     }
 
-    public TypeInfo getVariable(String varName) {
+    public TypeDefinition getVariable(String varName) {
         if (varName.contains("::")) {
             String[] classNames = varName.split("::");
-            TypeInfo type = missingTypes.get(classNames[0]);
+            TypeDefinition type = missingTypes.get(classNames[0]);
             for (int i = 1; i < classNames.length; i++) {
                 String className = classNames[i];
                 System.out.println("className");
@@ -116,25 +119,25 @@ public class PatchData {
         return missingVariables.get(varName);
     }
 
-    public FunctionInfo getFunction(String functionName) {
+    public FunctionDefinition getFunction(String functionName) {
         return missingFunctions.get(functionName);
     }
 
     public void addFunction(String functionName) {
-        TypeInfo returnType = new TypeInfo();
+        TypeDefinition returnType = new TypeDefinition();
         addType(returnType);
-        missingFunctions.put(functionName, new FunctionInfo(functionName, returnType));
+        missingFunctions.put(functionName, new FunctionDefinition(functionName, returnType));
     }
 
     public void removeVariable(String varName) {
         missingVariables.remove(varName);
     }
 
-    public TypeInfo getType(String typeName) {
+    public TypeDefinition getType(String typeName) {
         typeName = typeName.replace("class ", "").replace("struct ", "");
         if (typeName.contains("::")) {
             String[] classNames = typeName.split("::");
-            TypeInfo type = missingTypes.get(classNames[0]);
+            TypeDefinition type = missingTypes.get(classNames[0]);
             for (int i = 1; i < classNames.length; i++) {
                 String className = classNames[i];
                 System.out.println("className");
@@ -147,12 +150,12 @@ public class PatchData {
         }
     }
 
-    public void setType(String typeName, TypeInfo type) {
+    public void setType(String typeName, TypeDefinition type) {
         // missingTypes.remove(typeName);
         missingTypes.put(typeName, type);
     }
 
-    public Map<String, TypeInfo> getTypes() {
+    public Map<String, TypeDefinition> getTypes() {
         return missingTypes;
     }
 
@@ -176,7 +179,7 @@ public class PatchData {
         }
         int i = 0;
         for (String varName : missingConstVariables.keySet()) {
-            TypeInfo type = missingConstVariables.get(varName);
+            TypeDefinition type = missingConstVariables.get(varName);
             String typeName = type.getName();
             result.append("const ").append(typeName).append(" ").append(varName);
             if (TUPatcherUtils.isPrimitiveType(type.getKind())) {
@@ -192,11 +195,11 @@ public class PatchData {
     /**
      * @return String with the definitions of all the functions.
      */
-    public String functionPatches(Map<String, FunctionInfo> functions) {
+    public String functionPatches(Map<String, FunctionDefinition> functions) {
         StringBuilder result = new StringBuilder();
         for (String functionName : functions.keySet()) {
-            FunctionInfo function = functions.get(functionName);
-            result.append(function.str());
+            FunctionDefinition function = functions.get(functionName);
+            result.append(function.toDefinitionString());
         }
         return result.toString();
     }
@@ -206,7 +209,7 @@ public class PatchData {
      */
     public String str() {
         StringBuilder result = new StringBuilder("#define NULL 0\n");
-        for (TypeInfo type : missingTypes.values()) {
+        for (TypeDefinition type : missingTypes.values()) {
             if (type.getKind().equals("class")) {
                 result.append("class ").append(type.getName()).append(";\n");
             } else if (type.getKind().equals("struct")) {
@@ -216,9 +219,9 @@ public class PatchData {
             }
         }
 
-        List<Definition> defs = orderedDefinitions();
-        for (Definition def : defs) {
-            result.append(def.str());
+        List<SymbolDefinition> defs = orderedDefinitions();
+        for (SymbolDefinition def : defs) {
+            result.append(def.toDefinitionString());
         }
         result.append(variablesPatches());
 
@@ -244,10 +247,10 @@ public class PatchData {
      * partially ordered. When it happens this problem may be solved by the fact that all structs and classes are
      * declared (but not defined) in the beginning of patch.h
      */
-    public List<Definition> orderedDefinitions() {
-        List<Definition> notSorted = new ArrayList<>();
-        List<Definition> result = new ArrayList<>();
-        for (TypeInfo type : missingTypes.values()) {
+    public List<SymbolDefinition> orderedDefinitions() {
+        List<SymbolDefinition> notSorted = new ArrayList<>();
+        List<SymbolDefinition> result = new ArrayList<>();
+        for (TypeDefinition type : missingTypes.values()) {
             if (!type.isNested()) {
                 notSorted.add(type);
             }
@@ -255,11 +258,11 @@ public class PatchData {
         notSorted.addAll(missingFunctions.values());
         while (!notSorted.isEmpty()) {
             boolean cyclic = true;
-            for (Definition def : notSorted) {
+            for (SymbolDefinition def : notSorted) {
                 boolean ok = true;
-                for (Definition dependency : def.getDependencies()) {
+                for (SymbolDefinition dependency : def.getSymbolDependencies()) {
                     boolean contains = false;
-                    for (Definition def2 : notSorted) {
+                    for (SymbolDefinition def2 : notSorted) {
                         if (dependency.getName().equals(def2.getName())) {
                             contains = true;
                             break;
@@ -278,19 +281,19 @@ public class PatchData {
                 }
             }
             if (cyclic) {
-                for (Definition def : notSorted) {
-                    if (def instanceof TypeInfo) {
-                        if (!(((TypeInfo) def).getKind().equals("class")
-                                || ((TypeInfo) def).getKind().equals("struct"))) {
+                for (SymbolDefinition def : notSorted) {
+                    if (def instanceof TypeDefinition) {
+                        if (!(((TypeDefinition) def).getKind().equals("class")
+                                || ((TypeDefinition) def).getKind().equals("struct"))) {
                             result.add(def);
                         }
                     } else {
                         result.add(def);
                     }
                 }
-                for (Definition def : notSorted) {
-                    if (def instanceof TypeInfo) {
-                        if (((TypeInfo) def).getKind().equals("class") || ((TypeInfo) def).getKind().equals("struct")) {
+                for (SymbolDefinition def : notSorted) {
+                    if (def instanceof TypeDefinition) {
+                        if (((TypeDefinition) def).getKind().equals("class") || ((TypeDefinition) def).getKind().equals("struct")) {
                             result.add(def);
                         }
                     } else {
