@@ -641,20 +641,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -1625,20 +1611,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -2860,20 +2832,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -3930,20 +3888,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -5178,20 +5122,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -6151,20 +6081,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -7253,20 +7169,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -8593,20 +8495,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -9614,20 +9502,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -10683,20 +10557,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -11958,20 +11818,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -13243,20 +13089,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -14357,20 +14189,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -15403,20 +15221,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -16826,20 +16630,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -18107,20 +17897,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -19163,20 +18939,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -20391,20 +20153,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -21385,20 +21133,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -22371,20 +22105,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -23431,20 +23151,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -24750,20 +24456,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -25725,20 +25417,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -26798,20 +26476,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -27852,20 +27516,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -28865,20 +28515,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -30119,20 +29755,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -31085,20 +30707,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -32145,20 +31753,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -33212,20 +32806,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -34463,20 +34043,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -35512,20 +35078,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -36585,20 +36137,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -37598,20 +37136,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -38652,20 +38176,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -40048,20 +39558,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -41069,20 +40565,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -42613,20 +42095,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -43884,20 +43352,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -44962,20 +44416,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -46125,20 +45565,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -47128,20 +46554,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -48153,20 +47565,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -49206,20 +48604,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -50292,20 +49676,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -51305,20 +50675,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -52728,20 +52084,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -53789,20 +53131,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -54861,20 +54189,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -56158,20 +55472,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -57719,20 +57019,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -58773,20 +58059,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -59786,20 +59058,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -61276,20 +60534,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -62314,20 +61558,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -63504,20 +62734,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -64526,20 +63742,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -65770,20 +64972,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -67027,20 +66215,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -68066,20 +67240,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -69357,20 +68517,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -70595,20 +69741,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -71710,20 +70842,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -72779,20 +71897,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -74120,20 +73224,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -75176,20 +74266,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -76295,20 +75371,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -77391,20 +76453,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -78439,20 +77487,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -79678,20 +78712,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -80936,20 +79956,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -82017,20 +81023,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -83030,20 +82022,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -84256,20 +83234,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -85310,20 +84274,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -86360,20 +85310,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -87605,20 +86541,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -88675,20 +87597,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -89734,20 +88642,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -90960,20 +89854,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -92143,20 +91023,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{
@@ -93413,20 +92279,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -94505,20 +93357,6 @@
 					},
 					{
 						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
-									}]
-					},
-					{
-						"type": "action",
 						"tooltip": "Clears all properties from the .data object",
 						"children": [
 									{
@@ -95577,20 +94415,6 @@
 									{
 										"type": "joinpoint",
 										"name": "copy"
-									}]
-					},
-					{
-						"type": "action",
-						"tooltip": "Copies all enumerable own properties from the source object to the .data object",
-						"children": [
-									{
-										"type": "void",
-										"name": "dataAssign"
-									},
-									{
-										"type": "Object",
-										"name": "source",
-										"defaultValue": ""
 									}]
 					},
 					{

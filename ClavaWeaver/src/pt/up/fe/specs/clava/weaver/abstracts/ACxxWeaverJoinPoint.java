@@ -20,7 +20,6 @@ import org.suikasoft.jOptions.Datakey.DataKey;
 import org.suikasoft.jOptions.storedefinition.StoreDefinition;
 
 import com.google.common.base.Preconditions;
-import com.google.gson.Gson;
 
 import pt.up.fe.specs.clava.ClavaLog;
 import pt.up.fe.specs.clava.ClavaNode;
@@ -52,7 +51,6 @@ import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AStatement;
 import pt.up.fe.specs.clava.weaver.abstracts.joinpoints.AType;
 import pt.up.fe.specs.clava.weaver.importable.AstFactory;
 import pt.up.fe.specs.clava.weaver.importable.LowLevelApi;
-import pt.up.fe.specs.util.SpecsCheck;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
@@ -1034,24 +1032,13 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public Object getDataImpl() {
 
-        final String dataKeyword = "data";
-
-        var jsEngine = getWeaverEngine().getScriptEngine();
+        // Check if data object already exists
+        if (ClavaData.hasData(getNode())) {
+            // Return data object from managed cache
+            return ClavaData.getCacheData(getNode());
+        }
 
         var dataPragma = ClavaData.getClavaData(getNode());
-        var jsDataPragma = dataPragma != null ? dataPragma : jsEngine.getUndefined();
-
-        // Check if data object already exists
-        var hasClavaDataJs = jsEngine.eval("var _data = _hasClavaData; _data;");
-        var hasClavaData = jsEngine.asBoolean(jsEngine.call(hasClavaDataJs, getNode()));
-
-        if (hasClavaData) {
-            // Return data object from managed cache
-            var dataCache = jsEngine.eval("var _data = _getClavaData; _data;");
-
-            // Create proxy object
-            return jsEngine.call(dataCache, getNode());
-        }
 
         // TODO: Refactor, so that decoding of pragma is done separately
         // TODO: life-cycle management of data objects according to node id
@@ -1059,30 +1046,21 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         // Pragma exists and data has not been created yet
         // if (!hasClavaData && dataPragma != null) {
         if (dataPragma != null) {
-            var node = getNode();
-            var tu = node instanceof TranslationUnit ? (TranslationUnit) node
+            ClavaNode node = getNode();
+            TranslationUnit tu = node instanceof TranslationUnit ? (TranslationUnit) node
                     : node.getAncestorTry(TranslationUnit.class).orElse(null);
 
-            var baseFolder = tu == null ? null
+            File baseFolder = tu == null ? null
                     : tu.getFolderpath().map(folderpath -> new File(folderpath)).orElse(null);
 
             StringSplitter splitter = new StringSplitter(dataPragma.getContent());
-            boolean isDataDirective = splitter.parseTry(StringSplitterRules::string)
-                    .filter(string -> string.toLowerCase().equals(dataKeyword))
-                    .isPresent();
-
-            SpecsCheck.checkArgument(isDataDirective, () -> "Expected pragma to be a clava data pragma: " + dataPragma);
-
-            var jsonString = SpecsStrings.normalizeJsonObject(splitter.toString().trim(), baseFolder);
+            String jsonString = SpecsStrings.normalizeJsonObject(splitter.toString().trim(), baseFolder);
 
             // Sanitize json string
             String sanitizedJsonString = null;
             try {
-                var gson = new Gson();
-                var parsedJson = gson.fromJson(jsonString, Object.class);
-                sanitizedJsonString = gson.toJson(parsedJson);
+                sanitizedJsonString = ClavaData.sanitizeJsonString(jsonString);
             } catch (Exception e) {
-
                 var message = "Invalid JSON";
                 if (dataPragma.getLocation().isValid()) {
                     message += " at " + dataPragma.getLocation();
@@ -1092,64 +1070,44 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
             }
 
             try {
-                // Create object
-                var newDataObject = jsEngine.eval("var _data = " + sanitizedJsonString + "; _data;");
+                ClavaData.setData(getNode(), sanitizedJsonString);
 
-                // Create proxy function
-                var proxyBuilder = jsEngine.eval("var _data = _getClavaData; _data;");
-
-                // Create proxy object
-                return jsEngine.call(proxyBuilder, getNode(), newDataObject, jsDataPragma);
             } catch (Exception e) {
                 SpecsLogs.warn(
-                        "Could not decode #pragma clava " + dataKeyword + " for contents '" + splitter.toString()
+                        "Could not decode #pragma clava " + ClavaData.KEYWORD_DATA + " for contents '" + splitter.toString()
                                 + "', returning empty object",
                         e);
             }
+            return sanitizedJsonString;
         }
 
-        // Return data object from managed cache
-        var dataCache = jsEngine.eval("var _data = _getClavaData; _data;");
-
-        // Create proxy object
-        return jsEngine.call(dataCache,
-
-                getNode());
+        // Create cache object and repeat the process
+        dataClearImpl();
+        return ClavaData.getCacheData(getNode());
     }
 
     @Override
     public void defDataImpl(Object source) {
-        ClavaLog.info(
-                "Warning: assigning an object directly to .data is not supported (e.g. $jp.data = {attr1: value1}). Use .dataAssign instead (e.g. $jp.dataAssign({attr1: value1}) ).");
+        setDataImpl(source);
     }
 
     @Override
     public void setDataImpl(Object source) {
-        defDataImpl(source);
-    }
-
-    @Override
-    public void dataAssignImpl(Object source) {
-        // Get engine
-        var jsEngine = getWeaverEngine().getScriptEngine();
-
-        var data = getDataImpl();
-        var dataAssign = jsEngine.get(data, "_assign");
-
-        // Call _clear()
-        jsEngine.call(dataAssign, source);
+        var dataPragma = ClavaData.getClavaData(getNode());
+        
+        if (dataPragma == null) {
+            ClavaData.buildClavaData(getNode());
+        }
+        
+        String sanitizedJson = ClavaData.sanitizeJsonString(source.toString());
+        
+        ClavaData.setData(getNode(), sanitizedJson);
     }
 
     @Override
     public void dataClearImpl() {
-        // Get engine
-        var jsEngine = getWeaverEngine().getScriptEngine();
-
-        var data = getDataImpl();
-        var dataClear = jsEngine.get(data, "_clear");
-
-        // Call _clear()
-        jsEngine.call(dataClear);
+        // TODO: Remove pragma entirely
+        ClavaData.clearData(getNode());
     }
 
     @Override
@@ -1381,9 +1339,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         if (type == null) {
             return null;
         }
-        
+
         Type typeNode = (Type) type.getNode();
-        
+
         Integer bitwidth = typeNode.getBitwidth(this.getNode());
 
         return bitwidth != -1 ? bitwidth : null;

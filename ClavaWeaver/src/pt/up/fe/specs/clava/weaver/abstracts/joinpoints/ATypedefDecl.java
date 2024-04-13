@@ -847,15 +847,6 @@ public abstract class ATypedefDecl extends ATypedefNameDecl {
     }
 
     /**
-     * Copies all enumerable own properties from the source object to the .data object
-     * @param source 
-     */
-    @Override
-    public void dataAssignImpl(Object source) {
-        this.aTypedefNameDecl.dataAssignImpl(source);
-    }
-
-    /**
      * Clears all properties from the .data object
      */
     @Override

@@ -123,7 +123,6 @@ public abstract class AJoinPoint extends JoinPoint {
         actions.add("setInlineComments(String[] comments)");
         actions.add("setInlineComments(String comments)");
         actions.add("setData(Object source)");
-        actions.add("dataAssign(Object source)");
         actions.add("dataClear()");
     }
 
@@ -735,32 +734,6 @@ public abstract class AJoinPoint extends JoinPoint {
         	}
         } catch(Exception e) {
         	throw new ActionException(get_class(), "setData", e);
-        }
-    }
-
-    /**
-     * Copies all enumerable own properties from the source object to the .data object
-     * @param source 
-     */
-    public void dataAssignImpl(Object source) {
-        throw new UnsupportedOperationException(get_class()+": Action dataAssign not implemented ");
-    }
-
-    /**
-     * Copies all enumerable own properties from the source object to the .data object
-     * @param source 
-     */
-    public final void dataAssign(Object source) {
-        try {
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.BEGIN, "dataAssign", this, Optional.empty(), source);
-        	}
-        	this.dataAssignImpl(source);
-        	if(hasListeners()) {
-        		eventTrigger().triggerAction(Stage.END, "dataAssign", this, Optional.empty(), source);
-        	}
-        } catch(Exception e) {
-        	throw new ActionException(get_class(), "dataAssign", e);
         }
     }
 

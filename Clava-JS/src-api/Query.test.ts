@@ -60,7 +60,7 @@ int query_regex() {
       .search("loop")
       .search("loop")
       .chain()) {
-      lst.push(((query as any)["loop"] as Loop).rank);
+      lst.push((query["loop"] as Loop).rank);
     }
     expect(lst.length).toBe(4);
     expect(lst[0]).toEqual([2, 1]);
@@ -76,7 +76,7 @@ int query_regex() {
       .search("loop")
       .scope("loop")
       .chain()) {
-      lst.push(((query as any)["loop"] as Loop).rank);
+      lst.push((query["loop"] as Loop).rank);
     }
     expect(lst.length).toBe(3);
     expect(lst[0]).toEqual([2, 1]);
@@ -91,7 +91,7 @@ int query_regex() {
       .search("loop", { isOutermost: true })
       .scope("loop")
       .chain()) {
-      lst.push(((query as any)["loop"] as Loop).rank);
+      lst.push((query["loop"] as Loop).rank);
     }
     expect(lst.length).toBe(2);
     expect(lst[0]).toEqual([2, 1]);
@@ -103,7 +103,7 @@ int query_regex() {
     for (const query of Query.search("function", "query_empty")
       .scope()
       .chain()) {
-      lst.push(((query as any)["joinpoint"] as Joinpoint).joinPointType);
+      lst.push((query["joinpoint"] as Joinpoint).joinPointType);
     }
     expect(lst.length).toBe(2);
     expect(lst[0]).toBe("declStmt");
@@ -132,7 +132,7 @@ int query_regex() {
   it("should be able to search for a function6", () => {
     const lst: string[] = [];
     for (const query of Query.search("function", /_regex/)) {
-      lst.push((query as any).name);
+      lst.push((query as FunctionJp).name);
     }
     expect(lst.length).toBe(1);
     expect(lst[0]).toBe("query_regex");

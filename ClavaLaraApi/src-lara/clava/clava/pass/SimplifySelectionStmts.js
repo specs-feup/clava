@@ -4,10 +4,10 @@ import Query from "lara-js/api/weaver/Query.js";
 // TODO: Refactor to use the SimplePass pattern
 export default class SimplifySelectionStmts extends Pass {
     _name = "SimplifySelectionStmts";
-    #statementDecomposer;
+    statementDecomposer;
     constructor(statementDecomposer) {
         super();
-        this.#statementDecomposer = statementDecomposer;
+        this.statementDecomposer = statementDecomposer;
     }
     _apply_impl($jp) {
         let appliedPass = false;
@@ -23,7 +23,7 @@ export default class SimplifySelectionStmts extends Pass {
     }
     transform($ifStmt) {
         const $ifCond = $ifStmt.cond;
-        const decomposeResult = this.#statementDecomposer.decomposeExpr($ifCond);
+        const decomposeResult = this.statementDecomposer.decomposeExpr($ifCond);
         for (const stmt of decomposeResult.precedingStmts) {
             $ifStmt.insertBefore(stmt);
         }

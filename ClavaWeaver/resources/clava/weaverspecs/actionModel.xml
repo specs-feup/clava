@@ -125,11 +125,6 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <parameter name="source" type="Object" />
     </action>
 
-    <action name="dataAssign"
-        tooltip="Copies all enumerable own properties from the source object to the .data object">
-        <parameter name="source" type="Object" />
-    </action>
-
     <action name="dataClear" tooltip="Clears all properties from the .data object" />
 
     <!-- PROGRAM -->

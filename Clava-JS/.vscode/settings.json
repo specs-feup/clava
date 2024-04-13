@@ -9,6 +9,15 @@
     "./api/**": true,
     "./code/**": true
   },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true,
+    "./api/**": true,
+    "./code/**": true,
+    "./coverage/**": true,
+    "./woven_code/**": true
+  },
   "cmake.configureOnOpen": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
