@@ -58,6 +58,8 @@ deps/*/*/*
 **/cmake-build*/*
 **/.gradle/*
 **/gradle/*
+gradlew
+gradlew.bat
 
 # Idea IDEs
 **/.idea/misc.xml
