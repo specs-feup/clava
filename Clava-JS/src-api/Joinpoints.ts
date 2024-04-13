@@ -284,10 +284,6 @@ export class Joinpoint extends LaraJoinPoint {
    */
   copy(): Joinpoint { return wrapJoinPoint(this._javaObject.copy()); }
   /**
-   * Copies all enumerable own properties from the source object to the .data object
-   */
-  dataAssign(source: object): void { return wrapJoinPoint(this._javaObject.dataAssign(unwrapJoinPoint(source))); }
-  /**
    * Clears all properties from the .data object
    */
   dataClear(): void { return wrapJoinPoint(this._javaObject.dataClear()); }
@@ -591,6 +587,9 @@ export class FileJp extends Joinpoint {
   write(destinationFoldername: string): string { return wrapJoinPoint(this._javaObject.write(unwrapJoinPoint(destinationFoldername))); }
 }
 
+export class ImplicitValue extends Expression {
+}
+
   /**
    * Represents an include directive (e.g., #include <stdio.h>)
    */
@@ -607,6 +606,13 @@ export class Include extends Decl {
    * The path to the folder of the source file of the include, relative to the name of the include
    */
   get relativeFolderpath(): string { return wrapJoinPoint(this._javaObject.getRelativeFolderpath()) }
+}
+
+export class InitList extends Expression {
+  /**
+   * [May be undefined] If this initializer list initializes an array with more elements than there are initializers in the list, specifies an expression to be used for value initialization of the rest of the elements
+   */
+  get arrayFiller(): Expression { return wrapJoinPoint(this._javaObject.getArrayFiller()) }
 }
 
 export class Literal extends Expression {
@@ -2160,7 +2166,9 @@ const JoinpointMapper: JoinpointMapperType = {
   empty: Empty,
   expression: Expression,
   file: FileJp,
+  implicitValue: ImplicitValue,
   include: Include,
+  initList: InitList,
   literal: Literal,
   memberAccess: MemberAccess,
   namedDecl: NamedDecl,

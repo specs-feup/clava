@@ -518,6 +518,18 @@ https://docs.google.com/document/d/1uPrvuVBXHSbjDTfehpEeLDz9hgIr8EuJJJvBc5A70rs/
         <attribute name="hasProperty" type="Boolean"
             tooltip="true if this variable reference has a MS-style property, false otherwise" />
     </artifact>
+    
+    <artifact class="initList">
+        <attribute name="arrayFiller" type="expression" tooltip="[May be undefined] If this initializer list initializes an array with more elements than there are initializers in the list, specifies an expression to be used for value initialization of the rest of the elements" />		
+<!--
+        <attribute name="initializedFieldInUnion" type="field" />		
+        <attribute name="isExplicit" type="Boolean"/>
+        <attribute name="isStringLiteral" type="Boolean"/>        
+        <attribute name="syntacticForm" type="initList" default="null" tooltip="Represents the initializer list as written by the user, which may contain C99 designated initializers (represented as DesignatedInitExprs), initializations of sub-object members without explicit braces, and so on. If the syntactic and semantic forms are the same for this initializer, it returns empty" />		
+        <attribute name="semanticForm" type="initList" default="null" tooltip="Represents the initializer list as written by the user, which may contain C99 designated initializers (represented as DesignatedInitExprs), initializations of sub-object members without explicit braces, and so on. If the syntactic and semantic forms are the same for this initializer, it returns empty" />		
+-->
+	</artifact>		
+    
 
     <!-- FUNCTION -->
     <artifact class="function" default="name">
