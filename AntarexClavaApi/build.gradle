@@ -1,0 +1,43 @@
+plugins {
+ 	id 'distribution'
+}
+
+// Java project
+apply plugin: 'java'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+
+// Repositories providers
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	testImplementation "junit:junit:4.11"     
+	implementation ':SpecsUtils'
+	implementation ':LaraUtils'		
+}
+
+java {
+	withSourcesJar()
+}
+
+
+// Project sources
+sourceSets {
+   main {
+      java {
+         srcDir 'src-java'
+      }
+	  
+	  resources {
+		srcDir 'src-lara'
+		srcDir 'src-js'
+	  }
+   }   
+   
+}

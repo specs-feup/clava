@@ -1,0 +1,27 @@
+rootProject.name = 'ClavaWeaver'
+
+includeBuild("../../specs-java-libs/CommonsLangPlus")
+includeBuild("../../specs-java-libs/GsonPlus")
+includeBuild("../../specs-java-libs/jOptions")
+includeBuild("../../specs-java-libs/JsEngine")
+includeBuild("../../specs-java-libs/SpecsUtils")
+includeBuild("../../specs-java-libs/XStreamPlus")
+includeBuild("../../specs-java-libs/tdrcLibrary")
+
+includeBuild("../../lara-framework/LanguageSpecification")
+includeBuild("../../lara-framework/LaraCommonLanguageApi")
+includeBuild("../../lara-framework/LaraDoc")
+includeBuild("../../lara-framework/LaraExtraApi")
+includeBuild("../../lara-framework/LaraFramework")
+includeBuild("../../lara-framework/LARAI")
+includeBuild("../../lara-framework/LaraLoc")
+includeBuild("../../lara-framework/LaraUnit")
+includeBuild("../../lara-framework/LaraUtils")
+includeBuild("../../lara-framework/WeaverGenerator")
+includeBuild("../../lara-framework/WeaverInterface")
+
+includeBuild("../../clava/AntarexClavaApi")
+includeBuild("../../clava/ClangAstParser")
+includeBuild("../../clava/ClavaAst")
+includeBuild("../../clava/ClavaHls")
+includeBuild("../../clava/ClavaLaraApi")

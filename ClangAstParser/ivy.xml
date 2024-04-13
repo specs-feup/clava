@@ -26,6 +26,6 @@
 	</info>
 	
 	<dependencies>
-		<dependency org="com.google.guava" name="guava" rev="19.0"/>
+		<!--<dependency org="com.google.guava" name="guava" rev="19.0"/>-->
 	</dependencies>
 </ivy-module>

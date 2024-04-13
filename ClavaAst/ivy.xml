@@ -21,12 +21,13 @@
        xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
     <info
         organisation="specs.fe.up.pt"
-        module="Clava"
+        module="ClavaAst"
         status="release">
 	</info>
 	
 	<dependencies>
 		<dependency org="com.google.guava" name="guava" rev="19.0"/>
-		<dependency org="com.google.code.gson" name="gson" rev="2.4"/>			
+		<dependency org="com.google.code.gson" name="gson" rev="2.4"/>	
+		
 	</dependencies>
 </ivy-module>
