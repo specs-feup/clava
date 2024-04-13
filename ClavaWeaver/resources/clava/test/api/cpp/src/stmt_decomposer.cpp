@@ -5,4 +5,3 @@ int foo() {
 	
 	return a + c;
 }
-

@@ -57,6 +57,7 @@ deps/*/*/*
 **/build-*/*
 **/cmake-build*/*
 **/.gradle/*
+**/gradle/*
 
 # Idea IDEs
 **/.idea/misc.xml
