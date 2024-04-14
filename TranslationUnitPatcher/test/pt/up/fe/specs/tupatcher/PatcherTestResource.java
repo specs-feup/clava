@@ -21,7 +21,8 @@ public enum PatcherTestResource implements ResourceProvider {
     NESTED("nested.cpp"),
     OPERATORS("operators.cpp"),
     POINTERS("pointers.cpp"),
-    STRUCTS("structs.cpp");
+    STRUCTS("structs.cpp"),
+    FUNCTION_POINTERS("function_pointers.cpp"),;
 
     private final String resource;
 

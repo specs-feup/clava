@@ -88,6 +88,12 @@ public class PatcherTest {
     }
 
     @Test
+    public void testFunctionPointers() {
+        var config = newSingleFileConfig(PatcherTestResource.FUNCTION_POINTERS);
+        assertEquals(0, new TUPatcherLauncher(config).execute());
+    }
+
+    @Test
     public void testParallelExecution() {
         var baseTests = Arrays.asList(PatcherTestResource.NESTED, PatcherTestResource.CLASSES,
                 PatcherTestResource.POINTERS, PatcherTestResource.STRUCTS);
