@@ -72,6 +72,9 @@ public class FunctionDefinition extends SymbolDefinition {
     @Override
     public List<SymbolDefinition> getSymbolDependencies() {
         List<SymbolDefinition> result = new ArrayList<>();
+        // NOTE: the arguments are not being added because the functions are declared/defined with a variable number of arguments
+        // in the future this should be changed if we want to process C code
+        // Besides this is needless for the current implementation because all types are declared at the start of the file
         result.add(returnType);
         return result;
     }
