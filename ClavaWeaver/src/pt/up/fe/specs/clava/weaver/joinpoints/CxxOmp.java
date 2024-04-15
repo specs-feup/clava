@@ -240,7 +240,7 @@ public class CxxOmp extends AOmp {
 
     @Override
     public void setScheduleChunkSizeImpl(int chunkSize) {
-        setScheduleChunkSize(String.valueOf(chunkSize));
+        setScheduleChunkSize(Integer.toString(chunkSize));
     }
 
     @Override
@@ -266,7 +266,7 @@ public class CxxOmp extends AOmp {
 
     @Override
     public void setCollapseImpl(int newExpr) {
-        setCollapseImpl(String.valueOf(newExpr));
+        setCollapseImpl(Integer.toString(newExpr));
     }
 
     @Override
