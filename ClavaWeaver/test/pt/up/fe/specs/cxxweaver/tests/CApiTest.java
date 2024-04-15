@@ -144,6 +144,11 @@ public class CApiTest {
     }
 
     @Test
+    public void testPassComposition() {
+        newTester().test("PassCompositionTest.js", "pass_composition.c");
+    }
+
+    @Test
     public void testCfgApi() {
         newTester().test("CfgApi.js", "cfg_api.c");
     }
