@@ -1,0 +1,44 @@
+[
+  {
+    "name": "C++23",
+    "standardNumber": "ISO/IEC PRF 14882",
+    "year": "2023",
+    "standardHeaderSection": ""
+  },
+  {
+    "name": "C++20",
+    "standardNumber": "ISO/IEC 14882:2020",
+    "year": "2020",
+    "standardHeaderSection": ""
+  },
+  {
+    "name": "C++17",
+    "standardNumber": "ISO/IEC 14882:2017",
+    "year": "2017",
+    "standardHeaderSection": ""
+  },
+  {
+    "name": "C++14",
+    "standardNumber": "ISO/IEC 14882:2014",
+    "year": "2014",
+    "standardHeaderSection": ""
+  },
+  {
+    "name": "C++11",
+    "standardNumber": "ISO/IEC 14882:2011",
+    "year": "2011",
+    "standardHeaderSection": ""
+  },
+  {
+    "name": "C++03",
+    "standardNumber": "ISO/IEC 14882:2003",
+    "year": "2003",
+    "standardHeaderSection": ""
+  },
+  {
+    "name": "C++98",
+    "standardNumber": "ISO/IEC 14882:1998",
+    "year": "1998",
+    "standardHeaderSection": ""
+  }
+]

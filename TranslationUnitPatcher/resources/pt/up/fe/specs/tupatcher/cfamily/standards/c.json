@@ -1,0 +1,44 @@
+[
+  {
+    "name": "C23",
+    "standardNumber": "ISO/IEC DIS 9899",
+    "year": "2023",
+    "standardHeaderSection": "7.1.2"
+  },
+  {
+    "name": "C17",
+    "standardNumber": "ISO/IEC 9899:2018",
+    "year": "2017",
+    "standardHeaderSection": "7.1.2"
+  },
+  {
+    "name": "C11",
+    "standardNumber": "ISO/IEC 9899:2011",
+    "year": "2011",
+    "standardHeaderSection": "7.1.2"
+  },
+  {
+    "name": "C99",
+    "standardNumber": "ISO/IEC 9899:1999",
+    "year": "1999",
+    "standardHeaderSection": "7.1.2"
+  },
+  {
+    "name": "C95",
+    "standardNumber": "ISO/IEC 9899:1990/AMD1:1995",
+    "year": "1995",
+    "standardHeaderSection": ""
+  },
+  {
+    "name": "C90",
+    "standardNumber": "ISO/IEC 9899:1990",
+    "year": "1990",
+    "standardHeaderSection": "4.1.2"
+  },
+  {
+    "name": "C89",
+    "standardNumber": "ISO/IEC 9899:1990",
+    "year": "1998",
+    "standardHeaderSection": "4.1.2"
+  }
+]

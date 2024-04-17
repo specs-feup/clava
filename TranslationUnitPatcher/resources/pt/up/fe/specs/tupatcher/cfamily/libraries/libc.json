@@ -1,0 +1,2628 @@
+{
+  "name": "libc",
+  "language": "C",
+  "description": "The C standard library or 'libc' is the standard library for the C programming language, as specified in the ISO C standard. It providing a collection of utility functions for performing common tasks.",
+  "headerFiles": [
+    {
+      "name": "assert.h",
+      "description": "Declares the assert macro, used to assist with detecting logical errors and other types of bugs while debugging a program. The assert macro writes information about the call that failed on stderr and then calls abort to terminate the program.",
+      "since": "C89",
+      "definitions": [
+        {
+          "definition": {
+            "name": "assert",
+            "type": "macro_function",
+            "macroParameters": [
+              "condition"
+            ],
+            "replacementText": "((condition) ? (void)0 : (void)0)",
+            "functionEquivalent": {
+              "returnType": "void",
+              "parameters": [
+                {
+                  "name": "condition",
+                  "type": "int"
+                }
+              ]
+            },
+            "dependencies": []
+          },
+          "description": "Aborts the program if the user-specified condition is not true. May be disabled for release builds.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "static_assert",
+            "type": "macro_keyword",
+            "replacementText": "_Static_assert"
+          },
+          "description": "Issues a compile-time diagnostic if the value of a constant expression is false. Becomes a keyword in C23, no longer available in his assert.h",
+          "since": "C11",
+          "removed": "C23"
+        }
+      ]
+    },
+    {
+      "name": "complex.h",
+      "description": "Defines a set of functions and types for handling complex number arithmetic.",
+      "since": "C99",
+      "definitions": [
+        {
+          "definition": {
+            "name": "imaginary",
+            "type": "macro_keyword",
+            "replacementText": "_Imaginary"
+          },
+          "description": "Imaginary type macro.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "complex",
+            "type": "macro_keyword",
+            "replacementText": "_Complex"
+          },
+          "description": "Complex type macro.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "_Imaginary_I",
+            "type": "macro_constant",
+            "replacementText": "(1.0iF)",
+            "replacementType": "_Imaginary float",
+            "dependencies": []
+          },
+          "description": "The imaginary unit constant i.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "_Complex_I",
+            "type": "macro_constant",
+            "replacementText": "(0.0F +  1.0iF)",
+            "replacementType": "_Complex float",
+            "dependencies": []
+          },
+          "description": "The complex unit constant i.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "I",
+            "type": "macro_constant",
+            "replacementText": "_Complex_I",
+            "replacementType": "_Complex float",
+            "dependencies": [
+              {
+                "name": "_Complex_I",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "The complex or imaginary unit constant i.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "CMPLX",
+            "type": "macro_function",
+            "macroParameters": [
+              "real",
+              "imag"
+            ],
+            "replacementText": "((double complex)((double)(x) + _Imaginary_I * (double)(y)))",
+            "functionEquivalent": {
+              "returnType": "double complex",
+              "parameters": [
+                {
+                  "name": "real",
+                  "type": "double"
+                },
+                {
+                  "name": "imag",
+                  "type": "double"
+                }
+              ]
+            },
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              },
+              {
+                "name": "_Imaginary_I",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Constructs a complex number from real and imaginary parts (double return).",
+          "since": "C11",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "CMPLXF",
+            "type": "macro_function",
+            "macroParameters": [
+              "real",
+              "imag"
+            ],
+            "replacementText": "((float complex)((float)(x) + _Imaginary_I * (float)(y)))",
+            "functionEquivalent": {
+              "returnType": "float complex",
+              "parameters": [
+                {
+                  "name": "real",
+                  "type": "float"
+                },
+                {
+                  "name": "imag",
+                  "type": "float"
+                }
+              ]
+            },
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              },
+              {
+                "name": "_Imaginary_I",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Constructs a complex number from real and imaginary parts (float return).",
+          "since": "C11",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "CMPLXL",
+            "type": "macro_function",
+            "macroParameters": [
+              "real",
+              "imag"
+            ],
+            "replacementText": "((long double complex)((long double)(x) + _Imaginary_I * (long double)(y)))",
+            "functionEquivalent": {
+              "returnType": "long double complex",
+              "parameters": [
+                {
+                  "name": "real",
+                  "type": "long double"
+                },
+                {
+                  "name": "imag",
+                  "type": "long double"
+                }
+              ]
+            },
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              },
+              {
+                "name": "_Imaginary_I",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Constructs a complex number from real and imaginary parts (long double return).",
+          "since": "C11",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "creal",
+            "type": "function",
+            "returnType": "double",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the real part of a complex number (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "crealf",
+            "type": "function",
+            "returnType": "float",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the real part of a complex number (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "creall",
+            "type": "function",
+            "returnType": "long double",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the real part of a complex number (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cimag",
+            "type": "function",
+            "returnType": "double",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the imaginary part of a complex number (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cimagf",
+            "type": "function",
+            "returnType": "float",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the imaginary part of a complex number (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cimagl",
+            "type": "function",
+            "returnType": "long double",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the imaginary part of a complex number (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cabs",
+            "type": "function",
+            "returnType": "double",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the magnitude of a complex number (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cabsf",
+            "type": "function",
+            "returnType": "float",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the magnitude of a complex number (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cabsl",
+            "type": "function",
+            "returnType": "long double",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the magnitude of a complex number (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "carg",
+            "type": "function",
+            "returnType": "double",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the phase angle of a complex number (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cargf",
+            "type": "function",
+            "returnType": "float",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the phase angle of a complex number (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cargl",
+            "type": "function",
+            "returnType": "long double",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the phase angle of a complex number (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "conj",
+            "type": "function",
+            "returnType": "double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex conjugate (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "conjf",
+            "type": "function",
+            "returnType": "float complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex conjugate (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "conjl",
+            "type": "function",
+            "returnType": "long double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex conjugate (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cproj",
+            "type": "function",
+            "returnType": "double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the projection on Riemann sphere (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cprojf",
+            "type": "function",
+            "returnType": "float complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the projection on Riemann sphere (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cprojl",
+            "type": "function",
+            "returnType": "long double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the projection on Riemann sphere (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cexp",
+            "type": "function",
+            "returnType": "double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex base-e exponential (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cexpf",
+            "type": "function",
+            "returnType": "float complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex base-e exponential (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cexpl",
+            "type": "function",
+            "returnType": "long double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex base-e exponential (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "clog",
+            "type": "function",
+            "returnType": "double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex natural logarithm (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "clogf",
+            "type": "function",
+            "returnType": "float complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex natural logarithm (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "clogl",
+            "type": "function",
+            "returnType": "long double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex natural logarithm (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cpow",
+            "type": "function",
+            "returnType": "double complex",
+            "parameters": [
+              {
+                "name": "x",
+                "type": "double complex"
+              },
+              {
+                "name": "y",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex power function (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cpowf",
+            "type": "function",
+            "returnType": "float complex",
+            "parameters": [
+              {
+                "name": "x",
+                "type": "float complex"
+              },
+              {
+                "name": "y",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+
+          },
+          "description": "Computes the complex power function (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cpowl",
+            "type": "function",
+            "returnType": "long double complex",
+            "parameters": [
+              {
+                "name": "x",
+                "type": "long double complex"
+              },
+              {
+                "name": "y",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+
+          },
+          "description": "Computes the complex power function (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "csqrt",
+            "type": "function",
+            "returnType": "double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex square root (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "csqrtf",
+            "type": "function",
+            "returnType": "float complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex square root (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "csqrtl",
+            "type": "function",
+            "returnType": "long double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex square root (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "csin",
+            "type": "function",
+            "returnType": "double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex sine (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "csinf",
+            "type": "function",
+            "returnType": "float complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex sine (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "csinl",
+            "type": "function",
+            "returnType": "long double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex sine (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "ccos",
+            "type": "function",
+            "returnType": "double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex cosine (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "ccosf",
+            "type": "function",
+            "returnType": "float complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex cosine (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "ccosl",
+            "type": "function",
+            "returnType": "long double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex cosine (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "ctan",
+            "type": "function",
+            "returnType": "double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex tangent (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "ctanf",
+            "type": "function",
+            "returnType": "float complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex tangent (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "ctanl",
+            "type": "function",
+            "returnType": "long double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex tangent (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "casinh",
+            "type": "function",
+            "returnType": "double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex arc hyperbolic sine (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "casinhf",
+            "type": "function",
+            "returnType": "float complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex arc hyperbolic sine (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "casinhl",
+            "type": "function",
+            "returnType": "long double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex arc hyperbolic sine (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cacosh",
+            "type": "function",
+            "returnType": "double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex arc hyperbolic cosine (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cacoshf",
+            "type": "function",
+            "returnType": "float complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex arc hyperbolic cosine (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "cacoshl",
+            "type": "function",
+            "returnType": "long double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex arc hyperbolic cosine (long double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "catanh",
+            "type": "function",
+            "returnType": "double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex arc hyperbolic tangent (double return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "catanhf",
+            "type": "function",
+            "returnType": "float complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "float complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex arc hyperbolic tangent (float return).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "catanhl",
+            "type": "function",
+            "returnType": "long double complex",
+            "parameters": [
+              {
+                "name": "z",
+                "type": "long double complex"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "complex",
+                "header": "complex.h"
+              }
+            ]
+          },
+          "description": "Computes the complex arc hyperbolic tangent (long double return).",
+          "since": "C99",
+          "removed": null
+        }
+      ]
+    },
+    {
+      "name": "ctype.h",
+      "description": "Defines set of functions used to classify characters by their types or to convert between upper and lower case in a way that is independent of the used character set (typically ASCII or one of its extensions, although implementations utilizing EBCDIC are also known).",
+      "since": "C89",
+      "definitions": [
+        {
+          "definition": {
+            "name": "isalnum",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ch",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Checks if a character is alphanumeric.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "isalpha",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ch",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Checks if a character is alphabetic.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "islower",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ch",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Checks if a character is lowercase.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "isupper",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ch",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Checks if a character is an uppercase character.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "isdigit",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ch",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Checks if a character is a digit.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "isxdigit",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ch",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Checks if a character is a hexadecimal character.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "iscntrl",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ch",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Checks if a character is a control character.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "isgraph",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ch",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Checks if a character is a graphical character.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "isspace",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ch",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Checks if a character is a space character.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "isblank",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ch",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Checks if a character is a blank character.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "isprint",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ch",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Checks if a character is a printing character.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "ispunct",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ch",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Checks if a character is a punctuation character.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "tolower",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ch",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Converts a character to lowercase.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "toupper",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ch",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Converts a character to uppercase.",
+          "since": null,
+          "removed": null
+        }
+      ]
+    },
+    {
+      "name": "errno.h",
+      "description": "Macros for testing error codes reported by library functions.",
+      "since": "C89",
+      "definitions": [
+        {
+          "definition": {
+            "name": "errno",
+            "type": "macro_variable",
+            "replacementText": "(*_errno())",
+            "replacementType": "int",
+            "funcDeclaration": {
+              "returnType": "int*",
+              "name": "_errno",
+              "parameters": [],
+              "dependencies": []
+            },
+            "dependencies": []
+          },
+          "description": "Macro which expands to POSIX-compatible thread-local error number variable.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "EDOM",
+            "type": "macro_constant",
+            "replacementText": "1",
+            "replacementType": "int",
+            "dependencies": []
+          },
+          "description": "Mathematics argument out of domain of function.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "EILSEQ",
+            "type": "macro_constant",
+            "replacementText": "2",
+            "replacementType": "int",
+            "dependencies": []
+          },
+          "description": "Illegal byte sequence.",
+          "since": "C95",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "ERANGE",
+            "type": "macro_constant",
+            "replacementText": "3",
+            "replacementType": "int",
+            "dependencies": []
+          },
+          "description": "Result too large.",
+          "since": null,
+          "removed": null
+        }
+      ]
+    },
+    {
+      "name": "fenv.h",
+      "description": "Defines a set of functions for controlling floating-point environment.",
+      "since": "C99",
+      "definitions": [
+        {
+          "definition": {
+            "name": "fenv_t",
+            "type": "type"
+          },
+          "description": "The type representing the entire floating-point environment.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "fexcept_t",
+            "type": "type"
+          },
+          "description": "The type representing all floating-point status flags collectively",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "feclearexcept",
+            "type": "function"
+          },
+          "description": "Clears the specified floating-point status flags.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "fetestexcept",
+            "type": "function"
+          },
+          "description": "Determines which of the specified floating-point status flags are set.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "feraiseexcept",
+            "type": "function"
+          },
+          "description": "Raises the specified floating-point exceptions.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "fegetexceptflag",
+            "type": "function"
+          },
+          "description": "Copies the state of the specified floating-point status flags from the floating-point environment.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "fesetexceptflag",
+            "type": "function"
+          },
+          "description": "Copies the state of the specified floating-point status flags to the floating-point environment.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "fegetround",
+            "type": "function"
+          },
+          "description": "Gets rounding direction.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "fesetround",
+            "type": "function"
+          },
+          "description": "Sets rounding direction.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "fegetenv",
+            "type": "function"
+          },
+          "description": "Saves the current floating-point environment.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "fesetenv",
+            "type": "function"
+          },
+          "description": "Restores the current floating-point environment.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "feholdexcept",
+            "type": "function"
+          },
+          "description": "Saves the environment, clears all status flags and ignores all future errors.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "feupdateenv",
+            "type": "function"
+          },
+          "description": "Restores the floating-point environment and raises the previously raised exceptions.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "FE_ALL_EXCEPT",
+            "type": "macro_constant"
+          },
+          "description": "Floating-point bitwise OR of all supported exceptions.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "FE_DIVBYZERO",
+            "type": "macro_constant"
+          },
+          "description": "Floating-point divide by zero exception.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "FE_INEXACT",
+            "type": "macro_constant"
+          },
+          "description": "Floating-point inexact result exception (rounding was necessary).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "FE_INVALID",
+            "type": "macro_constant"
+          },
+          "description": "Floating-point invalid domainexception.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "FE_OVERFLOW",
+            "type": "macro_constant"
+          },
+          "description": "Floating-point overflow exception (result too large to be representable).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "FE_UNDERFLOW",
+            "type": "macro_constant"
+          },
+          "description": "Floating-point underflow exception (loss of precision due to subnormal result).",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "FE_DOWNWARD",
+            "type": "macro_constant"
+          },
+          "description": "Floating-point rounding down direction.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "FE_TONEAREST",
+            "type": "macro_constant"
+          },
+          "description": "Floating-point rounding to nearest direction.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "FE_TOWARDZERO",
+            "type": "macro_constant"
+          },
+          "description": "Floating-point rounding towards zero direction.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "FE_UPWARD",
+            "type": "macro_constant"
+          },
+          "description": "Floating-point rounding upwards direction.",
+          "since": "C99",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "FE_DFL_ENV",
+            "type": "macro_constant"
+          },
+          "description": "Default floating-point environment.",
+          "since": "C99",
+          "removed": null
+        }
+      ]
+    },
+    {
+      "name": "float.h",
+      "description": "Defines a set of macro constants that specify the implementation-specific properties/limits of the floating-point arithmetic library.",
+      "since": "C89",
+      "definitions": []
+    },
+    {
+      "name": "inttypes.h",
+      "description": "Defines exact-width integer types and format conversion of integer types.",
+      "since": "C99",
+      "definitions": []
+    },
+    {
+      "name": "iso646.h",
+      "description": "Defines a set macros that implement alternative ways to express several standard tokens. For programming in ISO 646 variant character sets.",
+      "since": "C95",
+      "definitions": []
+    },
+    {
+      "name": "limits.h",
+      "description": "Defines a set of macro constants that specify the implementation-specific properties/ranges of the integer types.",
+      "since": "C89",
+      "definitions": []
+    },
+    {
+      "name": "locale.h",
+      "description": "Defines a set of functions for setting the locale and formatting data based on the locale.",
+      "since": "C89",
+      "definitions": [
+        {
+          "definition": {
+            "name": "NULL",
+            "type": "macro_constant",
+            "replacementText": "((void*)0)",
+            "replacementType": "void*",
+            "dependencies": []
+          },
+          "description": "Implementation-defined null pointer constant.",
+          "since": null,
+          "removed": null
+        }
+      ]
+    },
+    {
+      "name": "math.h",
+      "description": "Defines a set of functions for performing common mathematical operations.",
+      "since": "C89",
+      "definitions": []
+    },
+    {
+      "name": "setjmp.h",
+      "description": "Defines the macros setjmp and longjmp for performing non-local jumps/exits.",
+      "since": "C89",
+      "definitions": []
+    },
+    {
+      "name": "signal.h",
+      "description": "Defines a set of functions for handling signals.",
+      "since": "C89",
+      "definitions": []
+    },
+    {
+      "name": "stdalign.h",
+      "description": "Defines a set of macros (alignas and alignof) for querying and specifying the alignment of objects.",
+      "since": "C11",
+      "definitions": []
+    },
+    {
+      "name": "stdarg.h",
+      "description": "Defines a set of macros/functions for accessing a varying number of arguments passed to a function.",
+      "since": "C89",
+      "definitions": []
+    },
+    {
+      "name": "stdatomic.h",
+      "description": "Defines a set of functions for atomic operations on data shared between threads.",
+      "since": "C11",
+      "definitions": []
+    },
+    {
+      "name": "stdbit.h",
+      "description": "Defines a set of macros to work with the byte and bit representation of types.",
+      "since": "C23",
+      "definitions": []
+    },
+    {
+      "name": "stdbool.h",
+      "description": "Defines macros for a Boolean data type.",
+      "since": "C99",
+      "definitions": []
+    },
+    {
+      "name": "stdckdint.h",
+      "description": "Defines a set of macros for performing checked integer arithmetic",
+      "since": "C23",
+      "definitions": []
+    },
+    {
+      "name": "stddef.h",
+      "description": "Defines a set of types and macros.",
+      "since": "C89",
+      "definitions": [
+        {
+          "definition": {
+            "name": "size_t",
+            "type": "typedef",
+            "aliasedType": "unsigned long",
+            "dependencies": []
+          },
+          "description": "Unsigned integer type returned by the sizeof operator.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "ptrdiff_t",
+            "type": "typedef",
+            "aliasedType": "long",
+            "dependencies": []
+          },
+          "description": "Signed integer type returned when subtracting two pointers.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "nullptr_t",
+            "type": "typedef",
+            "aliasedType": "typeof(nullptr)",
+            "dependencies": []
+          },
+          "description": "The type of the predefined null pointer constant nullptr.",
+          "since": "C23",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "NULL",
+            "type": "macro_constant",
+            "replacementText": "((void*)0)",
+            "replacementType": "void*",
+            "dependencies": []
+          },
+          "description": "Implementation-defined null pointer constant.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "max_align_t",
+            "type": "typedef",
+            "aliasedType": "long double",
+            "dependencies": []
+          },
+          "description": "A type with alignment requirement as great as any other scalar type",
+          "since": "C11",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "offsetof",
+            "type": "macro_function",
+            "macroParameters": ["type", "member"],
+            "replacementText": "((size_t)(&((type *)0)->member))",
+            "functionEquivalent": null,
+            "dependencies": [
+              {
+                "name": "size_t",
+                "header": "stddef.h"
+              }
+            ]
+          },
+          "description": "Byte offset from the beginning of a struct type to specified struct member",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "errno_t",
+            "type": "typedef",
+            "aliasedType": "int",
+            "dependencies": []
+          },
+          "description": "Error number type.",
+          "since": "C11",
+          "removed": null
+        }
+      ]
+    },
+    {
+      "name": "stdint.h",
+      "description": "Defines a set of fixed-width integer types.",
+      "since": "C99",
+      "definitions": [
+        {
+          "definition": {
+            "name": "rsize_t",
+            "type": "typedef",
+            "aliasedType": "unsigned long",
+            "dependencies": []
+          },
+          "description": "A typedef for the same type as size_t, used to self-document functions that range-check their parameters at runtime.",
+          "since": "C11",
+          "removed": null
+        }
+      ]
+    },
+    {
+      "name": "stdio.h",
+      "description": "Defines a set of core functions for performing input and output.",
+      "since": "C89",
+      "definitions": [
+        {
+          "definition": {
+            "name": "size_t",
+            "type": "typedef",
+            "aliasedType": "unsigned long",
+            "dependencies": []
+          },
+          "description": "Unsigned integer type returned by the sizeof operator.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "NULL",
+            "type": "macro_constant",
+            "replacementText": "((void*)0)",
+            "replacementType": "void*",
+            "dependencies": []
+          },
+          "description": "Implementation-defined null pointer constant.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "errno_t",
+            "type": "typedef",
+            "aliasedType": "int",
+            "dependencies": []
+          },
+          "description": "Error number type.",
+          "since": "C11",
+          "removed": null
+        }
+      ]
+    },
+    {
+      "name": "stdlib.h",
+      "description": "Defines a set of functions for performing general functions (e.g., numeric conversion functions, pseudo-random numbers generation functions, memory allocation, process control functions, string conversions, algorithms).",
+      "since": "C89",
+      "definitions": [
+        {
+          "definition": {
+            "name": "size_t",
+            "type": "typedef",
+            "aliasedType": "unsigned long",
+            "dependencies": []
+          },
+          "description": "Unsigned integer type returned by the sizeof operator.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "NULL",
+            "type": "macro_constant",
+            "replacementText": "((void*)0)",
+            "replacementType": "void*",
+            "dependencies": []
+          },
+          "description": "Implementation-defined null pointer constant.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "errno_t",
+            "type": "typedef",
+            "aliasedType": "int",
+            "dependencies": []
+          },
+          "description": "Error number type.",
+          "since": "C11",
+          "removed": null
+        }
+      ]
+    },
+    {
+      "name": "stdnoreturn.h",
+      "description": "Defines a macro for specifying that a function does not return.",
+      "since": "C11",
+      "definitions": []
+    },
+    {
+      "name": "string.h",
+      "description": "Defines a set of functions for manipulating/handling strings (arrays of characters).",
+      "since": "C89",
+      "definitions": [
+        {
+          "definition": {
+            "name": "size_t",
+            "type": "typedef",
+            "aliasedType": "unsigned long",
+            "dependencies": []
+          },
+          "description": "Unsigned integer type returned by the sizeof operator.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "NULL",
+            "type": "macro_constant",
+            "replacementText": "((void*)0)",
+            "replacementType": "void*",
+            "dependencies": []
+          },
+          "description": "Implementation-defined null pointer constant.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "errno_t",
+            "type": "typedef",
+            "aliasedType": "int",
+            "dependencies": []
+          },
+          "description": "Error number type.",
+          "since": "C11",
+          "removed": null
+        }
+      ]
+    },
+    {
+      "name": "tgmath.h",
+      "description": "Defines a set of functions for type-generic mathematical operations (macros wrapping math.h and complex.h).",
+      "since": "C99",
+      "definitions": []
+    },
+    {
+      "name": "threads.h",
+      "description": "Defines a set of functions for creating and managing managing multiple threads, mutexes and condition variables.",
+      "since": "C11",
+      "definitions": []
+    },
+    {
+      "name": "time.h",
+      "description": "Defines a set of functions for handling date and time.",
+      "since": "C89",
+      "definitions": [
+        {
+          "definition": {
+            "name": "tm",
+            "type": "struct",
+            "members": [
+              {
+                "name": "tm_sec",
+                "type": "int"
+              },
+              {
+                "name": "tm_min",
+                "type": "int"
+              },
+              {
+                "name": "tm_hour",
+                "type": "int"
+              },
+              {
+                "name": "tm_mday",
+                "type": "int"
+              },
+              {
+                "name": "tm_mon",
+                "type": "int"
+              },
+              {
+                "name": "tm_year",
+                "type": "int"
+              },
+              {
+                "name": "tm_wday",
+                "type": "int"
+              },
+              {
+                "name": "tm_yday",
+                "type": "int"
+              },
+              {
+                "name": "tm_isdst",
+                "type": "int"
+              }
+            ],
+            "dependencies": []
+          },
+          "description": "Calendar time structure type containing a calendar date and time broken down into its components.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "time_t",
+            "type": "typedef",
+            "aliasedType": "long",
+            "dependencies": []
+          },
+          "description": "Arithmetic time type capable of representing times since the Unix Epoch.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "clock_t",
+            "type": "typedef",
+            "aliasedType": "long",
+            "dependencies": []
+          },
+          "description": "Processor time since era type. Capable of representing processor time used by a given process with implementation-defined range and precision.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "timespec",
+            "type": "struct",
+            "members": [
+              {
+                "name": "tv_sec",
+                "type": "time_t"
+              },
+              {
+                "name": "tv_nsec",
+                "type": "long"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "time_t",
+                "header": "time.h"
+              }
+            ]
+          },
+          "description": "Time structure type to represent seconds and nanoseconds.",
+          "since": "C11",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "CLOCKS_PER_SEC",
+            "type": "macro_constant",
+            "replacementText": "(clock_t(1000000))",
+            "replacementType": "clock_t",
+            "dependencies": [
+              {
+                "name": "clock_t",
+                "header": "time.h"
+              }
+            ]
+          },
+          "description": "Number of clock ticks per second. POSIX requires that the value of CLOCKS_PER_SEC equals 1000000 independent of the actual resolution.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "difftime",
+            "type": "function",
+            "returnType": "double",
+            "parameters": [
+              {
+                "name": "time_end",
+                "type": "time_t"
+              },
+              {
+                "name": "time_beg",
+                "type": "time_t"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "time_t",
+                "header": "time.h"
+              }
+            ]
+          },
+          "description": "Computes the difference between two calendar times.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "time",
+            "type": "function",
+            "returnType": "time_t",
+            "parameters": [
+              {
+                "name": "arg",
+                "type": "time_t*"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "time_t",
+                "header": "time.h"
+              }
+            ]
+          },
+          "description": "Computes the current calendar time of the system as time since epoch and returns it + stores it in arg.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "clock",
+            "type": "function",
+            "returnType": "clock_t",
+            "parameters": [],
+            "dependencies": [
+              {
+                "name": "clock_t",
+                "header": "time.h"
+              }
+            ]
+          },
+          "description": "Returns raw processor clock time since the program is started.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "timespec_get",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ts",
+                "type": "timespec*"
+              },
+              {
+                "name": "base",
+                "type": "int"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "timespec",
+                "header": "time.h"
+              }
+            ]
+          },
+          "description": "Returns the calendar time in seconds and nanoseconds based on a given time base.",
+          "since": "C11",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "timespec_getres",
+            "type": "function",
+            "returnType": "int",
+            "parameters": [
+              {
+                "name": "ts",
+                "type": "timespec*"
+              },
+              {
+                "name": "base",
+                "type": "int"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "timespec",
+                "header": "time.h"
+              }
+            ]
+          },
+          "description": "Returns the resolution of calendar time based on a given time base.",
+          "since": "C23",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "asctime",
+            "type": "function",
+            "returnType": "char*",
+            "parameters": [
+              {
+                "name": "time_ptr",
+                "type": "const tm*"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "tm",
+                "header": "time.h"
+              }
+            ]
+          },
+          "description": "Converts a given calendar time tm object to a textual representation.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "asctime_s",
+            "type": "function",
+            "returnType": "errno_t",
+            "parameters": [
+              {
+                "name": "buf",
+                "type": "char*"
+              },
+              {
+                "name": "bufsz",
+                "type": "rsize_t"
+              },
+              {
+                "name": "time_ptr",
+                "type": "const tm*"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "tm",
+                "header": "time.h"
+              },
+              {
+                "name": "errno_t",
+                "header": "time.h"
+              },
+              {
+                "name": "rsize_t",
+                "header": "stdint.h"
+              }
+            ]
+          },
+          "description": "Converts a given calendar time tm object to a textual representation. The message is written into user-provided storage buf, which is guaranteed to be null-terminated, and some errors are detected at runtime.",
+          "since": "C11",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "ctime",
+            "type": "function",
+            "returnType": "char*",
+            "parameters": [
+              {
+                "name": "timer",
+                "type": "const time_t*"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "time_t",
+                "header": "time.h"
+              }
+            ]
+          },
+          "description": "Converts a time_t object to a textual representation.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "ctime_s",
+            "type": "function",
+            "returnType": "errno_t",
+            "parameters": [
+              {
+                "name": "buf",
+                "type": "char*"
+              },
+              {
+                "name": "bufsz",
+                "type": "rsize_t"
+              },
+              {
+                "name": "timer",
+                "type": "const time_t*"
+              }
+            ],
+            "dependencies": [
+              {
+                "name": "time_t",
+                "header": "time.h"
+              },
+              {
+                "name": "errno_t",
+                "header": "time.h"
+              },
+              {
+                "name": "rsize_t",
+                "header": "stdint.h"
+              }
+            ]
+          },
+          "description": "Converts a time_t object to a textual representation. The message is written into user-provided storage buf, which is guaranteed to be null-terminated, and some errors are detected at runtime.",
+          "since": "C11",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "errno_t",
+            "type": "typedef",
+            "aliasedType": "int",
+            "dependencies": []
+          },
+          "description": "Error number type.",
+          "since": "C11",
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "size_t",
+            "type": "typedef",
+            "aliasedType": "unsigned long",
+            "dependencies": []
+          },
+          "description": "Unsigned integer type returned by the sizeof operator.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "NULL",
+            "type": "macro_constant",
+            "replacementText": "((void*)0)",
+            "replacementType": "void*",
+            "dependencies": []
+          },
+          "description": "Implementation-defined null pointer constant.",
+          "since": null,
+          "removed": null
+        }
+      ]
+    },
+    {
+      "name": "uchar.h",
+      "description": "Defines a set of functions for manipulating Unicode characters (UTF-16 and UTF-32).",
+      "since": "C11",
+      "definitions": [
+        {
+          "definition": {
+            "name": "size_t",
+            "type": "typedef",
+            "aliasedType": "unsigned long",
+            "dependencies": []
+          },
+          "description": "Unsigned integer type returned by the sizeof operator.",
+          "since": null,
+          "removed": null
+        }
+      ]
+    },
+    {
+      "name": "wchar.h",
+      "description": "Defines a set of functions for handling extended multibyte and wide character strings.",
+      "since": "C95",
+      "definitions": [
+        {
+          "definition": {
+            "name": "size_t",
+            "type": "typedef",
+            "aliasedType": "unsigned long",
+            "dependencies": []
+          },
+          "description": "Unsigned integer type returned by the sizeof operator.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "NULL",
+            "type": "macro_constant",
+            "replacementText": "((void*)0)",
+            "replacementType": "void*",
+            "dependencies": []
+          },
+          "description": "Implementation-defined null pointer constant.",
+          "since": null,
+          "removed": null
+        },
+        {
+          "definition": {
+            "name": "errno_t",
+            "type": "typedef",
+            "aliasedType": "int",
+            "dependencies": []
+          },
+          "description": "Error number type.",
+          "since": "C11",
+          "removed": null
+        }
+      ]
+    },
+    {
+      "name": "wctype.h",
+      "description": "Defines a set of functions to determine the type contained in wide character data or to convert between upper and lower case.",
+      "since": "C95",
+      "definitions": []
+    }
+  ]
+}
