@@ -1,58 +1,66 @@
 cmake_minimum_required(VERSION 3.14)
 project(ClangAstDumper)
 
-set(LLVM_VERSION 14)
+set(CLANG_VERSION 14)
 
-SET(CMAKE_C_COMPILER "clang")
-SET(CMAKE_CXX_COMPILER "clang++")
+SET(CMAKE_C_COMPILER "clang-${CLANG_VERSION}")
+SET(CMAKE_CXX_COMPILER "clang++-${CLANG_VERSION}")
+
+#SET(CMAKE_FIND_PACKAGE_SORT_ORDER NATURAL)
+#SET(CMAKE_FIND_PACKAGE_SORT_DIRECTION DEC)
+
+SET(Clang_DIR "/usr/lib/cmake/clang-${CLANG_VERSION}")
+SET(LLVM_DIR "/usr/lib/llvm-${CLANG_VERSION}/lib/cmake/llvm")
+
 
 find_package(Clang REQUIRED CONFIG)
-include_directories(C:/msys64/mingw64/include)
+include_directories("/usr/lib/clang/${CLANG_VERSION}/include/")
+include_directories("/usr/lib/llvm-${CLANG_VERSION}/include/")
 
 
 set(SOURCE_FILES
-		src/newmain.cpp
-		src/ClangAst.cpp
-    	src/ClangNodes.cpp
-		src/TypeMarker.cpp
-        src/ClavaDataDumper.cpp
-		src/ClavaDataDumperAttrs.cpp
-        src/ClavaDataDumperDecls.cpp
-		src/ClavaDataDumperStmts.cpp
-		src/ClavaDataDumperTypes.cpp
-		src/ClavaConstants.cpp
-		src/ClavaDecl.cpp
-		src/ChildrenVisitorAttrs.cpp
-    	src/ChildrenVisitorDecls.cpp
-		src/ChildrenVisitorExtras.cpp
-		src/ChildrenVisitorStmts.cpp
-		src/ChildrenVisitorTypes.cpp
-		src/ClangAstDumper.cpp
-		src/ClangAstDumperAttr.cpp
-		src/ClangAstDumperDecls.cpp
-		src/ClangAstDumperExprs.cpp
-        src/ClangAstDumperExtra.cpp
-		src/ClangAstDumperStmts.cpp
-		src/ClangAstDumperTypes.cpp
-		src/ClangEnums.cpp
-		src/enums_Type_h.cpp
-		src/enums_OperationKinds_h.cpp
-		src/enums_AttrKinds_h.cpp
-		src/enums_Specifiers_h.cpp
-		src/enums_ExceptionSpecificationType_h.cpp
-		src/enums_Linkage_h.cpp
-		src/enums_Visibility_h.cpp
-		src/enums_TemplateBase_h.cpp
-		src/enums_Decl_h.cpp
-		src/enums_ExprCXX_h.cpp
-		src/enums_TypeTraits_h.cpp
-		src/enums_NestedNameSpecifier_h.cpp
-		src/enums_DeclCxx_h.cpp
-		src/enums_Lambda_h.cpp
-		src/enums_TemplateName_h.cpp
-		src/enums_Attr_h.cpp
-		src/enums_Expr_h.cpp
-		)
+	src/newmain.cpp
+	src/ClangAst.cpp
+	src/ClangNodes.cpp
+	src/TypeMarker.cpp
+	src/ClavaDataDumper.cpp
+	src/ClavaDataDumperAttrs.cpp
+	src/ClavaDataDumperDecls.cpp
+	src/ClavaDataDumperStmts.cpp
+	src/ClavaDataDumperTypes.cpp
+	src/ClavaConstants.cpp
+	src/ClavaDecl.cpp
+	src/ChildrenVisitorAttrs.cpp
+	src/ChildrenVisitorDecls.cpp
+	src/ChildrenVisitorExtras.cpp
+	src/ChildrenVisitorStmts.cpp
+	src/ChildrenVisitorTypes.cpp
+	src/ClangAstDumper.cpp
+	src/ClangAstDumperAttr.cpp
+	src/ClangAstDumperDecls.cpp
+	src/ClangAstDumperExprs.cpp
+	src/ClangAstDumperExtra.cpp
+	src/ClangAstDumperStmts.cpp
+	src/ClangAstDumperTypes.cpp
+	src/ClangEnums.cpp
+	src/enums_Type_h.cpp
+	src/enums_OperationKinds_h.cpp
+	src/enums_AttrKinds_h.cpp
+	src/enums_Specifiers_h.cpp
+	src/enums_ExceptionSpecificationType_h.cpp
+	src/enums_Linkage_h.cpp
+	src/enums_Visibility_h.cpp
+	src/enums_TemplateBase_h.cpp
+	src/enums_Decl_h.cpp
+	src/enums_ExprCXX_h.cpp
+	src/enums_TypeTraits_h.cpp
+	src/enums_NestedNameSpecifier_h.cpp
+	src/enums_DeclCxx_h.cpp
+	src/enums_Lambda_h.cpp
+	src/enums_TemplateName_h.cpp
+	src/enums_Attr_h.cpp
+	src/enums_Expr_h.cpp
+	)
 
 add_library(MyPlugin SHARED ${SOURCE_FILES})
 
