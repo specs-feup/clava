@@ -20,8 +20,9 @@ import pt.up.fe.specs.util.providers.ResourceProvider;
 public class ClavaLaraApis {
 
     private static final List<ResourceProvider> CLAVA_LARA_API = ResourceProvider
-            .getResourcesFromEnum(ClavaApiJsResource.class, LaraWeaverApiResource.class, LaraApiResource.class);
+            .getResourcesFromEnum(LaraWeaverApiResource.class, LaraApiResource.class);
 
+    // .getResourcesFromEnum(ClavaApiJsResource.class, LaraWeaverApiResource.class, LaraApiResource.class);
     public static List<ResourceProvider> getApis() {
         return CLAVA_LARA_API;
     }
