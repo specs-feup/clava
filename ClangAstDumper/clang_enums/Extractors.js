@@ -1,15 +1,21 @@
 class Extractors {
+  /**
+   * 
+   * @param {string} enumName 
+   * @param {string[]} lines 
+   * @param {number} occurence 
+   * @returns 
+   */
   static simpleExtractor(enumName, lines, occurence) {
     const regex = "enum\\s+(class\\s+)?" + enumName + "\\s.*{";
     const enumNameRegex = new RegExp(regex);
-    //const enumNameRegex = new RegExp("\\s"+enumName+"\\s");
 
     const enums = [];
     let searching = true;
     let completed = false;
     let currentOccurence = 0;
 
-    for (var line of lines) {
+    for (let line of lines) {
       if (searching) {
         // Find enum
         const matchResult = line.match(enumNameRegex);
@@ -30,8 +36,6 @@ class Extractors {
 
         const indexOfBracket = line.indexOf("{");
         line = line.substring(indexOfBracket + 1);
-
-        //continue;
       }
 
       // Collect enums until } is found
@@ -57,15 +61,8 @@ class Extractors {
         .filter((s) => s.length > 0)
         // Remove =, } if present
         .map((s) => Extractors._processEnum(s));
-      /*
-      // Remove , if present
-      if (line.endsWith(",")) {
-        line = line.substring(0, line.length - 1);
-      }
-*/
-      // Get enum
 
-      //println("Enum: " + line)
+      // Get enum
       for (const enumName of enumNames) {
         enums.push(enumName);
       }
@@ -84,6 +81,11 @@ class Extractors {
     return enums;
   }
 
+  /**
+   * 
+   * @param {string} enumName 
+   * @returns 
+   */
   static _processEnum(enumName) {
     // Check for =
     const indexOfEquals = enumName.indexOf("=");

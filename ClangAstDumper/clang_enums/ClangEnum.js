@@ -5,35 +5,39 @@ laraImport("Extractors");
  * @class
  */
 class ClangEnum {
-  constructor(name, cppVarName, mapper, excludeArray, className) {
+  /**
+   *
+   * @param {string} name Name of the enum
+   * @param {string} cppVarName Original name of the enum in the C++ source files
+   * @param {(string) => string} mapper
+   * @param {string[]} excludeArray
+   * @param {string | undefined} className
+   */
+  constructor(
+    name,
+    cppVarName,
+    mapper = (el) => el,
+    excludeArray = [],
+    className = undefined
+  ) {
+    mapper ??= (el) => el;
+    excludeArray ??= [];
+
     this.name = name;
     this.cppVarName = cppVarName;
-
-    if (mapper === undefined) {
-      mapper = (element) => element;
-    }
     this.mapper = mapper;
-
-    if (excludeArray === undefined) {
-      excludeArray = [];
-    }
     this.excludeSet = new StringSet(excludeArray);
-    //println("Exclude set: " + this.excludeSet.values());
-
     this.className = className;
-
     this.enumValues = undefined;
-
-    /*
-    if (extractor == undefined) {
-      extractor = Extractors.simpleExtractor;
-    }
-    this.extractor = extractor;
-	*/
     this.extractor = Extractors.simpleExtractor;
     this.occurence = 1;
   }
 
+  /**
+   * 
+   * @param {number} occurence 
+   * @returns 
+   */
   setOccurence(occurence) {
     this.occurence = occurence;
     return this;
@@ -55,35 +59,13 @@ class ClangEnum {
     return this.className;
   }
 
-  /*
-ClangEnum.prototype.getStartingNode = function() {
-	if(this.className === undefined) {
-		return Query.root();
-	}
-	
-	var startingClass = Query.search("class", this.className).first();
-	
-	if(startingClass === undefined) {
-		throw new Error("Clang enum specifies class '"+this.className+"', but it could not be found");
-	}
-	
-	return startingClass;
-}
-*/
-
+  /**
+   * 
+   * @param {string[]} headerLines 
+   */
   setEnumValues(headerLines) {
     this.enumValues = this.extractor(this.name, headerLines, this.occurence);
   }
-
-  /*
-  setEnumValues(enumValues) {
-    if (this.enumValues !== undefined) {
-      println("Setting enum values again for enum " + this.name);
-    }
-
-    this.enumValues = enumValues;
-  }
-  */
 
   getCode() {
     if (this.enumValues === undefined) {
@@ -91,12 +73,11 @@ ClangEnum.prototype.getStartingNode = function() {
       return undefined;
     }
 
-    var code = "";
+    let code = "";
 
     code += "extern const std::string clava::" + this.cppVarName + "[] = {\n";
 
-    for (var enumValue of this.enumValues) {
-      //println("Enum: " + enumValue);
+    for (let enumValue of this.enumValues) {
       if (this.excludeSet.has(enumValue.toString())) {
         println("Excluded enum '" + enumValue + "'");
         continue;
@@ -105,7 +86,7 @@ ClangEnum.prototype.getStartingNode = function() {
       // Map enum value
       enumValue = this.mapper(enumValue);
 
-      code += '        "' + enumValue + '",\n';
+      code += `        "${enumValue}",\n`;
     }
 
     code += "};\n";

@@ -6,7 +6,7 @@ laraImport("weaver.Query");
  * @class
  */
 class ClangEnums {
-  static _TYPE_H = new HeaderEnums("src/include/clang/AST/Type.h", [
+  static _TYPE_H = new HeaderEnums("../../../include/clang/AST/Type.h", [
     new ClangEnum("Kind", "BUILTIN_KIND", undefined, ["LastKind"]).setOccurence(
       3
     ),
@@ -38,7 +38,7 @@ class ClangEnums {
   ]);
 
   static _OPERATIONS_KINDS_H = new HeaderEnums(
-    "src/include/clang/AST/OperationKinds.h",
+    "../../../include/clang/AST/OperationKinds.h",
     [
       new ClangEnum(
         "CastKind",
@@ -62,12 +62,12 @@ class ClangEnums {
   );
 
   static _ATTR_KINDS_H = new HeaderEnums(
-    "src/include/clang/Basic/AttrKinds.h",
+    "../../../include/clang/Basic/AttrKinds.h",
     [new ClangEnum("Kind", "ATTRIBUTES", undefined, undefined)]
   );
 
   static _SPECIFIERS_H = new HeaderEnums(
-    "src/include/clang/Basic/Specifiers.h",
+    "../../../include/clang/Basic/Specifiers.h",
     [
       new ClangEnum(
         "CallingConv",
@@ -103,7 +103,7 @@ class ClangEnums {
   );
 
   static _EXCEPTION_SPECIFICATION_TYPE_H = new HeaderEnums(
-    "src/include/clang/Basic/ExceptionSpecificationType.h",
+    "../../../include/clang/Basic/ExceptionSpecificationType.h",
     [
       new ClangEnum(
         "ExceptionSpecificationType",
@@ -114,7 +114,7 @@ class ClangEnums {
     ]
   );
 
-  static _LINKAGE_H = new HeaderEnums("src/include/clang/Basic/Linkage.h", [
+  static _LINKAGE_H = new HeaderEnums("../../../include/clang/Basic/Linkage.h", [
     new ClangEnum(
       "Linkage",
       "LINKAGE",
@@ -124,7 +124,7 @@ class ClangEnums {
   ]);
 
   static _VISIBILITY_H = new HeaderEnums(
-    "src/include/clang/Basic/Visibility.h",
+    "../../../include/clang/Basic/Visibility.h",
     [
       new ClangEnum(
         "Visibility",
@@ -136,11 +136,11 @@ class ClangEnums {
   );
 
   static _TEMPLATE_BASE_H = new HeaderEnums(
-    "src/include/clang/AST/TemplateBase.h",
+    "../../../include/clang/AST/TemplateBase.h",
     [new ClangEnum("ArgKind", "TEMPLATE_ARG_KIND", undefined, undefined)]
   );
 
-  static _DECL_H = new HeaderEnums("src/include/clang/AST/Decl.h", [
+  static _DECL_H = new HeaderEnums("../../../include/clang/AST/Decl.h", [
     new ClangEnum(
       "InitializationStyle",
       "INIT_STYLE",
@@ -161,7 +161,7 @@ class ClangEnums {
     ListInit: "LIST_INIT",
   };
 
-  static _EXPR_CXX_H = new HeaderEnums("src/include/clang/AST/ExprCXX.h", [
+  static _EXPR_CXX_H = new HeaderEnums("../../../include/clang/AST/ExprCXX.h", [
     new ClangEnum(
       "InitializationStyle",
       "NEW_INIT_STYLE",
@@ -183,7 +183,7 @@ class ClangEnums {
   };
 
   static _TYPE_TRAITS_H = new HeaderEnums(
-    "src/include/clang/Basic/TypeTraits.h",
+    "../../../include/clang/Basic/TypeTraits.h",
     [
       new ClangEnum(
         "UnaryExprOrTypeTrait",
@@ -195,7 +195,7 @@ class ClangEnums {
   );
 
   static _NESTED_NAME_SPECIFIER_H = new HeaderEnums(
-    "src/include/clang/AST/NestedNameSpecifier.h",
+    "../../../include/clang/AST/NestedNameSpecifier.h",
     [
       new ClangEnum(
         "SpecifierKind",
@@ -206,7 +206,7 @@ class ClangEnums {
     ]
   );
 
-  static _DECL_CXX_H = new HeaderEnums("src/include/clang/AST/DeclCxx.h", [
+  static _DECL_CXX_H = new HeaderEnums("../../../include/clang/AST/DeclCxx.h", [
     new ClangEnum(
       "LanguageIDs",
       "LINKAGE_LANGUAGE",
@@ -215,7 +215,7 @@ class ClangEnums {
     ),
   ]);
 
-  static _LAMBDA_H = new HeaderEnums("src/include/clang/Basic/Lambda.h", [
+  static _LAMBDA_H = new HeaderEnums("../../../include/clang/Basic/Lambda.h", [
     new ClangEnum(
       "LambdaCaptureDefault",
       "LAMBDA_CAPTURE_DEFAULT",
@@ -231,11 +231,11 @@ class ClangEnums {
   ]);
 
   static _TEMPLATE_NAME_H = new HeaderEnums(
-    "src/include/clang/AST/TemplateName.h",
+    "../../../include/clang/AST/TemplateName.h",
     [new ClangEnum("NameKind", "TEMPLATE_NAME_KIND", undefined, undefined)]
   );
 
-  static _ATTR_H = new HeaderEnums("src/include/clang/AST/Attr.h", [
+  static _ATTR_H = new HeaderEnums("../../../include/clang/AST/Attr.h", [
     new ClangEnum(
       "VisibilityType",
       "VISIBILITY_ATTR_TYPE",
@@ -244,7 +244,7 @@ class ClangEnums {
     ),
   ]);
 
-  static _EXPR_H = new HeaderEnums("src/include/clang/AST/Expr.h", [
+  static _EXPR_H = new HeaderEnums("../../../include/clang/AST/Expr.h", [
     new ClangEnum(
       "Kind",
       "OFFSET_OF_NODE_KIND",
@@ -302,7 +302,12 @@ Kind, DESIGNATOR_KIND (class Designator)
     ClangEnums._EXPR_H,
   ];
 
-  static getHeader = function (headerFilename) {
+  /**
+   * 
+   * @param {string} headerFilename 
+   * @returns {HeaderEnums}
+   */
+  static getHeader (headerFilename) {
     if (ClangEnums._HEADER_MAP === undefined) {
       ClangEnums._HEADER_MAP = ClangEnums.buildHeaderMap();
     }
@@ -310,21 +315,30 @@ Kind, DESIGNATOR_KIND (class Designator)
     return ClangEnums._HEADER_MAP[headerFilename];
   };
 
-  static buildHeaderMap = function () {
-    var map = {};
+  /**
+   * 
+   * @returns {Record<string, HeaderEnums>}
+   */
+  static buildHeaderMap() {
+    const map = {};
 
-    for (var header of ClangEnums._HEADERS) {
+    for (const header of ClangEnums._HEADERS) {
       map[header.getName()] = header;
     }
-    //println("Header map");
-    //printlnObject(map);
+
     return map;
   };
 
   /**
    * Mappers
    */
-  static _removePrefix = function (enumValue, prefix) {
+  /**
+   * 
+   * @param {string} enumValue 
+   * @param {string} prefix 
+   * @returns 
+   */
+  static _removePrefix(enumValue, prefix) {
     if (enumValue.startsWith(prefix)) {
       enumValue = enumValue.substring(prefix.length);
     }
@@ -332,47 +346,17 @@ Kind, DESIGNATOR_KIND (class Designator)
     return enumValue;
   };
 
-  static _removeSuffix = function (enumValue, suffix) {
+  /**
+   * 
+   * @param {string} enumValue 
+   * @param {string} suffix 
+   * @returns 
+   */
+  static _removeSuffix(enumValue, suffix) {
     if (enumValue.endsWith(suffix)) {
       enumValue = enumValue.substring(0, enumValue.length - suffix.length);
     }
 
     return enumValue;
   };
-
-  /*
-ClangEnums._refQualMapper = function(enumValue) {
-//println("MAPPER FOR " + enumValue);
-	if(enumValue.startsWith("RQ_")) {
-//	println("Starts with RQ_");
-		enumValue = enumValue.substring(3);
-	}
-//	println("RETURNING: " + enumValue);
-	return enumValue;
-}
-*/
-  /*
-ClangEnums._elaboratedTypeKeyworkMapper = function(enumValue) {
-
-	if(enumValue.startsWith("ETK_")) {
-		enumValue = enumValue.substring(4);
-	}
-	
-	enumValue = enumValue.toUpperCase();
-
-	return enumValue;
-}
-*/
-  /*
-ClangEnums._tagKindMapperMapper = function(enumValue) {
-
-	if(enumValue.startsWith("TTK_")) {
-		enumValue = enumValue.substring(4);
-	}
-	
-	enumValue = enumValue.toUpperCase();
-
-	return enumValue;
-}
-*/
 }

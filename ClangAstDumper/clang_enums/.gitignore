@@ -1,0 +1,10 @@
+.vscode
+.cache
+CMakeFiles/
+cmake_install.cmake
+CMakeCache.txt
+
+Clava.jar
+Clava_system_options.xml
+ClavaWeaver_lib/
+EnumGen_clava_weave/
