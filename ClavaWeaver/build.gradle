@@ -37,7 +37,6 @@ dependencies {
 	implementation ":LanguageSpecification"
 	implementation ":LaraCommonLanguageApi"
 	implementation ":LaraDoc"
-	implementation ":LaraExtraApi"
 	implementation ":LaraFramework"
 	implementation ":LARAI"
 	implementation ":LaraLoc"
