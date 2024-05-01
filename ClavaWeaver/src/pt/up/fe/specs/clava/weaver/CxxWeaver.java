@@ -274,11 +274,6 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     @Override
-    protected void addWeaverApis() {
-        addApis(CLAVA_API_NAME, CLAVA_LARA_API);
-    }
-
-    @Override
     public String getWeaverApiName() {
         return CLAVA_API_NAME;
     }
