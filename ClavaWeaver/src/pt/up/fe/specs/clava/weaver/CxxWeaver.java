@@ -2073,7 +2073,7 @@ public class CxxWeaver extends ACxxWeaver {
     }
 
     @Override
-    protected List<LaraResourceProvider> getCustomNpmResources() {
+    protected List<LaraResourceProvider> getWeaverNpmResources() {
         return Arrays.asList(ClavaApiJsResource.values());
     }
 
