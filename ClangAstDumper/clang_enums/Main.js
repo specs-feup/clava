@@ -1,18 +1,23 @@
-laraImport("clava.Clava");
-laraImport("lara.Io");
-laraImport("lara.Strings");
-laraImport("lara.util.ProcessExecutor");
-laraImport("ClangEnums");
-laraImport("HeaderEnums");
+#!/usr/bin/env node
+import fs from "fs";
+import path from "path";
+import { Headers } from "./ClangEnums.js";
 
-const llvmFolder = laraArgs.llvmFolder;
-const outputFolder = laraArgs.outputFolder;
+// Get the command line arguments
+const llvmVersion = process.argv[2];
+const outputFolder = process.argv[3];
 
-println("Using LLVM folder '" + llvmFolder + "'");
-println("Generating enums to folder '" + outputFolder + "'");
+const compilerCmd = `clang++-${llvmVersion}`;
+const llvmFolder = `/usr/lib/llvm-${llvmVersion}/lib/cmake/llvm`;
+const javaEnumsOutputFolder = path.join(outputFolder, "java_enums");
 
-for (const header of ClangEnums._HEADERS) {
-  header.process(llvmFolder);
+console.log("Using LLVM folder '" + llvmFolder + "'");
+console.log("Generating enums to folder '" + outputFolder + "'");
+
+fs.mkdirSync(javaEnumsOutputFolder, {recursive: true});
+
+for (const header of Headers) {
+  header.process(compilerCmd, llvmFolder);
   header.generateCode(outputFolder);
-  header.generateJavaEnums(Io.mkdir(outputFolder, "java_enums"));
+  header.generateJavaEnums(javaEnumsOutputFolder);
 }

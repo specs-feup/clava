@@ -1,104 +1,102 @@
-class Extractors {
-  /**
-   * 
-   * @param {string} enumName 
-   * @param {string[]} lines 
-   * @param {number} occurence 
-   * @returns 
-   */
-  static simpleExtractor(enumName, lines, occurence) {
-    const regex = "enum\\s+(class\\s+)?" + enumName + "\\s.*{";
-    const enumNameRegex = new RegExp(regex);
+/**
+ *
+ * @param {string} enumName
+ * @param {string[]} lines
+ * @param {number} occurence
+ * @returns
+ */
+export function simpleExtractor(enumName, lines, occurence) {
+  const regex = "enum\\s+(class\\s+)?" + enumName + "\\s.*{";
+  const enumNameRegex = new RegExp(regex);
 
-    const enums = [];
-    let searching = true;
-    let completed = false;
-    let currentOccurence = 0;
+  const enums = [];
+  let searching = true;
+  let completed = false;
+  let currentOccurence = 0;
 
-    for (let line of lines) {
-      if (searching) {
-        // Find enum
-        const matchResult = line.match(enumNameRegex);
-        if (matchResult == null) {
-          continue;
-        }
-
-        // Found enum, increment occurence
-        currentOccurence++;
-
-        // If not correct occurent, continue
-        if (currentOccurence !== occurence) {
-          continue;
-        }
-
-        // Found occurence, finish search and fallthrough, updating line
-        searching = false;
-
-        const indexOfBracket = line.indexOf("{");
-        line = line.substring(indexOfBracket + 1);
-      }
-
-      // Collect enums until } is found
-      line = line.trim();
-
-      if (line.startsWith("}")) {
-        // Finished, set flag
-        completed = true;
-        break;
-      }
-
-      // Continue if empty or comment
-      if (line == "" || line.startsWith("#") || line.startsWith("+")) {
+  for (let line of lines) {
+    if (searching) {
+      // Find enum
+      const matchResult = line.match(enumNameRegex);
+      if (matchResult == null) {
         continue;
       }
 
-      // Split by ,
-      const enumNames = line
-        .split(",")
-        // Trim string
-        .map((s) => s.trim())
-        // Remove empty strings
-        .filter((s) => s.length > 0)
-        // Remove =, } if present
-        .map((s) => Extractors._processEnum(s));
+      // Found enum, increment occurence
+      currentOccurence++;
 
-      // Get enum
-      for (const enumName of enumNames) {
-        enums.push(enumName);
+      // If not correct occurent, continue
+      if (currentOccurence !== occurence) {
+        continue;
       }
 
-      if (line.includes("}")) {
-        // Finished, set flag
-        completed = true;
-        break;
-      }
+      // Found occurence, finish search and fallthrough, updating line
+      searching = false;
+
+      const indexOfBracket = line.indexOf("{");
+      line = line.substring(indexOfBracket + 1);
     }
 
-    if (!completed) {
-      throw new Error("Could not find } for enum " + enumName);
+    // Collect enums until } is found
+    line = line.trim();
+
+    if (line.startsWith("}")) {
+      // Finished, set flag
+      completed = true;
+      break;
     }
 
-    return enums;
+    // Continue if empty or comment
+    if (line == "" || line.startsWith("#") || line.startsWith("+")) {
+      continue;
+    }
+
+    // Split by ,
+    const enumNames = line
+      .split(",")
+      // Trim string
+      .map((s) => s.trim())
+      // Remove empty strings
+      .filter((s) => s.length > 0)
+      // Remove =, } if present
+      .map((s) => processEnum(s));
+
+    // Get enum
+    for (const enumName of enumNames) {
+      enums.push(enumName);
+    }
+
+    if (line.includes("}")) {
+      // Finished, set flag
+      completed = true;
+      break;
+    }
   }
 
-  /**
-   * 
-   * @param {string} enumName 
-   * @returns 
-   */
-  static _processEnum(enumName) {
-    // Check for =
-    const indexOfEquals = enumName.indexOf("=");
-    if (indexOfEquals !== -1) {
-      enumName = enumName.substring(0, indexOfEquals).trim();
-    }
-
-    // Check for }
-    const indexOfBraket = enumName.indexOf("}");
-    if (indexOfBraket !== -1) {
-      enumName = enumName.substring(0, indexOfBraket).trim();
-    }
-
-    return enumName;
+  if (!completed) {
+    throw new Error("Could not find } for enum " + enumName);
   }
+
+  return enums;
+}
+
+/**
+ *
+ * @param {string} enumName
+ * @returns
+ */
+function processEnum(enumName) {
+  // Check for =
+  const indexOfEquals = enumName.indexOf("=");
+  if (indexOfEquals !== -1) {
+    enumName = enumName.substring(0, indexOfEquals).trim();
+  }
+
+  // Check for }
+  const indexOfBraket = enumName.indexOf("}");
+  if (indexOfBraket !== -1) {
+    enumName = enumName.substring(0, indexOfBraket).trim();
+  }
+
+  return enumName;
 }

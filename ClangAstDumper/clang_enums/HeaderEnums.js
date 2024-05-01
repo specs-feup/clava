@@ -1,23 +1,21 @@
-laraImport("lara.util.StringSet");
-laraImport("lara.Io");
-laraImport("lara.Strings");
-laraImport("lara.util.ProcessExecutor");
-laraImport("weaver.Query");
+import fs from "fs";
+import path from "path";
+import { spawnSync } from "child_process";
 
 /**
  * @class
  */
-class HeaderEnums {
+export default class HeaderEnums {
   /**
-   * 
-   * @param {string} headerFilename 
-   * @param {ClangEnum[]} clangEnums 
+   *
+   * @param {string} headerFilename
+   * @param {ClangEnum[]} clangEnums
    */
   constructor(headerFilename, clangEnums) {
     this.headerFilename = headerFilename;
     this.enumMap = {};
-    this.currentEnumSet = new StringSet();
-    this.enumsInsideClass = new StringSet();
+    this.currentEnumSet = new Set();
+    this.enumsInsideClass = new Set();
 
     for (const clangEnum of clangEnums) {
       this.enumMap[clangEnum.getCompleteEnumName()] = clangEnum;
@@ -35,49 +33,44 @@ class HeaderEnums {
   }
 
   /**
-   * 
-   * @param {ClangEnum} $enum 
-   * @returns 
+   *
+   * @param {string} llvmFolder
    */
-  _getEnumName($enum) {
-    // Check if enum needs to be prefixed by class
-    if (!this.enumsInsideClass.has($enum.name)) {
-      return $enum.name;
+  process(compilerCmd, llvmFolder) {
+    const headerFile = path.join(llvmFolder, this.headerFilename);
+
+    // Clean folder and set working directory
+    const result = spawnSync(
+      compilerCmd,
+      [
+        "-E",
+        path.resolve(headerFile),
+        "-isystem",
+        path.join(llvmFolder, "../../../include"),
+      ],
+      {
+        stdio: ["ignore", "pipe", "ignore"],
+        maxBuffer: 1024 * 1024 * 1024,
+      }
+    );
+
+    if (result.error) {
+      throw new Error(
+        "Could not process header '" +
+          path.resolve(headerFile) +
+          "': " +
+          result.error
+      );
     }
 
-    // Get class
-    const $class = $enum.ancestor("class");
+    const { stdout } = result;
 
-    return `${$class.name}_${$enum.name}`;
-  }
+    // Get stdout from spawn without writing to the console
+    let preprocessedFile = String(stdout);
 
-  /**
-   * 
-   * @param {string} llvmFolder 
-   */
-  process(llvmFolder) {
-    const compilerCmd = "clang";
-    const headerFile = Io.getPath(llvmFolder, this.headerFilename);
+    console.debug("Processed header '" + path.resolve(headerFile) + "':");
 
-    // Preprocess header
-    const exec = new ProcessExecutor();
-    // Clean folder and set working directory
-
-    exec.setPrintToConsole(false);
-    const preprocessedFile = exec.execute(
-      compilerCmd,
-      "-E",
-      headerFile.getAbsolutePath()
-    );
-
-    debug(
-      "Processed header '" +
-        headerFile.getAbsolutePath() +
-        "':\n" +
-        preprocessedFile
-    );
-
-    const headerLines = Strings.asLines(preprocessedFile);
+    const headerLines = preprocessedFile.split("\n");
 
     for (const enumName in this.enumMap) {
       const clangEnum = this.enumMap[enumName];
@@ -88,13 +81,13 @@ class HeaderEnums {
   }
 
   /**
-   * 
-   * @param {string} outputFolder 
+   *
+   * @param {string} outputFolder
    */
   generateCode(outputFolder) {
-    const headerFile = Io.getPath(this.headerFilename);
+    const headerFile = path.basename(this.headerFilename);
 
-    const filename = "enums_" + headerFile.getName().replace(".", "_") + ".cpp";
+    const filename = "enums_" + headerFile.replace(".", "_") + ".cpp";
 
     let code = '#include "ClangEnums.h"\n\n';
 
@@ -103,7 +96,7 @@ class HeaderEnums {
       const enumCode = this.enumMap[enumName].getCode();
 
       if (enumCode === undefined) {
-        println(
+        console.log(
           "Skipped code generation for " + this.headerFilename + "::" + enumName
         );
         continue;
@@ -112,13 +105,13 @@ class HeaderEnums {
       code += enumCode + "\n";
     }
 
-    const outputFile = Io.getPath(outputFolder, filename);
-    println("Generating header file '" + outputFile.getAbsolutePath() + "'");
-    Io.writeFile(Io.getPath(outputFolder, filename), code);
+    const outputFile = path.join(outputFolder, filename);
+    console.log("Generating header file '" + path.resolve(outputFile) + "'");
+    fs.writeFileSync(path.join(outputFolder, filename), code);
   }
 
   generateJavaEnums(outputFolder) {
-    const headerFile = Io.getPath(this.headerFilename);
+    const headerFile = path.basename(this.headerFilename);
 
     // Dump the names of each enum
     for (const enumName in this.enumMap) {
@@ -126,20 +119,18 @@ class HeaderEnums {
 
       const filename =
         "enums_" +
-        headerFile.getName().replace(".", "_") +
+        headerFile.replace(".", "_") +
         "_" +
         enumName +
         ".txt";
 
       const code = enumValues.join(",\n") + ";";
 
-      const outputFile = Io.getPath(outputFolder, filename);
-      println(
-        "Generating Java enum values file '" +
-          outputFile.getAbsolutePath() +
-          "'"
+      const outputFile = path.join(outputFolder, filename);
+      console.log(
+        "Generating Java enum values file '" + path.resolve(outputFile) + "'"
       );
-      Io.writeFile(Io.getPath(outputFolder, filename), code);
+      fs.writeFileSync(path.join(outputFolder, filename), code);
     }
   }
 }

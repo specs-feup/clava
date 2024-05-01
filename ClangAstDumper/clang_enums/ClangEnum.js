@@ -1,10 +1,6 @@
-laraImport("weaver.Query");
-laraImport("Extractors");
+import { simpleExtractor } from "./Extractors.js";
 
-/**
- * @class
- */
-class ClangEnum {
+export default class ClangEnum {
   /**
    *
    * @param {string} name Name of the enum
@@ -26,17 +22,17 @@ class ClangEnum {
     this.name = name;
     this.cppVarName = cppVarName;
     this.mapper = mapper;
-    this.excludeSet = new StringSet(excludeArray);
+    this.excludeSet = new Set(excludeArray);
     this.className = className;
     this.enumValues = undefined;
-    this.extractor = Extractors.simpleExtractor;
+    this.extractor = simpleExtractor;
     this.occurence = 1;
   }
 
   /**
-   * 
-   * @param {number} occurence 
-   * @returns 
+   *
+   * @param {number} occurence
+   * @returns
    */
   setOccurence(occurence) {
     this.occurence = occurence;
@@ -60,8 +56,8 @@ class ClangEnum {
   }
 
   /**
-   * 
-   * @param {string[]} headerLines 
+   *
+   * @param {string[]} headerLines
    */
   setEnumValues(headerLines) {
     this.enumValues = this.extractor(this.name, headerLines, this.occurence);
@@ -69,7 +65,7 @@ class ClangEnum {
 
   getCode() {
     if (this.enumValues === undefined) {
-      println("No enum values set for enum '" + this.name + "'");
+      console.log("No enum values set for enum '" + this.name + "'");
       return undefined;
     }
 
@@ -79,7 +75,7 @@ class ClangEnum {
 
     for (let enumValue of this.enumValues) {
       if (this.excludeSet.has(enumValue.toString())) {
-        println("Excluded enum '" + enumValue + "'");
+        console.log("Excluded enum '" + enumValue + "'");
         continue;
       }
 
