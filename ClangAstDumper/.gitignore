@@ -11,4 +11,5 @@ testSources
 *.o
 *.a
 
+src/ClangEnums/enums_*
 java_enums/
