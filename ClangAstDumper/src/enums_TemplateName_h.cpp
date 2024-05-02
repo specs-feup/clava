@@ -8,5 +8,6 @@ extern const std::string clava::TEMPLATE_NAME_KIND[] = {
         "DependentTemplate",
         "SubstTemplateTemplateParm",
         "SubstTemplateTemplateParmPack",
+        "UsingTemplate",
 };
 

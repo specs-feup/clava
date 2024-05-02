@@ -19,7 +19,7 @@ extern const std::string clava::PREDEFINED_ID_TYPE[] = {
 };
 
 extern const std::string clava::STRING_KIND[] = {
-        "ASCII",
+        "ORDINARY",
         "WIDE",
         "UTF8",
         "UTF16",

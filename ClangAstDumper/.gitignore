@@ -10,3 +10,5 @@ testSources
 *.gch
 *.o
 *.a
+
+java_enums/

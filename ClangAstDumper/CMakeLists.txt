@@ -55,7 +55,7 @@ set(SOURCE_FILES
 	src/enums_ExprCXX_h.cpp
 	src/enums_TypeTraits_h.cpp
 	src/enums_NestedNameSpecifier_h.cpp
-	src/enums_DeclCxx_h.cpp
+	src/enums_DeclCXX_h.cpp
 	src/enums_Lambda_h.cpp
 	src/enums_TemplateName_h.cpp
 	src/enums_Attr_h.cpp

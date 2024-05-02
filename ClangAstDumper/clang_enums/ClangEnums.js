@@ -201,7 +201,7 @@ const _NESTED_NAME_SPECIFIER_H = new HeaderEnums(
   ]
 );
 
-const _DECL_CXX_H = new HeaderEnums("../../../include/clang/AST/DeclCxx.h", [
+const _DECL_CXX_H = new HeaderEnums("../../../include/clang/AST/DeclCXX.h", [
   new ClangEnum(
     "LanguageIDs",
     "LINKAGE_LANGUAGE",

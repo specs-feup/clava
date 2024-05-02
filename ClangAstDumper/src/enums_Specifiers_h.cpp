@@ -20,6 +20,8 @@ extern const std::string clava::CALLING_CONVENTION[] = {
         "PreserveMost",
         "PreserveAll",
         "AArch64VectorCall",
+        "AArch64SVEPCS",
+        "AMDGPUKernelCall",
 };
 
 extern const std::string clava::ACCESS_SPECIFIER[] = {
