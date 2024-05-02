@@ -15,13 +15,13 @@ class TypeMarker : public clang::TypeVisitor<TypeMarker> {
 
   private:
     int id;
-    std::set<const Type*> &seenTypes;
+    std::set<const Type *> &seenTypes;
     void markType(const Type *T);
 
-public:
-    explicit TypeMarker(int id, std::set<const Type*> &seenTypes);
+  public:
+    explicit TypeMarker(int id, std::set<const Type *> &seenTypes);
     void VisitType(const Type *T);
     void VisitTypedefType(const TypedefType *T);
 };
 
-#endif //CLANGASTDUMPER_TYPEMARKER_H
+#endif // CLANGASTDUMPER_TYPEMARKER_H

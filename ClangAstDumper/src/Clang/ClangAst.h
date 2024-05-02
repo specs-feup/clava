@@ -29,7 +29,6 @@ class DumpResources {
 
     static std::ofstream includes;
     static std::ofstream nodetypes;
-    // static std::ofstream template_args;
     static std::ofstream is_temporary;
     static std::ofstream omp;
     static std::ofstream enum_integer_type;
@@ -123,8 +122,6 @@ class DumpAstAction : public PluginASTAction {
 class DumpAstVisitor : public RecursiveASTVisitor<DumpAstVisitor> {
 
   public:
-    // explicit DumpAstVisitor(ASTContext *Context, int id, ClangAstDumper
-    // *dumper) : Context(Context) , id(id), dumper(dumper) {}
     explicit DumpAstVisitor(ASTContext *Context, int id)
         : Context(Context), id(id) {}
     bool TraverseDecl(Decl *D);
@@ -132,8 +129,6 @@ class DumpAstVisitor : public RecursiveASTVisitor<DumpAstVisitor> {
   private:
     ASTContext *Context;
     int id;
-    // ClangAstDumper dumper;
-    // ClangAstDumper *dumper;
 };
 
 class PrintNodesTypesRelationsVisitor
@@ -143,18 +138,11 @@ class PrintNodesTypesRelationsVisitor
     ASTContext *Context;
     int id;
     ClangAstDumper dumper;
-    // ClangAstDumper *dumper;
     std::set<void *> seenNodes;
 
   public:
-    // explicit PrintNodesTypesRelationsVisitor(ASTContext *Context, int id,
-    // ClangAstDumper *dumper);
     explicit PrintNodesTypesRelationsVisitor(ASTContext *Context, int id,
                                              ClangAstDumper dumper);
-    // bool TraverseDecl(Decl *D);
-
-    // bool VisitOMPExecutableDirective(OMPExecutableDirective * D);
-    // bool VisitDeclRefExpr(DeclRefExpr * D);
     bool VisitCXXConstructExpr(CXXConstructExpr *D);
     bool VisitExpr(Expr *D);
     bool VisitLambdaExpr(LambdaExpr *D);
@@ -178,8 +166,6 @@ class PrintNodesTypesRelationsVisitor
 
     void dumpNodeToType(std::ofstream &stream, void *nodeAddr,
                         const QualType &type, bool checkDuplicates = true);
-
-    // ClangAstDumper getDumper();
 };
 
 // Implementation of the ASTConsumer interface for reading an AST produced by
@@ -188,13 +174,11 @@ class MyASTConsumer : public ASTConsumer {
 
   private:
     int id;
-    // ClangAstDumper dumper;
     DumpAstVisitor topLevelDeclVisitor;
     PrintNodesTypesRelationsVisitor printRelationsVisitor;
 
   public:
     MyASTConsumer(ASTContext *C, int id, ClangAstDumper dumper);
-    // MyASTConsumer(ASTContext *C, int id, ClangAstDumper *dumper);
     ~MyASTConsumer();
 
     bool HandleTopLevelDecl(DeclGroupRef DR) override;

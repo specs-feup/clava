@@ -2,9 +2,9 @@
 // Created by JoaoBispo on 20/01/2017.
 //
 
+#include "../Clang/ClangNodes.h"
 #include "ClangAstDumper.h"
 #include "ClangAstDumperConstants.h"
-#include "../Clang/ClangNodes.h"
 
 #include "clang/AST/AST.h"
 
@@ -13,143 +13,75 @@
 
 using namespace clang;
 
-//#define OLD_OUTPUT
+// #define OLD_OUTPUT
 
 void ClangAstDumper::visitChildrenAndData(const Stmt *S) {
+  // Visit children
+  visitChildren(S);
 
+  // Dump data
+  dataDumper.dump(S);
 
-
-    //llvm::errs() << "Current stmt system header level: " << this->currentSystemHeaderLevel << "\n";
-
-    // Visit children
-    visitChildren(S);
-
-    // Dump data
-    dataDumper.dump(S);
-
-    // Dump id
-    dumpIdToClassMap(S, clava::getClassName(S));
-
-
+  // Dump id
+  dumpIdToClassMap(S, clava::getClassName(S));
 }
 
 void ClangAstDumper::visitChildrenAndData(const Expr *E) {
-    // Visit children
-    visitChildren(E);
+  // Visit children
+  visitChildren(E);
 
-    // Dump data
-    dataDumper.dump(E);
+  // Dump data
+  dataDumper.dump(E);
 
-    // Dump id
-    dumpIdToClassMap(E, clava::getClassName(E));
+  // Dump id
+  dumpIdToClassMap(E, clava::getClassName(E));
 }
 
 /*
  * STMTS
  */
 
-bool ClangAstDumper::dumpStmt(const Stmt* stmtAddr) {
+bool ClangAstDumper::dumpStmt(const Stmt *stmtAddr) {
 
-    if(stmtAddr == nullptr) {
-        return true;
-    }
+  if (stmtAddr == nullptr) {
+    return true;
+  }
 
-    if(seenStmts.count(stmtAddr) != 0) {
-        return true;
-    }
+  if (seenStmts.count(stmtAddr) != 0) {
+    return true;
+  }
 
-    log(stmtAddr);
+  log(stmtAddr);
 
-    // A StmtDumper is created for each context,
-    // no need to use id to disambiguate
-    seenStmts.insert(stmtAddr);
+  // A StmtDumper is created for each context,
+  // no need to use id to disambiguate
+  seenStmts.insert(stmtAddr);
 
-    std::ostringstream extendedId;
-    extendedId << stmtAddr << "_" << id;
+  std::ostringstream extendedId;
+  extendedId << stmtAddr << "_" << id;
 
 #ifdef OLD_OUTPUT
-    // Dump location
-    dumpSourceRange(extendedId.str(), stmtAddr->getBeginLoc(), stmtAddr->getEndLoc());
+  // Dump location
+  dumpSourceRange(extendedId.str(), stmtAddr->getBeginLoc(),
+                  stmtAddr->getEndLoc());
 #endif
 
-    //dumpIdToClassMap(stmtAddr, clava::getClassName(stmtAddr));
-
-    return false;
+  return false;
 }
 
 void ClangAstDumper::VisitStmt(const Stmt *Node) {
-    if(dumpStmt(Node)) {
-        return;
-    }
+  if (dumpStmt(Node)) {
+    return;
+  }
 
-    bool isSystemHeader = clava::isSystemHeader(Node, Context);
-    if(isSystemHeader) {
-        currentSystemHeaderLevel++;
-    }
-/*
-    if(systemHeaderThreshold > 0 && currentSystemHeaderLevel > systemHeaderThreshold) {
-        // Add node as skipped node
-        llvm::errs() << SKIPPED_NODES_MAP << "\n";
-        llvm::errs() << clava::getId(Node, id) << "\n";
-        llvm::errs() << clava::getId((Stmt*) nullptr, id) << "\n";
+  bool isSystemHeader = clava::isSystemHeader(Node, Context);
+  if (isSystemHeader) {
+    currentSystemHeaderLevel++;
+  }
 
-        currentSystemHeaderLevel--;
-        return;
-    }
-*/
-    visitChildrenAndData(Node);
+  visitChildrenAndData(Node);
 
-    if(isSystemHeader) {
-        currentSystemHeaderLevel--;
-    }
+  if (isSystemHeader) {
+    currentSystemHeaderLevel--;
+  }
 }
-/*
-void ClangAstDumper::VisitCXXForRangeStmt(const CXXForRangeStmt *Node) {
-    if(dumpStmt(Node)) {
-        return;
-    }
-
-    visitChildrenAndData(Node);
-#ifdef OLD_OUTPUT
-    VisitStmtTop(Node->getRangeStmt());
-    VisitStmtTop(Node->getBeginEndStmt());
-    VisitStmtTop(Node->getCond());
-    VisitStmtTop(Node->getInc());
-    VisitStmtTop(Node->getBody());
-#endif
-}
-
-
-void ClangAstDumper::VisitForStmt(const ForStmt *Node) {
-    if(dumpStmt(Node)) {
-        return;
-    }
-
-    visitChildrenAndData(Node);
-#ifdef OLD_OUTPUT
-    if(Node->getInit() != nullptr) {
-        VisitStmtTop(Node->getInit());
-    }
-
-    if(Node->getCond() != nullptr) {
-        VisitStmtTop(Node->getCond());
-    }
-
-    if(Node->getInc() != nullptr) {
-        VisitStmtTop(Node->getInc());
-    }
-
-    if(Node->getConditionVariable()!= nullptr) {
-        VisitDeclTop(Node->getConditionVariable());
-    }
-
-    if(Node->getBody() != nullptr) {
-        VisitStmtTop(Node->getBody());
-    }
-#endif
-
-
-
-}
-
-*/

@@ -2,62 +2,44 @@
 // Created by JoaoBispo on 12/04/2018.
 //
 
-#include "ClangAstDumper.h"
 #include "../Clang/ClangNodes.h"
+#include "ClangAstDumper.h"
 
 #include "clang/AST/Attr.h"
 
 #include <sstream>
 
-
 using namespace clang;
 
-
 void ClangAstDumper::VisitAttr(const Attr *A) {
-    if(dumpAttr(A)) {
-        return;
-    }
+  if (dumpAttr(A)) {
+    return;
+  }
 
-    visitChildrenAndData(A);
-
-    // Dump data
-    //dataDumper.dump(clava::DeclNode::DECL, D);
-
-
-//    llvm::errs() << DECL_INFO << "\n";
-//    llvm::errs() << getId(D) << "\n";
-//    DumpDeclData(D);
+  visitChildrenAndData(A);
 }
 
-bool ClangAstDumper::dumpAttr(const Attr* attrAddr) {
-    if(seenAttrs.count(attrAddr) != 0) {
-        return true;
-    }
+bool ClangAstDumper::dumpAttr(const Attr *attrAddr) {
+  if (seenAttrs.count(attrAddr) != 0) {
+    return true;
+  }
 
-    log(attrAddr);
+  log(attrAddr);
 
-    // A Dumper is created for each context,
-    // no need to use id to disambiguate
-    seenAttrs.insert(attrAddr);
+  // A Dumper is created for each context,
+  // no need to use id to disambiguate
+  seenAttrs.insert(attrAddr);
 
-    //std::ostringstream extendedId;
-    //extendedId << attrAddr << "_" << id;
-
-
-    //dumpIdToClassMap(attrAddr, clava::getClassName(attrAddr));
-
-    return false;
+  return false;
 }
-
 
 void ClangAstDumper::visitChildrenAndData(const Attr *A) {
-    // Visit children
-    visitChildren(A);
+  // Visit children
+  visitChildren(A);
 
-    // Dump data
-    dataDumper.dump(A);
+  // Dump data
+  dataDumper.dump(A);
 
-    // Dump id
-    dumpIdToClassMap(A, clava::getClassName(A));
-
+  // Dump id
+  dumpIdToClassMap(A, clava::getClassName(A));
 }

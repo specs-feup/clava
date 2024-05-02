@@ -18,7 +18,8 @@ class MyASTVisitor : public RecursiveASTVisitor<MyASTVisitor> {
     explicit MyASTVisitor(ASTContext *context) : context_(context) {}
 
     bool VisitCallExpr(CallExpr *call) {
-        if (FunctionDecl const *funcDecl = call->getDirectCallee(); funcDecl && funcDecl->getNameAsString() == "myFunction") {
+        if (FunctionDecl const *funcDecl = call->getDirectCallee();
+            funcDecl && funcDecl->getNameAsString() == "myFunction") {
             SourceManager const &SM = context_->getSourceManager();
             SourceLocation loc = call->getBeginLoc();
             llvm::outs() << "Found call to myFunction at "
