@@ -49,17 +49,17 @@ export default class HeaderEnums {
         path.join(llvmFolder, "../../../include"),
       ],
       {
-        stdio: ["ignore", "pipe", "ignore"],
+        stdio: ["ignore", "pipe", "pipe"],
         maxBuffer: 1024 * 1024 * 1024,
       }
     );
 
-    if (result.error) {
+    if (result.status !== 0) {
       throw new Error(
         "Could not process header '" +
           path.resolve(headerFile) +
-          "': " +
-          result.error
+          "':\n\t" +
+          String(result.stderr).split("\n").join("\n\t")
       );
     }
 
