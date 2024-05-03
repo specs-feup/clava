@@ -6,9 +6,6 @@ set(CLANG_VERSION 14)
 SET(CMAKE_C_COMPILER "clang-${CLANG_VERSION}")
 SET(CMAKE_CXX_COMPILER "clang++-${CLANG_VERSION}")
 
-#SET(CMAKE_FIND_PACKAGE_SORT_ORDER NATURAL)
-#SET(CMAKE_FIND_PACKAGE_SORT_DIRECTION DEC)
-
 SET(Clang_DIR "/usr/lib/cmake/clang-${CLANG_VERSION}")
 SET(LLVM_DIR "/usr/lib/llvm-${CLANG_VERSION}/lib/cmake/llvm")
 
@@ -17,6 +14,9 @@ find_package(Clang REQUIRED CONFIG)
 include_directories("/usr/lib/clang/${CLANG_VERSION}/include/")
 include_directories("/usr/lib/llvm-${CLANG_VERSION}/include/")
 
+file (GLOB ENUM_FILES CONFIGURE_DEPENDS
+	"src/ClangEnums/enums_*.h"
+	"src/ClangEnums/enums_*.cpp")
 
 set(SOURCE_FILES
 	src/plugin.cpp
@@ -42,26 +42,15 @@ set(SOURCE_FILES
 	src/ClangAstDumper/ClangAstDumperExtra.cpp
 	src/ClangAstDumper/ClangAstDumperStmts.cpp
 	src/ClangAstDumper/ClangAstDumperTypes.cpp
-	src/ClangEnums/ClangEnums.cpp
-	src/ClangEnums/enums_Type_h.cpp
-	src/ClangEnums/enums_OperationKinds_h.cpp
-	src/ClangEnums/enums_AttrKinds_h.cpp
-	src/ClangEnums/enums_Specifiers_h.cpp
-	src/ClangEnums/enums_ExceptionSpecificationType_h.cpp
-	src/ClangEnums/enums_Linkage_h.cpp
-	src/ClangEnums/enums_Visibility_h.cpp
-	src/ClangEnums/enums_TemplateBase_h.cpp
-	src/ClangEnums/enums_Decl_h.cpp
-	src/ClangEnums/enums_ExprCXX_h.cpp
-	src/ClangEnums/enums_TypeTraits_h.cpp
-	src/ClangEnums/enums_NestedNameSpecifier_h.cpp
-	src/ClangEnums/enums_DeclCXX_h.cpp
-	src/ClangEnums/enums_Lambda_h.cpp
-	src/ClangEnums/enums_TemplateName_h.cpp
-	src/ClangEnums/enums_Attr_h.cpp
-	src/ClangEnums/enums_Expr_h.cpp
+	${ENUM_FILES}
 	)
 
-add_library(MyPlugin SHARED ${SOURCE_FILES})
-
+add_library(MyPlugin MODULE ${SOURCE_FILES})
 target_compile_features(MyPlugin PRIVATE cxx_std_17)
+
+
+add_custom_target (
+	clang_enums
+	COMMAND node clang_enums/Main.js ${CLANG_VERSION} src/
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+add_dependencies(MyPlugin clang_enums)
