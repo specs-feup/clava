@@ -1,7 +1,7 @@
-import { Weaver, setupWeaver } from "lara-js/code/Weaver.js";
+import { Weaver } from "lara-js/code/Weaver.js";
 import { weaverConfig } from "../code/WeaverConfiguration.js";
 
-export default async function () {
+async function oneTimeSetup() {
   const weaverMessageFromLauncher = {
     args: {
       _: [],
@@ -10,6 +10,18 @@ export default async function () {
     config: weaverConfig,
   };
 
-  setupWeaver(weaverMessageFromLauncher);
-  await Weaver.awaitSetup();
+  await Weaver.setupWeaver(
+    weaverMessageFromLauncher.args,
+    weaverMessageFromLauncher.config
+  );
+}
+
+let setupDone = false;
+
+export default async function () {
+  if (!setupDone) {
+    await oneTimeSetup();
+    setupDone = true;
+  }
+  Weaver.start();
 }
