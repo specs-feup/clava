@@ -1,12 +1,10 @@
-import "./Joinpoints.js";
-import { FunctionJp, Joinpoint, Loop } from "./Joinpoints.js";
+import Clava from "clava-js/api/clava/Clava.js";
+import ClavaJoinPoints from "clava-js/api/clava/ClavaJoinPoints.js";
 import Query from "lara-js/api/weaver/Query.js";
-import java from "java";
+import { FunctionJp, Joinpoint, Loop } from "./Joinpoints.js";
 
 describe("Query", () => {
-  beforeAll(async () => {
-    const clava = (globalThis as unknown as { clava: any }).clava;
-
+  beforeAll(() => {
     const code = `void query_loop() {
 	
 	for(int i=0; i<10; i++) {
@@ -41,17 +39,15 @@ int query_regex() {
 }
 `;
 
-    clava.rootJp.push();
-    const AstFactory = await java.import(
-      "pt.up.fe.specs.clava.weaver.importable.AstFactory"
-    );
-    clava.rootJp.addFile(AstFactory.file("dummyFile.cpp", code, ""));
-    clava.rootJp.rebuild();
+    Clava.getProgram().push();
+    const program = Clava.getProgram();
+    const sourceFile = ClavaJoinPoints.fileWithSource("dummyFile.cpp", code);
+    program.addFile(sourceFile);
+    program.rebuild();
   });
 
   afterAll(() => {
-    const clava = (globalThis as unknown as { clava: any }).clava;
-    clava.rootJp.pop();
+    Clava.getProgram().pop();
   });
 
   it("should be able to search for a function", () => {
