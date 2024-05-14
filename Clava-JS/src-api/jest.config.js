@@ -1,10 +1,19 @@
-{
-  "preset": "ts-jest/presets/default-esm",
-  "testEnvironment": "../jest/jestEnvironment.js",
-  "globalSetup": "../jest/jestGlobalSetup.js",
-  "globalTeardown": "../jest/jestGlobalTeardown.js",
-  "setupFiles": ["../jest/setupFiles/sharedJavaModule.js"],
-  "moduleNameMapper": {
+import { weaverConfig } from "../code/WeaverConfiguration.js";
+
+const config = {
+  preset: "ts-jest/presets/default-esm",
+  testEnvironment: "lara-js/jest/jestEnvironment.js",
+  globalSetup: "lara-js/jest/jestGlobalSetup.js",
+  globalTeardown: "lara-js/jest/jestGlobalTeardown.js",
+  setupFiles: [
+    "lara-js/jest/setupFiles/sharedJavaModule.js"
+  ],
+  moduleNameMapper: {
     "(.+)\\.js": "$1"
+  },
+  testEnvironmentOptions: {
+    weaverConfig
   }
 }
+
+export default config;
