@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 export const weaverConfig: WeaverConfiguration = {
   weaverName: "clava",
   weaverPrettyName: "Clava",
-  weaverFileName: "Weaver.js",
+  weaverFileName: "lara-js/code/Weaver.js",
   jarPath: path.join(
     path.dirname(path.dirname(fileURLToPath(import.meta.url))),
     "./java-binaries/"
