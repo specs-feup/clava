@@ -1,4 +1,4 @@
-{
+const config = {
   "preset": "ts-jest/presets/default-esm",
   "testEnvironment": "node",
   "notify": true,
@@ -14,3 +14,5 @@
   },
   "projects": ["src-api", "src-code"]
 }
+
+export default config;
