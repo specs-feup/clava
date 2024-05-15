@@ -7,12 +7,12 @@ const config = {
   collectCoverage: false,
   coverageDirectory: "coverage",
   coverageReporters: ["text", "lcov"],
-  collectCoverageFrom: ["**/*.(t|j)s"],
+  collectCoverageFrom: ["**/*[^.d].(t|j)s"],
   coverageProvider: "v8",
   moduleNameMapper: {
-    "(.+)\\.js": "$1"
+    "(.+)\\.js": "$1",
   },
-  projects: ["src-api", "src-code"]
-}
+  projects: ["src-api", "src-code"],
+};
 
 export default config;

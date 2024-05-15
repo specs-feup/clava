@@ -5,15 +5,13 @@ const config = {
   testEnvironment: "lara-js/jest/jestEnvironment.js",
   globalSetup: "lara-js/jest/jestGlobalSetup.js",
   globalTeardown: "lara-js/jest/jestGlobalTeardown.js",
-  setupFiles: [
-    "lara-js/jest/setupFiles/sharedJavaModule.js"
-  ],
+  setupFiles: ["lara-js/jest/setupFiles/sharedJavaModule.js"],
   moduleNameMapper: {
-    "(.+)\\.js": "$1"
+    "(.+)\\.js": "$1",
   },
   testEnvironmentOptions: {
-    weaverConfig
-  }
-}
+    weaverConfig,
+  },
+};
 
 export default config;
