@@ -499,8 +499,8 @@ public class AstFactory {
         return CxxJoinpoints.create(intLiteral, AExpression.class);
     }
 
-    public static AScope scope() {
-        return scope(new ArrayList<>());
+    public static AScope scope(AStatement... statements) {
+        return scope(Arrays.asList(statements));
     }
 
     public static AScope scope(List<? extends AStatement> statements) {
