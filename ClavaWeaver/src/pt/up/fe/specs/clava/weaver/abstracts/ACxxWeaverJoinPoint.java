@@ -55,7 +55,6 @@ import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsStrings;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 import pt.up.fe.specs.util.stringsplitter.StringSplitter;
-import pt.up.fe.specs.util.stringsplitter.StringSplitterRules;
 
 /**
  * Abstract class which can be edited by the developer. This class will not be overwritten.
@@ -1424,8 +1423,8 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
         var currentNode = getNode();
 
         // Travel insertion points until it finds an origin
-        while(currentNode.get(ClavaNode.INSERTION_POINT).isPresent()) {
-            currentNode = currentNode.get(ClavaNode.INSERTION_POINT).get();
+        while(currentNode.get(ClavaNode.ORIGIN).isPresent()) {
+            currentNode = currentNode.get(ClavaNode.ORIGIN).get();
         }
 
         return CxxJoinpoints.create(currentNode);

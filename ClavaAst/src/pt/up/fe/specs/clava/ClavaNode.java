@@ -121,7 +121,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     /**
      * If this node was not originally from the AST, contains the node that was used as an insertion point.
      */
-    public final static DataKey<Optional<ClavaNode>> INSERTION_POINT = KeyFactory.optional("insertionPoint");
+    public final static DataKey<Optional<ClavaNode>> ORIGIN = KeyFactory.optional("insertionPoint");
 
     /// DATAKEYS END
 
@@ -344,6 +344,9 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         // the method version without arguments
         boolean overridesCopyPrivate = isCopyPrivateOverriden();
         ClavaNode newToken = overridesCopyPrivate ? copyPrivate() : copyPrivate(keepId);
+
+        // Set origin
+        newToken.set(ORIGIN, Optional.of(this));
 
         // Check new token does not have children
         if (newToken.getNumChildren() != 0) {
@@ -1516,38 +1519,29 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     }
 
     /**
-     * Sets the key INSERTION_POINT if conditions apply.<br>
-     * <br>
-     * Only sets insertion point if:<br>
-     * - There are at least two trees in the AST stack (i.e., create with pushAst())
-     * - The current node has an invalid location.
+     * Sets the key ORIGIN on this node and its descendents.
      * @param target
      */
-    public void setInsertionPoint(ClavaNode target) {
+    public void setOrigin(ClavaNode target) {
+
+        // No need to find previous app, when copying, automatically sets the origin
+/*
         var previousApp = get(CONTEXT).getApp(1).orElse(null);
 
         // Not setting insertion point
         if(previousApp == null) {
             return;
         }
-        
+
         // Find target node in previous app is target has valid location
         var newTarget = target;
         if(target.getLocation().isValid()) {
             newTarget = previousApp.find(target).orElse(null);
 
-            /*
-            if(newTarget == null) {
-                System.out.println("Could not find corresponding node");
-            } else {
-                System.out.println("Found node in previous app. Are they the same instance? " + (newTarget == target));
-            }
-             */
         }
-
-        var lambdaTarget = newTarget != null ? newTarget : target;
+*/
         getDescendantsAndSelfStream()
                 //.filter(node -> !node.get(ClavaNode.LOCATION).isValid())
-                .forEach(node -> node.set(ClavaNode.INSERTION_POINT, Optional.of(lambdaTarget)));
+                .forEach(node -> node.set(ClavaNode.ORIGIN, Optional.of(target)));
     }
 }

@@ -155,7 +155,7 @@ public class CxxActions {
         weaver.clearUserField(target);
 
         // Set origin point from target to newNode if locations are invalid and no origin point is set
-        newNode.setInsertionPoint(target);
+        newNode.setOrigin(target);
 
 /*
         newNode.getDescendantsAndSelfStream()
@@ -199,7 +199,7 @@ public class CxxActions {
         // Set origin point from target to newNode if locations are invalid and no origin point is set
         var newNode = newJp.getNode();
         var target = baseJp.getNode();
-        newNode.setInsertionPoint(target);
+        newNode.setOrigin(target);
 
 
         // Special case: if this node is a statement in a loop header, insert using a special function.
