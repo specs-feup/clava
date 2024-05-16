@@ -1515,4 +1515,39 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         return Optional.of(siblings.get(leftIndex));
     }
 
+    /**
+     * Sets the key INSERTION_POINT if conditions apply.<br>
+     * <br>
+     * Only sets insertion point if:<br>
+     * - There are at least two trees in the AST stack (i.e., create with pushAst())
+     * - The current node has an invalid location.
+     * @param target
+     */
+    public void setInsertionPoint(ClavaNode target) {
+        var previousApp = get(CONTEXT).getApp(1).orElse(null);
+
+        // Not setting insertion point
+        if(previousApp == null) {
+            return;
+        }
+        
+        // Find target node in previous app is target has valid location
+        var newTarget = target;
+        if(target.getLocation().isValid()) {
+            newTarget = previousApp.find(target).orElse(null);
+
+            /*
+            if(newTarget == null) {
+                System.out.println("Could not find corresponding node");
+            } else {
+                System.out.println("Found node in previous app. Are they the same instance? " + (newTarget == target));
+            }
+             */
+        }
+
+        var lambdaTarget = newTarget != null ? newTarget : target;
+        getDescendantsAndSelfStream()
+                //.filter(node -> !node.get(ClavaNode.LOCATION).isValid())
+                .forEach(node -> node.set(ClavaNode.INSERTION_POINT, Optional.of(lambdaTarget)));
+    }
 }

@@ -151,6 +151,22 @@ public class ClavaContext extends ADataClass<ClavaContext> {
 
         return SpecsCollections.last(appStack);
     }
+
+    /**
+     * Returns the nth app from the top of the stack.<br>
+     * <br>
+     * E.g., if index is 1, returns the App immediately under the top of the stack.
+     * @param index
+     * @return the nth app from the top of the stack, or empty if none exists
+     */
+    public Optional<App> getApp(int index) {
+        if(index >= appStack.size()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(appStack.get(appStack.size()-index-1));
+    }
+
     // public <T> T get(DataKey<T> key) {
     // return this.data.get(key);
     // }

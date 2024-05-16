@@ -155,10 +155,13 @@ public class CxxActions {
         weaver.clearUserField(target);
 
         // Set origin point from target to newNode if locations are invalid and no origin point is set
+        newNode.setInsertionPoint(target);
+
+/*
         newNode.getDescendantsAndSelfStream()
                 .filter(node -> !node.get(ClavaNode.LOCATION).isValid())
                 .forEach(node -> node.set(ClavaNode.INSERTION_POINT, Optional.of(target)));
-
+*/
         return NodeInsertUtils.replace(target, newNode);
     }
 
@@ -196,9 +199,8 @@ public class CxxActions {
         // Set origin point from target to newNode if locations are invalid and no origin point is set
         var newNode = newJp.getNode();
         var target = baseJp.getNode();
-        newNode.getDescendantsAndSelfStream()
-                .filter(node -> !node.get(ClavaNode.LOCATION).isValid())
-                .forEach(node -> node.set(ClavaNode.INSERTION_POINT, Optional.of(target)));
+        newNode.setInsertionPoint(target);
+
 
         // Special case: if this node is a statement in a loop header, insert using a special function.
         if (baseJp.getIsInsideLoopHeaderImpl() && (position != Insert.REPLACE && position != Insert.AROUND)
