@@ -121,7 +121,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
     /**
      * If this node was not originally from the AST, contains the node that was used as an insertion point.
      */
-    public final static DataKey<Optional<ClavaNode>> ORIGIN = KeyFactory.optional("insertionPoint");
+    public final static DataKey<ClavaNode> ORIGIN = KeyFactory.object("origin", ClavaNode.class);
 
     /// DATAKEYS END
 
@@ -346,7 +346,7 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
         ClavaNode newToken = overridesCopyPrivate ? copyPrivate() : copyPrivate(keepId);
 
         // Set origin
-        newToken.set(ORIGIN, Optional.of(this));
+        newToken.set(ORIGIN, this);
 
         // Check new token does not have children
         if (newToken.getNumChildren() != 0) {
@@ -1542,6 +1542,6 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 */
         getDescendantsAndSelfStream()
                 //.filter(node -> !node.get(ClavaNode.LOCATION).isValid())
-                .forEach(node -> node.set(ClavaNode.ORIGIN, Optional.of(target)));
+                .forEach(node -> node.set(ClavaNode.ORIGIN, target));
     }
 }
