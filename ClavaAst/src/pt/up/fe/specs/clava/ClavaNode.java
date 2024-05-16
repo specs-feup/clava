@@ -118,6 +118,11 @@ public abstract class ClavaNode extends ATreeNode<ClavaNode>
 
     public final static DataKey<String> PREVIOUS_ID = KeyFactory.string("previousId");
 
+    /**
+     * If this node was not originally from the AST, contains the node that was used as an insertion point.
+     */
+    public final static DataKey<Optional<ClavaNode>> INSERTION_POINT = KeyFactory.optional("insertionPoint");
+
     /// DATAKEYS END
 
     public static String toTree(Collection<? extends ClavaNode> nodes) {

@@ -1234,6 +1234,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     // return CxxSelects.select(joinPointClass, getNode().getChildren(), true, this, filter);
     // }
 
+    /**
+     *
+     */
     @Override
     public void removeChildrenImpl() {
         for (AJoinPoint child : getChildrenArrayImpl()) {
@@ -1414,5 +1417,17 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
     @Override
     public Boolean getIsInSystemHeaderImpl() {
         return getNode().get(ClavaNode.IS_IN_SYSTEM_HEADER);
+    }
+
+    @Override
+    public AJoinPoint getOriginNodeImpl() {
+        var currentNode = getNode();
+
+        // Travel insertion points until it finds an origin
+        while(currentNode.get(ClavaNode.INSERTION_POINT).isPresent()) {
+            currentNode = currentNode.get(ClavaNode.INSERTION_POINT).get();
+        }
+
+        return CxxJoinpoints.create(currentNode);
     }
 }

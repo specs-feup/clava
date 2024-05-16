@@ -509,6 +509,15 @@ public abstract class AAccessSpecifier extends ADecl {
     }
 
     /**
+     * Get value on attribute originNode
+     * @return the attribute's value
+     */
+    @Override
+    public AJoinPoint getOriginNodeImpl() {
+        return this.aDecl.getOriginNodeImpl();
+    }
+
+    /**
      * Get value on attribute column
      * @return the attribute's value
      */
@@ -1014,6 +1023,7 @@ public abstract class AAccessSpecifier extends ADecl {
         GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
         CURRENTREGION("currentRegion"),
+        ORIGINNODE("originNode"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),

@@ -831,6 +831,7 @@ public abstract class AJoinPoint extends JoinPoint {
         attributes.add("scopeNodes");
         attributes.add("stmt");
         attributes.add("inlineComments");
+        attributes.add("originNode");
     }
 
     /**
@@ -2469,6 +2470,29 @@ public abstract class AJoinPoint extends JoinPoint {
         	return result!=null?result:getUndefinedValue();
         } catch(Exception e) {
         	throw new AttributeException(get_class(), "inlineComments", e);
+        }
+    }
+
+    /**
+     * If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin
+     */
+    public abstract AJoinPoint getOriginNodeImpl();
+
+    /**
+     * If this join point was not originally from the parsed AST, returns the first join point of the original AST that contributed to its origin
+     */
+    public final Object getOriginNode() {
+        try {
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.BEGIN, this, "originNode", Optional.empty());
+        	}
+        	AJoinPoint result = this.getOriginNodeImpl();
+        	if(hasListeners()) {
+        		eventTrigger().triggerAttribute(Stage.END, this, "originNode", Optional.ofNullable(result));
+        	}
+        	return result!=null?result:getUndefinedValue();
+        } catch(Exception e) {
+        	throw new AttributeException(get_class(), "originNode", e);
         }
     }
 

@@ -158,7 +158,7 @@ export default class ClavaJoinPoints {
             }
             return $normalizedStmt;
         });
-        return wrapJoinPoint(ClavaJavaTypes.AstFactory.scope(unwrapJoinPoint($stmts)));
+        return wrapJoinPoint(ClavaJavaTypes.AstFactory.scope(...unwrapJoinPoint($stmts)));
     }
     static varRef(decl, $type) {
         if (typeof decl === "string") {

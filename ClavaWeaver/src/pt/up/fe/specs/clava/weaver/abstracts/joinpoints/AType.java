@@ -895,6 +895,7 @@ public abstract class AType extends ACxxWeaverJoinPoint {
         GETDESCENDANTSANDSELF("getDescendantsAndSelf"),
         CHAIN("chain"),
         CURRENTREGION("currentRegion"),
+        ORIGINNODE("originNode"),
         COLUMN("column"),
         PARENTREGION("parentRegion"),
         GETVALUE("getValue"),
