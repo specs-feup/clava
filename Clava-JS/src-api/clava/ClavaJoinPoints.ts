@@ -286,7 +286,7 @@ export default class ClavaJoinPoints {
     });
 
     return wrapJoinPoint(
-      ClavaJavaTypes.AstFactory.scope(unwrapJoinPoint($stmts))
+      ClavaJavaTypes.AstFactory.scope(...unwrapJoinPoint($stmts))
     );
   }
 
@@ -795,7 +795,7 @@ export default class ClavaJoinPoints {
 
     throw new Error(
       "ClavaJoinPoints.type: source is join point but is not a type, nor has a .type property: " +
-        source.joinPointType
+      source.joinPointType
     );
   }
 
