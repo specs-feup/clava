@@ -393,6 +393,7 @@ export class Expression extends Joinpoint {
  * Represents a source file (.c, .cpp., .cl, etc)
  */
 export class FileJp extends Joinpoint {
+    static _defaultAttribute = "name";
     /**
      * The path to the source folder that was given as the base folder of this file
      */
@@ -516,6 +517,7 @@ export class ImplicitValue extends Expression {
  * Represents an include directive (e.g., #include <stdio.h>)
  */
 export class Include extends Decl {
+    static _defaultAttribute = "name";
     /**
      * True if this is an angled include (i.e., system include)
      */
@@ -559,6 +561,7 @@ export class MemberAccess extends Expression {
  * Represents a decl with a name
  */
 export class NamedDecl extends Decl {
+    static _defaultAttribute = "name";
     get isPublic() { return wrapJoinPoint(this._javaObject.getIsPublic()); }
     get name() { return wrapJoinPoint(this._javaObject.getName()); }
     set name(value) { this._javaObject.setName(unwrapJoinPoint(value)); }
@@ -599,6 +602,7 @@ export class ParenExpr extends Expression {
  * Represents a pragma in the code (e.g., #pragma kernel)
  */
 export class Pragma extends Joinpoint {
+    static _defaultAttribute = "name";
     /**
      * Everything that is after the name of the pragma
      */
@@ -630,6 +634,7 @@ export class Pragma extends Joinpoint {
  * Represents the complete program and is the top-most joinpoint in the hierarchy
  */
 export class Program extends Joinpoint {
+    static _defaultAttribute = "name";
     get baseFolder() { return wrapJoinPoint(this._javaObject.getBaseFolder()); }
     get defaultFlags() { return wrapJoinPoint(this._javaObject.getDefaultFlags()); }
     /**
@@ -729,6 +734,7 @@ export class Program extends Joinpoint {
  * Common class of struct, union and class
  */
 export class RecordJp extends NamedDecl {
+    static _defaultAttribute = "name";
     get fields() { return wrapJoinPoint(this._javaObject.getFields()); }
     get functions() { return wrapJoinPoint(this._javaObject.getFunctions()); }
     /**
@@ -753,6 +759,7 @@ export class Statement extends Joinpoint {
  * Represets a struct declaration
  */
 export class Struct extends RecordJp {
+    static _defaultAttribute = "name";
 }
 export class Switch extends Statement {
     /**
@@ -776,6 +783,7 @@ export class Switch extends Statement {
  * A pragma that references a point in the code and sticks to it
  */
 export class Tag extends Pragma {
+    static _defaultAttribute = "id";
     /**
      * The ID of the pragma
      */
@@ -863,6 +871,7 @@ export class Type extends Joinpoint {
  * Base node for declarations which introduce a typedef-name
  */
 export class TypedefNameDecl extends NamedDecl {
+    static _defaultAttribute = "name";
 }
 /**
  * Represents the type of a typedef.
@@ -896,6 +905,7 @@ export class UndefinedType extends Type {
  * A reference to a variable
  */
 export class Varref extends Expression {
+    static _defaultAttribute = "name";
     get declaration() { return wrapJoinPoint(this._javaObject.getDeclaration()); }
     /**
      * True if this variable reference has a MS-style property, false otherwise
@@ -923,6 +933,7 @@ export class WrapperStmt extends Statement {
     get kind() { return wrapJoinPoint(this._javaObject.getKind()); }
 }
 export class AccessSpecifier extends Decl {
+    static _defaultAttribute = "kind";
     /**
      * The type of specifier. Can return 'public', 'protected', 'private' or 'none'
      */
@@ -1006,6 +1017,7 @@ export class BuiltinType extends Type {
     get isVoid() { return wrapJoinPoint(this._javaObject.getIsVoid()); }
 }
 export class Call extends Expression {
+    static _defaultAttribute = "name";
     /**
      * An alias for 'args'
      */
@@ -1105,6 +1117,7 @@ export class Cast extends Expression {
     get toType() { return wrapJoinPoint(this._javaObject.getToType()); }
 }
 export class CilkSpawn extends Call {
+    static _defaultAttribute = "name";
 }
 export class CilkSync extends Statement {
 }
@@ -1112,6 +1125,7 @@ export class CilkSync extends Statement {
  * Represents a C++ class
  */
 export class Class extends RecordJp {
+    static _defaultAttribute = "name";
     /**
      * All the classes this class inherits from
      */
@@ -1160,6 +1174,7 @@ export class Class extends RecordJp {
 export class Continue extends Statement {
 }
 export class CudaKernelCall extends Call {
+    static _defaultAttribute = "name";
     get config() { return wrapJoinPoint(this._javaObject.getConfig()); }
     set config(value) { this._javaObject.setConfig(unwrapJoinPoint(value)); }
     setConfig(args) { return wrapJoinPoint(this._javaObject.setConfig(unwrapJoinPoint(args))); }
@@ -1175,6 +1190,7 @@ export class DeclStmt extends Statement {
  * Represents a decl that comes from a declarator (e.g., function, field, variable)
  */
 export class Declarator extends NamedDecl {
+    static _defaultAttribute = "name";
 }
 export class DeleteExpr extends Expression {
 }
@@ -1201,9 +1217,11 @@ export class EmptyStmt extends Statement {
  * Represents an enum
  */
 export class EnumDecl extends NamedDecl {
+    static _defaultAttribute = "name";
     get enumerators() { return wrapJoinPoint(this._javaObject.getEnumerators()); }
 }
 export class EnumeratorDecl extends NamedDecl {
+    static _defaultAttribute = "name";
 }
 export class ExprStmt extends Statement {
     /**
@@ -1215,6 +1233,7 @@ export class ExprStmt extends Statement {
  * Represents a member of a struct/union/class
  */
 export class Field extends Declarator {
+    static _defaultAttribute = "name";
 }
 export class FloatLiteral extends Literal {
     get value() { return wrapJoinPoint(this._javaObject.getValue()); }
@@ -1223,6 +1242,7 @@ export class FloatLiteral extends Literal {
  * Represents a function declaration or definition
  */
 export class FunctionJp extends Declarator {
+    static _defaultAttribute = "name";
     get body() { return wrapJoinPoint(this._javaObject.getBody()); }
     set body(value) { this._javaObject.setBody(unwrapJoinPoint(value)); }
     get calls() { return wrapJoinPoint(this._javaObject.getCalls()); }
@@ -1381,6 +1401,7 @@ export class IntLiteral extends Literal {
     get value() { return wrapJoinPoint(this._javaObject.getValue()); }
 }
 export class LabelDecl extends NamedDecl {
+    static _defaultAttribute = "name";
 }
 export class LabelStmt extends Statement {
     get decl() { return wrapJoinPoint(this._javaObject.getDecl()); }
@@ -1391,6 +1412,7 @@ export class LabelStmt extends Statement {
     setDecl(label) { return wrapJoinPoint(this._javaObject.setDecl(unwrapJoinPoint(label))); }
 }
 export class Loop extends Statement {
+    static _defaultAttribute = "kind";
     get body() { return wrapJoinPoint(this._javaObject.getBody()); }
     set body(value) { this._javaObject.setBody(unwrapJoinPoint(value)); }
     /**
@@ -1511,6 +1533,7 @@ export class Loop extends Statement {
  * Special pragma that can be used to mark scopes (e.g., #pragma lara marker loop1)
  */
 export class Marker extends Pragma {
+    static _defaultAttribute = "id";
     /**
      * A scope, associated with this marker
      */
@@ -1518,6 +1541,7 @@ export class Marker extends Pragma {
     get id() { return wrapJoinPoint(this._javaObject.getId()); }
 }
 export class MemberCall extends Call {
+    static _defaultAttribute = "name";
     get base() { return wrapJoinPoint(this._javaObject.getBase()); }
     get rootBase() { return wrapJoinPoint(this._javaObject.getRootBase()); }
 }
@@ -1525,6 +1549,7 @@ export class MemberCall extends Call {
  * Represents a C++ class method declaration or definition
  */
 export class Method extends FunctionJp {
+    static _defaultAttribute = "name";
     get record() { return wrapJoinPoint(this._javaObject.getRecord()); }
     /**
      * Removes the of the method
@@ -1535,6 +1560,7 @@ export class Method extends FunctionJp {
  * Represents an OpenMP pragma (e.g., #pragma omp parallel)
  */
 export class Omp extends Pragma {
+    static _defaultAttribute = "kind";
     /**
      * The names of the kinds of all clauses in the pragma, or empty array if no clause is defined
      */
@@ -1833,11 +1859,13 @@ export class TemplateSpecializationType extends Type {
  * Declaration of a typedef-name via the 'typedef' type specifier
  */
 export class TypedefDecl extends TypedefNameDecl {
+    static _defaultAttribute = "name";
 }
 /**
  * Represents a variable declaration or definition
  */
 export class Vardecl extends Declarator {
+    static _defaultAttribute = "name";
     /**
      * The vardecl corresponding to the actual definition. For global variables, returns the vardecl of the file where it is actually defined (instead of the vardecl that defines an external link to the variable)
      */
@@ -1902,11 +1930,13 @@ export class VariableArrayType extends ArrayType {
 export class Body extends Scope {
 }
 export class CilkFor extends Loop {
+    static _defaultAttribute = "kind";
 }
 export class EnumType extends TagType {
     get integerType() { return wrapJoinPoint(this._javaObject.getIntegerType()); }
 }
 export class Param extends Vardecl {
+    static _defaultAttribute = "name";
 }
 export var StorageClass;
 (function (StorageClass) {
