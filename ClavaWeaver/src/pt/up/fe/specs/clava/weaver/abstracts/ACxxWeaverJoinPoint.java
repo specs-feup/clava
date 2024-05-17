@@ -1054,6 +1054,9 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                     : tu.getFolderpath().map(folderpath -> new File(folderpath)).orElse(null);
 
             StringSplitter splitter = new StringSplitter(dataPragma.getContent());
+            splitter.parseTry(StringSplitterRules::string)
+                    .filter(string -> string.toLowerCase().equals(ClavaData.KEYWORD_DATA))
+                    .isPresent();
             String jsonString = SpecsStrings.normalizeJsonObject(splitter.toString().trim(), baseFolder);
 
             // Sanitize json string
@@ -1066,7 +1069,7 @@ public abstract class ACxxWeaverJoinPoint extends AJoinPoint {
                     message += " at " + dataPragma.getLocation();
                 }
                 throw new RuntimeException(
-                        message + " in #pragma clava " + dataPragma.getContent());
+                        message + " in #pragma clava " + dataPragma.getContent(), e);
             }
 
             try {

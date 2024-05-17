@@ -130,7 +130,7 @@ public class ClavaData {
             var parsedJson = gson.fromJson(json, Object.class);
             return gson.toJson(parsedJson);
         } catch (Exception e) {
-            throw new RuntimeException("Invalid JSON");
+            throw new RuntimeException("Invalid JSON", e);
         }
     }
 
